@@ -1,0 +1,8 @@
+version: "2"
+services: 
+    talawa_admin: 
+        container_name: talawa_admin
+        build:
+            context: .
+        ports: 
+            - '8080:8080'
