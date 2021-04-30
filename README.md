@@ -1,61 +1,46 @@
-# Talawa Admin
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![GitHub stars](https://img.shields.io/github/stars/PalisadoesFoundation/talawa-admin.svg?style=social&label=Star&maxAge=2592000)](https://github.com/PalisadoesFoundation/talawa-admin)
-[![GitHub forks](https://img.shields.io/github/forks/PalisadoesFoundation/talawa-admin.svg?style=social&label=Fork&maxAge=2592000)](https://github.com/PalisadoesFoundation/talawa-admin)
+# Getting Started with Create React App
 
-[![N|Solid](src/assets/talawa-logo-200x200.png)](https://github.com/PalisadoesFoundation/talawa-admin)
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-Talawa is a modular open source project to manage group activities of both non-profit organizations and businesses.
+## Available Scripts
 
-Core features include:
+In the project directory, you can run:
 
- 1. Membership management
- 2. Groups management
- 3. Event registrations
- 4. Recurring meetings
- 5. Facilities registrations
+### `yarn start`
 
-``talawa`` is based on the original ``quito`` code created by the [Palisadoes Foundation][pfd] as part of its annual Calico Challenge program. Calico provides paid summer internships for  Jamaican university students to work on selected open source projects. They are mentored by software professionals and receive stipends based on the completion of predefined milestones. Calico was started in 2015. Visit [The Palisadoes Foundation's website](http://www.palisadoes.org/) for more details on its origin and activities.
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-# Talawa Components
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
 
-`talawa` has these major software components:
+### `yarn test`
 
-1. **talawa**: [A mobile application with social media features](https://github.com/PalisadoesFoundation/talawa)
-1. **talawa-api**: [An API providing access to user data and features](https://github.com/PalisadoesFoundation/talawa-api)
-1. **talawa-admin**: [A web based administrative portal](https://github.com/PalisadoesFoundation/talawa-admin)
-1. **talawa-docs**: [The online documentation website](https://github.com/PalisadoesFoundation/talawa-docs)
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-# Documentation
+### `yarn build`
 
-- The `talawa` documentation can be found [here](https://palisadoesfoundation.github.io/talawa-docs/).
-- Want to contribute? Look at [CONTRIBUTING.md][link] to get started.
-- Visit the [Talawa-Docs GitHub][repo] to see the code.
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-# Project Setup
-```
-yarn install
-```
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-## Compiles and hot-reloads for development
-```
-yarn serve
-```
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-## Compiles and minifies for production
-```
-yarn build
-```
+### `yarn eject`
 
-## Run your end-to-end tests
-```
-yarn test:e2e
-```
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-## Lints and fixes files
-```
-yarn lint
-```
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-## Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
