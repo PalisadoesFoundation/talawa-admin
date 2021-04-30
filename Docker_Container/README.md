@@ -10,7 +10,7 @@
 
 - Then Spin up the container once build is done 
 
-``
+```
 $ docker run \
     -it \
     --rm \
@@ -19,7 +19,7 @@ $ docker run \
     -p 3001:3000 \
     -e CHOKIDAR_USEPOLLING=true \
     sample:dev
-    ``
+```
 
 - Whats Happening here 
 
