@@ -1,46 +1,64 @@
-# Getting Started with Create React App
+# Talawa Admin
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![GitHub stars](https://img.shields.io/github/stars/PalisadoesFoundation/talawa-admin.svg?style=social&label=Star&maxAge=2592000)](https://github.com/PalisadoesFoundation/talawa-admin)
+[![GitHub forks](https://img.shields.io/github/forks/PalisadoesFoundation/talawa-admin.svg?style=social&label=Fork&maxAge=2592000)](https://github.com/PalisadoesFoundation/talawa-admin)
 
-## Available Scripts
+[![N|Solid](src/assets/talawa-logo-200x200.png)](https://github.com/PalisadoesFoundation/talawa-admin)
 
-In the project directory, you can run:
+Talawa is a modular open source project to manage group activities of both non-profit organizations and businesses.
 
-### `yarn start`
+Core features include:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1.  Membership management
+2.  Groups management
+3.  Event registrations
+4.  Recurring meetings
+5.  Facilities registrations
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+`talawa` is based on the original `quito` code created by the [Palisadoes Foundation][pfd] as part of its annual Calico Challenge program. Calico provides paid summer internships for Jamaican university students to work on selected open source projects. They are mentored by software professionals and receive stipends based on the completion of predefined milestones. Calico was started in 2015. Visit [The Palisadoes Foundation's website](http://www.palisadoes.org/) for more details on its origin and activities.
 
-### `yarn test`
+# Talawa Components
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+`talawa` has these major software components:
 
-### `yarn build`
+1. **talawa**: [A mobile application with social media features](https://github.com/PalisadoesFoundation/talawa)
+1. **talawa-api**: [An API providing access to user data and features](https://github.com/PalisadoesFoundation/talawa-api)
+1. **talawa-admin**: [A web based administrative portal](https://github.com/PalisadoesFoundation/talawa-admin)
+1. **talawa-docs**: [The online documentation website](https://github.com/PalisadoesFoundation/talawa-docs)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Documentation
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- The `talawa` documentation can be found [here](https://palisadoesfoundation.github.io/talawa-docs/).
+- Want to contribute? Look at [CONTRIBUTING.md][link] to get started.
+- Visit the [Talawa-Docs GitHub][repo] to see the code.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Project Setup
 
-### `yarn eject`
+```
+yarn install
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Compiles and hot-reloads for development
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+yarn serve
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Compiles and minifies for production
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```
+yarn build
+```
 
-## Learn More
+## Run your end-to-end tests
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```
+yarn test:e2e
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Lints and fixes files
+
+```
+yarn lint
+```
