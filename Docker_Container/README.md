@@ -2,7 +2,7 @@
 
 ### Project Setup
 
-- Install [Docker](https://desktop.docker.com/win/stable/amd64/Docker%20Desktop%20Installer.exe?utm_source=docker&amp;utm_medium=webreferral&amp;utm_campaign=dd-smartbutton&amp;utm_location=module)
+- Install [Docker](https://www.docker.com/)
 
 - Build and Tag The Docker Image 
 
