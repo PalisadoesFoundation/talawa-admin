@@ -30,8 +30,8 @@ Core features include:
 # Documentation
 
 - The `talawa` documentation can be found [here](https://palisadoesfoundation.github.io/talawa-docs/).
-- Want to contribute? Look at [CONTRIBUTING.md][link] to get started.
-- Visit the [Talawa-Docs GitHub][repo] to see the code.
+- Want to contribute? Look at [CONTRIBUTING.md](https://github.com/PalisadoesFoundation/talawa-admin/blob/master/CONTRIBUTING.md) to get started.
+- Visit the [Talawa-Docs GitHub](https://github.com/PalisadoesFoundation/talawa-docs) to see the code.
 
 # Project Setup
 
@@ -42,7 +42,7 @@ yarn install
 ## Compiles and hot-reloads for development
 
 ```
-yarn start
+yarn serve
 ```
 
 ## Compiles and minifies for production
@@ -54,7 +54,7 @@ yarn build
 ## Run your end-to-end tests
 
 ```
-yarn test
+yarn test:e2e
 ```
 
 ## Lints and fixes files
@@ -62,3 +62,7 @@ yarn test
 ```
 yarn lint
 ```
+
+## Customize configuration
+
+See [Configuration Reference](https://cli.vuejs.org/config/).
