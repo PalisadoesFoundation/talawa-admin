@@ -1,4 +1,5 @@
 # Talawa Admin
+
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![GitHub stars](https://img.shields.io/github/stars/PalisadoesFoundation/talawa-admin.svg?style=social&label=Star&maxAge=2592000)](https://github.com/PalisadoesFoundation/talawa-admin)
 [![GitHub forks](https://img.shields.io/github/forks/PalisadoesFoundation/talawa-admin.svg?style=social&label=Fork&maxAge=2592000)](https://github.com/PalisadoesFoundation/talawa-admin)
@@ -9,13 +10,13 @@ Talawa is a modular open source project to manage group activities of both non-p
 
 Core features include:
 
- 1. Membership management
- 2. Groups management
- 3. Event registrations
- 4. Recurring meetings
- 5. Facilities registrations
+1.  Membership management
+2.  Groups management
+3.  Event registrations
+4.  Recurring meetings
+5.  Facilities registrations
 
-``talawa`` is based on the original ``quito`` code created by the [Palisadoes Foundation][pfd] as part of its annual Calico Challenge program. Calico provides paid summer internships for  Jamaican university students to work on selected open source projects. They are mentored by software professionals and receive stipends based on the completion of predefined milestones. Calico was started in 2015. Visit [The Palisadoes Foundation's website](http://www.palisadoes.org/) for more details on its origin and activities.
+`talawa` is based on the original `quito` code created by the [Palisadoes Foundation][pfd] as part of its annual Calico Challenge program. Calico provides paid summer internships for Jamaican university students to work on selected open source projects. They are mentored by software professionals and receive stipends based on the completion of predefined milestones. Calico was started in 2015. Visit [The Palisadoes Foundation's website](http://www.palisadoes.org/) for more details on its origin and activities.
 
 # Talawa Components
 
@@ -33,29 +34,37 @@ Core features include:
 - Visit the [Talawa-Docs GitHub](https://github.com/PalisadoesFoundation/talawa-docs) to see the code.
 
 # Project Setup
+
 ```
 yarn install
 ```
 
 ## Compiles and hot-reloads for development
+
 ```
 yarn serve
 ```
 
 ## Compiles and minifies for production
+
 ```
 yarn build
 ```
 
 ## Run your end-to-end tests
+
 ```
 yarn test:e2e
 ```
 
 ## Lints and fixes files
+
 ```
 yarn lint
 ```
 
 ## Customize configuration
+
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+

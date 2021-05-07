@@ -1,20 +1,23 @@
 module.exports = {
-  root: true,
-  env: {
-    node: true,
-  },
-  extends: [
-    "plugin:vue/essential",
-    "eslint:recommended",
-    "@vue/typescript/recommended",
-    "@vue/prettier",
-    "@vue/prettier/@typescript-eslint",
-  ],
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 2020,
+    ecmaVersion: 2018,
+    sourceType: 'module',
   },
+  plugins: ['@typescript-eslint', 'react-hooks'],
+  extends: [
+    'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended',
+  ],
   rules: {
-    "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
-    "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
+    'react/prop-types': 'off',
+  },
+  settings: {
+    react: {
+      pragma: 'React',
+      version: 'detect',
+    },
   },
 };
