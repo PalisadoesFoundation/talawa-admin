@@ -1,9 +1,13 @@
-name: PR Lint
-on: [pull_request]
+name: pr-name-linter
+on:
+  pull_request:
+    types: ['opened', 'edited', 'reopened', 'synchronize']
+
 jobs:
-  pr_lint:
+  lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: vijaykramesh/pr-lint-action@v1.0
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: actions/checkout@v1
+    - name: Install Dependencies
+      run: npm install @commitlint/config-conventional
+    - uses: JulienKode/pull-request-name-linter-action@v0.2.0
