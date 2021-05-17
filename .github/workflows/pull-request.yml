@@ -2,6 +2,7 @@ name: PR Workflow
 on: [pull_request]
 
 jobs:
+  # Greeting Message to first pull request by user
   PR-Greeting:
     name: Greeting Message to user
     runs-on: ubuntu-latest
@@ -10,7 +11,7 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           pr-message: "Congratulations on making your first PR! :confetti_ball: If you haven't already, check out our [Contributing Guidelines](https://github.com/PalisadoesFoundation/talawa/blob/master/CONTRIBUTING.md) and [PR Reporting Guidelines](https://github.com/PalisadoesFoundation/talawa/blob/master/PR-guidelines.md) to ensure that you are following our guidelines for contributing and creating PR."
-
+  # Check number of lines of code
   Count-lines-of-code:
     name: Total number of lines in every file should not be more than 300
     needs: PR-Greeting
@@ -19,7 +20,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: chmod +x ./.github/workflows/countline.py
       - run: ./.github/workflows/countline.py
-
+  # PR code quality check
   Codeql-analysis:
     name: Analyzing the code quality
     runs-on: ubuntu-latest
