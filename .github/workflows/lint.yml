@@ -1,6 +1,6 @@
 name: Lint
 
-on: pull-request
+on: [pull-request]
 
 jobs:
   run-linters:
