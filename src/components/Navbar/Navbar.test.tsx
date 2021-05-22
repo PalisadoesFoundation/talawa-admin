@@ -27,10 +27,7 @@ describe('This is the test for Navbar component', () => {
 
   test('checks if the routes link to the correct endpoints', () => {
     render(<Navbar />);
-    expect(screen.getByText('Home').closest('a')).toHaveAttribute(
-      'href',
-      '/'
-    );
+    expect(screen.getByText('Home').closest('a')).toHaveAttribute('href', '/');
     expect(screen.getByText('Login').closest('a')).toHaveAttribute(
       'href',
       '/login'
