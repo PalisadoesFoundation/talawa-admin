@@ -23,10 +23,8 @@ function Navbar() {
       <div className="main">
         <a className="logo" href="/">
           <img src={web} />
-          <h4>
-            <strong className="Color_Green">Talawa</strong>
-            <strong className="Color_Yellow">Admin</strong>
-          </h4>
+          <strong className="green">Talawa</strong>{' '}
+          <strong className="yellow">Admin</strong>
         </a>
       </div>
       <ul className={renderClasses()}>

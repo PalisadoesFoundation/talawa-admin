@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Navbar from 'components/Navbar/Navbar';
 import web from 'assets/fourth_image.png';
-import 'css/Login.css';
+
+import styles from './LoginPage.module.css';
 
 function LoginPage() {
   const [formState, setFormState] = useState({
@@ -13,17 +14,17 @@ function LoginPage() {
     <>
       <section className="background">
         <Navbar />
-        <div className="display">
-          <div className="margin_s">
-            <h3 className="h_size">
-              <strong className="Color_Yellow">Welcome Back</strong>
+        <section id={styles.grid_wrapper}>
+          <div className={styles.form_wrapper}>
+            <h3>
+              <strong className="yellow">Welcome Back</strong>
             </h3>
             <h5>
-              <strong className="Color_Green">Login to your account</strong>
+              <strong className="green">Login to your account</strong>
             </h5>
-            <form className="display_block">
+            <form>
               <input
-                type="text"
+                type="email"
                 id="email"
                 className="input_box"
                 placeholder="Email"
@@ -50,13 +51,13 @@ function LoginPage() {
                 }}
                 required
               />
+              <input type="submit" className="btn" value="Login" />
             </form>
-            <input type="submit" className="btn" value="Login" />
           </div>
-          <div className="animated">
+          <div className={styles.animated_content}>
             <img src={web} className="image" />
           </div>
-        </div>
+        </section>
       </section>
     </>
   );
