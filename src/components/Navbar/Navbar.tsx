@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import '../css/Navbar.css';
-import '../css/Home.css';
-import web from '../assets/talawa-logo-lite-200x200.png';
+import './Navbar.css';
+import web from '../../assets/talawa-logo-lite-200x200.png';
 function Navbar() {
   const [navLinkOpen, navLinkToggle] = useState(false);
 
@@ -23,23 +21,23 @@ function Navbar() {
   return (
     <nav>
       <div className="main">
-        <NavLink className="logo" to="/">
+        <a className="logo" href="/">
           <img src={web} />
           <h4>
-            <strong className="Color_Green">Talawa</strong>{' '}
+            <strong className="Color_Green">Talawa</strong>
             <strong className="Color_Yellow">Admin</strong>
           </h4>
-        </NavLink>
+        </a>
       </div>
       <ul className={renderClasses()}>
         <li className="link">
           <a href="/">Home</a>
         </li>
         <li className="link">
-          <a href="/Login">Login</a>
+          <a href="/login">Login</a>
         </li>
         <li className="link">
-          <a href="/About">About</a>
+          <a href="/about">About</a>
         </li>
       </ul>
       <div onClick={handleNavLinksToggle} className="hamburger-toggle">

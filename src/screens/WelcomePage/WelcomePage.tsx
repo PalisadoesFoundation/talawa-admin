@@ -1,8 +1,8 @@
 import React from 'react';
-import Navbar from '../SharedComponents/Navbar';
-import '../css/Home.css';
-import '../css/Index.css';
-import web from '../assets/first_image.png';
+import Navbar from 'components/Navbar/Navbar';
+import 'css/Home.css';
+import 'css/Index.css';
+import web from 'assets/first_image.png';
 function WelcomePage() {
   return (
     <>
@@ -17,7 +17,7 @@ function WelcomePage() {
               The online portal to manage{' '}
               <strong className="Color_Green">Talawa</strong>
             </h5>
-            <a href="/Login" className="btn">
+            <a href="/login" className="btn">
               Get Started
             </a>
           </div>

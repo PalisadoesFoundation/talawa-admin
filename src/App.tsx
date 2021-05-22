@@ -1,15 +1,17 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import WelcomePage from './Screens/WelcomePage';
-import AboutPage from './Screens/AboutPage';
-import LoginPage from './Screens/LoginPage';
+import WelcomePage from './screens/WelcomePage/WelcomePage';
+import AboutPage from './screens/AboutPage';
+import LoginPage from './screens/LoginPage/LoginPage';
 function App() {
   return (
-    <Switch>
-      <Route exact path="/" component={WelcomePage} />
-      <Route exact path="/About" component={AboutPage} />
-      <Route exact path="/Login" component={LoginPage} />
-    </Switch>
+    <>
+      <Switch>
+        <Route exact path="/" component={WelcomePage} />
+        <Route exact path="/about" component={AboutPage} />
+        <Route exact path="/login" component={LoginPage} />
+      </Switch>
+    </>
   );
 }
 
