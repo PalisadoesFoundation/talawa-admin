@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import WelcomePage from './screens/WelcomePage/WelcomePage';
 import AboutPage from './screens/AboutPage';
 import LoginPage from './screens/LoginPage/LoginPage';
-function App() {
+function App(): JSX.Element {
   return (
     <>
       <Switch>
