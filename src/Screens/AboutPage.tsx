@@ -1,14 +1,12 @@
 import React from 'react';
-import {NavLink} from 'react-router-dom';
-import Navbar from "../SharedComponents/Navbar";
+import Navbar from '../SharedComponents/Navbar';
 
-const About_Page =() =>
-{
-    return(
+function AboutPage() {
+  return (
     <>
-     <Navbar/>
+      <Navbar />
     </>
-    );
+  );
 }
 
-export default About_Page;
+export default AboutPage;

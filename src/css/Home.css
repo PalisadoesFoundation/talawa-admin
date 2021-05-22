@@ -1,84 +1,84 @@
 /* Margin */
 .margin {
-    padding-left: 9em;
-    padding-top: 20em;
-} 
+  padding-left: 9em;
+  padding-top: 20em;
+}
 
 .margin h3 {
-    font-weight: 20.0;
-    font-size: 31px;
+  font-weight: 20;
+  font-size: 31px;
 }
 
 .margin h5 {
-    font-weight: 20.0;
-    padding-top: 10px;
-    font-size: 18px;
-    padding-bottom: 20px;
+  font-weight: 20;
+  padding-top: 10px;
+  font-size: 18px;
+  padding-bottom: 20px;
 }
 
 .margin_second {
-    margin-left: 0.5em;
+  margin-left: 0.5em;
 }
 /* Colors */
-.Color_Green{
-    color: #31BB6B;
+.Color_Green {
+  color: #31bb6b;
 }
-.Color_Blue{
-    color: #4285F4;
+.Color_Blue {
+  color: #4285f4;
 }
-.Color_Yellow{
-    color: #FEBC59;
+.Color_Yellow {
+  color: #febc59;
 }
 
 /* Buttons */
 .btn {
-    background-color: #4285F4;
-    padding: 0.5em 1.0em;
-    font-size: 16px;
-    color: #fff;
-    outline: none;
-    border: none;
-    border-radius: 1.8em 1.8em 1.8em 1.8em;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  
+  background-color: #4285f4;
+  padding: 0.5em 1em;
+  font-size: 16px;
+  color: #fff;
+  outline: none;
+  border: none;
+  border-radius: 1.8em 1.8em 1.8em 1.8em;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
 .btn:hover {
-    transform: translateY((-5px));
-    box-shadow: 0 5px 5px #00000040;
+  transform: translateY((-5px));
+  box-shadow: 0 5px 5px #00000040;
 }
 
 /* Animation */
-.animated{
-    height: 0;
-    width: 0;
-    animation: up-down 2s ease-in-out infinite alternate-reverse both;
+.animated {
+  height: 0;
+  width: 0;
+  animation: up-down 2s ease-in-out infinite alternate-reverse both;
 }
 @-webkit-keyframes up-down {
-    0%{
-        transform: translateY(10px);
-    }
-    100%{
-  transform: translateY(-10px);
-    }
+  0% {
+    transform: translateY(10px);
+  }
+  100% {
+    transform: translateY(-10px);
+  }
 }
 @keyframes up-down {
-    0%{
-        transform: translateY(10px);
-    }
-    100%{
-  transform: translateY(-10px);
-    }
+  0% {
+    transform: translateY(10px);
+  }
+  100% {
+    transform: translateY(-10px);
+  }
 }
 
 /* Sizes */
-.image{
-    height: 500px !important;
-    width: 500px !important;
-    margin-top: 10em;
-    margin-left: 25em;
+.image {
+  height: 500px !important;
+  width: 500px !important;
+  margin-top: 10em;
+  margin-left: 25em;
 }
 
 .display {
-    display: flex;
+  display: flex;
 }
