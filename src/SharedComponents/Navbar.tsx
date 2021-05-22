@@ -45,11 +45,6 @@ const Navbar = () => {
                         About
                     </a>
                 </li>
-                <li className = "link">
-                    <a href="/Contact">
-                        Contact Us
-                    </a>
-                </li>
             </ul>    
             <div onClick = {handleNavLinksToggle} className = "hamburger-toggle">
                 <i className = "fas fa-bars fa-lg"></i>
