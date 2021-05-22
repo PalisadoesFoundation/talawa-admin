@@ -10,7 +10,5 @@ jobs:
       - name: Run tests
         run: yarn test
       - name: Run ESLint and Prettier
-        uses: wearerequired/lint-action@v1
-        with:
-          eslint: true
-          prettier: true
+        run: yarn lint
+        
