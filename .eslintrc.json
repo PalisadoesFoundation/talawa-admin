@@ -1,0 +1,70 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+
+  // Specify the rulesets from other ESLint Plugins tobe used
+  "extends": [
+    "plugin:react/recommended",
+    "eslint:recommended",
+    "plugin:jest/recommended",
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+
+  // Specify the ESLint plugins tobe used
+  "plugins": ["react", "@typescript-eslint", "react-hooks", "jest"],
+  "rules": {
+    "react/destructuring-assignment": ["warn", "always"],
+    "react/no-multi-comp": ["error", { "ignoreStateless": false }],
+    "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
+
+    // Ensures that components are always written in PascalCase
+    "react/jsx-pascal-case": [
+      "error",
+      { "allowAllCaps": false, "allowNamespace": false }
+    ],
+
+    // Enforces whitespace around equal sign operators
+    "react/jsx-equals-spacing": ["warn", "never"],
+    "react/no-this-in-sfc": "error",
+
+    // Ensures that components are always indented by 2 spaces
+    "react/jsx-indent": ["warn", 2],
+    "react/jsx-tag-spacing": [
+      "warn",
+      {
+        "afterOpening": "never",
+        "beforeClosing": "never",
+        "beforeSelfClosing": "always"
+      }
+    ],
+
+    // Enforce Strictly functional components
+    "react/no-unstable-nested-components": ["error", { "allowAsProps": true }],
+    "react/function-component-definition": [
+      "error",
+      { "namedComponents": "function-declaration" }
+    ]
+  },
+
+  // Let ESLint use the react version in the package.json
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
+}
