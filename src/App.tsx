@@ -1,26 +1,15 @@
 import React from 'react';
-import './App.css';
-
-function App(): JSX.Element {
+import { Redirect, Route, Switch } from 'react-router-dom';
+import WelcomePage from './Screens/WelcomePage';
+import About_Page from './Screens/AboutPage';
+import LoginPage from './Screens/LoginPage';
+function App() {
   return (
-    <div>
-      <div>
-        <header>
-          <img />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-      );
-    </div>
+    <Switch>
+      <Route exact path = "/" component = {WelcomePage}/>
+      <Route exact path = "/About" component =  {About_Page}/>
+      <Route exact path = "/Login" component =  {LoginPage}/>
+    </Switch>
   );
 }
 
