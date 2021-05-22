@@ -4,9 +4,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/PalisadoesFoundation/talawa-admin.svg?style=social&label=Star&maxAge=2592000)](https://github.com/PalisadoesFoundation/talawa-admin)
 [![GitHub forks](https://img.shields.io/github/forks/PalisadoesFoundation/talawa-admin.svg?style=social&label=Fork&maxAge=2592000)](https://github.com/PalisadoesFoundation/talawa-admin)
 
-
 [![N|Solid](src/assets/talawa-logo-lite-200x200.png)](https://github.com/PalisadoesFoundation/talawa-admin)
-
 
 Talawa is a modular open source project to manage group activities of both non-profit organizations and businesses.
 
@@ -69,7 +67,6 @@ yarn lint
 
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
-
-## Project setup using docker 
+## Project setup using docker
 
 See [Docker Container](Docker_Container/README.md)
