@@ -30,6 +30,28 @@
   "rules": {
     "react/destructuring-assignment": ["warn", "always"],
     "react/no-multi-comp": ["error", { "ignoreStateless": false }],
+    "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
+
+    // Ensures that components are always written in PascalCase
+    "react/jsx-pascal-case": [
+      "error",
+      { "allowAllCaps": false, "allowNamespace": false }
+    ],
+
+    // Enforces whitespace around equal sign operators
+    "react/jsx-equals-spacing": ["warn", "never"],
+    "react/no-this-in-sfc": "error",
+
+    // Ensures that components are always indented by 2 spaces
+    "react/jsx-indent": ["warn", 2],
+    "react/jsx-tag-spacing": [
+      "warn",
+      {
+        "afterOpening": "never",
+        "beforeClosing": "never",
+        "beforeSelfClosing": "always"
+      }
+    ],
 
     // Enforce Strictly functional components
     "react/no-unstable-nested-components": ["warn", { "allowAsProps": true }],
