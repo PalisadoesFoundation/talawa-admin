@@ -1,4 +1,4 @@
-name: Continuous Integration
+name: Linter
 on: [pull_request]
 jobs:
   build:
@@ -7,7 +7,5 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install Dependencies
         run: yarn
-      - name: Run tests
-        run: yarn test
-
-        
+      - name: Run ESLint and Prettier
+        run: yarn lint
