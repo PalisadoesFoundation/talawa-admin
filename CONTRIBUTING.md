@@ -83,8 +83,6 @@ When multiple developers are working on issues there is bound to be a conflict o
 - Last but not the least, communication is important make sure to talk to other contributors, in these cases, in slack channel or in a issue/PR thread.
 - As a last resort the Admins would be responsible for deciding how to resolve this conflict.
 
-### Contributing Code
-
 Code contributions to Talawa come in the form of pull requests. These are done by forking the repo and making changes locally.
 
 Make sure you have read the [Documentation for Setting up the Project](https://github.com/PalisadoesFoundation/talawa-admin#project-setup)
