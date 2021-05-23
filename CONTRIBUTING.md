@@ -38,7 +38,7 @@ Make sure you are following [issue report guidelines](https://github.com/Palisad
 
 #### Branching Strategy
 
-For Talawa Admin, to simplify the development process, and to ensure that only stable code is pushed to the `master` branch, we had employed the following branching strategy:
+For Talawa Admin, we had employed the following branching strategy to simplify the development process and to ensure that only stable code is pushed to the `master` branch:
 
 - Develop branch: For unstable code and bug fixing
 - Alpha-x.x.x: for stability teesting
