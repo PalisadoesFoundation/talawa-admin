@@ -46,8 +46,6 @@ For Talawa Admin, to simplify the development process, and to ensure that only s
 
 ### Contributing Code
 
-### Contributing Code
-
 Code contributions to Talawa come in the form of pull requests. These are done by forking the repo and making changes locally.
 
 Make sure you have read the [Documentation for Setting up the Project](https://github.com/PalisadoesFoundation/talawa-admin#project-setup)
