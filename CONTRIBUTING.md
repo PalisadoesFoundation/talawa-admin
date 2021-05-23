@@ -54,16 +54,13 @@ Make sure you are following [issue report guidelines](https://github.com/Palisad
 
 #### Branching Strategy
 
-For Talawa Admin, we utilize the GitFlow branching model. GitFlow is geared towards efficiently tracking development and managing releases. The model makes parallel development efforts easy and safe by isolating new development efforts from completed work.
+For Talawa Admin, to simplify the development process, and to ensure that only stable code is pushed to the `master` branch, we had employed the following branching strategy:
 
-The different types of branches we may use are:
+- Develop branch: For unstable code and bug fixing
+- Alpha-x.x.x: for stability teesting
+- Master: Where the stable production ready code lies
 
-- Feature branches (feature/branch-name)
-- Release branches (release/1.XX)
-- Bug branches (bugfix/branch-name)
-- Hotfix branches (hotfix/branch-name)
-
-Detailed document containing how GitFlow works: https://nvie.com/posts/a-successful-git-branching-model/
+### Contributing Code
 
 ### Contributing Code
 
