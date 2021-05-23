@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Navbar from 'components/Navbar/Navbar';
-import web from 'assets/fourth_image.png';
 
 import styles from './LoginPage.module.css';
 
@@ -17,10 +16,10 @@ function LoginPage() {
         <section id={styles.grid_wrapper}>
           <div className={styles.form_wrapper}>
             <h3>
-              <strong className="yellow">Welcome Back</strong>
+              <strong className="black">Welcome Back</strong>
             </h3>
             <h5>
-              <strong className="green">Login to your account</strong>
+              <strong className="black">Login to your account</strong>
             </h5>
             <form>
               <input
@@ -53,9 +52,6 @@ function LoginPage() {
               />
               <input type="submit" className="btn" value="Login" />
             </form>
-          </div>
-          <div className={styles.animated_content}>
-            <img src={web} className="image" />
           </div>
         </section>
       </section>

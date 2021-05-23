@@ -8,7 +8,7 @@ import Navbar from 'components/Navbar/Navbar';
 import styles from './WelcomePage.module.css';
 
 import 'css/index.css';
-import web from 'assets/first_image.png';
+
 function WelcomePage() {
   return (
     <>
@@ -19,21 +19,18 @@ function WelcomePage() {
             <div className={styles.page_content}>
               {/* Primary Header */}
               <h3>
-                Welcome to <strong className="yellow">Talawa Admin</strong>
+                Welcome to <strong className="black">Talawa Admin</strong>
               </h3>
 
               {/* Secondary Header */}
               <h5>
                 The online portal to manage{' '}
-                <strong className="green">Talawa</strong>
+                <strong className="black">Talawa</strong>
               </h5>
               <a href="/login" className="btn">
                 Get Started
               </a>
             </div>
-          </div>
-          <div className={styles.animated_content}>
-            <img src={web} className="image" />
           </div>
         </section>
       </section>
