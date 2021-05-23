@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 """Script to encourage more efficient coding practices.
+
 Methodology:
     Analyses the `src` directory to find files that exceed a
     pre-defined number of lines of code.
@@ -25,6 +26,7 @@ import argparse
 
 def arg_parser_resolver():
     """Resolve the CLI arguments provided by the user.
+
     Args:
         None
     Returns:
@@ -44,6 +46,7 @@ def arg_parser_resolver():
 
 def main():
     """Analyze code files.
+
     This function finds, and prints the files that exceed the CLI
     defined defaults.
     Args:
