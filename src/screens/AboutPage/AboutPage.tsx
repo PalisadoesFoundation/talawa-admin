@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 
-function AboutPage() {
+function AboutPage(): JSX.Element {
   return (
     <>
       <Navbar />

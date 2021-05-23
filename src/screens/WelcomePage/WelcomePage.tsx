@@ -9,7 +9,7 @@ import styles from './WelcomePage.module.css';
 
 import 'css/index.css';
 
-function WelcomePage() {
+function WelcomePage(): JSX.Element {
   return (
     <>
       <section className="background">

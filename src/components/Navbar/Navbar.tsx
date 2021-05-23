@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Navbar.css';
-import web from '../../assets/talawa-logo-lite-200x200.png';
+import web from 'assets/talawa-logo-lite-200x200.png';
 function Navbar() {
   const [navLinkOpen, navLinkToggle] = useState(false);
 

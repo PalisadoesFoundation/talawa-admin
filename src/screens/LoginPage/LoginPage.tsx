@@ -3,7 +3,7 @@ import Navbar from 'components/Navbar/Navbar';
 
 import styles from './LoginPage.module.css';
 
-function LoginPage() {
+function LoginPage(): JSX.Element {
   const [formState, setFormState] = useState({
     email: '',
     password: '',
