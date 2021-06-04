@@ -12,13 +12,16 @@ a {
   text-decoration: none;
 }
 
-nav {
+.main {
+  margin-left: -65rem;
+}
+
+.nav {
   display: flex;
   justify-content: space-around;
   min-height: 5vh;
   width: 100%;
-  padding: 10px 0;
-  align-items: center;
+  align-items: left;
 }
 
 .navlinks {
@@ -67,7 +70,7 @@ nav {
   border-bottom: 1px solid #febc59;
 }
 
-.hamburger-toggle {
+.hamburgertoggle {
   cursor: pointer;
   color: black;
   display: none;
