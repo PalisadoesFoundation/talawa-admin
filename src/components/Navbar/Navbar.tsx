@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Navbar.css';
 import web from 'assets/talawa-logo-lite-200x200.png';
-function Navbar() {
+function Navbar(): JSX.Element {
   const [navLinkOpen, navLinkToggle] = useState(false);
 
   const handleNavLinksToggle = () => {
@@ -23,19 +23,19 @@ function Navbar() {
       <div className="main">
         <a className="logo" href="/">
           <img src={web} />
-          <strong className="green">Talawa</strong>{' '}
-          <strong className="yellow">Admin</strong>
+          <strong>Talawa</strong>
+          <strong>Admin</strong>
         </a>
       </div>
       <ul className={renderClasses()}>
         <li className="link">
-          <a href="/">Home</a>
+          <a href="/"></a>
         </li>
         <li className="link">
-          <a href="/login">Login</a>
+          <a href="/login"></a>
         </li>
         <li className="link">
-          <a href="/about">About</a>
+          <a href="/about"></a>
         </li>
       </ul>
       <div onClick={handleNavLinksToggle} className="hamburger-toggle">

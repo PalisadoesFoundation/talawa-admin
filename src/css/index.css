@@ -17,8 +17,9 @@
   background-color: #febc59;
   padding: 0.5em 1em;
   font-size: 16px;
-  color: #fff;
+  color: #000;
   outline: none;
+  font-weight: bold;
   border: none;
   border-radius: 1.8em 1.8em 1.8em 1.8em;
   cursor: pointer;

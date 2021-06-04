@@ -37,7 +37,13 @@ nav {
 }
 
 .logo img {
-  height: 5em;
+  height: 134px;
+  width: 130px;
+}
+
+.logo strong {
+  font-family: sans-serif;
+  font-size: 24;
 }
 
 .logo h4 {
