@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  getByLabelText,
-  getByPlaceholderText,
-  render,
-  screen,
-} from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import LoginPage from 'screens/LoginPage/LoginPage';
 
 describe('Testing the LoginPage', () => {

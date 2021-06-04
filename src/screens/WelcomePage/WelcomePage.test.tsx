@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import WelcomePage from 'screens/WelcomePage/WelcomePage';
 
 describe('Test for the Welcome Pages', () => {
