@@ -4,7 +4,6 @@ import {
   getByPlaceholderText,
   render,
   screen,
-  within,
 } from '@testing-library/react';
 import LoginPage from 'screens/LoginPage/LoginPage';
 
@@ -24,8 +23,9 @@ describe('Testing the LoginPage', () => {
 
   test('should show the text on the website', () => {
     render(<LoginPage />);
-    expect(screen.getByPlaceholderText('Email')).toHaveAttribute('type', 'email');
+    expect(screen.getByPlaceholderText('Email')).toHaveAttribute(
+      'type',
+      'email'
+    );
   });
-
-
 });
