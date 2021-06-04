@@ -8,8 +8,9 @@
     "@testing-library/user-event": "^12.1.10",
     "@types/jest": "^26.0.15",
     "@types/node": "^12.0.0",
-    "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "antd": "^4.15.6",
+    "enzyme": "^3.11.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
     "prettier": "^2.3.0",
@@ -26,8 +27,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint 'src/*.{ts,tsx}'",
-    "lint-fix": "eslint 'src/*.{ts,tsx}' --fix",
+    "lint": "eslint '**/*.{ts,tsx}'",
+    "lint-fix": "eslint '**/*.{ts,tsx}' --fix",
     "format": "prettier --write \"**/*.{ts,tsx,json,scss,css}\""
   },
   "eslintConfig": {
@@ -49,6 +50,9 @@
     ]
   },
   "devDependencies": {
+    "@types/enzyme": "^3.10.8",
+    "@types/react": "^17.0.6",
+    "@types/react-router-dom": "^5.1.7",
     "@typescript-eslint/eslint-plugin": "^4.24.0",
     "@typescript-eslint/parser": "^4.24.0",
     "eslint-plugin-react-hooks": "^4.2.0"
