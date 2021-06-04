@@ -8,14 +8,18 @@ describe('Testing the LoginPage', () => {
     expect(screen.getByText('Welcome Back')).toBeInTheDocument();
     expect(screen.getByText('Login to your account')).toBeInTheDocument();
   });
+});
 
+describe('Testing the LoginPage', () => {
   test('should show the text on the website', () => {
     render(<LoginPage />);
     expect(screen.getByPlaceholderText('Email')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Password')).toBeInTheDocument();
     expect(screen.getByDisplayValue('Login')).toBeInTheDocument();
   });
+});
 
+describe('Testing the LoginPage', () => {
   test('should show the text on the website', () => {
     render(<LoginPage />);
     expect(screen.getByPlaceholderText('Email')).toHaveAttribute(

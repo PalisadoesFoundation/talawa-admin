@@ -10,7 +10,9 @@ describe('Test for the Welcome Pages', () => {
     expect(screen.getByText('The online portal to manage')).toBeInTheDocument();
     expect(screen.getByText('Get Started')).toBeInTheDocument();
   });
+});
 
+describe('Test for the WelcomePages', () => {
   test('should click the anchor tag', () => {
     render(<WelcomePage />);
     expect(screen.getByText('Get Started').closest('a')).toHaveAttribute(
