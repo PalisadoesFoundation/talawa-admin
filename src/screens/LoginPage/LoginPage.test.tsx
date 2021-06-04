@@ -10,7 +10,7 @@ describe('Testing the LoginPage', () => {
   });
 });
 
-describe('Testing the LoginPage', () => {
+describe('Testing the Login Page', () => {
   test('should show the text on the website', () => {
     render(<LoginPage />);
     expect(screen.getByPlaceholderText('Email')).toBeInTheDocument();
@@ -19,7 +19,7 @@ describe('Testing the LoginPage', () => {
   });
 });
 
-describe('Testing the LoginPage', () => {
+describe('Testing the Login Pages', () => {
   test('should show the text on the website', () => {
     render(<LoginPage />);
     expect(screen.getByPlaceholderText('Email')).toHaveAttribute(
