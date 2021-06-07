@@ -1,0 +1,119 @@
+.main {
+  position: absolute;
+  width: 1102px;
+  height: 75%;
+  margin-left: 320px;
+  margin-top: 150px;
+  background: #fdfdfd;
+  border: 1px solid #e1e1e1;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+.main h4 {
+  position: absolute;
+  height: 31px;
+  margin-left: 150px;
+  margin-top: 50px;
+  font-family: Quattrocento Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 22px;
+  line-height: 31px;
+  color: #000000;
+}
+
+.main h5 {
+  position: absolute;
+  width: 145px;
+  height: 24px;
+  margin-left: 150px;
+  margin-top: 80px;
+  font-family: Quattrocento Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 24px;
+  color: #393939;
+}
+
+.main img {
+  border-radius: 50%;
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  margin-left: 30px;
+  margin-top: 15px;
+  background-blend-mode: darken;
+}
+
+.main h6 {
+  position: absolute;
+  width: 116px;
+  height: 22px;
+  margin-top: 70px;
+  margin-left: 60rem;
+  font-family: Quattrocento Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 22px;
+  color: #000000;
+}
+
+.main hr {
+  position: absolute;
+  width: 1102px;
+  height: 0px;
+  fill: #393939;
+  border: 1px solid #c9c3c3;
+  transform: rotate(179.95deg);
+  margin-top: 120px;
+}
+
+.box {
+  position: absolute;
+  width: 1032px;
+  height: 140px;
+  margin-top: 140px;
+  margin-left: 40px;
+  background: #fdfdfd;
+  border: 1px solid #e1e1e1;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+.box h5 {
+  position: absolute;
+  width: 110px;
+  height: 15px;
+  margin-top: 5px;
+  margin-left: 20px;
+  font-family: Quattrocento Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 15px;
+  line-height: 24px;
+
+  color: #000000;
+}
+
+.box hr {
+  position: absolute;
+  width: 1032px;
+  height: 0px;
+  margin-top: 30px;
+  margin-left: -2px;
+  fill: #393939;
+  border: 1px solid #c9c3c3;
+  transform: rotate(179.95deg);
+}
+
+.box p {
+    margin-top: 45px;
+    margin-left: 20px;
+    width: 970px;
+    font-size: 12px;
+}
