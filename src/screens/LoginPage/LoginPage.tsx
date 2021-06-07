@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Navbar from 'components/Navbar/Navbar';
-
 import styles from './LoginPage.module.css';
 
 function LoginPage(): JSX.Element {
@@ -8,6 +7,10 @@ function LoginPage(): JSX.Element {
     email: '',
     password: '',
   });
+
+  function login_link() {
+    window.location.replace('/orghome');
+  }
 
   return (
     <>
@@ -50,7 +53,12 @@ function LoginPage(): JSX.Element {
                 }}
                 required
               />
-              <input type="submit" className="btn" value="Login" />
+              <input
+                type="submit"
+                className="btn"
+                value="Login"
+                onClick={login_link}
+              />
             </form>
           </div>
         </section>

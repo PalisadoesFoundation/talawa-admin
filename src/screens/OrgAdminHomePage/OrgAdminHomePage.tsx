@@ -1,12 +1,12 @@
 import React from 'react';
-import styles from './OrgAdminHomePage.module.css';
+import OrgAdminNavbar from 'components/OrgAdminNavbar/OrgAdminNavbar';
 
 function OrgAdminHomePage(): JSX.Element {
-    return(
-        <>
-        
-        </>
-    );
-};
+  return (
+    <>
+      <OrgAdminNavbar />
+    </>
+  );
+}
 
 export default OrgAdminHomePage;
