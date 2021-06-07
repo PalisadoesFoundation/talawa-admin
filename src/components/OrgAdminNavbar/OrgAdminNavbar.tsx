@@ -15,32 +15,28 @@ function OrgAdminNavbar(): JSX.Element {
         <div>
           <ul>
             <li>
-              <a href="/orghome" className="fas fa-home">
-                <strong className={styles.text}>Home</strong>
+              <a href="/orghome" className={styles.text}>
+                Home
               </a>
             </li>
             <li>
               <div>
-                <a href="/orghome" className="fas fa-user">
-                  <strong className={styles.text}>Member</strong>
+                <a href="/orghome" className={styles.text}>
+                  Member
                 </a>
               </div>
             </li>
             <li>
-              <a href="/orghome" className="fas fa-user-circle">
-                <strong className={styles.text}>Profile</strong>
+              <a href="/orghome" className={styles.text}>
+                Profile
               </a>
             </li>
           </ul>
         </div>
         <div className={styles.third_box}>
-          <ul>
-            <li>
-              <a href="/orghome" className="fas fa-sign">
-                <strong className={styles.text}>LogOut</strong>
-              </a>
-            </li>
-          </ul>
+          <a href="/orghome" className={styles.text}>
+            LogOut
+          </a>
         </div>
       </div>
     </>
