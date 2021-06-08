@@ -112,8 +112,143 @@
 }
 
 .box p {
-    margin-top: 45px;
-    margin-left: 20px;
-    width: 970px;
-    font-size: 12px;
+  margin-top: 45px;
+  margin-left: 20px;
+  width: 970px;
+  font-size: 12px;
+  font-family: Quattrocento Sans;
+}
+
+.second_box {
+  position: absolute;
+  width: 1032px;
+  height: 110px;
+  background: #ffffff;
+  border: 1px solid #e1e1e1;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  margin-top: 290px;
+  margin-left: 40px;
+  display: flex;
+}
+
+.second_box h5 {
+  position: absolute;
+  width: 66px;
+  height: 41.81px;
+  font-family: Quattrocento Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 23px;
+  color: #000000;
+  margin-top: 20px;
+  margin-left: 40px;
+  padding-left: 20px;
+}
+
+.second_box h6 {
+  position: absolute;
+  width: 128px;
+  height: 19.57px;
+  font-family: Quattrocento Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 22px;
+  margin-left: 115px;
+  margin-top: 20px;
+  color: #393939;
+}
+
+.margin_third {
+  margin-top: 60px !important;
+}
+
+.tag {
+  position: absolute;
+  width: 82px;
+  height: 26px;
+  padding-left: 20px;
+  padding-top: 4px;
+  background: #febd59;
+  border-radius: 20px;
+  align-items: center;
+  font-family: Quattrocento Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 20px;
+  margin-top: 20px;
+  margin-left: 35rem;
+}
+
+.margin {
+  margin-top: 60px !important;
+  margin-left: 40px !important;
+}
+
+.margin_second {
+  margin-left: 29rem !important;
+}
+
+.third_box {
+  position: absolute;
+  width: 1030px;
+  height: 120px;
+  background: #ffffff;
+  border: 1px solid #e1e1e1;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  margin-left: 40px;
+  margin-top: 410px;
+  display: flex;
+}
+
+.third_box img {
+  height: 30px;
+  width: 30px;
+  margin-left: 50px;
+  margin-top: 45px;
+}
+
+.third_box h5 {
+  position: absolute;
+  width: 88.66px;
+  height: 31px;
+  margin-top: 2px;
+  margin-left: 50px;
+  font-family: Quattrocento Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 31px;
+}
+
+.margin_up {
+  margin-top: 85px !important;
+}
+
+.third_box hr {
+  position: absolute;
+  width: 1025.78px;
+  height: 0px;
+  border: 1px solid #c9c3c3;
+  margin-top: 30px;
+}
+
+.third_box h6 {
+  position: absolute;
+  width: 634.7px;
+  height: 21px;
+  font-family: Quattrocento Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 20px;
+  color: #000000;
+  margin-left: 100px;
+  margin-top: 50px;
 }
