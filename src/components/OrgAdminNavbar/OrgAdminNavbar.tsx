@@ -21,15 +21,10 @@ function OrgAdminNavbar(): JSX.Element {
             </li>
             <li>
               <div>
-                <a href="/orghome" className={styles.text}>
+                <a href="/orgmember" className={styles.text}>
                   Member
                 </a>
               </div>
-            </li>
-            <li>
-              <a href="/orghome" className={styles.text}>
-                Profile
-              </a>
             </li>
           </ul>
         </div>
