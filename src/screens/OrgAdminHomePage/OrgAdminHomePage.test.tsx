@@ -10,6 +10,5 @@ describe('Testing the LoginPage', () => {
     expect(screen.getByText('Interest:')).toBeInTheDocument();
     expect(screen.getByText('Email:')).toBeInTheDocument();
     expect(screen.getByText('Links')).toBeInTheDocument();
-    expect(screen.getByText('Singer')).toBeInTheDocument();
   });
 });
