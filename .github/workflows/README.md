@@ -21,3 +21,6 @@ Follow these guidelines when creating or modifying scripts in this directory.
     1. Flake8
 1. All scripts must run a main() function.
 
+### Exception
+
+1. Sometimes the action 'Code scanning results / CodeQL' might not resolve with an error/warning : 'analysis not found', this is an exception and is non-blocking, will be fixed in future. 
