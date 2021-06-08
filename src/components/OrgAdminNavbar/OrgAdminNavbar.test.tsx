@@ -8,7 +8,6 @@ describe('This is the test for Navbar component', () => {
     expect(screen.getByText('TalawaAdmin')).toBeInTheDocument();
     expect(screen.getByText('Home')).toBeInTheDocument();
     expect(screen.getByText('Member')).toBeInTheDocument();
-    expect(screen.getByText('Profile')).toBeInTheDocument();
     expect(screen.getByText('LogOut')).toBeInTheDocument();
   });
 
@@ -17,15 +16,14 @@ describe('This is the test for Navbar component', () => {
     const list = screen.getByRole('list');
     const { getAllByRole } = within(list);
     const listItems = getAllByRole('listitem');
-    expect(listItems.length).toBe(3);
+    expect(listItems.length).toBe(2);
     expect(screen.getByRole('list')).toBeInTheDocument();
   });
 
   test('checking anchor tags', () => {
     render(<OrgAdminNavbar />);
     expect(screen.getByText('Home')).toHaveAttribute('href', '/orghome');
-    expect(screen.getByText('Member')).toHaveAttribute('href', '/orghome');
+    expect(screen.getByText('Member')).toHaveAttribute('href', '/orgmember');
     expect(screen.getByText('LogOut')).toHaveAttribute('href', '/orghome');
-    expect(screen.getByText('Profile')).toHaveAttribute('href', '/orghome');
   });
 });

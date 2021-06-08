@@ -2,7 +2,7 @@ import React from 'react';
 import OrgAdminNavbar from 'components/OrgAdminNavbar/OrgAdminNavbar';
 import styles from './OrgAdminMemberPage.module.css';
 
-function OrgAdminProfilePage(): JSX.Element {
+function OrgAdminMemberPage(): JSX.Element {
   return (
     <>
       <OrgAdminNavbar />
@@ -11,7 +11,7 @@ function OrgAdminProfilePage(): JSX.Element {
         <form>
           <input
             type="text"
-            placeholder="Search.."
+            placeholder="Search"
             name="search"
             className={styles.deco}
           />
@@ -23,4 +23,4 @@ function OrgAdminProfilePage(): JSX.Element {
   );
 }
 
-export default OrgAdminProfilePage;
+export default OrgAdminMemberPage;
