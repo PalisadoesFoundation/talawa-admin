@@ -1,8 +1,11 @@
 # Rules to follow 
 
 . Variable naming should be in camel case 
+
 . Function naming should be in camel case
+
 . Using class is refrained 
+
 . The structure of the project is 
 
  Structure for the different screens
@@ -18,7 +21,11 @@
                                                                      -> Name_of_the_page.tsx (main file)
 
 . ESlint rules should be followed
+
 . Prettier rules should be followed as well
+
 . All the pictures should be placed in assets 
+
 . Change the readme.md according to your pull request
+
 . All the code should be automated tested before the pull request could be merged 
