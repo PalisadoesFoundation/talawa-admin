@@ -11,9 +11,11 @@ function OrgAdminHomePage(): JSX.Element {
       <OrgAdminNavbar />
       <div className={styles.main}>
         <img src={web} />
-        <h4>Organization for Dogs</h4>
-        <h5>Location:Spain</h5>
-        <h6>members: 40</h6>
+        <div className={styles.align}>
+          <h4>Organization for Dogs</h4>
+          <h5>Location:Spain</h5>
+          <h6>members: 40</h6>
+        </div>
         <hr></hr>
         <div className={styles.box}>
           <h5>Description</h5>

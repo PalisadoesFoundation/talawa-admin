@@ -242,3 +242,8 @@
   margin-left: 100px;
   margin-top: 50px;
 }
+
+.align {
+  display: flex;
+  justify-content: center;
+}

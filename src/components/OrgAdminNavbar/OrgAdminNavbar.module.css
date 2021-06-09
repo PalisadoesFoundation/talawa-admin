@@ -46,6 +46,7 @@
   text-decoration: none;
   list-style-type: none;
   display: flex;
+  padding-top: 30px;
 }
 
 .text {
@@ -61,5 +62,5 @@
 
 .third_box {
   margin-top: 28rem;
-  margin-left: -50px;
+  margin-left: -10px;
 }
