@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './OrgAdminNavbar.module.css';
-import web from 'assets/talawa-logo-lite-200x200.png';
+import Logo from 'assets/talawa-logo-lite-200x200.png';
 
 function OrgAdminNavbar(): JSX.Element {
   return (
