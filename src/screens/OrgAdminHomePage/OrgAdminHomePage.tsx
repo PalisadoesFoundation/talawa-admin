@@ -1,9 +1,9 @@
 import React from 'react';
 import OrgAdminNavbar from 'components/OrgAdminNavbar/OrgAdminNavbar';
 import styles from './OrgAdminHomePage.module.css';
-import web from 'assets/talawa-logo-lite-200x200.png';
-import web1 from 'assets/174857.png';
-import web2 from 'assets/Dribbble-icon-Logo-PNG-Image.png';
+import TalawaLogo from 'assets/talawa-logo-lite-200x200.png';
+import LinkedinLogo from 'assets/174857.png';
+import DribbleLogo from 'assets/Dribbble-icon-Logo-PNG-Image.png';
 
 function OrgAdminHomePage(): JSX.Element {
   return (
