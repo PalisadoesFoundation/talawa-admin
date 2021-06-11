@@ -10,7 +10,7 @@ function OrgAdminHomePage(): JSX.Element {
     <>
       <OrgAdminNavbar />
       <div className={styles.main}>
-        <img src={web} />
+        <img src={TalawaLogo} />
         <div className={styles.align}>
           <h4>Organization for Dogs</h4>
           <h5>Location:Spain</h5>
@@ -45,8 +45,8 @@ function OrgAdminHomePage(): JSX.Element {
           <hr></hr>
           <h6>https://www.linkedin.com/in/yasharth-dubey-0434b6155</h6>
           <h6 className={styles.margin_up}>https://dribbble.com/dark_020</h6>
-          <img src={web1} />
-          <img src={web2} className={styles.margin_up} />
+          <img src={LinkedinLogo} />
+          <img src={DribbleLogo} className={styles.margin_up} />
         </div>
       </div>
     </>

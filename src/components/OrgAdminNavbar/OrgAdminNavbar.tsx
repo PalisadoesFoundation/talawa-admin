@@ -7,7 +7,7 @@ function OrgAdminNavbar(): JSX.Element {
     <>
       <div className={styles.header_block}>
         <a href="/orghome">
-          <img src={web} className={styles.image} />
+          <img src={Logo} className={styles.image} />
           <strong className={styles.heading}>TalawaAdmin</strong>
         </a>
       </div>
