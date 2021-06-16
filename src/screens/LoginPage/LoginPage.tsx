@@ -24,7 +24,7 @@ function LoginPage(): JSX.Element {
             <h5>
               <p className="black">Login to your account</p>
             </h5>
-            <form>
+            <form action="/orghome">
               <input
                 type="email"
                 id="email"
@@ -54,7 +54,7 @@ function LoginPage(): JSX.Element {
                 }}
                 required
               />
-              <button type="submit" className={styles.loginbtn} value="Login">
+              <button className={styles.loginbtn} value="Login">
                 Login
               </button>
             </form>
