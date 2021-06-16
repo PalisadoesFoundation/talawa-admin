@@ -29,7 +29,7 @@ function OrgAdminNavbar(): JSX.Element {
           </ul>
         </div>
         <div className={styles.third_box}>
-          <a href="/orghome" className={styles.text}>
+          <a href="/" className={styles.text}>
             LogOut
           </a>
         </div>

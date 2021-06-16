@@ -1,0 +1,18 @@
+.logo {
+  height: 16vh;
+  width: 16vh;
+  margin-left: 2%;
+}
+
+.header_block{
+    height: 18vh;
+    width: 100%;
+    background: #f7f7f7;
+    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.16);
+    position: flex;
+    float: left;
+}
+
+.heading {
+    vertical-align: middle !important;
+}
