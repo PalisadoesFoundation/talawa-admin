@@ -1,31 +1,70 @@
-# Rules to follow 
 
-. Variable naming should be in camel case 
+# Talawa Admin Code Style
 
-. Function naming should be in camel case
+For Talawa Admin, most of the rules for the code style have been enforced with ESLint, but this document serves to provide an overview of the Code style used in Talawa Admin and the Rationale behind it.
 
-. Using class is refrained 
+The code style must be strictly adhered to, to ensure that there is consistency throughout the contributions made to Talawa-Admin
 
-. The structure of the project is 
+code style should not be changed and must be followed.
 
- Structure for the different screens
+## Tech Stack
 
-    src (folder) -> screens (folder) -> Name_of_the_page (folder) -> Name_of_the_page.module.css (file for styling)
-                                                                  -> Name_of_the_page.test.tsx (testing file)
-                                                                  -> Name_of_the_page.tsx (main file)
- 
- Structure for the comman components
-    
-    src (folder) -> components (folder) -> Name_of_the_page (folder) -> Name_of_the_page.module.css (file for styling)
-                                                                     -> Name_of_the_page.test.tsx (testing file)
-                                                                     -> Name_of_the_page.tsx (main file)
+. React.js 
 
-. ESlint rules should be followed
+. CSS module
 
-. Prettier rules should be followed as well
+. Axios (for fetching data)
 
-. All the pictures should be placed in assets 
+. React bootstrap
 
-. Change the readme.md according to your pull request
+## Component Structure
 
-. All the code should be automated tested before the pull request could be merged 
+. Components should be strictly functional components
+
+. Should make use of React hooks where appropriate
+
+
+## Code Style and Naming Conventions
+
+. All React components *must* be written in PascalCase, with their file names, and associated CSS modules being written in PascalCase
+
+. All other files may follow the camelCase naming convention
+
+. All the Return fragment should be closed in empty tag
+
+. Always use Input tag whenever making button or any input field
+
+. Use of classes is refrained 
+
+
+## Test and Code Linting 
+
+Unit tests must be written for *all* code submissions to the repository, 
+the code submitted must also be linted ESLint and formatted with Prettier.
+
+## Folder/Directory Structure
+
+### Sub Directories of `src`
+
+`components`  - The directory for base components that will be used in the various views/screens
+
+`screens` - This houses all of the views/screens to be navigated through in Talawa-Admin
+
+`hooks` - This houses the user defined hooks to be used within Talawa-Admin
+
+`util` - This holds the utility functions that do not fall into any of the other categories
+
+`axios` - This houses all of the functions and code that is related to handling data with axios
+
+`reducers` - This houses the reducers created to be used with Redux for state management
+
+## Imports
+
+Absolute imports have been set up for the project, so imports may be done directly from `src`.
+
+An example being
+
+```
+import Navbar from 'components/Navbar/Navbar';
+```
+
