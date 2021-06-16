@@ -13,7 +13,7 @@ function LoginPage(): JSX.Element {
   }
 
   return (
-    <div>
+    <>
       <section className="background">
         <NavBar />
         <section id={styles.grid_wrapper}>
@@ -61,7 +61,7 @@ function LoginPage(): JSX.Element {
           </div>
         </section>
       </section>
-    </div>
+    </>
   );
 }
 
