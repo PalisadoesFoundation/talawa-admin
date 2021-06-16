@@ -54,7 +54,7 @@ function LoginPage(): JSX.Element {
                 }}
                 required
               />
-              <button className={styles.loginbtn} value="Login">
+              <button type="submit" className={styles.loginbtn} value="Login">
                 Login
               </button>
             </form>
