@@ -1,14 +1,14 @@
 import React from 'react';
-import styles from './SuperAdminMemberPage.module.css';
+import styles from './SuperAdminOrgPage.module.css';
 import SuperAdminNavbar from 'components/SuperAdminNavbar/SuperAdminNavbar';
 
-function SuperAdminMemberPage(): JSX.Element {
+function SuperAdminOrgPage(): JSX.Element {
   return (
     <>
       <SuperAdminNavbar />
       <div className={styles.first_box}>
         <div className={styles.inside_box}>
-          <h5>List of People</h5>
+          <h5>List of Organization</h5>
           <form>
             <input
               type="text"
@@ -25,4 +25,4 @@ function SuperAdminMemberPage(): JSX.Element {
   );
 }
 
-export default SuperAdminMemberPage;
+export default SuperAdminOrgPage;

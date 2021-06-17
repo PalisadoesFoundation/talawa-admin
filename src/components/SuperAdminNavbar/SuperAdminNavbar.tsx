@@ -17,7 +17,7 @@ function SuperAdminNavbar(): JSX.Element {
           <a href="/supermember">People</a>
         </li>
         <li>
-          <a href="/">Organization</a>
+          <a href="/superorg">Organization</a>
         </li>
         <li>
           <a href="/">LogOut</a>

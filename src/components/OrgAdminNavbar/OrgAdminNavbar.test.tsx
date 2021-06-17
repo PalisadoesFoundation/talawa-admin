@@ -24,6 +24,6 @@ describe('This is the test for Navbar component', () => {
     render(<OrgAdminNavbar />);
     expect(screen.getByText('Home')).toHaveAttribute('href', '/orghome');
     expect(screen.getByText('Member')).toHaveAttribute('href', '/orgmember');
-    expect(screen.getByText('LogOut')).toHaveAttribute('href', '/orghome');
+    expect(screen.getByText('LogOut')).toHaveAttribute('href', '/');
   });
 });
