@@ -8,7 +8,7 @@ function OrgAdminMemberPage(): JSX.Element {
       <OrgAdminNavbar />
       <div className={styles.first_box}>
         <div className={styles.inside_box}>
-          <h5>List of member</h5>
+          <h5>List of members</h5>
           <form>
             <input
               type="text"
