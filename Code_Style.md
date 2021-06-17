@@ -32,8 +32,6 @@ code style should not be changed and must be followed.
 
 . All the Return fragment should be closed in empty tag
 
-. Always use Input tag whenever making button or any input field
-
 . Use of classes is refrained 
 
 

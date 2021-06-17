@@ -9,22 +9,19 @@ function SuperAdminNavbar(): JSX.Element {
         <img src={Logo} className={styles.logo} />
         <strong className={styles.heading}>TalawaAdmin</strong>
       </div>
-      <div>
-        <div>
-          <ul>
-            <li>
-              <a>Home</a>
-            </li>
-            <li>
-              <div>
-                <a href="/supermember">People</a>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <div>
+      <div className={styles.left_block}>
+        <li>
+          <a href="/">Home</a>
+        </li>
+        <li>
+          <a href="/supermember">People</a>
+        </li>
+        <li>
+          <a href="/">Organization</a>
+        </li>
+        <li>
           <a href="/">LogOut</a>
-        </div>
+        </li>
       </div>
     </>
   );
