@@ -31,8 +31,7 @@
     "react/destructuring-assignment": ["warn", "always"],
     "react/no-multi-comp": ["error", { "ignoreStateless": false }],
     "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
-    "prettier/prettier": ["error", {"endOfLine": "auto"}],
-    
+
     // Ensures that components are always written in PascalCase
     "react/jsx-pascal-case": [
       "error",
