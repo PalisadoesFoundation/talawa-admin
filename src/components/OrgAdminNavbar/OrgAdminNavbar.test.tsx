@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import OrgAdminNavbar from './OrgAdminNavbar';
 
 describe('This is the test for Navbar component', () => {
@@ -10,7 +10,7 @@ describe('This is the test for Navbar component', () => {
     expect(screen.getByText('Member')).toBeInTheDocument();
     expect(screen.getByText('LogOut')).toBeInTheDocument();
   });
-  
+
   test('checking anchor tags', () => {
     render(<OrgAdminNavbar />);
     expect(screen.getByText('Home')).toHaveAttribute('href', '/orghome');

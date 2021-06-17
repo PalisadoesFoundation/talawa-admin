@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import SuperAdminNavbar from './SuperAdminNavbar';
 
 describe('This is the test for Navbar component', () => {
