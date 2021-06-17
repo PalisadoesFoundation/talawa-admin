@@ -3,15 +3,15 @@
 }
 
 .form_wrapper {
-  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  width: 43%;
+  width: 30%;
   padding: 40px 30px;
   background: #ffffff00;
   box-shadow: 2px 10px 10px 10px #acacac21;

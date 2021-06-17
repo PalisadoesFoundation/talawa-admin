@@ -13,7 +13,7 @@ function LoginPage(): JSX.Element {
   }
 
   return (
-    <div>
+    <>
       <section className="background">
         <NavBar />
         <section id={styles.grid_wrapper}>
@@ -54,14 +54,14 @@ function LoginPage(): JSX.Element {
                 }}
                 required
               />
-              <button className={styles.loginbtn} value="Login">
+              <button type="submit" className={styles.loginbtn} value="Login">
                 Login
               </button>
             </form>
           </div>
         </section>
       </section>
-    </div>
+    </>
   );
 }
 
