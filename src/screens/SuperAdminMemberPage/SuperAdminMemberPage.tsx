@@ -19,7 +19,6 @@ function SuperAdminMemberPage(): JSX.Element {
           </form>
         </div>
         <hr></hr>
-        <div className={styles.scroll}></div>
       </div>
     </>
   );

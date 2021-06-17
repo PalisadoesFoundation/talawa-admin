@@ -6,33 +6,19 @@ function OrgAdminNavbar(): JSX.Element {
   return (
     <>
       <div className={styles.header_block}>
-        <a href="/orghome">
-          <img src={Logo} className={styles.image} />
-          <strong className={styles.heading}>TalawaAdmin</strong>
-        </a>
+        <img src={Logo} className={styles.logo} />
+        <strong className={styles.heading}>TalawaAdmin</strong>
       </div>
-      <div className={styles.second_box}>
-        <div>
-          <ul>
-            <li>
-              <a href="/orghome" className={styles.text}>
-                Home
-              </a>
-            </li>
-            <li>
-              <div>
-                <a href="/orgmember" className={styles.text}>
-                  Member
-                </a>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <div className={styles.third_box}>
-          <a href="/" className={styles.text}>
-            LogOut
-          </a>
-        </div>
+      <div className={styles.left_block}>
+        <li>
+          <a href="/orghome">Home</a>
+        </li>
+        <li>
+          <a href="/orgmember">Member</a>
+        </li>
+        <li>
+          <a href="/">LogOut</a>
+        </li>
       </div>
     </>
   );

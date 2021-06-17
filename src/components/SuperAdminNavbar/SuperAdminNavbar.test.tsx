@@ -17,6 +17,9 @@ describe('This is the test for Navbar component', () => {
     expect(screen.getByText('Home')).toHaveAttribute('href', '/');
     expect(screen.getByText('People')).toHaveAttribute('href', '/supermember');
     expect(screen.getByText('LogOut')).toHaveAttribute('href', '/');
-    expect(screen.getByText('Organization')).toHaveAttribute('href', '/superorg');
+    expect(screen.getByText('Organization')).toHaveAttribute(
+      'href',
+      '/superorg'
+    );
   });
 });
