@@ -1,7 +1,8 @@
 import React from 'react';
 import styles from './Navbar.module.css';
-import web from 'assets/talawa-logo-lite-200x200.png';
-function Navbar(): JSX.Element {
+import Navbar from 'react-bootstrap/Navbar';
+import Logo from 'assets/talawa-logo-lite-200x200.png';
+function NavBar(): JSX.Element {
   return (
     <>
       <nav className={styles.nav}>
@@ -17,4 +18,4 @@ function Navbar(): JSX.Element {
   );
 }
 
-export default Navbar;
+export default NavBar;

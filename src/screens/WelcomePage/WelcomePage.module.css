@@ -1,9 +1,7 @@
 #grid_wrapper {
-  display: grid;
   align-items: center;
-  gap: 4em;
-  grid-template-columns: 1fr 1fr;
 }
+
 /* Animation */
 .animated_content {
   display: flex;
@@ -12,27 +10,20 @@
   animation: up-down 2s ease-in-out infinite alternate-reverse both;
 }
 
-.flex_wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .page_content {
-  margin-left: 5em;
-  margin-top: 12em;
+  margin-left: 7%;
+  margin-top: 10%;
 }
 .page_content h3 {
   font-weight: bold;
-
   font-size: 2.5em;
+  margin-bottom: 0.5em;
 }
 
 .page_content h5 {
   font-weight: 20;
   font-size: 1.3em;
-  margin: 0.5em 0;
-  margin-bottom: 1.3em;
+  margin-bottom: 1.5em;
 }
 /* Sizes */
 .animated_content img {
@@ -56,3 +47,4 @@
     transform: translateY(-10px);
   }
 }
+
