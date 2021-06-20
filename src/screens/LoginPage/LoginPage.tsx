@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Navbar from 'components/Navbar/Navbar';
+import NavBar from 'components/Navbar/Navbar';
 import styles from './LoginPage.module.css';
 
 function LoginPage(): JSX.Element {
@@ -15,21 +15,22 @@ function LoginPage(): JSX.Element {
   return (
     <>
       <section className="background">
-        <Navbar />
+        <NavBar />
         <section id={styles.grid_wrapper}>
           <div className={styles.form_wrapper}>
             <h3>
-              <strong className="black">Welcome Back</strong>
+              <p className="black">Welcome Back</p>
             </h3>
             <h5>
-              <strong className="black">Login to your account</strong>
+              <p className="black">Login to your account</p>
             </h5>
-            <form>
+            <form action="/orghome">
               <input
                 type="email"
                 id="email"
                 className="input_box"
                 placeholder="Email"
+                autoComplete="off"
                 value={formState.email}
                 onChange={(e) => {
                   setFormState({
@@ -53,12 +54,9 @@ function LoginPage(): JSX.Element {
                 }}
                 required
               />
-              <input
-                type="submit"
-                className="btn"
-                value="Login"
-                onClick={login_link}
-              />
+              <button type="button" className={styles.loginbtn} value="Login">
+                Login
+              </button>
             </form>
           </div>
         </section>

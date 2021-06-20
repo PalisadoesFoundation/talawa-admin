@@ -15,7 +15,7 @@ describe('Testing the Login Page', () => {
     render(<LoginPage />);
     expect(screen.getByPlaceholderText('Email')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Password')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('Login')).toBeInTheDocument();
+    expect(screen.getByText('Login')).toBeInTheDocument();
   });
 });
 

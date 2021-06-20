@@ -13,15 +13,16 @@ a {
 }
 
 .main {
-  margin-left: -65rem;
+  float: left;
+  display: block;
 }
 
 .nav {
   display: flex;
+  position: relative;
   justify-content: space-around;
-  min-height: 5vh;
   width: 100%;
-  align-items: left;
+  z-index: 100;
 }
 
 .navlinks {
@@ -33,8 +34,8 @@ a {
 }
 
 .logo {
+  margin-left: 4%;
   display: flex;
-  justify-content: center;
   align-items: center;
   text-decoration: none;
 }
@@ -100,5 +101,8 @@ a {
 
   .active {
     transform: translateX(0%);
+  }
+  .logo {
+    margin-left: 0%;
   }
 }
