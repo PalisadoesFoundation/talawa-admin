@@ -74,7 +74,7 @@
   width: 70vh;
 }
 
-.loginbtn{
+.loginbtn {
   margin: 1rem 0 0;
   background-color: #febc59;
   padding: 0.5em 1em;
@@ -86,21 +86,20 @@
   border-radius: 5px;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
-  width:100%;
+  width: 100%;
 }
 
 /* Screen sizes */
-@media screen and (max-width: 1024px){
-  .form_wrapper{
+@media screen and (max-width: 1024px) {
+  .form_wrapper {
     left: 50%;
   }
 }
-@media screen and (max-width: 665px){
-  .form_wrapper{
+@media screen and (max-width: 665px) {
+  .form_wrapper {
     min-width: 90%;
   }
 }
-
 
 @-webkit-keyframes up-down {
   0% {

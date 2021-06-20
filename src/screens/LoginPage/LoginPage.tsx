@@ -54,7 +54,12 @@ function LoginPage(): JSX.Element {
                 }}
                 required
               />
-              <button type="button" className={styles.loginbtn} value="Login">
+              <button
+                type="button"
+                className={styles.loginbtn}
+                value="Login"
+                onClick={login_link}
+              >
                 Login
               </button>
             </form>
