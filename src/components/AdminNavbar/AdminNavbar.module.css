@@ -1,0 +1,42 @@
+.logo {
+  height: 16vh;
+  width: 16vh;
+  margin-left: 2%;
+}
+
+.header_block {
+  height: 18vh;
+  width: 100%;
+  background: #f7f7f7;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.16);
+  display: flex;
+  float: left;
+}
+
+.heading {
+  font-size: 2vh;
+  padding-top: 10vh;
+}
+
+.left_block {
+  width: 20vw;
+  height: 82vh;
+  color: #f7f7f7;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.16);
+  vertical-align: top;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  padding-left: 2vw;
+  gap: 10%;
+  padding-top: 10vh;
+}
+
+.left_block a {
+  font-weight: bold;
+  font-size: 2vh;
+}
+
+.left_block li {
+  list-style-type: none;
+}

@@ -1,20 +1,21 @@
 import React from 'react';
+import styles from './SuperAdminOrgPage.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
-import styles from './OrgAdminMemberPage.module.css';
 
-function OrgAdminMemberPage(): JSX.Element {
+function SuperAdminOrgPage(): JSX.Element {
   return (
     <>
       <AdminNavbar
         targets={[
-          { name: 'Home', url: '/orghome' },
-          { name: 'Member', url: '/orgmember' },
+          { name: 'Home', url: '/' },
+          { name: 'People', url: '/supermember' },
+          { name: 'Organisation', url: '/superorg' },
           { name: 'LogOut', url: '/' },
         ]}
       />
       <div className={styles.first_box}>
         <div className={styles.inside_box}>
-          <h5>List of members</h5>
+          <h5>List of Organization</h5>
           <form>
             <input
               type="text"
@@ -30,4 +31,4 @@ function OrgAdminMemberPage(): JSX.Element {
   );
 }
 
-export default OrgAdminMemberPage;
+export default SuperAdminOrgPage;

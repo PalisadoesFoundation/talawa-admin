@@ -2,13 +2,13 @@
   position: absolute;
   width: 1102px;
   height: 75%;
-  margin-left: 320px;
-  margin-top: 150px;
   background: #fdfdfd;
   border: 1px solid #e1e1e1;
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
   border-radius: 10px;
+  margin-top: -80vh;
+  margin-left: 25%;
 }
 
 .main h4 {

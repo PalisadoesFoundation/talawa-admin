@@ -1,5 +1,5 @@
 import React from 'react';
-import OrgAdminNavbar from 'components/OrgAdminNavbar/OrgAdminNavbar';
+import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import styles from './OrgAdminHomePage.module.css';
 import TalawaLogo from 'assets/talawa-logo-lite-200x200.png';
 import LinkedinLogo from 'assets/174857.png';
@@ -8,7 +8,13 @@ import DribbleLogo from 'assets/Dribbble-icon-Logo-PNG-Image.png';
 function OrgAdminHomePage(): JSX.Element {
   return (
     <>
-      <OrgAdminNavbar />
+      <AdminNavbar
+        targets={[
+          { name: 'Home', url: '/orghome' },
+          { name: 'Member', url: '/orgmember' },
+          { name: 'LogOut', url: '/' },
+        ]}
+      />
       <div className={styles.main}>
         <img src={TalawaLogo} />
         <div className={styles.align}>
