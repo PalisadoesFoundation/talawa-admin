@@ -1,11 +1,17 @@
 import React from 'react';
-import OrgAdminNavbar from 'components/OrgAdminNavbar/OrgAdminNavbar';
+import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import styles from './OrgAdminMemberPage.module.css';
 
 function OrgAdminMemberPage(): JSX.Element {
   return (
     <>
-      <OrgAdminNavbar />
+      <AdminNavbar
+        targets={[
+          { name: 'Home', url: '/orghome' },
+          { name: 'Member', url: '/orgmember' },
+          { name: 'LogOut', url: '/' },
+        ]}
+      />
       <div className={styles.first_box}>
         <div className={styles.inside_box}>
           <h5>List of members</h5>

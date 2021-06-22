@@ -1,11 +1,18 @@
 import React from 'react';
 import styles from './SuperAdminMemberPage.module.css';
-import SuperAdminNavbar from 'components/SuperAdminNavbar/SuperAdminNavbar';
+import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 
 function SuperAdminMemberPage(): JSX.Element {
   return (
     <>
-      <SuperAdminNavbar />
+      <AdminNavbar
+        targets={[
+          { name: 'Home', url: '/' },
+          { name: 'People', url: '/supermember' },
+          { name: 'Organisation', url: '/superorg' },
+          { name: 'LogOut', url: '/' },
+        ]}
+      />
       <div className={styles.first_box}>
         <div className={styles.inside_box}>
           <h5>List of People</h5>
