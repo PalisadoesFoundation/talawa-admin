@@ -17,15 +17,15 @@ a {
   display: block;
 }
 
-.navbarbg{
-  height:73px;
-  background-color: #F7F7F7;
+.navbarbg {
+  height: 73px;
+  background-color: #f7f7f7;
   display: flex;
-  z-index:1;
+  z-index: 1;
   position: relative;
   flex-direction: row;
   justify-content: space-between;
-  box-shadow: 0px 0px 8px 2px #c8c8c8;  
+  box-shadow: 0px 0px 8px 2px #c8c8c8;
 }
 
 .logo {
@@ -36,15 +36,15 @@ a {
 }
 
 .logo img {
-  margin-top:5px;
-  margin-left:10px;
+  margin-top: 5px;
+  margin-left: 10px;
   transform: scale(1.1);
   height: 64px;
   width: 70px;
 }
 
 .logo > strong {
-  margin-left:3px;
+  margin-left: 3px;
   font-family: sans-serif;
   font-size: 19px;
 }
@@ -55,53 +55,53 @@ a {
   font-weight: lighter;
   margin-top: 3em;
 }
-.roundedcircle{
-  margin-top:7px;
-  margin-right:25px;
+.roundedcircle {
+  margin-top: 7px;
+  margin-right: 25px;
   border-radius: 50px;
 }
 
-.sidebar{
-  z-index:0;
+.sidebar {
+  z-index: 0;
   position: relative;
-  min-width:160px;
-  width:10%;
-  background-color: #F7F7F7;
-  margin:0;
+  min-width: 160px;
+  width: 10%;
+  background-color: #f7f7f7;
+  margin: 0;
   min-height: 100vh !important;
 }
 
-.sidebarsticky{
-  padding-top:40%;
+.sidebarsticky {
+  padding-top: 40%;
 }
 
-.navitem{
-  padding-left:27%;
-  padding-top:12px;
-  padding-bottom:12px;
+.navitem {
+  padding-left: 27%;
+  padding-top: 12px;
+  padding-bottom: 12px;
   cursor: pointer;
 }
-.navitem:hover{
-  border-left:4px solid black;
-  z-index:1;
-  background-color: #F7F7F7;
-  box-shadow: 2px 2px 8px 2px #c8c8c8;  
+.navitem:hover {
+  border-left: 4px solid black;
+  z-index: 1;
+  background-color: #f7f7f7;
+  box-shadow: 2px 2px 8px 2px #c8c8c8;
 }
 
 .navitem:target {
-  z-index:1;
-  background-color: #F7F7F7;
-  box-shadow: 2px 2px 2px 2px #c8c8c8;  
+  z-index: 1;
+  background-color: #f7f7f7;
+  box-shadow: 2px 2px 2px 2px #c8c8c8;
 }
 
-.naviteminside{
-  font-size:17px;
+.naviteminside {
+  font-size: 17px;
   font-weight: 600;
 }
 
-@media screen and (max-width: 768px){
-  .sidebar{
-    width:15%;
+@media screen and (max-width: 768px) {
+  .sidebar {
+    width: 15%;
   }
 }
 
