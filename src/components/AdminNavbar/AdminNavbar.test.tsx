@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import AdminNavbar from './AdminNavbar';
 
 describe('This is the test for Navbar component', () => {
-  test('should render 5 text elements test for the Navbar componet', () => {
+  test('should render 5 text elements test for the Navbar component', () => {
     render(
       <AdminNavbar
         targets={[
@@ -14,7 +14,8 @@ describe('This is the test for Navbar component', () => {
         ]}
       />
     );
-    expect(screen.getByText('TalawaAdmin')).toBeInTheDocument();
+    expect(screen.getByText('Talawa')).toBeInTheDocument();
+    expect(screen.getByText('Admin')).toBeInTheDocument();
     expect(screen.getByText('Home')).toBeInTheDocument();
     expect(screen.getByText('People')).toBeInTheDocument();
     expect(screen.getByText('Organisation')).toBeInTheDocument();
@@ -41,7 +42,7 @@ describe('This is the test for Navbar component', () => {
     );
   });
 
-  test('should render 3 text elements test for the Navbar componet', () => {
+  test('should render 3 text elements test for the Navbar component', () => {
     render(
       <AdminNavbar
         targets={[
@@ -51,7 +52,8 @@ describe('This is the test for Navbar component', () => {
         ]}
       />
     );
-    expect(screen.getByText('TalawaAdmin')).toBeInTheDocument();
+    expect(screen.getByText('Talawa')).toBeInTheDocument();
+    expect(screen.getByText('Admin')).toBeInTheDocument();
     expect(screen.getByText('Home')).toBeInTheDocument();
     expect(screen.getByText('Member')).toBeInTheDocument();
     expect(screen.getByText('LogOut')).toBeInTheDocument();
