@@ -6,7 +6,7 @@ import OrgAdminHomePage from 'screens/OrgAdminHomePage/OrgAdminHomePage';
 import OrgAdminMemberPage from 'screens/OrgAdminMemberPage/OrgAdminMemberPage';
 import SuperAdminMemberPage from 'screens/SuperAdminMemberPage/SuperAdminMemberPage';
 import SuperAdminOrgPage from 'screens/SuperAdminOrgPage/SuperAdminOrgPage';
-
+import SuperAdminDashboard from 'screens/SuperAdminDashboard/SuperAdminDashboard';
 function App(): JSX.Element {
   return (
     <>
@@ -17,6 +17,7 @@ function App(): JSX.Element {
         <Route exact path="/orgmember" component={OrgAdminMemberPage} />
         <Route exact path="/supermember" component={SuperAdminMemberPage} />
         <Route exact path="/superorg" component={SuperAdminOrgPage} />
+        <Route exact path="/superdash" component={SuperAdminDashboard} />
       </Switch>
     </>
   );
