@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './SuperAdminUserOrgPage.module.css';
+import styles from './SuperAdminUserOrg.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 
 function SuperAdminUserOrgPage(): JSX.Element {
