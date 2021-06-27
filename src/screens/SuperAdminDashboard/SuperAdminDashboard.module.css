@@ -6,12 +6,12 @@
 .first_box h2 {
   font-size: 3vh;
   padding-bottom: 20px;
+  margin-left: 4vw;
 }
 
 .second_box {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
   margin-left: -11vw;
   padding-bottom: 40px;
 }
@@ -23,13 +23,12 @@
   border-radius: 10px;
   margin-top: 10px;
   height: 25vh;
-  width: 30vw;
+  width: 20vw;
 }
 
 .third_box {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
   margin-left: -11vw;
   padding-bottom: 40px;
 }
@@ -40,4 +39,13 @@
 
 .box {
   height: 60px;
+}
+
+.right_one {
+  margin-left: 15vw;
+}
+
+.left_one {
+  margin-left: 15vw;
+  padding-bottom: 15px;
 }

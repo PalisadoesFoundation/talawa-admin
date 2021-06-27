@@ -21,7 +21,7 @@ const line_state = {
   datasets: [
     {
       label: 'Uptime',
-      backgroundColor: 'rgba(75,192,192,1)',
+      backgroundColor: '#31bb6b',
       borderColor: 'rgba(0,0,0,1)',
       borderWidth: 2,
       data: [65, 59, 80, 81, 56],
@@ -34,8 +34,8 @@ const pie_state = {
   datasets: [
     {
       label: 'Organisation',
-      backgroundColor: ['#B21F00', '#C9DE00'],
-      hoverBackgroundColor: ['#501800', '#4B5000'],
+      backgroundColor: ['#febd59', '#31bb6b'],
+      hoverBackgroundColor: ['#febd60', '#31bb6c'],
       data: [65, 45],
     },
   ],
@@ -59,7 +59,7 @@ const bar_state = {
   datasets: [
     {
       label: 'Uptime',
-      backgroundColor: 'rgba(75,192,192,1)',
+      backgroundColor: '#febd59',
       borderColor: 'rgba(0,0,0,1)',
       borderWidth: 2,
       data: [65, 59, 80, 81, 56],
@@ -81,11 +81,11 @@ function SuperAdminDashboard(): JSX.Element {
       <div className={styles.first_box}>
         <h2>Dashboard</h2>
         <div className={styles.second_box}>
-          <div>
+          <div className={styles.left_one}>
             <h4>List Of Organization</h4>
             <div className={styles.list}></div>
           </div>
-          <div>
+          <div className={styles.right_one}>
             <h4>Organisation Statistics</h4>
             <div>
               <Pie
@@ -109,7 +109,7 @@ function SuperAdminDashboard(): JSX.Element {
           </div>
         </div>
         <div className={styles.third_box}>
-          <div>
+          <div className={styles.left_one}>
             <h4>API Uptime Statistics</h4>
             <div>
               <Line
@@ -130,7 +130,7 @@ function SuperAdminDashboard(): JSX.Element {
               />
             </div>
           </div>
-          <div>
+          <div className={styles.right_one}>
             <h4>Organisation Registered Statistics</h4>
             <div>
               <Bar
