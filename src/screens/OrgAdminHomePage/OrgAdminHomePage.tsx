@@ -1,9 +1,6 @@
 import React from 'react';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import styles from './OrgAdminHomePage.module.css';
-// import TalawaLogo from 'assets/talawa-logo-lite-200x200.png';
-// import LinkedinLogo from 'assets/174857.png';
-// import DribbleLogo from 'assets/Dribbble-icon-Logo-PNG-Image.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faYoutube,
@@ -13,7 +10,6 @@ import {
   faDribbble,
   faGooglePlus,
   faLinkedinIn,
-  faGithub,
 } from '@fortawesome/free-brands-svg-icons';
 
 function OrgAdminHomePage(): JSX.Element {
@@ -84,20 +80,9 @@ function OrgAdminHomePage(): JSX.Element {
                 </div>
               </div>
             </div>
-            {/* <h6>8650611111</h6>
-            <h5 className={styles.margin}>Email:</h5>
-            <h6 className={styles.margin_third}>domain@domain.com</h6>
-            <h5 className={styles.margin_second}>Interest:</h5>
-            <div className={styles.tag}>Singer</div> */}
             <hr></hr>
           </div>
           <div className={styles.third_box}>
-            {/* <h5>Links</h5>
-            <hr></hr>
-            <h6>https://www.linkedin.com/in/yasharth-dubey-0434b6155</h6>
-            <h6 className={styles.margin_up}>https://dribbble.com/dark_020</h6>
-            <img src={LinkedinLogo} />
-            <img src={DribbleLogo} className={styles.margin_up} /> */}
             <h5>Interests Offered</h5>
             <div className={styles.interests_data}>
               <p className={styles.interests_data_odd}>NGO</p>
