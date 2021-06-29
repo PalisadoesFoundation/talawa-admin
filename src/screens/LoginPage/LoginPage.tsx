@@ -9,7 +9,7 @@ function LoginPage(): JSX.Element {
   });
 
   function login_link() {
-    window.location.replace('/supermember');
+    window.location.replace('/orghome');
   }
 
   return (
