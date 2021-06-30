@@ -86,6 +86,7 @@ a {
 .navitem:hover{
   border-left:4px solid black;
   z-index:1;
+  transition: all .5s;
   background-color: #F7F7F7;
   box-shadow: 2px 2px 8px 2px #c8c8c8;  
 }
