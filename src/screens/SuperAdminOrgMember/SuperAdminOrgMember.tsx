@@ -1,8 +1,8 @@
 import React from 'react';
-import styles from './SuperAdminOrgPage.module.css';
+import styles from './SuperAdminOrgMember.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 
-function SuperAdminOrgPage(): JSX.Element {
+function SuperAdminOrgMemberPage(): JSX.Element {
   return (
     <>
       <AdminNavbar
@@ -15,7 +15,7 @@ function SuperAdminOrgPage(): JSX.Element {
       />
       <div className={styles.first_box}>
         <div className={styles.inside_box}>
-          <h5>List of Organisation</h5>
+          <h5>List of People</h5>
           <form>
             <input
               type="text"
@@ -31,4 +31,4 @@ function SuperAdminOrgPage(): JSX.Element {
   );
 }
 
-export default SuperAdminOrgPage;
+export default SuperAdminOrgMemberPage;
