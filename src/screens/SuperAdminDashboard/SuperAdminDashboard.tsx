@@ -87,7 +87,7 @@ function SuperAdminDashboard(): JSX.Element {
           </div>
           <div className={styles.right_one}>
             <h4>Organisation Statistics</h4>
-            <div>
+            <canvas>
               <Pie
                 type
                 data={pie_state}
@@ -105,7 +105,7 @@ function SuperAdminDashboard(): JSX.Element {
                   },
                 }}
               />
-            </div>
+            </canvas>
           </div>
         </div>
         <div className={styles.third_box}>
