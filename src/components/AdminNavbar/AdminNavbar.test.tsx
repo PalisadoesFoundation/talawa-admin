@@ -7,7 +7,7 @@ describe('This is the test for Navbar component', () => {
     render(
       <AdminNavbar
         targets={[
-          { name: 'Home', url: '/' },
+          { name: 'Home', url: '/superdash' },
           { name: 'People', url: '/supermember' },
           { name: 'Organisation', url: '/superorg' },
           { name: 'LogOut', url: '/' },
@@ -26,14 +26,14 @@ describe('This is the test for Navbar component', () => {
     render(
       <AdminNavbar
         targets={[
-          { name: 'Home', url: '/' },
+          { name: 'Home', url: '/superdash' },
           { name: 'People', url: '/supermember' },
           { name: 'Organisation', url: '/superorg' },
           { name: 'LogOut', url: '/' },
         ]}
       />
     );
-    expect(screen.getByText('Home')).toHaveAttribute('href', '/');
+    expect(screen.getByText('Home')).toHaveAttribute('href', '/superdash');
     expect(screen.getByText('People')).toHaveAttribute('href', '/supermember');
     expect(screen.getByText('LogOut')).toHaveAttribute('href', '/');
     expect(screen.getByText('Organisation')).toHaveAttribute(

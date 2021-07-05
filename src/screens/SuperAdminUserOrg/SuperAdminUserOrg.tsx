@@ -1,8 +1,8 @@
 import React from 'react';
-import styles from './SuperAdminOrgPage.module.css';
+import styles from './SuperAdminUserOrg.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 
-function SuperAdminOrgPage(): JSX.Element {
+function SuperAdminUserOrgPage(): JSX.Element {
   return (
     <>
       <AdminNavbar
@@ -31,4 +31,4 @@ function SuperAdminOrgPage(): JSX.Element {
   );
 }
 
-export default SuperAdminOrgPage;
+export default SuperAdminUserOrgPage;

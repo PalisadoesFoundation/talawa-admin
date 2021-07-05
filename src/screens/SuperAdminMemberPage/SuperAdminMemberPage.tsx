@@ -7,7 +7,7 @@ function SuperAdminMemberPage(): JSX.Element {
     <>
       <AdminNavbar
         targets={[
-          { name: 'Home', url: '/' },
+          { name: 'Home', url: '/superdash' },
           { name: 'People', url: '/supermember' },
           { name: 'Organisation', url: '/superorg' },
           { name: 'LogOut', url: '/' },
