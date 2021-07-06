@@ -12,10 +12,14 @@ function OrganizationCard(props: {
     <>
       <div>
         <div className={styles.first_box}>
-          <img
-            src="https://via.placeholder.com/80"
-            className={styles.alignimg}
-          />
+          {props.image ? (
+            <img src={props.image} className={styles.alignimg} />
+          ) : (
+            <img
+              src="https://via.placeholder.com/80"
+              className={styles.alignimg}
+            />
+          )}
           <div className={styles.second_box}>
             <h4>{props.name}</h4>
             <h5>
