@@ -44,14 +44,14 @@ function SuperAdminOrgPage(): JSX.Element {
           </form>
         </div>
         <hr></hr>
-        <div>
+        <div className={styles.list_box}>
           {data
             ? data.organizations.map(
                 (datas: {
                   _id: any;
                   image: string;
-                  name: any;
-                  creator: { lastName: any; firstName: any };
+                  name: string;
+                  creator: { lastName: string; firstName: string };
                 }) => {
                   return (
                     <OrganizationCard

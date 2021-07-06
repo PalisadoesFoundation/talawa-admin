@@ -41,7 +41,7 @@ function SuperAdminMemberPage(): JSX.Element {
           </form>
         </div>
         <hr></hr>
-        <div>
+        <div className={styles.list_box}>
           {data
             ? data.users.map(
                 (datas: {

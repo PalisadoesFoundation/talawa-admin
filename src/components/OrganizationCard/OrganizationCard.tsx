@@ -1,17 +1,32 @@
 import React from 'react';
+import styles from './OrganizationCard.module.css';
 
 function OrganizationCard(props: {
-  key: any;
+  key: any | undefined;
   image: string;
-  name: any;
-  lastName: any;
-  firstName: any;
+  name: string;
+  lastName: string;
+  firstName: string;
 }): JSX.Element {
   return (
     <>
-      <h4>{props.name}</h4>
-      <h5>{props.firstName}</h5>
-      <h5>{props.lastName}</h5>
+      <div>
+        <div className={styles.first_box}>
+          <img
+            src="https://via.placeholder.com/80"
+            className={styles.alignimg}
+          />
+          <div className={styles.second_box}>
+            <h4>{props.name}</h4>
+            <h5>
+              Owner:{props.firstName}
+              &nbsp;
+              {props.lastName}
+            </h5>
+          </div>
+        </div>
+        <div className={styles.deco}></div>
+      </div>
     </>
   );
 }
