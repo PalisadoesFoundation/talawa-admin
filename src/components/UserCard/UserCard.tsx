@@ -1,12 +1,14 @@
 import React from 'react';
 import styles from './UserCard.module.css';
 
-function UserCard(props: {
+interface Details {
   key: any;
   firstName: any;
   lastName: any;
   image: any;
-}): JSX.Element {
+}
+
+function UserCard(props: Details): JSX.Element {
   return (
     <>
       <div>
