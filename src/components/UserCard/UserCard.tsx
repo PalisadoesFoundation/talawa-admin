@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './UserCard.module.css';
 
-interface Details {
+interface UserCardProps {
   key: any;
   firstName: any;
   lastName: any;
