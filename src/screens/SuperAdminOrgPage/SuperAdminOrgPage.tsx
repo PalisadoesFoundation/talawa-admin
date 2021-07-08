@@ -6,7 +6,6 @@ import OrganizationCard from 'components/OrganizationCard/OrganizationCard';
 import ORGANIZATION_LIST from 'GraphQl/Queries/Queries';
 
 function SuperAdminOrgPage(): JSX.Element {
-  
   const { data } = useQuery(ORGANIZATION_LIST);
 
   return (
