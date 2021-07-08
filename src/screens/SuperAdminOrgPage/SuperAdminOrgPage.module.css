@@ -8,9 +8,6 @@
   width: 70vw;
   margin-top: -75vh;
   margin-left: 25%;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
 }
 
 .inside_box {
@@ -36,4 +33,11 @@
   border: 1px solid #e1e1e1;
   box-sizing: border-box;
   border-radius: 30px;
+}
+
+.list_box {
+  margin-left: 2vw;
+  margin-top: 1vh;
+  height: 60vh;
+  overflow-y: scroll;
 }
