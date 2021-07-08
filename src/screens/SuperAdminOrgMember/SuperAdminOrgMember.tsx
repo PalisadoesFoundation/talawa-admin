@@ -1,8 +1,31 @@
 import React from 'react';
 import styles from './SuperAdminOrgMember.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
+import { gql, useQuery } from '@apollo/client';
+import UserCard from 'components/UserCard/UserCard';
+import { MEMBERS_LIST } from 'components/Queries/Queries';
 
+<<<<<<< Updated upstream
 function SuperAdminOrgMemberPage(): JSX.Element {
+=======
+function SuperAdminOrgMemberPage() {
+  const a = window.location.href.split('=')[1];
+
+  const b = '/superorghome/id=' + a;
+
+  const { data, loading } = useQuery(MEMBERS_LIST, {
+    variables: { id: a },
+  });
+
+  if (loading) {
+    return (
+      <>
+        <div className={styles.loader}></div>
+      </>
+    );
+  }
+
+>>>>>>> Stashed changes
   return (
     <>
       <AdminNavbar
@@ -11,6 +34,7 @@ function SuperAdminOrgMemberPage(): JSX.Element {
           { name: 'People', url: '/supermember' },
           { name: 'Organisation', url: '/superorg' },
           { name: 'LogOut', url: '/' },
+          { name: 'Back', url: b },
         ]}
       />
       <div className={styles.first_box}>
@@ -26,6 +50,27 @@ function SuperAdminOrgMemberPage(): JSX.Element {
           </form>
         </div>
         <hr></hr>
+        <div className={styles.list_box}>
+          {data
+            ? data.organizations[0].members.map(
+                (datas: {
+                  _id: any;
+                  lastName: string;
+                  firstName: string;
+                  image: string;
+                }) => {
+                  return (
+                    <UserCard
+                      key={datas._id}
+                      image={datas.image}
+                      lastName={datas.lastName}
+                      firstName={datas.firstName}
+                    />
+                  );
+                }
+              )
+            : null}
+        </div>
       </div>
     </>
   );

@@ -1,6 +1,6 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import SuperAdminOrgMemberPage from './SuperAdminOrgMember';
+import { render, screen, within } from '@testing-library/react';
+import SuperAdminOrgHomePage from './SuperAdminOrgHomePage';
 import {
   ApolloClient,
   NormalizedCacheObject,
@@ -8,17 +8,21 @@ import {
   InMemoryCache,
 } from '@apollo/client';
 
+jest.setTimeout(300000);
+
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
   uri: 'https://talawa-graphql-api.herokuapp.com/graphql',
 });
 
-describe('This is the test for Organization member page component', () => {
-  test('should render 5 text elements test for the member page componet', async () => {
+describe('Testing the LoginPage', () => {
+  test('should show the text on the website', async () => {
     render(
       <ApolloProvider client={client}>
-        <SuperAdminOrgMemberPage />
+        <SuperAdminOrgHomePage />
       </ApolloProvider>
     );
+
+    await new Promise((r) => setTimeout(r, 2000));
   });
 });
