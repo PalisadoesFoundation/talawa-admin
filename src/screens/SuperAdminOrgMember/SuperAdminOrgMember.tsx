@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './SuperAdminOrgMember.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 
-function SuperAdminOrgMemberPage() {
+function SuperAdminOrgMemberPage(): JSX.Element {
   return (
     <>
       <AdminNavbar
