@@ -3,18 +3,9 @@ import styles from './SuperAdminMemberPage.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import { gql, useQuery } from '@apollo/client';
 import UserCard from 'components/UserCard/UserCard';
+import { PEOPLE_LIST } from 'GraphQl/Queries/Queries';
 
 function SuperAdminMemberPage(): JSX.Element {
-  const PEOPLE_LIST = gql`
-    query {
-      users {
-        firstName
-        lastName
-        image
-        _id
-      }
-    }
-  `;
 
   const { data } = useQuery(PEOPLE_LIST);
 
