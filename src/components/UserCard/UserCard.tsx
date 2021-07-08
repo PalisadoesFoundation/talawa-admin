@@ -8,7 +8,7 @@ interface UserCardProps {
   image: any;
 }
 
-function UserCard(props: Details): JSX.Element {
+function UserCard(props: UserCardProps): JSX.Element {
   return (
     <>
       <div>

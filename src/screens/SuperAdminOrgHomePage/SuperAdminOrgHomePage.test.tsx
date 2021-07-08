@@ -8,8 +8,6 @@ import {
   InMemoryCache,
 } from '@apollo/client';
 
-jest.setTimeout(300000);
-
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
   uri: 'https://talawa-graphql-api.herokuapp.com/graphql',
@@ -22,7 +20,5 @@ describe('Testing the LoginPage', () => {
         <SuperAdminOrgHomePage />
       </ApolloProvider>
     );
-
-    await new Promise((r) => setTimeout(r, 2000));
   });
 });

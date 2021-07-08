@@ -11,7 +11,7 @@ interface OrganizationCardProps {
   firstName: string;
 }
 
-function OrganizationCard(props: Details): JSX.Element {
+function OrganizationCard(props: OrganizationCardProps): JSX.Element {
   const uri = '/superorghome/i=' + props.id;
 
   return (

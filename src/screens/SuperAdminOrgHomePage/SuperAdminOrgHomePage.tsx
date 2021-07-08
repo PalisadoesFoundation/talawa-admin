@@ -12,7 +12,7 @@ import {
   faLinkedinIn,
 } from '@fortawesome/free-brands-svg-icons';
 import { useQuery } from '@apollo/client';
-import { ORGANIZATIONS_LIST } from 'components/Queries/Queries';
+import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 
 function SuperAdminOrgHomePage(): JSX.Element {
   const a = window.location.href.split('=')[1];

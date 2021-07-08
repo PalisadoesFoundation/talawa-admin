@@ -3,11 +3,8 @@ import styles from './SuperAdminOrgMember.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import { gql, useQuery } from '@apollo/client';
 import UserCard from 'components/UserCard/UserCard';
-import { MEMBERS_LIST } from 'components/Queries/Queries';
+import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 
-<<<<<<< Updated upstream
-function SuperAdminOrgMemberPage(): JSX.Element {
-=======
 function SuperAdminOrgMemberPage() {
   const a = window.location.href.split('=')[1];
 
@@ -25,7 +22,6 @@ function SuperAdminOrgMemberPage() {
     );
   }
 
->>>>>>> Stashed changes
   return (
     <>
       <AdminNavbar
