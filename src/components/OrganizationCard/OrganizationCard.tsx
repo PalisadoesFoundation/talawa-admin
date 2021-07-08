@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './OrganizationCard.module.css';
 
-interface Details {
+interface OrganizationCardProps {
   key: any;
   image: string;
   id: string;
