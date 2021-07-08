@@ -3,7 +3,7 @@ import styles from './SuperAdminOrgPage.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import { gql, useQuery } from '@apollo/client';
 import OrganizationCard from 'components/OrganizationCard/OrganizationCard';
-import ORGANIZATION_LIST from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 
 function SuperAdminOrgPage(): JSX.Element {
   const { data } = useQuery(ORGANIZATION_LIST);
