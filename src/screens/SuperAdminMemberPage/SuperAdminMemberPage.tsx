@@ -6,7 +6,6 @@ import UserCard from 'components/UserCard/UserCard';
 import { PEOPLE_LIST } from 'GraphQl/Queries/Queries';
 
 function SuperAdminMemberPage(): JSX.Element {
-
   const { data } = useQuery(PEOPLE_LIST);
 
   return (
