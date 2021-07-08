@@ -14,7 +14,7 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 });
 
 describe('This is the test for Organization member page component', () => {
-  test('should render 5 text elements test for the member page componet', async () => {
+  test('should render 5 text elements test for the member page componet', () => {
     render(
       <ApolloProvider client={client}>
         <SuperAdminOrgPage />

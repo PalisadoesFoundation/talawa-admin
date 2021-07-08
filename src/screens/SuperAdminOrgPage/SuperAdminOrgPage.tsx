@@ -4,11 +4,6 @@ import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import { useQuery } from '@apollo/client';
 import OrganizationCard from 'components/OrganizationCard/OrganizationCard';
 import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
-<<<<<<< Updated upstream
-
-function SuperAdminOrgPage(): JSX.Element {
-  const { data } = useQuery(ORGANIZATION_LIST);
-=======
 function SuperAdminOrgPage(): JSX.Element {
   const { data, loading } = useQuery(ORGANIZATION_LIST);
 
@@ -19,7 +14,6 @@ function SuperAdminOrgPage(): JSX.Element {
       </>
     );
   }
->>>>>>> Stashed changes
 
   return (
     <>

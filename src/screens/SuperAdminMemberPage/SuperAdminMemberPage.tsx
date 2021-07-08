@@ -6,9 +6,6 @@ import UserCard from 'components/UserCard/UserCard';
 import { PEOPLE_LIST } from 'GraphQl/Queries/Queries';
 
 function SuperAdminMemberPage(): JSX.Element {
-<<<<<<< Updated upstream
-  const { data } = useQuery(PEOPLE_LIST);
-=======
   const { data, loading } = useQuery(PEOPLE_LIST);
 
   if (loading) {
@@ -18,7 +15,6 @@ function SuperAdminMemberPage(): JSX.Element {
       </>
     );
   }
->>>>>>> Stashed changes
 
   return (
     <>

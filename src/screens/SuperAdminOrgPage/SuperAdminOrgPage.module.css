@@ -41,7 +41,6 @@
   height: 60vh;
   overflow-y: scroll;
 }
-
 .loader,
 .loader:after {
   border-radius: 50%;
