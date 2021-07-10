@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import WelcomePage from 'screens/WelcomePage/WelcomePage';
 import LoginPage from 'screens/LoginPage/LoginPage';
+import MainUserPage from 'screens/MainUserPage/MainUserPage';
 import OrgAdminHomePage from 'screens/OrgAdminHomePage/OrgAdminHomePage';
 import OrgAdminMemberPage from 'screens/OrgAdminMemberPage/OrgAdminMemberPage';
 import SuperAdminMemberPage from 'screens/SuperAdminMemberPage/SuperAdminMemberPage';
@@ -15,6 +16,7 @@ function App(): JSX.Element {
       <Switch>
         <Route exact path="/" component={WelcomePage} />
         <Route exact path="/login" component={LoginPage} />
+        <Route exact path="/mainuser" component={MainUserPage} />
         <Route exact path="/orghome" component={OrgAdminHomePage} />
         <Route exact path="/orgmember" component={OrgAdminMemberPage} />
         <Route exact path="/supermember" component={SuperAdminMemberPage} />
