@@ -92,7 +92,7 @@ function OrgAdminHomePage(): JSX.Element {
             </div>
             <hr></hr>
           </div>
-          <div className={styles.forth_box}>
+         <div className={styles.forth_box}>
             <h5>Links</h5>
             <div className={styles.link_data}>
               <div className={styles.left_style}>

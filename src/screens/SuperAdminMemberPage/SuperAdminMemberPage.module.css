@@ -37,3 +37,10 @@
   box-sizing: border-box;
   border-radius: 30px;
 }
+
+.list_box {
+  margin-left: 2vw;
+  margin-top: 1vh;
+  height: 60vh;
+  overflow-y: scroll;
+}
