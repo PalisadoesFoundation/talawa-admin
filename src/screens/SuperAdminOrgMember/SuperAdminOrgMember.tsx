@@ -1,11 +1,11 @@
 import React from 'react';
 import styles from './SuperAdminOrgMember.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import UserCard from 'components/UserCard/UserCard';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 
-function SuperAdminOrgMemberPage() {
+function SuperAdminOrgMemberPage(): JSX.Element {
   const a = window.location.href.split('=')[1];
 
   const b = '/superorghome/id=' + a;
@@ -50,7 +50,7 @@ function SuperAdminOrgMemberPage() {
           {data
             ? data.organizations[0].members.map(
                 (datas: {
-                  _id: any;
+                  _id: string;
                   lastName: string;
                   firstName: string;
                   image: string;

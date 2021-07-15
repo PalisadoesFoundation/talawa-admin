@@ -43,10 +43,10 @@ function SuperAdminMemberPage(): JSX.Element {
           {data
             ? data.users.map(
                 (datas: {
-                  _id: any;
-                  image: any;
-                  firstName: any;
-                  lastName: any;
+                  _id: string;
+                  image: string;
+                  firstName: string;
+                  lastName: string;
                 }) => {
                   return (
                     <UserCard

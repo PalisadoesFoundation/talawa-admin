@@ -1,6 +1,6 @@
-import React from 'react';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
-import styles from './OrgAdminHomePage.module.css';
+import React from 'react';
+import styles from './MainUserPage.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faYoutube,
@@ -11,33 +11,15 @@ import {
   faGooglePlus,
   faLinkedinIn,
 } from '@fortawesome/free-brands-svg-icons';
-import { useQuery } from '@apollo/client';
-import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 
-function OrgAdminHomePage(): JSX.Element {
-  const a = window.location.href.split('=')[1];
-
-  const b = '/orgmember/id=' + a;
-
-  const { data, loading } = useQuery(ORGANIZATIONS_LIST, {
-    variables: { id: a },
-  });
-
-  if (loading) {
-    return (
-      <>
-        <div className={styles.loader}></div>
-      </>
-    );
-  }
-
+function MainUserPage(): JSX.Element {
   return (
     <>
       <div className={styles.wrappage}>
         <AdminNavbar
           targets={[
-            { name: 'Home', url: '/orghome' },
-            { name: 'Members', url: b },
+            { name: 'Home', url: '/mainuser' },
+            { name: 'Member', url: '/' },
             { name: 'LogOut', url: '/' },
           ]}
         />
@@ -51,46 +33,31 @@ function OrgAdminHomePage(): JSX.Element {
             </a>
             <div className={styles.orginfomain}>
               <div className={styles.orginfo}>
-                <h4>{data.organizations[0].name}</h4>
+                <h4>Saumya Singh</h4>
                 <h5>Location: Spain</h5>
               </div>
             </div>
           </div>
           <hr></hr>
           <div className={styles.box}>
-            <h5>Description</h5>
-            <p>{data.organizations[0].description}</p>
-            <hr></hr>
-          </div>
-          <div className={styles.second_box}>
-            <h5>Creator</h5>
-            <div className={styles.ownerdata}>
-              <img src="https://via.placeholder.com/55" />
-              <div className={styles.ownerdata_inner}>
-                <div className={styles.ownerinfo_one}>
-                  <h4>
-                    {data.organizations[0].creator.firstName}
-                    &nbsp;
-                    {data.organizations[0].creator.lastName}
-                  </h4>
-                  <h5>Location: India</h5>
-                </div>
-                <div className={styles.ownerinfo_two}>
-                  <a href={data.organizations[0].creator.email}>
-                    <h5>
-                      <strong>Email: </strong>
-                      {data.organizations[0].creator.email}
-                    </h5>
-                  </a>
-                </div>
-              </div>
-            </div>
+            <h5>About</h5>
+            <p>
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industrys standard dummy text
+              ever since the 1500s, when an unknown printer took a galley oftype
+              and scrambled it to make a type specimen book. It has survived not
+              only five centuries, but also the leap into electronictypesetting,
+              remaining essentially unchanged. It was popularised in the 1960s
+              with the release of Letraset sheets containing LoremIpsumpassages,
+              and more recently with desktop publishing software like Aldus
+              PageMaker including versions of Lorem Ipsum.
+            </p>
             <hr></hr>
           </div>
           <div className={styles.third_box}>
-            <h5>Interests Offered</h5>
+            <h5>Interests</h5>
             <div className={styles.interests_data}>
-              <p className={styles.interests_data_even}>Shelter</p>
+              <p className={styles.interests_data_odd}>NGO</p>
             </div>
             <hr></hr>
           </div>
@@ -130,6 +97,8 @@ function OrgAdminHomePage(): JSX.Element {
                     className={styles.icons}
                   />
                 </a>
+              </div>
+              <div className={styles.right_style}>
                 <a href="https://www.instagram.com/palisadoes/?hl=en">
                   <FontAwesomeIcon
                     icon={faInstagram}
@@ -163,4 +132,4 @@ function OrgAdminHomePage(): JSX.Element {
   );
 }
 
-export default OrgAdminHomePage;
+export default MainUserPage;

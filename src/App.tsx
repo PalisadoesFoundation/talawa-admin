@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import WelcomePage from 'screens/WelcomePage/WelcomePage';
 import LoginPage from 'screens/LoginPage/LoginPage';
 import OrgAdminHomePage from 'screens/OrgAdminHomePage/OrgAdminHomePage';
@@ -10,20 +10,86 @@ import SuperAdminDashboard from 'screens/SuperAdminDashboard/SuperAdminDashboard
 import SuperAdminOrgMemberPage from 'screens/SuperAdminOrgMember/SuperAdminOrgMember';
 import SuperAdminUserOrgPage from 'screens/SuperAdminUserOrg/SuperAdminUserOrg';
 import SuperAdminOrgHomePage from 'screens/SuperAdminOrgHomePage/SuperAdminOrgHomePage';
+import OrgCreationPage from 'screens/OrgCreationPage/OrgCreationPage';
+import SelectOrganizationPage from 'screens/SelectOrganization/SelectOrganization';
 function App(): JSX.Element {
+  const IsLoggedInAs = localStorage.getItem('isloggedinas');
+
   return (
     <>
       <Switch>
         <Route exact path="/" component={WelcomePage} />
         <Route exact path="/login" component={LoginPage} />
-        <Route exact path="/orghome" component={OrgAdminHomePage} />
-        <Route exact path="/orgmember" component={OrgAdminMemberPage} />
-        <Route exact path="/supermember" component={SuperAdminMemberPage} />
-        <Route exact path="/superorg" component={SuperAdminOrgPage} />
-        <Route exact path="/superdash" component={SuperAdminDashboard} />
-        <Route path="/superorgmember" component={SuperAdminOrgMemberPage} />
-        <Route exact path="/superuserorg" component={SuperAdminUserOrgPage} />
-        <Route path="/superorghome" component={SuperAdminOrgHomePage} />
+        <Route path="/orghome">
+          {IsLoggedInAs != 'ORGADMIN' ? (
+            <Redirect to="/login" />
+          ) : (
+            <OrgAdminHomePage />
+          )}
+        </Route>
+        <Route path="/orgmember">
+          {IsLoggedInAs != 'ORGADMIN' ? (
+            <Redirect to="/login" />
+          ) : (
+            <OrgAdminMemberPage />
+          )}
+        </Route>
+        <Route path="/selectorg">
+          {IsLoggedInAs != 'ORGADMIN' ? (
+            <Redirect to="/login" />
+          ) : (
+            <SelectOrganizationPage />
+          )}
+        </Route>
+        <Route exact path="/supermember">
+          {IsLoggedInAs != 'SUPERADMIN' ? (
+            <Redirect to="/login" />
+          ) : (
+            <SuperAdminMemberPage />
+          )}
+        </Route>
+        <Route exact path="/superorg">
+          {IsLoggedInAs != 'SUPERADMIN' ? (
+            <Redirect to="/login" />
+          ) : (
+            <SuperAdminOrgPage />
+          )}
+        </Route>
+        <Route exact path="/superdash">
+          {IsLoggedInAs != 'SUPERADMIN' ? (
+            <Redirect to="/login" />
+          ) : (
+            <SuperAdminDashboard />
+          )}
+        </Route>
+        <Route path="/superorgmember">
+          {IsLoggedInAs != 'SUPERADMIN' ? (
+            <Redirect to="/login" />
+          ) : (
+            <SuperAdminOrgMemberPage />
+          )}
+        </Route>
+        <Route exact path="/superuserorg">
+          {IsLoggedInAs != 'SUPERADMIN' ? (
+            <Redirect to="/login" />
+          ) : (
+            <SuperAdminUserOrgPage />
+          )}
+        </Route>
+        <Route path="/superorghome">
+          {IsLoggedInAs != 'SUPERADMIN' ? (
+            <Redirect to="/login" />
+          ) : (
+            <SuperAdminOrgHomePage />
+          )}
+        </Route>
+        <Route path="/createorg">
+          {IsLoggedInAs != 'SUPERADMIN' ? (
+            <Redirect to="/login" />
+          ) : (
+            <OrgCreationPage />
+          )}
+        </Route>
       </Switch>
     </>
   );

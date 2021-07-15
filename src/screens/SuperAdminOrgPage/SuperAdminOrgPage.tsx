@@ -5,7 +5,7 @@ import { useQuery } from '@apollo/client';
 import OrganizationCard from 'components/OrganizationCard/OrganizationCard';
 import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 function SuperAdminOrgPage(): JSX.Element {
-  const { data, loading, error } = useQuery(ORGANIZATION_LIST);
+  const { data, loading } = useQuery(ORGANIZATION_LIST);
 
   if (loading) {
     return (
@@ -62,6 +62,7 @@ function SuperAdminOrgPage(): JSX.Element {
             : null}
         </div>
       </div>
+      <button>Create New Organization</button>
     </>
   );
 }
