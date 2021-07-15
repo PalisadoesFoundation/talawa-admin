@@ -21,7 +21,6 @@ function SuperAdminOrgMemberPage(): JSX.Element {
       </>
     );
   }
-
   return (
     <>
       <AdminNavbar
