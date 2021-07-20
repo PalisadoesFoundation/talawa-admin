@@ -15,12 +15,12 @@ import { useQuery } from '@apollo/client';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 
 function OrgAdminHomePage(): JSX.Element {
-  const a = window.location.href.split('=')[1];
+  const currentUrl = window.location.href.split('=')[1];
 
-  const b = '/orgmember/id=' + a;
+  const nextUrl = '/orgmember/id=' + currentUrl;
 
   const { data, loading } = useQuery(ORGANIZATIONS_LIST, {
-    variables: { id: a },
+    variables: { id: currentUrl },
   });
 
   if (loading) {
@@ -37,7 +37,7 @@ function OrgAdminHomePage(): JSX.Element {
         <AdminNavbar
           targets={[
             { name: 'Home', url: '/orghome' },
-            { name: 'Members', url: b },
+            { name: 'Members', url: nexrUrl },
             { name: 'LogOut', url: '/' },
           ]}
         />
