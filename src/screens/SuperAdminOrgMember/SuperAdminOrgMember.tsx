@@ -6,12 +6,12 @@ import UserCard from 'components/UserCard/UserCard';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 
 function SuperAdminOrgMemberPage(): JSX.Element {
-  const a = window.location.href.split('=')[1];
+  const currentUrl = window.location.href.split('=')[1];
 
-  const b = '/superorghome/id=' + a;
+  const nextUrl = '/superorghome/id=' + currentUrl;
 
   const { data, loading } = useQuery(MEMBERS_LIST, {
-    variables: { id: a },
+    variables: { id: currentUrl },
   });
 
   if (loading) {
@@ -29,7 +29,7 @@ function SuperAdminOrgMemberPage(): JSX.Element {
           { name: 'People', url: '/supermember' },
           { name: 'Organisation', url: '/superorg' },
           { name: 'LogOut', url: '/' },
-          { name: 'Back', url: b },
+          { name: 'Back', url: nextUrl },
         ]}
       />
       <div className={styles.first_box}>
