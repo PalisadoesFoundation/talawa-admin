@@ -13,7 +13,7 @@ import SuperAdminOrgHomePage from 'screens/SuperAdminOrgHomePage/SuperAdminOrgHo
 import OrgCreationPage from 'screens/OrgCreationPage/OrgCreationPage';
 import SelectOrganizationPage from 'screens/SelectOrganization/SelectOrganization';
 function App(): JSX.Element {
-  const IsLoggedInAs = localStorage.getItem('isloggedinas');
+  const isLoggedInAs = localStorage.getItem('isloggedinas');
 
   return (
     <>
@@ -21,70 +21,70 @@ function App(): JSX.Element {
         <Route exact path="/" component={WelcomePage} />
         <Route exact path="/login" component={LoginPage} />
         <Route path="/orghome">
-          {IsLoggedInAs != 'ORGADMIN' ? (
+          {isLoggedInAs != 'ORGADMIN' ? (
             <Redirect to="/login" />
           ) : (
             <OrgAdminHomePage />
           )}
         </Route>
         <Route path="/orgmember">
-          {IsLoggedInAs != 'ORGADMIN' ? (
+          {isLoggedInAs != 'ORGADMIN' ? (
             <Redirect to="/login" />
           ) : (
             <OrgAdminMemberPage />
           )}
         </Route>
         <Route path="/selectorg">
-          {IsLoggedInAs != 'ORGADMIN' ? (
+          {isLoggedInAs != 'ORGADMIN' ? (
             <Redirect to="/login" />
           ) : (
             <SelectOrganizationPage />
           )}
         </Route>
         <Route exact path="/supermember">
-          {IsLoggedInAs != 'SUPERADMIN' ? (
+          {isLoggedInAs != 'SUPERADMIN' ? (
             <Redirect to="/login" />
           ) : (
             <SuperAdminMemberPage />
           )}
         </Route>
         <Route exact path="/superorg">
-          {IsLoggedInAs != 'SUPERADMIN' ? (
+          {isLoggedInAs != 'SUPERADMIN' ? (
             <Redirect to="/login" />
           ) : (
             <SuperAdminOrgPage />
           )}
         </Route>
         <Route exact path="/superdash">
-          {IsLoggedInAs != 'SUPERADMIN' ? (
+          {isLoggedInAs != 'SUPERADMIN' ? (
             <Redirect to="/login" />
           ) : (
             <SuperAdminDashboard />
           )}
         </Route>
         <Route path="/superorgmember">
-          {IsLoggedInAs != 'SUPERADMIN' ? (
+          {isLoggedInAs != 'SUPERADMIN' ? (
             <Redirect to="/login" />
           ) : (
             <SuperAdminOrgMemberPage />
           )}
         </Route>
         <Route exact path="/superuserorg">
-          {IsLoggedInAs != 'SUPERADMIN' ? (
+          {isLoggedInAs != 'SUPERADMIN' ? (
             <Redirect to="/login" />
           ) : (
             <SuperAdminUserOrgPage />
           )}
         </Route>
         <Route path="/superorghome">
-          {IsLoggedInAs != 'SUPERADMIN' ? (
+          {isLoggedInAs != 'SUPERADMIN' ? (
             <Redirect to="/login" />
           ) : (
             <SuperAdminOrgHomePage />
           )}
         </Route>
         <Route path="/createorg">
-          {IsLoggedInAs != 'SUPERADMIN' ? (
+          {isLoggedInAs != 'SUPERADMIN' ? (
             <Redirect to="/login" />
           ) : (
             <OrgCreationPage />
