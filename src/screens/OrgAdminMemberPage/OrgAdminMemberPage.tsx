@@ -6,12 +6,12 @@ import { useQuery } from '@apollo/client';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 
 function OrgAdminMemberPage(): JSX.Element {
-  const a = window.location.href.split('=')[1];
+  const currentUrl = window.location.href.split('=')[1];
 
-  const b = '/orghome/id=' + a;
+  const nextUrl = '/orghome/id=' + currentUrl;
 
   const { data, loading } = useQuery(MEMBERS_LIST, {
-    variables: { id: a },
+    variables: { id: currentUrl },
   });
 
   if (loading) {
@@ -29,7 +29,7 @@ function OrgAdminMemberPage(): JSX.Element {
           { name: 'Home', url: '/orghome' },
           { name: 'Member', url: '/orgmember' },
           { name: 'LogOut', url: '/' },
-          { name: 'Back', url: b },
+          { name: 'Back', url: NextUrl },
         ]}
       />
       <div className={styles.first_box}>
