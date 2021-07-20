@@ -6,10 +6,10 @@ import React from 'react';
 import styles from './SelectOrganization.module.css';
 
 function SelectOrganizationPage(): JSX.Element {
-  const a = window.location.href.split('=')[1];
+  const currentUrl = window.location.href.split('=')[1];
 
   const { data, loading } = useQuery(USER_ORGANIZATION_LIST, {
-    variables: { id: a },
+    variables: { id: currentUrl },
   });
 
   if (loading) {
