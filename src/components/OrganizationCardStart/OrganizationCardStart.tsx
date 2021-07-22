@@ -1,17 +1,15 @@
 import React from 'react';
-import styles from './OrganizationCard.module.css';
+import styles from './OrganizationCardStart.module.css';
 
-interface OrganizationCardProps {
+interface OrganizationCardStartProps {
   key: any;
   image: string;
   id: string;
   name: string;
-  lastName: string;
-  firstName: string;
 }
 
-function OrganizationCard(props: OrganizationCardProps): JSX.Element {
-  const uri = '/superorghome/i=' + props.id;
+function OrganizationCardStart(props: OrganizationCardStartProps): JSX.Element {
+  const uri = '/orghome/i=' + props.id;
 
   return (
     <>
@@ -28,11 +26,7 @@ function OrganizationCard(props: OrganizationCardProps): JSX.Element {
             )}
             <div className={styles.second_box}>
               <h4>{props.name}</h4>
-              <h5>
-                Owner:{props.firstName}
-                &nbsp;
-                {props.lastName}
-              </h5>
+              <h5></h5>
             </div>
           </div>
           <div className={styles.deco}></div>
@@ -42,4 +36,4 @@ function OrganizationCard(props: OrganizationCardProps): JSX.Element {
   );
 }
 
-export default OrganizationCard;
+export default OrganizationCardStart;

@@ -62,6 +62,7 @@ function SuperAdminOrgPage(): JSX.Element {
             : null}
         </div>
       </div>
+      <button>Create New Organization</button>
     </>
   );
 }

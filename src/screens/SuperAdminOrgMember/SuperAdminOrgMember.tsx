@@ -1,17 +1,17 @@
 import React from 'react';
 import styles from './SuperAdminOrgMember.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import UserCard from 'components/UserCard/UserCard';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 
-function SuperAdminOrgMemberPage() {
-  const a = window.location.href.split('=')[1];
+function SuperAdminOrgMemberPage(): JSX.Element {
+  const currentUrl = window.location.href.split('=')[1];
 
-  const b = '/superorghome/id=' + a;
+  const nextUrl = '/superorghome/id=' + currentUrl;
 
   const { data, loading } = useQuery(MEMBERS_LIST, {
-    variables: { id: a },
+    variables: { id: currentUrl },
   });
 
   if (loading) {
@@ -21,7 +21,6 @@ function SuperAdminOrgMemberPage() {
       </>
     );
   }
-
   return (
     <>
       <AdminNavbar
@@ -30,7 +29,7 @@ function SuperAdminOrgMemberPage() {
           { name: 'People', url: '/supermember' },
           { name: 'Organisation', url: '/superorg' },
           { name: 'LogOut', url: '/' },
-          { name: 'Back', url: b },
+          { name: 'Back', url: nextUrl },
         ]}
       />
       <div className={styles.first_box}>
@@ -50,7 +49,7 @@ function SuperAdminOrgMemberPage() {
           {data
             ? data.organizations[0].members.map(
                 (datas: {
-                  _id: any;
+                  _id: string;
                   lastName: string;
                   firstName: string;
                   image: string;

@@ -1,16 +1,64 @@
 import React, { useState } from 'react';
 import NavBar from 'components/Navbar/Navbar';
 import styles from './LoginPage.module.css';
-
+import { useMutation } from '@apollo/client';
+import { LOGIN_MUTATION } from 'GraphQl/Mutations/mutations';
 function LoginPage(): JSX.Element {
+  const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
+
+  const [login_organization] = useMutation(LOGIN_MUTATION);
+
+  if (loading) {
+    return (
+      <>
+        <div className={styles.loader}></div>
+      </>
+    );
+  }
+
+  if (error) {
+    window.alert('Incorrect ID or Password');
+    window.location.reload();
+  }
+
   const [formState, setFormState] = useState({
     email: '',
     password: '',
   });
 
-  function login_link() {
-    window.location.replace('/superdash');
-  }
+  const login_link = async () => {
+    const { data } = await login({
+      variables: {
+        email: formState.email,
+        password: formState.password,
+      },
+    });
+    if (data.login.user.userType === 'SUPERADMIN') {
+      localStorage.setItem('token', data.login.accessToken);
+      localStorage.setItem('isloggedinas', 'SUPERADMIN');
+      if (localStorage.getItem('isloggedinas') == 'SUPERADMIN') {
+        window.location.replace('/superdash');
+      }
+    } else {
+      window.alert('Sorry! you are not Authorised');
+      window.location.reload();
+    }
+  };
+
+  const login_link_organization = async () => {
+    const { data } = await login_organization({
+      variables: {
+        email: formState.email,
+        password: formState.password,
+      },
+    });
+    if (data) {
+      localStorage.setItem('token', data.login.accessToken);
+      localStorage.setItem('isloggedinas', 'ORGADMIN');
+      const uri = '/selectorg/i=' + data.login.user._id;
+      window.location.replace(uri);
+    }
+  };
 
   return (
     <>
@@ -24,13 +72,14 @@ function LoginPage(): JSX.Element {
             <h5>
               <p className="black">Login to your account</p>
             </h5>
-            <form action="/orghome">
+            <form>
               <input
                 type="email"
                 id="email"
                 className="input_box"
                 placeholder="Email"
                 autoComplete="off"
+                required
                 value={formState.email}
                 onChange={(e) => {
                   setFormState({
@@ -38,13 +87,13 @@ function LoginPage(): JSX.Element {
                     email: e.target.value,
                   });
                 }}
-                required
               />
               <input
                 type="password"
                 id="password"
                 className="input_box_second"
                 placeholder="Password"
+                required
                 value={formState.password}
                 onChange={(e) => {
                   setFormState({
@@ -52,7 +101,6 @@ function LoginPage(): JSX.Element {
                     password: e.target.value,
                   });
                 }}
-                required
               />
               <button
                 type="button"
@@ -60,7 +108,15 @@ function LoginPage(): JSX.Element {
                 value="Login"
                 onClick={login_link}
               >
-                Login
+                Login as Admin
+              </button>
+              <button
+                type="button"
+                className={styles.loginbtn}
+                value="Login"
+                onClick={login_link_organization}
+              >
+                Login as Organization
               </button>
             </form>
           </div>

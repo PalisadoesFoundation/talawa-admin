@@ -1,8 +1,27 @@
 import React from 'react';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import styles from './OrgAdminMemberPage.module.css';
+import UserCard from 'components/UserCard/UserCard';
+import { useQuery } from '@apollo/client';
+import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 
 function OrgAdminMemberPage(): JSX.Element {
+  const currentUrl = window.location.href.split('=')[1];
+
+  const nextUrl = '/orghome/id=' + currentUrl;
+
+  const { data, loading } = useQuery(MEMBERS_LIST, {
+    variables: { id: currentUrl },
+  });
+
+  if (loading) {
+    return (
+      <>
+        <div className={styles.loader}></div>
+      </>
+    );
+  }
+
   return (
     <>
       <AdminNavbar
@@ -10,6 +29,7 @@ function OrgAdminMemberPage(): JSX.Element {
           { name: 'Home', url: '/orghome' },
           { name: 'Member', url: '/orgmember' },
           { name: 'LogOut', url: '/' },
+          { name: 'Back', url: NextUrl },
         ]}
       />
       <div className={styles.first_box}>
@@ -25,6 +45,27 @@ function OrgAdminMemberPage(): JSX.Element {
           </form>
         </div>
         <hr></hr>
+        <div className={styles.list_box}>
+          {data
+            ? data.organizations[0].members.map(
+                (datas: {
+                  _id: string;
+                  lastName: string;
+                  firstName: string;
+                  image: string;
+                }) => {
+                  return (
+                    <UserCard
+                      key={datas._id}
+                      image={datas.image}
+                      lastName={datas.lastName}
+                      firstName={datas.firstName}
+                    />
+                  );
+                }
+              )
+            : null}
+        </div>
       </div>
     </>
   );

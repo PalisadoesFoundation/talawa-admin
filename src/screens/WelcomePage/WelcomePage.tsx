@@ -10,6 +10,8 @@ import styles from './WelcomePage.module.css';
 import 'css/index.css';
 
 function WelcomePage(): JSX.Element {
+  localStorage.clear();
+
   return (
     <>
       <section className="background">
