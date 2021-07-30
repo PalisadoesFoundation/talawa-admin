@@ -1,12 +1,19 @@
 import React from 'react';
 import styles from './SuperAdminOrgPage.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import OrganizationCard from 'components/OrganizationCard/OrganizationCard';
 import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
-
 function SuperAdminOrgPage(): JSX.Element {
-  const { data } = useQuery(ORGANIZATION_LIST);
+  const { data, loading, error } = useQuery(ORGANIZATION_LIST);
+
+  if (loading) {
+    return (
+      <>
+        <div className={styles.loader}></div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -35,7 +42,7 @@ function SuperAdminOrgPage(): JSX.Element {
           {data
             ? data.organizations.map(
                 (datas: {
-                  _id: any;
+                  _id: string;
                   image: string;
                   name: string;
                   creator: { lastName: string; firstName: string };
@@ -43,6 +50,7 @@ function SuperAdminOrgPage(): JSX.Element {
                   return (
                     <OrganizationCard
                       key={datas._id}
+                      id={datas._id}
                       image={datas.image}
                       name={datas.name}
                       lastName={datas.creator.lastName}
@@ -54,6 +62,7 @@ function SuperAdminOrgPage(): JSX.Element {
             : null}
         </div>
       </div>
+      <button>Create New Organization</button>
     </>
   );
 }

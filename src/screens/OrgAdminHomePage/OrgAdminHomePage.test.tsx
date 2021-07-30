@@ -1,14 +1,24 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import OrgAdminHomePage from './OrgAdminHomePage';
+import {
+  ApolloClient,
+  NormalizedCacheObject,
+  ApolloProvider,
+  InMemoryCache,
+} from '@apollo/client';
 
-describe('Testing the OrgAdminHomePage', () => {
-  test('should show the text on the website', () => {
-    render(<OrgAdminHomePage />);
-    expect(screen.getByText('Description')).toBeInTheDocument();
-    expect(screen.getByText('Owner')).toBeInTheDocument();
-    expect(screen.getByText('Interests Offered')).toBeInTheDocument();
-    expect(screen.getByText('Email:')).toBeInTheDocument();
-    expect(screen.getByText('Links')).toBeInTheDocument();
+const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+  cache: new InMemoryCache(),
+  uri: 'https://talawa-graphql-api.herokuapp.com/graphql',
+});
+
+describe('Testing the LoginPage', () => {
+  test('should show the text on the website', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <OrgAdminHomePage />
+      </ApolloProvider>
+    );
   });
 });

@@ -1,5 +1,5 @@
-import React from 'react';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
+import React from 'react';
 import styles from './MainUserPage.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -58,9 +58,6 @@ function MainUserPage(): JSX.Element {
             <h5>Interests</h5>
             <div className={styles.interests_data}>
               <p className={styles.interests_data_odd}>NGO</p>
-              <p className={styles.interests_data_even}>Feeding Dogs</p>
-              <p className={styles.interests_data_odd}>Donations</p>
-              <p className={styles.interests_data_even}>Shelter</p>
             </div>
             <hr></hr>
           </div>
@@ -75,7 +72,6 @@ function MainUserPage(): JSX.Element {
                     size="2x"
                     className={styles.icons}
                   />
-                  <h2>https://www.facebook.com/palisadoesproject/</h2>
                 </a>
                 <a href="https://www.youtube.com/c/palisadoesorganization">
                   <FontAwesomeIcon
@@ -84,7 +80,6 @@ function MainUserPage(): JSX.Element {
                     size="2x"
                     className={styles.icons}
                   />
-                  <h2>https://www.youtube.com/c/palisadoesorganization</h2>
                 </a>
                 <a href="https://twitter.com/palisadoesorg?lang=en">
                   <FontAwesomeIcon
@@ -93,7 +88,6 @@ function MainUserPage(): JSX.Element {
                     size="2x"
                     className={styles.icons}
                   />
-                  <h2>https://twitter.com/palisadoesorg?lang=en</h2>
                 </a>
                 <a href="http://www.palisadoes.org/gsoc/">
                   <FontAwesomeIcon
@@ -102,7 +96,6 @@ function MainUserPage(): JSX.Element {
                     size="2x"
                     className={styles.icons}
                   />
-                  <h2>http://www.palisadoes.org/gsoc/</h2>
                 </a>
               </div>
               <div className={styles.right_style}>
@@ -113,7 +106,6 @@ function MainUserPage(): JSX.Element {
                     size="2x"
                     className={styles.icons}
                   />
-                  <h2>https://www.instagram.com/palisadoes/?hl=en</h2>
                 </a>
                 <a href="#">
                   <FontAwesomeIcon
@@ -122,7 +114,6 @@ function MainUserPage(): JSX.Element {
                     size="2x"
                     className={styles.icons}
                   />
-                  <h2>http://www.palisadoes.org/</h2>
                 </a>
                 <a href="https://www.linkedin.com/company/palisadoes/">
                   <FontAwesomeIcon
@@ -131,7 +122,6 @@ function MainUserPage(): JSX.Element {
                     size="2x"
                     className={styles.icons}
                   />
-                  <h2>https://www.linkedin.com/company/palisadoes/</h2>
                 </a>
               </div>
             </div>

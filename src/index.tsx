@@ -7,11 +7,25 @@ import {
   NormalizedCacheObject,
   ApolloProvider,
   InMemoryCache,
+  ApolloLink,
+  HttpLink,
 } from '@apollo/client';
+import { onError } from '@apollo/link-error';
+
+const errorLink = onError(({ graphQLErrors }) => {
+  if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message));
+});
+
+const httpLink = new HttpLink({
+  uri: 'http://localhost:4000/graphql',
+  headers: {
+    authorization: 'Bearer ' + localStorage.getItem('token') || '',
+  },
+});
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
-  uri: 'https://talawa-graphql-api.herokuapp.com/graphql',
+  link: ApolloLink.from([errorLink, httpLink]),
 });
 
 ReactDOM.render(

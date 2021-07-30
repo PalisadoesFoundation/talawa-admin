@@ -1,12 +1,20 @@
 import React from 'react';
 import styles from './SuperAdminMemberPage.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import UserCard from 'components/UserCard/UserCard';
 import { PEOPLE_LIST } from 'GraphQl/Queries/Queries';
 
 function SuperAdminMemberPage(): JSX.Element {
-  const { data } = useQuery(PEOPLE_LIST);
+  const { data, loading } = useQuery(PEOPLE_LIST);
+
+  if (loading) {
+    return (
+      <>
+        <div className={styles.loader}></div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -35,10 +43,10 @@ function SuperAdminMemberPage(): JSX.Element {
           {data
             ? data.users.map(
                 (datas: {
-                  _id: any;
-                  image: any;
-                  firstName: any;
-                  lastName: any;
+                  _id: string;
+                  image: string;
+                  firstName: string;
+                  lastName: string;
                 }) => {
                   return (
                     <UserCard

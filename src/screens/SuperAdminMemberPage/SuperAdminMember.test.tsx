@@ -20,7 +20,5 @@ describe('This is the test for Organization member page component', () => {
         <SuperAdminMemberPage />
       </ApolloProvider>
     );
-    expect(screen.getByText('List of People')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Search')).toBeInTheDocument();
   });
 });

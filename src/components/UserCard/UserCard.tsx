@@ -3,12 +3,12 @@ import styles from './UserCard.module.css';
 
 interface UserCardProps {
   key: any;
-  firstName: any;
-  lastName: any;
-  image: any;
+  firstName: string;
+  lastName: string;
+  image: string;
 }
 
-function UserCard(props: Details): JSX.Element {
+function UserCard(props: UserCardProps): JSX.Element {
   return (
     <>
       <div>

@@ -1,4 +1,3 @@
-import React from 'react';
 import { gql } from '@apollo/client';
 
 export const ORGANIZATION_LIST = gql`
@@ -50,6 +49,18 @@ export const MEMBERS_LIST = gql`
         _id
         firstName
         lastName
+        image
+      }
+    }
+  }
+`;
+
+export const USER_ORGANIZATION_LIST = gql`
+  query User($id: ID!) {
+    user(id: $id) {
+      adminFor {
+        _id
+        name
         image
       }
     }

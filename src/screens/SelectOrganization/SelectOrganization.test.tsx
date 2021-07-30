@@ -1,6 +1,6 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import SuperAdminOrgPage from './SuperAdminOrgPage';
+import { render } from '@testing-library/react';
+import SuperAdminMemberPage from './SelectOrganization';
 import {
   ApolloClient,
   NormalizedCacheObject,
@@ -14,10 +14,10 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 });
 
 describe('This is the test for Organization member page component', () => {
-  test('should render 5 text elements test for the member page componet', () => {
+  test('should render 2 text elements test for the member page componet', () => {
     render(
       <ApolloProvider client={client}>
-        <SuperAdminOrgPage />
+        <SuperAdminMemberPage />
       </ApolloProvider>
     );
   });

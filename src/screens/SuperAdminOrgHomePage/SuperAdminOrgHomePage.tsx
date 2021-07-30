@@ -1,6 +1,6 @@
 import React from 'react';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
-import styles from './OrgAdminHomePage.module.css';
+import styles from './SuperAdminOrgHomePage.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faYoutube,
@@ -14,13 +14,13 @@ import {
 import { useQuery } from '@apollo/client';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 
-function OrgAdminHomePage(): JSX.Element {
-  const currentUrl = window.location.href.split('=')[1];
+function SuperAdminOrgHomePage(): JSX.Element {
+  const a = window.location.href.split('=')[1];
 
-  const nextUrl = '/orgmember/id=' + currentUrl;
+  const b = '/superorgmember/id=' + a;
 
   const { data, loading } = useQuery(ORGANIZATIONS_LIST, {
-    variables: { id: currentUrl },
+    variables: { id: a },
   });
 
   if (loading) {
@@ -36,9 +36,11 @@ function OrgAdminHomePage(): JSX.Element {
       <div className={styles.wrappage}>
         <AdminNavbar
           targets={[
-            { name: 'Home', url: '/orghome' },
-            { name: 'Members', url: nextUrl },
+            { name: 'Home', url: '/superdash' },
+            { name: 'People', url: '/supermember' },
+            { name: 'Organisation', url: '/superorg' },
             { name: 'LogOut', url: '/' },
+            { name: 'Members', url: b },
           ]}
         />
         <div className={styles.main}>
@@ -76,7 +78,7 @@ function OrgAdminHomePage(): JSX.Element {
                   <h5>Location: India</h5>
                 </div>
                 <div className={styles.ownerinfo_two}>
-                  <a href={data.organizations[0].creator.email}>
+                  <a href="mailto:saumya4799@gmail.com">
                     <h5>
                       <strong>Email: </strong>
                       {data.organizations[0].creator.email}
@@ -105,7 +107,6 @@ function OrgAdminHomePage(): JSX.Element {
                     size="2x"
                     className={styles.icons}
                   />
-                  <h2>https://www.facebook.com/palisadoesproject/</h2>
                 </a>
                 <a href="https://www.youtube.com/c/palisadoesorganization">
                   <FontAwesomeIcon
@@ -114,7 +115,6 @@ function OrgAdminHomePage(): JSX.Element {
                     size="2x"
                     className={styles.icons}
                   />
-                  <h2>https://www.youtube.com/c/palisadoesorganization</h2>
                 </a>
                 <a href="https://twitter.com/palisadoesorg?lang=en">
                   <FontAwesomeIcon
@@ -123,7 +123,6 @@ function OrgAdminHomePage(): JSX.Element {
                     size="2x"
                     className={styles.icons}
                   />
-                  <h2>https://twitter.com/palisadoesorg?lang=en</h2>
                 </a>
                 <a href="http://www.palisadoes.org/gsoc/">
                   <FontAwesomeIcon
@@ -132,10 +131,7 @@ function OrgAdminHomePage(): JSX.Element {
                     size="2x"
                     className={styles.icons}
                   />
-                  <h2>http://www.palisadoes.org/gsoc/</h2>
                 </a>
-              </div>
-              <div className={styles.right_style}>
                 <a href="https://www.instagram.com/palisadoes/?hl=en">
                   <FontAwesomeIcon
                     icon={faInstagram}
@@ -143,7 +139,6 @@ function OrgAdminHomePage(): JSX.Element {
                     size="2x"
                     className={styles.icons}
                   />
-                  <h2>https://www.instagram.com/palisadoes/?hl=en</h2>
                 </a>
                 <a href="#">
                   <FontAwesomeIcon
@@ -152,7 +147,6 @@ function OrgAdminHomePage(): JSX.Element {
                     size="2x"
                     className={styles.icons}
                   />
-                  <h2>http://www.palisadoes.org/</h2>
                 </a>
                 <a href="https://www.linkedin.com/company/palisadoes/">
                   <FontAwesomeIcon
@@ -161,7 +155,6 @@ function OrgAdminHomePage(): JSX.Element {
                     size="2x"
                     className={styles.icons}
                   />
-                  <h2>https://www.linkedin.com/company/palisadoes/</h2>
                 </a>
               </div>
             </div>
@@ -172,4 +165,4 @@ function OrgAdminHomePage(): JSX.Element {
   );
 }
 
-export default OrgAdminHomePage;
+export default SuperAdminOrgHomePage;

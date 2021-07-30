@@ -1,11 +1,24 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import OrgAdminMemberPage from './OrgAdminMemberPage';
+import {
+  ApolloClient,
+  NormalizedCacheObject,
+  ApolloProvider,
+  InMemoryCache,
+} from '@apollo/client';
 
-describe('This is the test for Organization member page component', () => {
-  test('should render 5 text elements test for the member page componet', () => {
-    render(<OrgAdminMemberPage />);
-    expect(screen.getByText('List of members')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Search')).toBeInTheDocument();
+const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+  cache: new InMemoryCache(),
+  uri: 'https://talawa-graphql-api.herokuapp.com/graphql',
+});
+
+describe('Testing the LoginPage', () => {
+  test('should show the text on the website', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <OrgAdminMemberPage />
+      </ApolloProvider>
+    );
   });
 });
