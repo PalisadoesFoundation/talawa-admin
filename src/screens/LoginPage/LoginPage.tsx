@@ -4,11 +4,11 @@ import { useMutation } from '@apollo/client';
 import Navbar from 'react-bootstrap/Navbar';
 import Logo from 'assets/talawa-logo-200x200.png';
 import { LOGIN_MUTATION } from 'GraphQl/Mutations/mutations';
-import Modal from 'react-bootstrap/Modal';
+import Modal from 'react-modal';
 import ModalHeader from 'react-bootstrap/ModalHeader';
 import ModalTitle from 'react-bootstrap/ModalTitle';
 function LoginPage(): JSX.Element {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [modalisOpen, setIsOpen] = React.useState(false);
 
   const showModal = () => {
     setIsOpen(true);
@@ -99,11 +99,11 @@ function LoginPage(): JSX.Element {
           <h5>Register bg</h5>
         </div>
         <Modal
-          show={isOpen}
-          onHide={hideModal}
-          size="lg"
-          aria-labelledby="contained-modal-title-vcenter"
-          centered
+          isOpen={modalisOpen}
+          style={{
+            overlay: { backgroundColor: 'grey' },
+          }}
+          className={styles.modalbody}
         >
           <section id={styles.grid_wrapper}>
             <div className={styles.form_wrapper}>

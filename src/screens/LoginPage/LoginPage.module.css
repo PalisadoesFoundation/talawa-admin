@@ -2,7 +2,7 @@
   align-items: left;
 }
 .login_background {
-  background-color: #F7F7F7;
+  background-color: #f7f7f7;
   height: 100vh;
   width: 100vw;
   margin: 0;
@@ -10,13 +10,13 @@
   background-position: center !important;
   background-size: cover !important;
 }
-.flexdir{
+.flexdir {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 .form_wrapper {
-  margin-top:50px;
+  margin-top: 27px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -25,8 +25,8 @@
   flex-direction: column;
   width: 30%;
   padding: 40px 30px;
-  background: #FFFFFF;
-  border-color: #E8E5E5;
+  background: #ffffff;
+  border-color: #e8e5e5;
   border-width: 5px;
   border-radius: 10px;
 }
@@ -38,26 +38,26 @@
   flex-direction: column;
 }
 .logintitle {
-  color:#707070;
-  font-weight:600;
+  color: #707070;
+  font-weight: 600;
   font-size: 24px;
-  margin-bottom:30px;
+  margin-bottom: 30px;
   padding-bottom: 5px;
   border-bottom: 3px solid #31bb6b;
-  width:50%;
+  width: 50%;
 }
-form >label {
+form > label {
   font-weight: bold;
   padding-bottom: 10px;
   font-size: 16px;
-  color:#707070;
+  color: #707070;
 }
 
 form > input {
   display: block;
-  margin-bottom:30px;
-  border: 1px solid #E8E5E5;
-  box-shadow: 2px 1px #E8E5E5;
+  margin-bottom: 25px;
+  border: 1px solid #e8e5e5;
+  box-shadow: 2px 1px #e8e5e5;
   padding: 10px 20px;
   border-radius: 5px;
   background: none;
@@ -68,7 +68,6 @@ form > input {
   -ms-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
 }
-
 
 /* Animation */
 .animated_content {
@@ -85,9 +84,9 @@ form > input {
 
 .whiteloginbtn {
   margin: 1rem 0 0;
-  margin-top:20px;
-  border: 1px solid #E8E5E5;
-  box-shadow:  0 2px 2px #E8E5E5;
+  margin-top: 20px;
+  border: 1px solid #e8e5e5;
+  box-shadow: 0 2px 2px #e8e5e5;
   padding: 10px 20px;
   border-radius: 5px;
   background: none;
@@ -102,12 +101,12 @@ form > input {
 }
 .greenregbtn {
   margin: 1rem 0 0;
-  margin-top:20px;
-  border: 1px solid #E8E5E5;
-  box-shadow:  0 2px 2px #E8E5E5;
-  padding: 10px 20px;
+  margin-top: 20px;
+  border: 1px solid #e8e5e5;
+  box-shadow: 0 2px 2px #e8e5e5;
+  padding: 10px 10px;
   border-radius: 5px;
-  background-color:#31bb6b;
+  background-color: #31bb6b;
   width: 100%;
   font-size: 16px;
   color: white;
@@ -117,7 +116,6 @@ form > input {
   transition: transform 0.2s, box-shadow 0.2s;
   width: 100%;
 }
-
 
 .navloginbtn {
   margin-top: 1rem;
@@ -134,22 +132,22 @@ form > input {
   transition: transform 0.2s, box-shadow 0.2s;
   width: 130px;
 }
-.forgotpwd{
+.forgotpwd {
   text-align: right;
   justify-content: right;
-  color:#707070;
+  color: #707070;
   font-size: 11px;
-  margin-top:10px;
+  margin-top: 10px;
 }
-form > hr{
-  margin-top: 30px;
-  margin-bottom: 10px;
-  border-bottom: 0rem solid #E8E5E5;
+form > hr {
+  margin-top: 25px;
+  margin-bottom: 5px;
+  border-bottom: 0rem solid #e8e5e5;
 }
-form > br{
+form > br {
   margin-top: 10px;
   margin-bottom: 10px;
-  border-bottom: 0.2rem solid #E8E5E5;
+  border-bottom: 0.2rem solid #e8e5e5;
 }
 .loader,
 .loader:after {
@@ -195,7 +193,7 @@ form > br{
 }
 @media only screen and (max-width: 800px) {
   .form_wrapper {
-  width: 50%;
+    width: 50%;
   }
 }
 
@@ -255,9 +253,12 @@ form > br{
   filter: blur(5px) grayscale(90%);
   background-color: red;
 }
-.cancel > i{
-  margin-top:5px;
+.cancel > i {
+  margin-top: 5px;
   transform: scale(1.2);
   cursor: pointer;
-  color:#707070;
+  color: #707070;
+}
+.modalbody{
+  width:50px;
 }
