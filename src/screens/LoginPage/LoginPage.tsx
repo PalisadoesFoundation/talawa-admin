@@ -79,7 +79,7 @@ function LoginPage(): JSX.Element {
       <section className={styles.login_background}>
         <Navbar className={styles.navbarbg}>
           <Navbar.Brand>
-            <a className={styles.logo} href="/">
+            <a className={styles.logo}>
               <img src={Logo} />
               <strong>Talawa Portal</strong>
             </a>

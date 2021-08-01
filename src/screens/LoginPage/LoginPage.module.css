@@ -40,7 +40,7 @@
 .logintitle {
   color: #707070;
   font-weight: 600;
-  font-size: 24px;
+  font-size: 20px;
   margin-bottom: 30px;
   padding-bottom: 5px;
   border-bottom: 3px solid #31bb6b;
@@ -49,7 +49,7 @@
 form > label {
   font-weight: bold;
   padding-bottom: 10px;
-  font-size: 16px;
+  font-size: 14px;
   color: #707070;
 }
 
@@ -84,7 +84,7 @@ form > input {
 
 .whiteloginbtn {
   margin: 1rem 0 0;
-  margin-top: 20px;
+  margin-top: 10px;
   border: 1px solid #e8e5e5;
   box-shadow: 0 2px 2px #e8e5e5;
   padding: 10px 20px;
@@ -140,8 +140,8 @@ form > input {
   margin-top: 10px;
 }
 form > hr {
-  margin-top: 25px;
-  margin-bottom: 5px;
+  margin-top: 20px;
+  margin-bottom: 0px;
   border-bottom: 0rem solid #e8e5e5;
 }
 form > br {
@@ -231,12 +231,6 @@ form > br {
   color: #707070;
 }
 
-.logo h4 {
-  margin-left: 7px;
-  letter-spacing: 1px;
-  font-weight: lighter;
-  margin-top: 3em;
-}
 /* .special_modal{
    background-color: red;
    color: red;
@@ -259,6 +253,6 @@ form > br {
   cursor: pointer;
   color: #707070;
 }
-.modalbody{
-  width:50px;
+.modalbody {
+  width: 50px;
 }
