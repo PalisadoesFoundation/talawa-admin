@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import styles from './LoginPage.module.css';
 import { useMutation } from '@apollo/client';
-import Navbar from 'react-bootstrap/Navbar';
 import Logo from 'assets/talawa-logo-200x200.png';
 import { LOGIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import Modal from 'react-modal';
-import ModalHeader from 'react-bootstrap/ModalHeader';
 import ModalTitle from 'react-bootstrap/ModalTitle';
 function LoginPage(): JSX.Element {
   const [modalisOpen, setIsOpen] = React.useState(false);
@@ -77,14 +75,14 @@ function LoginPage(): JSX.Element {
   return (
     <>
       <section className={styles.login_background}>
-        <Navbar className={styles.navbarbg}>
-          <Navbar.Brand>
+        <div className={styles.navbarbg}>
+          <div>
             <a className={styles.logo}>
               <img src={Logo} />
               <strong>Talawa Portal</strong>
             </a>
-          </Navbar.Brand>
-          <Navbar.Collapse>
+          </div>
+          <div>
             <button
               type="button"
               className={styles.navloginbtn}
@@ -93,8 +91,8 @@ function LoginPage(): JSX.Element {
             >
               Login
             </button>
-          </Navbar.Collapse>
-        </Navbar>
+          </div>
+        </div>
         <div className={styles.reg_bg}>
           <h5>Register bg</h5>
         </div>
@@ -107,12 +105,12 @@ function LoginPage(): JSX.Element {
         >
           <section id={styles.grid_wrapper}>
             <div className={styles.form_wrapper}>
-              <ModalHeader className={styles.flexdir}>
-                <ModalTitle className={styles.logintitle}>Login</ModalTitle>
+              <div className={styles.flexdir}>
+                <p className={styles.logintitle}>Login</p>
                 <a onClick={hideModal} className={styles.cancel}>
                   <i className="fa fa-times"></i>
                 </a>
-              </ModalHeader>
+              </div>
               <form>
                 <label>Email</label>
                 <input

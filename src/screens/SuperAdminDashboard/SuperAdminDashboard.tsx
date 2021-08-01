@@ -245,7 +245,7 @@ function SuperAdminDashboard(): JSX.Element {
               />
               <Col className={styles.singledetails}>
                 <div className={styles.singledetails_data_left}>
-                  <p className={styles.orgname}>Saumya Singh</p>
+                  <p className={styles.orgname}>Organization for dogs</p>
                   <p className={styles.orgfont}>Gujarat, India</p>
                   <p className={styles.orgfontcreated}>
                     Created: <span>Date</span>
@@ -270,7 +270,7 @@ function SuperAdminDashboard(): JSX.Element {
               />
               <Col className={styles.singledetails}>
                 <div className={styles.singledetails_data_left}>
-                  <p className={styles.orgname}>Saumya Singh</p>
+                  <p className={styles.orgname}>Dogs Care</p>
                   <p className={styles.orgfont}>Gujarat, India</p>
                   <p className={styles.orgfontcreated}>
                     Created: <span>Date</span>
