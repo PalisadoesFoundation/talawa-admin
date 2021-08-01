@@ -103,7 +103,7 @@ form > input {
 }
 .greenregbtn {
   margin: 1rem 0 0;
-  margin-top: 20px;
+  margin-top: 10px;
   border: 1px solid #e8e5e5;
   box-shadow: 0 2px 2px #e8e5e5;
   padding: 10px 10px;
@@ -120,7 +120,7 @@ form > input {
 }
 
 .navloginbtn {
-  margin-top: 1rem;
+  margin-top: 10px;
   background-color: #31bb6b;
   padding: 0.5em 1em;
   margin-right: 3rem;

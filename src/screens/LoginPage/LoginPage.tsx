@@ -4,7 +4,6 @@ import { useMutation } from '@apollo/client';
 import Logo from 'assets/talawa-logo-200x200.png';
 import { LOGIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import Modal from 'react-modal';
-import ModalTitle from 'react-bootstrap/ModalTitle';
 function LoginPage(): JSX.Element {
   const [modalisOpen, setIsOpen] = React.useState(false);
 

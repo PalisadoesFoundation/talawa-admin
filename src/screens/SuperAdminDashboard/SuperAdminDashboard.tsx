@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, FormEvent } from 'react';
+import { Form } from 'antd';
 import styles from './SuperAdminDashboard.module.css';
 import { Pie, Line, Bar } from 'react-chartjs-2';
 import Navbar from 'react-bootstrap/Navbar';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Image from 'react-bootstrap/Image';
+import Modal from 'react-modal';
 import Logo from 'assets/talawa-logo-200x200.png';
 const line_state = {
   labels: [
@@ -71,6 +72,23 @@ const bar_state = {
 };
 
 function SuperAdminDashboard(): JSX.Element {
+  const [modalisOpen, setmodalIsOpen] = React.useState(false);
+
+  const showInviteModal = () => {
+    setmodalIsOpen(true);
+  };
+  const hideInviteModal = () => {
+    setmodalIsOpen(false);
+  };
+
+  const [formState, setFormState] = useState({
+    email: '',
+  });
+  // const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   console.log(formState);
+  // };
+
   return (
     <>
       {/* <div className={styles.first_box}>
@@ -211,7 +229,9 @@ function SuperAdminDashboard(): JSX.Element {
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>Organizations List</p>
-              <button>+</button>
+              <button className={styles.invitebtn} onClick={showInviteModal}>
+                Invite Super Admins
+              </button>
             </Row>
             <Row className={styles.orglist}>
               <img
@@ -291,6 +311,48 @@ function SuperAdminDashboard(): JSX.Element {
           </div>
         </Col>
       </Row>
+      <Modal
+        isOpen={modalisOpen}
+        style={{
+          overlay: { backgroundColor: 'grey' },
+        }}
+        className={styles.modalbody}
+      >
+        <section id={styles.grid_wrapper}>
+          <div className={styles.form_wrapper}>
+            <div className={styles.flexdir}>
+              <p className={styles.logintitleinvite}>Invite</p>
+              <a onClick={hideInviteModal} className={styles.cancel}>
+                <i className="fa fa-times"></i>
+              </a>
+            </div>
+            <Form>
+              <label>Email</label>
+              <input
+                type="email"
+                id="email"
+                placeholder="Enter Email"
+                autoComplete="off"
+                required
+                value={formState.email}
+                onChange={(e) => {
+                  setFormState({
+                    ...formState,
+                    email: e.target.value,
+                  });
+                }}
+              />
+              <button
+                type="button"
+                className={styles.greenregbtn}
+                value="invite"
+              >
+                Invite Super Admin
+              </button>
+            </Form>
+          </div>
+        </section>
+      </Modal>
     </>
   );
 }
