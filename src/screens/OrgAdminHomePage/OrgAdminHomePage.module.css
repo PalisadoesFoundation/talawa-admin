@@ -12,10 +12,11 @@
   height: 100%;
   margin-right: 10px;
   margin-left: 170px;
-  margin-top: -88vh;
+  margin-top: 15px;
   display: flex;
   flex-direction: column;
 }
+
 .align_row {
   display: flex;
   flex-direction: row;
@@ -253,14 +254,29 @@
   flex-direction: row;
   justify-content: space-between;
 }
+
 .left_style {
   margin-left: 2%;
   margin-top: 10px;
 }
+
 .left_style > a {
-  padding-right: 10px;
+  display: flex;
+  flex-direction: row;
   margin-bottom: 7px;
 }
+.right_style {
+  margin-right: 13%;
+  margin-top: 10px;
+}
+
+.right_style > a {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 7px;
+  margin-right: 7px;
+}
+
 .link_data h2 {
   font-size: 15px;
   color: black;
@@ -268,9 +284,11 @@
   margin-top: 5px;
   font-weight: normal;
 }
+
 .link_data h2:hover {
   text-decoration: underline;
 }
+
 @media screen and (max-width: 1023px) {
   .link_data {
     display: flex;

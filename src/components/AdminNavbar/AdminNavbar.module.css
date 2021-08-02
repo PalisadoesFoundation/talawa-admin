@@ -64,13 +64,13 @@ a {
 
 .sidebar {
   z-index: 0;
-  position: relative;
+  padding-top: 50px;
+  position: fixed;
   min-width: 160px;
   width: 10%;
   background-color: #f7f7f7;
   margin: 0;
-  min-height: calc(100vh - 73px);
-  max-height: 150vh;
+  height: 100%;
 }
 
 .sidebarsticky {

@@ -2,6 +2,7 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import WelcomePage from 'screens/WelcomePage/WelcomePage';
 import LoginPage from 'screens/LoginPage/LoginPage';
+import MainUserPage from 'screens/MainUserPage/MainUserPage';
 import OrgAdminHomePage from 'screens/OrgAdminHomePage/OrgAdminHomePage';
 import OrgAdminMemberPage from 'screens/OrgAdminMemberPage/OrgAdminMemberPage';
 import SuperAdminMemberPage from 'screens/SuperAdminMemberPage/SuperAdminMemberPage';

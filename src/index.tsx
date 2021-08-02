@@ -11,7 +11,7 @@ import {
   HttpLink,
 } from '@apollo/client';
 import { onError } from '@apollo/link-error';
-
+import 'bootstrap/dist/css/bootstrap.css';
 const errorLink = onError(({ graphQLErrors }) => {
   if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message));
 });

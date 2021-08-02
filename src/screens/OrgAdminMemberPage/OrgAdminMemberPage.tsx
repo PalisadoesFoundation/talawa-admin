@@ -29,7 +29,7 @@ function OrgAdminMemberPage(): JSX.Element {
           { name: 'Home', url: '/orghome' },
           { name: 'Member', url: '/orgmember' },
           { name: 'LogOut', url: '/' },
-          { name: 'Back', url: NextUrl },
+          { name: 'Back', url: nextUrl },
         ]}
       />
       <div className={styles.first_box}>

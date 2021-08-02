@@ -1,9 +1,6 @@
 // React imports
 import React from 'react';
 
-// Component Imports
-import NavBar from 'components/Navbar/Navbar';
-
 // Assets and CSS imports
 import styles from './WelcomePage.module.css';
 
@@ -15,7 +12,6 @@ function WelcomePage(): JSX.Element {
   return (
     <>
       <section className="background">
-        <NavBar />
         <section id={styles.grid_wrapper}>
           <div>
             <div className={styles.page_content}>
