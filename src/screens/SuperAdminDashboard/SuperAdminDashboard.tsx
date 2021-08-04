@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-modal';
 import Logo from 'assets/talawa-logo-200x200.png';
+import SuperDashListCard from 'components/SuperDashListCard/SuperDashListCard';
 const line_state = {
   labels: [
     'January',
@@ -233,81 +234,20 @@ function SuperAdminDashboard(): JSX.Element {
                 Invite Super Admins
               </button>
             </Row>
-            <Row className={styles.orglist}>
-              <img
-                src="https://via.placeholder.com/200x100"
-                className={styles.orgimg}
-              />
-              <Col className={styles.singledetails}>
-                <div className={styles.singledetails_data_left}>
-                  <p className={styles.orgname}>Saumya Singh</p>
-                  <p className={styles.orgfont}>Gujarat, India</p>
-                  <p className={styles.orgfontcreated}>
-                    Created: <span>Date</span>
-                  </p>
-                </div>
-                <div className={styles.singledetails_data_right}>
-                  <p className={styles.orgfont}>
-                    Admins: <span>10</span>
-                  </p>
-                  <p className={styles.orgfont}>
-                    Members: <span>40</span>
-                  </p>
-                  <button className={styles.orgfontcreated}>Manage</button>
-                </div>
-              </Col>
-            </Row>
-            <hr></hr>
-            <Row className={styles.orglist}>
-              <img
-                src="https://via.placeholder.com/200x100"
-                className={styles.orgimg}
-              />
-              <Col className={styles.singledetails}>
-                <div className={styles.singledetails_data_left}>
-                  <p className={styles.orgname}>Organization for dogs</p>
-                  <p className={styles.orgfont}>Gujarat, India</p>
-                  <p className={styles.orgfontcreated}>
-                    Created: <span>Date</span>
-                  </p>
-                </div>
-                <div className={styles.singledetails_data_right}>
-                  <p className={styles.orgfont}>
-                    Admins: <span>10</span>
-                  </p>
-                  <p className={styles.orgfont}>
-                    Members: <span>40</span>
-                  </p>
-                  <button className={styles.orgfontcreated}>Manage</button>
-                </div>
-              </Col>
-            </Row>
-            <hr></hr>
-            <Row className={styles.orglist}>
-              <img
-                src="https://via.placeholder.com/200x100"
-                className={styles.orgimg}
-              />
-              <Col className={styles.singledetails}>
-                <div className={styles.singledetails_data_left}>
-                  <p className={styles.orgname}>Dogs Care</p>
-                  <p className={styles.orgfont}>Gujarat, India</p>
-                  <p className={styles.orgfontcreated}>
-                    Created: <span>Date</span>
-                  </p>
-                </div>
-                <div className={styles.singledetails_data_right}>
-                  <p className={styles.orgfont}>
-                    Admins: <span>10</span>
-                  </p>
-                  <p className={styles.orgfont}>
-                    Members: <span>40</span>
-                  </p>
-                  <button className={styles.orgfontcreated}>Manage</button>
-                </div>
-              </Col>
-            </Row>
-            <hr></hr>
+            <SuperDashListCard
+              key={123}
+              image=""
+              createdDate="05/06/2020"
+              orgName="Dogs Care"
+              orgLocation="Anand, Gujarat"
+            />
+            <SuperDashListCard
+              key={124}
+              image=""
+              createdDate="05/07/2021"
+              orgName="Dogs Care Organization"
+              orgLocation="Vadodara, Gujarat"
+            />
           </div>
         </Col>
       </Row>

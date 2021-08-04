@@ -118,46 +118,6 @@
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 }
-.orglist {
-  margin-top: -1px;
-}
-.orgimg {
-  border-radius: 10px;
-  margin-left: 10px;
-}
-.singledetails {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-.singledetails p {
-  margin-bottom: -5px;
-}
-.singledetails_data_left {
-  margin-top: 10px;
-  margin-left: 10px;
-  color: #707070;
-}
-.singledetails_data_right {
-  justify-content: right;
-  margin-top: 10px;
-  text-align: right;
-  color: #707070;
-}
-.orgname {
-  font-size: 16px;
-  font-weight: bold;
-}
-.orgfont {
-  margin-top: 3px;
-}
-.orgfontcreated {
-  margin-top: 18px;
-}
-#grid_wrapper {
-  align-items: left;
-}
-
 .flexdir {
   display: flex;
   flex-direction: row;
