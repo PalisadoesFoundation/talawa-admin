@@ -59,7 +59,7 @@ function LoginPage(): JSX.Element {
         window.location.reload();
       }
     } catch (error) {
-      window.alert('some error occured');
+      window.alert(error);
       window.location.reload();
     }
   };
