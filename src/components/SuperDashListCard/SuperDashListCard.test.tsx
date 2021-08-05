@@ -13,7 +13,7 @@ describe('Testing the LoginPage', () => {
         createdDate=""
       />
     );
-    expect(screen.getByText('Admins')).toBeInTheDocument();
-    expect(screen.getByText('Members')).toBeInTheDocument();
+    expect(screen.getByText('Admins:')).toBeInTheDocument();
+    expect(screen.getByText('Members:')).toBeInTheDocument();
   });
 });

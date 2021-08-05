@@ -33,7 +33,7 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
           </div>
           <div className={styles.singledetails_data_right}>
             <p className={styles.memberfont}>
-              Members : <span> Dogs care, Organization for Dogs</span>
+              Members:<span> Dogs care, Organization for Dogs</span>
             </p>
             <button className={styles.memberfontcreatedbtn}>Details</button>
           </div>

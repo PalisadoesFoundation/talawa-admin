@@ -13,6 +13,6 @@ describe('Testing the LoginPage', () => {
         memberLocation=""
       />
     );
-    expect(screen.getByText('Members')).toBeInTheDocument();
+    expect(screen.getByText('Members:')).toBeInTheDocument();
   });
 });
