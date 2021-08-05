@@ -35,26 +35,34 @@ function LoginPage(): JSX.Element {
     email: '',
     password: '',
   });
-
   const login_link = async () => {
-    const { data } = await login({
-      variables: {
-        email: formState.email,
-        password: formState.password,
-      },
-    });
-    if (data.login.user.userType === 'SUPERADMIN') {
-      localStorage.setItem('token', data.login.accessToken);
-      localStorage.setItem('IsLoggedIn', 'TRUE');
-      if (localStorage.getItem('IsLoggedIn') == 'TRUE') {
-        window.location.replace('/orgdash');
+    try {
+      const { data } = await login({
+        variables: {
+          email: formState.email,
+          password: formState.password,
+        },
+      });
+      if (data) {
+        if (data.login.user.userType === 'SUPERADMIN') {
+          localStorage.setItem('token', data.login.accessToken);
+          localStorage.setItem('IsLoggedIn', 'TRUE');
+          if (localStorage.getItem('IsLoggedIn') == 'TRUE') {
+            window.location.replace('/orgdash');
+          }
+        } else {
+          window.alert('Sorry! you are not Authorised');
+          window.location.reload();
+        }
+      } else {
+        window.alert('Sorry! User Not Found');
+        window.location.reload();
       }
-    } else {
-      window.alert('Sorry! you are not Authorised');
+    } catch (error) {
+      window.alert('some error occured');
       window.location.reload();
     }
   };
-
   return (
     <>
       <section className={styles.login_background}>
