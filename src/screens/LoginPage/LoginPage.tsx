@@ -5,6 +5,7 @@ import Logo from 'assets/talawa-logo-200x200.png';
 import { LOGIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import Modal from 'react-modal';
 function LoginPage(): JSX.Element {
+  localStorage.clear();
   const [modalisOpen, setIsOpen] = React.useState(false);
 
   const showModal = () => {
@@ -16,8 +17,6 @@ function LoginPage(): JSX.Element {
   };
 
   const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
-
-  const [login_organization] = useMutation(LOGIN_MUTATION);
 
   if (loading) {
     return (
@@ -46,28 +45,13 @@ function LoginPage(): JSX.Element {
     });
     if (data.login.user.userType === 'SUPERADMIN') {
       localStorage.setItem('token', data.login.accessToken);
-      localStorage.setItem('isloggedinas', 'SUPERADMIN');
-      if (localStorage.getItem('isloggedinas') == 'SUPERADMIN') {
-        window.location.replace('/superdash');
+      localStorage.setItem('IsLoggedIn', 'TRUE');
+      if (localStorage.getItem('IsLoggedIn') == 'TRUE') {
+        window.location.replace('/orgdash');
       }
     } else {
       window.alert('Sorry! you are not Authorised');
       window.location.reload();
-    }
-  };
-
-  const login_link_organization = async () => {
-    const { data } = await login_organization({
-      variables: {
-        email: formState.email,
-        password: formState.password,
-      },
-    });
-    if (data) {
-      localStorage.setItem('token', data.login.accessToken);
-      localStorage.setItem('isloggedinas', 'ORGADMIN');
-      const uri = '/selectorg/i=' + data.login.user._id;
-      window.location.replace(uri);
     }
   };
 
@@ -150,14 +134,6 @@ function LoginPage(): JSX.Element {
                 >
                   Login as Admin
                 </button>
-                <button
-                  type="button"
-                  className={styles.whiteloginbtn}
-                  value="Login"
-                  onClick={login_link_organization}
-                >
-                  Login as Organization
-                </button>
                 <a href="#" className={styles.forgotpwd}>
                   Forgot Password ?
                 </a>
@@ -166,7 +142,7 @@ function LoginPage(): JSX.Element {
                   type="button"
                   className={styles.greenregbtn}
                   value="Register"
-                  onClick={login_link_organization}
+                  onClick={login_link}
                 >
                   Register
                 </button>

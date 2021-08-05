@@ -13,12 +13,12 @@ function AdminNavbar({ targets }: NavbarProps): JSX.Element {
       <Navbar className={styles.navbarbg}>
         <Navbar.Brand>
           <Row className={styles.navallitem}>
-            <a className={styles.logo} href="/">
+            <a className={styles.logo}>
               <img src={Logo} />
               <strong>Talawa Portal</strong>
             </a>
             <div className={styles.navitems}>
-              <a href="/orgdashboard">Dashboard</a>
+              <a href="/orgdash">Dashboard</a>
               <a href="/orgpeople">People</a>
               <a>Events</a>
               <a>Contributions</a>

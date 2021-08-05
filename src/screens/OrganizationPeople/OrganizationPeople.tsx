@@ -1,9 +1,7 @@
-import React, { useState, FormEvent } from 'react';
-import { Form } from 'antd';
+import React from 'react';
 import styles from './OrganizationPeople.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Modal from 'react-modal';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 
@@ -29,13 +27,6 @@ function OrganizationPeople(): JSX.Element {
                 placeholder="Enter Name"
                 autoComplete="off"
                 required
-                // value={formState.email}
-                // onChange={(e) => {
-                //   setFormState({
-                //     ...formState,
-                //     email: e.target.value,
-                //   });
-                // }}
               />
 
               <h6 className={styles.searchtitle}>Filter by Location</h6>
@@ -45,13 +36,6 @@ function OrganizationPeople(): JSX.Element {
                 placeholder="Enter Location"
                 autoComplete="off"
                 required
-                // value={formState.email}
-                // onChange={(e) => {
-                //   setFormState({
-                //     ...formState,
-                //     email: e.target.value,
-                //   });
-                // }}
               />
               <h6 className={styles.searchtitle}>Filter by Event</h6>
               <input
@@ -60,13 +44,6 @@ function OrganizationPeople(): JSX.Element {
                 placeholder="Enter Event"
                 autoComplete="off"
                 required
-                // value={formState.email}
-                // onChange={(e) => {
-                //   setFormState({
-                //     ...formState,
-                //     email: e.target.value,
-                //   });
-                // }}
               />
             </div>
           </div>
@@ -97,47 +74,6 @@ function OrganizationPeople(): JSX.Element {
           </div>
         </Col>
       </Row>
-      {/* <Modal
-        style={{
-          overlay: { backgroundColor: 'grey' },
-        }}
-        className={styles.modalbody}
-      >
-        <section id={styles.grid_wrapper}>
-          <div className={styles.form_wrapper}>
-            <div className={styles.flexdir}>
-              <p className={styles.logintitleinvite}>Invite</p>
-              <a className={styles.cancel}>
-                <i className="fa fa-times"></i>
-              </a>
-            </div>
-            <Form>
-              <label>Email</label>
-              <input
-                type="email"
-                id="email"
-                placeholder="Enter Email"
-                autoComplete="off"
-                required
-                value={formState.email}
-                onChange={(e) => {
-                  setFormState({
-                    ...formState,
-                    email: e.target.value,
-                  });
-                }}
-              />
-              <button
-                type="button"
-                className={styles.greenregbtn}
-                value="invite"
-              >
-                Invite Super Admin
-              </button>
-            </Form>
-          </div>
-        </section>
-     </Modal> */}
     </>
   );
 }
