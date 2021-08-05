@@ -16,30 +16,14 @@ import SuperAdminOrgHomePage from 'screens/SuperAdminOrgHomePage/SuperAdminOrgHo
 import OrgCreationPage from 'screens/OrgCreationPage/OrgCreationPage';
 import SelectOrganizationPage from 'screens/SelectOrganization/SelectOrganization';
 function App(): JSX.Element {
-  // const isLoggedInAs = localStorage.getItem('isloggedinas');
+  const isLoggedInAs = localStorage.getItem('isloggedinas');
 
   return (
     <>
       <Switch>
         <Route exact path="/" component={WelcomePage} />
         <Route exact path="/login" component={LoginPage} />
-        <Route exact path="/orghome" component={OrgAdminHomePage} />
-        <Route exact path="/orgmember" component={OrgAdminMemberPage} />
-        <Route exact path="/selectorg" component={OrgAdminMemberPage} />
-        <Route exact path="/supermember" component={SuperAdminMemberPage} />
-        <Route exact path="/superorg" component={SuperAdminOrgPage} />
-        <Route exact path="/superdash" component={SuperAdminDashboard} />
-        <Route exact path="/orgdashboard" component={OrganizationDashboard} />
-        <Route exact path="/orgpeople" component={OrganizationPeople} />
-        <Route
-          exact
-          path="/superorgmember"
-          component={SuperAdminOrgMemberPage}
-        />
-        <Route exact path="/superuserorg" component={SuperAdminUserOrgPage} />
-        <Route exact path="/superorghome" component={SuperAdminOrgHomePage} />
-        <Route exact path="/createorg" component={OrgCreationPage} />
-        {/* <Route path="/orghome">
+        <Route path="/orghome">
           {isLoggedInAs != 'ORGADMIN' ? (
             <Redirect to="/login" />
           ) : (
@@ -108,7 +92,7 @@ function App(): JSX.Element {
           ) : (
             <OrgCreationPage />
           )}
-        </Route> */}
+        </Route>
       </Switch>
     </>
   );

@@ -19,7 +19,7 @@ function AdminNavbar({ targets }: NavbarProps): JSX.Element {
             </a>
             <div className={styles.navitems}>
               <a href="/orgdashboard">Dashboard</a>
-              <a>People</a>
+              <a href="/orgpeople">People</a>
               <a>Events</a>
               <a>Contributions</a>
               <a>Posts</a>

@@ -1,19 +1,18 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import SuperDashListCard from './SuperDashListCard';
+import OrgPeopleListCard from './OrgPeopleListCard';
 
 describe('Testing the LoginPage', () => {
   test('should show the text on the website', () => {
     render(
-      <SuperDashListCard
-        key={123}
-        image=""
-        orgName=""
-        orgLocation=""
-        createdDate=""
+      <OrgPeopleListCard
+        key={124}
+        memberImage=""
+        joinDate=""
+        memberName=""
+        memberLocation=""
       />
     );
-    expect(screen.getByText('Admins')).toBeInTheDocument();
     expect(screen.getByText('Members')).toBeInTheDocument();
   });
 });
