@@ -1,3 +1,6 @@
+html {
+  overflow-x: hidden;
+}
 .background {
   height: 100vh;
   width: 100vw;
