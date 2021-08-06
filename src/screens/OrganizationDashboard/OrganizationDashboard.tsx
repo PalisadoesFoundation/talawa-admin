@@ -1,3 +1,4 @@
+
 import React from 'react';
 import styles from './OrganizationDashboard.module.css';
 import Row from 'react-bootstrap/Row';
@@ -5,13 +6,17 @@ import Col from 'react-bootstrap/Col';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import AboutImg from 'assets/images/dogo.png';
 
+
 function OrganizationDashboard(): JSX.Element {
   return (
     <>
       <AdminNavbar
         targets={[
+
           { name: 'Dashboard', url: '/orgdash' },
           { name: 'People', url: '/orgpeople' },
+
+
           { name: 'LogOut', url: '/' },
         ]}
       />
@@ -30,6 +35,7 @@ function OrganizationDashboard(): JSX.Element {
                 eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
                 enim ad minim veniam, quis nostrud exercitation ullamco laboris
                 nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+
               </p>
               <img src={AboutImg} className={styles.org_about_img} />
               <h6 className={styles.titlename}>Tags</h6>
@@ -51,10 +57,12 @@ function OrganizationDashboard(): JSX.Element {
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
               <p className={styles.titlename}>Statistics</p>
+
             </Row>
           </div>
         </Col>
       </Row>
+
     </>
   );
 }
