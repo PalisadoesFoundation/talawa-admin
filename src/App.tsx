@@ -13,10 +13,8 @@ function App(): JSX.Element {
         <Route exact path="/" component={LoginPage} />
         {isLoggedIn == 'TRUE' ? (
           <Route path="/orgdash" component={OrganizationDashboard} />
-        ) : null}
-        {isLoggedIn == 'TRUE' ? (
           <Route path="/orgpeople" component={OrganizationPeople} />
-        ) : null}
+        ) : null }
       </Switch>
     </>
   );
