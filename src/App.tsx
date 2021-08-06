@@ -12,9 +12,11 @@ function App(): JSX.Element {
       <Switch>
         <Route exact path="/" component={LoginPage} />
         {isLoggedIn == 'TRUE' ? (
-          <Route path="/orgdash" component={OrganizationDashboard} />
-          <Route path="/orgpeople" component={OrganizationPeople} />
-        ) : null }
+          <div>
+            <Route path="/orgdash" component={OrganizationDashboard} />
+            <Route path="/orgpeople" component={OrganizationPeople} />
+          </div>
+        ) : null}
       </Switch>
     </>
   );
