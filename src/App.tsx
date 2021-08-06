@@ -5,6 +5,8 @@ import LoginPage from 'screens/LoginPage/LoginPage';
 import MainUserPage from 'screens/MainUserPage/MainUserPage';
 import OrgAdminHomePage from 'screens/OrgAdminHomePage/OrgAdminHomePage';
 import OrgAdminMemberPage from 'screens/OrgAdminMemberPage/OrgAdminMemberPage';
+import OrganizationDashboard from 'screens/OrganizationDashboard/OrganizationDashboard';
+import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
 import SuperAdminMemberPage from 'screens/SuperAdminMemberPage/SuperAdminMemberPage';
 import SuperAdminOrgPage from 'screens/SuperAdminOrgPage/SuperAdminOrgPage';
 import SuperAdminDashboard from 'screens/SuperAdminDashboard/SuperAdminDashboard';

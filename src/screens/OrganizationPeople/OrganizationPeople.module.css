@@ -73,7 +73,16 @@
   margin-bottom: 30px;
   padding-bottom: 5px;
   border-bottom: 3px solid #31bb6b;
-  width: 30%;
+  width: 15%;
+}
+.searchtitle {
+  color: #707070;
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid #31bb6b;
+  width: 60%;
 }
 .logintitleadmin {
   color: #707070;
@@ -83,7 +92,7 @@
   margin-bottom: 40px;
   padding-bottom: 5px;
   border-bottom: 3px solid #31bb6b;
-  width: 60%;
+  width: 30%;
 }
 .admindetails {
   display: flex;
@@ -104,18 +113,25 @@
   display: flex;
   justify-content: space-between;
 }
-.invitebtn {
+.addbtnmain {
+  float: right;
+  align-items: right;
+  width: 40%;
+}
+
+.addbtn {
+  width: 40%;
   border: 1px solid #e8e5e5;
   box-shadow: 0 2px 2px #e8e5e5;
   border-radius: 5px;
   background-color: #31bb6b;
-  width: 20%;
   height: 40px;
   font-size: 16px;
   color: white;
   outline: none;
   font-weight: 600;
   cursor: pointer;
+  margin-left: 30px;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 .flexdir {
@@ -203,4 +219,16 @@ form > input {
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   width: 100%;
+}
+.sidebarsticky > input {
+  text-decoration: none;
+  margin-bottom: 50px;
+  border-color: #e8e5e5;
+  width: 80%;
+  border-radius: 7px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  box-shadow: none;
 }

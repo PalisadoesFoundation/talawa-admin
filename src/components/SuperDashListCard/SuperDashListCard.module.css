@@ -1,0 +1,48 @@
+.orglist {
+  margin-top: -1px;
+}
+.orgimg {
+  border-radius: 10px;
+  margin-left: 10px;
+}
+.singledetails {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.singledetails p {
+  margin-bottom: -5px;
+}
+.singledetails_data_left {
+  margin-top: 10px;
+  margin-left: 10px;
+  color: #707070;
+}
+.singledetails_data_right {
+  justify-content: right;
+  margin-top: 10px;
+  text-align: right;
+  color: #707070;
+}
+.orgname {
+  font-size: 16px;
+  font-weight: bold;
+}
+.orgfont {
+  margin-top: 3px;
+}
+.orgfontcreated {
+  margin-top: 18px;
+}
+.orgfontcreatedbtn {
+  margin-top: 18px;
+  border-radius: 7px;
+  border-color: #e8e5e5;
+  background-color: #f7f7f7;
+  padding-right: 10px;
+  padding-left: 10px;
+  box-shadow: none;
+}
+#grid_wrapper {
+  align-items: left;
+}

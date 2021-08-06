@@ -1,0 +1,142 @@
+.mainpage {
+  display: flex;
+  flex-direction: row;
+}
+
+.toporginfo {
+  justify-content: space-evenly;
+  text-align: center;
+}
+.toporgname {
+  font-size: 24px;
+}
+.toporgloc {
+  padding-top: 8px;
+  font-size: 16px;
+}
+.sidebar {
+  z-index: 0;
+  padding-top: 5px;
+  margin: 0;
+  height: 100%;
+}
+.sidebar:after {
+  content: '';
+  background-color: #f7f7f7;
+  position: absolute;
+  width: 2px;
+  height: 600px;
+  top: 10px;
+  left: 94%;
+  display: block;
+}
+.sidebarsticky {
+  padding-left: 30px;
+}
+.sidebarsticky > p {
+  margin-top: -10px;
+  width: 90%;
+}
+
+.titlename {
+  color: #707070;
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 30px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid #31bb6b;
+  width: 26%;
+}
+.tagdetails {
+  display: flex;
+}
+.tagdetails > button {
+  background-color: #febc59;
+  color: #000;
+  outline: none;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: none;
+  border-radius: 5px;
+  margin-top: -12px;
+  margin-bottom: 10px;
+  margin-right: 30px;
+  padding-right: 20px;
+  padding-left: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.mainpageright > hr {
+  margin-top: 20px;
+  width: 100%;
+  margin-left: -15px;
+  margin-right: -15px;
+  margin-bottom: 20px;
+}
+.justifysp {
+  display: flex;
+  justify-content: space-between;
+}
+.org_about_img {
+  margin-top: 0px;
+  margin-bottom: 30px;
+  border-radius: 5px;
+  max-width: 100%;
+  height: auto;
+  width: 90%;
+}
+.invitebtn {
+  border: 1px solid #e8e5e5;
+  box-shadow: 0 2px 2px #e8e5e5;
+  border-radius: 5px;
+  background-color: #31bb6b;
+  width: 20%;
+  height: 40px;
+  font-size: 16px;
+  color: white;
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.flexdir {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border: none;
+}
+
+.logintitleinvite {
+  color: #707070;
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid #31bb6b;
+  width: 40%;
+}
+
+.cancel > i {
+  margin-top: 5px;
+  transform: scale(1.2);
+  cursor: pointer;
+  color: #707070;
+}
+
+.greenregbtn {
+  margin: 1rem 0 0;
+  margin-top: 10px;
+  border: 1px solid #e8e5e5;
+  box-shadow: 0 2px 2px #e8e5e5;
+  padding: 10px 10px;
+  border-radius: 5px;
+  background-color: #31bb6b;
+  width: 100%;
+  font-size: 16px;
+  color: white;
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
