@@ -5,9 +5,6 @@ import LoginPage from 'screens/LoginPage/LoginPage';
 import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
 import OrganizationDashboard from 'screens/OrganizationDashboard/OrganizationDashboard';
 
-
-
-
 function App(): JSX.Element {
   const isLoggedIn = localStorage.getItem('IsLoggedIn');
   return (

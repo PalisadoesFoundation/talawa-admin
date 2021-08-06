@@ -1,4 +1,3 @@
-
 import React from 'react';
 import styles from './OrganizationPeople.module.css';
 import Row from 'react-bootstrap/Row';
@@ -29,7 +28,6 @@ function OrganizationPeople(): JSX.Element {
                 placeholder="Enter Name"
                 autoComplete="off"
                 required
-
               />
 
               <h6 className={styles.searchtitle}>Filter by Location</h6>
@@ -39,7 +37,6 @@ function OrganizationPeople(): JSX.Element {
                 placeholder="Enter Location"
                 autoComplete="off"
                 required
-
               />
               <h6 className={styles.searchtitle}>Filter by Event</h6>
               <input
@@ -48,7 +45,6 @@ function OrganizationPeople(): JSX.Element {
                 placeholder="Enter Event"
                 autoComplete="off"
                 required
-
               />
             </div>
           </div>
@@ -79,7 +75,6 @@ function OrganizationPeople(): JSX.Element {
           </div>
         </Col>
       </Row>
-
     </>
   );
 }
