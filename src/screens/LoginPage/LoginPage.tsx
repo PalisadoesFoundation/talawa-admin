@@ -48,7 +48,7 @@ function LoginPage(): JSX.Element {
           localStorage.setItem('token', data.login.accessToken);
           localStorage.setItem('IsLoggedIn', 'TRUE');
           if (localStorage.getItem('IsLoggedIn') == 'TRUE') {
-            window.location.replace('/orgdash');
+            window.location.replace('/orglist');
           }
         } else {
           window.alert('Sorry! you are not Authorised');

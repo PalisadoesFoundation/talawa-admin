@@ -3,6 +3,7 @@ import styles from './AdminNavbar.module.css';
 import Navbar from 'react-bootstrap/Navbar';
 import Logo from 'assets/talawa-logo-200x200.png';
 import Row from 'react-bootstrap/Row';
+import { Nav } from 'react-bootstrap';
 interface NavbarProps {
   targets: { url: string; name: string }[];
 }
@@ -18,9 +19,13 @@ function AdminNavbar({ targets }: NavbarProps): JSX.Element {
               <strong>Talawa Portal</strong>
             </a>
             <div className={styles.navitems}>
-              <a href="/orgdash">Dashboard</a>
-
-              <a href="/orgpeople">People</a>
+              <a>
+                {targets.map(({ name, url }) => (
+                  <Nav.Item key={name}>
+                    <Nav.Link href={url}>{name}</Nav.Link>
+                  </Nav.Item>
+                ))}
+              </a>
               <a>Events</a>
               <a>Contributions</a>
               <a>Posts</a>

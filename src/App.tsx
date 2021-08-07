@@ -4,6 +4,7 @@ import LoginPage from 'screens/LoginPage/LoginPage';
 
 import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
 import OrganizationDashboard from 'screens/OrganizationDashboard/OrganizationDashboard';
+import OrgList from 'screens/OrgList/OrgList';
 
 function App(): JSX.Element {
   const isLoggedIn = localStorage.getItem('IsLoggedIn');
@@ -15,6 +16,7 @@ function App(): JSX.Element {
           <div>
             <Route path="/orgdash" component={OrganizationDashboard} />
             <Route path="/orgpeople" component={OrganizationPeople} />
+            <Route path="/orglist" component={OrgList} />
           </div>
         ) : null}
       </Switch>

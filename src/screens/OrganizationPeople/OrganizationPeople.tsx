@@ -2,21 +2,30 @@ import React from 'react';
 import styles from './OrganizationPeople.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-
+import { useQuery } from '@apollo/client';
+import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 
 function OrganizationPeople(): JSX.Element {
+  const currentUrl = window.location.href.split('=')[1];
+
+  const { data, loading } = useQuery(MEMBERS_LIST, {
+    variables: { id: currentUrl },
+  });
+
+  if (loading) {
+    return (
+      <>
+        <div className={styles.loader}></div>
+      </>
+    );
+  }
+
+  const url = '/orgdash/id=' + currentUrl;
   return (
     <>
-      <AdminNavbar
-        targets={[
-          { name: 'Dashboard', url: '/orgdashboard' },
-          { name: 'People', url: '/supermember' },
-          { name: 'Organisation', url: '/superorg' },
-          { name: 'LogOut', url: '/' },
-        ]}
-      />
+      <AdminNavbar targets={[{ name: 'Dashboard', url: url }]} />
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
@@ -58,20 +67,26 @@ function OrganizationPeople(): JSX.Element {
                 <button className={styles.addbtn}>Add Member</button>
               </div>
             </Row>
-            <OrgPeopleListCard
-              key={123}
-              memberImage=""
-              joinDate="05/06/2020"
-              memberName="Saumya Singh"
-              memberLocation="Anand, Gujarat"
-            />
-            <OrgPeopleListCard
-              key={124}
-              memberImage=""
-              joinDate="05/07/2021"
-              memberName="Yasharth Dubey"
-              memberLocation="Vadodara, Gujarat"
-            />
+            {data
+              ? data.organizations[0].members.map(
+                  (datas: {
+                    _id: string;
+                    lastName: string;
+                    firstName: string;
+                    image: string;
+                  }) => {
+                    return (
+                      <OrgPeopleListCard
+                        key={datas._id}
+                        memberImage={datas.image}
+                        joinDate="05/07/2021"
+                        memberName={datas.firstName + ' ' + datas.lastName}
+                        memberLocation="Vadodara, Gujarat"
+                      />
+                    );
+                  }
+                )
+              : null}
           </div>
         </Col>
       </Row>
