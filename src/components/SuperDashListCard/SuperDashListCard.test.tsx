@@ -7,6 +7,7 @@ describe('Testing the LoginPage', () => {
     render(
       <SuperDashListCard
         key="123"
+        id=""
         image=""
         orgName=""
         orgLocation=""

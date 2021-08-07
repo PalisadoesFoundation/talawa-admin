@@ -6,7 +6,7 @@ describe('Testing the LoginPage', () => {
   test('should show the text on the website', () => {
     render(
       <OrgPeopleListCard
-        key={124}
+        key="123"
         memberImage=""
         joinDate=""
         memberName=""
