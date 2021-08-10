@@ -3,13 +3,19 @@ import styles from './SuperDashListCard.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 interface SuperDashListCardProps {
-  key: number;
+  key: string;
+  id: string;
   orgName: string;
   orgLocation: string;
   createdDate: string;
   image: string;
 }
 function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
+  function Click() {
+    const url = '/orgdash/id=' + props.id;
+    window.location.replace(url);
+  }
+
   return (
     <>
       <Row className={styles.orglist}>
@@ -38,7 +44,9 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
             <p className={styles.orgfont}>
               Members: <span>40</span>
             </p>
-            <button className={styles.orgfontcreatedbtn}>Manage</button>
+            <button className={styles.orgfontcreatedbtn} onClick={Click}>
+              Manage
+            </button>
           </div>
         </Col>
       </Row>
