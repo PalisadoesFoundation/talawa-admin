@@ -1,14 +1,16 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState } from 'react';
 import { Form } from 'antd';
-import styles from './SuperAdminDashboard.module.css';
+import styles from './OrgList.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-modal';
 import Navbar from 'react-bootstrap/Navbar';
 import Logo from 'assets/talawa-logo-200x200.png';
 import SuperDashListCard from 'components/SuperDashListCard/SuperDashListCard';
+import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
+import { useQuery } from '@apollo/client';
 
-function SuperAdminDashboard(): JSX.Element {
+function OrgList(): JSX.Element {
   const [modalisOpen, setmodalIsOpen] = React.useState(false);
 
   const showInviteModal = () => {
@@ -21,10 +23,16 @@ function SuperAdminDashboard(): JSX.Element {
   const [formState, setFormState] = useState({
     email: '',
   });
-  // const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   console.log(formState);
-  // };
+
+  const { data, loading } = useQuery(ORGANIZATION_LIST);
+
+  if (loading) {
+    return (
+      <>
+        <div className={styles.loader}></div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -59,24 +67,6 @@ function SuperAdminDashboard(): JSX.Element {
                 Contact:
                 <span></span>
               </p>
-
-              <h6 className={styles.logintitleadmin}>Super Admins</h6>
-              <p className={styles.admindetails}>
-                <p>Saumya Singh</p>
-                <p>+</p>
-              </p>
-              <p className={styles.admindetails}>
-                <p>Yasharth Dubey</p>
-                <p>+</p>
-              </p>
-              <p className={styles.admindetails}>
-                <p>Saumya Singh</p>
-                <p>+</p>
-              </p>
-              <p className={styles.admindetails}>
-                <p>Yasarth Dubey</p>
-                <p>+</p>
-              </p>
             </div>
           </div>
         </Col>
@@ -88,22 +78,22 @@ function SuperAdminDashboard(): JSX.Element {
                 Invite Super Admins
               </button>
             </Row>
-            <SuperDashListCard
-              key="{123}"
-              id="gjg"
-              image=""
-              createdDate="05/06/2020"
-              orgName="Dogs Care"
-              orgLocation="Anand, Gujarat"
-            />
-            <SuperDashListCard
-              key="{124}"
-              id="ghj"
-              image=""
-              createdDate="05/07/2021"
-              orgName="Dogs Care Organization"
-              orgLocation="Vadodara, Gujarat"
-            />
+            {data
+              ? data.organizations.map(
+                  (datas: { _id: string; image: string; name: string }) => {
+                    return (
+                      <SuperDashListCard
+                        id={datas._id}
+                        key={datas._id}
+                        image={datas.image}
+                        createdDate="05/06/2020"
+                        orgName={datas.name}
+                        orgLocation="Anand, Gujarat"
+                      />
+                    );
+                  }
+                )
+              : null}
           </div>
         </Col>
       </Row>
@@ -153,4 +143,4 @@ function SuperAdminDashboard(): JSX.Element {
   );
 }
 
-export default SuperAdminDashboard;
+export default OrgList;

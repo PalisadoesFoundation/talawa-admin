@@ -3,7 +3,7 @@ import styles from './OrgPeopleListCard.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 interface OrgPeopleListCardProps {
-  key: number;
+  key: string;
   memberName: string;
   memberLocation: string;
   joinDate: string;
