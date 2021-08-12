@@ -73,26 +73,17 @@
   margin-bottom: 30px;
   padding-bottom: 5px;
   border-bottom: 3px solid #31bb6b;
-  width: 15%;
-}
-.searchtitle {
-  color: #707070;
-  font-weight: 600;
-  font-size: 20px;
-  margin-bottom: 20px;
-  padding-bottom: 5px;
-  border-bottom: 3px solid #31bb6b;
-  width: 60%;
+  width: 30%;
 }
 .logintitleadmin {
   color: #707070;
   font-weight: 600;
-  font-size: 18px;
+  font-size: 20px;
   margin-top: 50px;
   margin-bottom: 40px;
   padding-bottom: 5px;
   border-bottom: 3px solid #31bb6b;
-  width: 30%;
+  width: 60%;
 }
 .admindetails {
   display: flex;
@@ -113,20 +104,18 @@
   display: flex;
   justify-content: space-between;
 }
-
-.addbtn {
-  width: 12%;
+.invitebtn {
   border: 1px solid #e8e5e5;
   box-shadow: 0 2px 2px #e8e5e5;
   border-radius: 5px;
   background-color: #31bb6b;
+  width: 20%;
   height: 40px;
   font-size: 16px;
   color: white;
   outline: none;
   font-weight: 600;
   cursor: pointer;
-  margin-left: 30px;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 .flexdir {
@@ -214,59 +203,4 @@ form > input {
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   width: 100%;
-}
-.sidebarsticky > input {
-  text-decoration: none;
-  margin-bottom: 50px;
-  border-color: #e8e5e5;
-  width: 80%;
-  border-radius: 7px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  padding-right: 10px;
-  padding-left: 10px;
-  box-shadow: none;
-}
-
-.loader,
-.loader:after {
-  border-radius: 50%;
-  width: 10em;
-  height: 10em;
-}
-.loader {
-  margin: 60px auto;
-  margin-top: 35vh !important;
-  font-size: 10px;
-  position: relative;
-  text-indent: -9999em;
-  border-top: 1.1em solid rgba(255, 255, 255, 0.2);
-  border-right: 1.1em solid rgba(255, 255, 255, 0.2);
-  border-bottom: 1.1em solid rgba(255, 255, 255, 0.2);
-  border-left: 1.1em solid #febc59;
-  -webkit-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  transform: translateZ(0);
-  -webkit-animation: load8 1.1s infinite linear;
-  animation: load8 1.1s infinite linear;
-}
-@-webkit-keyframes load8 {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-@keyframes load8 {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
 }

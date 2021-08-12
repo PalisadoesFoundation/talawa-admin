@@ -78,7 +78,7 @@
 .searchtitle {
   color: #707070;
   font-weight: 600;
-  font-size: 20px;
+  font-size: 18px;
   margin-bottom: 20px;
   padding-bottom: 5px;
   border-bottom: 3px solid #31bb6b;
@@ -102,6 +102,7 @@
   margin-top: -12px;
   margin-right: 30px;
 }
+
 .mainpageright > hr {
   margin-top: 20px;
   width: 100%;
@@ -113,20 +114,18 @@
   display: flex;
   justify-content: space-between;
 }
-
 .addbtn {
-  width: 12%;
   border: 1px solid #e8e5e5;
   box-shadow: 0 2px 2px #e8e5e5;
   border-radius: 5px;
   background-color: #31bb6b;
+  width: 15%;
   height: 40px;
   font-size: 16px;
   color: white;
   outline: none;
   font-weight: 600;
   cursor: pointer;
-  margin-left: 30px;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 .flexdir {
