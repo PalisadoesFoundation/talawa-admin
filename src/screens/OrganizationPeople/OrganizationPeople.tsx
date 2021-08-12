@@ -23,6 +23,7 @@ function OrganizationPeople(): JSX.Element {
   }
 
   const url = '/orgdash/id=' + currentUrl;
+  const url_2 = '/orgevents/is';
   return (
     <>
       <AdminNavbar targets={[{ name: 'Dashboard', url: url }]} />

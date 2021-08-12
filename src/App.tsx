@@ -12,10 +12,6 @@ function App(): JSX.Element {
     <>
       <Switch>
         <Route exact path="/" component={LoginPage} />
-        <Route path="/orgdash" component={OrganizationDashboard} />
-        <Route path="/orgpeople" component={OrganizationPeople} />
-        <Route path="/orglist" component={OrgList} />
-        <Route path="/orgevents" component={OrganizationEvents} />
         {isLoggedIn == 'TRUE' ? (
           <div>
             <Route path="/orgdash" component={OrganizationDashboard} />

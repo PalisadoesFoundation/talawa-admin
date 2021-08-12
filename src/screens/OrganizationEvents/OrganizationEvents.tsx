@@ -11,9 +11,15 @@ function OrganizationEvents(): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
 
   const url = '/orgdash/id=' + currentUrl;
+  const url_2 = '/orgpeople/id=' + currentUrl;
   return (
     <>
-      <AdminNavbar targets={[{ name: 'Dashboard', url: url }]} />
+      <AdminNavbar
+        targets={[
+          { name: 'Dashboard', url: url },
+          { name: 'People', url: url_2 },
+        ]}
+      />
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
