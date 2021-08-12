@@ -23,10 +23,15 @@ function OrganizationPeople(): JSX.Element {
   }
 
   const url = '/orgdash/id=' + currentUrl;
-  const url_2 = '/orgevents/is';
+  const url_2 = '/orgevents/id=' + currentUrl;
   return (
     <>
-      <AdminNavbar targets={[{ name: 'Dashboard', url: url }]} />
+      <AdminNavbar
+        targets={[
+          { name: 'Dashboard', url: url },
+          { name: 'Events', url: url_2 },
+        ]}
+      />
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>

@@ -71,3 +71,14 @@ export const USER_ORGANIZATION_LIST = gql`
     }
   }
 `;
+
+export const ORGANIZATION_EVENT_LIST = gql`
+  query EventsByOrganization($id: ID!) {
+    eventsByOrganization(id: $id) {
+      _id
+      title
+      description
+      startDate
+    }
+  }
+`;
