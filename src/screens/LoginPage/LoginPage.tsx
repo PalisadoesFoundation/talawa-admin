@@ -44,8 +44,12 @@ function LoginPage(): JSX.Element {
         },
       });
       if (data) {
-        if (data.login.user.userType === 'SUPERADMIN') {
+        if (
+          data.login.user.userType === 'SUPERADMIN' ||
+          data.login.user.userType === 'ADMIN'
+        ) {
           localStorage.setItem('token', data.login.accessToken);
+          localStorage.setItem('id', data.login.user._id);
           localStorage.setItem('IsLoggedIn', 'TRUE');
           if (localStorage.getItem('IsLoggedIn') == 'TRUE') {
             window.location.replace('/orglist');

@@ -3,17 +3,37 @@ import styles from './OrganizationEvents.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useQuery } from '@apollo/client';
-import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import EventListCard from 'components/EventListCard/EventListCard';
+import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
 
 function OrganizationEvents(): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
 
+  const { data, loading } = useQuery(ORGANIZATION_EVENT_LIST, {
+    variables: { id: currentUrl },
+  });
+
+  if (loading) {
+    return (
+      <>
+        <div className={styles.loader}></div>
+      </>
+    );
+  }
+
+  console.log(data);
+
   const url = '/orgdash/id=' + currentUrl;
+  const url_2 = '/orgpeople/id=' + currentUrl;
   return (
     <>
-      <AdminNavbar targets={[{ name: 'Dashboard', url: url }]} />
+      <AdminNavbar
+        targets={[
+          { name: 'Dashboard', url: url },
+          { name: 'People', url: url_2 },
+        ]}
+      />
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
@@ -41,20 +61,33 @@ function OrganizationEvents(): JSX.Element {
         <Col sm={8}>
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
-              <p className={styles.logintitle}>Members</p>
+              <p className={styles.logintitle}>Events</p>
               <button className={styles.addbtn}>Add Event</button>
             </Row>
-            <EventListCard
-              key="123"
-              id="7"
-              eventLocation="India"
-              eventName="Dogs Care"
-              totalAdmin="10"
-              totalMember="30"
-              eventImage=""
-              regDate="21/2/2021"
-              regDays="2 days"
-            />
+            {data
+              ? data.eventsByOrganization.map(
+                  (datas: {
+                    _id: string;
+                    title: string;
+                    description: string;
+                    startDate: string;
+                  }) => {
+                    return (
+                      <EventListCard
+                        key={datas._id}
+                        id={datas._id}
+                        eventLocation="India"
+                        eventName={datas.title}
+                        totalAdmin="10"
+                        totalMember="30"
+                        eventImage=""
+                        regDate={datas.startDate}
+                        regDays="2 days"
+                      />
+                    );
+                  }
+                )
+              : null}
           </div>
         </Col>
       </Row>

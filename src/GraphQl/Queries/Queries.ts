@@ -58,11 +58,27 @@ export const MEMBERS_LIST = gql`
 export const USER_ORGANIZATION_LIST = gql`
   query User($id: ID!) {
     user(id: $id) {
+      firstName
+      lastName
+      image
+      email
+      userType
       adminFor {
         _id
         name
         image
       }
+    }
+  }
+`;
+
+export const ORGANIZATION_EVENT_LIST = gql`
+  query EventsByOrganization($id: ID!) {
+    eventsByOrganization(id: $id) {
+      _id
+      title
+      description
+      startDate
     }
   }
 `;
