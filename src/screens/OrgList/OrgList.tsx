@@ -7,7 +7,10 @@ import Modal from 'react-modal';
 import Navbar from 'react-bootstrap/Navbar';
 import Logo from 'assets/talawa-logo-200x200.png';
 import SuperDashListCard from 'components/SuperDashListCard/SuperDashListCard';
-import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATION_LIST,
+  USER_ORGANIZATION_LIST,
+} from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 
 function OrgList(): JSX.Element {
@@ -24,9 +27,16 @@ function OrgList(): JSX.Element {
     email: '',
   });
 
+  const { data: data_2, loading: loading_2 } = useQuery(
+    USER_ORGANIZATION_LIST,
+    {
+      variables: { id: localStorage.getItem('id') },
+    }
+  );
+
   const { data, loading } = useQuery(ORGANIZATION_LIST);
 
-  if (loading) {
+  if (loading || loading_2) {
     return (
       <>
         <div className={styles.loader}></div>
@@ -53,15 +63,17 @@ function OrgList(): JSX.Element {
               <h6 className={styles.logintitle}>You</h6>
               <p>
                 Name:
-                <span></span>
+                <span>
+                  {data_2.user.firstName} {data_2.user.lastName}
+                </span>
               </p>
               <p>
                 Designation:
-                <span></span>
+                <span>{data_2.user.userType}</span>
               </p>
               <p>
                 Email:
-                <span></span>
+                <span>{data_2.user.email}</span>
               </p>
               <p>
                 Contact:

@@ -23,11 +23,16 @@ function OrganizationDashboard(): JSX.Element {
   }
 
   const url = '/orgpeople/id=' + currentUrl;
-  console.log(url);
+  const url_2 = '/orgevents/id=' + currentUrl;
 
   return (
     <>
-      <AdminNavbar targets={[{ name: 'People', url: url }]} />
+      <AdminNavbar
+        targets={[
+          { name: 'People', url: url },
+          { name: 'Events', url: url_2 },
+        ]}
+      />
       <Row className={styles.toporginfo}>
         <p></p>
         <p className={styles.toporgname}>{data.organizations[0].name}</p>
