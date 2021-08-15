@@ -1,0 +1,7 @@
+.fonts {
+  color: #707070;
+}
+
+.fonts > span {
+  font-weight: 600;
+}
