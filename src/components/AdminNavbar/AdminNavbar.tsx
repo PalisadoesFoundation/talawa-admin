@@ -22,12 +22,12 @@ function AdminNavbar({ targets }: NavbarProps): JSX.Element {
               <a>
                 {targets.map(({ name, url }) => (
                   <Nav.Item key={name}>
-                    <Nav.Link href={url}>{name}</Nav.Link>
+                    <Nav.Link href={url} className={styles.navitem}>
+                      {name}
+                    </Nav.Link>
                   </Nav.Item>
                 ))}
               </a>
-              <a>Contributions</a>
-              <a>Posts</a>
             </div>
           </Row>
         </Navbar.Brand>

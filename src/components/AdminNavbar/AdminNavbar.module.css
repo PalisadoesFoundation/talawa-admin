@@ -27,11 +27,6 @@ a {
   box-shadow: 0px 0px 8px 2px #c8c8c8;
 }
 
-/* .navallitem > div{
-  position: relative;
-  justify-content: space-between;
-} */
-
 .logo {
   color: #707070;
   margin-left: 0;
@@ -75,23 +70,23 @@ a {
   font-size: 16px;
 }
 .navitems > a {
-  text-decoration: none;
-  color: #707070;
   margin-right: 40px;
   padding-bottom: 5px;
   width: 100%;
   z-index: 1;
+  flex-direction: row;
+  display: flex;
+}
+
+.navitem {
+  text-decoration: none;
+  color: #707070 !important;
   transition: smooth;
 }
-.navitems > a:hover {
+.navitem:hover {
   text-decoration: none;
   border-bottom: 3px solid #31bb6b;
   font-weight: 600;
-}
-
-.navitems:active {
-  padding-bottom: 5px;
-  border-bottom: 3px solid #31bb6b;
 }
 
 @media screen and (max-width: 1024px) {
