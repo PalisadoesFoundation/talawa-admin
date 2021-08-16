@@ -26,8 +26,6 @@ function AdminNavbar({ targets }: NavbarProps): JSX.Element {
                   </Nav.Item>
                 ))}
               </a>
-              <a>Contributions</a>
-              <a>Posts</a>
             </div>
           </Row>
         </Navbar.Brand>

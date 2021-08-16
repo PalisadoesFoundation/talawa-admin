@@ -51,6 +51,7 @@ function LoginPage(): JSX.Element {
           localStorage.setItem('token', data.login.accessToken);
           localStorage.setItem('id', data.login.user._id);
           localStorage.setItem('IsLoggedIn', 'TRUE');
+          localStorage.setItem('UserType', data.login.user.userType);
           if (localStorage.getItem('IsLoggedIn') == 'TRUE') {
             window.location.replace('/orglist');
           }
