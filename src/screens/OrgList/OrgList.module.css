@@ -262,3 +262,9 @@ form > input {
     transform: rotate(360deg);
   }
 }
+.list_box {
+  height: 70vh;
+  overflow-y: scroll;
+  width: auto;
+  padding-right: 50px;
+}

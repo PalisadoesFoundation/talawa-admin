@@ -124,22 +124,24 @@ function OrgList(): JSX.Element {
                 </button>
               )}
             </Row>
-            {data
-              ? data.organizations.map(
-                  (datas: { _id: string; image: string; name: string }) => {
-                    return (
-                      <SuperDashListCard
-                        id={datas._id}
-                        key={datas._id}
-                        image={datas.image}
-                        createdDate="05/06/2020"
-                        orgName={datas.name}
-                        orgLocation="Anand, Gujarat"
-                      />
-                    );
-                  }
-                )
-              : null}
+            <div className={styles.list_box}>
+              {data
+                ? data.organizations.map(
+                    (datas: { _id: string; image: string; name: string }) => {
+                      return (
+                        <SuperDashListCard
+                          id={datas._id}
+                          key={datas._id}
+                          image={datas.image}
+                          createdDate="05/06/2020"
+                          orgName={datas.name}
+                          orgLocation="Anand, Gujarat"
+                        />
+                      );
+                    }
+                  )
+                : null}
+            </div>
           </div>
         </Col>
       </Row>
