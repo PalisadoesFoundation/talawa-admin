@@ -13,6 +13,7 @@ function App(): JSX.Element {
   return (
     <>
       <Switch>
+        <Route exact path="/" component={LoginPage} />
         {isLoggedIn == 'TRUE' ? (
           <div>
             <Route path="/orgdash" component={OrganizationDashboard} />
