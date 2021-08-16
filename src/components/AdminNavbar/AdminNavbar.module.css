@@ -77,8 +77,15 @@ a {
   width: 100%;
   z-index: 1;
   transition: smooth;
+  flex-direction: row;
+  display: flex;
 }
-.navitems > a:hover {
+
+.navitem{
+  text-decoration: none;
+  color: #707070 !important;
+}
+.navitem:hover {
   text-decoration: none;
   border-bottom: 3px solid #31bb6b;
   font-weight: 600;
