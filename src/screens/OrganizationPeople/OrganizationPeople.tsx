@@ -24,12 +24,19 @@ function OrganizationPeople(): JSX.Element {
 
   const url = '/orgdash/id=' + currentUrl;
   const url_2 = '/orgevents/id=' + currentUrl;
+  const url_3 = '/orgpost/id=' + currentUrl;
+  const url_4 = '/orgcontribution/id=' + currentUrl;
+  const url_5 = '/orglist';
+
   return (
     <>
       <AdminNavbar
         targets={[
           { name: 'Dashboard', url: url },
           { name: 'Events', url: url_2 },
+          { name: 'Contribution', url: url_3 },
+          { name: 'Post', url: url_4 },
+          { name: 'Home', url: url_5 },
         ]}
       />
       <Row>

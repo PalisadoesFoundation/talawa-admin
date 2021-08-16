@@ -4,8 +4,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import AboutImg from 'assets/images/dogo.png';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 
 function OrganizationDashboard(): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
@@ -14,6 +15,18 @@ function OrganizationDashboard(): JSX.Element {
     variables: { id: currentUrl },
   });
 
+  const [del] = useMutation(DELETE_ORGANIZATION_MUTATION);
+
+  const delete_org = async () => {
+    const { data } = await del({
+      variables: {
+        id: currentUrl,
+      },
+    });
+    console.log(data);
+    window.location.replace('/orglist');
+  };
+
   if (loading) {
     return (
       <>
@@ -21,16 +34,21 @@ function OrganizationDashboard(): JSX.Element {
       </>
     );
   }
-
-  const url = '/orgpeople/id=' + currentUrl;
-  const url_2 = '/orgevents/id=' + currentUrl;
+  const url = '/orgpost/id=' + currentUrl;
+  const url_2 = '/orgpeople/id=' + currentUrl;
+  const url_3 = '/orgevents/id=' + currentUrl;
+  const url_4 = '/orgcontribution/id=' + currentUrl;
+  const url_5 = '/orglist';
 
   return (
     <>
       <AdminNavbar
         targets={[
-          { name: 'People', url: url },
-          { name: 'Events', url: url_2 },
+          { name: 'People', url: url_2 },
+          { name: 'Events', url: url_3 },
+          { name: 'Post', url: url },
+          { name: 'Contribution', url: url_4 },
+          { name: 'Home', url: url_5 },
         ]}
       />
       <Row className={styles.toporginfo}>
@@ -58,6 +76,7 @@ function OrganizationDashboard(): JSX.Element {
                 <button>NGO</button>
               </p>
             </div>
+            <button onClick={delete_org}>Delete This Organization</button>
           </div>
         </Col>
         <Col sm={8}>

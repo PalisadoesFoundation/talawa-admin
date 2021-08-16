@@ -70,13 +70,10 @@ a {
   font-size: 16px;
 }
 .navitems > a {
-  text-decoration: none;
-  color: #707070 !important;
   margin-right: 40px;
   padding-bottom: 5px;
   width: 100%;
   z-index: 1;
-  transition: smooth;
   flex-direction: row;
   display: flex;
 }
@@ -84,16 +81,12 @@ a {
 .navitem {
   text-decoration: none;
   color: #707070 !important;
+  transition: smooth;
 }
 .navitem:hover {
   text-decoration: none;
   border-bottom: 3px solid #31bb6b;
   font-weight: 600;
-}
-
-.navitems:active {
-  padding-bottom: 5px;
-  border-bottom: 3px solid #31bb6b;
 }
 
 @media screen and (max-width: 1024px) {

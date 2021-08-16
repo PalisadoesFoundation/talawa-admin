@@ -32,3 +32,11 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
     }
   }
 `;
+
+export const DELETE_ORGANIZATION_MUTATION = gql`
+  mutation RemoveOrganization($id: ID!) {
+    removeOrganization(id: $id) {
+      _id
+    }
+  }
+`;
