@@ -84,6 +84,10 @@
   border-bottom: 3px solid #31bb6b;
   width: 60%;
 }
+.justifysp {
+  display: flex;
+  justify-content: space-between;
+}
 .logintitleadmin {
   color: #707070;
   font-weight: 600;
@@ -92,7 +96,7 @@
   margin-bottom: 40px;
   padding-bottom: 5px;
   border-bottom: 3px solid #31bb6b;
-  width: 30%;
+  width: 40%;
 }
 .admindetails {
   display: flex;
@@ -109,13 +113,13 @@
   margin-right: -15px;
   margin-bottom: 20px;
 }
-.justifysp {
-  display: flex;
-  justify-content: space-between;
+.addbtnmain {
+  width: 60%;
+  margin-right: 30px;
 }
-
 .addbtn {
-  width: 12%;
+  float: right;
+  width: 23%;
   border: 1px solid #e8e5e5;
   box-shadow: 0 2px 2px #e8e5e5;
   border-radius: 5px;
