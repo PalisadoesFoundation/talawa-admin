@@ -147,16 +147,16 @@
   justify-content: left;
   flex-direction: column;
 }
-.logintitleinvite {
+.titlemodal {
   color: #707070;
   font-weight: 600;
   font-size: 20px;
   margin-bottom: 20px;
   padding-bottom: 5px;
   border-bottom: 3px solid #31bb6b;
-  width: 40%;
+  width: 65%;
 }
-form > label {
+form label {
   font-weight: bold;
   padding-bottom: 1px;
   font-size: 14px;
@@ -177,6 +177,21 @@ form > input {
   -moz-transition: all 0.3s ease-in-out;
   -ms-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
+}
+
+.checkboxdiv > label {
+  margin-right: 50px;
+}
+.checkboxdiv > label > input {
+  margin-left: 10px;
+}
+.orgphoto {
+  margin-top: 5px;
+}
+.orgphoto > input {
+  margin-top: 10px;
+  cursor: pointer;
+  margin-bottom: 5px;
 }
 .cancel > i {
   margin-top: 5px;

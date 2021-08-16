@@ -22,9 +22,14 @@ function OrgList(): JSX.Element {
   const hideInviteModal = () => {
     setmodalIsOpen(false);
   };
+  const [ispublicchecked, setIsPublicChecked] = React.useState(true);
+  const [visiblechecked, setVisibleChecked] = React.useState(false);
 
   const [formState, setFormState] = useState({
-    email: '',
+    name: '',
+    descrip: '',
+    ispublic: false,
+    visible: false,
   });
 
   const { data: data_2, loading: loading_2 } = useQuery(
@@ -69,11 +74,11 @@ function OrgList(): JSX.Element {
               </p>
               <p>
                 Designation:
-                <span>{data_2.user.userType}</span>
+                <span> {data_2.user.userType}</span>
               </p>
               <p>
                 Email:
-                <span>{data_2.user.email}</span>
+                <span> {data_2.user.email}</span>
               </p>
               <p>
                 Contact:
@@ -87,7 +92,7 @@ function OrgList(): JSX.Element {
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>Organizations List</p>
               <button className={styles.invitebtn} onClick={showInviteModal}>
-                Invite Super Admins
+                + Create Organization
               </button>
             </Row>
             {data
@@ -119,33 +124,79 @@ function OrgList(): JSX.Element {
         <section id={styles.grid_wrapper}>
           <div className={styles.form_wrapper}>
             <div className={styles.flexdir}>
-              <p className={styles.logintitleinvite}>Invite</p>
+              <p className={styles.titlemodal}>Create Organization</p>
               <a onClick={hideInviteModal} className={styles.cancel}>
                 <i className="fa fa-times"></i>
               </a>
             </div>
             <Form>
-              <label>Email</label>
+              <label htmlFor="orgname">Name</label>
               <input
-                type="email"
-                id="email"
-                placeholder="Enter Email"
+                type="name"
+                id="orgname"
+                placeholder="Enter Name"
                 autoComplete="off"
                 required
-                value={formState.email}
+                value={formState.name}
                 onChange={(e) => {
                   setFormState({
                     ...formState,
-                    email: e.target.value,
+                    name: e.target.value,
                   });
                 }}
               />
+              <label htmlFor="descrip">Description</label>
+              <input
+                type="descrip"
+                id="descrip"
+                placeholder="Enter Description"
+                autoComplete="off"
+                required
+                value={formState.descrip}
+                onChange={(e) => {
+                  setFormState({
+                    ...formState,
+                    descrip: e.target.value,
+                  });
+                }}
+              />
+              <div className={styles.checkboxdiv}>
+                <label htmlFor="ispublic">
+                  Is Public:
+                  <input
+                    id="ispublic"
+                    type="checkbox"
+                    defaultChecked={ispublicchecked}
+                    onChange={() => setIsPublicChecked(!ispublicchecked)}
+                  />
+                </label>
+                <label htmlFor="visible">
+                  Visible:
+                  <input
+                    id="visible"
+                    type="checkbox"
+                    defaultChecked={visiblechecked}
+                    onChange={() => setVisibleChecked(!visiblechecked)}
+                  />
+                </label>
+              </div>
+              <label htmlFor="orgphoto" className={styles.orgphoto}>
+                Display Image:
+                <input
+                  accept="image/*"
+                  id="orgphoto"
+                  name="photo"
+                  type="file"
+                  multiple={false}
+                  //onChange=""
+                />
+              </label>
               <button
                 type="button"
                 className={styles.greenregbtn}
                 value="invite"
               >
-                Invite Super Admin
+                Create Organization
               </button>
             </Form>
           </div>
