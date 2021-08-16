@@ -64,7 +64,7 @@ function OrganizationPeople(): JSX.Element {
             </div>
           </div>
         </Col>
-        <Col sm={8}>
+        <Col sm={9}>
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>Members</p>
