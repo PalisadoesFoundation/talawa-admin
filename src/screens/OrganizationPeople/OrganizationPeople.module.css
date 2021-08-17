@@ -108,7 +108,7 @@
 }
 .mainpageright > hr {
   margin-top: 20px;
-  width: 100%;
+  width: 97%;
   margin-left: -15px;
   margin-right: -15px;
   margin-bottom: 20px;
@@ -254,6 +254,21 @@ form > input {
   -webkit-animation: load8 1.1s infinite linear;
   animation: load8 1.1s infinite linear;
 }
+.radio_buttons{
+  display: flex;
+  color: #707070;
+  font-weight: 600;
+  font-size: 14px;
+}
+.radio_buttons > input{
+  transform: scale(1.2);
+}
+.radio_buttons > label{
+  margin-top : -4px;
+  margin-left: 5px;
+  margin-right: 15px;
+}
+
 @-webkit-keyframes load8 {
   0% {
     -webkit-transform: rotate(0deg);
