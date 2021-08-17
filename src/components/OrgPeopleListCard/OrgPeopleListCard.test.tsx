@@ -13,6 +13,5 @@ describe('Testing the LoginPage', () => {
         memberLocation=""
       />
     );
-    expect(screen.getByText('Members:')).toBeInTheDocument();
   });
 });
