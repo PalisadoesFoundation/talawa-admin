@@ -234,13 +234,13 @@ form > input {
   padding-left: 10px;
   box-shadow: none;
 }
-.datediv{
+.datediv {
   display: flex;
   flex-direction: row;
-  margin-bottom:15px;
+  margin-bottom: 15px;
 }
-.datebox{
-  width:90%;
+.datebox {
+  width: 90%;
   border-radius: 7px;
   border-color: #e8e5e5;
   outline: none;

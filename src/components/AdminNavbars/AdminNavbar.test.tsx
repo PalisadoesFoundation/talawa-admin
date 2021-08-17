@@ -14,7 +14,7 @@ describe('This is the test for Navbar component', () => {
         ]}
       />
     );
-    expect(screen.getByText('Talawa')).toBeInTheDocument();
+    expect(screen.getByText('Talawa Portal')).toBeInTheDocument();
     expect(screen.getByText('Admin')).toBeInTheDocument();
     expect(screen.getByText('Home')).toBeInTheDocument();
     expect(screen.getByText('People')).toBeInTheDocument();
