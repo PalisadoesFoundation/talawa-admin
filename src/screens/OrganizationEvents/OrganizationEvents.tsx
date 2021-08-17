@@ -23,15 +23,21 @@ function OrganizationEvents(): JSX.Element {
   }
 
   console.log(data);
-
   const url = '/orgdash/id=' + currentUrl;
-  const url_2 = '/orgpeople/id=' + currentUrl;
+  const url_2 = '/orgpeople';
+  const url_3 = '/orgevents/id=' + currentUrl;
+  const url_4 = '/orgcontribution';
+  const url_5 = '/orgpost';
+
   return (
     <>
       <AdminNavbar
         targets={[
           { name: 'Dashboard', url: url },
           { name: 'People', url: url_2 },
+          { name: 'Events', url: url_3 },
+          { name: 'Contributions', url: url_4 },
+          { name: 'Posts', url: url_5 },
         ]}
       />
       <Row>

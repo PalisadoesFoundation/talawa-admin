@@ -16,6 +16,7 @@ a {
   float: left;
   display: block;
 }
+
 .navbarbg {
   height: 60px;
   background-color: white;
@@ -25,12 +26,13 @@ a {
   position: relative;
   flex-direction: row;
   box-shadow: 0px 0px 8px 2px #c8c8c8;
+  justify-content: space-between !important;
 }
 
-/* .navallitem > div{
+.navallitem {
   position: relative;
   justify-content: space-between;
-} */
+}
 
 .logo {
   color: #707070;
@@ -63,35 +65,43 @@ a {
   margin-right: 25px;
 }
 .roundedcircle {
-  margin-top: 10px;
-  margin-right: 25px;
+  margin-right: 5px;
   border-radius: 50px;
 }
-.navitems {
+.navit {
+  display: flex;
+  margin-left: 50px;
+  margin-top: -3px;
+}
+.navitems > .navlinks {
   margin-top: 19px;
   cursor: pointer;
-  margin-left: 80px;
-  line-height: 1.5rem;
+  margin-left: 10px;
+  line-height: 1rem;
   font-size: 16px;
-}
-.navitems > a {
-  text-decoration: none;
   color: #707070;
-  margin-right: 40px;
-  padding-bottom: 5px;
-  width: 100%;
   z-index: 1;
   transition: smooth;
+  padding-bottom: 10px;
 }
-.navitems > a:hover {
+.navlinks:hover {
   text-decoration: none;
   border-bottom: 3px solid #31bb6b;
   font-weight: 600;
 }
 
-.navitems:active {
-  padding-bottom: 5px;
+.navlinks:active {
   border-bottom: 3px solid #31bb6b;
+}
+.dropdowns {
+  margin-right: 16px;
+  text-decoration: none;
+}
+#dropdown-basic,
+.dropdowns.btn,
+.btn:focus,
+.btn.focus {
+  box-shadow: none !important;
 }
 
 @media screen and (max-width: 1024px) {
