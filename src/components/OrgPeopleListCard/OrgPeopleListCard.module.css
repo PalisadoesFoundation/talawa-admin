@@ -38,7 +38,7 @@
   margin-top: 18px;
 }
 .memberfontcreatedbtn {
-  margin-top: 18px;
+  margin-top: 33px;
   border-radius: 7px;
   border-color: #e8e5e5;
   background-color: #f7f7f7;
@@ -51,4 +51,7 @@
 }
 #grid_wrapper {
   align-items: left;
+}
+.peoplelistdiv {
+  margin-right: 50px;
 }

@@ -28,6 +28,12 @@ a {
   box-shadow: 0px 0px 8px 2px #c8c8c8;
   justify-content: space-between !important;
 }
+
+.navallitem {
+  position: relative;
+  justify-content: space-between;
+}
+
 .logo {
   color: #707070;
   margin-left: 0;

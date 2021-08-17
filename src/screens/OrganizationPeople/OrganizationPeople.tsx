@@ -68,6 +68,25 @@ function OrganizationPeople(): JSX.Element {
                 autoComplete="off"
                 required
               />
+              <div className={styles.radio_buttons}>
+                <input
+                  id="memberslist"
+                  value="memberslist"
+                  name="displaylist"
+                  type="radio"
+                  checked={true}
+                  // onChange={onChangeValue}
+                />
+                <label>Members</label>
+                <input
+                  id="adminslist"
+                  value="adminslist"
+                  name="displaylist"
+                  type="radio"
+                  // onChange={onChangeValue}
+                />
+                <label>Admins</label>
+              </div>
             </div>
           </div>
         </Col>
@@ -76,8 +95,8 @@ function OrganizationPeople(): JSX.Element {
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>Members</p>
               <div className={styles.addbtnmain}>
-                <button className={styles.addbtn}>Add Admin</button>
-                <button className={styles.addbtn}>Add Member</button>
+                <button className={styles.addbtn}>Add User</button>
+                {/* <button className={styles.addbtn}>Add Member</button> */}
               </div>
             </Row>
             {data
