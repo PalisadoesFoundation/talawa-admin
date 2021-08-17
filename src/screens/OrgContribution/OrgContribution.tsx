@@ -5,7 +5,6 @@ import Col from 'react-bootstrap/Col';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import OrgContriCards from 'components/OrgContriCards/OrgContriCards';
 import ContriStats from 'components/ContriStats/ContriStats';
-
 function OrgContribution(): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
   const url = '/orgdash/id=' + currentUrl;
@@ -13,7 +12,6 @@ function OrgContribution(): JSX.Element {
   const url_3 = '/orgevents/id=' + currentUrl;
   const url_4 = '/orgcontribution';
   const url_5 = '/orgpost/id=' + currentUrl;
-
   return (
     <>
       <AdminNavbar

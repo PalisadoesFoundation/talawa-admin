@@ -8,7 +8,6 @@ import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
 function OrgPost(): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
   const url = '/orgdash/id=' + currentUrl;
-  const url = '/orgdash/id=' + currentUrl;
   const url_2 = '/orgpeople/id=' + currentUrl;
   const url_3 = '/orgevents/id=' + currentUrl;
   const url_4 = '/orgcontribution';

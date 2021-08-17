@@ -1,13 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './OrganizationEvents.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Modal from 'react-modal';
+import DatePicker from 'react-datepicker';
+import { Form } from 'antd';
 import { useQuery } from '@apollo/client';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import EventListCard from 'components/EventListCard/EventListCard';
 import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
 
 function OrganizationEvents(): JSX.Element {
+  const [eventmodalisOpen, setEventModalIsOpen] = React.useState(false);
+
+  const showInviteModal = () => {
+    setEventModalIsOpen(true);
+  };
+  const hideInviteModal = () => {
+    setEventModalIsOpen(false);
+  };
+
+  const [startDate, setStartDate] = React.useState<Date | null>(new Date());
+  const [endDate, setEndDate] = React.useState<Date | null>(new Date());
+
+  const [alldaychecked, setAllDayChecked] = React.useState(true);
+  const [recurringchecked, setRecurringChecked] = React.useState(false);
+
+  const [publicchecked, setPublicChecked] = React.useState(true);
+  const [registrablechecked, setRegistrableChecked] = React.useState(false);
+
+  const [formState, setFormState] = useState({
+    title: '',
+    eventdescrip: '',
+    ispublic: false,
+    visible: false,
+    date: '',
+  });
   const currentUrl = window.location.href.split('=')[1];
 
   const { data, loading } = useQuery(ORGANIZATION_EVENT_LIST, {
@@ -23,7 +51,6 @@ function OrganizationEvents(): JSX.Element {
   }
 
   console.log(data);
-  const url = '/orgdash/id=' + currentUrl;
   const url = '/orgdash/id=' + currentUrl;
   const url_2 = '/orgpeople/id=' + currentUrl;
   const url_3 = '/orgevents/id=' + currentUrl;
@@ -69,7 +96,9 @@ function OrganizationEvents(): JSX.Element {
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>Events</p>
-              <button className={styles.addbtn}>Add Event</button>
+              <button className={styles.addbtn} onClick={showInviteModal}>
+                + Add Event
+              </button>
             </Row>
             {data
               ? data.eventsByOrganization.map(
@@ -98,6 +127,124 @@ function OrganizationEvents(): JSX.Element {
           </div>
         </Col>
       </Row>
+      <Modal
+        isOpen={eventmodalisOpen}
+        style={{
+          overlay: { backgroundColor: 'grey' },
+        }}
+        className={styles.modalbody}
+      >
+        <section id={styles.grid_wrapper}>
+          <div className={styles.form_wrapper}>
+            <div className={styles.flexdir}>
+              <p className={styles.titlemodal}>Create Event</p>
+              <a onClick={hideInviteModal} className={styles.cancel}>
+                <i className="fa fa-times"></i>
+              </a>
+            </div>
+            <Form>
+              <label htmlFor="eventtitle">Title</label>
+              <input
+                type="title"
+                id="eventitle"
+                placeholder="Enter Title"
+                autoComplete="off"
+                required
+                value={formState.title}
+                onChange={(e) => {
+                  setFormState({
+                    ...formState,
+                    title: e.target.value,
+                  });
+                }}
+              />
+              <label htmlFor="eventdescrip">Description</label>
+              <input
+                type="eventdescrip"
+                id="eventdescrip"
+                placeholder="Enter Description"
+                autoComplete="off"
+                required
+                value={formState.eventdescrip}
+                onChange={(e) => {
+                  setFormState({
+                    ...formState,
+                    eventdescrip: e.target.value,
+                  });
+                }}
+              />
+              <div className={styles.datediv}>
+                <div>
+                  <label htmlFor="startdate">Start Date</label>
+                  <DatePicker
+                    className={styles.datebox}
+                    id="startdate"
+                    selected={startDate}
+                    onChange={(date: Date | null) => setStartDate(date)}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="enddate">End Date</label>
+                  <DatePicker
+                    className={styles.datebox}
+                    id="enddate"
+                    selected={endDate}
+                    onChange={(date: Date | null) => setEndDate(date)}
+                  />
+                </div>
+              </div>
+              <div className={styles.checkboxdiv}>
+                <label htmlFor="allday">
+                  All Day:
+                  <input
+                    id="allday"
+                    type="checkbox"
+                    defaultChecked={alldaychecked}
+                    onChange={() => setAllDayChecked(!alldaychecked)}
+                  />
+                </label>
+                <label htmlFor="recurring">
+                  Recurring Event ?
+                  <input
+                    id="recurring"
+                    type="checkbox"
+                    defaultChecked={recurringchecked}
+                    onChange={() => setRecurringChecked(!recurringchecked)}
+                  />
+                </label>
+              </div>
+              <div className={styles.checkboxdiv}>
+                <label htmlFor="ispublic">
+                  Is Public:
+                  <input
+                    id="ispublic"
+                    type="checkbox"
+                    defaultChecked={publicchecked}
+                    onChange={() => setPublicChecked(!publicchecked)}
+                  />
+                </label>
+                <label htmlFor="visible">
+                  Is Registrable ?
+                  <input
+                    id="registrable"
+                    type="checkbox"
+                    defaultChecked={registrablechecked}
+                    onChange={() => setRegistrableChecked(!registrablechecked)}
+                  />
+                </label>
+              </div>
+              <button
+                type="button"
+                className={styles.greenregbtn}
+                value="createevent"
+                // onClick={CreateEvent}
+              >
+                Create Event
+              </button>
+            </Form>
+          </div>
+        </section>
+      </Modal>
     </>
   );
 }
