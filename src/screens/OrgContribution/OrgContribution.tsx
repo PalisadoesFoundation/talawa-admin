@@ -5,24 +5,22 @@ import Col from 'react-bootstrap/Col';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import OrgContriCards from 'components/OrgContriCards/OrgContriCards';
 import ContriStats from 'components/ContriStats/ContriStats';
-
 function OrgContribution(): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
   const url = '/orgdash/id=' + currentUrl;
   const url_2 = '/orgpeople/id=' + currentUrl;
-  const url_3 = '/orgpost/id=' + currentUrl;
-  const url_4 = '/orgevents/id=' + currentUrl;
-  const url_5 = '/orglist';
-
+  const url_3 = '/orgevents/id=' + currentUrl;
+  const url_4 = '/orgcontribution';
+  const url_5 = '/orgpost/id=' + currentUrl;
   return (
     <>
       <AdminNavbar
         targets={[
           { name: 'Dashboard', url: url },
           { name: 'People', url: url_2 },
-          { name: 'Post', url: url_3 },
-          { name: 'Events', url: url_4 },
-          { name: 'Home', url: url_5 },
+          { name: 'Events', url: url_3 },
+          { name: 'Contributions', url: url_4 },
+          { name: 'Posts', url: url_5 },
         ]}
       />
       <Row>
