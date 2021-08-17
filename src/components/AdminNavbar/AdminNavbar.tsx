@@ -15,7 +15,7 @@ function AdminNavbar({ targets }: NavbarProps): JSX.Element {
       <Navbar className={styles.navbarbg}>
         <Navbar.Brand>
           <Row className={styles.navallitem}>
-            <a className={styles.logo}>
+            <a className={styles.logo} href="/orglist">
               <img src={Logo} />
               <strong>Talawa Portal</strong>
             </a>
@@ -38,9 +38,18 @@ function AdminNavbar({ targets }: NavbarProps): JSX.Element {
             />
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            <Dropdown.Item href="">Delete Org</Dropdown.Item>
-            <Dropdown.Item href="#/orgsettings">Settings</Dropdown.Item>
-            <Dropdown.Item href="#">Log Out</Dropdown.Item>
+            <Dropdown.Item href="/notification">
+              <i className="fa fa-bell"></i>
+              Notify
+            </Dropdown.Item>
+            <Dropdown.Item href="/orgsettings">
+              <i className="fa fa-cogs"></i>
+              Settings
+            </Dropdown.Item>
+            <Dropdown.Item href="/">
+              <i className="fa fa-arrow-right"></i>
+              Logout
+            </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       </Navbar>

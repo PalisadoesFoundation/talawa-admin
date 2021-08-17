@@ -7,7 +7,7 @@ import OrganizationDashboard from 'screens/OrganizationDashboard/OrganizationDas
 import OrgContribution from 'screens/OrgContribution/OrgContribution';
 import OrgList from 'screens/OrgList/OrgList';
 import OrgPost from 'screens/OrgPost/OrgPost';
-
+import OrgSettings from 'screens/OrgSettings/OrgSettings';
 function App(): JSX.Element {
   const isLoggedIn = localStorage.getItem('IsLoggedIn');
   return (
@@ -22,6 +22,7 @@ function App(): JSX.Element {
             <Route path="/orgevents" component={OrganizationEvents} />
             <Route path="/orgcontribution" component={OrgContribution} />
             <Route path="/orgpost" component={OrgPost} />
+            <Route path="/orgsettings" component={OrgSettings} />
           </div>
         ) : null}
       </Switch>
