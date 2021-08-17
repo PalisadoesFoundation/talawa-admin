@@ -11,7 +11,8 @@ import {
   ORGANIZATION_LIST,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
+import { CREATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 
 function OrgList(): JSX.Element {
   const [modalisOpen, setmodalIsOpen] = React.useState(false);
@@ -32,6 +33,24 @@ function OrgList(): JSX.Element {
     visible: false,
   });
 
+  const CreateOrg = async () => {
+    const { data } = await create({
+      variables: {
+        name: formState.name,
+        description: formState.descrip,
+        visibleInSearch: formState.visible,
+        isPublic: formState.ispublic,
+      },
+    });
+    console.log(data);
+    window.alert('Congratulation the Organization is created');
+    window.location.replace('/orglist');
+  };
+
+  const [create, { loading: loading_3, error }] = useMutation(
+    CREATE_ORGANIZATION_MUTATION
+  );
+
   const { data: data_2, loading: loading_2 } = useQuery(
     USER_ORGANIZATION_LIST,
     {
@@ -41,7 +60,7 @@ function OrgList(): JSX.Element {
 
   const { data, loading } = useQuery(ORGANIZATION_LIST);
 
-  if (loading || loading_2) {
+  if (loading || loading_2 || loading_3) {
     return (
       <>
         <div className={styles.loader}></div>
@@ -91,26 +110,38 @@ function OrgList(): JSX.Element {
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>Organizations List</p>
-              <button className={styles.invitebtn} onClick={showInviteModal}>
-                + Create Organization
-              </button>
+              {localStorage.getItem('UserType') == 'SUPERADMIN' ? (
+                <button className={styles.invitebtn} onClick={showInviteModal}>
+                  + Create Organization
+                </button>
+              ) : (
+                <button
+                  className={styles.invitebtn}
+                  disabled={true}
+                  onClick={showInviteModal}
+                >
+                  + Create Organization
+                </button>
+              )}
             </Row>
-            {data
-              ? data.organizations.map(
-                  (datas: { _id: string; image: string; name: string }) => {
-                    return (
-                      <SuperDashListCard
-                        id={datas._id}
-                        key={datas._id}
-                        image={datas.image}
-                        createdDate="05/06/2020"
-                        orgName={datas.name}
-                        orgLocation="Anand, Gujarat"
-                      />
-                    );
-                  }
-                )
-              : null}
+            <div className={styles.list_box}>
+              {data
+                ? data.organizations.map(
+                    (datas: { _id: string; image: string; name: string }) => {
+                      return (
+                        <SuperDashListCard
+                          id={datas._id}
+                          key={datas._id}
+                          image={datas.image}
+                          createdDate="05/06/2020"
+                          orgName={datas.name}
+                          orgLocation="Anand, Gujarat"
+                        />
+                      );
+                    }
+                  )
+                : null}
+            </div>
           </div>
         </Col>
       </Row>
@@ -195,6 +226,7 @@ function OrgList(): JSX.Element {
                 type="button"
                 className={styles.greenregbtn}
                 value="invite"
+                onClick={CreateOrg}
               >
                 Create Organization
               </button>

@@ -125,11 +125,9 @@ a {
   margin: 0;
   height: 100%;
 }
-
 .sidebarsticky {
   padding-top: 40%;
 }
-
 .navitem {
   padding-left: 27%;
   padding-top: 12px;
@@ -142,30 +140,25 @@ a {
   background-color: #f7f7f7;
   box-shadow: 2px 2px 8px 2px #c8c8c8;
 }
-
 .navitem:target {
   z-index: 1;
   background-color: #f7f7f7;
   box-shadow: 2px 2px 2px 2px #c8c8c8;
 }
-
 .naviteminside {
   font-size: 17px;
   font-weight: 600;
   color: black;
 }
-
 @media screen and (max-width: 768px) {
   .sidebar {
     width: 15%;
   }
 }
-
 @media screen and (max-width: 680px) {
   body {
     overflow-x: hidden;
   }
-
   .logo {
     margin-left: 0%;
   }

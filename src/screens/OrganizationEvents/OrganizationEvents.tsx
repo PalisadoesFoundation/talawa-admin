@@ -24,10 +24,11 @@ function OrganizationEvents(): JSX.Element {
 
   console.log(data);
   const url = '/orgdash/id=' + currentUrl;
-  const url_2 = '/orgpeople';
+  const url = '/orgdash/id=' + currentUrl;
+  const url_2 = '/orgpeople/id=' + currentUrl;
   const url_3 = '/orgevents/id=' + currentUrl;
   const url_4 = '/orgcontribution';
-  const url_5 = '/orgpost';
+  const url_5 = '/orgpost/id=' + currentUrl;
 
   return (
     <>
