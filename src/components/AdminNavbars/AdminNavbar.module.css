@@ -28,6 +28,12 @@ a {
   box-shadow: 0px 0px 8px 2px #c8c8c8;
   justify-content: space-between !important;
 }
+
+.navallitem {
+  position: relative;
+  justify-content: space-between;
+}
+
 .logo {
   color: #707070;
   margin-left: 0;
@@ -75,13 +81,6 @@ a {
   font-size: 16px;
   color: #707070;
   z-index: 1;
-  flex-direction: row;
-  display: flex;
-}
-
-.navitem {
-  text-decoration: none;
-  color: #707070 !important;
   transition: smooth;
   padding-bottom: 10px;
 }
@@ -116,7 +115,7 @@ a {
     margin-right: 20px;
   }
 }
-.sidebar {
+/* .sidebar {
   z-index: 0;
   padding-top: 50px;
   position: fixed;
@@ -128,6 +127,28 @@ a {
 }
 .sidebarsticky {
   padding-top: 40%;
+}
+.navitem {
+  padding-left: 27%;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  cursor: pointer;
+}
+.navitem:hover {
+  border-left: 4px solid black;
+  z-index: 1;
+  background-color: #f7f7f7;
+  box-shadow: 2px 2px 8px 2px #c8c8c8;
+}
+.navitem:target {
+  z-index: 1;
+  background-color: #f7f7f7;
+  box-shadow: 2px 2px 2px 2px #c8c8c8;
+}
+.naviteminside {
+  font-size: 17px;
+  font-weight: 600;
+  color: black;
 }
 @media screen and (max-width: 768px) {
   .sidebar {
@@ -141,4 +162,4 @@ a {
   .logo {
     margin-left: 0%;
   }
-} 
+} */
