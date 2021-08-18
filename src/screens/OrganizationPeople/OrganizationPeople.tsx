@@ -3,16 +3,33 @@ import styles from './OrganizationPeople.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useQuery } from '@apollo/client';
-import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
+import { ADMIN_LIST, MEMBERS_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 
 function OrganizationPeople(): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
+  let data, loading;
 
-  const { data, loading } = useQuery(MEMBERS_LIST, {
-    variables: { id: currentUrl },
-  });
+  const [t, setT] = React.useState(0);
+
+  if (t == 0) {
+    const { data: data_2, loading: loading_2 } = useQuery(MEMBERS_LIST, {
+      variables: { id: currentUrl },
+    });
+    data = data_2;
+    loading = loading_2;
+  } else if (t == 1) {
+    const { data: data_2, loading: loading_2 } = useQuery(ADMIN_LIST, {
+      variables: { id: currentUrl },
+    });
+    data = data_2;
+    loading = loading_2;
+  } else if (t == 2) {
+    const { data: data_2, loading: loading_2 } = useQuery(USER_LIST);
+    data = data_2;
+    loading = loading_2;
+  }
 
   if (loading) {
     return (
@@ -74,8 +91,10 @@ function OrganizationPeople(): JSX.Element {
                   value="memberslist"
                   name="displaylist"
                   type="radio"
-                  checked={true}
-                  // onChange={onChangeValue}
+                  checked={t == 0 ? true : false}
+                  onClick={() => {
+                    setT(0);
+                  }}
                 />
                 <label>Members</label>
                 <input
@@ -83,9 +102,23 @@ function OrganizationPeople(): JSX.Element {
                   value="adminslist"
                   name="displaylist"
                   type="radio"
-                  // onChange={onChangeValue}
+                  checked={t == 1 ? true : false}
+                  onClick={() => {
+                    setT(1);
+                  }}
                 />
                 <label>Admins</label>
+                <input
+                  id="adminslist"
+                  value="adminslist"
+                  name="displaylist"
+                  type="radio"
+                  checked={t == 2 ? true : false}
+                  onClick={() => {
+                    setT(2);
+                  }}
+                />
+                <label>User</label>
               </div>
             </div>
           </div>
@@ -96,28 +129,71 @@ function OrganizationPeople(): JSX.Element {
               <p className={styles.logintitle}>Members</p>
               <div className={styles.addbtnmain}>
                 <button className={styles.addbtn}>Add User</button>
-                {/* <button className={styles.addbtn}>Add Member</button> */}
               </div>
             </Row>
-            {data
-              ? data.organizations[0].members.map(
-                  (datas: {
-                    _id: string;
-                    lastName: string;
-                    firstName: string;
-                    image: string;
-                  }) => {
-                    return (
-                      <OrgPeopleListCard
-                        key={datas._id}
-                        memberImage={datas.image}
-                        joinDate="05/07/2021"
-                        memberName={datas.firstName + ' ' + datas.lastName}
-                        memberLocation="Vadodara, Gujarat"
-                      />
-                    );
-                  }
-                )
+            {t == 0
+              ? data
+                ? data.organizations[0].members.map(
+                    (datas: {
+                      _id: string;
+                      lastName: string;
+                      firstName: string;
+                      image: string;
+                    }) => {
+                      return (
+                        <OrgPeopleListCard
+                          key={datas._id}
+                          memberImage={datas.image}
+                          joinDate="05/07/2021"
+                          memberName={datas.firstName + ' ' + datas.lastName}
+                          memberLocation="Vadodara, Gujarat"
+                        />
+                      );
+                    }
+                  )
+                : null
+              : t == 1
+              ? data
+                ? data.organizations[0].admins.map(
+                    (datas: {
+                      _id: string;
+                      lastName: string;
+                      firstName: string;
+                      image: string;
+                    }) => {
+                      return (
+                        <OrgPeopleListCard
+                          key={datas._id}
+                          memberImage={datas.image}
+                          joinDate="05/07/2021"
+                          memberName={datas.firstName + ' ' + datas.lastName}
+                          memberLocation="Vadodara, Gujarat"
+                        />
+                      );
+                    }
+                  )
+                : null
+              : t == 2
+              ? data
+                ? data.users.map(
+                    (datas: {
+                      _id: string;
+                      lastName: string;
+                      firstName: string;
+                      image: string;
+                    }) => {
+                      return (
+                        <OrgPeopleListCard
+                          key={datas._id}
+                          memberImage={datas.image}
+                          joinDate="05/07/2021"
+                          memberName={datas.firstName + ' ' + datas.lastName}
+                          memberLocation="Vadodara, Gujarat"
+                        />
+                      );
+                    }
+                  )
+                : null
               : null}
           </div>
         </Col>

@@ -5,10 +5,11 @@ import Col from 'react-bootstrap/Col';
 import Modal from 'react-modal';
 import DatePicker from 'react-datepicker';
 import { Form } from 'antd';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import EventListCard from 'components/EventListCard/EventListCard';
 import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
+import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 
 function OrganizationEvents(): JSX.Element {
   const [eventmodalisOpen, setEventModalIsOpen] = React.useState(false);
@@ -33,7 +34,6 @@ function OrganizationEvents(): JSX.Element {
     title: '',
     eventdescrip: '',
     ispublic: false,
-    visible: false,
     date: '',
   });
   const currentUrl = window.location.href.split('=')[1];
@@ -42,7 +42,34 @@ function OrganizationEvents(): JSX.Element {
     variables: { id: currentUrl },
   });
 
-  if (loading) {
+  const [create, { loading: loading_2, error }] = useMutation(
+    CREATE_EVENT_MUTATION
+  );
+
+  const CreateEvent = async () => {
+    try {
+      const { data } = await create({
+        variables: {
+          title: formState.title,
+          description: formState.eventdescrip,
+          isPublic: formState.ispublic,
+          recurring: recurringchecked,
+          isRegisterable: registrablechecked,
+          organizationId: currentUrl,
+          startDate: startDate?.toDateString(),
+          endDate: endDate?.toDateString(),
+          allDay: alldaychecked,
+        },
+      });
+      console.log(data);
+      window.alert('Congratulation the Event is created');
+      window.location.reload();
+    } catch (error) {
+      window.alert(error);
+    }
+  };
+
+  if (loading || loading_2) {
     return (
       <>
         <div className={styles.loader}></div>
@@ -54,7 +81,7 @@ function OrganizationEvents(): JSX.Element {
   const url = '/orgdash/id=' + currentUrl;
   const url_2 = '/orgpeople/id=' + currentUrl;
   const url_3 = '/orgevents/id=' + currentUrl;
-  const url_4 = '/orgcontribution';
+  const url_4 = '/orgcontribution/id=' + currentUrl;
   const url_5 = '/orgpost/id=' + currentUrl;
 
   return (
@@ -204,7 +231,7 @@ function OrganizationEvents(): JSX.Element {
                   />
                 </label>
                 <label htmlFor="recurring">
-                  Recurring Event ?
+                  Recurring Event:
                   <input
                     id="recurring"
                     type="checkbox"
@@ -224,7 +251,7 @@ function OrganizationEvents(): JSX.Element {
                   />
                 </label>
                 <label htmlFor="visible">
-                  Is Registrable ?
+                  Is Registrable:
                   <input
                     id="registrable"
                     type="checkbox"
@@ -237,7 +264,7 @@ function OrganizationEvents(): JSX.Element {
                 type="button"
                 className={styles.greenregbtn}
                 value="createevent"
-                // onClick={CreateEvent}
+                onClick={CreateEvent}
               >
                 Create Event
               </button>
