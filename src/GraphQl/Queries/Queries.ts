@@ -14,7 +14,7 @@ export const ORGANIZATION_LIST = gql`
   }
 `;
 
-export const PEOPLE_LIST = gql`
+export const USER_LIST = gql`
   query {
     users {
       firstName
@@ -79,6 +79,20 @@ export const ORGANIZATION_EVENT_LIST = gql`
       title
       description
       startDate
+    }
+  }
+`;
+
+export const ADMIN_LIST = gql`
+  query Organizations($id: ID!) {
+    organizations(id: $id) {
+      _id
+      admins {
+        _id
+        firstName
+        lastName
+        image
+      }
     }
   }
 `;

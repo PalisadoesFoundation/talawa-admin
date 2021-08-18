@@ -10,7 +10,7 @@ function OrgContribution(): JSX.Element {
   const url = '/orgdash/id=' + currentUrl;
   const url_2 = '/orgpeople/id=' + currentUrl;
   const url_3 = '/orgevents/id=' + currentUrl;
-  const url_4 = '/orgcontribution';
+  const url_4 = '/orgcontribution/id=' + currentUrl;
   const url_5 = '/orgpost/id=' + currentUrl;
   return (
     <>

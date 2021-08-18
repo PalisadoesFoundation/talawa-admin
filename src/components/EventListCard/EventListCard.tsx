@@ -2,6 +2,8 @@ import React from 'react';
 import styles from './EventListCard.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { DELETE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
+import { useMutation } from '@apollo/client';
 interface EventListCardProps {
   key: string;
   id: string;
@@ -14,6 +16,23 @@ interface EventListCardProps {
   regDays: string;
 }
 function EventListCard(props: EventListCardProps): JSX.Element {
+  const [create] = useMutation(DELETE_EVENT_MUTATION);
+
+  const DeleteEvent = async () => {
+    try {
+      const { data } = await create({
+        variables: {
+          id: props.id,
+        },
+      });
+      console.log(data);
+      window.alert('The Event is deleted');
+      window.location.reload();
+    } catch (error) {
+      window.alert(error);
+    }
+  };
+
   return (
     <>
       <Row className={styles.orglist}>
@@ -51,7 +70,9 @@ function EventListCard(props: EventListCardProps): JSX.Element {
             <p className={styles.orgfont}>
               On: <span>{props.regDate}</span>
             </p>
-            <button className={styles.orgfontcreatedbtn}>Details</button>
+            <button className={styles.orgfontcreatedbtn} onClick={DeleteEvent}>
+              Delete
+            </button>
           </div>
         </Col>
       </Row>
