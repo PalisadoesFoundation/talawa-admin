@@ -6,6 +6,8 @@ import { useQuery } from '@apollo/client';
 import { ADMIN_LIST, MEMBERS_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
+import OrgAdminListCard from 'components/OrgAdminListCard/OrgAdminListCard';
+import UserListCard from 'components/UserListCard/UserListCard';
 
 function OrganizationPeople(): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
@@ -162,7 +164,7 @@ function OrganizationPeople(): JSX.Element {
                       image: string;
                     }) => {
                       return (
-                        <OrgPeopleListCard
+                        <OrgAdminListCard
                           key={datas._id}
                           memberImage={datas.image}
                           joinDate="05/07/2021"
@@ -183,7 +185,7 @@ function OrganizationPeople(): JSX.Element {
                       image: string;
                     }) => {
                       return (
-                        <OrgPeopleListCard
+                        <UserListCard
                           key={datas._id}
                           memberImage={datas.image}
                           joinDate="05/07/2021"

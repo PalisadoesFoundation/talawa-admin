@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './OrgPeopleListCard.module.css';
+import styles from './UserListCard.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 interface OrgPeopleListCardProps {
@@ -9,7 +9,7 @@ interface OrgPeopleListCardProps {
   joinDate: string;
   memberImage: string;
 }
-function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
+function UserListCard(props: OrgPeopleListCardProps): JSX.Element {
   return (
     <>
       <div className={styles.peoplelistdiv}>
@@ -38,7 +38,10 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
               <p className={styles.memberfont}>
                 Joined: <span>{props.joinDate}</span>
               </p>
-              <button className={styles.memberfontcreatedbtn}>Remove</button>
+              <button className={styles.memberfontcreatedbtn}>Add Admin</button>
+              <button className={styles.memberfontcreatedbtn}>
+                Add Member
+              </button>
             </div>
           </Col>
         </Row>
@@ -48,4 +51,4 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
   );
 }
 export {};
-export default OrgPeopleListCard;
+export default UserListCard;
