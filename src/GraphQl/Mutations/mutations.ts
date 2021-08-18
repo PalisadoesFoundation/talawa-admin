@@ -83,3 +83,27 @@ export const DELETE_EVENT_MUTATION = gql`
     }
   }
 `;
+
+export const REMOVE_ADMIN_MUTATION = gql`
+  mutation RemoveAdmin($orgid: ID!, $userid: ID!) {
+    removeAdmin(data: { organizationId: $orgid, userId: $userid }) {
+      _id
+    }
+  }
+`;
+
+export const REMOVE_MEMBER_MUTATION = gql`
+  mutation RemoveAdmin($orgid: ID!, $userid: ID!) {
+    removeAdmin(data: { organizationId: $orgid, userId: $userid }) {
+      _id
+    }
+  }
+`;
+
+export const ADD_ADMIN_MUTATION = gql`
+  mutation CreateAdmin($orgid: ID!, $userid: ID!) {
+    createAdmin(data: { organizationId: $orgid, userId: $userid }) {
+      _id
+    }
+  }
+`;

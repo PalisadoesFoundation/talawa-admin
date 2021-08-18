@@ -145,6 +145,7 @@ function OrganizationPeople(): JSX.Element {
                       return (
                         <OrgPeopleListCard
                           key={datas._id}
+                          id={datas._id}
                           memberImage={datas.image}
                           joinDate="05/07/2021"
                           memberName={datas.firstName + ' ' + datas.lastName}
@@ -166,6 +167,7 @@ function OrganizationPeople(): JSX.Element {
                       return (
                         <OrgAdminListCard
                           key={datas._id}
+                          id={datas._id}
                           memberImage={datas.image}
                           joinDate="05/07/2021"
                           memberName={datas.firstName + ' ' + datas.lastName}
@@ -187,6 +189,7 @@ function OrganizationPeople(): JSX.Element {
                       return (
                         <UserListCard
                           key={datas._id}
+                          id={datas._id}
                           memberImage={datas.image}
                           joinDate="05/07/2021"
                           memberName={datas.firstName + ' ' + datas.lastName}

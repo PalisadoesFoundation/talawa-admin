@@ -2,14 +2,37 @@ import React from 'react';
 import styles from './OrgAdminListCard.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { useMutation } from '@apollo/client';
+import { REMOVE_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 interface OrgPeopleListCardProps {
   key: string;
+  id: string;
   memberName: string;
   memberLocation: string;
   joinDate: string;
   memberImage: string;
 }
 function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
+  const currentUrl = window.location.href.split('=')[1];
+  const [remove] = useMutation(REMOVE_ADMIN_MUTATION);
+
+  const RemoveAdmin = async () => {
+    console.log(currentUrl);
+    console.log(props.id);
+    try {
+      const { data } = await remove({
+        variables: {
+          userid: props.id,
+          orgid: currentUrl,
+        },
+      });
+      console.log(data);
+      window.alert('The admin is removed');
+      window.location.reload();
+    } catch (error) {
+      window.alert(error);
+    }
+  };
   return (
     <>
       <div className={styles.peoplelistdiv}>
@@ -38,7 +61,12 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
               <p className={styles.memberfont}>
                 Joined: <span>{props.joinDate}</span>
               </p>
-              <button className={styles.memberfontcreatedbtn}>Remove</button>
+              <button
+                className={styles.memberfontcreatedbtn}
+                onClick={RemoveAdmin}
+              >
+                Remove
+              </button>
             </div>
           </Col>
         </Row>

@@ -2,14 +2,36 @@ import React from 'react';
 import styles from './UserListCard.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { useMutation } from '@apollo/client';
+import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 interface OrgPeopleListCardProps {
   key: string;
+  id: string;
   memberName: string;
   memberLocation: string;
   joinDate: string;
   memberImage: string;
 }
 function UserListCard(props: OrgPeopleListCardProps): JSX.Element {
+  const currentUrl = window.location.href.split('=')[1];
+  const [adda] = useMutation(ADD_ADMIN_MUTATION);
+
+  const AddAdmin = async () => {
+    try {
+      const { data } = await adda({
+        variables: {
+          userid: props.id,
+          orgid: currentUrl,
+        },
+      });
+      console.log(data);
+      window.alert('The Event is deleted');
+      window.location.reload();
+    } catch (error) {
+      window.alert(error);
+    }
+  };
+
   return (
     <>
       <div className={styles.peoplelistdiv}>
@@ -38,9 +60,11 @@ function UserListCard(props: OrgPeopleListCardProps): JSX.Element {
               <p className={styles.memberfont}>
                 Joined: <span>{props.joinDate}</span>
               </p>
-              <button className={styles.memberfontcreatedbtn}>Add Admin</button>
-              <button className={styles.memberfontcreatedbtn}>
-                Add Member
+              <button
+                className={styles.memberfontcreatedbtn}
+                onClick={AddAdmin}
+              >
+                Add Admin
               </button>
             </div>
           </Col>
