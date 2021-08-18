@@ -40,3 +40,70 @@ export const DELETE_ORGANIZATION_MUTATION = gql`
     }
   }
 `;
+
+export const CREATE_EVENT_MUTATION = gql`
+  mutation CreateEvent(
+    $title: String!
+    $description: String!
+    $recurring: Boolean!
+    $isPublic: Boolean!
+    $isRegisterable: Boolean!
+    $organizationId: ID!
+    $startDate: String!
+    $endDate: String
+    $allDay: Boolean!
+  ) {
+    createEvent(
+      data: {
+        title: $title
+        description: $description
+        recurring: $recurring
+        isPublic: $isPublic
+        isRegisterable: $isRegisterable
+        organizationId: $organizationId
+        startDate: $startDate
+        endDate: $endDate
+        allDay: $allDay
+        recurrance: "DAILY"
+        attendees: "0"
+        startTime: "00:00"
+        endTime: "01:10"
+        location: "India"
+      }
+    ) {
+      _id
+    }
+  }
+`;
+
+export const DELETE_EVENT_MUTATION = gql`
+  mutation RemoveEvent($id: ID!) {
+    removeEvent(id: $id) {
+      _id
+    }
+  }
+`;
+
+export const REMOVE_ADMIN_MUTATION = gql`
+  mutation RemoveAdmin($orgid: ID!, $userid: ID!) {
+    removeAdmin(data: { organizationId: $orgid, userId: $userid }) {
+      _id
+    }
+  }
+`;
+
+export const REMOVE_MEMBER_MUTATION = gql`
+  mutation RemoveAdmin($orgid: ID!, $userid: ID!) {
+    removeAdmin(data: { organizationId: $orgid, userId: $userid }) {
+      _id
+    }
+  }
+`;
+
+export const ADD_ADMIN_MUTATION = gql`
+  mutation CreateAdmin($orgid: ID!, $userid: ID!) {
+    createAdmin(data: { organizationId: $orgid, userId: $userid }) {
+      _id
+    }
+  }
+`;

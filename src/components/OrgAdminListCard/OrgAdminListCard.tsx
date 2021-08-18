@@ -1,9 +1,9 @@
 import React from 'react';
-import styles from './OrgPeopleListCard.module.css';
+import styles from './OrgAdminListCard.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useMutation } from '@apollo/client';
-import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
+import { REMOVE_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 interface OrgPeopleListCardProps {
   key: string;
   id: string;
@@ -12,11 +12,13 @@ interface OrgPeopleListCardProps {
   joinDate: string;
   memberImage: string;
 }
-function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
+function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
-  const [remove] = useMutation(REMOVE_MEMBER_MUTATION);
+  const [remove] = useMutation(REMOVE_ADMIN_MUTATION);
 
-  const RemoveMember = async () => {
+  const RemoveAdmin = async () => {
+    console.log(currentUrl);
+    console.log(props.id);
     try {
       const { data } = await remove({
         variables: {
@@ -25,7 +27,7 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
         },
       });
       console.log(data);
-      window.alert('The Member is removed');
+      window.alert('The admin is removed');
       window.location.reload();
     } catch (error) {
       window.alert(error);
@@ -61,7 +63,7 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
               </p>
               <button
                 className={styles.memberfontcreatedbtn}
-                onClick={RemoveMember}
+                onClick={RemoveAdmin}
               >
                 Remove
               </button>
@@ -74,4 +76,4 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
   );
 }
 export {};
-export default OrgPeopleListCard;
+export default OrgAdminListCard;
