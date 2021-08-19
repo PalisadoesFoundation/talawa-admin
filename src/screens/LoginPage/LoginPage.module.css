@@ -1,8 +1,13 @@
+html,
+body {
+  overflow-x: hidden !important;
+}
+/* ===== Login Modal CSS Start ===== */
 #grid_wrapper {
   align-items: left;
 }
 .login_background {
-  background-color: #f7f7f7;
+  background-color: white;
   height: 100vh;
   width: 100vw;
   margin: 0;
@@ -238,3 +243,52 @@ form > br {
     transform: rotate(360deg);
   }
 }
+/* ===== Login Modal CSS End ===== */
+/* ================================================= */
+/* ===== Home Page CSS Start ===== */
+/* .homeleft {
+  width: 55%;
+} */
+.rightmainbg {
+  border-top-left-radius: 10%;
+  background-color: #fbfbfb;
+  height: 100%;
+}
+.homeright {
+  width: 80%;
+  margin-left: 40px;
+  margin-bottom: 30px;
+}
+.homeright > h1 {
+  font-size: 20px;
+  padding-top: 30px;
+  width: 40%;
+  padding-bottom: 6px;
+  border-bottom: 3px solid #31bb6b;
+  margin-bottom: 20px;
+}
+/* .homeright>h2{
+  width:75%;
+  font-size: 16px;
+  color: #707070;
+  padding-bottom: 5px;
+  border-bottom: 3px solid #31bb6b;
+  margin-bottom:20px;
+} */
+.dispflex {
+  display: flex;
+  flex-direction: row;
+}
+.dispflex > div {
+  width: 95%;
+  margin-right: 10px;
+}
+.passwordalert>input{
+  margin-bottom:2px;
+}
+.passwordalert>span{
+  color:rgb(240, 48, 48);
+  font-size: 9px;
+  padding-bottom:20px;
+}
+/* ===== Home Page CSS End ===== */
