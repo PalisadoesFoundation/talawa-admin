@@ -1,3 +1,5 @@
+import { useMutation } from '@apollo/client';
+import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import React from 'react';
 import styles from './OrgUpdate.module.css';
 interface OrgUpdateProps {
@@ -15,24 +17,33 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
   });
   const [publicchecked, setPublicChecked] = React.useState(true);
   const [visiblechecked, setVisibleChecked] = React.useState(false);
+
+  const [login] = useMutation(UPDATE_ORGANIZATION_MUTATION);
+
+  const login_link = async () => {
+    try {
+      const { data } = await login({
+        variables: {
+          name: formState.orgName,
+          description: formState.orgDescrip,
+          isPublic: publicchecked,
+          visibleInSearch: visiblechecked,
+        },
+      });
+      if (data) {
+        window.alert('Successful updated');
+        window.location.reload();
+      }
+    } catch (error) {
+      window.alert(error);
+    }
+  };
+
   return (
     <>
       <div id="orgupdate" className={styles.userupdatediv}>
         <form>
           {/* <h3 className={styles.settingstitle}>Update Your Details</h3> */}
-          <div className={styles.dispflex}>
-            <div>
-              <label>Organization ID</label>
-              <input
-                className={styles.idtitle}
-                type="orgid"
-                id={props.orgid}
-                name="orgid"
-                value={props.orgid}
-                readOnly
-              ></input>
-            </div>
-          </div>
           <div className={styles.dispflex}>
             <div>
               <label>Name</label>
@@ -129,7 +140,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
                 />
               </div>
               <div>
-                <label htmlFor="visible">Is Registrable ?</label>
+                <label htmlFor="visible">Is Registrable:</label>
                 <input
                   id="registrable"
                   type="checkbox"
@@ -144,7 +155,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
               type="button"
               className={styles.greenregbtn}
               value="savechanges"
-              // onClick={login_link}
+              onClick={login_link}
             >
               Save Changes
             </button>
@@ -152,7 +163,9 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
               type="button"
               className={styles.whitebtn}
               value="cancelchanges"
-              // onClick={login_link}
+              onClick={() => {
+                window.location.reload();
+              }}
             >
               Cancel
             </button>

@@ -1,6 +1,4 @@
 import React from 'react';
-import Navbar from 'react-bootstrap/Navbar';
-import Logo from 'assets/talawa-logo-200x200.png';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import styles from './OrgSettings.module.css';
@@ -10,7 +8,6 @@ import OrgDelete from 'components/OrgDelete/OrgDelete';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 
 function OrgSettings(): JSX.Element {
-  const [showResults, setShowResults] = React.useState(true);
   const [showUserUpdate, setShowUserUpdate] = React.useState(false);
   const [showOrgUpdate, setShowOrgUpdate] = React.useState(false);
   const [showOrgDelete, setShowOrgDelete] = React.useState(false);
@@ -35,16 +32,6 @@ function OrgSettings(): JSX.Element {
         ]}
         url_1={url_6}
       />
-      <Navbar className={styles.navbarbg}>
-        <Navbar.Brand>
-          <Row className={styles.navallitem}>
-            <a className={styles.logo} href="/orglist">
-              <img src={Logo} />
-              <strong>Talawa Portal</strong>
-            </a>
-          </Row>
-        </Navbar.Brand>
-      </Navbar>
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
@@ -83,14 +70,13 @@ function OrgSettings(): JSX.Element {
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>Settings</p>
             </Row>
-            <div>
-              {showUserUpdate ? (
-                <UserUpdate id="AB123RE" userid="AB123RE" />
-              ) : null}
-            </div>
+            <div>{showUserUpdate ? <UserUpdate id="abcd" /> : null}</div>
             <div>
               {showOrgUpdate ? (
-                <OrgUpdate id="AB123RE" orgid="AB123RE" />
+                <OrgUpdate
+                  id="abcd"
+                  orgid={window.location.href.split('=')[1]}
+                />
               ) : null}
             </div>
             <div>{showOrgDelete ? <OrgDelete /> : null}</div>
