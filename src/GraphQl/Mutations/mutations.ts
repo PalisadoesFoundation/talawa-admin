@@ -1,5 +1,41 @@
 import { gql } from '@apollo/client';
 
+export const UPDATE_ORGANIZATION_MUTATION = gql`
+  mutation UpdateOrganization(
+    $id: ID!
+    $name: String
+    $description: String
+    $isPublic: Boolean
+    $visibleInSearch: Boolean
+  ) {
+    updateOrganization(
+      id: $id
+      data: {
+        name: $name
+        description: $description
+        isPublic: $isPublic
+        visibleInSearch: $visibleInSearch
+      }
+    ) {
+      _id
+    }
+  }
+`;
+
+export const UPDATE_USER_MUTATION = gql`
+  mutation UpdateUserProfile(
+    $firstName: String
+    $lastName: String
+    $email: String
+  ) {
+    updateUserProfile(
+      data: { firstName: $firstName, lastName: $lastName, email: $email }
+    ) {
+      _id
+    }
+  }
+`;
+
 export const SIGNUP_MUTATION = gql`
   mutation SignUp(
     $firstName: String!
@@ -25,6 +61,7 @@ export const SIGNUP_MUTATION = gql`
     }
   }
 `;
+
 export const LOGIN_MUTATION = gql`
   mutation Login($email: String!, $password: String!) {
     login(data: { email: $email, password: $password }) {
