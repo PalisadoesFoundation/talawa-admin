@@ -5,9 +5,9 @@ import Col from 'react-bootstrap/Col';
 import Modal from 'react-modal';
 import DatePicker from 'react-datepicker';
 import { Form } from 'antd';
-import { useMutation, useQuery } from '@apollo/client';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import EventListCard from 'components/EventListCard/EventListCard';
+import { useMutation, useQuery } from '@apollo/client';
 import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 

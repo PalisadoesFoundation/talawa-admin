@@ -2,13 +2,12 @@ import React from 'react';
 import styles from './OrganizationPeople.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { useQuery } from '@apollo/client';
-import { ADMIN_LIST, MEMBERS_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 import OrgAdminListCard from 'components/OrgAdminListCard/OrgAdminListCard';
 import UserListCard from 'components/UserListCard/UserListCard';
-
+import { useQuery } from '@apollo/client';
+import { ADMIN_LIST, MEMBERS_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
 function OrganizationPeople(): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
   let data, loading;
