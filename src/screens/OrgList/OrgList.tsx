@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Form } from 'antd';
 import styles from './OrgList.module.css';
+import Logo from 'assets/talawa-logo-200x200.png';
+import Modal from 'react-modal';
+import { Form } from 'antd';
+import Navbar from 'react-bootstrap/Navbar';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Modal from 'react-modal';
-import Navbar from 'react-bootstrap/Navbar';
-import Logo from 'assets/talawa-logo-200x200.png';
 import SuperDashListCard from 'components/SuperDashListCard/SuperDashListCard';
 import {
   ORGANIZATION_LIST,

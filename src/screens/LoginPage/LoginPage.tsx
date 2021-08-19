@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import styles from './LoginPage.module.css';
-import { useMutation } from '@apollo/client';
 import Logo from 'assets/talawa-logo-200x200.png';
-import { LOGIN_MUTATION } from 'GraphQl/Mutations/mutations';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import Modal from 'react-modal';
+import Carousel from 'react-bootstrap/Carousel';
+import { useMutation } from '@apollo/client';
+import { LOGIN_MUTATION } from 'GraphQl/Mutations/mutations';
+import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
+
 function LoginPage(): JSX.Element {
   localStorage.clear();
   const [modalisOpen, setIsOpen] = React.useState(false);
@@ -16,14 +21,24 @@ function LoginPage(): JSX.Element {
     setIsOpen(false);
   };
 
-  const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
+  const redirect_signup = () => {
+    window.location.replace('/');
+  };
 
-  if (loading) {
+  const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
+  const [signup, { loading: signloading, error: signerror }] =
+    useMutation(SIGNUP_MUTATION);
+
+  if (loading || signloading) {
     return (
       <>
         <div className={styles.loader}></div>
       </>
     );
+  }
+  if (signerror) {
+    window.alert('xyz');
+    window.location.reload();
   }
 
   if (error) {
@@ -31,10 +46,53 @@ function LoginPage(): JSX.Element {
     window.location.reload();
   }
 
+  const [signformState, setSignFormState] = useState({
+    signfirstName: '',
+    signlastName: '',
+    signEmail: '',
+    signPassword: '',
+    cPassword: '',
+    signuserType: '',
+  });
+
   const [formState, setFormState] = useState({
     email: '',
     password: '',
   });
+
+  const signup_link = async () => {
+    if (
+      signformState.signfirstName.length > 1 &&
+      signformState.signlastName.length > 1 &&
+      signformState.signEmail.length >= 8 &&
+      signformState.signPassword.length > 1
+    ) {
+      if (
+        signformState.cPassword == signformState.signPassword &&
+        (signformState.signuserType == 'ADMIN' ||
+          signformState.signuserType == 'SUPERADMIN')
+      ) {
+        const { data } = await signup({
+          variables: {
+            firstName: signformState.signfirstName,
+            lastName: signformState.signlastName,
+            email: signformState.signEmail,
+            password: signformState.signPassword,
+            userType: signformState.signuserType,
+          },
+        });
+        console.log(data);
+        window.alert('Successfully Registered. Please Login In to Continue...');
+        window.location.replace('/');
+      } else {
+        alert('Write USERTYPE correctly OR Check Password');
+        window.location.replace('/');
+      }
+    } else {
+      alert('Fill all the Details Correctly.');
+    }
+  };
+
   const login_link = async () => {
     try {
       const { data } = await login({
@@ -68,6 +126,7 @@ function LoginPage(): JSX.Element {
       window.location.reload();
     }
   };
+
   return (
     <>
       <section className={styles.login_background}>
@@ -90,7 +149,126 @@ function LoginPage(): JSX.Element {
           </div>
         </div>
         <div className={styles.reg_bg}>
-          <h5>Register bg</h5>
+          <Row>
+            <Col sm={7}>
+              <div className={styles.homeleft}>
+                {/* <h5>Register bg</h5> */}
+              </div>
+            </Col>
+            <Col sm={5} className={styles.rightmainbg}>
+              <div className={styles.homeright}>
+                <h1>Register</h1>
+                {/* <h2>to seamlessly manage your Organization.</h2> */}
+                <form>
+                  <div className={styles.dispflex}>
+                    <div>
+                      <label>First Name</label>
+                      <input
+                        type="text"
+                        id="signfirstname"
+                        placeholder="eg. John"
+                        autoComplete="on"
+                        required
+                        value={signformState.signfirstName}
+                        onChange={(e) => {
+                          setSignFormState({
+                            ...signformState,
+                            signfirstName: e.target.value,
+                          });
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <label>Last Name</label>
+                      <input
+                        type="text"
+                        id="signlastname"
+                        placeholder="eg. Doe"
+                        autoComplete="on"
+                        required
+                        value={signformState.signlastName}
+                        onChange={(e) => {
+                          setSignFormState({
+                            ...signformState,
+                            signlastName: e.target.value,
+                          });
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <label>User Type</label>
+                  <input
+                    type="type"
+                    id="signusertype"
+                    placeholder="SUPERADMIN OR ADMIN"
+                    autoComplete="off"
+                    required
+                    value={signformState.signuserType}
+                    onChange={(e) => {
+                      setSignFormState({
+                        ...signformState,
+                        signuserType: e.target.value.toUpperCase(),
+                      });
+                    }}
+                  />
+                  <label>Email</label>
+                  <input
+                    type="email"
+                    id="signemail"
+                    placeholder="Your Email"
+                    autoComplete="on"
+                    required
+                    value={signformState.signEmail}
+                    onChange={(e) => {
+                      setSignFormState({
+                        ...signformState,
+                        signEmail: e.target.value.toLowerCase(),
+                      });
+                    }}
+                  />
+                  <div className={styles.passwordalert}>
+                    <label>Password</label>
+                    <input
+                      type="password"
+                      id="signpassword"
+                      placeholder="Password"
+                      required
+                      value={signformState.signPassword}
+                      onChange={(e) => {
+                        setSignFormState({
+                          ...signformState,
+                          signPassword: e.target.value,
+                        });
+                      }}
+                    />
+                    <span>Atleast 8 Character long</span>
+                  </div>
+                  <label>Confirm Password</label>
+                  <input
+                    type="password"
+                    id="cpassword"
+                    placeholder="Confirm Password"
+                    required
+                    value={signformState.cPassword}
+                    onChange={(e) => {
+                      setSignFormState({
+                        ...signformState,
+                        cPassword: e.target.value,
+                      });
+                    }}
+                  />
+                  <button
+                    type="button"
+                    className={styles.greenregbtn}
+                    value="Register"
+                    onClick={signup_link}
+                  >
+                    Register
+                  </button>
+                </form>
+              </div>
+            </Col>
+          </Row>
         </div>
         <Modal
           isOpen={modalisOpen}
@@ -145,7 +323,7 @@ function LoginPage(): JSX.Element {
                   value="Login"
                   onClick={login_link}
                 >
-                  Login as Admin
+                  Login As Super Admin
                 </button>
                 <a href="#" className={styles.forgotpwd}>
                   Forgot Password ?
@@ -155,7 +333,7 @@ function LoginPage(): JSX.Element {
                   type="button"
                   className={styles.greenregbtn}
                   value="Register"
-                  onClick={login_link}
+                  onClick={redirect_signup}
                 >
                   Register
                 </button>
