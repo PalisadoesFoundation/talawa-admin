@@ -7,9 +7,10 @@ import Row from 'react-bootstrap/Row';
 import { Nav } from 'react-bootstrap';
 interface NavbarProps {
   targets: { url: string; name: string }[];
+  url_1: string;
 }
 
-function AdminNavbar({ targets }: NavbarProps): JSX.Element {
+function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
   return (
     <>
       <Navbar className={styles.navbarbg}>
@@ -42,7 +43,7 @@ function AdminNavbar({ targets }: NavbarProps): JSX.Element {
               <i className="fa fa-bell"></i>
               Notify
             </Dropdown.Item>
-            <Dropdown.Item href="/orgsettings">
+            <Dropdown.Item href={url_1}>
               <i className="fa fa-cogs"></i>
               Settings
             </Dropdown.Item>

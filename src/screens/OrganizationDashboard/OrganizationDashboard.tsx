@@ -39,6 +39,7 @@ function OrganizationDashboard(): JSX.Element {
   const url_3 = '/orgevents/id=' + currentUrl;
   const url_4 = '/orgcontribution/id=' + currentUrl;
   const url_5 = '/orgpost/id=' + currentUrl;
+  const url_6 = '/orgsettings/id=' + currentUrl;
 
   return (
     <>
@@ -50,6 +51,7 @@ function OrganizationDashboard(): JSX.Element {
           { name: 'Contributions', url: url_4 },
           { name: 'Posts', url: url_5 },
         ]}
+        url_1={url_6}
       />
       <Row className={styles.toporginfo}>
         <p></p>

@@ -83,10 +83,10 @@ function LoginPage(): JSX.Element {
         });
         console.log(data);
         window.alert('Successfully Registered. Please Login In to Continue...');
-        window.location.replace('/');
+        window.location.reload();
       } else {
         alert('Write USERTYPE correctly OR Check Password');
-        window.location.replace('/');
+        window.location.reload();
       }
     } else {
       alert('Fill all the Details Correctly.');
