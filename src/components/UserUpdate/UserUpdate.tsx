@@ -1,9 +1,10 @@
+import { useMutation } from '@apollo/client';
+import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import React from 'react';
 import styles from './UserUpdate.module.css';
 
 interface UserUpdateProps {
   id: string;
-  userid: string;
 }
 
 function UserUpdate(props: UserUpdateProps): JSX.Element {
@@ -15,24 +16,32 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
     applangcode: '',
     selectedOption: '',
   });
+
+  const [login] = useMutation(UPDATE_USER_MUTATION);
+
+  const login_link = async () => {
+    try {
+      const { data } = await login({
+        variables: {
+          firstName: formState.firstName,
+          lastName: formState.lastName,
+          email: formState.email,
+        },
+      });
+      if (data) {
+        window.alert('Successful updated');
+        window.location.reload();
+      }
+    } catch (error) {
+      window.alert(error);
+    }
+  };
+
   return (
     <>
       <div id="userupdate" className={styles.userupdatediv}>
         <form>
           {/* <h3 className={styles.settingstitle}>Update Your Details</h3> */}
-          <div className={styles.dispflex}>
-            <div>
-              <label>User ID</label>
-              <input
-                className={styles.idtitle}
-                type="userid"
-                id={props.userid}
-                name="userid"
-                value={props.userid}
-                readOnly
-              ></input>
-            </div>
-          </div>
           <div className={styles.dispflex}>
             <div>
               <label>First Name</label>
@@ -171,7 +180,7 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
               type="button"
               className={styles.greenregbtn}
               value="savechanges"
-              // onClick={login_link}
+              onClick={login_link}
             >
               Save Changes
             </button>
@@ -179,7 +188,9 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
               type="button"
               className={styles.whitebtn}
               value="cancelchanges"
-              // onClick={login_link}
+              onClick={() => {
+                window.location.reload();
+              }}
             >
               Cancel
             </button>

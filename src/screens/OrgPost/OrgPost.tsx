@@ -12,6 +12,7 @@ function OrgPost(): JSX.Element {
   const url_3 = '/orgevents/id=' + currentUrl;
   const url_4 = '/orgcontribution/id=' + currentUrl;
   const url_5 = '/orgpost/id=' + currentUrl;
+  const url_6 = '/orgsetting/id=' + currentUrl;
 
   return (
     <>
@@ -23,6 +24,7 @@ function OrgPost(): JSX.Element {
           { name: 'Contributions', url: url_4 },
           { name: 'Posts', url: url_5 },
         ]}
+        url_1={url_6}
       />
       <Row>
         <Col sm={3}>
