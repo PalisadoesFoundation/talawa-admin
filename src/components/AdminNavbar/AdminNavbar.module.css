@@ -96,10 +96,16 @@ a {
   border-bottom: 3px solid #31bb6b;
   font-weight: 600;
 }
-
-.navlinks:active {
+/* 
+.navlinks.focus {
   border-bottom: 3px solid #31bb6b;
 }
+.navitems.focus {
+  border-bottom: 3px solid #31bb6b;
+}
+:target{
+  border-bottom: 3px solid #31bb6b;
+} */
 .dropdowns {
   margin-right: 16px;
   text-decoration: none;
