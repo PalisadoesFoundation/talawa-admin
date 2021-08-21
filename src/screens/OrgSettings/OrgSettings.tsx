@@ -7,6 +7,8 @@ import OrgUpdate from 'components/OrgUpdate/OrgUpdate';
 import OrgDelete from 'components/OrgDelete/OrgDelete';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import MemberRequestCard from 'components/MemberRequestCard/MemberRequestCard';
+import { useQuery } from '@apollo/client';
+import { MEMBERSHIP_REQUEST } from 'GraphQl/Queries/Queries';
 
 function OrgSettings(): JSX.Element {
   const [t, setT] = React.useState(0);
@@ -18,6 +20,18 @@ function OrgSettings(): JSX.Element {
   const url_4 = '/orgcontribution/id=' + currentUrl;
   const url_5 = '/orgpost/id=' + currentUrl;
   const url_6 = '/orgsetting/id=' + currentUrl;
+
+  const { data, loading } = useQuery(MEMBERSHIP_REQUEST, {
+    variables: { id: currentUrl },
+  });
+
+  if (loading) {
+    return (
+      <>
+        <div className={styles.loader}></div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -89,14 +103,36 @@ function OrgSettings(): JSX.Element {
             <div>{t == 3 ? <OrgDelete /> : null}</div>
             <div>
               {t == 4 ? (
-                <MemberRequestCard
-                  key="string;"
-                  id="string;"
-                  memberName="string;"
-                  memberLocation="string;"
-                  joinDate="string;"
-                  memberImage="https://via.placeholder.com/200x100"
-                />
+                data.organizations.membershipRequests ? (
+                  data.organizations.map(
+                    (datas: {
+                      _id: string;
+                      membershipRequests: {
+                        _id: string;
+                        user: {
+                          _id: string;
+                          firstName: string;
+                          lastName: string;
+                          email: string;
+                        };
+                      };
+                    }) => {
+                      return (
+                        <MemberRequestCard
+                          key={datas.membershipRequests._id}
+                          id={datas.membershipRequests._id}
+                          memberName={datas.membershipRequests.user.firstName}
+                          memberLocation="India"
+                          joinDate="12/12/2012"
+                          memberImage="https://via.placeholder.com/200x100"
+                          email={datas.membershipRequests.user.email}
+                        />
+                      );
+                    }
+                  )
+                ) : (
+                  <div>No data</div>
+                )
               ) : null}
             </div>
           </div>

@@ -96,3 +96,20 @@ export const ADMIN_LIST = gql`
     }
   }
 `;
+
+export const MEMBERSHIP_REQUEST = gql`
+  query Organizations($id: ID!) {
+    organizations(id: $id) {
+      _id
+      membershipRequests {
+        _id
+        user {
+          _id
+          firstName
+          lastName
+          email
+        }
+      }
+    }
+  }
+`;
