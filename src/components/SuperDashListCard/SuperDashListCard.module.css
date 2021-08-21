@@ -1,10 +1,7 @@
 .orglist {
   margin-top: -1px;
 }
-.orgimg {
-  border-radius: 10px;
-  margin-left: 10px;
-}
+
 .singledetails {
   display: flex;
   flex-direction: row;
@@ -45,4 +42,10 @@
 }
 #grid_wrapper {
   align-items: left;
+}
+.orgimg {
+  width: 200px;
+  height: 100px;
+  border-radius: 7px;
+  margin-left: 20px;
 }

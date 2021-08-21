@@ -7,8 +7,8 @@ body {
   align-items: left;
 }
 .login_background {
-  background-color: white;
-  height: 100vh;
+  background-color: #fcfcfc;
+  height: 100%;
   width: 100vw;
   margin: 0;
   background-repeat: no-repeat !important;
@@ -251,9 +251,14 @@ form > br {
 } */
 .rightmainbg {
   border-top-left-radius: 10%;
-  background-color: #fbfbfb;
   height: 100%;
+  background-color: white;
 }
+/* .leftmainbg{
+  background-color: #fafafa;
+  border-bottom-right-radius: 10%;
+  z-index:-1;
+} */
 .homeright {
   width: 80%;
   margin-left: 40px;
@@ -261,7 +266,7 @@ form > br {
 }
 .homeright > h1 {
   font-size: 20px;
-  padding-top: 30px;
+  padding-top: 35px;
   width: 40%;
   padding-bottom: 6px;
   border-bottom: 3px solid #31bb6b;
@@ -290,5 +295,9 @@ form > br {
   color: rgb(240, 48, 48);
   font-size: 9px;
   padding-bottom: 20px;
+}
+.homeright > form input {
+  background-color: white;
+  box-shadow: 1px 3px #e8e5e5;
 }
 /* ===== Home Page CSS End ===== */

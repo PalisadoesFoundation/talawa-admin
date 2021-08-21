@@ -23,7 +23,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
             <div className={styles.navit}>
               {targets.map(({ name, url }) => (
                 <Nav.Item key={name} className={styles.navitems}>
-                  <Nav.Link href={url} className={styles.navlinks}>
+                  <Nav.Link href={url} id={name} className={styles.navlinks}>
                     {name}
                   </Nav.Link>
                 </Nav.Item>
