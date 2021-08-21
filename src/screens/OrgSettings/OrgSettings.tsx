@@ -6,11 +6,10 @@ import UserUpdate from 'components/UserUpdate/UserUpdate';
 import OrgUpdate from 'components/OrgUpdate/OrgUpdate';
 import OrgDelete from 'components/OrgDelete/OrgDelete';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
+import MemberRequestCard from 'components/MemberRequestCard/MemberRequestCard';
 
 function OrgSettings(): JSX.Element {
-  const [showUserUpdate, setShowUserUpdate] = React.useState(false);
-  const [showOrgUpdate, setShowOrgUpdate] = React.useState(false);
-  const [showOrgDelete, setShowOrgDelete] = React.useState(false);
+  const [t, setT] = React.useState(0);
 
   const currentUrl = window.location.href.split('=')[1];
   const url = '/orgdash/id=' + currentUrl;
@@ -18,7 +17,7 @@ function OrgSettings(): JSX.Element {
   const url_3 = '/orgevents/id=' + currentUrl;
   const url_4 = '/orgcontribution/id=' + currentUrl;
   const url_5 = '/orgpost/id=' + currentUrl;
-  const url_6 = '/orgsettings/id=' + currentUrl;
+  const url_6 = '/orgsetting/id=' + currentUrl;
 
   return (
     <>
@@ -41,7 +40,7 @@ function OrgSettings(): JSX.Element {
                   className={styles.greenregbtn}
                   type="button"
                   value="userupdate"
-                  onClick={() => setShowUserUpdate(!showUserUpdate)}
+                  onClick={() => setT(1)}
                 >
                   Update Your Details
                 </button>
@@ -49,7 +48,7 @@ function OrgSettings(): JSX.Element {
                   className={styles.greenregbtn}
                   type="button"
                   value="orgupdate"
-                  onClick={() => setShowOrgUpdate(!showOrgUpdate)}
+                  onClick={() => setT(2)}
                 >
                   Update Organization
                 </button>
@@ -57,9 +56,17 @@ function OrgSettings(): JSX.Element {
                   className={styles.greenregbtn}
                   type="button"
                   value="orgdelete"
-                  onClick={() => setShowOrgDelete(!showOrgDelete)}
+                  onClick={() => setT(3)}
                 >
                   Delete Organization
+                </button>
+                <button
+                  className={styles.greenregbtn}
+                  type="button"
+                  value="orgdelete"
+                  onClick={() => setT(4)}
+                >
+                  See Request
                 </button>
               </div>
             </div>
@@ -70,16 +77,28 @@ function OrgSettings(): JSX.Element {
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>Settings</p>
             </Row>
-            <div>{showUserUpdate ? <UserUpdate id="abcd" /> : null}</div>
+            <div>{t == 1 ? <UserUpdate id="abcd" /> : null}</div>
             <div>
-              {showOrgUpdate ? (
+              {t == 2 ? (
                 <OrgUpdate
                   id="abcd"
                   orgid={window.location.href.split('=')[1]}
                 />
               ) : null}
             </div>
-            <div>{showOrgDelete ? <OrgDelete /> : null}</div>
+            <div>{t == 3 ? <OrgDelete /> : null}</div>
+            <div>
+              {t == 4 ? (
+                <MemberRequestCard
+                  key="string;"
+                  id="string;"
+                  memberName="string;"
+                  memberLocation="string;"
+                  joinDate="string;"
+                  memberImage="https://via.placeholder.com/200x100"
+                />
+              ) : null}
+            </div>
           </div>
         </Col>
       </Row>

@@ -83,7 +83,7 @@ function OrganizationEvents(): JSX.Element {
   const url_3 = '/orgevents/id=' + currentUrl;
   const url_4 = '/orgcontribution/id=' + currentUrl;
   const url_5 = '/orgpost/id=' + currentUrl;
-  const url_6 = '/orgsettings/id=' + currentUrl;
+  const url_6 = '/orgsetting/id=' + currentUrl;
 
   return (
     <>
