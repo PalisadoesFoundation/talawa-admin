@@ -287,3 +287,18 @@ form > input {
 ::-webkit-scrollbar-thumb:hover {
   background: #ffbd59;
 }
+.dispflex {
+  display: flex;
+}
+.dispflex > input {
+  width: 20%;
+  border: none;
+  box-shadow: none;
+  margin-top: 5px;
+}
+.checkboxdiv {
+  display: flex;
+}
+.checkboxdiv > div {
+  width: 50%;
+}

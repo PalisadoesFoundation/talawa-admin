@@ -20,7 +20,7 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
     <>
       <Row className={styles.orglist}>
         {props.image ? (
-          <img src={props.image} className={styles.alignimg} />
+          <img src={props.image} className={styles.orgimg} />
         ) : (
           <img
             src="https://via.placeholder.com/200x100"

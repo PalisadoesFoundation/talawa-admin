@@ -4,7 +4,7 @@ import Logo from 'assets/talawa-logo-200x200.png';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-modal';
-import Carousel from 'react-bootstrap/Carousel';
+import LandingPage from 'components/LandingPage/LandingPage';
 import { useMutation } from '@apollo/client';
 import { LOGIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -150,9 +150,9 @@ function LoginPage(): JSX.Element {
         </div>
         <div className={styles.reg_bg}>
           <Row>
-            <Col sm={7}>
+            <Col sm={7} className={styles.leftmainbg}>
               <div className={styles.homeleft}>
-                {/* <h5>Register bg</h5> */}
+                <LandingPage />
               </div>
             </Col>
             <Col sm={5} className={styles.rightmainbg}>
@@ -200,7 +200,7 @@ function LoginPage(): JSX.Element {
                   <input
                     type="type"
                     id="signusertype"
-                    placeholder="SUPERADMIN OR ADMIN"
+                    placeholder="SUPERADMIN"
                     autoComplete="off"
                     required
                     value={signformState.signuserType}
@@ -273,7 +273,7 @@ function LoginPage(): JSX.Element {
         <Modal
           isOpen={modalisOpen}
           style={{
-            overlay: { backgroundColor: 'grey' },
+            overlay: { backgroundColor: 'grey', zIndex: 20 },
           }}
           className={styles.modalbody}
         >

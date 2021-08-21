@@ -192,24 +192,24 @@ function OrgList(): JSX.Element {
                 }}
               />
               <div className={styles.checkboxdiv}>
-                <label htmlFor="ispublic">
-                  Is Public:
+                <div className={styles.dispflex}>
+                  <label htmlFor="ispublic">Is Public:</label>
                   <input
                     id="ispublic"
                     type="checkbox"
                     defaultChecked={ispublicchecked}
                     onChange={() => setIsPublicChecked(!ispublicchecked)}
                   />
-                </label>
-                <label htmlFor="visible">
-                  Visible:
+                </div>
+                <div className={styles.dispflex}>
+                  <label htmlFor="visible">Visible: </label>
                   <input
                     id="visible"
                     type="checkbox"
                     defaultChecked={visiblechecked}
                     onChange={() => setVisibleChecked(!visiblechecked)}
                   />
-                </label>
+                </div>
               </div>
               <label htmlFor="orgphoto" className={styles.orgphoto}>
                 Display Image:

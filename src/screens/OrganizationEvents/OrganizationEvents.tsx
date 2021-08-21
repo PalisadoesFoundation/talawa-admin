@@ -223,44 +223,44 @@ function OrganizationEvents(): JSX.Element {
                 </div>
               </div>
               <div className={styles.checkboxdiv}>
-                <label htmlFor="allday">
-                  All Day:
+                <div className={styles.dispflex}>
+                  <label htmlFor="allday">All Day?</label>
                   <input
                     id="allday"
                     type="checkbox"
                     defaultChecked={alldaychecked}
                     onChange={() => setAllDayChecked(!alldaychecked)}
                   />
-                </label>
-                <label htmlFor="recurring">
-                  Recurring Event:
+                </div>
+                <div className={styles.dispflex}>
+                  <label htmlFor="recurring">Recurring Event:</label>
                   <input
                     id="recurring"
                     type="checkbox"
                     defaultChecked={recurringchecked}
                     onChange={() => setRecurringChecked(!recurringchecked)}
                   />
-                </label>
+                </div>
               </div>
               <div className={styles.checkboxdiv}>
-                <label htmlFor="ispublic">
-                  Is Public:
+                <div className={styles.dispflex}>
+                  <label htmlFor="ispublic">Is Public?</label>
                   <input
                     id="ispublic"
                     type="checkbox"
                     defaultChecked={publicchecked}
                     onChange={() => setPublicChecked(!publicchecked)}
                   />
-                </label>
-                <label htmlFor="visible">
-                  Is Registrable:
+                </div>
+                <div className={styles.dispflex}>
+                  <label htmlFor="visible">Is Registrable?</label>
                   <input
                     id="registrable"
                     type="checkbox"
                     defaultChecked={registrablechecked}
                     onChange={() => setRegistrableChecked(!registrablechecked)}
                   />
-                </label>
+                </div>
               </div>
               <button
                 type="button"
