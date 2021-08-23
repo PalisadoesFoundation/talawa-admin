@@ -1,5 +1,37 @@
 import { gql } from '@apollo/client';
 
+export const UNBLOCK_USER_MUTATION = gql`
+  mutation UnblockUser($userId: ID!, $orgId: ID!) {
+    unblockUser(organizationId: $orgId, userId: $userId) {
+      _id
+    }
+  }
+`;
+
+export const BLOCK_USER_MUTATION = gql`
+  mutation BlockUser($userId: ID!, $orgId: ID!) {
+    blockUser(organizationId: $orgId, userId: $userId) {
+      _id
+    }
+  }
+`;
+
+export const REJECT_ORGANIZATION_REQUEST_MUTATION = gql`
+  mutation RejectMembershipRequest($id: ID!) {
+    rejectMembershipRequest(membershipRequestId: $id) {
+      _id
+    }
+  }
+`;
+
+export const ACCEPT_ORGANIZATION_REQUEST_MUTATION = gql`
+  mutation AcceptMembershipRequest($id: ID!) {
+    acceptMembershipRequest(membershipRequestId: $id) {
+      _id
+    }
+  }
+`;
+
 export const UPDATE_ORGANIZATION_MUTATION = gql`
   mutation UpdateOrganization(
     $id: ID!
