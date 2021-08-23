@@ -11,7 +11,7 @@ import { useQuery } from '@apollo/client';
 import { MEMBERSHIP_REQUEST } from 'GraphQl/Queries/Queries';
 
 function OrgSettings(): JSX.Element {
-  const [t, setT] = React.useState(0);
+  const [screenVariable, setScreenVariable] = React.useState(0);
 
   const currentUrl = window.location.href.split('=')[1];
   const url = '/orgdash/id=' + currentUrl;
@@ -54,7 +54,7 @@ function OrgSettings(): JSX.Element {
                   className={styles.greenregbtn}
                   type="button"
                   value="userupdate"
-                  onClick={() => setT(1)}
+                  onClick={() => setScreenVariable(1)}
                 >
                   Update Your Details
                 </button>
@@ -62,7 +62,7 @@ function OrgSettings(): JSX.Element {
                   className={styles.greenregbtn}
                   type="button"
                   value="orgupdate"
-                  onClick={() => setT(2)}
+                  onClick={() => setScreenVariable(2)}
                 >
                   Update Organization
                 </button>
@@ -70,7 +70,7 @@ function OrgSettings(): JSX.Element {
                   className={styles.greenregbtn}
                   type="button"
                   value="orgdelete"
-                  onClick={() => setT(3)}
+                  onClick={() => setScreenVariable(3)}
                 >
                   Delete Organization
                 </button>
@@ -78,7 +78,7 @@ function OrgSettings(): JSX.Element {
                   className={styles.greenregbtn}
                   type="button"
                   value="orgdelete"
-                  onClick={() => setT(4)}
+                  onClick={() => setScreenVariable(4)}
                 >
                   See Request
                 </button>
@@ -91,18 +91,18 @@ function OrgSettings(): JSX.Element {
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>Settings</p>
             </Row>
-            <div>{t == 1 ? <UserUpdate id="abcd" /> : null}</div>
+            <div>{screenVariable == 1 ? <UserUpdate id="abcd" /> : null}</div>
             <div>
-              {t == 2 ? (
+              {screenVariable == 2 ? (
                 <OrgUpdate
                   id="abcd"
                   orgid={window.location.href.split('=')[1]}
                 />
               ) : null}
             </div>
-            <div>{t == 3 ? <OrgDelete /> : null}</div>
+            <div>{screenVariable == 3 ? <OrgDelete /> : null}</div>
             <div>
-              {t == 4 ? (
+              {screenVariable == 4 ? (
                 data.organizations.membershipRequests ? (
                   data.organizations.map(
                     (datas: {
