@@ -17,8 +17,8 @@ interface MemberRequestCardProps {
   email: string;
 }
 function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
-  const [addm] = useMutation(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
-  const [removem] = useMutation(REJECT_ORGANIZATION_REQUEST_MUTATION);
+  const [acceptMutation] = useMutation(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
+  const [rejectMutation] = useMutation(REJECT_ORGANIZATION_REQUEST_MUTATION);
 
   const AddMember = async () => {
     try {
