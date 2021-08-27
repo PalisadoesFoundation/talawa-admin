@@ -184,8 +184,6 @@ export const CREATE_EVENT_MUTATION = gql`
         startDate: $startDate
         endDate: $endDate
         allDay: $allDay
-        recurrance: "DAILY"
-        attendees: "0"
         startTime: "00:00"
         endTime: "01:10"
         location: "India"
