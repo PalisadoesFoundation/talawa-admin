@@ -12,6 +12,7 @@ export const UNBLOCK_USER_MUTATION = gql`
   }
 `;
 
+
 // to block the user
 
 export const BLOCK_USER_MUTATION = gql`
@@ -41,6 +42,7 @@ export const ACCEPT_ORGANIZATION_REQUEST_MUTATION = gql`
     }
   }
 `;
+
 
 // to update the organization details
 
