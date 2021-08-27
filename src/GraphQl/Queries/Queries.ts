@@ -1,5 +1,8 @@
 import { gql } from '@apollo/client';
 
+//Query List
+
+// Query to take the Organization list
 export const ORGANIZATION_LIST = gql`
   query {
     organizations {
@@ -14,6 +17,8 @@ export const ORGANIZATION_LIST = gql`
   }
 `;
 
+// Query to take the User list
+
 export const USER_LIST = gql`
   query {
     users {
@@ -24,6 +29,8 @@ export const USER_LIST = gql`
     }
   }
 `;
+
+// Query to take the Organization with data
 
 export const ORGANIZATIONS_LIST = gql`
   query Organizations($id: ID!) {
@@ -41,6 +48,8 @@ export const ORGANIZATIONS_LIST = gql`
   }
 `;
 
+// Query to take the Members of a particular organization
+
 export const MEMBERS_LIST = gql`
   query Organizations($id: ID!) {
     organizations(id: $id) {
@@ -55,6 +64,7 @@ export const MEMBERS_LIST = gql`
   }
 `;
 
+// To take the list of the oranization joined by a user
 export const USER_ORGANIZATION_LIST = gql`
   query User($id: ID!) {
     user(id: $id) {
@@ -72,6 +82,7 @@ export const USER_ORGANIZATION_LIST = gql`
   }
 `;
 
+// to take the organization event list
 export const ORGANIZATION_EVENT_LIST = gql`
   query EventsByOrganization($id: ID!) {
     eventsByOrganization(id: $id) {
@@ -82,6 +93,8 @@ export const ORGANIZATION_EVENT_LIST = gql`
     }
   }
 `;
+
+// to take the list of the admins of a particular
 
 export const ADMIN_LIST = gql`
   query Organizations($id: ID!) {
@@ -96,6 +109,8 @@ export const ADMIN_LIST = gql`
     }
   }
 `;
+
+// to take the membership request
 
 export const MEMBERSHIP_REQUEST = gql`
   query Organizations($id: ID!) {

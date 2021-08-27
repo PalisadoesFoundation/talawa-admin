@@ -22,7 +22,7 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
 
   const AddMember = async () => {
     try {
-      const { data } = await addm({
+      const { data } = await acceptMutation({
         variables: {
           id: props.id,
         },
@@ -37,7 +37,7 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
 
   const RejectMember = async () => {
     try {
-      const { data } = await removem({
+      const { data } = await rejectMutation({
         variables: {
           userid: props.id,
         },
