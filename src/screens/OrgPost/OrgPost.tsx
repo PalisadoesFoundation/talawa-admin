@@ -220,7 +220,7 @@ function OrgPost(): JSX.Element {
                 value="createpost"
                 onClick={CreatePost}
               >
-                Create Post
+                Add Post
               </button>
             </Form>
           </div>
