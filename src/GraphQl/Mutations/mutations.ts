@@ -169,3 +169,33 @@ export const ADD_ADMIN_MUTATION = gql`
     }
   }
 `;
+
+export const CREATE_POST_MUTATION = gql`
+  mutation CreatePost(
+    $text: String!
+    $title: String!
+    $imageUrl: String
+    $videoUrl: String
+    $organizationId: ID!
+  ) {
+    createPost(
+      data: {
+        text: $text
+        title: $title
+        imageUrl: $imageUrl
+        videoUrl: $videoUrl
+        organizationId: $organizationId
+      }
+    ) {
+      _id
+    }
+  }
+`;
+
+export const DELETE_POST_MUTATION = gql`
+  mutation RemovePost($id: ID!) {
+    removePost(id: $id) {
+      _id
+    }
+  }
+`;

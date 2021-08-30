@@ -1,18 +1,69 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './OrgPost.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Modal from 'react-modal';
+import { Form } from 'antd';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
+import { useMutation, useQuery } from '@apollo/client';
+import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
+import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 
 function OrgPost(): JSX.Element {
+  const [postmodalisOpen, setPostModalIsOpen] = useState(false);
+
+  const showInviteModal = () => {
+    setPostModalIsOpen(true);
+  };
+  const hideInviteModal = () => {
+    setPostModalIsOpen(false);
+  };
+
+  const [postformState, setPostFormState] = useState({
+    posttitle: '',
+    postinfo: '',
+    postphoto: '',
+    postvideo: '',
+  });
   const currentUrl = window.location.href.split('=')[1];
+
+  const { data, loading: loading2 } = useQuery(ORGANIZATION_POST_LIST, {
+    variables: { id: currentUrl },
+  });
+
   const url = '/orgdash/id=' + currentUrl;
   const url_2 = '/orgpeople/id=' + currentUrl;
   const url_3 = '/orgevents/id=' + currentUrl;
   const url_4 = '/orgcontribution/id=' + currentUrl;
   const url_5 = '/orgpost/id=' + currentUrl;
   const url_6 = '/orgsetting/id=' + currentUrl;
+
+  const CreatePost = async () => {
+    const { data } = await create({
+      variables: {
+        // _id: currentUrl,
+        title: postformState.posttitle,
+        text: postformState.postinfo,
+        imageUrl: postformState.postphoto,
+        videoUrl: postformState.postvideo,
+        organizationId: currentUrl,
+      },
+    });
+    console.log(data);
+    window.alert('Congratulations you have Posted Something');
+    window.location.replace('/orgpost/id=' + currentUrl);
+  };
+
+  const [create, { loading, error }] = useMutation(CREATE_POST_MUTATION);
+
+  if (loading || loading2) {
+    return (
+      <>
+        <div className={styles.loader}></div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -54,18 +105,136 @@ function OrgPost(): JSX.Element {
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>Posts</p>
+              <button className={styles.addbtn} onClick={showInviteModal}>
+                + Create Post
+              </button>
             </Row>
-            <OrgPostCard
+            <div className={styles.grid_section_div}>
+              {data
+                ? data.postsByOrganization.map(
+                    (datas: {
+                      _id: string;
+                      title: string;
+                      text: string;
+                      imageUrl: string;
+                      videoUrl: string;
+                      organizationId: string;
+                    }) => {
+                      return (
+                        <OrgPostCard
+                          key={datas._id}
+                          id={datas._id}
+                          postTitle={datas.title}
+                          postInfo={datas.text}
+                          postAuthor="John Doe"
+                          postPhoto={datas.imageUrl}
+                          postVideo={datas.videoUrl}
+                        />
+                      );
+                    }
+                  )
+                : null}
+            </div>
+            {/* <OrgPostCard
               key="129"
               id="21"
               postTitle="Outreach for Donation"
               postInfo="Hello everyone we are going live in 30 minutes, share this information with your folks and join us soon. See you live."
               postAuthor="John Doe Xyz"
-              postTime="16.00"
-            />
+              postPhoto="16.00"
+              postVideo="jkjk"
+            />*/}
           </div>
         </Col>
       </Row>
+      <Modal
+        isOpen={postmodalisOpen}
+        style={{
+          overlay: { backgroundColor: 'grey' },
+        }}
+        className={styles.modalbody}
+      >
+        <section id={styles.grid_wrapper}>
+          <div className={styles.form_wrapper}>
+            <div className={styles.flexdir}>
+              <p className={styles.titlemodal}>Post Details</p>
+              <a onClick={hideInviteModal} className={styles.cancel}>
+                <i className="fa fa-times"></i>
+              </a>
+            </div>
+            <Form>
+              <label htmlFor="posttitle">Title</label>
+              <input
+                type="title"
+                id="postitle"
+                placeholder="Post Title"
+                autoComplete="off"
+                required
+                value={postformState.posttitle}
+                onChange={(e) => {
+                  setPostFormState({
+                    ...postformState,
+                    posttitle: e.target.value,
+                  });
+                }}
+              />
+              <label htmlFor="postinfo">Information</label>
+              <textarea
+                id="postinfo"
+                className={styles.postinfo}
+                placeholder="What do you want to talk about?"
+                autoComplete="off"
+                required
+                value={postformState.postinfo}
+                onChange={(e) => {
+                  setPostFormState({
+                    ...postformState,
+                    postinfo: e.target.value,
+                  });
+                }}
+              />
+              <label htmlFor="postphoto" className={styles.orgphoto}>
+                Image URL:
+              </label>
+              <input
+                type="url"
+                id="postphoto"
+                name="postphoto"
+                placeholder="Enter Image URL"
+                value={postformState.postphoto}
+                onChange={(e) => {
+                  setPostFormState({
+                    ...postformState,
+                    postphoto: e.target.value,
+                  });
+                }}
+              />
+              <label htmlFor="postvideo">Video URL:</label>
+              <input
+                type="url"
+                id="postvideo"
+                placeholder="Enter Video URL"
+                autoComplete="off"
+                value={postformState.postvideo}
+                onChange={(e) => {
+                  setPostFormState({
+                    ...postformState,
+                    postvideo: e.target.value,
+                  });
+                }}
+              />
+              <button
+                type="button"
+                className={styles.greenregbtn}
+                value="createpost"
+                onClick={CreatePost}
+              >
+                Create Post
+              </button>
+            </Form>
+          </div>
+        </section>
+      </Modal>
     </>
   );
 }

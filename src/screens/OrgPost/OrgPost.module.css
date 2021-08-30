@@ -1,3 +1,7 @@
+.grid_section_div {
+  column-count: 2;
+  column-gap: 0px;
+}
 .navbarbg {
   height: 60px;
   background-color: white;
@@ -144,8 +148,8 @@
   position: absolute;
   display: flex;
   flex-direction: column;
-  width: 30%;
-  padding: 40px 30px;
+  width: 33%;
+  padding: 20px 30px;
   background: #ffffff;
   border-color: #e8e5e5;
   border-width: 5px;
@@ -173,8 +177,11 @@ form > label {
   font-size: 14px;
   color: #707070;
 }
-
-form > input {
+.postinfo {
+  height: 80px;
+}
+form > input,
+textarea {
   display: block;
   margin-bottom: 20px;
   border: 1px solid #e8e5e5;
@@ -188,6 +195,19 @@ form > input {
   -moz-transition: all 0.3s ease-in-out;
   -ms-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
+}
+.postinfo {
+  height: 80px;
+  margin-bottom: 20px;
+}
+.titlemodal {
+  color: #707070;
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid #31bb6b;
+  width: 65%;
 }
 .cancel > i {
   margin-top: 5px;
