@@ -19,17 +19,19 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
   const [create] = useMutation(DELETE_POST_MUTATION);
 
   const DeletePost = async () => {
-    try {
-      const { data } = await create({
-        variables: {
-          id: props.id,
-        },
-      });
-      console.log(data);
-      window.alert('The Post is deleted');
-      window.location.reload();
-    } catch (error) {
-      window.alert(error);
+    const sure = window.confirm('Are you sure you want to delete Post ?');
+    if (sure) {
+      try {
+        const { data } = await create({
+          variables: {
+            id: props.id,
+          },
+        });
+        console.log(data);
+        window.location.reload();
+      } catch (error) {
+        window.alert(error);
+      }
     }
   };
 

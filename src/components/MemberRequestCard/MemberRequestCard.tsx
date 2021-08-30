@@ -1,39 +1,57 @@
 import React from 'react';
-import styles from './OrgPeopleListCard.module.css';
+import styles from './MemberRequestCard.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useMutation } from '@apollo/client';
-import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
-interface OrgPeopleListCardProps {
+import {
+  ACCEPT_ORGANIZATION_REQUEST_MUTATION,
+  REJECT_ORGANIZATION_REQUEST_MUTATION,
+} from 'GraphQl/Mutations/mutations';
+interface MemberRequestCardProps {
   key: string;
   id: string;
   memberName: string;
   memberLocation: string;
   joinDate: string;
   memberImage: string;
+  email: string;
 }
-function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
-  const currentUrl = window.location.href.split('=')[1];
-  const [remove] = useMutation(REMOVE_MEMBER_MUTATION);
+function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
+  const [acceptMutation] = useMutation(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
+  const [rejectMutation] = useMutation(REJECT_ORGANIZATION_REQUEST_MUTATION);
 
-  const RemoveMember = async () => {
-    const sure = window.confirm('Are you sure you want to Remove Member ?');
+  const AddMember = async () => {
+    try {
+      const { data } = await acceptMutation({
+        variables: {
+          id: props.id,
+        },
+      });
+      console.log(data);
+      window.alert('it is accepted');
+      window.location.reload();
+    } catch (error) {
+      window.alert(error);
+    }
+  };
+
+  const RejectMember = async () => {
+    const sure = window.confirm('Are you sure you want to Reject Request ?');
     if (sure) {
       try {
-        const { data } = await remove({
+        const { data } = await rejectMutation({
           variables: {
             userid: props.id,
-            orgid: currentUrl,
           },
         });
         console.log(data);
-        window.alert('The Member is removed');
         window.location.reload();
       } catch (error) {
         window.alert(error);
       }
     }
   };
+
   return (
     <>
       <div className={styles.peoplelistdiv}>
@@ -56,7 +74,7 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
                 )}
               </p>
               <p className={styles.memberfont}>{props.memberLocation}</p>
-              <p className={styles.memberfontcreated}>saumya47999@gmail.com</p>
+              <p className={styles.memberfontcreated}>{props.email}</p>
             </div>
             <div className={styles.singledetails_data_right}>
               <p className={styles.memberfont}>
@@ -64,9 +82,15 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
               </p>
               <button
                 className={styles.memberfontcreatedbtn}
-                onClick={RemoveMember}
+                onClick={AddMember}
               >
-                Remove
+                Accept
+              </button>
+              <button
+                className={styles.memberfontcreatedbtn}
+                onClick={RejectMember}
+              >
+                Reject
               </button>
             </div>
           </Col>
@@ -77,4 +101,4 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
   );
 }
 export {};
-export default OrgPeopleListCard;
+export default MemberRequestCard;

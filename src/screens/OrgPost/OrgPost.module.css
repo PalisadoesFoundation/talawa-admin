@@ -1,6 +1,9 @@
 .grid_section_div {
-  column-count: 2;
-  column-gap: 0px;
+  grid-gap: 10px;
+  display: grid;
+  background-color: #fff;
+  color: #444;
+  grid-template-columns: 2fr 2fr;
 }
 .navbarbg {
   height: 60px;

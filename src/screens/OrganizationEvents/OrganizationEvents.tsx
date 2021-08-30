@@ -47,26 +47,22 @@ function OrganizationEvents(): JSX.Element {
   );
 
   const CreateEvent = async () => {
-    try {
-      const { data } = await create({
-        variables: {
-          title: formState.title,
-          description: formState.eventdescrip,
-          isPublic: formState.ispublic,
-          recurring: recurringchecked,
-          isRegisterable: registrablechecked,
-          organizationId: currentUrl,
-          startDate: startDate?.toDateString(),
-          endDate: endDate?.toDateString(),
-          allDay: alldaychecked,
-        },
-      });
-      console.log(data);
-      window.alert('Congratulation the Event is created');
-      window.location.reload();
-    } catch (error) {
-      window.alert(error);
-    }
+    const { data } = await create({
+      variables: {
+        title: formState.title,
+        description: formState.eventdescrip,
+        isPublic: formState.ispublic,
+        recurring: recurringchecked,
+        isRegisterable: registrablechecked,
+        organizationId: currentUrl,
+        startDate: startDate?.toDateString(),
+        endDate: endDate?.toDateString(),
+        allDay: alldaychecked,
+      },
+    });
+    console.log(data);
+    window.alert('Congratulation the Event is created');
+    window.location.reload();
   };
 
   if (loading || loading_2) {
@@ -83,7 +79,7 @@ function OrganizationEvents(): JSX.Element {
   const url_3 = '/orgevents/id=' + currentUrl;
   const url_4 = '/orgcontribution/id=' + currentUrl;
   const url_5 = '/orgpost/id=' + currentUrl;
-  const url_6 = '/orgsettings/id=' + currentUrl;
+  const url_6 = '/orgsetting/id=' + currentUrl;
 
   return (
     <>

@@ -14,7 +14,6 @@ function App(): JSX.Element {
     <>
       <Switch>
         <Route exact path="/" component={LoginPage} />
-        <Route path="/orgsettings" component={OrgSettings} />
         {isLoggedIn == 'TRUE' ? (
           <div>
             <Route path="/orgdash" component={OrganizationDashboard} />
@@ -23,7 +22,7 @@ function App(): JSX.Element {
             <Route path="/orgevents" component={OrganizationEvents} />
             <Route path="/orgcontribution" component={OrgContribution} />
             <Route path="/orgpost" component={OrgPost} />
-            <Route path="/orgsettings" component={OrgSettings} />
+            <Route path="/orgsetting" component={OrgSettings} />
           </div>
         ) : null}
       </Switch>

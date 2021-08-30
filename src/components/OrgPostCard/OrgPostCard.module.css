@@ -1,18 +1,3 @@
-.cards {
-  width: 80%;
-  background: #fcfcfc;
-  margin: 10px 40px;
-  padding: 20px 30px;
-  border-radius: 5px;
-  border: 1px solid #e8e8e8;
-  box-shadow: 0 3px 5px #c9c9c9;
-  margin-right: 30px;
-  /* display: flex; */
-  /* height:auto; */
-  color: #737373;
-  /* column-fill: auto; */
-  box-sizing: border-box;
-}
 .cards h2 {
   font-size: 20px;
 }
@@ -37,4 +22,25 @@
 }
 .icon {
   transform: scale(0.75);
+}
+
+.cards {
+  width: 80%;
+  background: #fcfcfc;
+  margin: 10px 40px;
+  padding: 20px 30px;
+  border-radius: 5px;
+  border: 1px solid #e8e8e8;
+  box-shadow: 0 3px 5px #c9c9c9;
+  margin-right: 30px;
+  color: #737373;
+  box-sizing: border-box;
+}
+.cards:last-child:nth-last-child(odd) {
+  grid-column: auto / span 2;
+}
+
+.cards:first-child:nth-last-child(even),
+.cards:first-child:nth-last-child(even) ~ .box {
+  grid-column: auto / span 1;
 }

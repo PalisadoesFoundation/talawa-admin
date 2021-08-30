@@ -135,15 +135,6 @@ function OrgPost(): JSX.Element {
                   )
                 : null}
             </div>
-            {/* <OrgPostCard
-              key="129"
-              id="21"
-              postTitle="Outreach for Donation"
-              postInfo="Hello everyone we are going live in 30 minutes, share this information with your folks and join us soon. See you live."
-              postAuthor="John Doe Xyz"
-              postPhoto="16.00"
-              postVideo="jkjk"
-            />*/}
           </div>
         </Col>
       </Row>

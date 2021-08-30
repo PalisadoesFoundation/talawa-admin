@@ -1,5 +1,49 @@
 import { gql } from '@apollo/client';
 
+// List of the mutations used in the code
+
+// to unblock the user
+
+export const UNBLOCK_USER_MUTATION = gql`
+  mutation UnblockUser($userId: ID!, $orgId: ID!) {
+    unblockUser(organizationId: $orgId, userId: $userId) {
+      _id
+    }
+  }
+`;
+
+// to block the user
+
+export const BLOCK_USER_MUTATION = gql`
+  mutation BlockUser($userId: ID!, $orgId: ID!) {
+    blockUser(organizationId: $orgId, userId: $userId) {
+      _id
+    }
+  }
+`;
+
+// to reject the organization request
+
+export const REJECT_ORGANIZATION_REQUEST_MUTATION = gql`
+  mutation RejectMembershipRequest($id: ID!) {
+    rejectMembershipRequest(membershipRequestId: $id) {
+      _id
+    }
+  }
+`;
+
+// to accept the organization request
+
+export const ACCEPT_ORGANIZATION_REQUEST_MUTATION = gql`
+  mutation AcceptMembershipRequest($id: ID!) {
+    acceptMembershipRequest(membershipRequestId: $id) {
+      _id
+    }
+  }
+`;
+
+// to update the organization details
+
 export const UPDATE_ORGANIZATION_MUTATION = gql`
   mutation UpdateOrganization(
     $id: ID!
@@ -22,6 +66,8 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
   }
 `;
 
+// to update the details of the user
+
 export const UPDATE_USER_MUTATION = gql`
   mutation UpdateUserProfile(
     $firstName: String
@@ -35,6 +81,8 @@ export const UPDATE_USER_MUTATION = gql`
     }
   }
 `;
+
+// to sign up in the talawa admin
 
 export const SIGNUP_MUTATION = gql`
   mutation SignUp(
@@ -62,6 +110,8 @@ export const SIGNUP_MUTATION = gql`
   }
 `;
 
+// to login in the talawa admin
+
 export const LOGIN_MUTATION = gql`
   mutation Login($email: String!, $password: String!) {
     login(data: { email: $email, password: $password }) {
@@ -74,6 +124,8 @@ export const LOGIN_MUTATION = gql`
     }
   }
 `;
+
+// to create the organization
 
 export const CREATE_ORGANIZATION_MUTATION = gql`
   mutation CreateOrganization(
@@ -95,6 +147,8 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
   }
 `;
 
+// to delete the organization
+
 export const DELETE_ORGANIZATION_MUTATION = gql`
   mutation RemoveOrganization($id: ID!) {
     removeOrganization(id: $id) {
@@ -102,6 +156,8 @@ export const DELETE_ORGANIZATION_MUTATION = gql`
     }
   }
 `;
+
+// to create the event by any organization
 
 export const CREATE_EVENT_MUTATION = gql`
   mutation CreateEvent(
@@ -126,8 +182,6 @@ export const CREATE_EVENT_MUTATION = gql`
         startDate: $startDate
         endDate: $endDate
         allDay: $allDay
-        recurrance: "DAILY"
-        attendees: "0"
         startTime: "00:00"
         endTime: "01:10"
         location: "India"
@@ -138,6 +192,8 @@ export const CREATE_EVENT_MUTATION = gql`
   }
 `;
 
+// to delete any event by any organization
+
 export const DELETE_EVENT_MUTATION = gql`
   mutation RemoveEvent($id: ID!) {
     removeEvent(id: $id) {
@@ -145,6 +201,8 @@ export const DELETE_EVENT_MUTATION = gql`
     }
   }
 `;
+
+// to remove an admin from an organization
 
 export const REMOVE_ADMIN_MUTATION = gql`
   mutation RemoveAdmin($orgid: ID!, $userid: ID!) {
@@ -154,6 +212,8 @@ export const REMOVE_ADMIN_MUTATION = gql`
   }
 `;
 
+// to Remove member from an organization
+
 export const REMOVE_MEMBER_MUTATION = gql`
   mutation RemoveAdmin($orgid: ID!, $userid: ID!) {
     removeAdmin(data: { organizationId: $orgid, userId: $userid }) {
@@ -161,6 +221,8 @@ export const REMOVE_MEMBER_MUTATION = gql`
     }
   }
 `;
+
+// to add the admin
 
 export const ADD_ADMIN_MUTATION = gql`
   mutation CreateAdmin($orgid: ID!, $userid: ID!) {
