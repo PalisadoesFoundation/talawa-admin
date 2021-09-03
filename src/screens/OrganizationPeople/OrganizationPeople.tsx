@@ -132,9 +132,6 @@ function OrganizationPeople(): JSX.Element {
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>Members</p>
-              <div className={styles.addbtnmain}>
-                <button className={styles.addbtn}>Add User</button>
-              </div>
             </Row>
             {t == 0
               ? data

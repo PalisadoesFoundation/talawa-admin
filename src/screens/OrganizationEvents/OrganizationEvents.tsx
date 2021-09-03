@@ -162,7 +162,7 @@ function OrganizationEvents(): JSX.Element {
         <section id={styles.grid_wrapper}>
           <div className={styles.form_wrapper}>
             <div className={styles.flexdir}>
-              <p className={styles.titlemodal}>Create Event</p>
+              <p className={styles.titlemodal}>Event Details</p>
               <a onClick={hideInviteModal} className={styles.cancel}>
                 <i className="fa fa-times"></i>
               </a>

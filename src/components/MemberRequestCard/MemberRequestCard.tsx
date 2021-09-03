@@ -36,17 +36,19 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
   };
 
   const RejectMember = async () => {
-    try {
-      const { data } = await rejectMutation({
-        variables: {
-          userid: props.id,
-        },
-      });
-      console.log(data);
-      window.alert('it is removed');
-      window.location.reload();
-    } catch (error) {
-      window.alert(error);
+    const sure = window.confirm('Are you sure you want to Reject Request ?');
+    if (sure) {
+      try {
+        const { data } = await rejectMutation({
+          variables: {
+            userid: props.id,
+          },
+        });
+        console.log(data);
+        window.location.reload();
+      } catch (error) {
+        window.alert(error);
+      }
     }
   };
 

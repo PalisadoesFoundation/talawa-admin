@@ -1,16 +1,5 @@
-.cards {
-  width: 45%;
-  background: #fcfcfc;
-  margin: 10px 20px;
-  padding: 20px 30px;
-  border-radius: 5px;
-  border: 1px solid #e8e8e8;
-  box-shadow: 0 3px 5px #c9c9c9;
-  margin-right: 40px;
-  color: #737373;
-}
-.cards > h2 {
-  font-size: 19px;
+.cards h2 {
+  font-size: 20px;
 }
 .cards > h3 {
   font-size: 17px;
@@ -19,4 +8,39 @@
   font-size: 14px;
   margin-top: 0px;
   margin-bottom: 7px;
+}
+.cards a {
+  color: #737373;
+  font-weight: 600;
+}
+.cards a:hover {
+  color: black;
+}
+.dispflex {
+  display: flex;
+  justify-content: space-between;
+}
+.icon {
+  transform: scale(0.75);
+}
+
+.cards {
+  width: 80%;
+  background: #fcfcfc;
+  margin: 10px 40px;
+  padding: 20px 30px;
+  border-radius: 5px;
+  border: 1px solid #e8e8e8;
+  box-shadow: 0 3px 5px #c9c9c9;
+  margin-right: 30px;
+  color: #737373;
+  box-sizing: border-box;
+}
+.cards:last-child:nth-last-child(odd) {
+  grid-column: auto / span 2;
+}
+
+.cards:first-child:nth-last-child(even),
+.cards:first-child:nth-last-child(even) ~ .box {
+  grid-column: auto / span 1;
 }

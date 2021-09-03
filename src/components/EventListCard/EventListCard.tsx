@@ -19,17 +19,19 @@ function EventListCard(props: EventListCardProps): JSX.Element {
   const [create] = useMutation(DELETE_EVENT_MUTATION);
 
   const DeleteEvent = async () => {
-    try {
-      const { data } = await create({
-        variables: {
-          id: props.id,
-        },
-      });
-      console.log(data);
-      window.alert('The Event is deleted');
-      window.location.reload();
-    } catch (error) {
-      window.alert(error);
+    const sure = window.confirm('Are you sure you want to delete Event ?');
+    if (sure) {
+      try {
+        const { data } = await create({
+          variables: {
+            id: props.id,
+          },
+        });
+        console.log(data);
+        window.location.reload();
+      } catch (error) {
+        window.alert(error);
+      }
     }
   };
 
