@@ -24,3 +24,8 @@
     padding-left: 10px;
     box-shadow: none;
 }
+
+.actionradio input {
+    width: fit-content;
+    margin: inherit;
+}

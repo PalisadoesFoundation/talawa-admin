@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'react';
 import styles from './AddOnStore.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
@@ -13,10 +13,10 @@ import { RootState } from '../../../../state/reducers';
 import { Form, Tab, Tabs } from 'react-bootstrap';
 import AddOnRegister from '../AddOnRegister/AddOnRegister';
 
-// interface AddOnStoreProps {}
-
-//{  }: AddOnStoreProps
 function AddOnStore(): JSX.Element {
+  const [isStore, setIsStore] = useState(true);
+  const [showEnabled, setShowEnabled] = useState(true);
+
   let loading;
 
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
@@ -39,6 +39,14 @@ function AddOnStore(): JSX.Element {
   //       return await result.json();
   //   }
 
+  const updateSelectedTab = (tab: any) => {
+    setIsStore(tab === 'available');
+  };
+
+  const filterChange = (ev: any) => {
+    setShowEnabled(ev.target.value === 'enabled');
+  };
+
   if (loading) {
     return (
       <>
@@ -47,7 +55,7 @@ function AddOnStore(): JSX.Element {
     );
   }
 
-  // TODO: Filter for enabled vs disabled in installed
+  // TODO: Filter functionality
   // TODO: Update routes for other pages
 
   // TODO: Implement Search
@@ -68,26 +76,35 @@ function AddOnStore(): JSX.Element {
               required
             />
           </Action>
-          <Action label="Filters">
-            <Form>
-              <div key={`inline-radio`} className="mb-3">
-                <Form.Check
-                  inline
-                  label="Enabled"
-                  name="radio-enable"
-                  type="radio"
-                  id={`inline-radio-1`}
-                />
-                <Form.Check
-                  inline
-                  label="Disabled"
-                  name="radio-disable"
-                  type="radio"
-                  id={`inline-radio-2`}
-                />
-              </div>
-            </Form>
-          </Action>
+          {!isStore && (
+            <Action label="Filters">
+              <Form>
+                <div key={`inline-radio`} className="mb-3">
+                  <Form.Check
+                    inline
+                    label="Enabled"
+                    name="radio-group"
+                    type="radio"
+                    value="enabled"
+                    onChange={filterChange}
+                    checked={showEnabled}
+                    className={styles.actionradio}
+                    id={`inline-radio-1`}
+                  />
+                  <Form.Check
+                    inline
+                    label="Disabled"
+                    name="radio-group"
+                    type="radio"
+                    value="disabled"
+                    onChange={filterChange}
+                    className={styles.actionradio}
+                    id={`inline-radio-2`}
+                  />
+                </div>
+              </Form>
+            </Action>
+          )}
         </SidePanel>
         <MainContent>
           <div className={styles.justifysp}>
@@ -97,6 +114,7 @@ function AddOnStore(): JSX.Element {
               defaultActiveKey="available"
               id="uncontrolled-tab-example"
               className="mb-3"
+              onSelect={updateSelectedTab}
             >
               <Tab eventKey="available" title="Available">
                 {addonStore.map((plugin: any, index: number) => {
@@ -111,17 +129,21 @@ function AddOnStore(): JSX.Element {
                 })}
               </Tab>
               <Tab eventKey="installed" title="Installed">
-                {installed.map((plugin: any, index: number) => {
-                  return (
-                    <AddOnEntry
-                      key={index}
-                      title={plugin.name}
-                      description={plugin.description}
-                      createdBy={plugin.createdBy}
-                      installed={true}
-                    />
-                  );
-                })}
+                {installed
+                  .filter((plugin: any) =>
+                    showEnabled ? plugin.enabled : !plugin.enabled
+                  )
+                  .map((plugin: any, index: number) => {
+                    return (
+                      <AddOnEntry
+                        key={index}
+                        title={plugin.name}
+                        description={plugin.description}
+                        createdBy={plugin.createdBy}
+                        installed={true}
+                      />
+                    );
+                  })}
               </Tab>
             </Tabs>
           </div>
