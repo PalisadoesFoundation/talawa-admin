@@ -1,0 +1,11 @@
+.sidebarcontainer{
+    width: 30vw;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+}
+
+.sidebarcollapsed{
+    display: none;
+}

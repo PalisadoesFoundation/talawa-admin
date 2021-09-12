@@ -1,0 +1,14 @@
+.entrytoggle{
+    margin: 24px 24px 0 auto;
+    width: fit-content;
+}
+
+.entryaction{
+    margin-left: auto;
+    display: flex !important;
+    align-items: center;
+}
+
+.entryaction i{
+    margin-right: 8px;
+}
