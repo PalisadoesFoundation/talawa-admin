@@ -40,9 +40,15 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
               <Form.Label>Plugin Description</Form.Label>
               <Form.Control as="textarea" rows={3} />
             </Form.Group>
-            <Form.Group controlId="formFile" className="mb-3">
-              <Form.Label>Plugin Package</Form.Label>
-              <Form.Control type="file" />
+            <Form.Group className="mb-3" controlId="registerForm.PluginURL">
+              <Form.Label>Plugin Repo (GitHub URL)</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Plugin Repo (GitHub URL)"
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="registerForm.PluginInstall">
+              <Form.Check type="checkbox" label="Install after register." />
             </Form.Group>
           </Form>
         </Modal.Body>
