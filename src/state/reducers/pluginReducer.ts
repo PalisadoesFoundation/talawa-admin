@@ -3,27 +3,27 @@ import { Action } from 'state/helpers/Action';
 const reducer = (state = INITIAL_STATE, action: Action) => {
   switch (action.type) {
     case 'UPDATE_INSTALLED':
-      return Object.assign({}, INITIAL_STATE, {
+      return Object.assign({}, state, {
         installed: [...action.payload],
       });
     case 'INSTALL_PLUGIN':
-      return Object.assign({}, INITIAL_STATE, {
-        installed: [...INITIAL_STATE.installed, action.payload],
+      return Object.assign({}, state, {
+        installed: [...state.installed, action.payload],
       });
     case 'REMOVE_PLUGIN':
-      return Object.assign({}, INITIAL_STATE, {
+      return Object.assign({}, state, {
         installed: [
-          ...INITIAL_STATE.installed.filter(
+          ...state.installed.filter(
             (plugin: any) => plugin.id !== action.payload.id
           ),
         ],
       });
     case 'UPDATE_STORE':
-      return Object.assign({}, INITIAL_STATE, {
+      return Object.assign({}, state, {
         addonStore: [...action.payload],
       });
     case 'UPDATE_EXTRAS':
-      return Object.assign({}, INITIAL_STATE, {
+      return Object.assign({}, state, {
         addonStore: [...action.payload],
       });
     default:
@@ -31,29 +31,9 @@ const reducer = (state = INITIAL_STATE, action: Action) => {
   }
 };
 
-// Installed { id, name, install datetime, installed by, component, enabled }
 const INITIAL_STATE: any = {
-  installed: [
-    {
-      id: 'dummy-plugin',
-      name: 'Dummy Plugin',
-      description: 'This is a plugin for a demo',
-      createdBy: 'Admin',
-      installDatetime: new Date(),
-      installedBy: 'Admin',
-      component: 'DummyPlugin',
-      enabled: true,
-    },
-  ],
-  addonStore: [
-    {
-      id: 'dummy-plugin2',
-      name: 'Dummy Plugin 2',
-      description: 'This is a plugin for a demo',
-      createdBy: 'Admin',
-      component: 'DummyPlugin2',
-    },
-  ],
+  installed: [],
+  addonStore: [],
   extras: [],
 };
 

@@ -3,10 +3,6 @@ import { Action } from 'state/helpers/Action';
 const currentOrg = window.location.href.split('=')[1];
 
 const reducer = (state = INITIAL_STATE, action: Action) => {
-  console.log(
-    'INIT',
-    INITIAL_STATE.targets.filter((target: any) => target.name === 'Plugins')
-  );
   switch (action.type) {
     case 'UPDATE_TARGETS': {
       return Object.assign({}, INITIAL_STATE, {

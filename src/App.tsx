@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from 'state/reducers';
+import { useDispatch } from 'react-redux';
 import LoginPage from 'screens/LoginPage/LoginPage';
 import OrganizationEvents from 'screens/OrganizationEvents/OrganizationEvents';
 import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
@@ -14,28 +13,35 @@ import AddOnStore from 'components/AddOn/core/AddOnStore/AddOnStore';
 import * as installedPlugins from 'components/plugins/index';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from './state/index';
+import PluginHelper from 'components/AddOn/support/services/Plugin.helper';
 
 function App(): JSX.Element {
   const isLoggedIn = localStorage.getItem('IsLoggedIn');
 
   const dispatch = useDispatch();
 
-  const { updatePluginLinks } = bindActionCreators(actionCreators, dispatch);
+  const { updatePluginLinks, updateInstalled } = bindActionCreators(
+    actionCreators,
+    dispatch
+  );
+
+  const getInstalledPlugins = async () => {
+    const plugins = await fetchInstalled();
+    updateInstalled(plugins);
+    updatePluginLinks(new PluginHelper().generateLinks(plugins));
+  };
+
+  const fetchInstalled = async () => {
+    const result = await fetch(`http://localhost:3005/installed`);
+    return await result.json();
+  };
+
+  useEffect(() => {
+    getInstalledPlugins();
+  }, []);
 
   // const appRoutes = useSelector((state: RootState) => state.appRoutes);
   // const { components } = appRoutes;
-
-  const plugins = useSelector((state: RootState) => state.plugins);
-  const { installed } = plugins;
-
-  const links: any[] = installed.map((installedPlugin: any) => {
-    return {
-      name: installedPlugin.name,
-      url: `/plugin/${installedPlugin.component.toLowerCase()}`,
-    };
-  });
-
-  updatePluginLinks(links);
 
   // TODO: Fetch Installed plugin extras and store for use within MainContent and Side Panel Components.
 

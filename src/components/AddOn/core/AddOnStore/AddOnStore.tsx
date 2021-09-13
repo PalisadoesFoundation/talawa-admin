@@ -12,6 +12,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../state/reducers';
 import { Form, Tab, Tabs } from 'react-bootstrap';
 import AddOnRegister from '../AddOnRegister/AddOnRegister';
+import PluginHelper from 'components/AddOn/support/services/Plugin.helper';
+import { store } from './../../../../state/store';
 
 function AddOnStore(): JSX.Element {
   const [isStore, setIsStore] = useState(true);
@@ -25,22 +27,42 @@ function AddOnStore(): JSX.Element {
   const plugins = useSelector((state: RootState) => state.plugins);
   const { installed, addonStore } = plugins;
 
-  //   useEffect(() => {
-  //       const getPlugins = async () => {
-  //         const plugins = await fetchPlugins();
-  //         setPlugins(plugins);
-  //       }
+  const getStorePlugins = async () => {
+    let plugins = await new PluginHelper().fetchStore();
+    const installIds = (await new PluginHelper().fetchInstalled()).map(
+      (plugin: any) => plugin.id
+    );
+    plugins = plugins.map((plugin: any) => {
+      plugin.installed = installIds.includes(plugin.id);
+      return plugin;
+    });
+    store.dispatch({ type: 'UPDATE_STORE', payload: plugins });
+  };
 
-  //       getPlugins();
-  //   }, []);
+  const getInstalledPlugins = async () => {
+    const plugins = await new PluginHelper().fetchInstalled();
+    store.dispatch({ type: 'UPDATE_INSTALLED', payload: plugins });
+    return plugins;
+  };
 
-  //   const fetchPlugins = async () => {
-  //       const result = await fetch(`http:localhost:5000/api`);
-  //       return await result.json();
-  //   }
+  const updateLinks = async (links: any[]) => {
+    store.dispatch({ type: 'UPDATE_P_TARGETS', payload: links });
+  };
+
+  const pluginModified = () => {
+    return getInstalledPlugins().then((installedPlugins) => {
+      getStorePlugins();
+      return installedPlugins;
+    });
+  };
+
+  useEffect(() => {
+    pluginModified().then();
+  }, []);
 
   const updateSelectedTab = (tab: any) => {
     setIsStore(tab === 'available');
+    isStore ? getStorePlugins() : getInstalledPlugins();
   };
 
   const filterChange = (ev: any) => {
@@ -55,9 +77,7 @@ function AddOnStore(): JSX.Element {
     );
   }
 
-  // TODO: Filter functionality
   // TODO: Update routes for other pages
-
   // TODO: Implement Search
   return (
     <>
@@ -98,6 +118,7 @@ function AddOnStore(): JSX.Element {
                     type="radio"
                     value="disabled"
                     onChange={filterChange}
+                    checked={!showEnabled}
                     className={styles.actionradio}
                     id={`inline-radio-2`}
                   />
@@ -120,10 +141,20 @@ function AddOnStore(): JSX.Element {
                 {addonStore.map((plugin: any, index: number) => {
                   return (
                     <AddOnEntry
+                      id={plugin.id}
                       key={index}
                       title={plugin.name}
                       description={plugin.description}
                       createdBy={plugin.createdBy}
+                      component={plugin.component}
+                      configurable={!plugin.installed}
+                      modified={() => {
+                        pluginModified().then((installedPlugins) => {
+                          updateLinks(
+                            new PluginHelper().generateLinks(installedPlugins)
+                          );
+                        });
+                      }}
                     />
                   );
                 })}
@@ -136,11 +167,22 @@ function AddOnStore(): JSX.Element {
                   .map((plugin: any, index: number) => {
                     return (
                       <AddOnEntry
+                        id={plugin.id}
                         key={index}
                         title={plugin.name}
                         description={plugin.description}
                         createdBy={plugin.createdBy}
+                        component={plugin.component}
+                        enabled={plugin.enabled}
                         installed={true}
+                        configurable={true}
+                        modified={() => {
+                          pluginModified().then((installedPlugins) => {
+                            updateLinks(
+                              new PluginHelper().generateLinks(installedPlugins)
+                            );
+                          });
+                        }}
                       />
                     );
                   })}

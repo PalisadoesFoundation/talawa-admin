@@ -12,8 +12,8 @@ function Action(props: ActionProps): JSX.Element {
   const actionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    console.log('Props', props.children); // Validate Type
-    console.log('Ref', actionRef); // Fetch Events
+    // console.log('Props', props.children); // Validate Type
+    // console.log('Ref', actionRef); // Fetch Events
   });
   return (
     <div ref={actionRef}>
