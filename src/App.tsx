@@ -14,7 +14,6 @@ import * as installedPlugins from 'components/plugins/index';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from './state/index';
 import PluginHelper from 'components/AddOn/support/services/Plugin.helper';
-import { AddOn } from 'components/AddOn/core/types/AddOn';
 
 function App(): JSX.Element {
   const isLoggedIn = localStorage.getItem('IsLoggedIn');
