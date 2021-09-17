@@ -29,9 +29,12 @@ function OrganizationCard(props: OrganizationCardProps): JSX.Element {
             <div className={styles.second_box}>
               <h4>{props.name}</h4>
               <h5>
-                Owner:{props.firstName}
-                &nbsp;
-                {props.lastName}
+                Owner:
+                <span>
+                  {props.firstName}
+                  &nbsp;
+                  {props.lastName}
+                </span>
               </h5>
             </div>
           </div>

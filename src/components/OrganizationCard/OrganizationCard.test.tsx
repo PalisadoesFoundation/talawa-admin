@@ -9,12 +9,12 @@ describe('Testing the Organization Card', () => {
         id="624135624625"
         key="5"
         image=""
-        firstName="yasharth"
-        lastName="dubey"
+        firstName=""
+        lastName=""
         name="organization"
       />
     );
-    expect(screen.getByText('Owner:')).toBeInTheDocument();
     expect(screen.getByText('organization')).toBeInTheDocument();
+    expect(screen.getByText('Owner:')).toBeInTheDocument();
   });
 });
