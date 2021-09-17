@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import OrganizationCard from './OrganizationCard';
 
-describe('Testing the LoginPage', () => {
+describe('Testing the Organization Card', () => {
   test('should show the text on the website', () => {
     render(
       <OrganizationCard
@@ -14,7 +14,7 @@ describe('Testing the LoginPage', () => {
         name="organization"
       />
     );
-    expect(screen.getByText('Owner:yasharth dubey')).toBeInTheDocument();
+    expect(screen.getByText('Owner:')).toBeInTheDocument();
     expect(screen.getByText('organization')).toBeInTheDocument();
   });
 });
