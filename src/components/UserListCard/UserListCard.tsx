@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useMutation } from '@apollo/client';
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
+
 interface OrgPeopleListCardProps {
   key: string;
   id: string;
@@ -12,6 +13,7 @@ interface OrgPeopleListCardProps {
   joinDate: string;
   memberImage: string;
 }
+
 function UserListCard(props: OrgPeopleListCardProps): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
