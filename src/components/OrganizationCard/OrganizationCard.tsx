@@ -45,4 +45,5 @@ function OrganizationCard(props: OrganizationCardProps): JSX.Element {
   );
 }
 
+export {};
 export default OrganizationCard;

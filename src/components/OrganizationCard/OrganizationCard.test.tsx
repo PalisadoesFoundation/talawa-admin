@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import OrganizationCard from './OrganizationCard';
 
-describe('Testing the Organization Card', () => {
+describe('Testing the OrganizationCard', () => {
   test('should show the text on the website', () => {
     render(
       <OrganizationCard

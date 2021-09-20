@@ -3,6 +3,8 @@ import styles from './OrgAdminListCard.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useMutation } from '@apollo/client';
+
+// import { ApolloProvider } from '@apollo/react-hooks';
 import { REMOVE_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 interface OrgPeopleListCardProps {
   key: string;
@@ -12,8 +14,9 @@ interface OrgPeopleListCardProps {
   joinDate: string;
   memberImage: string;
 }
+const currentUrl = window.location.href.split('=')[1];
+
 function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
-  const currentUrl = window.location.href.split('=')[1];
   const [remove] = useMutation(REMOVE_ADMIN_MUTATION);
 
   const RemoveAdmin = async () => {

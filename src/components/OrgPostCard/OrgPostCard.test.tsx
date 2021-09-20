@@ -1,6 +1,6 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-import OrgAdminListCard from './OrgAdminListCard';
+import { render, screen } from '@testing-library/react';
+import OrgPostCard from './OrgPostCard';
 import {
   ApolloClient,
   NormalizedCacheObject,
@@ -17,15 +17,19 @@ describe('This is the test for Organization member page component', () => {
   test('should render 2 text elements test for the member page componet', () => {
     render(
       <ApolloProvider client={client}>
-        <OrgAdminListCard
+        <OrgPostCard
           key="123"
-          id={''}
-          memberName={''}
-          memberLocation={''}
-          joinDate={''}
-          memberImage={''}
+          id=""
+          postTitle=""
+          postInfo=""
+          postAuthor=""
+          postPhoto=""
+          postVideo=""
         />
       </ApolloProvider>
     );
+    expect(screen.getByText('Author:')).toBeInTheDocument();
+    expect(screen.getByText('Image URL:')).toBeInTheDocument();
+    expect(screen.getByText('Video URL:')).toBeInTheDocument();
   });
 });
