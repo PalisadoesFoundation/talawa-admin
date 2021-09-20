@@ -13,8 +13,8 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   uri: 'https://talawa-graphql-api.herokuapp.com/graphql',
 });
 
-describe('This is the test for Organization member page component', () => {
-  test('should render 2 text elements test for the member page componet', () => {
+describe('Testing Member Request Card', () => {
+  test('should render props and text elements test for the page component', () => {
     render(
       <ApolloProvider client={client}>
         <MemberRequestCard
@@ -29,7 +29,5 @@ describe('This is the test for Organization member page component', () => {
       </ApolloProvider>
     );
     expect(screen.getByText('Joined:')).toBeInTheDocument();
-    // expect(screen.getByText('Recent Contribution:')).toBeInTheDocument();
-    // expect(screen.getByText('Highest Contribution:')).toBeInTheDocument();
   });
 });

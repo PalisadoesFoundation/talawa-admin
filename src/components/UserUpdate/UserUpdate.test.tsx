@@ -13,8 +13,8 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   uri: 'https://talawa-graphql-api.herokuapp.com/graphql',
 });
 
-describe('This is the test for Useranization member page component', () => {
-  test('should render 2 text elements test for the member page componet', () => {
+describe('Testing User Update', () => {
+  test('should render props and text elements test for the page component', () => {
     render(
       <ApolloProvider client={client}>
         <UserUpdate key="123" id="" />

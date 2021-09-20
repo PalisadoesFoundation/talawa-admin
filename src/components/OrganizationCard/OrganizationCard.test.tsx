@@ -2,8 +2,8 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import OrganizationCard from './OrganizationCard';
 
-describe('Testing the OrganizationCard', () => {
-  test('should show the text on the website', () => {
+describe('Testing the Organization Card', () => {
+  test('should render props and text elements test for the page component', () => {
     render(
       <OrganizationCard
         id="624135624625"
