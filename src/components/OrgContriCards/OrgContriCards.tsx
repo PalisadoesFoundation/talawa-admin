@@ -22,15 +22,12 @@ function OrgContriCards(props: OrgContriCardsProps): JSX.Element {
             Date:
             <span>{props.contriDate}</span>
           </p>
-          <p>Transaction ID: {props.contriTransactionId} </p>
-          <h3>Amount: $ {props.contriAmount}</h3>
-        </Col>
-        <Col className={styles.cards}>
-          <h2>Yasharth Dubey</h2>
-          <p>johndoexyz@gmail.com</p>
-          <p>Date: 27/09/2021</p>
-          <p>Transaction ID: BARIC4537Y </p>
-          <h3>Amount: $ 67</h3>
+          <p>
+            Transaction ID: <span>{props.contriTransactionId} </span>
+          </p>
+          <h3>
+            Amount: $ <span>{props.contriAmount}</span>
+          </h3>
         </Col>
       </Row>
     </>

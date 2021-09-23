@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useMutation } from '@apollo/client';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
+
 interface OrgPeopleListCardProps {
   key: string;
   id: string;
@@ -12,6 +13,7 @@ interface OrgPeopleListCardProps {
   joinDate: string;
   memberImage: string;
 }
+
 function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
   const [remove] = useMutation(REMOVE_MEMBER_MUTATION);

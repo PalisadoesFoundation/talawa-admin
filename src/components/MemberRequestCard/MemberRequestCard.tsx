@@ -7,6 +7,7 @@ import {
   ACCEPT_ORGANIZATION_REQUEST_MUTATION,
   REJECT_ORGANIZATION_REQUEST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+
 interface MemberRequestCardProps {
   key: string;
   id: string;
@@ -16,6 +17,7 @@ interface MemberRequestCardProps {
   memberImage: string;
   email: string;
 }
+
 function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
   const [acceptMutation] = useMutation(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
   const [rejectMutation] = useMutation(REJECT_ORGANIZATION_REQUEST_MUTATION);
