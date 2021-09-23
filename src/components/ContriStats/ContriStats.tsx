@@ -11,13 +11,13 @@ function ContriStats(props: ContriStatsProps): JSX.Element {
   return (
     <>
       <p className={styles.fonts}>
-        Recent Contribution: <span>${props.recentAmount}</span>
+        Recent Contribution: $&nbsp;<span>{props.recentAmount}</span>
       </p>
       <p className={styles.fonts}>
-        Highest Contribution: <span>${props.highestAmount}</span>
+        Highest Contribution: $&nbsp;<span>{props.highestAmount}</span>
       </p>
       <p className={styles.fonts}>
-        Total Contribution: <span>${props.totalAmount}</span>
+        Total Contribution: $&nbsp;<span>{props.totalAmount}</span>
       </p>
     </>
   );

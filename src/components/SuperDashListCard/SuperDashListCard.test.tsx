@@ -9,12 +9,15 @@ describe('Testing the Super Dash List', () => {
         key="123"
         id=""
         image=""
-        orgName=""
-        orgLocation=""
-        createdDate=""
+        orgName="Dogs Care"
+        orgLocation="India"
+        createdDate="04/07/2019"
       />
     );
     expect(screen.getByText('Admins:')).toBeInTheDocument();
     expect(screen.getByText('Members:')).toBeInTheDocument();
+    expect(screen.getByText('Dogs Care')).toBeInTheDocument();
+    expect(screen.getByText('India')).toBeInTheDocument();
+    expect(screen.getByText('04/07/2019')).toBeInTheDocument();
   });
 });

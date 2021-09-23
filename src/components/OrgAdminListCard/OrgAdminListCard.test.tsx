@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import OrgAdminListCard from './OrgAdminListCard';
 import {
   ApolloClient,
@@ -19,13 +19,16 @@ describe('Testing Organization Admin List Card', () => {
       <ApolloProvider client={client}>
         <OrgAdminListCard
           key="123"
-          id={''}
-          memberName={''}
-          memberLocation={''}
-          joinDate={''}
-          memberImage={''}
+          id=""
+          memberName="Saumya"
+          memberLocation="India"
+          joinDate="04/09/2001"
+          memberImage=""
         />
       </ApolloProvider>
     );
+    expect(screen.getByText('Saumya')).toBeInTheDocument();
+    expect(screen.getByText('India')).toBeInTheDocument();
+    expect(screen.getByText('04/09/2001')).toBeInTheDocument();
   });
 });

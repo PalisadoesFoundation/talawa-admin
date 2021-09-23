@@ -4,6 +4,6 @@ import AdminNavbar from './AdminNavbar';
 
 describe('Testing Admin Navbar', () => {
   test('should render following text elements', () => {
-    render(<AdminNavbar url_1="" targets={[]} />);
+    render(<AdminNavbar url_1="palisadoes" targets={[]} />);
   });
 });

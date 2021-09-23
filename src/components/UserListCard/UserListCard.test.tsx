@@ -20,13 +20,16 @@ describe('Testing User List Card', () => {
         <UserListCard
           key="123"
           id=""
-          memberName=""
-          memberLocation=""
-          joinDate=""
+          memberName="Dogs Care"
+          memberLocation="India"
+          joinDate="04/07/2019"
           memberImage=""
         />
       </ApolloProvider>
     );
     expect(screen.getByText('Joined:')).toBeInTheDocument();
+    expect(screen.getByText('Dogs Care')).toBeInTheDocument();
+    expect(screen.getByText('India')).toBeInTheDocument();
+    expect(screen.getByText('04/07/2019')).toBeInTheDocument();
   });
 });

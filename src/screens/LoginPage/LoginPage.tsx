@@ -270,6 +270,77 @@ function LoginPage(): JSX.Element {
             </Col>
           </Row>
         </div>
+        <Modal
+          isOpen={modalisOpen}
+          style={{
+            overlay: { backgroundColor: 'grey', zIndex: 20 },
+          }}
+          className={styles.modalbody}
+        >
+          <section id={styles.grid_wrapper}>
+            <div className={styles.form_wrapper}>
+              <div className={styles.flexdir}>
+                <p className={styles.logintitle}>Login</p>
+                <a onClick={hideModal} className={styles.cancel}>
+                  <i className="fa fa-times"></i>
+                </a>
+              </div>
+              <form>
+                <label>Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  className="input_box"
+                  placeholder="Enter Email"
+                  autoComplete="off"
+                  required
+                  value={formState.email}
+                  onChange={(e) => {
+                    setFormState({
+                      ...formState,
+                      email: e.target.value,
+                    });
+                  }}
+                />
+                <label>Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  className="input_box_second"
+                  placeholder="Enter Password"
+                  required
+                  value={formState.password}
+                  onChange={(e) => {
+                    setFormState({
+                      ...formState,
+                      password: e.target.value,
+                    });
+                  }}
+                />
+                <button
+                  type="button"
+                  className={styles.whiteloginbtn}
+                  value="Login"
+                  onClick={login_link}
+                >
+                  Login As Super Admin
+                </button>
+                <a href="#" className={styles.forgotpwd}>
+                  Forgot Password ?
+                </a>
+                <hr></hr>
+                <button
+                  type="button"
+                  className={styles.greenregbtn}
+                  value="Register"
+                  onClick={redirect_signup}
+                >
+                  Register
+                </button>
+              </form>
+            </div>
+          </section>
+        </Modal>
       </section>
     </>
   );

@@ -20,13 +20,17 @@ describe('Testing Contribution Stats', () => {
         <ContriStats
           key="123"
           id=""
-          recentAmount=""
-          highestAmount=""
-          totalAmount=""
+          recentAmount="200"
+          highestAmount="500"
+          totalAmount="1000"
         />
       </ApolloProvider>
     );
-    expect(screen.getByText('Recent Contribution:')).toBeInTheDocument();
-    expect(screen.getByText('Highest Contribution:')).toBeInTheDocument();
+    expect(screen.getByText('Recent Contribution: $')).toBeInTheDocument();
+    expect(screen.getByText('Highest Contribution: $')).toBeInTheDocument();
+    expect(screen.getByText('Total Contribution: $')).toBeInTheDocument();
+    expect(screen.getByText('200')).toBeInTheDocument();
+    expect(screen.getByText('500')).toBeInTheDocument();
+    expect(screen.getByText('1000')).toBeInTheDocument();
   });
 });

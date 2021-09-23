@@ -20,16 +20,21 @@ describe('Testing Organization Post Card', () => {
         <OrgPostCard
           key="123"
           id=""
-          postTitle=""
-          postInfo=""
-          postAuthor=""
-          postPhoto=""
-          postVideo=""
+          postTitle="Event Info"
+          postInfo="Time change"
+          postAuthor="Saumya xyz"
+          postPhoto="photoLink"
+          postVideo="videoLink"
         />
       </ApolloProvider>
     );
     expect(screen.getByText('Author:')).toBeInTheDocument();
     expect(screen.getByText('Image URL:')).toBeInTheDocument();
     expect(screen.getByText('Video URL:')).toBeInTheDocument();
+    expect(screen.getByText('Event Info')).toBeInTheDocument();
+    expect(screen.getByText('Time change')).toBeInTheDocument();
+    expect(screen.getByText('Saumya xyz')).toBeInTheDocument();
+    expect(screen.getByText('photoLink')).toBeInTheDocument();
+    expect(screen.getByText('videoLink')).toBeInTheDocument();
   });
 });

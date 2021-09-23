@@ -20,13 +20,16 @@ describe('Testing Organization People List Card', () => {
         <OrgPeopleListCard
           key="123"
           id=""
-          memberName=""
-          memberLocation=""
-          joinDate=""
+          memberName="John Doe"
+          memberLocation="USA"
+          joinDate="04/07/2005"
           memberImage=""
         />
       </ApolloProvider>
     );
     expect(screen.getByText('Joined:')).toBeInTheDocument();
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    expect(screen.getByText('USA')).toBeInTheDocument();
+    expect(screen.getByText('04/07/2005')).toBeInTheDocument();
   });
 });

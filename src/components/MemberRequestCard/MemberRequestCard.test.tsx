@@ -20,14 +20,18 @@ describe('Testing Member Request Card', () => {
         <MemberRequestCard
           key="123"
           id=""
-          memberName=""
-          memberLocation=""
-          joinDate=""
+          memberName="Saumya Singh"
+          memberLocation="India"
+          joinDate="07/04/2019"
           memberImage=""
-          email=""
+          email="xyz@gmail.com"
         />
       </ApolloProvider>
     );
     expect(screen.getByText('Joined:')).toBeInTheDocument();
+    expect(screen.getByText('Saumya Singh')).toBeInTheDocument();
+    expect(screen.getByText('India')).toBeInTheDocument();
+    expect(screen.getByText('07/04/2019')).toBeInTheDocument();
+    expect(screen.getByText('xyz@gmail.com')).toBeInTheDocument();
   });
 });

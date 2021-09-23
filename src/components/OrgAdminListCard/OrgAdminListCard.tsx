@@ -57,7 +57,9 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
                   <p>Dogs Care</p>
                 )}
               </p>
-              <p className={styles.memberfont}>{props.memberLocation}</p>
+              <p className={styles.memberfont}>
+                <span>{props.memberLocation}</span>
+              </p>
               <p className={styles.memberfontcreated}>saumya47999@gmail.com</p>
             </div>
             <div className={styles.singledetails_data_right}>

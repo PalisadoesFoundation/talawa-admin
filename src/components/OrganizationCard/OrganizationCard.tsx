@@ -30,8 +30,8 @@ function OrganizationCard(props: OrganizationCardProps): JSX.Element {
               <h4>{props.name}</h4>
               <h5>
                 Owner:
+                <span>{props.firstName}</span>
                 <span>
-                  {props.firstName}
                   &nbsp;
                   {props.lastName}
                 </span>
