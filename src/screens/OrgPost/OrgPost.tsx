@@ -9,9 +9,14 @@ import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
 import { useMutation, useQuery } from '@apollo/client';
 import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
+import { useSelector } from 'react-redux';
+import { RootState } from 'state/reducers';
 
 function OrgPost(): JSX.Element {
   const [postmodalisOpen, setPostModalIsOpen] = useState(false);
+
+  const appRoutes = useSelector((state: RootState) => state.appRoutes);
+  const { targets, configUrl } = appRoutes;
 
   const showInviteModal = () => {
     setPostModalIsOpen(true);
@@ -31,13 +36,6 @@ function OrgPost(): JSX.Element {
   const { data, loading: loading2 } = useQuery(ORGANIZATION_POST_LIST, {
     variables: { id: currentUrl },
   });
-
-  const url = '/orgdash/id=' + currentUrl;
-  const url_2 = '/orgpeople/id=' + currentUrl;
-  const url_3 = '/orgevents/id=' + currentUrl;
-  const url_4 = '/orgcontribution/id=' + currentUrl;
-  const url_5 = '/orgpost/id=' + currentUrl;
-  const url_6 = '/orgsetting/id=' + currentUrl;
 
   const CreatePost = async () => {
     const { data } = await create({
@@ -67,16 +65,7 @@ function OrgPost(): JSX.Element {
 
   return (
     <>
-      <AdminNavbar
-        targets={[
-          { name: 'Dashboard', url: url },
-          { name: 'People', url: url_2 },
-          { name: 'Events', url: url_3 },
-          { name: 'Contributions', url: url_4 },
-          { name: 'Posts', url: url_5 },
-        ]}
-        url_1={url_6}
-      />
+      <AdminNavbar targets={targets} url_1={configUrl} />
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>

@@ -16,6 +16,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 const errorLink = onError(({ graphQLErrors }) => {
   if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message));
 });
+import { Provider } from 'react-redux';
+import { store } from './state/store';
 
 const httpLink = new HttpLink({
   uri: 'http://localhost:4000/graphql',
@@ -32,7 +34,9 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 ReactDOM.render(
   <ApolloProvider client={client}>
     <BrowserRouter>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </BrowserRouter>
   </ApolloProvider>,
   document.getElementById('root')

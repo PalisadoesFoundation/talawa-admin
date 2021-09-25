@@ -5,27 +5,15 @@ import Col from 'react-bootstrap/Col';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import OrgContriCards from 'components/OrgContriCards/OrgContriCards';
 import ContriStats from 'components/ContriStats/ContriStats';
+import { useSelector } from 'react-redux';
+import { RootState } from 'state/reducers';
 function OrgContribution(): JSX.Element {
-  const currentUrl = window.location.href.split('=')[1];
-  const url = '/orgdash/id=' + currentUrl;
-  const url_2 = '/orgpeople/id=' + currentUrl;
-  const url_3 = '/orgevents/id=' + currentUrl;
-  const url_4 = '/orgcontribution/id=' + currentUrl;
-  const url_5 = '/orgpost/id=' + currentUrl;
-  const url_6 = '/orgsetting/id=' + currentUrl;
+  const appRoutes = useSelector((state: RootState) => state.appRoutes);
+  const { targets, configUrl } = appRoutes;
 
   return (
     <>
-      <AdminNavbar
-        targets={[
-          { name: 'Dashboard', url: url },
-          { name: 'People', url: url_2 },
-          { name: 'Events', url: url_3 },
-          { name: 'Contributions', url: url_4 },
-          { name: 'Posts', url: url_5 },
-        ]}
-        url_1={url_6}
-      />
+      <AdminNavbar targets={targets} url_1={configUrl} />
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
