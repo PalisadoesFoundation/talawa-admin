@@ -117,13 +117,13 @@ a {
   box-shadow: none !important;
 }
 
-.dropdowntoggle{
+.dropdowntoggle {
   display: flex !important;
   align-items: center !important;
   margin-top: 8px;
 }
 
-.dropdownitem i{
+.dropdownitem i {
   margin-right: 8px;
 }
 

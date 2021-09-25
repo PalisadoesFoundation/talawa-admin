@@ -1,9 +1,9 @@
-.modalbtn{
-    display: flex !important;
-    margin-left: auto;
-    align-items: center;
+.modalbtn {
+  display: flex !important;
+  margin-left: auto;
+  align-items: center;
 }
 
-.modalbtn i{
-    margin-right: 8px;
+.modalbtn i {
+  margin-right: 8px;
 }

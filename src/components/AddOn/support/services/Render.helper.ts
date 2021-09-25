@@ -1,5 +1,3 @@
-class RenderHelper {
-    
-}
+class RenderHelper {}
 
 export default RenderHelper;
