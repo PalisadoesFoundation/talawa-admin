@@ -7,6 +7,13 @@ interface ContriStatsProps {
   highestAmount: string;
   totalAmount: string;
 }
+
+/**
+ * Displays statistics related to all the recent contributions made per country
+ * @author Saumya Singh
+ * @param {props} ContriStatsProps
+ * @returns template for the contry statistics display 
+ */
 function ContriStats(props: ContriStatsProps): JSX.Element {
   return (
     <>

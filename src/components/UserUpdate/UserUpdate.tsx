@@ -7,6 +7,12 @@ interface UserUpdateProps {
   id: string;
 }
 
+/**
+ * Allows for updating of user information
+ * @author Saumya Singh
+ * @param {props} UserUpdateProps 
+ * @returns template of a form receiving user information
+ */
 function UserUpdate(props: UserUpdateProps): JSX.Element {
   const [formState, setFormState] = React.useState({
     firstName: '',
@@ -19,6 +25,12 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
 
   const [login] = useMutation(UPDATE_USER_MUTATION);
 
+  /**
+   * Updates a user's login information
+   * @author Yasharth Dubey
+   * @param none 
+   * @async
+   */
   const login_link = async () => {
     try {
       const { data } = await login({

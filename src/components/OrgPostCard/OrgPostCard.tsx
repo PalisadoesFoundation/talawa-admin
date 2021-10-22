@@ -15,9 +15,21 @@ interface OrgPostCardProps {
   postVideo: string;
 }
 
+/**
+ * Displays a posts made by members of an organization
+ * @author Saumya Singh
+ * @param {props} OrgPostCardProps 
+ * @returns template which displays a post and its respective details
+ */
 function OrgPostCard(props: OrgPostCardProps): JSX.Element {
   const [create] = useMutation(DELETE_POST_MUTATION);
 
+  /**
+   * Allows for the deletion of a post made
+   * @author Saumya Singh
+   * @param none 
+   * @async
+   */
   const DeletePost = async () => {
     const sure = window.confirm('Are you sure you want to delete Post ?');
     if (sure) {

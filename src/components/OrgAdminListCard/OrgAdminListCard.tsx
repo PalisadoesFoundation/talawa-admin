@@ -16,9 +16,21 @@ interface OrgPeopleListCardProps {
 }
 const currentUrl = window.location.href.split('=')[1];
 
+/**
+ * Displays the details about an organization administrator
+ * @author Yasharth Dubey
+ * @param {props} OrgPeopleListCard
+ * @returns template for the card that displays information on a selected admin
+ */
 function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
   const [remove] = useMutation(REMOVE_ADMIN_MUTATION);
 
+  /**
+   * Allows user to remove an organization administrator from their position
+   * @author Yasharth Dubey
+   * @param none, howeever passes the url for the organization and the ID of the organization admin to be removed 
+   * @async 
+   */
   const RemoveAdmin = async () => {
     console.log(currentUrl);
     console.log(props.id);

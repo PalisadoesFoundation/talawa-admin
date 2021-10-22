@@ -18,10 +18,23 @@ interface MemberRequestCardProps {
   email: string;
 }
 
+/**
+ * Displays a member request on a card to the active user
+ * @author Yasharth Dubey
+ * @param {props} MemberRequestCardProps
+ * @returns template for the member request card, displaying information on the member request
+ */
 function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
   const [acceptMutation] = useMutation(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
   const [rejectMutation] = useMutation(REJECT_ORGANIZATION_REQUEST_MUTATION);
 
+  
+  /**
+   * Allows for the acceptance of a member via the member request card
+   * @author Yasharth Dubey
+   * @param none however it passes the ID of the member to be added
+   * @async 
+   */
   const AddMember = async () => {
     try {
       const { data } = await acceptMutation({

@@ -11,6 +11,13 @@ interface OrgContriCardsProps {
   contriTransactionId: string;
   userEmail: string;
 }
+
+/**
+ * Displays a card with contributions made to an organization
+ * @author Saumya Singh
+ * @param {props} OrgCountriCardsProps
+ * @returns template 
+ */
 function OrgContriCards(props: OrgContriCardsProps): JSX.Element {
   return (
     <>

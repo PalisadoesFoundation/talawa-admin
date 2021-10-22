@@ -14,10 +14,22 @@ interface UserListCardProps {
   memberImage: string;
 }
 
+/**
+ * Displays a list of organization members to user
+ * @author Saumya Singh
+ * @param {props} UserListCardProps
+ * @returns template
+ */
 function UserListCard(props: UserListCardProps): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
 
+  /**
+   * Allows for the addition of organization admins
+   * @author Yasharth Darbey
+   * @param none 
+   * @async 
+   */
   const AddAdmin = async () => {
     try {
       const { data } = await adda({

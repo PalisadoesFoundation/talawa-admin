@@ -14,10 +14,22 @@ interface OrgPeopleListCardProps {
   memberImage: string;
 }
 
+/**
+ * Displays a list of members of an organization
+ * @author Saumya Singh
+ * @param {props} OrgPeopleListCardProps 
+ * @returns template displaying details on a member of the organization
+ */
 function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
   const [remove] = useMutation(REMOVE_MEMBER_MUTATION);
 
+  /**
+   * Allows for the removal of a member from an organization
+   * @author Yasharth Dubey
+   * @param none
+   * @async 
+   */
   const RemoveMember = async () => {
     const sure = window.confirm('Are you sure you want to Remove Member ?');
     if (sure) {

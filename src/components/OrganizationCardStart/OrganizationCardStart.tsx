@@ -8,6 +8,12 @@ interface OrganizationCardStartProps {
   name: string;
 }
 
+/**
+ * Displays a base card with an image  the organbization and the name of the organization
+ * @author Yasharth Dubey
+ * @param {props} OrganizationCardStartProps
+ * @returns template containing a provided image of and name of the organization
+ */
 function OrganizationCardStart(props: OrganizationCardStartProps): JSX.Element {
   const uri = '/orghome/i=' + props.id;
 

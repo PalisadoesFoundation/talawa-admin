@@ -10,6 +10,12 @@ interface NavbarProps {
   url_1: string;
 }
 
+/**
+ * Displays the navigation bar to Admin Users
+ * @author Yasharth Dubey, X
+ * @param {targets, url_1} NavbarProps
+ * @returns template for the admin navigation bar  
+ */
 function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
   return (
     <>

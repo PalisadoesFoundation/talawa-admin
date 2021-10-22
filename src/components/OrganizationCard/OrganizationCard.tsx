@@ -10,6 +10,12 @@ interface OrganizationCardProps {
   firstName: string;
 }
 
+/**
+ * Displays information regarding an organization
+ * @author Yasharth Dubey
+ * @param {props} OrganizationCardProps 
+ * @returns template for card displaying organization information, inclusive of the name of the owner
+ */
 function OrganizationCard(props: OrganizationCardProps): JSX.Element {
   const uri = '/superorghome/i=' + props.id;
 

@@ -8,6 +8,12 @@ interface OrgUpdateProps {
   orgid: string;
 }
 
+/**
+ * Allows for the updating of organization information
+ * @author
+ * @param {props} OrgUpdateProps 
+ * @returns 
+ */
 function OrgUpdate(props: OrgUpdateProps): JSX.Element {
   const [formState, setFormState] = React.useState({
     orgName: '',
@@ -22,6 +28,11 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
 
   const [login] = useMutation(UPDATE_ORGANIZATION_MUTATION);
 
+  /**
+   * Updates organization information
+   * @author
+   * @param none 
+   */
   const login_link = async () => {
     try {
       const { data } = await login({

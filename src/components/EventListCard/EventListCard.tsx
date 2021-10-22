@@ -15,9 +15,22 @@ interface EventListCardProps {
   regDate: string;
   regDays: string;
 }
+
+/**
+ * Displays a list of events to the active user
+ * @author Saumya Singh
+ * @param {props} EventListCardProps
+ * @returns template for the event list card which displays information on an event
+ */
 function EventListCard(props: EventListCardProps): JSX.Element {
   const [create] = useMutation(DELETE_EVENT_MUTATION);
 
+  /**
+   * Allows the active user to delete an event from list of events
+   * @author Saumya Singh
+   * @param none however passes the ID of the event 
+   * @async
+   */
   const DeleteEvent = async () => {
     const sure = window.confirm('Are you sure you want to delete Event ?');
     if (sure) {

@@ -12,6 +12,12 @@ interface SuperDashListCardProps {
   image: string;
 }
 
+/**
+ * Displays a list of organizations and information about them to a super admin
+ * @author Saumya Singh
+ * @param {props} SuperDashListCardProps 
+ * @returns template showing details of the organization that would be showed (and maybe modified) to a super admin
+ */
 function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
   function Click() {
     const url = '/orgdash/id=' + props.id;

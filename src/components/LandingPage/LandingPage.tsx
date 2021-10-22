@@ -7,6 +7,13 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-modal';
 import Carousel from 'react-bootstrap/Carousel';
+
+/**
+ * Displays the landing page to users
+ * @author Saumya Singh
+ * @param none 
+ * @returns template for the Talawa-Admin Management Portal landing page,includes a carousel of predefined images
+ */
 function LandingPage(): JSX.Element {
   return (
     <>
