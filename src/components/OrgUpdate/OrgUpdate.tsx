@@ -1,6 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import React from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 import styles from './OrgUpdate.module.css';
 
 interface OrgUpdateProps {
@@ -33,7 +34,13 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
         },
       });
       if (data) {
-        window.alert('Successful updated');
+        toast.success('Successfully updated.', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
         window.location.reload();
       }
     } catch (error) {
@@ -43,6 +50,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
 
   return (
     <>
+      <ToastContainer />
       <div id="orgupdate" className={styles.userupdatediv}>
         <form>
           {/* <h3 className={styles.settingstitle}>Update Your Details</h3> */}
