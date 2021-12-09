@@ -65,7 +65,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install Dependencies
-        run: npm i
+        run: npm install --save --legacy-peer-deps
         
       - name: test
         run: npm test -- --coverage
