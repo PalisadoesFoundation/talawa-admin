@@ -58,4 +58,13 @@ jobs:
 
        - name: Perform CodeQL Analysis
          uses: github/codeql-action/analyze@v1
-       
+         
+  Code-Coverage:
+    name: Code Coverage with CodeCov
+    runs-on: ubuntu-latest
+    steps:
+      - name: CodeCov
+        uses: codecov/codecov-action@v2.1.0
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
