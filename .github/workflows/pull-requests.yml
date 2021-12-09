@@ -62,11 +62,9 @@ jobs:
   Code-Coverage:
     name: Code Coverage with CodeCov
     runs-on: ubuntu-latest
+    needs: CodeQL
     steps:
       - uses: actions/checkout@v2
-      - name: Install Dependencies
-        run: npm install --save --legacy-peer-deps
-        
       - name: test
         run: npm test -- --coverage
 
