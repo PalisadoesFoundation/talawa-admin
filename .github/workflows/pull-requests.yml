@@ -63,6 +63,9 @@ jobs:
     name: Code Coverage with CodeCov
     runs-on: ubuntu-latest
     steps:
+      - name: Install Dependencies
+        run: npm i
+        
       - name: test
         run: npm test -- --coverage
 
