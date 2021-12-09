@@ -63,7 +63,10 @@ jobs:
     name: Code Coverage with CodeCov
     runs-on: ubuntu-latest
     steps:
-      - name: CodeCov
+      - name: test
+        run: npm test -- --coverage
+
+      - name: upload coverage
         uses: codecov/codecov-action@v2.1.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
