@@ -6,7 +6,15 @@ import Logo from 'assets/talawa-logo-200x200.png';
 import Row from 'react-bootstrap/Row';
 import { Nav } from 'react-bootstrap';
 interface NavbarProps {
-  targets: { url: string; name: string }[];
+  targets: {
+    url?: string;
+    name: string;
+    subTargets?: {
+      url: string;
+      name: string;
+      icon?: string;
+    }[];
+  }[];
   url_1: string;
 }
 
@@ -21,13 +29,50 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
               <strong>Talawa Portal</strong>
             </a>
             <div className={styles.navit}>
-              {targets.map(({ name, url }) => (
-                <Nav.Item key={name} className={styles.navitems}>
-                  <Nav.Link href={url} id={name} className={styles.navlinks}>
-                    {name}
-                  </Nav.Link>
-                </Nav.Item>
-              ))}
+              {targets.map(({ name, url, subTargets }) => {
+                return url ? (
+                  <Nav.Item key={name} className={styles.navitems}>
+                    <Nav.Link href={url} id={name} className={styles.navlinks}>
+                      {name}
+                    </Nav.Link>
+                  </Nav.Item>
+                ) : (
+                  <Nav.Item key={name} className={styles.navitems}>
+                    <Dropdown className={styles.dropdowns}>
+                      <Dropdown.Toggle
+                        variant=""
+                        className={styles.dropdowntoggle}
+                      >
+                        <Nav.Link
+                          href={url}
+                          id={name}
+                          className={styles.navlinks}
+                        >
+                          {name}
+                        </Nav.Link>
+                      </Dropdown.Toggle>
+                      {subTargets && (
+                        <Dropdown.Menu>
+                          {subTargets.map((subTarget: any, index: number) => (
+                            <Dropdown.Item
+                              key={index}
+                              href={subTarget.url}
+                              className={styles.dropdownitem}
+                            >
+                              <i
+                                className={`fa ${
+                                  subTarget.icon ? subTarget.icon : 'fa-cubes'
+                                }`}
+                              ></i>
+                              {subTarget.name}
+                            </Dropdown.Item>
+                          ))}
+                        </Dropdown.Menu>
+                      )}
+                    </Dropdown>
+                  </Nav.Item>
+                );
+              })}
             </div>
           </Row>
         </Navbar.Brand>

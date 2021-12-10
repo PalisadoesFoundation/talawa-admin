@@ -8,9 +8,15 @@ import OrgAdminListCard from 'components/OrgAdminListCard/OrgAdminListCard';
 import UserListCard from 'components/UserListCard/UserListCard';
 import { useQuery } from '@apollo/client';
 import { ADMIN_LIST, MEMBERS_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../state/reducers';
+
 function OrganizationPeople(): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
   let data, loading;
+
+  const appRoutes = useSelector((state: RootState) => state.appRoutes);
+  const { targets, configUrl } = appRoutes;
 
   const [t, setT] = React.useState(0);
 
@@ -40,26 +46,10 @@ function OrganizationPeople(): JSX.Element {
     );
   }
 
-  const url = '/orgdash/id=' + currentUrl;
-  const url_2 = '/orgpeople/id=' + currentUrl;
-  const url_3 = '/orgevents/id=' + currentUrl;
-  const url_4 = '/orgcontribution/id=' + currentUrl;
-  const url_5 = '/orgpost/id=' + currentUrl;
-  const url_6 = '/orgsetting/id=' + currentUrl;
-
   return (
     <>
       <div>
-        <AdminNavbar
-          targets={[
-            { name: 'Dashboard', url: url },
-            { name: 'People', url: url_2 },
-            { name: 'Events', url: url_3 },
-            { name: 'Contributions', url: url_4 },
-            { name: 'Posts', url: url_5 },
-          ]}
-          url_1={url_6}
-        />
+        <AdminNavbar targets={targets} url_1={configUrl} />
       </div>
       <Row>
         <Col sm={3}>
@@ -132,9 +122,6 @@ function OrganizationPeople(): JSX.Element {
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>Members</p>
-              <div className={styles.addbtnmain}>
-                <button className={styles.addbtn}>Add User</button>
-              </div>
             </Row>
             {t == 0
               ? data

@@ -2,10 +2,12 @@ import { useMutation } from '@apollo/client';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import React from 'react';
 import styles from './OrgUpdate.module.css';
+
 interface OrgUpdateProps {
   id: string;
   orgid: string;
 }
+
 function OrgUpdate(props: OrgUpdateProps): JSX.Element {
   const [formState, setFormState] = React.useState({
     orgName: '',

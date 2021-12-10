@@ -128,3 +128,17 @@ export const MEMBERSHIP_REQUEST = gql`
     }
   }
 `;
+
+// display posts
+
+export const ORGANIZATION_POST_LIST = gql`
+  query PostsByOrganization($id: ID!) {
+    postsByOrganization(id: $id) {
+      _id
+      title
+      text
+      imageUrl
+      videoUrl
+    }
+  }
+`;

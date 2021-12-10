@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './SuperDashListCard.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+
 interface SuperDashListCardProps {
   key: string;
   id: string;
@@ -10,6 +11,7 @@ interface SuperDashListCardProps {
   createdDate: string;
   image: string;
 }
+
 function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
   function Click() {
     const url = '/orgdash/id=' + props.id;

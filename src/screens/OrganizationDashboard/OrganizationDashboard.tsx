@@ -7,9 +7,14 @@ import AboutImg from 'assets/images/dogo.png';
 import { useMutation, useQuery } from '@apollo/client';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import { useSelector } from 'react-redux';
+import { RootState } from 'state/reducers';
 
 function OrganizationDashboard(): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
+
+  const appRoutes = useSelector((state: RootState) => state.appRoutes);
+  const { targets, configUrl } = appRoutes;
 
   const { data, loading } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: currentUrl },
@@ -34,25 +39,10 @@ function OrganizationDashboard(): JSX.Element {
       </>
     );
   }
-  const url = '/orgdash/id=' + currentUrl;
-  const url_2 = '/orgpeople/id=' + currentUrl;
-  const url_3 = '/orgevents/id=' + currentUrl;
-  const url_4 = '/orgcontribution/id=' + currentUrl;
-  const url_5 = '/orgpost/id=' + currentUrl;
-  const url_6 = '/orgsetting/id=' + currentUrl;
 
   return (
     <>
-      <AdminNavbar
-        targets={[
-          { name: 'Dashboard', url: url },
-          { name: 'People', url: url_2 },
-          { name: 'Events', url: url_3 },
-          { name: 'Contributions', url: url_4 },
-          { name: 'Posts', url: url_5 },
-        ]}
-        url_1={url_6}
-      />
+      <AdminNavbar targets={targets} url_1={configUrl} />
       <Row className={styles.toporginfo}>
         <p></p>
         <p className={styles.toporgname}>{data.organizations[0].name}</p>

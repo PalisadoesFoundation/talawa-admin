@@ -7,6 +7,7 @@ import {
   ACCEPT_ORGANIZATION_REQUEST_MUTATION,
   REJECT_ORGANIZATION_REQUEST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+
 interface MemberRequestCardProps {
   key: string;
   id: string;
@@ -16,6 +17,7 @@ interface MemberRequestCardProps {
   memberImage: string;
   email: string;
 }
+
 function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
   const [acceptMutation] = useMutation(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
   const [rejectMutation] = useMutation(REJECT_ORGANIZATION_REQUEST_MUTATION);
@@ -36,17 +38,19 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
   };
 
   const RejectMember = async () => {
-    try {
-      const { data } = await rejectMutation({
-        variables: {
-          userid: props.id,
-        },
-      });
-      console.log(data);
-      window.alert('it is removed');
-      window.location.reload();
-    } catch (error) {
-      window.alert(error);
+    const sure = window.confirm('Are you sure you want to Reject Request ?');
+    if (sure) {
+      try {
+        const { data } = await rejectMutation({
+          variables: {
+            userid: props.id,
+          },
+        });
+        console.log(data);
+        window.location.reload();
+      } catch (error) {
+        window.alert(error);
+      }
     }
   };
 

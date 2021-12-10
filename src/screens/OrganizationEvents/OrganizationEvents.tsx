@@ -10,9 +10,14 @@ import EventListCard from 'components/EventListCard/EventListCard';
 import { useMutation, useQuery } from '@apollo/client';
 import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
+import { useSelector } from 'react-redux';
+import { RootState } from 'state/reducers';
 
 function OrganizationEvents(): JSX.Element {
   const [eventmodalisOpen, setEventModalIsOpen] = React.useState(false);
+
+  const appRoutes = useSelector((state: RootState) => state.appRoutes);
+  const { targets, configUrl } = appRoutes;
 
   const showInviteModal = () => {
     setEventModalIsOpen(true);
@@ -74,25 +79,10 @@ function OrganizationEvents(): JSX.Element {
   }
 
   console.log(data);
-  const url = '/orgdash/id=' + currentUrl;
-  const url_2 = '/orgpeople/id=' + currentUrl;
-  const url_3 = '/orgevents/id=' + currentUrl;
-  const url_4 = '/orgcontribution/id=' + currentUrl;
-  const url_5 = '/orgpost/id=' + currentUrl;
-  const url_6 = '/orgsetting/id=' + currentUrl;
 
   return (
     <>
-      <AdminNavbar
-        targets={[
-          { name: 'Dashboard', url: url },
-          { name: 'People', url: url_2 },
-          { name: 'Events', url: url_3 },
-          { name: 'Contributions', url: url_4 },
-          { name: 'Posts', url: url_5 },
-        ]}
-        url_1={url_6}
-      />
+      <AdminNavbar targets={targets} url_1={configUrl} />
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
@@ -162,7 +152,7 @@ function OrganizationEvents(): JSX.Element {
         <section id={styles.grid_wrapper}>
           <div className={styles.form_wrapper}>
             <div className={styles.flexdir}>
-              <p className={styles.titlemodal}>Create Event</p>
+              <p className={styles.titlemodal}>Event Details</p>
               <a onClick={hideInviteModal} className={styles.cancel}>
                 <i className="fa fa-times"></i>
               </a>
