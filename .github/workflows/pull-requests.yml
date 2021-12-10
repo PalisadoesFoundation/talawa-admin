@@ -3,8 +3,7 @@ on:
   pull_request:
     branches:
       - '**'
-
-#jobs:
+jobs:
  # PR-Greeting:
   #  name: Greeting Message to user
    #steps:
