@@ -1,9 +1,8 @@
 name: PR Workflow
 on:
-  pull_request:
+  pull_request_target:
     branches:
       - '**'
-
 jobs:
   PR-Greeting:
     name: Greeting Message to user
