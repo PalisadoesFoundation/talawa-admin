@@ -33,14 +33,16 @@ function EventListCard(props: EventListCardProps): JSX.Element {
           },
         });
         console.log(data);
-        toast.success('Event deleted successfully. Reload to continue', {
+        toast.success('Event deleted successfully', {
           position: 'top-right',
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
         });
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 5000);
       } catch (error) {
         toast.error('Could not delete the event', {
           position: 'top-right',
@@ -126,5 +128,5 @@ function EventListCard(props: EventListCardProps): JSX.Element {
     </>
   );
 }
-export {};
+export { };
 export default EventListCard;
