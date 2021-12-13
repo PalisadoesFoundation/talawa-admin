@@ -1,6 +1,5 @@
 import React from 'react';
-import { render, screen, act, fireEvent } from '@testing-library/react';
-import { mount, ReactWrapper } from 'enzyme'
+import { render, screen } from '@testing-library/react';
 import EventListCard from './EventListCard';
 import {
   ApolloClient,
@@ -10,8 +9,6 @@ import {
 } from '@apollo/client';
 import ModalResponse from 'components/Response/ModalResponse';
 import userEvent from '@testing-library/user-event';
-import { ToastContainer } from 'react-toastify'
-
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
@@ -91,6 +88,8 @@ describe('Testing Event List Card', () => {
       </ApolloProvider>
     );
     userEvent.click(screen.getByText('Okay', { selector: 'button' }));
-    expect(await screen.queryByText('Could not delete the event')).toBeInTheDocument();
+    expect(
+      await screen.queryByText('Are you sure you want to delete this event')
+    ).toBeNull();
   });
 });

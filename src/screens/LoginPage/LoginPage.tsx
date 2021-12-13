@@ -94,7 +94,7 @@ function LoginPage(): JSX.Element {
           },
         });
         console.log(data);
-        toast.success('🦄 User created successfully', {
+        toast.success('User created successfully', {
           position: 'top-right',
           autoClose: 5000,
           hideProgressBar: false,

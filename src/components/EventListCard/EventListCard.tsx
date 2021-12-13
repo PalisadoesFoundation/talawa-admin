@@ -128,5 +128,5 @@ function EventListCard(props: EventListCardProps): JSX.Element {
     </>
   );
 }
-export { };
+export {};
 export default EventListCard;
