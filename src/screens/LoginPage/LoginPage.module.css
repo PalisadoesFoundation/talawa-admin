@@ -259,19 +259,29 @@ form > br {
   border-bottom-right-radius: 10%;
   z-index:-1;
 } */
+
 .homeright {
   width: 80%;
   margin-left: 40px;
   margin-bottom: 30px;
+
 }
+
+
 .homeright > h1 {
   font-size: 20px;
   padding-top: 35px;
-  width: 40%;
+  width: 20%;
   padding-bottom: 6px;
   border-bottom: 3px solid #31bb6b;
-  margin-bottom: 20px;
+  
+  margin-bottom: 20px; 
+
 }
+
+
+
+
 /* .homeright>h2{
   width:75%;
   font-size: 16px;
