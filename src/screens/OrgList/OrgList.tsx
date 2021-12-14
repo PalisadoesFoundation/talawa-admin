@@ -81,7 +81,10 @@ function OrgList(): JSX.Element {
         </Navbar.Brand>
         <button
           className={styles.logoutbtn}
-          onClick={() => window.location.replace('/')}
+          onClick={() => {
+            localStorage.clear();
+            window.location.replace('/');
+          }}
         >
           Logout
         </button>
