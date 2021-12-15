@@ -2,6 +2,8 @@ import React from 'react';
 import styles from './UserListCard.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import ModalResponse from 'components/Response/ModalResponse';
+import { ToastContainer, toast } from 'react-toastify';
 import { useMutation } from '@apollo/client';
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 
@@ -18,6 +20,9 @@ function UserListCard(props: UserListCardProps): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
 
+  const [modalNotification, setModalNotification] = React.useState(false);
+  const [notificationText, setNotificationText] = React.useState('');
+
   const AddAdmin = async () => {
     try {
       const { data } = await adda({
@@ -27,15 +32,49 @@ function UserListCard(props: UserListCardProps): JSX.Element {
         },
       });
       console.log(data);
-      window.alert('The Event is deleted');
-      window.location.reload();
+      toast.success('Event deleted', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+      });
     } catch (error) {
-      window.alert(error);
+      toast.error(`Organization's user is not a member`, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+      });
     }
+  };
+
+  const ConfirmationHandler = () => {
+    setModalNotification(true);
+    setNotificationText('Are you sure you want to add Admin');
+  };
+
+  const ContinueHandler = () => {
+    AddAdmin();
+    setModalNotification(false);
+    setNotificationText('');
+  };
+
+  const CloseHandler = () => {
+    setModalNotification(false);
+    setNotificationText('');
   };
 
   return (
     <>
+      <ToastContainer />
+      <ModalResponse
+        show={modalNotification}
+        message={notificationText}
+        handleClose={CloseHandler}
+        handleContinue={ContinueHandler}
+      />
       <div className={styles.peoplelistdiv}>
         <Row className={styles.memberlist}>
           {props.memberImage ? (
@@ -64,7 +103,7 @@ function UserListCard(props: UserListCardProps): JSX.Element {
               </p>
               <button
                 className={styles.memberfontcreatedbtn}
-                onClick={AddAdmin}
+                onClick={ConfirmationHandler}
               >
                 Add Admin
               </button>

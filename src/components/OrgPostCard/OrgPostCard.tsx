@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './OrgPostCard.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { ToastContainer, toast } from 'react-toastify';
 import { DELETE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 
@@ -19,7 +20,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
   const [create] = useMutation(DELETE_POST_MUTATION);
 
   const DeletePost = async () => {
-    const sure = window.confirm('Are you sure you want to delete Post ?');
+    const sure = true;
     if (sure) {
       try {
         const { data } = await create({
@@ -30,13 +31,20 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
         console.log(data);
         window.location.reload();
       } catch (error) {
-        window.alert(error);
+        toast.error('User is not authorized for performing this operation', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
       }
     }
   };
 
   return (
     <>
+      <ToastContainer />
       <Row>
         <div className={styles.cards}>
           <div className={styles.dispflex}>

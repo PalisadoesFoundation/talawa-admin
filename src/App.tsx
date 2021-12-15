@@ -32,7 +32,7 @@ function App(): JSX.Element {
   };
 
   const fetchInstalled = async () => {
-    const result = await fetch(`http://localhost:3005/installed`);
+    const result = await fetch(`http://localhost:4000/installed`);
     return await result.json();
   };
 
