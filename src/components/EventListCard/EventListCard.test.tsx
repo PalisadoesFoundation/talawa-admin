@@ -82,8 +82,12 @@ describe('Testing Event List Card', () => {
         <ModalResponse
           show={true}
           message=""
-          handleClose={() => {}}
-          handleContinue={() => {}}
+          handleClose={() => {
+            console.log('');
+          }}
+          handleContinue={() => {
+            console.log('');
+          }}
         />
       </ApolloProvider>
     );

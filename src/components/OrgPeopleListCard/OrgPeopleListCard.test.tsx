@@ -68,8 +68,12 @@ describe('Testing Organization People List Card', () => {
         <ModalResponse
           show={true}
           message=""
-          handleClose={() => {}}
-          handleContinue={() => {}}
+          handleClose={() => {
+            console.log('');
+          }}
+          handleContinue={() => {
+            console.log('');
+          }}
         />
       </ApolloProvider>
     );

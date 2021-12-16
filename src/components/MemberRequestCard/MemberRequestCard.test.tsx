@@ -72,8 +72,12 @@ describe('Testing Member Request Card', () => {
         <ModalResponse
           show={true}
           message=""
-          handleClose={() => {}}
-          handleContinue={() => {}}
+          handleClose={() => {
+            console.log('');
+          }}
+          handleContinue={() => {
+            console.log('');
+          }}
         />
       </ApolloProvider>
     );
