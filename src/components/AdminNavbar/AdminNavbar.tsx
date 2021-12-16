@@ -92,7 +92,12 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
               <i className="fa fa-cogs"></i>
               Settings
             </Dropdown.Item>
-            <Dropdown.Item href="/">
+            <Dropdown.Item
+              onClick={() => {
+                localStorage.clear();
+                window.location.replace('/');
+              }}
+            >
               <i className="fa fa-arrow-right"></i>
               Logout
             </Dropdown.Item>

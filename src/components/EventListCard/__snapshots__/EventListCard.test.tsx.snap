@@ -1,0 +1,150 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing Event List Card should delete event when okay is clicked 1`] = `
+<body
+  class="modal-open"
+  style="padding-right: 0px;"
+>
+  <div
+    aria-hidden="true"
+  >
+    <div
+      class="Toastify"
+    />
+    <div
+      class="orglist row"
+    >
+      <img
+        class="orgimg"
+        src="https://via.placeholder.com/200x100"
+      />
+      <div
+        class="singledetails col"
+      >
+        <div
+          class="singledetails_data_left"
+        >
+          <p
+            class="orgname"
+          >
+            <p>
+              Shelter for Dogs
+            </p>
+          </p>
+          <p
+            class="orgfont"
+          >
+            <p>
+              Gujarat
+            </p>
+          </p>
+          <p
+            class="orgfont"
+          >
+            Admin: 
+            <span>
+              5
+            </span>
+          </p>
+          <p
+            class="orgfont"
+          >
+            Member: 
+            <span>
+              107
+            </span>
+          </p>
+        </div>
+        <div
+          class="singledetails_data_right"
+        >
+          <p
+            class="orgfont"
+          >
+            Days: 
+            <span>
+              3
+            </span>
+          </p>
+          <p
+            class="orgfont"
+          >
+            On: 
+            <span>
+              07/04/2020
+            </span>
+          </p>
+          <button
+            class="orgfontcreatedbtn"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+    <hr />
+  </div>
+  <div
+    class="fade modal-backdrop show"
+  />
+  <div
+    aria-modal="true"
+    class="fade modal show"
+    role="dialog"
+    style="display: block;"
+    tabindex="-1"
+  >
+    <div
+      class="modal-dialog"
+    >
+      <div
+        class="modal-content"
+      >
+        <div
+          class="modal-header"
+        >
+          <div
+            class="modal-title h4"
+          >
+            Confirmation
+          </div>
+          <button
+            class="close"
+            type="button"
+          >
+            <span
+              aria-hidden="true"
+            >
+              ×
+            </span>
+            <span
+              class="sr-only"
+            >
+              Close
+            </span>
+          </button>
+        </div>
+        <div
+          class="modal-body"
+        />
+        <div
+          class="modal-footer"
+        >
+          <button
+            class="btn btn-secondary"
+            type="button"
+          >
+            Okay
+          </button>
+          <button
+            class="btn btn-secondary"
+            type="button"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;

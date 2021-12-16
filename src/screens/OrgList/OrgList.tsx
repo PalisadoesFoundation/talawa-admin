@@ -6,6 +6,7 @@ import { Form } from 'antd';
 import Navbar from 'react-bootstrap/Navbar';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { ToastContainer, toast } from 'react-toastify';
 import SuperDashListCard from 'components/SuperDashListCard/SuperDashListCard';
 import {
   ORGANIZATION_LIST,
@@ -43,7 +44,14 @@ function OrgList(): JSX.Element {
       },
     });
     console.log(data);
-    window.alert('Congratulation the Organization is created');
+    //window.alert('Congratulation the Organization is created');
+    toast.success('Organization created successfully', {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+    });
     window.location.replace('/orglist');
   };
 
@@ -79,7 +87,17 @@ function OrgList(): JSX.Element {
             </a>
           </Row>
         </Navbar.Brand>
+        <button
+          className={styles.logoutbtn}
+          onClick={() => {
+            localStorage.clear();
+            window.location.replace('/');
+          }}
+        >
+          Logout
+        </button>
       </Navbar>
+      <ToastContainer />
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>

@@ -2,6 +2,8 @@ import React from 'react';
 import styles from './OrgPeopleListCard.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import ModalResponse from 'components/Response/ModalResponse';
+import { ToastContainer, toast } from 'react-toastify';
 import { useMutation } from '@apollo/client';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 
@@ -18,8 +20,11 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
   const [remove] = useMutation(REMOVE_MEMBER_MUTATION);
 
+  const [modalNotification, setModalNotification] = React.useState(false);
+  const [notificationText, setNotificationText] = React.useState('');
+
   const RemoveMember = async () => {
-    const sure = window.confirm('Are you sure you want to Remove Member ?');
+    const sure = true;
     if (sure) {
       try {
         const { data } = await remove({
@@ -29,15 +34,50 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
           },
         });
         console.log(data);
-        window.alert('The Member is removed');
-        window.location.reload();
+        toast.success('Member is removed', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
       } catch (error) {
-        window.alert(error);
+        toast.error('User is not authorized for performing this operation', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
       }
     }
   };
+
+  const ConfirmationHandler = () => {
+    setModalNotification(true);
+    setNotificationText('Are you sure you want to Remove Member');
+  };
+
+  const ContinueHandler = () => {
+    RemoveMember();
+    setModalNotification(false);
+    setNotificationText('');
+  };
+
+  const CloseHandler = () => {
+    setModalNotification(false);
+    setNotificationText('');
+  };
+
   return (
     <>
+      <ToastContainer />
+      <ModalResponse
+        show={modalNotification}
+        message={notificationText}
+        handleClose={CloseHandler}
+        handleContinue={ContinueHandler}
+      />
       <div className={styles.peoplelistdiv}>
         <Row className={styles.memberlist}>
           {props.memberImage ? (
@@ -66,7 +106,7 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
               </p>
               <button
                 className={styles.memberfontcreatedbtn}
-                onClick={RemoveMember}
+                onClick={ConfirmationHandler}
               >
                 Remove
               </button>
