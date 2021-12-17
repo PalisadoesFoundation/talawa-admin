@@ -65,7 +65,16 @@ describe('Testing Organization People List Card', () => {
           joinDate="04/07/2005"
           memberImage=""
         />
-        <ModalResponse show={true} message="" />
+        <ModalResponse
+          show={true}
+          message=""
+          handleClose={() => {
+            console.log('test');
+          }}
+          handleContinue={() => {
+            console.log('test');
+          }}
+        />
       </ApolloProvider>
     );
     userEvent.click(screen.getByText('Okay', { selector: 'button' }));

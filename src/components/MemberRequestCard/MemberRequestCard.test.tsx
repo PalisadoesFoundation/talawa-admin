@@ -69,7 +69,16 @@ describe('Testing Member Request Card', () => {
           memberImage=""
           email="xyz@gmail.com"
         />
-        <ModalResponse show={true} message="" />
+        <ModalResponse
+          show={true}
+          message=""
+          handleClose={() => {
+            console.log('test');
+          }}
+          handleContinue={() => {
+            console.log('test');
+          }}
+        />
       </ApolloProvider>
     );
     userEvent.click(screen.getByText('Okay', { selector: 'button' }));

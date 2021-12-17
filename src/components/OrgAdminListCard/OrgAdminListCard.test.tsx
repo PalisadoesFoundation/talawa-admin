@@ -63,7 +63,16 @@ describe('Testing Organization Admin List Card', () => {
           joinDate="04/09/2001"
           memberImage=""
         />
-        <ModalResponse show={true} message="" />
+        <ModalResponse
+          show={true}
+          message=""
+          handleClose={() => {
+            console.log('test');
+          }}
+          handleContinue={() => {
+            console.log('test');
+          }}
+        />
       </ApolloProvider>
     );
     userEvent.click(screen.getByText('Okay', { selector: 'button' }));
