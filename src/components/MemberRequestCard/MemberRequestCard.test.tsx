@@ -69,17 +69,12 @@ describe('Testing Member Request Card', () => {
           memberImage=""
           email="xyz@gmail.com"
         />
-        <ModalResponse
-          show={true}
-          message=""
-          handleClose={() => { }}
-          handleContinue={() => { }}
-        />
+        <ModalResponse show={true} message="" />
       </ApolloProvider>
     );
     userEvent.click(screen.getByText('Okay', { selector: 'button' }));
     expect(
       await screen.queryByText('Are you sure you want to Reject Member')
     ).toBeNull();
-  })
+  });
 });

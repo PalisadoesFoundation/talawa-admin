@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
 import EventListCard from './EventListCard';
 import {
   ApolloClient,
@@ -9,6 +10,7 @@ import {
 } from '@apollo/client';
 import ModalResponse from 'components/Response/ModalResponse';
 import userEvent from '@testing-library/user-event';
+import { ToastContainer, toast } from 'react-toastify';
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
@@ -68,6 +70,7 @@ describe('Testing Event List Card', () => {
   test('should delete event when okay is clicked', async () => {
     render(
       <ApolloProvider client={client}>
+        <ToastContainer />
         <EventListCard
           key="123"
           id=""
@@ -79,17 +82,12 @@ describe('Testing Event List Card', () => {
           regDate="07/04/2020"
           regDays="3"
         />
-        <ModalResponse
-          show={true}
-          message=""
-          handleClose={() => { }}
-          handleContinue={() => { }}
-        />
+        <ModalResponse show={true} message="" />
       </ApolloProvider>
     );
     userEvent.click(screen.getByText('Okay', { selector: 'button' }));
     expect(
-      await screen.queryByText('Are you sure you want to delete this event')
+      screen.queryByText('Are you sure you want to delete this event')
     ).toBeNull();
   });
 });

@@ -63,17 +63,12 @@ describe('Testing Organization Admin List Card', () => {
           joinDate="04/09/2001"
           memberImage=""
         />
-        <ModalResponse
-          show={true}
-          message=""
-          handleClose={() => { }}
-          handleContinue={() => { }}
-        />
+        <ModalResponse show={true} message="" />
       </ApolloProvider>
     );
     userEvent.click(screen.getByText('Okay', { selector: 'button' }));
     expect(
       await screen.queryByText('Are you sure you want to Remove Admin')
     ).toBeNull();
-  })
+  });
 });

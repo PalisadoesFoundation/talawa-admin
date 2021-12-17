@@ -40,9 +40,9 @@ function EventListCard(props: EventListCardProps): JSX.Element {
           closeOnClick: true,
           pauseOnHover: true,
         });
-        setTimeout(() => {
-          window.location.reload();
-        }, 5000);
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 5000);
       } catch (error) {
         toast.error('Could not delete the event', {
           position: 'top-right',

@@ -65,17 +65,12 @@ describe('Testing User List Card', () => {
           joinDate="04/07/2019"
           memberImage=""
         />
-        <ModalResponse
-          show={true}
-          message=""
-          handleClose={() => { }}
-          handleContinue={() => { }}
-        />
+        <ModalResponse show={true} message="" />
       </ApolloProvider>
     );
     userEvent.click(screen.getByText('Okay', { selector: 'button' }));
     expect(
       await screen.queryByText('Are you sure you want to add Admin')
     ).toBeNull();
-  })
+  });
 });
