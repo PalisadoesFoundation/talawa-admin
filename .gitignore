@@ -3,6 +3,8 @@
 # files that interfere with YARN
 .package-lock.json
 package-lock.json
+.yarn
+.yarnrc.yml
 
 # dependencies
 /node_modules

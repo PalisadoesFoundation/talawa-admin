@@ -68,8 +68,8 @@ describe('Testing User List Card', () => {
         <ModalResponse
           show={true}
           message=""
-          handleClose={() => { }}
-          handleContinue={() => { }}
+          handleClose={() => {}}
+          handleContinue={() => {}}
         />
       </ApolloProvider>
     );
@@ -77,5 +77,5 @@ describe('Testing User List Card', () => {
     expect(
       await screen.queryByText('Are you sure you want to add Admin')
     ).toBeNull();
-  })
+  });
 });
