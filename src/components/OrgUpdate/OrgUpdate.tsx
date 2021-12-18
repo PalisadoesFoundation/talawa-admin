@@ -9,6 +9,7 @@ interface OrgUpdateProps {
   orgid: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function OrgUpdate(props: OrgUpdateProps): JSX.Element {
   const [formState, setFormState] = React.useState({
     orgName: '',

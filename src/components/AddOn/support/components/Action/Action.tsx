@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import styles from './Action.module.css';
 
 // TODO: UI logic for embedded actions (hide label)
 interface ActionProps {

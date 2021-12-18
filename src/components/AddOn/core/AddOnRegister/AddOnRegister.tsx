@@ -8,6 +8,7 @@ interface AddOnRegisterProps {
   createdBy?: string; // User
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
   const [show, setShow] = useState(false);
 

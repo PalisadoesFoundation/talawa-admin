@@ -55,6 +55,7 @@ function OrgList(): JSX.Element {
     window.location.replace('/orglist');
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [create, { loading: loading_3, error }] = useMutation(
     CREATE_ORGANIZATION_MUTATION
   );

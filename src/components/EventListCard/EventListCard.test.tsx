@@ -79,12 +79,7 @@ describe('Testing Event List Card', () => {
           regDate="07/04/2020"
           regDays="3"
         />
-        <ModalResponse
-          show={true}
-          message=""
-          handleClose={() => { }}
-          handleContinue={() => { }}
-        />
+        <ModalResponse show={true} message="" />
       </ApolloProvider>
     );
     userEvent.click(screen.getByText('Okay', { selector: 'button' }));

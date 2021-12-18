@@ -48,9 +48,7 @@ function OrganizationEvents(): JSX.Element {
     variables: { id: currentUrl },
   });
 
-  const [create, { loading: loading_2, error }] = useMutation(
-    CREATE_EVENT_MUTATION
-  );
+  const [create, { loading: loading_2 }] = useMutation(CREATE_EVENT_MUTATION);
 
   const CreateEvent = async () => {
     setEventModalIsOpen(false);

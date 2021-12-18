@@ -1,11 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './LandingPage.module.css';
 import slide1 from 'assets/images/dogscare.jpg';
 import slide2 from 'assets/images/children.jpg';
 import slide3 from 'assets/images/dogshelter.jpg';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Modal from 'react-modal';
 import Carousel from 'react-bootstrap/Carousel';
 function LandingPage(): JSX.Element {
   return (

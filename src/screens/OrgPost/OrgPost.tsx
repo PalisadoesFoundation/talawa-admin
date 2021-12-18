@@ -60,7 +60,7 @@ function OrgPost(): JSX.Element {
     window.location.replace('/orgpost/id=' + currentUrl);
   };
 
-  const [create, { loading, error }] = useMutation(CREATE_POST_MUTATION);
+  const [create, { loading }] = useMutation(CREATE_POST_MUTATION);
 
   if (loading || loading2) {
     return (

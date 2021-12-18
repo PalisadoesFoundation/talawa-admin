@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './OrgPostCard.module.css';
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import { ToastContainer, toast } from 'react-toastify';
 import { DELETE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
