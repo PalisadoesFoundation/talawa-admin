@@ -66,8 +66,8 @@ describe('Testing Organization Admin List Card', () => {
         <ModalResponse
           show={true}
           message=""
-          handleClose={() => { }}
-          handleContinue={() => { }}
+          handleClose={() => {}}
+          handleContinue={() => {}}
         />
       </ApolloProvider>
     );
@@ -75,5 +75,5 @@ describe('Testing Organization Admin List Card', () => {
     expect(
       await screen.queryByText('Are you sure you want to Remove Admin')
     ).toBeNull();
-  })
+  });
 });

@@ -72,8 +72,8 @@ describe('Testing Member Request Card', () => {
         <ModalResponse
           show={true}
           message=""
-          handleClose={() => { }}
-          handleContinue={() => { }}
+          handleClose={() => {}}
+          handleContinue={() => {}}
         />
       </ApolloProvider>
     );
@@ -81,5 +81,5 @@ describe('Testing Member Request Card', () => {
     expect(
       await screen.queryByText('Are you sure you want to Reject Member')
     ).toBeNull();
-  })
+  });
 });

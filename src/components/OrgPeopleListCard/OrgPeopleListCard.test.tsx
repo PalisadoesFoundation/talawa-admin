@@ -68,8 +68,8 @@ describe('Testing Organization People List Card', () => {
         <ModalResponse
           show={true}
           message=""
-          handleClose={() => { }}
-          handleContinue={() => { }}
+          handleClose={() => {}}
+          handleContinue={() => {}}
         />
       </ApolloProvider>
     );
@@ -78,5 +78,4 @@ describe('Testing Organization People List Card', () => {
       await screen.queryByText('Are you sure you want to Remove Member')
     ).toBeNull();
   });
-
 });
