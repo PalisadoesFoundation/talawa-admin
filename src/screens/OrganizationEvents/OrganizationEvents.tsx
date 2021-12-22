@@ -4,7 +4,6 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-modal';
 import DatePicker from 'react-datepicker';
-import { ToastContainer, toast } from 'react-toastify';
 import { Form } from 'antd';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import EventListCard from 'components/EventListCard/EventListCard';
@@ -51,7 +50,6 @@ function OrganizationEvents(): JSX.Element {
   const [create, { loading: loading_2 }] = useMutation(CREATE_EVENT_MUTATION);
 
   const CreateEvent = async () => {
-    setEventModalIsOpen(false);
     const { data } = await create({
       variables: {
         title: formState.title,
@@ -66,13 +64,7 @@ function OrganizationEvents(): JSX.Element {
       },
     });
     console.log(data);
-    toast.success('Event created successfully. Reload to continue', {
-      position: 'top-right',
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-    });
+    window.alert('Congratulation the Event is created');
     window.location.reload();
   };
 
@@ -89,7 +81,6 @@ function OrganizationEvents(): JSX.Element {
   return (
     <>
       <AdminNavbar targets={targets} url_1={configUrl} />
-      <ToastContainer />
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
