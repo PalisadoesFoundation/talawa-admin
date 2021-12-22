@@ -7,8 +7,6 @@ import {
   ApolloProvider,
   InMemoryCache,
 } from '@apollo/client';
-import userEvent from '@testing-library/user-event';
-import ModalResponse from 'components/Response/ModalResponse';
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
@@ -33,49 +31,5 @@ describe('Testing Organization People List Card', () => {
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('USA')).toBeInTheDocument();
     expect(screen.getByText('04/07/2005')).toBeInTheDocument();
-  });
-
-  test('should show modal when the button is clicked', () => {
-    render(
-      <ApolloProvider client={client}>
-        <OrgPeopleListCard
-          key="123"
-          id=""
-          memberName="John Doe"
-          memberLocation="USA"
-          joinDate="04/07/2005"
-          memberImage=""
-        />
-      </ApolloProvider>
-    );
-    userEvent.click(screen.getByText('Remove', { selector: 'button' }));
-    expect(
-      screen.getByText('Are you sure you want to Remove Member')
-    ).toBeInTheDocument();
-  });
-
-  test('should return a message from server', async () => {
-    render(
-      <ApolloProvider client={client}>
-        <OrgPeopleListCard
-          key="123"
-          id=""
-          memberName="John Doe"
-          memberLocation="USA"
-          joinDate="04/07/2005"
-          memberImage=""
-        />
-        <ModalResponse
-          show={true}
-          message=""
-          handleClose={() => {}}
-          handleContinue={() => {}}
-        />
-      </ApolloProvider>
-    );
-    userEvent.click(screen.getByText('Okay', { selector: 'button' }));
-    expect(
-      await screen.queryByText('Are you sure you want to Remove Member')
-    ).toBeNull();
   });
 });
