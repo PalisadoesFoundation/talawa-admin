@@ -1,7 +1,5 @@
 import React from 'react';
 import styles from './MemberRequestCard.module.css';
-import ModalResponse from 'components/Response/ModalResponse';
-import { ToastContainer, toast } from 'react-toastify';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useMutation } from '@apollo/client';
@@ -24,9 +22,6 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
   const [acceptMutation] = useMutation(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
   const [rejectMutation] = useMutation(REJECT_ORGANIZATION_REQUEST_MUTATION);
 
-  const [modalNotification, setModalNotification] = React.useState(false);
-  const [notificationText, setNotificationText] = React.useState('');
-
   const AddMember = async () => {
     try {
       const { data } = await acceptMutation({
@@ -35,13 +30,7 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
         },
       });
       console.log(data);
-      toast.success('Request accepted.', {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-      });
+      window.alert('it is accepted');
       window.location.reload();
     } catch (error) {
       window.alert(error);
@@ -49,7 +38,7 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
   };
 
   const RejectMember = async () => {
-    const sure = true;
+    const sure = window.confirm('Are you sure you want to Reject Request ?');
     if (sure) {
       try {
         const { data } = await rejectMutation({
@@ -65,31 +54,8 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
     }
   };
 
-  const ConfirmationHandler = () => {
-    setModalNotification(true);
-    setNotificationText('Are you sure you want to Reject Member');
-  };
-
-  const ContinueHandler = () => {
-    RejectMember();
-    setModalNotification(false);
-    setNotificationText('');
-  };
-
-  const CloseHandler = () => {
-    setModalNotification(false);
-    setNotificationText('');
-  };
-
   return (
     <>
-      <ToastContainer />
-      <ModalResponse
-        show={modalNotification}
-        message={notificationText}
-        handleClose={CloseHandler}
-        handleContinue={ContinueHandler}
-      />
       <div className={styles.peoplelistdiv}>
         <Row className={styles.memberlist}>
           {props.memberImage ? (
@@ -124,7 +90,7 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
               </button>
               <button
                 className={styles.memberfontcreatedbtn}
-                onClick={ConfirmationHandler}
+                onClick={RejectMember}
               >
                 Reject
               </button>
