@@ -25,7 +25,9 @@ function LoginPage(): JSX.Element {
     window.location.replace('/');
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [signup, { loading: signloading, error: signerror }] =
     useMutation(SIGNUP_MUTATION);
 

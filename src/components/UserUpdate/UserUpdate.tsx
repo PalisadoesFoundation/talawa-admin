@@ -7,6 +7,7 @@ interface UserUpdateProps {
   id: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function UserUpdate(props: UserUpdateProps): JSX.Element {
   const [formState, setFormState] = React.useState({
     firstName: '',

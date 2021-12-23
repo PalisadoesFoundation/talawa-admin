@@ -28,10 +28,23 @@
   // Specify the ESLint plugins tobe used
   "plugins": ["react", "@typescript-eslint", "react-hooks", "jest"],
   "rules": {
-    "react/destructuring-assignment": ["warn", "always"],
-    "react/no-multi-comp": ["error", { "ignoreStateless": false }],
-    "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
-
+    "react/destructuring-assignment": ["off"],
+    "@typescript-eslint/no-explicit-any": ["off"],
+    "@typescript-eslint/explicit-module-boundary-types": ["off"],
+    "react/no-multi-comp": [
+      "error",
+      {
+        "ignoreStateless": false
+      }
+    ],
+    "react/jsx-filename-extension": [
+      "error",
+      {
+        "extensions": [
+          ".tsx"
+        ]
+      }
+    ],
     // Ensures that components are always written in PascalCase
     "react/jsx-pascal-case": [
       "error",

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'react';
 import styles from './AddOnStore.module.css';
