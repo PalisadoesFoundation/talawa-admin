@@ -28,7 +28,7 @@ const httpLink = new HttpLink({
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
-  link: ApolloLink.from([errorLink, httpLink]),
+  link: ApolloLink.from([httpLink]),
 });
 
 ReactDOM.render(

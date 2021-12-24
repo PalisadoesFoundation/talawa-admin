@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './AddOn.module.css';
 import PropTypes from 'prop-types';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import { useSelector } from 'react-redux';
@@ -12,7 +11,7 @@ interface AddOnProps {
 }
 
 // Validate Extras
-function AddOn({ extras, name, children }: AddOnProps): JSX.Element {
+function AddOn({ children }: AddOnProps): JSX.Element {
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
   return (

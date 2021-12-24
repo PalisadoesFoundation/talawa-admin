@@ -5,9 +5,6 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-modal';
 import LandingPage from 'components/LandingPage/LandingPage';
-import AlertResponse from 'components/Response/AlertResponse';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useMutation } from '@apollo/client';
 import { LOGIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -15,8 +12,6 @@ import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 function LoginPage(): JSX.Element {
   localStorage.clear();
   const [modalisOpen, setIsOpen] = React.useState(false);
-  const [alertNotification, setAlertNotification] = React.useState(false);
-  const [notificationText, setNotificationText] = React.useState('');
 
   const showModal = () => {
     setIsOpen(true);
@@ -30,33 +25,28 @@ function LoginPage(): JSX.Element {
     window.location.replace('/');
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [signup, { loading: signloading, error: signerror }] =
     useMutation(SIGNUP_MUTATION);
 
-  // if (loading || signloading) {
-  //   return (
-  //     <>
-  //       <div className={styles.loader}></div>
-  //     </>
-  //   );
-  // }
+  if (loading || signloading) {
+    return (
+      <>
+        <div className={styles.loader}></div>
+      </>
+    );
+  }
+  if (signerror) {
+    window.alert('xyz');
+    window.location.reload();
+  }
 
-  // if (signerror) {
-  //   // window.alert('xyz');
-  //   // window.location.reload();
-  //   setIsError(true);
-  //   setAlertNotification(true);
-  //   setNotificationText('Unknown Error');
-  // }
-
-  // if (error) {
-  //   // window.alert('Incorrect ID or Password');
-  //   setIsError(true);
-  //   setAlertNotification(true);
-  //   setNotificationText('Incorrect ID or Password');
-  //   // window.location.reload();
-  // }
+  if (error) {
+    window.alert('Incorrect ID or Password');
+    window.location.reload();
+  }
 
   const [signformState, setSignFormState] = useState({
     signfirstName: '',
@@ -94,28 +84,14 @@ function LoginPage(): JSX.Element {
           },
         });
         console.log(data);
-        toast.success('User created successfully', {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-        });
-        setSignFormState({
-          signfirstName: '',
-          signlastName: '',
-          signEmail: '',
-          signPassword: '',
-          cPassword: '',
-          signuserType: '',
-        });
+        window.alert('Successfully Registered. Please Login In to Continue...');
+        window.location.reload();
       } else {
-        setAlertNotification(true);
-        setNotificationText('Enter correct userType');
+        alert('Write USERTYPE correctly OR Check Password');
+        window.location.reload();
       }
     } else {
-      setAlertNotification(true);
-      setNotificationText('Invalid credentials. Please try again');
+      alert('Fill all the Details Correctly.');
     }
   };
 
@@ -140,16 +116,16 @@ function LoginPage(): JSX.Element {
             window.location.replace('/orglist');
           }
         } else {
-          setAlertNotification(true);
-          setNotificationText('You are not authorised');
+          window.alert('Sorry! you are not Authorised');
+          window.location.reload();
         }
       } else {
-        setAlertNotification(true);
-        setNotificationText('User not found');
+        window.alert('Sorry! User Not Found');
+        window.location.reload();
       }
     } catch (error) {
-      setAlertNotification(true);
-      setNotificationText('Invalid credentials');
+      window.alert(error);
+      window.location.reload();
     }
   };
 
@@ -175,7 +151,6 @@ function LoginPage(): JSX.Element {
           </div>
         </div>
         <div className={styles.reg_bg}>
-          <ToastContainer />
           <Row>
             <Col sm={7} className={styles.leftmainbg}>
               <div className={styles.homeleft}>
@@ -284,10 +259,6 @@ function LoginPage(): JSX.Element {
                       });
                     }}
                   />
-                  <AlertResponse
-                    show={alertNotification}
-                    message={notificationText}
-                  />
                   <button
                     type="button"
                     className={styles.greenregbtn}
@@ -347,10 +318,6 @@ function LoginPage(): JSX.Element {
                       password: e.target.value,
                     });
                   }}
-                />
-                <AlertResponse
-                  show={alertNotification}
-                  message={notificationText}
                 />
                 <button
                   type="button"

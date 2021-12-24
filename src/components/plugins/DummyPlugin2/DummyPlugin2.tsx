@@ -1,9 +1,7 @@
 import React from 'react';
-import styles from './DummyPlugin2.module.css';
-import PropTypes from 'prop-types';
 
 // Validate Extras
-function DummyPlugin2(props: any): JSX.Element {
+function DummyPlugin2(): JSX.Element {
   return <div></div>;
 }
 
