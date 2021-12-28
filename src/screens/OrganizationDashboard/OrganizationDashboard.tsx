@@ -9,6 +9,7 @@ import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useSelector } from 'react-redux';
 import { RootState } from 'state/reducers';
+import { FaTrash } from 'react-icons/fa';
 
 function OrganizationDashboard(): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
@@ -68,7 +69,11 @@ function OrganizationDashboard(): JSX.Element {
                 <button>NGO</button>
               </p>
             </div>
-            <button onClick={delete_org}>Delete This Organization</button>
+
+            <button className={styles.invitebtn} onClick={delete_org}>
+              <FaTrash className={styles.icon} size={18} />
+              Delete Organization
+            </button>
           </div>
         </Col>
         <Col sm={8}>
