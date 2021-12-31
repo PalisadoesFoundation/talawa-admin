@@ -45,9 +45,11 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint \"**/*.{ts,tsx}\"",
+    "lint": "eslint \"**/*.{ts,tsx}\" && pip install pylint-runner && pylint_runner --rcfile=.pylintrc -v",
     "lint-fix": "eslint \"**/*.{ts,tsx}\" --fix",
-    "format": "prettier --write \"**/*.{ts,tsx,json,scss,css}\""
+    "format": "prettier --write \"**/*.{ts,tsx,json,scss,css}\"",
+    "setup-windows": "pip install rich validators --user && python setup_file.py && venv\\Scripts\\activate && pip install -r requirements.txt && python virtual_setup.py",
+    "setup-others": "sudo apt install python3-pip && pip install rich validators --user && python setup_file.py && . venv/bin/activate && pip install -r requirements.txt && python virtual_setup.py"
   },
   "eslintConfig": {
     "extends": [
