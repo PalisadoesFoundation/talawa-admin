@@ -2,7 +2,10 @@ name: PR Workflow
 on:
   pull_request:
     branches:
-      - '**'
+      - '**'  
+  push:
+    branches:
+      - '**'      
 jobs:
   
   Linter:
@@ -48,4 +51,3 @@ jobs:
 
        - name: Perform CodeQL Analysis
          uses: github/codeql-action/analyze@v1
-       
