@@ -63,7 +63,7 @@ yarn test:e2e
 yarn lint
 ```
 
-## Automated Installation
+## Express Installation
 
 See [Follow this guide](./INSTALLATION.md).
 
