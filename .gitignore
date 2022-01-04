@@ -27,7 +27,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# automated setup
-__pycache__
-venv
+# express setup
 debug.log
