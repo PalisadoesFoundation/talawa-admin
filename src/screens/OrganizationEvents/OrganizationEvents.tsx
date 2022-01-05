@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styles from './OrganizationEvents.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import Modal from 'react-modal';
 import DatePicker from 'react-datepicker';
 import { Form } from 'antd';
@@ -109,9 +110,13 @@ function OrganizationEvents(): JSX.Element {
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>Events</p>
-              <button className={styles.addbtn} onClick={showInviteModal}>
-                + Add Event
-              </button>
+              <Button
+                variant="success"
+                className={styles.addbtn}
+                onClick={showInviteModal}
+              >
+                <i className="fa fa-plus"></i> Add Event
+              </Button>
             </Row>
             {data
               ? data.eventsByOrganization.map(

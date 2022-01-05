@@ -83,14 +83,12 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
               className={styles.roundedcircle}
             />
           </Dropdown.Toggle>
-          <Dropdown.Menu>
+          <Dropdown.Menu className={styles.dropdownMenu}>
             <Dropdown.Item href="/notification">
-              <i className="fa fa-bell"></i>
-              Notify
+              <i className="fa fa-bell"></i>&ensp; Notify
             </Dropdown.Item>
             <Dropdown.Item href={url_1}>
-              <i className="fa fa-cogs"></i>
-              Settings
+              <i className="fa fa-cogs"></i>&ensp; Settings
             </Dropdown.Item>
             <Dropdown.Item
               onClick={() => {
@@ -99,7 +97,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
               }}
             >
               <i className="fa fa-arrow-right"></i>
-              Logout
+              &ensp;Logout
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>

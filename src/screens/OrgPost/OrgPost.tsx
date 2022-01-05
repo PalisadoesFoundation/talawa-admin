@@ -11,6 +11,7 @@ import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useSelector } from 'react-redux';
 import { RootState } from 'state/reducers';
+import Button from 'react-bootstrap/Button';
 
 function OrgPost(): JSX.Element {
   const [postmodalisOpen, setPostModalIsOpen] = useState(false);
@@ -94,9 +95,13 @@ function OrgPost(): JSX.Element {
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>Posts</p>
-              <button className={styles.addbtn} onClick={showInviteModal}>
+              <Button
+                variant="success"
+                className={styles.addbtn}
+                onClick={showInviteModal}
+              >
                 + Create Post
-              </button>
+              </Button>
             </Row>
             <div className={styles.grid_section_div}>
               {data
@@ -203,14 +208,14 @@ function OrgPost(): JSX.Element {
                   });
                 }}
               />
-              <button
-                type="button"
+              <Button
                 className={styles.greenregbtn}
+                variant="success"
                 value="createpost"
                 onClick={CreatePost}
               >
-                Add Post
-              </button>
+                <i className="fa fa-plus"></i> Add Post
+              </Button>
             </Form>
           </div>
         </section>
