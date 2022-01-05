@@ -14,16 +14,6 @@ No one should fear voicing their opinion. Respones must be respectful.
 
 If you are ready to start contributing code right away, we have a list of [good first issues](https://github.com/PalisadoesFoundation/talawa-admin/labels/good%20first%20issue) that contain issues with a limited scope.
 
-## Quicklinks
-
-- [Our Development Process](#Our-development-process)
-  - [Issues](#issues)
-  - [Pull Requests](#pull-requests)
-  - [Git Flow](#git-flow)
-- [Contributing Code](#contributing-code)
-- [GSoC](#gsoc)
-- [Community](#community)
-
 ### Our Development Process
 
 We utilize GitHub issues and pull requests to keep track of issues and contributions from the community.
