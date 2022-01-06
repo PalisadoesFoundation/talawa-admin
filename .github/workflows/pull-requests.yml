@@ -1,11 +1,20 @@
+##############################################################################
+##############################################################################
+#
+# NOTE!
+#
+# Please read the README.md file in this directory that defines what should 
+# be placed in this file
+#
+##############################################################################
+##############################################################################
+
 name: PR Workflow
 on:
   pull_request:
     branches:
       - '**'  
-  push:
-    branches:
-      - '**'      
+
 jobs:
   
   Linter:
@@ -45,6 +54,7 @@ jobs:
          uses: github/codeql-action/init@v1
          with:
           languages: ${{ matrix.language }}
+          debug: true
 
        - name: Autobuild
          uses: github/codeql-action/autobuild@v1
