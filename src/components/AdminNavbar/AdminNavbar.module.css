@@ -107,8 +107,13 @@ a {
   border-bottom: 3px solid #31bb6b;
 } */
 .dropdowns {
-  margin-right: 16px;
+  margin-right: 30px;
   text-decoration: none;
+}
+.dropdownMenu {
+  transform: scale(0.85);
+  cursor: pointer;
+  transform: translateX(-60px) scale(0.9);
 }
 #dropdown-basic,
 .dropdowns.btn,
@@ -164,3 +169,4 @@ a {
     margin-left: 0%;
   }
 }
+

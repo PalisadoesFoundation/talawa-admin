@@ -13,6 +13,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import Button from 'react-bootstrap/Button';
 
 function OrgList(): JSX.Element {
   const [modalisOpen, setmodalIsOpen] = React.useState(false);
@@ -121,17 +122,22 @@ function OrgList(): JSX.Element {
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>Organizations List</p>
               {localStorage.getItem('UserType') == 'SUPERADMIN' ? (
-                <button className={styles.invitebtn} onClick={showInviteModal}>
-                  + Create Organization
-                </button>
-              ) : (
-                <button
+                <Button
+                  variant="success"
                   className={styles.invitebtn}
-                  disabled={true}
                   onClick={showInviteModal}
                 >
                   + Create Organization
-                </button>
+                </Button>
+              ) : (
+                <Button
+                  className={styles.invitebtn}
+                  disabled={true}
+                  variant="success"
+                  onClick={showInviteModal}
+                >
+                  + Create Organization
+                </Button>
               )}
             </Row>
             <div className={styles.list_box}>
