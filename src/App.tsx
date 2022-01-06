@@ -20,7 +20,7 @@ function App(): JSX.Element {
 
   const dispatch = useDispatch();
 
-  const { updatePluginLinks, updateInstalled } = bindActionCreators(
+  /*const { updatePluginLinks, updateInstalled } = bindActionCreators(
     actionCreators,
     dispatch
   );
@@ -38,7 +38,7 @@ function App(): JSX.Element {
 
   useEffect(() => {
     getInstalledPlugins();
-  }, []);
+  }, []);*/
 
   // const appRoutes = useSelector((state: RootState) => state.appRoutes);
   // const { components } = appRoutes;

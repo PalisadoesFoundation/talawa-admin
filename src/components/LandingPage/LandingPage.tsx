@@ -25,9 +25,12 @@ function LandingPage(): JSX.Element {
             </Carousel.Item>
           </Carousel>
         </div>
-        <h2 className={styles.fromtitle}>FROM PALISADOES</h2>
+        <h2 className={styles.fromtitle}>
+          <p>FROM PALISADOES</p>
+        </h2>
       </div>
     </>
   );
 }
+export {};
 export default LandingPage;
