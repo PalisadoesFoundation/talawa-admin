@@ -5,6 +5,8 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Logo from 'assets/talawa-logo-200x200.png';
 import Row from 'react-bootstrap/Row';
 import { Nav } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+
 interface NavbarProps {
   targets: {
     url?: string;
@@ -24,15 +26,20 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
       <Navbar className={styles.navbarbg}>
         <Navbar.Brand>
           <Row className={styles.navallitem}>
-            <a className={styles.logo} href="/orglist">
+            <Link className={styles.logo} to="/orglist">
               <img src={Logo} />
               <strong>Talawa Portal</strong>
-            </a>
+            </Link>
             <div className={styles.navit}>
               {targets.map(({ name, url, subTargets }) => {
                 return url ? (
                   <Nav.Item key={name} className={styles.navitems}>
-                    <Nav.Link href={url} id={name} className={styles.navlinks}>
+                    <Nav.Link
+                      as={Link}
+                      to={url}
+                      id={name}
+                      className={styles.navlinks}
+                    >
                       {name}
                     </Nav.Link>
                   </Nav.Item>
@@ -56,7 +63,8 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                           {subTargets.map((subTarget: any, index: number) => (
                             <Dropdown.Item
                               key={index}
-                              href={subTarget.url}
+                              as={Link}
+                              to={subTarget.url}
                               className={styles.dropdownitem}
                             >
                               <i
@@ -84,10 +92,10 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
             />
           </Dropdown.Toggle>
           <Dropdown.Menu className={styles.dropdownMenu}>
-            <Dropdown.Item href="/notification">
+            <Dropdown.Item as={Link} to="/notification">
               <i className="fa fa-bell"></i>&ensp; Notify
             </Dropdown.Item>
-            <Dropdown.Item href={url_1}>
+            <Dropdown.Item as={Link} to={url_1}>
               <i className="fa fa-cogs"></i>&ensp; Settings
             </Dropdown.Item>
             <Dropdown.Item
