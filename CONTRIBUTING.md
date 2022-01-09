@@ -56,11 +56,16 @@ The process of proposing a change to Talawa Admin can be summarized as:
       1. We need to get to 100% test coverage for the app. We periodically increase the desired test coverage for our pull requests to meet this goal.
       1. Pull requests that don't meet the minimum test coverage levels will not be accepted. This may mean that you will have to create tests for code you did not write. You can decide which part of the code base needs additional tests if this happens to you.
    1. **_Testing_:**
-      1. Test using the `yarn test --watchAll=false --coverage` command.
+      1. Test using this set of commands:
+      ```
+         yarn install
+         yarn test --watchAll=false --coverage
+      ```
    1. **_Test Code Coverage_:**
       1. The current code coverage of the repo is: [![codecov](https://codecov.io/gh/PalisadoesFoundation/talawa-admin/branch/develop/graph/badge.svg?token=II0R0RREES)](https://codecov.io/gh/PalisadoesFoundation/talawa-admin)
       2. You can determine the percentage test coverage of your code by running these two commands in sequence:
          ```
+         yarn install
          yarn test --watchAll=false --coverage
          genhtml coverage/lcov.info -o coverage
          ```
