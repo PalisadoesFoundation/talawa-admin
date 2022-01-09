@@ -5,6 +5,7 @@ import OrganizationDashboard from './OrganizationDashboard';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
+import { BrowserRouter } from 'react-router-dom';
 
 const MOCKS = [
   {
@@ -43,9 +44,11 @@ describe('Organisation Dashboard Page', () => {
   test('should render props and text elements test for the screen', async () => {
     const { container } = render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
-        <Provider store={store}>
-          <OrganizationDashboard />
-        </Provider>
+        <BrowserRouter>
+          <Provider store={store}>
+            <OrganizationDashboard />
+          </Provider>
+        </BrowserRouter>
       </MockedProvider>
     );
 
