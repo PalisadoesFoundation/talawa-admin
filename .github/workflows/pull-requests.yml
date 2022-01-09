@@ -54,7 +54,7 @@ jobs:
         uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:
           path: "./coverage/lcov.info"
-          min_coverage: 15       
+          min_coverage: 20       
 
   CodeQL:
     name: Analyse code with codeQL
