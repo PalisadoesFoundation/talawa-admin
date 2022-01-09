@@ -44,3 +44,7 @@ Follow these guidelines when creating or modifying scripts in this directory.
     1. Pylint
     1. Flake8
 1. All scripts must run a main() function.
+
+## Code Coverage
+
+[![codecov](https://codecov.io/gh/PalisadoesFoundation/talawa-admin/branch/develop/graph/badge.svg?token=II0R0RREES)](https://codecov.io/gh/PalisadoesFoundation/talawa-admin)
