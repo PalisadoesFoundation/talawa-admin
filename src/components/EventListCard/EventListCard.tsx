@@ -49,14 +49,10 @@ function EventListCard(props: EventListCardProps): JSX.Element {
         <Col className={styles.singledetails}>
           <div className={styles.singledetails_data_left}>
             <p className={styles.orgname}>
-              {props.eventName ? <p>{props.eventName}</p> : <p>Dogs Care</p>}
+              {props.eventName ? <>{props.eventName}</> : <>Dogs Care</>}
             </p>
             <p className={styles.orgfont}>
-              {props.eventLocation ? (
-                <p>{props.eventLocation}</p>
-              ) : (
-                <p>India</p>
-              )}
+              {props.eventLocation ? <>{props.eventLocation}</> : <>India</>}
             </p>
             <p className={styles.orgfont}>
               Admin: <span>{props.totalAdmin}</span>
