@@ -32,7 +32,7 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
         <Col className={styles.singledetails}>
           <div className={styles.singledetails_data_left}>
             <p className={styles.orgname}>
-              {props.orgName ? <p>{props.orgName}</p> : <p>Dogs Care</p>}
+              {props.orgName ? <>{props.orgName}</> : <>Dogs Care</>}
             </p>
             <p className={styles.orgfont}>{props.orgLocation}</p>
             <p className={styles.orgfontcreated}>

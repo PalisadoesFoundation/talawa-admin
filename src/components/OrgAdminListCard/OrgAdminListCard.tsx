@@ -51,11 +51,7 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
           <Col className={styles.singledetails}>
             <div className={styles.singledetails_data_left}>
               <p className={styles.membername}>
-                {props.memberName ? (
-                  <p>{props.memberName}</p>
-                ) : (
-                  <p>Dogs Care</p>
-                )}
+                {props.memberName ? <>{props.memberName}</> : <>Dogs Care</>}
               </p>
               <p className={styles.memberfont}>
                 <span>{props.memberLocation}</span>
