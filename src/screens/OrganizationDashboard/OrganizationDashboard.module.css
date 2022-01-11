@@ -47,9 +47,7 @@
   border-bottom: 3px solid #31bb6b;
   width: 26%;
 }
-.tagdetails {
-  display: flex;
-}
+
 .tagdetails > button {
   background-color: #febc59;
   color: #000;

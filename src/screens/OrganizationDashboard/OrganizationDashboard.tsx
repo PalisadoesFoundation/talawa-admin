@@ -9,6 +9,7 @@ import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useSelector } from 'react-redux';
 import { RootState } from 'state/reducers';
+import { Button, Container } from 'react-bootstrap';
 
 function OrganizationDashboard(): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
@@ -67,16 +68,20 @@ function OrganizationDashboard(): JSX.Element {
               <p className={styles.tagdetails}>
                 <button>NGO</button>
               </p>
+              <Button variant="success" onClick={delete_org}>
+                Delete This Organization
+              </Button>
             </div>
-            <button onClick={delete_org}>Delete This Organization</button>
           </div>
         </Col>
-        <Col sm={8}>
-          <div className={styles.mainpageright}>
-            <Row className={styles.justifysp}>
-              <p className={styles.titlename}>Statistics</p>
-            </Row>
-          </div>
+        <Col sm={8} className="mt-sm-0 mt-5 ml-4 ml-sm-0">
+          <Container>
+            <div className={styles.mainpageright}>
+              <Row className={styles.justifysp}>
+                <p className={styles.titlename}>Statistics</p>
+              </Row>
+            </div>
+          </Container>
         </Col>
       </Row>
     </>

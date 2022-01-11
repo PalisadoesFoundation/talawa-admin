@@ -72,7 +72,7 @@ function OrgList(): JSX.Element {
 
   return (
     <>
-      <Navbar className={styles.navbarbg}>
+      <Navbar className={styles.navbarbg} fixed="top">
         <Navbar.Brand>
           <Row className={styles.navallitem}>
             <a className={styles.logo} href="/">
