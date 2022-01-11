@@ -48,9 +48,9 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: yarn install
       - run: yarn test --watchAll=false --coverage
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1   
-      - name: Report code coverage
+      - name: Present current coverage in PR
+        uses: codecov/codecov-action@v2.1.0
+      - name: Test acceptable level of code coverage
         uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:
           path: "./coverage/lcov.info"
