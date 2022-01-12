@@ -88,6 +88,15 @@
   display: flex;
   justify-content: space-between;
 }
+@media screen and (max-width: 575.5px) {
+  .justifysp {
+    padding-left: 55px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+}
+
 .logintitleadmin {
   color: #707070;
   font-weight: 600;
