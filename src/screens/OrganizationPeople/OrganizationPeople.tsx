@@ -10,6 +10,7 @@ import { useQuery } from '@apollo/client';
 import { ADMIN_LIST, MEMBERS_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../state/reducers';
+import { Container } from 'react-bootstrap';
 
 function OrganizationPeople(): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
@@ -118,79 +119,81 @@ function OrganizationPeople(): JSX.Element {
             </div>
           </div>
         </Col>
-        <Col sm={9}>
-          <div className={styles.mainpageright}>
-            <Row className={styles.justifysp}>
-              <p className={styles.logintitle}>Members</p>
-            </Row>
-            {t == 0
-              ? data
-                ? data.organizations[0].members.map(
-                    (datas: {
-                      _id: string;
-                      lastName: string;
-                      firstName: string;
-                      image: string;
-                    }) => {
-                      return (
-                        <OrgPeopleListCard
-                          key={datas._id}
-                          id={datas._id}
-                          memberImage={datas.image}
-                          joinDate="05/07/2021"
-                          memberName={datas.firstName + ' ' + datas.lastName}
-                          memberLocation="Vadodara, Gujarat"
-                        />
-                      );
-                    }
-                  )
-                : null
-              : t == 1
-              ? data
-                ? data.organizations[0].admins.map(
-                    (datas: {
-                      _id: string;
-                      lastName: string;
-                      firstName: string;
-                      image: string;
-                    }) => {
-                      return (
-                        <OrgAdminListCard
-                          key={datas._id}
-                          id={datas._id}
-                          memberImage={datas.image}
-                          joinDate="05/07/2021"
-                          memberName={datas.firstName + ' ' + datas.lastName}
-                          memberLocation="Vadodara, Gujarat"
-                        />
-                      );
-                    }
-                  )
-                : null
-              : t == 2
-              ? data
-                ? data.users.map(
-                    (datas: {
-                      _id: string;
-                      lastName: string;
-                      firstName: string;
-                      image: string;
-                    }) => {
-                      return (
-                        <UserListCard
-                          key={datas._id}
-                          id={datas._id}
-                          memberImage={datas.image}
-                          joinDate="05/07/2021"
-                          memberName={datas.firstName + ' ' + datas.lastName}
-                          memberLocation="Vadodara, Gujarat"
-                        />
-                      );
-                    }
-                  )
-                : null
-              : null}
-          </div>
+        <Col sm={9} className="mt-sm-0 mt-5 ml-4 ml-sm-0">
+          <Container>
+            <div className={styles.mainpageright}>
+              <Row className={styles.justifysp}>
+                <p className={styles.logintitle}>Members</p>
+              </Row>
+              {t == 0
+                ? data
+                  ? data.organizations[0].members.map(
+                      (datas: {
+                        _id: string;
+                        lastName: string;
+                        firstName: string;
+                        image: string;
+                      }) => {
+                        return (
+                          <OrgPeopleListCard
+                            key={datas._id}
+                            id={datas._id}
+                            memberImage={datas.image}
+                            joinDate="05/07/2021"
+                            memberName={datas.firstName + ' ' + datas.lastName}
+                            memberLocation="Vadodara, Gujarat"
+                          />
+                        );
+                      }
+                    )
+                  : null
+                : t == 1
+                ? data
+                  ? data.organizations[0].admins.map(
+                      (datas: {
+                        _id: string;
+                        lastName: string;
+                        firstName: string;
+                        image: string;
+                      }) => {
+                        return (
+                          <OrgAdminListCard
+                            key={datas._id}
+                            id={datas._id}
+                            memberImage={datas.image}
+                            joinDate="05/07/2021"
+                            memberName={datas.firstName + ' ' + datas.lastName}
+                            memberLocation="Vadodara, Gujarat"
+                          />
+                        );
+                      }
+                    )
+                  : null
+                : t == 2
+                ? data
+                  ? data.users.map(
+                      (datas: {
+                        _id: string;
+                        lastName: string;
+                        firstName: string;
+                        image: string;
+                      }) => {
+                        return (
+                          <UserListCard
+                            key={datas._id}
+                            id={datas._id}
+                            memberImage={datas.image}
+                            joinDate="05/07/2021"
+                            memberName={datas.firstName + ' ' + datas.lastName}
+                            memberLocation="Vadodara, Gujarat"
+                          />
+                        );
+                      }
+                    )
+                  : null
+                : null}
+            </div>
+          </Container>
         </Col>
       </Row>
     </>
