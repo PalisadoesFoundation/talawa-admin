@@ -87,7 +87,7 @@ function OrganizationPeople(): JSX.Element {
                   value="memberslist"
                   name="displaylist"
                   type="radio"
-                  checked={t == 0 ? true : false}
+                  defaultChecked={t == 0 ? true : false}
                   onClick={() => {
                     setT(0);
                   }}
@@ -98,7 +98,7 @@ function OrganizationPeople(): JSX.Element {
                   value="adminslist"
                   name="displaylist"
                   type="radio"
-                  checked={t == 1 ? true : false}
+                  defaultChecked={t == 1 ? true : false}
                   onClick={() => {
                     setT(1);
                   }}
@@ -109,7 +109,7 @@ function OrganizationPeople(): JSX.Element {
                   value="adminslist"
                   name="displaylist"
                   type="radio"
-                  checked={t == 2 ? true : false}
+                  defaultChecked={t == 2 ? true : false}
                   onClick={() => {
                     setT(2);
                   }}
