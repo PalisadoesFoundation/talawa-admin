@@ -115,6 +115,14 @@
   display: flex;
   justify-content: space-between;
 }
+@media screen and (max-width: 575.5px) {
+  .justifysp {
+    padding-left: 55px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+}
 .addbtn {
   border: 1px solid #e8e5e5;
   box-shadow: 0 2px 2px #e8e5e5;

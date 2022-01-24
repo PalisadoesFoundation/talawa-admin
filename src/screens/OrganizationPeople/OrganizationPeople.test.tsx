@@ -63,6 +63,15 @@ async function wait(ms = 0) {
 }
 
 describe('Organisation People Page', () => {
+  test('correct mock data should be queried', async () => {
+    const dataQuery1 = MOCKS[0]?.result?.data?.organizations;
+
+    console.log(`Data is ${dataQuery1}`);
+    expect(dataQuery1[0]?._id).toEqual(1);
+
+    const dataQuery2 = MOCKS[1]?.result?.data?.organizations;
+    expect(dataQuery2[0]?._id).toEqual(1);
+  });
   test('It is necessary to query the correct mock data.', async () => {
     const { container } = render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
