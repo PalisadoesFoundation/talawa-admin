@@ -24,16 +24,22 @@ function OrganizationDashboard(): JSX.Element {
   const [del] = useMutation(DELETE_ORGANIZATION_MUTATION);
 
   const delete_org = async () => {
-    if (confirm('Are you sure to Delete the Organization ?')) {
-      const { data } = await del({
-        variables: {
-          id: currentUrl,
-        },
-      });
-      console.log(data);
-      window.location.replace('/orglist');
-    } else {
-      alert('Could Not Delete Organization');
+    if (
+      confirm(
+        'This action cannot be undone. This will permanently delete the organization, calendars, chats, news feeds, groups, and remove all collaborator associations.'
+      )
+    ) {
+      if (confirm('Are you sure to Delete this Organization ?')) {
+        const { data } = await del({
+          variables: {
+            id: currentUrl,
+          },
+        });
+        console.log(data);
+        window.location.replace('/orglist');
+      } else {
+        alert('Could Not Delete Organization');
+      }
     }
   };
 
