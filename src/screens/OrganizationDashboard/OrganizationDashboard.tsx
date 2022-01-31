@@ -24,13 +24,17 @@ function OrganizationDashboard(): JSX.Element {
   const [del] = useMutation(DELETE_ORGANIZATION_MUTATION);
 
   const delete_org = async () => {
-    const { data } = await del({
-      variables: {
-        id: currentUrl,
-      },
-    });
-    console.log(data);
-    window.location.replace('/orglist');
+    if (confirm('Are you sure to Delete the Organization ?')) {
+      const { data } = await del({
+        variables: {
+          id: currentUrl,
+        },
+      });
+      console.log(data);
+      window.location.replace('/orglist');
+    } else {
+      alert('Could Not Delete Organization');
+    }
   };
 
   if (loading) {
