@@ -61,6 +61,9 @@ jobs:
       - run: yarn test --watchAll=false --coverage
       - name: Present current coverage in PR
         uses: codecov/codecov-action@v2.1.0
+        with:
+          token: ${{secrets.CODECOV_TOKEN}}
+          file: ./coverage/lcov.info      
       - name: Test acceptable level of code coverage
         uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:
