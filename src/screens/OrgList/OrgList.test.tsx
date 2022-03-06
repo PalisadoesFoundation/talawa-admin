@@ -25,6 +25,14 @@ const MOCKS = [
               firstName: 'John',
               lastName: 'Doe',
             },
+            admins: {
+              _id: '123',
+            },
+            members: {
+              _id: '234',
+            },
+            createdAt: '02/02/2022',
+            location: 'Washington DC',
           },
         ],
       },
@@ -75,6 +83,14 @@ describe('Organisation List Page', () => {
         creator: { firstName: 'John', lastName: 'Doe' },
         image: '',
         name: 'Akatsuki',
+        createdAt: '02/02/2022',
+        admins: {
+          _id: '123',
+        },
+        members: {
+          _id: '234',
+        },
+        location: 'Washington DC',
       },
     ]);
   });
