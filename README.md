@@ -64,6 +64,10 @@ yarn test:e2e
 yarn lint
 ```
 
+## Express Installation
+
+See [Follow this guide](./INSTALLATION.md).
+
 ## Customize configuration
 
 See [Configuration Reference](https://cli.vuejs.org/config/).
@@ -75,4 +79,3 @@ See [Docker Container](Docker_Container/README.md)
 ## For Code Style
 
 See [Code Stlye](Code_Style.md)
-
