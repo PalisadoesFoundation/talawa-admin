@@ -24,7 +24,7 @@ module.exports = {
       if not already exists. It also checks whether all the fields
       were provided or not, else raises an error and exists the
       installation process.
-
+      
       Args:
           None
 
@@ -32,12 +32,10 @@ module.exports = {
           None
     */
 
-    const access_token = prompt('Access Token: ');
-    const refresh_token = prompt('Refresh Token: ');
     const talawa_api_url = prompt('Talawa-Api URL:');
 
     // check if all information is provided or not
-    if (access_token === '' || refresh_token === '' || talawa_api_url === '') {
+    if (talawa_api_url === '') {
       log(chalk.bold.underline.red('\nAll fields were not provided.\n'));
       process.exit();
     }
@@ -49,8 +47,8 @@ module.exports = {
     }
 
     // Create a file for environment variables and save it
-    const data = `ACCESS_TOKEN_SECRET=${access_token}\nREFRESH_TOKEN_SECRET=${refresh_token}\nTALAWA_API_URL=${talawa_api_url}\n`;
-    fs.writeFileSync('.env.local', data, (err) => {
+    const data = `REACT_APP_BACKEND_ENDPOINT=${talawa_api_url}\n`;
+    fs.writeFileSync('.env', data, (err) => {
       if (err) throw err;
       log(chalk.bold.underline.green('\nUser configured successfully.'));
     });
@@ -59,10 +57,10 @@ module.exports = {
   print_console: function (text, color = '#CCF381') {
     /*
       Display a message on console
-
+      
       Displays a message on the console,
       with a given color,and green by deafult.
-
+      
       Args:
           text: String
               Message to be displayed on the console.
@@ -81,7 +79,7 @@ module.exports = {
 
       This runs whenever an error is encountered. It displays the
       reason of error and exits the installation process.
-
+      
       Args:
           reason: String
               Reason or message produced by the error.
