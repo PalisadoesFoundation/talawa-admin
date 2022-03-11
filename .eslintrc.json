@@ -40,9 +40,7 @@
     "react/jsx-filename-extension": [
       "error",
       {
-        "extensions": [
-          ".tsx"
-        ]
+        "extensions": [".tsx"]
       }
     ],
     // Ensures that components are always written in PascalCase
