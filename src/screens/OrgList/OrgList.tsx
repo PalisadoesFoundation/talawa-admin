@@ -14,6 +14,7 @@ import {
 import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import Button from 'react-bootstrap/Button';
+import dayjs from 'dayjs';
 
 function OrgList(): JSX.Element {
   const [modalisOpen, setmodalIsOpen] = React.useState(false);
@@ -32,6 +33,7 @@ function OrgList(): JSX.Element {
     descrip: '',
     ispublic: false,
     visible: false,
+    location: '',
   });
 
   const CreateOrg = async () => {
@@ -39,6 +41,7 @@ function OrgList(): JSX.Element {
       variables: {
         name: formState.name,
         description: formState.descrip,
+        location: formState.location,
         visibleInSearch: formState.visible,
         isPublic: formState.ispublic,
       },
@@ -143,15 +146,27 @@ function OrgList(): JSX.Element {
             <div className={styles.list_box}>
               {data
                 ? data.organizations.map(
-                    (datas: { _id: string; image: string; name: string }) => {
+                    (datas: {
+                      _id: string;
+                      image: string;
+                      name: string;
+                      admins: any;
+                      members: any;
+                      createdAt: string;
+                      location: string | null;
+                    }) => {
                       return (
                         <SuperDashListCard
                           id={datas._id}
                           key={datas._id}
                           image={datas.image}
-                          createdDate="05/06/2020"
+                          admins={datas.admins.length}
+                          members={datas.members.length}
+                          createdDate={dayjs(parseInt(datas?.createdAt)).format(
+                            'DD/MM/YYYY'
+                          )}
                           orgName={datas.name}
-                          orgLocation="Anand, Gujarat"
+                          orgLocation={datas.location}
                         />
                       );
                     }
@@ -204,6 +219,21 @@ function OrgList(): JSX.Element {
                   setFormState({
                     ...formState,
                     descrip: e.target.value,
+                  });
+                }}
+              />
+              <label htmlFor="descrip">Location</label>
+              <input
+                type="text"
+                id="location"
+                placeholder="Enter Location"
+                autoComplete="off"
+                required
+                value={formState.location}
+                onChange={(e) => {
+                  setFormState({
+                    ...formState,
+                    location: e.target.value,
                   });
                 }}
               />

@@ -7,9 +7,11 @@ interface SuperDashListCardProps {
   key: string;
   id: string;
   orgName: string;
-  orgLocation: string;
+  orgLocation: string | null;
   createdDate: string;
   image: string;
+  admins: string;
+  members: string;
 }
 
 function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
@@ -34,17 +36,17 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
             <p className={styles.orgname}>
               {props.orgName ? <>{props.orgName}</> : <>Dogs Care</>}
             </p>
-            <p className={styles.orgfont}>{props.orgLocation}</p>
+            <p className={styles.orgfont}>{props?.orgLocation}</p>
             <p className={styles.orgfontcreated}>
               Created: <span>{props.createdDate}</span>
             </p>
           </div>
           <div className={styles.singledetails_data_right}>
             <p className={styles.orgfont}>
-              Admins: <span>10</span>
+              Admins: <span>{props?.admins}</span>
             </p>
             <p className={styles.orgfont}>
-              Members: <span>40</span>
+              Members: <span>{props?.members}</span>
             </p>
             <button className={styles.orgfontcreatedbtn} onClick={Click}>
               Manage
