@@ -20,7 +20,7 @@ import { Provider } from 'react-redux';
 import { store } from './state/store';
 
 const httpLink = new HttpLink({
-  uri: 'http://localhost:4000/graphql',
+  uri: process.env.REACT_APP_BACKEND_ENDPOINT,
   headers: {
     authorization: 'Bearer ' + localStorage.getItem('token') || '',
   },
