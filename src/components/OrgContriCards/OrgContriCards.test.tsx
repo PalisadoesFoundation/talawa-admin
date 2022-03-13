@@ -10,21 +10,31 @@ import {
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
-  uri: 'http://localhost:4000/graphql',
+  uri: process.env.REACT_APP_BACKEND_ENDPOINT,
 });
 
 describe('Testing the Organization Contributions Cards', () => {
+  const props = {
+    key: '123',
+    id: '123',
+    userName: 'John Doe',
+    contriDate: '06/03/2022',
+    contriAmount: '500',
+    contriTransactionId: 'QW56DA88',
+    userEmail: 'johndoe@gmail.com',
+  };
+
   it('should render props and text elements test for the page component', () => {
     render(
       <ApolloProvider client={client}>
         <OrgContriCards
-          id="784513962"
-          key="unique"
-          userName="John Doe"
-          contriDate="06/03/2022"
-          contriAmount="500"
-          contriTransactionId="QW56DA88"
-          userEmail="johndoe@gmail.com"
+          id={props.key}
+          key={props.id}
+          userName={props.userName}
+          contriDate={props.contriDate}
+          contriAmount={props.contriAmount}
+          contriTransactionId={props.contriTransactionId}
+          userEmail={props.userEmail}
         />
       </ApolloProvider>
     );
