@@ -36,9 +36,25 @@ Core features include:
 
 # Project Setup
 
-```
-yarn install
-```
+1.  Clone this repo to your local machine
+
+        git clone https://github.com/PalisadoesFoundation/talawa-admin
+        cd talawa-admin
+        yarn install
+
+2.  Talawa-ADMIN uses a configuration file named `.env` in the root directory. It is not a part of the repo and you will need to create it. There is a sample configuration file named `.env.example` in the root diretory. Create a new `.env` file by copying the contents of the `.env.example` file.
+
+        cp .env .env.example
+
+3.  Run Talawa-api locally in your system, and copy the URL to the `REACT_APP_BACKEND_ENDPOINT` section of the `.env` file.
+
+        Talawa-API: https://github.com/PalisadoesFoundation/talawa-api
+
+4.  When finished, your `.env` file should have the following field filled in.
+
+    - REACT_APP_BACKEND_ENDPOINT
+
+    Please review the contents of the `.env.example` file for additional details.
 
 ## Compiles and hot-reloads for development
 
@@ -64,6 +80,10 @@ yarn test:e2e
 yarn lint
 ```
 
+## Express Installation
+
+See [Follow this guide](./INSTALLATION.md).
+
 ## Customize configuration
 
 See [Configuration Reference](https://cli.vuejs.org/config/).
@@ -75,4 +95,3 @@ See [Docker Container](Docker_Container/README.md)
 ## For Code Style
 
 See [Code Stlye](Code_Style.md)
-

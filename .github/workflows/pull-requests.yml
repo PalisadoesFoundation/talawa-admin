@@ -3,7 +3,7 @@
 #
 # NOTE!
 #
-# Please read the README.md file in this directory that defines what should 
+# Please read the README.md file in this directory that defines what should
 # be placed in this file
 #
 ##############################################################################
@@ -13,10 +13,10 @@ name: PR Workflow
 on:
   pull_request:
     branches:
-      - '**'  
+      - '**'
 
 jobs:
-  
+
   Linter:
     name: Lints the code
     runs-on: ubuntu-latest
@@ -24,11 +24,21 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install Dependencies
         run: yarn
-      - name: Run ESLint 
+      - name: Run ESLint
         run: yarn lint
-  
+
+  Count-lines-of-code:
+    name: Total number of lines in every file should not be more than 400
+    runs-on: ubuntu-latest
+    needs: Linter
+    steps:
+      - uses: actions/checkout@v2
+      - run: chmod +x ./.github/workflows/countline.py
+      - run: |
+          ./.github/workflows/countline.py --exclude_files src/screens/LoginPage/LoginPage.tsx
+
   Continuous-Integration:
-    name: continuous integration on pull request
+    name: Continuous integration on pull request
     runs-on: ubuntu-latest
     needs: Linter
     steps:
@@ -39,6 +49,7 @@ jobs:
         run: yarn test
 
   Code-Coverage:
+    name: Shows code coverage
     runs-on: ubuntu-latest
     needs: Continuous-Integration
     steps:
@@ -54,5 +65,4 @@ jobs:
         uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:
           path: "./coverage/lcov.info"
-          min_coverage: 37.51     
-
+          min_coverage: 37.41

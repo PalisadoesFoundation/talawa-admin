@@ -130,6 +130,7 @@ export const LOGIN_MUTATION = gql`
 export const CREATE_ORGANIZATION_MUTATION = gql`
   mutation CreateOrganization(
     $description: String!
+    $location: String!
     $name: String!
     $visibleInSearch: Boolean!
     $isPublic: Boolean!
@@ -137,6 +138,7 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
     createOrganization(
       data: {
         description: $description
+        location: $location
         name: $name
         visibleInSearch: $visibleInSearch
         isPublic: $isPublic

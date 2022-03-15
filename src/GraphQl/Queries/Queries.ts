@@ -13,6 +13,14 @@ export const ORGANIZATION_LIST = gql`
         lastName
       }
       name
+      members {
+        _id
+      }
+      admins {
+        _id
+      }
+      createdAt
+      location
     }
   }
 `;

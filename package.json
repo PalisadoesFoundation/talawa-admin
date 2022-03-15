@@ -1,6 +1,5 @@
 {
   "name": "my-app",
-  "type": "module",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -10,6 +9,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/jest": "^26.0.24",
     "@types/jquery": "^3.5.6",
     "@types/node": "^12.20.16",
@@ -21,8 +21,10 @@
     "apollo-boost": "^0.4.9",
     "bootstrap": "^4.2.1",
     "chart.js": "^3.4.1",
+    "dayjs": "^1.10.7",
     "detect-newline": "^4.0.0",
     "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-jest": "^25.3.4",
     "eslint-plugin-prettier": "^3.4.0",
@@ -53,7 +55,8 @@
     "eject": "react-scripts eject",
     "lint": "eslint \"**/*.{ts,tsx}\"",
     "lint-fix": "eslint \"**/*.{ts,tsx}\" --fix",
-    "format": "prettier --write \"**/*.{ts,tsx,json,scss,css}\""
+    "format": "prettier --write \"**/*.{ts,tsx,json,scss,css}\"",
+    "setup": "yarn install && node setup_file.js"
   },
   "eslintConfig": {
     "extends": [
@@ -80,10 +83,13 @@
     "@types/enzyme": "^3.10.9",
     "@types/react": "^17.0.14",
     "@types/react-router-dom": "^5.1.8",
+    "chalk": "4.1.0",
     "@typescript-eslint/eslint-plugin": "^5.9.0",
     "@typescript-eslint/parser": "^5.9.0",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "jquery": "^3.2.1"
+    "jquery": "^3.2.1",
+    "prompt-sync": "^4.2.0",
+    "valid-url": "^1.0.9"
   },
   "resolutions": {
     "@apollo/client": "^3.4.0-beta.19"
