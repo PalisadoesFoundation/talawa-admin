@@ -96,9 +96,19 @@ The process of proposing a change to Talawa Admin can be summarized as:
             yarn test --watchAll=false --coverage
             genhtml coverage/lcov.info -o coverage
             ```
-         1. The coverage rate will be visible on the penultimate line of the `genhtml` command's output.
+         1. The output of the `yarn test` command will give you a tablular coverage report per file
+         1. The overall coverage rate will be visible on the penultimate line of the `genhtml` command's output.
          1. The `genhtml` command is part of the Linux `lcov` package. Similar packages can be found for Windows and MacOS.
          1. The currently acceptable coverage rate can be found in the [GitHub Pull Request file](https://github.com/PalisadoesFoundation/talawa-admin/blob/develop/.github/workflows/pull-requests.yml). Search for the value below the line containing `min_coverage`.
+      1. _Testing Individual Files_
+         1. You can test an individual file by running this command:
+             ```
+             yarn test --watchAll=false /path/to/test/file
+             ```
+         1. You can get the test coverage report for that file by running this command. The report will list all tests in the suite. Those tests that are not run will have zero values. You will need to look for the output line relevant to your test file.
+             ```
+             yarn test --watchAll=false --coverage /path/to/test/file
+             ```
       1. _Creating your code coverage account_
           1. You can also see your code coverage online for your fork of the repo. This is provided by `codecov.io`
               1. Go to this link: `https://app.codecov.io/gh/XXXX/YYYY` where XXXX is your GitHub account username and YYYY is the name of the repository
