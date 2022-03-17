@@ -7,6 +7,8 @@ body {
   align-items: left;
 }
 .login_background {
+  overflow-x: hidden;
+  overflow-y: visible;
   background-color: #fcfcfc;
   height: 100%;
   width: 100vw;
