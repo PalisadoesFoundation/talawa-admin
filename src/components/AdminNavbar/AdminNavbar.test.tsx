@@ -1,12 +1,9 @@
 import React from 'react';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import AdminNavbar from './AdminNavbar';
 import { BrowserRouter } from 'react-router-dom';
-import Enzyme, { shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-
-Enzyme.configure({ adapter: new Adapter() });
+import userEvent from '@testing-library/user-event';
 
 describe('Testing Admin Navbar', () => {
   // eslint-disable-next-line jest/expect-expect
@@ -53,11 +50,22 @@ describe('Testing Admin Navbar', () => {
       </BrowserRouter>
     );
 
+    fireEvent.click(screen.getByText('Plugins'));
+    fireEvent.click(screen.getByTestId('logoutDropdown'));
+
     expect(screen.getByText('Dashboard')).toBeInTheDocument();
     expect(screen.getByText('Posts')).toBeInTheDocument();
     expect(screen.getByText('People')).toBeInTheDocument();
     expect(screen.getByText('Events')).toBeInTheDocument();
     expect(screen.getByText('Contributions')).toBeInTheDocument();
     expect(screen.getByText('Plugins')).toBeInTheDocument();
+    expect(screen.getByTestId('dropdownIcon')).toBeTruthy();
+    expect(screen.getByText('Plugin Store')).toBeInTheDocument();
+    expect(screen.getByTestId('logoutDropdown')).toBeTruthy();
+    expect(screen.getByText('Notify')).toBeInTheDocument();
+    expect(screen.getByText('Settings')).toBeInTheDocument();
+    expect(screen.getByText('Logout')).toBeInTheDocument();
+
+    userEvent.click(screen.getByText('Logout'));
   });
 });

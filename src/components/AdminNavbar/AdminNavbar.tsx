@@ -72,6 +72,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                               className={`fa ${
                                 subTarget.icon ? subTarget.icon : 'fa-cubes'
                               }`}
+                              data-testid="dropdownIcon"
                             ></i>
                             {subTarget.name}
                           </Dropdown.Item>
@@ -88,6 +89,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
               <img
                 src="https://via.placeholder.com/45x45"
                 className={styles.roundedcircle}
+                data-testid="logoutDropdown"
               />
             </Dropdown.Toggle>
             <Dropdown.Menu className={styles.dropdownMenu}>
