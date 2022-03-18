@@ -2,6 +2,7 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@apollo/client": "^3.4.12",
     "@apollo/link-error": "^2.0.0-beta.3",
@@ -20,6 +21,8 @@
     "antd": "^4.16.9",
     "apollo-boost": "^0.4.9",
     "bootstrap": "^4.2.1",
+    "boxen": "^4.2.0",
+    "chalk": "^4.1.0",
     "chart.js": "^3.4.1",
     "dayjs": "^1.10.7",
     "detect-newline": "^4.0.0",
@@ -29,8 +32,13 @@
     "eslint-plugin-jest": "^25.3.4",
     "eslint-plugin-prettier": "^3.4.0",
     "graphql": "^15.5.1",
+    "inquirer": "^8.2.1",
     "jest": "^27.4.5",
     "jest-docblock": "^27.4.0",
+    "markdown-js": "^0.0.4",
+    "marked": "^2.0.1",
+    "marked-terminal": "^4.1.0",
+    "node-cmd": "^5.0.0",
     "prettier": "^2.3.2",
     "react": "^17.0.2",
     "react-apollo": "^3.1.5",
@@ -56,7 +64,7 @@
     "lint": "eslint \"**/*.{ts,tsx}\"",
     "lint-fix": "eslint \"**/*.{ts,tsx}\" --fix",
     "format": "prettier --write \"**/*.{ts,tsx,json,scss,css}\"",
-    "setup": "yarn install && node setup_file.js"
+    "setup": "npm i boxen@4.2.0 chalk@4.1.0 inquirer markdown-js marked@2.0.1 marked-terminal@4.1.0 node-cmd@5.0.0 -f && node setup_file.js"
   },
   "eslintConfig": {
     "extends": [
@@ -83,7 +91,6 @@
     "@types/enzyme": "^3.10.9",
     "@types/react": "^17.0.14",
     "@types/react-router-dom": "^5.1.8",
-    "chalk": "4.1.0",
     "@typescript-eslint/eslint-plugin": "^5.9.0",
     "@typescript-eslint/parser": "^5.9.0",
     "eslint-plugin-react-hooks": "^4.2.0",
