@@ -10,20 +10,22 @@ import {
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
-  uri: 'https://talawa-graphql-api.herokuapp.com/graphql',
+  uri: process.env.REACT_APP_BACKEND_ENDPOINT,
 });
 
 describe('Testing Contribution Stats', () => {
+  const props = {
+    key: '123',
+    id: '234',
+    recentAmount: '200',
+    highestAmount: '500',
+    totalAmount: '1000',
+  };
+
   test('should render props and text elements test for the page component', () => {
     render(
       <ApolloProvider client={client}>
-        <ContriStats
-          key="123"
-          id=""
-          recentAmount="200"
-          highestAmount="500"
-          totalAmount="1000"
-        />
+        <ContriStats {...props} />
       </ApolloProvider>
     );
     expect(screen.getByText('Recent Contribution: $')).toBeInTheDocument();
