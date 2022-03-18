@@ -1,43 +1,39 @@
-/*
-Driver code for express installation.
+/**
+ * @brief Driver code for express installation
+ * @description This code installs the Talawa API by
+ * running the individual steps automatically. The
+ * process consists of 4 steps:
+ * 1. Displaying information about Talawa API
+ * 2. Install project dependencies
+ * 3. Set up user configuration
+ * 4. Display command to start the application
+ *
+ * Every step displays whether it has been
+ * executed successfully or not
+ */
+import path from 'path';
+import display_about from './setup/about.js';
+import install_dependencies from './setup/package_installation.js';
+import user_input from './setup/input.js';
+import start_application from './setup/start_app.js';
 
-This program will install Talawa Admin on the system.
-It executes the pre-defined commands on the shell and
-then logs the output of each step.
+/**
+ * This asynchronous function runs the setup process
+ * by executing each of the steps serially
+ */
+const run_setup = async () => {
+  //1. Display information about the project
+  display_about();
 
-*/
+  //2. Install project dependencies
+  await install_dependencies();
 
-const prompt = require('prompt-sync')();
-const { inputData, print_console, exit_process } = require('./setup/utils');
+  //3. Set up user configuration
+  const __dirname = path.resolve();
+  await user_input(path.join(__dirname, '.env'));
 
-//  1. Shift to talawa-admin Directory
-process.chdir(__dirname);
+  //4. Display command to start the application
+  await start_application();
+};
 
-// 2. Display initial data
-print_console('\nTALAWA-ADMIN INSTALLATION\n');
-
-// 3. Take input of details from user
-const takeUserInput = prompt(
-  'Do you want to configure variables for the application, This will override any existing variable. (Enter Y for Yes, any other key to ignore): '
-);
-
-print_console('\nUSER INPUT\n');
-
-if (takeUserInput === 'Y' || takeUserInput === 'y') {
-  console.log('\n');
-  print_console(
-    'Enter the details below. All fields are compulsory.\n',
-    '#8BD8BD'
-  );
-  inputData();
-} else {
-  exit_process('Installation is intruppted.\n');
-}
-
-// 4. Start the application
-print_console('\nSTARTING APPLICATION\n');
-print_console(
-  'Talawa Admin has been successfully installed on your device. Now, you can start the application using the command mentioned below. The same command can be used to restart the application.\n'
-);
-
-print_console('yarn serve\n', '#00FF00');
+run_setup();
