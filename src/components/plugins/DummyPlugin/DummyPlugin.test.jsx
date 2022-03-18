@@ -14,6 +14,6 @@ describe('Testing dummy plugin', () => {
       </BrowserRouter>
     );
 
-    expect(getByText('Welcome to the Dummy Plugin!')).toBeInTheDocument();
+    expect(getByText(/Welcome to the Dummy Plugin!/i)).toBeInTheDocument();
   });
 });
