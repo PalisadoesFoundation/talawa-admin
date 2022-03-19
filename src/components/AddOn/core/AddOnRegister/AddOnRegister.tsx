@@ -39,7 +39,7 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
             </Form.Group>
             <Form.Group className="mb-3" controlId="registerForm.PluginDesc">
               <Form.Label>Plugin Description</Form.Label>
-              <Form.Control as="textarea" rows={3} />
+              <Form.Control as="textarea" title="Plugin Description" rows={3} />
             </Form.Group>
             <Form.Group className="mb-3" controlId="registerForm.PluginURL">
               <Form.Label>Plugin Repo (GitHub URL)</Form.Label>
@@ -54,10 +54,10 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={handleClose} data-testid="addonclose">
             Close
           </Button>
-          <Button variant="primary" onClick={handleRegister}>
+          <Button variant="primary" onClick={handleRegister} data-testid="addonregister">
             Register
           </Button>
         </Modal.Footer>
