@@ -4,8 +4,7 @@ import AddOnRegister from './AddOnRegister';
 
 describe("Testing AddOnRegister", () => {
   const props = {
-    id: '6234d8bf6ud937ddk70ecc5c9',
-    createdBy: '6234d7da69dd45357843jfg52'
+    id: '6234d8bf6ud937ddk70ecc5c9'
   };
 
   test("should render modal and take info to add plugin for registered organization", () => {
@@ -19,7 +18,7 @@ describe("Testing AddOnRegister", () => {
     userEvent.click(screen.getByLabelText("Install after register."));
     userEvent.click(screen.getByTestId('addonregister'));
     userEvent.click(screen.getByTestId('addonclose'));
-
+    
     expect(screen.getByPlaceholderText("Plugin Name")).toHaveValue("myplugin");
     expect(screen.getByTitle("Plugin Description")).toHaveValue("myplugin description");
     expect(screen.getByPlaceholderText("Plugin Repo (GitHub URL)")).toHaveValue("https://github.com/PalisadoesFoundation/talawa-admin");
