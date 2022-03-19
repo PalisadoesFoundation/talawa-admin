@@ -45,10 +45,11 @@ describe('Testing Event List Card', () => {
     regDays: '3',
   };
 
-  global.confirm = () => true;
   global.alert = jest.fn();
 
   test('should render props and text elements test for the page component', async () => {
+    global.confirm = () => true;
+
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <EventListCard {...props} />
@@ -56,6 +57,7 @@ describe('Testing Event List Card', () => {
     );
 
     await wait();
+
     userEvent.click(screen.getByText(/Delete/i));
 
     expect(screen.getByText('Admin:')).toBeInTheDocument();
@@ -70,6 +72,8 @@ describe('Testing Event List Card', () => {
   });
 
   test('Should render text elements when props value is not passed', async () => {
+    global.confirm = () => false;
+
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <EventListCard
@@ -87,6 +91,7 @@ describe('Testing Event List Card', () => {
     );
 
     await wait();
+
     userEvent.click(screen.getByText(/Delete/i));
 
     expect(screen.getByText('Admin:')).toBeInTheDocument();
