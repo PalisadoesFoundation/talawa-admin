@@ -54,10 +54,18 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose} data-testid="addonclose">
+          <Button
+            variant="secondary"
+            onClick={handleClose}
+            data-testid="addonclose"
+          >
             Close
           </Button>
-          <Button variant="primary" onClick={handleRegister} data-testid="addonregister">
+          <Button
+            variant="primary"
+            onClick={handleRegister}
+            data-testid="addonregister"
+          >
             Register
           </Button>
         </Modal.Footer>
