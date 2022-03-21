@@ -1,40 +1,93 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import OrgPostCard from './OrgPostCard';
-import {
-  ApolloClient,
-  NormalizedCacheObject,
-  ApolloProvider,
-  InMemoryCache,
-} from '@apollo/client';
+import { act, render, screen } from '@testing-library/react';
+import { MockedProvider } from '@apollo/react-testing';
+import userEvent from '@testing-library/user-event';
 
-const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
-  cache: new InMemoryCache(),
-  uri: 'https://talawa-graphql-api.herokuapp.com/graphql',
-});
+import OrgPostCard from './OrgPostCard';
+import { DELETE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
+
+const MOCKS = [
+  {
+    request: {
+      query: DELETE_POST_MUTATION,
+      variable: { id: '123' },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: '1',
+          },
+        ],
+      },
+    },
+  },
+];
+
+async function wait(ms = 0) {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+}
 
 describe('Testing Organization Post Card', () => {
-  test('should render props and text elements test for the page component', () => {
+  const props = {
+    key: '123',
+    id: '12',
+    postTitle: 'Event Info',
+    postInfo: 'Time change',
+    postAuthor: 'John Doe',
+    postPhoto: 'photoLink',
+    postVideo: 'videoLink',
+  };
+
+  global.alert = jest.fn();
+
+  test('should render props and text elements test for the page component', async () => {
+    global.confirm = () => true;
+
     render(
-      <ApolloProvider client={client}>
-        <OrgPostCard
-          key="123"
-          id=""
-          postTitle="Event Info"
-          postInfo="Time change"
-          postAuthor="Saumya xyz"
-          postPhoto="photoLink"
-          postVideo="videoLink"
-        />
-      </ApolloProvider>
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <OrgPostCard {...props} />
+      </MockedProvider>
     );
-    expect(screen.getByText('Author:')).toBeInTheDocument();
-    expect(screen.getByText('Image URL:')).toBeInTheDocument();
-    expect(screen.getByText('Video URL:')).toBeInTheDocument();
-    expect(screen.getByText('Event Info')).toBeInTheDocument();
-    expect(screen.getByText('Time change')).toBeInTheDocument();
-    expect(screen.getByText('Saumya xyz')).toBeInTheDocument();
-    expect(screen.getByText('photoLink')).toBeInTheDocument();
-    expect(screen.getByText('videoLink')).toBeInTheDocument();
+
+    await wait();
+
+    userEvent.click(screen.getByTestId(/deletePostBtn/i));
+
+    expect(screen.getByText(/Author:/i)).toBeInTheDocument();
+    expect(screen.getByText(/Image URL:/i)).toBeInTheDocument();
+    expect(screen.getByText(/Video URL:/i)).toBeInTheDocument();
+    expect(screen.getByText(props.postTitle)).toBeInTheDocument();
+    expect(screen.getByText(props.postInfo)).toBeInTheDocument();
+    expect(screen.getByText(props.postAuthor)).toBeInTheDocument();
+    expect(screen.getByText(props.postPhoto)).toBeInTheDocument();
+    expect(screen.getByText(props.postVideo)).toBeInTheDocument();
+  });
+
+  test('Should render text elements when props value is not passed', async () => {
+    global.confirm = () => false;
+
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <OrgPostCard {...props} />
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId(/deletePostBtn/i));
+
+    expect(screen.getByText(/Author:/i)).toBeInTheDocument();
+    expect(screen.getByText(/Image URL:/i)).toBeInTheDocument();
+    expect(screen.getByText(/Video URL:/i)).toBeInTheDocument();
+    expect(screen.getByText(props.postTitle)).toBeInTheDocument();
+    expect(screen.getByText(props.postInfo)).toBeInTheDocument();
+    expect(screen.getByText(props.postAuthor)).toBeInTheDocument();
+    expect(screen.getByText(props.postPhoto)).toBeInTheDocument();
+    expect(screen.getByText(props.postVideo)).toBeInTheDocument();
   });
 });

@@ -26,7 +26,8 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
             id: props.id,
           },
         });
-        console.log(data);
+
+        /* istanbul ignore next */
         window.location.reload();
       } catch (error) {
         window.alert(error);
@@ -40,7 +41,11 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
         <div className={styles.cards}>
           <div className={styles.dispflex}>
             <h2>{props.postTitle}</h2>
-            <a onClick={DeletePost} className={styles.icon}>
+            <a
+              onClick={DeletePost}
+              data-testid="deletePostBtn"
+              className={styles.icon}
+            >
               <i className="fa fa-trash"></i>
             </a>
           </div>
