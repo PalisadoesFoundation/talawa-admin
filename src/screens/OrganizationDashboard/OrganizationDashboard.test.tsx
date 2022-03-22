@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render } from '@testing-library/react';
+import { act, render, screen, fireEvent } from '@testing-library/react';
 import OrganizationDashboard from './OrganizationDashboard';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { Provider } from 'react-redux';
@@ -55,5 +55,21 @@ describe('Organisation Dashboard Page', () => {
     expect(container.textContent).not.toBe('Loading data...');
     await wait();
     expect(container.textContent).toMatch('Location : ');
+  });
+  test('should check function call', async () => {
+    const { container } = render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <OrganizationDashboard />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    expect(container.textContent).not.toBe('Loading data...');
+    await wait();
+    fireEvent.click(screen.getByText('Delete This Organization'));
+    expect(window.location).not.toBeNull();
   });
 });
