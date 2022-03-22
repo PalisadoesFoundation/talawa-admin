@@ -1,6 +1,6 @@
 import { store } from './store';
 describe('Testing src/state/store.ts', () => {
-  test('Testing Store Component', () => {
+  test('State Object properties Should match with the following', () => {
     const state = store.getState();
     expect(state).toHaveProperty('appRoutes');
     expect(state).toHaveProperty('plugins');
