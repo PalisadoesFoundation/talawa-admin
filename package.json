@@ -110,6 +110,7 @@
         "lines": 20,
         "statements": 20
       }
-    }
+    },
+    "coveragePathIgnorePatterns": ["src/state/index.ts"]
   }
 }
