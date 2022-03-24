@@ -4,14 +4,28 @@ import OrganizationCardStart from './OrganizationCardStart';
 
 describe('Testing the Organization Cards', () => {
   test('should render props and text elements test for the page component', () => {
-    render(
-      <OrganizationCardStart
-        id="624135624625"
-        key="5"
-        image=""
-        name="organization"
-      />
-    );
-    expect(screen.getByText('organization')).toBeInTheDocument();
+    const props = {
+      id: '123',
+      key: '456',
+      image: 'https://via.placeholder.com/80',
+      name: 'Sample',
+    };
+
+    render(<OrganizationCardStart {...props} />);
+
+    expect(screen.getByText(props.name)).toBeInTheDocument();
+  });
+
+  test('Should render text elements when props value is not passed', () => {
+    const props = {
+      id: '123',
+      key: '456',
+      image: '',
+      name: 'Sample',
+    };
+
+    render(<OrganizationCardStart {...props} />);
+
+    expect(screen.getByText(props.name)).toBeInTheDocument();
   });
 });
