@@ -10,6 +10,7 @@ interface SidePanelProps {
 function SidePanel({ collapse, children }: SidePanelProps): JSX.Element {
   return (
     <div
+      data-testid="SidePanel"
       className={`${styles.sidebarcontainer}${
         collapse ? styles.sidebarcollapsed : ''
       }`}
