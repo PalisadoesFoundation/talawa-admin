@@ -1,25 +1,112 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import OrgUpdate from './OrgUpdate';
-import {
-  ApolloClient,
-  NormalizedCacheObject,
-  ApolloProvider,
-  InMemoryCache,
-} from '@apollo/client';
+import { act, render, screen } from '@testing-library/react';
+import { MockedProvider } from '@apollo/react-testing';
+import userEvent from '@testing-library/user-event';
 
-const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
-  cache: new InMemoryCache(),
-  uri: 'https://talawa-graphql-api.herokuapp.com/graphql',
-});
+import OrgUpdate from './OrgUpdate';
+import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+
+const MOCKS = [
+  {
+    request: {
+      query: UPDATE_ORGANIZATION_MUTATION,
+      variable: {
+        id: '123',
+        name: 'John Doe',
+        description: 'This is testing',
+        isPublic: true,
+        visibleInSearch: true,
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: '1',
+          },
+        ],
+      },
+    },
+  },
+];
+
+async function wait(ms = 0) {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+}
 
 describe('Testing Organization Update', () => {
-  test('should render props and text elements test for the page component', () => {
+  const props = {
+    id: '123',
+    orgid: '456',
+  };
+
+  const formData = {
+    name: 'John Doe',
+    description: 'This is a description',
+    creator: 'Sam Francisco',
+    apiUrl: 'https://github.com/PalisadoesFoundation/talawa-admin',
+    displayImage: new File(['hello'], 'hello.png', { type: 'image/png' }),
+    isPublic: true,
+    isVisible: true,
+  };
+
+  global.alert = jest.fn();
+
+  test('should render props and text elements test for the page component', async () => {
     render(
-      <ApolloProvider client={client}>
-        <OrgUpdate key="123" id="" orgid="" />
-      </ApolloProvider>
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <OrgUpdate {...props} />
+      </MockedProvider>
     );
+
+    userEvent.type(
+      screen.getByPlaceholderText(/Enter Organization Name/i),
+      formData.name
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Enter Description/i),
+      formData.description
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Enter Creator/i),
+      formData.creator
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Enter Api Url/i),
+      formData.apiUrl
+    );
+    userEvent.upload(
+      screen.getByLabelText(/display image:/i),
+      formData.displayImage
+    );
+    userEvent.click(screen.getByLabelText(/Is Public:/i));
+    userEvent.click(screen.getByLabelText(/Is Registrable:/i));
+
+    await wait();
+
+    userEvent.click(screen.getByText(/Save Changes/i));
+
+    expect(screen.getByPlaceholderText(/Enter Organization Name/i)).toHaveValue(
+      formData.name
+    );
+    expect(screen.getByPlaceholderText(/Enter Description/i)).toHaveValue(
+      formData.description
+    );
+    expect(screen.getByPlaceholderText(/Enter Creator/i)).toHaveValue(
+      formData.creator
+    );
+    expect(screen.getByPlaceholderText(/Enter Api Url/i)).toHaveValue(
+      formData.apiUrl
+    );
+    expect(screen.getByLabelText(/display image:/i)).toBeTruthy();
+    expect(screen.getByLabelText(/Is Public:/i)).not.toBeChecked();
+    expect(screen.getByLabelText(/Is Registrable:/i)).toBeChecked();
+    expect(screen.getByText(/Cancel/i)).toBeTruthy();
+
     expect(screen.getByText('Name')).toBeInTheDocument();
     expect(screen.getByText('Description')).toBeInTheDocument();
     expect(screen.getByText('Creator')).toBeInTheDocument();

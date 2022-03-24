@@ -33,13 +33,20 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
           visibleInSearch: visiblechecked,
         },
       });
+      /* istanbul ignore next */
       if (data) {
         window.alert('Successful updated');
         window.location.reload();
       }
     } catch (error) {
+      /* istanbul ignore next */
       window.alert(error);
     }
+  };
+
+  /* istanbul ignore next */
+  const cancelUpdate = () => {
+    window.location.reload();
   };
 
   return (
@@ -143,7 +150,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
                 />
               </div>
               <div>
-                <label htmlFor="visible">Is Registrable:</label>
+                <label htmlFor="registrable">Is Registrable:</label>
                 <input
                   id="registrable"
                   type="checkbox"
@@ -166,9 +173,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
               type="button"
               className={styles.whitebtn}
               value="cancelchanges"
-              onClick={() => {
-                window.location.reload();
-              }}
+              onClick={cancelUpdate}
             >
               Cancel
             </button>

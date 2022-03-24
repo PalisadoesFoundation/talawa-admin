@@ -28,8 +28,10 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
             orgid: currentUrl,
           },
         });
-        console.log(data);
+
+        /* istanbul ignore next */
         window.alert('The Member is removed');
+        /* istanbul ignore next */
         window.location.reload();
       } catch (error) {
         window.alert(error);

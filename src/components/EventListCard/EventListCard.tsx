@@ -27,7 +27,8 @@ function EventListCard(props: EventListCardProps): JSX.Element {
             id: props.id,
           },
         });
-        console.log(data);
+
+        /* istanbul ignore next */
         window.location.reload();
       } catch (error) {
         window.alert(error);

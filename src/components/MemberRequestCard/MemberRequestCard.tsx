@@ -29,8 +29,10 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
           id: props.id,
         },
       });
-      console.log(data);
+
+      /* istanbul ignore next */
       window.alert('it is accepted');
+      /* istanbul ignore next */
       window.location.reload();
     } catch (error) {
       window.alert(error);
@@ -46,7 +48,8 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
             userid: props.id,
           },
         });
-        console.log(data);
+
+        /* istanbul ignore next */
         window.location.reload();
       } catch (error) {
         window.alert(error);
@@ -59,11 +62,16 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
       <div className={styles.peoplelistdiv}>
         <Row className={styles.memberlist}>
           {props.memberImage ? (
-            <img src={props.memberImage} className={styles.alignimg} />
+            <img
+              src={props.memberImage}
+              className={styles.alignimg}
+              alt="userImage"
+            />
           ) : (
             <img
               src="https://via.placeholder.com/200x100"
               className={styles.memberimg}
+              alt="userImage"
             />
           )}
           <Col className={styles.singledetails}>
