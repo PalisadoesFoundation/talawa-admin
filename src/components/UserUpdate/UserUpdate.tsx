@@ -29,13 +29,20 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
           email: formState.email,
         },
       });
+      /* istanbul ignore next */
       if (data) {
         window.alert('Successful updated');
         window.location.reload();
       }
     } catch (error) {
+      /* istanbul ignore next */
       window.alert(error);
     }
+  };
+
+  /* istanbul ignore next */
+  const cancelUpdate = () => {
+    window.location.reload();
   };
 
   return (
@@ -135,10 +142,10 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
               <label>User Type</label>
               <div className={styles.radio_buttons}>
                 <input
-                  id="selectadmin"
-                  value="selectadmin"
-                  name="selectadmin"
                   type="radio"
+                  id="admin"
+                  value="selectadmin"
+                  name="selectRole"
                   checked={formState.selectedOption === 'selectadmin'}
                   onChange={(e) => {
                     setFormState({
@@ -147,12 +154,12 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
                     });
                   }}
                 />
-                <label>Admin</label>
+                <label htmlFor="admin">Admin</label>
                 <input
-                  id="selectsuperadmin"
-                  value="selectsuperadmin"
-                  name="selectsuperadmin"
                   type="radio"
+                  id="superadmin"
+                  value="selectsuperadmin"
+                  name="selectRole"
                   checked={formState.selectedOption === 'selectsuperadmin'}
                   onChange={(e) => {
                     setFormState({
@@ -161,7 +168,7 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
                     });
                   }}
                 />
-                <label>Superadmins</label>
+                <label htmlFor="superadmin">Superadmins</label>
               </div>
             </div>
           </div>
@@ -189,9 +196,7 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
               type="button"
               className={styles.whitebtn}
               value="cancelchanges"
-              onClick={() => {
-                window.location.reload();
-              }}
+              onClick={cancelUpdate}
             >
               Cancel
             </button>
