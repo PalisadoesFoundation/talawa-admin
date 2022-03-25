@@ -20,7 +20,7 @@ If you are new to contributing to open source, please read the Open Source Guide
 
 ## Code of Conduct
 
-A safe environment is required for everyone to contribute. Read our [Code of Conduct Guide](https://github.com/PalisadoesFoundation/talawa-admin/blob/develop/CODE_OF_CONDUCT.md) to understand what this means. Let us know immediately if you have unacceptable experiences in this area.
+A safe environment is required for everyone to contribute. Read our [Code of Conduct Guide](CODE_OF_CONDUCT.md) to understand what this means. Let us know immediately if you have unacceptable experiences in this area.
 
 No one should fear voicing their opinion. Respones must be respectful.
 
@@ -46,11 +46,11 @@ We utilize GitHub issues and pull requests to keep track of issues and contribut
 
 #### Issues
 
-Make sure you are following [issue report guidelines](https://github.com/PalisadoesFoundation/talawa-admin/blob/develop/issue-guidelines.md) available here before creating any new issues on Talawa Admin project.
+Make sure you are following [issue report guidelines](issue-guidelines.md) available here before creating any new issues on Talawa Admin project.
 
 #### Pull Requests
 
-[Pull Request guidelines](https://github.com/PalisadoesFoundation/talawa-admin/blob/develop/PR-guidelines.md) is best resource to follow to start working on open issues.
+[Pull Request guidelines](PR-guidelines.md) is best resource to follow to start working on open issues.
 
 #### Branching Strategy
 
@@ -94,7 +94,7 @@ The process of proposing a change to Talawa Admin can be summarized as:
          1. The output of the `yarn test` command will give you a tablular coverage report per file
          1. The overall coverage rate will be visible on the penultimate line of the `genhtml` command's output.
          1. The `genhtml` command is part of the Linux `lcov` package. Similar packages can be found for Windows and MacOS.
-         1. The currently acceptable coverage rate can be found in the [GitHub Pull Request file](https://github.com/PalisadoesFoundation/talawa-admin/blob/develop/.github/workflows/pull-requests.yml). Search for the value below the line containing `min_coverage`.
+         1. The currently acceptable coverage rate can be found in the [GitHub Pull Request file](.github/workflows/pull-requests.yml). Search for the value below the line containing `min_coverage`.
       1. _Testing Individual Files_
          1. You can test an individual file by running this command:
              ```
