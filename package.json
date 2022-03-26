@@ -94,6 +94,7 @@
     "@typescript-eslint/eslint-plugin": "^5.9.0",
     "@typescript-eslint/parser": "^5.9.0",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "jest-localstorage-mock": "^2.4.19",
     "jquery": "^3.2.1",
     "prompt-sync": "^4.2.0",
     "valid-url": "^1.0.9"
@@ -111,6 +112,9 @@
         "statements": 20
       }
     },
-    "coveragePathIgnorePatterns": ["src/state/index.ts"]
+    "resetMocks": false,
+    "coveragePathIgnorePatterns": [
+      "src/state/index.ts"
+    ]
   }
 }
