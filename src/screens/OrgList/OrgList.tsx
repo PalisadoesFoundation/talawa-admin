@@ -46,9 +46,12 @@ function OrgList(): JSX.Element {
         isPublic: formState.ispublic,
       },
     });
-    console.log(data);
-    window.alert('Congratulation the Organization is created');
-    window.location.replace('/orglist');
+
+    /* istanbul ignore next */
+    if (data) {
+      window.alert('Congratulation the Organization is created');
+      window.location.replace('/orglist');
+    }
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -86,6 +89,7 @@ function OrgList(): JSX.Element {
         </Navbar.Brand>
         <button
           className={styles.logoutbtn}
+          data-testid="logoutBtn"
           onClick={() => {
             localStorage.clear();
             window.location.replace('/');
@@ -102,16 +106,16 @@ function OrgList(): JSX.Element {
               <p>
                 Name:
                 <span>
-                  {data_2.user.firstName} {data_2.user.lastName}
+                  {data_2?.user.firstName} {data_2?.user.lastName}
                 </span>
               </p>
               <p>
                 Designation:
-                <span> {data_2.user.userType}</span>
+                <span> {data_2?.user.userType}</span>
               </p>
               <p>
                 Email:
-                <span> {data_2.user.email}</span>
+                <span> {data_2?.user.email}</span>
               </p>
               <p>
                 Contact:
@@ -129,6 +133,7 @@ function OrgList(): JSX.Element {
                   variant="success"
                   className={styles.invitebtn}
                   onClick={showInviteModal}
+                  data-testid="createOrganizationBtnEnable"
                 >
                   + Create Organization
                 </Button>
@@ -138,6 +143,7 @@ function OrgList(): JSX.Element {
                   disabled={true}
                   variant="success"
                   onClick={showInviteModal}
+                  data-testid="createOrganizationBtnDisable"
                 >
                   + Create Organization
                 </Button>
@@ -182,12 +188,17 @@ function OrgList(): JSX.Element {
           overlay: { backgroundColor: 'grey' },
         }}
         className={styles.modalbody}
+        ariaHideApp={false}
       >
         <section id={styles.grid_wrapper}>
           <div className={styles.form_wrapper}>
             <div className={styles.flexdir}>
               <p className={styles.titlemodal}>Create Organization</p>
-              <a onClick={hideInviteModal} className={styles.cancel}>
+              <a
+                onClick={hideInviteModal}
+                className={styles.cancel}
+                data-testid="closeOrganizationModal"
+              >
                 <i className="fa fa-times"></i>
               </a>
             </div>
@@ -273,6 +284,7 @@ function OrgList(): JSX.Element {
                 className={styles.greenregbtn}
                 value="invite"
                 onClick={CreateOrg}
+                data-testid="submitOrganizationForm"
               >
                 Create Organization
               </button>
