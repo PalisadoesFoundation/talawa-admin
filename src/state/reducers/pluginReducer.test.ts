@@ -33,14 +33,21 @@ describe('Testing Plugin Reducer', () => {
   it('should handle REMOVE_PLUGIN', () => {
     expect(
       reducer(
-        { installed: [], addonStore: [], extras: [] },
+        {
+          installed: [
+            { name: 'testplug2', id: 3 },
+            { name: 'testplug3', id: 5 },
+          ],
+          addonStore: [],
+          extras: [],
+        },
         {
           type: 'REMOVE_PLUGIN',
-          payload: { name: 'testplug' },
+          payload: { id: 3 },
         }
       )
     ).toEqual({
-      installed: [],
+      installed: [{ name: 'testplug3', id: 5 }],
       addonStore: [],
       extras: [],
     });
@@ -82,7 +89,7 @@ describe('Testing Plugin Reducer', () => {
       reducer(
         { installed: [], addonStore: [], extras: [] },
         {
-          type: 'UPDATE_STORE',
+          type: 'UPDATE_EXTRAS',
           //Here payload is expected to be as array
           payload: [{ name: 'sample-addon-extra' }],
         }
