@@ -61,4 +61,20 @@ describe('Testing Plugin Reducer', () => {
       extras: [],
     });
   });
+  it('should handle UPDATE_STORE', () => {
+    expect(
+      reducer(
+        { installed: [], addonStore: [], extras: [] },
+        {
+          type: 'UPDATE_STORE',
+          //Here payload is expected to be as array
+          payload: [{ name: 'sample-addon' }],
+        }
+      )
+    ).toEqual({
+      installed: [],
+      addonStore: [{ name: 'sample-addon' }],
+      extras: [],
+    });
+  });
 });
