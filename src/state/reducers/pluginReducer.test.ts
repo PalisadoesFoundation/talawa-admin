@@ -45,4 +45,20 @@ describe('Testing Plugin Reducer', () => {
       extras: [],
     });
   });
+  it('should handle UPDATE_INSTALLED', () => {
+    expect(
+      reducer(
+        { installed: [], addonStore: [], extras: [] },
+        {
+          type: 'UPDATE_INSTALLED',
+          //Here payload is expected to be as array
+          payload: [{ name: 'testplug-updated' }],
+        }
+      )
+    ).toEqual({
+      installed: [{ name: 'testplug-updated' }],
+      addonStore: [],
+      extras: [],
+    });
+  });
 });
