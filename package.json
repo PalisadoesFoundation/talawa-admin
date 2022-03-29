@@ -114,7 +114,8 @@
     },
     "resetMocks": false,
     "coveragePathIgnorePatterns": [
-      "src/state/index.ts"
+      "src/state/index.ts",
+      "src/components/plugins/index.ts"
     ]
   }
 }
