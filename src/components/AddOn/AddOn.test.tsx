@@ -7,15 +7,20 @@ import { store } from 'state/store';
 import AddOn from './AddOn';
 
 describe('Testing Addon', () => {
+  const props = {
+    children: 'This is a dummy text',
+  };
+
   test('should render props and text elements test for the page component', () => {
-    const { getByTestId } = render(
+    const { getByTestId, getByText } = render(
       <BrowserRouter>
         <Provider store={store}>
-          <AddOn />
+          <AddOn {...props} />
         </Provider>
       </BrowserRouter>
     );
 
     expect(getByTestId('pluginContainer')).toBeInTheDocument();
+    expect(getByText(props.children)).toBeInTheDocument();
   });
 });
