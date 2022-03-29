@@ -17,7 +17,9 @@ function AddOn({ children }: AddOnProps): JSX.Element {
   return (
     <>
       <AdminNavbar targets={targets} url_1={configUrl} />
-      <div className="plugin-container">{children}</div>
+      <div className="plugin-container" data-testid="pluginContainer">
+        {children}
+      </div>
     </>
   );
 }
