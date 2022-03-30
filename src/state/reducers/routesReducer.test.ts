@@ -139,8 +139,8 @@ describe('Testing Routes reducer', () => {
   it('should handle UPDATE_P_TARGETS', () => {
     expect(
       reducer(undefined, {
-        type: 'UPDATE_TARGETS',
-        payload: { test: 'test-target' },
+        type: 'UPDATE_P_TARGETS',
+        payload: [{ name: 'test-target-plugin', content: 'plugin-new' }],
       })
     ).toEqual({
       targets: [
@@ -150,17 +150,17 @@ describe('Testing Routes reducer', () => {
         { name: 'Contributions', url: '/orgcontribution/id=undefined' },
         { name: 'Posts', url: '/orgpost/id=undefined' },
         {
+          comp_id: null ,
+          component: null,
           name: 'Plugins',
           subTargets: [
+            { name: 'test-target-plugin', content: 'plugin-new' },
             {
               icon: 'fa-store',
               name: 'Plugin Store',
               url: '/orgstore/id=undefined',
             },
           ],
-        },
-        {
-          test: 'test-target',
         },
       ],
       configUrl: '/orgsetting/id=undefined',
