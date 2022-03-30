@@ -61,8 +61,10 @@ jobs:
       - run: yarn test --watchAll=false --coverage
       - name: Present current coverage in PR
         uses: codecov/codecov-action@v2.1.0
+        with:
+          verbose: true        
       - name: Test acceptable level of code coverage
         uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:
           path: "./coverage/lcov.info"
-          min_coverage: 55.19
+          min_coverage: 63.42

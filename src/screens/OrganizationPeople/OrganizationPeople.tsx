@@ -33,7 +33,7 @@ function OrganizationPeople(): JSX.Element {
     });
     data = data_2;
     loading = loading_2;
-  } else if (t == 2) {
+  } else {
     const { data: data_2, loading: loading_2 } = useQuery(USER_LIST);
     data = data_2;
     loading = loading_2;
@@ -92,7 +92,7 @@ function OrganizationPeople(): JSX.Element {
                     setT(0);
                   }}
                 />
-                <label>Members</label>
+                <label htmlFor="memberslist">Members</label>
                 <input
                   id="adminslist"
                   value="adminslist"
@@ -103,10 +103,10 @@ function OrganizationPeople(): JSX.Element {
                     setT(1);
                   }}
                 />
-                <label>Admins</label>
+                <label htmlFor="adminslist">Admins</label>
                 <input
-                  id="adminslist"
-                  value="adminslist"
+                  id="userslist"
+                  value="userslist"
                   name="displaylist"
                   type="radio"
                   defaultChecked={t == 2 ? true : false}
@@ -114,7 +114,7 @@ function OrganizationPeople(): JSX.Element {
                     setT(2);
                   }}
                 />
-                <label>User</label>
+                <label htmlFor="userslist">Users</label>
               </div>
             </div>
           </div>
@@ -191,7 +191,8 @@ function OrganizationPeople(): JSX.Element {
                       }
                     )
                   : null
-                : null}
+                : /* istanbul ignore next */
+                  null}
             </div>
           </Container>
         </Col>
