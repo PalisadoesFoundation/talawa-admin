@@ -1,5 +1,4 @@
 import reducer from './routesReducer';
-// import * as types from '../actions/posts/getPostsReduxAction';
 import expect from 'expect';
 
 describe('Testing Routes reducer', () => {
@@ -150,7 +149,7 @@ describe('Testing Routes reducer', () => {
         { name: 'Contributions', url: '/orgcontribution/id=undefined' },
         { name: 'Posts', url: '/orgpost/id=undefined' },
         {
-          comp_id: null ,
+          comp_id: null,
           component: null,
           name: 'Plugins',
           subTargets: [
