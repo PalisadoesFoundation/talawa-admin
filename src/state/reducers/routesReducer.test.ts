@@ -3,9 +3,9 @@ import * as types from '../actions/posts/getPostsReduxAction';
 import expect from 'expect';
 
 describe('team reducer', () => {
-  it('should return the initial state');
-  it('should handle GET_POST_SUCCESS');
-  it('should handle UPDATE_POST_SUCCESS');
-  it('should handle GET_POST_FAIL');
-  it('should handle GET_POST_START');
+  test.todo('should return the initial state');
+  test.todo('should handle UPDATE_TARGETS');
+  test.todo('should handle UPDATE_P_TARGETS');
+  test.todo('should handle GET_POST_FAIL');
+  test.todo('should handle GET_POST_START');
 });
