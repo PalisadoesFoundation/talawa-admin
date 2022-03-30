@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import AddOn from './AddOn';
 
-describe('Testing Addon', () => {
+describe('Testing Addon component', () => {
   const props = {
     children: 'This is a dummy text',
   };
