@@ -115,7 +115,9 @@
     "resetMocks": false,
     "coveragePathIgnorePatterns": [
       "src/state/index.ts",
-      "src/components/plugins/index.ts"
+      "src/components/plugins/index.ts",
+      "src/components/AddOn/support/services/Render.helper.ts"
     ]
+  }
   }
 }
