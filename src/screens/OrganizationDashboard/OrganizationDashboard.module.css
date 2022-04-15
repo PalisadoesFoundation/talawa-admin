@@ -64,14 +64,17 @@
   padding-top: 5px;
   padding-bottom: 5px;
 }
-.tagdetailsGreen > button {
-  background-color: green;
-  color: #000;
+.tagdetailsGreen {
+  background-color: rgb(158, 43, 43);
+  color:white;
   outline: none;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   border: none;
   border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-top: -12px;
   margin-bottom: 10px;
   margin-right: 30px;
