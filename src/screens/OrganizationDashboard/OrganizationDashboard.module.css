@@ -65,23 +65,27 @@
   padding-bottom: 5px;
 }
 .tagdetailsGreen {
-  background-color: rgb(158, 43, 43);
-  color:white;
+  background-color: rgb(162, 162, 162);
+  color:rgb(255, 255, 255);
   outline: none;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
-  border: none;
+  border: 2px solid rgb(213,216,218);
   border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: -12px;
-  margin-bottom: 10px;
-  margin-right: 30px;
   padding-right: 20px;
   padding-left: 20px;
   padding-top: 5px;
   padding-bottom: 5px;
+  
+}
+.tagdetailsGreen:hover{
+  background-color: rgb(199, 36, 36);
+  color:rgb(246,248,250);
+}
+.paddingbtn{
+  width:1.5rem;
+  height:1.5rem;
+  margin-right:5px;
 }
 .mainpageright > hr {
   margin-top: 20px;
@@ -200,3 +204,4 @@
     transform: rotate(360deg);
   }
 }
+
