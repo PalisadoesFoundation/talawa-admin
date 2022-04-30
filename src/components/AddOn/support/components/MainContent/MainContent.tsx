@@ -8,7 +8,11 @@ interface MainContentProps {
 // TODO: Implement additional styles
 // id - [plugin/component-name]-main-content if is in plugin
 function MainContent({ children }: MainContentProps): JSX.Element {
-  return <div className={styles.maincontainer}>{children}</div>;
+  return (
+    <div className={styles.maincontainer} data-testid="mainContentCheck">
+      {children}
+    </div>
+  );
 }
 
 export default MainContent;
