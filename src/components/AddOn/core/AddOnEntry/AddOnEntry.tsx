@@ -104,7 +104,7 @@ function AddOnEntry({
   };
 
   return (
-    <Card>
+    <Card data-testid="AddOnEntry">
       {installed && (
         <Form.Check
           type="switch"
