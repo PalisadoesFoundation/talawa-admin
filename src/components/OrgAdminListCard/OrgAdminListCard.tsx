@@ -20,8 +20,6 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
   const [remove] = useMutation(REMOVE_ADMIN_MUTATION);
 
   const RemoveAdmin = async () => {
-    console.log(currentUrl);
-    console.log(props.id);
     try {
       const { data } = await remove({
         variables: {
@@ -29,10 +27,14 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
           orgid: currentUrl,
         },
       });
-      console.log(data);
-      window.alert('The admin is removed');
-      window.location.reload();
+
+      /* istanbul ignore next */
+      if (data) {
+        window.alert('The admin is removed');
+        window.location.reload();
+      }
     } catch (error) {
+      /* istanbul ignore next */
       window.alert(error);
     }
   };
