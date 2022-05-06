@@ -10,7 +10,7 @@ const MOCKS = [
   {
     request: {
       query: ADD_ADMIN_MUTATION,
-      variable: { userid: '7845', orgid: '554' },
+      variable: { userid: '784', orgid: '554' },
     },
     result: {
       data: {
