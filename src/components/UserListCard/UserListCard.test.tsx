@@ -67,7 +67,7 @@ describe('Testing User List Card', () => {
       id: '456',
       memberName: '',
       memberLocation: 'India',
-      joinDate: '07/05/2022',
+      joinDate: '09/05/2022',
       memberImage: '',
     };
 
