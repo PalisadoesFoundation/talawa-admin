@@ -50,7 +50,7 @@ yarn setup
 
 2.  Talawa-ADMIN uses a configuration file named `.env` in the root directory. It is not a part of the repo and you will need to create it. There is a sample configuration file named `.env.example` in the root diretory. Create a new `.env` file by copying the contents of the `.env.example` file.
 
-        cp .env .env.example
+        cp .env.example .env
 
 3.  Run Talawa-api locally in your system, and copy the URL to the `REACT_APP_BACKEND_ENDPOINT` section of the `.env` file.
 
