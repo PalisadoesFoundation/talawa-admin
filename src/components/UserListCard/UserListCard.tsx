@@ -26,10 +26,14 @@ function UserListCard(props: UserListCardProps): JSX.Element {
           orgid: currentUrl,
         },
       });
-      console.log(data);
-      window.alert('The Event is deleted');
-      window.location.reload();
+
+      /* istanbul ignore next */
+      if (data) {
+        window.alert('The Event is deleted');
+        window.location.reload();
+      }
     } catch (error) {
+      /* istanbul ignore next */
       window.alert(error);
     }
   };
