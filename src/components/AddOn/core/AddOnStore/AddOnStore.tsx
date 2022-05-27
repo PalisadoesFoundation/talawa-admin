@@ -28,6 +28,7 @@ function AddOnStore(): JSX.Element {
   const plugins = useSelector((state: RootState) => state.plugins);
   const { installed, addonStore } = plugins;
 
+  /* istanbul ignore next */
   const getStorePlugins = async () => {
     let plugins = await new PluginHelper().fetchStore();
     const installIds = (await new PluginHelper().fetchInstalled()).map(
@@ -40,16 +41,19 @@ function AddOnStore(): JSX.Element {
     store.dispatch({ type: 'UPDATE_STORE', payload: plugins });
   };
 
+  /* istanbul ignore next */
   const getInstalledPlugins = async () => {
     const plugins = await new PluginHelper().fetchInstalled();
     store.dispatch({ type: 'UPDATE_INSTALLED', payload: plugins });
     return plugins;
   };
 
+  /* istanbul ignore next */
   const updateLinks = async (links: any[]) => {
     store.dispatch({ type: 'UPDATE_P_TARGETS', payload: links });
   };
 
+  /* istanbul ignore next */
   const pluginModified = () => {
     return getInstalledPlugins().then((installedPlugins) => {
       getStorePlugins();
@@ -70,6 +74,7 @@ function AddOnStore(): JSX.Element {
     setShowEnabled(ev.target.value === 'enabled');
   };
 
+  /* istanbul ignore next */
   if (loading) {
     return (
       <>
@@ -150,6 +155,7 @@ function AddOnStore(): JSX.Element {
                       component={plugin.component}
                       configurable={!plugin.installed}
                       modified={() => {
+                        /* istanbul ignore next */
                         pluginModified().then((installedPlugins) => {
                           updateLinks(
                             new PluginHelper().generateLinks(installedPlugins)
@@ -178,6 +184,7 @@ function AddOnStore(): JSX.Element {
                         installed={true}
                         configurable={true}
                         modified={() => {
+                          /* istanbul ignore next */
                           pluginModified().then((installedPlugins) => {
                             updateLinks(
                               new PluginHelper().generateLinks(installedPlugins)
