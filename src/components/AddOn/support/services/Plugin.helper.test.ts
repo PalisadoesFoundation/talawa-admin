@@ -24,18 +24,36 @@ describe('Testing src/components/AddOn/support/services/Plugin.helper.ts', () =>
   });
   test('fetchInstalled Mock function should return correct data', async () => {
     const pluginHelper = new PluginHelper();
-    const tempJSON = [{ name: 'test' }];
-    jest
-      .spyOn(pluginHelper, 'fetchInstalled')
-      .mockImplementation(async () => await tempJSON);
-    await expect(pluginHelper.fetchInstalled()).resolves.toBe(tempJSON);
+    const tempJSON = {
+      userId: 1,
+      id: 1,
+      title: 'delectus aut autem',
+      completed: false,
+    };
+    jest.spyOn(pluginHelper, 'fetchInstalled').mockImplementation(async () => {
+      const result = await fetch(
+        `https://jsonplaceholder.typicode.com/todos/1`
+      );
+      return await result.json();
+    });
+    await expect(pluginHelper.fetchInstalled()).resolves.toMatchObject(
+      tempJSON
+    );
   });
   test('fetchStore Mock function should return correct data', async () => {
     const pluginHelper = new PluginHelper();
-    const tempJSON = [{ name: 'testStore' }];
-    jest
-      .spyOn(pluginHelper, 'fetchInstalled')
-      .mockImplementation(async () => await tempJSON);
-    await expect(pluginHelper.fetchInstalled()).resolves.toBe(tempJSON);
+    const tempJSON = {
+      userId: 1,
+      id: 2,
+      title: 'quis ut nam facilis et officia qui',
+      completed: false,
+    };
+    jest.spyOn(pluginHelper, 'fetchStore').mockImplementation(async () => {
+      const result = await fetch(
+        `https://jsonplaceholder.typicode.com/todos/2`
+      );
+      return await result.json();
+    });
+    await expect(pluginHelper.fetchStore()).resolves.toMatchObject(tempJSON);
   });
 });
