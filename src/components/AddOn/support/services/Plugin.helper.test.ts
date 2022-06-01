@@ -22,4 +22,20 @@ describe('Testing src/components/AddOn/support/services/Plugin.helper.ts', () =>
     const val = pluginHelper.generateLinks([obj]);
     expect(val).toMatchObject([objToMatch]);
   });
+  test('fetchInstalled Mock function should return correct data', async () => {
+    const pluginHelper = new PluginHelper();
+    const tempJSON = [{ name: 'test' }];
+    jest
+      .spyOn(pluginHelper, 'fetchInstalled')
+      .mockImplementation(async () => await tempJSON);
+    await expect(pluginHelper.fetchInstalled()).resolves.toBe(tempJSON);
+  });
+  test('fetchStore Mock function should return correct data', async () => {
+    const pluginHelper = new PluginHelper();
+    const tempJSON = [{ name: 'testStore' }];
+    jest
+      .spyOn(pluginHelper, 'fetchInstalled')
+      .mockImplementation(async () => await tempJSON);
+    await expect(pluginHelper.fetchInstalled()).resolves.toBe(tempJSON);
+  });
 });
