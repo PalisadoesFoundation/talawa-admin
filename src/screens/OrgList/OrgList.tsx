@@ -17,6 +17,8 @@ import Button from 'react-bootstrap/Button';
 import dayjs from 'dayjs';
 
 function OrgList(): JSX.Element {
+  document.title = 'Talawa Organizations';
+
   const [modalisOpen, setmodalIsOpen] = React.useState(false);
 
   const showInviteModal = () => {
@@ -66,7 +68,7 @@ function OrgList(): JSX.Element {
     }
   );
 
-  const { data, loading } = useQuery(ORGANIZATION_LIST);
+  const { data, loading, error: error_list } = useQuery(ORGANIZATION_LIST);
 
   if (loading || loading_2 || loading_3) {
     return (
@@ -74,6 +76,11 @@ function OrgList(): JSX.Element {
         <div className={styles.loader}></div>
       </>
     );
+  }
+
+  /* istanbul ignore next */
+  if (error_list) {
+    window.location.href = '/orglist';
   }
 
   return (

@@ -14,6 +14,7 @@ import { RootState } from 'state/reducers';
 import Button from 'react-bootstrap/Button';
 
 function OrgPost(): JSX.Element {
+  document.title = 'Talawa Posts';
   const [postmodalisOpen, setPostModalIsOpen] = useState(false);
 
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
@@ -34,7 +35,11 @@ function OrgPost(): JSX.Element {
   });
   const currentUrl = window.location.href.split('=')[1];
 
-  const { data, loading: loading2 } = useQuery(ORGANIZATION_POST_LIST, {
+  const {
+    data,
+    loading: loading2,
+    error: error_post,
+  } = useQuery(ORGANIZATION_POST_LIST, {
     variables: { id: currentUrl },
   });
 
@@ -62,6 +67,11 @@ function OrgPost(): JSX.Element {
         <div className={styles.loader}></div>
       </>
     );
+  }
+
+  /* istanbul ignore next */
+  if (error_post) {
+    window.location.href = '/orglist';
   }
 
   return (
