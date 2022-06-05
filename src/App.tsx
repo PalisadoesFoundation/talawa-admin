@@ -1,7 +1,14 @@
 import React, { useEffect } from 'react';
-import './App.css';
 import { Route, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { useQuery } from '@apollo/client';
+
+import './App.css';
+import { actionCreators } from './state/index';
+import PluginHelper from 'components/AddOn/support/services/Plugin.helper';
+import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
+import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
 import LoginPage from 'screens/LoginPage/LoginPage';
 import OrganizationEvents from 'screens/OrganizationEvents/OrganizationEvents';
 import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
@@ -10,14 +17,9 @@ import OrgContribution from 'screens/OrgContribution/OrgContribution';
 import OrgList from 'screens/OrgList/OrgList';
 import OrgPost from 'screens/OrgPost/OrgPost';
 import OrgSettings from 'screens/OrgSettings/OrgSettings';
+import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import AddOnStore from 'components/AddOn/core/AddOnStore/AddOnStore';
 import * as installedPlugins from 'components/plugins/index';
-import { bindActionCreators } from 'redux';
-import { actionCreators } from './state/index';
-import PluginHelper from 'components/AddOn/support/services/Plugin.helper';
-import { useQuery } from '@apollo/client';
-import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
-import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
 
 function App(): JSX.Element {
   const dispatch = useDispatch();
@@ -92,6 +94,7 @@ function App(): JSX.Element {
         <SecuredRoute path="/orgsetting" component={OrgSettings} />
         <SecuredRoute path="/orgstore" component={AddOnStore} />
         {extraRoutes}
+        <Route exact path="*" component={PageNotFound} />
       </Switch>
     </>
   );
