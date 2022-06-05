@@ -10,6 +10,8 @@ import { LOGIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 
 function LoginPage(): JSX.Element {
+  document.title = 'Talawa Admin';
+
   const [modalisOpen, setIsOpen] = React.useState(false);
   const [componentLoader, setComponentLoader] = useState(true);
 
