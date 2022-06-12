@@ -1,19 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import styles from './LoginPage.module.css';
-import Logo from 'assets/talawa-logo-200x200.png';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-modal';
-import LandingPage from 'components/LandingPage/LandingPage';
 import { useMutation } from '@apollo/client';
-import { LOGIN_MUTATION } from 'GraphQl/Mutations/mutations';
+
+import styles from './LoginPage.module.css';
+import Logo from 'assets/talawa-logo-200x200.png';
+import LandingPage from 'components/LandingPage/LandingPage';
+import {
+  LOGIN_MUTATION,
+  RECAPTCHA_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
+import { toast } from 'react-toastify';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { Link } from 'react-router-dom';
 
 function LoginPage(): JSX.Element {
   document.title = 'Talawa Admin';
 
   const [modalisOpen, setIsOpen] = React.useState(false);
   const [componentLoader, setComponentLoader] = useState(true);
+  const [signformState, setSignFormState] = useState({
+    signfirstName: '',
+    signlastName: '',
+    signEmail: '',
+    signPassword: '',
+    cPassword: '',
+  });
+  const [formState, setFormState] = useState({
+    email: '',
+    password: '',
+  });
+
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('IsLoggedIn');
@@ -31,81 +51,108 @@ function LoginPage(): JSX.Element {
     setIsOpen(false);
   };
 
-  const redirect_signup = () => {
-    window.location.replace('/');
-  };
-
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
+  const [login, { loading: loginLoading }] = useMutation(LOGIN_MUTATION);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [signup, { loading: signloading, error: signerror }] =
-    useMutation(SIGNUP_MUTATION);
+  const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [recaptcha, { loading: recaptchaLoading }] =
+    useMutation(RECAPTCHA_MUTATION);
 
-  if (loading || signloading) {
-    return (
-      <>
-        <div className={styles.loader}></div>
-      </>
-    );
-  }
-  if (signerror) {
-    window.alert('xyz');
-    window.location.reload();
-  }
+  const verifyRecaptcha = async (recaptchaToken: any) => {
+    try {
+      const { data } = await recaptcha({
+        variables: {
+          recaptchaToken,
+        },
+      });
 
-  if (error) {
-    window.alert('Incorrect ID or Password');
-    window.location.reload();
-  }
-
-  const [signformState, setSignFormState] = useState({
-    signfirstName: '',
-    signlastName: '',
-    signEmail: '',
-    signPassword: '',
-    cPassword: '',
-    signuserType: '',
-  });
-
-  const [formState, setFormState] = useState({
-    email: '',
-    password: '',
-  });
-
-  const signup_link = async () => {
-    if (
-      signformState.signfirstName.length > 1 &&
-      signformState.signlastName.length > 1 &&
-      signformState.signEmail.length >= 8 &&
-      signformState.signPassword.length > 1
-    ) {
-      if (
-        signformState.cPassword == signformState.signPassword &&
-        (signformState.signuserType == 'ADMIN' ||
-          signformState.signuserType == 'SUPERADMIN')
-      ) {
-        const { data } = await signup({
-          variables: {
-            firstName: signformState.signfirstName,
-            lastName: signformState.signlastName,
-            email: signformState.signEmail,
-            password: signformState.signPassword,
-            userType: signformState.signuserType,
-          },
-        });
-        console.log(data);
-        window.alert('Successfully Registered. Please Login In to Continue...');
-        window.location.reload();
-      } else {
-        alert('Write USERTYPE correctly OR Check Password');
-        window.location.reload();
-      }
-    } else {
-      alert('Fill all the Details Correctly.');
+      return data.recaptcha;
+    } catch (error) {
+      /* istanbul ignore next */
+      toast.error('Captcha Error!');
     }
   };
 
-  const login_link = async () => {
+  const signup_link = async (e: ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const { signfirstName, signlastName, signEmail, signPassword, cPassword } =
+      signformState;
+
+    const recaptchaToken = recaptchaRef.current?.getValue();
+    recaptchaRef.current?.reset();
+
+    const isVerified = await verifyRecaptcha(recaptchaToken);
+
+    /* istanbul ignore next */
+    if (!isVerified) {
+      toast.error('Please, check the captcha.');
+      return;
+    }
+
+    if (
+      signfirstName.length > 1 &&
+      signlastName.length > 1 &&
+      signEmail.length >= 8 &&
+      signPassword.length > 1
+    ) {
+      if (cPassword == signPassword) {
+        try {
+          const { data } = await signup({
+            variables: {
+              firstName: signfirstName,
+              lastName: signlastName,
+              email: signEmail,
+              password: signPassword,
+              userType: 'ADMIN',
+            },
+          });
+
+          /* istanbul ignore next */
+          if (data) {
+            toast.success(
+              'Successfully Registered. Please wait until you will be approved.'
+            );
+
+            setSignFormState({
+              signfirstName: '',
+              signlastName: '',
+              signEmail: '',
+              signPassword: '',
+              cPassword: '',
+            });
+          }
+        } catch (error: any) {
+          /* istanbul ignore next */
+          if (error.message) {
+            toast.warn(error.message);
+          } else {
+            toast.error('Something went wrong, Please try after sometime.');
+          }
+        }
+      } else {
+        toast.error('Password and Confirm password mismatches.');
+      }
+    } else {
+      toast.error('Fill all the Details Correctly.');
+    }
+  };
+
+  const login_link = async (e: ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const recaptchaToken = recaptchaRef.current?.getValue();
+    recaptchaRef.current?.reset();
+
+    const isVerified = await verifyRecaptcha(recaptchaToken);
+
+    /* istanbul ignore next */
+    if (!isVerified) {
+      toast.error('Please, check the captcha.');
+      return;
+    }
+
     try {
       const { data } = await login({
         variables: {
@@ -113,6 +160,8 @@ function LoginPage(): JSX.Element {
           password: formState.password,
         },
       });
+
+      /* istanbul ignore next */
       if (data) {
         if (
           data.login.user.userType === 'SUPERADMIN' ||
@@ -126,20 +175,22 @@ function LoginPage(): JSX.Element {
             window.location.replace('/orglist');
           }
         } else {
-          window.alert('Sorry! you are not Authorised');
-          window.location.reload();
+          toast.warn('Sorry! you are not Authorised!');
         }
       } else {
-        window.alert('Sorry! User Not Found');
-        window.location.reload();
+        toast.warn('User not found!');
       }
-    } catch (error) {
-      window.alert(error);
-      window.location.reload();
+    } catch (error: any) {
+      /* istanbul ignore next */
+      if (error.message) {
+        toast.warn(error.message);
+      } else {
+        toast.error('Something went wrong, Please try after sometime.');
+      }
     }
   };
 
-  if (componentLoader) {
+  if (componentLoader || loginLoading || signinLoading || recaptchaLoading) {
     return <div className={styles.loader}></div>;
   }
 
@@ -159,6 +210,7 @@ function LoginPage(): JSX.Element {
               className={styles.navloginbtn}
               value="Login"
               onClick={showModal}
+              data-testid="loginModalBtn"
             >
               Login
             </button>
@@ -175,7 +227,7 @@ function LoginPage(): JSX.Element {
               <div className={styles.homeright}>
                 <h1>Register</h1>
                 {/* <h2>to seamlessly manage your Organization.</h2> */}
-                <form>
+                <form onSubmit={signup_link}>
                   <div className={styles.dispflex}>
                     <div>
                       <label>First Name</label>
@@ -212,21 +264,6 @@ function LoginPage(): JSX.Element {
                       />
                     </div>
                   </div>
-                  <label>User Type</label>
-                  <input
-                    type="type"
-                    id="signusertype"
-                    placeholder="SUPERADMIN"
-                    autoComplete="off"
-                    required
-                    value={signformState.signuserType}
-                    onChange={(e) => {
-                      setSignFormState({
-                        ...signformState,
-                        signuserType: e.target.value.toUpperCase(),
-                      });
-                    }}
-                  />
                   <label>Email</label>
                   <input
                     type="email"
@@ -273,11 +310,17 @@ function LoginPage(): JSX.Element {
                       });
                     }}
                   />
+                  <div className="googleRecaptcha">
+                    <ReCAPTCHA
+                      ref={recaptchaRef}
+                      sitekey={process.env.REACT_APP_RECAPTCHA_KEY || ''}
+                    />
+                  </div>
                   <button
-                    type="button"
+                    type="submit"
                     className={styles.greenregbtn}
                     value="Register"
-                    onClick={signup_link}
+                    data-testid="registrationBtn"
                   >
                     Register
                   </button>
@@ -292,16 +335,21 @@ function LoginPage(): JSX.Element {
             overlay: { backgroundColor: 'grey', zIndex: 20 },
           }}
           className={styles.modalbody}
+          ariaHideApp={false}
         >
           <section id={styles.grid_wrapper}>
             <div className={styles.form_wrapper}>
               <div className={styles.flexdir}>
                 <p className={styles.logintitle}>Login</p>
-                <a onClick={hideModal} className={styles.cancel}>
+                <a
+                  onClick={hideModal}
+                  className={styles.cancel}
+                  data-testid="hideModalBtn"
+                >
                   <i className="fa fa-times"></i>
                 </a>
               </div>
-              <form>
+              <form onSubmit={login_link}>
                 <label>Email</label>
                 <input
                   type="email"
@@ -333,23 +381,29 @@ function LoginPage(): JSX.Element {
                     });
                   }}
                 />
+                <div className="googleRecaptcha">
+                  <ReCAPTCHA
+                    ref={recaptchaRef}
+                    sitekey={process.env.REACT_APP_RECAPTCHA_KEY || ''}
+                  />
+                </div>
                 <button
-                  type="button"
+                  type="submit"
                   className={styles.whiteloginbtn}
                   value="Login"
-                  onClick={login_link}
+                  data-testid="loginBtn"
                 >
-                  Login As Super Admin
+                  Login
                 </button>
-                <a href="#" className={styles.forgotpwd}>
+                <Link to="/forgotPassword" className={styles.forgotpwd}>
                   Forgot Password ?
-                </a>
+                </Link>
                 <hr></hr>
                 <button
                   type="button"
                   className={styles.greenregbtn}
                   value="Register"
-                  onClick={redirect_signup}
+                  onClick={hideModal}
                 >
                   Register
                 </button>
