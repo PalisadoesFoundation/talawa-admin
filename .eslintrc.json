@@ -68,7 +68,7 @@
     // Enforce Strictly functional components
     "react/no-unstable-nested-components": ["error", { "allowAsProps": true }],
     "react/function-component-definition": [
-      "error",
+      0,
       { "namedComponents": "function-declaration" }
     ]
   },

@@ -116,7 +116,8 @@
     "coveragePathIgnorePatterns": [
       "src/state/index.ts",
       "src/components/plugins/index.ts",
-      "src/components/AddOn/support/services/Render.helper.ts"
+      "src/components/AddOn/support/services/Render.helper.ts",
+      "src/components/SecuredRoute/SecuredRoute.tsx"
     ]
   }
 }
