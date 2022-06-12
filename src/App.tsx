@@ -20,6 +20,7 @@ import OrgSettings from 'screens/OrgSettings/OrgSettings';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import AddOnStore from 'components/AddOn/core/AddOnStore/AddOnStore';
 import * as installedPlugins from 'components/plugins/index';
+import ForgotPassword from 'screens/ForgotPassword/ForgotPassword';
 
 function App(): JSX.Element {
   const dispatch = useDispatch();
@@ -94,6 +95,7 @@ function App(): JSX.Element {
         <SecuredRoute path="/orgsetting" component={OrgSettings} />
         <SecuredRoute path="/orgstore" component={AddOnStore} />
         {extraRoutes}
+        <Route exact path="/forgotPassword" component={ForgotPassword} />
         <Route exact path="*" component={PageNotFound} />
       </Switch>
     </>
