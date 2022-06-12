@@ -125,6 +125,14 @@ export const LOGIN_MUTATION = gql`
   }
 `;
 
+// To verify the google recaptcha
+
+export const RECAPTCHA_MUTATION = gql`
+  mutation Recaptcha($recaptchaToken: String!) {
+    recaptcha(data: { recaptchaToken: $recaptchaToken })
+  }
+`;
+
 // to create the organization
 
 export const CREATE_ORGANIZATION_MUTATION = gql`
@@ -261,5 +269,29 @@ export const DELETE_POST_MUTATION = gql`
     removePost(id: $id) {
       _id
     }
+  }
+`;
+
+export const GENERATE_OTP_MUTATION = gql`
+  mutation Otp($email: String!) {
+    otp(data: { email: $email }) {
+      otpToken
+    }
+  }
+`;
+
+export const FORGOT_PASSWORD_MUTATION = gql`
+  mutation ForgotPassword(
+    $userOtp: String!
+    $newPassword: String!
+    $otpToken: String!
+  ) {
+    forgotPassword(
+      data: {
+        userOtp: $userOtp
+        newPassword: $newPassword
+        otpToken: $otpToken
+      }
+    )
   }
 `;
