@@ -2,6 +2,21 @@ import gql from 'graphql-tag';
 
 //Query List
 
+// Check Auth
+
+export const CHECK_AUTH = gql`
+  query {
+    checkAuth {
+      _id
+      firstName
+      lastName
+      image
+      email
+      userType
+    }
+  }
+`;
+
 // Query to take the Organization list
 export const ORGANIZATION_LIST = gql`
   query {

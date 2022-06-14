@@ -8,6 +8,8 @@ import ContriStats from 'components/ContriStats/ContriStats';
 import { useSelector } from 'react-redux';
 import { RootState } from 'state/reducers';
 function OrgContribution(): JSX.Element {
+  document.title = 'Talawa Contributions';
+
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
 

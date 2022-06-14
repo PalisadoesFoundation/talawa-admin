@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './LoginPage.module.css';
 import Logo from 'assets/talawa-logo-200x200.png';
 import Row from 'react-bootstrap/Row';
@@ -10,8 +10,18 @@ import { LOGIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 
 function LoginPage(): JSX.Element {
-  localStorage.clear();
+  document.title = 'Talawa Admin';
+
   const [modalisOpen, setIsOpen] = React.useState(false);
+  const [componentLoader, setComponentLoader] = useState(true);
+
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem('IsLoggedIn');
+    if (isLoggedIn == 'TRUE') {
+      window.location.href = '/orglist';
+    }
+    setComponentLoader(false);
+  }, []);
 
   const showModal = () => {
     setIsOpen(true);
@@ -128,6 +138,10 @@ function LoginPage(): JSX.Element {
       window.location.reload();
     }
   };
+
+  if (componentLoader) {
+    return <div className={styles.loader}></div>;
+  }
 
   return (
     <>

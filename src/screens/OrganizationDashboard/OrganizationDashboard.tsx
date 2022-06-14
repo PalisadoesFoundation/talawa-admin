@@ -12,12 +12,13 @@ import { RootState } from 'state/reducers';
 import { Container } from 'react-bootstrap';
 
 function OrganizationDashboard(): JSX.Element {
+  document.title = 'Talawa Dashboard';
   const currentUrl = window.location.href.split('=')[1];
 
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
 
-  const { data, loading } = useQuery(ORGANIZATIONS_LIST, {
+  const { data, loading, error } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: currentUrl },
   });
 
@@ -29,8 +30,11 @@ function OrganizationDashboard(): JSX.Element {
         id: currentUrl,
       },
     });
-    //console.log(data);
-    window.location.replace('/orglist');
+
+    /* istanbul ignore next */
+    if (data) {
+      window.location.replace('/orglist');
+    }
   };
 
   if (loading) {
@@ -39,6 +43,11 @@ function OrganizationDashboard(): JSX.Element {
         <div className={styles.loader}></div>
       </>
     );
+  }
+
+  /* istanbul ignore next */
+  if (error) {
+    window.location.href = '/orglist';
   }
 
   return (

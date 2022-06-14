@@ -15,6 +15,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'state/reducers';
 
 function OrganizationEvents(): JSX.Element {
+  document.title = 'Talawa Events';
   const [eventmodalisOpen, setEventModalIsOpen] = React.useState(false);
 
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
@@ -44,7 +45,7 @@ function OrganizationEvents(): JSX.Element {
   });
   const currentUrl = window.location.href.split('=')[1];
 
-  const { data, loading } = useQuery(ORGANIZATION_EVENT_LIST, {
+  const { data, loading, error } = useQuery(ORGANIZATION_EVENT_LIST, {
     variables: { id: currentUrl },
   });
 
@@ -78,6 +79,11 @@ function OrganizationEvents(): JSX.Element {
         <div className={styles.loader}></div>
       </>
     );
+  }
+
+  /* istanbul ignore next */
+  if (error) {
+    window.location.href = '/orglist';
   }
 
   return (

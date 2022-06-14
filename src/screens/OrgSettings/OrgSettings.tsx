@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'state/reducers';
 
 function OrgSettings(): JSX.Element {
+  document.title = 'Talawa Setting';
   const [screenVariable, setScreenVariable] = React.useState(0);
 
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
@@ -20,7 +21,7 @@ function OrgSettings(): JSX.Element {
 
   const currentUrl = window.location.href.split('=')[1];
 
-  const { data, loading } = useQuery(MEMBERSHIP_REQUEST, {
+  const { data, loading, error } = useQuery(MEMBERSHIP_REQUEST, {
     variables: { id: currentUrl },
   });
 
@@ -30,6 +31,11 @@ function OrgSettings(): JSX.Element {
         <div className={styles.loader}></div>
       </>
     );
+  }
+
+  /* istanbul ignore next */
+  if (error) {
+    window.location.href = '/orglist';
   }
 
   return (
