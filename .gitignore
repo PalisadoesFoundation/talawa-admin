@@ -30,3 +30,6 @@ yarn-error.log*
 
 # express setup
 debug.log
+
+# declaration files
+/lib
