@@ -24,23 +24,43 @@
   },
 
   "messages": {
-    "compilerMessageReporting": {
-      "default": {
-        "logLevel": "warning"
-      }
-    },
-
     "extractorMessageReporting": {
       "default": {
         "logLevel": "warning"
+      },
+      "ae-forgotten-export": {
+        "logLevel": "warning",
+        "addToApiReportFile": true
+      },
+      "ae-incompatible-release-tags": {
+        "logLevel": "warning",
+        "addToApiReportFile": true
+      },
+      "ae-internal-missing-underscore": {
+        "logLevel": "warning",
+        "addToApiReportFile": true
+      },
+      "ae-internal-mixed-release-tag": {
+        "logLevel": "warning",
+        "addToApiReportFile": true
+      },
+      "ae-unresolved-inheritdoc-reference": {
+        "logLevel": "warning",
+        "addToApiReportFile": true
+      },
+      "ae-unresolved-inheritdoc-base": {
+        "logLevel": "warning",
+        "addToApiReportFile": true
+      },
+      "ae-wrong-input-file-type": {
+        "logLevel": "error"
       }
-
     },
-
     "tsdocMessageReporting": {
       "default": {
         "logLevel": "warning"
       }
     }
-  }
+  },
+  "testMode": false
 }
