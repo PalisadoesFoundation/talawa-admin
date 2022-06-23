@@ -31,5 +31,7 @@ yarn-error.log*
 # express setup
 debug.log
 
-# declaration files
+# Ignoring API-Extractor Generated declaration files etc.
 /lib
+/dist
+/temp
