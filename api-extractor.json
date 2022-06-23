@@ -1,0 +1,67 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json",
+  "mainEntryPointFilePath": "./lib/api-extractor.d.ts",
+  "bundledPackages": [],
+
+  "compiler": {
+
+  },
+  
+  "apiReport": {
+    "enabled": true
+  },
+
+  "docModel": {
+    "enabled": true,
+    "apiJsonFilePath" : "./temp/input/docModel.api.json"
+  },
+
+  "dtsRollup": {
+    "enabled": true
+  },
+
+  "tsdocMetadata": {
+
+  },
+
+  "messages": {
+    "extractorMessageReporting": {
+      "default": {
+        "logLevel": "warning"
+      },
+      "ae-forgotten-export": {
+        "logLevel": "warning",
+        "addToApiReportFile": true
+      },
+      "ae-incompatible-release-tags": {
+        "logLevel": "warning",
+        "addToApiReportFile": true
+      },
+      "ae-internal-missing-underscore": {
+        "logLevel": "warning",
+        "addToApiReportFile": true
+      },
+      "ae-internal-mixed-release-tag": {
+        "logLevel": "warning",
+        "addToApiReportFile": true
+      },
+      "ae-unresolved-inheritdoc-reference": {
+        "logLevel": "warning",
+        "addToApiReportFile": true
+      },
+      "ae-unresolved-inheritdoc-base": {
+        "logLevel": "warning",
+        "addToApiReportFile": true
+      },
+      "ae-wrong-input-file-type": {
+        "logLevel": "error"
+      }
+    },
+    "tsdocMessageReporting": {
+      "default": {
+        "logLevel": "warning"
+      }
+    }
+  },
+  "testMode": false
+}
