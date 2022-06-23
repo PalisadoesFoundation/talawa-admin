@@ -3,10 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "main": "./lib/api-extractor.ts",
+  "typings": "./lib/api-extractor.d.ts",
   "dependencies": {
     "@apollo/client": "^3.4.12",
     "@apollo/link-error": "^2.0.0-beta.3",
     "@apollo/react-testing": "^4.0.0",
+    "@microsoft/api-documenter": "^7.17.19",
+    "@microsoft/api-extractor": "^7.25.2",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -64,7 +68,8 @@
     "lint": "eslint \"**/*.{ts,tsx}\"",
     "lint-fix": "eslint \"**/*.{ts,tsx}\" --fix",
     "format": "prettier --write \"**/*.{ts,tsx,json,scss,css}\"",
-    "setup": "npm i boxen@4.2.0 chalk@4.1.0 inquirer markdown-js marked@2.0.1 marked-terminal@4.1.0 node-cmd@5.0.0 -f && node setup_file.js"
+    "setup": "npm i boxen@4.2.0 chalk@4.1.0 inquirer markdown-js marked@2.0.1 marked-terminal@4.1.0 node-cmd@5.0.0 -f && node setup_file.js",
+    "generate-docs": "tsc && api-extractor run --local --verbose && cd ./temp && api-documenter markdown"
   },
   "eslintConfig": {
     "extends": [
