@@ -22,5 +22,5 @@
     ],
     "outDir": "lib"
   },
-  "include": ["src", "src/App.tsx"]
+  "include": ["src"]
 }

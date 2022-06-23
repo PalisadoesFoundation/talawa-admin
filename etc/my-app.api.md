@@ -4,6 +4,38 @@
 
 ```ts
 
+import { DocumentNode } from 'graphql';
+
+// @public (undocumented)
+export const ADMIN_LIST: DocumentNode;
+
+// @public (undocumented)
+export const CHECK_AUTH: DocumentNode;
+
+// @public (undocumented)
+export const MEMBERS_LIST: DocumentNode;
+
+// @public (undocumented)
+export const MEMBERSHIP_REQUEST: DocumentNode;
+
+// @public (undocumented)
+export const ORGANIZATION_EVENT_LIST: DocumentNode;
+
+// @public (undocumented)
+export const ORGANIZATION_LIST: DocumentNode;
+
+// @public (undocumented)
+export const ORGANIZATION_POST_LIST: DocumentNode;
+
+// @public (undocumented)
+export const ORGANIZATIONS_LIST: DocumentNode;
+
+// @public (undocumented)
+export const USER_LIST: DocumentNode;
+
+// @public (undocumented)
+export const USER_ORGANIZATION_LIST: DocumentNode;
+
 // (No @packageDocumentation comment for this package)
 
 ```
