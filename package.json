@@ -68,7 +68,8 @@
     "lint": "eslint \"**/*.{ts,tsx}\"",
     "lint-fix": "eslint \"**/*.{ts,tsx}\" --fix",
     "format": "prettier --write \"**/*.{ts,tsx,json,scss,css}\"",
-    "setup": "npm i boxen@4.2.0 chalk@4.1.0 inquirer markdown-js marked@2.0.1 marked-terminal@4.1.0 node-cmd@5.0.0 -f && node setup_file.js"
+    "setup": "npm i boxen@4.2.0 chalk@4.1.0 inquirer markdown-js marked@2.0.1 marked-terminal@4.1.0 node-cmd@5.0.0 -f && node setup_file.js",
+    "generate-docs": "tsc && api-extractor run --local --verbose && cd ./temp && api-documenter markdown"
   },
   "eslintConfig": {
     "extends": [
