@@ -6,34 +6,34 @@
 
 import { DocumentNode } from 'graphql';
 
-// @public (undocumented)
+// @public
 export const ADMIN_LIST: DocumentNode;
 
-// @public (undocumented)
+// @public
 export const CHECK_AUTH: DocumentNode;
 
-// @public (undocumented)
+// @public
 export const MEMBERS_LIST: DocumentNode;
 
-// @public (undocumented)
+// @public
 export const MEMBERSHIP_REQUEST: DocumentNode;
 
-// @public (undocumented)
+// @public
 export const ORGANIZATION_EVENT_LIST: DocumentNode;
 
-// @public (undocumented)
+// @public
 export const ORGANIZATION_LIST: DocumentNode;
 
-// @public (undocumented)
+// @public
 export const ORGANIZATION_POST_LIST: DocumentNode;
 
-// @public (undocumented)
+// @public
 export const ORGANIZATIONS_LIST: DocumentNode;
 
-// @public (undocumented)
+// @public
 export const USER_LIST: DocumentNode;
 
-// @public (undocumented)
+// @public
 export const USER_ORGANIZATION_LIST: DocumentNode;
 
 // (No @packageDocumentation comment for this package)
