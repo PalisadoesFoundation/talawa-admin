@@ -3,23 +3,25 @@ import { MockedProvider } from '@apollo/react-testing';
 import { act, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import 'jest-localstorage-mock';
+import userEvent from '@testing-library/user-event';
+import { BrowserRouter } from 'react-router-dom';
+import 'jest-location-mock';
 
 import OrgList from './OrgList';
 import {
-  ORGANIZATION_LIST,
+  ORGANIZATION_CONNECTION_LIST,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { store } from 'state/store';
-import userEvent from '@testing-library/user-event';
 
 const MOCKS = [
   {
     request: {
-      query: ORGANIZATION_LIST,
+      query: ORGANIZATION_CONNECTION_LIST,
     },
     result: {
       data: {
-        organizations: [
+        organizationsConnection: [
           {
             _id: 1,
             image: '',
@@ -28,9 +30,11 @@ const MOCKS = [
               firstName: 'John',
               lastName: 'Doe',
             },
-            admins: {
-              _id: '123',
-            },
+            admins: [
+              {
+                _id: '123',
+              },
+            ],
             members: {
               _id: '234',
             },
@@ -84,13 +88,14 @@ describe('Organisation List Page', () => {
     name: 'Dummy Organization',
     description: 'This is a dummy organization',
     location: 'Delhi, India',
+    tags: 'Shelter, NGO, Open Source',
     image: new File(['hello'], 'hello.png', { type: 'image/png' }),
   };
 
   global.alert = jest.fn();
 
   test('Correct mock data should be queried', async () => {
-    const dataQuery1 = MOCKS[0]?.result?.data?.organizations;
+    const dataQuery1 = MOCKS[0]?.result?.data?.organizationsConnection;
 
     expect(dataQuery1).toEqual([
       {
@@ -99,9 +104,11 @@ describe('Organisation List Page', () => {
         image: '',
         name: 'Akatsuki',
         createdAt: '02/02/2022',
-        admins: {
-          _id: '123',
-        },
+        admins: [
+          {
+            _id: '123',
+          },
+        ],
         members: {
           _id: '234',
         },
@@ -111,11 +118,15 @@ describe('Organisation List Page', () => {
   });
 
   test('Should render props and text elements test for the screen', async () => {
+    window.location.assign('/');
+
     const { container } = render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
-        <Provider store={store}>
-          <OrgList />
-        </Provider>
+        <BrowserRouter>
+          <Provider store={store}>
+            <OrgList />
+          </Provider>
+        </BrowserRouter>
       </MockedProvider>
     );
 
@@ -123,34 +134,38 @@ describe('Organisation List Page', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId(/logoutBtn/i));
-
     expect(container.textContent).toMatch('Name:');
     expect(container.textContent).toMatch('Designation:');
     expect(container.textContent).toMatch('Email:');
-    expect(container.textContent).toMatch('Contact:');
+    expect(window.location).toBeAt('/');
+
+    userEvent.type(screen.getByTestId(/searchByName/i), formData.name);
   });
 
   test('Testing UserType from local storage', async () => {
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
-        <Provider store={store}>
-          <OrgList />
-        </Provider>
+        <BrowserRouter>
+          <Provider store={store}>
+            <OrgList />
+          </Provider>
+        </BrowserRouter>
       </MockedProvider>
     );
 
     await wait();
 
-    expect(screen.getByTestId(/createOrganizationBtnDisable/i)).toBeTruthy();
+    expect(screen.getByTestId(/createOrganizationBtn/i)).toBeTruthy();
   });
 
   test('Testing Organization data is not present', async () => {
     render(
       <MockedProvider addTypename={false}>
-        <Provider store={store}>
-          <OrgList />
-        </Provider>
+        <BrowserRouter>
+          <Provider store={store}>
+            <OrgList />
+          </Provider>
+        </BrowserRouter>
       </MockedProvider>
     );
 
@@ -162,15 +177,17 @@ describe('Organisation List Page', () => {
 
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
-        <Provider store={store}>
-          <OrgList />
-        </Provider>
+        <BrowserRouter>
+          <Provider store={store}>
+            <OrgList />
+          </Provider>
+        </BrowserRouter>
       </MockedProvider>
     );
 
     await wait();
 
-    userEvent.click(screen.getByTestId(/createOrganizationBtnEnable/i));
+    userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
     userEvent.click(screen.getByTestId(/closeOrganizationModal/i));
   });
 
@@ -179,9 +196,11 @@ describe('Organisation List Page', () => {
 
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
-        <Provider store={store}>
-          <OrgList />
-        </Provider>
+        <BrowserRouter>
+          <Provider store={store}>
+            <OrgList />
+          </Provider>
+        </BrowserRouter>
       </MockedProvider>
     );
 
@@ -192,9 +211,9 @@ describe('Organisation List Page', () => {
       'SUPERADMIN'
     );
 
-    userEvent.click(screen.getByTestId(/createOrganizationBtnEnable/i));
+    userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
 
-    userEvent.type(screen.getByPlaceholderText(/Enter Name/i), formData.name);
+    userEvent.type(screen.getByTestId(/modalOrganizationName/i), formData.name);
     userEvent.type(
       screen.getByPlaceholderText(/Enter Description/i),
       formData.description
@@ -203,11 +222,12 @@ describe('Organisation List Page', () => {
       screen.getByPlaceholderText(/Enter Location/i),
       formData.location
     );
+    userEvent.type(screen.getByPlaceholderText(/Enter Tags/i), formData.tags);
     userEvent.click(screen.getByLabelText(/Is Public:/i));
-    userEvent.click(screen.getByLabelText(/Visible:/i));
+    userEvent.click(screen.getByLabelText(/Visible In Search:/i));
     userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
 
-    expect(screen.getByPlaceholderText(/Enter Name/i)).toHaveValue(
+    expect(screen.getByTestId(/modalOrganizationName/i)).toHaveValue(
       formData.name
     );
     expect(screen.getByPlaceholderText(/Enter Description/i)).toHaveValue(
@@ -216,8 +236,11 @@ describe('Organisation List Page', () => {
     expect(screen.getByPlaceholderText(/Enter Location/i)).toHaveValue(
       formData.location
     );
+    expect(screen.getByPlaceholderText(/Enter Tags/i)).toHaveValue(
+      formData.tags
+    );
     expect(screen.getByLabelText(/Is Public/i)).not.toBeChecked();
-    expect(screen.getByLabelText(/Visible:/i)).toBeChecked();
+    expect(screen.getByLabelText(/Visible In Search:/i)).toBeChecked();
     expect(screen.getByLabelText(/Display Image:/i)).toBeTruthy();
 
     userEvent.click(screen.getByTestId(/submitOrganizationForm/i));

@@ -4,6 +4,7 @@ import { act, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import 'jest-localstorage-mock';
+import 'jest-location-mock';
 
 import LoginPage from './LoginPage';
 import {
@@ -29,6 +30,7 @@ const MOCKS = [
           user: {
             _id: '1',
             userType: 'ADMIN',
+            adminApproved: true,
           },
           accessToken: 'accessToken',
           refreshToken: 'refreshToken',
@@ -84,6 +86,8 @@ async function wait(ms = 0) {
 
 describe('Testing Login Page Screen', () => {
   test('Component Should be rendered properly', async () => {
+    window.location.assign('/orglist');
+
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
@@ -104,6 +108,7 @@ describe('Testing Login Page Screen', () => {
     expect(
       screen.getByText(/for the seamless management of Talawa Application./i)
     ).toBeInTheDocument();
+    expect(window.location).toBeAt('/orglist');
   });
 
   test('Testing registration functionality', async () => {

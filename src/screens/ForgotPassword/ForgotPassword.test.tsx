@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
+import 'jest-location-mock';
 
 import ForgotPassword from './ForgotPassword';
 import { store } from 'state/store';
@@ -60,6 +61,8 @@ afterEach(() => {
 
 describe('Testing Forgot Password screen', () => {
   test('Component should be rendered properly', async () => {
+    window.location.assign('/orglist');
+
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
@@ -74,6 +77,7 @@ describe('Testing Forgot Password screen', () => {
 
     expect(screen.getByText(/Forgot Password/i)).toBeInTheDocument();
     expect(screen.getByText(/Back to Home/i)).toBeInTheDocument();
+    expect(window.location).toBeAt('/orglist');
   });
 
   test('Testing, If user is already loggedIn', async () => {
