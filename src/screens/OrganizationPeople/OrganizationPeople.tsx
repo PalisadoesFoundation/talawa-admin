@@ -4,7 +4,6 @@ import Col from 'react-bootstrap/Col';
 import { useQuery } from '@apollo/client';
 import { useSelector } from 'react-redux';
 import { Container } from 'react-bootstrap';
-import { Hidden, TablePagination } from '@mui/material';
 import dayjs from 'dayjs';
 
 import styles from './OrganizationPeople.module.css';
@@ -14,7 +13,7 @@ import OrgAdminListCard from 'components/OrgAdminListCard/OrgAdminListCard';
 import UserListCard from 'components/UserListCard/UserListCard';
 import { ADMIN_LIST, MEMBERS_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
 import { RootState } from '../../state/reducers';
-import Pagination from 'components/Pagination/Pagination';
+import PaginationList from 'components/PaginationList/PaginationList';
 
 function OrganizationPeople(): JSX.Element {
   document.title = 'Talawa Members';
@@ -282,143 +281,35 @@ function OrganizationPeople(): JSX.Element {
                   <tr>
                     {t == 0 ? (
                       <>
-                        <Hidden smUp>
-                          <TablePagination
-                            rowsPerPageOptions={[]}
-                            colSpan={4}
-                            count={
-                              data ? data.organizations[0].members.length : 0
-                            }
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            SelectProps={{
-                              inputProps: {
-                                'aria-label': 'rows per page',
-                              },
-                              native: true,
-                            }}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                            ActionsComponent={Pagination}
-                          />
-                        </Hidden>
-                        <Hidden smDown>
-                          <TablePagination
-                            rowsPerPageOptions={[
-                              5,
-                              10,
-                              30,
-                              { label: 'All', value: -1 },
-                            ]}
-                            colSpan={4}
-                            count={
-                              data ? data.organizations[0].members.length : 0
-                            }
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            SelectProps={{
-                              inputProps: {
-                                'aria-label': 'rows per page',
-                              },
-                              native: true,
-                            }}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                            ActionsComponent={Pagination}
-                          />
-                        </Hidden>
+                        <PaginationList
+                          count={
+                            data ? data.organizations[0].members.length : 0
+                          }
+                          rowsPerPage={rowsPerPage}
+                          page={page}
+                          onPageChange={handleChangePage}
+                          onRowsPerPageChange={handleChangeRowsPerPage}
+                        />
                       </>
                     ) : t == 1 ? (
                       <>
-                        <Hidden smUp>
-                          <TablePagination
-                            rowsPerPageOptions={[]}
-                            colSpan={4}
-                            count={
-                              data ? data.organizations[0].admins.length : 0
-                            }
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            SelectProps={{
-                              inputProps: {
-                                'aria-label': 'rows per page',
-                              },
-                              native: true,
-                            }}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                            ActionsComponent={Pagination}
-                          />
-                        </Hidden>
-                        <Hidden smDown>
-                          <TablePagination
-                            rowsPerPageOptions={[
-                              5,
-                              10,
-                              30,
-                              { label: 'All', value: -1 },
-                            ]}
-                            colSpan={4}
-                            count={
-                              data ? data.organizations[0].admins.length : 0
-                            }
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            SelectProps={{
-                              inputProps: {
-                                'aria-label': 'rows per page',
-                              },
-                              native: true,
-                            }}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                            ActionsComponent={Pagination}
-                          />
-                        </Hidden>
+                        <PaginationList
+                          count={data ? data.organizations[0].admins.length : 0}
+                          rowsPerPage={rowsPerPage}
+                          page={page}
+                          onPageChange={handleChangePage}
+                          onRowsPerPageChange={handleChangeRowsPerPage}
+                        />
                       </>
                     ) : t == 2 ? (
                       <>
-                        <Hidden smUp>
-                          <TablePagination
-                            rowsPerPageOptions={[]}
-                            colSpan={4}
-                            count={data ? data.users.length : 0}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            SelectProps={{
-                              inputProps: {
-                                'aria-label': 'rows per page',
-                              },
-                              native: true,
-                            }}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                            ActionsComponent={Pagination}
-                          />
-                        </Hidden>
-                        <Hidden smDown>
-                          <TablePagination
-                            rowsPerPageOptions={[
-                              5,
-                              10,
-                              30,
-                              { label: 'All', value: -1 },
-                            ]}
-                            colSpan={4}
-                            count={data ? data.users.length : 0}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            SelectProps={{
-                              inputProps: {
-                                'aria-label': 'rows per page',
-                              },
-                              native: true,
-                            }}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                            ActionsComponent={Pagination}
-                          />
-                        </Hidden>
+                        <PaginationList
+                          count={data ? data.users.length : 0}
+                          rowsPerPage={rowsPerPage}
+                          page={page}
+                          onPageChange={handleChangePage}
+                          onRowsPerPageChange={handleChangeRowsPerPage}
+                        />
                       </>
                     ) : /* istanbul ignore next */
                     null}

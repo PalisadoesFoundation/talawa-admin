@@ -6,8 +6,7 @@ import Col from 'react-bootstrap/Col';
 import { useMutation, useQuery } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
 import dayjs from 'dayjs';
-import TablePagination from '@mui/material/TablePagination';
-import { Hidden } from '@mui/material';
+import { toast } from 'react-toastify';
 
 import styles from './OrgList.module.css';
 import SuperDashListCard from 'components/SuperDashListCard/SuperDashListCard';
@@ -16,9 +15,8 @@ import {
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { CREATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
-import Pagination from 'components/Pagination/Pagination';
 import ListNavbar from 'components/ListNavbar/ListNavbar';
-import { toast } from 'react-toastify';
+import PaginationList from 'components/PaginationList/PaginationList';
 
 function OrgList(): JSX.Element {
   document.title = 'Talawa Organizations';
@@ -231,47 +229,13 @@ function OrgList(): JSX.Element {
               <table>
                 <tbody>
                   <tr>
-                    <Hidden smUp>
-                      <TablePagination
-                        rowsPerPageOptions={[]}
-                        colSpan={4}
-                        count={data ? data.organizationsConnection.length : 0}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        SelectProps={{
-                          inputProps: {
-                            'aria-label': 'rows per page',
-                          },
-                          native: true,
-                        }}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                        ActionsComponent={Pagination}
-                      />
-                    </Hidden>
-                    <Hidden smDown>
-                      <TablePagination
-                        rowsPerPageOptions={[
-                          5,
-                          10,
-                          30,
-                          { label: 'All', value: -1 },
-                        ]}
-                        colSpan={4}
-                        count={data ? data.organizationsConnection.length : 0}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        SelectProps={{
-                          inputProps: {
-                            'aria-label': 'rows per page',
-                          },
-                          native: true,
-                        }}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                        ActionsComponent={Pagination}
-                      />
-                    </Hidden>
+                    <PaginationList
+                      count={data ? data.organizationsConnection.length : 0}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
                   </tr>
                 </tbody>
               </table>
