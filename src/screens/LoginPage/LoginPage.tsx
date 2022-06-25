@@ -38,7 +38,7 @@ function LoginPage(): JSX.Element {
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('IsLoggedIn');
     if (isLoggedIn == 'TRUE') {
-      window.location.href = '/orglist';
+      window.location.assign('/orglist');
     }
     setComponentLoader(false);
   }, []);
@@ -165,7 +165,8 @@ function LoginPage(): JSX.Element {
       if (data) {
         if (
           data.login.user.userType === 'SUPERADMIN' ||
-          data.login.user.userType === 'ADMIN'
+          (data.login.user.userType === 'ADMIN' &&
+            data.login.user.adminApproved === true)
         ) {
           localStorage.setItem('token', data.login.accessToken);
           localStorage.setItem('id', data.login.user._id);

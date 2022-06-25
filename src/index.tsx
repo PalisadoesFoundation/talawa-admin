@@ -11,6 +11,7 @@ import {
 } from '@apollo/client';
 import { onError } from '@apollo/link-error';
 import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.min.js';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';

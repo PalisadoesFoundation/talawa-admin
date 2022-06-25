@@ -1,16 +1,20 @@
-import React from 'react';
-import styles from './OrganizationPeople.module.css';
+import React, { useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { useQuery } from '@apollo/client';
+import { useSelector } from 'react-redux';
+import { Container } from 'react-bootstrap';
+import { Hidden, TablePagination } from '@mui/material';
+import dayjs from 'dayjs';
+
+import styles from './OrganizationPeople.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 import OrgAdminListCard from 'components/OrgAdminListCard/OrgAdminListCard';
 import UserListCard from 'components/UserListCard/UserListCard';
-import { useQuery } from '@apollo/client';
 import { ADMIN_LIST, MEMBERS_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
-import { useSelector } from 'react-redux';
 import { RootState } from '../../state/reducers';
-import { Container } from 'react-bootstrap';
+import Pagination from 'components/Pagination/Pagination';
 
 function OrganizationPeople(): JSX.Element {
   document.title = 'Talawa Members';
@@ -21,7 +25,9 @@ function OrganizationPeople(): JSX.Element {
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
 
-  const [t, setT] = React.useState(0);
+  const [t, setT] = useState(0);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   if (t == 0) {
     const {
@@ -66,8 +72,24 @@ function OrganizationPeople(): JSX.Element {
 
   /* istanbul ignore next */
   if (error) {
-    window.location.href = '/orglist';
+    window.location.assign('/orglist');
   }
+
+  /* istanbul ignore next */
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
+    setPage(newPage);
+  };
+
+  /* istanbul ignore next */
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   return (
     <>
@@ -147,74 +169,262 @@ function OrganizationPeople(): JSX.Element {
               <Row className={styles.justifysp}>
                 <p className={styles.logintitle}>Members</p>
               </Row>
-              {t == 0
-                ? data
-                  ? data.organizations[0].members.map(
-                      (datas: {
-                        _id: string;
-                        lastName: string;
-                        firstName: string;
-                        image: string;
-                      }) => {
-                        return (
-                          <OrgPeopleListCard
-                            key={datas._id}
-                            id={datas._id}
-                            memberImage={datas.image}
-                            joinDate="05/07/2021"
-                            memberName={datas.firstName + ' ' + datas.lastName}
-                            memberLocation="Vadodara, Gujarat"
+              <div className={styles.list_box}>
+                {t == 0
+                  ? data
+                    ? (rowsPerPage > 0
+                        ? data.organizations[0].members.slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage
+                          )
+                        : data.organizations[0].members
+                      ).map(
+                        (datas: {
+                          _id: string;
+                          lastName: string;
+                          firstName: string;
+                          image: string;
+                          email: string;
+                          createdAt: string;
+                        }) => {
+                          return (
+                            <OrgPeopleListCard
+                              key={datas._id}
+                              id={datas._id}
+                              memberImage={datas.image}
+                              joinDate={dayjs(parseInt(datas.createdAt)).format(
+                                'DD/MM/YYYY'
+                              )}
+                              memberName={
+                                datas.firstName + ' ' + datas.lastName
+                              }
+                              memberEmail={datas.email}
+                            />
+                          );
+                        }
+                      )
+                    : null
+                  : t == 1
+                  ? data
+                    ? (rowsPerPage > 0
+                        ? data.organizations[0].admins.slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage
+                          )
+                        : data.organizations[0].admins
+                      ).map(
+                        (datas: {
+                          _id: string;
+                          lastName: string;
+                          firstName: string;
+                          image: string;
+                          email: string;
+                          createdAt: string;
+                        }) => {
+                          return (
+                            <OrgAdminListCard
+                              key={datas._id}
+                              id={datas._id}
+                              memberImage={datas.image}
+                              joinDate={dayjs(parseInt(datas.createdAt)).format(
+                                'DD/MM/YYYY'
+                              )}
+                              memberName={
+                                datas.firstName + ' ' + datas.lastName
+                              }
+                              memberEmail={datas.email}
+                            />
+                          );
+                        }
+                      )
+                    : null
+                  : t == 2
+                  ? data
+                    ? (rowsPerPage > 0
+                        ? data.users.slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage
+                          )
+                        : data.users
+                      ).map(
+                        (datas: {
+                          _id: string;
+                          lastName: string;
+                          firstName: string;
+                          image: string;
+                          email: string;
+                          createdAt: string;
+                        }) => {
+                          return (
+                            <UserListCard
+                              key={datas._id}
+                              id={datas._id}
+                              memberImage={datas.image}
+                              joinDate={dayjs(parseInt(datas.createdAt)).format(
+                                'DD/MM/YYYY'
+                              )}
+                              memberName={
+                                datas.firstName + ' ' + datas.lastName
+                              }
+                              memberEmail={datas.email}
+                            />
+                          );
+                        }
+                      )
+                    : null
+                  : /* istanbul ignore next */
+                    null}
+              </div>
+            </div>
+            <div>
+              <table>
+                <tbody>
+                  <tr>
+                    {t == 0 ? (
+                      <>
+                        <Hidden smUp>
+                          <TablePagination
+                            rowsPerPageOptions={[]}
+                            colSpan={4}
+                            count={
+                              data ? data.organizations[0].members.length : 0
+                            }
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            SelectProps={{
+                              inputProps: {
+                                'aria-label': 'rows per page',
+                              },
+                              native: true,
+                            }}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                            ActionsComponent={Pagination}
                           />
-                        );
-                      }
-                    )
-                  : null
-                : t == 1
-                ? data
-                  ? data.organizations[0].admins.map(
-                      (datas: {
-                        _id: string;
-                        lastName: string;
-                        firstName: string;
-                        image: string;
-                      }) => {
-                        return (
-                          <OrgAdminListCard
-                            key={datas._id}
-                            id={datas._id}
-                            memberImage={datas.image}
-                            joinDate="05/07/2021"
-                            memberName={datas.firstName + ' ' + datas.lastName}
-                            memberLocation="Vadodara, Gujarat"
+                        </Hidden>
+                        <Hidden smDown>
+                          <TablePagination
+                            rowsPerPageOptions={[
+                              5,
+                              10,
+                              30,
+                              { label: 'All', value: -1 },
+                            ]}
+                            colSpan={4}
+                            count={
+                              data ? data.organizations[0].members.length : 0
+                            }
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            SelectProps={{
+                              inputProps: {
+                                'aria-label': 'rows per page',
+                              },
+                              native: true,
+                            }}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                            ActionsComponent={Pagination}
                           />
-                        );
-                      }
-                    )
-                  : null
-                : t == 2
-                ? data
-                  ? data.users.map(
-                      (datas: {
-                        _id: string;
-                        lastName: string;
-                        firstName: string;
-                        image: string;
-                      }) => {
-                        return (
-                          <UserListCard
-                            key={datas._id}
-                            id={datas._id}
-                            memberImage={datas.image}
-                            joinDate="05/07/2021"
-                            memberName={datas.firstName + ' ' + datas.lastName}
-                            memberLocation="Vadodara, Gujarat"
+                        </Hidden>
+                      </>
+                    ) : t == 1 ? (
+                      <>
+                        <Hidden smUp>
+                          <TablePagination
+                            rowsPerPageOptions={[]}
+                            colSpan={4}
+                            count={
+                              data ? data.organizations[0].admins.length : 0
+                            }
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            SelectProps={{
+                              inputProps: {
+                                'aria-label': 'rows per page',
+                              },
+                              native: true,
+                            }}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                            ActionsComponent={Pagination}
                           />
-                        );
-                      }
-                    )
-                  : null
-                : /* istanbul ignore next */
-                  null}
+                        </Hidden>
+                        <Hidden smDown>
+                          <TablePagination
+                            rowsPerPageOptions={[
+                              5,
+                              10,
+                              30,
+                              { label: 'All', value: -1 },
+                            ]}
+                            colSpan={4}
+                            count={
+                              data ? data.organizations[0].admins.length : 0
+                            }
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            SelectProps={{
+                              inputProps: {
+                                'aria-label': 'rows per page',
+                              },
+                              native: true,
+                            }}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                            ActionsComponent={Pagination}
+                          />
+                        </Hidden>
+                      </>
+                    ) : t == 2 ? (
+                      <>
+                        <Hidden smUp>
+                          <TablePagination
+                            rowsPerPageOptions={[]}
+                            colSpan={4}
+                            count={data ? data.users.length : 0}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            SelectProps={{
+                              inputProps: {
+                                'aria-label': 'rows per page',
+                              },
+                              native: true,
+                            }}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                            ActionsComponent={Pagination}
+                          />
+                        </Hidden>
+                        <Hidden smDown>
+                          <TablePagination
+                            rowsPerPageOptions={[
+                              5,
+                              10,
+                              30,
+                              { label: 'All', value: -1 },
+                            ]}
+                            colSpan={4}
+                            count={data ? data.users.length : 0}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            SelectProps={{
+                              inputProps: {
+                                'aria-label': 'rows per page',
+                              },
+                              native: true,
+                            }}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                            ActionsComponent={Pagination}
+                          />
+                        </Hidden>
+                      </>
+                    ) : /* istanbul ignore next */
+                    null}
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </Container>
         </Col>

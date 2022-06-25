@@ -40,15 +40,42 @@ export const ORGANIZATION_LIST = gql`
   }
 `;
 
+// Query to take the Organization list with filter option
+export const ORGANIZATION_CONNECTION_LIST = gql`
+  query OrganizationsConnection($filter: String) {
+    organizationsConnection(where: { name_contains: $filter }) {
+      _id
+      image
+      creator {
+        firstName
+        lastName
+      }
+      name
+      members {
+        _id
+      }
+      admins {
+        _id
+      }
+      createdAt
+      location
+    }
+  }
+`;
+
 // Query to take the User list
 
 export const USER_LIST = gql`
-  query {
-    users {
+  query Users($filter: String) {
+    users(where: { firstName_contains: $filter }) {
       firstName
       lastName
       image
       _id
+      email
+      userType
+      adminApproved
+      createdAt
     }
   }
 `;
@@ -67,6 +94,34 @@ export const ORGANIZATIONS_LIST = gql`
       }
       name
       description
+      location
+      members {
+        _id
+        firstName
+        lastName
+        email
+      }
+      admins {
+        _id
+        firstName
+        lastName
+        email
+      }
+      membershipRequests {
+        _id
+        user {
+          firstName
+          lastName
+          email
+        }
+      }
+      blockedUsers {
+        _id
+        firstName
+        lastName
+        email
+      }
+      tags
     }
   }
 `;
@@ -82,6 +137,8 @@ export const MEMBERS_LIST = gql`
         firstName
         lastName
         image
+        email
+        createdAt
       }
     }
   }
@@ -128,6 +185,8 @@ export const ADMIN_LIST = gql`
         firstName
         lastName
         image
+        email
+        createdAt
       }
     }
   }

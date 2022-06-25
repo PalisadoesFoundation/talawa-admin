@@ -10,11 +10,14 @@ interface SuperDashListCardProps {
   orgLocation: string | null;
   createdDate: string;
   image: string;
-  admins: string;
+  admins: any;
   members: string;
 }
 
 function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
+  const userId = localStorage.getItem('id');
+  const userType = localStorage.getItem('UserType');
+
   function Click() {
     const url = '/orgdash/id=' + props.id;
     window.location.replace(url);
@@ -43,14 +46,23 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
           </div>
           <div className={styles.singledetails_data_right}>
             <p className={styles.orgfont}>
-              Admins: <span>{props?.admins}</span>
+              Admins: <span>{props?.admins.length}</span>
             </p>
             <p className={styles.orgfont}>
               Members: <span>{props?.members}</span>
             </p>
-            <button className={styles.orgfontcreatedbtn} onClick={Click}>
-              Manage
-            </button>
+            <div className={styles.orgCreateBtnDiv}>
+              <button
+                className={styles.orgfontcreatedbtn}
+                onClick={Click}
+                disabled={
+                  userType !== 'SUPERADMIN' &&
+                  !props.admins.some((admin: any) => admin._id === userId)
+                }
+              >
+                Manage
+              </button>
+            </div>
           </div>
         </Col>
       </Row>

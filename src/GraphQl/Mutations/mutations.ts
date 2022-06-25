@@ -118,6 +118,7 @@ export const LOGIN_MUTATION = gql`
       user {
         _id
         userType
+        adminApproved
       }
       accessToken
       refreshToken
@@ -142,6 +143,7 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
     $name: String!
     $visibleInSearch: Boolean!
     $isPublic: Boolean!
+    $tags: [String]
   ) {
     createOrganization(
       data: {
@@ -150,6 +152,7 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
         name: $name
         visibleInSearch: $visibleInSearch
         isPublic: $isPublic
+        tags: $tags
       }
     ) {
       _id
@@ -293,5 +296,23 @@ export const FORGOT_PASSWORD_MUTATION = gql`
         otpToken: $otpToken
       }
     )
+  }
+`;
+
+export const UPDATE_USERTYPE_MUTATION = gql`
+  mutation UpdateUserType($id: ID!, $userType: String!) {
+    updateUserType(data: { id: $id, userType: $userType })
+  }
+`;
+
+export const ACCPET_ADMIN_MUTATION = gql`
+  mutation AcceptAdmin($id: ID!) {
+    acceptAdmin(id: $id)
+  }
+`;
+
+export const REJECT_ADMIN_MUTATION = gql`
+  mutation RejectAdmin($id: ID!) {
+    rejectAdmin(id: $id)
   }
 `;

@@ -1,25 +1,43 @@
-import React, { useState } from 'react';
-import styles from './OrgList.module.css';
-import Logo from 'assets/talawa-logo-200x200.png';
+import React, { ChangeEvent, useState } from 'react';
 import Modal from 'react-modal';
 import { Form } from 'antd';
-import Navbar from 'react-bootstrap/Navbar';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import SuperDashListCard from 'components/SuperDashListCard/SuperDashListCard';
-import {
-  ORGANIZATION_LIST,
-  USER_ORGANIZATION_LIST,
-} from 'GraphQl/Queries/Queries';
 import { useMutation, useQuery } from '@apollo/client';
-import { CREATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import Button from 'react-bootstrap/Button';
 import dayjs from 'dayjs';
+import TablePagination from '@mui/material/TablePagination';
+import { Hidden } from '@mui/material';
+
+import styles from './OrgList.module.css';
+import SuperDashListCard from 'components/SuperDashListCard/SuperDashListCard';
+import {
+  ORGANIZATION_CONNECTION_LIST,
+  USER_ORGANIZATION_LIST,
+} from 'GraphQl/Queries/Queries';
+import { CREATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import Pagination from 'components/Pagination/Pagination';
+import ListNavbar from 'components/ListNavbar/ListNavbar';
+import { toast } from 'react-toastify';
 
 function OrgList(): JSX.Element {
   document.title = 'Talawa Organizations';
 
-  const [modalisOpen, setmodalIsOpen] = React.useState(false);
+  const [modalisOpen, setmodalIsOpen] = useState(false);
+  const [formState, setFormState] = useState({
+    name: '',
+    descrip: '',
+    ispublic: true,
+    visible: false,
+    location: '',
+    tags: '',
+  });
+  const [searchByName, setSearchByName] = useState('');
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const isSuperAdmin = localStorage.getItem('UserType') !== 'SUPERADMIN';
 
   const showInviteModal = () => {
     setmodalIsOpen(true);
@@ -27,48 +45,64 @@ function OrgList(): JSX.Element {
   const hideInviteModal = () => {
     setmodalIsOpen(false);
   };
-  const [ispublicchecked, setIsPublicChecked] = React.useState(true);
-  const [visiblechecked, setVisibleChecked] = React.useState(false);
-
-  const [formState, setFormState] = useState({
-    name: '',
-    descrip: '',
-    ispublic: false,
-    visible: false,
-    location: '',
-  });
-
-  const CreateOrg = async () => {
-    const { data } = await create({
-      variables: {
-        name: formState.name,
-        description: formState.descrip,
-        location: formState.location,
-        visibleInSearch: formState.visible,
-        isPublic: formState.ispublic,
-      },
-    });
-
-    /* istanbul ignore next */
-    if (data) {
-      window.alert('Congratulation the Organization is created');
-      window.location.replace('/orglist');
-    }
-  };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [create, { loading: loading_3, error }] = useMutation(
+  const [create, { loading: loading_3 }] = useMutation(
     CREATE_ORGANIZATION_MUTATION
   );
 
-  const { data: data_2, loading: loading_2 } = useQuery(
-    USER_ORGANIZATION_LIST,
-    {
-      variables: { id: localStorage.getItem('id') },
-    }
-  );
+  const {
+    data: data_2,
+    loading: loading_2,
+    error: error_user,
+  } = useQuery(USER_ORGANIZATION_LIST, {
+    variables: { id: localStorage.getItem('id') },
+  });
 
-  const { data, loading, error: error_list } = useQuery(ORGANIZATION_LIST);
+  const {
+    data,
+    loading,
+    error: error_list,
+    refetch,
+  } = useQuery(ORGANIZATION_CONNECTION_LIST);
+
+  const CreateOrg = async (e: ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const { name, descrip, location, visible, ispublic, tags } = formState;
+
+    try {
+      const tagsArray = tags.split(',').map((tag) => tag.trim());
+
+      const { data } = await create({
+        variables: {
+          name: name,
+          description: descrip,
+          location: location,
+          visibleInSearch: visible,
+          isPublic: ispublic,
+          tags: tagsArray,
+        },
+      });
+
+      /* istanbul ignore next */
+      if (data) {
+        toast.success('Congratulation the Organization is created');
+        refetch();
+        setFormState({
+          name: '',
+          descrip: '',
+          ispublic: true,
+          visible: false,
+          location: '',
+          tags: '',
+        });
+      }
+    } catch (error: any) {
+      /* istanbul ignore next */
+      toast.error(error.message);
+    }
+  };
 
   if (loading || loading_2 || loading_3) {
     return (
@@ -79,32 +113,38 @@ function OrgList(): JSX.Element {
   }
 
   /* istanbul ignore next */
-  if (error_list) {
-    window.location.href = '/orglist';
+  if (error_list || error_user) {
+    window.location.assign('/');
   }
+
+  /* istanbul ignore next */
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
+    setPage(newPage);
+  };
+
+  /* istanbul ignore next */
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleSearchByName = (e: any) => {
+    const { value } = e.target;
+    setSearchByName(value);
+
+    refetch({
+      filter: searchByName,
+    });
+  };
 
   return (
     <>
-      <Navbar className={styles.navbarbg} fixed="top">
-        <Navbar.Brand>
-          <Row className={styles.navallitem}>
-            <a className={styles.logo} href="/">
-              <img src={Logo} />
-              <strong>Talawa Portal</strong>
-            </a>
-          </Row>
-        </Navbar.Brand>
-        <button
-          className={styles.logoutbtn}
-          data-testid="logoutBtn"
-          onClick={() => {
-            localStorage.clear();
-            window.location.replace('/');
-          }}
-        >
-          Logout
-        </button>
-      </Navbar>
+      <ListNavbar />
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
@@ -124,10 +164,17 @@ function OrgList(): JSX.Element {
                 Email:
                 <span> {data_2?.user.email}</span>
               </p>
-              <p>
-                Contact:
-                <span></span>
-              </p>
+
+              <h6 className={styles.searchtitle}>Search By Name</h6>
+              <input
+                type="name"
+                id="orgname"
+                placeholder="Enter Name"
+                data-testid="searchByName"
+                autoComplete="off"
+                required
+                onChange={handleSearchByName}
+              />
             </div>
           </div>
         </Col>
@@ -135,56 +182,99 @@ function OrgList(): JSX.Element {
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>Organizations List</p>
-              {localStorage.getItem('UserType') == 'SUPERADMIN' ? (
-                <Button
-                  variant="success"
-                  className={styles.invitebtn}
-                  onClick={showInviteModal}
-                  data-testid="createOrganizationBtnEnable"
-                >
-                  + Create Organization
-                </Button>
-              ) : (
-                <Button
-                  className={styles.invitebtn}
-                  disabled={true}
-                  variant="success"
-                  onClick={showInviteModal}
-                  data-testid="createOrganizationBtnDisable"
-                >
-                  + Create Organization
-                </Button>
-              )}
+              <Button
+                variant="success"
+                className={styles.invitebtn}
+                disabled={isSuperAdmin}
+                onClick={showInviteModal}
+                data-testid="createOrganizationBtn"
+              >
+                + Create Organization
+              </Button>
             </Row>
             <div className={styles.list_box}>
-              {data
-                ? data.organizations.map(
-                    (datas: {
-                      _id: string;
-                      image: string;
-                      name: string;
-                      admins: any;
-                      members: any;
-                      createdAt: string;
-                      location: string | null;
-                    }) => {
-                      return (
-                        <SuperDashListCard
-                          id={datas._id}
-                          key={datas._id}
-                          image={datas.image}
-                          admins={datas.admins.length}
-                          members={datas.members.length}
-                          createdDate={dayjs(parseInt(datas?.createdAt)).format(
-                            'DD/MM/YYYY'
-                          )}
-                          orgName={datas.name}
-                          orgLocation={datas.location}
-                        />
-                      );
-                    }
-                  )
-                : null}
+              {data &&
+                (rowsPerPage > 0
+                  ? data.organizationsConnection.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : data.organizationsConnection
+                ).map(
+                  (datas: {
+                    _id: string;
+                    image: string;
+                    name: string;
+                    admins: any;
+                    members: any;
+                    createdAt: string;
+                    location: string | null;
+                  }) => {
+                    return (
+                      <SuperDashListCard
+                        id={datas._id}
+                        key={datas._id}
+                        image={datas.image}
+                        admins={datas.admins}
+                        members={datas.members.length}
+                        createdDate={dayjs(parseInt(datas?.createdAt)).format(
+                          'DD/MM/YYYY'
+                        )}
+                        orgName={datas.name}
+                        orgLocation={datas.location}
+                      />
+                    );
+                  }
+                )}
+            </div>
+            <div>
+              <table>
+                <tbody>
+                  <tr>
+                    <Hidden smUp>
+                      <TablePagination
+                        rowsPerPageOptions={[]}
+                        colSpan={4}
+                        count={data ? data.organizationsConnection.length : 0}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        SelectProps={{
+                          inputProps: {
+                            'aria-label': 'rows per page',
+                          },
+                          native: true,
+                        }}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                        ActionsComponent={Pagination}
+                      />
+                    </Hidden>
+                    <Hidden smDown>
+                      <TablePagination
+                        rowsPerPageOptions={[
+                          5,
+                          10,
+                          30,
+                          { label: 'All', value: -1 },
+                        ]}
+                        colSpan={4}
+                        count={data ? data.organizationsConnection.length : 0}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        SelectProps={{
+                          inputProps: {
+                            'aria-label': 'rows per page',
+                          },
+                          native: true,
+                        }}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                        ActionsComponent={Pagination}
+                      />
+                    </Hidden>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </Col>
@@ -209,12 +299,13 @@ function OrgList(): JSX.Element {
                 <i className="fa fa-times"></i>
               </a>
             </div>
-            <Form>
+            <Form onSubmitCapture={CreateOrg}>
               <label htmlFor="orgname">Name</label>
               <input
                 type="name"
                 id="orgname"
                 placeholder="Enter Name"
+                data-testid="modalOrganizationName"
                 autoComplete="off"
                 required
                 value={formState.name}
@@ -240,7 +331,7 @@ function OrgList(): JSX.Element {
                   });
                 }}
               />
-              <label htmlFor="descrip">Location</label>
+              <label htmlFor="location">Location</label>
               <input
                 type="text"
                 id="location"
@@ -255,23 +346,48 @@ function OrgList(): JSX.Element {
                   });
                 }}
               />
+              <label htmlFor="tags">Tags (Comma(,) Seperated)</label>
+              <input
+                type="text"
+                id="tags"
+                placeholder="Enter Tags"
+                autoComplete="off"
+                required
+                value={formState.tags}
+                onChange={(e) => {
+                  setFormState({
+                    ...formState,
+                    tags: e.target.value,
+                  });
+                }}
+              />
               <div className={styles.checkboxdiv}>
                 <div className={styles.dispflex}>
                   <label htmlFor="ispublic">Is Public:</label>
                   <input
                     id="ispublic"
                     type="checkbox"
-                    defaultChecked={ispublicchecked}
-                    onChange={() => setIsPublicChecked(!ispublicchecked)}
+                    defaultChecked={formState.ispublic}
+                    onChange={() =>
+                      setFormState({
+                        ...formState,
+                        ispublic: !formState.ispublic,
+                      })
+                    }
                   />
                 </div>
                 <div className={styles.dispflex}>
-                  <label htmlFor="visible">Visible: </label>
+                  <label htmlFor="visible">Visible In Search: </label>
                   <input
                     id="visible"
                     type="checkbox"
-                    defaultChecked={visiblechecked}
-                    onChange={() => setVisibleChecked(!visiblechecked)}
+                    defaultChecked={formState.visible}
+                    onChange={() =>
+                      setFormState({
+                        ...formState,
+                        visible: !formState.visible,
+                      })
+                    }
                   />
                 </div>
               </div>
@@ -287,10 +403,9 @@ function OrgList(): JSX.Element {
                 />
               </label>
               <button
-                type="button"
+                type="submit"
                 className={styles.greenregbtn}
                 value="invite"
-                onClick={CreateOrg}
                 data-testid="submitOrganizationForm"
               >
                 Create Organization

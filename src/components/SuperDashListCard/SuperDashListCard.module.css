@@ -33,12 +33,17 @@
 }
 .orgfontcreatedbtn {
   margin-top: 18px;
-  border-radius: 7px;
-  border-color: #e8e5e5;
-  background-color: #f7f7f7;
+  border-radius: 4px;
+  border-color: #31bb6b;
+  background-color: #31bb6b;
+  color: white;
   padding-right: 10px;
   padding-left: 10px;
   box-shadow: none;
+  width: 100%;
+}
+.orgCreateBtnDiv {
+  width: 100%;
 }
 #grid_wrapper {
   align-items: left;
@@ -48,4 +53,12 @@
   height: 100px;
   border-radius: 7px;
   margin-left: 20px;
+}
+@media only screen and (max-width: 600px) {
+  .singledetails {
+    margin-left: 20px;
+  }
+  .orgimg {
+    margin: auto;
+  }
 }
