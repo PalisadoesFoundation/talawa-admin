@@ -132,7 +132,7 @@ def _arg_parser_resolver():
     # Initialize parser and add the CLI options we should expect
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        '--lines', type=int, required=False, default=400,
+        '--lines', type=int, required=False, default=300,
         help='The maximum number of lines of code to accept.')
     parser.add_argument(
         '--directory', type=str, required=False,
