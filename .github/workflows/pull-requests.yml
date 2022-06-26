@@ -35,7 +35,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: chmod +x ./.github/workflows/countline.py
       - run: |
-          ./.github/workflows/countline.py --exclude_files src/screens/LoginPage/LoginPage.tsx, src/screens/OrgList/OrgList.tsx, src/screens/OrganizationPeople/OrganizationPeople.tsx
+          ./.github/workflows/countline.py --exclude_files src/screens/LoginPage/LoginPage.tsx src/screens/OrgList/OrgList.tsx src/screens/OrganizationPeople/OrganizationPeople.tsx
 
   Continuous-Integration:
     name: Continuous integration on pull request
