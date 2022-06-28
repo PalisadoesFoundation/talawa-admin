@@ -35,6 +35,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-jest": "^25.3.4",
     "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-tsdoc": "^0.2.16",
     "graphql": "^15.5.1",
     "inquirer": "^8.2.1",
     "jest": "^27.4.5",
