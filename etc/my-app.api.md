@@ -87,6 +87,54 @@ export const USER_LIST: DocumentNode;
 // @public
 export const USER_ORGANIZATION_LIST: DocumentNode;
 
+// @public
+export const ADD_ADMIN_MUTATION: DocumentNode;
+
+// @public
+export const BLOCK_USER_MUTATION: DocumentNode;
+
+// @public
+export const CREATE_EVENT_MUTATION: DocumentNode;
+
+// @public
+export const CREATE_ORGANIZATION_MUTATION: DocumentNode;
+
+// @public
+export const CREATE_POST_MUTATION: DocumentNode;
+
+// @public
+export const DELETE_EVENT_MUTATION: DocumentNode;
+
+// @public
+export const DELETE_ORGANIZATION_MUTATION: DocumentNode;
+
+// @public
+export const DELETE_POST_MUTATION: DocumentNode;
+
+// @public
+export const LOGIN_MUTATION: DocumentNode;
+
+// @public
+export const REJECT_ORGANIZATION_REQUEST_MUTATION: DocumentNode;
+
+// @public
+export const REMOVE_ADMIN_MUTATION: DocumentNode;
+
+// @public
+export const REMOVE_MEMBER_MUTATION: DocumentNode;
+
+// @public
+export const SIGNUP_MUTATION: DocumentNode;
+
+// @public
+export const UNBLOCK_USER_MUTATION: DocumentNode;
+
+// @public
+export const UPDATE_ORGANIZATION_MUTATION: DocumentNode;
+
+// @public
+export const UPDATE_USER_MUTATION: DocumentNode;
+
 // (No @packageDocumentation comment for this package)
 
 ```
