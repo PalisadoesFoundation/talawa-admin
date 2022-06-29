@@ -27,11 +27,12 @@
   },
 
   // Specify the ESLint plugins tobe used
-  "plugins": ["react", "@typescript-eslint", "react-hooks", "jest"],
+  "plugins": ["react", "@typescript-eslint", "react-hooks", "jest", "eslint-plugin-tsdoc"],
   "rules": {
     "react/destructuring-assignment": ["off"],
     "@typescript-eslint/no-explicit-any": ["off"],
     "@typescript-eslint/explicit-module-boundary-types": ["off"],
+    "tsdoc/syntax": "warn",
     "react/no-multi-comp": [
       "error",
       {
