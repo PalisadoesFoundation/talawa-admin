@@ -64,7 +64,7 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
               <button
                 className={styles.memberfontcreatedbtn}
                 data-toggle="modal"
-                data-target="#removeMemberModal"
+                data-target={`#removeMemberModal${props.id}`}
                 data-testid="removeMemberModalBtn"
               >
                 Remove
@@ -77,16 +77,19 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
 
       <div
         className="modal fade"
-        id="removeMemberModal"
+        id={`removeMemberModal${props.id}`}
         tabIndex={-1}
         role="dialog"
-        aria-labelledby="removeMemberModalLabel"
+        aria-labelledby={`removeMemberModalLabel${props.id}`}
         aria-hidden="true"
       >
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title" id="removeMemberModalLabel">
+              <h5
+                className="modal-title"
+                id={`removeMemberModalLabel${props.id}`}
+              >
                 Remove Member
               </h5>
               <button
