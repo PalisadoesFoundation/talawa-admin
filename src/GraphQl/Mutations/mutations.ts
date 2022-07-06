@@ -118,10 +118,19 @@ export const LOGIN_MUTATION = gql`
       user {
         _id
         userType
+        adminApproved
       }
       accessToken
       refreshToken
     }
+  }
+`;
+
+// To verify the google recaptcha
+
+export const RECAPTCHA_MUTATION = gql`
+  mutation Recaptcha($recaptchaToken: String!) {
+    recaptcha(data: { recaptchaToken: $recaptchaToken })
   }
 `;
 
@@ -134,6 +143,7 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
     $name: String!
     $visibleInSearch: Boolean!
     $isPublic: Boolean!
+    $tags: [String]
   ) {
     createOrganization(
       data: {
@@ -142,6 +152,7 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
         name: $name
         visibleInSearch: $visibleInSearch
         isPublic: $isPublic
+        tags: $tags
       }
     ) {
       _id
@@ -261,5 +272,47 @@ export const DELETE_POST_MUTATION = gql`
     removePost(id: $id) {
       _id
     }
+  }
+`;
+
+export const GENERATE_OTP_MUTATION = gql`
+  mutation Otp($email: String!) {
+    otp(data: { email: $email }) {
+      otpToken
+    }
+  }
+`;
+
+export const FORGOT_PASSWORD_MUTATION = gql`
+  mutation ForgotPassword(
+    $userOtp: String!
+    $newPassword: String!
+    $otpToken: String!
+  ) {
+    forgotPassword(
+      data: {
+        userOtp: $userOtp
+        newPassword: $newPassword
+        otpToken: $otpToken
+      }
+    )
+  }
+`;
+
+export const UPDATE_USERTYPE_MUTATION = gql`
+  mutation UpdateUserType($id: ID!, $userType: String!) {
+    updateUserType(data: { id: $id, userType: $userType })
+  }
+`;
+
+export const ACCPET_ADMIN_MUTATION = gql`
+  mutation AcceptAdmin($id: ID!) {
+    acceptAdmin(id: $id)
+  }
+`;
+
+export const REJECT_ADMIN_MUTATION = gql`
+  mutation RejectAdmin($id: ID!) {
+    rejectAdmin(id: $id)
   }
 `;

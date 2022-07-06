@@ -65,8 +65,8 @@
   padding-bottom: 5px;
 }
 .tagdetailsGreen > button {
-  background-color: green;
-  color: #000;
+  background-color: #31bb6b;
+  color: white;
   outline: none;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
@@ -196,4 +196,23 @@
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
+}
+
+.cardContainer {
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.dashboardIcon {
+  font-size: 50px;
+  color: #31bb6b;
+}
+
+.counterNumber {
+  font-size: 24px;
+  margin-bottom: 0rem !important;
+}
+
+.counterHead {
+  color: #99abb4;
+  margin-bottom: 0rem !important;
 }

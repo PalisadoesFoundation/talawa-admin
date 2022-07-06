@@ -151,6 +151,7 @@ form > input {
   color: #707070;
   font-size: 11px;
   margin-top: 10px;
+  text-decoration: none !important;
 }
 form > hr {
   margin-top: 20px;
@@ -179,7 +180,7 @@ form > br {
   margin-left: 0;
   display: flex;
   align-items: center;
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 .logo img {
@@ -249,6 +250,14 @@ form > br {
     transform: rotate(360deg);
   }
 }
+
+@media only screen and (max-width: 600px) {
+  .form_wrapper {
+    width: 90%;
+    top: 45%;
+  }
+}
+
 /* ===== Login Modal CSS End ===== */
 /* ================================================= */
 /* ===== Home Page CSS Start ===== */
@@ -270,9 +279,7 @@ form > br {
   width: 80%;
   margin-left: 40px;
   margin-bottom: 30px;
-
 }
-
 
 .homeright > h1 {
   font-size: 20px;
@@ -280,12 +287,8 @@ form > br {
   width: 17%;
   padding-bottom: 6px;
   border-bottom: 3px solid #31bb6b;
-  margin-bottom: 20px; 
-
+  margin-bottom: 20px;
 }
-
-
-
 
 /* .homeright>h2{
   width:75%;

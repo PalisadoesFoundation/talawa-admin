@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import {
   ApolloClient,
@@ -12,12 +11,18 @@ import {
 } from '@apollo/client';
 import { onError } from '@apollo/link-error';
 import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.min.js';
 import 'react-datepicker/dist/react-datepicker.css';
+import { Provider } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import App from './App';
+import { store } from './state/store';
+
 const errorLink = onError(({ graphQLErrors }) => {
   if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message));
 });
-import { Provider } from 'react-redux';
-import { store } from './state/store';
 
 const httpLink = new HttpLink({
   uri: process.env.REACT_APP_BACKEND_ENDPOINT,
@@ -36,6 +41,7 @@ ReactDOM.render(
     <BrowserRouter>
       <Provider store={store}>
         <App />
+        <ToastContainer />
       </Provider>
     </BrowserRouter>
   </ApolloProvider>,

@@ -1,17 +1,19 @@
 import React from 'react';
-import styles from './UserListCard.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useMutation } from '@apollo/client';
+import { toast } from 'react-toastify';
+
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
+import styles from './UserListCard.module.css';
 
 interface UserListCardProps {
   key: string;
   id: string;
   memberName: string;
-  memberLocation: string;
   joinDate: string;
   memberImage: string;
+  memberEmail: string;
 }
 
 function UserListCard(props: UserListCardProps): JSX.Element {
@@ -29,12 +31,12 @@ function UserListCard(props: UserListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        window.alert('The Event is deleted');
+        window.alert('User is added as admin.');
         window.location.reload();
       }
-    } catch (error) {
+    } catch (error: any) {
       /* istanbul ignore next */
-      window.alert(error);
+      toast.error(error.message);
     }
   };
 
@@ -43,7 +45,7 @@ function UserListCard(props: UserListCardProps): JSX.Element {
       <div className={styles.peoplelistdiv}>
         <Row className={styles.memberlist}>
           {props.memberImage ? (
-            <img src={props.memberImage} className={styles.alignimg} />
+            <img src={props.memberImage} className={styles.memberimg} />
           ) : (
             <img
               src="https://via.placeholder.com/200x100"
@@ -55,8 +57,7 @@ function UserListCard(props: UserListCardProps): JSX.Element {
               <p className={styles.membername}>
                 {props.memberName ? <>{props.memberName}</> : <>Dogs Care</>}
               </p>
-              <p className={styles.memberfont}>{props.memberLocation}</p>
-              <p className={styles.memberfontcreated}>saumya47999@gmail.com</p>
+              <p className={styles.memberfontcreated}>{props.memberEmail}</p>
             </div>
             <div className={styles.singledetails_data_right}>
               <p className={styles.memberfont}>

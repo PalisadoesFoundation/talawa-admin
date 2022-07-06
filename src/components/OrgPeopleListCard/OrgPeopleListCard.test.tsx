@@ -37,9 +37,9 @@ describe('Testing Organization People List Card', () => {
     key: '123',
     id: '1',
     memberName: 'John Doe',
-    memberLocation: 'India',
     joinDate: '20/03/2022',
     memberImage: 'https://via.placeholder.com/200x100',
+    memberEmail: 'johndoe@gmail.com',
   };
 
   global.alert = jest.fn();
@@ -55,11 +55,11 @@ describe('Testing Organization People List Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByText(/Remove/i));
+    userEvent.click(screen.getByTestId(/removeMemberModalBtn/i));
+    userEvent.click(screen.getByTestId(/removeMemberBtn/i));
 
     expect(screen.getByText(/Joined:/i)).toBeInTheDocument();
     expect(screen.getByText(props.memberName)).toBeInTheDocument();
-    expect(screen.getByText(props.memberLocation)).toBeInTheDocument();
     expect(screen.getByText(props.joinDate)).toBeInTheDocument();
   });
 
@@ -72,20 +72,20 @@ describe('Testing Organization People List Card', () => {
           key="123"
           id="1"
           memberName=""
-          memberLocation="India"
           joinDate="20/03/2022"
           memberImage=""
+          memberEmail=""
         />
       </MockedProvider>
     );
 
     await wait();
 
-    userEvent.click(screen.getByText(/Remove/i));
+    userEvent.click(screen.getByTestId(/removeMemberModalBtn/i));
+    userEvent.click(screen.getByTestId(/removeMemberBtn/i));
 
     expect(screen.getByText(/Joined:/i)).toBeInTheDocument();
     expect(screen.queryByText(props.memberName)).not.toBeInTheDocument();
-    expect(screen.getByText(props.memberLocation)).toBeInTheDocument();
     expect(screen.getByText(props.joinDate)).toBeInTheDocument();
   });
 });

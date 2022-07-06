@@ -83,7 +83,7 @@ function OrganizationEvents(): JSX.Element {
 
   /* istanbul ignore next */
   if (error) {
-    window.location.href = '/orglist';
+    window.location.assign('/orglist');
   }
 
   return (

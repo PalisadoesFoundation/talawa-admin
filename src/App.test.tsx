@@ -3,6 +3,7 @@ import { act, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router-dom';
+import 'jest-location-mock';
 
 import App from './App';
 import { store } from 'state/store';
@@ -49,7 +50,9 @@ describe('Testing the App Component', () => {
     );
 
     await wait();
-
+    window.location.assign('/orglist');
+    await wait();
+    expect(window.location).toBeAt('/orglist');
     expect(screen.getByText('Talawa Admin Management Portal')).toBeTruthy();
     expect(screen.getByText('FROM PALISADOES')).toBeTruthy();
   });

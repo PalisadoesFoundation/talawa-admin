@@ -1,0 +1,93 @@
+.navbarbgOrglist {
+  height: 60px;
+  background-color: white;
+  display: flex;
+  margin-bottom: 30px;
+  z-index: 1;
+  position: relative;
+  flex-direction: row;
+  justify-content: space-between !important;
+  box-shadow: 0px 0px 8px 2px #c8c8c8;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1030;
+}
+
+.titlemodal .logo {
+  color: #707070;
+  margin-left: 0;
+  display: flex;
+  align-items: center;
+  text-decoration: none !important;
+}
+
+.logo img {
+  margin-top: 0px;
+  margin-left: 10px;
+  height: 64px;
+  width: 70px;
+}
+
+.logo > strong {
+  line-height: 1.5rem;
+  margin-left: -5px;
+  font-family: sans-serif;
+  font-size: 19px;
+  color: #707070;
+}
+
+.navitems > .navlinks {
+  cursor: pointer;
+  margin-left: 28px;
+  line-height: 1rem;
+  font-size: 16px;
+  color: #707070;
+  z-index: 1;
+  flex-direction: row;
+  display: flex;
+}
+
+.navitem {
+  text-decoration: none;
+  color: #707070 !important;
+  transition: smooth;
+  padding-bottom: 10px;
+}
+.navlinks:hover {
+  text-decoration: none;
+  border-bottom: 3px solid #31bb6b;
+  font-weight: 600;
+}
+.logoutbtn {
+  border: 1px solid #e8e5e5;
+  box-shadow: 0 2px 2px #e8e5e5;
+  border-radius: 5px;
+  background-color: #31bb6b;
+  height: 40px;
+  font-size: 16px;
+  color: white;
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  padding: 0 20px;
+  margin-right: 10px;
+}
+
+@media only screen and (max-width: 600px) {
+  body::before {
+    height: 118px;
+  }
+  .navbarbgOrglist {
+    height: auto;
+  }
+  .navitems > .navlinks {
+    margin-top: 11px;
+    margin-left: 0;
+  }
+  .logoutbtn {
+    margin-top: 10px;
+  }
+}

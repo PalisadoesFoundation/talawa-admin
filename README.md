@@ -56,9 +56,16 @@ yarn setup
 
         Talawa-API: https://github.com/PalisadoesFoundation/talawa-api
 
-4.  When finished, your `.env` file should have the following field filled in.
+4.  Get the google recaptcha site key from `google-recaptcha-admin` for reCAPTCHA v2 and "I'm not a robot" Checkbox, and copy the key to the `REACT_APP_RECAPTCHA_KEY` section of the `.env` file.
+
+- Note: In domains, fill localhost
+
+        Google-recaptcha-admin: https://www.google.com/recaptcha/admin/create
+
+5.  When finished, your `.env` file should have the following field filled in.
 
     - REACT_APP_BACKEND_ENDPOINT
+    - REACT_APP_RECAPTCHA_KEY
 
     Please review the contents of the `.env.example` file for additional details.
 

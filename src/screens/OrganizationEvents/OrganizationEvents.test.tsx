@@ -4,6 +4,7 @@ import { act, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
+import 'jest-location-mock';
 
 import OrganizationEvents from './OrganizationEvents';
 import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
@@ -90,6 +91,8 @@ describe('Organisation Events Page', () => {
   });
 
   test('It is necessary to check correct render', async () => {
+    window.location.assign('/orglist');
+
     const { container } = render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
@@ -106,6 +109,7 @@ describe('Organisation Events Page', () => {
     expect(container.textContent).toMatch('Filter by Organization');
     expect(container.textContent).toMatch('Filter by Location');
     expect(container.textContent).toMatch('Events');
+    expect(window.location).toBeAt('/orglist');
   });
 
   test('No mock data', async () => {

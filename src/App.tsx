@@ -20,6 +20,9 @@ import OrgSettings from 'screens/OrgSettings/OrgSettings';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import AddOnStore from 'components/AddOn/core/AddOnStore/AddOnStore';
 import * as installedPlugins from 'components/plugins/index';
+import ForgotPassword from 'screens/ForgotPassword/ForgotPassword';
+import Roles from 'screens/Roles/Roles';
+import Requests from 'screens/Requests/Requests';
 
 function App(): JSX.Element {
   const dispatch = useDispatch();
@@ -93,7 +96,10 @@ function App(): JSX.Element {
         <SecuredRoute path="/orgpost" component={OrgPost} />
         <SecuredRoute path="/orgsetting" component={OrgSettings} />
         <SecuredRoute path="/orgstore" component={AddOnStore} />
+        <SecuredRoute path="/roles" component={Roles} />
+        <SecuredRoute path="/requests" component={Requests} />
         {extraRoutes}
+        <Route exact path="/forgotPassword" component={ForgotPassword} />
         <Route exact path="*" component={PageNotFound} />
       </Switch>
     </>
