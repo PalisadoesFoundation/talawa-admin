@@ -8,6 +8,7 @@ import userEvent from '@testing-library/user-event';
 import OrganizationPeople from './OrganizationPeople';
 import { store } from 'state/store';
 import { ADMIN_LIST, MEMBERS_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
+import 'jest-location-mock';
 
 const MOCKS = [
   {
@@ -25,6 +26,8 @@ const MOCKS = [
                 firstName: 'John',
                 lastName: 'Doe',
                 image: '',
+                email: 'johndoe@gmail.com',
+                createdAt: '24/06/2022',
               },
             ],
           },
@@ -47,6 +50,8 @@ const MOCKS = [
                 firstName: 'Sam',
                 lastName: 'Francisco',
                 image: '',
+                email: 'samfrancisco@gmail.com',
+                createdAt: '24/06/2022',
               },
             ],
           },
@@ -66,6 +71,10 @@ const MOCKS = [
             firstName: 'Peter',
             lastName: 'Parker',
             image: '',
+            email: 'peterparker@gmail.com',
+            userType: 'SUPERADMIN',
+            adminApproved: true,
+            createdAt: '24/06/2022',
           },
         ],
       },
@@ -102,6 +111,8 @@ describe('Organisation People Page', () => {
             firstName: 'John',
             lastName: 'Doe',
             image: '',
+            email: 'johndoe@gmail.com',
+            createdAt: '24/06/2022',
           },
         ],
       },
@@ -116,6 +127,8 @@ describe('Organisation People Page', () => {
             firstName: 'Sam',
             lastName: 'Francisco',
             image: '',
+            email: 'samfrancisco@gmail.com',
+            createdAt: '24/06/2022',
           },
         ],
       },
@@ -127,11 +140,17 @@ describe('Organisation People Page', () => {
         firstName: 'Peter',
         lastName: 'Parker',
         image: '',
+        email: 'peterparker@gmail.com',
+        userType: 'SUPERADMIN',
+        adminApproved: true,
+        createdAt: '24/06/2022',
       },
     ]);
   });
 
   test('It is necessary to query the correct mock data.', async () => {
+    window.location.assign('/orglist');
+
     const { container } = render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
@@ -150,6 +169,7 @@ describe('Organisation People Page', () => {
     expect(container.textContent).toMatch('Filter by Name');
     expect(container.textContent).toMatch('Filter by Location');
     expect(container.textContent).toMatch('Filter by Event');
+    expect(window.location).toBeAt('/orglist');
   });
 
   test('Testing filters and MEMBER LIST', async () => {

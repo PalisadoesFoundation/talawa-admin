@@ -40,9 +40,9 @@ describe('Testing Organization Admin List Card', () => {
       key: '123',
       id: '456',
       memberName: 'John Doe',
-      memberLocation: 'India',
       joinDate: '05/05/2022',
       memberImage: 'https://via.placeholder.com/200x100',
+      memberEmail: 'johndoe@gmail.com',
     };
 
     render(
@@ -53,10 +53,10 @@ describe('Testing Organization Admin List Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByText(/Remove/i));
+    userEvent.click(screen.getByTestId(/removeAdminModalBtn/i));
+    userEvent.click(screen.getByTestId(/removeAdminBtn/i));
 
     expect(screen.getByText(props.memberName)).toBeInTheDocument();
-    expect(screen.getByText(props.memberLocation)).toBeInTheDocument();
     expect(screen.getByText(props.joinDate)).toBeInTheDocument();
   });
 
@@ -65,9 +65,9 @@ describe('Testing Organization Admin List Card', () => {
       key: '123',
       id: '456',
       memberName: '',
-      memberLocation: 'India',
       joinDate: '05/05/2022',
       memberImage: '',
+      memberEmail: '',
     };
 
     render(
@@ -78,10 +78,10 @@ describe('Testing Organization Admin List Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByText(/Remove/i));
+    userEvent.click(screen.getByTestId(/removeAdminModalBtn/i));
+    userEvent.click(screen.getByTestId(/removeAdminBtn/i));
 
     expect(screen.getByText(/Dogs Care/i)).toBeInTheDocument();
-    expect(screen.getByText(props.memberLocation)).toBeInTheDocument();
     expect(screen.getByText(props.joinDate)).toBeInTheDocument();
   });
 });

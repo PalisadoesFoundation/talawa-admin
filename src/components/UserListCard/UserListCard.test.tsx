@@ -40,9 +40,9 @@ describe('Testing User List Card', () => {
       key: '123',
       id: '456',
       memberName: 'John Doe',
-      memberLocation: 'India',
       joinDate: '07/05/2022',
       memberImage: 'https://via.placeholder.com/200x100',
+      memberEmail: 'johndoe@gmail.com',
     };
 
     render(
@@ -57,7 +57,6 @@ describe('Testing User List Card', () => {
 
     expect(screen.getByText('Joined:')).toBeInTheDocument();
     expect(screen.getByText(props.memberName)).toBeInTheDocument();
-    expect(screen.getByText(props.memberLocation)).toBeInTheDocument();
     expect(screen.getByText(props.joinDate)).toBeInTheDocument();
   });
 
@@ -66,9 +65,9 @@ describe('Testing User List Card', () => {
       key: '123',
       id: '456',
       memberName: '',
-      memberLocation: 'India',
       joinDate: '09/05/2022',
       memberImage: '',
+      memberEmail: '',
     };
 
     render(
@@ -82,7 +81,6 @@ describe('Testing User List Card', () => {
     userEvent.click(screen.getByText(/Add Admin/i));
 
     expect(screen.getByText('Joined:')).toBeInTheDocument();
-    expect(screen.getByText(props.memberLocation)).toBeInTheDocument();
     expect(screen.getByText(props.joinDate)).toBeInTheDocument();
   });
 });

@@ -2,8 +2,10 @@
   margin-top: -1px;
 }
 .memberimg {
-  border-radius: 10px;
-  margin-left: 10px;
+  width: 200px;
+  height: 100px;
+  border-radius: 7px;
+  margin-left: 20px;
 }
 .singledetails {
   display: flex;
@@ -40,8 +42,9 @@
 .memberfontcreatedbtn {
   margin-top: 33px;
   border-radius: 7px;
-  border-color: #e8e5e5;
-  background-color: #f7f7f7;
+  border-color: #31bb6b;
+  background-color: #31bb6b;
+  color: white;
   padding-right: 10px;
   padding-left: 10px;
   justify-content: flex-end;
@@ -54,4 +57,18 @@
 }
 .peoplelistdiv {
   margin-right: 50px;
+}
+@media only screen and (max-width: 600px) {
+  .singledetails {
+    margin-left: 20px;
+  }
+  .memberimg {
+    margin: auto;
+  }
+  .singledetails_data_right {
+    margin-right: -52px;
+  }
+  .singledetails_data_left {
+    margin-left: 0px;
+  }
 }

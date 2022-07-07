@@ -1,18 +1,20 @@
 import React from 'react';
-import styles from './OrgAdminListCard.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useMutation } from '@apollo/client';
-
+import { toast } from 'react-toastify';
 // import { ApolloProvider } from '@apollo/react-hooks';
+
+import styles from './OrgAdminListCard.module.css';
 import { REMOVE_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
+
 interface OrgPeopleListCardProps {
   key: string;
   id: string;
   memberName: string;
-  memberLocation: string;
   joinDate: string;
   memberImage: string;
+  memberEmail: string;
 }
 const currentUrl = window.location.href.split('=')[1];
 
@@ -30,12 +32,12 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        window.alert('The admin is removed');
+        window.alert('The admin is removed.');
         window.location.reload();
       }
-    } catch (error) {
+    } catch (error: any) {
       /* istanbul ignore next */
-      window.alert(error);
+      toast.error(error.message);
     }
   };
   return (
@@ -43,7 +45,7 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
       <div className={styles.peoplelistdiv}>
         <Row className={styles.memberlist}>
           {props.memberImage ? (
-            <img src={props.memberImage} className={styles.alignimg} />
+            <img src={props.memberImage} className={styles.memberimg} />
           ) : (
             <img
               src="https://via.placeholder.com/200x100"
@@ -55,10 +57,7 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
               <p className={styles.membername}>
                 {props.memberName ? <>{props.memberName}</> : <>Dogs Care</>}
               </p>
-              <p className={styles.memberfont}>
-                <span>{props.memberLocation}</span>
-              </p>
-              <p className={styles.memberfontcreated}>saumya47999@gmail.com</p>
+              <p className={styles.memberfontcreated}>{props.memberEmail}</p>
             </div>
             <div className={styles.singledetails_data_right}>
               <p className={styles.memberfont}>
@@ -66,7 +65,9 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
               </p>
               <button
                 className={styles.memberfontcreatedbtn}
-                onClick={RemoveAdmin}
+                data-toggle="modal"
+                data-target={`#removeAdminModal${props.id}`}
+                data-testid="removeAdminModalBtn"
               >
                 Remove
               </button>
@@ -75,6 +76,53 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
         </Row>
       </div>
       <hr></hr>
+      <div
+        className="modal fade"
+        id={`removeAdminModal${props.id}`}
+        tabIndex={-1}
+        role="dialog"
+        aria-labelledby={`removeAdminModalLabel${props.id}`}
+        aria-hidden="true"
+      >
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5
+                className="modal-title"
+                id={`removeAdminModalLabel${props.id}`}
+              >
+                Remove Admin
+              </h5>
+              <button
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">Do you want to remove this admin?</div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-danger"
+                data-dismiss="modal"
+              >
+                No
+              </button>
+              <button
+                type="button"
+                className="btn btn-success"
+                onClick={RemoveAdmin}
+                data-testid="removeAdminBtn"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
