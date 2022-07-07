@@ -105,7 +105,7 @@ function LoginPage(): JSX.Element {
     }
   };
 
-  const login_link = async () => { 
+  const login_link = async () => {
     try {
       const { data } = await login({
         variables: {
