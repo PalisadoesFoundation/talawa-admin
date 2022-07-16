@@ -224,3 +224,15 @@ export const ORGANIZATION_POST_LIST = gql`
     }
   }
 `;
+
+export const PLUGIN_GET = gql`
+  query getPluginList {
+    getPlugins {
+      _id
+      pluginName
+      pluginCreatedBy
+      pluginDesc
+      pluginInstallStatus
+    }
+  }
+`;
