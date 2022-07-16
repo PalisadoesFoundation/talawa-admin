@@ -8,26 +8,40 @@ import Action from '../../support/components/Action/Action';
 import SidePanel from 'components/AddOn/support/components/SidePanel/SidePanel';
 import MainContent from 'components/AddOn/support/components/MainContent/MainContent';
 import { useQuery } from '@apollo/client';
-import { ADMIN_LIST, MEMBERS_LIST, USER_LIST } from 'GraphQl/Queries/Queries'; // PLUGIN_LIST
+import {
+  ADMIN_LIST,
+  MEMBERS_LIST,
+  PLUGIN_GET,
+  USER_LIST,
+} from 'GraphQl/Queries/Queries'; // PLUGIN_LIST
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../state/reducers';
 import { Form, Tab, Tabs } from 'react-bootstrap';
 import AddOnRegister from '../AddOnRegister/AddOnRegister';
 import PluginHelper from 'components/AddOn/support/services/Plugin.helper';
 import { store } from './../../../../state/store';
-
+type PluginSid = {
+  _id: string;
+  pluginName: string;
+  pluginCreatedBy: string;
+  pluginDesc: string;
+  pluginInstallStatus: boolean;
+  installedOrgs: [string];
+};
 function AddOnStore(): JSX.Element {
   const [isStore, setIsStore] = useState(true);
   const [showEnabled, setShowEnabled] = useState(true);
+  const [searchText, setSearchText] = useState('');
+  const [dataList, setDataList] = useState([]);
 
-  let loading;
-
+  const [render, setRender] = useState(true);
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
 
   const plugins = useSelector((state: RootState) => state.plugins);
   const { installed, addonStore } = plugins;
-
+  // type plugData = { pluginName: String, plug };
+  const { data, loading, error } = useQuery(PLUGIN_GET);
   /* istanbul ignore next */
   const getStorePlugins = async () => {
     let plugins = await new PluginHelper().fetchStore();
@@ -42,10 +56,20 @@ function AddOnStore(): JSX.Element {
   };
 
   /* istanbul ignore next */
-  const getInstalledPlugins = async () => {
-    const plugins = await new PluginHelper().fetchInstalled();
-    store.dispatch({ type: 'UPDATE_INSTALLED', payload: plugins });
-    return plugins;
+  const getInstalledPlugins: () => any = () => {
+    setDataList(data);
+    // setRender((current) => !current);
+    // const {
+    //   data: newData,
+    //   loading: newLoading,
+    //   error: newError,
+    // } = useQuery(PLUGIN_GET);
+    // data = newData;
+    // loading = newLoading;
+    // error = newError;
+    // const plugins = await new PluginHelper().fetchInstalled();
+    // store.dispatch({ type: 'UPDATE_INSTALLED', payload: plugins });
+    // return plugins;
   };
 
   /* istanbul ignore next */
@@ -53,17 +77,18 @@ function AddOnStore(): JSX.Element {
     store.dispatch({ type: 'UPDATE_P_TARGETS', payload: links });
   };
 
-  /* istanbul ignore next */
+  // /* istanbul ignore next */
   const pluginModified = () => {
-    return getInstalledPlugins().then((installedPlugins) => {
-      getStorePlugins();
-      return installedPlugins;
-    });
+    return getInstalledPlugins();
+    // .then((installedPlugins) => {
+    //   getStorePlugins();
+    //   return installedPlugins;
+    // });
   };
 
-  useEffect(() => {
-    pluginModified().then();
-  }, []);
+  // useEffect(() => {
+  //   pluginModified();
+  // }, []);
 
   const updateSelectedTab = (tab: any) => {
     setIsStore(tab === 'available');
@@ -82,7 +107,10 @@ function AddOnStore(): JSX.Element {
       </>
     );
   }
-
+  // console.log(
+  //   'Filtered Data is  ',
+  //   data.getPlugins.filter((plugin: any) => plugin.pluginInstallStatus == true)
+  // );
   // TODO: Update routes for other pages
   // TODO: Implement Search
   return (
@@ -97,9 +125,10 @@ function AddOnStore(): JSX.Element {
               type="name"
               id="searchname"
               className={styles.actioninput}
-              placeholder="Plugins..."
+              placeholder="ex. Donations "
               autoComplete="off"
               required
+              onChange={(e) => setSearchText(e.target.value)}
             />
           </Action>
           {!isStore && (
@@ -136,6 +165,11 @@ function AddOnStore(): JSX.Element {
         <MainContent>
           <div className={styles.justifysp}>
             <p className={styles.logintitle}>Plugins</p>
+            {searchText ? (
+              <p className="mb-2 text-muted author">
+                Search results for <b>{searchText}</b>
+              </p>
+            ) : null}
             <AddOnRegister />
             <Tabs
               defaultActiveKey="available"
@@ -144,56 +178,177 @@ function AddOnStore(): JSX.Element {
               onSelect={updateSelectedTab}
             >
               <Tab eventKey="available" title="Available">
-                {addonStore.map((plugin: any, index: number) => {
-                  return (
-                    <AddOnEntry
-                      id={plugin.id}
-                      key={index}
-                      title={plugin.name}
-                      description={plugin.description}
-                      createdBy={plugin.createdBy}
-                      component={plugin.component}
-                      configurable={!plugin.installed}
-                      modified={() => {
-                        /* istanbul ignore next */
-                        pluginModified().then((installedPlugins) => {
-                          updateLinks(
-                            new PluginHelper().generateLinks(installedPlugins)
-                          );
-                        });
-                      }}
-                    />
-                  );
-                })}
+                {console.log(
+                  data.getPlugins.filter(
+                    (val: {
+                      _id: string;
+                      pluginName: string | undefined;
+                      pluginDesc: string | undefined;
+                      pluginCreatedBy: string;
+                      pluginInstallStatus: boolean | undefined;
+                      getInstalledPlugins: () => any;
+                    }) => {
+                      if (searchText == '') {
+                        return val;
+                      } else if (
+                        val.pluginName
+                          ?.toLowerCase()
+                          .includes(searchText.toLowerCase())
+                      ) {
+                        return val;
+                      }
+                    }
+                  )
+                )}
+                {data.getPlugins.filter(
+                  (val: {
+                    _id: string;
+                    pluginName: string | undefined;
+                    pluginDesc: string | undefined;
+                    pluginCreatedBy: string;
+                    pluginInstallStatus: boolean | undefined;
+                    getInstalledPlugins: () => any;
+                  }) => {
+                    if (searchText == '') {
+                      return val;
+                    } else if (
+                      val.pluginName
+                        ?.toLowerCase()
+                        .includes(searchText.toLowerCase())
+                    ) {
+                      return val;
+                    }
+                  }
+                ).length === 0 ? (
+                  <h4>Plugin does not exits </h4>
+                ) : (
+                  data.getPlugins
+                    .filter(
+                      (val: {
+                        _id: string;
+                        pluginName: string | undefined;
+                        pluginDesc: string | undefined;
+                        pluginCreatedBy: string;
+                        pluginInstallStatus: boolean | undefined;
+                        getInstalledPlugins: () => any;
+                      }) => {
+                        if (searchText == '') {
+                          return val;
+                        } else if (
+                          val.pluginName
+                            ?.toLowerCase()
+                            .includes(searchText.toLowerCase())
+                        ) {
+                          return val;
+                        }
+                      }
+                    )
+                    .map(
+                      (
+                        plug: {
+                          _id: string;
+                          pluginName: string | undefined;
+                          pluginDesc: string | undefined;
+                          pluginCreatedBy: string;
+                          pluginInstallStatus: boolean | undefined;
+                          getInstalledPlugins: () => any;
+                        },
+                        i: React.Key | null | undefined
+                      ): JSX.Element => (
+                        <AddOnEntry
+                          id={plug._id}
+                          key={i}
+                          title={plug.pluginName}
+                          description={plug.pluginDesc}
+                          createdBy={plug.pluginCreatedBy}
+                          isInstalled={plug.pluginInstallStatus}
+                          configurable={plug.pluginInstallStatus}
+                          component={'Special  Component'}
+                          modified={() => {
+                            console.log('Plugin is modified');
+                          }}
+                          getInstalledPlugins={getInstalledPlugins}
+                        />
+                      )
+                    )
+                )}
               </Tab>
               <Tab eventKey="installed" title="Installed">
-                {installed
-                  .filter((plugin: any) =>
-                    showEnabled ? plugin.enabled : !plugin.enabled
-                  )
-                  .map((plugin: any, index: number) => {
-                    return (
-                      <AddOnEntry
-                        id={plugin.id}
-                        key={index}
-                        title={plugin.name}
-                        description={plugin.description}
-                        createdBy={plugin.createdBy}
-                        component={plugin.component}
-                        enabled={plugin.enabled}
-                        installed={true}
-                        configurable={true}
-                        modified={() => {
-                          /* istanbul ignore next */
-                          pluginModified().then((installedPlugins) => {
-                            updateLinks(
-                              new PluginHelper().generateLinks(installedPlugins)
-                            );
-                          });
-                        }}
-                      />
-                    );
-                  })}
+                {data.getPlugins
+                  .filter((plugin: any) => plugin.pluginInstallStatus == true)
+                  .filter(
+                    (val: {
+                      _id: string;
+                      pluginName: string | undefined;
+                      pluginDesc: string | undefined;
+                      pluginCreatedBy: string;
+                      pluginInstallStatus: boolean | undefined;
+                      getInstalledPlugins: () => any;
+                    }) => {
+                      if (searchText == '') {
+                        return val;
+                      } else if (
+                        val.pluginName
+                          ?.toLowerCase()
+                          .includes(searchText.toLowerCase())
+                      ) {
+                        return val;
+                      }
+                    }
+                  ).length === 0 ? (
+                  <h4>Plugin does not exits </h4>
+                ) : (
+                  data.getPlugins
+                    .filter((plugin: any) => plugin.pluginInstallStatus == true)
+                    .filter(
+                      (val: {
+                        _id: string;
+                        pluginName: string | undefined;
+                        pluginDesc: string | undefined;
+                        pluginCreatedBy: string;
+                        pluginInstallStatus: boolean | undefined;
+                        getInstalledPlugins: () => any;
+                      }) => {
+                        if (searchText == '') {
+                          return val;
+                        } else if (
+                          val.pluginName
+                            ?.toLowerCase()
+                            .includes(searchText.toLowerCase())
+                        ) {
+                          return val;
+                        }
+                      }
+                    )
+                    .map(
+                      (
+                        plug: {
+                          _id: string;
+                          pluginName: string | undefined;
+                          pluginDesc: string | undefined;
+                          pluginCreatedBy: string;
+                          pluginInstallStatus: boolean | undefined;
+                          getInstalledPlugins: () => any;
+                        },
+                        i: React.Key | null | undefined
+                      ): JSX.Element => (
+                        <AddOnEntry
+                          id={plug._id}
+                          key={i}
+                          title={plug.pluginName}
+                          description={plug.pluginDesc}
+                          createdBy={plug.pluginCreatedBy}
+                          isInstalled={plug.pluginInstallStatus}
+                          configurable={plug.pluginInstallStatus}
+                          component={'Special  Component'}
+                          modified={() => {
+                            console.log('Plugin is modified');
+                          }}
+                          getInstalledPlugins={getInstalledPlugins}
+                        />
+                      )
+                    )
+                )}
               </Tab>
             </Tabs>
           </div>
@@ -208,3 +363,53 @@ AddOnStore.defaultProps = {};
 AddOnStore.propTypes = {};
 
 export default AddOnStore;
+
+// {addonStore.map((plugin: any, index: number) => {
+//   return (
+//     <AddOnEntry
+//       id={plugin.id}
+//       key={index}
+//       title={plugin.name}
+//       description={plugin.description}
+//       createdBy={plugin.createdBy}
+//       component={plugin.component}
+//       configurable={!plugin.installed}
+//       modified={() => {
+//         /* istanbul ignore next */
+//         pluginModified().then((installedPlugins) => {
+//           updateLinks(
+//             new PluginHelper().generateLinks(installedPlugins)
+//           );
+//         });
+//       }}
+//     />
+//   );
+// })}
+
+// {installed
+//   .filter((plugin: any) =>
+//     showEnabled ? plugin.enabled : !plugin.enabled
+//   )
+//   .map((plugin: any, index: number) => {
+//     return (
+//       <AddOnEntry
+//         id={plugin.id}
+//         key={index}
+//         title={plugin.name}
+//         description={plugin.description}
+//         createdBy={plugin.createdBy}
+//         component={plugin.component}
+//         enabled={plugin.enabled}
+//         installed={true}
+//         configurable={true}
+//         modified={() => {
+//           /* istanbul ignore next */
+//           pluginModified().then((installedPlugins) => {
+//             updateLinks(
+//               new PluginHelper().generateLinks(installedPlugins)
+//             );
+//           });
+//         }}
+//       />
+//     );
+//   })}
