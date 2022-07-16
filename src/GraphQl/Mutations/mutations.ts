@@ -317,7 +317,6 @@ export const REJECT_ADMIN_MUTATION = gql`
   }
 `;
 
-
 export const UPDATE_INSTALL_STATUS_PLUGIN_MUTATION = gql`
   mutation update_install_status_plugin_mutation($id: ID!, $status: Boolean!) {
     updateTempPluginStatus(id: $id, status: $status) {

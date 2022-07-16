@@ -16,14 +16,16 @@ describe('Testing AddOnEntry', () => {
     configurable: true,
     modified: true,
     isInstalled: true,
-    getInstalledPlugins: () => {},
+    getInstalledPlugins: () => {
+      return { sample: 'sample' };
+    },
   };
 
   test('should render modal and take info to add plugin for registered organization', () => {
-    const { getByTestId } = render(
-      <BrowserRouter>{/* <AddOnEntry {...props} /> */}</BrowserRouter>
-    );
-    expect(1 == 1);
+    // const { getByTestId } = render(
+    //   <BrowserRouter>{ <AddOnEntry {...props} /> }</BrowserRouter>
+    // );
+    expect(1).toBe(true);
     // expect(getByTestId('AddOnEntry')).toBeInTheDocument();
   });
 });
