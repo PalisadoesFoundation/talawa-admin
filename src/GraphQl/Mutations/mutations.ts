@@ -183,6 +183,9 @@ export const CREATE_EVENT_MUTATION = gql`
     $startDate: String!
     $endDate: String
     $allDay: Boolean!
+    $startTime: String
+    $endTime: String
+    $location: String
   ) {
     createEvent(
       data: {
@@ -195,9 +198,9 @@ export const CREATE_EVENT_MUTATION = gql`
         startDate: $startDate
         endDate: $endDate
         allDay: $allDay
-        startTime: "00:00"
-        endTime: "01:10"
-        location: "India"
+        startTime: $startTime
+        endTime: $endTime
+        location: $location
       }
     ) {
       _id
@@ -314,5 +317,59 @@ export const ACCPET_ADMIN_MUTATION = gql`
 export const REJECT_ADMIN_MUTATION = gql`
   mutation RejectAdmin($id: ID!) {
     rejectAdmin(id: $id)
+  }
+`;
+
+export const UPDATE_POST_MUTATION = gql`
+  mutation UpdatePost($id: ID!, $title: String, $text: String) {
+    updatePost(data: { _id: $id, title: $title, text: $text }) {
+      _id
+    }
+  }
+`;
+
+export const UPDATE_EVENT_MUTATION = gql`
+  mutation UpdateEvent(
+    $id: ID!
+    $title: String!
+    $description: String!
+    $recurring: Boolean!
+    $isPublic: Boolean!
+    $isRegisterable: Boolean!
+    $allDay: Boolean!
+    $startTime: String
+    $endTime: String
+    $location: String
+  ) {
+    updateEvent(
+      id: $id
+      data: {
+        title: $title
+        description: $description
+        recurring: $recurring
+        isPublic: $isPublic
+        isRegisterable: $isRegisterable
+        allDay: $allDay
+        startTime: $startTime
+        endTime: $endTime
+        location: $location
+      }
+    ) {
+      _id
+    }
+  }
+`;
+
+export const UPDATE_SPAM_NOTIFICATION_MUTATION = gql`
+  mutation UpdateSpamNotification(
+    $orgId: ID!
+    $spamId: ID!
+    $isReaded: Boolean
+  ) {
+    updateSpamNotification(
+      data: { orgId: $orgId, spamId: $spamId, isReaded: $isReaded }
+    ) {
+      _id
+    }
   }
 `;
