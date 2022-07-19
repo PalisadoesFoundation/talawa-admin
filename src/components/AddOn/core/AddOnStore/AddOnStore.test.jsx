@@ -6,6 +6,7 @@ import userEvent from '@testing-library/user-event';
 
 import AddOnStore from './AddOnStore';
 import { store } from 'state/store';
+import { MockedProvider } from '@apollo/react-testing';
 
 describe('Testing AddOnStore Component', () => {
   const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
@@ -65,11 +66,13 @@ describe('Testing AddOnStore Component', () => {
     });
 
     const { container } = render(
-      <BrowserRouter>
-        <reactRedux.Provider store={store}>
-          <AddOnStore />
-        </reactRedux.Provider>
-      </BrowserRouter>
+      <MockedProvider>
+        <BrowserRouter>
+          <reactRedux.Provider store={store}>
+            <AddOnStore />
+          </reactRedux.Provider>
+        </BrowserRouter>
+      </MockedProvider>
     );
 
     expect(container.textContent).not.toBe('Loading data...');
@@ -140,11 +143,13 @@ describe('Testing AddOnStore Component', () => {
     });
 
     const { container } = render(
-      <BrowserRouter>
-        <reactRedux.Provider store={store}>
-          <AddOnStore />
-        </reactRedux.Provider>
-      </BrowserRouter>
+      <MockedProvider>
+        <BrowserRouter>
+          <reactRedux.Provider store={store}>
+            <AddOnStore />
+          </reactRedux.Provider>
+        </BrowserRouter>
+      </MockedProvider>
     );
 
     expect(container.textContent).not.toBe('Loading data...');

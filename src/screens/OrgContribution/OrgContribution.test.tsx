@@ -1,10 +1,12 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { act, render } from '@testing-library/react';
-import OrgContribution from './OrgContribution';
 import { Provider } from 'react-redux';
-import { store } from 'state/store';
 import { BrowserRouter } from 'react-router-dom';
+import 'jest-location-mock';
+
+import OrgContribution from './OrgContribution';
+import { store } from 'state/store';
 
 async function wait(ms = 0) {
   await act(() => {
@@ -16,6 +18,8 @@ async function wait(ms = 0) {
 
 describe('Organisation Contribution Page', () => {
   test('should render props and text elements test for the screen', async () => {
+    window.location.assign('/orglist');
+
     const { container } = render(
       <MockedProvider addTypename={false}>
         <BrowserRouter>
@@ -28,10 +32,11 @@ describe('Organisation Contribution Page', () => {
 
     expect(container.textContent).not.toBe('Loading data...');
     await wait();
-    console.log(container);
+
     expect(container.textContent).toMatch('Filter by Name');
     expect(container.textContent).toMatch('Filter by Trans. ID');
     expect(container.textContent).toMatch('Recent Stats');
     expect(container.textContent).toMatch('Contribution');
+    expect(window.location).toBeAt('/orglist');
   });
 });

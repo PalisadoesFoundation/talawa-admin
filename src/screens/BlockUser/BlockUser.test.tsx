@@ -1,17 +1,16 @@
 import React from 'react';
-import { MockedProvider } from '@apollo/react-testing';
 import { act, render, screen } from '@testing-library/react';
-import { Provider } from 'react-redux';
+import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router-dom';
-import 'jest-localstorage-mock';
+import { Provider } from 'react-redux';
 import 'jest-location-mock';
 
-import Requests from './Requests';
-import {
-  ACCPET_ADMIN_MUTATION,
-  REJECT_ADMIN_MUTATION,
-} from 'GraphQl/Mutations/mutations';
+import BlockUser from './BlockUser';
 import { USER_LIST } from 'GraphQl/Queries/Queries';
+import {
+  BLOCK_USER_MUTATION,
+  UNBLOCK_USER_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
 
@@ -35,12 +34,12 @@ const MOCKS = [
             spamInOrganizations: [
               {
                 _id: '123',
-                name: 'Sam',
+                name: 'ABC',
               },
             ],
             organizationsBlockedBy: [
               {
-                _id: '256',
+                _id: '123',
                 name: 'ABC',
               },
             ],
@@ -57,35 +56,13 @@ const MOCKS = [
             spamInOrganizations: [
               {
                 _id: '123',
-                name: 'Sam',
+                name: 'ABC',
               },
             ],
             organizationsBlockedBy: [
               {
-                _id: '256',
-                name: 'ABC',
-              },
-            ],
-          },
-          {
-            _id: '789',
-            firstName: 'Peter',
-            lastName: 'Parker',
-            image: 'dummyImage',
-            email: 'peterparker@gmail.com',
-            userType: 'USER',
-            adminApproved: true,
-            createdAt: '20/06/2022',
-            spamInOrganizations: [
-              {
-                _id: '123',
-                name: 'Sam',
-              },
-            ],
-            organizationsBlockedBy: [
-              {
-                _id: '256',
-                name: 'ABC',
+                _id: '443',
+                name: 'DEF',
               },
             ],
           },
@@ -95,29 +72,33 @@ const MOCKS = [
   },
   {
     request: {
-      query: ACCPET_ADMIN_MUTATION,
+      query: BLOCK_USER_MUTATION,
       variables: {
-        id: '123',
-        userType: 'ADMIN',
+        userId: '123',
+        orgId: undefined,
       },
     },
     result: {
       data: {
-        acceptAdmin: true,
+        blockUser: {
+          _id: '123',
+        },
       },
     },
   },
   {
     request: {
-      query: REJECT_ADMIN_MUTATION,
+      query: UNBLOCK_USER_MUTATION,
       variables: {
-        id: '123',
-        userType: 'ADMIN',
+        userId: '123',
+        orgId: undefined,
       },
     },
     result: {
       data: {
-        rejectAdmin: true,
+        unblockUser: {
+          _id: '123',
+        },
       },
     },
   },
@@ -131,15 +112,15 @@ async function wait(ms = 0) {
   });
 }
 
-describe('Testing Request screen', () => {
-  test('Component should be rendered properly', async () => {
+describe('Testing Block/Unblock user screen', () => {
+  test('Components should be rendered properly', async () => {
     window.location.assign('/orglist');
 
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <Requests />
+            <BlockUser />
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -147,33 +128,36 @@ describe('Testing Request screen', () => {
 
     await wait();
 
-    expect(screen.getByText(/Requests/i)).toBeInTheDocument();
-    expect(screen.getByText(/Search By Name/i)).toBeInTheDocument();
+    expect(screen.getByText('Search By Name')).toBeInTheDocument();
+    expect(screen.getByText('List of Users who spammed')).toBeInTheDocument();
     expect(window.location).toBeAt('/orglist');
   });
 
-  test('Testing, If userType is not SUPERADMIN', async () => {
-    localStorage.setItem('UserType', 'USER');
+  test('Testing block/unblock user functionality', async () => {
+    window.location.assign('/blockuser/id=123');
 
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <Requests />
+            <BlockUser />
           </Provider>
         </BrowserRouter>
       </MockedProvider>
     );
 
     await wait();
+
+    userEvent.click(screen.getByTestId('unBlockUser123'));
+    userEvent.click(screen.getByTestId('blockUser456'));
   });
 
-  test('Testing seach by name functionality', async () => {
+  test('Testing seach functionality', async () => {
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <Requests />
+            <BlockUser />
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -181,38 +165,6 @@ describe('Testing Request screen', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId(/searchByName/i), 'John');
-  });
-
-  test('Testing accept user functionality', async () => {
-    render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <Requests />
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-
-    userEvent.click(screen.getByTestId(/acceptUser456/i));
-  });
-
-  test('Testing reject user functionality', async () => {
-    render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <Requests />
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-
-    userEvent.click(screen.getByTestId(/rejectUser456/i));
+    userEvent.type(screen.getByTestId('searchByName'), 'john');
   });
 });
