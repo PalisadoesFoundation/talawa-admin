@@ -4,7 +4,10 @@ import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 
 import OrgPostCard from './OrgPostCard';
-import { DELETE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  DELETE_POST_MUTATION,
+  UPDATE_POST_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 
 const MOCKS = [
   {
@@ -14,11 +17,26 @@ const MOCKS = [
     },
     result: {
       data: {
-        organizations: [
-          {
-            _id: '1',
-          },
-        ],
+        removePost: {
+          _id: '1',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_POST_MUTATION,
+      variable: {
+        id: '123',
+        title: 'updated title',
+        text: 'This is a updated text',
+      },
+    },
+    result: {
+      data: {
+        updatePost: {
+          _id: '32',
+        },
       },
     },
   },
@@ -56,8 +74,6 @@ describe('Testing Organization Post Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId(/deletePostBtn/i));
-
     expect(screen.getByText(/Author:/i)).toBeInTheDocument();
     expect(screen.getByText(/Image URL:/i)).toBeInTheDocument();
     expect(screen.getByText(/Video URL:/i)).toBeInTheDocument();
@@ -79,8 +95,6 @@ describe('Testing Organization Post Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId(/deletePostBtn/i));
-
     expect(screen.getByText(/Author:/i)).toBeInTheDocument();
     expect(screen.getByText(/Image URL:/i)).toBeInTheDocument();
     expect(screen.getByText(/Video URL:/i)).toBeInTheDocument();
@@ -89,5 +103,34 @@ describe('Testing Organization Post Card', () => {
     expect(screen.getByText(props.postAuthor)).toBeInTheDocument();
     expect(screen.getByText(props.postPhoto)).toBeInTheDocument();
     expect(screen.getByText(props.postVideo)).toBeInTheDocument();
+  });
+
+  test('Testing post update functionality', async () => {
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <OrgPostCard {...props} />
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('editPostModalBtn'));
+
+    userEvent.type(screen.getByTestId('updateTitle'), 'updated title');
+    userEvent.type(screen.getByTestId('updateText'), 'This is a updated text');
+    userEvent.click(screen.getByTestId('updatePostBtn'));
+  });
+
+  test('Testing delete post funcationality', async () => {
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <OrgPostCard {...props} />
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('deletePostModalBtn'));
+    userEvent.click(screen.getByTestId(/deletePostBtn/i));
   });
 });
