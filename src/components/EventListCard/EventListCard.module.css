@@ -1,48 +1,121 @@
-.orglist {
-  margin-top: -1px;
+.cards h2 {
+  font-size: 20px;
 }
-.orgimg {
-  border-radius: 10px;
-  margin-left: 10px;
+.cards > h3 {
+  font-size: 17px;
 }
-.singledetails {
+.cards > p {
+  font-size: 14px;
+  margin-top: 0px;
+  margin-bottom: 7px;
+}
+.cards a {
+  color: #737373;
+  font-weight: 600;
+}
+.cards a:hover {
+  color: black;
+}
+.dispflex {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
 }
-.singledetails p {
-  margin-bottom: -5px;
+.iconContainer {
+  display: flex;
 }
-.singledetails_data_left {
-  margin-top: 10px;
-  margin-left: 10px;
-  color: #707070;
+.icon {
+  transform: scale(0.75);
+  cursor: pointer;
 }
-.singledetails_data_right {
-  justify-content: right;
-  margin-top: 10px;
-  text-align: right;
-  color: #707070;
+
+.cards {
+  width: 80%;
+  background: #fcfcfc;
+  margin: 10px 40px;
+  padding: 20px 30px;
+  border-radius: 5px;
+  border: 1px solid #e8e8e8;
+  box-shadow: 0 3px 5px #c9c9c9;
+  margin-right: 30px;
+  color: #737373;
+  box-sizing: border-box;
 }
-.orgname {
-  font-size: 16px;
+.cards:last-child:nth-last-child(odd) {
+  grid-column: auto / span 2;
+}
+
+.cards:first-child:nth-last-child(even),
+.cards:first-child:nth-last-child(even) ~ .box {
+  grid-column: auto / span 1;
+}
+
+form > label {
   font-weight: bold;
+  padding-bottom: 1px;
+  font-size: 14px;
+  color: #707070;
 }
-.orgfont {
-  margin-top: 3px;
+form > input {
+  display: block;
+  margin-bottom: 20px;
+  border: 1px solid #e8e5e5;
+  box-shadow: 2px 1px #e8e5e5;
+  padding: 10px 20px;
+  border-radius: 5px;
+  background: none;
+  width: 100%;
+  transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
 }
-.orgfontcreated {
-  margin-top: 18px;
-}
-.orgfontcreatedbtn {
-  margin-top: 18px;
-  border-radius: 7px;
+.sidebarsticky > input {
+  text-decoration: none;
+  margin-bottom: 50px;
   border-color: #e8e5e5;
-  background-color: #f7f7f7;
+  width: 80%;
+  border-radius: 7px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   padding-right: 10px;
   padding-left: 10px;
   box-shadow: none;
 }
-#grid_wrapper {
-  align-items: left;
+.datediv {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 15px;
+}
+.datebox {
+  width: 90%;
+  border-radius: 7px;
+  border-color: #e8e5e5;
+  outline: none;
+  box-shadow: none;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+.checkboxdiv > label {
+  margin-right: 50px;
+}
+.checkboxdiv > label > input {
+  margin-left: 10px;
+}
+.dispflex {
+  display: flex;
+}
+.dispflex > input {
+  width: 20%;
+  border: none;
+  box-shadow: none;
+  margin-top: 5px;
+}
+.checkboxdiv {
+  display: flex;
+}
+.checkboxdiv > div {
+  width: 50%;
 }

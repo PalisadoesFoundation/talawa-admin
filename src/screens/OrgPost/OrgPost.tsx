@@ -1,22 +1,36 @@
-import React, { useState } from 'react';
-import styles from './OrgPost.module.css';
+import React, { ChangeEvent, useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-modal';
 import { Form } from 'antd';
+import { useMutation, useQuery } from '@apollo/client';
+import { useSelector } from 'react-redux';
+import Button from 'react-bootstrap/Button';
+import { toast } from 'react-toastify';
+
+import styles from './OrgPost.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
-import { useMutation, useQuery } from '@apollo/client';
 import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
-import { useSelector } from 'react-redux';
 import { RootState } from 'state/reducers';
-import Button from 'react-bootstrap/Button';
+import PaginationList from 'components/PaginationList/PaginationList';
 
 function OrgPost(): JSX.Element {
   document.title = 'Talawa Posts';
   const [postmodalisOpen, setPostModalIsOpen] = useState(false);
+  const [postformState, setPostFormState] = useState({
+    posttitle: '',
+    postinfo: '',
+  });
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [searchState, setSearchState] = useState({
+    byTitle: '',
+    byText: '',
+  });
 
+  const currentUrl = window.location.href.split('=')[1];
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
 
@@ -27,39 +41,39 @@ function OrgPost(): JSX.Element {
     setPostModalIsOpen(false);
   };
 
-  const [postformState, setPostFormState] = useState({
-    posttitle: '',
-    postinfo: '',
-    postphoto: '',
-    postvideo: '',
-  });
-  const currentUrl = window.location.href.split('=')[1];
-
   const {
     data,
     loading: loading2,
     error: error_post,
+    refetch,
   } = useQuery(ORGANIZATION_POST_LIST, {
     variables: { id: currentUrl },
   });
-
-  const CreatePost = async () => {
-    const { data } = await create({
-      variables: {
-        // _id: currentUrl,
-        title: postformState.posttitle,
-        text: postformState.postinfo,
-        imageUrl: postformState.postphoto,
-        videoUrl: postformState.postvideo,
-        organizationId: currentUrl,
-      },
-    });
-    console.log(data);
-    window.alert('Congratulations you have Posted Something');
-    window.location.replace('/orgpost/id=' + currentUrl);
-  };
-
   const [create, { loading }] = useMutation(CREATE_POST_MUTATION);
+
+  const CreatePost = async (e: ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const { data } = await create({
+        variables: {
+          title: postformState.posttitle,
+          text: postformState.postinfo,
+          organizationId: currentUrl,
+        },
+      });
+      /* istanbul ignore next */
+      if (data) {
+        toast.success('Congratulations! You have Posted Something.');
+        refetch();
+        setPostFormState({
+          posttitle: '',
+          postinfo: '',
+        });
+      }
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
 
   if (loading || loading2) {
     return (
@@ -71,8 +85,43 @@ function OrgPost(): JSX.Element {
 
   /* istanbul ignore next */
   if (error_post) {
-    window.location.href = '/orglist';
+    window.location.assign('/orglist');
   }
+
+  /* istanbul ignore next */
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
+    setPage(newPage);
+  };
+  /* istanbul ignore next */
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleSearchByTitle = (e: any) => {
+    const { value } = e.target;
+    setSearchState({ ...searchState, byTitle: value });
+    const filterData = {
+      id: currentUrl,
+      filterByTitle: searchState.byTitle,
+    };
+    refetch(filterData);
+  };
+
+  const handleSearchByText = (e: any) => {
+    const { value } = e.target;
+    setSearchState({ ...searchState, byText: value });
+    const filterData = {
+      id: currentUrl,
+      filterByText: searchState.byText,
+    };
+    refetch(filterData);
+  };
 
   return (
     <>
@@ -81,22 +130,21 @@ function OrgPost(): JSX.Element {
         <Col sm={3}>
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
-              <h6 className={styles.searchtitle}>Posts by Author</h6>
-              <input
-                type="name"
-                id="orgname"
-                placeholder="Search by Name"
-                autoComplete="off"
-                required
-              />
-
               <h6 className={styles.searchtitle}>Posts by Title</h6>
               <input
                 type="text"
                 id="posttitle"
                 placeholder="Search by Title"
                 autoComplete="off"
-                required
+                onChange={handleSearchByTitle}
+              />
+              <h6 className={styles.searchtitle}>Posts by Text</h6>
+              <input
+                type="name"
+                id="orgname"
+                placeholder="Search by Text"
+                autoComplete="off"
+                onChange={handleSearchByText}
               />
             </div>
           </div>
@@ -109,13 +157,20 @@ function OrgPost(): JSX.Element {
                 variant="success"
                 className={styles.addbtn}
                 onClick={showInviteModal}
+                data-testid="createPostModalBtn"
               >
                 + Create Post
               </Button>
             </Row>
-            <div className={styles.grid_section_div}>
+            <div className={`row ${styles.list_box}`}>
               {data
-                ? data.postsByOrganization.map(
+                ? (rowsPerPage > 0
+                    ? data.postsByOrganization.slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                    : data.postsByOrganization
+                  ).map(
                     (datas: {
                       _id: string;
                       title: string;
@@ -123,6 +178,7 @@ function OrgPost(): JSX.Element {
                       imageUrl: string;
                       videoUrl: string;
                       organizationId: string;
+                      creator: { firstName: string; lastName: string };
                     }) => {
                       return (
                         <OrgPostCard
@@ -130,7 +186,7 @@ function OrgPost(): JSX.Element {
                           id={datas._id}
                           postTitle={datas.title}
                           postInfo={datas.text}
-                          postAuthor="John Doe"
+                          postAuthor={`${datas.creator.firstName} ${datas.creator.lastName}`}
                           postPhoto={datas.imageUrl}
                           postVideo={datas.videoUrl}
                         />
@@ -140,6 +196,21 @@ function OrgPost(): JSX.Element {
                 : null}
             </div>
           </div>
+          <div>
+            <table>
+              <tbody>
+                <tr>
+                  <PaginationList
+                    count={data ? data.postsByOrganization.length : 0}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </Col>
       </Row>
       <Modal
@@ -148,16 +219,17 @@ function OrgPost(): JSX.Element {
           overlay: { backgroundColor: 'grey' },
         }}
         className={styles.modalbody}
+        ariaHideApp={false}
       >
         <section id={styles.grid_wrapper}>
           <div className={styles.form_wrapper}>
             <div className={styles.flexdir}>
               <p className={styles.titlemodal}>Post Details</p>
               <a onClick={hideInviteModal} className={styles.cancel}>
-                <i className="fa fa-times"></i>
+                <i className="fa fa-times" data-testid="closePostModalBtn"></i>
               </a>
             </div>
-            <Form>
+            <Form onSubmitCapture={CreatePost}>
               <label htmlFor="posttitle">Title</label>
               <input
                 type="title"
@@ -189,40 +261,32 @@ function OrgPost(): JSX.Element {
                 }}
               />
               <label htmlFor="postphoto" className={styles.orgphoto}>
-                Image URL:
+                Image:
               </label>
               <input
-                type="url"
+                accept="image/*"
                 id="postphoto"
-                name="postphoto"
-                placeholder="Enter Image URL"
-                value={postformState.postphoto}
-                onChange={(e) => {
-                  setPostFormState({
-                    ...postformState,
-                    postphoto: e.target.value,
-                  });
-                }}
+                name="photo"
+                type="file"
+                placeholder="Upload Image"
+                multiple={false}
+                //onChange=""
               />
-              <label htmlFor="postvideo">Video URL:</label>
+              <label htmlFor="postvideo">Video:</label>
               <input
-                type="url"
+                accept="image/*"
                 id="postvideo"
-                placeholder="Enter Video URL"
-                autoComplete="off"
-                value={postformState.postvideo}
-                onChange={(e) => {
-                  setPostFormState({
-                    ...postformState,
-                    postvideo: e.target.value,
-                  });
-                }}
+                name="video"
+                type="file"
+                placeholder="Upload Video"
+                multiple={false}
+                //onChange=""
               />
               <Button
+                type="submit"
                 className={styles.greenregbtn}
                 variant="success"
-                value="createpost"
-                onClick={CreatePost}
+                data-testid="createPostBtn"
               >
                 <i className="fa fa-plus"></i> Add Post
               </Button>
@@ -233,5 +297,4 @@ function OrgPost(): JSX.Element {
     </>
   );
 }
-
 export default OrgPost;
