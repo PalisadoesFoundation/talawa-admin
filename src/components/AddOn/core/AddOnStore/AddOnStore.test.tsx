@@ -1,16 +1,42 @@
 import React from 'react';
-// import { render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 // import * as reactRedux from 'react-redux';
 // import { BrowserRouter } from 'react-router-dom';
 // import userEvent from '@testing-library/user-event';
 
 // import AddOnStore from './AddOnStore';
 // import { store } from 'state/store';
+import {
+  ApolloClient,
+  NormalizedCacheObject,
+  ApolloProvider,
+  InMemoryCache,
+  ApolloLink,
+  HttpLink,
+} from '@apollo/client';
+import { BrowserRouter } from 'react-router-dom';
+import AddOnStore from './AddOnStore';
+const httpLink = new HttpLink({
+  uri: process.env.REACT_APP_BACKEND_ENDPOINT,
+  headers: {
+    authorization: 'Bearer ' + localStorage.getItem('token') || '',
+  },
+});
 
+const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: ApolloLink.from([httpLink]),
+});
 describe('Testing AddOnStore Component', () => {
-  test("Temporary test for AddOnStore", () => {
+  test('Temporary test for AddOnStore', () => {
     expect(true).toBe(true);
-  })
+    const { getByTestId } = render(
+      <ApolloProvider client={client}>
+        <BrowserRouter>{<AddOnStore />}</BrowserRouter>
+      </ApolloProvider>
+    );
+    expect(getByTestId('AddOnEntryStore')).toBeInTheDocument();
+  });
   // const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
   // const useDispatchMock = jest.spyOn(reactRedux, 'useDispatch');
 
