@@ -156,7 +156,8 @@ function AddOnEntry({
             id="custom-switch"
             label="Enabled"
             className={styles.entrytoggle}
-            // onChange={toggleActive}
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            onChange={() => {}}
             disabled={switchInProgress}
             checked={enabled}
           />

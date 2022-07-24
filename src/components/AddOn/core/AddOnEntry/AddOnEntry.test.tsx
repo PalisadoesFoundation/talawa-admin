@@ -11,6 +11,8 @@ import {
   ApolloLink,
   HttpLink,
 } from '@apollo/client';
+import { Provider } from 'react-redux';
+import { store } from 'state/store';
 const httpLink = new HttpLink({
   uri: process.env.REACT_APP_BACKEND_ENDPOINT,
   headers: {
@@ -43,7 +45,9 @@ describe('Testing AddOnEntry', () => {
   test('should render modal and take info to add plugin for registered organization', () => {
     const { getByTestId } = render(
       <ApolloProvider client={client}>
-        <BrowserRouter>{<AddOnEntry {...props} />}</BrowserRouter>
+        <Provider store={store}>
+          <BrowserRouter>{<AddOnEntry {...props} />}</BrowserRouter>
+        </Provider>
       </ApolloProvider>
     );
     expect(getByTestId('AddOnEntry')).toBeInTheDocument();

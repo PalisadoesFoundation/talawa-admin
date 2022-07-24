@@ -16,6 +16,8 @@ import {
 } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
 import AddOnStore from './AddOnStore';
+import { Provider } from 'react-redux';
+import { store } from 'state/store';
 const httpLink = new HttpLink({
   uri: process.env.REACT_APP_BACKEND_ENDPOINT,
   headers: {
@@ -32,7 +34,9 @@ describe('Testing AddOnStore Component', () => {
     expect(true).toBe(true);
     const { getByTestId } = render(
       <ApolloProvider client={client}>
-        <BrowserRouter>{<AddOnStore />}</BrowserRouter>
+        <Provider store={store}>
+          <BrowserRouter>{<AddOnStore />}</BrowserRouter>
+        </Provider>
       </ApolloProvider>
     );
     expect(getByTestId('AddOnEntryStore')).toBeInTheDocument();

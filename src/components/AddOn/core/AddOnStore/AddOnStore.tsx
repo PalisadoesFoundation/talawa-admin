@@ -96,7 +96,7 @@ function AddOnStore(): JSX.Element {
   if (loading) {
     return (
       <>
-        <div className={styles.loader}></div>
+        <div data-testid="AddOnEntryStore" className={styles.loader}></div>
       </>
     );
   }
@@ -108,7 +108,7 @@ function AddOnStore(): JSX.Element {
   // TODO: Implement Search
   return (
     <>
-      <div data-testid="AddOnEntryStore">
+      <div>
         <AdminNavbar targets={targets} url_1={configUrl} />
       </div>
       <div className={styles.container}>
