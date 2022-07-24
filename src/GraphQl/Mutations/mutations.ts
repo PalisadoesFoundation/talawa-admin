@@ -318,7 +318,7 @@ export const REJECT_ADMIN_MUTATION = gql`
 `;
 /**
  * @name UPDATE_INSTALL_STATUS_PLUGIN_MUTATION
- * @description used to toggle `installStatus` (boolean value) of a Plugin 
+ * @description used to toggle `installStatus` (boolean value) of a Plugin
  */
 export const UPDATE_INSTALL_STATUS_PLUGIN_MUTATION = gql`
   mutation update_install_status_plugin_mutation($id: ID!, $status: Boolean!) {

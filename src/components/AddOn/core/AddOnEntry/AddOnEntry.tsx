@@ -7,7 +7,6 @@ import {
   UPDATE_ORG_STATUS_PLUGIN_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
-// # For temporary purpose
 
 interface AddOnEntryProps {
   id: string;
