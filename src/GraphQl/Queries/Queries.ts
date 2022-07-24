@@ -224,7 +224,10 @@ export const ORGANIZATION_POST_LIST = gql`
     }
   }
 `;
-
+/**
+ * @name PLUGIN_GET
+ * @description used to fetch list of plugins
+ */
 export const PLUGIN_GET = gql`
   query getPluginList {
     getPlugins {
