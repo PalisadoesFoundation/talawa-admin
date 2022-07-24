@@ -20,14 +20,7 @@ import { Form, Tab, Tabs } from 'react-bootstrap';
 import AddOnRegister from '../AddOnRegister/AddOnRegister';
 import PluginHelper from 'components/AddOn/support/services/Plugin.helper';
 import { store } from './../../../../state/store';
-type PluginSid = {
-  _id: string;
-  pluginName: string;
-  pluginCreatedBy: string;
-  pluginDesc: string;
-  pluginInstallStatus: boolean;
-  installedOrgs: [string];
-};
+
 function AddOnStore(): JSX.Element {
   const [isStore, setIsStore] = useState(true);
   const [showEnabled, setShowEnabled] = useState(true);
@@ -115,7 +108,7 @@ function AddOnStore(): JSX.Element {
   // TODO: Implement Search
   return (
     <>
-      <div>
+      <div data-testid="AddOnEntryStore">
         <AdminNavbar targets={targets} url_1={configUrl} />
       </div>
       <div className={styles.container}>

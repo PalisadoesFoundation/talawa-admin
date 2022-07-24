@@ -46,7 +46,6 @@ describe('Testing AddOnEntry', () => {
         <BrowserRouter>{<AddOnEntry {...props} />}</BrowserRouter>
       </ApolloProvider>
     );
-    expect(true).toBe(true);
     expect(getByTestId('AddOnEntry')).toBeInTheDocument();
   });
 });
