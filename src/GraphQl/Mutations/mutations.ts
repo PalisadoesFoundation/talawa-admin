@@ -316,7 +316,10 @@ export const REJECT_ADMIN_MUTATION = gql`
     rejectAdmin(id: $id)
   }
 `;
-
+/**
+ * @name UPDATE_INSTALL_STATUS_PLUGIN_MUTATION
+ * @description used to toggle `installStatus` (boolean value) of a Plugin 
+ */
 export const UPDATE_INSTALL_STATUS_PLUGIN_MUTATION = gql`
   mutation update_install_status_plugin_mutation($id: ID!, $status: Boolean!) {
     updateTempPluginStatus(id: $id, status: $status) {
@@ -328,7 +331,10 @@ export const UPDATE_INSTALL_STATUS_PLUGIN_MUTATION = gql`
     }
   }
 `;
-
+/**
+ * @name UPDATE_ORG_STATUS_PLUGIN_MUTATION
+ * @description used  `updateTempPluginInstalledOrgs`to add or remove the current Organization the in the plugin list `installedOrgs`
+ */
 export const UPDATE_ORG_STATUS_PLUGIN_MUTATION = gql`
   mutation update_install_status_plugin_mutation($id: ID!, $orgId: ID!) {
     updateTempPluginInstalledOrgs(id: $id, orgId: $orgId) {
