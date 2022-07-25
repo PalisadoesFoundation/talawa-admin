@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AddOnRegister.module.css';
 import { Button, Form, Modal } from 'react-bootstrap';
+import { useMutation } from '@apollo/client';
+import { ADD_PLUGIN_MUTATION } from 'GraphQl/Mutations/mutations';
 
 interface AddOnRegisterProps {
   id?: string; // OrgId
@@ -72,7 +74,7 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
               <Form.Label>Plugin Name</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Ex. Donations "
+                placeholder="Ex. Donations"
                 autoComplete="off"
                 required
                 value={formState.pluginName}
@@ -88,7 +90,7 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
               <Form.Label>Creator Name</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Ex. Mr John Doe "
+                placeholder="Ex. Mr John Doe"
                 autoComplete="off"
                 required
                 value={formState.pluginCreatedBy}
@@ -106,7 +108,7 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
                 // type="text"
                 rows={3}
                 as="textarea"
-                placeholder="Ex. This plugin provides UI for .... "
+                placeholder="Ex. This plugin provides UI for ...."
                 required
                 value={formState.pluginDesc}
                 onChange={(e) => {
