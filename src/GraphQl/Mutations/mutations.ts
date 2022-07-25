@@ -347,3 +347,31 @@ export const UPDATE_ORG_STATUS_PLUGIN_MUTATION = gql`
     }
   }
 `;
+/**
+ * @name ADD_PLUGIN_MUTATION
+ * @description used  `createPlugin` to add new Plugin in database
+ */
+export const ADD_PLUGIN_MUTATION = gql`
+  mutation add_plugin_mutation(
+    $pluginName: String!
+    $pluginCreatedBy: String!
+    $pluginDesc: String!
+    $pluginInstallStatus: Boolean!
+    $installedOrgs: [ID!]
+  ) {
+    createPlugin(
+      pluginName: $pluginName
+      pluginCreatedBy: $pluginCreatedBy
+      pluginDesc: $pluginDesc
+      pluginInstallStatus: $pluginInstallStatus
+      installedOrgs: $installedOrgs
+    ) {
+      _id
+      pluginName
+      pluginCreatedBy
+      pluginDesc
+      pluginInstallStatus
+      installedOrgs
+    }
+  }
+`;

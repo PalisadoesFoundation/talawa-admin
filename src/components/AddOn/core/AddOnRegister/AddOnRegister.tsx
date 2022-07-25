@@ -7,15 +7,50 @@ interface AddOnRegisterProps {
   id?: string; // OrgId
   createdBy?: string; // User
 }
+interface formStateTypes {
+  pluginName: string;
+  pluginCreatedBy: string;
+  pluginDesc: string;
+  pluginInstallStatus: boolean;
+  installedOrgs: [string] | [];
+}
+const currentUrl = window.location.href.split('=')[1];
 
+console.log(currentUrl);
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
-  const handleRegister = () => setShow(false);
   const handleShow = () => setShow(true);
+  const [create, { loading: loading_2 }] = useMutation(ADD_PLUGIN_MUTATION);
 
+  const [formState, setFormState] = useState<formStateTypes>({
+    pluginName: '',
+    pluginCreatedBy: '',
+    pluginDesc: '',
+    pluginInstallStatus: false,
+    installedOrgs: [currentUrl],
+  });
+
+  const handleRegister = async () => {
+    console.log(formState);
+    const { data } = await create({
+      variables: {
+        $pluginName: formState.pluginName,
+        $pluginCreatedBy: formState.pluginCreatedBy,
+        $pluginDesc: formState.pluginDesc,
+        $pluginInstallStatus: formState.pluginInstallStatus,
+        $installedOrgs: formState.installedOrgs,
+      },
+    });
+
+    if (data) {
+      window.alert('Plugin Added Successfully');
+      window.location.reload();
+    }
+    console.log('Data is ', data);
+  };
   return (
     <>
       <Button
@@ -35,21 +70,52 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
           <Form>
             <Form.Group className="mb-3" controlId="registerForm.PluginName">
               <Form.Label>Plugin Name</Form.Label>
-              <Form.Control type="text" placeholder="Plugin Name" />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="registerForm.PluginDesc">
-              <Form.Label>Plugin Description</Form.Label>
-              <Form.Control as="textarea" title="Plugin Description" rows={3} />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="registerForm.PluginURL">
-              <Form.Label>Plugin Repo (GitHub URL)</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Plugin Repo (GitHub URL)"
+                placeholder="Ex. Donations "
+                autoComplete="off"
+                required
+                value={formState.pluginName}
+                onChange={(e) => {
+                  setFormState({
+                    ...formState,
+                    pluginName: e.target.value,
+                  });
+                }}
               />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="registerForm.PluginInstall">
-              <Form.Check type="checkbox" label="Install after register." />
+            <Form.Group className="mb-3" controlId="registerForm.PluginName">
+              <Form.Label>Creator Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Ex. Mr John Doe "
+                autoComplete="off"
+                required
+                value={formState.pluginCreatedBy}
+                onChange={(e) => {
+                  setFormState({
+                    ...formState,
+                    pluginCreatedBy: e.target.value,
+                  });
+                }}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="registerForm.PluginURL">
+              <Form.Label>Plugin Description</Form.Label>
+              <Form.Control
+                // type="text"
+                rows={3}
+                as="textarea"
+                placeholder="Ex. This plugin provides UI for .... "
+                required
+                value={formState.pluginDesc}
+                onChange={(e) => {
+                  setFormState({
+                    ...formState,
+                    pluginDesc: e.target.value,
+                  });
+                }}
+              />
             </Form.Group>
           </Form>
         </Modal.Body>
