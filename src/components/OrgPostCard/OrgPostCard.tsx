@@ -44,7 +44,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        window.alert('Post deleted successfully.');
+        toast.success('Post deleted successfully.');
         window.location.reload();
       }
     } catch (error: any) {
@@ -73,7 +73,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        window.alert('Post Updated successfully.');
+        toast.success('Post Updated successfully.');
         window.location.reload();
       }
     } catch (error: any) {

@@ -64,7 +64,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        window.alert('Event deleted successfully.');
+        toast.success('Event deleted successfully.');
         window.location.reload();
       }
     } catch (error: any) {
@@ -94,7 +94,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        window.alert('Event updated successfully.');
+        toast.success('Event updated successfully.');
         window.location.reload();
       }
     } catch (error: any) {
@@ -355,7 +355,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                   className="btn btn-success"
                   data-testid="updatePostBtn"
                 >
-                  Update Post
+                  Update Event
                 </button>
               </div>
             </form>
