@@ -4,6 +4,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import 'jest-location-mock';
+import { I18nextProvider } from 'react-i18next';
 
 import BlockUser from './BlockUser';
 import { USER_LIST } from 'GraphQl/Queries/Queries';
@@ -13,6 +14,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
+import i18nForTest from 'utils/i18nForTest';
 
 const MOCKS = [
   {
@@ -120,7 +122,9 @@ describe('Testing Block/Unblock user screen', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <BlockUser />
+            <I18nextProvider i18n={i18nForTest}>
+              <BlockUser />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -140,7 +144,9 @@ describe('Testing Block/Unblock user screen', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <BlockUser />
+            <I18nextProvider i18n={i18nForTest}>
+              <BlockUser />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -157,7 +163,9 @@ describe('Testing Block/Unblock user screen', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <BlockUser />
+            <I18nextProvider i18n={i18nForTest}>
+              <BlockUser />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>

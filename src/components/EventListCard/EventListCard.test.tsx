@@ -2,12 +2,14 @@ import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
+import { I18nextProvider } from 'react-i18next';
 
 import EventListCard from './EventListCard';
 import {
   DELETE_EVENT_MUTATION,
   UPDATE_EVENT_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+import i18nForTest from 'utils/i18nForTest';
 
 const MOCKS = [
   {
@@ -81,7 +83,9 @@ describe('Testing Event List Card', () => {
 
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
-        <EventListCard {...props} />
+        <I18nextProvider i18n={i18nForTest}>
+          <EventListCard {...props} />
+        </I18nextProvider>
       </MockedProvider>
     );
 
@@ -101,21 +105,23 @@ describe('Testing Event List Card', () => {
 
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
-        <EventListCard
-          key="123"
-          id="1"
-          eventName=""
-          eventLocation=""
-          eventDescription=""
-          regDate="19/03/2022"
-          regEndDate="26/03/2022"
-          startTime="02:00"
-          endTime="06:00"
-          allDay={true}
-          recurring={false}
-          isPublic={true}
-          isRegisterable={false}
-        />
+        <I18nextProvider i18n={i18nForTest}>
+          <EventListCard
+            key="123"
+            id="1"
+            eventName=""
+            eventLocation=""
+            eventDescription=""
+            regDate="19/03/2022"
+            regEndDate="26/03/2022"
+            startTime="02:00"
+            endTime="06:00"
+            allDay={true}
+            recurring={false}
+            isPublic={true}
+            isRegisterable={false}
+          />
+        </I18nextProvider>
       </MockedProvider>
     );
 
@@ -133,7 +139,9 @@ describe('Testing Event List Card', () => {
   test('Testing event update functionality', async () => {
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
-        <EventListCard {...props} />
+        <I18nextProvider i18n={i18nForTest}>
+          <EventListCard {...props} />
+        </I18nextProvider>
       </MockedProvider>
     );
 
@@ -158,7 +166,9 @@ describe('Testing Event List Card', () => {
   test('Testing if the event is not for all day', async () => {
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
-        <EventListCard {...props} />
+        <I18nextProvider i18n={i18nForTest}>
+          <EventListCard {...props} />
+        </I18nextProvider>
       </MockedProvider>
     );
 
@@ -184,7 +194,9 @@ describe('Testing Event List Card', () => {
   test('Testing delete event funcationality', async () => {
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
-        <EventListCard {...props} />
+        <I18nextProvider i18n={i18nForTest}>
+          <EventListCard {...props} />
+        </I18nextProvider>
       </MockedProvider>
     );
 

@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'state/reducers';
 import { Container } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 import styles from './OrganizationDashboard.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
@@ -18,7 +19,9 @@ import {
 import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 
 function OrganizationDashboard(): JSX.Element {
-  document.title = 'Talawa Dashboard';
+  const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
+
+  document.title = t('title');
   const currentUrl = window.location.href.split('=')[1];
 
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
@@ -82,17 +85,17 @@ function OrganizationDashboard(): JSX.Element {
         <p></p>
         <p className={styles.toporgname}>{data.organizations[0].name}</p>
         <p className={styles.toporgloc}>
-          Location : {data.organizations[0].location}
+          {t('location')} : {data.organizations[0].location}
         </p>
       </Row>
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
-              <h6 className={styles.titlename}>About</h6>
+              <h6 className={styles.titlename}>{t('about')}</h6>
               <p>{data.organizations[0].description}</p>
               <img src={AboutImg} className={styles.org_about_img} />
-              <h6 className={styles.titlename}>Tags</h6>
+              <h6 className={styles.titlename}>{t('tags')}</h6>
               <p className={styles.tagdetails}>
                 {data.organizations[0].tags.length > 0 ? (
                   data.organizations[0].tags.map(
@@ -103,7 +106,7 @@ function OrganizationDashboard(): JSX.Element {
                     )
                   )
                 ) : (
-                  <button>No Tags</button>
+                  <button>{t('noTags')}</button>
                 )}
               </p>
               <p className={styles.tagdetails}></p>
@@ -116,7 +119,7 @@ function OrganizationDashboard(): JSX.Element {
                   data-toggle="modal"
                   data-target="#deleteOrganizationModal"
                 >
-                  Delete This Organization
+                  {t('deleteThisOrganization')}
                 </button>
               </p>
             </div>
@@ -126,7 +129,7 @@ function OrganizationDashboard(): JSX.Element {
           <Container>
             <div className={styles.mainpageright}>
               <Row className={styles.justifysp}>
-                <p className={styles.titlename}>Statistics</p>
+                <p className={styles.titlename}>{t('statistics')}</p>
               </Row>
               <Row>
                 <Col sm={4} className="mb-5">
@@ -141,7 +144,7 @@ function OrganizationDashboard(): JSX.Element {
                         <p className={styles.counterNumber}>
                           {data.organizations[0].members.length}
                         </p>
-                        <p className={styles.counterHead}>Members</p>
+                        <p className={styles.counterHead}>{t('members')}</p>
                       </div>
                     </div>
                   </div>
@@ -158,7 +161,7 @@ function OrganizationDashboard(): JSX.Element {
                         <p className={styles.counterNumber}>
                           {data.organizations[0].admins.length}
                         </p>
-                        <p className={styles.counterHead}>Admins</p>
+                        <p className={styles.counterHead}>{t('admins')}</p>
                       </div>
                     </div>
                   </div>
@@ -175,7 +178,7 @@ function OrganizationDashboard(): JSX.Element {
                         <p className={styles.counterNumber}>
                           {postData.postsByOrganization.length}
                         </p>
-                        <p className={styles.counterHead}>Posts</p>
+                        <p className={styles.counterHead}>{t('posts')}</p>
                       </div>
                     </div>
                   </div>
@@ -192,7 +195,7 @@ function OrganizationDashboard(): JSX.Element {
                         <p className={styles.counterNumber}>
                           {eventData.eventsByOrganization.length}
                         </p>
-                        <p className={styles.counterHead}>Events</p>
+                        <p className={styles.counterHead}>{t('events')}</p>
                       </div>
                     </div>
                   </div>
@@ -209,7 +212,9 @@ function OrganizationDashboard(): JSX.Element {
                         <p className={styles.counterNumber}>
                           {data.organizations[0].blockedUsers.length}
                         </p>
-                        <p className={styles.counterHead}>Blocked Users</p>
+                        <p className={styles.counterHead}>
+                          {t('blockedUsers')}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -227,7 +232,7 @@ function OrganizationDashboard(): JSX.Element {
                           {data.organizations[0].membershipRequests.length}
                         </p>
                         <p className={styles.counterHead}>
-                          Membership Requests
+                          {t('membershipRequests')}
                         </p>
                       </div>
                     </div>
@@ -251,7 +256,7 @@ function OrganizationDashboard(): JSX.Element {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="deleteOrganizationModalLabel">
-                Delete Organization
+                {t('deleteOrganization')}
               </h5>
               <button
                 type="button"
@@ -262,16 +267,14 @@ function OrganizationDashboard(): JSX.Element {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div className="modal-body">
-              Do you want to delete this organization?
-            </div>
+            <div className="modal-body">{t('deleteMsg')}</div>
             <div className="modal-footer">
               <button
                 type="button"
                 className="btn btn-danger"
                 data-dismiss="modal"
               >
-                No
+                {t('no')}
               </button>
               <button
                 type="button"
@@ -279,7 +282,7 @@ function OrganizationDashboard(): JSX.Element {
                 onClick={delete_org}
                 data-testid="deleteOrganizationBtn"
               >
-                Yes
+                {t('yes')}
               </button>
             </div>
           </div>

@@ -2,9 +2,11 @@ import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
+import { I18nextProvider } from 'react-i18next';
 
 import OrgPeopleListCard from './OrgPeopleListCard';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
+import i18nForTest from 'utils/i18nForTest';
 
 const MOCKS = [
   {
@@ -49,7 +51,9 @@ describe('Testing Organization People List Card', () => {
 
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
-        <OrgPeopleListCard {...props} />
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPeopleListCard {...props} />
+        </I18nextProvider>
       </MockedProvider>
     );
 
@@ -68,14 +72,16 @@ describe('Testing Organization People List Card', () => {
 
     render(
       <MockedProvider>
-        <OrgPeopleListCard
-          key="123"
-          id="1"
-          memberName=""
-          joinDate="20/03/2022"
-          memberImage=""
-          memberEmail=""
-        />
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPeopleListCard
+            key="123"
+            id="1"
+            memberName=""
+            joinDate="20/03/2022"
+            memberImage=""
+            memberEmail=""
+          />
+        </I18nextProvider>
       </MockedProvider>
     );
 

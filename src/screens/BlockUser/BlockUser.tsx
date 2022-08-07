@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
-import { Hidden, TablePagination } from '@mui/material';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 
 import styles from './BlockUser.module.css';
-import Pagination from 'components/Pagination/Pagination';
 import { USER_LIST } from 'GraphQl/Queries/Queries';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import { RootState } from 'state/reducers';
@@ -14,9 +12,15 @@ import {
   BLOCK_USER_MUTATION,
   UNBLOCK_USER_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+import { useTranslation } from 'react-i18next';
+import PaginationList from 'components/PaginationList/PaginationList';
 
 const Requests = () => {
-  document.title = 'Talawa Block/Unblock User';
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'blockUnblockUser',
+  });
+
+  document.title = t('title');
 
   const [usersData, setUsersData] = useState([]);
   const [page, setPage] = useState(0);
@@ -126,7 +130,7 @@ const Requests = () => {
         <Col sm={3}>
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
-              <h6 className={styles.searchtitle}>Search By Name</h6>
+              <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
               <input
                 type="name"
                 id="orgname"
@@ -142,7 +146,7 @@ const Requests = () => {
         <Col sm={8}>
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
-              <p className={styles.logintitle}>List of Users who spammed</p>
+              <p className={styles.logintitle}>{t('listOfUsers')}</p>
             </Row>
             <div className={styles.list_box}>
               <div className="table-responsive">
@@ -150,10 +154,10 @@ const Requests = () => {
                   <thead>
                     <tr>
                       <th scope="col">#</th>
-                      <th scope="col">Name</th>
-                      <th scope="col">Email</th>
+                      <th scope="col">{t('name')}</th>
+                      <th scope="col">{t('email')}</th>
                       <th scope="col" className="text-center">
-                        Block/Unblock
+                        {t('block_unblock')}
                       </th>
                     </tr>
                   </thead>
@@ -189,7 +193,7 @@ const Requests = () => {
                                   onClick={() => handleUnBlockUser(user._id)}
                                   data-testid={`unBlockUser${user._id}`}
                                 >
-                                  UnBlock
+                                  {t('unblock')}
                                 </button>
                               ) : (
                                 <button
@@ -197,7 +201,7 @@ const Requests = () => {
                                   onClick={() => handleBlockUser(user._id)}
                                   data-testid={`blockUser${user._id}`}
                                 >
-                                  Block
+                                  {t('block')}
                                 </button>
                               )}
                             </td>
@@ -213,47 +217,13 @@ const Requests = () => {
               <table>
                 <tbody>
                   <tr>
-                    <Hidden smUp>
-                      <TablePagination
-                        rowsPerPageOptions={[]}
-                        colSpan={4}
-                        count={usersData.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        SelectProps={{
-                          inputProps: {
-                            'aria-label': 'rows per page',
-                          },
-                          native: true,
-                        }}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                        ActionsComponent={Pagination}
-                      />
-                    </Hidden>
-                    <Hidden smDown>
-                      <TablePagination
-                        rowsPerPageOptions={[
-                          10,
-                          20,
-                          50,
-                          { label: 'All', value: -1 },
-                        ]}
-                        colSpan={4}
-                        count={usersData.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        SelectProps={{
-                          inputProps: {
-                            'aria-label': 'rows per page',
-                          },
-                          native: true,
-                        }}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                        ActionsComponent={Pagination}
-                      />
-                    </Hidden>
+                    <PaginationList
+                      count={usersData.length}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
                   </tr>
                 </tbody>
               </table>

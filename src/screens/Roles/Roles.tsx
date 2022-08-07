@@ -2,16 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useMutation, useQuery } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
 
 import styles from './Roles.module.css';
 import ListNavbar from 'components/ListNavbar/ListNavbar';
-import Pagination from 'components/Pagination/Pagination';
 import { USER_LIST } from 'GraphQl/Queries/Queries';
-import { Hidden, TablePagination } from '@mui/material';
 import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
+import PaginationList from 'components/PaginationList/PaginationList';
 
 const Roles = () => {
-  document.title = 'Talawa Roles';
+  const { t } = useTranslation('translation', { keyPrefix: 'roles' });
+
+  document.title = t('title');
 
   const [componentLoader, setComponentLoader] = useState(true);
   const [page, setPage] = useState(0);
@@ -89,7 +91,7 @@ const Roles = () => {
         <Col sm={3}>
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
-              <h6 className={styles.searchtitle}>Search By Name</h6>
+              <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
               <input
                 type="name"
                 id="orgname"
@@ -105,7 +107,7 @@ const Roles = () => {
         <Col sm={8}>
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
-              <p className={styles.logintitle}>Users List</p>
+              <p className={styles.logintitle}>{t('usersList')}</p>
             </Row>
             <div className={styles.list_box}>
               <div className="table-responsive">
@@ -113,9 +115,9 @@ const Roles = () => {
                   <thead>
                     <tr>
                       <th scope="col">#</th>
-                      <th scope="col">Name</th>
-                      <th scope="col">Email</th>
-                      <th scope="col">Role/User-Type</th>
+                      <th scope="col">{t('name')}</th>
+                      <th scope="col">{t('email')}</th>
+                      <th scope="col">{t('roles_userType')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -153,13 +155,13 @@ const Roles = () => {
                                       value={`ADMIN?${user._id}`}
                                       selected
                                     >
-                                      ADMIN
+                                      {t('admin')}
                                     </option>
                                     <option value={`SUPERADMIN?${user._id}`}>
-                                      SUPERADMIN
+                                      {t('superAdmin')}
                                     </option>
                                     <option value={`USER?${user._id}`}>
-                                      USER
+                                      {t('user')}
                                     </option>
                                   </select>
                                 ) : user.userType === 'SUPERADMIN' ? (
@@ -170,16 +172,16 @@ const Roles = () => {
                                     onChange={changeRole}
                                   >
                                     <option value={`ADMIN?${user._id}`}>
-                                      ADMIN
+                                      {t('admin')}
                                     </option>
                                     <option
                                       value={`SUPERADMIN?${user._id}`}
                                       selected
                                     >
-                                      SUPERADMIN
+                                      {t('superAdmin')}
                                     </option>
                                     <option value={`USER?${user._id}`}>
-                                      USER
+                                      {t('user')}
                                     </option>
                                   </select>
                                 ) : (
@@ -189,13 +191,13 @@ const Roles = () => {
                                     onChange={changeRole}
                                   >
                                     <option value={`ADMIN?${user._id}`}>
-                                      ADMIN
+                                      {t('admin')}
                                     </option>
                                     <option value={`SUPERADMIN?${user._id}`}>
-                                      SUPERADMIN
+                                      {t('superAdmin')}
                                     </option>
                                     <option value={`USER?${user._id}`} selected>
-                                      USER
+                                      {t('user')}
                                     </option>
                                   </select>
                                 )}
@@ -212,47 +214,13 @@ const Roles = () => {
               <table>
                 <tbody>
                   <tr>
-                    <Hidden smUp>
-                      <TablePagination
-                        rowsPerPageOptions={[]}
-                        colSpan={4}
-                        count={data ? data.users.length : 0}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        SelectProps={{
-                          inputProps: {
-                            'aria-label': 'rows per page',
-                          },
-                          native: true,
-                        }}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                        ActionsComponent={Pagination}
-                      />
-                    </Hidden>
-                    <Hidden smDown>
-                      <TablePagination
-                        rowsPerPageOptions={[
-                          10,
-                          20,
-                          50,
-                          { label: 'All', value: -1 },
-                        ]}
-                        colSpan={4}
-                        count={data ? data.users.length : 0}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        SelectProps={{
-                          inputProps: {
-                            'aria-label': 'rows per page',
-                          },
-                          native: true,
-                        }}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                        ActionsComponent={Pagination}
-                      />
-                    </Hidden>
+                    <PaginationList
+                      count={data ? data.users.length : 0}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
                   </tr>
                 </tbody>
               </table>

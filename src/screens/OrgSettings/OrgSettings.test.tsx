@@ -1,11 +1,15 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { act, render } from '@testing-library/react';
-import OrgSettings from './OrgSettings';
 import { MEMBERSHIP_REQUEST } from 'GraphQl/Queries/Queries';
 import { Provider } from 'react-redux';
-import { store } from 'state/store';
 import { BrowserRouter } from 'react-router-dom';
+import { I18nextProvider } from 'react-i18next';
+import 'jest-location-mock';
+
+import { store } from 'state/store';
+import OrgSettings from './OrgSettings';
+import i18nForTest from 'utils/i18nForTest';
 
 const MOCKS = [
   {
@@ -45,7 +49,6 @@ describe('Organisation Settings Page', () => {
   test('correct mock data should be queried', async () => {
     const dataQuery1 = MOCKS[0]?.result?.data?.organizations[0];
 
-    console.log(`Data is ${dataQuery1}`);
     expect(dataQuery1).toEqual({
       _id: 1,
       membershipRequests: {
@@ -60,11 +63,15 @@ describe('Organisation Settings Page', () => {
     });
   });
   test('should render props and text elements test for the screen', async () => {
+    window.location.assign('/orglist');
+
     const { container } = render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <OrgSettings />
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgSettings />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -77,5 +84,6 @@ describe('Organisation Settings Page', () => {
     expect(container.textContent).toMatch('Update Organization');
     expect(container.textContent).toMatch('Delete Organization');
     expect(container.textContent).toMatch('See Request');
+    expect(window.location).toBeAt('/orglist');
   });
 });

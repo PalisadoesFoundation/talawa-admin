@@ -7,6 +7,7 @@ import {
   DELETE_POST_MUTATION,
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+import { useTranslation } from 'react-i18next';
 
 interface OrgPostCardProps {
   key: string;
@@ -30,6 +31,10 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
       postinfo: props.postInfo,
     });
   }, []);
+
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'orgPostCard',
+  });
 
   const [create] = useMutation(DELETE_POST_MUTATION);
   const [updatePost] = useMutation(UPDATE_POST_MUTATION);
@@ -108,19 +113,18 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
             </div>
           </div>
           <p>
-            Author:
-            <span> {props.postAuthor}</span>
+            {t('author')}:<span> {props.postAuthor}</span>
           </p>
           <p>{props.postInfo}</p>
           <p>
-            Image URL:
+            {t('imageURL')}:
             <span>
               {' '}
               <a href={props.postPhoto}>{props.postPhoto}</a>
             </span>
           </p>
           <p>
-            Video URL:
+            {t('videoURL')}:
             <span>
               {' '}
               <a href={props.postVideo}>{props.postVideo}</a>
@@ -145,7 +149,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
                 className="modal-title"
                 id={`deletePostModalLabel${props.id}`}
               >
-                Delete Post
+                {t('deletePost')}
               </h5>
               <button
                 type="button"
@@ -156,14 +160,14 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div className="modal-body">Do you want to remove this post?</div>
+            <div className="modal-body">{t('deletePostMsg')}</div>
             <div className="modal-footer">
               <button
                 type="button"
                 className="btn btn-danger"
                 data-dismiss="modal"
               >
-                No
+                {t('no')}
               </button>
               <button
                 type="button"
@@ -171,7 +175,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
                 onClick={DeletePost}
                 data-testid="deletePostBtn"
               >
-                Yes
+                {t('yes')}
               </button>
             </div>
           </div>
@@ -190,7 +194,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id={`editPostModal${props.id}Label`}>
-                Edit Post
+                {t('editPost')}
               </h5>
               <button
                 type="button"
@@ -205,7 +209,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
               <div className="modal-body">
                 <div className="form-group">
                   <label htmlFor="postTitle" className="col-form-label">
-                    Title
+                    {t('postTitle')}
                   </label>
                   <input
                     type="text"
@@ -220,7 +224,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
                 </div>
                 <div className="form-group">
                   <label htmlFor="postText" className="col-form-label">
-                    Information
+                    {t('information')}
                   </label>
                   <input
                     type="text"
@@ -235,7 +239,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
                 </div>
                 <div className="form-group">
                   <label htmlFor="postImageUrl" className="col-form-label">
-                    Image:
+                    {t('image')}:
                   </label>
                   <input
                     accept="image/*"
@@ -249,7 +253,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
                 </div>
                 <div className="form-group">
                   <label htmlFor="postVideoUrl" className="col-form-label">
-                    Video:
+                    {t('video')}:
                   </label>
                   <input
                     accept="image/*"
@@ -268,14 +272,14 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
                   className="btn btn-danger"
                   data-dismiss="modal"
                 >
-                  Close
+                  {t('close')}
                 </button>
                 <button
                   type="submit"
                   className="btn btn-success"
                   data-testid="updatePostBtn"
                 >
-                  Update Post
+                  {t('updatePost')}
                 </button>
               </div>
             </form>

@@ -131,7 +131,6 @@ form > input {
 }
 
 .navloginbtn {
-  margin-top: 10px;
   background-color: #31bb6b;
   padding: 0.5em 1em;
   margin-right: 3rem;
@@ -144,6 +143,16 @@ form > input {
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   width: 130px;
+}
+.languageBtn {
+  font-size: 20px;
+  color: #31bb6b;
+}
+.languageBtn:hover {
+  color: #31bb6b;
+}
+.languageBtn:focus {
+  color: #31bb6b;
 }
 .forgotpwd {
   text-align: right;
@@ -168,10 +177,11 @@ form > br {
   height: 60px;
   background-color: white;
   display: flex;
+  margin-bottom: 30px;
   z-index: 1;
   position: relative;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-between !important;
   box-shadow: 0px 0px 8px 2px #c8c8c8;
 }
 
@@ -317,5 +327,17 @@ form > br {
 .homeright > form input {
   background-color: white;
   box-shadow: 1px 3px #e8e5e5;
+}
+
+@media only screen and (max-width: 600px) {
+  body::before {
+    height: 118px;
+  }
+  .navbarbg {
+    height: auto;
+  }
+  .languageBtn {
+    margin-bottom: 10px;
+  }
 }
 /* ===== Home Page CSS End ===== */

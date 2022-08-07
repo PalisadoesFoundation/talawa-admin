@@ -3,6 +3,13 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-modal';
 import { useMutation } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import { Nav, Navbar } from 'react-bootstrap';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { toast } from 'react-toastify';
+import cookies from 'js-cookie';
+import i18next from 'i18next';
 
 import styles from './LoginPage.module.css';
 import Logo from 'assets/talawa-logo-200x200.png';
@@ -12,12 +19,12 @@ import {
   RECAPTCHA_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
-import { toast } from 'react-toastify';
-import ReCAPTCHA from 'react-google-recaptcha';
-import { Link } from 'react-router-dom';
+import { languages } from 'utils/languages';
 
 function LoginPage(): JSX.Element {
-  document.title = 'Talawa Admin';
+  const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
+
+  document.title = t('title');
 
   const [modalisOpen, setIsOpen] = React.useState(false);
   const [componentLoader, setComponentLoader] = useState(true);
@@ -34,6 +41,8 @@ function LoginPage(): JSX.Element {
   });
 
   const recaptchaRef = useRef<ReCAPTCHA>(null);
+
+  const currentLanguageCode = cookies.get('i18next') || 'en';
 
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('IsLoggedIn');
@@ -198,25 +207,55 @@ function LoginPage(): JSX.Element {
   return (
     <>
       <section className={styles.login_background}>
-        <div className={styles.navbarbg}>
-          <div>
+        <Navbar className={styles.navbarbg} expand="xl">
+          <Navbar.Brand>
             <a className={styles.logo}>
               <img src={Logo} />
-              <strong>Talawa Portal</strong>
+              <strong>{t('talawa_portal')}</strong>
             </a>
-          </div>
-          <div>
-            <button
-              type="button"
-              className={styles.navloginbtn}
-              value="Login"
-              onClick={showModal}
-              data-testid="loginModalBtn"
-            >
-              Login
-            </button>
-          </div>
-        </div>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="navbarScroll" />
+          <Navbar.Collapse id="navbarScroll">
+            <Nav className="ml-auto">
+              <div className="dropdown mr-4">
+                <button
+                  className={`btn dropdown-toggle ${styles.languageBtn}`}
+                  type="button"
+                  data-toggle="dropdown"
+                  aria-expanded="false"
+                  title="Change Langauge"
+                >
+                  <i className="fas fa-globe"></i>
+                </button>
+                <div className="dropdown-menu">
+                  {languages.map((language, index: number) => (
+                    <button
+                      key={index}
+                      className="dropdown-item"
+                      onClick={() => i18next.changeLanguage(language.code)}
+                      disabled={currentLanguageCode === language.code}
+                      data-testid={`changeLanguageBtn${index}`}
+                    >
+                      <span
+                        className={`flag-icon flag-icon-${language.country_code} mr-2`}
+                      ></span>
+                      {language.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <button
+                type="button"
+                className={styles.navloginbtn}
+                value="Login"
+                onClick={showModal}
+                data-testid="loginModalBtn"
+              >
+                {t('login')}
+              </button>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
         <div className={styles.reg_bg}>
           <Row>
             <Col sm={7} className={styles.leftmainbg}>
@@ -226,12 +265,12 @@ function LoginPage(): JSX.Element {
             </Col>
             <Col sm={5} className={styles.rightmainbg}>
               <div className={styles.homeright}>
-                <h1>Register</h1>
+                <h1>{t('register')}</h1>
                 {/* <h2>to seamlessly manage your Organization.</h2> */}
                 <form onSubmit={signup_link}>
                   <div className={styles.dispflex}>
                     <div>
-                      <label>First Name</label>
+                      <label>{t('firstName')}</label>
                       <input
                         type="text"
                         id="signfirstname"
@@ -248,7 +287,7 @@ function LoginPage(): JSX.Element {
                       />
                     </div>
                     <div>
-                      <label>Last Name</label>
+                      <label>{t('lastName')}</label>
                       <input
                         type="text"
                         id="signlastname"
@@ -265,7 +304,7 @@ function LoginPage(): JSX.Element {
                       />
                     </div>
                   </div>
-                  <label>Email</label>
+                  <label>{t('email')}</label>
                   <input
                     type="email"
                     id="signemail"
@@ -281,7 +320,7 @@ function LoginPage(): JSX.Element {
                     }}
                   />
                   <div className={styles.passwordalert}>
-                    <label>Password</label>
+                    <label>{t('password')}</label>
                     <input
                       type="password"
                       id="signpassword"
@@ -295,9 +334,9 @@ function LoginPage(): JSX.Element {
                         });
                       }}
                     />
-                    <span>Atleast 8 Character long</span>
+                    <span>{t('atleast_8_char_long')}</span>
                   </div>
-                  <label>Confirm Password</label>
+                  <label>{t('confirmPassword')}</label>
                   <input
                     type="password"
                     id="cpassword"
@@ -323,7 +362,7 @@ function LoginPage(): JSX.Element {
                     value="Register"
                     data-testid="registrationBtn"
                   >
-                    Register
+                    {t('register')}
                   </button>
                 </form>
               </div>
@@ -341,7 +380,7 @@ function LoginPage(): JSX.Element {
           <section id={styles.grid_wrapper}>
             <div className={styles.form_wrapper}>
               <div className={styles.flexdir}>
-                <p className={styles.logintitle}>Login</p>
+                <p className={styles.logintitle}>{t('login')}</p>
                 <a
                   onClick={hideModal}
                   className={styles.cancel}
@@ -351,7 +390,7 @@ function LoginPage(): JSX.Element {
                 </a>
               </div>
               <form onSubmit={login_link}>
-                <label>Email</label>
+                <label>{t('email')}</label>
                 <input
                   type="email"
                   id="email"
@@ -367,7 +406,7 @@ function LoginPage(): JSX.Element {
                     });
                   }}
                 />
-                <label>Password</label>
+                <label>{t('password')}</label>
                 <input
                   type="password"
                   id="password"
@@ -394,10 +433,10 @@ function LoginPage(): JSX.Element {
                   value="Login"
                   data-testid="loginBtn"
                 >
-                  Login
+                  {t('login')}
                 </button>
                 <Link to="/forgotPassword" className={styles.forgotpwd}>
-                  Forgot Password ?
+                  {t('forgotPassword')}
                 </Link>
                 <hr></hr>
                 <button
@@ -406,7 +445,7 @@ function LoginPage(): JSX.Element {
                   value="Register"
                   onClick={hideModal}
                 >
-                  Register
+                  {t('register')}
                 </button>
               </form>
             </div>

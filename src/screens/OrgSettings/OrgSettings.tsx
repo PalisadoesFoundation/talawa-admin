@@ -11,9 +11,14 @@ import { useQuery } from '@apollo/client';
 import { MEMBERSHIP_REQUEST } from 'GraphQl/Queries/Queries';
 import { useSelector } from 'react-redux';
 import { RootState } from 'state/reducers';
+import { useTranslation } from 'react-i18next';
 
 function OrgSettings(): JSX.Element {
-  document.title = 'Talawa Setting';
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'orgSettings',
+  });
+
+  document.title = t('title');
   const [screenVariable, setScreenVariable] = React.useState(0);
 
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
@@ -52,7 +57,7 @@ function OrgSettings(): JSX.Element {
                   value="userupdate"
                   onClick={() => setScreenVariable(1)}
                 >
-                  Update Your Details
+                  {t('updateYourDetails')}
                 </button>
                 <button
                   className={styles.greenregbtn}
@@ -60,7 +65,7 @@ function OrgSettings(): JSX.Element {
                   value="orgupdate"
                   onClick={() => setScreenVariable(2)}
                 >
-                  Update Organization
+                  {t('updateOrganization')}
                 </button>
                 <button
                   className={styles.greenregbtn}
@@ -68,7 +73,7 @@ function OrgSettings(): JSX.Element {
                   value="orgdelete"
                   onClick={() => setScreenVariable(3)}
                 >
-                  Delete Organization
+                  {t('deleteOrganization')}
                 </button>
                 <button
                   className={styles.greenregbtn}
@@ -76,7 +81,7 @@ function OrgSettings(): JSX.Element {
                   value="orgdelete"
                   onClick={() => setScreenVariable(4)}
                 >
-                  See Request
+                  {t('seeRequest')}
                 </button>
               </div>
             </div>
@@ -85,7 +90,7 @@ function OrgSettings(): JSX.Element {
         <Col sm={8}>
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
-              <p className={styles.logintitle}>Settings</p>
+              <p className={styles.logintitle}>{t('settings')}</p>
             </Row>
             <div>{screenVariable == 1 ? <UserUpdate id="abcd" /> : null}</div>
             <div>
@@ -127,7 +132,7 @@ function OrgSettings(): JSX.Element {
                     }
                   )
                 ) : (
-                  <div>No data</div>
+                  <div>{t('noData')}</div>
                 )
               ) : null}
             </div>

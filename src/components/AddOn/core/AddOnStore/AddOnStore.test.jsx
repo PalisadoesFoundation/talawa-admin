@@ -3,10 +3,12 @@ import { render, screen } from '@testing-library/react';
 import * as reactRedux from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
+import { I18nextProvider } from 'react-i18next';
 
 import AddOnStore from './AddOnStore';
 import { store } from 'state/store';
 import { MockedProvider } from '@apollo/react-testing';
+import i18nForTest from 'utils/i18nForTest';
 
 describe('Testing AddOnStore Component', () => {
   const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
@@ -69,7 +71,9 @@ describe('Testing AddOnStore Component', () => {
       <MockedProvider>
         <BrowserRouter>
           <reactRedux.Provider store={store}>
-            <AddOnStore />
+            <I18nextProvider i18n={i18nForTest}>
+              <AddOnStore />
+            </I18nextProvider>
           </reactRedux.Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -146,7 +150,9 @@ describe('Testing AddOnStore Component', () => {
       <MockedProvider>
         <BrowserRouter>
           <reactRedux.Provider store={store}>
-            <AddOnStore />
+            <I18nextProvider i18n={i18nForTest}>
+              <AddOnStore />
+            </I18nextProvider>
           </reactRedux.Provider>
         </BrowserRouter>
       </MockedProvider>

@@ -7,6 +7,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 import styles from './OrgPost.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
@@ -17,7 +18,11 @@ import { RootState } from 'state/reducers';
 import PaginationList from 'components/PaginationList/PaginationList';
 
 function OrgPost(): JSX.Element {
-  document.title = 'Talawa Posts';
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'orgPost',
+  });
+
+  document.title = t('title');
   const [postmodalisOpen, setPostModalIsOpen] = useState(false);
   const [postformState, setPostFormState] = useState({
     posttitle: '',
@@ -130,7 +135,7 @@ function OrgPost(): JSX.Element {
         <Col sm={3}>
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
-              <h6 className={styles.searchtitle}>Posts by Title</h6>
+              <h6 className={styles.searchtitle}>{t('postsByTitle')}</h6>
               <input
                 type="text"
                 id="posttitle"
@@ -138,7 +143,7 @@ function OrgPost(): JSX.Element {
                 autoComplete="off"
                 onChange={handleSearchByTitle}
               />
-              <h6 className={styles.searchtitle}>Posts by Text</h6>
+              <h6 className={styles.searchtitle}>{t('postsByText')}</h6>
               <input
                 type="name"
                 id="orgname"
@@ -152,14 +157,14 @@ function OrgPost(): JSX.Element {
         <Col sm={8}>
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
-              <p className={styles.logintitle}>Posts</p>
+              <p className={styles.logintitle}>{t('posts')}</p>
               <Button
                 variant="success"
                 className={styles.addbtn}
                 onClick={showInviteModal}
                 data-testid="createPostModalBtn"
               >
-                + Create Post
+                + {t('createPost')}
               </Button>
             </Row>
             <div className={`row ${styles.list_box}`}>
@@ -224,13 +229,13 @@ function OrgPost(): JSX.Element {
         <section id={styles.grid_wrapper}>
           <div className={styles.form_wrapper}>
             <div className={styles.flexdir}>
-              <p className={styles.titlemodal}>Post Details</p>
+              <p className={styles.titlemodal}>{t('postDetails')}</p>
               <a onClick={hideInviteModal} className={styles.cancel}>
                 <i className="fa fa-times" data-testid="closePostModalBtn"></i>
               </a>
             </div>
             <Form onSubmitCapture={CreatePost}>
-              <label htmlFor="posttitle">Title</label>
+              <label htmlFor="posttitle">{t('postTitle')}</label>
               <input
                 type="title"
                 id="postitle"
@@ -245,7 +250,7 @@ function OrgPost(): JSX.Element {
                   });
                 }}
               />
-              <label htmlFor="postinfo">Information</label>
+              <label htmlFor="postinfo">{t('information')}</label>
               <textarea
                 id="postinfo"
                 className={styles.postinfo}
@@ -261,7 +266,7 @@ function OrgPost(): JSX.Element {
                 }}
               />
               <label htmlFor="postphoto" className={styles.orgphoto}>
-                Image:
+                {t('image')}:
               </label>
               <input
                 accept="image/*"
@@ -272,7 +277,7 @@ function OrgPost(): JSX.Element {
                 multiple={false}
                 //onChange=""
               />
-              <label htmlFor="postvideo">Video:</label>
+              <label htmlFor="postvideo">{t('video')}:</label>
               <input
                 accept="image/*"
                 id="postvideo"
@@ -288,7 +293,7 @@ function OrgPost(): JSX.Element {
                 variant="success"
                 data-testid="createPostBtn"
               >
-                <i className="fa fa-plus"></i> Add Post
+                <i className="fa fa-plus"></i> {t('addPost')}
               </Button>
             </Form>
           </div>

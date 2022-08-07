@@ -3,6 +3,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import styles from './UserListCard.module.css';
@@ -19,6 +20,10 @@ interface UserListCardProps {
 function UserListCard(props: UserListCardProps): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
+
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'userListCard',
+  });
 
   const AddAdmin = async () => {
     try {
@@ -61,13 +66,13 @@ function UserListCard(props: UserListCardProps): JSX.Element {
             </div>
             <div className={styles.singledetails_data_right}>
               <p className={styles.memberfont}>
-                Joined: <span>{props.joinDate}</span>
+                {t('joined')}: <span>{props.joinDate}</span>
               </p>
               <button
                 className={styles.memberfontcreatedbtn}
                 onClick={AddAdmin}
               >
-                Add Admin
+                {t('addAdmin')}
               </button>
             </div>
           </Col>

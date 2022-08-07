@@ -5,11 +5,13 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import 'jest-location-mock';
+import { I18nextProvider } from 'react-i18next';
 
 import OrganizationEvents from './OrganizationEvents';
 import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
 import { store } from 'state/store';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
+import i18nForTest from 'utils/i18nForTest';
 
 const MOCKS = [
   {
@@ -116,7 +118,9 @@ describe('Organisation Events Page', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <OrganizationEvents />
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationEvents />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -136,7 +140,9 @@ describe('Organisation Events Page', () => {
       <MockedProvider>
         <BrowserRouter>
           <Provider store={store}>
-            <OrganizationEvents />
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationEvents />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -150,7 +156,9 @@ describe('Organisation Events Page', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <OrganizationEvents />
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationEvents />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -175,7 +183,9 @@ describe('Organisation Events Page', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <OrganizationEvents />
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationEvents />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -193,7 +203,9 @@ describe('Organisation Events Page', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <OrganizationEvents />
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationEvents />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -249,7 +261,9 @@ describe('Organisation Events Page', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <OrganizationEvents />
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationEvents />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>

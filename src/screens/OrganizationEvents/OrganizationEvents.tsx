@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import { Form } from 'antd';
 import { useMutation, useQuery } from '@apollo/client';
+import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 import styles from './OrganizationEvents.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
@@ -15,10 +17,13 @@ import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { RootState } from 'state/reducers';
 import PaginationList from 'components/PaginationList/PaginationList';
-import { toast } from 'react-toastify';
 
 function OrganizationEvents(): JSX.Element {
-  document.title = 'Talawa Events';
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'organizationEvents',
+  });
+
+  document.title = t('title');
   const [eventmodalisOpen, setEventModalIsOpen] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -155,7 +160,7 @@ function OrganizationEvents(): JSX.Element {
         <Col sm={3}>
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
-              <h6 className={styles.searchtitle}>Filter by Title</h6>
+              <h6 className={styles.searchtitle}>{t('filterByTitle')}</h6>
               <input
                 type="name"
                 id="searchTitle"
@@ -166,7 +171,7 @@ function OrganizationEvents(): JSX.Element {
                 data-testid="serachByTitle"
               />
 
-              <h6 className={styles.searchtitle}>Filter by Description</h6>
+              <h6 className={styles.searchtitle}>{t('filterByDescription')}</h6>
               <input
                 type="name"
                 id="searchDescription"
@@ -182,14 +187,14 @@ function OrganizationEvents(): JSX.Element {
         <Col sm={8}>
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
-              <p className={styles.logintitle}>Events</p>
+              <p className={styles.logintitle}>{t('events')}</p>
               <Button
                 variant="success"
                 className={styles.addbtn}
                 onClick={showInviteModal}
                 data-testid="createEventModalBtn"
               >
-                <i className="fa fa-plus"></i> Add Event
+                <i className="fa fa-plus"></i> {t('addEvent')}
               </Button>
             </Row>
             <div className={`row ${styles.list_box}`}>
@@ -265,7 +270,7 @@ function OrganizationEvents(): JSX.Element {
         <section id={styles.grid_wrapper}>
           <div className={styles.form_wrapper}>
             <div className={styles.flexdir}>
-              <p className={styles.titlemodal}>Event Details</p>
+              <p className={styles.titlemodal}>{t('eventDetails')}</p>
               <a
                 onClick={hideInviteModal}
                 className={styles.cancel}
@@ -275,7 +280,7 @@ function OrganizationEvents(): JSX.Element {
               </a>
             </div>
             <Form onSubmitCapture={CreateEvent}>
-              <label htmlFor="eventtitle">Title</label>
+              <label htmlFor="eventtitle">{t('eventTitle')}</label>
               <input
                 type="title"
                 id="eventitle"
@@ -290,7 +295,7 @@ function OrganizationEvents(): JSX.Element {
                   });
                 }}
               />
-              <label htmlFor="eventdescrip">Description</label>
+              <label htmlFor="eventdescrip">{t('description')}</label>
               <input
                 type="eventdescrip"
                 id="eventdescrip"
@@ -305,7 +310,7 @@ function OrganizationEvents(): JSX.Element {
                   });
                 }}
               />
-              <label htmlFor="eventLocation">Location</label>
+              <label htmlFor="eventLocation">{t('location')}</label>
               <input
                 type="text"
                 id="eventLocation"
@@ -322,7 +327,7 @@ function OrganizationEvents(): JSX.Element {
               />
               <div className={styles.datediv}>
                 <div>
-                  <label htmlFor="startdate">Start Date</label>
+                  <label htmlFor="startdate">{t('startDate')}</label>
                   <DatePicker
                     className={styles.datebox}
                     id="startdate"
@@ -332,7 +337,7 @@ function OrganizationEvents(): JSX.Element {
                   />
                 </div>
                 <div>
-                  <label htmlFor="enddate">End Date</label>
+                  <label htmlFor="enddate">{t('endDate')}</label>
                   <DatePicker
                     className={styles.datebox}
                     id="enddate"
@@ -345,7 +350,7 @@ function OrganizationEvents(): JSX.Element {
               {!alldaychecked && (
                 <div className={styles.datediv}>
                   <div className="mr-3">
-                    <label htmlFor="startTime">Start Time</label>
+                    <label htmlFor="startTime">{t('startTime')}</label>
                     <input
                       id="startTime"
                       placeholder="Start Time"
@@ -359,7 +364,7 @@ function OrganizationEvents(): JSX.Element {
                     />
                   </div>
                   <div>
-                    <label htmlFor="endTime">End Time</label>
+                    <label htmlFor="endTime">{t('endTime')}</label>
                     <input
                       id="endTime"
                       placeholder="End Time"
@@ -376,7 +381,7 @@ function OrganizationEvents(): JSX.Element {
               )}
               <div className={styles.checkboxdiv}>
                 <div className={styles.dispflex}>
-                  <label htmlFor="allday">All Day?</label>
+                  <label htmlFor="allday">{t('allDay')}?</label>
                   <input
                     id="allday"
                     type="checkbox"
@@ -386,7 +391,7 @@ function OrganizationEvents(): JSX.Element {
                   />
                 </div>
                 <div className={styles.dispflex}>
-                  <label htmlFor="recurring">Recurring Event:</label>
+                  <label htmlFor="recurring">{t('recurringEvent')}:</label>
                   <input
                     id="recurring"
                     type="checkbox"
@@ -398,7 +403,7 @@ function OrganizationEvents(): JSX.Element {
               </div>
               <div className={styles.checkboxdiv}>
                 <div className={styles.dispflex}>
-                  <label htmlFor="ispublic">Is Public?</label>
+                  <label htmlFor="ispublic">{t('isPublic')}?</label>
                   <input
                     id="ispublic"
                     type="checkbox"
@@ -408,7 +413,7 @@ function OrganizationEvents(): JSX.Element {
                   />
                 </div>
                 <div className={styles.dispflex}>
-                  <label htmlFor="registrable">Is Registrable?</label>
+                  <label htmlFor="registrable">{t('isRegistrable')}?</label>
                   <input
                     id="registrable"
                     type="checkbox"
@@ -424,7 +429,7 @@ function OrganizationEvents(): JSX.Element {
                 value="createevent"
                 data-testid="createEventBtn"
               >
-                Create Event
+                {t('createEvent')}
               </button>
             </Form>
           </div>

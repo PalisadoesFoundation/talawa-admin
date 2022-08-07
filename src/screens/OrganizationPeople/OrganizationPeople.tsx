@@ -14,9 +14,14 @@ import UserListCard from 'components/UserListCard/UserListCard';
 import { ADMIN_LIST, MEMBERS_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
 import { RootState } from '../../state/reducers';
 import PaginationList from 'components/PaginationList/PaginationList';
+import { useTranslation } from 'react-i18next';
 
 function OrganizationPeople(): JSX.Element {
-  document.title = 'Talawa Members';
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'organizationPeople',
+  });
+
+  document.title = t('title');
 
   const currentUrl = window.location.href.split('=')[1];
   let data, loading, error;
@@ -24,11 +29,11 @@ function OrganizationPeople(): JSX.Element {
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
 
-  const [t, setT] = useState(0);
+  const [state, setState] = useState(0);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  if (t == 0) {
+  if (state == 0) {
     const {
       data: data_2,
       loading: loading_2,
@@ -39,7 +44,7 @@ function OrganizationPeople(): JSX.Element {
     data = data_2;
     loading = loading_2;
     error = error_2;
-  } else if (t == 1) {
+  } else if (state == 1) {
     const {
       data: data_2,
       loading: loading_2,
@@ -99,7 +104,7 @@ function OrganizationPeople(): JSX.Element {
         <Col sm={3}>
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
-              <h6 className={styles.searchtitle}>Filter by Name</h6>
+              <h6 className={styles.searchtitle}>{t('filterByName')}</h6>
               <input
                 type="name"
                 id="searchname"
@@ -108,7 +113,7 @@ function OrganizationPeople(): JSX.Element {
                 required
               />
 
-              <h6 className={styles.searchtitle}>Filter by Location</h6>
+              <h6 className={styles.searchtitle}>{t('filterByLocation')}</h6>
               <input
                 type="name"
                 id="searchlocation"
@@ -116,7 +121,7 @@ function OrganizationPeople(): JSX.Element {
                 autoComplete="off"
                 required
               />
-              <h6 className={styles.searchtitle}>Filter by Event</h6>
+              <h6 className={styles.searchtitle}>{t('filterByEvent')}</h6>
               <input
                 type="name"
                 id="searchevent"
@@ -130,34 +135,34 @@ function OrganizationPeople(): JSX.Element {
                   value="memberslist"
                   name="displaylist"
                   type="radio"
-                  defaultChecked={t == 0 ? true : false}
+                  defaultChecked={state == 0 ? true : false}
                   onClick={() => {
-                    setT(0);
+                    setState(0);
                   }}
                 />
-                <label htmlFor="memberslist">Members</label>
+                <label htmlFor="memberslist">{t('members')}</label>
                 <input
                   id="adminslist"
                   value="adminslist"
                   name="displaylist"
                   type="radio"
-                  defaultChecked={t == 1 ? true : false}
+                  defaultChecked={state == 1 ? true : false}
                   onClick={() => {
-                    setT(1);
+                    setState(1);
                   }}
                 />
-                <label htmlFor="adminslist">Admins</label>
+                <label htmlFor="adminslist">{t('admins')}</label>
                 <input
                   id="userslist"
                   value="userslist"
                   name="displaylist"
                   type="radio"
-                  defaultChecked={t == 2 ? true : false}
+                  defaultChecked={state == 2 ? true : false}
                   onClick={() => {
-                    setT(2);
+                    setState(2);
                   }}
                 />
-                <label htmlFor="userslist">Users</label>
+                <label htmlFor="userslist">{t('users')}</label>
               </div>
             </div>
           </div>
@@ -166,10 +171,10 @@ function OrganizationPeople(): JSX.Element {
           <Container>
             <div className={styles.mainpageright}>
               <Row className={styles.justifysp}>
-                <p className={styles.logintitle}>Members</p>
+                <p className={styles.logintitle}>{t('members')}</p>
               </Row>
               <div className={styles.list_box}>
-                {t == 0
+                {state == 0
                   ? data
                     ? (rowsPerPage > 0
                         ? data.organizations[0].members.slice(
@@ -203,7 +208,7 @@ function OrganizationPeople(): JSX.Element {
                         }
                       )
                     : null
-                  : t == 1
+                  : state == 1
                   ? data
                     ? (rowsPerPage > 0
                         ? data.organizations[0].admins.slice(
@@ -237,7 +242,7 @@ function OrganizationPeople(): JSX.Element {
                         }
                       )
                     : null
-                  : t == 2
+                  : state == 2
                   ? data
                     ? (rowsPerPage > 0
                         ? data.users.slice(
@@ -279,7 +284,7 @@ function OrganizationPeople(): JSX.Element {
               <table>
                 <tbody>
                   <tr>
-                    {t == 0 ? (
+                    {state == 0 ? (
                       <>
                         <PaginationList
                           count={
@@ -291,7 +296,7 @@ function OrganizationPeople(): JSX.Element {
                           onRowsPerPageChange={handleChangeRowsPerPage}
                         />
                       </>
-                    ) : t == 1 ? (
+                    ) : state == 1 ? (
                       <>
                         <PaginationList
                           count={data ? data.organizations[0].admins.length : 0}
@@ -301,7 +306,7 @@ function OrganizationPeople(): JSX.Element {
                           onRowsPerPageChange={handleChangeRowsPerPage}
                         />
                       </>
-                    ) : t == 2 ? (
+                    ) : state == 2 ? (
                       <>
                         <PaginationList
                           count={data ? data.users.length : 0}
