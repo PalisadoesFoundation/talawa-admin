@@ -1,0 +1,296 @@
+{
+  "loginPage": {
+    "title": "Administrador Talawa",
+    "talawa_description": {
+      "part1": "Esto es",
+      "part2": " Portal de administración de administración de Talawa ",
+      "part3": "para la gestión perfecta de la aplicación Talawa."
+    },
+    "fromPalisadoes": "DESDE PALIZADOS",
+    "talawa_portal": "Portal Talawa",
+    "login": "Acceso",
+    "register": "Registro",
+    "firstName": "Primer nombre",
+    "lastName": "Apellido",
+    "email": "Correo electrónico",
+    "password": "Clave",
+    "atleast_8_char_long": "Al menos 8 caracteres de largo",
+    "confirmPassword": "Confirmar contraseña",
+    "forgotPassword": "Has olvidado tu contraseña ?"
+  },
+  "listNavbar": {
+    "talawa_portal": "Portal Talawa",
+    "roles": "Roles",
+    "requests": "Peticiones",
+    "logout": "Cerrar sesión"
+  },
+  "orgList": {
+    "title": "Organizaciones Talawa",
+    "you": "Tú",
+    "name": "Nombre",
+    "designation": "Designacion",
+    "email": "Correo electrónico",
+    "searchByName": "Buscar por nombre",
+    "organizationList": "Lista de organizaciones",
+    "createOrganization": "Crear organización",
+    "description": "Descripción",
+    "location": "Ubicación",
+    "tags": "Etiquetas (coma (,) separado)",
+    "isPublic": "Es público",
+    "visibleInSearch": "Visible en la búsqueda",
+    "displayImage": "Mostrar imagen"
+  },
+  "superDashListCard": {
+    "created": "Creado",
+    "admins": "Administradores",
+    "members": "Miembros",
+    "manage": "Administrar"
+  },
+  "paginationList": {
+    "rowsPerPage": "filas por página",
+    "all": "Todos"
+  },
+  "roles": {
+    "title": "Roles Talawa",
+    "searchByName": "Buscar por nombre",
+    "usersList": "Lista de usuarios",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "roles_userType": "Rol/Tipo de usuario",
+    "admin": "ADMINISTRACIÓN",
+    "superAdmin": "SUPERADMIN",
+    "user": "USUARIO"
+  },
+  "requests": {
+    "title": "Solicitudes Talawa",
+    "searchByName": "Buscar por nombre",
+    "requests": "Peticiones",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "accept": "Aceptar",
+    "reject": "Rechazar"
+  },
+  "adminNavbar": {
+    "talawa_portal": "Portal Talawa",
+    "Dashboard": "Tablero",
+    "People": "Gente",
+    "Events": "Eventos",
+    "Contributions": "Contribuciones",
+    "Posts": "Publicaciones",
+    "Block/Unblock": "Bloquear/Desbloquear",
+    "Plugins": "Complementos",
+    "Plugin Store": "Tienda de complementos",
+    "notification": "Notificación",
+    "settings": "Ajustes",
+    "language": "Idioma",
+    "logout": "Cerrar sesión",
+    "notifications": "Notificaciones",
+    "spamsThe": "envía correo no deseado",
+    "group": "grupo",
+    "noNotifications": "No Notificaciones",
+    "close": "Cerca"
+  },
+  "dashboard": {
+    "title": "Panel de Talawa",
+    "location": "Ubicación",
+    "about": "Sobre",
+    "tags": "Etiquetas",
+    "noTags": "No etiquetas",
+    "deleteThisOrganization": "Eliminar esta organización",
+    "statistics": "Estadísticas",
+    "members": "Miembros",
+    "admins": "Administradores",
+    "posts": "Publicaciones",
+    "events": "Eventos",
+    "blockedUsers": "Usuarios bloqueados",
+    "membershipRequests": "Solicitudes de membresía",
+    "deleteOrganization": "Eliminar Organización",
+    "deleteMsg": "¿Desea eliminar esta organización?",
+    "no": "No",
+    "yes": "Sí"
+  },
+  "organizationPeople": {
+    "title": "Miembros Talawa",
+    "filterByName": "Filtrar por nombre",
+    "filterByLocation": "Filtrar por Ubicación",
+    "filterByEvent": "Filtrar por Evento",
+    "members": "Miembros",
+    "admins": "Administradores",
+    "users": "Usuarios"
+  },
+  "userListCard": {
+    "joined": "Unido",
+    "addAdmin": "Agregar administrador"
+  },
+  "orgAdminListCard": {
+    "joined": "Unido",
+    "remove": "Remover",
+    "removeAdmin": "Eliminar administrador",
+    "removeAdminMsg": "¿Quieres eliminar a este administrador?",
+    "no": "No",
+    "yes": "Sí"
+  },
+  "orgPeopleListCard": {
+    "joined": "Unido",
+    "remove": "Remover",
+    "removeMember": "Eliminar miembro",
+    "removeMemberMsg": "¿Quieres eliminar a este miembro?",
+    "no": "No",
+    "yes": "Sí"
+  },
+  "organizationEvents": {
+    "title": "Eventos Talawa",
+    "filterByTitle": "Filtrar por Título",
+    "filterByDescription": "Filtrar por descripción",
+    "events": "Eventos",
+    "addEvent": "Añadir evento",
+    "eventDetails": "Detalles del evento",
+    "eventTitle": "Título",
+    "description": "Descripción",
+    "location": "Ubicación",
+    "startDate": "Fecha de inicio",
+    "endDate": "Fecha final",
+    "startTime": "Hora de inicio",
+    "endTime": "Hora de finalización",
+    "allDay": "Todo el dia",
+    "recurringEvent": "Evento recurrente",
+    "isPublic": "Es público",
+    "isRegistrable": "Es registrable",
+    "createEvent": "Crear evento"
+  },
+  "eventListCard": {
+    "location": "Ubicación",
+    "on": "En",
+    "end": "Final",
+    "deleteEvent": "Eliminar evento",
+    "deleteEventMsg": "¿Quieres eliminar este evento?",
+    "no": "No",
+    "yes": "Sí",
+    "editEvent": "Editar evento",
+    "eventTitle": "Título",
+    "description": "Descripción",
+    "startTime": "Hora de inicio",
+    "endTime": "Hora de finalización",
+    "allDay": "Todo el dia",
+    "recurringEvent": "Evento recurrente",
+    "isPublic": "Es público",
+    "isRegistrable": "Es registrable",
+    "close": "Cerca",
+    "updatePost": "Actualizar publicación"
+  },
+  "orgPost": {
+    "title": "Puestos Talawa",
+    "postsByTitle": "Publicaciones por título",
+    "postsByText": "Publicaciones por Texto",
+    "posts": "Publicaciones",
+    "createPost": "Crear publicación",
+    "postDetails": "Detalles de la publicación",
+    "postTitle": "Título",
+    "information": "Información",
+    "image": "Imagen",
+    "video": "Video",
+    "addPost": "Añadir publicación"
+  },
+  "orgPostCard": {
+    "author": "Autor",
+    "imageURL": "URL de la imagen",
+    "videoURL": "URL del vídeo",
+    "deletePost": "Eliminar mensaje",
+    "deletePostMsg": "¿Quieres eliminar esta publicación?",
+    "no": "No",
+    "yes": "Sí",
+    "editPost": "Editar post",
+    "postTitle": "Título",
+    "information": "Información",
+    "image": "Imagen",
+    "video": "Video",
+    "close": "Cerca",
+    "updatePost": "Actualizar publicación"
+  },
+  "blockUnblockUser": {
+    "title": "Usuario de bloqueo/desbloqueo de Talawa",
+    "searchByName": "Buscar por nombre",
+    "listOfUsers": "Lista de Usuarios que enviaron spam",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "block_unblock": "Bloquear/Desbloquear",
+    "unblock": "Desatascar",
+    "block": "Bloquear"
+  },
+  "forgotPassword": {
+    "title": "Talawa olvidó su contraseña",
+    "forgotPassword": "Has olvidado tu contraseña",
+    "registeredEmail": "Email registrado",
+    "getOtp": "Obtener OTP",
+    "enterOtp": "Ingresar OTP",
+    "enterNewPassword": "Ingrese nueva clave",
+    "cofirmNewPassword": "Confirmar nueva contraseña",
+    "changePassword": "Cambia la contraseña",
+    "backToHome": "De vuelta a casa"
+  },
+  "pageNotFound": {
+    "title": "404 No encontrado",
+    "talawaAdmin": "Administrador de Talawa",
+    "404": "404",
+    "notFoundMsg": "¡Ups! ¡No se encontró la página que solicitaste!",
+    "backToHome": "De vuelta a casa"
+  },
+  "orgContribution": {
+    "title": "Contribuciones Talawa",
+    "filterByName": "Filtrar por nombre",
+    "filterByTransId": "Filtrar por ID de transacción",
+    "recentStats": "Estadísticas recientes",
+    "contribution": "Contribución"
+  },
+  "contriStats": {
+    "recentContribution": "Contribución reciente",
+    "highestContribution": "Contribución más alta",
+    "totalContribution": "Contribución total"
+  },
+  "orgContriCards": {
+    "date": "Fecha",
+    "transactionId": "ID de transacción",
+    "amount": "Monto"
+  },
+  "orgSettings": {
+    "title": "Configuración Talawa",
+    "updateYourDetails": "Actualiza tus datos",
+    "updateOrganization": "Actualizar Organización",
+    "deleteOrganization": "Eliminar Organización",
+    "seeRequest": "Ver Solicitud",
+    "settings": "Ajustes",
+    "noData": "Sin datos"
+  },
+  "userUpdate": {
+    "firstName": "Primer nombre",
+    "lastName": "Apellido",
+    "email": "Correo electrónico",
+    "password": "Clave",
+    "appLanguageCode": "Código de idioma de la aplicación",
+    "userType": "Tipo de usuario",
+    "admin": "Administración",
+    "superAdmin": "Superadministrador",
+    "displayImage": "Mostrar imagen",
+    "saveChanges": "Guardar cambios",
+    "cancel": "Cancelar"
+  },
+  "orgDelete": {
+    "deleteOrg": "Eliminar organización"
+  },
+  "membershipRequest": {
+    "joined": "Unido",
+    "accept": "Aceptar",
+    "reject": "Rechazar"
+  },
+  "orgUpdate": {
+    "name": "Nombre",
+    "description": "Descripción",
+    "creator": "Creador",
+    "apiUrl": "URL API",
+    "displayImage": "Mostrar imagen",
+    "isPublic": "Es público",
+    "isRegistrable": "Es registrable",
+    "saveChanges": "Guardar cambios",
+    "cancel": "Cancelar"
+  }
+}

@@ -1,0 +1,296 @@
+{
+  "loginPage": {
+    "title": "塔拉瓦管理員",
+    "talawa_description": {
+      "part1": "這是",
+      "part2": " 塔拉瓦管理員管理門戶 ",
+      "part3": "用於 Talawa 應用程序的無縫管理"
+    },
+    "fromPalisadoes": "從柵欄",
+    "talawa_portal": "塔拉瓦門戶",
+    "login": "登錄",
+    "register": "登記",
+    "firstName": "名",
+    "lastName": "姓",
+    "email": "電子郵件",
+    "password": "密碼",
+    "atleast_8_char_long": "至少 8 個字符長",
+    "confirmPassword": "確認密碼",
+    "forgotPassword": "忘記密碼 ？"
+  },
+  "listNavbar": {
+    "talawa_portal": "塔拉瓦門戶",
+    "roles": "角色",
+    "requests": "要求",
+    "logout": "登出"
+  },
+  "orgList": {
+    "title": "塔拉瓦組織",
+    "you": "你",
+    "name": "姓名",
+    "designation": "指定",
+    "email": "電子郵件",
+    "searchByName": "按名稱搜索",
+    "organizationList": "組織名單",
+    "createOrganization": "創建組織",
+    "description": "描述",
+    "location": "地點",
+    "tags": "標籤（逗號（，）分隔）",
+    "isPublic": "是否公開",
+    "visibleInSearch": "在搜索中可見",
+    "displayImage": "顯示圖像"
+  },
+  "superDashListCard": {
+    "created": "創造",
+    "admins": "管理員",
+    "members": "成員",
+    "manage": "管理"
+  },
+  "paginationList": {
+    "rowsPerPage": "每頁行數",
+    "all": "全部"
+  },
+  "roles": {
+    "title": "塔拉瓦角色",
+    "searchByName": "按名稱搜索",
+    "usersList": "用戶列表",
+    "name": "姓名",
+    "email": "電子郵件",
+    "roles_userType": "角色/用戶類型",
+    "admin": "行政",
+    "superAdmin": "超級管理員",
+    "user": "用戶"
+  },
+  "requests": {
+    "title": "塔拉瓦請求",
+    "searchByName": "按名稱搜索",
+    "requests": "要求",
+    "name": "姓名",
+    "email": "電子郵件",
+    "accept": "接受",
+    "reject": "拒絕"
+  },
+  "adminNavbar": {
+    "talawa_portal": "塔拉瓦門戶",
+    "Dashboard": "儀表板",
+    "People": "人們",
+    "Events": "事件",
+    "Contributions": "貢獻",
+    "Posts": "帖子",
+    "Block/Unblock": "阻止/解除阻止",
+    "Plugins": "插件",
+    "Plugin Store": "插件商店",
+    "notification": "通知",
+    "settings": "設置",
+    "language": "語",
+    "logout": "登出",
+    "notifications": "通知",
+    "spamsThe": "垃圾郵件",
+    "group": "團體",
+    "noNotifications": "沒有通知",
+    "close": "關"
+  },
+  "dashboard": {
+    "title": "塔拉瓦儀表板",
+    "location": "地點",
+    "about": "關於",
+    "tags": "標籤",
+    "noTags": "無標籤",
+    "deleteThisOrganization": "刪除此組織",
+    "statistics": "統計數據",
+    "members": "成員",
+    "admins": "管理員",
+    "posts": "帖子",
+    "events": "事件",
+    "blockedUsers": "被阻止的用戶",
+    "membershipRequests": "會員申請",
+    "deleteOrganization": "刪除組織",
+    "deleteMsg": "您要刪除此組織嗎？",
+    "no": "不",
+    "yes": "是的"
+  },
+  "organizationPeople": {
+    "title": "塔拉瓦成員",
+    "filterByName": "按名稱過濾",
+    "filterByLocation": "按位置過濾",
+    "filterByEvent": "按事件過濾",
+    "members": "成員",
+    "admins": "管理員",
+    "users": "用戶"
+  },
+  "userListCard": {
+    "joined": "加入",
+    "addAdmin": "添加管理員"
+  },
+  "orgAdminListCard": {
+    "joined": "加入",
+    "remove": "消除",
+    "removeAdmin": "刪除管理員",
+    "removeAdminMsg": "您要刪除此管理員嗎？",
+    "no": "不",
+    "yes": "是的"
+  },
+  "orgPeopleListCard": {
+    "joined": "加入",
+    "remove": "消除",
+    "removeMember": "刪除成員",
+    "removeMemberMsg": "您要刪除此成員嗎？",
+    "no": "不",
+    "yes": "是的"
+  },
+  "organizationEvents": {
+    "title": "塔拉瓦事件",
+    "filterByTitle": "按標題過濾",
+    "filterByDescription": "按描述過濾",
+    "events": "事件",
+    "addEvent": "添加事件",
+    "eventDetails": "活動詳情",
+    "eventTitle": "標題",
+    "description": "描述",
+    "location": "地點",
+    "startDate": "開始日期",
+    "endDate": "結束日期",
+    "startTime": "開始時間",
+    "endTime": "時間結束",
+    "allDay": "一整天",
+    "recurringEvent": "重複事件",
+    "isPublic": "是公開的",
+    "isRegistrable": "可註冊",
+    "createEvent": "創建事件"
+  },
+  "eventListCard": {
+    "location": "地點",
+    "on": "上",
+    "end": "結尾",
+    "deleteEvent": "刪除事件",
+    "deleteEventMsg": "您要刪除此活動嗎？",
+    "no": "不",
+    "yes": "是的",
+    "editEvent": "編輯事件",
+    "eventTitle": "標題",
+    "description": "描述",
+    "startTime": "開始時間",
+    "endTime": "時間結束",
+    "allDay": "一整天",
+    "recurringEvent": "重複事件",
+    "isPublic": "是公開的",
+    "isRegistrable": "可註冊",
+    "close": "關",
+    "updatePost": "更新帖子"
+  },
+  "orgPost": {
+    "title": "塔拉瓦郵報",
+    "postsByTitle": "按標題的帖子",
+    "postsByText": "文字帖子",
+    "posts": "帖子",
+    "createPost": "創建帖子",
+    "postDetails": "發布詳細信息",
+    "postTitle": "標題",
+    "information": "信息",
+    "image": "圖片",
+    "video": "視頻",
+    "addPost": "添加帖子"
+  },
+  "orgPostCard": {
+    "author": "作者",
+    "imageURL": "圖片網址",
+    "videoURL": "視頻網址",
+    "deletePost": "刪除帖子",
+    "deletePostMsg": "你想刪除這個帖子嗎？",
+    "no": "不",
+    "yes": "是的",
+    "editPost": "編輯帖子",
+    "postTitle": "標題",
+    "information": "信息",
+    "image": "圖片",
+    "video": "視頻",
+    "close": "關",
+    "updatePost": "更新帖子"
+  },
+  "blockUnblockUser": {
+    "title": "塔拉瓦封鎖/解除封鎖用戶",
+    "searchByName": "按名稱搜索",
+    "listOfUsers": "發送垃圾郵件的用戶列表",
+    "name": "姓名",
+    "email": "電子郵件",
+    "block_unblock": "阻止/解除阻止",
+    "unblock": "解除封鎖",
+    "block": "堵塞"
+  },
+  "forgotPassword": {
+    "title": "塔拉瓦忘記密碼",
+    "forgotPassword": "忘記密碼",
+    "registeredEmail": "註冊的電子郵件",
+    "getOtp": "獲取一次性密碼",
+    "enterOtp": "輸入一次性密碼",
+    "enterNewPassword": "輸入新密碼",
+    "cofirmNewPassword": "確認新密碼",
+    "changePassword": "更改密碼",
+    "backToHome": "回到家"
+  },
+  "pageNotFound": {
+    "title": "404 未找到",
+    "talawaAdmin": "塔拉瓦管理員",
+    "404": "404",
+    "notFoundMsg": "糟糕！找不到您請求的頁面！",
+    "backToHome": "回到家"
+  },
+  "orgContribution": {
+    "title": "塔拉瓦貢獻",
+    "filterByName": "按名稱過濾",
+    "filterByTransId": "按 Trans.ID 過濾",
+    "recentStats": "最近的統計",
+    "contribution": "貢獻"
+  },
+  "contriStats": {
+    "recentContribution": "最近的貢獻",
+    "highestContribution": "最高貢獻",
+    "totalContribution": "總貢獻"
+  },
+  "orgContriCards": {
+    "date": "日期",
+    "transactionId": "交易 ID",
+    "amount": "數量"
+  },
+  "orgSettings": {
+    "title": "塔拉瓦設置",
+    "updateYourDetails": "更新您的詳細信息",
+    "updateOrganization": "更新組織",
+    "deleteOrganization": "刪除組織",
+    "seeRequest": "查看請求",
+    "settings": "設置",
+    "noData": "沒有數據"
+  },
+  "userUpdate": {
+    "firstName": "名",
+    "lastName": "姓",
+    "email": "電子郵件",
+    "password": "密碼",
+    "appLanguageCode": "應用語言代碼",
+    "userType": "用戶類型",
+    "admin": "行政",
+    "superAdmin": "超級管理員",
+    "displayImage": "顯示圖像",
+    "saveChanges": "保存更改",
+    "cancel": "取消"
+  },
+  "orgDelete": {
+    "deleteOrg": "刪除組織"
+  },
+  "membershipRequest": {
+    "joined": "加入",
+    "accept": "接受",
+    "reject": "拒絕"
+  },
+  "orgUpdate": {
+    "name": "姓名",
+    "description": "描述",
+    "creator": "創造者",
+    "apiUrl": "API 網址",
+    "displayImage": "顯示圖像",
+    "isPublic": "是公開的",
+    "isRegistrable": "可註冊",
+    "saveChanges": "保存更改",
+    "cancel": "取消"
+  }
+}

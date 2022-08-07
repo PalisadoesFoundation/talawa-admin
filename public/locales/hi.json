@@ -1,0 +1,296 @@
+{
+  "loginPage": {
+    "title": "तलवा व्यवस्थापक",
+    "talawa_description": {
+      "part1": "ये है",
+      "part2": " तलवा प्रशासन प्रबंधन पोर्टल ",
+      "part3": "तलावा एप्लिकेशन के निर्बाध प्रबंधन के लिए।"
+    },
+    "fromPalisadoes": "पलिसाडो से",
+    "talawa_portal": "तलावा पोर्टल",
+    "login": "लॉग इन करें",
+    "register": "पंजीकरण करवाना",
+    "firstName": "पहला नाम",
+    "lastName": "उपनाम",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "atleast_8_char_long": "कम से कम 8 कैरेक्टर लंबा",
+    "confirmPassword": "पासवर्ड की पुष्टि कीजिये",
+    "forgotPassword": "पासवर्ड भूल गए ?"
+  },
+  "listNavbar": {
+    "talawa_portal": "तलावा पोर्टल",
+    "roles": "भूमिकाएँ",
+    "requests": "अनुरोध",
+    "logout": "लॉग आउट"
+  },
+  "orgList": {
+    "title": "तलवा संगठन",
+    "you": "आप",
+    "name": "नाम",
+    "designation": "पद",
+    "email": "ईमेल",
+    "searchByName": "नाम से खोजें",
+    "organizationList": "संगठनों की सूची",
+    "createOrganization": "संगठन बनाएं",
+    "description": "विवरण",
+    "location": "स्थान",
+    "tags": "टैग (अल्पविराम (,) अलग)",
+    "isPublic": "सार्वजनिक है",
+    "visibleInSearch": "खोज में दृश्यमान",
+    "displayImage": "प्रदर्शन छवि"
+  },
+  "superDashListCard": {
+    "created": "बनाया था",
+    "admins": "व्यवस्थापक",
+    "members": "सदस्य",
+    "manage": "प्रबंधित करना"
+  },
+  "paginationList": {
+    "rowsPerPage": "प्रति पृष्ठ पंक्तियाँ",
+    "all": "सभी"
+  },
+  "roles": {
+    "title": "तलावा भूमिकाएं",
+    "searchByName": "नाम से खोजें",
+    "usersList": "उपयोगकर्ता सूची",
+    "name": "नाम",
+    "email": "ईमेल",
+    "roles_userType": "भूमिका/उपयोगकर्ता-प्रकार",
+    "admin": "व्यवस्थापक",
+    "superAdmin": "सुपरएडमिन",
+    "user": "उपयोगकर्ता"
+  },
+  "requests": {
+    "title": "तलवा अनुरोध",
+    "searchByName": "नाम से खोजें",
+    "requests": "अनुरोध",
+    "name": "नाम",
+    "email": "ईमेल",
+    "accept": "स्वीकार करना",
+    "reject": "अस्वीकार"
+  },
+  "adminNavbar": {
+    "talawa_portal": "तलावा पोर्टल",
+    "Dashboard": "डैशबोर्ड",
+    "People": "लोग",
+    "Events": "आयोजन",
+    "Contributions": "योगदान",
+    "Posts": "पोस्ट",
+    "Block/Unblock": "ब्लॉक/अनब्लॉक करें",
+    "Plugins": "प्लगइन्स",
+    "Plugin Store": "प्लगइन स्टोर",
+    "notification": "अधिसूचना",
+    "settings": "समायोजन",
+    "language": "भाषा",
+    "logout": "लॉग आउट",
+    "notifications": "सूचनाएं",
+    "spamsThe": "स्पैम द",
+    "group": "समूह",
+    "noNotifications": "कोई सूचनाएं नहीं",
+    "close": "बंद करना"
+  },
+  "dashboard": {
+    "title": "तलावा डैशबोर्ड",
+    "location": "स्थान",
+    "about": "के बारे में",
+    "tags": "टैग",
+    "noTags": "कोई टैग नहीं",
+    "deleteThisOrganization": "इस संगठन को हटाएं",
+    "statistics": "सांख्यिकी",
+    "members": "सदस्य",
+    "admins": "व्यवस्थापक",
+    "posts": "पोस्ट",
+    "events": "आयोजन",
+    "blockedUsers": "रोके गए उपयोगकर्ता",
+    "membershipRequests": "सदस्यता अनुरोध",
+    "deleteOrganization": "संगठन हटाएं",
+    "deleteMsg": "क्या आप इस संगठन को हटाना चाहते हैं?",
+    "no": "नहीं",
+    "yes": "हाँ"
+  },
+  "organizationPeople": {
+    "title": "तलावा सदस्य",
+    "filterByName": "नाम से फ़िल्टर करें",
+    "filterByLocation": "स्थान के अनुसार फ़िल्टर करें",
+    "filterByEvent": "इवेंट द्वारा फ़िल्टर करें",
+    "members": "सदस्य",
+    "admins": "व्यवस्थापक",
+    "users": "उपयोगकर्ता"
+  },
+  "userListCard": {
+    "joined": "में शामिल हो गए",
+    "addAdmin": "व्यवस्थापक जोड़ें"
+  },
+  "orgAdminListCard": {
+    "joined": "में शामिल हो गए",
+    "remove": "हटाना",
+    "removeAdmin": "व्यवस्थापक हटाएं",
+    "removeAdminMsg": "क्या आप इस व्यवस्थापक को हटाना चाहते हैं?",
+    "no": "नहीं",
+    "yes": "हाँ"
+  },
+  "orgPeopleListCard": {
+    "joined": "में शामिल हो गए",
+    "remove": "हटाना",
+    "removeMember": "सदस्य निकालें",
+    "removeMemberMsg": "क्या आप इस सदस्य को हटाना चाहते हैं?",
+    "no": "नहीं",
+    "yes": "हाँ"
+  },
+  "organizationEvents": {
+    "title": "तलावा इवेंट्स",
+    "filterByTitle": "शीर्षक द्वारा फ़िल्टर करें",
+    "filterByDescription": "विवरण द्वारा फ़िल्टर करें",
+    "events": "आयोजन",
+    "addEvent": "कार्यक्रम जोड़ें",
+    "eventDetails": "घटना की जानकारी",
+    "eventTitle": "शीर्षक",
+    "description": "विवरण",
+    "location": "स्थान",
+    "startDate": "आरंभ करने की तिथि",
+    "endDate": "अंतिम तिथि",
+    "startTime": "समय शुरू",
+    "endTime": "अंत समय",
+    "allDay": "पूरे दिन",
+    "recurringEvent": "पुनरावर्ती ईवेंट",
+    "isPublic": "सार्वजनिक है",
+    "isRegistrable": "पंजीकरण योग्य है",
+    "createEvent": "कार्यक्रम बनाएँ"
+  },
+  "eventListCard": {
+    "location": "स्थान",
+    "on": "पर",
+    "end": "समाप्त",
+    "deleteEvent": "घटना हटाएं",
+    "deleteEventMsg": "क्या आप इस इवेंट को हटाना चाहते हैं?",
+    "no": "नहीं",
+    "yes": "हाँ",
+    "editEvent": "घटना संपादित करें",
+    "eventTitle": "शीर्षक",
+    "description": "विवरण",
+    "startTime": "समय शुरू",
+    "endTime": "अंत समय",
+    "allDay": "पूरे दिन",
+    "recurringEvent": "पुनरावर्ती ईवेंट",
+    "isPublic": "सार्वजनिक है",
+    "isRegistrable": "पंजीकरण योग्य है",
+    "close": "बंद करना",
+    "updatePost": "अपडेट पोस्ट"
+  },
+  "orgPost": {
+    "title": "तलावा पोस्ट",
+    "postsByTitle": "शीर्षक द्वारा पोस्ट",
+    "postsByText": "पाठ द्वारा पोस्ट",
+    "posts": "पोस्ट",
+    "createPost": "पोस्ट बनाएं",
+    "postDetails": "पोस्ट विवरण",
+    "postTitle": "शीर्षक",
+    "information": "जानकारी",
+    "image": "छवि",
+    "video": "वीडियो",
+    "addPost": "पोस्ट जोड़ें"
+  },
+  "orgPostCard": {
+    "author": "लेखक",
+    "imageURL": "छवि यूआरएल",
+    "videoURL": "वीडियो यूआरएल",
+    "deletePost": "पोस्ट को हटाएं",
+    "deletePostMsg": "क्या आप इस पोस्ट को हटाना चाहते हैं?",
+    "no": "नहीं",
+    "yes": "हाँ",
+    "editPost": "संपादित पोस्ट",
+    "postTitle": "शीर्षक",
+    "information": "जानकारी",
+    "image": "छवि",
+    "video": "वीडियो",
+    "close": "बंद करना",
+    "updatePost": "अपडेट पोस्ट"
+  },
+  "blockUnblockUser": {
+    "title": "तलावा ब्लॉक/अनब्लॉक यूजर",
+    "searchByName": "नाम से खोजें",
+    "listOfUsers": "स्पैम करने वाले उपयोगकर्ताओं की सूची",
+    "name": "नाम",
+    "email": "ईमेल",
+    "block_unblock": "ब्लॉक/अनब्लॉक करें",
+    "unblock": "अनब्लॉक करें",
+    "block": "अवरोध पैदा करना"
+  },
+  "forgotPassword": {
+    "title": "तलवा पासवर्ड भूल गए",
+    "forgotPassword": "पासवर्ड भूल गए",
+    "registeredEmail": "पंजीकृत ईमेल",
+    "getOtp": "ओटीपी प्राप्त करें",
+    "enterOtp": "ओटीपी दर्ज करें",
+    "enterNewPassword": "नया पासवर्ड दर्ज करें",
+    "cofirmNewPassword": "नए पासवर्ड की पुष्टि करें",
+    "changePassword": "पासवर्ड बदलें",
+    "backToHome": "घर वापिस जा रहा हूँ"
+  },
+  "pageNotFound": {
+    "title": "404 नहीं मिला",
+    "talawaAdmin": "तलावा एडमिन",
+    "404": "404",
+    "notFoundMsg": "ओह! आपके द्वारा अनुरोधित पृष्ठ नहीं मिला!",
+    "backToHome": "घर वापिस जा रहा हूँ"
+  },
+  "orgContribution": {
+    "title": "तलवा योगदान",
+    "filterByName": "नाम से फ़िल्टर करें",
+    "filterByTransId": "ट्रांस आईडी द्वारा फ़िल्टर करें",
+    "recentStats": "हाल के आँकड़े",
+    "contribution": "योगदान"
+  },
+  "contriStats": {
+    "recentContribution": "हाल ही में योगदान",
+    "highestContribution": "उच्चतम योगदान",
+    "totalContribution": "कुल योगदान"
+  },
+  "orgContriCards": {
+    "date": "दिनांक",
+    "transactionId": "लेनदेन आईडी",
+    "amount": "राशि"
+  },
+  "orgSettings": {
+    "title": "तलावा सेटिंग",
+    "updateYourDetails": "अपना विवरण अपडेट करें",
+    "updateOrganization": "अद्यतन संगठन",
+    "deleteOrganization": "संगठन हटाएं",
+    "seeRequest": "अनुरोध देखें",
+    "settings": "समायोजन",
+    "noData": "कोई डेटा नहीं"
+  },
+  "userUpdate": {
+    "firstName": "पहला नाम",
+    "lastName": "उपनाम",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "appLanguageCode": "ऐप भाषा कोड",
+    "userType": "उपयोगकर्ता का प्रकार",
+    "admin": "व्यवस्थापक",
+    "superAdmin": "सुपरएडमिन",
+    "displayImage": "प्रदर्शन छवि",
+    "saveChanges": "परिवर्तनों को सुरक्षित करें",
+    "cancel": "रद्द करना"
+  },
+  "orgDelete": {
+    "deleteOrg": "संगठन हटाएं"
+  },
+  "membershipRequest": {
+    "joined": "में शामिल हो गए",
+    "accept": "स्वीकार करना",
+    "reject": "अस्वीकार"
+  },
+  "orgUpdate": {
+    "name": "नाम",
+    "description": "विवरण",
+    "creator": "बनाने वाला",
+    "apiUrl": "एपी यूआरएल",
+    "displayImage": "प्रदर्शन छवि",
+    "isPublic": "सार्वजनिक है",
+    "isRegistrable": "पंजीकरण योग्य है",
+    "saveChanges": "परिवर्तनों को सुरक्षित करें",
+    "cancel": "रद्द करना"
+  }
+}

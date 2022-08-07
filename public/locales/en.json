@@ -1,0 +1,296 @@
+{
+  "loginPage": {
+    "title": "Talawa Admin",
+    "talawa_description": {
+      "part1": "This is",
+      "part2": " Talawa Admin Management Portal ",
+      "part3": "for the seamless management of Talawa Application."
+    },
+    "fromPalisadoes": "FROM PALISADOES",
+    "talawa_portal": "Talawa Portal",
+    "login": "Login",
+    "register": "Register",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "password": "Password",
+    "atleast_8_char_long": "Atleast 8 Character long",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot Password ?"
+  },
+  "listNavbar": {
+    "talawa_portal": "Talawa Portal",
+    "roles": "Roles",
+    "requests": "Requests",
+    "logout": "Logout"
+  },
+  "orgList": {
+    "title": "Talawa Organizations",
+    "you": "You",
+    "name": "Name",
+    "designation": "Designation",
+    "email": "Email",
+    "searchByName": "Search By Name",
+    "organizationList": "Organizations List",
+    "createOrganization": "Create Organization",
+    "description": "Description",
+    "location": "Location",
+    "tags": "Tags (Comma(,) Seperated)",
+    "isPublic": "Is Public",
+    "visibleInSearch": "Visible In Search",
+    "displayImage": "Display Image"
+  },
+  "superDashListCard": {
+    "created": "Created",
+    "admins": "Admins",
+    "members": "Members",
+    "manage": "Manage"
+  },
+  "paginationList": {
+    "rowsPerPage": "rows per page",
+    "all": "All"
+  },
+  "roles": {
+    "title": "Talawa Roles",
+    "searchByName": "Search By Name",
+    "usersList": "Users List",
+    "name": "Name",
+    "email": "Email",
+    "roles_userType": "Role/User-Type",
+    "admin": "ADMIN",
+    "superAdmin": "SUPERADMIN",
+    "user": "USER"
+  },
+  "requests": {
+    "title": "Talawa Requests",
+    "searchByName": "Search By Name",
+    "requests": "Requests",
+    "name": "Name",
+    "email": "Email",
+    "accept": "Accept",
+    "reject": "Reject"
+  },
+  "adminNavbar": {
+    "talawa_portal": "Talawa Portal",
+    "Dashboard": "Dashboard",
+    "People": "People",
+    "Events": "Events",
+    "Contributions": "Contributions",
+    "Posts": "Posts",
+    "Block/Unblock": "Block/Unblock",
+    "Plugins": "Plugins",
+    "Plugin Store": "Plugin Store",
+    "notification": "Notification",
+    "settings": "Settings",
+    "language": "Language",
+    "logout": "Logout",
+    "notifications": "Notifications",
+    "spamsThe": "spams the",
+    "group": "group",
+    "noNotifications": "No Notifications",
+    "close": "Close"
+  },
+  "dashboard": {
+    "title": "Talawa Dashboard",
+    "location": "Location",
+    "about": "About",
+    "tags": "Tags",
+    "noTags": "No Tags",
+    "deleteThisOrganization": "Delete This Organization",
+    "statistics": "Statistics",
+    "members": "Members",
+    "admins": "Admins",
+    "posts": "Posts",
+    "events": "Events",
+    "blockedUsers": "Blocked Users",
+    "membershipRequests": "Membership Requests",
+    "deleteOrganization": "Delete Organization",
+    "deleteMsg": "Do you want to delete this organization?",
+    "no": "No",
+    "yes": "Yes"
+  },
+  "organizationPeople": {
+    "title": "Talawa Members",
+    "filterByName": "Filter by Name",
+    "filterByLocation": "Filter by Location",
+    "filterByEvent": "Filter by Event",
+    "members": "Members",
+    "admins": "Admins",
+    "users": "Users"
+  },
+  "userListCard": {
+    "joined": "Joined",
+    "addAdmin": "Add Admin"
+  },
+  "orgAdminListCard": {
+    "joined": "Joined",
+    "remove": "Remove",
+    "removeAdmin": "Remove Admin",
+    "removeAdminMsg": "Do you want to remove this admin?",
+    "no": "No",
+    "yes": "Yes"
+  },
+  "orgPeopleListCard": {
+    "joined": "Joined",
+    "remove": "Remove",
+    "removeMember": "Remove Member",
+    "removeMemberMsg": "Do you want to remove this member?",
+    "no": "No",
+    "yes": "Yes"
+  },
+  "organizationEvents": {
+    "title": "Talawa Events",
+    "filterByTitle": "Filter by Title",
+    "filterByDescription": "Filter by Description",
+    "events": "Events",
+    "addEvent": "Add Event",
+    "eventDetails": "Event Details",
+    "eventTitle": "Title",
+    "description": "Description",
+    "location": "Location",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "startTime": "Start Time",
+    "endTime": "End Time",
+    "allDay": "All Day",
+    "recurringEvent": "Recurring Event",
+    "isPublic": "Is Public",
+    "isRegistrable": "Is Registrable",
+    "createEvent": "Create Event"
+  },
+  "eventListCard": {
+    "location": "Location",
+    "on": "On",
+    "end": "End",
+    "deleteEvent": "Delete Event",
+    "deleteEventMsg": "Do you want to remove this event?",
+    "no": "No",
+    "yes": "Yes",
+    "editEvent": "Edit Event",
+    "eventTitle": "Title",
+    "description": "Description",
+    "startTime": "Start Time",
+    "endTime": "End Time",
+    "allDay": "All Day",
+    "recurringEvent": "Recurring Event",
+    "isPublic": "Is Public",
+    "isRegistrable": "Is Registrable",
+    "close": "Close",
+    "updatePost": "Update Post"
+  },
+  "orgPost": {
+    "title": "Talawa Posts",
+    "postsByTitle": "Posts by Title",
+    "postsByText": "Posts by Text",
+    "posts": "Posts",
+    "createPost": "Create Post",
+    "postDetails": "Post Details",
+    "postTitle": "Title",
+    "information": "Information",
+    "image": "Image",
+    "video": "Video",
+    "addPost": "Add Post"
+  },
+  "orgPostCard": {
+    "author": "Author",
+    "imageURL": "Image URL",
+    "videoURL": "Video URL",
+    "deletePost": "Delete Post",
+    "deletePostMsg": "Do you want to remove this post?",
+    "no": "No",
+    "yes": "Yes",
+    "editPost": "Edit Post",
+    "postTitle": "Title",
+    "information": "Information",
+    "image": "Image",
+    "video": "Video",
+    "close": "Close",
+    "updatePost": "Update Post"
+  },
+  "blockUnblockUser": {
+    "title": "Talawa Block/Unblock User",
+    "searchByName": "Search By Name",
+    "listOfUsers": "List of Users who spammed",
+    "name": "Name",
+    "email": "Email",
+    "block_unblock": "Block/Unblock",
+    "unblock": "UnBlock",
+    "block": "Block"
+  },
+  "forgotPassword": {
+    "title": "Talawa Forgot Password",
+    "forgotPassword": "Forgot Password",
+    "registeredEmail": "Registered Email",
+    "getOtp": "Get OTP",
+    "enterOtp": "Enter OTP",
+    "enterNewPassword": "Enter New Password",
+    "cofirmNewPassword": "Confirm New Password",
+    "changePassword": "Change Password",
+    "backToHome": "Back to Home"
+  },
+  "pageNotFound": {
+    "title": "404 Not Found",
+    "talawaAdmin": "Talawa Admin",
+    "404": "404",
+    "notFoundMsg": "Oops! The Page you requested was not found!",
+    "backToHome": "Back to Home"
+  },
+  "orgContribution": {
+    "title": "Talawa Contributions",
+    "filterByName": "Filter by Name",
+    "filterByTransId": "Filter by Trans. ID",
+    "recentStats": "Recent Stats",
+    "contribution": "Contribution"
+  },
+  "contriStats": {
+    "recentContribution": "Recent Contribution",
+    "highestContribution": "Highest Contribution",
+    "totalContribution": "Total Contribution"
+  },
+  "orgContriCards": {
+    "date": "Date",
+    "transactionId": "Transaction ID",
+    "amount": "Amount"
+  },
+  "orgSettings": {
+    "title": "Talawa Setting",
+    "updateYourDetails": "Update Your Details",
+    "updateOrganization": "Update Organization",
+    "deleteOrganization": "Delete Organization",
+    "seeRequest": "See Request",
+    "settings": "Settings",
+    "noData": "No data"
+  },
+  "userUpdate": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "password": "Password",
+    "appLanguageCode": "App Language Code",
+    "userType": "User Type",
+    "admin": "Admin",
+    "superAdmin": "Superadmin",
+    "displayImage": "Display Image",
+    "saveChanges": "Save Changes",
+    "cancel": "Cancel"
+  },
+  "orgDelete": {
+    "deleteOrg": "Delete Org"
+  },
+  "membershipRequest": {
+    "joined": "Joined",
+    "accept": "Accept",
+    "reject": "Reject"
+  },
+  "orgUpdate": {
+    "name": "Name",
+    "description": "Description",
+    "creator": "Creator",
+    "apiUrl": "Api Url",
+    "displayImage": "Display Image",
+    "isPublic": "Is Public",
+    "isRegistrable": "Is Registrable",
+    "saveChanges": "Save Changes",
+    "cancel": "Cancel"
+  }
+}
