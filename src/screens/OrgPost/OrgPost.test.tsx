@@ -33,12 +33,6 @@ const MOCKS = [
               lastName: 'Doe',
               email: 'johndoe@gmail.com',
             },
-            creator: {
-              _id: '583',
-              firstName: 'John',
-              lastName: 'Doe',
-              email: 'johndoe@gmail.com',
-            },
           },
         ],
       },
@@ -94,11 +88,6 @@ describe('Organisation Post Page', () => {
     postinfo: 'This is a dummy post',
   };
 
-  const formData = {
-    posttitle: 'dummy post',
-    postinfo: 'This is a dummy post',
-  };
-
   test('correct mock data should be queried', async () => {
     const dataQuery1 = MOCKS[0]?.result?.data?.postsByOrganization;
 
@@ -109,12 +98,6 @@ describe('Organisation Post Page', () => {
         text: 'Capture Jinchuriki',
         imageUrl: '',
         videoUrl: '',
-        creator: {
-          _id: '583',
-          firstName: 'John',
-          lastName: 'Doe',
-          email: 'johndoe@gmail.com',
-        },
         creator: {
           _id: '583',
           firstName: 'John',

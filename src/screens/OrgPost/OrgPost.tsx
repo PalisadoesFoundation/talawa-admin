@@ -51,11 +51,9 @@ function OrgPost(): JSX.Element {
     loading: loading2,
     error: error_post,
     refetch,
-    refetch,
   } = useQuery(ORGANIZATION_POST_LIST, {
     variables: { id: currentUrl },
   });
-  const [create, { loading }] = useMutation(CREATE_POST_MUTATION);
   const [create, { loading }] = useMutation(CREATE_POST_MUTATION);
 
   const CreatePost = async (e: ChangeEvent<HTMLFormElement>) => {
@@ -130,41 +128,6 @@ function OrgPost(): JSX.Element {
     refetch(filterData);
   };
 
-  /* istanbul ignore next */
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
-    setPage(newPage);
-  };
-  /* istanbul ignore next */
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const handleSearchByTitle = (e: any) => {
-    const { value } = e.target;
-    setSearchState({ ...searchState, byTitle: value });
-    const filterData = {
-      id: currentUrl,
-      filterByTitle: searchState.byTitle,
-    };
-    refetch(filterData);
-  };
-
-  const handleSearchByText = (e: any) => {
-    const { value } = e.target;
-    setSearchState({ ...searchState, byText: value });
-    const filterData = {
-      id: currentUrl,
-      filterByText: searchState.byText,
-    };
-    refetch(filterData);
-  };
-
   return (
     <>
       <AdminNavbar targets={targets} url_1={configUrl} />
@@ -200,7 +163,6 @@ function OrgPost(): JSX.Element {
                 className={styles.addbtn}
                 onClick={showInviteModal}
                 data-testid="createPostModalBtn"
-                data-testid="createPostModalBtn"
               >
                 + {t('createPost')}
               </Button>
@@ -226,7 +188,6 @@ function OrgPost(): JSX.Element {
                       imageUrl: string;
                       videoUrl: string;
                       organizationId: string;
-                      creator: { firstName: string; lastName: string };
                       creator: { firstName: string; lastName: string };
                     }) => {
                       return (
@@ -290,11 +251,7 @@ function OrgPost(): JSX.Element {
             <div className={styles.flexdir}>
               <p className={styles.titlemodal}>{t('postDetails')}</p>
               <a onClick={hideInviteModal} className={styles.cancel}>
-                <i
-                  className="fa fa-times"
-                  data-testid="closePostModalBtn"
-                  data-testid="closePostModalBtn"
-                ></i>
+                <i className="fa fa-times" data-testid="closePostModalBtn"></i>
               </a>
             </div>
             <Form onSubmitCapture={CreatePost}>
@@ -351,7 +308,6 @@ function OrgPost(): JSX.Element {
                 //onChange=""
               />
               <Button
-                type="submit"
                 type="submit"
                 className={styles.greenregbtn}
                 variant="success"

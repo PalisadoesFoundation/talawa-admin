@@ -4,7 +4,6 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
-import { useSelector } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import { Form } from 'antd';
 import { useMutation, useQuery } from '@apollo/client';
@@ -49,9 +48,6 @@ function OrganizationEvents(): JSX.Element {
     location: '',
     startTime: '',
     endTime: '',
-    location: '',
-    startTime: '',
-    endTime: '',
   });
   const currentUrl = window.location.href.split('=')[1];
 
@@ -65,22 +61,9 @@ function OrganizationEvents(): JSX.Element {
     setEventModalIsOpen(false);
   };
 
-  const appRoutes = useSelector((state: RootState) => state.appRoutes);
-  const { targets, configUrl } = appRoutes;
-
-  const showInviteModal = () => {
-    setEventModalIsOpen(true);
-  };
-  const hideInviteModal = () => {
-    setEventModalIsOpen(false);
-  };
-
-  const { data, loading, error, refetch, refetch } = useQuery(
-    ORGANIZATION_EVENT_LIST,
-    {
-      variables: { id: currentUrl },
-    }
-  );
+  const { data, loading, error, refetch } = useQuery(ORGANIZATION_EVENT_LIST, {
+    variables: { id: currentUrl },
+  });
 
   const [create, { loading: loading_2 }] = useMutation(CREATE_EVENT_MUTATION);
 
@@ -170,40 +153,6 @@ function OrganizationEvents(): JSX.Element {
     refetch(filterData);
   };
 
-  /* istanbul ignore next */
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
-    setPage(newPage);
-  };
-  /* istanbul ignore next */
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const handleSearchByTitle = (e: any) => {
-    const { value } = e.target;
-    setSearchState({ ...searchState, byTitle: value });
-    const filterData = {
-      id: currentUrl,
-      filterByTitle: searchState.byTitle,
-    };
-    refetch(filterData);
-  };
-  const handleSearchByDescription = (e: any) => {
-    const { value } = e.target;
-    setSearchState({ ...searchState, byDescription: value });
-    const filterData = {
-      id: currentUrl,
-      filterByDescription: searchState.byDescription,
-    };
-    refetch(filterData);
-  };
-
   return (
     <>
       <AdminNavbar targets={targets} url_1={configUrl} />
@@ -220,8 +169,6 @@ function OrganizationEvents(): JSX.Element {
                 required
                 onChange={handleSearchByTitle}
                 data-testid="serachByTitle"
-                onChange={handleSearchByTitle}
-                data-testid="serachByTitle"
               />
 
               <h6 className={styles.searchtitle}>{t('filterByDescription')}</h6>
@@ -231,8 +178,6 @@ function OrganizationEvents(): JSX.Element {
                 placeholder="Enter filter"
                 autoComplete="off"
                 required
-                onChange={handleSearchByDescription}
-                data-testid="serachByDescription"
                 onChange={handleSearchByDescription}
                 data-testid="serachByDescription"
               />
@@ -442,7 +387,6 @@ function OrganizationEvents(): JSX.Element {
                     type="checkbox"
                     defaultChecked={alldaychecked}
                     data-testid="alldayCheck"
-                    data-testid="alldayCheck"
                     onChange={() => setAllDayChecked(!alldaychecked)}
                   />
                 </div>
@@ -451,7 +395,6 @@ function OrganizationEvents(): JSX.Element {
                   <input
                     id="recurring"
                     type="checkbox"
-                    data-testid="recurringCheck"
                     data-testid="recurringCheck"
                     defaultChecked={recurringchecked}
                     onChange={() => setRecurringChecked(!recurringchecked)}
@@ -465,7 +408,6 @@ function OrganizationEvents(): JSX.Element {
                     id="ispublic"
                     type="checkbox"
                     data-testid="ispublicCheck"
-                    data-testid="ispublicCheck"
                     defaultChecked={publicchecked}
                     onChange={() => setPublicChecked(!publicchecked)}
                   />
@@ -475,7 +417,6 @@ function OrganizationEvents(): JSX.Element {
                   <input
                     id="registrable"
                     type="checkbox"
-                    data-testid="registrableCheck"
                     data-testid="registrableCheck"
                     defaultChecked={registrablechecked}
                     onChange={() => setRegistrableChecked(!registrablechecked)}
