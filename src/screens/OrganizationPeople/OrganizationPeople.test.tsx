@@ -75,6 +75,18 @@ const MOCKS = [
             userType: 'SUPERADMIN',
             adminApproved: true,
             createdAt: '24/06/2022',
+            spamInOrganizations: [
+              {
+                _id: '123',
+                name: 'Sam',
+              },
+            ],
+            organizationsBlockedBy: [
+              {
+                _id: '256',
+                name: 'ABC',
+              },
+            ],
           },
         ],
       },
@@ -144,6 +156,18 @@ describe('Organisation People Page', () => {
         userType: 'SUPERADMIN',
         adminApproved: true,
         createdAt: '24/06/2022',
+        spamInOrganizations: [
+          {
+            _id: '123',
+            name: 'Sam',
+          },
+        ],
+        organizationsBlockedBy: [
+          {
+            _id: '256',
+            name: 'ABC',
+          },
+        ],
       },
     ]);
   });

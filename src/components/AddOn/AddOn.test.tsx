@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+import { MockedProvider } from '@apollo/react-testing';
 
 import { store } from 'state/store';
 import AddOn from './AddOn';
@@ -13,11 +14,13 @@ describe('Testing Addon component', () => {
 
   test('should render props and text elements test for the page component', () => {
     const { getByTestId, getByText } = render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <AddOn {...props} />
-        </Provider>
-      </BrowserRouter>
+      <MockedProvider>
+        <BrowserRouter>
+          <Provider store={store}>
+            <AddOn {...props} />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
     );
 
     expect(getByTestId('pluginContainer')).toBeInTheDocument();

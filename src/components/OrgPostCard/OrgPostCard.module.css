@@ -20,8 +20,12 @@
   display: flex;
   justify-content: space-between;
 }
+.iconContainer {
+  display: flex;
+}
 .icon {
   transform: scale(0.75);
+  cursor: pointer;
 }
 
 .cards {

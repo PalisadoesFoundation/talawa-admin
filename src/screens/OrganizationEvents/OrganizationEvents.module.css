@@ -159,6 +159,8 @@
   border-color: #e8e5e5;
   border-width: 5px;
   border-radius: 10px;
+  max-height: 86vh;
+  overflow: auto;
 }
 
 .form_wrapper form {
@@ -322,4 +324,15 @@ form > input {
 }
 .checkboxdiv > div {
   width: 50%;
+}
+.list_box {
+  height: 70vh;
+  overflow-y: auto;
+  width: auto;
+}
+@media only screen and (max-width: 600px) {
+  .form_wrapper {
+    width: 90%;
+    top: 45%;
+  }
 }

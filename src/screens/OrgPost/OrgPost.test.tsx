@@ -1,11 +1,15 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render } from '@testing-library/react';
-import OrgPost from './OrgPost';
-import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
-import { Provider } from 'react-redux';
-import { store } from 'state/store';
 import { BrowserRouter } from 'react-router-dom';
+import { act, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { Provider } from 'react-redux';
+import 'jest-location-mock';
+
+import OrgPost from './OrgPost';
+import { store } from 'state/store';
+import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
+import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 
 const MOCKS = [
   {
@@ -21,8 +25,31 @@ const MOCKS = [
             text: 'Capture Jinchuriki',
             imageUrl: '',
             videoUrl: '',
+            creator: {
+              _id: '583',
+              firstName: 'John',
+              lastName: 'Doe',
+              email: 'johndoe@gmail.com',
+            },
           },
         ],
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_POST_MUTATION,
+      variables: {
+        title: 'Dummy Post',
+        text: 'This is dummy text',
+        organizationId: '123',
+      },
+      result: {
+        data: {
+          createPost: {
+            _id: '453',
+          },
+        },
       },
     },
   },
@@ -37,10 +64,14 @@ async function wait(ms = 0) {
 }
 
 describe('Organisation Post Page', () => {
+  const formData = {
+    posttitle: 'dummy post',
+    postinfo: 'This is a dummy post',
+  };
+
   test('correct mock data should be queried', async () => {
     const dataQuery1 = MOCKS[0]?.result?.data?.postsByOrganization;
 
-    console.log(`Data is ${dataQuery1}`);
     expect(dataQuery1).toEqual([
       {
         _id: 1,
@@ -48,9 +79,16 @@ describe('Organisation Post Page', () => {
         text: 'Capture Jinchuriki',
         imageUrl: '',
         videoUrl: '',
+        creator: {
+          _id: '583',
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'johndoe@gmail.com',
+        },
       },
     ]);
   });
+
   test('should render props and text elements test for the screen', async () => {
     const { container } = render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
@@ -63,11 +101,83 @@ describe('Organisation Post Page', () => {
     );
 
     expect(container.textContent).not.toBe('Loading data...');
+
     await wait();
-    console.log(container);
-    expect(container.textContent).toMatch('Posts by Author');
+
     expect(container.textContent).toMatch('Posts by Title');
+    expect(container.textContent).toMatch('Posts by Text');
     expect(container.textContent).toMatch('Posts');
     expect(container.textContent).toMatch('+ Create Post');
+  });
+
+  test('Testing create post functionality', async () => {
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <OrgPost />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+    userEvent.type(
+      screen.getByPlaceholderText('Post Title'),
+      formData.posttitle
+    );
+    userEvent.type(
+      screen.getByPlaceholderText('What do you want to talk about?'),
+      formData.postinfo
+    );
+
+    userEvent.click(screen.getByTestId('createPostBtn'));
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('closePostModalBtn'));
+  });
+
+  test('Testing search functionality', async () => {
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <OrgPost />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.type(
+      screen.getByPlaceholderText('Search by Title'),
+      formData.posttitle
+    );
+    userEvent.type(
+      screen.getByPlaceholderText('Search by Text'),
+      formData.postinfo
+    );
+  });
+
+  test('Testing when post data is not present', async () => {
+    window.location.assign('/orglist');
+
+    render(
+      <MockedProvider addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <OrgPost />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+    expect(window.location).toBeAt('/orglist');
   });
 });

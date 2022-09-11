@@ -23,6 +23,7 @@ import * as installedPlugins from 'components/plugins/index';
 import ForgotPassword from 'screens/ForgotPassword/ForgotPassword';
 import Roles from 'screens/Roles/Roles';
 import Requests from 'screens/Requests/Requests';
+import BlockUser from 'screens/BlockUser/BlockUser';
 
 function App(): JSX.Element {
   const dispatch = useDispatch();
@@ -98,6 +99,7 @@ function App(): JSX.Element {
         <SecuredRoute path="/orgstore" component={AddOnStore} />
         <SecuredRoute path="/roles" component={Roles} />
         <SecuredRoute path="/requests" component={Requests} />
+        <SecuredRoute path="/blockuser" component={BlockUser} />
         {extraRoutes}
         <Route exact path="/forgotPassword" component={ForgotPassword} />
         <Route exact path="*" component={PageNotFound} />

@@ -147,6 +147,16 @@ a {
 .sidebarsticky {
   padding-top: 40%;
 }
+.notificationIcon {
+  position: relative;
+  top: 12px;
+  right: 14px;
+}
+.notificationList:hover {
+  background-color: #dfe2e4;
+  cursor: pointer;
+}
+
 @media screen and (max-width: 768px) {
   .sidebar {
     width: 15%;
@@ -176,5 +186,9 @@ a {
   }
   .dropdownMenu {
     transform: translateX(0px) scale(0.9);
+  }
+  .notificationIcon {
+    top: 0px;
+    right: -8px;
   }
 }

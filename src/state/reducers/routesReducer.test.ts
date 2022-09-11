@@ -16,6 +16,10 @@ describe('Testing Routes reducer', () => {
         { name: 'Contributions', url: '/orgcontribution/id=undefined' },
         { name: 'Posts', url: '/orgpost/id=undefined' },
         {
+          name: 'Block/Unblock',
+          url: '/blockuser/id=undefined',
+        },
+        {
           name: 'Plugins',
           subTargets: [
             {
@@ -26,7 +30,7 @@ describe('Testing Routes reducer', () => {
           ],
         },
       ],
-      configUrl: '/orgsetting/id=undefined',
+      configUrl: 'undefined',
       components: [
         {
           name: 'Dashboard',
@@ -49,6 +53,7 @@ describe('Testing Routes reducer', () => {
           component: 'OrgContribution',
         },
         { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
+        { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
         {
           name: 'Plugins',
           comp_id: null,
@@ -81,6 +86,7 @@ describe('Testing Routes reducer', () => {
         { name: 'Events', url: '/orgevents/id=undefined' },
         { name: 'Contributions', url: '/orgcontribution/id=undefined' },
         { name: 'Posts', url: '/orgpost/id=undefined' },
+        { name: 'Block/Unblock', url: '/blockuser/id=undefined' },
         {
           name: 'Plugins',
           subTargets: [
@@ -93,7 +99,7 @@ describe('Testing Routes reducer', () => {
         },
         { test: 'testupdate' },
       ],
-      configUrl: '/orgsetting/id=undefined',
+      configUrl: 'undefined',
       components: [
         {
           name: 'Dashboard',
@@ -116,6 +122,7 @@ describe('Testing Routes reducer', () => {
           component: 'OrgContribution',
         },
         { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
+        { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
         {
           name: 'Plugins',
           comp_id: null,
@@ -149,6 +156,10 @@ describe('Testing Routes reducer', () => {
         { name: 'Contributions', url: '/orgcontribution/id=undefined' },
         { name: 'Posts', url: '/orgpost/id=undefined' },
         {
+          name: 'Block/Unblock',
+          url: '/blockuser/id=undefined',
+        },
+        {
           comp_id: null,
           component: null,
           name: 'Plugins',
@@ -162,7 +173,7 @@ describe('Testing Routes reducer', () => {
           ],
         },
       ],
-      configUrl: '/orgsetting/id=undefined',
+      configUrl: 'undefined',
       components: [
         {
           name: 'Dashboard',
@@ -185,6 +196,7 @@ describe('Testing Routes reducer', () => {
           component: 'OrgContribution',
         },
         { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
+        { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
         {
           name: 'Plugins',
           comp_id: null,

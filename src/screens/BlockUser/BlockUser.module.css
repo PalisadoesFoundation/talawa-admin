@@ -1,0 +1,109 @@
+.mainpage {
+  display: flex;
+  flex-direction: row;
+}
+.sidebar {
+  z-index: 0;
+  padding-top: 5px;
+  margin: 0;
+  height: 100%;
+}
+.sidebar:after {
+  content: '';
+  background-color: #f7f7f7;
+  position: absolute;
+  width: 2px;
+  height: 600px;
+  top: 10px;
+  left: 94%;
+  display: block;
+}
+.sidebarsticky {
+  padding-left: 45px;
+}
+.sidebarsticky > input {
+  text-decoration: none;
+  margin-bottom: 50px;
+  border-color: #e8e5e5;
+  width: 80%;
+  border-radius: 7px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  box-shadow: none;
+}
+
+.navitem {
+  padding-left: 27%;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  cursor: pointer;
+}
+
+.searchtitle {
+  color: #707070;
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid #31bb6b;
+  width: 60%;
+}
+
+.logintitle {
+  color: #707070;
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 30px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid #31bb6b;
+  width: 30%;
+}
+
+.mainpageright > hr {
+  margin-top: 20px;
+  width: 100%;
+  margin-left: -15px;
+  margin-right: -15px;
+  margin-bottom: 20px;
+}
+.justifysp {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media screen and (max-width: 575.5px) {
+  .justifysp {
+    padding-left: 55px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .mainpageright {
+    width: 100%;
+  }
+}
+
+.list_box {
+  height: 70vh;
+  overflow-y: auto;
+  width: auto;
+  padding-right: 50px;
+}
+
+@media only screen and (max-width: 600px) {
+  .sidebar {
+    position: relative;
+    bottom: 18px;
+  }
+  .invitebtn {
+    width: 135px;
+    position: relative;
+    right: 10px;
+  }
+  .userListTable {
+    margin-left: 40px;
+  }
+}

@@ -47,6 +47,7 @@ const components = [
     component: 'OrgContribution',
   },
   { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
+  { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
   {
     name: 'Plugins',
     comp_id: null,
@@ -86,7 +87,7 @@ const generateRoutes = (comps: any[]) => {
 
 const INITIAL_STATE: any = {
   targets: generateRoutes(components),
-  configUrl: `/orgsetting/id=${currentOrg}`,
+  configUrl: `${currentOrg}`,
   components,
 };
 

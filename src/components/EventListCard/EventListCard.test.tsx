@@ -4,7 +4,10 @@ import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 
 import EventListCard from './EventListCard';
-import { DELETE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  DELETE_EVENT_MUTATION,
+  UPDATE_EVENT_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 
 const MOCKS = [
   {
@@ -14,11 +17,33 @@ const MOCKS = [
     },
     result: {
       data: {
-        organizations: [
-          {
-            _id: '1',
-          },
-        ],
+        removeEvent: {
+          _id: '1',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_EVENT_MUTATION,
+      variable: {
+        id: '123',
+        title: 'Updated title',
+        description: 'This is a new update',
+        isPublic: true,
+        recurring: false,
+        isRegisterable: true,
+        allDay: false,
+        location: 'New Delhi',
+        startTime: '02:00',
+        endTime: '07:00',
+      },
+    },
+    result: {
+      data: {
+        updateEvent: {
+          _id: '1',
+        },
       },
     },
   },
@@ -38,11 +63,15 @@ describe('Testing Event List Card', () => {
     id: '1',
     eventLocation: 'India',
     eventName: 'Shelter for Dogs',
-    totalAdmin: '5',
-    totalMember: '107',
-    eventImage: 'https://via.placeholder.com/200x100',
+    eventDescription: 'This is shelter for dogs event',
     regDate: '19/03/2022',
-    regDays: '3',
+    regEndDate: '26/03/2022',
+    startTime: '02:00',
+    endTime: '06:00',
+    allDay: true,
+    recurring: false,
+    isPublic: true,
+    isRegisterable: false,
   };
 
   global.alert = jest.fn();
@@ -58,17 +87,13 @@ describe('Testing Event List Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByText(/Delete/i));
-
-    expect(screen.getByText('Admin:')).toBeInTheDocument();
-    expect(screen.getByText('Member:')).toBeInTheDocument();
-    expect(screen.getByText('Days:')).toBeInTheDocument();
+    expect(screen.getByText('Location:')).toBeInTheDocument();
+    expect(screen.getByText('On:')).toBeInTheDocument();
+    expect(screen.getByText('End:')).toBeInTheDocument();
     expect(screen.getByText(props.eventLocation)).toBeInTheDocument();
     expect(screen.getByText(props.eventName)).toBeInTheDocument();
-    expect(screen.getByText(props.totalAdmin)).toBeInTheDocument();
-    expect(screen.getByText(props.totalMember)).toBeInTheDocument();
     expect(screen.getByText(props.regDate)).toBeInTheDocument();
-    expect(screen.getByText(props.regDays)).toBeInTheDocument();
+    expect(screen.getByText(props.regEndDate)).toBeInTheDocument();
   });
 
   test('Should render text elements when props value is not passed', async () => {
@@ -81,27 +106,91 @@ describe('Testing Event List Card', () => {
           id="1"
           eventName=""
           eventLocation=""
-          totalAdmin="5"
-          eventImage=""
-          totalMember="107"
+          eventDescription=""
           regDate="19/03/2022"
-          regDays="3"
+          regEndDate="26/03/2022"
+          startTime="02:00"
+          endTime="06:00"
+          allDay={true}
+          recurring={false}
+          isPublic={true}
+          isRegisterable={false}
         />
       </MockedProvider>
     );
 
     await wait();
 
-    userEvent.click(screen.getByText(/Delete/i));
-
-    expect(screen.getByText('Admin:')).toBeInTheDocument();
-    expect(screen.getByText('Member:')).toBeInTheDocument();
-    expect(screen.getByText('Days:')).toBeInTheDocument();
+    expect(screen.getByText('Location:')).toBeInTheDocument();
+    expect(screen.getByText('On:')).toBeInTheDocument();
+    expect(screen.getByText('End:')).toBeInTheDocument();
     expect(screen.queryByText(props.eventLocation)).toBeInTheDocument();
     expect(screen.queryByText(props.eventName)).not.toBeInTheDocument();
-    expect(screen.getByText(props.totalAdmin)).toBeInTheDocument();
-    expect(screen.getByText(props.totalMember)).toBeInTheDocument();
     expect(screen.getByText(props.regDate)).toBeInTheDocument();
-    expect(screen.getByText(props.regDays)).toBeInTheDocument();
+    expect(screen.getByText(props.regEndDate)).toBeInTheDocument();
+  });
+
+  test('Testing event update functionality', async () => {
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <EventListCard {...props} />
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('editEventModalBtn'));
+
+    userEvent.type(screen.getByTestId('updateTitle'), props.eventName);
+    userEvent.type(
+      screen.getByTestId('updateDescription'),
+      props.eventDescription
+    );
+    userEvent.type(screen.getByTestId('updateLocation'), props.eventLocation);
+    userEvent.click(screen.getByTestId('updateAllDay'));
+    userEvent.click(screen.getByTestId('updateRecurring'));
+    userEvent.click(screen.getByTestId('updateIsPublic'));
+    userEvent.click(screen.getByTestId('updateRegistrable'));
+
+    userEvent.click(screen.getByTestId('updatePostBtn'));
+  });
+
+  test('Testing if the event is not for all day', async () => {
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <EventListCard {...props} />
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('editEventModalBtn'));
+
+    userEvent.type(screen.getByTestId('updateTitle'), props.eventName);
+    userEvent.type(
+      screen.getByTestId('updateDescription'),
+      props.eventDescription
+    );
+    userEvent.type(screen.getByTestId('updateLocation'), props.eventLocation);
+    userEvent.click(screen.getByTestId('updateAllDay'));
+    await wait();
+
+    userEvent.type(screen.getByTestId('updateStartTime'), props.startTime);
+    userEvent.type(screen.getByTestId('updateEndTime'), props.endTime);
+
+    userEvent.click(screen.getByTestId('updatePostBtn'));
+  });
+
+  test('Testing delete event funcationality', async () => {
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <EventListCard {...props} />
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('deleteEventModalBtn'));
+    userEvent.click(screen.getByTestId(/deleteEventBtn/i));
   });
 });
