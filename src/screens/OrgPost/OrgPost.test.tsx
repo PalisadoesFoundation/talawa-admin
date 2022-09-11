@@ -33,8 +33,31 @@ const MOCKS = [
               lastName: 'Doe',
               email: 'johndoe@gmail.com',
             },
+            creator: {
+              _id: '583',
+              firstName: 'John',
+              lastName: 'Doe',
+              email: 'johndoe@gmail.com',
+            },
           },
         ],
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_POST_MUTATION,
+      variables: {
+        title: 'Dummy Post',
+        text: 'This is dummy text',
+        organizationId: '123',
+      },
+      result: {
+        data: {
+          createPost: {
+            _id: '453',
+          },
+        },
       },
     },
   },
@@ -71,6 +94,11 @@ describe('Organisation Post Page', () => {
     postinfo: 'This is a dummy post',
   };
 
+  const formData = {
+    posttitle: 'dummy post',
+    postinfo: 'This is a dummy post',
+  };
+
   test('correct mock data should be queried', async () => {
     const dataQuery1 = MOCKS[0]?.result?.data?.postsByOrganization;
 
@@ -81,6 +109,12 @@ describe('Organisation Post Page', () => {
         text: 'Capture Jinchuriki',
         imageUrl: '',
         videoUrl: '',
+        creator: {
+          _id: '583',
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'johndoe@gmail.com',
+        },
         creator: {
           _id: '583',
           firstName: 'John',
@@ -109,6 +143,7 @@ describe('Organisation Post Page', () => {
     await wait();
 
     expect(container.textContent).toMatch('Posts by Title');
+    expect(container.textContent).toMatch('Posts by Text');
     expect(container.textContent).toMatch('Posts by Text');
     expect(container.textContent).toMatch('Posts');
     expect(container.textContent).toMatch('+ Create Post');

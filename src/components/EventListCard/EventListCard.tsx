@@ -58,6 +58,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
 
   const [create] = useMutation(DELETE_EVENT_MUTATION);
   const [updateEvent] = useMutation(UPDATE_EVENT_MUTATION);
+  const [updateEvent] = useMutation(UPDATE_EVENT_MUTATION);
 
   const DeleteEvent = async () => {
     try {

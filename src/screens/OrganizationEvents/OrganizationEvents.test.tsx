@@ -34,6 +34,14 @@ const MOCKS = [
             recurring: false,
             isPublic: true,
             isRegisterable: true,
+            endDate: '',
+            location: 'New Delhi',
+            startTime: '02:00',
+            endTime: '06:00',
+            allDay: false,
+            recurring: false,
+            isPublic: true,
+            isRegisterable: true,
           },
         ],
       },
@@ -94,20 +102,30 @@ describe('Organisation Events Page', () => {
     const dataQuery1 = MOCKS[0]?.result?.data?.eventsByOrganization;
 
     expect(dataQuery1).toEqual([
-      {
-        _id: 1,
-        title: 'Event',
-        description: 'Event Test',
-        startDate: '',
-        endDate: '',
-        location: 'New Delhi',
-        startTime: '02:00',
-        endTime: '06:00',
-        allDay: false,
-        recurring: false,
-        isPublic: true,
-        isRegisterable: true,
-      },
+      [
+        {
+          _id: 1,
+          title: 'Event',
+          description: 'Event Test',
+          startDate: '',
+          endDate: '',
+          location: 'New Delhi',
+          startTime: '02:00',
+          endTime: '06:00',
+          allDay: false,
+          recurring: false,
+          isPublic: true,
+          isRegisterable: true,
+          endDate: '',
+          location: 'New Delhi',
+          startTime: '02:00',
+          endTime: '06:00',
+          allDay: false,
+          recurring: false,
+          isPublic: true,
+          isRegisterable: true,
+        },
+      ],
     ]);
   });
 
@@ -167,6 +185,7 @@ describe('Organisation Events Page', () => {
     await wait();
 
     userEvent.type(screen.getByTestId('serachByTitle'), searchData.byTitle);
+    userEvent.type(screen.getByTestId('serachByTitle'), searchData.byTitle);
     userEvent.type(
       screen.getByTestId('serachByDescription'),
       searchData.byDescription
@@ -219,6 +238,10 @@ describe('Organisation Events Page', () => {
     userEvent.type(
       screen.getByPlaceholderText(/Enter Description/i),
       formData.description
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Enter Location/i),
+      formData.location
     );
     userEvent.type(
       screen.getByPlaceholderText(/Enter Location/i),

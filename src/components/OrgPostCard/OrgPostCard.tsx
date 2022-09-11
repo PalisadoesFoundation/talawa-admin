@@ -38,6 +38,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
 
   const [create] = useMutation(DELETE_POST_MUTATION);
   const [updatePost] = useMutation(UPDATE_POST_MUTATION);
+  const [updatePost] = useMutation(UPDATE_POST_MUTATION);
 
   const DeletePost = async () => {
     try {
@@ -49,36 +50,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        window.alert('Post deleted successfully.');
-        window.location.reload();
-      }
-    } catch (error: any) {
-      /* istanbul ignore next */
-      toast.error(error.message);
-    }
-  };
-
-  const handleInputEvent = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    setPostFormState({ ...postformState, [name]: value });
-  };
-
-  const updatePostHandler = async (e: ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    try {
-      const { data } = await updatePost({
-        variables: {
-          id: props.id,
-          title: postformState.posttitle,
-          text: postformState.postinfo,
-        },
-      });
-
-      /* istanbul ignore next */
-      if (data) {
-        window.alert('Post Updated successfully.');
+        toast.success('Post deleted successfully.');
         window.location.reload();
       }
     } catch (error: any) {
