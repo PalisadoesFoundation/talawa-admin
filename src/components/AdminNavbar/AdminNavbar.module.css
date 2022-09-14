@@ -123,6 +123,10 @@ a {
   margin-right: 8px;
 }
 
+.languageDropdown {
+  margin-left: 11px;
+}
+
 @media screen and (max-width: 1024px) {
   .logo > strong {
     display: none;

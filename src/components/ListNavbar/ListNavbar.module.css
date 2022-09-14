@@ -60,6 +60,16 @@
   border-bottom: 3px solid #31bb6b;
   font-weight: 600;
 }
+.languageBtn {
+  font-size: 20px;
+  color: #31bb6b;
+}
+.languageBtn:hover {
+  color: #31bb6b;
+}
+.languageBtn:focus {
+  color: #31bb6b;
+}
 .logoutbtn {
   border: 1px solid #e8e5e5;
   box-shadow: 0 2px 2px #e8e5e5;

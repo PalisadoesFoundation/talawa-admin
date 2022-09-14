@@ -13,6 +13,8 @@ import {
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { store } from 'state/store';
+import i18nForTest from 'utils/i18nForTest';
+import { I18nextProvider } from 'react-i18next';
 
 const MOCKS = [
   {
@@ -124,7 +126,9 @@ describe('Organisation List Page', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <OrgList />
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgList />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>

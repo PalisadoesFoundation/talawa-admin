@@ -1,6 +1,8 @@
+import React from 'react';
 import { useMutation } from '@apollo/client';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
-import React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import styles from './UserUpdate.module.css';
 
 interface UserUpdateProps {
@@ -19,6 +21,10 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
   });
 
   const [login] = useMutation(UPDATE_USER_MUTATION);
+
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'userUpdate',
+  });
 
   const login_link = async () => {
     try {
@@ -52,7 +58,7 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
           {/* <h3 className={styles.settingstitle}>Update Your Details</h3> */}
           <div className={styles.dispflex}>
             <div>
-              <label>First Name</label>
+              <label>{t('firstName')}</label>
               <input
                 type="input"
                 id="firstname"
@@ -69,7 +75,7 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
               />
             </div>
             <div>
-              <label>Last Name</label>
+              <label>{t('lastName')}</label>
               <input
                 type="input"
                 id="lastname"
@@ -88,7 +94,7 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
           </div>
           <div className={styles.dispflex}>
             <div>
-              <label>Email</label>
+              <label>{t('email')}</label>
               <input
                 type="email"
                 id="email"
@@ -105,7 +111,7 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
               />
             </div>
             <div>
-              <label>Password</label>
+              <label>{t('password')}</label>
               <input
                 type="password"
                 id="password"
@@ -123,7 +129,7 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
           </div>
           <div className={styles.dispflex}>
             <div>
-              <label>App Language Code</label>
+              <label>{t('appLanguageCode')}</label>
               <input
                 type="input"
                 id="applangcode"
@@ -139,7 +145,7 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
               />
             </div>
             <div>
-              <label>User Type</label>
+              <label>{t('userType')}</label>
               <div className={styles.radio_buttons}>
                 <input
                   type="radio"
@@ -154,7 +160,7 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
                     });
                   }}
                 />
-                <label htmlFor="admin">Admin</label>
+                <label htmlFor="admin">{t('admin')}</label>
                 <input
                   type="radio"
                   id="superadmin"
@@ -168,12 +174,12 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
                     });
                   }}
                 />
-                <label htmlFor="superadmin">Superadmins</label>
+                <label htmlFor="superadmin">{t('superAdmin')}</label>
               </div>
             </div>
           </div>
           <label htmlFor="orgphoto" className={styles.orgphoto}>
-            Display Image:
+            {t('displayImage')}:
             <input
               accept="image/*"
               id="orgphoto"
@@ -190,7 +196,7 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
               value="savechanges"
               onClick={login_link}
             >
-              Save Changes
+              {t('saveChanges')}
             </button>
             <button
               type="button"
@@ -198,7 +204,7 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
               value="cancelchanges"
               onClick={cancelUpdate}
             >
-              Cancel
+              {t('cancel')}
             </button>
           </div>
         </form>

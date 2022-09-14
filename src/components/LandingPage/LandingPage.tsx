@@ -4,13 +4,18 @@ import slide1 from 'assets/images/dogscare.jpg';
 import slide2 from 'assets/images/children.jpg';
 import slide3 from 'assets/images/dogshelter.jpg';
 import Carousel from 'react-bootstrap/Carousel';
+import { useTranslation } from 'react-i18next';
+
 function LandingPage(): JSX.Element {
+  const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
+
   return (
     <>
       <div>
         <h1 className={styles.maintitle}>
-          This is <span>Talawa Admin Management Portal</span> for the seamless
-          management of Talawa Application.
+          {t('talawa_description.part1')}
+          <span>{t('talawa_description.part2')}</span>
+          {t('talawa_description.part3')}
         </h1>
         <div className={styles.carouseldiv}>
           <Carousel>
@@ -26,7 +31,7 @@ function LandingPage(): JSX.Element {
           </Carousel>
         </div>
         <h2 className={styles.fromtitle}>
-          <p>FROM PALISADOES</p>
+          <p>{t('fromPalisadoes')}</p>
         </h2>
       </div>
     </>

@@ -7,11 +7,13 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
+import { I18nextProvider } from 'react-i18next';
 
 import AdminNavbar from './AdminNavbar';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { UPDATE_SPAM_NOTIFICATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
+import i18nForTest from 'utils/i18nForTest';
 
 const MOCKS = [
   {
@@ -32,6 +34,7 @@ const MOCKS = [
               email: '',
             },
             location: 'New Delhi',
+            apiUrl: 'www.dummyWebsite.com',
             members: {
               _id: '123',
               firstName: 'John',
@@ -59,6 +62,8 @@ const MOCKS = [
               email: 'stevesmith@gmail.com',
             },
             tags: ['Shelter', 'NGO', 'Open Source'],
+            isPublic: true,
+            visibleInSearch: false,
             spamCount: [
               {
                 _id: '6954',
@@ -147,7 +152,9 @@ describe('Testing Admin Navbar', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <AdminNavbar {...props} />
+            <I18nextProvider i18n={i18nForTest}>
+              <AdminNavbar {...props} />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -179,7 +186,9 @@ describe('Testing Admin Navbar', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <AdminNavbar {...props} />
+            <I18nextProvider i18n={i18nForTest}>
+              <AdminNavbar {...props} />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -198,7 +207,9 @@ describe('Testing Admin Navbar', () => {
       <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <AdminNavbar {...props} />
+            <I18nextProvider i18n={i18nForTest}>
+              <AdminNavbar {...props} />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -214,7 +225,9 @@ describe('Testing Admin Navbar', () => {
       <MockedProvider addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
-            <AdminNavbar {...props} />
+            <I18nextProvider i18n={i18nForTest}>
+              <AdminNavbar {...props} />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -222,5 +235,46 @@ describe('Testing Admin Navbar', () => {
 
     await wait();
     expect(window.location).toBeAt('/orglist');
+  });
+
+  test('Testing change language functionality', async () => {
+    render(
+      <MockedProvider addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdminNavbar {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('logoutDropdown'));
+    userEvent.click(screen.getByTestId('languageDropdown'));
+    userEvent.click(screen.getByTestId('changeLanguageBtn1'));
+  });
+
+  test('Testing when language cookie is not set', async () => {
+    Object.defineProperty(window.document, 'cookie', {
+      writable: true,
+      value: 'i18next=',
+    });
+
+    render(
+      <MockedProvider addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdminNavbar {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
   });
 });

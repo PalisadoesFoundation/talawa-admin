@@ -4,11 +4,13 @@ import { act, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
+import { I18nextProvider } from 'react-i18next';
 
 import OrganizationPeople from './OrganizationPeople';
 import { store } from 'state/store';
 import { ADMIN_LIST, MEMBERS_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
 import 'jest-location-mock';
+import i18nForTest from 'utils/i18nForTest';
 
 const MOCKS = [
   {
@@ -179,7 +181,9 @@ describe('Organisation People Page', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <OrganizationPeople />
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationPeople />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -201,7 +205,9 @@ describe('Organisation People Page', () => {
       <MockedProvider mocks={MOCKS} addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
-            <OrganizationPeople />
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationPeople />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -239,7 +245,9 @@ describe('Organisation People Page', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <OrganizationPeople />
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationPeople />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -259,7 +267,9 @@ describe('Organisation People Page', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <OrganizationPeople />
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationPeople />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -279,7 +289,9 @@ describe('Organisation People Page', () => {
       <MockedProvider addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
-            <OrganizationPeople />
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationPeople />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>

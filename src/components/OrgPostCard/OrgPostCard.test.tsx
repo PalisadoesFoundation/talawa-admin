@@ -2,12 +2,14 @@ import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
+import { I18nextProvider } from 'react-i18next';
 
 import OrgPostCard from './OrgPostCard';
 import {
   DELETE_POST_MUTATION,
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+import i18nForTest from 'utils/i18nForTest';
 
 const MOCKS = [
   {
@@ -68,7 +70,9 @@ describe('Testing Organization Post Card', () => {
 
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
-        <OrgPostCard {...props} />
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...props} />
+        </I18nextProvider>
       </MockedProvider>
     );
 
@@ -89,7 +93,9 @@ describe('Testing Organization Post Card', () => {
 
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
-        <OrgPostCard {...props} />
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...props} />
+        </I18nextProvider>
       </MockedProvider>
     );
 
@@ -108,7 +114,9 @@ describe('Testing Organization Post Card', () => {
   test('Testing post update functionality', async () => {
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
-        <OrgPostCard {...props} />
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...props} />
+        </I18nextProvider>
       </MockedProvider>
     );
 
@@ -124,7 +132,9 @@ describe('Testing Organization Post Card', () => {
   test('Testing delete post funcationality', async () => {
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
-        <OrgPostCard {...props} />
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...props} />
+        </I18nextProvider>
       </MockedProvider>
     );
 

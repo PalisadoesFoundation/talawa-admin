@@ -1,14 +1,21 @@
 import React from 'react';
 import { Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import i18next from 'i18next';
+import Cookies from 'js-cookie';
+import { useTranslation } from 'react-i18next';
 
 import styles from './ListNavbar.module.css';
 import Logo from 'assets/talawa-logo-200x200.png';
+import { languages } from 'utils/languages';
 
 const ListNavbar = () => {
+  const { t } = useTranslation('translation', { keyPrefix: 'listNavbar' });
+
   const isSuperAdmin = localStorage.getItem('UserType') !== 'SUPERADMIN';
 
-  /* istanbul ignore next */
+  const currentLanguageCode = Cookies.get('i18next') || 'en';
+
   const logout = () => {
     localStorage.clear();
     window.location.replace('/');
@@ -19,7 +26,7 @@ const ListNavbar = () => {
       <Navbar.Brand>
         <Link className={styles.logo} to="/orglist">
           <img src={Logo} />
-          <strong>Talawa Portal</strong>
+          <strong>{t('talawa_portal')}</strong>
         </Link>
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="navbarScroll" />
@@ -29,24 +36,53 @@ const ListNavbar = () => {
             <>
               <Nav.Item className={styles.navitems}>
                 <Nav.Link as={Link} to="/roles" className={styles.navlinks}>
-                  Roles
+                  {t('roles')}
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item className={styles.navitems}>
                 <Nav.Link as={Link} to="/requests" className={styles.navlinks}>
-                  Requests
+                  {t('requests')}
                 </Nav.Link>
               </Nav.Item>
             </>
           )}
         </Nav>
-        <button
-          className={`ml-auto ${styles.logoutbtn}`}
-          data-testid="logoutBtn"
-          onClick={logout}
-        >
-          Logout
-        </button>
+        <Nav className="ml-auto">
+          <div className="dropdown mr-4">
+            <button
+              className={`btn dropdown-toggle ${styles.languageBtn}`}
+              type="button"
+              data-toggle="dropdown"
+              aria-expanded="false"
+              title="Change Langauge"
+            >
+              <i className="fas fa-globe"></i>
+            </button>
+            <div className="dropdown-menu">
+              {languages.map((language, index: number) => (
+                <button
+                  key={index}
+                  className="dropdown-item"
+                  onClick={() => i18next.changeLanguage(language.code)}
+                  disabled={currentLanguageCode === language.code}
+                  data-testid={`changeLanguageBtn${index}`}
+                >
+                  <span
+                    className={`flag-icon flag-icon-${language.country_code} mr-2`}
+                  ></span>
+                  {language.name}
+                </button>
+              ))}
+            </div>
+          </div>
+          <button
+            className={styles.logoutbtn}
+            data-testid="logoutBtn"
+            onClick={logout}
+          >
+            {t('logout')}
+          </button>
+        </Nav>
       </Navbar.Collapse>
     </Navbar>
   );

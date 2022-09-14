@@ -2,16 +2,20 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+import { I18nextProvider } from 'react-i18next';
 
 import { store } from 'state/store';
 import PageNotFound from './PageNotFound';
+import i18nForTest from 'utils/i18nForTest';
 
 describe('Testing Page not found component', () => {
   test('Component should be rendered properly', () => {
     render(
       <BrowserRouter>
         <Provider store={store}>
-          <PageNotFound />
+          <I18nextProvider i18n={i18nForTest}>
+            <PageNotFound />
+          </I18nextProvider>
         </Provider>
       </BrowserRouter>
     );

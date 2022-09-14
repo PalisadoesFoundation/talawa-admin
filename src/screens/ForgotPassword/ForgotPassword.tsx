@@ -9,9 +9,14 @@ import {
 } from 'GraphQl/Mutations/mutations';
 
 import './ForgotPassword.css';
+import { useTranslation } from 'react-i18next';
 
 const ForgotPassword = () => {
-  document.title = 'Talawa Forgot Password';
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'forgotPassword',
+  });
+
+  document.title = t('title');
 
   const [componentLoader, setComponentLoader] = useState(true);
   const [registeredEmail, setregisteredEmail] = useState('');
@@ -108,7 +113,7 @@ const ForgotPassword = () => {
       <div className="container">
         <div className="border rounded p-4 mb-4">
           <div className="heading text-center">
-            <h1>Forgot Password</h1>
+            <h1>{t('forgotPassword')}</h1>
           </div>
 
           <div className="otpForm my-5">
@@ -118,7 +123,7 @@ const ForgotPassword = () => {
                   htmlFor="registeredEmail"
                   className="col-sm-2 col-form-label"
                 >
-                  Registered Email:
+                  {t('registeredEmail')}:
                 </label>
                 <div className="col-sm-7">
                   <input
@@ -134,7 +139,7 @@ const ForgotPassword = () => {
                 </div>
                 <div className="col-sm-3">
                   <button type="submit" className="btn btn-success btn-block">
-                    <i className="fa fa-key"></i> Get OTP
+                    <i className="fa fa-key"></i> {t('getOtp')}
                   </button>
                 </div>
               </div>
@@ -145,7 +150,7 @@ const ForgotPassword = () => {
             <form onSubmit={submitForgotPassword}>
               <div className="form-group row">
                 <label htmlFor="userOtp" className="col-sm-2 col-form-label">
-                  Enter OTP:
+                  {t('enterOtp')}:
                 </label>
                 <div className="col-sm-10">
                   <input
@@ -170,7 +175,7 @@ const ForgotPassword = () => {
                   htmlFor="newPassword"
                   className="col-sm-2 col-form-label"
                 >
-                  Enter New Password:
+                  {t('enterNewPassword')}:
                 </label>
                 <div className="col-sm-10">
                   <input
@@ -196,7 +201,7 @@ const ForgotPassword = () => {
                   htmlFor="confirmNewPassword"
                   className="col-sm-2 col-form-label"
                 >
-                  Confirm New Password:
+                  {t('cofirmNewPassword')}:
                 </label>
                 <div className="col-sm-10">
                   <input
@@ -219,12 +224,12 @@ const ForgotPassword = () => {
               </div>
               <div className="submitBtn">
                 <button type="submit" className="btn btn-success btn-block">
-                  Change Password
+                  {t('changePassword')}
                 </button>
               </div>
               <div className="homeBtn mt-3">
                 <Link to="/" className="btn btn-info btn-block">
-                  <i className="fas fa-home"></i> Back to Home
+                  <i className="fas fa-home"></i> {t('backToHome')}
                 </Link>
               </div>
             </form>

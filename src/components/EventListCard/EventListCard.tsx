@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 import styles from './EventListCard.module.css';
 import {
@@ -24,6 +25,10 @@ interface EventListCardProps {
   isRegisterable: boolean;
 }
 function EventListCard(props: EventListCardProps): JSX.Element {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'eventListCard',
+  });
+
   const [alldaychecked, setAllDayChecked] = useState(true);
   const [recurringchecked, setRecurringChecked] = useState(false);
   const [publicchecked, setPublicChecked] = useState(true);
@@ -64,7 +69,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Event deleted successfully.');
+        window.alert('Event deleted successfully.');
         window.location.reload();
       }
     } catch (error: any) {
@@ -94,7 +99,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Event updated successfully.');
+        window.alert('Event updated successfully.');
         window.location.reload();
       }
     } catch (error: any) {
@@ -129,17 +134,17 @@ function EventListCard(props: EventListCardProps): JSX.Element {
             </div>
           </div>
           <p>
-            Location:{' '}
+            {t('location')}:{' '}
             <span>
               {props.eventLocation ? <>{props.eventLocation}</> : <>India</>}
             </span>
           </p>
           <p>{props.eventDescription}</p>
           <p>
-            On: <span>{props.regDate}</span>
+            {t('on')}: <span>{props.regDate}</span>
           </p>
           <p>
-            End: <span>{props.regEndDate}</span>
+            {t('end')}: <span>{props.regEndDate}</span>
           </p>
         </div>
       </div>
@@ -160,7 +165,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                 className="modal-title"
                 id={`deleteEventModalLabel${props.id}`}
               >
-                Delete Event
+                {t('deleteEvent')}
               </h5>
               <button
                 type="button"
@@ -171,14 +176,14 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div className="modal-body">Do you want to remove this event?</div>
+            <div className="modal-body">{t('deleteEventMsg')}</div>
             <div className="modal-footer">
               <button
                 type="button"
                 className="btn btn-danger"
                 data-dismiss="modal"
               >
-                No
+                {t('no')}
               </button>
               <button
                 type="button"
@@ -186,7 +191,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                 onClick={DeleteEvent}
                 data-testid="deleteEventBtn"
               >
-                Yes
+                {t('yes')}
               </button>
             </div>
           </div>
@@ -205,7 +210,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id={`editEventModal${props.id}Label`}>
-                Edit Event
+                {t('editEvent')}
               </h5>
               <button
                 type="button"
@@ -218,7 +223,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
             </div>
             <form onSubmit={updateEventHandler}>
               <div className="modal-body">
-                <label htmlFor="eventtitle">Title</label>
+                <label htmlFor="eventtitle">{t('eventTitle')}</label>
                 <input
                   type="title"
                   id="eventitle"
@@ -233,7 +238,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                     });
                   }}
                 />
-                <label htmlFor="eventdescrip">Description</label>
+                <label htmlFor="eventdescrip">{t('description')}</label>
                 <input
                   type="eventdescrip"
                   id="eventdescrip"
@@ -248,7 +253,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                     });
                   }}
                 />
-                <label htmlFor="eventLocation">Location</label>
+                <label htmlFor="eventLocation">{t('location')}</label>
                 <input
                   type="text"
                   id="eventLocation"
@@ -266,7 +271,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                 {!alldaychecked && (
                   <div className={styles.datediv}>
                     <div className="mr-3">
-                      <label htmlFor="startTime">Start Time</label>
+                      <label htmlFor="startTime">{t('startTime')}</label>
                       <input
                         id="startTime"
                         value={formState.startTime}
@@ -280,7 +285,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                       />
                     </div>
                     <div>
-                      <label htmlFor="endTime">End Time</label>
+                      <label htmlFor="endTime">{t('endTime')}</label>
                       <input
                         id="endTime"
                         value={formState.endTime}
@@ -297,7 +302,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                 )}
                 <div className={styles.checkboxdiv}>
                   <div className={styles.dispflex}>
-                    <label htmlFor="allday">All Day?</label>
+                    <label htmlFor="allday">{t('allDay')}?</label>
                     <input
                       id="allday"
                       type="checkbox"
@@ -307,7 +312,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                     />
                   </div>
                   <div className={styles.dispflex}>
-                    <label htmlFor="recurring">Recurring Event:</label>
+                    <label htmlFor="recurring">{t('recurringEvent')}:</label>
                     <input
                       id="recurring"
                       type="checkbox"
@@ -319,7 +324,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                 </div>
                 <div className={styles.checkboxdiv}>
                   <div className={styles.dispflex}>
-                    <label htmlFor="ispublic">Is Public?</label>
+                    <label htmlFor="ispublic">{t('isPublic')}?</label>
                     <input
                       id="ispublic"
                       type="checkbox"
@@ -329,7 +334,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                     />
                   </div>
                   <div className={styles.dispflex}>
-                    <label htmlFor="registrable">Is Registrable?</label>
+                    <label htmlFor="registrable">{t('isRegistrable')}?</label>
                     <input
                       id="registrable"
                       type="checkbox"
@@ -348,14 +353,14 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                   className="btn btn-danger"
                   data-dismiss="modal"
                 >
-                  Close
+                  {t('close')}
                 </button>
                 <button
                   type="submit"
                   className="btn btn-success"
                   data-testid="updatePostBtn"
                 >
-                  Update Event
+                  {t('updatePost')}
                 </button>
               </div>
             </form>

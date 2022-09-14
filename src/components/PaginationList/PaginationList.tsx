@@ -1,5 +1,6 @@
 import React from 'react';
 import { Hidden, TablePagination } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 import Pagination from '../Pagination/Pagination';
 
@@ -17,6 +18,10 @@ interface PropsInterface {
 }
 
 const PaginationList = (props: PropsInterface) => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'paginationList',
+  });
+
   return (
     <>
       <Hidden smUp>
@@ -39,7 +44,7 @@ const PaginationList = (props: PropsInterface) => {
       </Hidden>
       <Hidden smDown>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 30, { label: 'All', value: -1 }]}
+          rowsPerPageOptions={[5, 10, 30, { label: t('all'), value: -1 }]}
           colSpan={4}
           count={props.count}
           rowsPerPage={props.rowsPerPage}
@@ -53,6 +58,7 @@ const PaginationList = (props: PropsInterface) => {
           onPageChange={props.onPageChange}
           onRowsPerPageChange={props.onRowsPerPageChange}
           ActionsComponent={Pagination}
+          labelRowsPerPage={t('rowsPerPage')}
         />
       </Hidden>
     </>

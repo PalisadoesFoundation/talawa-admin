@@ -2,9 +2,11 @@ import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
+import { I18nextProvider } from 'react-i18next';
 
 import OrgUpdate from './OrgUpdate';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import i18nForTest from 'utils/i18nForTest';
 
 const MOCKS = [
   {
@@ -59,7 +61,9 @@ describe('Testing Organization Update', () => {
   test('should render props and text elements test for the page component', async () => {
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
-        <OrgUpdate {...props} />
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgUpdate {...props} />
+        </I18nextProvider>
       </MockedProvider>
     );
 

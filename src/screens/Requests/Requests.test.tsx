@@ -3,6 +3,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { act, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+import { I18nextProvider } from 'react-i18next';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
 
@@ -14,6 +15,7 @@ import {
 import { USER_LIST } from 'GraphQl/Queries/Queries';
 import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
+import i18nForTest from 'utils/i18nForTest';
 
 const MOCKS = [
   {
@@ -139,7 +141,9 @@ describe('Testing Request screen', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <Requests />
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -159,7 +163,9 @@ describe('Testing Request screen', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <Requests />
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -173,7 +179,9 @@ describe('Testing Request screen', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <Requests />
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -189,7 +197,9 @@ describe('Testing Request screen', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <Requests />
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -205,7 +215,9 @@ describe('Testing Request screen', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <Requests />
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>

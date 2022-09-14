@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col';
 import { useMutation } from '@apollo/client';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 interface OrgPeopleListCardProps {
   key: string;
@@ -18,6 +19,10 @@ interface OrgPeopleListCardProps {
 function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
   const [remove] = useMutation(REMOVE_MEMBER_MUTATION);
+
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'orgPeopleListCard',
+  });
 
   const RemoveMember = async () => {
     try {
@@ -59,7 +64,7 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
             </div>
             <div className={styles.singledetails_data_right}>
               <p className={styles.memberfont}>
-                Joined: <span>{props.joinDate}</span>
+                {t('joined')}: <span>{props.joinDate}</span>
               </p>
               <button
                 className={styles.memberfontcreatedbtn}
@@ -67,7 +72,7 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
                 data-target={`#removeMemberModal${props.id}`}
                 data-testid="removeMemberModalBtn"
               >
-                Remove
+                {t('remove')}
               </button>
             </div>
           </Col>
@@ -90,7 +95,7 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
                 className="modal-title"
                 id={`removeMemberModalLabel${props.id}`}
               >
-                Remove Member
+                {t('removeMember')}
               </h5>
               <button
                 type="button"
@@ -101,14 +106,14 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div className="modal-body">Do you want to remove this member?</div>
+            <div className="modal-body">{t('removeMemberMsg')}</div>
             <div className="modal-footer">
               <button
                 type="button"
                 className="btn btn-danger"
                 data-dismiss="modal"
               >
-                No
+                {t('no')}
               </button>
               <button
                 type="button"
@@ -116,7 +121,7 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
                 onClick={RemoveMember}
                 data-testid="removeMemberBtn"
               >
-                Yes
+                {t('yes')}
               </button>
             </div>
           </div>

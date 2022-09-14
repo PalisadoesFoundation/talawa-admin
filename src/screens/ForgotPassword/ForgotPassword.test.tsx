@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
+import { I18nextProvider } from 'react-i18next';
 
 import ForgotPassword from './ForgotPassword';
 import { store } from 'state/store';
@@ -13,6 +14,7 @@ import {
   FORGOT_PASSWORD_MUTATION,
   GENERATE_OTP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+import i18nForTest from 'utils/i18nForTest';
 
 const MOCKS = [
   {
@@ -67,7 +69,9 @@ describe('Testing Forgot Password screen', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <ForgotPassword />
+            <I18nextProvider i18n={i18nForTest}>
+              <ForgotPassword />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -87,7 +91,9 @@ describe('Testing Forgot Password screen', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <ForgotPassword />
+            <I18nextProvider i18n={i18nForTest}>
+              <ForgotPassword />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -105,7 +111,9 @@ describe('Testing Forgot Password screen', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <ForgotPassword />
+            <I18nextProvider i18n={i18nForTest}>
+              <ForgotPassword />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -132,7 +140,9 @@ describe('Testing Forgot Password screen', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <ForgotPassword />
+            <I18nextProvider i18n={i18nForTest}>
+              <ForgotPassword />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -161,7 +171,9 @@ describe('Testing Forgot Password screen', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <ForgotPassword />
+            <I18nextProvider i18n={i18nForTest}>
+              <ForgotPassword />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -192,7 +204,9 @@ describe('Testing Forgot Password screen', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <ForgotPassword />
+            <I18nextProvider i18n={i18nForTest}>
+              <ForgotPassword />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>

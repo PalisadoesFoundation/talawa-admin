@@ -1,6 +1,8 @@
-import { useMutation } from '@apollo/client';
-import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import React from 'react';
+import { useMutation } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
+
+import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import styles from './OrgUpdate.module.css';
 
 interface OrgUpdateProps {
@@ -20,6 +22,10 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
   });
   const [publicchecked, setPublicChecked] = React.useState(true);
   const [visiblechecked, setVisibleChecked] = React.useState(false);
+
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'orgUpdate',
+  });
 
   const [login] = useMutation(UPDATE_ORGANIZATION_MUTATION);
 
@@ -56,7 +62,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
           {/* <h3 className={styles.settingstitle}>Update Your Details</h3> */}
           <div className={styles.dispflex}>
             <div>
-              <label>Name</label>
+              <label>{t('name')}</label>
               <input
                 type="input"
                 id="orgname"
@@ -73,7 +79,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
               />
             </div>
             <div>
-              <label>Description</label>
+              <label>{t('description')}</label>
               <input
                 type="input"
                 id="orgdescrip"
@@ -92,7 +98,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
           </div>
           <div className={styles.dispflex}>
             <div>
-              <label>Creator</label>
+              <label>{t('creator')}</label>
               <input
                 type="creator"
                 id="creator"
@@ -109,7 +115,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
               />
             </div>
             <div>
-              <label>Api Url</label>
+              <label>{t('apiUrl')}</label>
               <input
                 type="apiUrl"
                 id="apiUrl"
@@ -128,7 +134,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
           <div className={styles.dispflex}>
             <div>
               <label htmlFor="orgphoto" className={styles.orgphoto}>
-                Display Image:
+                {t('displayImage')}:
                 <input
                   accept="image/*"
                   id="orgphoto"
@@ -141,7 +147,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
             </div>
             <div className={styles.checkboxdiv}>
               <div>
-                <label htmlFor="ispublic">Is Public:</label>
+                <label htmlFor="ispublic">{t('isPublic')}:</label>
                 <input
                   id="ispublic"
                   type="checkbox"
@@ -150,7 +156,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
                 />
               </div>
               <div>
-                <label htmlFor="registrable">Is Registrable:</label>
+                <label htmlFor="registrable">{t('isRegistrable')}:</label>
                 <input
                   id="registrable"
                   type="checkbox"
@@ -167,7 +173,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
               value="savechanges"
               onClick={login_link}
             >
-              Save Changes
+              {t('saveChanges')}
             </button>
             <button
               type="button"
@@ -175,7 +181,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
               value="cancelchanges"
               onClick={cancelUpdate}
             >
-              Cancel
+              {t('cancel')}
             </button>
           </div>
         </form>

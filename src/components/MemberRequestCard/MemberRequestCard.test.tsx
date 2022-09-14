@@ -2,12 +2,14 @@ import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
+import { I18nextProvider } from 'react-i18next';
 
 import {
   ACCEPT_ORGANIZATION_REQUEST_MUTATION,
   REJECT_ORGANIZATION_REQUEST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import MemberRequestCard from './MemberRequestCard';
+import i18nForTest from 'utils/i18nForTest';
 
 const MOCKS = [
   {
@@ -68,7 +70,9 @@ describe('Testing Member Request Card', () => {
 
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
-        <MemberRequestCard {...props} />
+        <I18nextProvider i18n={i18nForTest}>
+          <MemberRequestCard {...props} />
+        </I18nextProvider>
       </MockedProvider>
     );
 
@@ -89,15 +93,17 @@ describe('Testing Member Request Card', () => {
 
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
-        <MemberRequestCard
-          key="123"
-          id="1"
-          memberName=""
-          memberLocation="India"
-          joinDate="18/03/2022"
-          memberImage=""
-          email="johndoe@gmail.com"
-        />
+        <I18nextProvider i18n={i18nForTest}>
+          <MemberRequestCard
+            key="123"
+            id="1"
+            memberName=""
+            memberLocation="India"
+            joinDate="18/03/2022"
+            memberImage=""
+            email="johndoe@gmail.com"
+          />
+        </I18nextProvider>
       </MockedProvider>
     );
 

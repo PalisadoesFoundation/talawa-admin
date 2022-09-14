@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 
 import styles from './OrgAdminListCard.module.css';
 import { REMOVE_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
+import { useTranslation } from 'react-i18next';
 
 interface OrgPeopleListCardProps {
   key: string;
@@ -20,6 +21,10 @@ const currentUrl = window.location.href.split('=')[1];
 
 function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
   const [remove] = useMutation(REMOVE_ADMIN_MUTATION);
+
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'orgAdminListCard',
+  });
 
   const RemoveAdmin = async () => {
     try {
@@ -61,7 +66,7 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
             </div>
             <div className={styles.singledetails_data_right}>
               <p className={styles.memberfont}>
-                Joined: <span>{props.joinDate}</span>
+                {t('joined')}: <span>{props.joinDate}</span>
               </p>
               <button
                 className={styles.memberfontcreatedbtn}
@@ -69,7 +74,7 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
                 data-target={`#removeAdminModal${props.id}`}
                 data-testid="removeAdminModalBtn"
               >
-                Remove
+                {t('remove')}
               </button>
             </div>
           </Col>
@@ -91,7 +96,7 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
                 className="modal-title"
                 id={`removeAdminModalLabel${props.id}`}
               >
-                Remove Admin
+                {t('removeAdmin')}
               </h5>
               <button
                 type="button"
@@ -102,14 +107,14 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div className="modal-body">Do you want to remove this admin?</div>
+            <div className="modal-body">{t('removeAdminMsg')}</div>
             <div className="modal-footer">
               <button
                 type="button"
                 className="btn btn-danger"
                 data-dismiss="modal"
               >
-                No
+                {t('no')}
               </button>
               <button
                 type="button"
@@ -117,7 +122,7 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
                 onClick={RemoveAdmin}
                 data-testid="removeAdminBtn"
               >
-                Yes
+                {t('yes')}
               </button>
             </div>
           </div>

@@ -6,11 +6,15 @@ import { Link } from 'react-router-dom';
 import { Badge, IconButton } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useMutation, useQuery } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
+import Cookies from 'js-cookie';
+import i18next from 'i18next';
 
 import styles from './AdminNavbar.module.css';
 import Logo from 'assets/talawa-logo-200x200.png';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { UPDATE_SPAM_NOTIFICATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import { languages } from 'utils/languages';
 
 interface NavbarProps {
   targets: {
@@ -26,6 +30,8 @@ interface NavbarProps {
 }
 
 function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
+  const { t } = useTranslation('translation', { keyPrefix: 'adminNavbar' });
+
   const [spamCountData, setSpamCountData] = useState([]);
 
   const currentUrl = window.location.href.split('=')[1];
@@ -73,6 +79,8 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
     }
   }, [data]);
 
+  const currentLanguageCode = Cookies.get('i18next') || 'en';
+
   const handleSpamNotification = (spamId: string) => {
     localStorage.setItem('spamId', spamId);
     window.location.assign(`/blockuser/id=${url_1}`);
@@ -89,7 +97,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
         <Navbar.Brand>
           <Link className={styles.logo} to="/orglist">
             <img src={Logo} />
-            <strong>Talawa Portal</strong>
+            <strong>{t('talawa_portal')}</strong>
           </Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
@@ -104,7 +112,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                     id={name}
                     className={styles.navlinks}
                   >
-                    {name}
+                    {t(name)}
                   </Nav.Link>
                 </Nav.Item>
               ) : (
@@ -119,7 +127,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                         id={name}
                         className={styles.navlinks}
                       >
-                        {name}
+                        {t(name)}
                       </Nav.Link>
                     </Dropdown.Toggle>
                     {subTargets && (
@@ -135,7 +143,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                               className={`fa ${subTarget.icon}`}
                               data-testid="dropdownIcon"
                             ></i>
-                            {subTarget.name}
+                            {t(subTarget.name)}
                           </Dropdown.Item>
                         ))}
                       </Dropdown.Menu>
@@ -175,14 +183,40 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                   data-toggle="modal"
                   data-target="#notificationModal"
                 >
-                  <i className="fa fa-bell"></i>&ensp; Notification{' '}
+                  <i className="fa fa-bell"></i>&ensp; {t('notification')}{' '}
                   <span className="badge badge-success">
                     {spamCountData.length}
                   </span>
                 </Dropdown.Item>
                 <Dropdown.Item as={Link} to={`/orgsetting/id=${url_1}`}>
-                  <i className="fa fa-cogs"></i>&ensp; Settings
+                  <i className="fa fa-cogs"></i>&ensp; {t('settings')}
                 </Dropdown.Item>
+                <Dropdown className={styles.languageDropdown}>
+                  <Dropdown.Toggle
+                    variant=""
+                    id="dropdown-basic"
+                    data-testid="languageDropdown"
+                  >
+                    <i className="fas fa-globe"></i>&ensp; {t('language')}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    {languages.map((language, index: number) => (
+                      <Dropdown.Item key={index}>
+                        <button
+                          className="dropdown-item"
+                          onClick={() => i18next.changeLanguage(language.code)}
+                          disabled={currentLanguageCode === language.code}
+                          data-testid={`changeLanguageBtn${index}`}
+                        >
+                          <span
+                            className={`flag-icon flag-icon-${language.country_code} mr-2`}
+                          ></span>
+                          {language.name}
+                        </button>
+                      </Dropdown.Item>
+                    ))}
+                  </Dropdown.Menu>
+                </Dropdown>
                 <Dropdown.Item
                   onClick={() => {
                     localStorage.clear();
@@ -190,7 +224,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                   }}
                 >
                   <i className="fa fa-arrow-right"></i>
-                  &ensp;Logout
+                  &ensp;{t('logout')}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
@@ -210,7 +244,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="notificationModalLabel">
-                Notifications
+                {t('notifications')}
               </h5>
               <button
                 type="button"
@@ -230,12 +264,12 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                     key={spam._id}
                     data-testid={`spamNotification${spam._id}`}
                   >
-                    {`${spam.user.firstName} ${spam.user.lastName}`} spams the{' '}
-                    {spam.groupchat.title} group.
+                    {`${spam.user.firstName} ${spam.user.lastName}`}{' '}
+                    {t('spamsThe')} {spam.groupchat.title} {t('group')}.
                   </div>
                 ))
               ) : (
-                <p className="text-center">No Notifications</p>
+                <p className="text-center">{t('noNotifications')}</p>
               )}
             </div>
             <div className="modal-footer">
@@ -244,7 +278,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                 className="btn btn-success"
                 data-dismiss="modal"
               >
-                Close
+                {t('close')}
               </button>
             </div>
           </div>

@@ -7,6 +7,7 @@ import {
   ACCEPT_ORGANIZATION_REQUEST_MUTATION,
   REJECT_ORGANIZATION_REQUEST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+import { useTranslation } from 'react-i18next';
 
 interface MemberRequestCardProps {
   key: string;
@@ -21,6 +22,10 @@ interface MemberRequestCardProps {
 function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
   const [acceptMutation] = useMutation(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
   const [rejectMutation] = useMutation(REJECT_ORGANIZATION_REQUEST_MUTATION);
+
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'membershipRequest',
+  });
 
   const AddMember = async () => {
     try {
@@ -84,19 +89,19 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
             </div>
             <div className={styles.singledetails_data_right}>
               <p className={styles.memberfont}>
-                Joined: <span>{props.joinDate}</span>
+                {t('joined')}: <span>{props.joinDate}</span>
               </p>
               <button
                 className={styles.memberfontcreatedbtn}
                 onClick={AddMember}
               >
-                Accept
+                {t('accept')}
               </button>
               <button
                 className={styles.memberfontcreatedbtn}
                 onClick={RejectMember}
               >
-                Reject
+                {t('reject')}
               </button>
             </div>
           </Col>

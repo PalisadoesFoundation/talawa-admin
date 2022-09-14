@@ -2,9 +2,11 @@ import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
+import { I18nextProvider } from 'react-i18next';
 
 import UserUpdate from './UserUpdate';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
+import i18nForTest from 'utils/i18nForTest';
 
 const MOCKS = [
   {
@@ -57,7 +59,9 @@ describe('Testing User Update', () => {
   test('should render props and text elements test for the page component', async () => {
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
-        <UserUpdate {...props} />
+        <I18nextProvider i18n={i18nForTest}>
+          <UserUpdate {...props} />
+        </I18nextProvider>
       </MockedProvider>
     );
 
@@ -79,7 +83,7 @@ describe('Testing User Update', () => {
       formData.applangcode
     );
     userEvent.click(screen.getByLabelText('Admin'));
-    userEvent.click(screen.getByRole('radio', { name: /superadmins/i }));
+    userEvent.click(screen.getByRole('radio', { name: /superadmin/i }));
     userEvent.upload(
       screen.getByLabelText(/display image:/i),
       formData.displayImage
@@ -105,7 +109,7 @@ describe('Testing User Update', () => {
       formData.applangcode
     );
     expect(screen.getByLabelText('Admin')).not.toBeChecked();
-    expect(screen.getByRole('radio', { name: /superadmins/i })).toBeChecked();
+    expect(screen.getByRole('radio', { name: /superadmin/i })).toBeChecked();
     expect(screen.getByLabelText(/display image:/i)).toBeTruthy();
 
     expect(screen.getByText(/Cancel/i)).toBeTruthy();
@@ -116,6 +120,6 @@ describe('Testing User Update', () => {
     expect(screen.getByText('App Language Code')).toBeInTheDocument();
     expect(screen.getByText('User Type')).toBeInTheDocument();
     expect(screen.getByText('Admin')).toBeInTheDocument();
-    expect(screen.getByText('Superadmins')).toBeInTheDocument();
+    expect(screen.getByText('Superadmin')).toBeInTheDocument();
   });
 });

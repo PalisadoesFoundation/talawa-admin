@@ -5,11 +5,13 @@ import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import 'jest-location-mock';
+import { I18nextProvider } from 'react-i18next';
 
 import OrgPost from './OrgPost';
 import { store } from 'state/store';
 import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
+import i18nForTest from 'utils/i18nForTest';
 
 const MOCKS = [
   {
@@ -33,6 +35,23 @@ const MOCKS = [
             },
           },
         ],
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_POST_MUTATION,
+      variables: {
+        title: 'Dummy Post',
+        text: 'This is dummy text',
+        organizationId: '123',
+      },
+      result: {
+        data: {
+          createPost: {
+            _id: '453',
+          },
+        },
       },
     },
   },
@@ -94,7 +113,9 @@ describe('Organisation Post Page', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <OrgPost />
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -106,6 +127,7 @@ describe('Organisation Post Page', () => {
 
     expect(container.textContent).toMatch('Posts by Title');
     expect(container.textContent).toMatch('Posts by Text');
+    expect(container.textContent).toMatch('Posts by Text');
     expect(container.textContent).toMatch('Posts');
     expect(container.textContent).toMatch('+ Create Post');
   });
@@ -115,7 +137,9 @@ describe('Organisation Post Page', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <OrgPost />
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -146,7 +170,9 @@ describe('Organisation Post Page', () => {
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
-            <OrgPost />
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -171,7 +197,9 @@ describe('Organisation Post Page', () => {
       <MockedProvider addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
-            <OrgPost />
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>

@@ -1,7 +1,9 @@
 import React from 'react';
-import styles from './SuperDashListCard.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { useTranslation } from 'react-i18next';
+
+import styles from './SuperDashListCard.module.css';
 
 interface SuperDashListCardProps {
   key: string;
@@ -23,6 +25,10 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
     window.location.replace(url);
   }
 
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'superDashListCard',
+  });
+
   return (
     <>
       <Row className={styles.orglist}>
@@ -41,15 +47,15 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
             </p>
             <p className={styles.orgfont}>{props?.orgLocation}</p>
             <p className={styles.orgfontcreated}>
-              Created: <span>{props.createdDate}</span>
+              {t('created')}: <span>{props.createdDate}</span>
             </p>
           </div>
           <div className={styles.singledetails_data_right}>
             <p className={styles.orgfont}>
-              Admins: <span>{props?.admins.length}</span>
+              {t('admins')}: <span>{props?.admins.length}</span>
             </p>
             <p className={styles.orgfont}>
-              Members: <span>{props?.members}</span>
+              {t('members')}: <span>{props?.members}</span>
             </p>
             <div className={styles.orgCreateBtnDiv}>
               <button
@@ -60,7 +66,7 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
                   !props.admins.some((admin: any) => admin._id === userId)
                 }
               >
-                Manage
+                {t('manage')}
               </button>
             </div>
           </div>

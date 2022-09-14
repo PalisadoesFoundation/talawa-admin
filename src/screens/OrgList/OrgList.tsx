@@ -7,6 +7,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 import styles from './OrgList.module.css';
 import SuperDashListCard from 'components/SuperDashListCard/SuperDashListCard';
@@ -19,7 +20,9 @@ import ListNavbar from 'components/ListNavbar/ListNavbar';
 import PaginationList from 'components/PaginationList/PaginationList';
 
 function OrgList(): JSX.Element {
-  document.title = 'Talawa Organizations';
+  const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
+
+  document.title = t('title');
 
   const [modalisOpen, setmodalIsOpen] = useState(false);
   const [formState, setFormState] = useState({
@@ -147,23 +150,21 @@ function OrgList(): JSX.Element {
         <Col sm={3}>
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
-              <h6 className={styles.logintitle}>You</h6>
+              <h6 className={styles.logintitle}>{t('you')}</h6>
               <p>
-                Name:
+                {t('name')}:
                 <span>
                   {data_2?.user.firstName} {data_2?.user.lastName}
                 </span>
               </p>
               <p>
-                Designation:
-                <span> {data_2?.user.userType}</span>
+                {t('designation')}:<span> {data_2?.user.userType}</span>
               </p>
               <p>
-                Email:
-                <span> {data_2?.user.email}</span>
+                {t('email')}:<span> {data_2?.user.email}</span>
               </p>
 
-              <h6 className={styles.searchtitle}>Search By Name</h6>
+              <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
               <input
                 type="name"
                 id="orgname"
@@ -179,7 +180,7 @@ function OrgList(): JSX.Element {
         <Col sm={8}>
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
-              <p className={styles.logintitle}>Organizations List</p>
+              <p className={styles.logintitle}>{t('organizationList')}</p>
               <Button
                 variant="success"
                 className={styles.invitebtn}
@@ -187,7 +188,7 @@ function OrgList(): JSX.Element {
                 onClick={showInviteModal}
                 data-testid="createOrganizationBtn"
               >
-                + Create Organization
+                + {t('createOrganization')}
               </Button>
             </Row>
             <div className={styles.list_box}>
@@ -254,7 +255,7 @@ function OrgList(): JSX.Element {
         <section id={styles.grid_wrapper}>
           <div className={styles.form_wrapper}>
             <div className={styles.flexdir}>
-              <p className={styles.titlemodal}>Create Organization</p>
+              <p className={styles.titlemodal}>{t('createOrganization')}</p>
               <a
                 onClick={hideInviteModal}
                 className={styles.cancel}
@@ -264,7 +265,7 @@ function OrgList(): JSX.Element {
               </a>
             </div>
             <Form onSubmitCapture={CreateOrg}>
-              <label htmlFor="orgname">Name</label>
+              <label htmlFor="orgname">{t('name')}</label>
               <input
                 type="name"
                 id="orgname"
@@ -280,7 +281,7 @@ function OrgList(): JSX.Element {
                   });
                 }}
               />
-              <label htmlFor="descrip">Description</label>
+              <label htmlFor="descrip">{t('description')}</label>
               <input
                 type="descrip"
                 id="descrip"
@@ -295,7 +296,7 @@ function OrgList(): JSX.Element {
                   });
                 }}
               />
-              <label htmlFor="location">Location</label>
+              <label htmlFor="location">{t('location')}</label>
               <input
                 type="text"
                 id="location"
@@ -310,7 +311,7 @@ function OrgList(): JSX.Element {
                   });
                 }}
               />
-              <label htmlFor="tags">Tags (Comma(,) Seperated)</label>
+              <label htmlFor="tags">{t('tags')}</label>
               <input
                 type="text"
                 id="tags"
@@ -327,7 +328,7 @@ function OrgList(): JSX.Element {
               />
               <div className={styles.checkboxdiv}>
                 <div className={styles.dispflex}>
-                  <label htmlFor="ispublic">Is Public:</label>
+                  <label htmlFor="ispublic">{t('isPublic')}:</label>
                   <input
                     id="ispublic"
                     type="checkbox"
@@ -341,7 +342,7 @@ function OrgList(): JSX.Element {
                   />
                 </div>
                 <div className={styles.dispflex}>
-                  <label htmlFor="visible">Visible In Search: </label>
+                  <label htmlFor="visible">{t('visibleInSearch')}: </label>
                   <input
                     id="visible"
                     type="checkbox"
@@ -356,7 +357,7 @@ function OrgList(): JSX.Element {
                 </div>
               </div>
               <label htmlFor="orgphoto" className={styles.orgphoto}>
-                Display Image:
+                {t('displayImage')}:
                 <input
                   accept="image/*"
                   id="orgphoto"
@@ -372,7 +373,7 @@ function OrgList(): JSX.Element {
                 value="invite"
                 data-testid="submitOrganizationForm"
               >
-                Create Organization
+                {t('createOrganization')}
               </button>
             </Form>
           </div>
