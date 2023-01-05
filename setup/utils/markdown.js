@@ -1,7 +1,7 @@
 /**
  * @function to display the content of a markdown file
  */
-import marked from 'marked';
+import { marked } from 'marked';
 import TerminalRenderer from 'marked-terminal';
 
 marked.setOptions({
