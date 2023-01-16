@@ -10,7 +10,7 @@ You must have the following installed on your system:
 To start with the installation process,
 
 1. Clone this repo to your local machine
-   
+
    ```sh
       git clone https://github.com/PalisadoesFoundation/talawa-admin.git
       cd talawa-admin
@@ -22,11 +22,11 @@ To start with the installation process,
       yarn install
    ```
 
-3.  Talawa-Admin uses a configuration file named `.env` in the root directory. It is not a part of the repo and you will need to create it. There is a sample configuration file named `.env.sample` in the root directory. Create a new `.env` file by copying the contents of the `.env.sample` file.
+3. Talawa-Admin uses a configuration file named `.env` in the root directory. It is not a part of the repo and you will need to create it. There is a sample configuration file named `.env.sample` in the root directory. Create a new `.env` file by copying the contents of the `.env.sample` file.
 
-   ```sh
-      cp .env.sample .env
-   ```
+```sh
+   cp .env.sample .env
+```
 
 4.  Run Talawa-api locally in your system, and put its url into the same.
 
@@ -36,7 +36,6 @@ Get the google recaptcha site key from google recaptcha admin or https://www.goo
 Note: In domains, fill localhost
 
 REACT_APP_RECAPTCHA_KEY=
-
 Note: the secret key and the site key should be generated at the same time for TALAWA-ADMIN and TALAWA-API
 
 6. The command below will run the talawa-admin server in development environment.
