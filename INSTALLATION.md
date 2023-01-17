@@ -1,5 +1,5 @@
 ## Installation
-### Prerequistes
+### Prerequisites
 This mode of installation helps to run all the installation steps automatically.
 
 You must have the following installed on your system:
@@ -8,18 +8,13 @@ You must have the following installed on your system:
 - [Yarn 1.22.17](https://yarnpkg.com/) or higher
 - Before starting the installation process run the talwa-api by [following this doc](https://github.com/PalisadoesFoundation/talawa-api/blob/develop/INSTALLATION.md)
 
-# Documentation
-
-- The `talawa` documentation can be found [here](https://docs.talawa.io).
-- Want to contribute? Look at [CONTRIBUTING.md](CONTRIBUTING.md) to get started.
-- Visit the [Talawa-Docs GitHub](https://github.com/PalisadoesFoundation/talawa-docs) to see the code.
 
 ## Installation (Automated Installer)
 
 ```
 yarn setup
 ```
-### Installation (Manually)
+## Installation (Manually)
 
 1.  Clone this repo to your local machine
 
@@ -31,21 +26,20 @@ yarn setup
 
         cp .env.example .env
 
-3.  Run Talawa-Api locally in your system, and copy the URL to the `REACT_APP_BACKEND_ENDPOINT` section of the `.env` file.
+3.  Run Talawa-api locally in your system, and put its url into the same section of the `.env` file.
 
         Talawa-API: https://github.com/PalisadoesFoundation/talawa-api
 
-4.  Run Talawa-api locally in your system, and put its url into the same.
-
       REACT_APP_BACKEND_ENDPOINT=
 
-      Get the google recaptcha site key from google recaptcha admin or https://www.google.com/recaptcha/admin/create from here for reCAPTCHA v2 and "I'm not a robot" Checkbox, and paste the key here.
+4.  Get the google `recaptcha site key` from google recaptcha admin or https://www.google.com/recaptcha/admin/create from here for reCAPTCHA v2 and "I'm not a robot" Checkbox, and paste the key here.
       Note: In domains, fill localhost
 
       REACT_APP_RECAPTCHA_KEY=
+      
       Note: the secret key and the site key should be generated at the same time for TALAWA-ADMIN and TALAWA-API
-
-5.  When finished, your `.env` file should have the following field filled in.
+      
+5. When finished, your `.env` file should have the following field filled in.
 
     - REACT_APP_BACKEND_ENDPOINT
     - REACT_APP_RECAPTCHA_KEY
