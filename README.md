@@ -34,6 +34,6 @@ Core features include:
 - Want to contribute? Look at [CONTRIBUTING.md](CONTRIBUTING.md) to get started.
 - Visit the [Talawa-Docs GitHub](https://github.com/PalisadoesFoundation/talawa-docs) to see the code.
 
-## Installation
+# Installation
 
 [Follow this guide](./INSTALLATION.md)
