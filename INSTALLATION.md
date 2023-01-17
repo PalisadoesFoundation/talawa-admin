@@ -1,32 +1,39 @@
 ## Installation
-
+### Prerequistes
 This mode of installation helps to run all the installation steps automatically.
 
 You must have the following installed on your system:
 
 - [NodeJS 12.20.16](https://www.nodejs.org) or higher
 - [Yarn 1.22.17](https://yarnpkg.com/) or higher
+- Before starting the installation process run the talwa-api by [following this doc](https://github.com/PalisadoesFoundation/talawa-api/blob/develop/INSTALLATION.md)
 
-To start with the installation process,
+# Documentation
 
-1. Clone this repo to your local machine
+- The `talawa` documentation can be found [here](https://docs.talawa.io).
+- Want to contribute? Look at [CONTRIBUTING.md](CONTRIBUTING.md) to get started.
+- Visit the [Talawa-Docs GitHub](https://github.com/PalisadoesFoundation/talawa-docs) to see the code.
 
-   ```sh
-      git clone https://github.com/PalisadoesFoundation/talawa-admin.git
-      cd talawa-admin
-   ```
+## Installation (Automated Installer)
 
-2. Install the yarn packages required by talawa-admin :-
+```
+yarn setup
+```
+### Installation (Manually)
 
-   ```sh
-      yarn install
-   ```
+1.  Clone this repo to your local machine
 
-3. Talawa-Admin uses a configuration file named `.env` in the root directory. It is not a part of the repo and you will need to create it. There is a sample configuration file named `.env.sample` in the root directory. Create a new `.env` file by copying the contents of the `.env.sample` file.
+        git clone https://github.com/PalisadoesFoundation/talawa-admin
+        cd talawa-admin
+        yarn install
 
-   ```sh
-      cp .env.example .env
-   ```
+2.  Talawa-ADMIN uses a configuration file named `.env` in the root directory. It is not a part of the repo and you will need to create it. There is a sample configuration file named `.env.example` in the root diretory. Create a new `.env` file by copying the contents of the `.env.example` file.
+
+        cp .env.example .env
+
+3.  Run Talawa-Api locally in your system, and copy the URL to the `REACT_APP_BACKEND_ENDPOINT` section of the `.env` file.
+
+        Talawa-API: https://github.com/PalisadoesFoundation/talawa-api
 
 4.  Run Talawa-api locally in your system, and put its url into the same.
 
@@ -38,14 +45,57 @@ To start with the installation process,
       REACT_APP_RECAPTCHA_KEY=
       Note: the secret key and the site key should be generated at the same time for TALAWA-ADMIN and TALAWA-API
 
-6. The command below will run the talawa-admin server in development environment.
+5.  When finished, your `.env` file should have the following field filled in.
 
-   ```sh
-      yarn serve
-   ```
+    - REACT_APP_BACKEND_ENDPOINT
+    - REACT_APP_RECAPTCHA_KEY
 
-7. To stop the server use this keybind in the terminal where the above command is executed.
+    Please review the contents of the `.env.example` file for additional details.
+
+## Compiles and hot-reloads for development
+
+```
+yarn serve
+```
+
+## Compiles and minifies for production
+
+```
+yarn build
+```
+
+## Run your end-to-end tests
+
+```
+yarn test:e2e
+```
+
+## Lints and fixes files
+
+```
+yarn lint
+```
+## To stop the server use this keybind in the terminal where the above command is executed.
 
    ```sh
       CTRL + C
    ```
+
+## Express Installation
+
+See [Follow this guide](./INSTALLATION.md).
+
+## Customize configuration
+
+See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## Project setup using docker
+
+See [Docker Container](Docker_Container/README.md)
+
+## For Code Style
+
+See [Code Stlye](Code_Style.md)
+
+
+
