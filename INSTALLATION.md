@@ -16,8 +16,10 @@ This document provides instructions on how to set up and start a running instanc
 8. [Installing required packages/dependencies](#installing-required-packagesdependencies)
 9. [Running talawa-admin](#running-talawa-admin)
 10. [Accessing talawa-admin](#accessing-talawa-admin)
-11. [Running tests](#running-tests)
-12. [Linting code files](#linting-code-files)
+11. [Elevate the permissions for created account](#elevate-the-permissions-for-created-account)
+12. [Sign in to talawa-admin](#sign-in-to-talawa-admin)
+13. [Running tests](#running-tests)
+14. [Linting code files](#linting-code-files)
 
 <br/>
 
@@ -113,6 +115,32 @@ By default `talawa-admin` runs on port `3000` on your system's localhost. It is 
         http://localhost:3000/
 
 <br/>
+
+## Sign up on talawa-admin
+
+The first time you navigate to the running talawa-admin's website you'll land at talawa-admin sign up page. Sign up using whatever credentials you want and create the account. Make sure to remember the email and password you entered because they'll be used to sign you in later on.
+
+<br/>
+
+## Elevate the permissions for created account
+
+You have to manually elevate your account's permissions to make it `admin approved` and make it have `SUPERADMIN` privileges. 
+
+For the account you created:-
+
+1. Set `adminApproved` field to `true`:-
+
+        adminApproved: true
+    
+2. Set `userType` field to `SUPERADMIN`:-
+
+        userType: "SUPERADMIN"
+
+<br/>
+
+## Sign in to talawa-admin
+
+Now sign in to talawa-admin using the `email` and `password` you used to sign up.
 
 ## Running tests
 
