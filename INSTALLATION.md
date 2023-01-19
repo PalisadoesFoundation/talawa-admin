@@ -142,6 +142,8 @@ For the account you created:-
 
 Now sign in to talawa-admin using the `email` and `password` you used to sign up.
 
+<br/>
+
 ## Running tests
 
 You can run the tests for `talawa-admin` using this command:-
