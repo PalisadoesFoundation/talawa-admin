@@ -29,21 +29,35 @@ This is the method that we recommend :-
         yarn install
 
 2.  Talawa-Admin uses a configuration file named `.env` in the root directory. It is not a part of the repo and you will need to create it. There is a sample configuration file named `.env.example` in the root diretory. Create a new `.env` file by copying the contents of the `.env.example` file.
-
+        
         cp .env.example .env
+     In the newly created .env file in your local system, you will find two env variables-
 
-3.  Run Talawa-api locally in your system, and put its url into the same section of the `.env` file.
+        REACT_APP_BACKEND_ENDPOINT=
+        REACT_APP_RECAPTCHA_KEY=
+      
+3.  Run Talawa-api locally in your system, and put its url into the same section of the `.env` file. By default, it will be `http://localhost:4000/graphql`
 
-        Talawa-API: https://github.com/PalisadoesFoundation/talawa-api
-
-    REACT_APP_BACKEND_ENDPOINT=
+        Talawa-API: https://github.com/PalisadoesFoundation/talawa-api //setup this project locally by following the installation guide 
+ Start the api server and pass the url to this variable in .env file 
+    REACT_APP_BACKEND_ENDPOINT=`<local talawa-api url>`
 
 4.  Get the google `recaptcha site key` from google recaptcha admin or https://www.google.com/recaptcha/admin/create from here for reCAPTCHA v2 and "I'm not a robot" Checkbox, and paste the key here.
     Note: In domains, fill localhost
-
-    REACT_APP_RECAPTCHA_KEY=
+    
+    After the key generation in the Google Console,
+    
+    Copy the `site key` and pass it to this variable in talwa-admin's .env file
+    
+        REACT_APP_RECAPTCHA_KEY=
+    
+    Go to the local talwa-api code and pass the `secret key` to this variable in its .env file
+    
+        RECAPTCHA_SECRET_KEY=
 
     Note: the secret key and the site key should be generated at the same time for TALAWA-ADMIN and TALAWA-API
+    
+        
 
 5.  When finished, your `.env` file should have the following field filled in.
 
@@ -88,9 +102,14 @@ To stop the server use this keybind in the terminal where the above command is e
 ```sh
    CTRL + C
 ```
-
 ## Installation: using docker
 Follow these steps to get Talawa-admin working with Docker :-
 
 See [Docker Container](Docker_Container/README.md)
-
+## Next Steps After Setup
+1. Register on the admin portal 
+2. After you get a `waiting for approval` notification , go to your mongoDB talawa-api instance , go to users and set the fields of the newly registered user to the new values-
+        
+        adminApproved:true
+        userType:SUPERADMIN
+3. Now you should be able to login to the admin-console with your credentials.
