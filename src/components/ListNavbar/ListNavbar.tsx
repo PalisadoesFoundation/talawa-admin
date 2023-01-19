@@ -23,7 +23,7 @@ const ListNavbar = () => {
 
   return (
     <Navbar className={styles.navbarbgOrglist} expand="xl">
-      <Navbar.Brand>
+      <Navbar.Brand className={styles.navbarBrand}>
         <Link className={styles.logo} to="/orglist">
           <img src={Logo} />
           <strong>{t('talawa_portal')}</strong>

@@ -179,9 +179,9 @@ a {
   body::before {
     height: 118px;
   }
-  .navbarbg {
+  /* .navbarbg {
     height: auto;
-  }
+  } */
   .navitems > .navlinks {
     margin-left: 0;
   }
