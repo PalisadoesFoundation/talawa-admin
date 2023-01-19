@@ -1,96 +1,129 @@
-# Talwa-Admin Installation
+# Talawa-admin installation
 
-Talawa Admin is mainly written and built using react.js and typescript. We are providing some common approaches to set it up on your system.
+This document provides instructions on how to set up and start a running instance of `talawa-admin` on your local system. The instructions are written to be followed in sequence so make sure to go through each of them step by step without skipping any sections.
 
-## Prerequisites
+<br/>
 
-This mode of installation helps to run all the installation steps automatically.
+# Table of contents
 
-You must have the following installed on your system:
+1. [Set up talawa-api](#set-up-talawa-api)
+2. [Clone this repository](#clone-this-repository)
+3. [Change directory into the cloned repo](#change-directory-into-the-cloned-repo)
+4. [Creating .env file](#creating-env-file)
+5. [Setting up REACT_APP_BACKEND_ENDPOINT in .env file](#setting-up-react_app_backend_endpoint-in-env-file)
+6. [Setting up REACT_APP_RECAPTCHA_KEY in .env file](#setting-up-react_app_recaptcha_key-in-env-file)
+7. [Setting up yarn](#setting-up-yarn)
+8. [Installing required packages/dependencies](#installing-required-packagesdependencies)
+9. [Running talawa-admin](#running-talawa-admin)
+10. [Accessing talawa-admin](#accessing-talawa-admin)
+11. [Running tests](#running-tests)
+12. [Linting code files](#linting-code-files)
 
-- [NodeJS 12.20.16](https://www.nodejs.org) or higher
-- [Yarn 1.22.17](https://yarnpkg.com/) or higher
-- Before starting the installation process run the talwa-api by [following this doc](https://github.com/PalisadoesFoundation/talawa-api/blob/develop/INSTALLATION.md)
+<br/>
 
-## Installation (Automated Installer)
-This method will automate most of the work needed for setting up talawa-admin.
+## Set up talawa-api
 
-```
-yarn setup
-```
+Talawa-admin needs URL endpoint to a running instance of `talawa-api` graphql service to perform its operations. You need to set up a local instance of talawa-api on your system.
 
-## Installation (Manually)
-This is the method that we recommend :-
+Follow the [installation guide](https://github.com/PalisadoesFoundation/talawa-api/blob/develop/INSTALLATION.md) on talawa-api repo to set it up.
 
-1.  Clone this repo to your local machine
+<br/>
 
-        git clone https://github.com/PalisadoesFoundation/talawa-admin
-        cd talawa-admin
-        yarn install
+## Clone this repository
 
-2.  Talawa-Admin uses a configuration file named `.env` in the root directory. It is not a part of the repo and you will need to create it. There is a sample configuration file named `.env.example` in the root diretory. Create a new `.env` file by copying the contents of the `.env.example` file.
+First you need a local copy of `talawa-admin`. Run the following command in the directory of choice on your local system.
 
-        cp .env.example .env
+    git clone https://github.com/PalisadoesFoundation/talawa-admin
 
-3.  Run Talawa-api locally in your system, and put its url into the same section of the `.env` file.
+This will download a local copy of `talawa-admin` in that directory.
 
-        Talawa-API: https://github.com/PalisadoesFoundation/talawa-api
+## Change directory into the cloned repo
 
-    REACT_APP_BACKEND_ENDPOINT=
+Right after cloning the repo you can change the directory of your current `terminal(shell)` to the root directory of cloned repository using this command:-
 
-4.  Get the google `recaptcha site key` from google recaptcha admin or https://www.google.com/recaptcha/admin/create from here for reCAPTCHA v2 and "I'm not a robot" Checkbox, and paste the key here.
-    Note: In domains, fill localhost
+    cd ./talawa-admin
 
-    REACT_APP_RECAPTCHA_KEY=
+**NOTE:-** `All the commands we're going to execute in the following instructions will assume you are in the root directory of the cloned talawa-admin project. If you fail to do so, the commands will not work.`
 
-    Note: the secret key and the site key should be generated at the same time for TALAWA-ADMIN and TALAWA-API
+## Creating .env file
 
-5.  When finished, your `.env` file should have the following field filled in.
+A file named .env is required in the root directory of talawa-admin for storing environment variables used at runtime. It is not a part of the repo and you will have to create it. For a sample of `.env` file there is a file named `.env.sample` in the root directory. Create a new `.env` file by copying the contents of the `.env.sample` into `.env` file. Use this command:-
 
-    - REACT_APP_BACKEND_ENDPOINT
-    - REACT_APP_RECAPTCHA_KEY
+    cp .env.sample .env
 
-    Please review the contents of the `.env.example` file for additional details.
-    
-## Compilation
-These commands will help you to compile the code and see the live chnages in your local machine :-
+This `.env` file must be populated with the following environment variables for `talawa-admin` to work:-
 
-Compiles and hot-reloads for development
+| Variable                   | Description                                 |
+| -------------------------- | ------------------------------------------- |
+| REACT_APP_BACKEND_ENDPOINT | URL endpoint for talawa-api graphql service |
+| REACT_APP_RECAPTCHA_KEY    | Site key for authentication using reCAPTCHA |
 
-```
-yarn serve
-```
+Follow the instructions from section [Setting up REACT_APP_BACKEND_ENDPOINT in .env file](#setting-up-react_app_backend_endpoint-in-env-file) up to and including section [Setting up REACT_APP_RECAPTCHA_KEY in .env file](#setting-up-react_app_recaptcha_key-in-env-file) to set up these environment variables.
 
-Compiles and minifies for production
+<br/>
 
-```
-yarn build
-```
-## Testing
+## Setting up REACT_APP_BACKEND_ENDPOINT in .env file
 
-You can run the tests for talawa-admin using this command :-
+Copy/paste the endpoint for [accessing](https://github.com/PalisadoesFoundation/talawa-api/blob/develop/INSTALLATION.md#accessing-talawa-api) talawa-api graphql service to the variable named `REACT_APP_BACKEND_ENDPOINT` in `.env` file.
 
-Run your end-to-end tests
+    REACT_APP_BACKEND_ENDPOINT="http://localhost:4000/graphql/"
 
-```
-yarn test:e2e
-```
+<br/>
 
-Lints and fixes files
+## Setting up REACT_APP_RECAPTCHA_KEY in .env file
 
-```
-yarn lint
-```
-## Server
+Make sure to go through [this](https://github.com/PalisadoesFoundation/talawa-api/blob/develop/INSTALLATION.md#setting-up-recaptcha_secret_key-in-env-file) section on `talawa-api's` installation docs.
 
-To stop the server use this keybind in the terminal where the above command is executed :-
+`Talawa-admin` needs the `reCAPTCHA site key` for the `reCAPTCHA` service you set up during `talawa-api` installation as shown in this screenshot:-
 
-```sh
-   CTRL + C
-```
+![reCAPTCHA site key](https://github.com/PalisadoesFoundation/talawa-api/blob/develop/image/recaptcha_secret.webp)
 
-## Installation: using docker
-Follow these steps to get Talawa-admin working with Docker :-
+Copy/paste this `reCAPTCHA site key` to the variable named `REACT_APP_RECAPTCHA_KEY` in `.env` file.
 
-See [Docker Container](Docker_Container/README.md)
+    REACT_APP_RECAPTCHA_KEY="this_is_the_recaptcha_key"
 
+<br/>
+
+## Setting up yarn
+
+If you've followed the previous steps you should have already set up node.js on your system. [Click here](https://yarnpkg.com/getting-started/install) for the official setup guide for yarn.
+
+<br/>
+
+## Installing required packages/dependencies
+
+Run the following command to install the packages and dependencies required by `talawa-admin`:-
+
+        yarn
+
+<br/>
+
+## Running talawa-admin
+
+Run the following command to start `talawa-admin` development server:-
+
+        yarn serve
+
+<br/>
+
+## Accessing talawa-admin
+
+By default `talawa-admin` runs on port `3000` on your system's localhost. It is available on the following endpoint:-
+
+        http://localhost:3000/
+
+<br/>
+
+## Running tests
+
+You can run the tests for `talawa-admin` using this command:-
+
+    yarn test
+
+<br/>
+
+## Linting code files
+
+You can lint your code files using this command:-
+
+    yarn lint
