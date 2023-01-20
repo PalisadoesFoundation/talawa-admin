@@ -16,10 +16,11 @@ This document provides instructions on how to set up and start a running instanc
 8. [Installing required packages/dependencies](#installing-required-packagesdependencies)
 9. [Running talawa-admin](#running-talawa-admin)
 10. [Accessing talawa-admin](#accessing-talawa-admin)
-11. [Elevate the permissions for created account](#elevate-the-permissions-for-created-account)
-12. [Sign in to talawa-admin](#sign-in-to-talawa-admin)
-13. [Running tests](#running-tests)
-14. [Linting code files](#linting-code-files)
+11. [Sign up on talawa-admin](#sign-up-on-talawa-admin)
+12. [Elevate the permissions for created account](#elevate-the-permissions-for-created-account)
+13. [Sign in to talawa-admin](#sign-in-to-talawa-admin)
+14. [Running tests](#running-tests)
+15. [Linting code files](#linting-code-files)
 
 <br/>
 
@@ -66,7 +67,9 @@ Follow the instructions from section [Setting up REACT_APP_BACKEND_ENDPOINT in .
 
 ## Setting up REACT_APP_BACKEND_ENDPOINT in .env file
 
-Copy/paste the endpoint for [accessing](https://github.com/PalisadoesFoundation/talawa-api/blob/develop/INSTALLATION.md#accessing-talawa-api) talawa-api graphql service to the variable named `REACT_APP_BACKEND_ENDPOINT` in `.env` file.
+Make sure to go through [this](https://github.com/PalisadoesFoundation/talawa-api/blob/develop/INSTALLATION.md#accessing-talawa-api) section on `talawa-api's` installation docs.
+
+Copy/paste the endpoint for accessing talawa-api graphql service to the variable named `REACT_APP_BACKEND_ENDPOINT` in `.env` file.
 
     REACT_APP_BACKEND_ENDPOINT="http://localhost:4000/graphql/"
 
