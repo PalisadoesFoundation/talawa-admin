@@ -21,6 +21,7 @@ This document provides instructions on how to set up and start a running instanc
 13. [Sign in to talawa-admin](#sign-in-to-talawa-admin)
 14. [Running tests](#running-tests)
 15. [Linting code files](#linting-code-files)
+16. [Setting up Talawa-Admin & API for Talawa App](#setting-up-talawa-admin-and-api-for-talawa)
 
 <br/>
 
@@ -160,3 +161,32 @@ You can run the tests for `talawa-admin` using this command:-
 You can lint your code files using this command:-
 
     yarn lint
+
+## Setting up Talawa-Admin and API for Talawa App
+
+Talawa mobile app requires [talawa-api](https://github.com/PalisadoesFoundation/talawa-api) running locally or remotely, which will be used as an `organisation url`. 
+
+### On Your Local Machine
+
+You need to setup your own local instance of [Talawa-API](https://github.com/PalisadoesFoundation/talawa-api) and [Talawa-admin](https://github.com/PalisadoesFoundation/talawa-admin). The advantage is that you'll be working with the latest code.
+
+1. You need to first setup the 2 supporting projects locally. Please refer the INSTALLATION.md of the respective repository for further guidance.
+    1. [talawa-api](https://github.com/PalisadoesFoundation/talawa-api)
+    1. [talawa-admin](https://github.com/PalisadoesFoundation/talawa-admin)
+1. Create a user account in [talawa-admin](https://github.com/PalisadoesFoundation/talawa-admin). The user account is necessary for creating the first organization which will be needed during your development time.
+    1. Enter your MongoDB dashboard to start the process of editing the `users` collection. This is done so that you will get authorized to create and manage an organization. Refer the images below as needed.
+        1. Go to your `MongoDB` dashboard
+        1. Select your project
+        1. Click Browse `collection` 
+        1. Select `users` collection and edit the data. Change:
+            1. `userType` from ADMIN to SUPERADMIN
+            1. `adminApproved` from `false` to `true`. 
+            1. ![User Collection Modification](https://user-images.githubusercontent.com/64683098/212524445-d2f59670-1ffd-462f-b6fe-09c10065976c.jpg)
+1. After you have created the [talawa-admin](https://github.com/PalisadoesFoundation/talawa-admin) user account, you'll need to create an organization.
+    1.  Login to your [talawa-admin](https://github.com/PalisadoesFoundation/talawa-admin) account and create an `organization`
+    1.  Click the `Create Organization` button on the top corner
+    1.  ![Organization Creation](https://user-images.githubusercontent.com/64683098/212369627-bc4e49fc-bf84-4ee2-b99b-12720c996308.PNG)
+1. Install [talawa](https://github.com/PalisadoesFoundation/talawa) Please refer the INSTALLATION.md of the respective repository for further guidance.
+    1. Then use the URL (Organization URL) in this form:
+        1. http://(IP-address):4000/graphql (See the below example) 
+        1. Example : http://10.0.2.2:4000/graphql
