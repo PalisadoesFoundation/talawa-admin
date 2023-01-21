@@ -21,7 +21,7 @@ This document provides instructions on how to set up and start a running instanc
 13. [Sign in to talawa-admin](#sign-in-to-talawa-admin)
 14. [Running tests](#running-tests)
 15. [Linting code files](#linting-code-files)
-16. [Setting up Talawa-Admin & API for Talawa App](#setting-up-talawa-admin-and-api-for-talawa)
+16. [Setting up Talawa-Admin & API for Talawa App](#setting-up-talawa-admin-and-api-for-talawa-app)
 
 <br/>
 
