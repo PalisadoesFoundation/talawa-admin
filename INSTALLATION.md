@@ -10,8 +10,8 @@ This document provides instructions on how to set up and start a running instanc
 2. [Clone this repository](#clone-this-repository)
 3. [Change directory into the cloned repo](#change-directory-into-the-cloned-repo)
 4. [Creating .env file](#creating-env-file)
-5. [Setting up REACT_APP_BACKEND_ENDPOINT in .env file](#setting-up-react_app_backend_endpoint-in-env-file)
-6. [Setting up REACT_APP_RECAPTCHA_KEY in .env file](#setting-up-react_app_recaptcha_key-in-env-file)
+5. [Setting up REACT_APP_TALAWA_URL in .env file](#setting-up-REACT_APP_TALAWA_URL-in-env-file)
+6. [Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-REACT_APP_RECAPTCHA_SITE_KEY-in-env-file)
 7. [Setting up yarn](#setting-up-yarn)
 8. [Installing required packages/dependencies](#installing-required-packagesdependencies)
 9. [Running talawa-admin](#running-talawa-admin)
@@ -58,24 +58,24 @@ This `.env` file must be populated with the following environment variables for 
 
 | Variable                   | Description                                 |
 | -------------------------- | ------------------------------------------- |
-| REACT_APP_BACKEND_ENDPOINT | URL endpoint for talawa-api graphql service |
-| REACT_APP_RECAPTCHA_KEY    | Site key for authentication using reCAPTCHA |
+| REACT_APP_TALAWA_URL | URL endpoint for talawa-api graphql service |
+| REACT_APP_RECAPTCHA_SITE_KEY    | Site key for authentication using reCAPTCHA |
 
-Follow the instructions from section [Setting up REACT_APP_BACKEND_ENDPOINT in .env file](#setting-up-react_app_backend_endpoint-in-env-file) up to and including section [Setting up REACT_APP_RECAPTCHA_KEY in .env file](#setting-up-react_app_recaptcha_key-in-env-file) to set up these environment variables.
+Follow the instructions from section [Setting up REACT_APP_TALAWA_URL in .env file](#setting-up-REACT_APP_TALAWA_URL-in-env-file) up to and including section [Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-REACT_APP_RECAPTCHA_SITE_KEY-in-env-file) to set up these environment variables.
 
 <br/>
 
-## Setting up REACT_APP_BACKEND_ENDPOINT in .env file
+## Setting up REACT_APP_TALAWA_URL in .env file
 
 Make sure to go through [this](https://github.com/PalisadoesFoundation/talawa-api/blob/develop/INSTALLATION.md#accessing-talawa-api) section on `talawa-api's` installation docs.
 
-Copy/paste the endpoint for accessing talawa-api graphql service to the variable named `REACT_APP_BACKEND_ENDPOINT` in `.env` file.
+Copy/paste the endpoint for accessing talawa-api graphql service to the variable named `REACT_APP_TALAWA_URL` in `.env` file.
 
-    REACT_APP_BACKEND_ENDPOINT="http://localhost:4000/graphql/"
+    REACT_APP_TALAWA_URL="http://localhost:4000/graphql/"
 
 <br/>
 
-## Setting up REACT_APP_RECAPTCHA_KEY in .env file
+## Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file
 
 Make sure to go through [this](https://github.com/PalisadoesFoundation/talawa-api/blob/develop/INSTALLATION.md#setting-up-recaptcha_secret_key-in-env-file) section on `talawa-api's` installation docs.
 
@@ -83,9 +83,9 @@ Make sure to go through [this](https://github.com/PalisadoesFoundation/talawa-ap
 
 ![reCAPTCHA site key](https://github.com/PalisadoesFoundation/talawa-api/blob/develop/image/recaptcha_secret.webp)
 
-Copy/paste this `reCAPTCHA site key` to the variable named `REACT_APP_RECAPTCHA_KEY` in `.env` file.
+Copy/paste this `reCAPTCHA site key` to the variable named `REACT_APP_RECAPTCHA_SITE_KEY` in `.env` file.
 
-    REACT_APP_RECAPTCHA_KEY="this_is_the_recaptcha_key"
+    REACT_APP_RECAPTCHA_SITE_KEY="this_is_the_recaptcha_key"
 
 <br/>
 

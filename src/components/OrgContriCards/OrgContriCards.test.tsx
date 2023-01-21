@@ -13,7 +13,7 @@ import i18nForTest from 'utils/i18nForTest';
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
-  uri: process.env.REACT_APP_BACKEND_ENDPOINT,
+  uri: process.env.REACT_APP_TALAWA_URL,
 });
 
 describe('Testing the Organization Contributions Cards', () => {
