@@ -10,8 +10,8 @@ This document provides instructions on how to set up and start a running instanc
 2. [Clone this repository](#clone-this-repository)
 3. [Change directory into the cloned repo](#change-directory-into-the-cloned-repo)
 4. [Creating .env file](#creating-env-file)
-5. [Setting up REACT_APP_BACKEND_ENDPOINT in .env file](#setting-up-react_app_backend_endpoint-in-env-file)
-6. [Setting up REACT_APP_RECAPTCHA_KEY in .env file](#setting-up-react_app_recaptcha_key-in-env-file)
+5. [Setting up REACT_APP_TALAWA_URL in .env file](#setting-up-REACT_APP_TALAWA_URL-in-env-file)
+6. [Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-REACT_APP_RECAPTCHA_SITE_KEY-in-env-file)
 7. [Setting up yarn](#setting-up-yarn)
 8. [Installing required packages/dependencies](#installing-required-packagesdependencies)
 9. [Running talawa-admin](#running-talawa-admin)
@@ -21,6 +21,7 @@ This document provides instructions on how to set up and start a running instanc
 13. [Sign in to talawa-admin](#sign-in-to-talawa-admin)
 14. [Running tests](#running-tests)
 15. [Linting code files](#linting-code-files)
+16. [Setting up Talawa-Admin & API for Talawa App](#setting-up-talawa-admin-and-api-for-talawa-app)
 
 <br/>
 
@@ -58,24 +59,24 @@ This `.env` file must be populated with the following environment variables for 
 
 | Variable                   | Description                                 |
 | -------------------------- | ------------------------------------------- |
-| REACT_APP_BACKEND_ENDPOINT | URL endpoint for talawa-api graphql service |
-| REACT_APP_RECAPTCHA_KEY    | Site key for authentication using reCAPTCHA |
+| REACT_APP_TALAWA_URL | URL endpoint for talawa-api graphql service |
+| REACT_APP_RECAPTCHA_SITE_KEY    | Site key for authentication using reCAPTCHA |
 
-Follow the instructions from section [Setting up REACT_APP_BACKEND_ENDPOINT in .env file](#setting-up-react_app_backend_endpoint-in-env-file) up to and including section [Setting up REACT_APP_RECAPTCHA_KEY in .env file](#setting-up-react_app_recaptcha_key-in-env-file) to set up these environment variables.
+Follow the instructions from section [Setting up REACT_APP_TALAWA_URL in .env file](#setting-up-REACT_APP_TALAWA_URL-in-env-file) up to and including section [Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-REACT_APP_RECAPTCHA_SITE_KEY-in-env-file) to set up these environment variables.
 
 <br/>
 
-## Setting up REACT_APP_BACKEND_ENDPOINT in .env file
+## Setting up REACT_APP_TALAWA_URL in .env file
 
 Make sure to go through [this](https://github.com/PalisadoesFoundation/talawa-api/blob/develop/INSTALLATION.md#accessing-talawa-api) section on `talawa-api's` installation docs.
 
-Copy/paste the endpoint for accessing talawa-api graphql service to the variable named `REACT_APP_BACKEND_ENDPOINT` in `.env` file.
+Copy/paste the endpoint for accessing talawa-api graphql service to the variable named `REACT_APP_TALAWA_URL` in `.env` file.
 
-    REACT_APP_BACKEND_ENDPOINT="http://localhost:4000/graphql/"
+    REACT_APP_TALAWA_URL="http://localhost:4000/graphql/"
 
 <br/>
 
-## Setting up REACT_APP_RECAPTCHA_KEY in .env file
+## Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file
 
 Make sure to go through [this](https://github.com/PalisadoesFoundation/talawa-api/blob/develop/INSTALLATION.md#setting-up-recaptcha_secret_key-in-env-file) section on `talawa-api's` installation docs.
 
@@ -83,9 +84,9 @@ Make sure to go through [this](https://github.com/PalisadoesFoundation/talawa-ap
 
 ![reCAPTCHA site key](https://github.com/PalisadoesFoundation/talawa-api/blob/develop/image/recaptcha_secret.webp)
 
-Copy/paste this `reCAPTCHA site key` to the variable named `REACT_APP_RECAPTCHA_KEY` in `.env` file.
+Copy/paste this `reCAPTCHA site key` to the variable named `REACT_APP_RECAPTCHA_SITE_KEY` in `.env` file.
 
-    REACT_APP_RECAPTCHA_KEY="this_is_the_recaptcha_key"
+    REACT_APP_RECAPTCHA_SITE_KEY="this_is_the_recaptcha_key"
 
 <br/>
 
@@ -160,3 +161,32 @@ You can run the tests for `talawa-admin` using this command:-
 You can lint your code files using this command:-
 
     yarn lint
+
+## Setting up Talawa-Admin and API for Talawa App
+
+Talawa mobile app requires [talawa-api](https://github.com/PalisadoesFoundation/talawa-api) running locally or remotely, which will be used as an `organisation url`. 
+
+### On Your Local Machine
+
+You need to setup your own local instance of [Talawa-API](https://github.com/PalisadoesFoundation/talawa-api) and [Talawa-admin](https://github.com/PalisadoesFoundation/talawa-admin). The advantage is that you'll be working with the latest code.
+
+1. You need to first setup the 2 supporting projects locally. Please refer the INSTALLATION.md of the respective repository for further guidance.
+    1. [talawa-api](https://github.com/PalisadoesFoundation/talawa-api)
+    1. [talawa-admin](https://github.com/PalisadoesFoundation/talawa-admin)
+1. Create a user account in [talawa-admin](https://github.com/PalisadoesFoundation/talawa-admin). The user account is necessary for creating the first organization which will be needed during your development time.
+    1. Enter your MongoDB dashboard to start the process of editing the `users` collection. This is done so that you will get authorized to create and manage an organization. Refer the images below as needed.
+        1. Go to your `MongoDB` dashboard
+        1. Select your project
+        1. Click Browse `collection` 
+        1. Select `users` collection and edit the data. Change:
+            1. `userType` from ADMIN to SUPERADMIN
+            1. `adminApproved` from `false` to `true`. 
+            1. ![User Collection Modification](https://user-images.githubusercontent.com/64683098/212524445-d2f59670-1ffd-462f-b6fe-09c10065976c.jpg)
+1. After you have created the [talawa-admin](https://github.com/PalisadoesFoundation/talawa-admin) user account, you'll need to create an organization.
+    1.  Login to your [talawa-admin](https://github.com/PalisadoesFoundation/talawa-admin) account and create an `organization`
+    1.  Click the `Create Organization` button on the top corner
+    1.  ![Organization Creation](https://user-images.githubusercontent.com/64683098/212369627-bc4e49fc-bf84-4ee2-b99b-12720c996308.PNG)
+1. Install [talawa](https://github.com/PalisadoesFoundation/talawa) Please refer the INSTALLATION.md of the respective repository for further guidance.
+    1. Then use the URL (Organization URL) in this form:
+        1. http://(IP-address):4000/graphql (See the below example) 
+        1. Example : http://10.0.2.2:4000/graphql

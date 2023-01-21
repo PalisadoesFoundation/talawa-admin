@@ -353,7 +353,7 @@ function LoginPage(): JSX.Element {
                   <div className="googleRecaptcha">
                     <ReCAPTCHA
                       ref={recaptchaRef}
-                      sitekey={process.env.REACT_APP_RECAPTCHA_KEY || ''}
+                      sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY || ''}
                     />
                   </div>
                   <button
@@ -424,7 +424,7 @@ function LoginPage(): JSX.Element {
                 <div className="googleRecaptcha">
                   <ReCAPTCHA
                     ref={recaptchaRef}
-                    sitekey={process.env.REACT_APP_RECAPTCHA_KEY || ''}
+                    sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY || ''}
                   />
                 </div>
                 <button
