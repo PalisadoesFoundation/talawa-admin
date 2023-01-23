@@ -92,8 +92,8 @@ function LoginPage(): JSX.Element {
     const recaptchaToken = recaptchaRef.current?.getValue();
     recaptchaRef.current?.reset();
 
-    const isVerified = true;
     // const isVerified = await verifyRecaptcha(recaptchaToken);
+    const isVerified = true;
 
     /* istanbul ignore next */
     if (!isVerified) {
@@ -155,9 +155,8 @@ function LoginPage(): JSX.Element {
     const recaptchaToken = recaptchaRef.current?.getValue();
     recaptchaRef.current?.reset();
 
-    const isVerified = true;
     // const isVerified = await verifyRecaptcha(recaptchaToken);
-
+    const isVerified = true;
     /* istanbul ignore next */
     if (!isVerified) {
       toast.error('Please, check the captcha.');
@@ -210,7 +209,7 @@ function LoginPage(): JSX.Element {
     <>
       <section className={styles.login_background}>
         <Navbar className={styles.navbarbg} expand="xl">
-          <Navbar.Brand className={styles.navbarBrand}>
+          <Navbar.Brand>
             <a className={styles.logo}>
               <img src={Logo} />
               <strong>{t('talawa_portal')}</strong>
@@ -248,7 +247,7 @@ function LoginPage(): JSX.Element {
               </div>
               <button
                 type="button"
-                className={styles.navloginbtn}
+                className={`btn btn-success ${styles.navloginbtn}`}
                 value="Login"
                 onClick={showModal}
                 data-testid="loginModalBtn"
@@ -360,7 +359,7 @@ function LoginPage(): JSX.Element {
                   </div>
                   <button
                     type="submit"
-                    className={styles.greenregbtn}
+                    className={`btn btn-success ${styles.greenregbtn}`}
                     value="Register"
                     data-testid="registrationBtn"
                   >
@@ -431,7 +430,7 @@ function LoginPage(): JSX.Element {
                 </div>
                 <button
                   type="submit"
-                  className={styles.whiteloginbtn}
+                  className={`btn btn-success ${styles.whiteloginbtn}`}
                   value="Login"
                   data-testid="loginBtn"
                 >
@@ -443,7 +442,7 @@ function LoginPage(): JSX.Element {
                 <hr></hr>
                 <button
                   type="button"
-                  className={styles.greenregbtn}
+                  className={`btn btn-success ${styles.greenregbtn}`}
                   value="Register"
                   onClick={hideModal}
                 >

@@ -144,6 +144,7 @@ form > input {
   transition: transform 0.2s, box-shadow 0.2s;
   width: 130px;
 }
+
 .languageBtn {
   font-size: 20px;
   color: #31bb6b;

@@ -8,6 +8,7 @@
   margin: 0;
   height: 100%;
 }
+
 .sidebar:after {
   content: '';
   background-color: #f7f7f7;
@@ -117,6 +118,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
+  background-color: #31bb6b;
 }
 .flexdir {
   display: flex;
