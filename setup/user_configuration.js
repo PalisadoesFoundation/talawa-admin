@@ -71,14 +71,14 @@ const set_user_configuration = async (path) => {
       const urlQuestions = [
         {
           type: 'input',
-          name: 'REACT_APP_BACKEND_ENDPOINT',
+          name: 'REACT_APP_TALAWA_URL',
           message: 'Enter the URL: ',
         },
       ];
       const responseUrl = await input(urlQuestions);
 
       //Check if all fields have been filled
-      if (!responseUrl['REACT_APP_BACKEND_ENDPOINT']) {
+      if (!responseUrl['REACT_APP_TALAWA_URL']) {
         console.log(pkg.red('ERROR: All fields are compulsory ❌'));
         process.exit(1);
       }
@@ -89,7 +89,7 @@ const set_user_configuration = async (path) => {
     } else {
       //save it in .env file
       const data = convertObjectToString({
-        REACT_APP_BACKEND_ENDPOINT:
+        REACT_APP_TALAWA_URL:
           'https://talawa-graphql-api.herokuapp.com/graphql',
       });
       writeFileSync(path, data, { encoding: 'utf8' });

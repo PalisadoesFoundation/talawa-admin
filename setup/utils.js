@@ -47,7 +47,7 @@ module.exports = {
     }
 
     // Create a file for environment variables and save it
-    const data = `REACT_APP_BACKEND_ENDPOINT=${talawa_api_url}\n`;
+    const data = `REACT_APP_TALAWA_URL=${talawa_api_url}\n`;
     fs.writeFileSync('.env', data, (err) => {
       if (err) throw err;
       log(chalk.bold.underline.green('\nUser configured successfully.'));
