@@ -29,7 +29,9 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: yarn install
       - run: yarn test --watchAll=false --coverage
-      - name: Upload coverage to Codecov - `${{env.CODECOV_UNIQUE_NAME}}`
+      - name: Echo CODECOV_UNIQUE_NAME value
+        run: echo ${{ env.resourceGroup2 }}
+      - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
           verbose: true
