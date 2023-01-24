@@ -1,0 +1,288 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing List navbar component testing using snapshot 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <nav
+        class="navbarbgOrglist navbar navbar-expand-xl navbar-light"
+      >
+        <span
+          class="navbarBrand navbar-brand"
+        >
+          <a
+            class="logo"
+            href="/orglist"
+          >
+            <img
+              src="talawa-logo-200x200.png"
+            />
+            <strong>
+              Talawa Portal
+            </strong>
+          </a>
+        </span>
+        <button
+          aria-controls="navbarScroll"
+          aria-label="Toggle navigation"
+          class="navbar-toggler collapsed"
+          type="button"
+        >
+          <span
+            class="navbar-toggler-icon"
+          />
+        </button>
+        <div
+          class="navbar-collapse collapse"
+          id="navbarScroll"
+        >
+          <div
+            class="me-auto navbar-nav"
+          />
+          <div
+            class="ml-auto navbar-nav"
+          >
+            <div
+              class="dropdown mr-4"
+            >
+              <button
+                aria-expanded="false"
+                class="btn dropdown-toggle languageBtn"
+                data-toggle="dropdown"
+                title="Change Langauge"
+                type="button"
+              >
+                <i
+                  class="fas fa-globe"
+                />
+              </button>
+              <div
+                class="dropdown-menu"
+              >
+                <button
+                  class="dropdown-item"
+                  data-testid="changeLanguageBtn0"
+                  disabled=""
+                >
+                  <span
+                    class="flag-icon flag-icon-gb mr-2"
+                  />
+                  English
+                </button>
+                <button
+                  class="dropdown-item"
+                  data-testid="changeLanguageBtn1"
+                >
+                  <span
+                    class="flag-icon flag-icon-fr mr-2"
+                  />
+                  Français
+                </button>
+                <button
+                  class="dropdown-item"
+                  data-testid="changeLanguageBtn2"
+                >
+                  <span
+                    class="flag-icon flag-icon-in mr-2"
+                  />
+                  हिन्दी
+                </button>
+                <button
+                  class="dropdown-item"
+                  data-testid="changeLanguageBtn3"
+                >
+                  <span
+                    class="flag-icon flag-icon-ar mr-2"
+                  />
+                  Español
+                </button>
+                <button
+                  class="dropdown-item"
+                  data-testid="changeLanguageBtn4"
+                >
+                  <span
+                    class="flag-icon flag-icon-cn mr-2"
+                  />
+                  中國人
+                </button>
+              </div>
+            </div>
+            <button
+              class="btn btn-success logoutbtn"
+              data-testid="logoutBtn"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </body>,
+  "container": <div>
+    <nav
+      class="navbarbgOrglist navbar navbar-expand-xl navbar-light"
+    >
+      <span
+        class="navbarBrand navbar-brand"
+      >
+        <a
+          class="logo"
+          href="/orglist"
+        >
+          <img
+            src="talawa-logo-200x200.png"
+          />
+          <strong>
+            Talawa Portal
+          </strong>
+        </a>
+      </span>
+      <button
+        aria-controls="navbarScroll"
+        aria-label="Toggle navigation"
+        class="navbar-toggler collapsed"
+        type="button"
+      >
+        <span
+          class="navbar-toggler-icon"
+        />
+      </button>
+      <div
+        class="navbar-collapse collapse"
+        id="navbarScroll"
+      >
+        <div
+          class="me-auto navbar-nav"
+        />
+        <div
+          class="ml-auto navbar-nav"
+        >
+          <div
+            class="dropdown mr-4"
+          >
+            <button
+              aria-expanded="false"
+              class="btn dropdown-toggle languageBtn"
+              data-toggle="dropdown"
+              title="Change Langauge"
+              type="button"
+            >
+              <i
+                class="fas fa-globe"
+              />
+            </button>
+            <div
+              class="dropdown-menu"
+            >
+              <button
+                class="dropdown-item"
+                data-testid="changeLanguageBtn0"
+                disabled=""
+              >
+                <span
+                  class="flag-icon flag-icon-gb mr-2"
+                />
+                English
+              </button>
+              <button
+                class="dropdown-item"
+                data-testid="changeLanguageBtn1"
+              >
+                <span
+                  class="flag-icon flag-icon-fr mr-2"
+                />
+                Français
+              </button>
+              <button
+                class="dropdown-item"
+                data-testid="changeLanguageBtn2"
+              >
+                <span
+                  class="flag-icon flag-icon-in mr-2"
+                />
+                हिन्दी
+              </button>
+              <button
+                class="dropdown-item"
+                data-testid="changeLanguageBtn3"
+              >
+                <span
+                  class="flag-icon flag-icon-ar mr-2"
+                />
+                Español
+              </button>
+              <button
+                class="dropdown-item"
+                data-testid="changeLanguageBtn4"
+              >
+                <span
+                  class="flag-icon flag-icon-cn mr-2"
+                />
+                中國人
+              </button>
+            </div>
+          </div>
+          <button
+            class="btn btn-success logoutbtn"
+            data-testid="logoutBtn"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </nav>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

@@ -76,4 +76,13 @@ describe('Testing List navbar component', () => {
 
     userEvent.click(screen.getByTestId('logoutBtn'));
   });
+
+  test("testing using snapshot", ()=>{
+    const asFragment = render(
+      <BrowserRouter>
+    <ListNavbar />
+    </BrowserRouter>
+    )
+    expect(asFragment).toMatchSnapshot()
+  })
 });
