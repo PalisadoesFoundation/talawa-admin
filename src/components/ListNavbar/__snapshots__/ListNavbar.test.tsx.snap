@@ -109,7 +109,7 @@ Object {
               </div>
             </div>
             <button
-              class="btn btn-success logoutbtn"
+              class="logoutbtn"
               data-testid="logoutBtn"
             >
               Logout
@@ -224,7 +224,7 @@ Object {
             </div>
           </div>
           <button
-            class="btn btn-success logoutbtn"
+            class="logoutbtn"
             data-testid="logoutBtn"
           >
             Logout
