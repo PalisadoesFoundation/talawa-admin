@@ -17,7 +17,7 @@ on:
       - '**'   
       
 env:
-  CODECOV_UNIQUE_NAME: ${{ github.run_id }}-${{ github.run_number }}
+    CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
   
 jobs:      
   Code-Coverage:
@@ -29,10 +29,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: yarn install
       - run: yarn test --watchAll=false --coverage
-      - name: Upload coverage to Codecov
+      - name: Upload coverage to Codecov - ${{env.CODECOV_UNIQUE_NAME}}
         uses: codecov/codecov-action@v3
         with:
           verbose: true
           name: '${{env.CODECOV_UNIQUE_NAME}}'
-      - name: CodeCov Unique Name Test
-        run: echo '${{env.CODECOV_UNIQUE_NAME}}'
