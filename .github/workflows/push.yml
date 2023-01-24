@@ -34,3 +34,5 @@ jobs:
         with:
           verbose: true
           name: '${{env.CODECOV_UNIQUE_NAME}}'
+      - name: CodeCov Unique Name Test
+        run: echo '${{env.CODECOV_UNIQUE_NAME}}'
