@@ -19,7 +19,7 @@ import AddOnStore from './AddOnStore';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 const httpLink = new HttpLink({
-  uri: process.env.REACT_APP_BACKEND_ENDPOINT,
+  uri: process.env.REACT_APP_TALAWA_URL,
   headers: {
     authorization: 'Bearer ' + localStorage.getItem('token') || '',
   },
