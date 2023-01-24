@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import i18next from 'i18next';
 import Cookies from 'js-cookie';
 import { useTranslation } from 'react-i18next';
+
 import styles from './ListNavbar.module.css';
 import Logo from 'assets/talawa-logo-200x200.png';
 import { languages } from 'utils/languages';
@@ -75,7 +76,7 @@ const ListNavbar = () => {
             </div>
           </div>
           <button
-            className={`btn btn-success ${styles.logoutbtn}`}
+            className={styles.logoutbtn}
             data-testid="logoutBtn"
             onClick={logout}
           >

@@ -367,15 +367,14 @@ function OrgList(): JSX.Element {
                   //onChange=""
                 />
               </label>
-              <Button
-                variant="success"
+              <button
                 type="submit"
                 className={styles.greenregbtn}
                 value="invite"
                 data-testid="submitOrganizationForm"
               >
                 {t('createOrganization')}
-              </Button>
+              </button>
             </Form>
           </div>
         </section>

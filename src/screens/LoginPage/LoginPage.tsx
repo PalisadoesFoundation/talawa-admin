@@ -210,7 +210,7 @@ function LoginPage(): JSX.Element {
     <>
       <section className={styles.login_background}>
         <Navbar className={styles.navbarbg} expand="xl">
-          <Navbar.Brand>
+          <Navbar.Brand className={styles.navbarBrand}>
             <a className={styles.logo}>
               <img src={Logo} />
               <strong>{t('talawa_portal')}</strong>
@@ -248,7 +248,7 @@ function LoginPage(): JSX.Element {
               </div>
               <button
                 type="button"
-                className={`btn btn-success ${styles.navloginbtn}`}
+                className={styles.navloginbtn}
                 value="Login"
                 onClick={showModal}
                 data-testid="loginModalBtn"
@@ -360,7 +360,7 @@ function LoginPage(): JSX.Element {
                   </div>
                   <button
                     type="submit"
-                    className={`btn btn-success ${styles.greenregbtn}`}
+                    className={styles.greenregbtn}
                     value="Register"
                     data-testid="registrationBtn"
                   >
@@ -431,7 +431,7 @@ function LoginPage(): JSX.Element {
                 </div>
                 <button
                   type="submit"
-                  className={`btn btn-success ${styles.whiteloginbtn}`}
+                  className={styles.whiteloginbtn}
                   value="Login"
                   data-testid="loginBtn"
                 >
@@ -443,7 +443,7 @@ function LoginPage(): JSX.Element {
                 <hr></hr>
                 <button
                   type="button"
-                  className={`btn btn-success ${styles.greenregbtn}`}
+                  className={styles.greenregbtn}
                   value="Register"
                   onClick={hideModal}
                 >
