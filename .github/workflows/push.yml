@@ -15,6 +15,10 @@ on:
   push:
     branches:
       - '**'   
+      
+env:
+  CODECOV_UNIQUE_NAME: ${{ github.run_id }}-${{ github.run_number }}
+  
 jobs:      
   Code-Coverage:
     runs-on: ubuntu-latest
@@ -29,3 +33,4 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           verbose: true
+          name: ${{env.CODECOV_UNIQUE_NAME}}
