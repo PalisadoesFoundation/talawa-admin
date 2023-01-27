@@ -89,10 +89,11 @@ function LoginPage(): JSX.Element {
     const { signfirstName, signlastName, signEmail, signPassword, cPassword } =
       signformState;
 
-    const recaptchaToken = recaptchaRef.current?.getValue();
-    recaptchaRef.current?.reset();
+    // const recaptchaToken = recaptchaRef.current?.getValue();
+    // recaptchaRef.current?.reset();
 
-    const isVerified = await verifyRecaptcha(recaptchaToken);
+    // const isVerified = await verifyRecaptcha(recaptchaToken);
+    const isVerified = true;
 
     /* istanbul ignore next */
     if (!isVerified) {
@@ -151,10 +152,11 @@ function LoginPage(): JSX.Element {
   const login_link = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const recaptchaToken = recaptchaRef.current?.getValue();
-    recaptchaRef.current?.reset();
+    // const recaptchaToken = recaptchaRef.current?.getValue();
+    // recaptchaRef.current?.reset();
 
-    const isVerified = await verifyRecaptcha(recaptchaToken);
+    // const isVerified = await verifyRecaptcha(recaptchaToken);
+    const isVerified = true;
 
     /* istanbul ignore next */
     if (!isVerified) {

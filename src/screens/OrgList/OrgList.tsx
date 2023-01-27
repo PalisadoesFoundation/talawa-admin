@@ -32,6 +32,7 @@ function OrgList(): JSX.Element {
     visible: false,
     location: '',
     tags: '',
+    image: '',
   });
   const [searchByName, setSearchByName] = useState('');
 
@@ -70,7 +71,8 @@ function OrgList(): JSX.Element {
   const CreateOrg = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { name, descrip, location, visible, ispublic, tags } = formState;
+    const { name, descrip, location, visible, ispublic, tags, image } =
+      formState;
 
     try {
       const tagsArray = tags.split(',').map((tag) => tag.trim());
@@ -83,6 +85,7 @@ function OrgList(): JSX.Element {
           visibleInSearch: visible,
           isPublic: ispublic,
           tags: tagsArray,
+          image: image,
         },
       });
 
@@ -97,6 +100,7 @@ function OrgList(): JSX.Element {
           visible: false,
           location: '',
           tags: '',
+          image: '',
         });
       }
     } catch (error: any) {
@@ -364,7 +368,19 @@ function OrgList(): JSX.Element {
                   name="photo"
                   type="file"
                   multiple={false}
-                  //onChange=""
+                  onChange={(e) => {
+                    const { files } = e.target;
+                    const fileReader = new FileReader();
+                    if (files && files.length > 0) {
+                      fileReader.readAsDataURL(files[0]);
+                      fileReader.onload = (e) => {
+                        setFormState({
+                          ...formState,
+                          image: String(e.target?.result),
+                        });
+                      };
+                    }
+                  }}
                 />
               </label>
               <button
