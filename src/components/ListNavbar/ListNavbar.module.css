@@ -1,5 +1,6 @@
 .navbarbgOrglist {
-  height: 60px;
+  /* height:60px;  */
+  padding:0 1rem;
   background-color: white;
   display: flex;
   margin-bottom: 30px;
@@ -13,6 +14,11 @@
   right: 0;
   left: 0;
   z-index: 1030;
+}
+
+.navbarBrand{
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .titlemodal .logo {

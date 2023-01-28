@@ -208,7 +208,7 @@ function LoginPage(): JSX.Element {
     <>
       <section className={styles.login_background}>
         <Navbar className={styles.navbarbg} expand="xl">
-          <Navbar.Brand>
+          <Navbar.Brand className={styles.navbarBrand}>
             <a className={styles.logo}>
               <img src={Logo} />
               <strong>{t('talawa_portal')}</strong>

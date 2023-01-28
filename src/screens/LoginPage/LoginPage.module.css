@@ -174,7 +174,8 @@ form > br {
 }
 
 .navbarbg {
-  height: 60px;
+  /* height: 60px; */
+  padding:0 1rem;
   background-color: white;
   display: flex;
   margin-bottom: 30px;
@@ -183,6 +184,11 @@ form > br {
   flex-direction: row;
   justify-content: space-between !important;
   box-shadow: 0px 0px 8px 2px #c8c8c8;
+}
+
+.navbarBrand{
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .logo {
