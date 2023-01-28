@@ -10,10 +10,11 @@ import { I18nextProvider } from 'react-i18next';
 
 import OrgDelete from './OrgDelete';
 import i18nForTest from 'utils/i18nForTest';
+import { BACKEND_URL } from 'Constant/constant';
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
-  uri: 'https://talawa-graphql-api.herokuapp.com/graphql',
+  uri: BACKEND_URL,
 });
 
 describe('Testing Organization People List Card', () => {
