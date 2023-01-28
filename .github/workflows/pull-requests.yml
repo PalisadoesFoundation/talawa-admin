@@ -15,6 +15,9 @@ on:
     branches:
       - '**'
 
+env:
+    CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
+    
 jobs:
 
   Linter:
@@ -59,10 +62,12 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: yarn install
       - run: yarn test --watchAll=false --coverage
-      - name: Present current coverage in PR
+      - name: Present and Upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
         uses: codecov/codecov-action@v3
         with:
-          verbose: true        
+          verbose: true
+          fail_ci_if_error: true
+          name: '${{env.CODECOV_UNIQUE_NAME}}'    
       - name: Test acceptable level of code coverage
         uses: VeryGoodOpenSource/very_good_coverage@v2
         with:
