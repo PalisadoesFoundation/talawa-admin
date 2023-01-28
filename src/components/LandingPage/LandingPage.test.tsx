@@ -10,10 +10,11 @@ import {
   InMemoryCache,
 } from '@apollo/client';
 import i18n from 'utils/i18n';
+import { BACKEND_URL } from 'Constant/constant';
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
-  uri: 'https://talawa-graphql-api.herokuapp.com/graphql',
+  uri: BACKEND_URL,
 });
 
 describe('Testing LandingPage', () => {
