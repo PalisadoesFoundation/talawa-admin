@@ -20,6 +20,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import { languages } from 'utils/languages';
+import { RECAPTCHA_SITE_KEY } from 'Constant/constant';
 
 function LoginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -353,7 +354,7 @@ function LoginPage(): JSX.Element {
                   <div className="googleRecaptcha">
                     <ReCAPTCHA
                       ref={recaptchaRef}
-                      sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY || ''}
+                      sitekey={RECAPTCHA_SITE_KEY ?? ''}
                     />
                   </div>
                   <button
@@ -424,7 +425,7 @@ function LoginPage(): JSX.Element {
                 <div className="googleRecaptcha">
                   <ReCAPTCHA
                     ref={recaptchaRef}
-                    sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY || ''}
+                    sitekey={RECAPTCHA_SITE_KEY ?? ''}
                   />
                 </div>
                 <button

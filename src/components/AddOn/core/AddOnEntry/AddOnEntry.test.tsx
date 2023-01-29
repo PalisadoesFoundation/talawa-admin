@@ -13,8 +13,10 @@ import {
 } from '@apollo/client';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
+import { BACKEND_URL } from 'Constant/constant';
+
 const httpLink = new HttpLink({
-  uri: process.env.REACT_APP_TALAWA_URL,
+  uri: BACKEND_URL,
   headers: {
     authorization: 'Bearer ' + localStorage.getItem('token') || '',
   },
