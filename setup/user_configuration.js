@@ -89,8 +89,7 @@ const set_user_configuration = async (path) => {
     } else {
       //save it in .env file
       const data = convertObjectToString({
-        REACT_APP_TALAWA_URL:
-          'https://talawa-graphql-api.herokuapp.com/graphql',
+        REACT_APP_TALAWA_URL: process.env.REACT_APP_TALAWA_URL,
       });
       writeFileSync(path, data, { encoding: 'utf8' });
     }
