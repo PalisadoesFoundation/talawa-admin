@@ -8,6 +8,7 @@ import { writeFileSync } from 'fs';
 import pkg from 'chalk';
 import display_heading from './utils/heading.js';
 import input from './utils/input.js';
+import { BACKEND_URL } from '../src/Constant/constant';
 
 /**
  * @function to convert the key-value pairs of
@@ -89,8 +90,7 @@ const set_user_configuration = async (path) => {
     } else {
       //save it in .env file
       const data = convertObjectToString({
-        REACT_APP_TALAWA_URL:
-          'https://talawa-graphql-api.herokuapp.com/graphql',
+        REACT_APP_TALAWA_URL: BACKEND_URL,
       });
       writeFileSync(path, data, { encoding: 'utf8' });
     }
