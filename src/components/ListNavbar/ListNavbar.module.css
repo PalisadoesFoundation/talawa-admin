@@ -91,6 +91,11 @@
   padding: 0 20px;
   margin-right: 10px;
 }
+.logoutbtn:hover{
+  color: #fff;
+  background-color: #1e7e34;
+  border-color: #1c7430;
+}
 
 @media only screen and (max-width: 600px) {
   body::before {

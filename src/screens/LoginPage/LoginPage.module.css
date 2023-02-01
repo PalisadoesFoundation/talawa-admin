@@ -112,6 +112,11 @@ form > input {
   transition: transform 0.2s, box-shadow 0.2s;
   width: 100%;
 }
+.whiteloginbtn:hover{
+background-color:#737373;
+color:white;
+
+}
 .greenregbtn {
   margin: 1rem 0 0;
   margin-top: 10px;
@@ -129,6 +134,11 @@ form > input {
   transition: transform 0.2s, box-shadow 0.2s;
   width: 100%;
 }
+.greenregbtn:hover{
+  color: #fff;
+  background-color: #1e7e34;
+  border-color: #1c7430;
+}
 
 .navloginbtn {
   background-color: #31bb6b;
@@ -143,6 +153,11 @@ form > input {
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   width: 130px;
+}
+.navloginbtn:hover{
+  color: #fff;
+  background-color: #1e7e34;
+  border-color: #1c7430;
 }
 .languageBtn {
   font-size: 20px;
