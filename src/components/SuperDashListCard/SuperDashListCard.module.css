@@ -42,6 +42,11 @@
   box-shadow: none;
   width: 100%;
 }
+.orgfontcreatedbtn:hover{
+  color: #fff;
+  background-color: #1e7e34;
+  border-color: #1c7430;
+}
 .orgCreateBtnDiv {
   width: 100%;
 }
