@@ -5,7 +5,6 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-
 import OrganizationPeople from './OrganizationPeople';
 import { store } from 'state/store';
 import { ADMIN_LIST, MEMBERS_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
