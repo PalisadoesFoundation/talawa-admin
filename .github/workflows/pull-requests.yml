@@ -54,8 +54,10 @@ jobs:
   Formatting-Linting:
     name: Check formatting and linting
     runs-on: ubuntu-latest
-    needs: Continuous-Integration
     steps:
+    - uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: yarn
       - name: Check linting
         run: yarn lint-check
       - name: Check formatting
