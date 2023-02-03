@@ -73,15 +73,7 @@ function AddOnStore(): JSX.Element {
   // /* istanbul ignore next */
   const pluginModified = () => {
     return getInstalledPlugins();
-    // .then((installedPlugins) => {
-    //   getStorePlugins();
-    //   return installedPlugins;
-    // });
   };
-
-  // useEffect(() => {
-  //   pluginModified();
-  // }, []);
 
   const updateSelectedTab = (tab: any) => {
     setIsStore(tab === 'available');
@@ -100,10 +92,7 @@ function AddOnStore(): JSX.Element {
       </>
     );
   }
-  // console.log(
-  //   'Filtered Data is  ',
-  //   data.getPlugins.filter((plugin: any) => plugin.pluginInstallStatus == true)
-  // );
+
   // TODO: Update routes for other pages
   // TODO: Implement Search
   return (
@@ -213,7 +202,7 @@ function AddOnStore(): JSX.Element {
                     }
                   }
                 ).length === 0 ? (
-                  <h4>Plugin does not exits </h4>
+                  <h4> Plugin does not exits </h4>  // eslint-disable-line
                 ) : (
                   data.getPlugins
                     .filter(
@@ -289,7 +278,7 @@ function AddOnStore(): JSX.Element {
                       }
                     }
                   ).length === 0 ? (
-                  <h4>Plugin does not exits </h4>
+                  <h4> Plugin does not exits </h4> // eslint-disable-line
                 ) : (
                   data.getPlugins
                     .filter((plugin: any) => plugin.pluginInstallStatus == true)

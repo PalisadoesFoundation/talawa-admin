@@ -50,6 +50,9 @@
       { "allowAllCaps": false, "allowNamespace": false }
     ],
 
+    // All tests must need not have an assertion
+    "jest/expect-expect": 0,
+
     // Enforces whitespace around equal sign operators
     "react/jsx-equals-spacing": ["warn", "never"],
     "react/no-this-in-sfc": "error",
