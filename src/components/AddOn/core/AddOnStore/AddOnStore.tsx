@@ -202,7 +202,7 @@ function AddOnStore(): JSX.Element {
                     }
                   }
                 ).length === 0 ? (
-                  <h4> Plugin does not exits </h4>  // eslint-disable-line
+                  <h4> Plugin does not exits </h4> // eslint-disable-line
                 ) : (
                   data.getPlugins
                     .filter(
