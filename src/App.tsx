@@ -4,7 +4,8 @@ import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { useQuery } from '@apollo/client';
 
-import './App.css';
+// import './App.css';
+import styles from './App.module.css';
 import { actionCreators } from './state/index';
 import PluginHelper from 'components/AddOn/support/services/Plugin.helper';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
@@ -69,7 +70,7 @@ function App(): JSX.Element {
   );
 
   if (loading) {
-    return <div className="loader"></div>;
+    return <div className={styles.loader}></div>;
   }
 
   if (data) {

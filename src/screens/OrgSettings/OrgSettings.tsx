@@ -13,7 +13,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'state/reducers';
 import { useTranslation } from 'react-i18next';
 
-
 function OrgSettings(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgSettings',
