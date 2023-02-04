@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import './PageNotFound.css';
+import styles from './PageNotFound.module.css';
 import Logo from 'assets/talawa-logo-200x200.png';
 
 const PageNotFound = (): JSX.Element => {
@@ -13,13 +13,13 @@ const PageNotFound = (): JSX.Element => {
   document.title = t('title');
 
   return (
-    <section className="notfound">
+    <section className={styles.notfound}>
       <div className="container text-center">
         <div className="brand">
           <img src={Logo} alt="Logo" className="img-fluid" />
           <h3 className="text-uppercase mt-4">{t('talawaAdmin')}</h3>
         </div>
-        <h1 className="head">
+        <h1 className={styles.head}>
           <span>{t('404')}</span>
         </h1>
         <p>{t('notFoundMsg')}</p>

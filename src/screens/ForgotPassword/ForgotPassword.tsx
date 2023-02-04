@@ -8,7 +8,7 @@ import {
   GENERATE_OTP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 
-import './ForgotPassword.css';
+import styles from './ForgotPassword.module.css';
 import { useTranslation } from 'react-i18next';
 
 const ForgotPassword = () => {
@@ -109,10 +109,10 @@ const ForgotPassword = () => {
   }
 
   return (
-    <section className="forgotPassword">
+    <section className={styles.forgotPassword}>
       <div className="container">
-        <div className="border rounded p-4 mb-4">
-          <div className="heading text-center">
+        <div className={`border rounded p-4 mb-4 ${styles.border}`}>
+          <div className={`heading text-center ${styles.heading}`}>
             <h1>{t('forgotPassword')}</h1>
           </div>
 
@@ -138,7 +138,10 @@ const ForgotPassword = () => {
                   />
                 </div>
                 <div className="col-sm-3">
-                  <button type="submit" className="btn btn-success btn-block">
+                  <button
+                    type="submit"
+                    className={`btn btn-success btn-block ${styles.talawaBackgroundColor}`}
+                  >
                     <i className="fa fa-key"></i> {t('getOtp')}
                   </button>
                 </div>
@@ -223,11 +226,14 @@ const ForgotPassword = () => {
                 </div>
               </div>
               <div className="submitBtn">
-                <button type="submit" className="btn btn-success btn-block">
+                <button
+                  type="submit"
+                  className={`btn btn-success btn-block ${styles.talawaBackgroundColor}`}
+                >
                   {t('changePassword')}
                 </button>
               </div>
-              <div className="homeBtn mt-3">
+              <div className={`homeBtn mt-3 ${styles.talawaBackgroundColor}`}>
                 <Link to="/" className="btn btn-info btn-block">
                   <i className="fas fa-home"></i> {t('backToHome')}
                 </Link>

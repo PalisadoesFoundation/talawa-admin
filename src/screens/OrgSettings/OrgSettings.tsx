@@ -55,6 +55,7 @@ function OrgSettings(): JSX.Element {
                   className={styles.greenregbtn}
                   type="button"
                   value="userupdate"
+                  data-testid="userUpdateBtn"
                   onClick={() => setScreenVariable(1)}
                 >
                   {t('updateYourDetails')}
@@ -63,6 +64,7 @@ function OrgSettings(): JSX.Element {
                   className={styles.greenregbtn}
                   type="button"
                   value="orgupdate"
+                  data-testid="orgUpdateBtn"
                   onClick={() => setScreenVariable(2)}
                 >
                   {t('updateOrganization')}
@@ -71,6 +73,7 @@ function OrgSettings(): JSX.Element {
                   className={styles.greenregbtn}
                   type="button"
                   value="orgdelete"
+                  data-testid="orgDeleteBtn"
                   onClick={() => setScreenVariable(3)}
                 >
                   {t('deleteOrganization')}
@@ -79,6 +82,7 @@ function OrgSettings(): JSX.Element {
                   className={styles.greenregbtn}
                   type="button"
                   value="orgdelete"
+                  data-testid="orgDeleteBtn2"
                   onClick={() => setScreenVariable(4)}
                 >
                   {t('seeRequest')}
