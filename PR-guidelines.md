@@ -9,6 +9,22 @@ In order to give everyone a chance to submit a pull request and contribute to th
 1. Pull requests must be based on [open issues](https://github.com/PalisadoesFoundation/talawa-admin/issues) available.
 1. [Use this method to automatically close the issue when the PR is completed.](https://docs.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue)
 
+## Linting and Formatting
+All the pull requests must have code that is properly linted and formatted, so that uniformity across the repository can be ensured.
+
+Before opening a PR, you can run the following scripts to automatically lint and format the code properly:
+```
+yarn lint:fix
+yarn format:fix
+```
+
+Both of these scripts also have a `check` counterpart, which would be used by the GitHub CI to ensure that the code is properly formatted.
+You can run the following scripts yourself to ensure that your pull request doesn't fail due to linting and formatting errors:
+```
+yarn lint:check
+yarn format:check
+```
+
 ## Testing
 1. All pull requests must have test units. If, for some reason, it is not possible to add tests, please let us know and explain why. In that case, you'll need to tell us what steps you followed to manually test your changes.
 1. Please read our [CONTRIBUTING.md](CONTRIBUTING.md) document for details on our testing policy.
