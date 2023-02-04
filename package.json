@@ -69,10 +69,10 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint \"**/*.{ts,tsx}\"",
-    "lint-check": "eslint \"**/*.{ts,tsx}\" --max-warnings=0",
-    "lint-fix": "eslint \"**/*.{ts,tsx}\" --fix",
-    "format": "prettier --write \"**/*.{ts,tsx,json,scss,css}\"",
-    "format-check": "prettier --check \"**/*.{ts,tsx,json,scss,css}\""
+    "lint:check": "eslint \"**/*.{ts,tsx}\" --max-warnings=0",
+    "lint:fix": "eslint \"**/*.{ts,tsx}\" --fix",
+    "format:fix": "prettier --write \"**/*.{ts,tsx,json,scss,css}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,json,scss,css}\""
   },
   "eslintConfig": {
     "extends": [
