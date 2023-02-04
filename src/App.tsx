@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
-import './App.css';
+import styles from './App.module.css';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
 import LoginPage from 'screens/LoginPage/LoginPage';
@@ -63,7 +63,7 @@ function App(): JSX.Element {
   );
 
   if (loading) {
-    return <div className="loader"></div>;
+    return <div className={styles.loader}></div>;
   }
 
   if (data) {
