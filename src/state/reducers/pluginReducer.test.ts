@@ -1,5 +1,4 @@
 import reducer from './pluginReducer';
-import * as types from '../action-creators/index';
 import expect from 'expect';
 
 describe('Testing Plugin Reducer', () => {

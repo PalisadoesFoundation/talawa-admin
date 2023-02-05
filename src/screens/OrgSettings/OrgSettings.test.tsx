@@ -99,8 +99,4 @@ describe('Organisation Settings Page', () => {
     expect(container.textContent).toMatch('See Request');
     expect(window.location).toBeAt('/orglist');
   });
-
-  // test("MemberRequestCard should be rendered when screen variable is 4", async () => {
-
-  // });
 });

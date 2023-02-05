@@ -112,10 +112,9 @@ form > input {
   transition: transform 0.2s, box-shadow 0.2s;
   width: 100%;
 }
-.whiteloginbtn:hover{
-background-color:#737373;
-color:white;
-
+.whiteloginbtn:hover {
+  background-color: #737373;
+  color: white;
 }
 .greenregbtn {
   margin: 1rem 0 0;
@@ -134,7 +133,7 @@ color:white;
   transition: transform 0.2s, box-shadow 0.2s;
   width: 100%;
 }
-.greenregbtn:hover{
+.greenregbtn:hover {
   color: #fff;
   background-color: #1e7e34;
   border-color: #1c7430;
@@ -154,7 +153,7 @@ color:white;
   transition: transform 0.2s, box-shadow 0.2s;
   width: 130px;
 }
-.navloginbtn:hover{
+.navloginbtn:hover {
   color: #fff;
   background-color: #1e7e34;
   border-color: #1c7430;
@@ -190,7 +189,7 @@ form > br {
 
 .navbarbg {
   /* height: 60px; */
-  padding:0 1rem;
+  padding: 0 1rem;
   background-color: white;
   display: flex;
   margin-bottom: 30px;
@@ -201,7 +200,7 @@ form > br {
   box-shadow: 0px 0px 8px 2px #c8c8c8;
 }
 
-.navbarBrand{
+.navbarBrand {
   padding-top: 0;
   padding-bottom: 0;
 }

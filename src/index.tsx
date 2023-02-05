@@ -23,7 +23,7 @@ import { store } from './state/store';
 import './utils/i18n';
 import { BACKEND_URL } from 'Constant/constant';
 
-const errorLink = onError(({ graphQLErrors }) => {
+onError(({ graphQLErrors }) => {
   if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message));
 });
 
