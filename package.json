@@ -125,6 +125,7 @@
       "src/components/plugins/index.ts",
       "src/components/AddOn/support/services/Render.helper.ts",
       "src/components/SecuredRoute/SecuredRoute.tsx"
+      "src/reportWebVitals.ts"
     ]
   }
 }
