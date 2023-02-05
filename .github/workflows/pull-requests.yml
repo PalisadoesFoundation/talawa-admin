@@ -49,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: Linter
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
       - name: Install Dependencies
         run: yarn
       - name: Check formatting
