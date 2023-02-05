@@ -1,6 +1,6 @@
 .navbarbgOrglist {
   /* height:60px;  */
-  padding:0 1rem;
+  padding: 0 1rem;
   background-color: white;
   display: flex;
   margin-bottom: 30px;
@@ -16,7 +16,7 @@
   z-index: 1030;
 }
 
-.navbarBrand{
+.navbarBrand {
   padding-top: 0;
   padding-bottom: 0;
 }
@@ -91,7 +91,7 @@
   padding: 0 20px;
   margin-right: 10px;
 }
-.logoutbtn:hover{
+.logoutbtn:hover {
   color: #fff;
   background-color: #1e7e34;
   border-color: #1c7430;
