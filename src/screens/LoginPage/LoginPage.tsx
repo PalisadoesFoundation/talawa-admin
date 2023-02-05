@@ -20,6 +20,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import { languages } from 'utils/languages';
+import { RECAPTCHA_SITE_KEY } from 'Constant/constant';
 
 function LoginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -210,7 +211,7 @@ function LoginPage(): JSX.Element {
     <>
       <section className={styles.login_background}>
         <Navbar className={styles.navbarbg} expand="xl">
-          <Navbar.Brand>
+          <Navbar.Brand className={styles.navbarBrand}>
             <a className={styles.logo}>
               <img src={Logo} />
               <strong>{t('talawa_portal')}</strong>
@@ -355,7 +356,7 @@ function LoginPage(): JSX.Element {
                   <div className="googleRecaptcha">
                     <ReCAPTCHA
                       ref={recaptchaRef}
-                      sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY || ''}
+                      sitekey={RECAPTCHA_SITE_KEY ?? ''}
                     />
                   </div>
                   <button
@@ -426,7 +427,7 @@ function LoginPage(): JSX.Element {
                 <div className="googleRecaptcha">
                   <ReCAPTCHA
                     ref={recaptchaRef}
-                    sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY || ''}
+                    sitekey={RECAPTCHA_SITE_KEY ?? ''}
                   />
                 </div>
                 <button

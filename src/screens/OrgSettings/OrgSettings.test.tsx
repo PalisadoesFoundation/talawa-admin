@@ -1,9 +1,10 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { MEMBERSHIP_REQUEST } from 'GraphQl/Queries/Queries';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import 'jest-location-mock';
 
@@ -79,6 +80,18 @@ describe('Organisation Settings Page', () => {
 
     expect(container.textContent).not.toBe('Loading data...');
     await wait();
+
+    // expect(screen.getByTestId('userUpdateBtn')).toBeInTheDocument();
+    // expect(screen.getByTestId('orgUpdateBtn')).toBeInTheDocument();
+    // expect(screen.getByTestId('orgDeleteBtn')).toBeInTheDocument();
+    // expect(screen.getByTestId('orgDeleteBtn2')).toBeInTheDocument();
+    // expect(screen.getByText(/settings/i)).toBeInTheDocument();
+
+    userEvent.click(screen.getByTestId('userUpdateBtn'));
+    userEvent.click(screen.getByTestId('orgUpdateBtn'));
+    userEvent.click(screen.getByTestId('orgDeleteBtn'));
+    userEvent.click(screen.getByTestId('orgDeleteBtn2'));
+
     expect(container.textContent).toMatch('Settings');
     expect(container.textContent).toMatch('Update Your Details');
     expect(container.textContent).toMatch('Update Organization');
@@ -86,4 +99,8 @@ describe('Organisation Settings Page', () => {
     expect(container.textContent).toMatch('See Request');
     expect(window.location).toBeAt('/orglist');
   });
+
+  // test("MemberRequestCard should be rendered when screen variable is 4", async () => {
+
+  // });
 });

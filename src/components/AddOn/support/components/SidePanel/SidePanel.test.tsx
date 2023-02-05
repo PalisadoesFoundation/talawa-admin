@@ -7,10 +7,11 @@ import {
   ApolloProvider,
   InMemoryCache,
 } from '@apollo/client';
+import { BACKEND_URL } from 'Constant/constant';
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
-  uri: process.env.REACT_APP_TALAWA_URL,
+  uri: BACKEND_URL,
 });
 
 describe('Testing Contribution Stats', () => {

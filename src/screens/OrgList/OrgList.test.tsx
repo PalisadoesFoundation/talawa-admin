@@ -250,3 +250,33 @@ describe('Organisation List Page', () => {
     userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
   });
 });
+
+test('Search bar filters organizations by name', async () => {
+  const { container } = render(
+    <MockedProvider addTypename={false} mocks={MOCKS}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgList />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>
+  );
+  await wait();
+
+  // Test that the search bar filters organizations by name
+  const searchBar = screen.getByTestId(/searchByName/i);
+  userEvent.type(searchBar, 'Akatsuki');
+  expect(container.textContent).toMatch('Akatsuki');
+
+  // Test that the search bar is case-insensitive
+  userEvent.clear(searchBar);
+  userEvent.type(searchBar, 'akatsuki');
+  expect(container.textContent).toMatch('Akatsuki');
+
+  // Test that the search bar filters organizations based on a partial match of the name
+  userEvent.clear(searchBar);
+  userEvent.type(searchBar, 'Aka');
+  expect(container.textContent).toMatch('Akatsuki');
+});

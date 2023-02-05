@@ -117,7 +117,9 @@
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
+  background-color: #31bb6b;
 }
+
 .flexdir {
   display: flex;
   flex-direction: row;
@@ -195,6 +197,7 @@ form > input {
   cursor: pointer;
   margin-bottom: 5px;
 }
+
 .cancel > i {
   margin-top: 5px;
   transform: scale(1.2);

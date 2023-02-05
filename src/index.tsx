@@ -21,13 +21,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import App from './App';
 import { store } from './state/store';
 import './utils/i18n';
+import { BACKEND_URL } from 'Constant/constant';
 
 const errorLink = onError(({ graphQLErrors }) => {
   if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message));
 });
 
 const httpLink = new HttpLink({
-  uri: process.env.REACT_APP_TALAWA_URL,
+  uri: BACKEND_URL,
   headers: {
     authorization: 'Bearer ' + localStorage.getItem('token') || '',
   },

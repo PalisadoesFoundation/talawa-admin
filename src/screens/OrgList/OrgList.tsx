@@ -142,9 +142,16 @@ function OrgList(): JSX.Element {
     const { value } = e.target;
     setSearchByName(value);
 
-    refetch({
-      filter: searchByName,
-    });
+    if (value.length === 0) {
+      refetch({
+        filter: '',
+      });
+    } else {
+      setSearchByName(value);
+      refetch({
+        filter: value,
+      });
+    }
   };
 
   return (
