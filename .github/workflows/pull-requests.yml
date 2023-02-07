@@ -51,22 +51,13 @@ jobs:
         run: yarn
       - name: Check formatting
         run: yarn format:check
-  
-  Type-Checker:
-    name: Check for type errors
-    runs-on: ubuntu-latest
-    needs: [Linter, Formatting]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install Dependencies
-        run: yarn
       - name: Check formatting
         run: yarn typecheck
   
   Continuous-Integration:
     name: Continuous integration on pull request
     runs-on: ubuntu-latest
-    needs: [Linter, Formatting, Type-Checker]
+    needs: [Linter, Formatting]
     steps:
       - uses: actions/checkout@v3
       - name: Install Dependencies
