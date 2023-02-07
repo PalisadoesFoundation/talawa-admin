@@ -54,6 +54,9 @@
     "react/jsx-equals-spacing": ["warn", "never"],
     "react/no-this-in-sfc": "error",
 
+    // All tests must need not have an assertion
+    "jest/expect-expect": 0,
+
     // Ensures that components are always indented by 2 spaces
     "react/jsx-indent": ["warn", 2],
     "react/jsx-tag-spacing": [

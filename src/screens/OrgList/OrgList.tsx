@@ -33,7 +33,7 @@ function OrgList(): JSX.Element {
     location: '',
     tags: '',
   });
-  const [searchByName, setSearchByName] = useState('');
+  const [, setSearchByName] = useState('');
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);

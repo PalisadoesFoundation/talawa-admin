@@ -27,8 +27,9 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install Dependencies
         run: yarn
-      - name: Run ESLint
-        run: yarn lint
+      - name: Run linting check
+        run: yarn lint:check
+
 
   Count-lines-of-code:
     name: Total number of lines in every file should not be more than 400
@@ -39,18 +40,29 @@ jobs:
       - run: chmod +x ./.github/workflows/countline.py
       - run: |
           ./.github/workflows/countline.py --exclude_files src/screens/LoginPage/LoginPage.tsx
-
-  Continuous-Integration:
-    name: Continuous integration on pull request
+      
+  Formatting:
+    name: Check formatting
     runs-on: ubuntu-latest
     needs: Linter
     steps:
       - uses: actions/checkout@v3
       - name: Install Dependencies
         run: yarn
+      - name: Check formatting
+        run: yarn format:check
+  
+  Continuous-Integration:
+    name: Continuous integration on pull request
+    runs-on: ubuntu-latest
+    needs: [Linter, Formatting]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: yarn
       - name: Run tests
         run: yarn test
-
+  
   Code-Coverage:
     name: Shows code coverage
     runs-on: ubuntu-latest
@@ -72,4 +84,4 @@ jobs:
         uses: VeryGoodOpenSource/very_good_coverage@v2
         with:
           path: "./coverage/lcov.info"
-          min_coverage: 90.2
+          min_coverage: 91.9
