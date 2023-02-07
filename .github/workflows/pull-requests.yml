@@ -29,7 +29,8 @@ jobs:
         run: yarn
       - name: Run linting check
         run: yarn lint:check
-
+      - name: Check for type errors
+        run: yarn typecheck
 
   Count-lines-of-code:
     name: Total number of lines in every file should not be more than 400
@@ -51,9 +52,7 @@ jobs:
         run: yarn
       - name: Check formatting
         run: yarn format:check
-      - name: Check for type errors
-        run: yarn typecheck
-  
+    
   Continuous-Integration:
     name: Continuous integration on pull request
     runs-on: ubuntu-latest
