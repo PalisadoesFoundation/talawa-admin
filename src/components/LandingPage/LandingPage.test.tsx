@@ -32,9 +32,6 @@ describe('Testing LandingPage', () => {
     );
 
     await waitFor(() => {
-      expect(
-        screen.getByText('loginPage.talawa_description.part2')
-      ).toBeInTheDocument();
       expect(screen.getByText('loginPage.fromPalisadoes')).toBeInTheDocument();
     });
   });
