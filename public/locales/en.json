@@ -1,11 +1,6 @@
 {
   "loginPage": {
     "title": "Talawa Admin",
-    "talawa_description": {
-      "part1": "This is",
-      "part2": " Talawa Admin Management Portal ",
-      "part3": "for the seamless management of Talawa Application."
-    },
     "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
     "talawa_portal": "Talawa Portal",
     "login": "Login",
