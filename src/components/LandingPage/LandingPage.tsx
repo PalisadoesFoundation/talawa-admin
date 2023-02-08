@@ -9,11 +9,6 @@ function LandingPage(): JSX.Element {
   return (
     <>
       <div>
-        <h1 className={styles.maintitle}>
-          {t('talawa_description.part1')}
-          <span>{t('talawa_description.part2')}</span>
-          {t('talawa_description.part3')}
-        </h1>
         <div className={styles.carouseldiv}>
           <img className="d-block w-100" src={slide1} alt="First slide" />
         </div>
