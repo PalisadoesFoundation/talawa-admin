@@ -169,10 +169,16 @@ function OrgList(): JSX.Element {
               </p>
               <p className={styles.userEmail}>
                 {t('email')}:
-                <p> 
-                  {data_2?.user.email.substring(0, data_2?.user.email.length/2)}
+                <p>
+                  {data_2?.user.email.substring(
+                    0,
+                    data_2?.user.email.length / 2
+                  )}
                   <span>
-                    {data_2?.user.email.substring(data_2?.user.email.length/2,data_2?.user.email.length)}
+                    {data_2?.user.email.substring(
+                      data_2?.user.email.length / 2,
+                      data_2?.user.email.length
+                    )}
                   </span>
                 </p>
               </p>
