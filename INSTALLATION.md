@@ -193,7 +193,7 @@ You need to setup your own local instance of [Talawa-API](https://github.com/Pal
 5. Select `user` collections and edit the data. Change:
     1. `userType` from ADMIN to SUPERADMIN
     2. `adminApproved` from false to true
-        ![Screenshot_251](https://user-images.githubusercontent.com/121368112/217746536-c2388f4c-8fd8-4039-a22d-2bf0e2e1eb0a.png)
+ ![Screenshot_251](https://user-images.githubusercontent.com/121368112/217746536-c2388f4c-8fd8-4039-a22d-2bf0e2e1eb0a.png)
 
 ##### Further instructions to connect and edit data through MONGOSH
 
