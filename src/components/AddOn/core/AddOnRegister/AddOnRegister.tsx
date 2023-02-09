@@ -25,7 +25,7 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const [create, { loading: loading_2 }] = useMutation(ADD_PLUGIN_MUTATION);
+  const [create] = useMutation(ADD_PLUGIN_MUTATION);
 
   const [formState, setFormState] = useState<formStateTypes>({
     pluginName: '',

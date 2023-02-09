@@ -5,15 +5,38 @@
 In order to give everyone a chance to submit a pull request and contribute to the Talawa project, we have put restrictions in place. This section outlines the guidelines that should be imposed upon pull requests in the Talawa project.
 
 ## Pull Requests and Issues
+
 1. Do not start working on any open issue and raise a PR unless the issue is assigned to you. PRs that don't meet these guidelines will be closed.
 1. Pull requests must be based on [open issues](https://github.com/PalisadoesFoundation/talawa-admin/issues) available.
 1. [Use this method to automatically close the issue when the PR is completed.](https://docs.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue)
 
+## Linting and Formatting
+
+All the pull requests must have code that is properly linted and formatted, so that uniformity across the repository can be ensured.
+
+Before opening a PR, you can run the following scripts to automatically lint and format the code properly:
+
+```
+yarn lint:fix
+yarn format:fix
+```
+
+Both of these scripts also have a `check` counterpart, which would be used by the GitHub CI to ensure that the code is properly formatted.
+You can run the following scripts yourself to ensure that your pull request doesn't fail due to linting and formatting errors:
+
+```
+yarn lint:check
+yarn format:check
+```
+
 ## Testing
+
 1. All pull requests must have test units. If, for some reason, it is not possible to add tests, please let us know and explain why. In that case, you'll need to tell us what steps you followed to manually test your changes.
 1. Please read our [CONTRIBUTING.md](CONTRIBUTING.md) document for details on our testing policy.
 
 ## Pull Request Processing
+
+1. We do not accept draft Pull Requests. They will be closed if submitted. We focus on work that is ready for immediate review.
 1. If you have not done so already, please read the `Pull Requests and Issues` and `Testing` sections above.
 1. Each contributor may only create one pull request at a time. We have this rule in place due to our limited resources - if everyone was allowed to post multiple pull requests, we would not be able to review them properly. It is also better for contributors because you can focus on creating one quality PR - so spend time making sure it is as good as it can be.
 1. Upon successful push to the fork, check if all tests are passing; if not, fix the issues and then create a pull request.

@@ -29,7 +29,7 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
 
   const AddMember = async () => {
     try {
-      const { data } = await acceptMutation({
+      await acceptMutation({
         variables: {
           id: props.id,
         },
@@ -48,7 +48,7 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
     const sure = window.confirm('Are you sure you want to Reject Request ?');
     if (sure) {
       try {
-        const { data } = await rejectMutation({
+        await rejectMutation({
           variables: {
             userid: props.id,
           },

@@ -1,12 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { useQuery } from '@apollo/client';
 
-import './App.css';
-import { actionCreators } from './state/index';
-import PluginHelper from 'components/AddOn/support/services/Plugin.helper';
+// import './App.css';
+import styles from './App.module.css';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
 import LoginPage from 'screens/LoginPage/LoginPage';
@@ -26,8 +23,6 @@ import Requests from 'screens/Requests/Requests';
 import BlockUser from 'screens/BlockUser/BlockUser';
 
 function App(): JSX.Element {
-  const dispatch = useDispatch();
-
   /*const { updatePluginLinks, updateInstalled } = bindActionCreators(
     actionCreators,
     dispatch
@@ -69,7 +64,7 @@ function App(): JSX.Element {
   );
 
   if (loading) {
-    return <div className="loader"></div>;
+    return <div className={styles.loader}></div>;
   }
 
   if (data) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AddOnEntry.module.css';
 import { Button, Card, Form, Spinner } from 'react-bootstrap';
@@ -28,34 +28,22 @@ function AddOnEntry({
   title,
   description,
   createdBy,
-  component,
   installed,
-  configurable,
-  modified,
   isInstalled,
   getInstalledPlugins,
 }: AddOnEntryProps): JSX.Element {
   const [buttonLoading, setButtonLoading] = useState(false);
-  const [switchInProgress, setSwitchState] = useState(false);
+  const [switchInProgress] = useState(false);
   const [isInstalledLocal, setIsInstalledLocal] = useState(isInstalled);
-  const entry = {
-    id,
-    name: title,
-    description,
-    createdBy,
-    component,
-  };
 
-  const [updateInstallStatus, { loading: loading_2 }] = useMutation(
+  const [updateInstallStatus] = useMutation(
     UPDATE_INSTALL_STATUS_PLUGIN_MUTATION
   );
-  const [updateOrgStatus, { loading: loading_3 }] = useMutation(
-    UPDATE_ORG_STATUS_PLUGIN_MUTATION
-  );
+  const [updateOrgStatus] = useMutation(UPDATE_ORG_STATUS_PLUGIN_MUTATION);
 
   const currentOrg = window.location.href.split('=')[1];
   const updateOrgList = async () => {
-    const { data } = await updateOrgStatus({
+    await updateOrgStatus({
       variables: {
         id: id.toString(),
         orgId: currentOrg.toString(),
@@ -65,7 +53,7 @@ function AddOnEntry({
   };
   const updateInstallStatusFunc = async () => {
     setButtonLoading(true);
-    const { data } = await updateInstallStatus({
+    await updateInstallStatus({
       variables: {
         id: id.toString(),
         status: !isInstalledLocal,
