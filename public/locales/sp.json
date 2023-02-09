@@ -1,12 +1,7 @@
 {
   "loginPage": {
     "title": "Administrador Talawa",
-    "talawa_description": {
-      "part1": "Esto es",
-      "part2": " Portal de administración de administración de Talawa ",
-      "part3": "para la gestión perfecta de la aplicación Talawa."
-    },
-    "fromPalisadoes": "DESDE PALIZADOS",
+    "fromPalisadoes": "Una aplicación de código abierto de los voluntarios de la Fundación palisados",
     "talawa_portal": "Portal Talawa",
     "login": "Acceso",
     "register": "Registro",
