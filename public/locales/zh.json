@@ -38,7 +38,8 @@
     "tags": "標籤（逗號（，）分隔）",
     "isPublic": "是否公開",
     "visibleInSearch": "在搜索中可見",
-    "displayImage": "顯示圖像"
+    "displayImage": "顯示圖像",
+    "enterName": "输入名字"
   },
   "superDashListCard": {
     "created": "創造",
@@ -59,7 +60,8 @@
     "roles_userType": "角色/用戶類型",
     "admin": "行政",
     "superAdmin": "超級管理員",
-    "user": "用戶"
+    "user": "用戶",
+    "enterName": "输入名字"
   },
   "requests": {
     "title": "塔拉瓦請求",
@@ -68,7 +70,8 @@
     "name": "姓名",
     "email": "電子郵件",
     "accept": "接受",
-    "reject": "拒絕"
+    "reject": "拒絕",
+    "enterName": "输入名字"
   },
   "adminNavbar": {
     "talawa_portal": "塔拉瓦門戶",
