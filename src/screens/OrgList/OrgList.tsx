@@ -18,6 +18,7 @@ import {
 import { CREATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import ListNavbar from 'components/ListNavbar/ListNavbar';
 import PaginationList from 'components/PaginationList/PaginationList';
+import debounce from 'utils/debounce';
 
 function OrgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
@@ -150,6 +151,8 @@ function OrgList(): JSX.Element {
     }
   };
 
+  const debouncedHandleSearchByName = debounce(handleSearchByName);
+
   return (
     <>
       <ListNavbar />
@@ -179,7 +182,7 @@ function OrgList(): JSX.Element {
                 data-testid="searchByName"
                 autoComplete="off"
                 required
-                onChange={handleSearchByName}
+                onChange={debouncedHandleSearchByName}
               />
             </div>
           </div>
