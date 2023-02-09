@@ -182,7 +182,8 @@ You need to setup your own local instance of [Talawa-API](https://github.com/Pal
 
 1. Login to your MongoDB account from here https://www.mongodb.com/
 2. Create your own database user.
-3. After you've have done it properly your interface will look like this:![Screenshot_246](https://user-images.githubusercontent.com/121368112/217745593-da2afd38-9ea7-42e0-b8f9-c58b569525bf.png)
+3. After you've have done it properly your interface will look like this:![Screenshot_255](https://user-images.githubusercontent.com/121368112/217766091-a7df3058-8293-422c-8661-5c4ef78c1fa4.png)
+
 
 ##### Further instructions to connect and edit data through MongoDB Compass
 
