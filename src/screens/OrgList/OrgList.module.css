@@ -20,7 +20,16 @@
 }
 .sidebarsticky {
   padding-left: 45px;
+  text-overflow: ellipsis;
+  /* overflow-x: hidden; */
 }
+
+/* .sidebarsticky:hover{
+  overflow-x:visible;
+  transition: all 0.4s ease;
+  background-color: #707070;
+
+} */
 .sidebarsticky > p {
   margin-top: -10px;
 }
@@ -94,7 +103,7 @@
   display: flex;
   justify-content: space-between;
 }
-@media screen and (max-width: 575.5px) {
+@media screen and (max-width: 1200px) {
   .justifysp {
     padding-left: 55px;
     display: flex;
@@ -104,6 +113,10 @@
 
   .mainpageright {
     width: 100%;
+  }
+  .invitebtn {
+    position: relative;
+    right: 15px;
   }
 }
 .invitebtn {
@@ -118,6 +131,7 @@
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   background-color: #31bb6b;
+  margin-right: 13px;
 }
 
 .flexdir {

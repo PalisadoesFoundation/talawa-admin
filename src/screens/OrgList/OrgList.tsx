@@ -154,7 +154,7 @@ function OrgList(): JSX.Element {
     <>
       <ListNavbar />
       <Row>
-        <Col sm={3}>
+        <Col xl={3}>
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
               <h6 className={styles.logintitle}>{t('you')}</h6>
@@ -167,8 +167,20 @@ function OrgList(): JSX.Element {
               <p>
                 {t('designation')}:<span> {data_2?.user.userType}</span>
               </p>
-              <p>
-                {t('email')}:<span> {data_2?.user.email}</span>
+              <p className={styles.userEmail}>
+                {t('email')}:
+                <p>
+                  {data_2?.user.email.substring(
+                    0,
+                    data_2?.user.email.length / 2
+                  )}
+                  <span>
+                    {data_2?.user.email.substring(
+                      data_2?.user.email.length / 2,
+                      data_2?.user.email.length
+                    )}
+                  </span>
+                </p>
               </p>
 
               <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
@@ -184,7 +196,7 @@ function OrgList(): JSX.Element {
             </div>
           </div>
         </Col>
-        <Col sm={8}>
+        <Col xl={8}>
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>{t('organizationList')}</p>

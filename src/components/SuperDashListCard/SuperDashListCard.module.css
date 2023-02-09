@@ -1,5 +1,6 @@
 .orglist {
   margin-top: -1px;
+  padding-left: 32px;
 }
 
 .singledetails {
@@ -12,7 +13,7 @@
 }
 .singledetails_data_left {
   margin-top: 10px;
-  margin-left: 10px;
+  /* margin-left: 10px; */
   color: #707070;
 }
 .singledetails_data_right {
@@ -59,11 +60,8 @@
   border-radius: 7px;
   margin-left: 20px;
 }
-@media only screen and (max-width: 600px) {
-  .singledetails {
-    margin-left: 20px;
-  }
-  .orgimg {
-    margin: auto;
-  }
+
+.singledetails {
+  margin-left: 25px;
+  padding-left: 0;
 }

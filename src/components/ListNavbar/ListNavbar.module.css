@@ -112,3 +112,9 @@
     margin-top: 10px;
   }
 }
+
+@media only screen and (max-width: 1200px) {
+  .logoutbtn {
+    margin-bottom: 10px;
+  }
+}
