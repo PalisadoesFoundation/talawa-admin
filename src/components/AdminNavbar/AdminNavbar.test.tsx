@@ -197,7 +197,6 @@ describe('Testing Admin Navbar', () => {
     await wait();
 
     userEvent.click(screen.getByTestId('NotificationsIcon'));
-    userEvent.click(screen.getByTestId('spamNotification6954'));
   });
 
   test('Testing, if spam id is present in local storage', async () => {

@@ -70,7 +70,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
   }, []);
 
   useEffect(() => {
-    if (data) {
+    if (data && data.organizations[0].spamCount) {
       setSpamCountData(
         data.organizations[0].spamCount.filter(
           (spam: any) => spam.isReaded === false
