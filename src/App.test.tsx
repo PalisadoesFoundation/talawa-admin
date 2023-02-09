@@ -58,7 +58,7 @@ describe('Testing the App Component', () => {
     window.location.assign('/orglist');
     await wait();
     expect(window.location).toBeAt('/orglist');
-    expect(screen.getByText('FROM PALISADOES')).toBeTruthy();
+    expect(screen.getByText('An open source application by Palisadoes Foundation volunteers')).toBeTruthy();
   });
 
   test('Component should be rendered properly and user is loggedout', async () => {
