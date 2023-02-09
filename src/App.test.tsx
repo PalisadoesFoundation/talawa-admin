@@ -58,7 +58,7 @@ describe('Testing the App Component', () => {
     window.location.assign('/orglist');
     await wait();
     expect(window.location).toBeAt('/orglist');
-        expect(
+    expect(
       screen.getByText(
         'An open source application by Palisadoes Foundation volunteers'
       )
