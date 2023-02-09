@@ -187,7 +187,8 @@ You need to setup your own local instance of [Talawa-API](https://github.com/Pal
 
 ##### Further instructions to connect and edit data through MongoDB Compass
 
-1. Click on connect and choose MongoDB Compass.![Screenshot_247](https://user-images.githubusercontent.com/121368112/217745906-2f91cfd9-e378-4660-8d27-770454bb3796.png)
+1. Click on connect and choose MongoDB Compass.![Screenshot_257](https://user-images.githubusercontent.com/121368112/217770218-774dde9c-f85f-4b5a-853c-5d1b80a67157.png)
+
 2. Copy the connection string open MongoDB Compass and paste it while creating new connection.
 3. Make sure to replace `<password>` with your password.
 4. You'll end up having interface like this:![Screenshot_248](https://user-images.githubusercontent.com/121368112/217746200-91a0e5a0-0a07-4ba6-b8e2-0ea59fae69ba.png)
