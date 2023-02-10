@@ -1,12 +1,7 @@
 {
   "loginPage": {
     "title": "塔拉瓦管理員",
-    "talawa_description": {
-      "part1": "這是",
-      "part2": " 塔拉瓦管理員管理門戶 ",
-      "part3": "用於 Talawa 應用程序的無縫管理"
-    },
-    "fromPalisadoes": "從柵欄",
+    "fromPalisadoes": "柵欄 基金会志愿者的开源应用程序",
     "talawa_portal": "塔拉瓦門戶",
     "login": "登錄",
     "register": "登記",

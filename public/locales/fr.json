@@ -2,12 +2,7 @@
   "loginPage": {
     "title": "Administrateur Talawa",
     "talawa_portal": "Portail Talawa",
-    "talawa_description": {
-      "part1": "C'est",
-      "part2": " Portail de gestion administrative Talawa ",
-      "part3": "pour la gestion transparente de l'application Talawa."
-    },
-    "fromPalisadoes": "DE PALISADES",
+    "fromPalisadoes": "Une application open source par les volontaires de la Fondation Palissades",
     "login": "Connexion",
     "register": "S'inscrire",
     "firstName": "Prénom",

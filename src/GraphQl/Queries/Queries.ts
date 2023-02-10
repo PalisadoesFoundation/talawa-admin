@@ -130,20 +130,6 @@ export const ORGANIZATIONS_LIST = gql`
         email
       }
       tags
-      spamCount {
-        _id
-        user {
-          _id
-          firstName
-          lastName
-          email
-        }
-        isReaded
-        groupchat {
-          _id
-          title
-        }
-      }
     }
   }
 `;
@@ -186,18 +172,8 @@ export const USER_ORGANIZATION_LIST = gql`
 
 // to take the organization event list
 export const ORGANIZATION_EVENT_LIST = gql`
-  query EventsByOrganization(
-    $id: ID!
-    $filterByTitle: String
-    $filterByDescription: String
-  ) {
-    eventsByOrganization(
-      id: $id
-      where: {
-        title_contains: $filterByTitle
-        description_contains: $filterByDescription
-      }
-    ) {
+  query EventsByOrganization($id: ID!) {
+    eventsByOrganization(id: $id) {
       _id
       title
       description
@@ -254,15 +230,8 @@ export const MEMBERSHIP_REQUEST = gql`
 // display posts
 
 export const ORGANIZATION_POST_LIST = gql`
-  query PostsByOrganization(
-    $id: ID!
-    $filterByTitle: String
-    $filterByText: String
-  ) {
-    postsByOrganization(
-      id: $id
-      where: { title_contains: $filterByTitle, text_contains: $filterByText }
-    ) {
+  query PostsByOrganization($id: ID!) {
+    postsByOrganization(id: $id) {
       _id
       title
       text
