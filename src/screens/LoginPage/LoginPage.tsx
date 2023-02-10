@@ -396,7 +396,7 @@ function LoginPage(): JSX.Element {
                   type="email"
                   id="email"
                   className="input_box"
-                  placeholder={t('email')}
+                  placeholder={t('enterEmail')}
                   autoComplete="off"
                   required
                   value={formState.email}
@@ -412,7 +412,7 @@ function LoginPage(): JSX.Element {
                   type="password"
                   id="password"
                   className="input_box_second"
-                  placeholder={t('password')}
+                  placeholder={t('enterPassword')}
                   required
                   value={formState.password}
                   onChange={(e) => {

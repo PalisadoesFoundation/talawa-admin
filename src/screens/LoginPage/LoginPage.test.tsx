@@ -138,9 +138,15 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    userEvent.type(screen.getByPlaceholderText('eg. John'), formData.firstName);
-    userEvent.type(screen.getByPlaceholderText('eg. Doe'), formData.lastName);
-    userEvent.type(screen.getByPlaceholderText('Your Email'), formData.email);
+    userEvent.type(
+      screen.getByPlaceholderText(/First Name/i),
+      formData.firstName
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Last name/i),
+      formData.lastName
+    );
+    userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
     userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
     userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
@@ -173,9 +179,15 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    userEvent.type(screen.getByPlaceholderText('eg. John'), formData.firstName);
-    userEvent.type(screen.getByPlaceholderText('eg. Doe'), formData.lastName);
-    userEvent.type(screen.getByPlaceholderText('Your Email'), formData.email);
+    userEvent.type(
+      screen.getByPlaceholderText(/First Name/i),
+      formData.firstName
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Last Name/i),
+      formData.lastName
+    );
+    userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
     userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
     userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
@@ -208,9 +220,15 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    userEvent.type(screen.getByPlaceholderText('eg. John'), formData.firstName);
-    userEvent.type(screen.getByPlaceholderText('eg. Doe'), formData.lastName);
-    userEvent.type(screen.getByPlaceholderText('Your Email'), formData.email);
+    userEvent.type(
+      screen.getByPlaceholderText(/First Name/i),
+      formData.firstName
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Last Name/i),
+      formData.lastName
+    );
+    userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
     userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
     userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
@@ -264,9 +282,9 @@ describe('Testing Login Page Screen', () => {
 
     userEvent.click(screen.getByTestId('loginModalBtn'));
 
-    userEvent.type(screen.getByPlaceholderText('Enter Email'), formData.email);
+    userEvent.type(screen.getByPlaceholderText(/Enter Email/i), formData.email);
     userEvent.type(
-      screen.getByPlaceholderText('Enter Password'),
+      screen.getByPlaceholderText(/Enter Password/i),
       formData.password
     );
 

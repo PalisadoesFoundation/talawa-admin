@@ -16,7 +16,9 @@
     "password": "密碼",
     "atleast_8_char_long": "至少 8 個字符長",
     "confirmPassword": "確認密碼",
-    "forgotPassword": "忘記密碼 ？"
+    "forgotPassword": "忘記密碼 ？",
+    "enterEmail" : "输入电子邮件",
+    "enterPassword":"输入密码"
   },
   "listNavbar": {
     "talawa_portal": "塔拉瓦門戶",

@@ -16,7 +16,9 @@
     "password": "Clave",
     "atleast_8_char_long": "Al menos 8 caracteres de largo",
     "confirmPassword": "Confirmar contraseña",
-    "forgotPassword": "Has olvidado tu contraseña ?"
+    "forgotPassword": "Has olvidado tu contraseña ?",
+    "enterEmail" : "ingrese correo electrónico",
+    "enterPassword":"introducir la contraseña"
   },
   "listNavbar": {
     "talawa_portal": "Portal Talawa",
