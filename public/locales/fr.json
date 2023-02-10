@@ -11,7 +11,9 @@
     "password": "Mot de passe",
     "atleast_8_char_long": "Au moins 8 caractères",
     "confirmPassword": "Confirmez le mot de passe",
-    "forgotPassword": "Mot de passe oublié ?"
+    "forgotPassword": "Mot de passe oublié ?",
+    "enterEmail": "entrez l'e-mail",
+    "enterPassword": "Entrer le mot de passe"
   },
   "listNavbar": {
     "talawa_portal": "Portail Talawa",
@@ -33,7 +35,8 @@
     "tags": "Balises (séparées par des virgules (,))",
     "isPublic": "Est publique",
     "visibleInSearch": "Visible dans la recherche",
-    "displayImage": "Afficher l'image"
+    "displayImage": "Afficher l'image",
+    "enterName": "Entrez le nom"
   },
   "superDashListCard": {
     "created": "Établi",
@@ -54,7 +57,8 @@
     "roles_userType": "Rôle/Type d'utilisateur",
     "admin": "ADMIN",
     "superAdmin": "SUPERADMIN",
-    "user": "UTILISATEUR"
+    "user": "UTILISATEUR",
+    "enterName": "Entrez le nom"
   },
   "requests": {
     "title": "Demandes Talawa",
@@ -63,7 +67,8 @@
     "name": "Nom",
     "email": "E-mail",
     "accept": "Accepter",
-    "reject": "Rejeter"
+    "reject": "Rejeter",
+    "enterName": "Entrez le nom"
   },
   "adminNavbar": {
     "talawa_portal": "Portail Talawa",

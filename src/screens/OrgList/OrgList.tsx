@@ -190,7 +190,7 @@ function OrgList(): JSX.Element {
               <input
                 type="name"
                 id="orgname"
-                placeholder="Enter Name"
+                placeholder={t('enterName')}
                 data-testid="searchByName"
                 autoComplete="off"
                 required

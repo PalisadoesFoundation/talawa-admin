@@ -11,7 +11,9 @@
     "password": "पासवर्ड",
     "atleast_8_char_long": "कम से कम 8 कैरेक्टर लंबा",
     "confirmPassword": "पासवर्ड की पुष्टि कीजिये",
-    "forgotPassword": "पासवर्ड भूल गए ?"
+    "forgotPassword": "पासवर्ड भूल गए ?",
+    "enterEmail": "ईमेल दर्ज करें",
+    "enterPassword": "पास वर्ड दर्ज करें"
   },
   "listNavbar": {
     "talawa_portal": "तलावा पोर्टल",
@@ -33,7 +35,8 @@
     "tags": "टैग (अल्पविराम (,) अलग)",
     "isPublic": "सार्वजनिक है",
     "visibleInSearch": "खोज में दृश्यमान",
-    "displayImage": "प्रदर्शन छवि"
+    "displayImage": "प्रदर्शन छवि",
+    "enterName": "नाम दर्ज करें"
   },
   "superDashListCard": {
     "created": "बनाया था",
@@ -54,7 +57,8 @@
     "roles_userType": "भूमिका/उपयोगकर्ता-प्रकार",
     "admin": "व्यवस्थापक",
     "superAdmin": "सुपरएडमिन",
-    "user": "उपयोगकर्ता"
+    "user": "उपयोगकर्ता",
+    "enterName": "नाम दर्ज करें"
   },
   "requests": {
     "title": "तलवा अनुरोध",
@@ -63,7 +67,8 @@
     "name": "नाम",
     "email": "ईमेल",
     "accept": "स्वीकार करना",
-    "reject": "अस्वीकार"
+    "reject": "अस्वीकार",
+    "enterName": "नाम दर्ज करें"
   },
   "adminNavbar": {
     "talawa_portal": "तलावा पोर्टल",

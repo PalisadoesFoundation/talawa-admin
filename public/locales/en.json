@@ -11,7 +11,9 @@
     "password": "Password",
     "atleast_8_char_long": "Atleast 8 Character long",
     "confirmPassword": "Confirm Password",
-    "forgotPassword": "Forgot Password ?"
+    "forgotPassword": "Forgot Password ?",
+    "enterEmail": "Enter Email",
+    "enterPassword": "Enter Password"
   },
   "listNavbar": {
     "talawa_portal": "Talawa Portal",
@@ -33,7 +35,8 @@
     "tags": "Tags (Comma(,) Seperated)",
     "isPublic": "Is Public",
     "visibleInSearch": "Visible In Search",
-    "displayImage": "Display Image"
+    "displayImage": "Display Image",
+    "enterName": "Enter Name"
   },
   "superDashListCard": {
     "created": "Created",
@@ -54,7 +57,8 @@
     "roles_userType": "Role/User-Type",
     "admin": "ADMIN",
     "superAdmin": "SUPERADMIN",
-    "user": "USER"
+    "user": "USER",
+    "enterName": "Enter Name"
   },
   "requests": {
     "title": "Talawa Requests",
@@ -63,7 +67,8 @@
     "name": "Name",
     "email": "Email",
     "accept": "Accept",
-    "reject": "Reject"
+    "reject": "Reject",
+    "enterName": "Enter Name"
   },
   "adminNavbar": {
     "talawa_portal": "Talawa Portal",
