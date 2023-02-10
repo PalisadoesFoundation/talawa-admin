@@ -71,7 +71,8 @@
     "lint:check": "eslint \"**/*.{ts,tsx}\" --max-warnings=0",
     "lint:fix": "eslint \"**/*.{ts,tsx}\" --fix",
     "format:fix": "prettier --write \"**/*.{ts,tsx,json,scss,css}\"",
-    "format:check": "prettier --check \"**/*.{ts,tsx,json,scss,css}\""
+    "format:check": "prettier --check \"**/*.{ts,tsx,json,scss,css}\"",
+    "typecheck": "tsc --project tsconfig.json --noEmit"
   },
   "eslintConfig": {
     "extends": [
