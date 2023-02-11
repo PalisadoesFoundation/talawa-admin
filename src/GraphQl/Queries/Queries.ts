@@ -75,10 +75,6 @@ export const USER_LIST = gql`
       email
       userType
       adminApproved
-      spamInOrganizations {
-        _id
-        name
-      }
       organizationsBlockedBy {
         _id
         name
