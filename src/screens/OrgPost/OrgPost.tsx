@@ -16,6 +16,7 @@ import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { RootState } from 'state/reducers';
 import PaginationList from 'components/PaginationList/PaginationList';
+import debounce from 'utils/debounce';
 
 function OrgPost(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -128,6 +129,9 @@ function OrgPost(): JSX.Element {
     refetch(filterData);
   };
 
+  const debouncedHandleSearchByTitle = debounce(handleSearchByTitle);
+  const debouncedHandleSearchByText = debounce(handleSearchByText);
+
   return (
     <>
       <AdminNavbar targets={targets} url_1={configUrl} />
@@ -141,7 +145,7 @@ function OrgPost(): JSX.Element {
                 id="posttitle"
                 placeholder="Search by Title"
                 autoComplete="off"
-                onChange={handleSearchByTitle}
+                onChange={debouncedHandleSearchByTitle}
               />
               <h6 className={styles.searchtitle}>{t('postsByText')}</h6>
               <input
@@ -149,7 +153,7 @@ function OrgPost(): JSX.Element {
                 id="orgname"
                 placeholder="Search by Text"
                 autoComplete="off"
-                onChange={handleSearchByText}
+                onChange={debouncedHandleSearchByText}
               />
             </div>
           </div>

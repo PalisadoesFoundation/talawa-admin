@@ -275,7 +275,7 @@ function LoginPage(): JSX.Element {
                       <input
                         type="text"
                         id="signfirstname"
-                        placeholder="eg. John"
+                        placeholder={t('firstName')}
                         autoComplete="on"
                         required
                         value={signformState.signfirstName}
@@ -292,7 +292,7 @@ function LoginPage(): JSX.Element {
                       <input
                         type="text"
                         id="signlastname"
-                        placeholder="eg. Doe"
+                        placeholder={t('lastName')}
                         autoComplete="on"
                         required
                         value={signformState.signlastName}
@@ -309,7 +309,7 @@ function LoginPage(): JSX.Element {
                   <input
                     type="email"
                     id="signemail"
-                    placeholder="Your Email"
+                    placeholder={t('email')}
                     autoComplete="on"
                     required
                     value={signformState.signEmail}
@@ -325,7 +325,7 @@ function LoginPage(): JSX.Element {
                     <input
                       type="password"
                       id="signpassword"
-                      placeholder="Password"
+                      placeholder={t('password')}
                       required
                       value={signformState.signPassword}
                       onChange={(e) => {
@@ -341,7 +341,7 @@ function LoginPage(): JSX.Element {
                   <input
                     type="password"
                     id="cpassword"
-                    placeholder="Confirm Password"
+                    placeholder={t('confirmPassword')}
                     required
                     value={signformState.cPassword}
                     onChange={(e) => {
@@ -396,7 +396,7 @@ function LoginPage(): JSX.Element {
                   type="email"
                   id="email"
                   className="input_box"
-                  placeholder="Enter Email"
+                  placeholder={t('enterEmail')}
                   autoComplete="off"
                   required
                   value={formState.email}
@@ -412,7 +412,7 @@ function LoginPage(): JSX.Element {
                   type="password"
                   id="password"
                   className="input_box_second"
-                  placeholder="Enter Password"
+                  placeholder={t('enterPassword')}
                   required
                   value={formState.password}
                   onChange={(e) => {
