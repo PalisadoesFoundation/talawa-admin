@@ -90,7 +90,6 @@ export const SIGNUP_MUTATION = gql`
     $lastName: String!
     $email: String!
     $password: String!
-    $userType: UserType
   ) {
     signUp(
       data: {
@@ -98,7 +97,6 @@ export const SIGNUP_MUTATION = gql`
         lastName: $lastName
         email: $email
         password: $password
-        userType: $userType
       }
     ) {
       user {

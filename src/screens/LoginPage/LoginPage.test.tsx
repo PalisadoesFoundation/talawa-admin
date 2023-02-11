@@ -48,7 +48,6 @@ const MOCKS = [
         lastName: 'Doe',
         email: 'johndoe@gmail.com',
         password: 'johnDoe',
-        userType: 'ADMIN',
       },
     },
     result: {

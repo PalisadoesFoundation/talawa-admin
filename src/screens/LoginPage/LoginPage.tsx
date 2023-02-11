@@ -115,7 +115,6 @@ function LoginPage(): JSX.Element {
               lastName: signlastName,
               email: signEmail,
               password: signPassword,
-              userType: 'ADMIN',
             },
           });
 
