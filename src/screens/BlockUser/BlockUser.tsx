@@ -43,11 +43,7 @@ const Requests = () => {
 
   useEffect(() => {
     if (data) {
-      setUsersData(
-        data.users.filter((user: any) =>
-          user.spamInOrganizations.some((spam: any) => spam._id === currentUrl)
-        )
-      );
+      setUsersData(data.users);
     }
   }, [data]);
 
