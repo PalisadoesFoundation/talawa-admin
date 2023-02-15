@@ -326,6 +326,7 @@ select:disabled {
 [type='submit'],
 button {
   -webkit-appearance: button;
+  appearance: button;
 }
 [type='button']:not(:disabled),
 [type='reset']:not(:disabled),
@@ -377,6 +378,7 @@ legend + * {
 [type='search'] {
   outline-offset: -2px;
   -webkit-appearance: textfield;
+  appearance: textfield;
 }
 ::-webkit-search-decoration {
   -webkit-appearance: none;
@@ -2063,7 +2065,7 @@ textarea.form-control-lg {
   -moz-appearance: none;
   appearance: none;
   -webkit-print-color-adjust: exact;
-  color-adjust: exact;
+  print-color-adjust: exact;
 }
 .form-check-input[type='checkbox'] {
   border-radius: 0.25em;
@@ -2367,7 +2369,9 @@ textarea.form-control-lg {
   border-bottom-right-radius: 0;
 }
 .input-group
-  > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+  > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(
+    .valid-feedback
+  ):not(.invalid-tooltip):not(.invalid-feedback) {
   margin-left: -1px;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
