@@ -32,7 +32,7 @@ This document provides instructions on how to set up and start a running instanc
 
 Talawa-admin needs URL endpoint to a running instance of `talawa-api` graphql service to perform its operations. You need to set up a local instance of talawa-api on your system.
 
-Refer to INSTALLATION.md  `accessing-talawa-api` section of [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api) to set it up.
+Refer to INSTALLATION.md of [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api) to set it up.
 
 <br/>
 
