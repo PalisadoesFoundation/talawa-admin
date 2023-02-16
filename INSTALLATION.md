@@ -19,7 +19,6 @@ This document provides instructions on how to set up and start a running instanc
   - [Running talawa-admin](#running-talawa-admin)
   - [Accessing talawa-admin](#accessing-talawa-admin)
   - [Sign up on talawa-admin](#sign-up-on-talawa-admin)
-  - [Elevate the permissions for created account](#elevate-the-permissions-for-created-account)
   - [Sign in to talawa-admin](#sign-in-to-talawa-admin)
   - [Running tests](#running-tests)
   - [Linting code files](#linting-code-files)
@@ -32,7 +31,7 @@ This document provides instructions on how to set up and start a running instanc
 
 Talawa-admin needs URL endpoint to a running instance of `talawa-api` graphql service to perform its operations. You need to set up a local instance of talawa-api on your system.
 
-Refer to INSTALLATION.md of [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api) to set it up.
+Follow the instructions in the INSTALLATION.md file of the [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api) to set it up.
 
 <br/>
 
@@ -71,7 +70,7 @@ Follow the instructions from section [Setting up REACT_APP_TALAWA_URL in .env fi
 
 ## Setting up REACT_APP_TALAWA_URL in .env file
 
-Make sure to go through INSTALLATION.md  `accessing-talawa-api` section of [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api).
+Refer to to the `REACT_APP_TALAWA_URL` section in the INSTALLATION.md file found in the [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api).
 
 Copy/paste the endpoint for accessing talawa-api graphql service to the variable named `REACT_APP_TALAWA_URL` in `.env` file.
 
@@ -81,7 +80,7 @@ Copy/paste the endpoint for accessing talawa-api graphql service to the variable
 
 ## Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file
 
-Make sure to go through INSTALLATION.md  `setting-up-recaptcha_secret_key-in-env-file` section of [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api).
+Refer to to the `RECAPTCHA` section in the INSTALLATION.md file found in [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api).
 
 
 `Talawa-admin` needs the `reCAPTCHA site key` for the `reCAPTCHA` service you set up during `talawa-api` installation as shown in this screenshot:-
@@ -127,24 +126,6 @@ By default `talawa-admin` runs on port `3000` on your system's localhost. It is 
 ## Sign up on talawa-admin
 
 The first time you navigate to the running talawa-admin's website you'll land at talawa-admin sign up page. Sign up using whatever credentials you want and create the account. Make sure to remember the email and password you entered because they'll be used to sign you in later on.
-
-<br/>
-
-## Elevate the permissions for created account
-
-You have to manually elevate your account's permissions to make it `admin approved` and make it have `SUPERADMIN` privileges.
-
-For the account you created:-
-
-1.  Set `adminApproved` field to `true`:-
-
-        adminApproved: true
-
-2.  Set `userType` field to `SUPERADMIN`:-
-
-        userType: "SUPERADMIN"
-
-Refer to INSTALLATION.md section of `instructions-to-edit-records-for-admin-user` of [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api) for instructions on the same.
 
 <br/>
 
