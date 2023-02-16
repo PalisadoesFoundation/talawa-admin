@@ -32,7 +32,7 @@ This document provides instructions on how to set up and start a running instanc
 
 Talawa-admin needs URL endpoint to a running instance of `talawa-api` graphql service to perform its operations. You need to set up a local instance of talawa-api on your system.
 
-Follow the [installation guide](https://github.com/PalisadoesFoundation/talawa-api/blob/develop/INSTALLATION.md) on talawa-api repo to set it up.
+Refer to INSTALLATION.md  `accessing-talawa-api` section of [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api) to set it up.
 
 <br/>
 
@@ -71,7 +71,7 @@ Follow the instructions from section [Setting up REACT_APP_TALAWA_URL in .env fi
 
 ## Setting up REACT_APP_TALAWA_URL in .env file
 
-Make sure to go through [this](https://github.com/PalisadoesFoundation/talawa-api/blob/develop/INSTALLATION.md#accessing-talawa-api) section on `talawa-api's` installation docs.
+Make sure to go through INSTALLATION.md  `accessing-talawa-api` section of [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api).
 
 Copy/paste the endpoint for accessing talawa-api graphql service to the variable named `REACT_APP_TALAWA_URL` in `.env` file.
 
@@ -81,7 +81,8 @@ Copy/paste the endpoint for accessing talawa-api graphql service to the variable
 
 ## Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file
 
-Make sure to go through [this](https://github.com/PalisadoesFoundation/talawa-api/blob/develop/INSTALLATION.md#setting-up-recaptcha_secret_key-in-env-file) section on `talawa-api's` installation docs.
+Make sure to go through INSTALLATION.md  `setting-up-recaptcha_secret_key-in-env-file` section of [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api).
+
 
 `Talawa-admin` needs the `reCAPTCHA site key` for the `reCAPTCHA` service you set up during `talawa-api` installation as shown in this screenshot:-
 
@@ -143,7 +144,7 @@ For the account you created:-
 
         userType: "SUPERADMIN"
 
-Refer to [Talawa-api-mongodb-section](https://github.com/PalisadoesFoundation/talawa-api/blob/develop/INSTALLATION.md#instructions-to-edit-records-for-admin-user) for instructions on the same.
+Refer to INSTALLATION.md section of `instructions-to-edit-records-for-admin-user` of [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api) for instructions on the same.
 
 <br/>
 
@@ -176,8 +177,8 @@ Talawa mobile app requires [talawa-api](https://github.com/PalisadoesFoundation/
 You need to setup your own local instance of [Talawa-API](https://github.com/PalisadoesFoundation/talawa-api) and [Talawa-admin](https://github.com/PalisadoesFoundation/talawa-admin). The advantage is that you'll be working with the latest code.
 
 1. You need to first setup the 2 supporting projects locally. Please refer the INSTALLATION.md of the respective repository for further guidance.
-   1. [talawa-api](https://github.com/PalisadoesFoundation/talawa-api)
-   2. [talawa-admin](https://github.com/PalisadoesFoundation/talawa-admin)
+   1. [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api)
+   2. [Talawa-ADMIN repo](https://github.com/PalisadoesFoundation/talawa-admin)
    
 * Install [talawa](https://github.com/PalisadoesFoundation/talawa) Please refer the INSTALLATION.md of the respective repository for further guidance
     - Then use the URL (Organization URL) in this form:
