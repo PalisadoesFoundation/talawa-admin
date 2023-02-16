@@ -17,6 +17,7 @@ import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { RootState } from 'state/reducers';
 import PaginationList from 'components/PaginationList/PaginationList';
+import debounce from 'utils/debounce';
 
 function OrganizationEvents(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -153,6 +154,11 @@ function OrganizationEvents(): JSX.Element {
     refetch(filterData);
   };
 
+  const debouncedHandleSearchByTitle = debounce(handleSearchByTitle);
+  const debouncedHandleSearchByDescription = debounce(
+    handleSearchByDescription
+  );
+
   return (
     <>
       <AdminNavbar targets={targets} url_1={configUrl} />
@@ -167,7 +173,7 @@ function OrganizationEvents(): JSX.Element {
                 placeholder="Enter filter"
                 autoComplete="off"
                 required
-                onChange={handleSearchByTitle}
+                onChange={debouncedHandleSearchByTitle}
                 data-testid="serachByTitle"
               />
 
@@ -178,7 +184,7 @@ function OrganizationEvents(): JSX.Element {
                 placeholder="Enter filter"
                 autoComplete="off"
                 required
-                onChange={handleSearchByDescription}
+                onChange={debouncedHandleSearchByDescription}
                 data-testid="serachByDescription"
               />
             </div>

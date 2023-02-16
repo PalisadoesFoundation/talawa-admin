@@ -1,12 +1,7 @@
 {
   "loginPage": {
     "title": "Administrador Talawa",
-    "talawa_description": {
-      "part1": "Esto es",
-      "part2": " Portal de administración de administración de Talawa ",
-      "part3": "para la gestión perfecta de la aplicación Talawa."
-    },
-    "fromPalisadoes": "DESDE PALIZADOS",
+    "fromPalisadoes": "Una aplicación de código abierto de los voluntarios de la Fundación palisados",
     "talawa_portal": "Portal Talawa",
     "login": "Acceso",
     "register": "Registro",
@@ -16,7 +11,9 @@
     "password": "Clave",
     "atleast_8_char_long": "Al menos 8 caracteres de largo",
     "confirmPassword": "Confirmar contraseña",
-    "forgotPassword": "Has olvidado tu contraseña ?"
+    "forgotPassword": "Has olvidado tu contraseña ?",
+    "enterEmail": "ingrese correo electrónico",
+    "enterPassword": "introducir la contraseña"
   },
   "listNavbar": {
     "talawa_portal": "Portal Talawa",
@@ -38,7 +35,8 @@
     "tags": "Etiquetas (coma (,) separado)",
     "isPublic": "Es público",
     "visibleInSearch": "Visible en la búsqueda",
-    "displayImage": "Mostrar imagen"
+    "displayImage": "Mostrar imagen",
+    "enterName": "Ingrese su nombre"
   },
   "superDashListCard": {
     "created": "Creado",
@@ -59,7 +57,8 @@
     "roles_userType": "Rol/Tipo de usuario",
     "admin": "ADMINISTRACIÓN",
     "superAdmin": "SUPERADMIN",
-    "user": "USUARIO"
+    "user": "USUARIO",
+    "enterName": "Ingrese su nombre"
   },
   "requests": {
     "title": "Solicitudes Talawa",
@@ -68,7 +67,8 @@
     "name": "Nombre",
     "email": "Correo electrónico",
     "accept": "Aceptar",
-    "reject": "Rechazar"
+    "reject": "Rechazar",
+    "enterName": "Ingrese su nombre"
   },
   "adminNavbar": {
     "talawa_portal": "Portal Talawa",

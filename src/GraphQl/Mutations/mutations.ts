@@ -90,7 +90,6 @@ export const SIGNUP_MUTATION = gql`
     $lastName: String!
     $email: String!
     $password: String!
-    $userType: UserType
   ) {
     signUp(
       data: {
@@ -98,7 +97,6 @@ export const SIGNUP_MUTATION = gql`
         lastName: $lastName
         email: $email
         password: $password
-        userType: $userType
       }
     ) {
       user {
@@ -381,7 +379,7 @@ export const ADD_PLUGIN_MUTATION = gql`
 
 export const UPDATE_POST_MUTATION = gql`
   mutation UpdatePost($id: ID!, $title: String, $text: String) {
-    updatePost(data: { _id: $id, title: $title, text: $text }) {
+    updatePost(id: $id, data: { title: $title, text: $text }) {
       _id
     }
   }

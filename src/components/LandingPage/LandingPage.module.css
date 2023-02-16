@@ -19,9 +19,8 @@
   margin: 35px auto 10px;
   align-items: center;
   width: 80%;
-  box-shadow: 0 6px 10px 0 rgba(255, 255, 255, 0.2),
-    0 10px 10px 0 rgba(0, 0, 0, 0.19);
 }
+
 .carouseldiv img {
   border-radius: 5px;
 }

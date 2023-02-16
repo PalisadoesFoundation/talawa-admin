@@ -31,12 +31,6 @@ const MOCKS = [
             userType: 'SUPERADMIN',
             adminApproved: true,
             createdAt: '20/06/2022',
-            spamInOrganizations: [
-              {
-                _id: '123',
-                name: 'Sam',
-              },
-            ],
             organizationsBlockedBy: [
               {
                 _id: '256',
@@ -53,12 +47,6 @@ const MOCKS = [
             userType: 'ADMIN',
             adminApproved: true,
             createdAt: '20/06/2022',
-            spamInOrganizations: [
-              {
-                _id: '123',
-                name: 'Sam',
-              },
-            ],
             organizationsBlockedBy: [
               {
                 _id: '256',
@@ -75,12 +63,6 @@ const MOCKS = [
             userType: 'USER',
             adminApproved: true,
             createdAt: '20/06/2022',
-            spamInOrganizations: [
-              {
-                _id: '123',
-                name: 'Sam',
-              },
-            ],
             organizationsBlockedBy: [
               {
                 _id: '256',
