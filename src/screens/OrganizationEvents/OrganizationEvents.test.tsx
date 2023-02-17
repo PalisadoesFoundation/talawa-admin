@@ -131,6 +131,7 @@ describe('Organisation Events Page', () => {
     expect(container.textContent).toMatch('Events');
     expect(container.textContent).toMatch('Filter by Title');
     expect(container.textContent).toMatch('Filter by Description');
+    expect(container.textContent).toMatch('Filter by Location');
     expect(container.textContent).toMatch('Events');
     expect(window.location).toBeAt('/orglist');
   });

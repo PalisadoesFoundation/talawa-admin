@@ -9,14 +9,14 @@ import { I18nextProvider } from 'react-i18next';
 
 import OrgPost from './OrgPost';
 import { store } from 'state/store';
-import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 
 const MOCKS = [
   {
     request: {
-      query: ORGANIZATION_POST_LIST,
+      query: ORGANIZATION_POST_CONNECTION_LIST,
     },
     result: {
       data: {
