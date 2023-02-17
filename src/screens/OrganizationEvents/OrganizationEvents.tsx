@@ -191,7 +191,7 @@ function OrganizationEvents(): JSX.Element {
               <input
                 type="name"
                 id="searchlocation"
-                placeholder="Enter Location"
+                placeholder="Enter filter"
                 autoComplete="off"
                 required
                 onChange={debouncedHandleSearchByLocation}
