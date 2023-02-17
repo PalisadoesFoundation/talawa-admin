@@ -7,7 +7,11 @@ import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import OrganizationPeople from './OrganizationPeople';
 import { store } from 'state/store';
-import { ORGANIZATIONS_MEMBER_CONNECTION_LIST, MEMBERS_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+  MEMBERS_LIST,
+  USER_LIST,
+} from 'GraphQl/Queries/Queries';
 import 'jest-location-mock';
 import i18nForTest from 'utils/i18nForTest';
 
