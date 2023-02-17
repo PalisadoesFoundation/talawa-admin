@@ -9,7 +9,6 @@ import OrganizationPeople from './OrganizationPeople';
 import { store } from 'state/store';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-  MEMBERS_LIST,
   USER_LIST,
 } from 'GraphQl/Queries/Queries';
 import 'jest-location-mock';
