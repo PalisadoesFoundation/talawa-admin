@@ -7,14 +7,17 @@ import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import OrganizationPeople from './OrganizationPeople';
 import { store } from 'state/store';
-import { ADMIN_LIST, MEMBERS_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+  USER_LIST,
+} from 'GraphQl/Queries/Queries';
 import 'jest-location-mock';
 import i18nForTest from 'utils/i18nForTest';
 
 const MOCKS = [
   {
     request: {
-      query: MEMBERS_LIST,
+      query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     },
     result: {
       data: {
@@ -38,7 +41,7 @@ const MOCKS = [
   },
   {
     request: {
-      query: ADMIN_LIST,
+      query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     },
     result: {
       data: {
@@ -182,7 +185,6 @@ describe('Organisation People Page', () => {
 
     expect(container.textContent).toMatch('Members');
     expect(container.textContent).toMatch('Filter by Name');
-    expect(container.textContent).toMatch('Filter by Location');
     expect(container.textContent).toMatch('Filter by Event');
     expect(window.location).toBeAt('/orglist');
   });
@@ -204,19 +206,12 @@ describe('Organisation People Page', () => {
 
     userEvent.type(screen.getByPlaceholderText(/Enter Name/i), searchData.name);
     userEvent.type(
-      screen.getByPlaceholderText(/Enter Location/i),
-      searchData.location
-    );
-    userEvent.type(
       screen.getByPlaceholderText(/Enter Event/i),
       searchData.event
     );
 
     expect(screen.getByPlaceholderText(/Enter Name/i)).toHaveValue(
       searchData.name
-    );
-    expect(screen.getByPlaceholderText(/Enter Location/i)).toHaveValue(
-      searchData.location
     );
     expect(screen.getByPlaceholderText(/Enter Event/i)).toHaveValue(
       searchData.event

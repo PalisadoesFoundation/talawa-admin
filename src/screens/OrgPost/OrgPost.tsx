@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 import styles from './OrgPost.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
-import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { RootState } from 'state/reducers';
 import PaginationList from 'components/PaginationList/PaginationList';
@@ -31,10 +31,6 @@ function OrgPost(): JSX.Element {
   });
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [searchState, setSearchState] = useState({
-    byTitle: '',
-    byText: '',
-  });
 
   const currentUrl = window.location.href.split('=')[1];
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
@@ -52,8 +48,8 @@ function OrgPost(): JSX.Element {
     loading: loading2,
     error: error_post,
     refetch,
-  } = useQuery(ORGANIZATION_POST_LIST, {
-    variables: { id: currentUrl },
+  } = useQuery(ORGANIZATION_POST_CONNECTION_LIST, {
+    variables: { id: currentUrl, title_contains: '', text_contains: '' },
   });
   const [create, { loading }] = useMutation(CREATE_POST_MUTATION);
 
@@ -111,20 +107,18 @@ function OrgPost(): JSX.Element {
 
   const handleSearchByTitle = (e: any) => {
     const { value } = e.target;
-    setSearchState({ ...searchState, byTitle: value });
     const filterData = {
       id: currentUrl,
-      filterByTitle: searchState.byTitle,
+      title_contains: value,
     };
     refetch(filterData);
   };
 
   const handleSearchByText = (e: any) => {
     const { value } = e.target;
-    setSearchState({ ...searchState, byText: value });
     const filterData = {
       id: currentUrl,
-      filterByText: searchState.byText,
+      text_contains: value,
     };
     refetch(filterData);
   };
@@ -174,16 +168,16 @@ function OrgPost(): JSX.Element {
             <div className={`row ${styles.list_box}`}>
               {data
                 ? (rowsPerPage > 0
-                    ? data.postsByOrganization.slice(
+                    ? data.postsByOrganizationConnection.edges.slice(
                         page * rowsPerPage,
                         page * rowsPerPage + rowsPerPage
                       )
                     : rowsPerPage > 0
-                    ? data.postsByOrganization.slice(
+                    ? data.postsByOrganizationConnection.edges.slice(
                         page * rowsPerPage,
                         page * rowsPerPage + rowsPerPage
                       )
-                    : data.postsByOrganization
+                    : data.postsByOrganizationConnection.edges
                   ).map(
                     (datas: {
                       _id: string;
@@ -215,7 +209,26 @@ function OrgPost(): JSX.Element {
               <tbody>
                 <tr>
                   <PaginationList
-                    count={data ? data.postsByOrganization.length : 0}
+                    count={
+                      data ? data.postsByOrganizationConnection.edges.length : 0
+                    }
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <table>
+              <tbody>
+                <tr>
+                  <PaginationList
+                    count={
+                      data ? data.postsByOrganizationConnection.edges.length : 0
+                    }
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}

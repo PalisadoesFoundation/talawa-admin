@@ -148,6 +148,34 @@ export const MEMBERS_LIST = gql`
   }
 `;
 
+// Query to filter out all the members with the macthing query and a particular OrgId
+export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
+  query Organizations(
+    $orgId: ID!
+    $firstName_contains: String
+    $admin_for: ID
+    $event_title_contains: String
+  ) {
+    organizationsMemberConnection(
+      orgId: $orgId
+      where: {
+        firstName_contains: $firstName_contains
+        admin_for: $admin_for
+        event_title_contains: $event_title_contains
+      }
+    ) {
+      edges {
+        _id
+        firstName
+        lastName
+        image
+        email
+        createdAt
+      }
+    }
+  }
+`;
+
 // To take the list of the oranization joined by a user
 export const USER_ORGANIZATION_LIST = gql`
   query User($id: ID!) {
@@ -182,6 +210,56 @@ export const ORGANIZATION_EVENT_LIST = gql`
       recurring
       isPublic
       isRegisterable
+    }
+  }
+`;
+
+export const ORGANIZATION_EVENT_CONNECTION_LIST = gql`
+  query EventsByOrganizationConnection(
+    $organization_id: ID!
+    $title_contains: String
+    $description_contains: String
+    $location_contains: String
+  ) {
+    eventsByOrganizationConnection(
+      where: {
+        organization_id: $organization_id
+        title_contains: $title_contains
+        description_contains: $description_contains
+        location_contains: $location_contains
+      }
+    ) {
+      _id
+      title
+      description
+      startDate
+      endDate
+      location
+      startTime
+      endTime
+      allDay
+      recurring
+      isPublic
+      isRegisterable
+    }
+  }
+`;
+
+export const ORGANIZATION_DONATION_CONNECTION_LIST = gql`
+  query GetDonationByOrgIdConnection(
+    $orgId: ID!
+    $id: ID
+    $name_of_user_contains: String
+  ) {
+    getDonationByOrgIdConnection(
+      orgId: $orgId
+      where: { id: $id, name_of_user_contains: $name_of_user_contains }
+    ) {
+      _id
+      nameOfUser
+      amount
+      userId
+      payPalId
     }
   }
 `;
@@ -238,6 +316,33 @@ export const ORGANIZATION_POST_LIST = gql`
         firstName
         lastName
         email
+      }
+    }
+  }
+`;
+
+export const ORGANIZATION_POST_CONNECTION_LIST = gql`
+  query PostsByOrganizationConnection(
+    $id: ID!
+    $title_contains: String
+    $text_contains: String
+  ) {
+    postsByOrganizationConnection(
+      id: $id
+      where: { title_contains: $title_contains, text_contains: $text_contains }
+    ) {
+      edges {
+        _id
+        title
+        text
+        imageUrl
+        videoUrl
+        creator {
+          _id
+          firstName
+          lastName
+          email
+        }
       }
     }
   }

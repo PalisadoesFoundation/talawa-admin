@@ -141,6 +141,7 @@
   "organizationEvents": {
     "title": "Talawa Events",
     "filterByTitle": "Filter by Title",
+    "filterByLocation": "Filter by Location",
     "filterByDescription": "Filter by Description",
     "events": "Events",
     "addEvent": "Add Event",
