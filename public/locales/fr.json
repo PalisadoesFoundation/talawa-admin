@@ -116,7 +116,9 @@
     "filterByEvent": "Filtrer par événement",
     "members": "Membres",
     "admins": "Administrateurs",
-    "users": "Utilisateurs"
+    "users": "Utilisateurs",
+    "searchName": "Entrez le nom",
+    "searchevent": "Entrez l'événement"
   },
   "userListCard": {
     "joined": "Inscrit",
@@ -141,6 +143,7 @@
   "organizationEvents": {
     "title": "Événements Talawa",
     "filterByTitle": "Filtrer par titre",
+    "filterByLocation": "Filtrer par l'emplacement",
     "filterByDescription": "Filtrer par Description",
     "events": "Événements",
     "addEvent": "Ajouter un évènement",
@@ -156,7 +159,11 @@
     "recurringEvent": "Événement récurrent",
     "isPublic": "Est publique",
     "isRegistrable": "Est enregistrable",
-    "createEvent": "Créer un évènement"
+    "createEvent": "Créer un évènement",
+    "enterFilter": "Entrez le filtre",
+    "enterTitle": "Entrez le titre",
+    "enterDescrip": "Entrez la description",
+    "eventLocation": "Entrez l'emplacement"
   },
   "eventListCard": {
     "location": "Emplacement",
@@ -189,7 +196,11 @@
     "information": "Informations",
     "image": "Image",
     "video": "Vidéo",
-    "addPost": "Ajouter un article"
+    "addPost": "Ajouter un article",
+    "searchTitle": "Rechercher par titre",
+    "searchText": "Rechercher par texte",
+    "ptitle": "Titre de l'article",
+    "postDes": "De quoi parlez-vous ?"
   },
   "orgPostCard": {
     "author": "Auteur",
@@ -215,7 +226,8 @@
     "email": "E-mail",
     "block_unblock": "Bloquer/Débloquer",
     "unblock": "Débloquer",
-    "block": "Bloquer"
+    "block": "Bloquer",
+    "orgName": "Entrez le nom"
   },
   "forgotPassword": {
     "title": "Mot de passe oublié Talawa",
@@ -226,7 +238,9 @@
     "enterNewPassword": "Entrez un nouveau mot de passe",
     "cofirmNewPassword": "Confirmer le nouveau mot de passe",
     "changePassword": "Changer le mot de passe",
-    "backToHome": "De retour à la maison"
+    "backToHome": "De retour à la maison",
+    "userOtp": "par exemple. 12345",
+    "password": "Mot de passe"
   },
   "pageNotFound": {
     "title": "404 introuvable",
@@ -240,7 +254,9 @@
     "filterByName": "Filtrer par nom",
     "filterByTransId": "Filtrer par Trans. ID",
     "recentStats": "Statistiques récentes",
-    "contribution": "Contribution"
+    "contribution": "Contribution",
+    "orgname": "Entrez le nom",
+    "searchtransaction": "Saisir l'identifiant de la transaction"
   },
   "contriStats": {
     "recentContribution": "Contribution récente",
@@ -291,6 +307,7 @@
     "isPublic": "Est publique",
     "isRegistrable": "Est enregistrable",
     "saveChanges": "Sauvegarder les modifications",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "enterNameOrganization": "Entrez le nom de l'organisation"
   }
 }

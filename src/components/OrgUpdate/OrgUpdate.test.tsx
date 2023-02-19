@@ -72,17 +72,11 @@ describe('Testing Organization Update', () => {
       formData.name
     );
     userEvent.type(
-      screen.getByPlaceholderText(/Enter Description/i),
+      screen.getByPlaceholderText(/Description/i),
       formData.description
     );
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter Creator/i),
-      formData.creator
-    );
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter Api Url/i),
-      formData.apiUrl
-    );
+    userEvent.type(screen.getByPlaceholderText(/Creator/i), formData.creator);
+    userEvent.type(screen.getByPlaceholderText(/Api Url/i), formData.apiUrl);
     userEvent.upload(
       screen.getByLabelText(/display image:/i),
       formData.displayImage
@@ -94,16 +88,16 @@ describe('Testing Organization Update', () => {
 
     userEvent.click(screen.getByText(/Save Changes/i));
 
-    expect(screen.getByPlaceholderText(/Enter Organization Name/i)).toHaveValue(
+    expect(screen.getByPlaceholderText(/Organization Name/i)).toHaveValue(
       formData.name
     );
-    expect(screen.getByPlaceholderText(/Enter Description/i)).toHaveValue(
+    expect(screen.getByPlaceholderText(/Description/i)).toHaveValue(
       formData.description
     );
-    expect(screen.getByPlaceholderText(/Enter Creator/i)).toHaveValue(
+    expect(screen.getByPlaceholderText(/Creator/i)).toHaveValue(
       formData.creator
     );
-    expect(screen.getByPlaceholderText(/Enter Api Url/i)).toHaveValue(
+    expect(screen.getByPlaceholderText(/Api Url/i)).toHaveValue(
       formData.apiUrl
     );
     expect(screen.getByLabelText(/display image:/i)).toBeTruthy();

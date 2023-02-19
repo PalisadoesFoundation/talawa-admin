@@ -122,7 +122,7 @@ describe('Testing Forgot Password screen', () => {
     await wait();
 
     userEvent.type(
-      screen.getByPlaceholderText('Registered email'),
+      screen.getByPlaceholderText(/Registered email/i),
       formData.email
     );
 

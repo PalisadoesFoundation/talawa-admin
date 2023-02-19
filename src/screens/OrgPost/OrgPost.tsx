@@ -137,7 +137,7 @@ function OrgPost(): JSX.Element {
               <input
                 type="text"
                 id="posttitle"
-                placeholder="Search by Title"
+                placeholder={t('searchTitle')}
                 autoComplete="off"
                 onChange={debouncedHandleSearchByTitle}
               />
@@ -145,7 +145,7 @@ function OrgPost(): JSX.Element {
               <input
                 type="name"
                 id="orgname"
-                placeholder="Search by Text"
+                placeholder={t('searchText')}
                 autoComplete="off"
                 onChange={debouncedHandleSearchByText}
               />
@@ -261,7 +261,7 @@ function OrgPost(): JSX.Element {
               <input
                 type="title"
                 id="postitle"
-                placeholder="Post Title"
+                placeholder={t('ptitle')}
                 autoComplete="off"
                 required
                 value={postformState.posttitle}
@@ -276,7 +276,7 @@ function OrgPost(): JSX.Element {
               <textarea
                 id="postinfo"
                 className={styles.postinfo}
-                placeholder="What do you want to talk about?"
+                placeholder={t('postDes')}
                 autoComplete="off"
                 required
                 value={postformState.postinfo}
@@ -295,7 +295,7 @@ function OrgPost(): JSX.Element {
                 id="postphoto"
                 name="photo"
                 type="file"
-                placeholder="Upload Image"
+                placeholder={t('image')}
                 multiple={false}
                 //onChange=""
               />
@@ -305,7 +305,7 @@ function OrgPost(): JSX.Element {
                 id="postvideo"
                 name="video"
                 type="file"
-                placeholder="Upload Video"
+                placeholder={t('video')}
                 multiple={false}
                 //onChange=""
               />

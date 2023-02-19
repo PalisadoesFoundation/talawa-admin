@@ -219,14 +219,11 @@ describe('Organisation List Page', () => {
 
     userEvent.type(screen.getByTestId(/modalOrganizationName/i), formData.name);
     userEvent.type(
-      screen.getByPlaceholderText(/Enter Description/i),
+      screen.getByPlaceholderText(/Description/i),
       formData.description
     );
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter Location/i),
-      formData.location
-    );
-    userEvent.type(screen.getByPlaceholderText(/Enter Tags/i), formData.tags);
+    userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
+    userEvent.type(screen.getByPlaceholderText(/Tags/i), formData.tags);
     userEvent.click(screen.getByLabelText(/Is Public:/i));
     userEvent.click(screen.getByLabelText(/Visible In Search:/i));
     userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
@@ -234,15 +231,13 @@ describe('Organisation List Page', () => {
     expect(screen.getByTestId(/modalOrganizationName/i)).toHaveValue(
       formData.name
     );
-    expect(screen.getByPlaceholderText(/Enter Description/i)).toHaveValue(
+    expect(screen.getByPlaceholderText(/Description/i)).toHaveValue(
       formData.description
     );
-    expect(screen.getByPlaceholderText(/Enter Location/i)).toHaveValue(
+    expect(screen.getByPlaceholderText(/Location/i)).toHaveValue(
       formData.location
     );
-    expect(screen.getByPlaceholderText(/Enter Tags/i)).toHaveValue(
-      formData.tags
-    );
+    expect(screen.getByPlaceholderText(/Tags/i)).toHaveValue(formData.tags);
     expect(screen.getByLabelText(/Is Public/i)).not.toBeChecked();
     expect(screen.getByLabelText(/Visible In Search:/i)).toBeChecked();
     expect(screen.getByLabelText(/Display Image:/i)).toBeTruthy();

@@ -31,7 +31,7 @@ function OrgContribution(): JSX.Element {
               <input
                 type="name"
                 id="orgname"
-                placeholder="Enter Name"
+                placeholder={t('orgname')}
                 autoComplete="off"
                 required
               />
@@ -40,7 +40,7 @@ function OrgContribution(): JSX.Element {
               <input
                 type="transaction"
                 id="searchtransaction"
-                placeholder="Enter Transaction ID"
+                placeholder={t('searchtransaction')}
                 autoComplete="off"
                 required
               />

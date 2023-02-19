@@ -130,7 +130,7 @@ const Requests = () => {
               <input
                 type="name"
                 id="orgname"
-                placeholder="Enter Name"
+                placeholder={t('orgName')}
                 data-testid="searchByName"
                 autoComplete="off"
                 required

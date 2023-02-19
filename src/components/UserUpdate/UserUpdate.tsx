@@ -62,7 +62,7 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
               <input
                 type="input"
                 id="firstname"
-                placeholder="Enter First Name"
+                placeholder={t('firstName')}
                 autoComplete="off"
                 required
                 value={formState.firstName}
@@ -79,7 +79,7 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
               <input
                 type="input"
                 id="lastname"
-                placeholder="Enter Last Name"
+                placeholder={t('lastName')}
                 autoComplete="off"
                 required
                 value={formState.lastName}
@@ -98,7 +98,7 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
               <input
                 type="email"
                 id="email"
-                placeholder="Enter Email"
+                placeholder={t('email')}
                 autoComplete="off"
                 required
                 value={formState.email}
@@ -115,7 +115,7 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
               <input
                 type="password"
                 id="password"
-                placeholder="Enter Password"
+                placeholder={t('password')}
                 required
                 value={formState.password}
                 onChange={(e) => {
@@ -133,7 +133,7 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
               <input
                 type="input"
                 id="applangcode"
-                placeholder="Enter App Language Code"
+                placeholder={t('appLanguageCode')}
                 required
                 value={formState.applangcode}
                 onChange={(e) => {

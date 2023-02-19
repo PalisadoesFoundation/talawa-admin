@@ -116,7 +116,9 @@
     "filterByEvent": "इवेंट द्वारा फ़िल्टर करें",
     "members": "सदस्य",
     "admins": "व्यवस्थापक",
-    "users": "उपयोगकर्ता"
+    "users": "उपयोगकर्ता",
+    "searchName": "नाम दर्ज करें",
+    "searchevent": "घटना दर्ज करें"
   },
   "userListCard": {
     "joined": "में शामिल हो गए",
@@ -141,6 +143,7 @@
   "organizationEvents": {
     "title": "तलावा इवेंट्स",
     "filterByTitle": "शीर्षक द्वारा फ़िल्टर करें",
+    "filterByLocation": "स्थान के अनुसार फ़िल्टर करें",
     "filterByDescription": "विवरण द्वारा फ़िल्टर करें",
     "events": "आयोजन",
     "addEvent": "कार्यक्रम जोड़ें",
@@ -156,7 +159,11 @@
     "recurringEvent": "पुनरावर्ती ईवेंट",
     "isPublic": "सार्वजनिक है",
     "isRegistrable": "पंजीकरण योग्य है",
-    "createEvent": "कार्यक्रम बनाएँ"
+    "createEvent": "कार्यक्रम बनाएँ",
+    "enterFilter": "फ़िल्टर दर्ज करें",
+    "enterTitle": "शीर्षक दर्ज करें",
+    "enterDescrip": "विवरण दर्ज करें",
+    "eventLocation": "स्थान दर्ज करें"
   },
   "eventListCard": {
     "location": "स्थान",
@@ -189,7 +196,11 @@
     "information": "जानकारी",
     "image": "छवि",
     "video": "वीडियो",
-    "addPost": "पोस्ट जोड़ें"
+    "addPost": "पोस्ट जोड़ें",
+    "searchTitle": "शीर्षक से खोजें",
+    "searchText": "पाठ द्वारा खोजें",
+    "ptitle": "शीर्षक पोस्ट करें",
+    "postDes": "आपको किस बारे में बात करनी है?"
   },
   "orgPostCard": {
     "author": "लेखक",
@@ -215,7 +226,8 @@
     "email": "ईमेल",
     "block_unblock": "ब्लॉक/अनब्लॉक करें",
     "unblock": "अनब्लॉक करें",
-    "block": "अवरोध पैदा करना"
+    "block": "अवरोध पैदा करना",
+    "orgName": "नाम दर्ज करें"
   },
   "forgotPassword": {
     "title": "तलवा पासवर्ड भूल गए",
@@ -226,7 +238,9 @@
     "enterNewPassword": "नया पासवर्ड दर्ज करें",
     "cofirmNewPassword": "नए पासवर्ड की पुष्टि करें",
     "changePassword": "पासवर्ड बदलें",
-    "backToHome": "घर वापिस जा रहा हूँ"
+    "backToHome": "घर वापिस जा रहा हूँ",
+    "userOtp": "उदाहरण के लिए 12345",
+    "password": "पासवर्ड"
   },
   "pageNotFound": {
     "title": "404 नहीं मिला",
@@ -240,7 +254,9 @@
     "filterByName": "नाम से फ़िल्टर करें",
     "filterByTransId": "ट्रांस आईडी द्वारा फ़िल्टर करें",
     "recentStats": "हाल के आँकड़े",
-    "contribution": "योगदान"
+    "contribution": "योगदान",
+    "orgname": "नाम दर्ज करें",
+    "searchtransaction": "लेन-देन आईडी दर्ज करें"
   },
   "contriStats": {
     "recentContribution": "हाल ही में योगदान",
@@ -291,6 +307,7 @@
     "isPublic": "सार्वजनिक है",
     "isRegistrable": "पंजीकरण योग्य है",
     "saveChanges": "परिवर्तनों को सुरक्षित करें",
-    "cancel": "रद्द करना"
+    "cancel": "रद्द करना",
+    "enterNameOrganization": "संगठन का नाम दर्ज करें"
   }
 }
