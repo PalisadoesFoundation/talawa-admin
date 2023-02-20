@@ -116,7 +116,9 @@
     "filterByEvent": "Filter by Event",
     "members": "Members",
     "admins": "Admins",
-    "users": "Users"
+    "users": "Users",
+    "searchName": "Enter Name",
+    "searchevent": "Enter Event"
   },
   "userListCard": {
     "joined": "Joined",
@@ -157,7 +159,11 @@
     "recurringEvent": "Recurring Event",
     "isPublic": "Is Public",
     "isRegistrable": "Is Registrable",
-    "createEvent": "Create Event"
+    "createEvent": "Create Event",
+    "enterFilter": "Enter Filter",
+    "enterTitle": "Enter Title",
+    "enterDescrip": "Enter Description",
+    "eventLocation": "Enter Location"
   },
   "eventListCard": {
     "location": "Location",
@@ -190,7 +196,11 @@
     "information": "Information",
     "image": "Image",
     "video": "Video",
-    "addPost": "Add Post"
+    "addPost": "Add Post",
+    "searchTitle": "Search By Title",
+    "searchText": "Search By Text",
+    "ptitle": "Post Title",
+    "postDes": "What do you to talk about?"
   },
   "orgPostCard": {
     "author": "Author",
@@ -216,7 +226,8 @@
     "email": "Email",
     "block_unblock": "Block/Unblock",
     "unblock": "UnBlock",
-    "block": "Block"
+    "block": "Block",
+    "orgName": "Enter Name"
   },
   "forgotPassword": {
     "title": "Talawa Forgot Password",
@@ -227,7 +238,9 @@
     "enterNewPassword": "Enter New Password",
     "cofirmNewPassword": "Confirm New Password",
     "changePassword": "Change Password",
-    "backToHome": "Back to Home"
+    "backToHome": "Back to Home",
+    "userOtp": "e.g. 12345",
+    "password": "Password"
   },
   "pageNotFound": {
     "title": "404 Not Found",
@@ -241,7 +254,9 @@
     "filterByName": "Filter by Name",
     "filterByTransId": "Filter by Trans. ID",
     "recentStats": "Recent Stats",
-    "contribution": "Contribution"
+    "contribution": "Contribution",
+    "orgname": "Enter Name",
+    "searchtransaction": "Enter Transaction ID"
   },
   "contriStats": {
     "recentContribution": "Recent Contribution",
@@ -292,6 +307,7 @@
     "isPublic": "Is Public",
     "isRegistrable": "Is Registrable",
     "saveChanges": "Save Changes",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "enterNameOrganization": "Enter Organization Name"
   }
 }

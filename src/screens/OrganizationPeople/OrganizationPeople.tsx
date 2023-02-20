@@ -167,7 +167,7 @@ function OrganizationPeople(): JSX.Element {
               <input
                 type="name"
                 id="searchname"
-                placeholder="Enter Name"
+                placeholder={t('searchName')}
                 autoComplete="off"
                 required
                 onChange={debouncedHandleFirstNameSearchChange}
@@ -176,7 +176,7 @@ function OrganizationPeople(): JSX.Element {
               <input
                 type="name"
                 id="searchevent"
-                placeholder="Enter Event"
+                placeholder={t('searchevent')}
                 autoComplete="off"
                 required
                 onChange={debouncedHandleEventTitleSearchChange}

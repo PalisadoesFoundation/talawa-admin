@@ -291,7 +291,7 @@ function OrgList(): JSX.Element {
               <input
                 type="name"
                 id="orgname"
-                placeholder="Enter Name"
+                placeholder={t('enterName')}
                 data-testid="modalOrganizationName"
                 autoComplete="off"
                 required
@@ -307,7 +307,7 @@ function OrgList(): JSX.Element {
               <input
                 type="descrip"
                 id="descrip"
-                placeholder="Enter Description"
+                placeholder={t('description')}
                 autoComplete="off"
                 required
                 value={formState.descrip}
@@ -322,7 +322,7 @@ function OrgList(): JSX.Element {
               <input
                 type="text"
                 id="location"
-                placeholder="Enter Location"
+                placeholder={t('location')}
                 autoComplete="off"
                 required
                 value={formState.location}
@@ -337,7 +337,7 @@ function OrgList(): JSX.Element {
               <input
                 type="text"
                 id="tags"
-                placeholder="Enter Tags"
+                placeholder={t('tags')}
                 autoComplete="off"
                 required
                 value={formState.tags}

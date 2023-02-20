@@ -130,7 +130,7 @@ const ForgotPassword = () => {
                     type="email"
                     className="form-control"
                     id="registeredEmail"
-                    placeholder="Registered email"
+                    placeholder={t('registeredEmail')}
                     value={registeredEmail}
                     name="registeredEmail"
                     required
@@ -160,7 +160,7 @@ const ForgotPassword = () => {
                     type="number"
                     className="form-control"
                     id="userOtp"
-                    placeholder="e.g. 12345"
+                    placeholder={t('userOtp')}
                     name="userOtp"
                     value={forgotPassFormData.userOtp}
                     required
@@ -185,7 +185,7 @@ const ForgotPassword = () => {
                     type="password"
                     className="form-control"
                     id="newPassword"
-                    placeholder="Password"
+                    placeholder={t('password')}
                     data-testid="newPassword"
                     name="newPassword"
                     value={forgotPassFormData.newPassword}
@@ -211,7 +211,7 @@ const ForgotPassword = () => {
                     type="password"
                     className="form-control"
                     id="confirmNewPassword"
-                    placeholder="Confirm Password"
+                    placeholder={t('cofirmNewPassword')}
                     data-testid="confirmNewPassword"
                     name="confirmNewPassword"
                     value={forgotPassFormData.confirmNewPassword}

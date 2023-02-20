@@ -150,11 +150,11 @@ describe('Organisation Post Page', () => {
     userEvent.click(screen.getByTestId('createPostModalBtn'));
 
     userEvent.type(
-      screen.getByPlaceholderText('Post Title'),
+      screen.getByPlaceholderText(/Post Title/i),
       formData.posttitle
     );
     userEvent.type(
-      screen.getByPlaceholderText('What do you want to talk about?'),
+      screen.getByPlaceholderText(/What do you to talk about?/i),
       formData.postinfo
     );
 
@@ -181,11 +181,11 @@ describe('Organisation Post Page', () => {
     await wait();
 
     userEvent.type(
-      screen.getByPlaceholderText('Search by Title'),
+      screen.getByPlaceholderText(/Search by Title/i),
       formData.posttitle
     );
     userEvent.type(
-      screen.getByPlaceholderText('Search by Text'),
+      screen.getByPlaceholderText(/Search by Text/i),
       formData.postinfo
     );
   });

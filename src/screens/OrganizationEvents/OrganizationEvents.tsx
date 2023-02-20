@@ -181,7 +181,7 @@ function OrganizationEvents(): JSX.Element {
               <input
                 type="name"
                 id="searchTitle"
-                placeholder="Enter filter"
+                placeholder={t('enterFilter')}
                 autoComplete="off"
                 required
                 onChange={debouncedHandleSearchByTitle}
@@ -191,7 +191,7 @@ function OrganizationEvents(): JSX.Element {
               <input
                 type="name"
                 id="searchlocation"
-                placeholder="Enter filter"
+                placeholder={t('enterFilter')}
                 autoComplete="off"
                 required
                 onChange={debouncedHandleSearchByLocation}
@@ -201,7 +201,7 @@ function OrganizationEvents(): JSX.Element {
               <input
                 type="name"
                 id="searchDescription"
-                placeholder="Enter filter"
+                placeholder={t('enterFilter')}
                 autoComplete="off"
                 required
                 onChange={debouncedHandleSearchByDescription}
@@ -312,7 +312,7 @@ function OrganizationEvents(): JSX.Element {
               <input
                 type="title"
                 id="eventitle"
-                placeholder="Enter Title"
+                placeholder={t('enterTitle')}
                 autoComplete="off"
                 required
                 value={formState.title}
@@ -327,7 +327,7 @@ function OrganizationEvents(): JSX.Element {
               <input
                 type="eventdescrip"
                 id="eventdescrip"
-                placeholder="Enter Description"
+                placeholder={t('enterDescrip')}
                 autoComplete="off"
                 required
                 value={formState.eventdescrip}
@@ -342,7 +342,7 @@ function OrganizationEvents(): JSX.Element {
               <input
                 type="text"
                 id="eventLocation"
-                placeholder="Enter Location"
+                placeholder={t('eventLocation')}
                 autoComplete="off"
                 required
                 value={formState.location}
@@ -361,7 +361,7 @@ function OrganizationEvents(): JSX.Element {
                     id="startdate"
                     selected={startDate}
                     onChange={(date: Date | null) => setStartDate(date)}
-                    placeholderText="Start Date"
+                    placeholderText={t('startDate')}
                   />
                 </div>
                 <div>
@@ -371,7 +371,7 @@ function OrganizationEvents(): JSX.Element {
                     id="enddate"
                     selected={endDate}
                     onChange={(date: Date | null) => setEndDate(date)}
-                    placeholderText="End Date"
+                    placeholderText={t('endDate')}
                   />
                 </div>
               </div>
@@ -381,7 +381,7 @@ function OrganizationEvents(): JSX.Element {
                     <label htmlFor="startTime">{t('startTime')}</label>
                     <input
                       id="startTime"
-                      placeholder="Start Time"
+                      placeholder={t('startTime')}
                       value={formState.startTime}
                       onChange={(e) =>
                         setFormState({
@@ -395,7 +395,7 @@ function OrganizationEvents(): JSX.Element {
                     <label htmlFor="endTime">{t('endTime')}</label>
                     <input
                       id="endTime"
-                      placeholder="End Time"
+                      placeholder={t('endTime')}
                       value={formState.endTime}
                       onChange={(e) =>
                         setFormState({
