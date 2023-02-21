@@ -5,7 +5,7 @@ import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import 'jest-location-mock';
-import { I18nextProvider } from 'react-i18next';
+import { I18nextProvider, Translation, useTranslation } from 'react-i18next';
 
 import OrgPost from './OrgPost';
 import { store } from 'state/store';
@@ -207,5 +207,42 @@ describe('Organisation Post Page', () => {
 
     await wait();
     expect(window.location).toBeAt('/orglist');
+  });
+  test('Testing Page title to be translated', async () => {
+    window.location.assign('/orglist');
+
+    render(
+      <MockedProvider addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    expect(document.title).toBe('Talawa Posts');
+  });
+  test('Should render the org post card', async () => {
+    window.location.assign('/orglist');
+
+    render(
+      <MockedProvider addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    // expect(document.title).toBe('Talawa Posts');
+    await wait();
+    const counter = screen.getByTestId('orgpostcards');
+    expect(counter).toBeTruthy();
+    let postcards = screen.getByTestId('singlepostcardnotfound');
+    expect(postcards).toBeTruthy();
   });
 });

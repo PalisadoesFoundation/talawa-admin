@@ -165,43 +165,49 @@ function OrgPost(): JSX.Element {
                 + {t('createPost')}
               </Button>
             </Row>
-            <div className={`row ${styles.list_box}`}>
-              {data
-                ? (rowsPerPage > 0
-                    ? data.postsByOrganizationConnection.edges.slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
-                      )
-                    : rowsPerPage > 0
-                    ? data.postsByOrganizationConnection.edges.slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
-                      )
-                    : data.postsByOrganizationConnection.edges
-                  ).map(
-                    (datas: {
-                      _id: string;
-                      title: string;
-                      text: string;
-                      imageUrl: string;
-                      videoUrl: string;
-                      organizationId: string;
-                      creator: { firstName: string; lastName: string };
-                    }) => {
-                      return (
-                        <OrgPostCard
-                          key={datas._id}
-                          id={datas._id}
-                          postTitle={datas.title}
-                          postInfo={datas.text}
-                          postAuthor={`${datas.creator.firstName} ${datas.creator.lastName}`}
-                          postPhoto={datas.imageUrl}
-                          postVideo={datas.videoUrl}
-                        />
-                      );
-                    }
-                  )
-                : null}
+            <div
+              className={`row ${styles.list_box}`}
+              data-testid="orgpostcards"
+            >
+              {data ? (
+                (rowsPerPage > 0
+                  ? data.postsByOrganizationConnection.edges.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : rowsPerPage > 0
+                  ? data.postsByOrganizationConnection.edges.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : data.postsByOrganizationConnection.edges
+                ).map(
+                  (datas: {
+                    _id: string;
+                    title: string;
+                    text: string;
+                    imageUrl: string;
+                    videoUrl: string;
+                    organizationId: string;
+                    creator: { firstName: string; lastName: string };
+                  }) => {
+                    return (
+                      <OrgPostCard
+                        data-testid="singlepostcard"
+                        key={datas._id}
+                        id={datas._id}
+                        postTitle={datas.title}
+                        postInfo={datas.text}
+                        postAuthor={`${datas.creator.firstName} ${datas.creator.lastName}`}
+                        postPhoto={datas.imageUrl}
+                        postVideo={datas.videoUrl}
+                      />
+                    );
+                  }
+                )
+              ) : (
+                <div data-testid="singlepostcardnotfound"></div>
+              )}
             </div>
           </div>
           <div>
