@@ -3,9 +3,9 @@ import styles from './OrgPeopleListCard.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useMutation } from '@apollo/client';
-import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 
 interface OrgPeopleListCardProps {
   key: string;

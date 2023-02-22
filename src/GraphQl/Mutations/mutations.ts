@@ -230,7 +230,7 @@ export const REMOVE_ADMIN_MUTATION = gql`
 
 export const REMOVE_MEMBER_MUTATION = gql`
   mutation RemoveAdmin($orgid: ID!, $userid: ID!) {
-    removeAdmin(data: { organizationId: $orgid, userId: $userid }) {
+    removeMember(data: { organizationId: $orgid, userId: $userid }) {
       _id
     }
   }
