@@ -43,11 +43,7 @@ const Requests = () => {
 
   useEffect(() => {
     if (data) {
-      setUsersData(
-        data.users.filter((user: any) =>
-          user.spamInOrganizations.some((spam: any) => spam._id === currentUrl)
-        )
-      );
+      setUsersData(data.users);
     }
   }, [data]);
 
@@ -134,7 +130,7 @@ const Requests = () => {
               <input
                 type="name"
                 id="orgname"
-                placeholder="Enter Name"
+                placeholder={t('orgName')}
                 data-testid="searchByName"
                 autoComplete="off"
                 required

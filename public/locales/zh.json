@@ -116,7 +116,9 @@
     "filterByEvent": "按事件過濾",
     "members": "成員",
     "admins": "管理員",
-    "users": "用戶"
+    "users": "用戶",
+    "searchName": "輸入名字",
+    "searchevent": "輸入事件"
   },
   "userListCard": {
     "joined": "加入",
@@ -141,6 +143,7 @@
   "organizationEvents": {
     "title": "塔拉瓦事件",
     "filterByTitle": "按標題過濾",
+    "filterByLocation": "按位置過濾",
     "filterByDescription": "按描述過濾",
     "events": "事件",
     "addEvent": "添加事件",
@@ -156,7 +159,11 @@
     "recurringEvent": "重複事件",
     "isPublic": "是公開的",
     "isRegistrable": "可註冊",
-    "createEvent": "創建事件"
+    "createEvent": "創建事件",
+    "enterFilter": "輸入過濾器",
+    "enterTitle": "輸入標題",
+    "enterDescrip": "輸入說明",
+    "eventLocation": "輸入位置"
   },
   "eventListCard": {
     "location": "地點",
@@ -189,7 +196,11 @@
     "information": "信息",
     "image": "圖片",
     "video": "視頻",
-    "addPost": "添加帖子"
+    "addPost": "添加帖子",
+    "searchTitle": "按標題搜索",
+    "searchText": "按文本搜索",
+    "ptitle": "帖子標題",
+    "postDes": "你要談什麼？"
   },
   "orgPostCard": {
     "author": "作者",
@@ -215,7 +226,8 @@
     "email": "電子郵件",
     "block_unblock": "阻止/解除阻止",
     "unblock": "解除封鎖",
-    "block": "堵塞"
+    "block": "堵塞",
+    "orgName": "輸入名字"
   },
   "forgotPassword": {
     "title": "塔拉瓦忘記密碼",
@@ -226,7 +238,9 @@
     "enterNewPassword": "輸入新密碼",
     "cofirmNewPassword": "確認新密碼",
     "changePassword": "更改密碼",
-    "backToHome": "回到家"
+    "backToHome": "回到家",
+    "userOtp": "舉個例子。 12345",
+    "password": "密碼"
   },
   "pageNotFound": {
     "title": "404 未找到",
@@ -240,7 +254,9 @@
     "filterByName": "按名稱過濾",
     "filterByTransId": "按 Trans.ID 過濾",
     "recentStats": "最近的統計",
-    "contribution": "貢獻"
+    "contribution": "貢獻",
+    "orgname": "輸入名字",
+    "searchtransaction": "輸入交易編號"
   },
   "contriStats": {
     "recentContribution": "最近的貢獻",
@@ -291,6 +307,7 @@
     "isPublic": "是公開的",
     "isRegistrable": "可註冊",
     "saveChanges": "保存更改",
-    "cancel": "取消"
+    "cancel": "取消",
+    "enterNameOrganization": "輸入組織名稱"
   }
 }

@@ -9,14 +9,14 @@ import { I18nextProvider } from 'react-i18next';
 
 import OrgPost from './OrgPost';
 import { store } from 'state/store';
-import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 
 const MOCKS = [
   {
     request: {
-      query: ORGANIZATION_POST_LIST,
+      query: ORGANIZATION_POST_CONNECTION_LIST,
     },
     result: {
       data: {
@@ -150,11 +150,11 @@ describe('Organisation Post Page', () => {
     userEvent.click(screen.getByTestId('createPostModalBtn'));
 
     userEvent.type(
-      screen.getByPlaceholderText('Post Title'),
+      screen.getByPlaceholderText(/Post Title/i),
       formData.posttitle
     );
     userEvent.type(
-      screen.getByPlaceholderText('What do you want to talk about?'),
+      screen.getByPlaceholderText(/What do you to talk about?/i),
       formData.postinfo
     );
 
@@ -181,11 +181,11 @@ describe('Organisation Post Page', () => {
     await wait();
 
     userEvent.type(
-      screen.getByPlaceholderText('Search by Title'),
+      screen.getByPlaceholderText(/Search by Title/i),
       formData.posttitle
     );
     userEvent.type(
-      screen.getByPlaceholderText('Search by Text'),
+      screen.getByPlaceholderText(/Search by Text/i),
       formData.postinfo
     );
   });

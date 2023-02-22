@@ -19,7 +19,6 @@ This document provides instructions on how to set up and start a running instanc
   - [Running talawa-admin](#running-talawa-admin)
   - [Accessing talawa-admin](#accessing-talawa-admin)
   - [Sign up on talawa-admin](#sign-up-on-talawa-admin)
-  - [Elevate the permissions for created account](#elevate-the-permissions-for-created-account)
   - [Sign in to talawa-admin](#sign-in-to-talawa-admin)
   - [Running tests](#running-tests)
   - [Linting code files](#linting-code-files)
@@ -32,7 +31,7 @@ This document provides instructions on how to set up and start a running instanc
 
 Talawa-admin needs URL endpoint to a running instance of `talawa-api` graphql service to perform its operations. You need to set up a local instance of talawa-api on your system.
 
-Follow the [installation guide](https://github.com/PalisadoesFoundation/talawa-api/blob/develop/INSTALLATION.md) on talawa-api repo to set it up.
+Follow the instructions in the INSTALLATION.md file of the [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api) to set it up.
 
 <br/>
 
@@ -71,7 +70,7 @@ Follow the instructions from section [Setting up REACT_APP_TALAWA_URL in .env fi
 
 ## Setting up REACT_APP_TALAWA_URL in .env file
 
-Make sure to go through [this](https://github.com/PalisadoesFoundation/talawa-api/blob/develop/INSTALLATION.md#accessing-talawa-api) section on `talawa-api's` installation docs.
+Refer to to the `REACT_APP_TALAWA_URL` section in the INSTALLATION.md file found in the [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api).
 
 Copy/paste the endpoint for accessing talawa-api graphql service to the variable named `REACT_APP_TALAWA_URL` in `.env` file.
 
@@ -81,7 +80,8 @@ Copy/paste the endpoint for accessing talawa-api graphql service to the variable
 
 ## Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file
 
-Make sure to go through [this](https://github.com/PalisadoesFoundation/talawa-api/blob/develop/INSTALLATION.md#setting-up-recaptcha_secret_key-in-env-file) section on `talawa-api's` installation docs.
+Refer to to the `RECAPTCHA` section in the INSTALLATION.md file found in [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api).
+
 
 `Talawa-admin` needs the `reCAPTCHA site key` for the `reCAPTCHA` service you set up during `talawa-api` installation as shown in this screenshot:-
 
@@ -129,22 +129,6 @@ The first time you navigate to the running talawa-admin's website you'll land at
 
 <br/>
 
-## Elevate the permissions for created account
-
-You have to manually elevate your account's permissions to make it `admin approved` and make it have `SUPERADMIN` privileges.
-
-For the account you created:-
-
-1.  Set `adminApproved` field to `true`:-
-
-        adminApproved: true
-
-2.  Set `userType` field to `SUPERADMIN`:-
-
-        userType: "SUPERADMIN"
-
-<br/>
-
 ## Sign in to talawa-admin
 
 Now sign in to talawa-admin using the `email` and `password` you used to sign up.
@@ -174,22 +158,16 @@ Talawa mobile app requires [talawa-api](https://github.com/PalisadoesFoundation/
 You need to setup your own local instance of [Talawa-API](https://github.com/PalisadoesFoundation/talawa-api) and [Talawa-admin](https://github.com/PalisadoesFoundation/talawa-admin). The advantage is that you'll be working with the latest code.
 
 1. You need to first setup the 2 supporting projects locally. Please refer the INSTALLATION.md of the respective repository for further guidance.
-   1. [talawa-api](https://github.com/PalisadoesFoundation/talawa-api)
-   1. [talawa-admin](https://github.com/PalisadoesFoundation/talawa-admin)
-1. Create a user account in [talawa-admin](https://github.com/PalisadoesFoundation/talawa-admin). The user account is necessary for creating the first organization which will be needed during your development time.
-   1. Enter your MongoDB dashboard to start the process of editing the `users` collection. This is done so that you will get authorized to create and manage an organization. Refer the images below as needed.
-      1. Go to your `MongoDB` dashboard
-      1. Select your project
-      1. Click Browse `collection`
-      1. Select `users` collection and edit the data. Change:
-         1. `userType` from ADMIN to SUPERADMIN
-         1. `adminApproved` from `false` to `true`.
-         1. ![User Collection Modification](https://user-images.githubusercontent.com/64683098/212524445-d2f59670-1ffd-462f-b6fe-09c10065976c.jpg)
-1. After you have created the [talawa-admin](https://github.com/PalisadoesFoundation/talawa-admin) user account, you'll need to create an organization.
-   1. Login to your [talawa-admin](https://github.com/PalisadoesFoundation/talawa-admin) account and create an `organization`
-   1. Click the `Create Organization` button on the top corner
-   1. ![Organization Creation](https://user-images.githubusercontent.com/64683098/212369627-bc4e49fc-bf84-4ee2-b99b-12720c996308.PNG)
-1. Install [talawa](https://github.com/PalisadoesFoundation/talawa) Please refer the INSTALLATION.md of the respective repository for further guidance.
-   1. Then use the URL (Organization URL) in this form:
-      1. http://(IP-address):4000/graphql (See the below example)
-      1. Example : http://10.0.2.2:4000/graphql
+   1. [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api)
+   2. [Talawa-ADMIN repo](https://github.com/PalisadoesFoundation/talawa-admin)
+   
+* Install [talawa](https://github.com/PalisadoesFoundation/talawa) Please refer the INSTALLATION.md of the respective repository for further guidance
+    - Then use the URL (Organization URL) in this form:
+    - http://(IP-address):4000/graphql (See the below example)
+    - Example : http://10.0.2.2:4000/graphql
+  
+        
+
+
+
+

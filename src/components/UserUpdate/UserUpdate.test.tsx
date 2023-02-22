@@ -66,20 +66,17 @@ describe('Testing User Update', () => {
     );
 
     userEvent.type(
-      screen.getByPlaceholderText(/Enter First Name/i),
+      screen.getByPlaceholderText(/First Name/i),
       formData.firstName
     );
     userEvent.type(
-      screen.getByPlaceholderText(/Enter Last Name/i),
+      screen.getByPlaceholderText(/Last Name/i),
       formData.lastName
     );
-    userEvent.type(screen.getByPlaceholderText(/Enter Email/i), formData.email);
+    userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
+    userEvent.type(screen.getByPlaceholderText(/Password/i), formData.password);
     userEvent.type(
-      screen.getByPlaceholderText(/Enter Password/i),
-      formData.password
-    );
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter App Language Code/i),
+      screen.getByPlaceholderText(/App Language Code/i),
       formData.applangcode
     );
     userEvent.click(screen.getByLabelText('Admin'));
@@ -93,19 +90,17 @@ describe('Testing User Update', () => {
 
     userEvent.click(screen.getByText(/Save Changes/i));
 
-    expect(screen.getByPlaceholderText(/Enter First Name/i)).toHaveValue(
+    expect(screen.getByPlaceholderText(/First Name/i)).toHaveValue(
       formData.firstName
     );
-    expect(screen.getByPlaceholderText(/Enter Last Name/i)).toHaveValue(
+    expect(screen.getByPlaceholderText(/Last Name/i)).toHaveValue(
       formData.lastName
     );
-    expect(screen.getByPlaceholderText(/Enter Email/i)).toHaveValue(
-      formData.email
-    );
-    expect(screen.getByPlaceholderText(/Enter Password/i)).toHaveValue(
+    expect(screen.getByPlaceholderText(/Email/i)).toHaveValue(formData.email);
+    expect(screen.getByPlaceholderText(/Password/i)).toHaveValue(
       formData.password
     );
-    expect(screen.getByPlaceholderText(/Enter App Language Code/i)).toHaveValue(
+    expect(screen.getByPlaceholderText(/App Language Code/i)).toHaveValue(
       formData.applangcode
     );
     expect(screen.getByLabelText('Admin')).not.toBeChecked();
@@ -113,11 +108,13 @@ describe('Testing User Update', () => {
     expect(screen.getByLabelText(/display image:/i)).toBeTruthy();
 
     expect(screen.getByText(/Cancel/i)).toBeTruthy();
-    expect(screen.getByText('First Name')).toBeInTheDocument();
-    expect(screen.getByText('Last Name')).toBeInTheDocument();
-    expect(screen.getByText('Email')).toBeInTheDocument();
-    expect(screen.getByText('Password')).toBeInTheDocument();
-    expect(screen.getByText('App Language Code')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/First Name/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Last Name/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Email/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Password/i)).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(/App Language Code/i)
+    ).toBeInTheDocument();
     expect(screen.getByText('User Type')).toBeInTheDocument();
     expect(screen.getByText('Admin')).toBeInTheDocument();
     expect(screen.getByText('Superadmin')).toBeInTheDocument();

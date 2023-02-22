@@ -116,7 +116,9 @@
     "filterByEvent": "Filtrar por Evento",
     "members": "Miembros",
     "admins": "Administradores",
-    "users": "Usuarios"
+    "users": "Usuarios",
+    "searchName": "Ingrese su nombre",
+    "searchevent": "Ingresar evento"
   },
   "userListCard": {
     "joined": "Unido",
@@ -141,6 +143,7 @@
   "organizationEvents": {
     "title": "Eventos Talawa",
     "filterByTitle": "Filtrar por Título",
+    "filterByLocation": "Filtrar por Ubicación",
     "filterByDescription": "Filtrar por descripción",
     "events": "Eventos",
     "addEvent": "Añadir evento",
@@ -156,7 +159,11 @@
     "recurringEvent": "Evento recurrente",
     "isPublic": "Es público",
     "isRegistrable": "Es registrable",
-    "createEvent": "Crear evento"
+    "createEvent": "Crear evento",
+    "enterFilter": "Introducir filtro",
+    "enterTitle": "Ingrese el título",
+    "enterDescrip": "Introduce la descripción",
+    "eventLocation": "Introducir ubicación"
   },
   "eventListCard": {
     "location": "Ubicación",
@@ -189,7 +196,11 @@
     "information": "Información",
     "image": "Imagen",
     "video": "Video",
-    "addPost": "Añadir publicación"
+    "addPost": "Añadir publicación",
+    "searchTitle": "Buscar por título",
+    "searchText": "Buscar por texto",
+    "ptitle": "Título de la entrada",
+    "postDes": "¿De qué hablar?"
   },
   "orgPostCard": {
     "author": "Autor",
@@ -215,7 +226,8 @@
     "email": "Correo electrónico",
     "block_unblock": "Bloquear/Desbloquear",
     "unblock": "Desatascar",
-    "block": "Bloquear"
+    "block": "Bloquear",
+    "orgName": "Ingrese su nombre"
   },
   "forgotPassword": {
     "title": "Talawa olvidó su contraseña",
@@ -226,7 +238,9 @@
     "enterNewPassword": "Ingrese nueva clave",
     "cofirmNewPassword": "Confirmar nueva contraseña",
     "changePassword": "Cambia la contraseña",
-    "backToHome": "De vuelta a casa"
+    "backToHome": "De vuelta a casa",
+    "userOtp": "por ejemplo 12345",
+    "password": "Contraseña"
   },
   "pageNotFound": {
     "title": "404 No encontrado",
@@ -240,7 +254,9 @@
     "filterByName": "Filtrar por nombre",
     "filterByTransId": "Filtrar por ID de transacción",
     "recentStats": "Estadísticas recientes",
-    "contribution": "Contribución"
+    "contribution": "Contribución",
+    "orgname": "Ingrese su nombre",
+    "searchtransaction": "Ingrese la identificación de la transacción"
   },
   "contriStats": {
     "recentContribution": "Contribución reciente",
@@ -291,6 +307,7 @@
     "isPublic": "Es público",
     "isRegistrable": "Es registrable",
     "saveChanges": "Guardar cambios",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "enterNameOrganization": "Ingrese el nombre de la organización"
   }
 }

@@ -15,12 +15,15 @@ on:
     paths:
       - '.github/**'   
       - 'env.example'
+      - '.husky/**'
       - 'package.json'
       - 'tsconfig.json'
       - '.gitignore'
       - '.eslintrc.json'
       - '.eslintignore '
+      - 'vite.config.ts'
       - 'CODEOWNERS'
+      - 'LICENSE'
       
 jobs:
   Checking-for-unauthorized-file-changes:

@@ -66,7 +66,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
               <input
                 type="input"
                 id="orgname"
-                placeholder="Enter Organization Name"
+                placeholder={t('enterNameOrganization')}
                 autoComplete="off"
                 required
                 value={formState.orgName}
@@ -83,7 +83,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
               <input
                 type="input"
                 id="orgdescrip"
-                placeholder="Enter Description"
+                placeholder={t('description')}
                 autoComplete="off"
                 required
                 value={formState.orgDescrip}
@@ -102,7 +102,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
               <input
                 type="creator"
                 id="creator"
-                placeholder="Enter Creator"
+                placeholder={t('creator')}
                 autoComplete="off"
                 required
                 value={formState.creator}
@@ -119,7 +119,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
               <input
                 type="apiUrl"
                 id="apiUrl"
-                placeholder="Enter Api Url"
+                placeholder={t('apiUrl')}
                 required
                 value={formState.apiUrl}
                 onChange={(e) => {

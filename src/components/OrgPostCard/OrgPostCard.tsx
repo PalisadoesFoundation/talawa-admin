@@ -246,7 +246,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
                     id="postImageUrl"
                     name="photo"
                     type="file"
-                    placeholder="Upload New Image"
+                    placeholder={t('image')}
                     multiple={false}
                     //onChange=""
                   />
@@ -260,7 +260,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
                     id="postVideoUrl"
                     name="video"
                     type="file"
-                    placeholder="Upload New Video"
+                    placeholder={t('video')}
                     multiple={false}
                     //onChange=""
                   />
