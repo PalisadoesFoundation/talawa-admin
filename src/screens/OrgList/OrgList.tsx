@@ -74,13 +74,17 @@ function OrgList(): JSX.Element {
     const { name, descrip, location, visible, ispublic, tags } = formState;
 
     try {
-      const tagsArray = tags.split(',').map((tag) => tag.trim());
+      const tagsArray = tags
+        .split(',')
+        .map((tag) => tag.trim())
+        .filter((tag) => tag != '')
+        .filter((tag, index, self) => self.indexOf(tag) === index);
 
       const { data } = await create({
         variables: {
-          name: name,
-          description: descrip,
-          location: location,
+          name: name.trim(),
+          description: descrip.trim(),
+          location: location.trim(),
           visibleInSearch: visible,
           isPublic: ispublic,
           tags: tagsArray,
@@ -89,7 +93,7 @@ function OrgList(): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Congratulation the Organization is created');
+        toast.success('Congratulations! The Organization has been created.');
         refetch();
         setFormState({
           name: '',
@@ -386,7 +390,6 @@ function OrgList(): JSX.Element {
                   name="photo"
                   type="file"
                   multiple={false}
-                  //onChange=""
                 />
               </label>
               <button
