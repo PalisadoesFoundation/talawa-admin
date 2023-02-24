@@ -41,11 +41,11 @@ const components = [
   { name: 'Dashboard', comp_id: 'orgdash', component: 'OrganizationDashboard' },
   { name: 'People', comp_id: 'orgpeople', component: 'OrganizationPeople' },
   { name: 'Events', comp_id: 'orgevents', component: 'OrganizationEvents' },
-  {
-    name: 'Contributions',
-    comp_id: 'orgcontribution',
-    component: 'OrgContribution',
-  },
+  // {
+  //   name: 'Contributions',
+  //   comp_id: 'orgcontribution',
+  //   component: 'OrgContribution',
+  // },
   { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
   { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
   {
