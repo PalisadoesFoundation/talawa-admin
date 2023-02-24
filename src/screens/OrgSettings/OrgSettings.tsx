@@ -20,8 +20,7 @@ function OrgSettings(): JSX.Element {
 
   document.title = t('title');
   const [screenVariable, setScreenVariable] = React.useState(0);
-  const [screenDisplayVariable, setDisplayScreenVariable] =
-    React.useState('settings');
+  const [screenDisplayVariable, setDisplayScreenVariable] = React.useState('');
 
   const handleClick = (number: any) => {
     if (number === 1) {
@@ -116,7 +115,16 @@ function OrgSettings(): JSX.Element {
         <Col sm={8}>
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
-              <p className={styles.logintitle}>{t(screenDisplayVariable)}</p>
+              <div className={styles.headerDiv}>
+                <p className={styles.logintitle}>{t('settings')}</p>
+                {screenDisplayVariable != '' && (
+                  <p className={styles.loginSubtitle}>
+                    {t(screenDisplayVariable)}
+                  </p>
+                )}
+                {/* <p className={styles.loginSubtitle}>{t("abc")}</p> */}
+              </div>
+
               {/* <p className={styles.logintitle}>{t('settings')}</p> */}
             </Row>
             <div>{screenVariable == 1 ? <UserUpdate id="abcd" /> : null}</div>
