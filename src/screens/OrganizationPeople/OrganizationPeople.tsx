@@ -248,7 +248,7 @@ function OrganizationPeople(): JSX.Element {
                               key={datas._id}
                               id={datas._id}
                               memberImage={datas.image}
-                              joinDate={dayjs(parseInt(datas.createdAt)).format(
+                              joinDate={dayjs(datas.createdAt).format(
                                 'DD/MM/YYYY'
                               )}
                               memberName={
@@ -282,7 +282,7 @@ function OrganizationPeople(): JSX.Element {
                               key={datas._id}
                               id={datas._id}
                               memberImage={datas.image}
-                              joinDate={dayjs(parseInt(datas.createdAt)).format(
+                              joinDate={dayjs(datas.createdAt).format(
                                 'DD/MM/YYYY'
                               )}
                               memberName={
@@ -316,7 +316,7 @@ function OrganizationPeople(): JSX.Element {
                               key={datas._id}
                               id={datas._id}
                               memberImage={datas.image}
-                              joinDate={dayjs(parseInt(datas.createdAt)).format(
+                              joinDate={dayjs(datas.createdAt).format(
                                 'DD/MM/YYYY'
                               )}
                               memberName={
