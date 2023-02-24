@@ -13,7 +13,7 @@ describe('Testing Routes reducer', () => {
         { name: 'Dashboard', url: '/orgdash/id=undefined' },
         { name: 'People', url: '/orgpeople/id=undefined' },
         { name: 'Events', url: '/orgevents/id=undefined' },
-        { name: 'Contributions', url: '/orgcontribution/id=undefined' },
+        // { name: 'Contributions', url: '/orgcontribution/id=undefined' },
         { name: 'Posts', url: '/orgpost/id=undefined' },
         {
           name: 'Block/Unblock',
@@ -47,11 +47,11 @@ describe('Testing Routes reducer', () => {
           comp_id: 'orgevents',
           component: 'OrganizationEvents',
         },
-        {
-          name: 'Contributions',
-          comp_id: 'orgcontribution',
-          component: 'OrgContribution',
-        },
+        // {
+        //   name: 'Contributions',
+        //   comp_id: 'orgcontribution',
+        //   component: 'OrgContribution',
+        // },
         { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
         { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
         {
@@ -84,7 +84,7 @@ describe('Testing Routes reducer', () => {
         { name: 'Dashboard', url: '/orgdash/id=undefined' },
         { name: 'People', url: '/orgpeople/id=undefined' },
         { name: 'Events', url: '/orgevents/id=undefined' },
-        { name: 'Contributions', url: '/orgcontribution/id=undefined' },
+        // { name: 'Contributions', url: '/orgcontribution/id=undefined' },
         { name: 'Posts', url: '/orgpost/id=undefined' },
         { name: 'Block/Unblock', url: '/blockuser/id=undefined' },
         {
@@ -116,11 +116,11 @@ describe('Testing Routes reducer', () => {
           comp_id: 'orgevents',
           component: 'OrganizationEvents',
         },
-        {
-          name: 'Contributions',
-          comp_id: 'orgcontribution',
-          component: 'OrgContribution',
-        },
+        // {
+        //   name: 'Contributions',
+        //   comp_id: 'orgcontribution',
+        //   component: 'OrgContribution',
+        // },
         { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
         { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
         {
@@ -153,7 +153,7 @@ describe('Testing Routes reducer', () => {
         { name: 'Dashboard', url: '/orgdash/id=undefined' },
         { name: 'People', url: '/orgpeople/id=undefined' },
         { name: 'Events', url: '/orgevents/id=undefined' },
-        { name: 'Contributions', url: '/orgcontribution/id=undefined' },
+        // { name: 'Contributions', url: '/orgcontribution/id=undefined' },
         { name: 'Posts', url: '/orgpost/id=undefined' },
         {
           name: 'Block/Unblock',
@@ -190,11 +190,11 @@ describe('Testing Routes reducer', () => {
           comp_id: 'orgevents',
           component: 'OrganizationEvents',
         },
-        {
-          name: 'Contributions',
-          comp_id: 'orgcontribution',
-          component: 'OrgContribution',
-        },
+        // {
+        //   name: 'Contributions',
+        //   comp_id: 'orgcontribution',
+        //   component: 'OrgContribution',
+        // },
         { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
         { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
         {
