@@ -141,7 +141,6 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
                   });
                 }}
               >
-                <option value="">-</option>
                 {languages.map((language, index: number) => (
                   <option key={index} value={language.code}>
                     {language.name}
