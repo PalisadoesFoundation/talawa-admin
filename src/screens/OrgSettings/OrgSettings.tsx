@@ -20,6 +20,24 @@ function OrgSettings(): JSX.Element {
 
   document.title = t('title');
   const [screenVariable, setScreenVariable] = React.useState(0);
+  const [screenDisplayVariable, setDisplayScreenVariable] =
+    React.useState('settings');
+
+  const handleClick = (number: any) => {
+    if (number === 1) {
+      setDisplayScreenVariable('updateYourDetails');
+      setScreenVariable(1);
+    } else if (number === 2) {
+      setDisplayScreenVariable('updateOrganization');
+      setScreenVariable(2);
+    } else if (number === 3) {
+      setDisplayScreenVariable('deleteOrganization');
+      setScreenVariable(3);
+    } else {
+      setDisplayScreenVariable('seeRequest');
+      setScreenVariable(4);
+    }
+  };
 
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
@@ -56,7 +74,8 @@ function OrgSettings(): JSX.Element {
                   type="button"
                   value="userupdate"
                   data-testid="userUpdateBtn"
-                  onClick={() => setScreenVariable(1)}
+                  onClick={() => handleClick(1)}
+                  // onClick={() => setScreenVariable(1)}
                 >
                   {t('updateYourDetails')}
                 </button>
@@ -65,7 +84,8 @@ function OrgSettings(): JSX.Element {
                   type="button"
                   value="orgupdate"
                   data-testid="orgUpdateBtn"
-                  onClick={() => setScreenVariable(2)}
+                  onClick={() => handleClick(2)}
+                  // onClick={() => setScreenVariable(2)}
                 >
                   {t('updateOrganization')}
                 </button>
@@ -74,7 +94,8 @@ function OrgSettings(): JSX.Element {
                   type="button"
                   value="orgdelete"
                   data-testid="orgDeleteBtn"
-                  onClick={() => setScreenVariable(3)}
+                  onClick={() => handleClick(3)}
+                  // onClick={() => setScreenVariable(3)}
                 >
                   {t('deleteOrganization')}
                 </button>
@@ -83,7 +104,8 @@ function OrgSettings(): JSX.Element {
                   type="button"
                   value="orgdelete"
                   data-testid="orgDeleteBtn2"
-                  onClick={() => setScreenVariable(4)}
+                  onClick={() => handleClick(4)}
+                  // onClick={() => setScreenVariable(4)}
                 >
                   {t('seeRequest')}
                 </button>
@@ -94,7 +116,8 @@ function OrgSettings(): JSX.Element {
         <Col sm={8}>
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
-              <p className={styles.logintitle}>{t('settings')}</p>
+              <p className={styles.logintitle}>{t(screenDisplayVariable)}</p>
+              {/* <p className={styles.logintitle}>{t('settings')}</p> */}
             </Row>
             <div>{screenVariable == 1 ? <UserUpdate id="abcd" /> : null}</div>
             <div>

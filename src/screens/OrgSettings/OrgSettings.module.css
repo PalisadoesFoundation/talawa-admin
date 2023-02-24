@@ -74,7 +74,8 @@
   margin-bottom: 30px;
   padding-bottom: 5px;
   border-bottom: 3px solid #31bb6b;
-  width: 15%;
+  /* width: 15%; */
+  margin-left: 20px;
 }
 .searchtitle {
   color: #707070;
