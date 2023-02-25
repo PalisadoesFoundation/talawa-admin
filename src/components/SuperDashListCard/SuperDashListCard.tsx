@@ -33,7 +33,10 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
     <>
       <Row className={styles.orglist}>
         {props.image ? (
-          <img src={props.image} className={styles.orgimg} />
+          <img
+            src={'http://localhost:4000/' + props.image}
+            className={styles.orgimg}
+          />
         ) : (
           <img
             src="https://via.placeholder.com/200x100"

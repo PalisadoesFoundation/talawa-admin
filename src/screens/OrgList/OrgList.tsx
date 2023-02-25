@@ -24,15 +24,24 @@ function OrgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
 
   document.title = t('title');
-
+  type createOrgFormState = {
+    name: string;
+    descrip: string;
+    ispublic: boolean;
+    visible: boolean;
+    location: string;
+    tags: string;
+    image: any;
+  };
   const [modalisOpen, setmodalIsOpen] = useState(false);
-  const [formState, setFormState] = useState({
+  const [formState, setFormState] = useState<createOrgFormState>({
     name: '',
     descrip: '',
     ispublic: true,
     visible: false,
     location: '',
     tags: '',
+    image: '',
   });
   const [, setSearchByName] = useState('');
 
@@ -68,10 +77,28 @@ function OrgList(): JSX.Element {
     refetch,
   } = useQuery(ORGANIZATION_CONNECTION_LIST);
 
+  const changeImage = (e: any) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        console.log(reader.result);
+
+        setFormState({
+          ...formState,
+          image: reader.result,
+        });
+      }
+    };
+
+    reader.readAsDataURL(e.target.files[0]);
+  };
+
   const CreateOrg = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { name, descrip, location, visible, ispublic, tags } = formState;
+    const { name, descrip, location, visible, ispublic, tags, image } =
+      formState;
 
     try {
       const tagsArray = tags.split(',').map((tag) => tag.trim());
@@ -84,6 +111,7 @@ function OrgList(): JSX.Element {
           visibleInSearch: visible,
           isPublic: ispublic,
           tags: tagsArray,
+          file: image,
         },
       });
 
@@ -98,6 +126,7 @@ function OrgList(): JSX.Element {
           visible: false,
           location: '',
           tags: '',
+          image: '',
         });
       }
     } catch (error: any) {
@@ -386,7 +415,7 @@ function OrgList(): JSX.Element {
                   name="photo"
                   type="file"
                   multiple={false}
-                  //onChange=""
+                  onChange={changeImage}
                 />
               </label>
               <button

@@ -142,6 +142,7 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
     $visibleInSearch: Boolean!
     $isPublic: Boolean!
     $tags: [String!]!
+    $file: String
   ) {
     createOrganization(
       data: {
@@ -152,6 +153,7 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
         isPublic: $isPublic
         tags: $tags
       }
+      file: $file
     ) {
       _id
     }
