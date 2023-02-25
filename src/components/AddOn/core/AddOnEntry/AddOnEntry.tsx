@@ -7,6 +7,7 @@ import {
   UPDATE_ORG_STATUS_PLUGIN_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
 
 interface AddOnEntryProps {
   id: string;
@@ -32,6 +33,8 @@ function AddOnEntry({
   isInstalled,
   getInstalledPlugins,
 }: AddOnEntryProps): JSX.Element {
+  const { t } = useTranslation('translation', { keyPrefix: 'addOnEntry' });
+
   const [buttonLoading, setButtonLoading] = useState(false);
   const [switchInProgress] = useState(false);
   const [isInstalledLocal, setIsInstalledLocal] = useState(isInstalled);
@@ -142,7 +145,7 @@ function AddOnEntry({
           <Form.Check
             type="switch"
             id="custom-switch"
-            label="Enabled"
+            label={t('enable')}
             className={styles.entrytoggle}
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             onChange={() => {}}
@@ -176,7 +179,7 @@ function AddOnEntry({
               ></i>
             )}
             {/* {installed ? 'Remove' : configurable ? 'Installed' : 'Install'} */}
-            {isInstalledLocal ? 'Uninstall' : 'Install'}
+            {isInstalledLocal ? t('uninstall') : t('install')}
           </Button>
         </Card.Body>
       </Card>

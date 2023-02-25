@@ -309,5 +309,33 @@
     "saveChanges": "Guardar cambios",
     "cancel": "Cancelar",
     "enterNameOrganization": "Ingrese el nombre de la organización"
+  },
+  "addOnRegister": {
+    "addNew": "Agregar nueva",
+    "addPlugin": "Agregar complemento",
+    "pluginName": "Nombre del complemento",
+    "creatorName": "Nombre del creadora",
+    "pluginDesc": "Descripción del complemento",
+    "close": "Cerca",
+    "register": "Registro",
+    "pName": "Ej: Donaciones",
+    "cName": "Ej: John Doe",
+    "pDesc": "Este complemento habilita la interfaz de usuario para"
+  },
+  "addOnStore": {
+    "searchName": "Ej: Donaciones",
+    "enable": "Activada",
+    "disable": "Desactivada",
+    "pHeading": "Complementos",
+    "install": "Instalada",
+    "available": "Disponible",
+    "pMessage": "El complemento no existe",
+    "filter": "filtros",
+    "search": "Buscar"
+  },
+  "addOnEntry": {
+    "enable": "Activada",
+    "install": "Instalar",
+    "uninstall": "Desinstalar"
   }
 }

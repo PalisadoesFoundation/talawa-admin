@@ -309,5 +309,33 @@
     "saveChanges": "परिवर्तनों को सुरक्षित करें",
     "cancel": "रद्द करना",
     "enterNameOrganization": "संगठन का नाम दर्ज करें"
+  },
+  "addOnRegister": {
+    "addNew": "नया जोड़ो",
+    "addPlugin": "प्लगइन जोड़ें",
+    "pluginName": "प्लगइन का नाम",
+    "creatorName": "निर्माता का नाम",
+    "pluginDesc": "प्लगइन विवरण",
+    "close": "बंद करना",
+    "register": "पंजीकरण करवाना",
+    "pName": "जैसे: दान",
+    "cName": "जैसे: जॉन डो",
+    "pDesc": "यह प्लगइन यूआई को सक्षम बनाता है"
+  },
+  "addOnStore": {
+    "searchName": "जैसे: दान",
+    "enable": "सक्रिय",
+    "disable": "अक्षम",
+    "pHeading": "प्लग-इन",
+    "install": "स्थापित",
+    "available": "उपलब्ध",
+    "pMessage": "प्लगइन मौजूद नहीं है",
+    "filter": "फिल्टर",
+    "search": "खोज"
+  },
+  "addOnEntry": {
+    "enable": "सक्रिय",
+    "install": "स्थापित करना",
+    "uninstall": "स्थापना रद्द करें"
   }
 }

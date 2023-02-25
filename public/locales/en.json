@@ -309,5 +309,33 @@
     "saveChanges": "Save Changes",
     "cancel": "Cancel",
     "enterNameOrganization": "Enter Organization Name"
+  },
+  "addOnRegister": {
+    "addNew": "Add New",
+    "addPlugin": "Add Plugin",
+    "pluginName": "Plugin Name",
+    "creatorName": "Creator Name",
+    "pluginDesc": "Plugin Description",
+    "close": "Close",
+    "register": "Register",
+    "pName": "Ex: Donations",
+    "cName": "Ex: john Doe",
+    "pDesc": "This Plugin enables UI for"
+  },
+  "addOnStore": {
+    "searchName": "Ex: Donations",
+    "enable": "Enabled",
+    "disable": "Disabled",
+    "pHeading": "Plugins",
+    "install": "Installed",
+    "available": "Available",
+    "pMessage": "Plugin does not exists",
+    "filter": "Filters",
+    "search": "Search"
+  },
+  "addOnEntry": {
+    "enable": "Enabled",
+    "install": "Install",
+    "uninstall": "Uninstall"
   }
 }
