@@ -238,7 +238,7 @@ function OrgList(): JSX.Element {
                         image={datas.image}
                         admins={datas.admins}
                         members={datas.members.length}
-                        createdDate={dayjs(parseInt(datas?.createdAt)).format(
+                        createdDate={dayjs(datas?.createdAt).format(
                           'DD/MM/YYYY'
                         )}
                         orgName={datas.name}

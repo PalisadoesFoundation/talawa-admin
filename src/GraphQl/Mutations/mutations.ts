@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 // to unblock the user
 
 export const UNBLOCK_USER_MUTATION = gql`
-  mutation UnblockUser($userId: ID!, $orgId: ID!) {
+  mutation UnblockUser($userId: ObjectID!, $orgId: ObjectID!) {
     unblockUser(organizationId: $orgId, userId: $userId) {
       _id
     }
@@ -15,7 +15,7 @@ export const UNBLOCK_USER_MUTATION = gql`
 // to block the user
 
 export const BLOCK_USER_MUTATION = gql`
-  mutation BlockUser($userId: ID!, $orgId: ID!) {
+  mutation BlockUser($userId: ObjectID!, $orgId: ObjectID!) {
     blockUser(organizationId: $orgId, userId: $userId) {
       _id
     }
@@ -25,7 +25,7 @@ export const BLOCK_USER_MUTATION = gql`
 // to reject the organization request
 
 export const REJECT_ORGANIZATION_REQUEST_MUTATION = gql`
-  mutation RejectMembershipRequest($id: ID!) {
+  mutation RejectMembershipRequest($id: ObjectID!) {
     rejectMembershipRequest(membershipRequestId: $id) {
       _id
     }
@@ -35,7 +35,7 @@ export const REJECT_ORGANIZATION_REQUEST_MUTATION = gql`
 // to accept the organization request
 
 export const ACCEPT_ORGANIZATION_REQUEST_MUTATION = gql`
-  mutation AcceptMembershipRequest($id: ID!) {
+  mutation AcceptMembershipRequest($id: ObjectID!) {
     acceptMembershipRequest(membershipRequestId: $id) {
       _id
     }
@@ -46,7 +46,7 @@ export const ACCEPT_ORGANIZATION_REQUEST_MUTATION = gql`
 
 export const UPDATE_ORGANIZATION_MUTATION = gql`
   mutation UpdateOrganization(
-    $id: ID!
+    $id: ObjectID!
     $name: String
     $description: String
     $isPublic: Boolean
@@ -72,7 +72,7 @@ export const UPDATE_USER_MUTATION = gql`
   mutation UpdateUserProfile(
     $firstName: String
     $lastName: String
-    $email: String
+    $email: EmailAddress
   ) {
     updateUserProfile(
       data: { firstName: $firstName, lastName: $lastName, email: $email }
@@ -88,7 +88,7 @@ export const SIGNUP_MUTATION = gql`
   mutation SignUp(
     $firstName: String!
     $lastName: String!
-    $email: String!
+    $email: EmailAddress!
     $password: String!
   ) {
     signUp(
@@ -111,7 +111,7 @@ export const SIGNUP_MUTATION = gql`
 // to login in the talawa admin
 
 export const LOGIN_MUTATION = gql`
-  mutation Login($email: String!, $password: String!) {
+  mutation Login($email: EmailAddress!, $password: String!) {
     login(data: { email: $email, password: $password }) {
       user {
         _id
@@ -161,7 +161,7 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
 // to delete the organization
 
 export const DELETE_ORGANIZATION_MUTATION = gql`
-  mutation RemoveOrganization($id: ID!) {
+  mutation RemoveOrganization($id: ObjectID!) {
     removeOrganization(id: $id) {
       _id
     }
@@ -177,12 +177,12 @@ export const CREATE_EVENT_MUTATION = gql`
     $recurring: Boolean!
     $isPublic: Boolean!
     $isRegisterable: Boolean!
-    $organizationId: ID!
-    $startDate: String!
-    $endDate: String
+    $organizationId: ObjectID!
+    $startDate: Date!
+    $endDate: Date
     $allDay: Boolean!
-    $startTime: String
-    $endTime: String
+    $startTime: Time
+    $endTime: Time
     $location: String
   ) {
     createEvent(
@@ -209,7 +209,7 @@ export const CREATE_EVENT_MUTATION = gql`
 // to delete any event by any organization
 
 export const DELETE_EVENT_MUTATION = gql`
-  mutation RemoveEvent($id: ID!) {
+  mutation RemoveEvent($id: ObjectID!) {
     removeEvent(id: $id) {
       _id
     }
@@ -219,7 +219,7 @@ export const DELETE_EVENT_MUTATION = gql`
 // to remove an admin from an organization
 
 export const REMOVE_ADMIN_MUTATION = gql`
-  mutation RemoveAdmin($orgid: ID!, $userid: ID!) {
+  mutation RemoveAdmin($orgid: ObjectID!, $userid: ObjectID!) {
     removeAdmin(data: { organizationId: $orgid, userId: $userid }) {
       _id
     }
@@ -229,7 +229,7 @@ export const REMOVE_ADMIN_MUTATION = gql`
 // to Remove member from an organization
 
 export const REMOVE_MEMBER_MUTATION = gql`
-  mutation RemoveMember($orgid: ID!, $userid: ID!) {
+  mutation RemoveMember($orgid: ObjectID!, $userid: ObjectID!) {
     removeMember(data: { organizationId: $orgid, userId: $userid }) {
       _id
     }
@@ -239,7 +239,7 @@ export const REMOVE_MEMBER_MUTATION = gql`
 // to add the admin
 
 export const ADD_ADMIN_MUTATION = gql`
-  mutation CreateAdmin($orgid: ID!, $userid: ID!) {
+  mutation CreateAdmin($orgid: ObjectID!, $userid: ObjectID!) {
     createAdmin(data: { organizationId: $orgid, userId: $userid }) {
       _id
     }
@@ -250,9 +250,9 @@ export const CREATE_POST_MUTATION = gql`
   mutation CreatePost(
     $text: String!
     $title: String!
-    $imageUrl: String
-    $videoUrl: String
-    $organizationId: ID!
+    $imageUrl: URL
+    $videoUrl: URL
+    $organizationId: ObjectID!
   ) {
     createPost(
       data: {
@@ -269,7 +269,7 @@ export const CREATE_POST_MUTATION = gql`
 `;
 
 export const DELETE_POST_MUTATION = gql`
-  mutation RemovePost($id: ID!) {
+  mutation RemovePost($id: ObjectID!) {
     removePost(id: $id) {
       _id
     }
@@ -277,7 +277,7 @@ export const DELETE_POST_MUTATION = gql`
 `;
 
 export const GENERATE_OTP_MUTATION = gql`
-  mutation Otp($email: String!) {
+  mutation Otp($email: EmailAddress!) {
     otp(data: { email: $email }) {
       otpToken
     }
@@ -301,28 +301,32 @@ export const FORGOT_PASSWORD_MUTATION = gql`
 `;
 
 export const UPDATE_USERTYPE_MUTATION = gql`
-  mutation UpdateUserType($id: ID!, $userType: String!) {
+  mutation UpdateUserType($id: ObjectID!, $userType: String!) {
     updateUserType(data: { id: $id, userType: $userType })
   }
 `;
 
 export const ACCPET_ADMIN_MUTATION = gql`
-  mutation AcceptAdmin($id: ID!) {
+  mutation AcceptAdmin($id: ObjectID!) {
     acceptAdmin(id: $id)
   }
 `;
 
 export const REJECT_ADMIN_MUTATION = gql`
-  mutation RejectAdmin($id: ID!) {
+  mutation RejectAdmin($id: ObjectID!) {
     rejectAdmin(id: $id)
   }
 `;
+
 /**
  * @name UPDATE_INSTALL_STATUS_PLUGIN_MUTATION
  * @description used to toggle `installStatus` (boolean value) of a Plugin
  */
 export const UPDATE_INSTALL_STATUS_PLUGIN_MUTATION = gql`
-  mutation update_install_status_plugin_mutation($id: ID!, $status: Boolean!) {
+  mutation update_install_status_plugin_mutation(
+    $id: ObjectID!
+    $status: Boolean!
+  ) {
     updateTempPluginStatus(id: $id, status: $status) {
       _id
       pluginName
@@ -332,12 +336,16 @@ export const UPDATE_INSTALL_STATUS_PLUGIN_MUTATION = gql`
     }
   }
 `;
+
 /**
  * @name UPDATE_ORG_STATUS_PLUGIN_MUTATION
  * @description used  `updateTempPluginInstalledOrgs`to add or remove the current Organization the in the plugin list `installedOrgs`
  */
 export const UPDATE_ORG_STATUS_PLUGIN_MUTATION = gql`
-  mutation update_install_status_plugin_mutation($id: ID!, $orgId: ID!) {
+  mutation update_install_status_plugin_mutation(
+    $id: ObjectID!
+    $orgId: ObjectID!
+  ) {
     updateTempPluginInstalledOrgs(id: $id, orgId: $orgId) {
       _id
       pluginName
@@ -348,6 +356,7 @@ export const UPDATE_ORG_STATUS_PLUGIN_MUTATION = gql`
     }
   }
 `;
+
 /**
  * @name ADD_PLUGIN_MUTATION
  * @description used  `createPlugin` to add new Plugin in database
@@ -358,7 +367,7 @@ export const ADD_PLUGIN_MUTATION = gql`
     $pluginCreatedBy: String!
     $pluginDesc: String!
     $pluginInstallStatus: Boolean!
-    $installedOrgs: [ID!]
+    $installedOrgs: [ObjectID!]
   ) {
     createPlugin(
       pluginName: $pluginName
@@ -378,7 +387,7 @@ export const ADD_PLUGIN_MUTATION = gql`
 `;
 
 export const UPDATE_POST_MUTATION = gql`
-  mutation UpdatePost($id: ID!, $title: String, $text: String) {
+  mutation UpdatePost($id: ObjectID!, $title: String, $text: String) {
     updatePost(id: $id, data: { title: $title, text: $text }) {
       _id
     }
@@ -387,15 +396,15 @@ export const UPDATE_POST_MUTATION = gql`
 
 export const UPDATE_EVENT_MUTATION = gql`
   mutation UpdateEvent(
-    $id: ID!
+    $id: ObjectID!
     $title: String!
     $description: String!
     $recurring: Boolean!
     $isPublic: Boolean!
     $isRegisterable: Boolean!
     $allDay: Boolean!
-    $startTime: String
-    $endTime: String
+    $startTime: Time
+    $endTime: Time
     $location: String
   ) {
     updateEvent(
@@ -419,8 +428,8 @@ export const UPDATE_EVENT_MUTATION = gql`
 
 export const UPDATE_SPAM_NOTIFICATION_MUTATION = gql`
   mutation UpdateSpamNotification(
-    $orgId: ID!
-    $spamId: ID!
+    $orgId: ObjectID!
+    $spamId: ObjectID!
     $isReaded: Boolean
   ) {
     updateSpamNotification(
