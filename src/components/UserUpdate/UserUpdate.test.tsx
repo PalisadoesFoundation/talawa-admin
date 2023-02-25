@@ -49,7 +49,7 @@ describe('Testing User Update', () => {
     lastName: 'Doe',
     email: 'johndoe@gmail.com',
     password: 'qwerty',
-    applangcode: '2',
+    applangcode: 'en',
     selectedOption: 'selectadmin',
     displayImage: new File(['hello'], 'hello.png', { type: 'image/png' }),
   };
@@ -75,8 +75,8 @@ describe('Testing User Update', () => {
     );
     userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
     userEvent.type(screen.getByPlaceholderText(/Password/i), formData.password);
-    userEvent.type(
-      screen.getByPlaceholderText(/App Language Code/i),
+    userEvent.selectOptions(
+      screen.getByTestId(/applangcode/i),
       formData.applangcode
     );
     userEvent.click(screen.getByLabelText('Admin'));
@@ -100,7 +100,7 @@ describe('Testing User Update', () => {
     expect(screen.getByPlaceholderText(/Password/i)).toHaveValue(
       formData.password
     );
-    expect(screen.getByPlaceholderText(/App Language Code/i)).toHaveValue(
+    expect(screen.getByTestId(/applangcode/i)).toHaveValue(
       formData.applangcode
     );
     expect(screen.getByLabelText('Admin')).not.toBeChecked();
@@ -112,9 +112,7 @@ describe('Testing User Update', () => {
     expect(screen.getByPlaceholderText(/Last Name/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Email/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Password/i)).toBeInTheDocument();
-    expect(
-      screen.getByPlaceholderText(/App Language Code/i)
-    ).toBeInTheDocument();
+    expect(screen.getByTestId(/applangcode/i)).toBeInTheDocument();
     expect(screen.getByText('User Type')).toBeInTheDocument();
     expect(screen.getByText('Admin')).toBeInTheDocument();
     expect(screen.getByText('Superadmin')).toBeInTheDocument();

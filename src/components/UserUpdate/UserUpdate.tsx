@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/client';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 
+import { languages } from 'utils/languages';
 import styles from './UserUpdate.module.css';
 
 interface UserUpdateProps {
@@ -130,19 +131,22 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
           <div className={styles.dispflex}>
             <div>
               <label>{t('appLanguageCode')}</label>
-              <input
-                type="input"
-                id="applangcode"
-                placeholder={t('appLanguageCode')}
-                required
-                value={formState.applangcode}
+              <select
+                className="form-control"
+                data-testid="applangcode"
                 onChange={(e) => {
                   setFormState({
                     ...formState,
                     applangcode: e.target.value,
                   });
                 }}
-              />
+              >
+                {languages.map((language, index: number) => (
+                  <option key={index} value={language.code}>
+                    {language.name}
+                  </option>
+                ))}
+              </select>
             </div>
             <div>
               <label>{t('userType')}</label>
