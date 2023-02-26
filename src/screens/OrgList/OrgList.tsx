@@ -20,19 +20,30 @@ import ListNavbar from 'components/ListNavbar/ListNavbar';
 import PaginationList from 'components/PaginationList/PaginationList';
 import debounce from 'utils/debounce';
 
+interface createOrgFormState {
+  name: string;
+  descrip: string;
+  ispublic: boolean;
+  visible: boolean;
+  location: string;
+  tags: string;
+  image: string | ArrayBuffer | null;
+}
+
 function OrgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
 
   document.title = t('title');
 
   const [modalisOpen, setmodalIsOpen] = useState(false);
-  const [formState, setFormState] = useState({
+  const [formState, setFormState] = useState<createOrgFormState>({
     name: '',
     descrip: '',
     ispublic: true,
     visible: false,
     location: '',
     tags: '',
+    image: null,
   });
   const [, setSearchByName] = useState('');
 
@@ -71,7 +82,8 @@ function OrgList(): JSX.Element {
   const CreateOrg = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { name, descrip, location, visible, ispublic, tags } = formState;
+    const { name, descrip, location, visible, ispublic, tags, image } =
+      formState;
 
     try {
       const tagsArray = tags.split(',').map((tag) => tag.trim());
@@ -84,6 +96,7 @@ function OrgList(): JSX.Element {
           visibleInSearch: visible,
           isPublic: ispublic,
           tags: tagsArray,
+          image: image,
         },
       });
 
@@ -98,6 +111,7 @@ function OrgList(): JSX.Element {
           visible: false,
           location: '',
           tags: '',
+          image: null,
         });
       }
     } catch (error: any) {
@@ -148,6 +162,23 @@ function OrgList(): JSX.Element {
       refetch({
         filter: value,
       });
+    }
+  };
+
+  const changeImage = (e: any) => {
+    const file = e.target.files?.[0];
+    const reader = new FileReader();
+
+    reader.onload = (upload) => {
+      const base64Image = upload.target?.result;
+      setFormState({
+        ...formState,
+        image: base64Image ? base64Image : null,
+      });
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
     }
   };
 
@@ -386,7 +417,7 @@ function OrgList(): JSX.Element {
                   name="photo"
                   type="file"
                   multiple={false}
-                  //onChange=""
+                  onChange={changeImage}
                 />
               </label>
               <button
