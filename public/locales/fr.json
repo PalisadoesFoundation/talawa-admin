@@ -282,7 +282,7 @@
     "lastName": "Nom de famille",
     "email": "E-mail",
     "password": "Mot de passe",
-    "appLanguageCode": "Code de langue de l'application",
+    "appLanguageCode": "Langue par défaut",
     "userType": "Type d'utilisateur",
     "admin": "Administrateur",
     "superAdmin": "Super administrateur",

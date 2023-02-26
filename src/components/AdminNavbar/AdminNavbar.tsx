@@ -94,7 +94,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
   return (
     <>
       <Navbar className={styles.navbarbg} expand="xl" fixed="top">
-        <Navbar.Brand>
+        <Navbar.Brand className={styles.navbarBrandLogo}>
           <Link className={styles.logo} to="/orglist">
             <img src={Logo} />
             <strong>{t('talawa_portal')}</strong>

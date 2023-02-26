@@ -282,7 +282,7 @@
     "lastName": "उपनाम",
     "email": "ईमेल",
     "password": "पासवर्ड",
-    "appLanguageCode": "ऐप भाषा कोड",
+    "appLanguageCode": "डिफ़ॉल्ट भाषा",
     "userType": "उपयोगकर्ता का प्रकार",
     "admin": "व्यवस्थापक",
     "superAdmin": "सुपरएडमिन",

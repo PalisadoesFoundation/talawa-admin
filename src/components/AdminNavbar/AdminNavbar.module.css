@@ -24,10 +24,13 @@ a {
 }
 
 .navbarbg {
-  height: 60px;
+  /* height: 60px; */
+  height: auto;
   background-color: white;
   z-index: 1;
   box-shadow: 0px 0px 8px 2px #c8c8c8;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 
 .logo {
@@ -195,4 +198,8 @@ a {
     top: 0px;
     right: -8px;
   }
+}
+
+.navbarBrandLogo {
+  padding: 0;
 }

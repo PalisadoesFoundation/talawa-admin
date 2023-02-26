@@ -282,7 +282,7 @@
     "lastName": "姓",
     "email": "電子郵件",
     "password": "密碼",
-    "appLanguageCode": "應用語言代碼",
+    "appLanguageCode": "默认语言",
     "userType": "用戶類型",
     "admin": "行政",
     "superAdmin": "超級管理員",
