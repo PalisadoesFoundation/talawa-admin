@@ -172,7 +172,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
             </div>
             <Dropdown className={styles.dropdowns}>
               <Dropdown.Toggle variant="" id="dropdown-basic">
-                {data.organizations[0].image ? (
+                {data?.organizations[0].image ? (
                   <img
                     src={data.organizations[0].image}
                     className={styles.roundedcircle}
