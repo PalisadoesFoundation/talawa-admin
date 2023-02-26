@@ -87,7 +87,7 @@ export const USER_LIST = gql`
 // Query to take the Organization with data
 
 export const ORGANIZATIONS_LIST = gql`
-  query Organizations($id: ObjectID!) {
+  query Organizations($id: ID!) {
     organizations(id: $id) {
       _id
       image
@@ -133,7 +133,7 @@ export const ORGANIZATIONS_LIST = gql`
 // Query to take the Members of a particular organization
 
 export const MEMBERS_LIST = gql`
-  query Organizations($id: ObjectID!) {
+  query Organizations($id: ID!) {
     organizations(id: $id) {
       _id
       members {
@@ -151,9 +151,9 @@ export const MEMBERS_LIST = gql`
 // Query to filter out all the members with the macthing query and a particular OrgId
 export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
   query Organizations(
-    $orgId: ObjectID!
+    $orgId: ID!
     $firstName_contains: String
-    $admin_for: ObjectID
+    $admin_for: ID
     $event_title_contains: String
   ) {
     organizationsMemberConnection(
@@ -178,7 +178,7 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
 
 // To take the list of the oranization joined by a user
 export const USER_ORGANIZATION_LIST = gql`
-  query User($id: ObjectID!) {
+  query User($id: ID!) {
     user(id: $id) {
       firstName
       lastName
@@ -196,7 +196,7 @@ export const USER_ORGANIZATION_LIST = gql`
 
 // to take the organization event list
 export const ORGANIZATION_EVENT_LIST = gql`
-  query EventsByOrganization($id: ObjectID!) {
+  query EventsByOrganization($id: ID!) {
     eventsByOrganization(id: $id) {
       _id
       title
@@ -216,7 +216,7 @@ export const ORGANIZATION_EVENT_LIST = gql`
 
 export const ORGANIZATION_EVENT_CONNECTION_LIST = gql`
   query EventsByOrganizationConnection(
-    $organization_id: ObjectID!
+    $organization_id: ID!
     $title_contains: String
     $description_contains: String
     $location_contains: String
@@ -247,8 +247,8 @@ export const ORGANIZATION_EVENT_CONNECTION_LIST = gql`
 
 export const ORGANIZATION_DONATION_CONNECTION_LIST = gql`
   query GetDonationByOrgIdConnection(
-    $orgId: ObjectID!
-    $id: ObjectID
+    $orgId: ID!
+    $id: ID
     $name_of_user_contains: String
   ) {
     getDonationByOrgIdConnection(
@@ -267,7 +267,7 @@ export const ORGANIZATION_DONATION_CONNECTION_LIST = gql`
 // to take the list of the admins of a particular
 
 export const ADMIN_LIST = gql`
-  query Organizations($id: ObjectID!) {
+  query Organizations($id: ID!) {
     organizations(id: $id) {
       _id
       admins {
@@ -285,7 +285,7 @@ export const ADMIN_LIST = gql`
 // to take the membership request
 
 export const MEMBERSHIP_REQUEST = gql`
-  query Organizations($id: ObjectID!) {
+  query Organizations($id: ID!) {
     organizations(id: $id) {
       _id
       membershipRequests {
@@ -304,7 +304,7 @@ export const MEMBERSHIP_REQUEST = gql`
 // display posts
 
 export const ORGANIZATION_POST_LIST = gql`
-  query PostsByOrganization($id: ObjectID!) {
+  query PostsByOrganization($id: ID!) {
     postsByOrganization(id: $id) {
       _id
       title
@@ -323,7 +323,7 @@ export const ORGANIZATION_POST_LIST = gql`
 
 export const ORGANIZATION_POST_CONNECTION_LIST = gql`
   query PostsByOrganizationConnection(
-    $id: ObjectID!
+    $id: ID!
     $title_contains: String
     $text_contains: String
   ) {
