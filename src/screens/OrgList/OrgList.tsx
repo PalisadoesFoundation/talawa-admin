@@ -99,6 +99,7 @@ function OrgList(): JSX.Element {
           location: '',
           tags: '',
         });
+        setmodalIsOpen(false);
       }
     } catch (error: any) {
       /* istanbul ignore next */
