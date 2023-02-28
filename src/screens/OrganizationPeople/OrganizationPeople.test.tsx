@@ -242,6 +242,18 @@ describe('Organisation People Page', () => {
     await wait();
 
     expect(screen.getByLabelText(/Admins/i)).toBeChecked();
+    userEvent.type(screen.getByPlaceholderText(/Enter Name/i), searchData.name);
+    userEvent.type(
+      screen.getByPlaceholderText(/Enter Event/i),
+      searchData.event
+    );
+
+    expect(screen.getByPlaceholderText(/Enter Name/i)).toHaveValue(
+      searchData.name
+    );
+    expect(screen.getByPlaceholderText(/Enter Event/i)).toHaveValue(
+      searchData.event
+    );
   });
 
   test('Testing USER LIST', async () => {
@@ -264,6 +276,19 @@ describe('Organisation People Page', () => {
     await wait();
 
     expect(screen.getByLabelText(/Users/i)).toBeChecked();
+
+    userEvent.type(screen.getByPlaceholderText(/Enter Name/i), searchData.name);
+    userEvent.type(
+      screen.getByPlaceholderText(/Enter Event/i),
+      searchData.event
+    );
+
+    expect(screen.getByPlaceholderText(/Enter Name/i)).toHaveValue(
+      searchData.name
+    );
+    expect(screen.getByPlaceholderText(/Enter Event/i)).toHaveValue(
+      searchData.event
+    );
   });
 
   test('No Mock Data', async () => {
