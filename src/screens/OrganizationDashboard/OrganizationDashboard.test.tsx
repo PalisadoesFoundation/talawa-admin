@@ -7,7 +7,11 @@ import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 
 import OrganizationDashboard from './OrganizationDashboard';
-import { MOCKS_WITH_TAGGED, MOCKS_NO_TAGS, MOCKS_WITH_IMAGE } from './OrganizationDashboardMocks';
+import {
+  MOCKS_WITH_TAGGED,
+  MOCKS_NO_TAGS,
+  MOCKS_WITH_IMAGE,
+} from './OrganizationDashboardMocks';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 

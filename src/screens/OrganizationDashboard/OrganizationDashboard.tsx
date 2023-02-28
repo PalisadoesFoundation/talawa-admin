@@ -101,9 +101,9 @@ function OrganizationDashboard(): JSX.Element {
                   data-testid="orgDashImgPresent"
                 />
               ) : (
-                <img 
-                  src={AboutImg} 
-                  className={styles.org_about_img} 
+                <img
+                  src={AboutImg}
+                  className={styles.org_about_img}
                   data-testid="orgDashImgAbsent"
                 />
               )}
