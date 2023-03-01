@@ -82,7 +82,6 @@ function OrganizationDashboard(): JSX.Element {
     <>
       <AdminNavbar targets={targets} url_1={configUrl} />
       <Row className={styles.toporginfo}>
-        <p></p>
         <p className={styles.toporgname}>{data.organizations[0].name}</p>
         <p className={styles.toporgloc}>
           {t('location')} : {data.organizations[0].location}
