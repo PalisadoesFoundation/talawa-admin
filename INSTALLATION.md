@@ -22,6 +22,7 @@ This document provides instructions on how to set up and start a running instanc
   - [Sign in to talawa-admin](#sign-in-to-talawa-admin)
   - [Running tests](#running-tests)
   - [Linting code files](#linting-code-files)
+  - [Husky for Git Hooks](#husky-for-git-hooks)
   - [Setting up Talawa-Admin and API for Talawa App](#setting-up-talawa-admin-and-api-for-talawa-app)
     - [On Your Local Machine](#on-your-local-machine)
 
@@ -147,7 +148,24 @@ You can run the tests for `talawa-admin` using this command:-
 
 You can lint your code files using this command:-
 
-    yarn lint
+      yarn lint:fix
+
+## Husky for Git Hooks
+
+We are using the package `Husky` to automatically run the following scripts on your changes whenever you make a commit:
+
+```
+yarn format:fix
+yarn lint:fix
+yarn typecheck
+```
+
+This is done to improve developer experience and to make sure that your commits do not fail on the automated workflow runs. Still you can manually opt-out of the same using the `--no-verify` flag as follows:
+
+```
+git commit -m "Commit message" --no-verify
+```
+
 
 ## Setting up Talawa-Admin and API for Talawa App
 
