@@ -171,12 +171,24 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
               </IconButton>
             </div>
             <Dropdown className={styles.dropdowns}>
-              <Dropdown.Toggle variant="" id="dropdown-basic">
-                <img
-                  src="https://via.placeholder.com/45x45"
-                  className={styles.roundedcircle}
-                  data-testid="logoutDropdown"
-                />
+              <Dropdown.Toggle
+                variant=""
+                id="dropdown-basic"
+                data-testid="logoutDropdown"
+              >
+                {data?.organizations[0].image ? (
+                  <img
+                    src={data.organizations[0].image}
+                    className={styles.roundedcircle}
+                    data-testid="navbarOrgImagePresent"
+                  />
+                ) : (
+                  <img
+                    src="https://via.placeholder.com/45x45"
+                    className={styles.roundedcircle}
+                    data-testid="navbarOrgImageAbsent"
+                  />
+                )}
               </Dropdown.Toggle>
               <Dropdown.Menu className={styles.dropdownMenu}>
                 <Dropdown.Item

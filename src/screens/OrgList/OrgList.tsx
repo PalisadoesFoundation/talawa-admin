@@ -19,6 +19,7 @@ import { CREATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import ListNavbar from 'components/ListNavbar/ListNavbar';
 import PaginationList from 'components/PaginationList/PaginationList';
 import debounce from 'utils/debounce';
+import convertToBase64 from 'utils/convertToBase64';
 
 function OrgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
@@ -33,6 +34,7 @@ function OrgList(): JSX.Element {
     visible: false,
     location: '',
     tags: '',
+    image: '',
   });
   const [, setSearchByName] = useState('');
 
@@ -71,7 +73,8 @@ function OrgList(): JSX.Element {
   const CreateOrg = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { name, descrip, location, visible, ispublic, tags } = formState;
+    const { name, descrip, location, visible, ispublic, tags, image } =
+      formState;
 
     try {
       const tagsArray = tags.split(',').map((tag) => tag.trim());
@@ -84,6 +87,7 @@ function OrgList(): JSX.Element {
           visibleInSearch: visible,
           isPublic: ispublic,
           tags: tagsArray,
+          image: image,
         },
       });
 
@@ -98,6 +102,7 @@ function OrgList(): JSX.Element {
           visible: false,
           location: '',
           tags: '',
+          image: '',
         });
         setmodalIsOpen(false);
       }
@@ -389,7 +394,15 @@ function OrgList(): JSX.Element {
                   name="photo"
                   type="file"
                   multiple={false}
-                  //onChange=""
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file)
+                      setFormState({
+                        ...formState,
+                        image: await convertToBase64(file),
+                      });
+                  }}
+                  data-testid="organisationImage"
                 />
               </label>
               <button

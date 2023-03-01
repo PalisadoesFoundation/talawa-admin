@@ -7,7 +7,11 @@ import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 
 import OrganizationDashboard from './OrganizationDashboard';
-import { MOCKS_WITH_TAGGED, MOCKS_NO_TAGS } from './OrganizationDashboardMocks';
+import {
+  MOCKS_WITH_TAGGED,
+  MOCKS_NO_TAGS,
+  MOCKS_WITH_IMAGE,
+} from './OrganizationDashboardMocks';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 
@@ -79,5 +83,41 @@ describe('Organisation Dashboard Page', () => {
     await wait();
     const button = screen.getByRole('button', { name: /no tags/i });
     expect(button).toBeInTheDocument();
+  });
+  test('Should check if organisation image is present', async () => {
+    const { container } = render(
+      <MockedProvider addTypename={false} mocks={MOCKS_WITH_IMAGE}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationDashboard />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    expect(container.textContent).not.toBe('Loading data...');
+    await wait();
+    const image = screen.getByTestId(/orgDashImgPresent/i);
+    expect(image).toBeInTheDocument();
+  });
+  test('Should check if organisation image is not present', async () => {
+    const { container } = render(
+      <MockedProvider addTypename={false} mocks={MOCKS_WITH_TAGGED}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationDashboard />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    expect(container.textContent).not.toBe('Loading data...');
+    await wait();
+    const image = screen.getByTestId(/orgDashImgAbsent/i);
+    expect(image).toBeInTheDocument();
   });
 });

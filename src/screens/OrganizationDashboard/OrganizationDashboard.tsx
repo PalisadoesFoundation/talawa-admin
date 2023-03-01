@@ -94,7 +94,19 @@ function OrganizationDashboard(): JSX.Element {
             <div className={styles.sidebarsticky}>
               <h6 className={styles.titlename}>{t('about')}</h6>
               <p>{data.organizations[0].description}</p>
-              <img src={AboutImg} className={styles.org_about_img} />
+              {data.organizations[0].image ? (
+                <img
+                  src={data.organizations[0].image}
+                  className={styles.org_about_img}
+                  data-testid="orgDashImgPresent"
+                />
+              ) : (
+                <img
+                  src={AboutImg}
+                  className={styles.org_about_img}
+                  data-testid="orgDashImgAbsent"
+                />
+              )}
               <h6 className={styles.titlename}>{t('tags')}</h6>
               <p className={styles.tagdetails}>
                 {data.organizations[0].tags.length > 0 ? (

@@ -66,6 +66,9 @@ a {
 .roundedcircle {
   margin-right: 5px;
   border-radius: 50px;
+  height: 45px;
+  width: 45px;
+  object-fit: cover;
 }
 .navitems > .navlinks {
   margin-top: 11px;
