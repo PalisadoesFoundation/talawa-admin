@@ -12,8 +12,8 @@ This document provides instructions on how to set up and start a running instanc
   - [Clone this repository](#clone-this-repository)
   - [Change directory into the cloned repo](#change-directory-into-the-cloned-repo)
   - [Creating .env file](#creating-env-file)
-  - [Setting up REACT\_APP\_TALAWA\_URL in .env file](#setting-up-react_app_talawa_url-in-env-file)
-  - [Setting up REACT\_APP\_RECAPTCHA\_SITE\_KEY in .env file](#setting-up-react_app_recaptcha_site_key-in-env-file)
+  - [Setting up REACT_APP_TALAWA_URL in .env file](#setting-up-react_app_talawa_url-in-env-file)
+  - [Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-react_app_recaptcha_site_key-in-env-file)
   - [Setting up yarn](#setting-up-yarn)
   - [Installing required packages/dependencies](#installing-required-packagesdependencies)
   - [Running talawa-admin](#running-talawa-admin)
@@ -22,6 +22,7 @@ This document provides instructions on how to set up and start a running instanc
   - [Sign in to talawa-admin](#sign-in-to-talawa-admin)
   - [Running tests](#running-tests)
   - [Linting code files](#linting-code-files)
+  - [Husky for Git Hooks](#husky-for-git-hooks)
   - [Setting up Talawa-Admin and API for Talawa App](#setting-up-talawa-admin-and-api-for-talawa-app)
     - [On Your Local Machine](#on-your-local-machine)
 
@@ -81,7 +82,6 @@ Copy/paste the endpoint for accessing talawa-api graphql service to the variable
 ## Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file
 
 Refer to to the `RECAPTCHA` section in the INSTALLATION.md file found in [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api).
-
 
 `Talawa-admin` needs the `reCAPTCHA site key` for the `reCAPTCHA` service you set up during `talawa-api` installation as shown in this screenshot:-
 
@@ -147,7 +147,23 @@ You can run the tests for `talawa-admin` using this command:-
 
 You can lint your code files using this command:-
 
-    yarn lint
+    yarn lint:fix
+
+## Husky for Git Hooks
+
+We are using the package `Husky` to automatically run the following scripts on your changes whenever you make a commit:
+
+```
+yarn format:fix
+yarn lint:fix
+yarn typecheck
+```
+
+This is done to improve developer experience and to make sure that your commits do not fail on the automated workflow runs. Still you can manually opt-out of the same using the `--no-verify` flag as follows:
+
+```
+git commit -m "Commit message" --no-verify
+```
 
 ## Setting up Talawa-Admin and API for Talawa App
 
@@ -160,14 +176,8 @@ You need to setup your own local instance of [Talawa-API](https://github.com/Pal
 1. You need to first setup the 2 supporting projects locally. Please refer the INSTALLATION.md of the respective repository for further guidance.
    1. [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api)
    2. [Talawa-ADMIN repo](https://github.com/PalisadoesFoundation/talawa-admin)
-   
-* Install [talawa](https://github.com/PalisadoesFoundation/talawa) Please refer the INSTALLATION.md of the respective repository for further guidance
-    - Then use the URL (Organization URL) in this form:
-    - http://(IP-address):4000/graphql (See the below example)
-    - Example : http://10.0.2.2:4000/graphql
-  
-        
 
-
-
-
+- Install [talawa](https://github.com/PalisadoesFoundation/talawa) Please refer the INSTALLATION.md of the respective repository for further guidance
+  - Then use the URL (Organization URL) in this form:
+  - http://(IP-address):4000/graphql (See the below example)
+  - Example : http://10.0.2.2:4000/graphql
