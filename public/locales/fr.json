@@ -309,5 +309,33 @@
     "saveChanges": "Sauvegarder les modifications",
     "cancel": "Annuler",
     "enterNameOrganization": "Entrez le nom de l'organisation"
+  },
+  "addOnRegister": {
+    "addNew": "Ajouter nouveau",
+    "addPlugin": "Ajouter un plug-in",
+    "pluginName": "Nom du plug-in",
+    "creatorName": "Creator Name",
+    "pluginDesc": "Description du plug-in",
+    "close": "Fermer",
+    "register": "Enregistrer",
+    "pName": "Ex : Dons",
+    "cName": "Ex: Jean Doe",
+    "pDesc": "Ce plugin active l'interface utilisateur pour"
+  },
+  "addOnStore": {
+    "searchName": "Ex:Des dons ",
+    "enable": "Activé",
+    "disable": "Désactivé",
+    "pHeading": "Plugins",
+    "install": "Installée",
+    "available": "Disponible",
+    "pMessage": "Le plugin n'existe pas",
+    "filter": "Filtres",
+    "search": "recherche"
+  },
+  "addOnEntry": {
+    "enable": "Activé",
+    "install": "Installer",
+    "uninstall": "désinstaller"
   }
 }

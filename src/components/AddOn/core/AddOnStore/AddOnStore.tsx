@@ -20,8 +20,11 @@ import { Form, Tab, Tabs } from 'react-bootstrap';
 import AddOnRegister from '../AddOnRegister/AddOnRegister';
 import PluginHelper from 'components/AddOn/support/services/Plugin.helper';
 import { store } from './../../../../state/store';
+import { useTranslation } from 'react-i18next';
 
 function AddOnStore(): JSX.Element {
+  const { t } = useTranslation('translation', { keyPrefix: 'addOnStore' });
+
   const [isStore, setIsStore] = useState(true);
   const [showEnabled, setShowEnabled] = useState(true);
   const [searchText, setSearchText] = useState('');
@@ -113,24 +116,24 @@ function AddOnStore(): JSX.Element {
       </div>
       <div className={styles.container}>
         <SidePanel>
-          <Action label="Search">
+          <Action label={t('search')}>
             <input
               type="name"
               id="searchname"
               className={styles.actioninput}
-              placeholder="ex. Donations "
+              placeholder={t('searchName')}
               autoComplete="off"
               required
               onChange={(e) => setSearchText(e.target.value)}
             />
           </Action>
           {!isStore && (
-            <Action label="Filters">
+            <Action label={t('filter')}>
               <Form>
                 <div key={`inline-radio`} className="mb-3">
                   <Form.Check
                     inline
-                    label="Enabled"
+                    label={t('enable')}
                     name="radio-group"
                     type="radio"
                     value="enabled"
@@ -141,7 +144,7 @@ function AddOnStore(): JSX.Element {
                   />
                   <Form.Check
                     inline
-                    label="Disabled"
+                    label={t('disable')}
                     name="radio-group"
                     type="radio"
                     value="disabled"
@@ -157,7 +160,7 @@ function AddOnStore(): JSX.Element {
         </SidePanel>
         <MainContent>
           <div className={styles.justifysp}>
-            <p className={styles.logintitle}>Plugins</p>
+            <p className={styles.logintitle}>{t('pHeading')}</p>
             {searchText ? (
               <p className="mb-2 text-muted author">
                 Search results for <b>{searchText}</b>
@@ -170,7 +173,7 @@ function AddOnStore(): JSX.Element {
               className="mb-3"
               onSelect={updateSelectedTab}
             >
-              <Tab eventKey="available" title="Available">
+              <Tab eventKey="available" title={t('available')}>
                 {console.log(
                   data.getPlugins.filter(
                     (val: {
@@ -213,7 +216,7 @@ function AddOnStore(): JSX.Element {
                     }
                   }
                 ).length === 0 ? (
-                  <h4>Plugin does not exits </h4>
+                  <h4> {t('pMessage')}</h4>
                 ) : (
                   data.getPlugins
                     .filter(
@@ -266,7 +269,7 @@ function AddOnStore(): JSX.Element {
                     )
                 )}
               </Tab>
-              <Tab eventKey="installed" title="Installed">
+              <Tab eventKey="installed" title={t('install')}>
                 {data.getPlugins
                   .filter((plugin: any) => plugin.pluginInstallStatus == true)
                   .filter(
@@ -289,7 +292,7 @@ function AddOnStore(): JSX.Element {
                       }
                     }
                   ).length === 0 ? (
-                  <h4>Plugin does not exits </h4> // eslint-disable-line
+                  <h4>{t('pMessage')} </h4> // eslint-disable-line
                 ) : (
                   data.getPlugins
                     .filter((plugin: any) => plugin.pluginInstallStatus == true)

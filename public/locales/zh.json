@@ -309,5 +309,33 @@
     "saveChanges": "保存更改",
     "cancel": "取消",
     "enterNameOrganization": "輸入組織名稱"
+  },
+  "addOnRegister": {
+    "addNew": "添新",
+    "addPlugin": "添加插件",
+    "pluginName": "插件名称",
+    "creatorName": "创建者姓名",
+    "pluginDesc": "插件说明",
+    "close": "关闭",
+    "register": "登记",
+    "pName": "例如：捐赠",
+    "cName": "例如：约翰·多伊",
+    "pDesc": "此插件启用 UI"
+  },
+  "addOnStore": {
+    "searchName": "例如：捐赠",
+    "enable": "启用",
+    "disable": "残疾人",
+    "pHeading": "插件",
+    "install": "已安装",
+    "available": "可用的",
+    "pMessage": "插件不存在”",
+    "filter": "过滤器",
+    "search": "搜索"
+  },
+  "addOnEntry": {
+    "enable": "启用",
+    "install": "安装",
+    "uninstall": "卸载"
   }
 }

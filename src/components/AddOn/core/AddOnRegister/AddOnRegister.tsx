@@ -4,6 +4,7 @@ import styles from './AddOnRegister.module.css';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
 import { ADD_PLUGIN_MUTATION } from 'GraphQl/Mutations/mutations';
+import { useTranslation } from 'react-i18next';
 
 interface AddOnRegisterProps {
   id?: string; // OrgId
@@ -21,6 +22,8 @@ const currentUrl = window.location.href.split('=')[1];
 console.log(currentUrl);
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
+  const { t } = useTranslation('translation', { keyPrefix: 'addOnRegister' });
+
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -61,20 +64,20 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
         onClick={handleShow}
       >
         <i className="fa fa-plus"></i>
-        Add New
+        {t('addNew')}
       </Button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Add Plugin</Modal.Title>
+          <Modal.Title> {t('addPlugin')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3" controlId="registerForm.PluginName">
-              <Form.Label>Plugin Name</Form.Label>
+              <Form.Label>{t('pluginName')}</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Ex. Donations"
+                placeholder={t('pName')}
                 autoComplete="off"
                 required
                 value={formState.pluginName}
@@ -87,10 +90,10 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="registerForm.PluginName">
-              <Form.Label>Creator Name</Form.Label>
+              <Form.Label>{t('creatorName')}</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Ex. Mr John Doe"
+                placeholder={t('cName')}
                 autoComplete="off"
                 required
                 value={formState.pluginCreatedBy}
@@ -103,12 +106,12 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="registerForm.PluginURL">
-              <Form.Label>Plugin Description</Form.Label>
+              <Form.Label>{t('pluginDesc')}</Form.Label>
               <Form.Control
                 // type="text"
                 rows={3}
                 as="textarea"
-                placeholder="Ex. This plugin provides UI for ...."
+                placeholder={t('pDesc')}
                 required
                 value={formState.pluginDesc}
                 onChange={(e) => {
@@ -127,14 +130,14 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
             onClick={handleClose}
             data-testid="addonclose"
           >
-            Close
+            {t('close')}
           </Button>
           <Button
             variant="primary"
             onClick={handleRegister}
             data-testid="addonregister"
           >
-            Register
+            {t('register')}
           </Button>
         </Modal.Footer>
       </Modal>
