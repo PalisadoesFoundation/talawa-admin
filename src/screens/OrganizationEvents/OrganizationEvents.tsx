@@ -18,6 +18,7 @@ import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { RootState } from 'state/reducers';
 import PaginationList from 'components/PaginationList/PaginationList';
 import debounce from 'utils/debounce';
+import dayjs from 'dayjs';
 
 function OrganizationEvents(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -43,8 +44,8 @@ function OrganizationEvents(): JSX.Element {
     eventdescrip: '',
     date: '',
     location: '',
-    startTime: '',
-    endTime: '',
+    startTime: '08:00:00',
+    endTime: '18:00:00',
   });
   const currentUrl = window.location.href.split('=')[1];
 
@@ -83,12 +84,12 @@ function OrganizationEvents(): JSX.Element {
           recurring: recurringchecked,
           isRegisterable: registrablechecked,
           organizationId: currentUrl,
-          startDate: startDate?.toDateString(),
-          endDate: endDate?.toDateString(),
+          startDate: dayjs(startDate).format('YYYY-MM-DD'),
+          endDate: dayjs(endDate).format('YYYY-MM-DD'),
           allDay: alldaychecked,
           location: formState.location,
-          startTime: formState.startTime,
-          endTime: formState.endTime,
+          startTime: !alldaychecked ? formState.startTime + 'Z' : null,
+          endTime: !alldaychecked ? formState.endTime + 'Z' : null,
         },
       });
 
@@ -101,8 +102,8 @@ function OrganizationEvents(): JSX.Element {
           eventdescrip: '',
           date: '',
           location: '',
-          startTime: '',
-          endTime: '',
+          startTime: '08:00:00',
+          endTime: '18:00:00',
         });
       }
     } catch (error: any) {
