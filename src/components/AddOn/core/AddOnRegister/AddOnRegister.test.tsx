@@ -39,27 +39,17 @@ describe('Testing AddOnRegister', () => {
         </Provider>
       </ApolloProvider>
     );
-    userEvent.click(screen.getByRole('button', { name: /add new/i }));
-    userEvent.type(screen.getByPlaceholderText('Ex. Donations'), 'myplugin');
-    userEvent.type(
-      screen.getByPlaceholderText('Ex. This plugin provides UI for ....'),
-      'test description'
-    );
-    userEvent.type(
-      screen.getByPlaceholderText('Ex. Mr John Doe'),
-      'test creator'
-    );
+    userEvent.click(screen.getByRole('button', { name: /addnew/i }));
+    userEvent.type(screen.getByPlaceholderText(/pName/i), 'myplugin');
+    userEvent.type(screen.getByPlaceholderText(/pDesc/i), 'test description');
+    userEvent.type(screen.getByPlaceholderText(/cName/i), 'test creator');
     userEvent.click(screen.getByTestId('addonregister'));
     userEvent.click(screen.getByTestId('addonclose'));
 
-    expect(screen.getByPlaceholderText('Ex. Donations')).toHaveValue(
-      'myplugin'
+    expect(screen.getByPlaceholderText(/pName/i)).toHaveValue('myplugin');
+    expect(screen.getByPlaceholderText(/pDesc/i)).toHaveValue(
+      'test description'
     );
-    expect(
-      screen.getByPlaceholderText('Ex. This plugin provides UI for ....')
-    ).toHaveValue('test description');
-    expect(screen.getByPlaceholderText('Ex. Mr John Doe')).toHaveValue(
-      'test creator'
-    );
+    expect(screen.getByPlaceholderText(/cName/i)).toHaveValue('test creator');
   });
 });
