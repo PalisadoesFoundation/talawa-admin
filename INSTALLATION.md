@@ -73,7 +73,11 @@ Follow the instructions from section [Setting up REACT_APP_TALAWA_URL in .env fi
 
 Refer to to the `REACT_APP_TALAWA_URL` section in the INSTALLATION.md file found in the [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api).
 
-Copy/paste the endpoint for accessing talawa-api graphql service to the variable named `REACT_APP_TALAWA_URL` in `.env` file.
+Add the endpoint for accessing talawa-api graphql service to the variable named `REACT_APP_TALAWA_URL` in the `.env` file. 
+
+    REACT_APP_TALAWA_URL="http://API-IP-ADRESS:4000/graphql/"
+
+If you are a software developer working on your local system, then the URL would be:
 
     REACT_APP_TALAWA_URL="http://localhost:4000/graphql/"
 
