@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
@@ -8,7 +8,7 @@ import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 
 import OrganizationEvents from './OrganizationEvents';
-import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_EVENT_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { store } from 'state/store';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
@@ -16,11 +16,17 @@ import i18nForTest from 'utils/i18nForTest';
 const MOCKS = [
   {
     request: {
-      query: ORGANIZATION_EVENT_LIST,
+      query: ORGANIZATION_EVENT_CONNECTION_LIST,
+      variables: {
+        organization_id: undefined,
+        title_contains: '',
+        description_contains: '',
+        location_contains: '',
+      },
     },
     result: {
       data: {
-        eventsByOrganization: [
+        eventsByOrganizationConnection: [
           {
             _id: 1,
             title: 'Event',
@@ -76,6 +82,7 @@ describe('Organisation Events Page', () => {
   const searchData = {
     byTitle: 'Dummy title',
     byDescription: 'This is a dummy description',
+    byLocation: 'New Delhi',
   };
 
   const formData = {
@@ -91,7 +98,7 @@ describe('Organisation Events Page', () => {
   global.alert = jest.fn();
 
   test('It is necessary to query the correct mock data.', async () => {
-    const dataQuery1 = MOCKS[0]?.result?.data?.eventsByOrganization;
+    const dataQuery1 = MOCKS[0]?.result?.data?.eventsByOrganizationConnection;
 
     expect(dataQuery1).toEqual([
       {
@@ -131,6 +138,7 @@ describe('Organisation Events Page', () => {
     expect(container.textContent).toMatch('Events');
     expect(container.textContent).toMatch('Filter by Title');
     expect(container.textContent).toMatch('Filter by Description');
+    expect(container.textContent).toMatch('Filter by Location');
     expect(container.textContent).toMatch('Events');
     expect(window.location).toBeAt('/orglist');
   });
@@ -171,10 +179,17 @@ describe('Organisation Events Page', () => {
       screen.getByTestId('serachByDescription'),
       searchData.byDescription
     );
+    userEvent.type(
+      screen.getByTestId('searchByLocation'),
+      searchData.byLocation
+    );
 
     expect(screen.getByTestId('serachByTitle')).toHaveValue(searchData.byTitle);
     expect(screen.getByTestId('serachByDescription')).toHaveValue(
       searchData.byDescription
+    );
+    expect(screen.getByTestId('searchByLocation')).toHaveValue(
+      searchData.byLocation
     );
   });
 
@@ -228,15 +243,24 @@ describe('Organisation Events Page', () => {
       screen.getByPlaceholderText(/Enter Location/i),
       formData.location
     );
+
+    const endDateDatePicker = screen.getByPlaceholderText(/End Date/i);
+    const startDateDatePicker = screen.getByPlaceholderText(/Start Date/i);
+
+    fireEvent.click(endDateDatePicker);
+    fireEvent.click(startDateDatePicker);
+
     await act(async () => {
-      userEvent.type(
-        screen.getByPlaceholderText(/Start Date/i),
-        formData.startDate
-      );
-      userEvent.type(
-        screen.getByPlaceholderText(/End Date/i),
-        formData.endDate
-      );
+      fireEvent.change(endDateDatePicker, {
+        target: {
+          value: formData.endDate,
+        },
+      });
+      fireEvent.change(startDateDatePicker, {
+        target: {
+          value: formData.startDate,
+        },
+      });
     });
     userEvent.click(screen.getByTestId('alldayCheck'));
     userEvent.click(screen.getByTestId('recurringCheck'));
@@ -252,6 +276,8 @@ describe('Organisation Events Page', () => {
       formData.description
     );
 
+    expect(endDateDatePicker).toHaveValue(formData.endDate);
+    expect(startDateDatePicker).toHaveValue(formData.startDate);
     expect(screen.getByTestId('alldayCheck')).not.toBeChecked();
     expect(screen.getByTestId('recurringCheck')).toBeChecked();
     expect(screen.getByTestId('ispublicCheck')).not.toBeChecked();
