@@ -9,6 +9,9 @@
 }
 .toporgname {
   font-size: 24px;
+  border-bottom: 3px solid #31bb6b;
+  color: #707070;
+  font-weight: 600;
 }
 .toporgloc {
   padding-top: 8px;
@@ -44,7 +47,6 @@
   font-size: 20px;
   margin-bottom: 30px;
   padding-bottom: 5px;
-  border-bottom: 3px solid #31bb6b;
   width: 26%;
 }
 

@@ -91,14 +91,22 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
     window.location.replace('/orglist');
   }
 
+  let OrgName;
+  if (data) {
+    OrgName = data.organizations[0].name;
+  }
+
   return (
     <>
       <Navbar className={styles.navbarbg} expand="xl" fixed="top">
         <Navbar.Brand className={styles.navbarBrandLogo}>
-          <Link className={styles.logo} to="/orglist">
-            <img src={Logo} />
-            <strong>{t('talawa_portal')}</strong>
-          </Link>
+          <div className={styles.logo}>
+            <img
+              className={styles.roundedcircle}
+              src="https://via.placeholder.com/45x45"
+            />
+            <strong>{OrgName}</strong>
+          </div>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
@@ -153,6 +161,9 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
               );
             })}
           </Nav>
+          <Link className={styles.allOrgBtn} to="/orglist">
+            All Organizations
+          </Link>
           <Nav className="ml-auto ">
             <div className={styles.notificationIcon}>
               <IconButton
@@ -184,7 +195,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                   />
                 ) : (
                   <img
-                    src="https://via.placeholder.com/45x45"
+                    src={Logo}
                     className={styles.roundedcircle}
                     data-testid="navbarOrgImageAbsent"
                   />

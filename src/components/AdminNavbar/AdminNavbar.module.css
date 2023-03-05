@@ -51,9 +51,9 @@ a {
 .logo > strong {
   text-decoration: none;
   line-height: 1.5rem;
-  margin-left: -5px;
+  margin-left: 10px;
   font-family: sans-serif;
-  font-size: 19px;
+  font-size: 24px;
   color: #707070;
 }
 .userimage {
@@ -205,4 +205,19 @@ a {
 
 .navbarBrandLogo {
   padding: 0;
+}
+
+.allOrgBtn {
+  margin-left: 10px;
+  background-color: #31bb6b;
+  padding: 5px 10px;
+  color: white;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.allOrgBtn:hover {
+  color: #fff;
+  background-color: #1e7e34;
+  border-color: #1c7430;
 }

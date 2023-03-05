@@ -37,8 +37,8 @@ function EventListCard(props: EventListCardProps): JSX.Element {
     title: '',
     eventdescrip: '',
     location: '',
-    startTime: '',
-    endTime: '',
+    startTime: '08:00:00',
+    endTime: '18:00:00',
   });
 
   useEffect(() => {
@@ -46,8 +46,8 @@ function EventListCard(props: EventListCardProps): JSX.Element {
       title: props.eventName,
       eventdescrip: props.eventDescription,
       location: props.eventLocation,
-      startTime: props.startTime,
-      endTime: props.endTime,
+      startTime: props.startTime?.split('.')[0] || '08:00:00',
+      endTime: props.endTime?.split('.')[0] || '18:00:00',
     });
 
     setAllDayChecked(props.allDay);
@@ -92,8 +92,8 @@ function EventListCard(props: EventListCardProps): JSX.Element {
           isRegisterable: registrablechecked,
           allDay: alldaychecked,
           location: formState.location,
-          startTime: formState.startTime,
-          endTime: formState.endTime,
+          startTime: !alldaychecked ? formState.startTime + 'Z' : null,
+          endTime: !alldaychecked ? formState.endTime + 'Z' : null,
         },
       });
 
