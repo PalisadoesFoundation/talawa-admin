@@ -376,6 +376,21 @@ form>input {
 
 /* User page */
 
+
+.memberfontcreatedbtn {
+  border-radius: 7px;
+  border-color: #31bb6b;
+  background-color: #31bb6b;
+  color: white;
+  padding-right: 10px;
+  padding-left: 10px;
+  justify-content: flex-end;
+  float: right;
+  text-align: right;
+  box-shadow: none;
+  height: 2.5rem;
+}
+
 .userImage {
   width: 200px;
   height: 200px;
@@ -389,11 +404,13 @@ form>input {
   color: #fff;
   border: 1px solid #31bb6b;
   background-color: #31bb6b;
+  transition: 0.5s;
 }
 
 .activeBtn:hover {
   color: #fff;
   background: #23864c;
+  transition: 0.5s;
 }
 
 .inactiveBtn {
@@ -402,11 +419,13 @@ form>input {
   color: #31bb6b;
   border: 1px solid #31bb6a60;
   background-color: #fff;
+  transition: 0.5s;
 }
 
 .inactiveBtn:hover {
   color: #fff;
   background: #31bb6b;
+  transition: 0.5s;
 }
 
 .sidebarsticky>button {

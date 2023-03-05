@@ -1,5 +1,5 @@
 import React from 'react';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +11,8 @@ import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { RootState } from 'state/reducers';
 import styles from './MemberDetail.module.css';
 import { languages } from 'utils/languages';
+import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
+import { toast } from 'react-toastify';
 
 type MemberDetailProps = {
   id: string; // This is the userId
@@ -22,12 +24,13 @@ function MemberDetail(): JSX.Element {
   });
 
   const location = useLocation<MemberDetailProps>();
-
+  const currentUrl = window.location.href.split('=')[1];
   document.title = t('title');
 
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
 
+  const [adda] = useMutation(ADD_ADMIN_MUTATION);
   const {
     data: data,
     loading: loading,
@@ -49,6 +52,26 @@ function MemberDetail(): JSX.Element {
     console.error(error);
     // window.location.assign('/orglist');
   }
+
+  const AddAdmin = async () => {
+    try {
+      const { data } = await adda({
+        variables: {
+          userid: location.state?.id,
+          orgid: currentUrl,
+        },
+      });
+
+      /* istanbul ignore next */
+      if (data) {
+        window.alert('User is added as admin.');
+        window.location.reload();
+      }
+    } catch (error: any) {
+      /* istanbul ignore next */
+      toast.error(error.message);
+    }
+  };
 
   const prettyDate = (param: string): string => {
     try {
@@ -102,6 +125,12 @@ function MemberDetail(): JSX.Element {
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>{t('title')}</p>
+              <button
+                className={styles.memberfontcreatedbtn}
+                onClick={AddAdmin}
+              >
+                {t('addAdmin')}
+              </button>
             </Row>
             <Row className={styles.justifysp}>
               <Col sm={6} lg={4}>

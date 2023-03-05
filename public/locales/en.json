@@ -337,5 +337,9 @@
     "enable": "Enabled",
     "install": "Install",
     "uninstall": "Uninstall"
+  },
+  "memberDetail":{
+    "title": "User Details",
+    "addAdmin": "Add Admin"
   }
 }

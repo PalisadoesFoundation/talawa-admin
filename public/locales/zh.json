@@ -337,5 +337,9 @@
     "enable": "启用",
     "install": "安装",
     "uninstall": "卸载"
+  },
+  "memberDetail":{
+    "title": "用户详细信息",
+    "addAdmin": "添加管理員"
   }
 }
