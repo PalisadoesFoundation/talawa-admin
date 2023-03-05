@@ -48,7 +48,6 @@ export const MOCKS = [
               lastName: 'Smith',
               email: 'stevesmith@gmail.com',
             },
-            tags: ['Shelter', 'NGO', 'Open Source'],
             isPublic: true,
             visibleInSearch: false,
             spamCount: [
@@ -134,7 +133,6 @@ export const MOCKS_WITH_IMAGE = [
               lastName: 'Smith',
               email: 'stevesmith@gmail.com',
             },
-            tags: ['Shelter', 'NGO', 'Open Source'],
             isPublic: true,
             visibleInSearch: false,
             spamCount: [

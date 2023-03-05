@@ -125,7 +125,6 @@ export const ORGANIZATIONS_LIST = gql`
         lastName
         email
       }
-      tags
     }
   }
 `;
