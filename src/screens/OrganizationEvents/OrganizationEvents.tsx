@@ -226,46 +226,42 @@ function OrganizationEvents(): JSX.Element {
             </Row>
             <div className={`row ${styles.list_box}`}>
               {data
-                ? (rowsPerPage > 0
-                    ? data.eventsByOrganizationConnection.slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
-                      )
-                    : data.eventsByOrganizationConnection
-                  ).map(
-                    (datas: {
-                      _id: string;
-                      title: string;
-                      description: string;
-                      startDate: string;
-                      endDate: string;
-                      location: string;
-                      startTime: string;
-                      endTime: string;
-                      allDay: boolean;
-                      recurring: boolean;
-                      isPublic: boolean;
-                      isRegisterable: boolean;
-                    }) => {
-                      return (
-                        <EventListCard
-                          key={datas._id}
-                          id={datas._id}
-                          eventLocation={datas.location}
-                          eventName={datas.title}
-                          eventDescription={datas.description}
-                          regDate={datas.startDate}
-                          regEndDate={datas.endDate}
-                          startTime={datas.startTime}
-                          endTime={datas.endTime}
-                          allDay={datas.allDay}
-                          recurring={datas.recurring}
-                          isPublic={datas.isPublic}
-                          isRegisterable={datas.isRegisterable}
-                        />
-                      );
-                    }
-                  )
+                ? data.eventsByOrganizationConnection
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map(
+                      (datas: {
+                        _id: string;
+                        title: string;
+                        description: string;
+                        startDate: string;
+                        endDate: string;
+                        location: string;
+                        startTime: string;
+                        endTime: string;
+                        allDay: boolean;
+                        recurring: boolean;
+                        isPublic: boolean;
+                        isRegisterable: boolean;
+                      }) => {
+                        return (
+                          <EventListCard
+                            key={datas._id}
+                            id={datas._id}
+                            eventLocation={datas.location}
+                            eventName={datas.title}
+                            eventDescription={datas.description}
+                            regDate={datas.startDate}
+                            regEndDate={datas.endDate}
+                            startTime={datas.startTime}
+                            endTime={datas.endTime}
+                            allDay={datas.allDay}
+                            recurring={datas.recurring}
+                            isPublic={datas.isPublic}
+                            isRegisterable={datas.isRegisterable}
+                          />
+                        );
+                      }
+                    )
                 : null}
             </div>
           </div>
