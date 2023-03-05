@@ -342,7 +342,7 @@
     "title": "उपयोगकर्ता विवरण",
     "addAdmin": "व्यवस्थापक जोड़ें",
     "organizations": "संगठन",
-    "events": "घटनाएँ",
+    "events": "घटनाएं",
     "role": "भूमिका",
     "email": "ईमेल",
     "createdOn": "पर बनाया गया",
@@ -351,13 +351,12 @@
     "lastName": "अंतिम नाम",
     "memberOfOrganization": "संगठन का सदस्य",
     "language": "भाषा",
-    "adminApproved": "व्यवस्थापक स्वीकृत",
+    "adminApproved": "व्यवस्थापक द्वारा स्वीकृत",
     "pluginCreationAllowed": "प्लगइन निर्माण अनुमति दी गई",
-    "organizationsCreated": "संगठन बनाया गया",
-    "organizationsJoined": "संगठन में शामिल हुए",
+    "joined": "शामिल हुए",
+    "created": "बनाया गया",
     "adminForOrganizations": "संगठनों के लिए व्यवस्थापक",
     "membershipRequests": "सदस्यता अनुरोध",
-    "eventsCreated": "घटनाएँ बनाई गईं",
-    "eventsJoined": "घटनाओं में शामिल हुए"
+    "adminForEvents": "घटनाओं के लिए व्यवस्थापक"
   }
 }

@@ -348,16 +348,15 @@
     "createdOn": "Créé le",
     "main": "Principal",
     "firstName": "Prénom",
-    "lastName": "Nom",
+    "lastName": "Nom de famille",
     "memberOfOrganization": "Membre de l'organisation",
     "language": "Langue",
-    "adminApproved": "Administrateur approuvé",
-    "pluginCreationAllowed": "Autorisation de création de plug-in",
-    "organizationsCreated": "Organisation créée",
-    "organizationsJoined": "Organisation rejointe",
+    "adminApproved": "Approuvé par l'administrateur",
+    "pluginCreationAllowed": "Autorisation de création de plugin",
+    "joined": "Rejoint",
+    "created": "Créé",
     "adminForOrganizations": "Administrateur pour les organisations",
     "membershipRequests": "Demandes d'adhésion",
-    "eventsCreated": "Événements créés",
-    "eventsJoined": "Événements rejoints"
+    "adminForEvents": "Administrateur pour les événements"
   }
 }

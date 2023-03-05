@@ -339,8 +339,8 @@
     "uninstall": "Desinstalar"
   },
   "memberDetail": {
-    "title": "Detalles del Usuario",
-    "addAdmin": "Agregar Administrador",
+    "title": "Detalles del usuario",
+    "addAdmin": "Agregar administrador",
     "organizations": "Organizaciones",
     "events": "Eventos",
     "role": "Rol",
@@ -353,11 +353,10 @@
     "language": "Idioma",
     "adminApproved": "Aprobado por el administrador",
     "pluginCreationAllowed": "Permitir creación de complementos",
-    "organizationsCreated": "Organización creada",
-    "organizationsJoined": "Unido a la organización",
+    "joined": "Unido",
+    "created": "Creado",
     "adminForOrganizations": "Administrador de organizaciones",
     "membershipRequests": "Solicitudes de membresía",
-    "eventsCreated": "Eventos creados",
-    "eventsJoined": "Eventos unidos"
+    "adminForEvents": "Administrador de eventos"
   }
 }

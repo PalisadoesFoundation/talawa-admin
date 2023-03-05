@@ -339,25 +339,24 @@
     "uninstall": "卸载"
   },
   "memberDetail": {
-    "title": "用户详情",
+    "title": "用户详细信息",
     "addAdmin": "添加管理员",
     "organizations": "组织",
     "events": "事件",
     "role": "角色",
-    "email": "邮箱",
+    "email": "电子邮件",
     "createdOn": "创建于",
-    "main": "主要",
+    "main": "主要的",
     "firstName": "名字",
     "lastName": "姓氏",
     "memberOfOrganization": "组织成员",
     "language": "语言",
-    "adminApproved": "管理员批准",
-    "pluginCreationAllowed": "允许插件创建",
-    "organizationsCreated": "创建的组织",
-    "organizationsJoined": "加入的组织",
+    "adminApproved": "管理员已批准",
+    "pluginCreationAllowed": "允许创建插件",
+    "joined": "加入",
+    "created": "创建",
     "adminForOrganizations": "组织管理员",
-    "membershipRequests": "成员请求",
-    "eventsCreated": "创建的事件",
-    "eventsJoined": "加入的事件"
+    "membershipRequests": "会员申请",
+    "adminForEvents": "事件管理员"
   }
 }

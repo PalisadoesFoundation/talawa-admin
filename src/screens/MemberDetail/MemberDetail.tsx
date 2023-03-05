@@ -49,8 +49,7 @@ function MemberDetail(): JSX.Element {
 
   /* istanbul ignore next */
   if (error) {
-    console.error(error);
-    // window.location.assign('/orglist');
+    window.location.assign(`/orgpeople/id=${currentUrl}`);
   }
 
   const AddAdmin = async () => {
