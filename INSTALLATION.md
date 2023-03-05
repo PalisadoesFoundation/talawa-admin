@@ -179,8 +179,3 @@ This is done to improve developer experience and to make sure that your commits 
 ```
 git commit -m "Commit message" --no-verify
 ```
-
-
-## Setting up Talawa-Admin and API for Talawa App
-
-Talawa mobile app requires [talawa-api](https://github.com/PalisadoesFoundation/talawa-api) running locally or remotely, which will be used as an `organisation url`.
