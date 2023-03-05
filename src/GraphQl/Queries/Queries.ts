@@ -198,28 +198,41 @@ export const USER_ORGANIZATION_LIST = gql`
 export const USER_DETAILS = gql`
   query User($id: ID!) {
     user(id: $id) {
+      image
       firstName
       lastName
       email
-      image
       appLanguageCode
+      userType
       pluginCreationAllowed
       adminApproved
       createdAt
+      adminFor {
+        _id
+      }
       createdOrganizations {
         _id
-        name
-        image
       }
       joinedOrganizations {
         _id
-        name
-        image
       }
       organizationUserBelongsTo {
         _id
-        name
-        image
+      }
+      organizationsBlockedBy {
+        _id
+      }
+      createdEvents {
+        _id
+      }
+      registeredEvents {
+        _id
+      }
+      eventAdmin {
+        _id
+      }
+      membershipRequests {
+        _id
       }
     }
   }

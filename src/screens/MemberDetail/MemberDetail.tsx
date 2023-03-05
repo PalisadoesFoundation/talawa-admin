@@ -10,6 +10,7 @@ import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { RootState } from 'state/reducers';
 import styles from './MemberDetail.module.css';
+import { languages } from 'utils/languages';
 
 type MemberDetailProps = {
   id: string; // This is the userId
@@ -58,6 +59,16 @@ function MemberDetail(): JSX.Element {
     }
   };
 
+  const getLanguageName = (code: string): string => {
+    let language = 'Unavailable';
+    languages.map((data) => {
+      if (data.code == code) {
+        language = data.name;
+      }
+    });
+    return language;
+  };
+
   return (
     <>
       <AdminNavbar targets={targets} url_1={configUrl} />
@@ -94,16 +105,16 @@ function MemberDetail(): JSX.Element {
               <Col sm={6} lg={8}>
                 {/* User section */}
                 <div>
-                  <h2 className="mb-3">
-                    {data?.user.firstName} {data.user.lastName}
+                  <h2 className="mt-3 mb-4">
+                    <strong>
+                      {data?.user.firstName} {data.user.lastName}
+                    </strong>
                   </h2>
                   <p>
-                    {' '}
-                    <i className="fa text-success fa-envelope"></i>{' '}
-                    {data?.user?.email}
+                    <strong>Role :</strong> {data?.user?.__typename}
                   </p>
                   <p>
-                    <b>Role :</b> {data?.user?.__typename}
+                    <strong>Email :</strong> {data?.user?.email}
                   </p>
                   <p>
                     <b>Created on :</b> {prettyDate(data?.user?.createdAt)}
@@ -115,6 +126,122 @@ function MemberDetail(): JSX.Element {
                 </Row>
               </Col>
             </Row>
+            <br />
+            <br />
+            {/* Main Section And Activity section */}
+            <section className="mb-5">
+              <Row className={styles.justifysp}>
+                {/* Main Section */}
+                <Col sm={12} lg={6}>
+                  <div className="card mb-4">
+                    <div className="card-header">
+                      <h5>
+                        <strong>Main</strong>
+                      </h5>
+                    </div>
+                    <div className="card-body">
+                      <Row className="border-bottom pt-2 pb-3">
+                        <Col sm={6}>First Name</Col>
+                        <Col sm={6}>{data?.user?.firstName}</Col>
+                      </Row>
+                      <Row className="border-bottom py-3">
+                        <Col sm={6}>Last Name</Col>
+                        <Col sm={6}>{data?.user?.lastName}</Col>
+                      </Row>
+                      <Row className="border-bottom py-3">
+                        <Col sm={6}>Role</Col>
+                        <Col sm={6}>{data?.user?.__typename}</Col>
+                      </Row>
+                      <Row className="border-bottom py-3">
+                        <Col sm={6}>Member of Organization</Col>
+                        <Col sm={6}>
+                          {data?.user?.organizationUserBelongsTo ?? 'None'}
+                        </Col>
+                      </Row>
+                      <Row className="border-bottom py-3">
+                        <Col sm={6}>App language</Col>
+                        <Col sm={6}>
+                          {getLanguageName(data?.user?.appLanguageCode)}
+                        </Col>
+                      </Row>
+                      <Row className="border-bottom py-3">
+                        <Col sm={6}>Admin approved</Col>
+                        <Col sm={6}>
+                          {data?.user?.adminApproved ? 'True' : 'False'}
+                        </Col>
+                      </Row>
+                      <Row className="border-bottom py-3">
+                        <Col sm={6}>Plugin Creation allowed</Col>
+                        <Col sm={6}>
+                          {data?.user?.pluginCreationAllowed ? 'True' : 'False'}
+                        </Col>
+                      </Row>
+                      <Row className="pt-3">
+                        <Col sm={6}>Created on</Col>
+                        <Col sm={6}>{prettyDate(data?.user?.createdAt)}</Col>
+                      </Row>
+                    </div>
+                  </div>
+                </Col>
+                {/* Activity Section */}
+                <Col sm={12} lg={6}>
+                  {/* Organizations */}
+                  <div className="card">
+                    <div className="card-header">
+                      <h5>
+                        <strong>Organizations</strong>
+                      </h5>
+                    </div>
+                    <div className="card-body">
+                      <Row className="border-bottom pt-2 pb-3">
+                        <Col sm={8}>Organizations created</Col>
+                        <Col sm={4}>
+                          {data?.user?.createdOrganizations?.length}
+                        </Col>
+                      </Row>
+                      <Row className="border-bottom py-3">
+                        <Col sm={8}>Organizations joined</Col>
+                        <Col sm={4}>
+                          {data?.user?.joinedOrganizations?.length}
+                        </Col>
+                      </Row>
+                      <Row className="border-bottom py-3">
+                        <Col sm={8}>Admin for organizations</Col>
+                        <Col sm={4}>{data?.user?.adminFor?.length}</Col>
+                      </Row>
+                      <Row className="pt-3">
+                        <Col sm={8}>Membership Requests</Col>
+                        <Col sm={4}>
+                          {data?.user?.membershipRequests?.length}
+                        </Col>
+                      </Row>
+                    </div>
+                  </div>
+                  {/* Events */}
+                  <div className="card mt-4">
+                    <div className="card-header">
+                      <h5>
+                        <strong>Events</strong>
+                      </h5>
+                    </div>
+                    <div className="card-body">
+                      <Row className="border-bottom pt-2 pb-3">
+                        <Col sm={8}>Events created</Col>
+                        <Col sm={4}>
+                          {data?.user?.createdOrganizations?.length}
+                        </Col>
+                      </Row>
+                      <Row className="pt-3">
+                        <Col sm={8}>Events joined</Col>
+                        <Col sm={4}>
+                          {data?.user?.joinedOrganizations?.length}
+                        </Col>
+                      </Row>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+            </section>
           </div>
         </Col>
       </Row>
