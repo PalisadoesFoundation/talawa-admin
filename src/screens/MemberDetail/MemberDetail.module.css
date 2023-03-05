@@ -33,7 +33,7 @@
   background-color: #707070;
 
 } */
-.sidebarsticky>p {
+.sidebarsticky > p {
   margin-top: -10px;
 }
 
@@ -55,7 +55,7 @@
   width: 60%;
 }
 
-.sidebarsticky>input {
+.sidebarsticky > input {
   text-decoration: none;
   margin-bottom: 50px;
   border-color: #e8e5e5;
@@ -94,12 +94,12 @@
   justify-content: space-between;
 }
 
-.admindetails>p {
+.admindetails > p {
   margin-top: -12px;
   margin-right: 30px;
 }
 
-.mainpageright>hr {
+.mainpageright > hr {
   margin-top: 20px;
   width: 100%;
   margin-left: -15px;
@@ -194,7 +194,7 @@ form label {
   color: #707070;
 }
 
-form>input {
+form > input {
   display: block;
   margin-bottom: 20px;
   border: 1px solid #e8e5e5;
@@ -210,11 +210,11 @@ form>input {
   -o-transition: all 0.3s ease-in-out;
 }
 
-.checkboxdiv>label {
+.checkboxdiv > label {
   margin-right: 50px;
 }
 
-.checkboxdiv>label>input {
+.checkboxdiv > label > input {
   margin-left: 10px;
 }
 
@@ -222,13 +222,13 @@ form>input {
   margin-top: 5px;
 }
 
-.orgphoto>input {
+.orgphoto > input {
   margin-top: 10px;
   cursor: pointer;
   margin-bottom: 5px;
 }
 
-.cancel>i {
+.cancel > i {
   margin-top: 5px;
   transform: scale(1.2);
   cursor: pointer;
@@ -338,7 +338,7 @@ form>input {
   display: flex;
 }
 
-.dispflex>input {
+.dispflex > input {
   width: 20%;
   border: none;
   box-shadow: none;
@@ -349,7 +349,7 @@ form>input {
   display: flex;
 }
 
-.checkboxdiv>div {
+.checkboxdiv > div {
   width: 50%;
 }
 
@@ -375,7 +375,6 @@ form>input {
 }
 
 /* User page */
-
 
 .memberfontcreatedbtn {
   border-radius: 7px;
@@ -428,7 +427,7 @@ form>input {
   transition: 0.5s;
 }
 
-.sidebarsticky>button {
+.sidebarsticky > button {
   display: flex;
   align-items: center;
   text-align: start;

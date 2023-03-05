@@ -338,7 +338,7 @@
     "install": "स्थापित करना",
     "uninstall": "स्थापना रद्द करें"
   },
-  "memberDetail":{
+  "memberDetail": {
     "title": "उपयोगकर्ता विवरण",
     "addAdmin": "व्यवस्थापक जोड़ें"
   }

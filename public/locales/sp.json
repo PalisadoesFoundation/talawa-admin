@@ -338,7 +338,7 @@
     "install": "Instalar",
     "uninstall": "Desinstalar"
   },
-  "memberDetail":{
+  "memberDetail": {
     "title": "Detalles del usuario",
     "addAdmin": "Agregar administrador"
   }
