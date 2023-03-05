@@ -340,6 +340,24 @@
   },
   "memberDetail": {
     "title": "उपयोगकर्ता विवरण",
-    "addAdmin": "व्यवस्थापक जोड़ें"
+    "addAdmin": "व्यवस्थापक जोड़ें",
+    "organizations": "संगठन",
+    "events": "घटनाएँ",
+    "role": "भूमिका",
+    "email": "ईमेल",
+    "createdOn": "पर बनाया गया",
+    "main": "मुख्य",
+    "firstName": "पहला नाम",
+    "lastName": "अंतिम नाम",
+    "memberOfOrganization": "संगठन का सदस्य",
+    "language": "भाषा",
+    "adminApproved": "व्यवस्थापक स्वीकृत",
+    "pluginCreationAllowed": "प्लगइन निर्माण अनुमति दी गई",
+    "organizationsCreated": "संगठन बनाया गया",
+    "organizationsJoined": "संगठन में शामिल हुए",
+    "adminForOrganizations": "संगठनों के लिए व्यवस्थापक",
+    "membershipRequests": "सदस्यता अनुरोध",
+    "eventsCreated": "घटनाएँ बनाई गईं",
+    "eventsJoined": "घटनाओं में शामिल हुए"
   }
 }

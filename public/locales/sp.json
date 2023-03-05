@@ -339,7 +339,25 @@
     "uninstall": "Desinstalar"
   },
   "memberDetail": {
-    "title": "Detalles del usuario",
-    "addAdmin": "Agregar administrador"
+    "title": "Detalles del Usuario",
+    "addAdmin": "Agregar Administrador",
+    "organizations": "Organizaciones",
+    "events": "Eventos",
+    "role": "Rol",
+    "email": "Correo electrónico",
+    "createdOn": "Creado en",
+    "main": "Principal",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "memberOfOrganization": "Miembro de la organización",
+    "language": "Idioma",
+    "adminApproved": "Aprobado por el administrador",
+    "pluginCreationAllowed": "Permitir creación de complementos",
+    "organizationsCreated": "Organización creada",
+    "organizationsJoined": "Unido a la organización",
+    "adminForOrganizations": "Administrador de organizaciones",
+    "membershipRequests": "Solicitudes de membresía",
+    "eventsCreated": "Eventos creados",
+    "eventsJoined": "Eventos unidos"
   }
 }

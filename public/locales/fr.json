@@ -340,6 +340,24 @@
   },
   "memberDetail": {
     "title": "Détails de l'utilisateur",
-    "addAdmin": "Ajouter un administrateur"
+    "addAdmin": "Ajouter un administrateur",
+    "organizations": "Organisations",
+    "events": "Événements",
+    "role": "Rôle",
+    "email": "Email",
+    "createdOn": "Créé le",
+    "main": "Principal",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "memberOfOrganization": "Membre de l'organisation",
+    "language": "Langue",
+    "adminApproved": "Administrateur approuvé",
+    "pluginCreationAllowed": "Autorisation de création de plug-in",
+    "organizationsCreated": "Organisation créée",
+    "organizationsJoined": "Organisation rejointe",
+    "adminForOrganizations": "Administrateur pour les organisations",
+    "membershipRequests": "Demandes d'adhésion",
+    "eventsCreated": "Événements créés",
+    "eventsJoined": "Événements rejoints"
   }
 }

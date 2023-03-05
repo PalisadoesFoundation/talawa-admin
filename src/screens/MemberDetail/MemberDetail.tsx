@@ -104,19 +104,19 @@ function MemberDetail(): JSX.Element {
                 <div className={styles.bgFill}>
                   <i className="fa fa-user" />
                 </div>
-                User profile
+                {t('title')}
               </button>
               <button className={styles.inactiveBtn}>
                 <div className={styles.bgFill}>
                   <i className="fa fa-building" />
                 </div>
-                Organizations
+                {t('organizations')}
               </button>
               <button className={styles.inactiveBtn}>
                 <div className={styles.bgFill}>
                   <i className="fa fa-calendar" />
                 </div>
-                Events
+                {t('events')}
               </button>
             </div>
           </div>
@@ -136,10 +136,7 @@ function MemberDetail(): JSX.Element {
               <Col sm={6} lg={4}>
                 <div>
                   {data?.user.image ? (
-                    <img
-                      className={styles.userImage}
-                      src="https://m.media-amazon.com/images/M/MV5BNWZlM2IwMzYtYjM4MS00YTZhLTk2OWUtNWI2M2VmM2Y1ODRkXkEyXkFqcGdeQXVyMzQ3Nzk5MTU@._V1_.jpg"
-                    />
+                    <img className={styles.userImage} src={data?.user?.image} />
                   ) : (
                     <img
                       className={styles.userImage}
@@ -157,21 +154,19 @@ function MemberDetail(): JSX.Element {
                     </strong>
                   </h2>
                   <p>
-                    <strong>Role :</strong> {data?.user?.__typename}
+                    <strong>{t('role')} :</strong> {data?.user?.__typename}
                   </p>
                   <p>
-                    <strong>Email :</strong> {data?.user?.email}
+                    <strong>{t('email')} :</strong> {data?.user?.email}
                   </p>
                   <p>
-                    <b>Created on :</b> {prettyDate(data?.user?.createdAt)}
+                    <b>{t('createdOn')} :</b>{' '}
+                    {prettyDate(data?.user?.createdAt)}
                   </p>
                 </div>
-                <Row>
-                  <Col sm={6}></Col>
-                  <Col sm={6}></Col>
-                </Row>
               </Col>
             </Row>
+            <br />
             <br />
             <br />
             {/* Main Section And Activity section */}
@@ -182,48 +177,48 @@ function MemberDetail(): JSX.Element {
                   <div className="card mb-4">
                     <div className="card-header">
                       <h5>
-                        <strong>Main</strong>
+                        <strong>{t('main')}</strong>
                       </h5>
                     </div>
                     <div className="card-body">
                       <Row className="border-bottom pt-2 pb-3">
-                        <Col sm={6}>First Name</Col>
+                        <Col sm={6}>{t('firstName')}</Col>
                         <Col sm={6}>{data?.user?.firstName}</Col>
                       </Row>
                       <Row className="border-bottom py-3">
-                        <Col sm={6}>Last Name</Col>
+                        <Col sm={6}>{t('lastName')}</Col>
                         <Col sm={6}>{data?.user?.lastName}</Col>
                       </Row>
                       <Row className="border-bottom py-3">
-                        <Col sm={6}>Role</Col>
+                        <Col sm={6}>{t('role')}</Col>
                         <Col sm={6}>{data?.user?.__typename}</Col>
                       </Row>
                       <Row className="border-bottom py-3">
-                        <Col sm={6}>Member of Organization</Col>
+                        <Col sm={6}>{t('memberOfOrganization')}</Col>
                         <Col sm={6}>
                           {data?.user?.organizationUserBelongsTo ?? 'None'}
                         </Col>
                       </Row>
                       <Row className="border-bottom py-3">
-                        <Col sm={6}>App language</Col>
+                        <Col sm={6}>{t('language')}</Col>
                         <Col sm={6}>
                           {getLanguageName(data?.user?.appLanguageCode)}
                         </Col>
                       </Row>
                       <Row className="border-bottom py-3">
-                        <Col sm={6}>Admin approved</Col>
+                        <Col sm={6}>{t('adminApproved')}</Col>
                         <Col sm={6}>
                           {data?.user?.adminApproved ? 'True' : 'False'}
                         </Col>
                       </Row>
                       <Row className="border-bottom py-3">
-                        <Col sm={6}>Plugin Creation allowed</Col>
+                        <Col sm={6}>{t('pluginCreationAllowed')}</Col>
                         <Col sm={6}>
                           {data?.user?.pluginCreationAllowed ? 'True' : 'False'}
                         </Col>
                       </Row>
                       <Row className="pt-3">
-                        <Col sm={6}>Created on</Col>
+                        <Col sm={6}>{t('createdOn')}</Col>
                         <Col sm={6}>{prettyDate(data?.user?.createdAt)}</Col>
                       </Row>
                     </div>
@@ -235,28 +230,28 @@ function MemberDetail(): JSX.Element {
                   <div className="card">
                     <div className="card-header">
                       <h5>
-                        <strong>Organizations</strong>
+                        <strong>{t('organizations')}</strong>
                       </h5>
                     </div>
                     <div className="card-body">
                       <Row className="border-bottom pt-2 pb-3">
-                        <Col sm={8}>Organizations created</Col>
+                        <Col sm={8}>{t('created')}</Col>
                         <Col sm={4}>
                           {data?.user?.createdOrganizations?.length}
                         </Col>
                       </Row>
                       <Row className="border-bottom py-3">
-                        <Col sm={8}>Organizations joined</Col>
+                        <Col sm={8}>{t('joined')}</Col>
                         <Col sm={4}>
                           {data?.user?.joinedOrganizations?.length}
                         </Col>
                       </Row>
                       <Row className="border-bottom py-3">
-                        <Col sm={8}>Admin for organizations</Col>
+                        <Col sm={8}>{t('adminForOrganizations')}</Col>
                         <Col sm={4}>{data?.user?.adminFor?.length}</Col>
                       </Row>
                       <Row className="pt-3">
-                        <Col sm={8}>Membership Requests</Col>
+                        <Col sm={8}>{t('membershipRequests')}</Col>
                         <Col sm={4}>
                           {data?.user?.membershipRequests?.length}
                         </Col>
@@ -267,21 +262,21 @@ function MemberDetail(): JSX.Element {
                   <div className="card mt-4">
                     <div className="card-header">
                       <h5>
-                        <strong>Events</strong>
+                        <strong>{t('events')}</strong>
                       </h5>
                     </div>
                     <div className="card-body">
                       <Row className="border-bottom pt-2 pb-3">
-                        <Col sm={8}>Events created</Col>
-                        <Col sm={4}>
-                          {data?.user?.createdOrganizations?.length}
-                        </Col>
+                        <Col sm={8}>{t('created')}</Col>
+                        <Col sm={4}>{data?.user?.createdEvents?.length}</Col>
+                      </Row>
+                      <Row className="border-bottom py-3">
+                        <Col sm={8}>{t('joined')}</Col>
+                        <Col sm={4}>{data?.user?.registeredEvents?.length}</Col>
                       </Row>
                       <Row className="pt-3">
-                        <Col sm={8}>Events joined</Col>
-                        <Col sm={4}>
-                          {data?.user?.joinedOrganizations?.length}
-                        </Col>
+                        <Col sm={8}>{t('adminForEvents')}</Col>
+                        <Col sm={4}>{data?.user?.eventAdmin?.length}</Col>
                       </Row>
                     </div>
                   </div>
