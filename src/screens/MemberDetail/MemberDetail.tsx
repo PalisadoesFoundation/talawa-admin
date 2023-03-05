@@ -76,8 +76,25 @@ function MemberDetail(): JSX.Element {
         <Col sm={3}>
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
-              <h4>User</h4>
-              <pre>{JSON.stringify(data.user, null, 4)}</pre>
+              <br />
+              <button className={styles.activeBtn}>
+                <div className={styles.bgFill}>
+                  <i className="fa fa-user" />
+                </div>
+                User profile
+              </button>
+              <button className={styles.inactiveBtn}>
+                <div className={styles.bgFill}>
+                  <i className="fa fa-building" />
+                </div>
+                Organizations
+              </button>
+              <button className={styles.inactiveBtn}>
+                <div className={styles.bgFill}>
+                  <i className="fa fa-calendar" />
+                </div>
+                Events
+              </button>
             </div>
           </div>
         </Col>
