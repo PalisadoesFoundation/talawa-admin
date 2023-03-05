@@ -194,6 +194,37 @@ export const USER_ORGANIZATION_LIST = gql`
   }
 `;
 
+// To take the details of a user
+export const USER_DETAILS = gql`
+  query User($id: ID!) {
+    user(id: $id) {
+      firstName
+      lastName
+      email
+      image
+      appLanguageCode
+      pluginCreationAllowed
+      adminApproved
+      createdAt
+      createdOrganizations {
+        _id
+        name
+        image
+      }
+      joinedOrganizations {
+        _id
+        name
+        image
+      }
+      organizationUserBelongsTo {
+        _id
+        name
+        image
+      }
+    }
+  }
+`;
+
 // to take the organization event list
 export const ORGANIZATION_EVENT_LIST = gql`
   query EventsByOrganization($id: ID!) {
