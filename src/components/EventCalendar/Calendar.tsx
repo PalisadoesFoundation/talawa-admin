@@ -21,7 +21,7 @@ interface CalendarProps {
   eventData: Event[];
 }
 const Calendar: React.FC<CalendarProps> = ({ eventData }) => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate] = useState<Date | null>(null);
   const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const months = [
     'January',
