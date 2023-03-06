@@ -302,7 +302,6 @@
     "name": "Name",
     "description": "Description",
     "location": "Location",
-    "apiUrl": "Api Url",
     "displayImage": "Display Image",
     "isPublic": "Is Public",
     "isRegistrable": "Is Registrable",

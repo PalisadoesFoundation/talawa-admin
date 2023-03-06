@@ -301,8 +301,7 @@
   "orgUpdate": {
     "name": "नाम",
     "description": "विवरण",
-    "creator": "बनाने वाला",
-    "apiUrl": "एपी यूआरएल",
+    "location": "जगह",
     "displayImage": "प्रदर्शन छवि",
     "isPublic": "सार्वजनिक है",
     "isRegistrable": "पंजीकरण योग्य है",
