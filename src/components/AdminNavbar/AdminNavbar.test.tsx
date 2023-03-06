@@ -206,8 +206,11 @@ describe('Testing Admin Navbar', () => {
 
     expect(container.textContent).not.toBe('Loading data...');
     await wait();
-    const image = screen.getByTestId(/navbarOrgImagePresent/i);
-    expect(image).toBeInTheDocument();
+
+    const imageOptions = screen.getByTestId(/navbarOrgImagePresent/i);
+    const imageLogo = screen.getByTestId(/orgLogoPresent/i);
+    expect(imageLogo).toBeInTheDocument();
+    expect(imageOptions).toBeInTheDocument();
   });
 
   test('Should check if organisation image is not present', async () => {
@@ -225,7 +228,9 @@ describe('Testing Admin Navbar', () => {
 
     expect(container.textContent).not.toBe('Loading data...');
     await wait();
-    const image = screen.getByTestId(/navbarOrgImageAbsent/i);
-    expect(image).toBeInTheDocument();
+    const imageOptions = screen.getByTestId(/navbarOrgImageAbsent/i);
+    const imageLogo = screen.getByTestId(/orgLogoAbsent/i);
+    expect(imageLogo).toBeInTheDocument();
+    expect(imageOptions).toBeInTheDocument();
   });
 });
