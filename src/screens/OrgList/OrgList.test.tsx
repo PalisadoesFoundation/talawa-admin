@@ -90,7 +90,6 @@ describe('Organisation List Page', () => {
     name: 'Dummy Organization',
     description: 'This is a dummy organization',
     location: 'Delhi, India',
-    tags: 'Shelter, NGO, Open Source',
     image: new File(['hello'], 'hello.png', { type: 'image/png' }),
   };
 
@@ -223,7 +222,6 @@ describe('Organisation List Page', () => {
       formData.description
     );
     userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
-    userEvent.type(screen.getByPlaceholderText(/Tags/i), formData.tags);
     userEvent.click(screen.getByLabelText(/Is Public:/i));
     userEvent.click(screen.getByLabelText(/Visible In Search:/i));
     userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
@@ -237,7 +235,6 @@ describe('Organisation List Page', () => {
     expect(screen.getByPlaceholderText(/Location/i)).toHaveValue(
       formData.location
     );
-    expect(screen.getByPlaceholderText(/Tags/i)).toHaveValue(formData.tags);
     expect(screen.getByLabelText(/Is Public/i)).not.toBeChecked();
     expect(screen.getByLabelText(/Visible In Search:/i)).toBeChecked();
     expect(screen.getByLabelText(/Display Image:/i)).toBeTruthy();
