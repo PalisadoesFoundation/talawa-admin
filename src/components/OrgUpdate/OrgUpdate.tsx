@@ -1,9 +1,10 @@
 import React from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import styles from './OrgUpdate.module.css';
+import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 
 interface OrgUpdateProps {
   id: string;
@@ -12,29 +13,42 @@ interface OrgUpdateProps {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function OrgUpdate(props: OrgUpdateProps): JSX.Element {
+  const currentUrl = window.location.href.split('=')[1];
   const [formState, setFormState] = React.useState({
     orgName: '',
     orgDescrip: '',
-    creator: '',
-    apiUrl: '',
-    applangcode: '',
-    selectedOption: '',
+    location: '',
   });
   const [publicchecked, setPublicChecked] = React.useState(true);
   const [visiblechecked, setVisibleChecked] = React.useState(false);
-
+  const [login] = useMutation(UPDATE_ORGANIZATION_MUTATION);
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgUpdate',
   });
-
-  const [login] = useMutation(UPDATE_ORGANIZATION_MUTATION);
-
+  const { data, loading: loadingdata } = useQuery(ORGANIZATIONS_LIST, {
+    variables: { id: currentUrl },
+  });
+  React.useEffect(() => {
+    if (data) {
+      setFormState({
+        ...formState,
+        orgName: data.organizations[0].name,
+        orgDescrip: data.organizations[0].description,
+        location: data.organizations[0].location,
+      });
+    }
+  }, [data]);
+  if (loadingdata) {
+    return <div className="loader"></div>;
+  }
   const login_link = async () => {
     try {
       const { data } = await login({
         variables: {
+          id: currentUrl,
           name: formState.orgName,
           description: formState.orgDescrip,
+          location: formState.location,
           isPublic: publicchecked,
           visibleInSearch: visiblechecked,
         },
@@ -98,34 +112,18 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
           </div>
           <div className={styles.dispflex}>
             <div>
-              <label>{t('creator')}</label>
+              <label>{t('location')}</label>
               <input
-                type="creator"
-                id="creator"
-                placeholder={t('creator')}
+                type="location"
+                id="location"
+                placeholder={t('location')}
                 autoComplete="off"
                 required
-                value={formState.creator}
+                value={formState.location}
                 onChange={(e) => {
                   setFormState({
                     ...formState,
-                    creator: e.target.value,
-                  });
-                }}
-              />
-            </div>
-            <div>
-              <label>{t('apiUrl')}</label>
-              <input
-                type="apiUrl"
-                id="apiUrl"
-                placeholder={t('apiUrl')}
-                required
-                value={formState.apiUrl}
-                onChange={(e) => {
-                  setFormState({
-                    ...formState,
-                    apiUrl: e.target.value,
+                    location: e.target.value,
                   });
                 }}
               />

@@ -49,6 +49,7 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
     $id: ID!
     $name: String
     $description: String
+    $location: String
     $isPublic: Boolean
     $visibleInSearch: Boolean
   ) {
@@ -59,6 +60,7 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
         description: $description
         isPublic: $isPublic
         visibleInSearch: $visibleInSearch
+        location: $location
       }
     ) {
       _id
