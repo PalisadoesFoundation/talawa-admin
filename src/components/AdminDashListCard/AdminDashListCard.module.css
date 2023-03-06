@@ -1,45 +1,45 @@
 .orglist {
     margin-top: -1px;
     padding-left: 32px;
-  }
-  
-  .singledetails {
+}
+
+.singledetails {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-  }
-  
-  .singledetails p {
+}
+
+.singledetails p {
     margin-bottom: -5px;
-  }
-  
-  .singledetails_data_left {
+}
+
+.singledetails_data_left {
     margin-top: 10px;
     /* margin-left: 10px; */
     color: #707070;
-  }
-  
-  .singledetails_data_right {
+}
+
+.singledetails_data_right {
     justify-content: right;
     margin-top: 10px;
     text-align: right;
     color: #707070;
-  }
-  
-  .orgname {
+}
+
+.orgname {
     font-size: 16px;
     font-weight: bold;
-  }
-  
-  .orgfont {
+}
+
+.orgfont {
     margin-top: 3px;
-  }
-  
-  .orgfontcreated {
+}
+
+.orgfontcreated {
     margin-top: 18px;
-  }
-  
-  .orgfontcreatedbtn {
+}
+
+.orgfontcreatedbtn {
     margin-top: 18px;
     border-radius: 4px;
     border-color: #31bb6b;
@@ -49,31 +49,30 @@
     padding-left: 10px;
     box-shadow: none;
     width: 100%;
-  }
-  
-  .orgfontcreatedbtn:hover {
+}
+
+.orgfontcreatedbtn:hover {
     color: #fff;
     background-color: #1e7e34;
     border-color: #1c7430;
-  }
-  
-  .orgCreateBtnDiv {
+}
+
+.orgCreateBtnDiv {
     width: 100%;
-  }
-  
-  #grid_wrapper {
+}
+
+#grid_wrapper {
     align-items: left;
-  }
-  
-  .orgimg {
+}
+
+.orgimg {
     width: 200px;
     height: 100px;
     border-radius: 7px;
     margin-left: 20px;
-  }
-  
-  .singledetails {
+}
+
+.singledetails {
     margin-left: 25px;
     padding-left: 0;
-  }
-  
+}
