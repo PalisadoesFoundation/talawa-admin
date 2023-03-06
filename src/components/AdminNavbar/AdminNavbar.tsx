@@ -171,7 +171,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
             })}
           </Nav>
           <Link className={styles.allOrgBtn} to="/orglist">
-            All Organizations
+            {t('allOrganizations')}
           </Link>
           <Nav className="ml-auto ">
             <div className={styles.notificationIcon}>
