@@ -299,8 +299,7 @@
   "orgUpdate": {
     "name": "Name",
     "description": "Description",
-    "creator": "Creator",
-    "apiUrl": "Api Url",
+    "location": "Location",
     "displayImage": "Display Image",
     "isPublic": "Is Public",
     "isRegistrable": "Is Registrable",
