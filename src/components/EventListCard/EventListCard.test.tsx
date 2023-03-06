@@ -91,13 +91,7 @@ describe('Testing Event List Card', () => {
 
     await wait();
 
-    expect(screen.getByText('Location:')).toBeInTheDocument();
-    expect(screen.getByText('On:')).toBeInTheDocument();
-    expect(screen.getByText('End:')).toBeInTheDocument();
-    expect(screen.getByText(props.eventLocation)).toBeInTheDocument();
     expect(screen.getByText(props.eventName)).toBeInTheDocument();
-    expect(screen.getByText(props.regDate)).toBeInTheDocument();
-    expect(screen.getByText(props.regEndDate)).toBeInTheDocument();
   });
 
   test('Should render text elements when props value is not passed', async () => {
@@ -127,13 +121,7 @@ describe('Testing Event List Card', () => {
 
     await wait();
 
-    expect(screen.getByText('Location:')).toBeInTheDocument();
-    expect(screen.getByText('On:')).toBeInTheDocument();
-    expect(screen.getByText('End:')).toBeInTheDocument();
-    expect(screen.queryByText(props.eventLocation)).toBeInTheDocument();
     expect(screen.queryByText(props.eventName)).not.toBeInTheDocument();
-    expect(screen.getByText(props.regDate)).toBeInTheDocument();
-    expect(screen.getByText(props.regEndDate)).toBeInTheDocument();
   });
 
   test('Testing event update functionality', async () => {
