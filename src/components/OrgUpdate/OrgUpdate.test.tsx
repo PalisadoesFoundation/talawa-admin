@@ -3,30 +3,101 @@ import { act, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-
 import OrgUpdate from './OrgUpdate';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
+import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 
 const MOCKS = [
   {
     request: {
-      query: UPDATE_ORGANIZATION_MUTATION,
-      variable: {
-        id: '123',
-        name: 'John Doe',
-        description: 'This is testing',
-        isPublic: true,
-        visibleInSearch: true,
-      },
+      query: ORGANIZATIONS_LIST,
     },
     result: {
       data: {
         organizations: [
           {
-            _id: '1',
+            _id: '123',
+            image: '',
+            name: '',
+            description: '',
+            creator: {
+              firstName: '',
+              lastName: '',
+              email: '',
+            },
+            location: '',
+            members: {
+              _id: '123',
+              firstName: 'John',
+              lastName: 'Doe',
+              email: 'johndoe@gmail.com',
+            },
+            admins: {
+              _id: '123',
+              firstName: 'John',
+              lastName: 'Doe',
+              email: 'johndoe@gmail.com',
+            },
+            membershipRequests: {
+              _id: '456',
+              user: {
+                firstName: 'Sam',
+                lastName: 'Smith',
+                email: 'samsmith@gmail.com',
+              },
+            },
+            blockedUsers: {
+              _id: '789',
+              firstName: 'Steve',
+              lastName: 'Smith',
+              email: 'stevesmith@gmail.com',
+            },
+            tags: ['Shelter', 'NGO', 'Open Source'],
+            spamCount: [
+              {
+                _id: '6954',
+                user: {
+                  _id: '878',
+                  firstName: 'Joe',
+                  lastName: 'Root',
+                  email: 'joeroot@gmail.com',
+                },
+                isReaded: false,
+                groupchat: {
+                  _id: '321',
+                  title: 'Dummy',
+                },
+              },
+            ],
           },
         ],
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_ORGANIZATION_MUTATION,
+      variables: {
+        id: '123',
+        name: 'Updated Organization',
+        description: 'This is an updated test organization',
+        location: 'Updated location',
+        image: new File(['hello'], 'hello.png', { type: 'image/png' }),
+        isPublic: true,
+        visibleInSearch: false,
+      },
+    },
+    result: {
+      data: {
+        updateOrganization: {
+          _id: '123',
+          name: 'Updated Organization',
+          description: 'This is an updated test organization',
+          location: 'Updated location',
+          isPublic: true,
+          visibleInSearch: false,
+        },
       },
     },
   },
@@ -43,14 +114,13 @@ async function wait(ms = 0) {
 describe('Testing Organization Update', () => {
   const props = {
     id: '123',
-    orgid: '456',
+    orgid: '123',
   };
 
   const formData = {
     name: 'John Doe',
     description: 'This is a description',
-    creator: 'Sam Francisco',
-    apiUrl: 'https://github.com/PalisadoesFoundation/talawa-admin',
+    location: 'Test location',
     displayImage: new File(['hello'], 'hello.png', { type: 'image/png' }),
     isPublic: true,
     isVisible: true,
@@ -59,6 +129,7 @@ describe('Testing Organization Update', () => {
   global.alert = jest.fn();
 
   test('should render props and text elements test for the page component', async () => {
+    //window.location.assign('/orgsetting/id=123');
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <I18nextProvider i18n={i18nForTest}>
@@ -66,7 +137,7 @@ describe('Testing Organization Update', () => {
         </I18nextProvider>
       </MockedProvider>
     );
-
+    await wait();
     userEvent.type(
       screen.getByPlaceholderText(/Enter Organization Name/i),
       formData.name
@@ -75,8 +146,7 @@ describe('Testing Organization Update', () => {
       screen.getByPlaceholderText(/Description/i),
       formData.description
     );
-    userEvent.type(screen.getByPlaceholderText(/Creator/i), formData.creator);
-    userEvent.type(screen.getByPlaceholderText(/Api Url/i), formData.apiUrl);
+    userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
     userEvent.upload(
       screen.getByLabelText(/display image:/i),
       formData.displayImage
@@ -94,11 +164,8 @@ describe('Testing Organization Update', () => {
     expect(screen.getByPlaceholderText(/Description/i)).toHaveValue(
       formData.description
     );
-    expect(screen.getByPlaceholderText(/Creator/i)).toHaveValue(
-      formData.creator
-    );
-    expect(screen.getByPlaceholderText(/Api Url/i)).toHaveValue(
-      formData.apiUrl
+    expect(screen.getByPlaceholderText(/Location/i)).toHaveValue(
+      formData.location
     );
     expect(screen.getByLabelText(/display image:/i)).toBeTruthy();
     expect(screen.getByLabelText(/Is Public:/i)).not.toBeChecked();
@@ -107,8 +174,7 @@ describe('Testing Organization Update', () => {
 
     expect(screen.getByText('Name')).toBeInTheDocument();
     expect(screen.getByText('Description')).toBeInTheDocument();
-    expect(screen.getByText('Creator')).toBeInTheDocument();
-    expect(screen.getByText('Api Url')).toBeInTheDocument();
+    expect(screen.getByText('Location')).toBeInTheDocument();
     expect(screen.getByText('Display Image:')).toBeInTheDocument();
     expect(screen.getByText('Is Public:')).toBeInTheDocument();
     expect(screen.getByText('Is Registrable:')).toBeInTheDocument();

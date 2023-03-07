@@ -33,7 +33,6 @@ function OrgList(): JSX.Element {
     ispublic: true,
     visible: false,
     location: '',
-    tags: '',
     image: '',
   });
   const [, setSearchByName] = useState('');
@@ -73,12 +72,9 @@ function OrgList(): JSX.Element {
   const CreateOrg = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { name, descrip, location, visible, ispublic, tags, image } =
-      formState;
+    const { name, descrip, location, visible, ispublic, image } = formState;
 
     try {
-      const tagsArray = tags.split(',').map((tag) => tag.trim());
-
       const { data } = await create({
         variables: {
           name: name,
@@ -86,7 +82,6 @@ function OrgList(): JSX.Element {
           location: location,
           visibleInSearch: visible,
           isPublic: ispublic,
-          tags: tagsArray,
           image: image,
         },
       });
@@ -101,7 +96,6 @@ function OrgList(): JSX.Element {
           ispublic: true,
           visible: false,
           location: '',
-          tags: '',
           image: '',
         });
         setmodalIsOpen(false);
@@ -341,21 +335,7 @@ function OrgList(): JSX.Element {
                   });
                 }}
               />
-              <label htmlFor="tags">{t('tags')}</label>
-              <input
-                type="text"
-                id="tags"
-                placeholder={t('tags')}
-                autoComplete="off"
-                required
-                value={formState.tags}
-                onChange={(e) => {
-                  setFormState({
-                    ...formState,
-                    tags: e.target.value,
-                  });
-                }}
-              />
+
               <div className={styles.checkboxdiv}>
                 <div className={styles.dispflex}>
                   <label htmlFor="ispublic">{t('isPublic')}:</label>

@@ -101,10 +101,19 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
       <Navbar className={styles.navbarbg} expand="xl" fixed="top">
         <Navbar.Brand className={styles.navbarBrandLogo}>
           <div className={styles.logo}>
-            <img
-              className={styles.roundedcircle}
-              src="https://via.placeholder.com/45x45"
-            />
+            {data?.organizations[0].image ? (
+              <img
+                src={data.organizations[0].image}
+                className={styles.roundedcircle}
+                data-testid={'orgLogoPresent'}
+              />
+            ) : (
+              <img
+                src={Logo}
+                className={styles.roundedcircle}
+                data-testid={'orgLogoAbsent'}
+              />
+            )}
             <strong>{OrgName}</strong>
           </div>
         </Navbar.Brand>
@@ -162,7 +171,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
             })}
           </Nav>
           <Link className={styles.allOrgBtn} to="/orglist">
-            All Organizations
+            {t('allOrganizations')}
           </Link>
           <Nav className="ml-auto ">
             <div className={styles.notificationIcon}>
