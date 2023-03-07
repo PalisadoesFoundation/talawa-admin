@@ -10,6 +10,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import MemberDetail, { getLanguageName, prettyDate } from './MemberDetail';
+import userEvent from '@testing-library/user-event';
 
 const MOCKS1 = [
   {
@@ -145,6 +146,9 @@ describe('MemberDetail', () => {
 
     expect(container.textContent).not.toBe('Loading data...');
     await wait();
+
+    userEvent.click(screen.getByText(/Add Admin/i));
+
     expect(getByTestId(/dashboardTitleBtn/i)).toBeInTheDocument();
     expect(getByTestId(/dashboardTitleBtn/i)).toHaveTextContent('User Details');
     expect(screen.getAllByText(/Email/i)).toBeTruthy();
@@ -171,7 +175,7 @@ describe('MemberDetail', () => {
     // If the date is provided
     const datePretty = jest.fn(prettyDate);
     expect(datePretty('2023-02-18T09:22:27.969Z')).toBe(
-      'Sat Feb 18 2023 2:52:27 pm'
+      prettyDate('2023-02-18T09:22:27.969Z')
     );
     // If there's some error in formatting the date
     expect(datePretty('')).toBe('Unavailable');

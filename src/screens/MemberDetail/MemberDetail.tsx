@@ -39,8 +39,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     variables: { id: location.state?.id ?? id }, // For testing we are sending the id as a prop
   });
 
-  console.log({ data });
-
   if (loading) {
     return (
       <>
@@ -54,7 +52,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     window.location.assign(`/orgpeople/id=${currentUrl}`);
   }
 
-  /* istanbul ignore next */
   const AddAdmin = async () => {
     try {
       const { data } = await adda({
