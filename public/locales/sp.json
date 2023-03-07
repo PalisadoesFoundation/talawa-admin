@@ -299,8 +299,7 @@
   "orgUpdate": {
     "name": "Nombre",
     "description": "Descripción",
-    "creator": "Creador",
-    "apiUrl": "URL API",
+    "location": "ubicación",
     "displayImage": "Mostrar imagen",
     "isPublic": "Es público",
     "isRegistrable": "Es registrable",
