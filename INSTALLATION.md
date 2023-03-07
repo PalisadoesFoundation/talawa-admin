@@ -174,14 +174,23 @@ yarn lint:fix
 yarn typecheck
 ```
 
-We are also using the package `Husky` to automatically run the following scripts on your changes whenever you make a pull from your remote repository:(This hook will only run if there are changes in pakage.json file)
-
-```
-yarn
-```
 
 This is done to improve developer experience and to make sure that your commits do not fail on the automated workflow runs. Still you can manually opt-out of the same using the `--no-verify` flag as follows:
 
 ```
 git commit -m "Commit message" --no-verify
 ```
+
+
+We are also using the package `Husky` to automatically run the following scripts on your changes whenever you make a pull from your remote repository:(This hook will only run if there are changes in pakage.json file)
+
+```
+yarn
+```
+
+Still you can also manually opt out of this hook using `--no-verify` flag as follows:
+
+```
+git pull --no-verify
+```
+
