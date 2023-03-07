@@ -294,6 +294,9 @@ export const MEMBERSHIP_REQUEST = gql`
           firstName
           lastName
           email
+          image
+          location
+          created_at
         }
       }
     }

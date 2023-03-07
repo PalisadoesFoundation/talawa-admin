@@ -289,7 +289,13 @@
     "cancel": "Cancelar"
   },
   "orgDelete": {
-    "deleteOrg": "Eliminar organización"
+    "location": "Ubicación",
+    "about": "Sobre",
+    "deleteThisOrganization": "Eliminar esta organización",
+    "deleteOrg": "Eliminar organización",
+    "deleteMsg": "¿Desea eliminar esta organización?",
+    "no": "No",
+    "yes": "Sí"
   },
   "membershipRequest": {
     "joined": "Unido",

@@ -289,7 +289,13 @@
     "cancel": "Annuler"
   },
   "orgDelete": {
-    "deleteOrg": "Supprimer l'organisation"
+    "location": "Emplacement",
+    "about": "À propos de",
+    "deleteThisOrganization": "Supprimer cette organisation",
+    "deleteOrg": "Supprimer l'organisation",
+    "deleteMsg": "Voulez-vous supprimer cette organisation ?",
+    "no": "Non",
+    "yes": "Oui"
   },
   "membershipRequest": {
     "joined": "Inscrit",

@@ -289,7 +289,13 @@
     "cancel": "रद्द करना"
   },
   "orgDelete": {
-    "deleteOrg": "संगठन हटाएं"
+    "location": "स्थान",
+    "about": "के बारे में",
+    "deleteThisOrganization": "इस संगठन को हटाएं",
+    "deleteOrg": "संगठन हटाएं",
+    "deleteMsg": "क्या आप इस संगठन को हटाना चाहते हैं?",
+    "no": "नहीं",
+    "yes": "हाँ"
   },
   "membershipRequest": {
     "joined": "में शामिल हो गए",

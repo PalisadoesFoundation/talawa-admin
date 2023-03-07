@@ -55,7 +55,6 @@ function OrgSettings(): JSX.Element {
     );
   }
 
-  /* istanbul ignore next */
   if (error) {
     window.location.href = '/orglist';
   }
@@ -74,7 +73,6 @@ function OrgSettings(): JSX.Element {
                   value="userupdate"
                   data-testid="userUpdateBtn"
                   onClick={() => handleClick(1)}
-                  // onClick={() => setScreenVariable(1)}
                 >
                   {t('updateYourDetails')}
                 </button>
@@ -84,7 +82,6 @@ function OrgSettings(): JSX.Element {
                   value="orgupdate"
                   data-testid="orgUpdateBtn"
                   onClick={() => handleClick(2)}
-                  // onClick={() => setScreenVariable(2)}
                 >
                   {t('updateOrganization')}
                 </button>
@@ -94,17 +91,15 @@ function OrgSettings(): JSX.Element {
                   value="orgdelete"
                   data-testid="orgDeleteBtn"
                   onClick={() => handleClick(3)}
-                  // onClick={() => setScreenVariable(3)}
                 >
                   {t('deleteOrganization')}
                 </button>
                 <button
                   className={styles.greenregbtn}
                   type="button"
-                  value="orgdelete"
-                  data-testid="orgDeleteBtn2"
+                  value="orgrequests"
+                  data-testid="orgRequestsBtn"
                   onClick={() => handleClick(4)}
-                  // onClick={() => setScreenVariable(4)}
                 >
                   {t('seeRequest')}
                 </button>
@@ -122,16 +117,15 @@ function OrgSettings(): JSX.Element {
                     {t(screenDisplayVariable)}
                   </p>
                 )}
-                {/* <p className={styles.loginSubtitle}>{t("abc")}</p> */}
               </div>
-
-              {/* <p className={styles.logintitle}>{t('settings')}</p> */}
             </Row>
-            <div>{screenVariable == 1 ? <UserUpdate id="abcd" /> : null}</div>
+            <div>
+              {screenVariable == 1 ? <UserUpdate id="userupdate" /> : null}
+            </div>
             <div>
               {screenVariable == 2 ? (
                 <OrgUpdate
-                  id="abcd"
+                  id="orgupdate"
                   orgid={window.location.href.split('=')[1]}
                 />
               ) : null}
@@ -139,7 +133,7 @@ function OrgSettings(): JSX.Element {
             <div>{screenVariable == 3 ? <OrgDelete /> : null}</div>
             <div>
               {screenVariable == 4 ? (
-                data.organizations.membershipRequests ? (
+                data.organizations[0].membershipRequests.length > 0 ? (
                   data.organizations.map(
                     (datas: {
                       _id: string;
@@ -150,6 +144,9 @@ function OrgSettings(): JSX.Element {
                           firstName: string;
                           lastName: string;
                           email: string;
+                          image: string;
+                          location: string;
+                          created_at: string;
                         };
                       };
                     }) => {
@@ -158,10 +155,12 @@ function OrgSettings(): JSX.Element {
                           key={datas.membershipRequests._id}
                           id={datas.membershipRequests._id}
                           memberName={datas.membershipRequests.user.firstName}
-                          memberLocation="India"
-                          joinDate="12/12/2012"
-                          memberImage="https://via.placeholder.com/200x100"
+                          joinDate={datas.membershipRequests.user.created_at}
+                          memberImage={datas.membershipRequests.user.image}
                           email={datas.membershipRequests.user.email}
+                          memberLocation={
+                            datas.membershipRequests.user.location
+                          }
                         />
                       );
                     }

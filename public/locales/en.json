@@ -275,6 +275,15 @@
     "settings": "Settings",
     "noData": "No data"
   },
+  "orgDelete": {
+    "location": "Location",
+    "about": "About",
+    "deleteThisOrganization": "Delete This Organization",
+    "deleteOrg": "Delete Organization",
+    "deleteMsg": "Do you want to delete this organization?",
+    "no": "No",
+    "yes": "Yes"
+  },
   "userUpdate": {
     "firstName": "First Name",
     "lastName": "Last Name",
@@ -287,9 +296,6 @@
     "displayImage": "Display Image",
     "saveChanges": "Save Changes",
     "cancel": "Cancel"
-  },
-  "orgDelete": {
-    "deleteOrg": "Delete Org"
   },
   "membershipRequest": {
     "joined": "Joined",
