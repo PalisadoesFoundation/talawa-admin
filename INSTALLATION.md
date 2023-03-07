@@ -166,7 +166,11 @@ yarn lint:fix
 
 ## Husky for Git Hooks
 
-We are using the package `Husky` to automatically run the following scripts on your changes whenever you make a commit:
+
+We are using the package `Husky` to automatically run git hooks that run according to different git workflows
+
+#### pre-commit
+The following scripts will run on your changes whenever you make a commit:
 
 ```
 yarn format:fix
@@ -181,14 +185,14 @@ This is done to improve developer experience and to make sure that your commits 
 git commit -m "Commit message" --no-verify
 ```
 
-
-We are also using the package `Husky` to automatically run the following scripts on your changes whenever you make a pull from your remote repository:(This hook will only run if there are changes in pakage.json file)
+#### post-merge
+The follwing script will run if there are any changes in the pakage.json file when you try to merge(git pull) files to your system:
 
 ```
 yarn
 ```
 
-Still you can also manually opt out of this hook using `--no-verify` flag as follows:
+This is done to make sure that you have all the required dependencies to run the appplication on your local system. Still you can also manually opt out of this hook using `--no-verify` flag as follows:
 
 ```
 git pull --no-verify
