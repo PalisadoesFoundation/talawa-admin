@@ -7,6 +7,7 @@ import { I18nextProvider } from 'react-i18next';
 import OrgPeopleListCard from './OrgPeopleListCard';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
+import { BrowserRouter } from 'react-router-dom';
 
 const MOCKS = [
   {
@@ -51,9 +52,11 @@ describe('Testing Organization People List Card', () => {
 
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
+        <BrowserRouter>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPeopleListCard {...props} />
         </I18nextProvider>
+        </BrowserRouter>
       </MockedProvider>
     );
 
@@ -72,6 +75,7 @@ describe('Testing Organization People List Card', () => {
 
     render(
       <MockedProvider>
+        <BrowserRouter>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPeopleListCard
             key="123"
@@ -82,6 +86,7 @@ describe('Testing Organization People List Card', () => {
             memberEmail=""
           />
         </I18nextProvider>
+        </BrowserRouter>
       </MockedProvider>
     );
 

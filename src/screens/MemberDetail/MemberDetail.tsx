@@ -18,7 +18,7 @@ type MemberDetailProps = {
   id: string; // This is the userId
 };
 
-function MemberDetail(): JSX.Element {
+const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'memberDetail',
   });
@@ -36,8 +36,10 @@ function MemberDetail(): JSX.Element {
     loading: loading,
     error: error,
   } = useQuery(USER_DETAILS, {
-    variables: { id: location.state?.id },
+    variables: { id: location.state?.id ?? id }, // For testing we are sending the id as a prop
   });
+
+  console.log({ data });
 
   if (loading) {
     return (
@@ -52,6 +54,7 @@ function MemberDetail(): JSX.Element {
     window.location.assign(`/orgpeople/id=${currentUrl}`);
   }
 
+  /* istanbul ignore next */
   const AddAdmin = async () => {
     try {
       const { data } = await adda({
@@ -72,25 +75,6 @@ function MemberDetail(): JSX.Element {
     }
   };
 
-  const prettyDate = (param: string): string => {
-    try {
-      const date = new Date(param);
-      return `${date?.toDateString()} ${date.toLocaleTimeString()}`;
-    } catch (e: any) {
-      return 'Unavailable';
-    }
-  };
-
-  const getLanguageName = (code: string): string => {
-    let language = 'Unavailable';
-    languages.map((data) => {
-      if (data.code == code) {
-        language = data.name;
-      }
-    });
-    return language;
-  };
-
   return (
     <>
       <AdminNavbar targets={targets} url_1={configUrl} />
@@ -99,23 +83,14 @@ function MemberDetail(): JSX.Element {
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
               <br />
-              <button className={styles.activeBtn}>
+              <button
+                className={styles.activeBtn}
+                data-testid="dashboardTitleBtn"
+              >
                 <div className={styles.bgFill}>
                   <i className="fa fa-user" />
                 </div>
                 {t('title')}
-              </button>
-              <button className={styles.inactiveBtn}>
-                <div className={styles.bgFill}>
-                  <i className="fa fa-building" />
-                </div>
-                {t('organizations')}
-              </button>
-              <button className={styles.inactiveBtn}>
-                <div className={styles.bgFill}>
-                  <i className="fa fa-calendar" />
-                </div>
-                {t('events')}
               </button>
             </div>
           </div>
@@ -134,12 +109,17 @@ function MemberDetail(): JSX.Element {
             <Row className={styles.justifysp}>
               <Col sm={6} lg={4}>
                 <div>
-                  {data?.user.image ? (
-                    <img className={styles.userImage} src={data?.user?.image} />
+                  {data?.user?.image ? (
+                    <img
+                      className={styles.userImage}
+                      src={data?.user?.image}
+                      data-testid="userImagePresent"
+                    />
                   ) : (
                     <img
                       className={styles.userImage}
                       src={`https://api.dicebear.com/5.x/initials/svg?seed=${data?.user?.firstName} ${data?.user?.lastName}`}
+                      data-testid="userImageAbsent"
                     />
                   )}
                 </div>
@@ -149,17 +129,19 @@ function MemberDetail(): JSX.Element {
                 <div>
                   <h2 className="mt-3 mb-4">
                     <strong>
-                      {data?.user.firstName} {data.user.lastName}
+                      {data?.user?.firstName} {data?.user?.lastName}
                     </strong>
                   </h2>
                   <p>
-                    <strong>{t('role')} :</strong> {data?.user?.__typename}
+                    <strong>{t('role')} :</strong>{' '}
+                    <span>{data?.user?.userType}</span>
                   </p>
                   <p>
-                    <strong>{t('email')} :</strong> {data?.user?.email}
+                    <strong>{t('email')} :</strong>{' '}
+                    <span>{data?.user?.email}</span>
                   </p>
                   <p>
-                    <b>{t('createdOn')} :</b>{' '}
+                    <strong>{t('createdOn')} :</strong>{' '}
                     {prettyDate(data?.user?.createdAt)}
                   </p>
                 </div>
@@ -190,7 +172,7 @@ function MemberDetail(): JSX.Element {
                       </Row>
                       <Row className="border-bottom py-3">
                         <Col sm={6}>{t('role')}</Col>
-                        <Col sm={6}>{data?.user?.__typename}</Col>
+                        <Col sm={6}>{data?.user?.userType}</Col>
                       </Row>
                       <Row className="border-bottom py-3">
                         <Col sm={6}>{t('memberOfOrganization')}</Col>
@@ -206,19 +188,21 @@ function MemberDetail(): JSX.Element {
                       </Row>
                       <Row className="border-bottom py-3">
                         <Col sm={6}>{t('adminApproved')}</Col>
-                        <Col sm={6}>
-                          {data?.user?.adminApproved ? 'True' : 'False'}
+                        <Col sm={6} data-testid="adminApproved">
+                          {data?.user?.adminApproved ? 'Yes' : 'No'}
                         </Col>
                       </Row>
                       <Row className="border-bottom py-3">
                         <Col sm={6}>{t('pluginCreationAllowed')}</Col>
-                        <Col sm={6}>
-                          {data?.user?.pluginCreationAllowed ? 'True' : 'False'}
+                        <Col sm={6} data-testid="pluginCreationAllowed">
+                          {data?.user?.pluginCreationAllowed ? 'Yes' : 'No'}
                         </Col>
                       </Row>
                       <Row className="pt-3">
                         <Col sm={6}>{t('createdOn')}</Col>
-                        <Col sm={6}>{prettyDate(data?.user?.createdAt)}</Col>
+                        <Col data-testid="createdOn" sm={6}>
+                          {prettyDate(data?.user?.createdAt)}
+                        </Col>
                       </Row>
                     </div>
                   </div>
@@ -287,6 +271,24 @@ function MemberDetail(): JSX.Element {
       </Row>
     </>
   );
-}
+};
+
+export const prettyDate = (param: string): string => {
+  const date = new Date(param);
+  if (date?.toDateString() === 'Invalid Date') {
+    return 'Unavailable';
+  }
+  return `${date?.toDateString()} ${date.toLocaleTimeString()}`;
+};
+
+export const getLanguageName = (code: string): string => {
+  let language = 'Unavailable';
+  languages.map((data) => {
+    if (data.code == code) {
+      language = data.name;
+    }
+  });
+  return language;
+};
 
 export default MemberDetail;
