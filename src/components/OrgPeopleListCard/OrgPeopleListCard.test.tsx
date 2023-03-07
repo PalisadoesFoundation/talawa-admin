@@ -53,9 +53,9 @@ describe('Testing Organization People List Card', () => {
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPeopleListCard {...props} />
-        </I18nextProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPeopleListCard {...props} />
+          </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>
     );
@@ -76,16 +76,16 @@ describe('Testing Organization People List Card', () => {
     render(
       <MockedProvider>
         <BrowserRouter>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPeopleListCard
-            key="123"
-            id="1"
-            memberName=""
-            joinDate="20/03/2022"
-            memberImage=""
-            memberEmail=""
-          />
-        </I18nextProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPeopleListCard
+              key="123"
+              id="1"
+              memberName=""
+              joinDate="20/03/2022"
+              memberImage=""
+              memberEmail=""
+            />
+          </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>
     );
