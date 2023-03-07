@@ -9,14 +9,13 @@ import { Form } from 'antd';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import Calendar from 'components/EventCalendar/Calendar';
 
 import styles from './OrganizationEvents.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
-import EventListCard from 'components/EventListCard/EventListCard';
 import { ORGANIZATION_EVENT_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { RootState } from 'state/reducers';
-import PaginationList from 'components/PaginationList/PaginationList';
 import debounce from 'utils/debounce';
 import dayjs from 'dayjs';
 
@@ -27,8 +26,6 @@ function OrganizationEvents(): JSX.Element {
 
   document.title = t('title');
   const [eventmodalisOpen, setEventModalIsOpen] = useState(false);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [startDate, setStartDate] = React.useState<Date | null>(new Date());
   const [endDate, setEndDate] = React.useState<Date | null>(new Date());
@@ -126,19 +123,6 @@ function OrganizationEvents(): JSX.Element {
   }
 
   /* istanbul ignore next */
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
-    setPage(newPage);
-  };
-  /* istanbul ignore next */
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
 
   const handleSearchByTitle = (e: any) => {
     const { value } = e.target;
@@ -224,68 +208,8 @@ function OrganizationEvents(): JSX.Element {
                 <i className="fa fa-plus"></i> {t('addEvent')}
               </Button>
             </Row>
-            <div className={`row ${styles.list_box}`}>
-              {data
-                ? (rowsPerPage > 0
-                    ? data.eventsByOrganizationConnection.slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
-                      )
-                    : data.eventsByOrganizationConnection
-                  ).map(
-                    (datas: {
-                      _id: string;
-                      title: string;
-                      description: string;
-                      startDate: string;
-                      endDate: string;
-                      location: string;
-                      startTime: string;
-                      endTime: string;
-                      allDay: boolean;
-                      recurring: boolean;
-                      isPublic: boolean;
-                      isRegisterable: boolean;
-                    }) => {
-                      return (
-                        <EventListCard
-                          key={datas._id}
-                          id={datas._id}
-                          eventLocation={datas.location}
-                          eventName={datas.title}
-                          eventDescription={datas.description}
-                          regDate={datas.startDate}
-                          regEndDate={datas.endDate}
-                          startTime={datas.startTime}
-                          endTime={datas.endTime}
-                          allDay={datas.allDay}
-                          recurring={datas.recurring}
-                          isPublic={datas.isPublic}
-                          isRegisterable={datas.isRegisterable}
-                        />
-                      );
-                    }
-                  )
-                : null}
-            </div>
           </div>
-          <div>
-            <table>
-              <tbody>
-                <tr>
-                  <PaginationList
-                    count={
-                      data ? data.eventsByOrganizationConnection.length : 0
-                    }
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <Calendar eventData={data.eventsByOrganizationConnection} />
         </Col>
       </Row>
       <Modal
