@@ -401,7 +401,7 @@ form > input {
   width: 100%;
   display: flex;
   color: #fff;
-  border: 1px solid #31bb6b;
+  border: 1px solid #000;
   background-color: #31bb6b;
   transition: 0.5s;
 }
