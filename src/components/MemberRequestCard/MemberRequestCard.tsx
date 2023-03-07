@@ -74,7 +74,7 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
             />
           ) : (
             <img
-              src={props.memberLocation}
+              src="https://via.placeholder.com/200x100"
               className={styles.memberimg}
               alt="userImage"
             />
