@@ -249,7 +249,7 @@ function OrgList(): JSX.Element {
                           orgLocation={datas.location}
                         />
                       );
-                    } else if (data_2?.user.userType == 'ADMIN') {
+                    } else {
                       return (
                         <AdminDashListCard
                           id={datas._id}
