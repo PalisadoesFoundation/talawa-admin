@@ -167,34 +167,29 @@ yarn lint:fix
 ## Husky for Git Hooks
 
 
-We are using the package `Husky` to automatically run git hooks that run according to different git workflows
+We are using the package `Husky` to run git hooks that run according to different git workflows.
 
-#### pre-commit
-The following scripts will run on your changes whenever you make a commit:
+<br/>
 
-```
-yarn format:fix
-yarn lint:fix
-yarn typecheck
-```
+#### pre-commit hook
+We run a pre-commit hook which automatically runs code quality checks each time you make a commit and also fixes some of the issues. This way you don't have to run them manually each time.
 
 
-This is done to improve developer experience and to make sure that your commits do not fail on the automated workflow runs. Still you can manually opt-out of the same using the `--no-verify` flag as follows:
+If you don't want these pre-commit checks running on each commit, you can manually opt out of it using the `--no-verify` flag with your commit message as shown:-
 
-```
-git commit -m "Commit message" --no-verify
-```
+        git commit -m "commit message" --no-verify
 
-#### post-merge
-The follwing script will run if there are any changes in the pakage.json file when you try to merge(git pull) files to your system:
+<br/>
 
-```
-yarn
-```
 
-This is done to make sure that you have all the required dependencies to run the appplication on your local system. Still you can also manually opt out of this hook using `--no-verify` flag as follows:
+#### post-merge hook
 
-```
-git pull --no-verify
-```
+We are also running a post-merge(post-pull) hook which will automatically run "yarn" only if there is any change made to pakage.json file so that the developer has all the required dependencies when pulling files from remote.
+
+
+If you don't want this hook to run, you can manually opt out of this using the `no verify` flag while using the merge command(git pull):
+
+        git pull --no-verify  
+
+<br/>
 
