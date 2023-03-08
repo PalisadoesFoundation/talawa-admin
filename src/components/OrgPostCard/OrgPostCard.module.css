@@ -49,10 +49,7 @@
   grid-column: auto / span 1;
 }
 
-
-
-
-.toggleClickBtn{
+.toggleClickBtn {
   color: #31bb6b;
-  cursor:pointer;
+  cursor: pointer;
 }
