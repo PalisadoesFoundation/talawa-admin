@@ -1,5 +1,6 @@
 .cards h2 {
-  font-size: 20px;
+  font-size: 15px;
+  color: #fff;
 }
 .cards > h3 {
   font-size: 17px;
@@ -10,7 +11,7 @@
   margin-bottom: 7px;
 }
 .cards a {
-  color: #737373;
+  color: #fff;
   font-weight: 600;
 }
 .cards a:hover {
@@ -29,14 +30,12 @@
 }
 
 .cards {
-  width: 80%;
-  background: #fcfcfc;
-  margin: 10px 40px;
-  padding: 20px 30px;
+  width: 100%;
+  background: rgba(40, 167, 69, 1);
+  padding: 2px 3px;
   border-radius: 5px;
   border: 1px solid #e8e8e8;
   box-shadow: 0 3px 5px #c9c9c9;
-  margin-right: 30px;
   color: #737373;
   box-sizing: border-box;
 }

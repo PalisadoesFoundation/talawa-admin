@@ -15,7 +15,6 @@ If you are new to contributing to open source, please read the Open Source Guide
     * [Conflict Resolution](#conflict-resolution)
 * [Contributing Code](#contributing-code)
 * Internships
-    * [GSoC](#gsoc)
 * [Community](#community)
 
 ## Code of Conduct
@@ -130,11 +129,7 @@ The process of proposing a change to Talawa Admin can be summarized as:
 
 ## Internships
 
-We have internship partnerships with a number of organizations. See below for more details.
-
-### GSoC
-
-If you are participating in the Summer of Code, please read more about us and our processes [here](https://docs.talawa.io/docs/internships/gsoc/gsoc-introduction)
+If you are participating in any of the various internship programs we ar members of then please read the [introduction guides on our documentation website](https://docs.talawa.io/docs/).
 
 ## Community
 There are many ways to communicate with the community.

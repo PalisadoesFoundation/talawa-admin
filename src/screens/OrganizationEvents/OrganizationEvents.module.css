@@ -325,11 +325,7 @@ form > input {
 .checkboxdiv > div {
   width: 50%;
 }
-.list_box {
-  height: 70vh;
-  overflow-y: auto;
-  width: auto;
-}
+
 @media only screen and (max-width: 600px) {
   .form_wrapper {
     width: 90%;
