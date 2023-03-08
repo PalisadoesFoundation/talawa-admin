@@ -32,7 +32,7 @@ function OrgDelete(): JSX.Element {
   return (
     <>
       <div id="OrgDelete" className="search-OrgDelete">
-        <p className={styles.tagdetailsGreen}>
+        <p className={styles.greenDeleteButton}>
           <button
             type="button"
             className="mt-3"
