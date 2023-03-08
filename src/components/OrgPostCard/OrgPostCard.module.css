@@ -48,3 +48,11 @@
 .cards:first-child:nth-last-child(even) ~ .box {
   grid-column: auto / span 1;
 }
+
+
+
+
+.toggleClickBtn{
+  color: #31bb6b;
+  cursor:pointer;
+}
