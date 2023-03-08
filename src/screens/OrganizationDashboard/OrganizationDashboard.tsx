@@ -17,6 +17,7 @@ import {
   ORGANIZATION_POST_LIST,
 } from 'GraphQl/Queries/Queries';
 import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import { Link } from 'react-router-dom';
 
 function OrganizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
@@ -77,6 +78,8 @@ function OrganizationDashboard(): JSX.Element {
   if (error || error_post || error_event) {
     window.location.replace('/orglist');
   }
+  
+  console.log(targets);
 
   return (
     <>
@@ -128,7 +131,12 @@ function OrganizationDashboard(): JSX.Element {
               </Row>
               <Row>
                 <Col sm={4} className="mb-5">
-                  <div className={`card ${styles.cardContainer}`}>
+                  <Link className={`card ${styles.cardContainer}`} to={`${targets.filter((target: any) => {
+                    const {name} = target;
+                    return name == "People";
+                    }).map((target: any) => {
+                      return target.url;
+                    })}`}>
                     <div className="card-body">
                       <div className="text-center mb-3">
                         <i
@@ -142,7 +150,7 @@ function OrganizationDashboard(): JSX.Element {
                         <p className={styles.counterHead}>{t('members')}</p>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 </Col>
                 <Col sm={4} className="mb-5">
                   <div className={`card ${styles.cardContainer}`}>
@@ -162,7 +170,12 @@ function OrganizationDashboard(): JSX.Element {
                   </div>
                 </Col>
                 <Col sm={4} className="mb-5">
-                  <div className={`card ${styles.cardContainer}`}>
+                  <Link className={`card ${styles.cardContainer}`} to={`${targets.filter((target: any) => {
+                    const {name} = target;
+                    return name == "Posts";
+                    }).map((target: any) => {
+                      return target.url;
+                    })}`}>
                     <div className="card-body">
                       <div className="text-center mb-3">
                         <i
@@ -176,43 +189,53 @@ function OrganizationDashboard(): JSX.Element {
                         <p className={styles.counterHead}>{t('posts')}</p>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 </Col>
                 <Col sm={4} className="mb-5">
-                  <div className={`card ${styles.cardContainer}`}>
-                    <div className="card-body">
-                      <div className="text-center mb-3">
-                        <i
-                          className={`fas fa-calendar ${styles.dashboardIcon}`}
-                        ></i>
+                  <Link className={`card ${styles.cardContainer}`} to={`${targets.filter((target: any) => {
+                    const {name} = target;
+                    return name == "Events";
+                    }).map((target: any) => {
+                      return target.url;
+                    })}`}>
+                      <div className="card-body">
+                        <div className="text-center mb-3">
+                          <i
+                            className={`fas fa-calendar ${styles.dashboardIcon}`}
+                          ></i>
+                        </div>
+                        <div className="text-center">
+                          <p className={styles.counterNumber}>
+                            {eventData.eventsByOrganization.length}
+                          </p>
+                          <p className={styles.counterHead}>{t('events')}</p>
+                        </div>
                       </div>
-                      <div className="text-center">
-                        <p className={styles.counterNumber}>
-                          {eventData.eventsByOrganization.length}
-                        </p>
-                        <p className={styles.counterHead}>{t('events')}</p>
-                      </div>
-                    </div>
-                  </div>
+                  </Link>
                 </Col>
                 <Col sm={4} className="mb-5">
-                  <div className={`card ${styles.cardContainer}`}>
-                    <div className="card-body">
-                      <div className="text-center mb-3">
-                        <i
-                          className={`fas fa-user-alt-slash ${styles.dashboardIcon}`}
-                        ></i>
+                  <Link className={`card ${styles.cardContainer}`} to={`${targets.filter((target: any) => {
+                    const {name} = target;
+                    return name == "Block/Unblock";
+                    }).map((target: any) => {
+                      return target.url;
+                    })}`}>
+                      <div className="card-body">
+                        <div className="text-center mb-3">
+                          <i
+                            className={`fas fa-user-alt-slash ${styles.dashboardIcon}`}
+                          ></i>
+                        </div>
+                        <div className="text-center">
+                          <p className={styles.counterNumber}>
+                            {data.organizations[0].blockedUsers.length}
+                          </p>
+                          <p className={styles.counterHead}>
+                            {t('blockedUsers')}
+                          </p>
+                        </div>
                       </div>
-                      <div className="text-center">
-                        <p className={styles.counterNumber}>
-                          {data.organizations[0].blockedUsers.length}
-                        </p>
-                        <p className={styles.counterHead}>
-                          {t('blockedUsers')}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                  </Link>
                 </Col>
                 <Col sm={4} className="mb-5">
                   <div className={`card ${styles.cardContainer}`}>
