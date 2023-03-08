@@ -78,8 +78,6 @@ function OrganizationDashboard(): JSX.Element {
   if (error || error_post || error_event) {
     window.location.replace('/orglist');
   }
-  
-  console.log(targets);
 
   return (
     <>
@@ -131,12 +129,17 @@ function OrganizationDashboard(): JSX.Element {
               </Row>
               <Row>
                 <Col sm={4} className="mb-5">
-                  <Link className={`card ${styles.cardContainer}`} to={`${targets.filter((target: any) => {
-                    const {name} = target;
-                    return name == "People";
-                    }).map((target: any) => {
-                      return target.url;
-                    })}`}>
+                  <Link
+                    className={`card ${styles.cardContainer}`}
+                    to={`${targets
+                      .filter((target: any) => {
+                        const { name } = target;
+                        return name == 'People';
+                      })
+                      .map((target: any) => {
+                        return target.url;
+                      })}`}
+                  >
                     <div className="card-body">
                       <div className="text-center mb-3">
                         <i
@@ -170,12 +173,17 @@ function OrganizationDashboard(): JSX.Element {
                   </div>
                 </Col>
                 <Col sm={4} className="mb-5">
-                  <Link className={`card ${styles.cardContainer}`} to={`${targets.filter((target: any) => {
-                    const {name} = target;
-                    return name == "Posts";
-                    }).map((target: any) => {
-                      return target.url;
-                    })}`}>
+                  <Link
+                    className={`card ${styles.cardContainer}`}
+                    to={`${targets
+                      .filter((target: any) => {
+                        const { name } = target;
+                        return name == 'Posts';
+                      })
+                      .map((target: any) => {
+                        return target.url;
+                      })}`}
+                  >
                     <div className="card-body">
                       <div className="text-center mb-3">
                         <i
@@ -192,49 +200,59 @@ function OrganizationDashboard(): JSX.Element {
                   </Link>
                 </Col>
                 <Col sm={4} className="mb-5">
-                  <Link className={`card ${styles.cardContainer}`} to={`${targets.filter((target: any) => {
-                    const {name} = target;
-                    return name == "Events";
-                    }).map((target: any) => {
-                      return target.url;
-                    })}`}>
-                      <div className="card-body">
-                        <div className="text-center mb-3">
-                          <i
-                            className={`fas fa-calendar ${styles.dashboardIcon}`}
-                          ></i>
-                        </div>
-                        <div className="text-center">
-                          <p className={styles.counterNumber}>
-                            {eventData.eventsByOrganization.length}
-                          </p>
-                          <p className={styles.counterHead}>{t('events')}</p>
-                        </div>
+                  <Link
+                    className={`card ${styles.cardContainer}`}
+                    to={`${targets
+                      .filter((target: any) => {
+                        const { name } = target;
+                        return name == 'Events';
+                      })
+                      .map((target: any) => {
+                        return target.url;
+                      })}`}
+                  >
+                    <div className="card-body">
+                      <div className="text-center mb-3">
+                        <i
+                          className={`fas fa-calendar ${styles.dashboardIcon}`}
+                        ></i>
                       </div>
+                      <div className="text-center">
+                        <p className={styles.counterNumber}>
+                          {eventData.eventsByOrganization.length}
+                        </p>
+                        <p className={styles.counterHead}>{t('events')}</p>
+                      </div>
+                    </div>
                   </Link>
                 </Col>
                 <Col sm={4} className="mb-5">
-                  <Link className={`card ${styles.cardContainer}`} to={`${targets.filter((target: any) => {
-                    const {name} = target;
-                    return name == "Block/Unblock";
-                    }).map((target: any) => {
-                      return target.url;
-                    })}`}>
-                      <div className="card-body">
-                        <div className="text-center mb-3">
-                          <i
-                            className={`fas fa-user-alt-slash ${styles.dashboardIcon}`}
-                          ></i>
-                        </div>
-                        <div className="text-center">
-                          <p className={styles.counterNumber}>
-                            {data.organizations[0].blockedUsers.length}
-                          </p>
-                          <p className={styles.counterHead}>
-                            {t('blockedUsers')}
-                          </p>
-                        </div>
+                  <Link
+                    className={`card ${styles.cardContainer}`}
+                    to={`${targets
+                      .filter((target: any) => {
+                        const { name } = target;
+                        return name == 'Block/Unblock';
+                      })
+                      .map((target: any) => {
+                        return target.url;
+                      })}`}
+                  >
+                    <div className="card-body">
+                      <div className="text-center mb-3">
+                        <i
+                          className={`fas fa-user-alt-slash ${styles.dashboardIcon}`}
+                        ></i>
                       </div>
+                      <div className="text-center">
+                        <p className={styles.counterNumber}>
+                          {data.organizations[0].blockedUsers.length}
+                        </p>
+                        <p className={styles.counterHead}>
+                          {t('blockedUsers')}
+                        </p>
+                      </div>
+                    </div>
                   </Link>
                 </Col>
                 <Col sm={4} className="mb-5">
