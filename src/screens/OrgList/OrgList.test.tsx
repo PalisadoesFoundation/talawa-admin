@@ -271,4 +271,8 @@ test('Search bar filters organizations by name', async () => {
   userEvent.clear(searchBar);
   userEvent.type(searchBar, 'Aka');
   expect(container.textContent).toMatch('Akatsuki');
+
+  // Test that all organizations are displayed when search bar filter is empty
+  userEvent.clear(searchBar);
+  expect(container.textContent).toMatch('Akatsuki');
 });
