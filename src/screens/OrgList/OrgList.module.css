@@ -53,18 +53,18 @@
 }
 
 .justifysp > input {
-    text-decoration: none;
-    margin-bottom: 50px;
-    border-color: #dbd7d7;
-    border-style: solid;
-    width: 35%;
-    border-radius: 5px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-right: 10px;
-    padding-left: 10px;
-    box-shadow: none;
-  }
+  text-decoration: none;
+  margin-bottom: 50px;
+  border-color: #dbd7d7;
+  border-style: solid;
+  width: 35%;
+  border-radius: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  box-shadow: none;
+}
 
 .logintitle {
   color: #707070;
