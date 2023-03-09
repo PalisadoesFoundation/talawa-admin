@@ -83,9 +83,6 @@ function OrganizationDashboard(): JSX.Element {
       <AdminNavbar targets={targets} url_1={configUrl} />
       <Row className={styles.toporginfo}>
         <p className={styles.toporgname}>{data.organizations[0].name}</p>
-        <p className={styles.toporgloc}>
-          {t('location')} : {data.organizations[0].location}
-        </p>
       </Row>
       <Row>
         <Col sm={3}>
@@ -93,6 +90,9 @@ function OrganizationDashboard(): JSX.Element {
             <div className={styles.sidebarsticky}>
               <h6 className={styles.titlename}>{t('about')}</h6>
               <p>{data.organizations[0].description}</p>
+              <p className={styles.toporgloc}>
+                {t('location')} : {data.organizations[0].location}
+              </p>
               {data.organizations[0].image ? (
                 <img
                   src={data.organizations[0].image}
