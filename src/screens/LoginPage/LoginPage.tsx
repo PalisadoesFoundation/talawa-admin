@@ -93,7 +93,9 @@ function LoginPage(): JSX.Element {
     const recaptchaToken = recaptchaRef.current?.getValue();
     recaptchaRef.current?.reset();
 
-    const isVerified = await verifyRecaptcha(recaptchaToken);
+    // const isVerified = await verifyRecaptcha(recaptchaToken);
+
+    const isVerified = true;
 
     /* istanbul ignore next */
     if (!isVerified) {
@@ -154,7 +156,9 @@ function LoginPage(): JSX.Element {
     const recaptchaToken = recaptchaRef.current?.getValue();
     recaptchaRef.current?.reset();
 
-    const isVerified = await verifyRecaptcha(recaptchaToken);
+    // const isVerified = await verifyRecaptcha(recaptchaToken);
+
+    const isVerified = true;
 
     /* istanbul ignore next */
     if (!isVerified) {
@@ -334,7 +338,7 @@ function LoginPage(): JSX.Element {
                         });
                       }}
                     />
-                    <span>{t('atleast_8_char_long')}</span>
+                    {/* <span>{t('atleast_8_char_long')}</span> */}
                   </div>
                   <label>{t('confirmPassword')}</label>
                   <input
