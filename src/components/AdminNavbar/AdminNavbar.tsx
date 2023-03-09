@@ -9,6 +9,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import Cookies from 'js-cookie';
 import i18next from 'i18next';
+import { useHistory } from 'react-router-dom';
 
 import styles from './AdminNavbar.module.css';
 import Logo from 'assets/talawa-logo-200x200.png';
@@ -40,6 +41,8 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
     variables: { id: currentUrl },
   });
   const [updateSpam] = useMutation(UPDATE_SPAM_NOTIFICATION_MUTATION);
+
+  const history = useHistory();
 
   useEffect(() => {
     const handleUpdateSpam = async () => {
@@ -88,7 +91,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
 
   /* istanbul ignore next */
   if (error) {
-    window.location.replace('/orglist');
+    history.push('/orglist');
   }
 
   let OrgName;
