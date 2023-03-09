@@ -102,10 +102,7 @@
     "events": "आयोजन",
     "blockedUsers": "रोके गए उपयोगकर्ता",
     "membershipRequests": "सदस्यता अनुरोध",
-    "deleteOrganization": "संगठन हटाएं",
-    "deleteMsg": "क्या आप इस संगठन को हटाना चाहते हैं?",
-    "no": "नहीं",
-    "yes": "हाँ"
+    "deleteOrganization": "संगठन हटाएं"
   },
   "organizationPeople": {
     "title": "तलावा सदस्य",
@@ -273,7 +270,10 @@
     "deleteOrganization": "संगठन हटाएं",
     "seeRequest": "अनुरोध देखें",
     "settings": "समायोजन",
-    "noData": "कोई डेटा नहीं"
+    "noData": "कोई डेटा नहीं",
+    "deleteMsg": "क्या आप इस संगठन को हटाना चाहते हैं?",
+    "no": "नहीं",
+    "yes": "हाँ"
   },
   "userUpdate": {
     "firstName": "पहला नाम",

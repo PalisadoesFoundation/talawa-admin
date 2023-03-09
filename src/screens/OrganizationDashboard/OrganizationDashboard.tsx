@@ -1,11 +1,10 @@
 import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { useMutation, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { useSelector } from 'react-redux';
 import { RootState } from 'state/reducers';
 import { Container } from 'react-bootstrap';
-import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
 import styles from './OrganizationDashboard.module.css';
@@ -16,7 +15,6 @@ import {
   ORGANIZATION_EVENT_LIST,
   ORGANIZATION_POST_LIST,
 } from 'GraphQl/Queries/Queries';
-import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 
 function OrganizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
@@ -44,26 +42,6 @@ function OrganizationDashboard(): JSX.Element {
   } = useQuery(ORGANIZATION_EVENT_LIST, {
     variables: { id: currentUrl },
   });
-
-  const [del] = useMutation(DELETE_ORGANIZATION_MUTATION);
-
-  const delete_org = async () => {
-    try {
-      const { data } = await del({
-        variables: {
-          id: currentUrl,
-        },
-      });
-
-      /* istanbul ignore next */
-      if (data) {
-        window.location.replace('/orglist');
-      }
-    } catch (error: any) {
-      /* istanbul ignore next */
-      toast.error(error.message);
-    }
-  };
 
   if (loading || loading_post || loading_event) {
     return (
@@ -106,17 +84,6 @@ function OrganizationDashboard(): JSX.Element {
                   data-testid="orgDashImgAbsent"
                 />
               )}
-              <p className={styles.tagdetailsGreen}>
-                <button
-                  type="button"
-                  className="mt-3"
-                  data-testid="deleteClick"
-                  data-toggle="modal"
-                  data-target="#deleteOrganizationModal"
-                >
-                  {t('deleteThisOrganization')}
-                </button>
-              </p>
             </div>
           </div>
         </Col>
@@ -238,51 +205,6 @@ function OrganizationDashboard(): JSX.Element {
           </Container>
         </Col>
       </Row>
-
-      <div
-        className="modal fade"
-        id="deleteOrganizationModal"
-        tabIndex={-1}
-        role="dialog"
-        aria-labelledby="deleteOrganizationModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="deleteOrganizationModalLabel">
-                {t('deleteOrganization')}
-              </h5>
-              <button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">{t('deleteMsg')}</div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-danger"
-                data-dismiss="modal"
-              >
-                {t('no')}
-              </button>
-              <button
-                type="button"
-                className="btn btn-success"
-                onClick={delete_org}
-                data-testid="deleteOrganizationBtn"
-              >
-                {t('yes')}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
     </>
   );
 }

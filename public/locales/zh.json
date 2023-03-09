@@ -102,10 +102,7 @@
     "events": "事件",
     "blockedUsers": "被阻止的用戶",
     "membershipRequests": "會員申請",
-    "deleteOrganization": "刪除組織",
-    "deleteMsg": "您要刪除此組織嗎？",
-    "no": "不",
-    "yes": "是的"
+    "deleteOrganization": "刪除組織"
   },
   "organizationPeople": {
     "title": "塔拉瓦成員",
@@ -273,7 +270,10 @@
     "deleteOrganization": "刪除組織",
     "seeRequest": "查看請求",
     "settings": "設置",
-    "noData": "沒有數據"
+    "noData": "沒有數據",
+    "deleteMsg": "您要刪除此組織嗎？",
+    "no": "不",
+    "yes": "是的"
   },
   "userUpdate": {
     "firstName": "名",

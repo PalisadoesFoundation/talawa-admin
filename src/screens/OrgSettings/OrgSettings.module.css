@@ -127,6 +127,25 @@
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 }
+
+.btndanger {
+  margin: 1rem 0 0;
+  margin-top: 15px;
+  border: 1px solid #e8e5e5;
+  box-shadow: 0 2px 2px #e8e5e5;
+  padding: 6px 8px;
+  border-radius: 5px;
+  background-color: #dc3545;
+  border-color: #dc3545;
+  width: 70%;
+  font-size: 14px;
+  color: white;
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
 .sidebarsticky > input {
   text-decoration: none;
   margin-bottom: 50px;

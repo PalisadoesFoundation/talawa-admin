@@ -102,10 +102,7 @@
     "events": "Eventos",
     "blockedUsers": "Usuarios bloqueados",
     "membershipRequests": "Solicitudes de membresía",
-    "deleteOrganization": "Eliminar Organización",
-    "deleteMsg": "¿Desea eliminar esta organización?",
-    "no": "No",
-    "yes": "Sí"
+    "deleteOrganization": "Eliminar Organización"
   },
   "organizationPeople": {
     "title": "Miembros Talawa",
@@ -273,7 +270,10 @@
     "deleteOrganization": "Eliminar Organización",
     "seeRequest": "Ver Solicitud",
     "settings": "Ajustes",
-    "noData": "Sin datos"
+    "noData": "Sin datos",
+    "deleteMsg": "¿Desea eliminar esta organización?",
+    "no": "No",
+    "yes": "Sí"
   },
   "userUpdate": {
     "firstName": "Primer nombre",

@@ -7,8 +7,13 @@ import OrgUpdate from 'components/OrgUpdate/OrgUpdate';
 import OrgDelete from 'components/OrgDelete/OrgDelete';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import MemberRequestCard from 'components/MemberRequestCard/MemberRequestCard';
-import { useQuery } from '@apollo/client';
-import { MEMBERSHIP_REQUEST } from 'GraphQl/Queries/Queries';
+import { useMutation, useQuery } from '@apollo/client';
+import {
+  MEMBERSHIP_REQUEST,
+  ORGANIZATIONS_LIST,
+} from 'GraphQl/Queries/Queries';
+import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { RootState } from 'state/reducers';
 import { useTranslation } from 'react-i18next';
@@ -29,9 +34,6 @@ function OrgSettings(): JSX.Element {
     } else if (number === 2) {
       setDisplayScreenVariable('updateOrganization');
       setScreenVariable(2);
-    } else if (number === 3) {
-      setDisplayScreenVariable('deleteOrganization');
-      setScreenVariable(3);
     } else {
       setDisplayScreenVariable('seeRequest');
       setScreenVariable(4);
@@ -46,8 +48,34 @@ function OrgSettings(): JSX.Element {
   const { data, loading, error } = useQuery(MEMBERSHIP_REQUEST, {
     variables: { id: currentUrl },
   });
+  const { loading: loadingOrg, error: errorOrg } = useQuery(
+    ORGANIZATIONS_LIST,
+    {
+      variables: { id: currentUrl },
+    }
+  );
 
-  if (loading) {
+  const [del] = useMutation(DELETE_ORGANIZATION_MUTATION);
+
+  const delete_org = async () => {
+    try {
+      const { data } = await del({
+        variables: {
+          id: currentUrl,
+        },
+      });
+
+      /* istanbul ignore next */
+      if (data) {
+        window.location.replace('/orglist');
+      }
+    } catch (error: any) {
+      /* istanbul ignore next */
+      toast.error(error.message);
+    }
+  };
+
+  if (loading || loadingOrg) {
     return (
       <>
         <div className={styles.loader}></div>
@@ -56,7 +84,7 @@ function OrgSettings(): JSX.Element {
   }
 
   /* istanbul ignore next */
-  if (error) {
+  if (error || errorOrg) {
     window.location.href = '/orglist';
   }
 
@@ -92,21 +120,20 @@ function OrgSettings(): JSX.Element {
                   className={styles.greenregbtn}
                   type="button"
                   value="orgdelete"
-                  data-testid="orgDeleteBtn"
-                  onClick={() => handleClick(3)}
-                  // onClick={() => setScreenVariable(3)}
-                >
-                  {t('deleteOrganization')}
-                </button>
-                <button
-                  className={styles.greenregbtn}
-                  type="button"
-                  value="orgdelete"
                   data-testid="orgDeleteBtn2"
                   onClick={() => handleClick(4)}
                   // onClick={() => setScreenVariable(4)}
                 >
                   {t('seeRequest')}
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.btndanger}`}
+                  data-testid="deleteClick"
+                  data-toggle="modal"
+                  data-target="#deleteOrganizationModal"
+                >
+                  {t('deleteOrganization')}
                 </button>
               </div>
             </div>
@@ -174,6 +201,51 @@ function OrgSettings(): JSX.Element {
           </div>
         </Col>
       </Row>
+
+      <div
+        className="modal fade"
+        id="deleteOrganizationModal"
+        tabIndex={-1}
+        role="dialog"
+        aria-labelledby="deleteOrganizationModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="deleteOrganizationModalLabel">
+                {t('deleteOrganization')}
+              </h5>
+              <button
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">{t('deleteMsg')}</div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-danger"
+                data-dismiss="modal"
+              >
+                {t('no')}
+              </button>
+              <button
+                type="button"
+                className="btn btn-success"
+                onClick={delete_org}
+                data-testid="deleteOrganizationBtn"
+              >
+                {t('yes')}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

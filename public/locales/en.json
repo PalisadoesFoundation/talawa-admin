@@ -102,10 +102,7 @@
     "events": "Events",
     "blockedUsers": "Blocked Users",
     "membershipRequests": "Membership Requests",
-    "deleteOrganization": "Delete Organization",
-    "deleteMsg": "Do you want to delete this organization?",
-    "no": "No",
-    "yes": "Yes"
+    "deleteOrganization": "Delete Organization"
   },
   "organizationPeople": {
     "title": "Talawa Members",
@@ -273,7 +270,10 @@
     "deleteOrganization": "Delete Organization",
     "seeRequest": "See Request",
     "settings": "Settings",
-    "noData": "No data"
+    "noData": "No data",
+    "deleteMsg": "Do you want to delete this organization?",
+    "no": "No",
+    "yes": "Yes"
   },
   "userUpdate": {
     "firstName": "First Name",
