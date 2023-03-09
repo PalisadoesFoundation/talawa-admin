@@ -69,20 +69,20 @@ function LoginPage(): JSX.Element {
   const [recaptcha, { loading: recaptchaLoading }] =
     useMutation(RECAPTCHA_MUTATION);
 
-  const verifyRecaptcha = async (recaptchaToken: any) => {
-    try {
-      const { data } = await recaptcha({
-        variables: {
-          recaptchaToken,
-        },
-      });
+  // const verifyRecaptcha = async (recaptchaToken: any) => {
+  //   try {
+  //     const { data } = await recaptcha({
+  //       variables: {
+  //         recaptchaToken,
+  //       },
+  //     });
 
-      return data.recaptcha;
-    } catch (error) {
-      /* istanbul ignore next */
-      toast.error('Captcha Error!');
-    }
-  };
+  //     return data.recaptcha;
+  //   } catch (error) {
+  //     /* istanbul ignore next */
+  //     toast.error('Captcha Error!');
+  //   }
+  // };
 
   const signup_link = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -90,8 +90,8 @@ function LoginPage(): JSX.Element {
     const { signfirstName, signlastName, signEmail, signPassword, cPassword } =
       signformState;
 
-    const recaptchaToken = recaptchaRef.current?.getValue();
-    recaptchaRef.current?.reset();
+    // const recaptchaToken = recaptchaRef.current?.getValue();
+    // recaptchaRef.current?.reset();
 
     // const isVerified = await verifyRecaptcha(recaptchaToken);
 
@@ -153,8 +153,8 @@ function LoginPage(): JSX.Element {
   const login_link = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const recaptchaToken = recaptchaRef.current?.getValue();
-    recaptchaRef.current?.reset();
+    // const recaptchaToken = recaptchaRef.current?.getValue();
+    // recaptchaRef.current?.reset();
 
     // const isVerified = await verifyRecaptcha(recaptchaToken);
 
