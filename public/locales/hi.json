@@ -35,7 +35,7 @@
     "isPublic": "सार्वजनिक है",
     "visibleInSearch": "खोज में दृश्यमान",
     "displayImage": "प्रदर्शन छवि",
-    "enterName": "नाम दर्ज करें"
+    "enterName": "नाम दर्ज करें (अधिकतम 15 वर्ण)"
   },
   "superDashListCard": {
     "created": "बनाया था",

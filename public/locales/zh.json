@@ -35,7 +35,7 @@
     "isPublic": "是否公開",
     "visibleInSearch": "在搜索中可見",
     "displayImage": "顯示圖像",
-    "enterName": "输入名字"
+    "enterName": "输入名字 (最多 15 个字符)"
   },
   "superDashListCard": {
     "created": "創造",

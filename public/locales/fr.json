@@ -35,7 +35,7 @@
     "isPublic": "Est publique",
     "visibleInSearch": "Visible dans la recherche",
     "displayImage": "Afficher l'image",
-    "enterName": "Entrez le nom"
+    "enterName": "Entrez le nom (15 caractères maximum)"
   },
   "superDashListCard": {
     "created": "Établi",

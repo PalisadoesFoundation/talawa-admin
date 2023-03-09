@@ -291,6 +291,7 @@ function OrgList(): JSX.Element {
             <Form onSubmitCapture={CreateOrg}>
               <label htmlFor="orgname">{t('name')}</label>
               <input
+                maxLength={15}
                 type="name"
                 id="orgname"
                 placeholder={t('enterName')}

@@ -35,7 +35,7 @@
     "isPublic": "Is Public",
     "visibleInSearch": "Visible In Search",
     "displayImage": "Display Image",
-    "enterName": "Enter Name"
+    "enterName": "Enter Name (Maximum 15 characters)"
   },
   "superDashListCard": {
     "created": "Created",
