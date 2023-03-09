@@ -324,6 +324,7 @@ function LoginPage(): JSX.Element {
                     <input
                       type="password"
                       id="signpassword"
+                      data-testid="signpassword"
                       placeholder={t('password')}
                       required
                       value={signformState.signPassword}
@@ -334,7 +335,9 @@ function LoginPage(): JSX.Element {
                         });
                       }}
                     />
-                    <span>{t('atleast_8_char_long')}</span>
+                    {signformState.signPassword.length < 8 && (
+                      <span>{t('atleast_8_char_long')}</span>
+                    )}
                   </div>
                   <label>{t('confirmPassword')}</label>
                   <input
