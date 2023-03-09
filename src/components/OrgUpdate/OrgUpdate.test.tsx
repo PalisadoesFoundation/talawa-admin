@@ -80,12 +80,11 @@ const MOCKS = [
       query: UPDATE_ORGANIZATION_MUTATION,
       variables: {
         id: '123',
-        name: 'Updated Organization',
-        description: 'This is an updated test organization',
-        location: 'Updated location',
-        image: new File(['hello'], 'hello.png', { type: 'image/png' }),
-        isPublic: true,
-        visibleInSearch: false,
+        name: 'John Doe',
+        description: 'This is a description',
+        location: 'Test location',
+        isPublic: false,
+        visibleInSearch: true,
       },
     },
     result: {
