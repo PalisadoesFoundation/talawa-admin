@@ -13,7 +13,8 @@
     "confirmPassword": "पासवर्ड की पुष्टि कीजिये",
     "forgotPassword": "पासवर्ड भूल गए ?",
     "enterEmail": "ईमेल दर्ज करें",
-    "enterPassword": "पास वर्ड दर्ज करें"
+    "enterPassword": "पास वर्ड दर्ज करें",
+    "doNotOwnAnAccount": "क्या आपके पास खाता नहीं है?"
   },
   "listNavbar": {
     "talawa_portal": "तलावा पोर्टल",

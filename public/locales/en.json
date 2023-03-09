@@ -13,7 +13,8 @@
     "confirmPassword": "Confirm Password",
     "forgotPassword": "Forgot Password ?",
     "enterEmail": "Enter Email",
-    "enterPassword": "Enter Password"
+    "enterPassword": "Enter Password",
+    "doNotOwnAnAccount": "Do not own an account?"
   },
   "listNavbar": {
     "talawa_portal": "Talawa Portal",
