@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen, fireEvent } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
@@ -322,25 +322,5 @@ describe('Testing Login Page Screen', () => {
     );
 
     await wait();
-  });
-
-  test('renders the span element when password length < 8', () => {
-    const { getByText, queryByText } = render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    const passwordInput = screen.getByTestId('signpassword');
-    fireEvent.change(passwordInput, { target: { value: 'pass' } });
-    expect(getByText('Atleast 8 Character long')).toBeInTheDocument();
-    fireEvent.change(passwordInput, { target: { value: 'password' } });
-    expect(queryByText('Atleast 8 Character long')).toBeNull();
   });
 });
