@@ -334,5 +334,26 @@
     "enable": "Enabled",
     "install": "Install",
     "uninstall": "Uninstall"
+  },
+  "memberDetail": {
+    "title": "User Details",
+    "addAdmin": "Add Admin",
+    "organizations": "Organizations",
+    "events": "Events",
+    "role": "Role",
+    "email": "Email",
+    "createdOn": "Created on",
+    "main": "Main",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "memberOfOrganization": "Member of Organization",
+    "language": "Language",
+    "adminApproved": "Admin approved",
+    "pluginCreationAllowed": "Plugin creation allowed",
+    "joined": "Joined",
+    "created": "Created",
+    "adminForOrganizations": "Admin for organizations",
+    "membershipRequests": "Membership requests",
+    "adminForEvents": "Admin for events"
   }
 }
