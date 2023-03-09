@@ -29,6 +29,7 @@ function LoginPage(): JSX.Element {
 
   const [modalisOpen, setIsOpen] = React.useState(false);
   const [componentLoader, setComponentLoader] = useState(true);
+  const [errShowPassword, setErrShowPassword] = useState(false);
   const [signformState, setSignFormState] = useState({
     signfirstName: '',
     signlastName: '',
@@ -101,6 +102,10 @@ function LoginPage(): JSX.Element {
       return;
     }
 
+    if (signPassword.length < 8) {
+      return setErrShowPassword(true);
+    }
+
     if (
       signfirstName.length > 1 &&
       signlastName.length > 1 &&
@@ -131,6 +136,8 @@ function LoginPage(): JSX.Element {
               signPassword: '',
               cPassword: '',
             });
+
+            setErrShowPassword(false);
           }
         } catch (error: any) {
           /* istanbul ignore next */
@@ -334,7 +341,9 @@ function LoginPage(): JSX.Element {
                         });
                       }}
                     />
-                    <span>{t('atleast_8_char_long')}</span>
+                    <span>
+                      {errShowPassword ? t('atleast_8_char_long') : null}
+                    </span>
                   </div>
                   <label>{t('confirmPassword')}</label>
                   <input
