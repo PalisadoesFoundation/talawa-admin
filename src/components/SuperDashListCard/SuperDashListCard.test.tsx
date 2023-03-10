@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { I18nextProvider } from 'react-i18next';
+import { BrowserRouter } from 'react-router-dom';
 import 'jest-location-mock';
 
 import SuperDashListCard from './SuperDashListCard';
@@ -11,7 +12,7 @@ import i18nForTest from 'utils/i18nForTest';
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('Testing the Super Dash List', () => {
-  test('should render props and text elements test for the page component', () => {
+  test('should render props and text elements test for the page component', async () => {
     const props = {
       key: '123',
       id: '123',
@@ -34,18 +35,20 @@ describe('Testing the Super Dash List', () => {
     const clickButton = buttonInstance.find('button');
 
     render(
-      <I18nextProvider i18n={i18nForTest}>
-        <SuperDashListCard
-          key={props.key}
-          id={props.id}
-          image={props.image}
-          orgName={props.orgName}
-          orgLocation={props.orgLocation}
-          createdDate={props.createdDate}
-          admins={props.admins}
-          members={props.members}
-        />
-      </I18nextProvider>
+      <BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <SuperDashListCard
+            key={props.key}
+            id={props.id}
+            image={props.image}
+            orgName={props.orgName}
+            orgLocation={props.orgLocation}
+            createdDate={props.createdDate}
+            admins={props.admins}
+            members={props.members}
+          />
+        </I18nextProvider>
+      </BrowserRouter>
     );
 
     expect(screen.getByText('Admins:')).toBeInTheDocument();

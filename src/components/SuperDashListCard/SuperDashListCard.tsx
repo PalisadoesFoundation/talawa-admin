@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useTranslation } from 'react-i18next';
@@ -20,10 +20,18 @@ interface SuperDashListCardProps {
 function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
   const userId = localStorage.getItem('id');
   const userType = localStorage.getItem('UserType');
+  const [clicked, setClicked] = useState(false);
   const history = useHistory();
 
+  useEffect(() => {
+    if (clicked) {
+      history.push('/orgdash/id=' + props.id);
+      setClicked(false);
+    }
+  }, [clicked]);
+
   function Click() {
-    history.push('/orgdash/id=' + props.id);
+    setClicked(true);
   }
 
   const { t } = useTranslation('translation', {
