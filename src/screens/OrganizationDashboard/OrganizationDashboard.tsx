@@ -92,7 +92,9 @@ function OrganizationDashboard(): JSX.Element {
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
               <h6 className={styles.titlename}>{t('about')}</h6>
-              <p>{data.organizations[0].description}</p>
+              <p className={styles.description}>
+                {data.organizations[0].description}
+              </p>
               {data.organizations[0].image ? (
                 <img
                   src={data.organizations[0].image}
