@@ -42,11 +42,11 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
     console.log(formState);
     const { data } = await create({
       variables: {
-        $pluginName: formState.pluginName,
-        $pluginCreatedBy: formState.pluginCreatedBy,
-        $pluginDesc: formState.pluginDesc,
-        $pluginInstallStatus: formState.pluginInstallStatus,
-        $installedOrgs: formState.installedOrgs,
+        pluginName: formState.pluginName,
+        pluginCreatedBy: formState.pluginCreatedBy,
+        pluginDesc: formState.pluginDesc,
+        pluginInstallStatus: formState.pluginInstallStatus,
+        installedOrgs: formState.installedOrgs,
       },
     });
 
