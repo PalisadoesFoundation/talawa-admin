@@ -55,6 +55,7 @@
 .justifysp > input {
   text-decoration: none;
   margin-bottom: 50px;
+  margin-left: -40px;
   border-color: #dbd7d7;
   border-style: solid;
   width: 35%;
@@ -103,13 +104,26 @@
 .justifysp {
   display: flex;
   justify-content: space-between;
+  margin-right: -110px;
+  margin-left: -15px;
 }
 @media screen and (max-width: 1200px) {
   .justifysp {
     padding-left: 55px;
-    display: flex;
+    display: block;
     justify-content: space-between;
     width: 100%;
+    margin-bottom: 40px;
+  }
+
+  .logintitle {
+    width: 90%;
+  }
+
+  .justifysp > input {
+    width: 90%;
+    margin-left: 1px;
+    margin-bottom: 30px;
   }
 
   .mainpageright {
@@ -330,9 +344,9 @@ form > input {
     bottom: 18px;
   }
   .invitebtn {
-    width: 135px;
+    width: auto;
     position: relative;
-    right: 10px;
+    right: 0px;
   }
   .form_wrapper {
     width: 90%;
