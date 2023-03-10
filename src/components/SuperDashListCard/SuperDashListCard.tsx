@@ -23,6 +23,7 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
 
   function handleClick() {
     const url = '/orgdash/id=' + props.id;
+    window.location.replace(url);
     history.push(url);
   }
 
