@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import styles from './OrgAdminListCard.module.css';
 import { REMOVE_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 interface OrgPeopleListCardProps {
   key: string;
@@ -59,9 +60,15 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
           )}
           <Col className={styles.singledetails}>
             <div className={styles.singledetails_data_left}>
-              <p className={styles.membername}>
+              <Link
+                className={styles.membername}
+                to={{
+                  pathname: `/member/id=${currentUrl}`,
+                  state: { id: props.id },
+                }}
+              >
                 {props.memberName ? <>{props.memberName}</> : <>Dogs Care</>}
-              </p>
+              </Link>
               <p className={styles.memberfontcreated}>{props.memberEmail}</p>
             </div>
             <div className={styles.singledetails_data_right}>
