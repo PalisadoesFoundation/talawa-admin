@@ -81,9 +81,6 @@ function OrganizationDashboard(): JSX.Element {
   return (
     <>
       <AdminNavbar targets={targets} url_1={configUrl} />
-      <Row className={styles.toporginfo}>
-        <p className={styles.toporgname}>{data.organizations[0].name}</p>
-      </Row>
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>

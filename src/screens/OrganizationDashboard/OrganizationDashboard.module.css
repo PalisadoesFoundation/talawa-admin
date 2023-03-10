@@ -3,16 +3,6 @@
   flex-direction: row;
 }
 
-.toporginfo {
-  justify-content: space-evenly;
-  text-align: center;
-}
-.toporgname {
-  font-size: 24px;
-  border-bottom: 3px solid #31bb6b;
-  color: #707070;
-  font-weight: 600;
-}
 .toporgloc {
   padding-top: 8px;
   font-size: 16px;
