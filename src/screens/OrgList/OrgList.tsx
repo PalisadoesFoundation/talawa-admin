@@ -20,6 +20,7 @@ import ListNavbar from 'components/ListNavbar/ListNavbar';
 import PaginationList from 'components/PaginationList/PaginationList';
 import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
+import AdminDashListCard from 'components/AdminDashListCard/AdminDashListCard';
 
 function OrgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
@@ -231,20 +232,37 @@ function OrgList(): JSX.Element {
                     createdAt: string;
                     location: string | null;
                   }) => {
-                    return (
-                      <SuperDashListCard
-                        id={datas._id}
-                        key={datas._id}
-                        image={datas.image}
-                        admins={datas.admins}
-                        members={datas.members.length}
-                        createdDate={dayjs(datas?.createdAt).format(
-                          'DD/MM/YYYY'
-                        )}
-                        orgName={datas.name}
-                        orgLocation={datas.location}
-                      />
-                    );
+                    if (data_2?.user.userType == 'SUPERADMIN') {
+                      return (
+                        <SuperDashListCard
+                          id={datas._id}
+                          key={datas._id}
+                          image={datas.image}
+                          admins={datas.admins}
+                          members={datas.members.length}
+                          createdDate={dayjs(parseInt(datas?.createdAt)).format(
+                            'DD/MM/YYYY'
+                          )}
+                          orgName={datas.name}
+                          orgLocation={datas.location}
+                        />
+                      );
+                    } else {
+                      return (
+                        <AdminDashListCard
+                          id={datas._id}
+                          key={datas._id}
+                          image={datas.image}
+                          admins={datas.admins}
+                          members={datas.members.length}
+                          createdDate={dayjs(parseInt(datas?.createdAt)).format(
+                            'DD/MM/YYYY'
+                          )}
+                          orgName={datas.name}
+                          orgLocation={datas.location}
+                        />
+                      );
+                    }
                   }
                 )}
             </div>
