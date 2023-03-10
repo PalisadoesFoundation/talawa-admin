@@ -338,7 +338,11 @@ function LoginPage(): JSX.Element {
                         });
                       }}
                     />
-                    {/* <span>{t('atleast_8_char_long')}</span> */}
+                    {signformState.signPassword.length < 8 ? (
+                      <span>{t('atleast_8_char_long')}</span>
+                    ) : (
+                      <span>{''}</span>
+                    )}
                   </div>
                   <label>{t('confirmPassword')}</label>
                   <input
