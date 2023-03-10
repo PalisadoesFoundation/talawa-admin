@@ -1,6 +1,6 @@
 import React from 'react';
 import { act, render, screen } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider, MockLink } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 
@@ -51,6 +51,8 @@ const MOCKS = [
   },
 ];
 
+const mocklink = new MockLink(MOCKS, false, { showWarnings: false });
+
 async function wait(ms = 0) {
   await act(() => {
     return new Promise((resolve) => {
@@ -82,7 +84,7 @@ describe('Testing Event List Card', () => {
     global.confirm = () => true;
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={mocklink}>
         <I18nextProvider i18n={i18nForTest}>
           <EventListCard {...props} />
         </I18nextProvider>
@@ -91,20 +93,14 @@ describe('Testing Event List Card', () => {
 
     await wait();
 
-    expect(screen.getByText('Location:')).toBeInTheDocument();
-    expect(screen.getByText('On:')).toBeInTheDocument();
-    expect(screen.getByText('End:')).toBeInTheDocument();
-    expect(screen.getByText(props.eventLocation)).toBeInTheDocument();
     expect(screen.getByText(props.eventName)).toBeInTheDocument();
-    expect(screen.getByText(props.regDate)).toBeInTheDocument();
-    expect(screen.getByText(props.regEndDate)).toBeInTheDocument();
   });
 
   test('Should render text elements when props value is not passed', async () => {
     global.confirm = () => false;
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={mocklink}>
         <I18nextProvider i18n={i18nForTest}>
           <EventListCard
             key="123"
@@ -127,18 +123,12 @@ describe('Testing Event List Card', () => {
 
     await wait();
 
-    expect(screen.getByText('Location:')).toBeInTheDocument();
-    expect(screen.getByText('On:')).toBeInTheDocument();
-    expect(screen.getByText('End:')).toBeInTheDocument();
-    expect(screen.queryByText(props.eventLocation)).toBeInTheDocument();
     expect(screen.queryByText(props.eventName)).not.toBeInTheDocument();
-    expect(screen.getByText(props.regDate)).toBeInTheDocument();
-    expect(screen.getByText(props.regEndDate)).toBeInTheDocument();
   });
 
   test('Testing event update functionality', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={mocklink}>
         <I18nextProvider i18n={i18nForTest}>
           <EventListCard {...props} />
         </I18nextProvider>
@@ -165,7 +155,7 @@ describe('Testing Event List Card', () => {
 
   test('Testing if the event is not for all day', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={mocklink}>
         <I18nextProvider i18n={i18nForTest}>
           <EventListCard {...props} />
         </I18nextProvider>
@@ -193,7 +183,7 @@ describe('Testing Event List Card', () => {
 
   test('Testing delete event funcationality', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={mocklink}>
         <I18nextProvider i18n={i18nForTest}>
           <EventListCard {...props} />
         </I18nextProvider>

@@ -125,7 +125,6 @@ export const ORGANIZATIONS_LIST = gql`
         lastName
         email
       }
-      tags
     }
   }
 `;
@@ -189,6 +188,50 @@ export const USER_ORGANIZATION_LIST = gql`
         _id
         name
         image
+      }
+    }
+  }
+`;
+
+// To take the details of a user
+export const USER_DETAILS = gql`
+  query User($id: ID!) {
+    user(id: $id) {
+      image
+      firstName
+      lastName
+      email
+      appLanguageCode
+      userType
+      pluginCreationAllowed
+      adminApproved
+      createdAt
+      adminFor {
+        _id
+      }
+      createdOrganizations {
+        _id
+      }
+      joinedOrganizations {
+        _id
+      }
+      organizationUserBelongsTo {
+        _id
+      }
+      organizationsBlockedBy {
+        _id
+      }
+      createdEvents {
+        _id
+      }
+      registeredEvents {
+        _id
+      }
+      eventAdmin {
+        _id
+      }
+      membershipRequests {
+        _id
       }
     }
   }

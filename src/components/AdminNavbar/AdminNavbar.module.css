@@ -35,7 +35,7 @@ a {
 
 .logo {
   color: #707070;
-  margin-left: 0;
+  margin: 0.5rem 0;
   display: flex;
   align-items: center;
   text-decoration: none !important;
@@ -44,8 +44,6 @@ a {
 .logo img {
   margin-top: 0px;
   margin-left: 10px;
-  height: 64px;
-  width: 70px;
 }
 
 .logo > strong {

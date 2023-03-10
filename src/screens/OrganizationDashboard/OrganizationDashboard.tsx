@@ -106,22 +106,6 @@ function OrganizationDashboard(): JSX.Element {
                   data-testid="orgDashImgAbsent"
                 />
               )}
-              <h6 className={styles.titlename}>{t('tags')}</h6>
-              <p className={styles.tagdetails}>
-                {data.organizations[0].tags.length > 0 ? (
-                  data.organizations[0].tags.map(
-                    (tag: string, index: number) => (
-                      <button className="mb-3" key={index}>
-                        {tag}
-                      </button>
-                    )
-                  )
-                ) : (
-                  <button>{t('noTags')}</button>
-                )}
-              </p>
-              <p className={styles.tagdetails}></p>
-              <p className={styles.tagdetails}></p>
               <p className={styles.tagdetailsGreen}>
                 <button
                   type="button"

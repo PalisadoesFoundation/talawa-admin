@@ -49,6 +49,7 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
     $id: ID!
     $name: String
     $description: String
+    $location: String
     $isPublic: Boolean
     $visibleInSearch: Boolean
   ) {
@@ -59,6 +60,7 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
         description: $description
         isPublic: $isPublic
         visibleInSearch: $visibleInSearch
+        location: $location
       }
     ) {
       _id
@@ -141,7 +143,6 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
     $name: String!
     $visibleInSearch: Boolean!
     $isPublic: Boolean!
-    $tags: [String!]!
     $image: String
   ) {
     createOrganization(
@@ -151,7 +152,6 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
         name: $name
         visibleInSearch: $visibleInSearch
         isPublic: $isPublic
-        tags: $tags
       }
       file: $image
     ) {

@@ -110,7 +110,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
 
   return (
     <>
-      <div className="col-sm-6">
+      <div className="">
         <div className={styles.cards}>
           <div className={styles.dispflex}>
             <h2>{props.eventName ? <>{props.eventName}</> : <>Dogs Care</>}</h2>
@@ -133,7 +133,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
               </a>
             </div>
           </div>
-          <p>
+          {/* <p>
             {t('location')}:{' '}
             <span>
               {props.eventLocation ? <>{props.eventLocation}</> : <>India</>}
@@ -145,7 +145,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
           </p>
           <p>
             {t('end')}: <span>{props.regEndDate}</span>
-          </p>
+          </p> */}
         </div>
       </div>
 

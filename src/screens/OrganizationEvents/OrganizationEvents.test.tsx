@@ -3,15 +3,18 @@ import { MockedProvider } from '@apollo/react-testing';
 import { act, render, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import userEvent from '@testing-library/user-event';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 
 import OrganizationEvents from './OrganizationEvents';
-import { ORGANIZATION_EVENT_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATION_EVENT_CONNECTION_LIST,
+  ORGANIZATION_EVENT_LIST,
+} from 'GraphQl/Queries/Queries';
 import { store } from 'state/store';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
+import userEvent from '@testing-library/user-event';
 
 const MOCKS = [
   {
@@ -34,6 +37,37 @@ const MOCKS = [
             startDate: '',
             endDate: '',
             location: 'New Delhi',
+            startTime: '02:00',
+            endTime: '06:00',
+            allDay: false,
+            recurring: false,
+            isPublic: true,
+            isRegisterable: true,
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_EVENT_CONNECTION_LIST,
+      variables: {
+        title_contains: '',
+        description_contains: '',
+        organization_id: undefined,
+        location_contains: '',
+      },
+    },
+    result: {
+      data: {
+        eventsByOrganizationConnection: [
+          {
+            _id: '1',
+            title: 'Dummy Org',
+            description: 'This is a dummy organization',
+            location: 'string',
+            startDate: '',
+            endDate: '',
             startTime: '02:00',
             endTime: '06:00',
             allDay: false,
@@ -117,7 +151,26 @@ describe('Organisation Events Page', () => {
       },
     ]);
   });
+  test('It is necessary to query the correct mock data for organization.', async () => {
+    const dataQuery1 = MOCKS[1]?.result?.data?.eventsByOrganizationConnection;
 
+    expect(dataQuery1).toEqual([
+      {
+        _id: '1',
+        title: 'Dummy Org',
+        description: 'This is a dummy organization',
+        location: 'string',
+        startDate: '',
+        endDate: '',
+        startTime: '02:00',
+        endTime: '06:00',
+        allDay: false,
+        recurring: false,
+        isPublic: true,
+        isRegisterable: true,
+      },
+    ]);
+  });
   test('It is necessary to check correct render', async () => {
     window.location.assign('/orglist');
 

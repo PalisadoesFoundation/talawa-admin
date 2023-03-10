@@ -33,7 +33,6 @@ function OrgList(): JSX.Element {
     ispublic: true,
     visible: false,
     location: '',
-    tags: '',
     image: '',
   });
   const [, setSearchByName] = useState('');
@@ -73,12 +72,9 @@ function OrgList(): JSX.Element {
   const CreateOrg = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { name, descrip, location, visible, ispublic, tags, image } =
-      formState;
+    const { name, descrip, location, visible, ispublic, image } = formState;
 
     try {
-      const tagsArray = tags.split(',').map((tag) => tag.trim());
-
       const { data } = await create({
         variables: {
           name: name,
@@ -86,7 +82,6 @@ function OrgList(): JSX.Element {
           location: location,
           visibleInSearch: visible,
           isPublic: ispublic,
-          tags: tagsArray,
           image: image,
         },
       });
@@ -101,7 +96,6 @@ function OrgList(): JSX.Element {
           ispublic: true,
           visible: false,
           location: '',
-          tags: '',
           image: '',
         });
         setmodalIsOpen(false);
@@ -193,17 +187,6 @@ function OrgList(): JSX.Element {
                   </span>
                 </p>
               </div>
-
-              <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
-              <input
-                type="name"
-                id="orgname"
-                placeholder={t('enterName')}
-                data-testid="searchByName"
-                autoComplete="off"
-                required
-                onChange={debouncedHandleSearchByName}
-              />
             </div>
           </div>
         </Col>
@@ -211,6 +194,15 @@ function OrgList(): JSX.Element {
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>{t('organizationList')}</p>
+              <input
+                type="name"
+                id="orgname"
+                placeholder="Search Organization"
+                data-testid="searchByName"
+                autoComplete="off"
+                required
+                onChange={debouncedHandleSearchByName}
+              />
               <Button
                 variant="success"
                 className={styles.invitebtn}
@@ -341,21 +333,7 @@ function OrgList(): JSX.Element {
                   });
                 }}
               />
-              <label htmlFor="tags">{t('tags')}</label>
-              <input
-                type="text"
-                id="tags"
-                placeholder={t('tags')}
-                autoComplete="off"
-                required
-                value={formState.tags}
-                onChange={(e) => {
-                  setFormState({
-                    ...formState,
-                    tags: e.target.value,
-                  });
-                }}
-              />
+
               <div className={styles.checkboxdiv}>
                 <div className={styles.dispflex}>
                   <label htmlFor="ispublic">{t('isPublic')}:</label>
