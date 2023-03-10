@@ -106,7 +106,7 @@ const Calendar: React.FC<CalendarProps> = ({ eventData }) => {
         >
           {date.getDate()}
           <div className={styles.list_box}>
-            {eventData
+            {eventData && eventData
               .filter((datas) => {
                 if (datas.startDate == dayjs(date).format('YYYY-MM-DD'))
                   return datas;
