@@ -187,17 +187,6 @@ function OrgList(): JSX.Element {
                   </span>
                 </p>
               </div>
-
-              <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
-              <input
-                type="name"
-                id="orgname"
-                placeholder={t('enterName')}
-                data-testid="searchByName"
-                autoComplete="off"
-                required
-                onChange={debouncedHandleSearchByName}
-              />
             </div>
           </div>
         </Col>
@@ -205,6 +194,15 @@ function OrgList(): JSX.Element {
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>{t('organizationList')}</p>
+              <input
+                type="name"
+                id="orgname"
+                placeholder="Search Organization"
+                data-testid="searchByName"
+                autoComplete="off"
+                required
+                onChange={debouncedHandleSearchByName}
+              />
               <Button
                 variant="success"
                 className={styles.invitebtn}

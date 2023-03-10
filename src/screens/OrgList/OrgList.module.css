@@ -52,12 +52,13 @@
   width: 60%;
 }
 
-.sidebarsticky > input {
+.justifysp > input {
   text-decoration: none;
   margin-bottom: 50px;
-  border-color: #e8e5e5;
-  width: 80%;
-  border-radius: 7px;
+  border-color: #dbd7d7;
+  border-style: solid;
+  width: 35%;
+  border-radius: 5px;
   padding-top: 5px;
   padding-bottom: 5px;
   padding-right: 10px;
