@@ -3,7 +3,6 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
-
 import styles from './SuperDashListCard.module.css';
 
 interface SuperDashListCardProps {
