@@ -102,6 +102,7 @@ const Calendar: React.FC<CalendarProps> = ({ eventData }) => {
           }}
           key={index}
           className={className}
+          data-testid="day"
         >
           {date.getDate()}
           <div className={styles.list_box}>
@@ -142,7 +143,10 @@ const Calendar: React.FC<CalendarProps> = ({ eventData }) => {
         <button className={styles.button} onClick={handlePrevMonth}>
           {'<'}
         </button>
-        <div className={styles.calendar__header_month}>
+        <div
+          className={styles.calendar__header_month}
+          data-testid="current-date"
+        >
           {months[currentMonth]} {currentYear}
         </div>
         <button className={styles.button} onClick={handleNextMonth}>

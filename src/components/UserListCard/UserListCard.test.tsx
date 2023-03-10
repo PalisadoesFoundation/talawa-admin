@@ -7,6 +7,7 @@ import { I18nextProvider } from 'react-i18next';
 import UserListCard from './UserListCard';
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
+import { BrowserRouter } from 'react-router-dom';
 
 const MOCKS = [
   {
@@ -49,9 +50,11 @@ describe('Testing User List Card', () => {
 
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
-        <I18nextProvider i18n={i18nForTest}>
-          <UserListCard {...props} />
-        </I18nextProvider>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UserListCard {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
       </MockedProvider>
     );
 
@@ -76,9 +79,11 @@ describe('Testing User List Card', () => {
 
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
-        <I18nextProvider i18n={i18nForTest}>
-          <UserListCard {...props} />
-        </I18nextProvider>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UserListCard {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
       </MockedProvider>
     );
 

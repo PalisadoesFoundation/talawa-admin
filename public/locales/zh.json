@@ -334,5 +334,26 @@
     "enable": "启用",
     "install": "安装",
     "uninstall": "卸载"
+  },
+  "memberDetail": {
+    "title": "用户详细信息",
+    "addAdmin": "添加管理员",
+    "organizations": "组织",
+    "events": "事件",
+    "role": "角色",
+    "email": "电子邮件",
+    "createdOn": "创建于",
+    "main": "主要的",
+    "firstName": "名字",
+    "lastName": "姓氏",
+    "memberOfOrganization": "组织成员",
+    "language": "语言",
+    "adminApproved": "管理员已批准",
+    "pluginCreationAllowed": "允许创建插件",
+    "joined": "加入",
+    "created": "创建",
+    "adminForOrganizations": "组织管理员",
+    "membershipRequests": "会员申请",
+    "adminForEvents": "事件管理员"
   }
 }
