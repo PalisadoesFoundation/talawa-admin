@@ -2,7 +2,7 @@ import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-modal';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client'; //fixed problems with test
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Nav, Navbar } from 'react-bootstrap';
