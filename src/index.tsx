@@ -9,7 +9,7 @@ import {
   ApolloLink,
   HttpLink,
 } from '@apollo/client';
-import { onError } from '@apollo/link-error';
+import { onError } from '@apollo/client/link/error';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import 'react-datepicker/dist/react-datepicker.css';
