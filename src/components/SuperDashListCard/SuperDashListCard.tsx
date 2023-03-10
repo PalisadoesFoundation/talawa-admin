@@ -2,7 +2,7 @@ import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useTranslation } from 'react-i18next';
-
+import { useHistory } from 'react-router-dom';
 import styles from './SuperDashListCard.module.css';
 
 interface SuperDashListCardProps {
@@ -19,10 +19,11 @@ interface SuperDashListCardProps {
 function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
   const userId = localStorage.getItem('id');
   const userType = localStorage.getItem('UserType');
+  const history = useHistory();
 
-  function Click() {
+  function handleClick() {
     const url = '/orgdash/id=' + props.id;
-    window.location.replace(url);
+    history.push(url);
   }
 
   const { t } = useTranslation('translation', {
@@ -60,7 +61,7 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
             <div className={styles.orgCreateBtnDiv}>
               <button
                 className={styles.orgfontcreatedbtn}
-                onClick={Click}
+                onClick={handleClick}
                 disabled={
                   userType !== 'SUPERADMIN' &&
                   !props.admins.some((admin: any) => admin._id === userId)

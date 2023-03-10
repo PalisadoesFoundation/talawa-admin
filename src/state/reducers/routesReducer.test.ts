@@ -69,6 +69,7 @@ describe('Testing Routes reducer', () => {
         },
         { name: '', comp_id: 'orglist', component: 'OrgList' },
         { name: '', comp_id: 'orgsetting', component: 'OrgSettings' },
+        { name: '', comp_id: 'member', component: 'MemberDetail' },
       ],
     });
   });
@@ -138,6 +139,7 @@ describe('Testing Routes reducer', () => {
         },
         { name: '', comp_id: 'orglist', component: 'OrgList' },
         { name: '', comp_id: 'orgsetting', component: 'OrgSettings' },
+        { name: '', comp_id: 'member', component: 'MemberDetail' },
       ],
     });
   });
@@ -212,6 +214,7 @@ describe('Testing Routes reducer', () => {
         },
         { name: '', comp_id: 'orglist', component: 'OrgList' },
         { name: '', comp_id: 'orgsetting', component: 'OrgSettings' },
+        { name: '', comp_id: 'member', component: 'MemberDetail' },
       ],
     });
   });
