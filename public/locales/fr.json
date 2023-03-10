@@ -334,5 +334,26 @@
     "enable": "Activé",
     "install": "Installer",
     "uninstall": "désinstaller"
+  },
+  "memberDetail": {
+    "title": "Détails de l'utilisateur",
+    "addAdmin": "Ajouter un administrateur",
+    "organizations": "Organisations",
+    "events": "Événements",
+    "role": "Rôle",
+    "email": "Email",
+    "createdOn": "Créé le",
+    "main": "Principal",
+    "firstName": "Prénom",
+    "lastName": "Nom de famille",
+    "memberOfOrganization": "Membre de l'organisation",
+    "language": "Langue",
+    "adminApproved": "Approuvé par l'administrateur",
+    "pluginCreationAllowed": "Autorisation de création de plugin",
+    "joined": "Rejoint",
+    "created": "Créé",
+    "adminForOrganizations": "Administrateur pour les organisations",
+    "membershipRequests": "Demandes d'adhésion",
+    "adminForEvents": "Administrateur pour les événements"
   }
 }

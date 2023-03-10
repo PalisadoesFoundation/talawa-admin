@@ -41,6 +41,10 @@
   width: 90%;
 }
 
+.description {
+  word-wrap: break-word;
+}
+
 .titlename {
   color: #707070;
   font-weight: 600;
