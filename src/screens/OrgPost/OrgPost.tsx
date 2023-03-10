@@ -71,6 +71,7 @@ function OrgPost(): JSX.Element {
           posttitle: '',
           postinfo: '',
         });
+        setPostModalIsOpen(false); // close the modal
       }
     } catch (error: any) {
       toast.error(error.message);
