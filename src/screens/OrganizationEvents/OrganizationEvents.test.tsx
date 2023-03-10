@@ -7,10 +7,7 @@ import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 
 import OrganizationEvents from './OrganizationEvents';
-import {
-  ORGANIZATION_EVENT_CONNECTION_LIST,
-  ORGANIZATION_EVENT_LIST,
-} from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_EVENT_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { store } from 'state/store';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
