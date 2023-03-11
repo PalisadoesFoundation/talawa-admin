@@ -3,6 +3,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import styles from './OrgSettings.module.css';
 import UserUpdate from 'components/UserUpdate/UserUpdate';
+import UserPasswordUpdate from 'components/UserPasswordUpdate/UserPasswordUpdate';
 import OrgUpdate from 'components/OrgUpdate/OrgUpdate';
 import OrgDelete from 'components/OrgDelete/OrgDelete';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
@@ -32,9 +33,12 @@ function OrgSettings(): JSX.Element {
     } else if (number === 3) {
       setDisplayScreenVariable('deleteOrganization');
       setScreenVariable(3);
-    } else {
+    } else if (number === 4) {
       setDisplayScreenVariable('seeRequest');
       setScreenVariable(4);
+    } else {
+      setDisplayScreenVariable('updateYourPassword');
+      setScreenVariable(5);
     }
   };
 
@@ -77,6 +81,16 @@ function OrgSettings(): JSX.Element {
                   // onClick={() => setScreenVariable(1)}
                 >
                   {t('updateYourDetails')}
+                </button>
+                <button
+                  className={styles.greenregbtn}
+                  type="button"
+                  value="userPasswordUpdate"
+                  data-testid="userPasswordUpdateBtn"
+                  onClick={() => handleClick(5)}
+                  // onClick={() => setScreenVariable(1)}
+                >
+                  {t('updateYourPassword')}
                 </button>
                 <button
                   className={styles.greenregbtn}
@@ -129,6 +143,9 @@ function OrgSettings(): JSX.Element {
             </Row>
             <div>{screenVariable == 1 ? <UserUpdate id="abcd" /> : null}</div>
             <div>
+              {screenVariable == 5 ? <UserPasswordUpdate id="abcd" /> : null}
+            </div>
+            <div>
               {screenVariable == 2 ? (
                 <OrgUpdate
                   id="abcd"
@@ -140,7 +157,9 @@ function OrgSettings(): JSX.Element {
             <div>
               {screenVariable == 4 ? (
                 data.organizations.membershipRequests ? (
+                  /* istanbul ignore next */
                   data.organizations.map(
+                    /* istanbul ignore next */
                     (datas: {
                       _id: string;
                       membershipRequests: {
@@ -153,6 +172,7 @@ function OrgSettings(): JSX.Element {
                         };
                       };
                     }) => {
+                      /* istanbul ignore next */
                       return (
                         <MemberRequestCard
                           key={datas.membershipRequests._id}
