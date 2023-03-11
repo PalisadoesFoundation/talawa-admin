@@ -327,6 +327,7 @@ function LoginPage(): JSX.Element {
                       id="signpassword"
                       placeholder={t('password')}
                       onFocus={() => setIsInputFocused(true)}
+                      onBlur={() => setIsInputFocused(false)}
                       required
                       value={signformState.signPassword}
                       onChange={(e) => {
@@ -337,6 +338,11 @@ function LoginPage(): JSX.Element {
                       }}
                     />
                     {isInputFocused &&
+                      signformState.signPassword.length < 8 && (
+                        <span>{t('atleast_8_char_long')}</span>
+                      )}
+                    {!isInputFocused &&
+                      signformState.signPassword.length > 0 &&
                       signformState.signPassword.length < 8 && (
                         <span>{t('atleast_8_char_long')}</span>
                       )}
