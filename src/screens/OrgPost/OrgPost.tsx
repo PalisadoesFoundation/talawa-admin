@@ -222,23 +222,6 @@ function OrgPost(): JSX.Element {
               </tbody>
             </table>
           </div>
-          <div>
-            <table>
-              <tbody>
-                <tr>
-                  <PaginationList
-                    count={
-                      data ? data.postsByOrganizationConnection.edges.length : 0
-                    }
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </tr>
-              </tbody>
-            </table>
-          </div>
         </Col>
       </Row>
       <Modal
