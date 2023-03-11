@@ -63,7 +63,11 @@ describe('Testing the Super Dash List', () => {
     clickButton.simulate('click');
   });
 
-  // test case to check for the window.location.replace exists and is being called correctly. Do not tamper with this testcase.
+  /*
+  WARNING!
+    Do not tamper with this testcase. This is a test case to check for the window.location.replace exists and is being called correctly.
+    Removal of this testcase will lead to unexpected breaks in the routing of the dashboard and such actions must be avoided.
+  */
   test('Testing if window.location.replace exists and is called', () => {
     const props = {
       key: '123',
@@ -105,6 +109,8 @@ describe('Testing the Super Dash List', () => {
     expect(window.location.replace).toHaveBeenCalled();
     expect(window.location).toBeAt(`/orgdash/id=${props.id}`);
   });
+
+  // Do not change the lines above.
 
   test('Testing if the props data is not provided', () => {
     const props = {
