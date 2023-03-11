@@ -59,6 +59,22 @@ cd talawa-admin
 ## Setting up Yarn
 
 If you've followed the previous steps you should have already set up node.js on your system. [Click here](https://yarnpkg.com/getting-started/install) for the official setup guide for yarn.
+Please note that Talawa's admin system is only compatible with yarn version 1. Using versions 2 or 3 may cause errors.
+To install yarn version you can use following command:
+
+*Windows/ Mac-OS*
+```
+npm install -g yarn@1.22.17
+```
+*Linux*
+```
+sudo npm install -g yarn@1.22.17
+```
+
+To verify yarn is correctly installed in your system use:
+```
+yarn -v
+```
 
 ## Installing required packages/dependencies
 
