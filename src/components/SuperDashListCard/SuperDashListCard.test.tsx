@@ -102,7 +102,7 @@ describe('Testing the Super Dash List', () => {
 
     clickButton.simulate('click');
     expect(window.location.replace).toHaveBeenCalled();
-    expect(window.location).toBeAt('/orgdash/id=' + props.id);
+    expect(window.location).toBeAt(`/orgdash/id=${props.id}`);
   });
 
   test('Testing if the props data is not provided', () => {
