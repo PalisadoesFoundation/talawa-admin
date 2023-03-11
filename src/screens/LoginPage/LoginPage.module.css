@@ -2,7 +2,15 @@ html,
 body {
   overflow-x: hidden !important;
 }
+
 /* ===== Login Modal CSS Start ===== */
+
+.show {
+  position: absolute;
+  right: 10%;
+  font-weight: normal;
+  top: 42%;
+}
 #grid_wrapper {
   align-items: left;
 }
