@@ -95,8 +95,6 @@ function LoginPage(): JSX.Element {
 
     const isVerified = await verifyRecaptcha(recaptchaToken);
 
-    // const isVerified = true;
-
     /* istanbul ignore next */
     if (!isVerified) {
       toast.error('Please, check the captcha.');
@@ -157,8 +155,6 @@ function LoginPage(): JSX.Element {
     recaptchaRef.current?.reset();
 
     const isVerified = await verifyRecaptcha(recaptchaToken);
-
-    // const isVerified = true;
 
     /* istanbul ignore next */
     if (!isVerified) {
@@ -338,10 +334,8 @@ function LoginPage(): JSX.Element {
                         });
                       }}
                     />
-                    {signformState.signPassword.length < 8 ? (
+                    {signformState.signPassword.length < 8 && (
                       <span>{t('atleast_8_char_long')}</span>
-                    ) : (
-                      <span>{''}</span>
                     )}
                   </div>
                   <label>{t('confirmPassword')}</label>
