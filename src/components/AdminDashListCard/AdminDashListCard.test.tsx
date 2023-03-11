@@ -5,16 +5,10 @@ import Adapter from 'enzyme-adapter-react-16';
 import { I18nextProvider } from 'react-i18next';
 import 'jest-location-mock';
 
-import SuperDashListCard from './SuperDashListCard';
+import AdminDashListCard from './AdminDashListCard';
 import i18nForTest from 'utils/i18nForTest';
 
 Enzyme.configure({ adapter: new Adapter() });
-
-jest.mock('react-router-dom', () => ({
-  useHistory: () => ({
-    push: jest.fn(),
-  }),
-}));
 
 describe('Testing the Super Dash List', () => {
   test('should render props and text elements test for the page component', () => {
@@ -36,12 +30,12 @@ describe('Testing the Super Dash List', () => {
       members: '34',
     };
 
-    const buttonInstance = shallow(<SuperDashListCard {...props} />);
+    const buttonInstance = shallow(<AdminDashListCard {...props} />);
     const clickButton = buttonInstance.find('button');
 
     render(
       <I18nextProvider i18n={i18nForTest}>
-        <SuperDashListCard
+        <AdminDashListCard
           key={props.key}
           id={props.id}
           image={props.image}
@@ -86,7 +80,7 @@ describe('Testing the Super Dash List', () => {
 
     render(
       <I18nextProvider i18n={i18nForTest}>
-        <SuperDashListCard
+        <AdminDashListCard
           key={props.key}
           id={props.id}
           image={props.image}

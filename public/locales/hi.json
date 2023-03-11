@@ -334,5 +334,26 @@
     "enable": "सक्रिय",
     "install": "स्थापित करना",
     "uninstall": "स्थापना रद्द करें"
+  },
+  "memberDetail": {
+    "title": "उपयोगकर्ता विवरण",
+    "addAdmin": "व्यवस्थापक जोड़ें",
+    "organizations": "संगठन",
+    "events": "घटनाएं",
+    "role": "भूमिका",
+    "email": "ईमेल",
+    "createdOn": "पर बनाया गया",
+    "main": "मुख्य",
+    "firstName": "पहला नाम",
+    "lastName": "अंतिम नाम",
+    "memberOfOrganization": "संगठन का सदस्य",
+    "language": "भाषा",
+    "adminApproved": "व्यवस्थापक द्वारा स्वीकृत",
+    "pluginCreationAllowed": "प्लगइन निर्माण अनुमति दी गई",
+    "joined": "शामिल हुए",
+    "created": "बनाया गया",
+    "adminForOrganizations": "संगठनों के लिए व्यवस्थापक",
+    "membershipRequests": "सदस्यता अनुरोध",
+    "adminForEvents": "घटनाओं के लिए व्यवस्थापक"
   }
 }
