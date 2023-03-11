@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen,fireEvent } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -143,4 +143,27 @@ describe('Testing Organization Post Card', () => {
     userEvent.click(screen.getByTestId('deletePostModalBtn'));
     userEvent.click(screen.getByTestId(/deletePostBtn/i));
   });
+
+  test("should toggle post visibility when button is clicked", () => {
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...props} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    const toggleButton = screen.getByRole('toggleBtn')
+
+    expect(screen.getByText('Read more')).toBeInTheDocument();
+
+    fireEvent.click(toggleButton);
+
+    expect(screen.getByText('hide')).toBeInTheDocument();
+
+    fireEvent.click(toggleButton);
+
+    expect(screen.getByText('Read more')).toBeInTheDocument();
+    
+  })
 });

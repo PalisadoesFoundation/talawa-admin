@@ -52,4 +52,11 @@
 .toggleClickBtn {
   color: #31bb6b;
   cursor: pointer;
+  border:none;
+  font-size: 12px;
+  background-color: white;
+}
+
+.toggleClickBtnNone{
+  display: none;
 }
