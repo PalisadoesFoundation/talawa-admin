@@ -2,10 +2,10 @@ import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
-import styles from './SuperDashListCard.module.css';
 
-interface SuperDashListCardProps {
+import styles from './AdminDashListCard.module.css';
+
+interface AdminDashListCardProps {
   key: string;
   id: string;
   orgName: string;
@@ -16,15 +16,12 @@ interface SuperDashListCardProps {
   members: string;
 }
 
-function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
+function AdminDashListCard(props: AdminDashListCardProps): JSX.Element {
   const userId = localStorage.getItem('id');
-  const userType = localStorage.getItem('UserType');
-  const history = useHistory();
 
-  function handleClick() {
+  function Click() {
     const url = '/orgdash/id=' + props.id;
     window.location.replace(url);
-    history.push(url);
   }
 
   const { t } = useTranslation('translation', {
@@ -62,9 +59,8 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
             <div className={styles.orgCreateBtnDiv}>
               <button
                 className={styles.orgfontcreatedbtn}
-                onClick={handleClick}
+                onClick={Click}
                 disabled={
-                  userType !== 'SUPERADMIN' &&
                   !props.admins.some((admin: any) => admin._id === userId)
                 }
               >
@@ -79,4 +75,4 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
   );
 }
 export {};
-export default SuperDashListCard;
+export default AdminDashListCard;
