@@ -135,9 +135,17 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
           ) : (
             <p>{props.postInfo}</p>
           )}
-          <button role='toggleBtn' className={`${props.postInfo.length > 43 ? styles.toggleClickBtn : styles.toggleClickBtnNone}`} onClick={handletoggleClick}>
-              {togglePost}
-            </button>
+          <button
+            role="toggleBtn"
+            className={`${
+              props.postInfo.length > 43
+                ? styles.toggleClickBtn
+                : styles.toggleClickBtnNone
+            }`}
+            onClick={handletoggleClick}
+          >
+            {togglePost}
+          </button>
           {/* {props.postInfo.length > 43 && (
             <button role='toggleBtn' className={styles.toggleClickBtn} onClick={handletoggleClick}>
               {togglePost}
