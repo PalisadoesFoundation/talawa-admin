@@ -140,7 +140,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                       <Nav.Link
                         href={url}
                         id={name}
-                        className={styles.navlinks}
+                        className={styles.navlinks_dropdown}
                       >
                         {t(name)}
                       </Nav.Link>
@@ -171,7 +171,10 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
           <Link className={styles.allOrgBtn} to="/orglist">
             {t('allOrganizations')}
           </Link>
-          <Nav className="ml-auto ">
+          <Nav
+            className="ml-auto items-center"
+            style={{ alignItems: 'center' }}
+          >
             <Dropdown className={styles.dropdowns}>
               <Dropdown.Toggle
                 variant=""
