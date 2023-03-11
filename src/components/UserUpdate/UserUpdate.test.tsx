@@ -120,7 +120,7 @@ describe('Testing User Update', () => {
     expect(screen.getByPlaceholderText(/Last Name/i)).toHaveValue(
       formData.lastName
     );
-    expect(screen.getByPlaceholderText(/Email/i)).toHaveValue(formData.email);;
+    expect(screen.getByPlaceholderText(/Email/i)).toHaveValue(formData.email);
 
     expect(screen.getByText(/Cancel/i)).toBeTruthy();
     expect(screen.getByPlaceholderText(/First Name/i)).toBeInTheDocument();
