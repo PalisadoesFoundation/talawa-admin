@@ -63,6 +63,7 @@ describe('Testing the Super Dash List', () => {
     clickButton.simulate('click');
   });
 
+  // test case to check for the window.location.replace exists and is being called correctly. Do not tamper with this testcase.
   test('Testing if window.location.replace exists and is called', () => {
     const props = {
       key: '123',

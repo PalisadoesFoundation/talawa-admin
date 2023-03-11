@@ -23,6 +23,7 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
 
   function handleClick() {
     const url = '/orgdash/id=' + props.id;
+    // Please endeavor to NOT remove both the window.location.replace(url) and the history.push(url) as both are very important for routing correctly.
     window.location.replace(url);
     history.push(url);
   }
