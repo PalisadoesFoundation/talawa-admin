@@ -269,6 +269,7 @@
   "orgSettings": {
     "title": "塔拉瓦設置",
     "updateYourDetails": "更新您的詳細信息",
+    "updateYourPassword": "Update Your Password",
     "updateOrganization": "更新組織",
     "deleteOrganization": "刪除組織",
     "seeRequest": "查看請求",

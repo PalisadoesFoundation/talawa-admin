@@ -269,6 +269,7 @@
   "orgSettings": {
     "title": "Configuración Talawa",
     "updateYourDetails": "Actualiza tus datos",
+    "updateYourPassword": "Update Your Password",
     "updateOrganization": "Actualizar Organización",
     "deleteOrganization": "Eliminar Organización",
     "seeRequest": "Ver Solicitud",

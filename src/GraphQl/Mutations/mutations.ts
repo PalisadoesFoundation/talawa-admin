@@ -84,6 +84,26 @@ export const UPDATE_USER_MUTATION = gql`
   }
 `;
 
+// to update the password of user
+
+export const UPDATE_USER_PASSWORD_MUTATION = gql`
+  mutation UpdateUserPassword(
+    $previousPassword: String!
+    $newPassword: String!
+    $confirmNewPassword: String!
+  ) {
+    updateUserPassword(
+      data: {
+        previousPassword: $previousPassword
+        newPassword: $newPassword
+        confirmNewPassword: $confirmNewPassword
+      }
+    ) {
+      _id
+    }
+  }
+`;
+
 // to sign up in the talawa admin
 
 export const SIGNUP_MUTATION = gql`
