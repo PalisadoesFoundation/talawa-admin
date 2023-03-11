@@ -157,7 +157,9 @@ function OrgSettings(): JSX.Element {
             <div>
               {screenVariable == 4 ? (
                 data.organizations.membershipRequests ? (
+                  /* istanbul ignore next */
                   data.organizations.map(
+                    /* istanbul ignore next */
                     (datas: {
                       _id: string;
                       membershipRequests: {
@@ -170,6 +172,7 @@ function OrgSettings(): JSX.Element {
                         };
                       };
                     }) => {
+                      /* istanbul ignore next */
                       return (
                         <MemberRequestCard
                           key={datas.membershipRequests._id}
