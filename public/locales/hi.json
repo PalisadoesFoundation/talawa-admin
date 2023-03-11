@@ -269,6 +269,7 @@
   "orgSettings": {
     "title": "तलावा सेटिंग",
     "updateYourDetails": "अपना विवरण अपडेट करें",
+    "updateYourPassword": "अपना पासवर्ड अपडेट करें",
     "updateOrganization": "अद्यतन संगठन",
     "deleteOrganization": "संगठन हटाएं",
     "seeRequest": "अनुरोध देखें",
@@ -288,6 +289,15 @@
     "saveChanges": "परिवर्तनों को सुरक्षित करें",
     "cancel": "रद्द करना"
   },
+
+  "userPasswordUpdate": {
+    "previousPassword": "पिछला पासवर्ड",
+    "newPassword": "नया पासवर्ड",
+    "confirmNewPassword": "नए पासवर्ड की पुष्टि करें",
+    "saveChanges": "परिवर्तनों को सुरक्षित करें",
+    "cancel": "रद्द करना"
+  },
+
   "orgDelete": {
     "deleteOrg": "संगठन हटाएं"
   },
