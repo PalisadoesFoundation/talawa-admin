@@ -269,6 +269,7 @@
   "orgSettings": {
     "title": "Configuración Talawa",
     "updateYourDetails": "Actualiza tus datos",
+    "updateYourPassword": "Actualice su contraseña",
     "updateOrganization": "Actualizar Organización",
     "deleteOrganization": "Eliminar Organización",
     "seeRequest": "Ver Solicitud",
@@ -288,6 +289,15 @@
     "saveChanges": "Guardar cambios",
     "cancel": "Cancelar"
   },
+
+  "userPasswordUpdate": {
+    "previousPassword": "Contraseña anterior",
+    "newPassword": "Nueva contraseña",
+    "confirmNewPassword": "Confirmar nueva contraseña",
+    "saveChanges": "Guardar cambios",
+    "cancel": "Cancelar"
+  },
+
   "orgDelete": {
     "deleteOrg": "Eliminar organización"
   },

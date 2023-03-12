@@ -63,6 +63,55 @@ describe('Testing the Super Dash List', () => {
     clickButton.simulate('click');
   });
 
+  /*
+  WARNING!
+    Do not tamper with this testcase. This is a test case to check for the window.location.replace exists and is being called correctly.
+    Removal of this testcase will lead to unexpected breaks in the routing of the dashboard and such actions must be avoided.
+  */
+  test('Testing if window.location.replace exists and is called', () => {
+    const props = {
+      key: '123',
+      id: '123',
+      orgName: '',
+      orgLocation: 'India',
+      createdDate: '04/07/2019',
+      image: '',
+      admins: [
+        {
+          _id: '123',
+        },
+        {
+          _id: '456',
+        },
+      ],
+      members: '34',
+    };
+
+    const buttonInstance = shallow(<SuperDashListCard {...props} />);
+    const clickButton = buttonInstance.find('button');
+
+    render(
+      <I18nextProvider i18n={i18nForTest}>
+        <SuperDashListCard
+          key={props.key}
+          id={props.id}
+          image={props.image}
+          orgName={props.orgName}
+          orgLocation={props.orgLocation}
+          createdDate={props.createdDate}
+          admins={props.admins}
+          members={props.members}
+        />
+      </I18nextProvider>
+    );
+
+    clickButton.simulate('click');
+    expect(window.location.replace).toHaveBeenCalled();
+    expect(window.location).toBeAt(`/orgdash/id=${props.id}`);
+  });
+
+  // Do not change the lines above.
+
   test('Testing if the props data is not provided', () => {
     const props = {
       key: '123',

@@ -2,8 +2,8 @@ import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
 import styles from './SuperDashListCard.module.css';
+import { useHistory } from 'react-router-dom';
 
 interface SuperDashListCardProps {
   key: string;
@@ -23,8 +23,14 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
 
   function handleClick() {
     const url = '/orgdash/id=' + props.id;
+    /*
+    WARNING!
+     Please endeavor to NOT remove both the window.location.replace(url) and the history.push(url) as both are very important for routing correctly.
+     Removal of the window.location.replace will result to a crash on other depending routes. History.push(url) is being used to alongside window.location.replace to keep track of the browser history stack and ensure consistency with the react component life cycle.
+     */
     window.location.replace(url);
     history.push(url);
+    // Do not change the lines above.
   }
 
   const { t } = useTranslation('translation', {

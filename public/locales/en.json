@@ -269,6 +269,7 @@
   "orgSettings": {
     "title": "Talawa Setting",
     "updateYourDetails": "Update Your Details",
+    "updateYourPassword": "Update Your Password",
     "updateOrganization": "Update Organization",
     "deleteOrganization": "Delete Organization",
     "seeRequest": "See Request",
@@ -288,6 +289,15 @@
     "saveChanges": "Save Changes",
     "cancel": "Cancel"
   },
+
+  "userPasswordUpdate": {
+    "previousPassword": "Previous Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "saveChanges": "Save Changes",
+    "cancel": "Cancel"
+  },
+
   "orgDelete": {
     "deleteOrg": "Delete Org"
   },

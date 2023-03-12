@@ -88,6 +88,7 @@ describe('Organisation Settings Page', () => {
     // expect(screen.getByText(/settings/i)).toBeInTheDocument();
 
     userEvent.click(screen.getByTestId('userUpdateBtn'));
+    userEvent.click(screen.getByTestId('userPasswordUpdateBtn'));
     userEvent.click(screen.getByTestId('orgUpdateBtn'));
     userEvent.click(screen.getByTestId('orgDeleteBtn'));
     userEvent.click(screen.getByTestId('orgDeleteBtn2'));
