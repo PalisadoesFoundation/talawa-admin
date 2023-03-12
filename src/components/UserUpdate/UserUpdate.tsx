@@ -5,8 +5,7 @@ import { useTranslation } from 'react-i18next';
 import styles from './UserUpdate.module.css';
 import convertToBase64 from 'utils/convertToBase64';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
-import { useLocation } from 'react-router-dom';
-import { USER_DETAILS } from 'GraphQl/Queries/Queries';
+import { languages } from 'utils/languages';
 
 interface UserUpdateProps {
   id: string;

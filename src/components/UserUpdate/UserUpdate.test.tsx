@@ -65,7 +65,7 @@ const MOCKS = [
   },
 ];
 
-const mocklink = new MockLink(MOCKS, false, { showWarnings: false });
+const mocklink = new MockLink(MOCKS, false);
 
 async function wait(ms = 5) {
   await act(() => {
