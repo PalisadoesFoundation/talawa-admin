@@ -117,7 +117,7 @@ describe('Talawa-API server fetch check', () => {
 
     expect(fetch).toHaveBeenCalledWith('http://localhost:4000/graphql/');
     expect(toast.success).toHaveBeenCalledWith(
-      'Talawa-Admin resources loaded successfully'
+      'Talawa-Admin is up and running!'
     );
   });
 
