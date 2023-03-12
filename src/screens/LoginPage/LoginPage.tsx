@@ -78,10 +78,12 @@ function LoginPage(): JSX.Element {
         if (response != null) {
           toast.success('Talawa-Admin is up and running!');
         }
-      } catch (error) {
-        toast.warn(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
+      } catch (error: any) {
+        if (error.message) {
+          toast.error(
+            'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+          );
+        }
       }
     }
 
@@ -97,7 +99,7 @@ function LoginPage(): JSX.Element {
       });
 
       return data.recaptcha;
-    } catch (error) {
+    } catch (error: any) {
       /* istanbul ignore next */
       toast.error('Captcha Error!');
     }
@@ -153,12 +155,12 @@ function LoginPage(): JSX.Element {
         } catch (error: any) {
           /* istanbul ignore next */
           if (error.message === 'Failed to fetch') {
-            toast.warn(
+            toast.error(
               'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
             );
-          } else if (error.message) {
+          }  else if (error.message) {
             toast.warn(error.message);
-          } else {
+          }  else {
             toast.error('Something went wrong, Please try after sometime.');
           }
         }
@@ -212,14 +214,13 @@ function LoginPage(): JSX.Element {
         toast.warn('User not found!');
       }
     } catch (error: any) {
-      /* istanbul ignore next */
       if (error.message == 'Failed to fetch') {
-        toast.warn(
+        toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
         );
       } else if (error.message) {
-        toast.warn(error.message);
-      } else {
+        toast.error(error.message);
+      } /* istanbul ignore next */ else {
         toast.error('Something went wrong, Please try after sometime.');
       }
     }
@@ -482,3 +483,4 @@ function LoginPage(): JSX.Element {
 }
 
 export default LoginPage;
+
