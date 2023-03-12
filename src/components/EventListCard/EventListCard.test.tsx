@@ -51,6 +51,7 @@ const MOCKS = [
   },
 ];
 
+//@ts-ignore
 const mocklink = new MockLink(MOCKS, false, { showWarnings: false });
 
 async function wait(ms = 0) {

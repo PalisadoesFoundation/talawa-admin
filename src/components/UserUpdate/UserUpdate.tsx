@@ -1,10 +1,13 @@
 import React from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 
 import { languages } from 'utils/languages';
 import styles from './UserUpdate.module.css';
+import convertToBase64 from 'utils/convertToBase64';
+import { USER_DETAILS } from 'GraphQl/Queries/Queries';
+import { useLocation } from 'react-router-dom';
 
 interface UserUpdateProps {
   id: string;
@@ -19,6 +22,7 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
     password: '',
     applangcode: '',
     selectedOption: '',
+    file: '',
   });
 
   const [login] = useMutation(UPDATE_USER_MUTATION);
@@ -31,14 +35,21 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
     try {
       const { data } = await login({
         variables: {
-          firstName: formState.firstName,
-          lastName: formState.lastName,
-          email: formState.email,
+          file: formState.file,
         },
       });
       /* istanbul ignore next */
       if (data) {
         window.alert('Successful updated');
+        setFormState({
+          firstName: '',
+          lastName: '',
+          email: '',
+          password: '',
+          applangcode: '',
+          selectedOption: '',
+          file: '',
+        });
         window.location.reload();
       }
     } catch (error) {
@@ -186,11 +197,19 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
             {t('displayImage')}:
             <input
               accept="image/*"
-              id="orgphoto"
+              id="photo"
               name="photo"
               type="file"
               multiple={false}
-              //onChange=""
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (file)
+                  setFormState({
+                    ...formState,
+                    file: await convertToBase64(file),
+                  });
+              }}
+              data-testid="organisationImage"
             />
           </label>
           <div className={styles.dispbtnflex}>
