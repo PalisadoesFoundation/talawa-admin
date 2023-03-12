@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen } from '@testing-library/react';
+import { act, queryByText, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
@@ -322,5 +322,129 @@ describe('Testing Login Page Screen', () => {
     );
 
     await wait();
+  });
+
+  test('Testing for the password error warning when user firsts lands on a page', async () => {
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    await wait();
+
+    expect(screen.queryByText('Atleast 8 Char Long')).not.toBeInTheDocument();
+  });
+
+  test('Testing for the password error warning when user clicks on password field and password is less than 8 character', async () => {
+    const password = {
+      password: '7',
+    };
+
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    await wait();
+
+    userEvent.type(screen.getByPlaceholderText('Password'), password.password);
+
+    expect(screen.getByTestId('passwordField')).toHaveFocus();
+
+    expect(password.password.length).toBeLessThan(8);
+
+    expect(screen.getByText(/Atleast 8 Character Long/i)).toBeInTheDocument();
+  });
+
+  test('Testing for the password error warning when user clicks on password field and password is greater than or equal to 8 character', async () => {
+    const password = {
+      password: '12345678',
+    };
+
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    await wait();
+
+    userEvent.type(screen.getByPlaceholderText('Password'), password.password);
+
+    expect(screen.getByTestId('passwordField')).toHaveFocus();
+
+    expect(password.password.length).toBeGreaterThanOrEqual(8);
+    expect(screen.queryByText('Atleast 8 Char Long')).not.toBeInTheDocument();
+  });
+
+  test('Testing for the password error warning when user clicks on fields except password field and password is less than 8 character', async () => {
+    const password = {
+      password: '7',
+    };
+
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    await wait();
+
+    expect(screen.getByPlaceholderText('Password')).not.toHaveFocus();
+
+    userEvent.type(screen.getByPlaceholderText('Password'), password.password);
+
+    expect(password.password.length).toBeLessThan(8);
+
+    expect(screen.getByText(/Atleast 8 Character Long/i)).toBeInTheDocument();
+  });
+
+  test('Testing for the password error warning when user clicks on fields except password field and password is greater than or equal to 8 character', async () => {
+    const password = {
+      password: '12345678',
+    };
+
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    await wait();
+
+    expect(screen.getByPlaceholderText('Password')).not.toHaveFocus();
+
+    userEvent.type(screen.getByPlaceholderText('Password'), password.password);
+
+    expect(password.password.length).toBeGreaterThanOrEqual(8);
+
+    expect(screen.queryByText('Atleast 8 Char Long')).not.toBeInTheDocument();
   });
 });
