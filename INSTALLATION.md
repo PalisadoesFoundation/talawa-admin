@@ -8,7 +8,7 @@ This document provides instructions on how to set up and start a running instanc
 1. [Installation](#installation)
     1. [Clone this repository](#clone-this-repository)
     1. [Change directory into the cloned repo](#change-directory-into-the-cloned-repo)
-    1. [Setting up yarn](#setting-up-yarn)
+    1. [Setting up npm](#setting-up-npm)
     1. [Installing required packages/dependencies](#installing-required-packagesdependencies)
 1. [Configuration](#configuration)
     1. [Creating .env file](#creating-env-file)
@@ -56,32 +56,16 @@ cd talawa-admin
 
 **NOTE:** `All the commands we're going to execute in the following instructions will assume you are in the root directory of the cloned talawa-admin project. If you fail to do so, the commands will not work.`
 
-## Setting up Yarn
+## Setting up npm
 
-If you've followed the previous steps you should have already set up node.js on your system. [Click here](https://yarnpkg.com/getting-started/install) for the official setup guide for yarn.
-Please note that Talawa's admin system is only compatible with yarn version 1. Using versions 2 or 3 may cause errors.
-To install yarn version you can use following command:
-
-*Windows/ Mac-OS*
-```
-npm install -g yarn@1.22.17
-```
-*Linux*
-```
-sudo npm install -g yarn@1.22.17
-```
-
-To verify yarn is correctly installed in your system use:
-```
-yarn -v
-```
+If you've followed the previous steps you should have already set up node.js on your system. [Click here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) for the official setup guide for npm.
 
 ## Installing required packages/dependencies
 
 Run the following command to install the packages and dependencies required by `talawa-admin`:
 
 ```
-yarn
+npm install
 ```
 # Configuration
 It's important to configure Talawa-Admin. Here's how to do it.
@@ -141,7 +125,7 @@ It's now time to start Talawa-Admin and get it running
 Run the following command to start `talawa-admin` development server:
 
 ```
-yarn serve
+npm run serve
 ```
 
 ## Accessing Talawa-Admin
@@ -169,7 +153,7 @@ It is important to test our code. If you are a contributor, please follow these 
 You can run the tests for `talawa-admin` using this command:
 
 ```
-yarn test
+npm run test
 ```
 
 ## Linting code files
@@ -177,7 +161,7 @@ yarn test
 You can lint your code files using this command:
 
 ```
-yarn lint:fix
+npm run lint:fix
 ```
 
 ## Husky for Git Hooks
@@ -200,7 +184,7 @@ If you don't want these pre-commit checks running on each commit, you can manual
 
 #### post-merge hook
 
-We are also running a post-merge(post-pull) hook which will automatically run "yarn" only if there is any change made to pakage.json file so that the developer has all the required dependencies when pulling files from remote.
+We are also running a post-merge(post-pull) hook which will automatically run "npm install" only if there is any change made to pakage.json file so that the developer has all the required dependencies when pulling files from remote.
 
 
 If you don't want this hook to run, you can manually opt out of this using the `no verify` flag while using the merge command(git pull):
