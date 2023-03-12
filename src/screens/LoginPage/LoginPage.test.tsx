@@ -173,7 +173,7 @@ describe('Testing Login Page Screen', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'johndoe@gmail.com',
-      password: 'johnDoe',
+      password: 'johndoe',
       confirmPassword: 'johndoe',
     };
 
