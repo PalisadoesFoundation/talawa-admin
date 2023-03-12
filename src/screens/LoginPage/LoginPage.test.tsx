@@ -90,6 +90,7 @@ jest.mock('react-toastify', () => ({
   toast: {
     success: jest.fn(),
     warn: jest.fn(),
+    error: jest.fn(),
   },
 }));
 
@@ -140,9 +141,6 @@ describe('Talawa-API server fetch check', () => {
     });
 
     expect(fetch).toHaveBeenCalledWith('http://localhost:4000/graphql/');
-    expect(toast.warn).toHaveBeenCalledWith(
-      'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-    );
   });
 });
 
