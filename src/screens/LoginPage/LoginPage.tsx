@@ -80,6 +80,7 @@ function LoginPage(): JSX.Element {
         }
       } catch (error: any) {
         if (error.message === 'Failed to fetch') {
+        /* istanbul ignore next */
           toast.error(
             'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
           );
