@@ -3,8 +3,6 @@ import Navbar from 'react-bootstrap/Navbar';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { Badge, IconButton } from '@mui/material';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import Cookies from 'js-cookie';
@@ -142,7 +140,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                       <Nav.Link
                         href={url}
                         id={name}
-                        className={styles.navlinks}
+                        className={styles.navlinks_dropdown}
                       >
                         {t(name)}
                       </Nav.Link>
@@ -173,23 +171,10 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
           <Link className={styles.allOrgBtn} to="/orglist">
             {t('allOrganizations')}
           </Link>
-          <Nav className="ml-auto ">
-            <div className={styles.notificationIcon}>
-              <IconButton
-                data-toggle="modal"
-                data-target="#notificationModal"
-                data-placement="bottom"
-                title="Notification"
-              >
-                <Badge
-                  color="success"
-                  badgeContent={spamCountData.length}
-                  max={9}
-                >
-                  <NotificationsIcon htmlColor="black" />
-                </Badge>
-              </IconButton>
-            </div>
+          <Nav
+            className="ml-auto items-center"
+            style={{ alignItems: 'center' }}
+          >
             <Dropdown className={styles.dropdowns}>
               <Dropdown.Toggle
                 variant=""

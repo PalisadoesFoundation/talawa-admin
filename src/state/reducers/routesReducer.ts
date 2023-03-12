@@ -63,6 +63,7 @@ const components = [
   },
   { name: '', comp_id: 'orglist', component: 'OrgList' },
   { name: '', comp_id: 'orgsetting', component: 'OrgSettings' },
+  { name: '', comp_id: 'member', component: 'MemberDetail' },
 ];
 
 const generateRoutes = (comps: any[]) => {

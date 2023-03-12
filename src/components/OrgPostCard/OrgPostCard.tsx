@@ -25,6 +25,16 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
     postinfo: '',
   });
 
+  const [togglePost, setPostToggle] = useState('Read more');
+
+  function handletoggleClick() {
+    if (togglePost === 'Read more') {
+      setPostToggle('hide');
+    } else {
+      setPostToggle('Read more');
+    }
+  }
+
   useEffect(() => {
     setPostFormState({
       posttitle: props.postTitle,
@@ -115,7 +125,33 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
           <p>
             {t('author')}:<span> {props.postAuthor}</span>
           </p>
-          <p>{props.postInfo}</p>
+
+          {togglePost === 'Read more' ? (
+            <p>
+              {props.postInfo.length > 43
+                ? props.postInfo.substring(0, 40) + '...'
+                : props.postInfo}
+            </p>
+          ) : (
+            <p>{props.postInfo}</p>
+          )}
+          <button
+            role="toggleBtn"
+            className={`${
+              props.postInfo.length > 43
+                ? styles.toggleClickBtn
+                : styles.toggleClickBtnNone
+            }`}
+            onClick={handletoggleClick}
+          >
+            {togglePost}
+          </button>
+          {/* {props.postInfo.length > 43 && (
+            <button role='toggleBtn' className={styles.toggleClickBtn} onClick={handletoggleClick}>
+              {togglePost}
+            </button>
+          )} */}
+          {/* <p>{props.postInfo}</p> */}
           <p>
             {t('imageURL')}:
             <span>
