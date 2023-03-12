@@ -76,7 +76,7 @@ function LoginPage(): JSX.Element {
       try {
         const response = await fetch(resourceUrl);
         if (response != null) {
-          toast.success('Talawa-Admin resources loaded successfully');
+          toast.success('Talawa-Admin is up and running!');
         }
       } catch (error) {
         toast.warn(
