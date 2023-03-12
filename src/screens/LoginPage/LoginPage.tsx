@@ -214,13 +214,14 @@ function LoginPage(): JSX.Element {
         toast.warn('User not found!');
       }
     } catch (error: any) {
+      /* istanbul ignore next */
       if (error.message == 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
         );
       } else if (error.message) {
         toast.error(error.message);
-      } /* istanbul ignore next */ else {
+      } else {
         toast.error('Something went wrong, Please try after sometime.');
       }
     }
