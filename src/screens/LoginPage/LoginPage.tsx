@@ -79,8 +79,8 @@ function LoginPage(): JSX.Element {
           toast.success('Talawa-Admin is up and running!');
         }
       } catch (error: any) {
-        if (error.message === 'Failed to fetch') {
         /* istanbul ignore next */
+        if (error.message === 'Failed to fetch') {
           toast.error(
             'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
           );
@@ -117,8 +117,7 @@ function LoginPage(): JSX.Element {
     const recaptchaToken = recaptchaRef.current?.getValue();
     recaptchaRef.current?.reset();
 
-    let isVerified = await verifyRecaptcha(recaptchaToken);
-    isVerified = true;
+    const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
       toast.error('Please, check the captcha.');
@@ -182,8 +181,7 @@ function LoginPage(): JSX.Element {
     const recaptchaToken = recaptchaRef.current?.getValue();
     recaptchaRef.current?.reset();
 
-    let isVerified = await verifyRecaptcha(recaptchaToken);
-    isVerified = true;
+    const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
       toast.error('Please, check the captcha.');
