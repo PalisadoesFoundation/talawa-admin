@@ -158,9 +158,9 @@ function LoginPage(): JSX.Element {
             toast.error(
               'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
             );
-          }  else if (error.message) {
+          } else if (error.message) {
             toast.warn(error.message);
-          }  else {
+          } else {
             toast.error('Something went wrong, Please try after sometime.');
           }
         }
@@ -483,4 +483,3 @@ function LoginPage(): JSX.Element {
 }
 
 export default LoginPage;
-
