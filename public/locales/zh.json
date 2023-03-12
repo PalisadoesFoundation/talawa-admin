@@ -269,6 +269,7 @@
   "orgSettings": {
     "title": "塔拉瓦設置",
     "updateYourDetails": "更新您的詳細信息",
+    "updateYourPassword": "更新您的密碼",
     "updateOrganization": "更新組織",
     "deleteOrganization": "刪除組織",
     "seeRequest": "查看請求",
@@ -288,6 +289,15 @@
     "saveChanges": "保存更改",
     "cancel": "取消"
   },
+
+  "userPasswordUpdate": {
+    "previousPassword": "以前的密碼",
+    "newPassword": "新密碼",
+    "confirmNewPassword": "確認新密碼",
+    "saveChanges": "保存更改",
+    "cancel": "取消"
+  },
+
   "orgDelete": {
     "deleteOrg": "刪除組織"
   },

@@ -209,7 +209,7 @@ function OrganizationEvents(): JSX.Element {
               </Button>
             </Row>
           </div>
-          <Calendar eventData={data.eventsByOrganizationConnection} />
+          <Calendar eventData={data?.eventsByOrganizationConnection} />
         </Col>
       </Row>
       <Modal

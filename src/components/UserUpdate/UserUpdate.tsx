@@ -2,19 +2,22 @@ import React from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
-
-import { languages } from 'utils/languages';
 import styles from './UserUpdate.module.css';
 import convertToBase64 from 'utils/convertToBase64';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { useLocation } from 'react-router-dom';
+import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 
 interface UserUpdateProps {
   id: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function UserUpdate(props: UserUpdateProps): JSX.Element {
+const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
+  const currentUrl = localStorage.getItem('id');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'userUpdate',
+  });
   const [formState, setFormState] = React.useState({
     firstName: '',
     lastName: '',
@@ -27,9 +30,36 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
 
   const [login] = useMutation(UPDATE_USER_MUTATION);
 
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userUpdate',
+  const {
+    data: data,
+    loading: loading,
+    error: error,
+  } = useQuery(USER_DETAILS, {
+    variables: { id: localStorage.getItem('id') ?? id }, // For testing we are sending the id as a prop
   });
+  React.useEffect(() => {
+    if (data) {
+      setFormState({
+        ...formState,
+        firstName: data?.user?.firstName,
+        lastName: data?.user?.lastName,
+        email: data?.user?.email,
+      });
+    }
+  }, [data]);
+
+  if (loading) {
+    return (
+      <>
+        <div className={styles.loader}></div>
+      </>
+    );
+  }
+
+  /* istanbul ignore next */
+  if (error) {
+    window.location.assign(`/orgsettings/id=${currentUrl}`);
+  }
 
   const login_link = async () => {
     try {
@@ -86,6 +116,8 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
                 }}
               />
             </div>
+          </div>
+          <div className={styles.dispflex}>
             <div>
               <label>{t('lastName')}</label>
               <input
@@ -122,23 +154,8 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
                 }}
               />
             </div>
-            <div>
-              <label>{t('password')}</label>
-              <input
-                type="password"
-                id="password"
-                placeholder={t('password')}
-                required
-                value={formState.password}
-                onChange={(e) => {
-                  setFormState({
-                    ...formState,
-                    password: e.target.value,
-                  });
-                }}
-              />
-            </div>
           </div>
+
           <div className={styles.dispflex}>
             <div>
               <label>{t('appLanguageCode')}</label>
@@ -234,5 +251,5 @@ function UserUpdate(props: UserUpdateProps): JSX.Element {
       </div>
     </>
   );
-}
+};
 export default UserUpdate;
