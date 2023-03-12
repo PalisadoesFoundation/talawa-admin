@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
+import { toast } from 'react-toastify';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
 
@@ -77,6 +78,7 @@ const MOCKS = [
   },
 ];
 
+
 async function wait(ms = 0) {
   await act(() => {
     return new Promise((resolve) => {
@@ -84,6 +86,66 @@ async function wait(ms = 0) {
     });
   });
 }
+
+jest.mock('react-toastify', () => ({
+  toast: {
+    success: jest.fn(),
+    warn: jest.fn(),
+  },
+}));
+
+describe('Talawa-API server fetch check', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('displays success message when resource is loaded', async () => {
+    global.fetch = jest.fn(() => Promise.resolve({} as unknown as Response));
+
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} mocks={MOCKS}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+    });
+
+    expect(fetch).toHaveBeenCalledWith('http://localhost:4000/graphql/');
+    expect(toast.success).toHaveBeenCalledWith(
+      'Talawa-Admin resources loaded successfully'
+    );
+  });
+
+  test('displays warning message when resource loading fails', async () => {
+    const mockError = new Error('Network error');
+    global.fetch = jest.fn(() => Promise.reject(mockError));
+
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} mocks={MOCKS}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+    });
+
+    expect(fetch).toHaveBeenCalledWith('http://localhost:4000/graphql/');
+    expect(toast.warn).toHaveBeenCalledWith(
+      'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+    );
+  });
+});
 
 describe('Testing Login Page Screen', () => {
   test('Component Should be rendered properly', async () => {
@@ -112,7 +174,7 @@ describe('Testing Login Page Screen', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'johndoe@gmail.com',
-      password: 'johndoe',
+      password: 'johnDoe',
       confirmPassword: 'johndoe',
     };
 
