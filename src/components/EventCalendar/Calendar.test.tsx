@@ -84,8 +84,50 @@ const MOCKS = [
 const mocklink = new MockLink(MOCKS, false, { showWarnings: false });
 
 describe('Calendar', () => {
+  it('renders weekdays', () => {
+    render(<Calendar eventData={eventData} />);
+    const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    weekdays.forEach((weekday) => {
+      expect(screen.getByText(weekday)).toBeInTheDocument();
+    });
+  });
+  it('should initialize currentMonth and currentYear with the current date', () => {
+    const today = new Date();
+    const { getByTestId } = render(<Calendar eventData={eventData} />);
+
+    const currentMonth = getByTestId('current-date');
+    const currentYear = getByTestId('current-date');
+
+    expect(currentMonth).toHaveTextContent(
+      today.toLocaleString('default', { month: 'long' })
+    );
+    expect(currentYear).toHaveTextContent(today.getFullYear().toString());
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
+  });
+
+  it('should render the current month and year', () => {
+    const { getByText } = render(<Calendar eventData={eventData} />);
+    const currentMonth = new Date().toLocaleString('default', {
+      month: 'long',
+    });
+    const currentYear = new Date().getFullYear();
+    expect(getByText(`${currentMonth} ${currentYear}`)).toBeInTheDocument();
+  });
+
+  it('should render the correct number of days', () => {
+    const { getAllByTestId } = render(<Calendar eventData={eventData} />);
+    const days = getAllByTestId('day');
+    expect(days.length).toBe(35);
+  });
+
+  it('should highlight the selected date when clicked', () => {
+    const { getByText } = render(<Calendar eventData={eventData} />);
+    const selectedDate = getByText('15');
+    fireEvent.click(selectedDate);
+    expect(selectedDate).toHaveClass('day');
   });
 
   it('Should show prev and next month on clicking < & > buttons', () => {
