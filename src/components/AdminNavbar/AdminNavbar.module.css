@@ -79,7 +79,9 @@ a {
   flex-direction: row;
   display: flex;
 }
-
+.navlinks_active {
+  border-bottom: 3px solid #31bb6b;
+}
 .navitem {
   text-decoration: none;
   color: #707070 !important;
