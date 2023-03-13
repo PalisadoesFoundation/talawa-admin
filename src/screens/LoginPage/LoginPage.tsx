@@ -29,6 +29,7 @@ function LoginPage(): JSX.Element {
 
   const [modalisOpen, setIsOpen] = React.useState(false);
   const [componentLoader, setComponentLoader] = useState(true);
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const [signformState, setSignFormState] = useState({
     signfirstName: '',
     signlastName: '',
@@ -40,7 +41,7 @@ function LoginPage(): JSX.Element {
     email: '',
     password: '',
   });
-
+  const [show, setShow] = useState<boolean>(false);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   const currentLanguageCode = cookies.get('i18next') || 'en';
@@ -204,6 +205,10 @@ function LoginPage(): JSX.Element {
     return <div className={styles.loader}></div>;
   }
 
+  const handleShow = () => {
+    setShow(!show);
+  };
+
   return (
     <>
       <section className={styles.login_background}>
@@ -324,7 +329,10 @@ function LoginPage(): JSX.Element {
                     <input
                       type="password"
                       id="signpassword"
+                      data-testid="passwordField"
                       placeholder={t('password')}
+                      onFocus={() => setIsInputFocused(true)}
+                      onBlur={() => setIsInputFocused(false)}
                       required
                       value={signformState.signPassword}
                       onChange={(e) => {
@@ -334,7 +342,19 @@ function LoginPage(): JSX.Element {
                         });
                       }}
                     />
-                    <span>{t('atleast_8_char_long')}</span>
+                    {isInputFocused &&
+                      signformState.signPassword.length < 8 && (
+                        <span data-testid="passwordCheck">
+                          {t('atleast_8_char_long')}
+                        </span>
+                      )}
+                    {!isInputFocused &&
+                      signformState.signPassword.length > 0 &&
+                      signformState.signPassword.length < 8 && (
+                        <span data-testid="passwordCheck">
+                          {t('atleast_8_char_long')}
+                        </span>
+                      )}
                   </div>
                   <label>{t('confirmPassword')}</label>
                   <input
@@ -406,21 +426,32 @@ function LoginPage(): JSX.Element {
                     });
                   }}
                 />
+
                 <label>{t('password')}</label>
-                <input
-                  type="password"
-                  id="password"
-                  className="input_box_second"
-                  placeholder={t('enterPassword')}
-                  required
-                  value={formState.password}
-                  onChange={(e) => {
-                    setFormState({
-                      ...formState,
-                      password: e.target.value,
-                    });
-                  }}
-                />
+                <div>
+                  <input
+                    type={show ? 'text' : 'password'}
+                    className="input_box_second"
+                    placeholder={t('enterPassword')}
+                    required
+                    value={formState.password}
+                    data-testid="password"
+                    onChange={(e) => {
+                      setFormState({
+                        ...formState,
+                        password: e.target.value,
+                      });
+                    }}
+                  />
+                  <label
+                    id="showPassword"
+                    className={styles.show}
+                    onClick={handleShow}
+                    data-testid="showPassword"
+                  >
+                    {show ? 'Hide' : 'Show'}
+                  </label>
+                </div>
                 <div className="googleRecaptcha">
                   <ReCAPTCHA
                     ref={recaptchaRef}

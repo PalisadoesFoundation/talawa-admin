@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/client';
 import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import styles from './UserPasswordUpdate.module.css';
+import { toast } from 'react-toastify';
 
 interface UserPasswordUpdateProps {
   id: string;
@@ -22,6 +23,18 @@ const UserUpdate: React.FC<UserPasswordUpdateProps> = ({ id }): JSX.Element => {
   const [login] = useMutation(UPDATE_USER_PASSWORD_MUTATION);
 
   const login_link = async () => {
+    if (
+      !formState.previousPassword ||
+      !formState.newPassword ||
+      !formState.confirmNewPassword
+    ) {
+      return toast.error('The password field cannot be empty.');
+    }
+
+    if (formState.newPassword !== formState.confirmNewPassword) {
+      return toast.error('New and Confirm password do not match.');
+    }
+
     try {
       const { data } = await login({
         variables: {
