@@ -29,6 +29,7 @@ function LoginPage(): JSX.Element {
 
   const [modalisOpen, setIsOpen] = React.useState(false);
   const [componentLoader, setComponentLoader] = useState(true);
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const [signformState, setSignFormState] = useState({
     signfirstName: '',
     signlastName: '',
@@ -328,7 +329,10 @@ function LoginPage(): JSX.Element {
                     <input
                       type="password"
                       id="signpassword"
+                      data-testid="passwordField"
                       placeholder={t('password')}
+                      onFocus={() => setIsInputFocused(true)}
+                      onBlur={() => setIsInputFocused(false)}
                       required
                       value={signformState.signPassword}
                       onChange={(e) => {
@@ -338,7 +342,19 @@ function LoginPage(): JSX.Element {
                         });
                       }}
                     />
-                    <span>{t('atleast_8_char_long')}</span>
+                    {isInputFocused &&
+                      signformState.signPassword.length < 8 && (
+                        <span data-testid="passwordCheck">
+                          {t('atleast_8_char_long')}
+                        </span>
+                      )}
+                    {!isInputFocused &&
+                      signformState.signPassword.length > 0 &&
+                      signformState.signPassword.length < 8 && (
+                        <span data-testid="passwordCheck">
+                          {t('atleast_8_char_long')}
+                        </span>
+                      )}
                   </div>
                   <label>{t('confirmPassword')}</label>
                   <input
