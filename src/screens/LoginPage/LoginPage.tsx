@@ -41,7 +41,7 @@ function LoginPage(): JSX.Element {
     email: '',
     password: '',
   });
-
+  const [show, setShow] = useState<boolean>(false);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   const currentLanguageCode = cookies.get('i18next') || 'en';
@@ -204,6 +204,10 @@ function LoginPage(): JSX.Element {
   if (componentLoader || loginLoading || signinLoading || recaptchaLoading) {
     return <div className={styles.loader}></div>;
   }
+
+  const handleShow = () => {
+    setShow(!show);
+  };
 
   return (
     <>
@@ -422,21 +426,32 @@ function LoginPage(): JSX.Element {
                     });
                   }}
                 />
+
                 <label>{t('password')}</label>
-                <input
-                  type="password"
-                  id="password"
-                  className="input_box_second"
-                  placeholder={t('enterPassword')}
-                  required
-                  value={formState.password}
-                  onChange={(e) => {
-                    setFormState({
-                      ...formState,
-                      password: e.target.value,
-                    });
-                  }}
-                />
+                <div>
+                  <input
+                    type={show ? 'text' : 'password'}
+                    className="input_box_second"
+                    placeholder={t('enterPassword')}
+                    required
+                    value={formState.password}
+                    data-testid="password"
+                    onChange={(e) => {
+                      setFormState({
+                        ...formState,
+                        password: e.target.value,
+                      });
+                    }}
+                  />
+                  <label
+                    id="showPassword"
+                    className={styles.show}
+                    onClick={handleShow}
+                    data-testid="showPassword"
+                  >
+                    {show ? 'Hide' : 'Show'}
+                  </label>
+                </div>
                 <div className="googleRecaptcha">
                   <ReCAPTCHA
                     ref={recaptchaRef}

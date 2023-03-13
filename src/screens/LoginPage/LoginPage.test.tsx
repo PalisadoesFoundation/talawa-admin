@@ -324,6 +324,36 @@ describe('Testing Login Page Screen', () => {
     await wait();
   });
 
+  test('Testing password preview feature', async () => {
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+    userEvent.click(screen.getByTestId('loginModalBtn'));
+
+    const input = screen.getByTestId('password') as HTMLInputElement;
+    const toggleText = screen.getByTestId('showPassword');
+    // password should be hidden
+    expect(input.type).toBe('password');
+    // click the toggle button to show password
+    userEvent.click(toggleText);
+    expect(input.type).toBe('text');
+    // click the toggle button to hide password
+    userEvent.click(toggleText);
+    expect(input.type).toBe('password');
+
+    await wait();
+  });
+
   test('Testing for the password error warning when user firsts lands on a page', async () => {
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
