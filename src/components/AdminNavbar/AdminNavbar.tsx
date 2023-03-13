@@ -134,7 +134,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
               ) : (
                 <Nav.Item key={name} className={styles.navitems}>
                   <Dropdown className={styles.dropdowns}>
-                  <Dropdown.Toggle
+                    <Dropdown.Toggle
                       variant=""
                       className={styles.dropdowntoggle}
                     >
