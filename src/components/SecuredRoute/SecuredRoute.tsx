@@ -1,9 +1,9 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const SecuredRoute = (props: any): JSX.Element => {
   const isLoggedIn = localStorage.getItem('IsLoggedIn');
-
   return isLoggedIn === 'TRUE' ? (
     <>
       <Route {...props} />
@@ -12,5 +12,25 @@ const SecuredRoute = (props: any): JSX.Element => {
     <Redirect to="/" />
   );
 };
+
+let lastActive: number = Date.now();
+
+document.addEventListener('mousemove', () => {
+  lastActive = Date.now();
+});
+
+setInterval(() => {
+  const currentTime = Date.now();
+  const timeSinceLastActive = currentTime - lastActive;
+  const logoutUserTime = 20 * 60 * 1000;
+
+  if (timeSinceLastActive > logoutUserTime) {
+    toast.error(
+      'Session timed out. Please login again to keep using the platform'
+    );
+    window.location.href = '/';
+    localStorage.setItem('IsLoggedIn', 'FALSE');
+  }
+}, 60000);
 
 export default SecuredRoute;
