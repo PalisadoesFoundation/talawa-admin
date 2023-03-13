@@ -162,7 +162,7 @@ function OrgList(): JSX.Element {
       <Row>
         <Col xl={3}>
           <div className={styles.sidebar}>
-            <div className={styles.sidebarsticky}>
+            <div className={`${styles.mainpageright} ${styles.sidebarsticky}`}>
               <h6 className={styles.logintitle}>{t('you')}</h6>
               <p>
                 {t('name')}:
@@ -188,24 +188,15 @@ function OrgList(): JSX.Element {
                   </span>
                 </p>
               </div>
-
-              <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
-              <input
-                type="name"
-                id="orgname"
-                placeholder={t('enterName')}
-                data-testid="searchByName"
-                autoComplete="off"
-                required
-                onChange={debouncedHandleSearchByName}
-              />
             </div>
           </div>
         </Col>
         <Col xl={8}>
           <div className={styles.mainpageright}>
-            <Row className={styles.justifysp}>
+            <div className={styles.justifysp}>
               <p className={styles.logintitle}>{t('organizationList')}</p>
+            </div>
+            <div className={styles.search}>
               <Button
                 variant="success"
                 className={styles.invitebtn}
@@ -215,7 +206,16 @@ function OrgList(): JSX.Element {
               >
                 + {t('createOrganization')}
               </Button>
-            </Row>
+              <input
+                type="name"
+                id="orgname"
+                placeholder="Search Organization"
+                data-testid="searchByName"
+                autoComplete="off"
+                required
+                onChange={debouncedHandleSearchByName}
+              />
+            </div>
             <div className={styles.list_box}>
               {data &&
                 (rowsPerPage > 0

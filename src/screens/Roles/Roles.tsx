@@ -68,6 +68,7 @@ const Roles = () => {
       /* istanbul ignore next */
       if (data) {
         toast.success('Role Updated.');
+        refetch();
       }
     } catch (error: any) {
       /* istanbul ignore next */

@@ -21,6 +21,7 @@ import ForgotPassword from 'screens/ForgotPassword/ForgotPassword';
 import Roles from 'screens/Roles/Roles';
 import Requests from 'screens/Requests/Requests';
 import BlockUser from 'screens/BlockUser/BlockUser';
+import MemberDetail from 'screens/MemberDetail/MemberDetail';
 
 function App(): JSX.Element {
   /*const { updatePluginLinks, updateInstalled } = bindActionCreators(
@@ -87,6 +88,7 @@ function App(): JSX.Element {
         <SecuredRoute path="/orgdash" component={OrganizationDashboard} />
         <SecuredRoute path="/orgpeople" component={OrganizationPeople} />
         <SecuredRoute path="/orglist" component={OrgList} />
+        <SecuredRoute path="/member" component={MemberDetail} />
         <SecuredRoute path="/orgevents" component={OrganizationEvents} />
         <SecuredRoute path="/orgcontribution" component={OrgContribution} />
         <SecuredRoute path="/orgpost" component={OrgPost} />

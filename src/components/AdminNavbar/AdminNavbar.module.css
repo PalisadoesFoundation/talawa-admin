@@ -86,10 +86,15 @@ a {
   transition: smooth;
   padding-bottom: 10px;
 }
-.navlinks:hover {
+.navlinks:hover,
+.navlinks_dropdown:hover {
   text-decoration: none;
   border-bottom: 3px solid #31bb6b;
-  font-weight: 600;
+}
+
+.navlinks_dropdown:hover {
+  border-bottom: 3px solid #31bb6b;
+  padding-bottom: 4px;
 }
 /* 
 .navlinks.focus {
@@ -155,11 +160,11 @@ a {
 .sidebarsticky {
   padding-top: 40%;
 }
-.notificationIcon {
+/* .notificationIcon {
   position: relative;
   top: 12px;
   right: 14px;
-}
+} */
 .notificationList:hover {
   background-color: #dfe2e4;
   cursor: pointer;
@@ -206,12 +211,13 @@ a {
 }
 
 .allOrgBtn {
-  margin-left: 10px;
+  margin: 0 10px;
   background-color: #31bb6b;
   padding: 5px 10px;
   color: white;
   border-radius: 10px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .allOrgBtn:hover {

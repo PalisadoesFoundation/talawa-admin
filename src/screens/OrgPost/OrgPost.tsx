@@ -71,6 +71,7 @@ function OrgPost(): JSX.Element {
           posttitle: '',
           postinfo: '',
         });
+        setPostModalIsOpen(false); // close the modal
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -203,23 +204,6 @@ function OrgPost(): JSX.Element {
                   )
                 : null}
             </div>
-          </div>
-          <div>
-            <table>
-              <tbody>
-                <tr>
-                  <PaginationList
-                    count={
-                      data ? data.postsByOrganizationConnection.edges.length : 0
-                    }
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </tr>
-              </tbody>
-            </table>
           </div>
           <div>
             <table>
