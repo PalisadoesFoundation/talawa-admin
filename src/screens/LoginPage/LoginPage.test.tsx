@@ -336,9 +336,9 @@ describe('Testing Login Page Screen', () => {
         </BrowserRouter>
       </MockedProvider>
     );
-    await wait();
+    await wait();;
 
-    expect(screen.queryByText('Atleast 8 Char Long')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('passwordCheck')).toBeNull();
   });
 
   test('Testing for the password error warning when user clicks on password field and password is less than 8 character', async () => {
@@ -365,7 +365,7 @@ describe('Testing Login Page Screen', () => {
 
     expect(password.password.length).toBeLessThan(8);
 
-    expect(screen.getByText(/Atleast 8 Character Long/i)).toBeInTheDocument();
+    expect(screen.queryByTestId('passwordCheck')).toBeInTheDocument();
   });
 
   test('Testing for the password error warning when user clicks on password field and password is greater than or equal to 8 character', async () => {
@@ -391,7 +391,8 @@ describe('Testing Login Page Screen', () => {
     expect(screen.getByTestId('passwordField')).toHaveFocus();
 
     expect(password.password.length).toBeGreaterThanOrEqual(8);
-    expect(screen.queryByText('Atleast 8 Char Long')).not.toBeInTheDocument();
+
+    expect(screen.queryByTestId('passwordCheck')).toBeNull();
   });
 
   test('Testing for the password error warning when user clicks on fields except password field and password is less than 8 character', async () => {
@@ -418,7 +419,7 @@ describe('Testing Login Page Screen', () => {
 
     expect(password.password.length).toBeLessThan(8);
 
-    expect(screen.getByText(/Atleast 8 Character Long/i)).toBeInTheDocument();
+    expect(screen.queryByTestId('passwordCheck')).toBeInTheDocument();
   });
 
   test('Testing for the password error warning when user clicks on fields except password field and password is greater than or equal to 8 character', async () => {
@@ -444,7 +445,7 @@ describe('Testing Login Page Screen', () => {
     userEvent.type(screen.getByPlaceholderText('Password'), password.password);
 
     expect(password.password.length).toBeGreaterThanOrEqual(8);
-
-    expect(screen.queryByText('Atleast 8 Char Long')).not.toBeInTheDocument();
+    
+    expect(screen.queryByTestId('passwordCheck')).toBeNull();
   });
 });
