@@ -336,7 +336,7 @@ describe('Testing Login Page Screen', () => {
         </BrowserRouter>
       </MockedProvider>
     );
-    await wait();;
+    await wait();
 
     expect(screen.queryByTestId('passwordCheck')).toBeNull();
   });
@@ -445,7 +445,7 @@ describe('Testing Login Page Screen', () => {
     userEvent.type(screen.getByPlaceholderText('Password'), password.password);
 
     expect(password.password.length).toBeGreaterThanOrEqual(8);
-    
+
     expect(screen.queryByTestId('passwordCheck')).toBeNull();
   });
 });
