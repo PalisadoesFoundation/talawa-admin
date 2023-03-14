@@ -69,8 +69,10 @@ function EventListCard(props: EventListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        window.alert('Event deleted successfully.');
-        window.location.reload();
+        toast.success('Event deleted successfully.');
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -99,8 +101,10 @@ function EventListCard(props: EventListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        window.alert('Event updated successfully.');
-        window.location.reload();
+        toast.success('Event updated successfully.');
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */

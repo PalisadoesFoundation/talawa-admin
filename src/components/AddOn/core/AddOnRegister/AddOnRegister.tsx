@@ -5,6 +5,7 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
 import { ADD_PLUGIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 interface AddOnRegisterProps {
   id?: string; // OrgId
@@ -51,8 +52,10 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
     });
 
     if (data) {
-      window.alert('Plugin Added Successfully');
-      window.location.reload();
+      toast.success('Plugin Added Successfully');
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     }
     console.log('Data is ', data);
   };

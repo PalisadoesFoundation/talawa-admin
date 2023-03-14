@@ -18,11 +18,6 @@
   left: 94%;
   display: block;
 }
-.sidebarsticky {
-  padding-left: 45px;
-  text-overflow: ellipsis;
-  /* overflow-x: hidden; */
-}
 
 /* .sidebarsticky:hover{
   overflow-x:visible;
@@ -32,6 +27,22 @@
 } */
 .sidebarsticky > p {
   margin-top: -10px;
+}
+
+.search {
+  display: flex;
+  margin-bottom: 2rem;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+@media screen and (min-width: 468px) {
+  .search {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-right: 40px;
+  }
 }
 
 .navitem {
@@ -52,18 +63,21 @@
   width: 60%;
 }
 
-.justifysp > input {
+.search > input {
   text-decoration: none;
-  margin-bottom: 50px;
   border-color: #dbd7d7;
   border-style: solid;
-  width: 35%;
   border-radius: 5px;
   padding-top: 5px;
   padding-bottom: 5px;
   padding-right: 10px;
   padding-left: 10px;
   box-shadow: none;
+}
+.search input:focus {
+  border-color: #fff;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  outline: none;
 }
 
 .logintitle {
@@ -72,9 +86,10 @@
   font-size: 20px;
   margin-bottom: 30px;
   padding-bottom: 5px;
-  border-bottom: 3px solid #31bb6b;
   width: 30%;
+  border-bottom: 3px solid #31bb6b;
 }
+
 .logintitleadmin {
   color: #707070;
   font-weight: 600;
@@ -103,21 +118,28 @@
 .justifysp {
   display: flex;
   justify-content: space-between;
+  width: 100%;
 }
-@media screen and (max-width: 1200px) {
+
+.mainpageright {
+  width: 100%;
+  margin: 0 auto;
+  max-width: 92vw;
+}
+
+@media screen and (min-width: 1200px) {
   .justifysp {
-    padding-left: 55px;
     display: flex;
     justify-content: space-between;
-    width: 100%;
   }
-
-  .mainpageright {
-    width: 100%;
-  }
-  .invitebtn {
+  /* .invitebtn {
     position: relative;
     right: 15px;
+  } */
+  .sidebarsticky {
+    padding-left: 30px;
+    text-overflow: ellipsis;
+    /* overflow-x: hidden; */
   }
 }
 .invitebtn {
@@ -132,7 +154,6 @@
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   background-color: #31bb6b;
-  margin-right: 13px;
 }
 
 .flexdir {
@@ -286,7 +307,8 @@ form > input {
   height: 70vh;
   overflow-y: auto;
   width: auto;
-  padding-right: 50px;
+  padding-right: 40px;
+  /* padding: 2rem; */
 }
 
 /* width */
@@ -329,11 +351,11 @@ form > input {
     position: relative;
     bottom: 18px;
   }
-  .invitebtn {
+  /* .invitebtn {
     width: 135px;
     position: relative;
     right: 10px;
-  }
+  } */
   .form_wrapper {
     width: 90%;
   }
