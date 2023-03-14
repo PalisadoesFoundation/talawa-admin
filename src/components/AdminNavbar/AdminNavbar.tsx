@@ -146,7 +146,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                       </Nav.Link>
                     </Dropdown.Toggle>
                     {subTargets && (
-                      <Dropdown.Menu>
+                      <Dropdown.Menu className={styles.dropdowns}>
                         {subTargets.map((subTarget: any, index: number) => (
                           <Dropdown.Item
                             key={index}

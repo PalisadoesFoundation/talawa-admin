@@ -108,6 +108,7 @@ a {
 } */
 .dropdowns {
   text-decoration: none;
+  margin-bottom: 8px;
 }
 .dropdownMenu {
   transform: scale(0.85);
