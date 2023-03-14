@@ -27,7 +27,7 @@ const PaginationList = (props: PropsInterface) => {
       <Hidden smUp>
         <TablePagination
           rowsPerPageOptions={[]}
-          colSpan={4}
+          colSpan={5}
           count={props.count}
           rowsPerPage={props.rowsPerPage}
           page={props.page}

@@ -269,7 +269,13 @@ function OrgList(): JSX.Element {
                 )}
             </div>
             <div>
-              <table>
+              <table
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
                 <tbody>
                   <tr>
                     <PaginationList
