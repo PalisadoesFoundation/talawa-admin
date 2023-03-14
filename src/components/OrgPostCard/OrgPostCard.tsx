@@ -60,7 +60,9 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
       /* istanbul ignore next */
       if (data) {
         toast.success('Post deleted successfully.');
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -89,7 +91,9 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
       /* istanbul ignore next */
       if (data) {
         toast.success('Post Updated successfully.');
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */

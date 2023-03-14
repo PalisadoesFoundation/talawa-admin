@@ -8,6 +8,7 @@ import {
   REJECT_ORGANIZATION_REQUEST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 interface MemberRequestCardProps {
   key: string;
@@ -36,11 +37,13 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
       });
 
       /* istanbul ignore next */
-      window.alert('it is accepted');
+      toast.success('it is accepted');
       /* istanbul ignore next */
-      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } catch (error) {
-      window.alert(error);
+      toast.error(error);
     }
   };
 
@@ -57,7 +60,7 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
         /* istanbul ignore next */
         window.location.reload();
       } catch (error) {
-        window.alert(error);
+        toast.error(error);
       }
     }
   };
