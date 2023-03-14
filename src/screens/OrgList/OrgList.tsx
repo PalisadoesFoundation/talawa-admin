@@ -243,7 +243,7 @@ function OrgList(): JSX.Element {
                           admins={datas.admins}
                           members={datas.members.length}
                           createdDate={dayjs(datas?.createdAt).format(
-                            'DD/MM/YYYY'
+                            'MMMM D, YYYY'
                           )}
                           orgName={datas.name}
                           orgLocation={datas.location}
@@ -258,7 +258,7 @@ function OrgList(): JSX.Element {
                           admins={datas.admins}
                           members={datas.members.length}
                           createdDate={dayjs(datas?.createdAt).format(
-                            'DD/MM/YYYY'
+                            'MMMM D, YYYY'
                           )}
                           orgName={datas.name}
                           orgLocation={datas.location}
