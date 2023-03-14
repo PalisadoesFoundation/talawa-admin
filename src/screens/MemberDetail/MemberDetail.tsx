@@ -63,8 +63,10 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
       /* istanbul ignore next */
       if (data) {
-        window.alert('User is added as admin.');
-        window.location.reload();
+        toast.success('User is added as admin.');
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */
