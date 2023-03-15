@@ -68,6 +68,7 @@ const Roles = () => {
       /* istanbul ignore next */
       if (data) {
         toast.success('Role Updated.');
+        refetch();
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -211,7 +212,13 @@ const Roles = () => {
               </div>
             </div>
             <div>
-              <table>
+              <table
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
                 <tbody>
                   <tr>
                     <PaginationList

@@ -36,8 +36,10 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        window.alert('The Member is removed');
-        window.location.reload();
+        toast.success('The Member is removed');
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */

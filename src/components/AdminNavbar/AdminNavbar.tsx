@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { Nav } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import Cookies from 'js-cookie';
@@ -122,10 +122,11 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
               return url ? (
                 <Nav.Item key={name} className={styles.navitems}>
                   <Nav.Link
-                    as={Link}
+                    as={NavLink}
                     to={url}
                     id={name}
                     className={styles.navlinks}
+                    activeClassName={styles.navlinks_active}
                   >
                     {t(name)}
                   </Nav.Link>
@@ -146,7 +147,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                       </Nav.Link>
                     </Dropdown.Toggle>
                     {subTargets && (
-                      <Dropdown.Menu>
+                      <Dropdown.Menu className={styles.dropdowns}>
                         {subTargets.map((subTarget: any, index: number) => (
                           <Dropdown.Item
                             key={index}
