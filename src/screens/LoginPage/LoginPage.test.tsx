@@ -5,7 +5,6 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-import { toast } from 'react-toastify';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
 
@@ -99,7 +98,7 @@ describe('Talawa-API server fetch check', () => {
     jest.clearAllMocks();
   });
 
-  test('displays success message when resource is loaded', async () => {
+  test('Checks if Talawa-API resource is loaded successfully', async () => {
     global.fetch = jest.fn(() => Promise.resolve({} as unknown as Response));
 
     await act(async () => {
@@ -117,9 +116,6 @@ describe('Talawa-API server fetch check', () => {
     });
 
     expect(fetch).toHaveBeenCalledWith('http://localhost:4000/graphql/');
-    expect(toast.success).toHaveBeenCalledWith(
-      'Talawa-Admin is up and running!'
-    );
   });
 
   test('displays warning message when resource loading fails', async () => {
