@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
 import styles from './OrgPost.module.css';
+import notfound from '../../assets/images/notfound.png';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
 import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
@@ -17,6 +18,7 @@ import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { RootState } from 'state/reducers';
 import PaginationList from 'components/PaginationList/PaginationList';
 import debounce from 'utils/debounce';
+import PostNotFound from 'screens/PostNotFound/PostNotFound';
 
 function OrgPost(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -167,42 +169,48 @@ function OrgPost(): JSX.Element {
               </Button>
             </Row>
             <div className={`row ${styles.list_box}`}>
-              {data
-                ? (rowsPerPage > 0
-                    ? data.postsByOrganizationConnection.edges.slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
-                      )
-                    : rowsPerPage > 0
-                    ? data.postsByOrganizationConnection.edges.slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
-                      )
-                    : data.postsByOrganizationConnection.edges
-                  ).map(
-                    (datas: {
-                      _id: string;
-                      title: string;
-                      text: string;
-                      imageUrl: string;
-                      videoUrl: string;
-                      organizationId: string;
-                      creator: { firstName: string; lastName: string };
-                    }) => {
-                      return (
-                        <OrgPostCard
-                          key={datas._id}
-                          id={datas._id}
-                          postTitle={datas.title}
-                          postInfo={datas.text}
-                          postAuthor={`${datas.creator.firstName} ${datas.creator.lastName}`}
-                          postPhoto={datas.imageUrl}
-                          postVideo={datas.videoUrl}
-                        />
-                      );
-                    }
-                  )
-                : null}
+              {data.postsByOrganizationConnection.edges.length > 0 ? (
+                (rowsPerPage > 0
+                  ? data.postsByOrganizationConnection.edges.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : rowsPerPage > 0
+                  ? data.postsByOrganizationConnection.edges.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : data.postsByOrganizationConnection.edges
+                ).map(
+                  (datas: {
+                    _id: string;
+                    title: string;
+                    text: string;
+                    imageUrl: string;
+                    videoUrl: string;
+                    organizationId: string;
+                    creator: { firstName: string; lastName: string };
+                  }) => {
+                    return (
+                      <OrgPostCard
+                        key={datas._id}
+                        id={datas._id}
+                        postTitle={datas.title}
+                        postInfo={datas.text}
+                        postAuthor={`${datas.creator.firstName} ${datas.creator.lastName}`}
+                        postPhoto={datas.imageUrl}
+                        postVideo={datas.videoUrl}
+                      />
+                    );
+                  }
+                )
+              ) : (
+                <PostNotFound
+                  image={notfound}
+                  errorMessage={'No Matching Results for'}
+                  subMessage={'Lorem ipsum dolor sit amet elit.'}
+                />
+              )}
             </div>
           </div>
           <div>
