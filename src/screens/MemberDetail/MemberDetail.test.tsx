@@ -148,29 +148,28 @@ describe('MemberDetail', () => {
     await wait();
 
     userEvent.click(screen.getByText(/Add Admin/i));
-    userEvent.click(screen.getByText(/edit/i));
 
     expect(getByTestId(/dashboardTitleBtn/i)).toBeInTheDocument();
     expect(getByTestId(/dashboardTitleBtn/i)).toHaveTextContent('User Details');
-    // expect(screen.getAllByText(/Email/i)).toBeTruthy();
-    // expect(screen.getAllByText(/Main/i)).toBeTruthy();
-    // expect(screen.getAllByText(/First name/i)).toBeTruthy();
-    // expect(screen.getAllByText(/Last name/i)).toBeTruthy();
-    // expect(screen.getAllByText(/Member of Organization/i)).toBeTruthy();
-    // expect(screen.getAllByText(/Language/i)).toBeTruthy();
-    // expect(screen.getAllByText(/Admin approved/i)).toBeTruthy();
-    // expect(screen.getAllByText(/Plugin creation allowed/i)).toBeTruthy();
-    // expect(screen.getAllByText(/Created on/i)).toBeTruthy();
-    // expect(screen.getAllByText(/Admin for organizations/i)).toBeTruthy();
-    // expect(screen.getAllByText(/Membership requests/i)).toBeTruthy();
-    // expect(screen.getAllByText(/Events/i)).toBeTruthy();
-    // expect(screen.getAllByText(/Admin for events/i)).toBeTruthy();
+    expect(screen.getAllByText(/Email/i)).toBeTruthy();
+    expect(screen.getAllByText(/Main/i)).toBeTruthy();
+    expect(screen.getAllByText(/First name/i)).toBeTruthy();
+    expect(screen.getAllByText(/Last name/i)).toBeTruthy();
+    expect(screen.getAllByText(/Member of Organization/i)).toBeTruthy();
+    expect(screen.getAllByText(/Language/i)).toBeTruthy();
+    expect(screen.getAllByText(/Admin approved/i)).toBeTruthy();
+    expect(screen.getAllByText(/Plugin creation allowed/i)).toBeTruthy();
+    expect(screen.getAllByText(/Created on/i)).toBeTruthy();
+    expect(screen.getAllByText(/Admin for organizations/i)).toBeTruthy();
+    expect(screen.getAllByText(/Membership requests/i)).toBeTruthy();
+    expect(screen.getAllByText(/Events/i)).toBeTruthy();
+    expect(screen.getAllByText(/Admin for events/i)).toBeTruthy();
 
-    // expect(screen.getAllByText(/Created On/i)).toHaveLength(2);
-    // expect(screen.getAllByText(/User Details/i)).toHaveLength(2);
-    // expect(screen.getAllByText(/Role/i)).toHaveLength(2);
-    // expect(screen.getAllByText(/Created/i)).toHaveLength(4);
-    // expect(screen.getAllByText(/Joined/i)).toHaveLength(2);
+    expect(screen.getAllByText(/Created On/i)).toHaveLength(2);
+    expect(screen.getAllByText(/User Details/i)).toHaveLength(2);
+    expect(screen.getAllByText(/Role/i)).toHaveLength(2);
+    expect(screen.getAllByText(/Created/i)).toHaveLength(4);
+    expect(screen.getAllByText(/Joined/i)).toHaveLength(2);
   });
   test('prettyDate function should work properly', () => {
     // If the date is provided
@@ -239,11 +238,12 @@ describe('MemberDetail', () => {
     );
   });
 
-  test('should call setState with 2 when button is clicked', () => {
+  test('should call setState with 2 when button is clicked', async () => {
     const props = {
       id: 'rishav-jha-mech',
     };
-    render(
+
+    const { container } = render(
       <MockedProvider addTypename={false} mocks={MOCKS1}>
         <BrowserRouter>
           <Provider store={store}>
@@ -254,6 +254,10 @@ describe('MemberDetail', () => {
         </BrowserRouter>
       </MockedProvider>
     );
-    screen.debug();
+
+    expect(container.textContent).not.toBe('Loading data...');
+    await wait();
+
+    userEvent.click(screen.getByText(/edit/i));
   });
 });
