@@ -9,7 +9,7 @@ import Cookies from 'js-cookie';
 import i18next from 'i18next';
 
 import styles from './AdminNavbar.module.css';
-import AboutImg from 'assets/images/queMark.png';
+import AboutImg from 'assets/images/defaultImg.png';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { UPDATE_SPAM_NOTIFICATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { languages } from 'utils/languages';

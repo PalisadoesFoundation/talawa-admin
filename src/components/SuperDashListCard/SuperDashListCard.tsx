@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import { useTranslation } from 'react-i18next';
 import styles from './SuperDashListCard.module.css';
 import { useHistory } from 'react-router-dom';
-import AboutImg from 'assets/images/queMark.png';
+import AboutImg from 'assets/images/defaultImg.png';
 
 interface SuperDashListCardProps {
   key: string;
