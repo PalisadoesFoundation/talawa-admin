@@ -1,6 +1,6 @@
 import React from 'react';
 import { Nav, Navbar } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import i18next from 'i18next';
 import Cookies from 'js-cookie';
 import { useTranslation } from 'react-i18next';
@@ -35,12 +35,22 @@ const ListNavbar = () => {
           {!isSuperAdmin && (
             <>
               <Nav.Item className={styles.navitems}>
-                <Nav.Link as={Link} to="/roles" className={styles.navlinks}>
+                <Nav.Link
+                  as={NavLink}
+                  to="/roles"
+                  className={styles.navlinks}
+                  activeClassName={styles.navlinks_active}
+                >
                   {t('roles')}
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item className={styles.navitems}>
-                <Nav.Link as={Link} to="/requests" className={styles.navlinks}>
+                <Nav.Link
+                  as={NavLink}
+                  to="/requests"
+                  className={styles.navlinks}
+                  activeClassName={styles.navlinks_active}
+                >
                   {t('requests')}
                 </Nav.Link>
               </Nav.Item>
