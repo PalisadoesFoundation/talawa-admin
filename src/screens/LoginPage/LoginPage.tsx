@@ -73,12 +73,9 @@ function LoginPage(): JSX.Element {
   useEffect(() => {
     async function loadResource() {
       const resourceUrl = 'http://localhost:4000/graphql/';
-
       try {
+        // eslint-disable-next-line no-unused-vars
         const response = await fetch(resourceUrl);
-        if (response != null) {
-          toast.success('Talawa-Admin is up and running!');
-        }
       } catch (error: any) {
         /* istanbul ignore next */
         if (error.message === 'Failed to fetch') {
