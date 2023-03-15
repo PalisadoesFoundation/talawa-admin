@@ -212,7 +212,13 @@ const Roles = () => {
               </div>
             </div>
             <div>
-              <table>
+              <table
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
                 <tbody>
                   <tr>
                     <PaginationList

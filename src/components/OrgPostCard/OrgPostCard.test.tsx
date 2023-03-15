@@ -82,7 +82,7 @@ describe('Testing Organization Post Card', () => {
     expect(screen.getByText(/Image URL:/i)).toBeInTheDocument();
     expect(screen.getByText(/Video URL:/i)).toBeInTheDocument();
     expect(screen.getByText(props.postTitle)).toBeInTheDocument();
-    expect(screen.getByText(props.postInfo)).toBeInTheDocument();
+    expect(screen.getByDisplayValue(props.postInfo)).toBeInTheDocument();
     expect(screen.getByText(props.postAuthor)).toBeInTheDocument();
     expect(screen.getByText(props.postPhoto)).toBeInTheDocument();
     expect(screen.getByText(props.postVideo)).toBeInTheDocument();
@@ -105,7 +105,7 @@ describe('Testing Organization Post Card', () => {
     expect(screen.getByText(/Image URL:/i)).toBeInTheDocument();
     expect(screen.getByText(/Video URL:/i)).toBeInTheDocument();
     expect(screen.getByText(props.postTitle)).toBeInTheDocument();
-    expect(screen.getByText(props.postInfo)).toBeInTheDocument();
+    expect(screen.getByDisplayValue(props.postInfo)).toBeInTheDocument();
     expect(screen.getByText(props.postAuthor)).toBeInTheDocument();
     expect(screen.getByText(props.postPhoto)).toBeInTheDocument();
     expect(screen.getByText(props.postVideo)).toBeInTheDocument();
@@ -195,11 +195,9 @@ describe('Testing Organization Post Card', () => {
 
     fireEvent.click(toggleBtn);
 
-    expect(
-      screen.getByText(
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-      )
-    ).toBeInTheDocument();
+    expect(screen.getByTestId('toggleContent').innerHTML).toEqual(
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+    );
     expect(toggleBtn).toHaveTextContent('hide');
     expect(toggleBtn).toHaveClass('toggleClickBtn');
   });

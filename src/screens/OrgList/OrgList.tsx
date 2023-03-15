@@ -242,8 +242,8 @@ function OrgList(): JSX.Element {
                           image={datas.image}
                           admins={datas.admins}
                           members={datas.members.length}
-                          createdDate={dayjs(parseInt(datas?.createdAt)).format(
-                            'DD/MM/YYYY'
+                          createdDate={dayjs(datas?.createdAt).format(
+                            'MMMM D, YYYY'
                           )}
                           orgName={datas.name}
                           orgLocation={datas.location}
@@ -257,8 +257,8 @@ function OrgList(): JSX.Element {
                           image={datas.image}
                           admins={datas.admins}
                           members={datas.members.length}
-                          createdDate={dayjs(parseInt(datas?.createdAt)).format(
-                            'DD/MM/YYYY'
+                          createdDate={dayjs(datas?.createdAt).format(
+                            'MMMM D, YYYY'
                           )}
                           orgName={datas.name}
                           orgLocation={datas.location}
@@ -269,7 +269,13 @@ function OrgList(): JSX.Element {
                 )}
             </div>
             <div>
-              <table>
+              <table
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
                 <tbody>
                   <tr>
                     <PaginationList

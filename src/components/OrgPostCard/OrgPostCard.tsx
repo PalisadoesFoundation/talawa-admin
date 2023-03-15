@@ -70,7 +70,9 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
     }
   };
 
-  const handleInputEvent = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleInputEvent = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
 
     setPostFormState({ ...postformState, [name]: value });
@@ -131,13 +133,13 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
           </p>
 
           {togglePost === 'Read more' ? (
-            <p>
+            <p data-testid="toggleContent">
               {props.postInfo.length > 43
                 ? props.postInfo.substring(0, 40) + '...'
                 : props.postInfo}
             </p>
           ) : (
-            <p>{props.postInfo}</p>
+            <p data-testid="toggleContent">{props.postInfo}</p>
           )}
           <button
             role="toggleBtn"
@@ -266,12 +268,11 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
                   <label htmlFor="postText" className="col-form-label">
                     {t('information')}
                   </label>
-                  <input
-                    type="text"
+                  <textarea
                     className="form-control"
-                    id="postText"
                     name="postinfo"
                     value={postformState.postinfo}
+                    autoComplete="off"
                     onChange={handleInputEvent}
                     data-testid="updateText"
                     required
