@@ -74,7 +74,7 @@ function LoginPage(): JSX.Element {
     async function loadResource() {
       const resourceUrl = 'http://localhost:4000/graphql/';
       try {
-        // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const response = await fetch(resourceUrl);
       } catch (error: any) {
         /* istanbul ignore next */
