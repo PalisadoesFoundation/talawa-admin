@@ -4,6 +4,7 @@ import Col from 'react-bootstrap/Col';
 import { useTranslation } from 'react-i18next';
 import styles from './SuperDashListCard.module.css';
 import { useHistory } from 'react-router-dom';
+import AboutImg from 'assets/images/defaultImg.png';
 
 interface SuperDashListCardProps {
   key: string;
@@ -43,10 +44,7 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
         {props.image ? (
           <img src={props.image} className={styles.orgimg} />
         ) : (
-          <img
-            src="https://via.placeholder.com/200x100"
-            className={styles.orgimg}
-          />
+          <img src={AboutImg} className={styles.orgimg} />
         )}
         <Col className={styles.singledetails}>
           <div className={styles.singledetails_data_left}>
