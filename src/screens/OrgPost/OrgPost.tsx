@@ -169,7 +169,7 @@ function OrgPost(): JSX.Element {
               </Button>
             </Row>
             <div className={`row ${styles.list_box}`}>
-              {data.postsByOrganizationConnection.edges.length > 0 ? (
+              {data && data.postsByOrganizationConnection.edges.length > 0 ? (
                 (rowsPerPage > 0
                   ? data.postsByOrganizationConnection.edges.slice(
                       page * rowsPerPage,
