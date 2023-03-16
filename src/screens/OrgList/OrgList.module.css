@@ -36,6 +36,11 @@
   gap: 0.7rem;
 }
 
+.noResult {
+  color: #707070;
+  font-size: 20px;
+}
+
 @media screen and (min-width: 468px) {
   .search {
     display: flex;
