@@ -25,9 +25,8 @@ setInterval(() => {
   const logoutUserTime = 20 * 60 * 1000;
 
   if (timeSinceLastActive > logoutUserTime) {
-    toast.error(
-      'Session timed out. Please login again to keep using the platform'
-    );
+    toast.warn('User not found! kindly relogin as sessison has expired');
+
     window.location.href = '/';
     localStorage.setItem('IsLoggedIn', 'FALSE');
   }
