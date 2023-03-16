@@ -37,6 +37,7 @@ function OrgList(): JSX.Element {
     image: '',
   });
   const [, setSearchByName] = useState('');
+  const [noResult, setNoResult] = useState(false);
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -148,6 +149,12 @@ function OrgList(): JSX.Element {
       setSearchByName(value);
       refetch({
         filter: value,
+      }).then((response) => {
+        if (response.data.organizationsConnection.length === 0) {
+          setNoResult(true);
+        } else {
+          setNoResult(false);
+        }
       });
     }
   };
@@ -217,7 +224,10 @@ function OrgList(): JSX.Element {
               />
             </div>
             <div className={styles.list_box}>
-              {data &&
+              {noResult ? (
+                <p className={styles.noResult}> No Organization found! </p>
+              ) : (
+                data &&
                 (rowsPerPage > 0
                   ? dataRevOrg.slice(
                       page * rowsPerPage,
@@ -266,7 +276,8 @@ function OrgList(): JSX.Element {
                       );
                     }
                   }
-                )}
+                )
+              )}
             </div>
             <div>
               <table
