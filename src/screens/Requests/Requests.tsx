@@ -83,7 +83,14 @@ const Requests = () => {
         setUsersData(usersData.filter((user: any) => user._id !== userId));
       }
     } catch (error: any) {
-      toast.error(error.message);
+      /* istanbul ignore next */
+      if (error.message === 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
+      } else {
+        toast.error(error.message);
+      }
     }
   };
 
@@ -102,7 +109,13 @@ const Requests = () => {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error(error.message);
+      if (error.message === 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
+      } else {
+        toast.error(error.message);
+      }
     }
   };
 

@@ -61,9 +61,15 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
           window.location.reload();
         }, 2000);
       }
-    } catch (error) {
+    } catch (error: any) {
       /* istanbul ignore next */
-      toast.error(error);
+      if (error.message === 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
+      } else {
+        toast.error(error.message);
+      }
     }
   };
 
