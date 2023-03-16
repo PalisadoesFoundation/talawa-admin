@@ -1,5 +1,5 @@
 import React from 'react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider, MockLink } from '@apollo/react-testing';
 import { act, render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -9,6 +9,8 @@ import { I18nextProvider } from 'react-i18next';
 import OrgContribution from './OrgContribution';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
+
+const mocklink = new MockLink([], false, { showWarnings: false });
 
 async function wait(ms = 0) {
   await act(() => {
@@ -23,7 +25,7 @@ describe('Organisation Contribution Page', () => {
     window.location.assign('/orglist');
 
     const { container } = render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider link={mocklink} addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
