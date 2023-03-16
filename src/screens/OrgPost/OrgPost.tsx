@@ -63,7 +63,7 @@ function OrgPost(): JSX.Element {
           organizationId: currentUrl,
         },
       });
-      /* istanbul ignore next */
+      /* istanbul ignore next */  
       if (data) {
         toast.success('Congratulations! You have Posted Something.');
         refetch();
@@ -74,7 +74,14 @@ function OrgPost(): JSX.Element {
         setPostModalIsOpen(false); // close the modal
       }
     } catch (error: any) {
-      toast.error(error.message);
+      /* istanbul ignore next */
+      if (error.message === 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
+      } else {
+        toast.error(error.message);
+      }
     }
   };
 

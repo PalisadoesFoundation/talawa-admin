@@ -7,6 +7,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import Cookies from 'js-cookie';
 import i18next from 'i18next';
+import { toast } from 'react-toastify';
 
 import styles from './AdminNavbar.module.css';
 import AboutImg from 'assets/images/defaultImg.png';
@@ -57,9 +58,15 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
             localStorage.removeItem('spamId');
             refetch();
           }
-        } catch (error) {
+        } catch (error: any) {
           /* istanbul ignore next */
-          console.log(error);
+          if (error.message === 'Failed to fetch') {
+            toast.error(
+              'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+            );
+          } else {
+            toast.error(error.message);
+          }
         }
       }
     };
