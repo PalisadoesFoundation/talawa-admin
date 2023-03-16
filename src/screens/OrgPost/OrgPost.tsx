@@ -63,7 +63,7 @@ function OrgPost(): JSX.Element {
           organizationId: currentUrl,
         },
       });
-      /* istanbul ignore next */  
+      /* istanbul ignore next */
       if (data) {
         toast.success('Congratulations! You have Posted Something.');
         refetch();
