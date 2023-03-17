@@ -200,6 +200,13 @@
     "ptitle": "Post Title",
     "postDes": "What do you to talk about?"
   },
+  "postNotFound": {
+    "post": "Post",
+    "not found!": "Not Found!",
+    "organization": "Organization",
+    "post not found!": "Post Not Found!",
+    "organization not found!": "Organization Not Found!"
+  },
   "orgPostCard": {
     "author": "Author",
     "imageURL": "Image URL",

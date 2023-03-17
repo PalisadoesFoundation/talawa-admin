@@ -200,6 +200,13 @@
     "ptitle": "帖子標題",
     "postDes": "你要談什麼？"
   },
+  "postNotFound": {
+    "post": "郵政",
+    "not found!": "未找到!",
+    "organization": "組織",
+    "post not found!": "郵政 未找到!",
+    "organization not found!": "組織 未找到!"
+  },
   "orgPostCard": {
     "author": "作者",
     "imageURL": "圖片網址",

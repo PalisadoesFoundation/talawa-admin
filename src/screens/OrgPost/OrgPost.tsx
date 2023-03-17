@@ -10,7 +10,6 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
 import styles from './OrgPost.module.css';
-import notfound from '../../assets/images/notfound.png';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
 import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
@@ -18,7 +17,7 @@ import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { RootState } from 'state/reducers';
 import PaginationList from 'components/PaginationList/PaginationList';
 import debounce from 'utils/debounce';
-import PostNotFound from 'screens/PostNotFound/PostNotFound';
+import PostNotFound from 'components/PostNotFound/PostNotFound';
 
 function OrgPost(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -205,11 +204,7 @@ function OrgPost(): JSX.Element {
                   }
                 )
               ) : (
-                <PostNotFound
-                  image={notfound}
-                  errorMessage={'No Matching Results for'}
-                  subMessage={'Lorem ipsum dolor sit amet elit.'}
-                />
+                <PostNotFound title="organization" />
               )}
             </div>
           </div>
