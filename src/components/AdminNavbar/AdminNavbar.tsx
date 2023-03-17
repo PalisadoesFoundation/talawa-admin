@@ -75,9 +75,9 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
   }, []);
 
   useEffect(() => {
-    if (data && data.organizations[0].spamCount) {
+    if (data && data?.organizations[0].spamCount) {
       setSpamCountData(
-        data.organizations[0].spamCount.filter(
+        data?.organizations[0].spamCount.filter(
           (spam: any) => spam.isReaded === false
         )
       );
@@ -98,7 +98,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
 
   let OrgName;
   if (data) {
-    OrgName = data.organizations[0].name;
+    OrgName = data?.organizations[0].name;
   }
 
   return (
@@ -108,7 +108,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
           <div className={styles.logo}>
             {data?.organizations[0].image ? (
               <img
-                src={data.organizations[0].image}
+                src={data?.organizations[0].image}
                 className={styles.roundedcircle}
                 data-testid={'orgLogoPresent'}
               />
@@ -191,7 +191,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
               >
                 {data?.organizations[0].image ? (
                   <img
-                    src={data.organizations[0].image}
+                    src={data?.organizations[0].image}
                     className={styles.roundedcircle}
                     data-testid="navbarOrgImagePresent"
                   />

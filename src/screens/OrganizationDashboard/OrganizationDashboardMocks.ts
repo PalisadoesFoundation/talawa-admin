@@ -1,3 +1,4 @@
+import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATIONS_LIST,
   ORGANIZATION_EVENT_LIST,
@@ -89,6 +90,20 @@ export const MOCKS_WITHOUT_IMAGE = [
               lastName: 'Doe',
               email: 'johndoe@gmail.com',
             },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: DELETE_ORGANIZATION_MUTATION,
+    },
+    result: {
+      data: {
+        removeOrganization: [
+          {
+            _id: 1,
           },
         ],
       },

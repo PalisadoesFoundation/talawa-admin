@@ -9,7 +9,8 @@ import { I18nextProvider } from 'react-i18next';
 import OrgContribution from './OrgContribution';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-
+import { StaticMockLink } from 'utils/StaticMockLink';
+const link = new StaticMockLink([], true);
 async function wait(ms = 0) {
   await act(() => {
     return new Promise((resolve) => {
@@ -23,7 +24,7 @@ describe('Organisation Contribution Page', () => {
     window.location.assign('/orglist');
 
     const { container } = render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
