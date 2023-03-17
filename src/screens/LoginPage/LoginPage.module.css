@@ -360,6 +360,8 @@ form > br {
   color: rgb(240, 48, 48);
   font-size: 9px;
   font-style: italics;
+  position: relative;
+  top: -14px;
 }
 
 @media only screen and (max-width: 600px) {
