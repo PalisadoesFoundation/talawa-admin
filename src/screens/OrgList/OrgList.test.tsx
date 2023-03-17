@@ -1,5 +1,5 @@
 import React from 'react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider, MockLink } from '@apollo/react-testing';
 import { act, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import 'jest-localstorage-mock';
@@ -15,6 +15,7 @@ import {
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
 const MOCKS = [
   {
@@ -72,6 +73,8 @@ const MOCKS = [
     },
   },
 ];
+const link = new StaticMockLink(MOCKS, true);
+const mocklink = new MockLink([], false, { showWarnings: false });
 
 async function wait(ms = 0) {
   await act(() => {
@@ -122,7 +125,7 @@ describe('Organisation List Page', () => {
     window.location.assign('/');
 
     const { container } = render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -147,7 +150,7 @@ describe('Organisation List Page', () => {
 
   test('Testing UserType from local storage', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <OrgList />
@@ -163,7 +166,7 @@ describe('Organisation List Page', () => {
 
   test('Testing Organization data is not present', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider addTypename={false} link={mocklink}>
         <BrowserRouter>
           <Provider store={store}>
             <OrgList />
@@ -179,7 +182,7 @@ describe('Organisation List Page', () => {
     localStorage.setItem('UserType', 'SUPERADMIN');
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <OrgList />
@@ -198,7 +201,7 @@ describe('Organisation List Page', () => {
     localStorage.setItem('UserType', 'SUPERADMIN');
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <OrgList />
@@ -245,7 +248,7 @@ describe('Organisation List Page', () => {
 
 test('Search bar filters organizations by name', async () => {
   const { container } = render(
-    <MockedProvider addTypename={false} mocks={MOCKS}>
+    <MockedProvider addTypename={false} link={link}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>

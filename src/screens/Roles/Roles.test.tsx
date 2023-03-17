@@ -1,6 +1,6 @@
 import React from 'react';
 import { act, render, screen } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider, MockLink } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
@@ -13,6 +13,7 @@ import { USER_LIST } from 'GraphQl/Queries/Queries';
 import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
 import i18nForTest from 'utils/i18nForTest';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
 const MOCKS = [
   {
@@ -89,6 +90,8 @@ const MOCKS = [
     },
   },
 ];
+const link = new StaticMockLink(MOCKS, true);
+const mocklink = new MockLink([], false, { showWarnings: false });
 
 async function wait(ms = 0) {
   await act(() => {
@@ -103,7 +106,7 @@ describe('Testing Roles screen', () => {
     window.location.assign('/orglist');
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -125,7 +128,7 @@ describe('Testing Roles screen', () => {
     localStorage.setItem('UserType', 'USER');
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -141,7 +144,7 @@ describe('Testing Roles screen', () => {
 
   test('Testing seach by name functionality', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -159,7 +162,7 @@ describe('Testing Roles screen', () => {
 
   test('Testing change role functionality', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -177,7 +180,7 @@ describe('Testing Roles screen', () => {
 
   test('Testing User data is not present', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider addTypename={false} link={mocklink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
