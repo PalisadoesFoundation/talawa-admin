@@ -60,15 +60,25 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
       /* istanbul ignore next */
       if (data) {
         toast.success('Post deleted successfully.');
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error(error.message);
+      if (error.message === 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
+      } else {
+        toast.error(error.message);
+      }
     }
   };
 
-  const handleInputEvent = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleInputEvent = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
 
     setPostFormState({ ...postformState, [name]: value });
@@ -89,7 +99,9 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
       /* istanbul ignore next */
       if (data) {
         toast.success('Post Updated successfully.');
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -127,13 +139,13 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
           </p>
 
           {togglePost === 'Read more' ? (
-            <p>
+            <p data-testid="toggleContent">
               {props.postInfo.length > 43
                 ? props.postInfo.substring(0, 40) + '...'
                 : props.postInfo}
             </p>
           ) : (
-            <p>{props.postInfo}</p>
+            <p data-testid="toggleContent">{props.postInfo}</p>
           )}
           <button
             role="toggleBtn"
@@ -262,12 +274,11 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
                   <label htmlFor="postText" className="col-form-label">
                     {t('information')}
                   </label>
-                  <input
-                    type="text"
+                  <textarea
                     className="form-control"
-                    id="postText"
                     name="postinfo"
                     value={postformState.postinfo}
+                    autoComplete="off"
                     onChange={handleInputEvent}
                     data-testid="updateText"
                     required

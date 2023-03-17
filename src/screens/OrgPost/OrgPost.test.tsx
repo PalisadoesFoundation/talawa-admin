@@ -17,24 +17,44 @@ const MOCKS = [
   {
     request: {
       query: ORGANIZATION_POST_CONNECTION_LIST,
+      variables: {
+        id: undefined,
+        title_contains: '',
+        text_contains: '',
+      },
     },
     result: {
       data: {
-        postsByOrganization: [
-          {
-            _id: 1,
-            title: 'Akatsuki',
-            text: 'Capture Jinchuriki',
-            imageUrl: '',
-            videoUrl: '',
-            creator: {
-              _id: '583',
-              firstName: 'John',
-              lastName: 'Doe',
-              email: 'johndoe@gmail.com',
+        postsByOrganizationConnection: {
+          edges: [
+            {
+              _id: '6411e53835d7ba2344a78e21',
+              title: 'postone',
+              text: 'THis is the frist post',
+              imageUrl: null,
+              videoUrl: null,
+              creator: {
+                _id: '640d98d9eb6a743d75341067',
+                firstName: 'Aditya',
+                lastName: 'Shelke',
+                email: 'adidacreator1@gmail.com',
+              },
             },
-          },
-        ],
+            {
+              _id: '6411e54835d7ba2344a78e29',
+              title: 'posttwo',
+              text: 'THis is the post two',
+              imageUrl: null,
+              videoUrl: null,
+              creator: {
+                _id: '640d98d9eb6a743d75341067',
+                firstName: 'Aditya',
+                lastName: 'Shelke',
+                email: 'adidacreator1@gmail.com',
+              },
+            },
+          ],
+        },
       },
     },
   },
@@ -74,7 +94,7 @@ const MOCKS = [
   },
 ];
 
-async function wait(ms = 0) {
+async function wait(ms = 500) {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -89,26 +109,25 @@ describe('Organisation Post Page', () => {
   };
 
   test('correct mock data should be queried', async () => {
-    const dataQuery1 = MOCKS[0]?.result?.data?.postsByOrganization;
+    const dataQuery1 =
+      MOCKS[0]?.result?.data?.postsByOrganizationConnection.edges[0];
 
-    expect(dataQuery1).toEqual([
-      {
-        _id: 1,
-        title: 'Akatsuki',
-        text: 'Capture Jinchuriki',
-        imageUrl: '',
-        videoUrl: '',
-        creator: {
-          _id: '583',
-          firstName: 'John',
-          lastName: 'Doe',
-          email: 'johndoe@gmail.com',
-        },
+    expect(dataQuery1).toEqual({
+      _id: '6411e53835d7ba2344a78e21',
+      title: 'postone',
+      text: 'THis is the frist post',
+      imageUrl: null,
+      videoUrl: null,
+      creator: {
+        _id: '640d98d9eb6a743d75341067',
+        firstName: 'Aditya',
+        lastName: 'Shelke',
+        email: 'adidacreator1@gmail.com',
       },
-    ]);
+    });
   });
 
-  test('should render props and text elements test for the screen', async () => {
+  test('should render props and text  elements test for the screen', async () => {
     const { container } = render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
         <BrowserRouter>
@@ -177,17 +196,18 @@ describe('Organisation Post Page', () => {
         </BrowserRouter>
       </MockedProvider>
     );
-
-    await wait();
-
-    userEvent.type(
-      screen.getByPlaceholderText(/Search by Title/i),
-      formData.posttitle
-    );
-    userEvent.type(
-      screen.getByPlaceholderText(/Search by Text/i),
-      formData.postinfo
-    );
+    async function debounceWait(ms = 200) {
+      await act(() => {
+        return new Promise((resolve) => {
+          setTimeout(resolve, ms);
+        });
+      });
+    }
+    await debounceWait();
+    userEvent.type(screen.getByPlaceholderText(/Search By Title/i), 'postone');
+    await debounceWait();
+    userEvent.type(screen.getByPlaceholderText(/Search By Text/i), 'THis');
+    await debounceWait();
   });
 
   test('Testing when post data is not present', async () => {

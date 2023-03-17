@@ -38,12 +38,20 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        window.alert('The admin is removed.');
-        window.location.reload();
+        toast.success('The admin is removed.');
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error(error.message);
+      if (error.message === 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
+      } else {
+        toast.error(error.message);
+      }
     }
   };
   return (

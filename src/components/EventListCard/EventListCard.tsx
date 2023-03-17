@@ -69,12 +69,20 @@ function EventListCard(props: EventListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        window.alert('Event deleted successfully.');
-        window.location.reload();
+        toast.success('Event deleted successfully.');
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error(error.message);
+      if (error.message === 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
+      } else {
+        toast.error(error.message);
+      }
     }
   };
 
@@ -99,12 +107,20 @@ function EventListCard(props: EventListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        window.alert('Event updated successfully.');
-        window.location.reload();
+        toast.success('Event updated successfully.');
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error(error.message);
+      if (error.message === 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
+      } else {
+        toast.error(error.message);
+      }
     }
   };
 

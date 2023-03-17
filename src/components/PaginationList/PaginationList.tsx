@@ -3,6 +3,7 @@ import { Hidden, TablePagination } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import Pagination from '../Pagination/Pagination';
+import './PaginationList.css';
 
 interface PropsInterface {
   count: number;
@@ -26,8 +27,13 @@ const PaginationList = (props: PropsInterface) => {
     <>
       <Hidden smUp>
         <TablePagination
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
           rowsPerPageOptions={[]}
-          colSpan={4}
+          colSpan={5}
           count={props.count}
           rowsPerPage={props.rowsPerPage}
           page={props.page}
