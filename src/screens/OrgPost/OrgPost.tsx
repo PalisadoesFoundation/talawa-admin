@@ -211,7 +211,7 @@ function OrgPost(): JSX.Element {
                   }
                 )
               ) : (
-                <PostNotFound title="organization" />
+                <PostNotFound title="post" />
               )}
             </div>
           </div>
