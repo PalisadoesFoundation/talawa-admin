@@ -22,7 +22,7 @@
     "toastError6": "Fill all the Details Correctly.",
     "toastError7": "Sorry! you are not Authorised!",
     "toastError8": "User not found!",
-    "toastSuccess1":"Successfully Registered. Please wait until you will be approved."
+    "toastSuccess1": "Successfully Registered. Please wait until you will be approved."
   },
   "listNavbar": {
     "talawa_portal": "Talawa Portal",
@@ -83,7 +83,7 @@
     "enterName": "Enter Name",
     "toastSuccess1": "User Approved",
     "toastSuccess2": "User Rejected",
-    "toastError":"Talawa-API service is unavailable. Is it running? Check your network connectivity too."
+    "toastError": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "adminNavbar": {
     "talawa_portal": "Talawa Portal",
@@ -281,7 +281,7 @@
     "toastError3": "Error in sending mail.",
     "toastError4": "Password and Confirm password mismatches.",
     "toastError5": "Password changes successfully.",
-    "toastSuccess1":"OTP is sent to your registered email."
+    "toastSuccess1": "OTP is sent to your registered email."
   },
   "pageNotFound": {
     "title": "404 Not Found",
