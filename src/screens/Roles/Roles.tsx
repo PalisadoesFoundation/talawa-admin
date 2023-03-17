@@ -87,7 +87,7 @@ const Roles = () => {
     setSearchByName(value);
 
     refetch({
-      filter: searchByName,
+      filter: value,
     });
   };
 
