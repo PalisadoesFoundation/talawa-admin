@@ -12,10 +12,9 @@ import { I18nextProvider } from 'react-i18next';
 import AdminNavbar from './AdminNavbar';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import { MOCKS, MOCKS_WITH_IMAGE } from './AdminNavbarMocks';
+import { MOCKS } from './AdminNavbarMocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 const link1 = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(MOCKS_WITH_IMAGE, true);
 async function wait(ms = 0) {
   await act(() => {
     return new Promise((resolve) => {
