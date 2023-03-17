@@ -13,7 +13,8 @@
     "confirmPassword": "確認密碼",
     "forgotPassword": "忘記密碼 ？",
     "enterEmail": "输入电子邮件",
-    "enterPassword": "输入密码"
+    "enterPassword": "输入密码",
+    "doNotOwnAnAccount": "沒有帳戶嗎？"
   },
   "listNavbar": {
     "talawa_portal": "塔拉瓦門戶",
