@@ -67,15 +67,13 @@ const Roles = () => {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Role Updated.');
+        toast.success(t('toastRoleUpdate'));
         refetch();
       }
     } catch (error: any) {
       /* istanbul ignore next */
       if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
+        toast.error(t('toastError'));
       } else {
         toast.error(error.message);
       }

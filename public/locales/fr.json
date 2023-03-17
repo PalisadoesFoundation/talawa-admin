@@ -13,7 +13,16 @@
     "confirmPassword": "Confirmez le mot de passe",
     "forgotPassword": "Mot de passe oublié ?",
     "enterEmail": "entrez l'e-mail",
-    "enterPassword": "Entrer le mot de passe"
+    "enterPassword": "Entrer le mot de passe",
+    "toastError1": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau.",
+    "toastError2": "Erreur Captcha !",
+    "toastError3": "Veuillez vérifier le captcha.",
+    "toastError4": "Une erreur s'est produite, veuillez réessayer ultérieurement.",
+    "toastError5": "Le mot de passe et la confirmation du mot de passe ne correspondent pas.",
+    "toastError6": "Remplissez correctement tous les détails.",
+    "toastError7": "Désolé ! vous n'êtes pas autorisé !",
+    "toastError8": "Utilisateur introuvable !",
+    "toastSuccess1": "Enregistré avec succès. Veuillez patienter jusqu'à ce que vous soyez approuvé."
   },
   "listNavbar": {
     "talawa_portal": "Portail Talawa",
@@ -35,7 +44,9 @@
     "isPublic": "Est publique",
     "visibleInSearch": "Visible dans la recherche",
     "displayImage": "Afficher l'image",
-    "enterName": "Entrez le nom"
+    "enterName": "Entrez le nom",
+    "toastSuccess": "Félicitation l'organisation est créée",
+    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "superDashListCard": {
     "created": "Établi",
@@ -57,7 +68,9 @@
     "admin": "ADMIN",
     "superAdmin": "SUPERADMIN",
     "user": "UTILISATEUR",
-    "enterName": "Entrez le nom"
+    "enterName": "Entrez le nom",
+    "toastRoleUpdate": "Rôle mis à jour.",
+    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "requests": {
     "title": "Demandes Talawa",
@@ -67,7 +80,10 @@
     "email": "E-mail",
     "accept": "Accepter",
     "reject": "Rejeter",
-    "enterName": "Entrez le nom"
+    "enterName": "Entrez le nom",
+    "toastSuccess1": "Approuvé par l'utilisateur",
+    "toastSuccess2": "Utilisateur rejeté",
+    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "adminNavbar": {
     "talawa_portal": "Portail Talawa",
@@ -88,7 +104,8 @@
     "spamsThe": "spam le",
     "group": "groupe",
     "noNotifications": "Aucune notification",
-    "close": "Proche"
+    "close": "Proche",
+    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "dashboard": {
     "title": "Tableau de bord Talawa",
@@ -105,7 +122,8 @@
     "deleteOrganization": "Supprimer l'organisation",
     "deleteMsg": "Voulez-vous supprimer cette organisation ?",
     "no": "Non",
-    "yes": "Oui"
+    "yes": "Oui",
+    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "organizationPeople": {
     "title": "Membres Talawa",
@@ -120,7 +138,9 @@
   },
   "userListCard": {
     "joined": "Inscrit",
-    "addAdmin": "Ajouter un administrateur"
+    "addAdmin": "Ajouter un administrateur",
+    "toastSuccess": "L'utilisateur est ajouté en tant qu'administrateur.",
+    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "orgAdminListCard": {
     "joined": "Inscrit",
@@ -128,7 +148,9 @@
     "removeAdmin": "Supprimer l'administrateur",
     "removeAdminMsg": "Voulez-vous supprimer cet administrateur ?",
     "no": "Non",
-    "yes": "Oui"
+    "yes": "Oui",
+    "toastSuccess": "L'administrateur est supprimé.",
+    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "orgPeopleListCard": {
     "joined": "Inscrit",
@@ -136,7 +158,9 @@
     "removeMember": "Supprimer le membre",
     "removeMemberMsg": "Voulez-vous supprimer ce membre ?",
     "no": "Non",
-    "yes": "Oui"
+    "yes": "Oui",
+    "toastSuccess": "Le membre est supprimé",
+    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "organizationEvents": {
     "title": "Événements Talawa",
@@ -161,7 +185,9 @@
     "enterFilter": "Entrez le filtre",
     "enterTitle": "Entrez le titre",
     "enterDescrip": "Entrez la description",
-    "eventLocation": "Entrez l'emplacement"
+    "eventLocation": "Entrez l'emplacement",
+    "toastSuccess": "Toutes nos félicitations! L'événement est créé.",
+    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "eventListCard": {
     "location": "Emplacement",
@@ -181,7 +207,10 @@
     "isPublic": "Est publique",
     "isRegistrable": "Est enregistrable",
     "close": "Proche",
-    "updatePost": "Mettre à jour le message"
+    "updatePost": "Mettre à jour le message",
+    "toastSuccess1": "Événement supprimé avec succès.",
+    "toastSuccess2": "Événement mis à jour avec succès.",
+    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "orgPost": {
     "title": "Postes de Talawa",
@@ -198,7 +227,9 @@
     "searchTitle": "Rechercher par titre",
     "searchText": "Rechercher par texte",
     "ptitle": "Titre de l'article",
-    "postDes": "De quoi parlez-vous ?"
+    "postDes": "De quoi parlez-vous ?",
+    "toastSuccess": "Toutes nos félicitations! Vous avez posté quelque chose.",
+    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "orgPostCard": {
     "author": "Auteur",
@@ -214,7 +245,10 @@
     "image": "Image",
     "video": "Vidéo",
     "close": "Proche",
-    "updatePost": "Mettre à jour le message"
+    "updatePost": "Mettre à jour le message",
+    "toastSuccess1": "Message supprimé avec succès.",
+    "toastSuccess2": "Message mis à jour avec succès.",
+    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "blockUnblockUser": {
     "title": "Talawa Bloquer/Débloquer l'utilisateur",
@@ -225,7 +259,10 @@
     "block_unblock": "Bloquer/Débloquer",
     "unblock": "Débloquer",
     "block": "Bloquer",
-    "orgName": "Entrez le nom"
+    "orgName": "Entrez le nom",
+    "toastSuccess1": "Utilisateur bloqué avec succès",
+    "toastSuccess2": "Utilisateur débloqué avec succès",
+    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "forgotPassword": {
     "title": "Mot de passe oublié Talawa",
@@ -287,24 +324,29 @@
     "superAdmin": "Super administrateur",
     "displayImage": "Afficher l'image",
     "saveChanges": "Sauvegarder les modifications",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "toastSuccess": "Mise à jour réussie",
+    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
-
   "userPasswordUpdate": {
     "previousPassword": "mot de passe précédent",
     "newPassword": "Nouveau mot de passe",
     "confirmNewPassword": "Confirmer le nouveau mot de passe",
     "saveChanges": "Sauvegarder les modifications",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "toastError1": "Le champ du mot de passe ne peut pas être vide.",
+    "toastError2": "Le nouveau et le mot de passe de confirmation ne correspondent pas.",
+    "toastSuccess": "Mise à jour réussie"
   },
-
   "orgDelete": {
     "deleteOrg": "Supprimer l'organisation"
   },
   "membershipRequest": {
     "joined": "Inscrit",
     "accept": "Accepter",
-    "reject": "Rejeter"
+    "reject": "Rejeter",
+    "toastSuccess": "c'est accepté",
+    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "orgUpdate": {
     "name": "Nom",
@@ -315,7 +357,9 @@
     "isRegistrable": "Est enregistrable",
     "saveChanges": "Sauvegarder les modifications",
     "cancel": "Annuler",
-    "enterNameOrganization": "Entrez le nom de l'organisation"
+    "enterNameOrganization": "Entrez le nom de l'organisation",
+    "toastSuccess": "Mise à jour réussie",
+    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "addOnRegister": {
     "addNew": "Ajouter nouveau",
@@ -327,7 +371,8 @@
     "register": "Enregistrer",
     "pName": "Ex : Dons",
     "cName": "Ex: Jean Doe",
-    "pDesc": "Ce plugin active l'interface utilisateur pour"
+    "pDesc": "Ce plugin active l'interface utilisateur pour",
+    "toastSuccess": "Plugin ajouté avec succès"
   },
   "addOnStore": {
     "searchName": "Ex:Des dons ",
@@ -364,6 +409,8 @@
     "created": "Créé",
     "adminForOrganizations": "Administrateur pour les organisations",
     "membershipRequests": "Demandes d'adhésion",
-    "adminForEvents": "Administrateur pour les événements"
+    "adminForEvents": "Administrateur pour les événements",
+    "toastSuccess": "L'utilisateur est ajouté en tant qu'administrateur.",
+    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   }
 }
