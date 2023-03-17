@@ -10,6 +10,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { toast } from 'react-toastify';
 import cookies from 'js-cookie';
 import i18next from 'i18next';
+import { useForm } from 'react-hook-form';
 
 import styles from './LoginPage.module.css';
 import Logo from 'assets/talawa-logo-200x200.png';
@@ -43,6 +44,15 @@ function LoginPage(): JSX.Element {
   });
   const [show, setShow] = useState<boolean>(false);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+  } = useForm({
+    mode: 'onChange',
+  });
 
   const currentLanguageCode = cookies.get('i18next') || 'en';
 
@@ -85,8 +95,8 @@ function LoginPage(): JSX.Element {
     }
   };
 
-  const signup_link = async (e: ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const signup_link = async () => {
+    // e.preventDefault();
 
     const { signfirstName, signlastName, signEmail, signPassword, cPassword } =
       signformState;
@@ -272,7 +282,7 @@ function LoginPage(): JSX.Element {
               <div className={styles.homeright}>
                 <h1>{t('register')}</h1>
                 {/* <h2>to seamlessly manage your Organization.</h2> */}
-                <form onSubmit={signup_link}>
+                <form onSubmit={handleSubmit(signup_link)}>
                   <div className={styles.dispflex}>
                     <div>
                       <label>{t('firstName')}</label>
@@ -327,22 +337,35 @@ function LoginPage(): JSX.Element {
                   <div className={styles.passwordalert}>
                     <label>{t('password')}</label>
                     <input
+                      style={{ marginBottom: '20px' }}
                       type="password"
                       id="signpassword"
+                      value={signformState.signPassword}
                       data-testid="passwordField"
                       placeholder={t('password')}
-                      onFocus={() => setIsInputFocused(true)}
-                      onBlur={() => setIsInputFocused(false)}
                       required
-                      value={signformState.signPassword}
-                      onChange={(e) => {
-                        setSignFormState({
-                          ...signformState,
-                          signPassword: e.target.value,
-                        });
-                      }}
+                      onFocus={() => setIsInputFocused(true)}
+                      {...register('userPassword', {
+                        required: 'Please enter your password',
+                        minLength: {
+                          value: 8,
+                          message: 'Atleast 8 Character long',
+                        },
+                        onBlur: () => setIsInputFocused(false),
+                        onChange: (e) => {
+                          setSignFormState({
+                            ...signformState,
+                            signPassword: e.target.value,
+                          });
+                        },
+                      })}
                     />
-                    {isInputFocused &&
+                    {errors.userPassword && (
+                      <p className={styles.passworderror}>
+                        {errors.userPassword.message}
+                      </p>
+                    )}
+                    {/* {isInputFocused &&
                       signformState.signPassword.length < 8 && (
                         <span data-testid="passwordCheck">
                           {t('atleast_8_char_long')}
@@ -354,22 +377,37 @@ function LoginPage(): JSX.Element {
                         <span data-testid="passwordCheck">
                           {t('atleast_8_char_long')}
                         </span>
-                      )}
+                      )} */}
                   </div>
                   <label>{t('confirmPassword')}</label>
                   <input
+                    style={{ marginBottom: '20px' }}
                     type="password"
                     id="cpassword"
                     placeholder={t('confirmPassword')}
                     required
                     value={signformState.cPassword}
-                    onChange={(e) => {
-                      setSignFormState({
-                        ...signformState,
-                        cPassword: e.target.value,
-                      });
-                    }}
+                    {...register('password', {
+                      required: true,
+                      validate: (value) => {
+                        const { userPassword } = getValues();
+                        return (
+                          userPassword === value || 'Passwords should match'
+                        );
+                      },
+                      onChange: (e) => {
+                        setSignFormState({
+                          ...signformState,
+                          cPassword: e.target.value,
+                        });
+                      },
+                    })}
                   />
+                  {errors.password && (
+                    <p className={styles.passworderror}>
+                      {errors.password.message}
+                    </p>
+                  )}
                   <div className="googleRecaptcha">
                     <ReCAPTCHA
                       ref={recaptchaRef}

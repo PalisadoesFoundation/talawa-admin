@@ -356,6 +356,11 @@ form > br {
   background-color: white;
   box-shadow: 1px 3px #e8e5e5;
 }
+.passworderror {
+  color: rgb(240, 48, 48);
+  font-size: 9px;
+  font-style: italics;
+}
 
 @media only screen and (max-width: 600px) {
   body::before {
