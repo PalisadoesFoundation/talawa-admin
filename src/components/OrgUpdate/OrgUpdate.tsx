@@ -46,7 +46,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
     try {
       const { data } = await login({
         variables: {
-          id: props.id,
+          id: currentUrl,
           name: formState.orgName,
           description: formState.orgDescrip,
           location: formState.location,

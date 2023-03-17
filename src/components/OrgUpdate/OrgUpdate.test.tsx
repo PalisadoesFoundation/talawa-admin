@@ -1,6 +1,6 @@
 import React from 'react';
 import { act, render, screen } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider, MockLink } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import OrgUpdate from './OrgUpdate';
@@ -80,11 +80,12 @@ const MOCKS = [
       query: UPDATE_ORGANIZATION_MUTATION,
       variables: {
         id: '123',
-        name: 'John Doe',
-        description: 'This is a description',
-        location: 'Test location',
-        isPublic: false,
-        visibleInSearch: true,
+        name: 'Updated Organization',
+        description: 'This is an updated test organization',
+        location: 'Updated location',
+        image: new File(['hello'], 'hello.png', { type: 'image/png' }),
+        isPublic: true,
+        visibleInSearch: false,
       },
     },
     result: {
@@ -101,7 +102,7 @@ const MOCKS = [
     },
   },
 ];
-
+const mocklink = new MockLink(MOCKS, false, { showWarnings: false });
 async function wait(ms = 0) {
   await act(() => {
     return new Promise((resolve) => {
@@ -130,7 +131,7 @@ describe('Testing Organization Update', () => {
   test('should render props and text elements test for the page component', async () => {
     //window.location.assign('/orgsetting/id=123');
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} mocks={MOCKS} link={mocklink}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgUpdate {...props} />
         </I18nextProvider>
