@@ -1,5 +1,5 @@
 import React from 'react';
-import { MockedProvider, MockLink } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/react-testing';
 import { act, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import 'jest-localstorage-mock';
@@ -73,8 +73,21 @@ const MOCKS = [
     },
   },
 ];
+const MOCKS_EMPTY = [
+  {
+    request: {
+      query: ORGANIZATION_CONNECTION_LIST,
+    },
+  },
+  {
+    request: {
+      query: USER_ORGANIZATION_LIST,
+      variables: { id: '123' },
+    },
+  },
+];
 const link = new StaticMockLink(MOCKS, true);
-const mocklink = new MockLink([], false, { showWarnings: false });
+const link2 = new StaticMockLink(MOCKS_EMPTY, true);
 
 async function wait(ms = 0) {
   await act(() => {
@@ -166,7 +179,7 @@ describe('Organisation List Page', () => {
 
   test('Testing Organization data is not present', async () => {
     render(
-      <MockedProvider addTypename={false} link={mocklink}>
+      <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <OrgList />

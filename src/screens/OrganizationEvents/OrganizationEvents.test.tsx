@@ -1,5 +1,5 @@
 import React from 'react';
-import { MockedProvider, MockLink } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/react-testing';
 import { act, render, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -102,7 +102,7 @@ const MOCKS = [
   },
 ];
 const link = new StaticMockLink(MOCKS, true);
-const mocklink = new MockLink([], false, { showWarnings: false });
+const link2 = new StaticMockLink([], true);
 
 async function wait(ms = 0) {
   await act(() => {
@@ -198,7 +198,7 @@ describe('Organisation Events Page', () => {
 
   test('No mock data', async () => {
     render(
-      <MockedProvider link={mocklink}>
+      <MockedProvider link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
