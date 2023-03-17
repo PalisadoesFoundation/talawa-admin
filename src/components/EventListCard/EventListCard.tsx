@@ -319,7 +319,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                       id="allday"
                       type="checkbox"
                       data-testid="updateAllDay"
-                      defaultChecked={alldaychecked}
+                      checked={alldaychecked}
                       onChange={() => setAllDayChecked(!alldaychecked)}
                     />
                   </div>
@@ -329,7 +329,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                       id="recurring"
                       type="checkbox"
                       data-testid="updateRecurring"
-                      defaultChecked={recurringchecked}
+                      checked={recurringchecked}
                       onChange={() => setRecurringChecked(!recurringchecked)}
                     />
                   </div>
@@ -341,7 +341,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                       id="ispublic"
                       type="checkbox"
                       data-testid="updateIsPublic"
-                      defaultChecked={publicchecked}
+                      checked={publicchecked}
                       onChange={() => setPublicChecked(!publicchecked)}
                     />
                   </div>
@@ -351,7 +351,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                       id="registrable"
                       type="checkbox"
                       data-testid="updateRegistrable"
-                      defaultChecked={registrablechecked}
+                      checked={registrablechecked}
                       onChange={() =>
                         setRegistrableChecked(!registrablechecked)
                       }

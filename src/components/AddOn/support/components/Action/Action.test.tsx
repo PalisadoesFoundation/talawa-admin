@@ -12,13 +12,11 @@ describe('Testing Action Component', () => {
   };
 
   test('should render props and text elements test for the page component', () => {
-    const { debug, getByText } = render(
+    const { getByText } = render(
       <Provider store={store}>
         <Action {...props} />
       </Provider>
     );
-
-    debug();
 
     expect(getByText(props.label)).toBeInTheDocument();
     expect(getByText(props.children)).toBeInTheDocument();

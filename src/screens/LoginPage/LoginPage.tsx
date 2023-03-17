@@ -479,7 +479,7 @@ function LoginPage(): JSX.Element {
                 </div>
                 <button
                   type="submit"
-                  className={styles.whiteloginbtn}
+                  className={styles.greenregbtn}
                   value="Login"
                   data-testid="loginBtn"
                 >
@@ -489,9 +489,12 @@ function LoginPage(): JSX.Element {
                   {t('forgotPassword')}
                 </Link>
                 <hr></hr>
+                <span className={styles.noaccount}>
+                  {t('doNotOwnAnAccount')}
+                </span>
                 <button
                   type="button"
-                  className={styles.greenregbtn}
+                  className={styles.whiteloginbtn}
                   value="Register"
                   onClick={hideModal}
                 >
