@@ -20,6 +20,7 @@ import ListNavbar from 'components/ListNavbar/ListNavbar';
 import PaginationList from 'components/PaginationList/PaginationList';
 import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
+import AdminDashListCard from 'components/AdminDashListCard/AdminDashListCard';
 
 function OrgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
@@ -102,7 +103,13 @@ function OrgList(): JSX.Element {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error(error.message);
+      if (error.message === 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
+      } else {
+        toast.error(error.message);
+      }
     }
   };
 
@@ -161,7 +168,7 @@ function OrgList(): JSX.Element {
       <Row>
         <Col xl={3}>
           <div className={styles.sidebar}>
-            <div className={styles.sidebarsticky}>
+            <div className={`${styles.mainpageright} ${styles.sidebarsticky}`}>
               <h6 className={styles.logintitle}>{t('you')}</h6>
               <p>
                 {t('name')}:
@@ -187,24 +194,15 @@ function OrgList(): JSX.Element {
                   </span>
                 </p>
               </div>
-
-              <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
-              <input
-                type="name"
-                id="orgname"
-                placeholder={t('enterName')}
-                data-testid="searchByName"
-                autoComplete="off"
-                required
-                onChange={debouncedHandleSearchByName}
-              />
             </div>
           </div>
         </Col>
         <Col xl={8}>
           <div className={styles.mainpageright}>
-            <Row className={styles.justifysp}>
+            <div className={styles.justifysp}>
               <p className={styles.logintitle}>{t('organizationList')}</p>
+            </div>
+            <div className={styles.search}>
               <Button
                 variant="success"
                 className={styles.invitebtn}
@@ -214,7 +212,16 @@ function OrgList(): JSX.Element {
               >
                 + {t('createOrganization')}
               </Button>
-            </Row>
+              <input
+                type="name"
+                id="orgname"
+                placeholder="Search Organization"
+                data-testid="searchByName"
+                autoComplete="off"
+                required
+                onChange={debouncedHandleSearchByName}
+              />
+            </div>
             <div className={styles.list_box}>
               {data &&
                 (rowsPerPage > 0
@@ -233,25 +240,48 @@ function OrgList(): JSX.Element {
                     createdAt: string;
                     location: string | null;
                   }) => {
-                    return (
-                      <SuperDashListCard
-                        id={datas._id}
-                        key={datas._id}
-                        image={datas.image}
-                        admins={datas.admins}
-                        members={datas.members.length}
-                        createdDate={dayjs(datas?.createdAt).format(
-                          'DD/MM/YYYY'
-                        )}
-                        orgName={datas.name}
-                        orgLocation={datas.location}
-                      />
-                    );
+                    if (data_2?.user.userType == 'SUPERADMIN') {
+                      return (
+                        <SuperDashListCard
+                          id={datas._id}
+                          key={datas._id}
+                          image={datas.image}
+                          admins={datas.admins}
+                          members={datas.members.length}
+                          createdDate={dayjs(datas?.createdAt).format(
+                            'MMMM D, YYYY'
+                          )}
+                          orgName={datas.name}
+                          orgLocation={datas.location}
+                        />
+                      );
+                    } else {
+                      return (
+                        <AdminDashListCard
+                          id={datas._id}
+                          key={datas._id}
+                          image={datas.image}
+                          admins={datas.admins}
+                          members={datas.members.length}
+                          createdDate={dayjs(datas?.createdAt).format(
+                            'MMMM D, YYYY'
+                          )}
+                          orgName={datas.name}
+                          orgLocation={datas.location}
+                        />
+                      );
+                    }
                   }
                 )}
             </div>
             <div>
-              <table>
+              <table
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
                 <tbody>
                   <tr>
                     <PaginationList

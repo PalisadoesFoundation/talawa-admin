@@ -1,6 +1,7 @@
 import React from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import styles from './OrgUpdate.module.css';
@@ -55,12 +56,20 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
       });
       /* istanbul ignore next */
       if (data) {
-        window.alert('Successful updated');
-        window.location.reload();
+        toast.success('Successful updated');
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
-    } catch (error) {
+    } catch (error: any) {
       /* istanbul ignore next */
-      window.alert(error);
+      if (error.message === 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
+      } else {
+        toast.error(error.message);
+      }
     }
   };
 

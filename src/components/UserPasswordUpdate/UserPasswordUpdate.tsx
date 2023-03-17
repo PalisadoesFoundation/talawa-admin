@@ -1,67 +1,46 @@
 import React from 'react';
-import { useMutation, useQuery } from '@apollo/client';
-import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
+import { useMutation } from '@apollo/client';
+import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
-import styles from './UserUpdate.module.css';
-import { USER_DETAILS } from 'GraphQl/Queries/Queries';
+import styles from './UserPasswordUpdate.module.css';
 import { toast } from 'react-toastify';
 
-interface UserUpdateProps {
+interface UserPasswordUpdateProps {
   id: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
-  const currentUrl = localStorage.getItem('id');
+const UserUpdate: React.FC<UserPasswordUpdateProps> = ({ id }): JSX.Element => {
   const { t } = useTranslation('translation', {
-    keyPrefix: 'userUpdate',
+    keyPrefix: 'userPasswordUpdate',
   });
   const [formState, setFormState] = React.useState({
-    firstName: '',
-    lastName: '',
-    email: '',
+    previousPassword: '',
+    newPassword: '',
+    confirmNewPassword: '',
   });
 
-  const [login] = useMutation(UPDATE_USER_MUTATION);
-
-  const {
-    data: data,
-    loading: loading,
-    error: error,
-  } = useQuery(USER_DETAILS, {
-    variables: { id: localStorage.getItem('id') ?? id }, // For testing we are sending the id as a prop
-  });
-  React.useEffect(() => {
-    if (data) {
-      setFormState({
-        ...formState,
-        firstName: data?.user?.firstName,
-        lastName: data?.user?.lastName,
-        email: data?.user?.email,
-      });
-    }
-  }, [data]);
-
-  if (loading) {
-    return (
-      <>
-        <div className={styles.loader}></div>
-      </>
-    );
-  }
-
-  /* istanbul ignore next */
-  if (error) {
-    window.location.assign(`/orgsettings/id=${currentUrl}`);
-  }
+  const [login] = useMutation(UPDATE_USER_PASSWORD_MUTATION);
 
   const login_link = async () => {
+    if (
+      !formState.previousPassword ||
+      !formState.newPassword ||
+      !formState.confirmNewPassword
+    ) {
+      return toast.error('The password field cannot be empty.');
+    }
+
+    if (formState.newPassword !== formState.confirmNewPassword) {
+      return toast.error('New and Confirm password do not match.');
+    }
+
     try {
       const { data } = await login({
         variables: {
-          firstName: formState.firstName,
-          lastName: formState.lastName,
-          email: formState.email,
+          previousPassword: formState.previousPassword,
+          newPassword: formState.newPassword,
+          confirmNewPassword: formState.confirmNewPassword,
         },
       });
       /* istanbul ignore next */
@@ -71,15 +50,9 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
           window.location.reload();
         }, 2000);
       }
-    } catch (error: any) {
+    } catch (error) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
-      } else {
-        toast.error(error.message);
-      }
+      toast.error(error);
     }
   };
 
@@ -95,18 +68,18 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
           {/* <h3 className={styles.settingstitle}>Update Your Details</h3> */}
           <div className={styles.dispflex}>
             <div>
-              <label>{t('firstName')}</label>
+              <label>{t('previousPassword')}</label>
               <input
-                type="input"
-                id="firstname"
-                placeholder={t('firstName')}
+                type="password"
+                id="previousPassword"
+                placeholder={t('previousPassword')}
                 autoComplete="off"
                 required
-                value={formState.firstName}
+                value={formState.previousPassword}
                 onChange={(e) => {
                   setFormState({
                     ...formState,
-                    firstName: e.target.value,
+                    previousPassword: e.target.value,
                   });
                 }}
               />
@@ -114,18 +87,18 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
           </div>
           <div className={styles.dispflex}>
             <div>
-              <label>{t('lastName')}</label>
+              <label>{t('newPassword')}</label>
               <input
-                type="input"
-                id="lastname"
-                placeholder={t('lastName')}
+                type="password"
+                id="newPassword"
+                placeholder={t('newPassword')}
                 autoComplete="off"
                 required
-                value={formState.lastName}
+                value={formState.newPassword}
                 onChange={(e) => {
                   setFormState({
                     ...formState,
-                    lastName: e.target.value,
+                    newPassword: e.target.value,
                   });
                 }}
               />
@@ -133,18 +106,18 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
           </div>
           <div className={styles.dispflex}>
             <div>
-              <label>{t('email')}</label>
+              <label>{t('confirmNewPassword')}</label>
               <input
-                type="email"
-                id="email"
-                placeholder={t('email')}
+                type="password"
+                id="confirmNewPassword"
+                placeholder={t('confirmNewPassword')}
                 autoComplete="off"
                 required
-                value={formState.email}
+                value={formState.confirmNewPassword}
                 onChange={(e) => {
                   setFormState({
                     ...formState,
-                    email: e.target.value,
+                    confirmNewPassword: e.target.value,
                   });
                 }}
               />

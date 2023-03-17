@@ -2,11 +2,10 @@ import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useTranslation } from 'react-i18next';
-import styles from './SuperDashListCard.module.css';
-import { useHistory } from 'react-router-dom';
-import AboutImg from 'assets/images/defaultImg.png';
 
-interface SuperDashListCardProps {
+import styles from './AdminDashListCard.module.css';
+
+interface AdminDashListCardProps {
   key: string;
   id: string;
   orgName: string;
@@ -17,21 +16,12 @@ interface SuperDashListCardProps {
   members: string;
 }
 
-function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
+function AdminDashListCard(props: AdminDashListCardProps): JSX.Element {
   const userId = localStorage.getItem('id');
-  const userType = localStorage.getItem('UserType');
-  const history = useHistory();
 
-  function handleClick() {
+  function Click() {
     const url = '/orgdash/id=' + props.id;
-    /*
-    WARNING!
-     Please endeavor to NOT remove both the window.location.replace(url) and the history.push(url) as both are very important for routing correctly.
-     Removal of the window.location.replace will result to a crash on other depending routes. History.push(url) is being used to alongside window.location.replace to keep track of the browser history stack and ensure consistency with the react component life cycle.
-     */
     window.location.replace(url);
-    history.push(url);
-    // Do not change the lines above.
   }
 
   const { t } = useTranslation('translation', {
@@ -44,7 +34,10 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
         {props.image ? (
           <img src={props.image} className={styles.orgimg} />
         ) : (
-          <img src={AboutImg} className={styles.orgimg} />
+          <img
+            src="https://via.placeholder.com/200x100"
+            className={styles.orgimg}
+          />
         )}
         <Col className={styles.singledetails}>
           <div className={styles.singledetails_data_left}>
@@ -66,9 +59,8 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
             <div className={styles.orgCreateBtnDiv}>
               <button
                 className={styles.orgfontcreatedbtn}
-                onClick={handleClick}
+                onClick={Click}
                 disabled={
-                  userType !== 'SUPERADMIN' &&
                   !props.admins.some((admin: any) => admin._id === userId)
                 }
               >
@@ -83,4 +75,4 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
   );
 }
 export {};
-export default SuperDashListCard;
+export default AdminDashListCard;

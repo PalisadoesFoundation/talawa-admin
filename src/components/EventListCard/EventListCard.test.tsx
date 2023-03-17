@@ -1,6 +1,6 @@
 import React from 'react';
 import { act, render, screen } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider, MockLink } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 
@@ -51,6 +51,8 @@ const MOCKS = [
   },
 ];
 
+const mocklink = new MockLink(MOCKS, false, { showWarnings: false });
+
 async function wait(ms = 0) {
   await act(() => {
     return new Promise((resolve) => {
@@ -82,7 +84,7 @@ describe('Testing Event List Card', () => {
     global.confirm = () => true;
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={mocklink}>
         <I18nextProvider i18n={i18nForTest}>
           <EventListCard {...props} />
         </I18nextProvider>
@@ -98,7 +100,7 @@ describe('Testing Event List Card', () => {
     global.confirm = () => false;
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={mocklink}>
         <I18nextProvider i18n={i18nForTest}>
           <EventListCard
             key="123"
@@ -126,7 +128,7 @@ describe('Testing Event List Card', () => {
 
   test('Testing event update functionality', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={mocklink}>
         <I18nextProvider i18n={i18nForTest}>
           <EventListCard {...props} />
         </I18nextProvider>
@@ -153,7 +155,7 @@ describe('Testing Event List Card', () => {
 
   test('Testing if the event is not for all day', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={mocklink}>
         <I18nextProvider i18n={i18nForTest}>
           <EventListCard {...props} />
         </I18nextProvider>
@@ -181,7 +183,7 @@ describe('Testing Event List Card', () => {
 
   test('Testing delete event funcationality', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={mocklink}>
         <I18nextProvider i18n={i18nForTest}>
           <EventListCard {...props} />
         </I18nextProvider>

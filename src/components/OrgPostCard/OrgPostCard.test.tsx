@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, fireEvent } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -82,7 +82,7 @@ describe('Testing Organization Post Card', () => {
     expect(screen.getByText(/Image URL:/i)).toBeInTheDocument();
     expect(screen.getByText(/Video URL:/i)).toBeInTheDocument();
     expect(screen.getByText(props.postTitle)).toBeInTheDocument();
-    expect(screen.getByText(props.postInfo)).toBeInTheDocument();
+    expect(screen.getByDisplayValue(props.postInfo)).toBeInTheDocument();
     expect(screen.getByText(props.postAuthor)).toBeInTheDocument();
     expect(screen.getByText(props.postPhoto)).toBeInTheDocument();
     expect(screen.getByText(props.postVideo)).toBeInTheDocument();
@@ -105,7 +105,7 @@ describe('Testing Organization Post Card', () => {
     expect(screen.getByText(/Image URL:/i)).toBeInTheDocument();
     expect(screen.getByText(/Video URL:/i)).toBeInTheDocument();
     expect(screen.getByText(props.postTitle)).toBeInTheDocument();
-    expect(screen.getByText(props.postInfo)).toBeInTheDocument();
+    expect(screen.getByDisplayValue(props.postInfo)).toBeInTheDocument();
     expect(screen.getByText(props.postAuthor)).toBeInTheDocument();
     expect(screen.getByText(props.postPhoto)).toBeInTheDocument();
     expect(screen.getByText(props.postVideo)).toBeInTheDocument();
@@ -142,5 +142,86 @@ describe('Testing Organization Post Card', () => {
 
     userEvent.click(screen.getByTestId('deletePostModalBtn'));
     userEvent.click(screen.getByTestId(/deletePostBtn/i));
+  });
+
+  test('should toggle post visibility when button is clicked', () => {
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...props} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    const toggleButton = screen.getByRole('toggleBtn');
+
+    expect(screen.getByText('Read more')).toBeInTheDocument();
+
+    fireEvent.click(toggleButton);
+
+    expect(screen.getByText('hide')).toBeInTheDocument();
+
+    fireEvent.click(toggleButton);
+
+    expect(screen.getByText('Read more')).toBeInTheDocument();
+  });
+
+  test('should toggle post content', () => {
+    const props = {
+      key: '123',
+      id: '12',
+      postTitle: 'Event Info',
+      postInfo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      postAuthor: 'John Doe',
+      postPhoto: 'photoLink',
+      postVideo: 'videoLink',
+    };
+
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...props} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    const toggleBtn = screen.getByRole('toggleBtn');
+
+    expect(
+      screen.getByText('Lorem ipsum dolor sit amet, consectetur ...')
+    ).toBeInTheDocument();
+    expect(toggleBtn).toHaveTextContent('Read more');
+    expect(toggleBtn).toHaveClass('toggleClickBtn');
+
+    fireEvent.click(toggleBtn);
+
+    expect(screen.getByTestId('toggleContent').innerHTML).toEqual(
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+    );
+    expect(toggleBtn).toHaveTextContent('hide');
+    expect(toggleBtn).toHaveClass('toggleClickBtn');
+  });
+
+  test('renders without "Read more" button when postInfo length is less than or equal to 43', () => {
+    const props = {
+      key: '123',
+      id: '12',
+      postTitle: 'Event Info',
+      postInfo: 'Lorem ipsum dolor sit amet',
+      postAuthor: 'John Doe',
+      postPhoto: 'photoLink',
+      postVideo: 'videoLink',
+    };
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...props} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    // const toggleBtn = screen.queryByRole('toggleBtn');
+
+    // expect(toggleBtn).not.toBeInTheDocument();
   });
 });

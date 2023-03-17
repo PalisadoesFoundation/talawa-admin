@@ -105,7 +105,13 @@ function OrganizationEvents(): JSX.Element {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error(error.message);
+      if (error.message === 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
+      } else {
+        toast.error(error.message);
+      }
     }
   };
 
@@ -209,7 +215,7 @@ function OrganizationEvents(): JSX.Element {
               </Button>
             </Row>
           </div>
-          <Calendar eventData={data.eventsByOrganizationConnection} />
+          <Calendar eventData={data?.eventsByOrganizationConnection} />
         </Col>
       </Row>
       <Modal
