@@ -13,16 +13,7 @@
     "confirmPassword": "Confirmez le mot de passe",
     "forgotPassword": "Mot de passe oublié ?",
     "enterEmail": "entrez l'e-mail",
-    "enterPassword": "Entrer le mot de passe",
-    "toastError1": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau.",
-    "toastError2": "Erreur Captcha !",
-    "toastError3": "Veuillez vérifier le captcha.",
-    "toastError4": "Une erreur s'est produite, veuillez réessayer ultérieurement.",
-    "toastError5": "Le mot de passe et la confirmation du mot de passe ne correspondent pas.",
-    "toastError6": "Remplissez correctement tous les détails.",
-    "toastError7": "Désolé ! vous n'êtes pas autorisé !",
-    "toastError8": "Utilisateur introuvable !",
-    "toastSuccess1": "Enregistré avec succès. Veuillez patienter jusqu'à ce que vous soyez approuvé."
+    "enterPassword": "Entrer le mot de passe"
   },
   "listNavbar": {
     "talawa_portal": "Portail Talawa",

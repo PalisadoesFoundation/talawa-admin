@@ -13,16 +13,7 @@
     "confirmPassword": "確認密碼",
     "forgotPassword": "忘記密碼 ？",
     "enterEmail": "输入电子邮件",
-    "enterPassword": "输入密码",
-    "toastError1": "服務不可用。它在運行嗎？還要檢查您的網絡連接。",
-    "toastError2": "驗證碼錯誤！",
-    "toastError3": "請檢查驗證碼。",
-    "toastError4": "出了點問題，請稍後再試。",
-    "toastError5": "密碼和確認密碼不匹配。",
-    "toastError6": "正確填寫所有細節。",
-    "toastError7": "抱歉！你沒有被授權！",
-    "toastError8": "找不到用戶！",
-    "toastSuccess1": "註冊成功，請等待審核通過。"
+    "enterPassword": "输入密码"
   },
   "listNavbar": {
     "talawa_portal": "塔拉瓦門戶",

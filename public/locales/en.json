@@ -14,15 +14,6 @@
     "forgotPassword": "Forgot Password ?",
     "enterEmail": "Enter Email",
     "enterPassword": "Enter Password",
-    "toastError1": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
-    "toastError2": "Captcha Error!",
-    "toastError3": "Please, check the captcha.",
-    "toastError4": "Something went wrong, Please try after sometime.",
-    "toastError5": "Password and Confirm password mismatches.",
-    "toastError6": "Fill all the Details Correctly.",
-    "toastError7": "Sorry! you are not Authorised!",
-    "toastError8": "User not found!",
-    "toastSuccess1":"Successfully Registered. Please wait until you will be approved."
   },
   "listNavbar": {
     "talawa_portal": "Talawa Portal",

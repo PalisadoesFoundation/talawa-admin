@@ -1,6 +1,6 @@
 import React from 'react';
 import { act, render, screen } from '@testing-library/react';
-import { MockedProvider, MockLink } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 
@@ -10,6 +10,7 @@ import {
   UPDATE_EVENT_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
 const MOCKS = [
   {
@@ -51,7 +52,7 @@ const MOCKS = [
   },
 ];
 
-const mocklink = new MockLink(MOCKS, false, { showWarnings: false });
+const link = new StaticMockLink(MOCKS, true);
 
 async function wait(ms = 0) {
   await act(() => {
@@ -84,7 +85,7 @@ describe('Testing Event List Card', () => {
     global.confirm = () => true;
 
     render(
-      <MockedProvider addTypename={false} link={mocklink}>
+      <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <EventListCard {...props} />
         </I18nextProvider>
@@ -100,7 +101,7 @@ describe('Testing Event List Card', () => {
     global.confirm = () => false;
 
     render(
-      <MockedProvider addTypename={false} link={mocklink}>
+      <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <EventListCard
             key="123"
@@ -128,7 +129,7 @@ describe('Testing Event List Card', () => {
 
   test('Testing event update functionality', async () => {
     render(
-      <MockedProvider addTypename={false} link={mocklink}>
+      <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <EventListCard {...props} />
         </I18nextProvider>
@@ -155,7 +156,7 @@ describe('Testing Event List Card', () => {
 
   test('Testing if the event is not for all day', async () => {
     render(
-      <MockedProvider addTypename={false} link={mocklink}>
+      <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <EventListCard {...props} />
         </I18nextProvider>
@@ -183,7 +184,7 @@ describe('Testing Event List Card', () => {
 
   test('Testing delete event funcationality', async () => {
     render(
-      <MockedProvider addTypename={false} link={mocklink}>
+      <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <EventListCard {...props} />
         </I18nextProvider>
