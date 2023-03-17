@@ -19,6 +19,7 @@ const Roles = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchByName, setSearchByName] = useState('');
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     const userType = localStorage.getItem('UserType');
@@ -27,6 +28,20 @@ const Roles = () => {
     }
     setComponentLoader(false);
   }, []);
+
+  useEffect(() => {
+    if (searchByName !== '') {
+      refetch({
+        filter: searchByName,
+      });
+    } else {
+      if (count !== 0) {
+        refetch({
+          filter: searchByName,
+        });
+      }
+    }
+  }, [count, searchByName]);
 
   const { data, loading: users_loading, refetch } = useQuery(USER_LIST);
 
@@ -85,10 +100,7 @@ const Roles = () => {
   const handleSearchByName = (e: any) => {
     const { value } = e.target;
     setSearchByName(value);
-
-    refetch({
-      filter: value,
-    });
+    setCount((prev) => prev + 1);
   };
 
   return (
