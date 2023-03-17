@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { Nav } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import Cookies from 'js-cookie';
 import i18next from 'i18next';
+import { toast } from 'react-toastify';
 
 import styles from './AdminNavbar.module.css';
-import Logo from 'assets/talawa-logo-200x200.png';
+import AboutImg from 'assets/images/defaultImg.png';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { UPDATE_SPAM_NOTIFICATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { languages } from 'utils/languages';
@@ -57,9 +58,15 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
             localStorage.removeItem('spamId');
             refetch();
           }
-        } catch (error) {
+        } catch (error: any) {
           /* istanbul ignore next */
-          console.log(error);
+          if (error.message === 'Failed to fetch') {
+            toast.error(
+              'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+            );
+          } else {
+            toast.error(error.message);
+          }
         }
       }
     };
@@ -107,7 +114,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
               />
             ) : (
               <img
-                src={Logo}
+                src={AboutImg}
                 className={styles.roundedcircle}
                 data-testid={'orgLogoAbsent'}
               />
@@ -122,10 +129,11 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
               return url ? (
                 <Nav.Item key={name} className={styles.navitems}>
                   <Nav.Link
-                    as={Link}
+                    as={NavLink}
                     to={url}
                     id={name}
                     className={styles.navlinks}
+                    activeClassName={styles.navlinks_active}
                   >
                     {t(name)}
                   </Nav.Link>
@@ -189,7 +197,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                   />
                 ) : (
                   <img
-                    src={Logo}
+                    src={AboutImg}
                     className={styles.roundedcircle}
                     data-testid="navbarOrgImageAbsent"
                   />
