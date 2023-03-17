@@ -7,7 +7,7 @@ import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 
 import BlockUser from './BlockUser';
-import { USER_LIST } from 'GraphQl/Queries/Queries';
+import { MEMBERS_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
 import {
   BLOCK_USER_MUTATION,
   UNBLOCK_USER_MUTATION,
@@ -54,6 +54,41 @@ const MOCKS = [
               {
                 _id: '443',
                 name: 'DEF',
+              },
+            ],
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: MEMBERS_LIST,
+      variables: {
+        id: '123',
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: '123',
+            members: [
+              {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image: 'dummyImage',
+                email: 'johndoe@gmail.com',
+                createdAt: '20/06/2022',
+              },
+              {
+                _id: '456',
+                firstName: 'Sam',
+                lastName: 'Smith',
+                image: 'dummyImage',
+                email: 'samsmith@gmail.com',
+                createdAt: '20/06/2022',
               },
             ],
           },
