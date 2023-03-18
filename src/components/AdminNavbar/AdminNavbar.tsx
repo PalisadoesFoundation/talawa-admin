@@ -190,11 +190,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                 data-testid="logoutDropdown"
               >
                 {data?.organizations[0].image ? (
-                  <img
-                    src={data?.organizations[0].image}
-                    className={styles.roundedcircle}
-                    data-testid="navbarOrgImagePresent"
-                  />
+                  <span>More</span>
                 ) : (
                   <img
                     src={AboutImg}
