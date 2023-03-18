@@ -96,8 +96,6 @@ function LoginPage(): JSX.Element {
   };
 
   const signup_link = async () => {
-    // e.preventDefault();
-
     const { signfirstName, signlastName, signEmail, signPassword, cPassword } =
       signformState;
 
@@ -365,19 +363,6 @@ function LoginPage(): JSX.Element {
                         {errors.userPassword.message}
                       </p>
                     )}
-                    {/* {isInputFocused &&
-                      signformState.signPassword.length < 8 && (
-                        <span data-testid="passwordCheck">
-                          {t('atleast_8_char_long')}
-                        </span>
-                      )}
-                    {!isInputFocused &&
-                      signformState.signPassword.length > 0 &&
-                      signformState.signPassword.length < 8 && (
-                        <span data-testid="passwordCheck">
-                          {t('atleast_8_char_long')}
-                        </span>
-                      )} */}
                   </div>
                   <label>{t('confirmPassword')}</label>
                   <input
