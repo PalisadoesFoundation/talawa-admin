@@ -170,7 +170,9 @@ function OrgList(): JSX.Element {
         <Col xl={3}>
           <div className={styles.sidebar}>
             <div className={`${styles.mainpageright} ${styles.sidebarsticky}`}>
-              <h6 className={styles.logintitle}>{t('you')}</h6>
+              <h6 className={`${styles.logintitle} ${styles.youheader}`}>
+                {t('you')}
+              </h6>
               <p>
                 {t('name')}:
                 <span>
@@ -198,7 +200,7 @@ function OrgList(): JSX.Element {
             </div>
           </div>
         </Col>
-        <Col xl={8}>
+        <Col xl={8} className={styles.mainpagerightContainer}>
           <div className={styles.mainpageright}>
             <div className={styles.justifysp}>
               <p className={styles.logintitle}>{t('organizationList')}</p>

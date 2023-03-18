@@ -127,6 +127,30 @@
   max-width: 92vw;
 }
 
+@media (min-width: 468px) and (max-width: 890px) {
+  .logintitle {
+    width: 90%;
+  }
+  .mainpagerightContainer {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+  }
+}
+
+@media (min-width: 900px) and (max-width: 1190px) {
+  .mainpagerightContainer {
+    border-left: 1px solid #e5e5e5;
+    width: 70%;
+    position: absolute;
+    right: 1%;
+    margin-top: -2px;
+  }
+  .youheader {
+    width: 20%;
+  }
+}
+
 @media screen and (min-width: 1200px) {
   .justifysp {
     display: flex;
