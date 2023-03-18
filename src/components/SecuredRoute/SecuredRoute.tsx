@@ -13,7 +13,7 @@ const SecuredRoute = (props: any): JSX.Element => {
   );
 };
 
-const timeoutMinutes = 1;
+const timeoutMinutes = 15;
 const timeoutMilliseconds = timeoutMinutes * 60 * 1000;
 
 const inactiveIntervalMin = 1;
