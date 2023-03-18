@@ -224,7 +224,7 @@ function OrgList(): JSX.Element {
               />
             </div>
             <div className={styles.list_box}>
-              {data.organizationsConnection.length > 0 ? (
+              {data?.organizationsConnection.length > 0 ? (
                 (rowsPerPage > 0
                   ? dataRevOrg.slice(
                       page * rowsPerPage,
