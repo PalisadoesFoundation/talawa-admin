@@ -36,7 +36,9 @@
     "isPublic": "Is Public",
     "visibleInSearch": "Visible In Search",
     "displayImage": "Display Image",
-    "enterName": "Enter Name"
+    "enterName": "Enter Name",
+    "noOrgErrorTitle": "Organizations Not Found",
+    "noOrgErrorDescription": "Please create an organization through dashboard"
   },
   "superDashListCard": {
     "created": "Created",
