@@ -42,7 +42,7 @@ const Roles = () => {
       return;
     }
 
-    if (dataOrgs.organizationsConnection.length > 0) {
+    if (dataOrgs.organizationsConnection.length === 0) {
       toast.warning(t('noOrgError'));
     }
   }, [dataOrgs]);
