@@ -60,7 +60,8 @@
     "admin": "ADMIN",
     "superAdmin": "SUPERADMIN",
     "user": "USER",
-    "enterName": "Enter Name"
+    "enterName": "Enter Name",
+    "noOrgError": "Organizations not found, please create an organization through dashboard"
   },
   "requests": {
     "title": "Talawa Requests",
@@ -70,7 +71,8 @@
     "email": "Email",
     "accept": "Accept",
     "reject": "Reject",
-    "enterName": "Enter Name"
+    "enterName": "Enter Name",
+    "noOrgError": "Organizations not found, please create an organization through dashboard"
   },
   "adminNavbar": {
     "talawa_portal": "Talawa Portal",
