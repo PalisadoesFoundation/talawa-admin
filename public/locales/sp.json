@@ -201,6 +201,13 @@
     "ptitle": "Título de la entrada",
     "postDes": "¿De qué hablar?"
   },
+  "postNotFound": {
+    "post": "Publicaciones",
+    "not found!": "Extraviado!",
+    "organization": "Organización",
+    "post not found!": "Publicaciones Extraviado!",
+    "organization not found!": "Organización Extraviado!"
+  },
   "orgPostCard": {
     "author": "Autor",
     "imageURL": "URL de la imagen",

@@ -201,6 +201,13 @@
     "ptitle": "शीर्षक पोस्ट करें",
     "postDes": "आपको किस बारे में बात करनी है?"
   },
+  "postNotFound": {
+    "post": "पोस्ट",
+    "not found!": "नहीं मिला!",
+    "organization": "संगठन",
+    "post not found!": "पोस्ट नहीं मिला!",
+    "organization not found!": "संगठन नहीं मिला!"
+  },
   "orgPostCard": {
     "author": "लेखक",
     "imageURL": "छवि यूआरएल",

@@ -17,6 +17,7 @@ import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { RootState } from 'state/reducers';
 import PaginationList from 'components/PaginationList/PaginationList';
 import debounce from 'utils/debounce';
+import PostNotFound from 'components/PostNotFound/PostNotFound';
 
 function OrgPost(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -174,42 +175,44 @@ function OrgPost(): JSX.Element {
               </Button>
             </Row>
             <div className={`row ${styles.list_box}`}>
-              {data
-                ? (rowsPerPage > 0
-                    ? data.postsByOrganizationConnection.edges.slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
-                      )
-                    : rowsPerPage > 0
-                    ? data.postsByOrganizationConnection.edges.slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
-                      )
-                    : data.postsByOrganizationConnection.edges
-                  ).map(
-                    (datas: {
-                      _id: string;
-                      title: string;
-                      text: string;
-                      imageUrl: string;
-                      videoUrl: string;
-                      organizationId: string;
-                      creator: { firstName: string; lastName: string };
-                    }) => {
-                      return (
-                        <OrgPostCard
-                          key={datas._id}
-                          id={datas._id}
-                          postTitle={datas.title}
-                          postInfo={datas.text}
-                          postAuthor={`${datas.creator.firstName} ${datas.creator.lastName}`}
-                          postPhoto={datas.imageUrl}
-                          postVideo={datas.videoUrl}
-                        />
-                      );
-                    }
-                  )
-                : null}
+              {data && data.postsByOrganizationConnection.edges.length > 0 ? (
+                (rowsPerPage > 0
+                  ? data.postsByOrganizationConnection.edges.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : rowsPerPage > 0
+                  ? data.postsByOrganizationConnection.edges.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : data.postsByOrganizationConnection.edges
+                ).map(
+                  (datas: {
+                    _id: string;
+                    title: string;
+                    text: string;
+                    imageUrl: string;
+                    videoUrl: string;
+                    organizationId: string;
+                    creator: { firstName: string; lastName: string };
+                  }) => {
+                    return (
+                      <OrgPostCard
+                        key={datas._id}
+                        id={datas._id}
+                        postTitle={datas.title}
+                        postInfo={datas.text}
+                        postAuthor={`${datas.creator.firstName} ${datas.creator.lastName}`}
+                        postPhoto={datas.imageUrl}
+                        postVideo={datas.videoUrl}
+                      />
+                    );
+                  }
+                )
+              ) : (
+                <PostNotFound title="post" />
+              )}
             </div>
           </div>
           <div>
