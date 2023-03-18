@@ -66,7 +66,6 @@ const MOCKS = [
   },
 ];
 
-
 const link = new StaticMockLink(MOCKS, true);
 
 async function wait(ms = 5) {

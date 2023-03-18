@@ -9,7 +9,6 @@ import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { languages } from 'utils/languages';
 import { toast } from 'react-toastify';
 
-
 interface UserUpdateProps {
   id: string;
 }

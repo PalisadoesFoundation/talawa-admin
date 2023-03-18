@@ -20,7 +20,6 @@ import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
 import PostNotFound from 'components/PostNotFound/PostNotFound';
 
-
 function OrgPost(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgPost',
