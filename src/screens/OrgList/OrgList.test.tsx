@@ -140,6 +140,30 @@ describe('Organisation List Page', () => {
     expect(window.location).toBeAt('/');
   });
 
+  test('Should not render no organisation warning alert when there are no organization', async () => {
+    window.location.assign('/');
+
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgList />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(container.textContent).not.toMatch('Organizations Not Found');
+    expect(container.textContent).not.toMatch(
+      'Please create an organization through dashboard'
+    );
+    expect(window.location).toBeAt('/');
+  });
+
   test('Correct mock data should be queried', async () => {
     const dataQuery1 = MOCKS[0]?.result?.data?.organizationsConnection;
 
