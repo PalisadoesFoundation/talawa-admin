@@ -61,7 +61,7 @@ function OrgSettings(): JSX.Element {
 
   /* istanbul ignore next */
   if (error) {
-    window.location.href = '/orglist';
+    window.location.replace('/orglist');
   }
 
   return (
@@ -156,7 +156,7 @@ function OrgSettings(): JSX.Element {
             <div>{screenVariable == 3 ? <OrgDelete /> : null}</div>
             <div>
               {screenVariable == 4 ? (
-                data.organizations.membershipRequests ? (
+                data?.organizations?.membershipRequests ? (
                   /* istanbul ignore next */
                   data.organizations.map(
                     /* istanbul ignore next */

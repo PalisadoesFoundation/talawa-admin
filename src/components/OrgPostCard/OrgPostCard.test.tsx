@@ -10,6 +10,7 @@ import {
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
 const MOCKS = [
   {
@@ -43,7 +44,7 @@ const MOCKS = [
     },
   },
 ];
-
+const link = new StaticMockLink(MOCKS, true);
 async function wait(ms = 0) {
   await act(() => {
     return new Promise((resolve) => {
@@ -69,7 +70,7 @@ describe('Testing Organization Post Card', () => {
     global.confirm = () => true;
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
         </I18nextProvider>
@@ -92,7 +93,7 @@ describe('Testing Organization Post Card', () => {
     global.confirm = () => false;
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
         </I18nextProvider>
@@ -113,7 +114,7 @@ describe('Testing Organization Post Card', () => {
 
   test('Testing post update functionality', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
         </I18nextProvider>
@@ -131,7 +132,7 @@ describe('Testing Organization Post Card', () => {
 
   test('Testing delete post funcationality', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
         </I18nextProvider>
@@ -146,7 +147,7 @@ describe('Testing Organization Post Card', () => {
 
   test('should toggle post visibility when button is clicked', () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
         </I18nextProvider>
@@ -178,7 +179,7 @@ describe('Testing Organization Post Card', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
         </I18nextProvider>
@@ -213,7 +214,7 @@ describe('Testing Organization Post Card', () => {
       postVideo: 'videoLink',
     };
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
         </I18nextProvider>

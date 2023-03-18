@@ -44,7 +44,6 @@ body {
   position: absolute;
   display: flex;
   flex-direction: column;
-  width: 30%;
   padding: 40px 30px;
   background: #ffffff;
   border-color: #e8e5e5;
@@ -268,6 +267,7 @@ form > br {
   -webkit-animation: load8 1.1s infinite linear;
   animation: load8 1.1s infinite linear;
 }
+
 @-webkit-keyframes load8 {
   0% {
     -webkit-transform: rotate(0deg);
@@ -355,6 +355,13 @@ form > br {
 .homeright > form input {
   background-color: white;
   box-shadow: 1px 3px #e8e5e5;
+}
+
+.noaccount {
+  text-align: center;
+  color: #707070;
+  font-size: 11px;
+  margin-top: 10px;
 }
 
 @media only screen and (max-width: 600px) {

@@ -13,7 +13,8 @@
     "confirmPassword": "Confirmez le mot de passe",
     "forgotPassword": "Mot de passe oublié ?",
     "enterEmail": "entrez l'e-mail",
-    "enterPassword": "Entrer le mot de passe"
+    "enterPassword": "Entrer le mot de passe",
+    "doNotOwnAnAccount": "Vous n'avez pas de compte ?"
   },
   "listNavbar": {
     "talawa_portal": "Portail Talawa",
