@@ -38,7 +38,7 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('The admin is removed.');
+        toast.success(t('toastSuccess'));
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -46,9 +46,7 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
     } catch (error: any) {
       /* istanbul ignore next */
       if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
+        toast.error(t('toastError'));
       } else {
         toast.error(error.message);
       }

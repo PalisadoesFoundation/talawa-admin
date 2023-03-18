@@ -52,7 +52,7 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
     });
 
     if (data) {
-      toast.success('Plugin Added Successfully');
+      toast.success(t('toastSuccess'));
       setTimeout(() => {
         window.location.reload();
       }, 2000);

@@ -52,18 +52,16 @@ const ForgotPassword = () => {
       /* istanbul ignore next */
       if (data) {
         localStorage.setItem('otpToken', data.otp.otpToken);
-        toast.success('OTP is sent to your registered email.');
+        toast.success(t('toastSuccess1'));
       }
     } catch (error: any) {
       /* istanbul ignore next */
       if (error.message === 'User not found') {
-        toast.warn('Email is not registered.');
+        toast.warn(t('toastError1'));
       } else if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
+        toast.error(t('toastError2'));
       } else {
-        toast.error('Error in sending mail.');
+        toast.error(t('toastError3'));
       }
     }
   };
@@ -73,7 +71,7 @@ const ForgotPassword = () => {
     const { userOtp, newPassword, confirmNewPassword } = forgotPassFormData;
 
     if (newPassword !== confirmNewPassword) {
-      toast.error('Password and Confirm password mismatches.');
+      toast.error(t('toastError4'));
       return;
     }
 
@@ -94,7 +92,7 @@ const ForgotPassword = () => {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Password changes successfully.');
+        toast.success(t('toastError5'));
 
         setForgotPassFormData({
           userOtp: '',
@@ -105,9 +103,7 @@ const ForgotPassword = () => {
     } catch (error: any) {
       /* istanbul ignore next */
       if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
+        toast.error(t('toastError2'));
       } else {
         toast.error(error.message);
       }

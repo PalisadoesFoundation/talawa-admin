@@ -66,7 +66,7 @@ function OrgPost(): JSX.Element {
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success('Congratulations! You have Posted Something.');
+        toast.success(t('toastSuccess'));
         refetch();
         setPostFormState({
           posttitle: '',
@@ -77,9 +77,7 @@ function OrgPost(): JSX.Element {
     } catch (error: any) {
       /* istanbul ignore next */
       if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
+        toast.error(t('toastError'));
       } else {
         toast.error(error.message);
       }

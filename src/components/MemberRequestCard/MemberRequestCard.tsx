@@ -37,7 +37,7 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
       });
 
       /* istanbul ignore next */
-      toast.success('it is accepted');
+      toast.success(t('toastSuccess'));
       /* istanbul ignore next */
       setTimeout(() => {
         window.location.reload();
@@ -45,9 +45,7 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
     } catch (error: any) {
       /* istanbul ignore next */
       if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
+        toast.error(t('toastError'));
       } else {
         toast.error(error.message);
       }
@@ -69,9 +67,7 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
       } catch (error: any) {
         /* istanbul ignore next */
         if (error.message === 'Failed to fetch') {
-          toast.error(
-            'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-          );
+          toast.error(t('toastError'));
         } else {
           toast.error(error.message);
         }

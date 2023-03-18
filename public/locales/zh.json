@@ -14,7 +14,15 @@
     "forgotPassword": "忘記密碼 ？",
     "enterEmail": "输入电子邮件",
     "enterPassword": "输入密码",
-    "doNotOwnAnAccount": "沒有帳戶嗎？"
+    "toastError1": "服務不可用。它在運行嗎？還要檢查您的網絡連接。",
+    "toastError2": "驗證碼錯誤！",
+    "toastError3": "請檢查驗證碼。",
+    "toastError4": "出了點問題，請稍後再試。",
+    "toastError5": "密碼和確認密碼不匹配。",
+    "toastError6": "正確填寫所有細節。",
+    "toastError7": "抱歉！你沒有被授權！",
+    "toastError8": "找不到用戶！",
+    "toastSuccess1": "註冊成功，請等待審核通過。"
   },
   "listNavbar": {
     "talawa_portal": "塔拉瓦門戶",
@@ -36,7 +44,9 @@
     "isPublic": "是否公開",
     "visibleInSearch": "在搜索中可見",
     "displayImage": "顯示圖像",
-    "enterName": "输入名字"
+    "enterName": "输入名字",
+    "toastSuccess": "祝賀組織成立",
+    "toastError": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "superDashListCard": {
     "created": "創造",
@@ -58,7 +68,9 @@
     "admin": "行政",
     "superAdmin": "超級管理員",
     "user": "用戶",
-    "enterName": "输入名字"
+    "enterName": "输入名字",
+    "toastRoleUpdate": "角色已更新。",
+    "toastError": "服务不可用。它在运行吗？还要检查您的网络连接。"
   },
   "requests": {
     "title": "塔拉瓦請求",
@@ -68,7 +80,10 @@
     "email": "電子郵件",
     "accept": "接受",
     "reject": "拒絕",
-    "enterName": "输入名字"
+    "enterName": "输入名字",
+    "toastSuccess1": "用戶批准",
+    "toastSuccess2": "用戶被拒絕",
+    "toastError": "服務不可用。它正在運行嗎？還要檢查您的網絡連接。"
   },
   "adminNavbar": {
     "talawa_portal": "塔拉瓦門戶",
@@ -89,7 +104,8 @@
     "spamsThe": "垃圾郵件",
     "group": "團體",
     "noNotifications": "沒有通知",
-    "close": "關"
+    "close": "關",
+    "toastError": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "dashboard": {
     "title": "塔拉瓦儀表板",
@@ -106,7 +122,8 @@
     "deleteOrganization": "刪除組織",
     "deleteMsg": "您要刪除此組織嗎？",
     "no": "不",
-    "yes": "是的"
+    "yes": "是的",
+    "toastError": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "organizationPeople": {
     "title": "塔拉瓦成員",
@@ -121,7 +138,9 @@
   },
   "userListCard": {
     "joined": "加入",
-    "addAdmin": "添加管理員"
+    "addAdmin": "添加管理員",
+    "toastSuccess": "用戶被添加為管理員。",
+    "toastError": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "orgAdminListCard": {
     "joined": "加入",
@@ -129,7 +148,9 @@
     "removeAdmin": "刪除管理員",
     "removeAdminMsg": "您要刪除此管理員嗎？",
     "no": "不",
-    "yes": "是的"
+    "yes": "是的",
+    "toastSuccess": "管理員被刪除。",
+    "toastError": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "orgPeopleListCard": {
     "joined": "加入",
@@ -137,7 +158,9 @@
     "removeMember": "刪除成員",
     "removeMemberMsg": "您要刪除此成員嗎？",
     "no": "不",
-    "yes": "是的"
+    "yes": "是的",
+    "toastSuccess": "該會員已被刪除",
+    "toastError": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "organizationEvents": {
     "title": "塔拉瓦事件",
@@ -162,7 +185,9 @@
     "enterFilter": "輸入過濾器",
     "enterTitle": "輸入標題",
     "enterDescrip": "輸入說明",
-    "eventLocation": "輸入位置"
+    "eventLocation": "輸入位置",
+    "toastSuccess": "恭喜！事件已創建。",
+    "toastError": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "eventListCard": {
     "location": "地點",
@@ -182,7 +207,10 @@
     "isPublic": "是公開的",
     "isRegistrable": "可註冊",
     "close": "關",
-    "updatePost": "更新帖子"
+    "updatePost": "更新帖子",
+    "toastSuccess1": "活动删除成功。",
+    "toastSuccess2": "活動更新成功。",
+    "toastError": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "orgPost": {
     "title": "塔拉瓦郵報",
@@ -199,14 +227,9 @@
     "searchTitle": "按標題搜索",
     "searchText": "按文本搜索",
     "ptitle": "帖子標題",
-    "postDes": "你要談什麼？"
-  },
-  "postNotFound": {
-    "post": "郵政",
-    "not found!": "未找到!",
-    "organization": "組織",
-    "post not found!": "郵政 未找到!",
-    "organization not found!": "組織 未找到!"
+    "postDes": "你要談什麼？",
+    "toastSuccess": "恭喜！你發布了一些東西。",
+    "toastError": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "orgPostCard": {
     "author": "作者",
@@ -222,7 +245,10 @@
     "image": "圖片",
     "video": "視頻",
     "close": "關",
-    "updatePost": "更新帖子"
+    "updatePost": "更新帖子",
+    "toastSuccess1": "帖子刪除成功。",
+    "toastSuccess2": "帖子更新成功。",
+    "toastError": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "blockUnblockUser": {
     "title": "塔拉瓦封鎖/解除封鎖用戶",
@@ -233,7 +259,10 @@
     "block_unblock": "阻止/解除阻止",
     "unblock": "解除封鎖",
     "block": "堵塞",
-    "orgName": "輸入名字"
+    "orgName": "輸入名字",
+    "toastSuccess1": "用戶被成功阻止",
+    "toastSuccess2": "用戶解封成功",
+    "toastError": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "forgotPassword": {
     "title": "塔拉瓦忘記密碼",
@@ -295,24 +324,29 @@
     "superAdmin": "超級管理員",
     "displayImage": "顯示圖像",
     "saveChanges": "保存更改",
-    "cancel": "取消"
+    "cancel": "取消",
+    "toastSuccess": "更新成功",
+    "toastError": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
-
   "userPasswordUpdate": {
     "previousPassword": "以前的密碼",
     "newPassword": "新密碼",
     "confirmNewPassword": "確認新密碼",
     "saveChanges": "保存更改",
-    "cancel": "取消"
+    "cancel": "取消",
+    "toastError1": "密碼字段不能為空。",
+    "toastError2": "新密碼和確認密碼不匹配。",
+    "toastSuccess": "更新成功"
   },
-
   "orgDelete": {
     "deleteOrg": "刪除組織"
   },
   "membershipRequest": {
     "joined": "加入",
     "accept": "接受",
-    "reject": "拒絕"
+    "reject": "拒絕",
+    "toastSuccess": "它被接受",
+    "toastError": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "orgUpdate": {
     "name": "姓名",
@@ -323,7 +357,9 @@
     "isRegistrable": "可註冊",
     "saveChanges": "保存更改",
     "cancel": "取消",
-    "enterNameOrganization": "輸入組織名稱"
+    "enterNameOrganization": "輸入組織名稱",
+    "toastSuccess": "更新成功",
+    "toastError": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "addOnRegister": {
     "addNew": "添新",
@@ -335,7 +371,8 @@
     "register": "登记",
     "pName": "例如：捐赠",
     "cName": "例如：约翰·多伊",
-    "pDesc": "此插件启用 UI"
+    "pDesc": "此插件启用 UI",
+    "toastSuccess": "插件添加成功"
   },
   "addOnStore": {
     "searchName": "例如：捐赠",
@@ -372,6 +409,8 @@
     "created": "创建",
     "adminForOrganizations": "组织管理员",
     "membershipRequests": "会员申请",
-    "adminForEvents": "事件管理员"
+    "adminForEvents": "事件管理员",
+    "toastSuccess": "用戶被添加為管理員。",
+    "toastError": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   }
 }

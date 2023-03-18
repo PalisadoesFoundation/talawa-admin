@@ -28,11 +28,11 @@ const UserUpdate: React.FC<UserPasswordUpdateProps> = ({ id }): JSX.Element => {
       !formState.newPassword ||
       !formState.confirmNewPassword
     ) {
-      return toast.error('The password field cannot be empty.');
+      return toast.error(t('toastError1'));
     }
 
     if (formState.newPassword !== formState.confirmNewPassword) {
-      return toast.error('New and Confirm password do not match.');
+      return toast.error(t('toastError2'));
     }
 
     try {
@@ -45,7 +45,7 @@ const UserUpdate: React.FC<UserPasswordUpdateProps> = ({ id }): JSX.Element => {
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success('Successful updated');
+        toast.success(t('toastSuccess'));
         setTimeout(() => {
           window.location.reload();
         }, 2000);
