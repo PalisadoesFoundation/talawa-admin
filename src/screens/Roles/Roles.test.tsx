@@ -154,7 +154,11 @@ describe('Testing Roles screen', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId(/searchByName/i), 'John');
+    const search1 = 'Jo\b\bS\b';
+    userEvent.type(screen.getByTestId(/searchByName/i), search1);
+
+    const search2 = 'Peter';
+    userEvent.type(screen.getByTestId(/searchByName/i), search2);
   });
 
   test('Testing change role functionality', async () => {
