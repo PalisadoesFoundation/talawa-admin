@@ -18,6 +18,10 @@ a {
   text-decoration: none !important;
 }
 
+.modal {
+  margin-right: 2rem;
+}
+
 .main {
   float: left;
   display: block;
@@ -242,4 +246,18 @@ a {
 .dropdowns {
   display: flex;
   justify-content: center;
+}
+
+/* .dropdowns,
+#dropdown-basic::after {
+  content: none;
+} */
+
+.dropdown-toggle:after {
+  display: none;
+}
+
+.dropdowns,
+.navbar-toggler-icon {
+  margin-top: 0.2rem;
 }

@@ -185,12 +185,13 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
           >
             <Dropdown className={styles.dropdowns}>
               <Dropdown.Toggle
-                variant=""
+                variant="white"
                 id="dropdown-basic"
                 data-testid="logoutDropdown"
+                className="navbar-toggler-icon"
               >
                 {data?.organizations[0].image ? (
-                  <span>More</span>
+                  <span></span>
                 ) : (
                   <img
                     src={AboutImg}
