@@ -5,7 +5,10 @@ import { useTranslation } from 'react-i18next';
 import styles from './UserUpdate.module.css';
 import convertToBase64 from 'utils/convertToBase64';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
+
 import { languages } from 'utils/languages';
+import { toast } from 'react-toastify';
+
 
 interface UserUpdateProps {
   id: string;
@@ -69,7 +72,6 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
       });
       /* istanbul ignore next */
       if (data) {
-        window.alert('Successful updated');
         setFormState({
           firstName: '',
           lastName: '',
@@ -79,11 +81,20 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
           selectedOption: '',
           file: '',
         });
-        window.location.reload();
+        toast.success('Successful updated');
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
-    } catch (error) {
+    } catch (error: any) {
       /* istanbul ignore next */
-      window.alert(error);
+      if (error.message === 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
+      } else {
+        toast.error(error.message);
+      }
     }
   };
 

@@ -105,7 +105,13 @@ function OrganizationEvents(): JSX.Element {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error(error.message);
+      if (error.message === 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
+      } else {
+        toast.error(error.message);
+      }
     }
   };
 
@@ -338,7 +344,7 @@ function OrganizationEvents(): JSX.Element {
                   <input
                     id="allday"
                     type="checkbox"
-                    defaultChecked={alldaychecked}
+                    checked={alldaychecked}
                     data-testid="alldayCheck"
                     onChange={() => setAllDayChecked(!alldaychecked)}
                   />
@@ -349,7 +355,7 @@ function OrganizationEvents(): JSX.Element {
                     id="recurring"
                     type="checkbox"
                     data-testid="recurringCheck"
-                    defaultChecked={recurringchecked}
+                    checked={recurringchecked}
                     onChange={() => setRecurringChecked(!recurringchecked)}
                   />
                 </div>
@@ -361,7 +367,7 @@ function OrganizationEvents(): JSX.Element {
                     id="ispublic"
                     type="checkbox"
                     data-testid="ispublicCheck"
-                    defaultChecked={publicchecked}
+                    checked={publicchecked}
                     onChange={() => setPublicChecked(!publicchecked)}
                   />
                 </div>
@@ -371,7 +377,7 @@ function OrganizationEvents(): JSX.Element {
                     id="registrable"
                     type="checkbox"
                     data-testid="registrableCheck"
-                    defaultChecked={registrablechecked}
+                    checked={registrablechecked}
                     onChange={() => setRegistrableChecked(!registrablechecked)}
                   />
                 </div>

@@ -13,6 +13,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import 'jest-location-mock';
 import i18nForTest from 'utils/i18nForTest';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
 const MOCKS = [
   {
@@ -149,7 +150,7 @@ const MOCKS = [
     },
   },
 ];
-
+const link = new StaticMockLink(MOCKS, true);
 async function wait(ms = 2) {
   await act(() => {
     return new Promise((resolve) => {
@@ -226,7 +227,7 @@ describe('Organisation People Page', () => {
 
   test('It is necessary to query the correct mock data.', async () => {
     const { container } = render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -252,7 +253,7 @@ describe('Organisation People Page', () => {
     render(
       <MockedProvider
         addTypename={true}
-        mocks={MOCKS}
+        link={link}
         defaultOptions={{
           watchQuery: { fetchPolicy: 'no-cache' },
           query: { fetchPolicy: 'no-cache' },
@@ -294,7 +295,7 @@ describe('Organisation People Page', () => {
     render(
       <MockedProvider
         addTypename={true}
-        mocks={MOCKS}
+        link={link}
         defaultOptions={{
           watchQuery: { fetchPolicy: 'no-cache' },
           query: { fetchPolicy: 'no-cache' },
@@ -338,7 +339,7 @@ describe('Organisation People Page', () => {
     render(
       <MockedProvider
         addTypename={true}
-        mocks={MOCKS}
+        link={link}
         defaultOptions={{
           watchQuery: { fetchPolicy: 'no-cache' },
           query: { fetchPolicy: 'no-cache' },
@@ -364,7 +365,7 @@ describe('Organisation People Page', () => {
 
   test('No Mock Data', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

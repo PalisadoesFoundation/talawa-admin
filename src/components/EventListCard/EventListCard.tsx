@@ -69,12 +69,20 @@ function EventListCard(props: EventListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        window.alert('Event deleted successfully.');
-        window.location.reload();
+        toast.success('Event deleted successfully.');
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error(error.message);
+      if (error.message === 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
+      } else {
+        toast.error(error.message);
+      }
     }
   };
 
@@ -99,12 +107,20 @@ function EventListCard(props: EventListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        window.alert('Event updated successfully.');
-        window.location.reload();
+        toast.success('Event updated successfully.');
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error(error.message);
+      if (error.message === 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
+      } else {
+        toast.error(error.message);
+      }
     }
   };
 
@@ -307,7 +323,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                       id="allday"
                       type="checkbox"
                       data-testid="updateAllDay"
-                      defaultChecked={alldaychecked}
+                      checked={alldaychecked}
                       onChange={() => setAllDayChecked(!alldaychecked)}
                     />
                   </div>
@@ -317,7 +333,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                       id="recurring"
                       type="checkbox"
                       data-testid="updateRecurring"
-                      defaultChecked={recurringchecked}
+                      checked={recurringchecked}
                       onChange={() => setRecurringChecked(!recurringchecked)}
                     />
                   </div>
@@ -329,7 +345,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                       id="ispublic"
                       type="checkbox"
                       data-testid="updateIsPublic"
-                      defaultChecked={publicchecked}
+                      checked={publicchecked}
                       onChange={() => setPublicChecked(!publicchecked)}
                     />
                   </div>
@@ -339,7 +355,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                       id="registrable"
                       type="checkbox"
                       data-testid="updateRegistrable"
-                      defaultChecked={registrablechecked}
+                      checked={registrablechecked}
                       onChange={() =>
                         setRegistrableChecked(!registrablechecked)
                       }

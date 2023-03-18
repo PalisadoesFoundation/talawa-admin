@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { Nav } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import Cookies from 'js-cookie';
 import i18next from 'i18next';
+import { toast } from 'react-toastify';
 
 import styles from './AdminNavbar.module.css';
-import Logo from 'assets/talawa-logo-200x200.png';
+import AboutImg from 'assets/images/defaultImg.png';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { UPDATE_SPAM_NOTIFICATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { languages } from 'utils/languages';
@@ -57,9 +58,15 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
             localStorage.removeItem('spamId');
             refetch();
           }
-        } catch (error) {
+        } catch (error: any) {
           /* istanbul ignore next */
-          console.log(error);
+          if (error.message === 'Failed to fetch') {
+            toast.error(
+              'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+            );
+          } else {
+            toast.error(error.message);
+          }
         }
       }
     };
@@ -68,9 +75,9 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
   }, []);
 
   useEffect(() => {
-    if (data && data.organizations[0].spamCount) {
+    if (data && data?.organizations[0].spamCount) {
       setSpamCountData(
-        data.organizations[0].spamCount.filter(
+        data?.organizations[0].spamCount.filter(
           (spam: any) => spam.isReaded === false
         )
       );
@@ -91,7 +98,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
 
   let OrgName;
   if (data) {
-    OrgName = data.organizations[0].name;
+    OrgName = data?.organizations[0].name;
   }
 
   return (
@@ -101,13 +108,13 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
           <div className={styles.logo}>
             {data?.organizations[0].image ? (
               <img
-                src={data.organizations[0].image}
+                src={data?.organizations[0].image}
                 className={styles.roundedcircle}
                 data-testid={'orgLogoPresent'}
               />
             ) : (
               <img
-                src={Logo}
+                src={AboutImg}
                 className={styles.roundedcircle}
                 data-testid={'orgLogoAbsent'}
               />
@@ -122,10 +129,11 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
               return url ? (
                 <Nav.Item key={name} className={styles.navitems}>
                   <Nav.Link
-                    as={Link}
+                    as={NavLink}
                     to={url}
                     id={name}
                     className={styles.navlinks}
+                    activeClassName={styles.navlinks_active}
                   >
                     {t(name)}
                   </Nav.Link>
@@ -146,7 +154,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                       </Nav.Link>
                     </Dropdown.Toggle>
                     {subTargets && (
-                      <Dropdown.Menu>
+                      <Dropdown.Menu className={styles.dropdowns}>
                         {subTargets.map((subTarget: any, index: number) => (
                           <Dropdown.Item
                             key={index}
@@ -183,13 +191,13 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
               >
                 {data?.organizations[0].image ? (
                   <img
-                    src={data.organizations[0].image}
+                    src={data?.organizations[0].image}
                     className={styles.roundedcircle}
                     data-testid="navbarOrgImagePresent"
                   />
                 ) : (
                   <img
-                    src={Logo}
+                    src={AboutImg}
                     className={styles.roundedcircle}
                     data-testid="navbarOrgImageAbsent"
                   />

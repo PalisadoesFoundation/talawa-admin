@@ -18,6 +18,8 @@ import { RootState } from 'state/reducers';
 import PaginationList from 'components/PaginationList/PaginationList';
 import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
+import PostNotFound from 'components/PostNotFound/PostNotFound';
+
 
 function OrgPost(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -78,7 +80,14 @@ function OrgPost(): JSX.Element {
         setPostModalIsOpen(false); // close the modal
       }
     } catch (error: any) {
-      toast.error(error.message);
+      /* istanbul ignore next */
+      if (error.message === 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
+      } else {
+        toast.error(error.message);
+      }
     }
   };
 
@@ -171,42 +180,44 @@ function OrgPost(): JSX.Element {
               </Button>
             </Row>
             <div className={`row ${styles.list_box}`}>
-              {data
-                ? (rowsPerPage > 0
-                    ? data.postsByOrganizationConnection.edges.slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
-                      )
-                    : rowsPerPage > 0
-                    ? data.postsByOrganizationConnection.edges.slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
-                      )
-                    : data.postsByOrganizationConnection.edges
-                  ).map(
-                    (datas: {
-                      _id: string;
-                      title: string;
-                      text: string;
-                      imageUrl: string;
-                      videoUrl: string;
-                      organizationId: string;
-                      creator: { firstName: string; lastName: string };
-                    }) => {
-                      return (
-                        <OrgPostCard
-                          key={datas._id}
-                          id={datas._id}
-                          postTitle={datas.title}
-                          postInfo={datas.text}
-                          postAuthor={`${datas.creator.firstName} ${datas.creator.lastName}`}
-                          postPhoto={datas.imageUrl}
-                          postVideo={datas.videoUrl}
-                        />
-                      );
-                    }
-                  )
-                : null}
+              {data && data.postsByOrganizationConnection.edges.length > 0 ? (
+                (rowsPerPage > 0
+                  ? data.postsByOrganizationConnection.edges.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : rowsPerPage > 0
+                  ? data.postsByOrganizationConnection.edges.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : data.postsByOrganizationConnection.edges
+                ).map(
+                  (datas: {
+                    _id: string;
+                    title: string;
+                    text: string;
+                    imageUrl: string;
+                    videoUrl: string;
+                    organizationId: string;
+                    creator: { firstName: string; lastName: string };
+                  }) => {
+                    return (
+                      <OrgPostCard
+                        key={datas._id}
+                        id={datas._id}
+                        postTitle={datas.title}
+                        postInfo={datas.text}
+                        postAuthor={`${datas.creator.firstName} ${datas.creator.lastName}`}
+                        postPhoto={datas.imageUrl}
+                        postVideo={datas.videoUrl}
+                      />
+                    );
+                  }
+                )
+              ) : (
+                <PostNotFound title="post" />
+              )}
             </div>
           </div>
           <div>

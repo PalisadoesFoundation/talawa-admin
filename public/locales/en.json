@@ -13,7 +13,8 @@
     "confirmPassword": "Confirm Password",
     "forgotPassword": "Forgot Password ?",
     "enterEmail": "Enter Email",
-    "enterPassword": "Enter Password"
+    "enterPassword": "Enter Password",
+    "doNotOwnAnAccount": "Do not own an account?"
   },
   "listNavbar": {
     "talawa_portal": "Talawa Portal",
@@ -199,6 +200,13 @@
     "searchText": "Search By Text",
     "ptitle": "Post Title",
     "postDes": "What do you to talk about?"
+  },
+  "postNotFound": {
+    "post": "Post",
+    "not found!": "Not Found!",
+    "organization": "Organization",
+    "post not found!": "Post Not Found!",
+    "organization not found!": "Organization Not Found!"
   },
   "orgPostCard": {
     "author": "Author",
