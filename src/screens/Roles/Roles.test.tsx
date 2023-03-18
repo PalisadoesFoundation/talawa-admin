@@ -154,11 +154,14 @@ describe('Testing Roles screen', () => {
 
     await wait();
 
-    const search1 = 'Jo\b\bS\b';
+    const search1 = 'John{backspace}{backspace}{backspace}{backspace}';
     userEvent.type(screen.getByTestId(/searchByName/i), search1);
 
-    const search2 = 'Peter';
+    const search2 = 'Pete{backspace}{backspace}{backspace}{backspace}';
     userEvent.type(screen.getByTestId(/searchByName/i), search2);
+
+    const search3 = 'John{backspace}{backspace}{backspace}{backspace}Sam';
+    userEvent.type(screen.getByTestId(/searchByName/i), search3);
   });
 
   test('Testing change role functionality', async () => {
