@@ -11,7 +11,7 @@
     "password": "密碼",
     "atleast_8_char_long": "至少 8 個字符長",
     "confirmPassword": "確認密碼",
-    "forgotPassword": "忘記密碼 ？",
+    "forgotPassword": "忘記密碼",
     "enterEmail": "输入电子邮件",
     "enterPassword": "输入密码",
     "toastError1": "服務不可用。它在運行嗎？還要檢查您的網絡連接。",

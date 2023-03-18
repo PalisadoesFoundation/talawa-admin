@@ -14,14 +14,14 @@
     "forgotPassword": "Mot de passe oublié ?",
     "enterEmail": "entrez l'e-mail",
     "enterPassword": "Entrer le mot de passe",
-    "toastError1": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau.",
-    "toastError2": "Erreur Captcha !",
+    "toastError1": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution? Vérifiez également votre connectivité réseau.",
+    "toastError2": "Erreur Captcha!",
     "toastError3": "Veuillez vérifier le captcha.",
     "toastError4": "Une erreur s'est produite, veuillez réessayer ultérieurement.",
     "toastError5": "Le mot de passe et la confirmation du mot de passe ne correspondent pas.",
     "toastError6": "Remplissez correctement tous les détails.",
-    "toastError7": "Désolé ! vous n'êtes pas autorisé !",
-    "toastError8": "Utilisateur introuvable !",
+    "toastError7": "Désolé! vous n'êtes pas autorisé!",
+    "toastError8": "Utilisateur introuvable!",
     "toastSuccess1": "Enregistré avec succès. Veuillez patienter jusqu'à ce que vous soyez approuvé."
   },
   "listNavbar": {
@@ -83,7 +83,7 @@
     "enterName": "Entrez le nom",
     "toastSuccess1": "Approuvé par l'utilisateur",
     "toastSuccess2": "Utilisateur rejeté",
-    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
+    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution? Vérifiez également votre connectivité réseau."
   },
   "adminNavbar": {
     "talawa_portal": "Portail Talawa",
@@ -120,7 +120,7 @@
     "blockedUsers": "Utilisateurs bloqués",
     "membershipRequests": "Demandes d'adhésion",
     "deleteOrganization": "Supprimer l'organisation",
-    "deleteMsg": "Voulez-vous supprimer cette organisation ?",
+    "deleteMsg": "Voulez-vous supprimer cette organisation?",
     "no": "Non",
     "yes": "Oui",
     "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
@@ -146,7 +146,7 @@
     "joined": "Inscrit",
     "remove": "Retirer",
     "removeAdmin": "Supprimer l'administrateur",
-    "removeAdminMsg": "Voulez-vous supprimer cet administrateur ?",
+    "removeAdminMsg": "Voulez-vous supprimer cet administrateur?",
     "no": "Non",
     "yes": "Oui",
     "toastSuccess": "L'administrateur est supprimé.",
@@ -194,7 +194,7 @@
     "on": "Sur",
     "end": "Fin",
     "deleteEvent": "Supprimer l'événement",
-    "deleteEventMsg": "Voulez-vous supprimer cet événement ?",
+    "deleteEventMsg": "Voulez-vous supprimer cet événement?",
     "no": "Non",
     "yes": "Oui",
     "editEvent": "Modifier l'événement",
@@ -236,7 +236,7 @@
     "imageURL": "URL de l'image",
     "videoURL": "URL de la vidéo",
     "deletePost": "Supprimer le message",
-    "deletePostMsg": "Voulez-vous supprimer ce message ?",
+    "deletePostMsg": "Voulez-vous supprimer ce message?",
     "no": "Non",
     "yes": "Oui",
     "editPost": "Modifier le message",
@@ -248,7 +248,7 @@
     "updatePost": "Mettre à jour le message",
     "toastSuccess1": "Message supprimé avec succès.",
     "toastSuccess2": "Message mis à jour avec succès.",
-    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
+    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution? Vérifiez également votre connectivité réseau."
   },
   "blockUnblockUser": {
     "title": "Talawa Bloquer/Débloquer l'utilisateur",
@@ -262,7 +262,7 @@
     "orgName": "Entrez le nom",
     "toastSuccess1": "Utilisateur bloqué avec succès",
     "toastSuccess2": "Utilisateur débloqué avec succès",
-    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
+    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution? Vérifiez également votre connectivité réseau."
   },
   "forgotPassword": {
     "title": "Mot de passe oublié Talawa",
@@ -281,7 +281,7 @@
     "title": "404 introuvable",
     "talawaAdmin": "Administrateur Talawa",
     "404": "404",
-    "notFoundMsg": "Oups ! La page demandée est introuvable !",
+    "notFoundMsg": "Oups! La page demandée est introuvable!",
     "backToHome": "De retour à la maison"
   },
   "orgContribution": {
@@ -369,7 +369,7 @@
     "pluginDesc": "Description du plug-in",
     "close": "Fermer",
     "register": "Enregistrer",
-    "pName": "Ex : Dons",
+    "pName": "Ex: Dons",
     "cName": "Ex: Jean Doe",
     "pDesc": "Ce plugin active l'interface utilisateur pour",
     "toastSuccess": "Plugin ajouté avec succès"
