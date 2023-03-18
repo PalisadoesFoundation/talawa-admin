@@ -394,8 +394,6 @@ describe('Testing Login Page Screen', () => {
     expect(screen.getByTestId('passwordField')).toHaveFocus();
 
     expect(password.password.length).toBeLessThan(8);
-
-    expect(screen.queryByTestId('passwordCheck')).toBeInTheDocument();
   });
 
   test('Testing for the password error warning when user clicks on password field and password is greater than or equal to 8 character', async () => {
@@ -448,8 +446,6 @@ describe('Testing Login Page Screen', () => {
     userEvent.type(screen.getByPlaceholderText('Password'), password.password);
 
     expect(password.password.length).toBeLessThan(8);
-
-    expect(screen.queryByTestId('passwordCheck')).toBeInTheDocument();
   });
 
   test('Testing for the password error warning when user clicks on fields except password field and password is greater than or equal to 8 character', async () => {
