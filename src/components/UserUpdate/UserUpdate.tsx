@@ -223,7 +223,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
             {t('displayImage')}:
             <input
               accept="image/*"
-              id="photo"
+              id="orgphoto"
               name="photo"
               type="file"
               multiple={false}
