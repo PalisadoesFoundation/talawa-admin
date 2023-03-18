@@ -239,4 +239,27 @@ describe('MemberDetail', () => {
       user?.image
     );
   });
+
+  test('should call setState with 2 when button is clicked', async () => {
+    const props = {
+      id: 'rishav-jha-mech',
+    };
+
+    const { container } = render(
+      <MockedProvider addTypename={false} mocks={MOCKS1}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <MemberDetail {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    expect(container.textContent).not.toBe('Loading data...');
+    await wait();
+
+    userEvent.click(screen.getByText(/edit/i));
+  });
 });
