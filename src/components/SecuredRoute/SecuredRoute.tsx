@@ -13,6 +13,11 @@ const SecuredRoute = (props: any): JSX.Element => {
   );
 };
 
+const timeoutMinutes = 1;
+const timeoutMilliseconds = timeoutMinutes * 60 * 1000;
+
+const inactiveIntervalMin = 1;
+const inactiveIntervalMilsec = inactiveIntervalMin * 60 * 1000;
 let lastActive: number = Date.now();
 
 document.addEventListener('mousemove', () => {
@@ -22,14 +27,13 @@ document.addEventListener('mousemove', () => {
 setInterval(() => {
   const currentTime = Date.now();
   const timeSinceLastActive = currentTime - lastActive;
-  const logoutUserTime = 20 * 60 * 1000;
 
-  if (timeSinceLastActive > logoutUserTime) {
-    toast.warn('User not found! kindly relogin as sessison has expired');
+  if (timeSinceLastActive > timeoutMilliseconds) {
+    toast.warn('Kindly relogin as sessison has expired');
 
     window.location.href = '/';
     localStorage.setItem('IsLoggedIn', 'FALSE');
   }
-}, 60000);
+}, inactiveIntervalMilsec);
 
 export default SecuredRoute;
