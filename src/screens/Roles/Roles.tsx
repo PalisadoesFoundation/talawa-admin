@@ -6,7 +6,10 @@ import { useTranslation } from 'react-i18next';
 
 import styles from './Roles.module.css';
 import ListNavbar from 'components/ListNavbar/ListNavbar';
-import { USER_LIST } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATION_CONNECTION_LIST,
+  USER_LIST,
+} from 'GraphQl/Queries/Queries';
 import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
 import PaginationList from 'components/PaginationList/PaginationList';
 
@@ -31,6 +34,18 @@ const Roles = () => {
   const { data, loading: users_loading, refetch } = useQuery(USER_LIST);
 
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
+
+  const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
+
+  useEffect(() => {
+    if (!dataOrgs) {
+      return;
+    }
+
+    if (dataOrgs.organizationsConnection.length === 0) {
+      toast.warning(t('noOrgError'));
+    }
+  }, [dataOrgs]);
 
   if (componentLoader || users_loading) {
     return <div className="loader"></div>;
@@ -116,6 +131,7 @@ const Roles = () => {
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>{t('usersList')}</p>
             </Row>
+
             <div className={styles.list_box}>
               <div className="table-responsive">
                 <table className={`table table-hover ${styles.userListTable}`}>
