@@ -161,21 +161,33 @@ function OrganizationDashboard(): JSX.Element {
                   </Link>
                 </Col>
                 <Col sm={4} className="mb-5">
-                  <div className={`card ${styles.cardContainer}`}>
-                    <div className="card-body">
-                      <div className="text-center mb-3">
-                        <i
-                          className={`fas fa-user ${styles.dashboardIcon}`}
-                        ></i>
-                      </div>
-                      <div className="text-center">
-                        <p className={styles.counterNumber}>
-                          {data.organizations[0].admins.length}
-                        </p>
-                        <p className={styles.counterHead}>{t('admins')}</p>
+                  <Link
+                    className={`card ${styles.cardContainer}`}
+                    to={`${targets
+                      .filter((target: any) => {
+                        const { name } = target;
+                        return name == 'People';
+                      })
+                      .map((target: any) => {
+                        return target.url;
+                      })}`}
+                  >
+                    <div className={`card ${styles.cardContainer}`}>
+                      <div className="card-body">
+                        <div className="text-center mb-3">
+                          <i
+                            className={`fas fa-user ${styles.dashboardIcon}`}
+                          ></i>
+                        </div>
+                        <div className="text-center">
+                          <p className={styles.counterNumber}>
+                            {data.organizations[0].admins.length}
+                          </p>
+                          <p className={styles.counterHead}>{t('admins')}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 </Col>
                 <Col sm={4} className="mb-5">
                   <Link
