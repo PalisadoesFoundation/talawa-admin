@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -12,6 +12,7 @@ import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
 import { USER_LIST } from 'GraphQl/Queries/Queries';
 import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
+import { within } from '@testing-library/react';
 import i18nForTest from 'utils/i18nForTest';
 
 const MOCKS = [
@@ -121,6 +122,46 @@ describe('Testing Roles screen', () => {
     expect(window.location).toBeAt('/orglist');
   });
 
+  test('Roles renders a <PaginationList /> and tests changing rowsPerPage in the select', () => {
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Roles />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    const appHeader = screen.queryByTestId('roles-header');
+    const function_when_appHeader_isNotNull = (app: any) => {
+      const paginationList = within(app).getByTestId('something');
+      const tablePagination =
+        within(paginationList).getByTestId('table-pagination');
+
+      expect(tablePagination).toBeInTheDocument();
+
+      const rowsPerPageSelect = within(tablePagination).getByTestId(
+        'rows-per-page-select'
+      );
+      fireEvent.change(rowsPerPageSelect, { target: { value: '-1' } });
+      expect(rowsPerPageSelect).toHaveValue('-1');
+    };
+
+    const function_when_appHeader_isNull = () => {
+      expect(appHeader).toBeNull();
+    };
+
+    const assertion =
+      appHeader !== null
+        ? function_when_appHeader_isNotNull(appHeader)
+        : function_when_appHeader_isNull();
+
+    assertion;
+  });
+
   test('Testing, If userType is not SUPERADMIN', async () => {
     localStorage.setItem('UserType', 'USER');
 
@@ -160,8 +201,12 @@ describe('Testing Roles screen', () => {
     const search2 = 'Pete{backspace}{backspace}{backspace}{backspace}';
     userEvent.type(screen.getByTestId(/searchByName/i), search2);
 
-    const search3 = 'John{backspace}{backspace}{backspace}{backspace}Sam';
+    const search3 =
+      'John{backspace}{backspace}{backspace}{backspace}Sam{backspace}{backspace}{backspace}';
     userEvent.type(screen.getByTestId(/searchByName/i), search3);
+
+    const search4 = 'Sam{backspace}{backspace}P';
+    userEvent.type(screen.getByTestId(/searchByName/i), search4);
   });
 
   test('Testing change role functionality', async () => {

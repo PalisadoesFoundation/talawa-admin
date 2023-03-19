@@ -104,7 +104,7 @@ const Roles = () => {
   };
 
   return (
-    <>
+    <div data-testid="roles-header">
       <ListNavbar />
       <Row>
         <Col sm={3}>
@@ -243,6 +243,7 @@ const Roles = () => {
                       count={data ? data.users.length : 0}
                       rowsPerPage={rowsPerPage}
                       page={page}
+                      data-testid="something"
                       onPageChange={handleChangePage}
                       onRowsPerPageChange={handleChangeRowsPerPage}
                     />
@@ -253,7 +254,7 @@ const Roles = () => {
           </div>
         </Col>
       </Row>
-    </>
+    </div>
   );
 };
 
