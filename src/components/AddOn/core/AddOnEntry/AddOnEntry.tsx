@@ -45,6 +45,7 @@ function AddOnEntry({
   const [updateOrgStatus] = useMutation(UPDATE_ORG_STATUS_PLUGIN_MUTATION);
 
   const currentOrg = window.location.href.split('=')[1];
+
   const updateOrgList = async () => {
     await updateOrgStatus({
       variables: {
@@ -54,6 +55,7 @@ function AddOnEntry({
     });
     // console.log('orgs pushed', data);
   };
+
   const updateInstallStatusFunc = async () => {
     setButtonLoading(true);
     await updateInstallStatus({

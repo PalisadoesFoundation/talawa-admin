@@ -18,6 +18,10 @@ a {
   text-decoration: none !important;
 }
 
+.modal {
+  margin-right: 2rem;
+}
+
 .main {
   float: left;
   display: block;
@@ -78,6 +82,7 @@ a {
   z-index: 1;
   flex-direction: row;
   display: flex;
+  text-align: center;
 }
 .navlinks_active {
   border-bottom: 3px solid #31bb6b;
@@ -221,10 +226,38 @@ a {
   border-radius: 10px;
   font-weight: 600;
   white-space: nowrap;
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  min-width: 10rem;
+  max-width: 30%;
 }
 
 .allOrgBtn:hover {
   color: #fff;
   background-color: #1e7e34;
   border-color: #1c7430;
+}
+
+.navitems > .navlinks {
+  justify-content: center;
+}
+
+.dropdowns {
+  display: flex;
+  justify-content: center;
+}
+
+/* .dropdowns,
+#dropdown-basic::after {
+  content: none;
+} */
+
+.dropdown-toggle:after {
+  display: none;
+}
+
+.dropdowns,
+.navbar-toggler-icon {
+  margin-top: 0.2rem;
 }
