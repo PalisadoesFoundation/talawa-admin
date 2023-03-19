@@ -375,7 +375,11 @@ function LoginPage(): JSX.Element {
                       onClick={handleShow}
                       data-testid="showPasswordr"
                     >
-                      {show ? 'Hide' : 'Show'}
+                      {show ? (
+                        <i className="fas fa-eye"></i>
+                      ) : (
+                        <i className="fas fa-eye-slash"></i>
+                      )}
                     </label>
                     {isInputFocused &&
                       signformState.signPassword.length < 8 && (
@@ -490,7 +494,11 @@ function LoginPage(): JSX.Element {
                     onClick={handleShow}
                     data-testid="showPassword"
                   >
-                    {show ? 'Hide' : 'Show'}
+                    {show ? (
+                      <i className="fas fa-eye"></i>
+                    ) : (
+                      <i className="fas fa-eye-slash"></i>
+                    )}
                   </label>
                 </div>
                 <div className="googleRecaptcha">
