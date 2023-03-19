@@ -30,7 +30,6 @@ function LoginPage(): JSX.Element {
 
   const [modalisOpen, setIsOpen] = React.useState(false);
   const [componentLoader, setComponentLoader] = useState(true);
-  const [isInputFocused, setIsInputFocused] = useState(false);
   const [signformState, setSignFormState] = useState({
     signfirstName: '',
     signlastName: '',
@@ -342,14 +341,12 @@ function LoginPage(): JSX.Element {
                       data-testid="passwordField"
                       placeholder={t('password')}
                       required
-                      onFocus={() => setIsInputFocused(true)}
                       {...register('userPassword', {
                         required: 'Please enter your password',
                         minLength: {
                           value: 8,
                           message: 'Atleast 8 Character long',
                         },
-                        onBlur: () => setIsInputFocused(false),
                         onChange: (e) => {
                           setSignFormState({
                             ...signformState,
