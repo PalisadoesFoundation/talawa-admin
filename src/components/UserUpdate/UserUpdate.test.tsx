@@ -111,10 +111,10 @@ describe('Testing User Update', () => {
       formData.lastName
     );
     userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
+    userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
 
     await wait();
 
-    // userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
     userEvent.click(screen.getByText(/Save Changes/i));
 
     expect(screen.getByPlaceholderText(/First Name/i)).toHaveValue(
@@ -129,6 +129,6 @@ describe('Testing User Update', () => {
     expect(screen.getByPlaceholderText(/First Name/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Last Name/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Email/i)).toBeInTheDocument();
-    // expect(screen.getByText('Display Image:')).toBeInTheDocument();
+    expect(screen.getByText(/Display Image/i)).toBeInTheDocument();
   });
 });

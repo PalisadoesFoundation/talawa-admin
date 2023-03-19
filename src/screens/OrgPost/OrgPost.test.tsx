@@ -109,7 +109,7 @@ describe('Organisation Post Page', () => {
   const formData = {
     posttitle: 'dummy post',
     postinfo: 'This is a dummy post',
-    // postImage: new File(['hello'], 'hello.png', { type: 'image/png' }),
+    postImage: new File(['hello'], 'hello.png', { type: 'image/png' }),
   };
 
   test('correct mock data should be queried', async () => {
@@ -181,7 +181,7 @@ describe('Organisation Post Page', () => {
       screen.getByPlaceholderText(/What do you to talk about?/i),
       formData.postinfo
     );
-    // userEvent.upload(screen.getByLabelText(/Post Image:/i), formData.postImage);
+    userEvent.upload(screen.getByLabelText(/Post Image:/i), formData.postImage);
 
     userEvent.click(screen.getByTestId('createPostBtn'));
 
