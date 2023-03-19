@@ -176,6 +176,7 @@ describe('Organisation Post Page', () => {
       screen.getByPlaceholderText(/Post Title/i),
       formData.posttitle
     );
+
     userEvent.type(
       screen.getByPlaceholderText(/What do you to talk about?/i),
       formData.postinfo
