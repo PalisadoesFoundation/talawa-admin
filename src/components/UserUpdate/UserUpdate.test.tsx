@@ -112,7 +112,8 @@ describe('Testing User Update', () => {
     );
     userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
     userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
-
+    userEvent.click(screen.getByLabelText(/Default Language/i));
+    userEvent.click(screen.getByLabelText(/User Type/i));
     await wait();
 
     userEvent.click(screen.getByText(/Save Changes/i));

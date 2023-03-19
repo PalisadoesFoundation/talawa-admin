@@ -167,56 +167,60 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
 
           <div className={styles.dispflex}>
             <div>
-              <label>{t('appLanguageCode')}</label>
-              <select
-                className="form-control"
-                data-testid="applangcode"
-                onChange={(e) => {
-                  setFormState({
-                    ...formState,
-                    applangcode: e.target.value,
-                  });
-                }}
-              >
-                {languages.map((language, index: number) => (
-                  <option key={index} value={language.code}>
-                    {language.name}
-                  </option>
-                ))}
-              </select>
+              <label>
+                {t('appLanguageCode')}
+                <select
+                  className="form-control"
+                  data-testid="applangcode"
+                  onChange={(e) => {
+                    setFormState({
+                      ...formState,
+                      applangcode: e.target.value,
+                    });
+                  }}
+                >
+                  {languages.map((language, index: number) => (
+                    <option key={index} value={language.code}>
+                      {language.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
             </div>
             <div>
-              <label>{t('userType')}</label>
-              <div className={styles.radio_buttons}>
-                <input
-                  type="radio"
-                  id="admin"
-                  value="selectadmin"
-                  name="selectRole"
-                  checked={formState.selectedOption === 'selectadmin'}
-                  onChange={(e) => {
-                    setFormState({
-                      ...formState,
-                      selectedOption: e.target.value,
-                    });
-                  }}
-                />
-                <label htmlFor="admin">{t('admin')}</label>
-                <input
-                  type="radio"
-                  id="superadmin"
-                  value="selectsuperadmin"
-                  name="selectRole"
-                  checked={formState.selectedOption === 'selectsuperadmin'}
-                  onChange={(e) => {
-                    setFormState({
-                      ...formState,
-                      selectedOption: e.target.value,
-                    });
-                  }}
-                />
-                <label htmlFor="superadmin">{t('superAdmin')}</label>
-              </div>
+              <label>
+                {t('userType')}
+                <div className={styles.radio_buttons}>
+                  <input
+                    type="radio"
+                    id="admin"
+                    value="selectadmin"
+                    name="selectRole"
+                    checked={formState.selectedOption === 'selectadmin'}
+                    onChange={(e) => {
+                      setFormState({
+                        ...formState,
+                        selectedOption: e.target.value,
+                      });
+                    }}
+                  />
+                  <label htmlFor="admin">{t('admin')}</label>
+                  <input
+                    type="radio"
+                    id="superadmin"
+                    value="selectsuperadmin"
+                    name="selectRole"
+                    checked={formState.selectedOption === 'selectsuperadmin'}
+                    onChange={(e) => {
+                      setFormState({
+                        ...formState,
+                        selectedOption: e.target.value,
+                      });
+                    }}
+                  />
+                  <label htmlFor="superadmin">{t('superAdmin')}</label>
+                </div>
+              </label>
             </div>
           </div>
           <label htmlFor="orgphoto" className={styles.orgphoto}>
