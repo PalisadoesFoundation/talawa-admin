@@ -148,9 +148,7 @@ describe('Organisation Post Page', () => {
 
     await wait();
 
-    expect(container.textContent).toMatch('Posts by Title');
-    expect(container.textContent).toMatch('Posts by Text');
-    expect(container.textContent).toMatch('Posts by Text');
+    expect(container.textContent).toMatch('Search Post');
     expect(container.textContent).toMatch('Posts');
     expect(container.textContent).toMatch('+ Create Post');
   });
@@ -210,9 +208,7 @@ describe('Organisation Post Page', () => {
       });
     }
     await debounceWait();
-    userEvent.type(screen.getByPlaceholderText(/Search By Title/i), 'postone');
-    await debounceWait();
-    userEvent.type(screen.getByPlaceholderText(/Search By Text/i), 'THis');
+    userEvent.type(screen.getByPlaceholderText(/Search By/i), 'postone');
     await debounceWait();
   });
 

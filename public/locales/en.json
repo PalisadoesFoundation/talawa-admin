@@ -190,8 +190,7 @@
   },
   "orgPost": {
     "title": "Talawa Posts",
-    "postsByTitle": "Posts by Title",
-    "postsByText": "Posts by Text",
+    "searchPost": "Search Post",
     "posts": "Posts",
     "createPost": "Create Post",
     "postDetails": "Post Details",
@@ -203,7 +202,9 @@
     "searchTitle": "Search By Title",
     "searchText": "Search By Text",
     "ptitle": "Post Title",
-    "postDes": "What do you to talk about?"
+    "postDes": "What do you to talk about?",
+    "Title": "Title",
+    "Text": "Text"
   },
   "postNotFound": {
     "post": "Post",
