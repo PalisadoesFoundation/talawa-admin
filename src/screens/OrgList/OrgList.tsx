@@ -21,7 +21,7 @@ import PaginationList from 'components/PaginationList/PaginationList';
 import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
 import AdminDashListCard from 'components/AdminDashListCard/AdminDashListCard';
-import PostNotFound from 'components/PostNotFound/PostNotFound';
+import { Alert, AlertTitle } from '@mui/material';
 
 function OrgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
@@ -226,7 +226,7 @@ function OrgList(): JSX.Element {
               />
             </div>
             <div className={styles.list_box}>
-              {data && data.organizationsConnection.length > 0 ? (
+              {data?.organizationsConnection.length > 0 ? (
                 (rowsPerPage > 0
                   ? dataRevOrg.slice(
                       page * rowsPerPage,
@@ -277,7 +277,12 @@ function OrgList(): JSX.Element {
                   }
                 )
               ) : (
-                <PostNotFound title="organization" />
+                <div>
+                  <Alert variant="filled" severity="error">
+                    <AlertTitle>{t('noOrgErrorTitle')}</AlertTitle>
+                    {t('noOrgErrorDescription')}
+                  </Alert>
+                </div>
               )}
             </div>
             <div>

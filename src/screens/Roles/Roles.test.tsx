@@ -9,11 +9,15 @@ import 'jest-location-mock';
 
 import Roles from './Roles';
 import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
-import { USER_LIST } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATION_CONNECTION_LIST,
+  USER_LIST,
+} from 'GraphQl/Queries/Queries';
 import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import { ToastContainer } from 'react-toastify';
 
 const MOCKS = [
   {
@@ -89,6 +93,36 @@ const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: ORGANIZATION_CONNECTION_LIST,
+    },
+    result: {
+      data: {
+        organizationsConnection: [
+          {
+            _id: 1,
+            image: '',
+            name: 'Akatsuki',
+            creator: {
+              firstName: 'John',
+              lastName: 'Doe',
+            },
+            admins: [
+              {
+                _id: '123',
+              },
+            ],
+            members: {
+              _id: '234',
+            },
+            createdAt: '02/02/2022',
+            location: 'Washington DC',
+          },
+        ],
+      },
+    },
+  },
 ];
 const EMPTY_MOCKS = [
   {
@@ -107,6 +141,16 @@ const EMPTY_MOCKS = [
     result: {
       data: {
         updateUserType: false,
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_CONNECTION_LIST,
+    },
+    result: {
+      data: {
+        organizationsConnection: [],
       },
     },
   },
@@ -213,5 +257,47 @@ describe('Testing Roles screen', () => {
     );
 
     await wait();
+  });
+
+  test('Should render warning alert when there are no organizations', async () => {
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <Roles />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(container.textContent).toMatch(
+      'Organizations not found, please create an organization through dashboard'
+    );
+  });
+
+  test('Should not render warning alert when there are organizations present', async () => {
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <Roles />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(container.textContent).not.toMatch(
+      'Organizations not found, please create an organization through dashboard'
+    );
   });
 });

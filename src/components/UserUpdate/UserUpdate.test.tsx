@@ -86,6 +86,7 @@ describe('Testing User Update', () => {
     firstName: 'Ansh',
     lastName: 'Goyal',
     email: 'ansh@gmail.com',
+    image: new File(['hello'], 'hello.png', { type: 'image/png' }),
   };
 
   global.alert = jest.fn();
@@ -110,7 +111,8 @@ describe('Testing User Update', () => {
       formData.lastName
     );
     userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
-
+    userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
+    userEvent.click(screen.getByLabelText(/User Type/i));
     await wait();
 
     userEvent.click(screen.getByText(/Save Changes/i));
@@ -127,5 +129,6 @@ describe('Testing User Update', () => {
     expect(screen.getByPlaceholderText(/First Name/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Last Name/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Email/i)).toBeInTheDocument();
+    expect(screen.getByText(/Display Image/i)).toBeInTheDocument();
   });
 });

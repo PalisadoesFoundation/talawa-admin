@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import styles from './OrgUpdate.module.css';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import convertToBase64 from 'utils/convertToBase64';
 
 interface OrgUpdateProps {
   id: string;
@@ -19,6 +20,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
     orgName: '',
     orgDescrip: '',
     location: '',
+    orgImage: '',
   });
   const [publicchecked, setPublicChecked] = React.useState(true);
   const [visiblechecked, setVisibleChecked] = React.useState(false);
@@ -36,6 +38,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
         orgName: data.organizations[0].name,
         orgDescrip: data.organizations[0].description,
         location: data.organizations[0].location,
+        orgImage: data.organizations[0].image,
       });
     }
   }, [data]);
@@ -52,6 +55,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
           location: formState.location,
           isPublic: publicchecked,
           visibleInSearch: visiblechecked,
+          file: formState.orgImage,
         },
       });
       /* istanbul ignore next */
@@ -148,7 +152,15 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
                   name="photo"
                   type="file"
                   multiple={false}
-                  //onChange=""
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file)
+                      setFormState({
+                        ...formState,
+                        orgImage: await convertToBase64(file),
+                      });
+                  }}
+                  data-testid="organisationImage"
                 />
               </label>
             </div>
