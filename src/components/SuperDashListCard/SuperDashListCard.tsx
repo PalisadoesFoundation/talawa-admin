@@ -24,11 +24,13 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
 
   function handleClick() {
     const url = '/orgdash/id=' + props.id;
+
     /*
     WARNING!
      Please endeavor to NOT remove both the window.location.replace(url) and the history.push(url) as both are very important for routing correctly.
      Removal of the window.location.replace will result to a crash on other depending routes. History.push(url) is being used to alongside window.location.replace to keep track of the browser history stack and ensure consistency with the react component life cycle.
      */
+
     window.location.replace(url);
     history.push(url);
     // Do not change the lines above.

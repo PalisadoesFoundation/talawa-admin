@@ -149,7 +149,7 @@ describe('Testing Organization Update', () => {
     );
     userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
     userEvent.upload(
-      screen.getByLabelText(/display image:/i),
+      screen.getByLabelText(/Display Image:/i),
       formData.displayImage
     );
     userEvent.click(screen.getByLabelText(/Is Public:/i));

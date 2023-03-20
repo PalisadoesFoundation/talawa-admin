@@ -3,7 +3,10 @@ import { useMutation, useQuery } from '@apollo/client';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import styles from './UserUpdate.module.css';
+import convertToBase64 from 'utils/convertToBase64';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
+
+import { languages } from 'utils/languages';
 import { toast } from 'react-toastify';
 
 interface UserUpdateProps {
@@ -20,6 +23,10 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
     firstName: '',
     lastName: '',
     email: '',
+    password: '',
+    applangcode: '',
+    selectedOption: '',
+    file: '',
   });
 
   const [login] = useMutation(UPDATE_USER_MUTATION);
@@ -59,13 +66,20 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
     try {
       const { data } = await login({
         variables: {
-          firstName: formState.firstName,
-          lastName: formState.lastName,
-          email: formState.email,
+          file: formState.file,
         },
       });
       /* istanbul ignore next */
       if (data) {
+        setFormState({
+          firstName: '',
+          lastName: '',
+          email: '',
+          password: '',
+          applangcode: '',
+          selectedOption: '',
+          file: '',
+        });
         toast.success('Successful updated');
         setTimeout(() => {
           window.location.reload();
@@ -150,6 +164,84 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
               />
             </div>
           </div>
+
+          <div className={styles.dispflex}>
+            <div>
+              <label>
+                {t('appLanguageCode')}
+                <select
+                  className="form-control"
+                  data-testid="applangcode"
+                  onChange={(e) => {
+                    setFormState({
+                      ...formState,
+                      applangcode: e.target.value,
+                    });
+                  }}
+                >
+                  {languages.map((language, index: number) => (
+                    <option key={index} value={language.code}>
+                      {language.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <div>
+              <label>
+                {t('userType')}
+                <div className={styles.radio_buttons}>
+                  <input
+                    type="radio"
+                    id="admin"
+                    value="selectadmin"
+                    name="selectRole"
+                    checked={formState.selectedOption === 'selectadmin'}
+                    onChange={(e) => {
+                      setFormState({
+                        ...formState,
+                        selectedOption: e.target.value,
+                      });
+                    }}
+                  />
+                  <label htmlFor="admin">{t('admin')}</label>
+                  <input
+                    type="radio"
+                    id="superadmin"
+                    value="selectsuperadmin"
+                    name="selectRole"
+                    checked={formState.selectedOption === 'selectsuperadmin'}
+                    onChange={(e) => {
+                      setFormState({
+                        ...formState,
+                        selectedOption: e.target.value,
+                      });
+                    }}
+                  />
+                  <label htmlFor="superadmin">{t('superAdmin')}</label>
+                </div>
+              </label>
+            </div>
+          </div>
+          <label htmlFor="orgphoto" className={styles.orgphoto}>
+            {t('displayImage')}:
+            <input
+              accept="image/*"
+              id="orgphoto"
+              name="photo"
+              type="file"
+              multiple={false}
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (file)
+                  setFormState({
+                    ...formState,
+                    file: await convertToBase64(file),
+                  });
+              }}
+              data-testid="organisationImage"
+            />
+          </label>
           <div className={styles.dispbtnflex}>
             <button
               type="button"

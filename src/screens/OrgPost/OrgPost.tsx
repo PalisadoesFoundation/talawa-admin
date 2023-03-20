@@ -17,6 +17,7 @@ import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { RootState } from 'state/reducers';
 import PaginationList from 'components/PaginationList/PaginationList';
 import debounce from 'utils/debounce';
+import convertToBase64 from 'utils/convertToBase64';
 import PostNotFound from 'components/PostNotFound/PostNotFound';
 
 function OrgPost(): JSX.Element {
@@ -29,6 +30,7 @@ function OrgPost(): JSX.Element {
   const [postformState, setPostFormState] = useState({
     posttitle: '',
     postinfo: '',
+    postImage: '',
   });
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -62,6 +64,7 @@ function OrgPost(): JSX.Element {
           title: postformState.posttitle,
           text: postformState.postinfo,
           organizationId: currentUrl,
+          file: postformState.postImage,
         },
       });
       /* istanbul ignore next */
@@ -71,6 +74,7 @@ function OrgPost(): JSX.Element {
         setPostFormState({
           posttitle: '',
           postinfo: '',
+          postImage: '',
         });
         setPostModalIsOpen(false); // close the modal
       }
@@ -283,16 +287,23 @@ function OrgPost(): JSX.Element {
               />
               <label htmlFor="postphoto" className={styles.orgphoto}>
                 {t('image')}:
+                <input
+                  accept="image/*"
+                  id="postphoto"
+                  name="photo"
+                  type="file"
+                  multiple={false}
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file)
+                      setPostFormState({
+                        ...postformState,
+                        postImage: await convertToBase64(file),
+                      });
+                  }}
+                  data-testid="organisationImage"
+                />
               </label>
-              <input
-                accept="image/*"
-                id="postphoto"
-                name="photo"
-                type="file"
-                placeholder={t('image')}
-                multiple={false}
-                //onChange=""
-              />
               <label htmlFor="postvideo">{t('video')}:</label>
               <input
                 accept="image/*"
