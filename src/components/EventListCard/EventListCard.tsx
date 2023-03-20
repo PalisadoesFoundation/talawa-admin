@@ -197,20 +197,20 @@ function EventListCard(props: EventListCardProps): JSX.Element {
               </div>
               <div className={styles.iconContainer}>
                 <a
-                  data-testid="deleteEventModalBtn"
-                  className={`${styles.icon} mr-2`}
-                  data-toggle="modal"
-                  data-target={`#deleteEventModal${props.id}`}
-                >
-                  <i className="fa fa-trash"></i>
-                </a>
-                <a
                   data-testid="editEventModalBtn"
-                  className={styles.icon}
+                  className={`${styles.icon} mr-2`}
                   data-toggle="modal"
                   data-target={`#editEventModal${props.id}`}
                 >
                   <i className="fas fa-edit"></i>
+                </a>
+                <a
+                  data-testid="deleteEventModalBtn"
+                  className={styles.icon}
+                  data-toggle="modal"
+                  data-target={`#deleteEventModal${props.id}`}
+                >
+                  <i className="fa fa-trash"></i>
                 </a>
               </div>
             </Form>
