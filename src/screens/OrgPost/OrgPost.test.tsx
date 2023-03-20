@@ -131,6 +131,13 @@ describe('Organisation Post Page', () => {
     });
   });
 
+  describe('searchChange', () => {
+    it('should update showTitle state when input value is "searchTitle"', () => {
+      const setShowTitle = jest.fn();
+      expect(setShowTitle).toHaveBeenCalledWith(true);
+    });
+  });
+
   test('should render props and text  elements test for the screen', async () => {
     const { container } = render(
       <MockedProvider addTypename={false} link={link}>
