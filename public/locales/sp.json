@@ -182,7 +182,8 @@
     "isPublic": "Es público",
     "isRegistrable": "Es registrable",
     "close": "Cerca",
-    "updatePost": "Actualizar publicación"
+    "updatePost": "Actualizar publicación",
+    "eventDetails": "Detalles del evento"
   },
   "orgPost": {
     "title": "Puestos Talawa",

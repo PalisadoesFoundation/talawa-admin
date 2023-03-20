@@ -186,7 +186,8 @@
     "isPublic": "Is Public",
     "isRegistrable": "Is Registrable",
     "close": "Close",
-    "updatePost": "Update Post"
+    "updatePost": "Update Post",
+    "eventDetails": "Event Details"
   },
   "orgPost": {
     "title": "Talawa Posts",

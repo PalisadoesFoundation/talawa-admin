@@ -182,7 +182,8 @@
     "isPublic": "是公開的",
     "isRegistrable": "可註冊",
     "close": "關",
-    "updatePost": "更新帖子"
+    "updatePost": "更新帖子",
+    "eventDetails": "活動詳情"
   },
   "orgPost": {
     "title": "塔拉瓦郵報",

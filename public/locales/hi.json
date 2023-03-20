@@ -182,7 +182,8 @@
     "isPublic": "सार्वजनिक है",
     "isRegistrable": "पंजीकरण योग्य है",
     "close": "बंद करना",
-    "updatePost": "अपडेट पोस्ट"
+    "updatePost": "अपडेट पोस्ट",
+    "eventDetails": "घटना की जानकारी"
   },
   "orgPost": {
     "title": "तलावा पोस्ट",

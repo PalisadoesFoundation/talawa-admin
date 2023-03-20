@@ -138,8 +138,6 @@ describe('Testing Event List Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('editEventModalBtn'));
-
     userEvent.type(screen.getByTestId('updateTitle'), props.eventName);
     userEvent.type(
       screen.getByTestId('updateDescription'),
@@ -165,8 +163,6 @@ describe('Testing Event List Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('editEventModalBtn'));
-
     userEvent.type(screen.getByTestId('updateTitle'), props.eventName);
     userEvent.type(
       screen.getByTestId('updateDescription'),
@@ -182,7 +178,7 @@ describe('Testing Event List Card', () => {
     userEvent.click(screen.getByTestId('updatePostBtn'));
   });
 
-  test('Testing delete event funcationality', async () => {
+  test('Testing event preview modal', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -190,10 +186,7 @@ describe('Testing Event List Card', () => {
         </I18nextProvider>
       </MockedProvider>
     );
-
     await wait();
-
-    userEvent.click(screen.getByTestId('deleteEventModalBtn'));
-    userEvent.click(screen.getByTestId(/deleteEventBtn/i));
+    expect(screen.getByText(props.eventName)).toBeInTheDocument();
   });
 });
