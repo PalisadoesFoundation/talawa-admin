@@ -11,6 +11,9 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from 'state/store';
 
 const MOCKS = [
   {
@@ -91,6 +94,7 @@ describe('Testing Event List Card', () => {
         </I18nextProvider>
       </MockedProvider>
     );
+    userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
 
     await wait();
 
@@ -151,6 +155,27 @@ describe('Testing Event List Card', () => {
 
     userEvent.click(screen.getByTestId('updatePostBtn'));
   });
+  test('should render props and text  elements test for the screen', async () => {
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}></I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    expect(container.textContent).not.toBe('Loading data...');
+
+    await wait();
+
+    expect(container.textContent).toMatch('Event by Title');
+    expect(container.textContent).toMatch('Events by Description');
+    expect(container.textContent).toMatch('Events by Location');
+    expect(container.textContent).toMatch('Events');
+    expect(container.textContent).toMatch('+ Create Event');
+  });
 
   test('Testing if the event is not for all day', async () => {
     render(
@@ -188,5 +213,10 @@ describe('Testing Event List Card', () => {
     );
     await wait();
     expect(screen.getByText(props.eventName)).toBeInTheDocument();
+    expect(screen.getByText(props.eventLocation)).toBeInTheDocument();
+    expect(screen.getByText(props.eventDescription)).toBeInTheDocument();
+    expect(screen.getByText(props.id)).toBeInTheDocument();
+    expect(screen.getByText(props.regDate)).toBeInTheDocument();
+    expect(screen.getByText(props.regEndDate)).toBeInTheDocument();
   });
 });
