@@ -58,6 +58,10 @@ const ForgotPassword = () => {
       /* istanbul ignore next */
       if (error.message === 'User not found') {
         toast.warn('Email is not registered.');
+      } else if (error.message === 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
       } else {
         toast.error('Error in sending mail.');
       }
@@ -100,7 +104,13 @@ const ForgotPassword = () => {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error(error.message);
+      if (error.message === 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
+      } else {
+        toast.error(error.message);
+      }
     }
   };
 

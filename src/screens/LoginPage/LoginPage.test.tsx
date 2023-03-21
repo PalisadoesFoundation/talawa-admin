@@ -7,6 +7,7 @@ import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
 import LoginPage from './LoginPage';
 import {
@@ -77,6 +78,8 @@ const MOCKS = [
   },
 ];
 
+const link = new StaticMockLink(MOCKS, true);
+
 async function wait(ms = 0) {
   await act(() => {
     return new Promise((resolve) => {
@@ -85,12 +88,67 @@ async function wait(ms = 0) {
   });
 }
 
+jest.mock('react-toastify', () => ({
+  toast: {
+    success: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+  },
+}));
+
+describe('Talawa-API server fetch check', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('Checks if Talawa-API resource is loaded successfully', async () => {
+    global.fetch = jest.fn(() => Promise.resolve({} as unknown as Response));
+
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+    });
+
+    expect(fetch).toHaveBeenCalledWith('http://localhost:4000/graphql/');
+  });
+
+  test('displays warning message when resource loading fails', async () => {
+    const mockError = new Error('Network error');
+    global.fetch = jest.fn(() => Promise.reject(mockError));
+
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+    });
+
+    expect(fetch).toHaveBeenCalledWith('http://localhost:4000/graphql/');
+  });
+});
+
 describe('Testing Login Page Screen', () => {
   test('Component Should be rendered properly', async () => {
     window.location.assign('/orglist');
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -117,7 +175,7 @@ describe('Testing Login Page Screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -158,7 +216,7 @@ describe('Testing Login Page Screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -199,7 +257,7 @@ describe('Testing Login Page Screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -232,7 +290,7 @@ describe('Testing Login Page Screen', () => {
 
   test('Testing login modal', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -259,7 +317,7 @@ describe('Testing Login Page Screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -287,7 +345,7 @@ describe('Testing Login Page Screen', () => {
 
   test('Testing change language functionality', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -310,7 +368,7 @@ describe('Testing Login Page Screen', () => {
     });
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -326,7 +384,7 @@ describe('Testing Login Page Screen', () => {
 
   test('Testing password preview feature', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -356,7 +414,7 @@ describe('Testing Login Page Screen', () => {
 
   test('Testing for the password error warning when user firsts lands on a page', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -377,7 +435,7 @@ describe('Testing Login Page Screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -402,7 +460,7 @@ describe('Testing Login Page Screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -429,7 +487,7 @@ describe('Testing Login Page Screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -454,7 +512,7 @@ describe('Testing Login Page Screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

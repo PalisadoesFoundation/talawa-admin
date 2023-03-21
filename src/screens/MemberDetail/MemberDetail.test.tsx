@@ -11,6 +11,7 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import MemberDetail, { getLanguageName, prettyDate } from './MemberDetail';
 import userEvent from '@testing-library/user-event';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
 const MOCKS1 = [
   {
@@ -113,7 +114,8 @@ const MOCKS2 = [
     },
   },
 ];
-
+const link1 = new StaticMockLink(MOCKS1, true);
+const link2 = new StaticMockLink(MOCKS2, true);
 async function wait(ms = 2) {
   await act(() => {
     return new Promise((resolve) => {
@@ -133,7 +135,7 @@ describe('MemberDetail', () => {
     };
 
     const { container, getByTestId } = render(
-      <MockedProvider addTypename={false} mocks={MOCKS1}>
+      <MockedProvider addTypename={false} link={link1}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -193,7 +195,7 @@ describe('MemberDetail', () => {
     };
 
     const { container } = render(
-      <MockedProvider addTypename={false} mocks={MOCKS1}>
+      <MockedProvider addTypename={false} link={link1}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -218,7 +220,7 @@ describe('MemberDetail', () => {
     };
 
     const { container } = render(
-      <MockedProvider addTypename={false} mocks={MOCKS2}>
+      <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -236,5 +238,28 @@ describe('MemberDetail', () => {
     expect(screen.getByTestId(/userImagePresent/i).getAttribute('src')).toBe(
       user?.image
     );
+  });
+
+  test('should call setState with 2 when button is clicked', async () => {
+    const props = {
+      id: 'rishav-jha-mech',
+    };
+
+    const { container } = render(
+      <MockedProvider addTypename={false} mocks={MOCKS1}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <MemberDetail {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    expect(container.textContent).not.toBe('Loading data...');
+    await wait();
+
+    userEvent.click(screen.getByText(/edit/i));
   });
 });

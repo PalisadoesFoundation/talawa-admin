@@ -1,6 +1,6 @@
 import React from 'react';
 import { act, render, screen } from '@testing-library/react';
-import { MockedProvider, MockLink } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 
@@ -8,6 +8,7 @@ import UserUpdate from './UserUpdate';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
 const MOCKS = [
   {
@@ -65,7 +66,7 @@ const MOCKS = [
   },
 ];
 
-const mocklink = new MockLink(MOCKS, false, { showWarnings: false });
+const link = new StaticMockLink(MOCKS, true);
 
 async function wait(ms = 5) {
   await act(() => {
@@ -85,13 +86,14 @@ describe('Testing User Update', () => {
     firstName: 'Ansh',
     lastName: 'Goyal',
     email: 'ansh@gmail.com',
+    image: new File(['hello'], 'hello.png', { type: 'image/png' }),
   };
 
   global.alert = jest.fn();
 
   test('should render props and text elements test for the page component', async () => {
     render(
-      <MockedProvider addTypename={false} link={mocklink}>
+      <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <UserUpdate {...props} />
         </I18nextProvider>
@@ -109,7 +111,8 @@ describe('Testing User Update', () => {
       formData.lastName
     );
     userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
-
+    userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
+    userEvent.click(screen.getByLabelText(/User Type/i));
     await wait();
 
     userEvent.click(screen.getByText(/Save Changes/i));
@@ -126,5 +129,6 @@ describe('Testing User Update', () => {
     expect(screen.getByPlaceholderText(/First Name/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Last Name/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Email/i)).toBeInTheDocument();
+    expect(screen.getByText(/Display Image/i)).toBeInTheDocument();
   });
 });

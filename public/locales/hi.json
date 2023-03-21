@@ -13,7 +13,8 @@
     "confirmPassword": "पासवर्ड की पुष्टि कीजिये",
     "forgotPassword": "पासवर्ड भूल गए ?",
     "enterEmail": "ईमेल दर्ज करें",
-    "enterPassword": "पास वर्ड दर्ज करें"
+    "enterPassword": "पास वर्ड दर्ज करें",
+    "doNotOwnAnAccount": "क्या आपके पास खाता नहीं है?"
   },
   "listNavbar": {
     "talawa_portal": "तलावा पोर्टल",
@@ -199,6 +200,13 @@
     "searchText": "पाठ द्वारा खोजें",
     "ptitle": "शीर्षक पोस्ट करें",
     "postDes": "आपको किस बारे में बात करनी है?"
+  },
+  "postNotFound": {
+    "post": "पोस्ट",
+    "not found!": "नहीं मिला!",
+    "organization": "संगठन",
+    "post not found!": "पोस्ट नहीं मिला!",
+    "organization not found!": "संगठन नहीं मिला!"
   },
   "orgPostCard": {
     "author": "लेखक",

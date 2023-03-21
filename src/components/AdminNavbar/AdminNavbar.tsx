@@ -7,6 +7,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import Cookies from 'js-cookie';
 import i18next from 'i18next';
+import { toast } from 'react-toastify';
 
 import styles from './AdminNavbar.module.css';
 import AboutImg from 'assets/images/defaultImg.png';
@@ -57,9 +58,15 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
             localStorage.removeItem('spamId');
             refetch();
           }
-        } catch (error) {
+        } catch (error: any) {
           /* istanbul ignore next */
-          console.log(error);
+          if (error.message === 'Failed to fetch') {
+            toast.error(
+              'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+            );
+          } else {
+            toast.error(error.message);
+          }
         }
       }
     };
@@ -68,9 +75,9 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
   }, []);
 
   useEffect(() => {
-    if (data && data.organizations[0].spamCount) {
+    if (data && data?.organizations[0].spamCount) {
       setSpamCountData(
-        data.organizations[0].spamCount.filter(
+        data?.organizations[0].spamCount.filter(
           (spam: any) => spam.isReaded === false
         )
       );
@@ -91,7 +98,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
 
   let OrgName;
   if (data) {
-    OrgName = data.organizations[0].name;
+    OrgName = data?.organizations[0].name;
   }
 
   return (
@@ -101,7 +108,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
           <div className={styles.logo}>
             {data?.organizations[0].image ? (
               <img
-                src={data.organizations[0].image}
+                src={data?.organizations[0].image}
                 className={styles.roundedcircle}
                 data-testid={'orgLogoPresent'}
               />
@@ -178,24 +185,11 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
           >
             <Dropdown className={styles.dropdowns}>
               <Dropdown.Toggle
-                variant=""
+                variant="white"
                 id="dropdown-basic"
                 data-testid="logoutDropdown"
-              >
-                {data?.organizations[0].image ? (
-                  <img
-                    src={data.organizations[0].image}
-                    className={styles.roundedcircle}
-                    data-testid="navbarOrgImagePresent"
-                  />
-                ) : (
-                  <img
-                    src={AboutImg}
-                    className={styles.roundedcircle}
-                    data-testid="navbarOrgImageAbsent"
-                  />
-                )}
-              </Dropdown.Toggle>
+                className="navbar-toggler-icon"
+              ></Dropdown.Toggle>
               <Dropdown.Menu className={styles.dropdownMenu}>
                 <Dropdown.Item
                   data-toggle="modal"
