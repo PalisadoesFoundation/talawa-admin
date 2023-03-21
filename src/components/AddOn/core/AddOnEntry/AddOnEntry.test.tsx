@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import userEvent from '@testing-library/user-event';
 import AddOnEntry from './AddOnEntry';
 import {
   ApolloClient,
@@ -61,7 +60,5 @@ describe('Testing AddOnEntry', () => {
     expect(screen.getByRole('button')).toBeInTheDocument();
     expect(screen.getByText(/uninstall/i)).toBeInTheDocument();
     expect(screen.getByText(/install/i)).toBeInTheDocument();
-
-
   });
 });
