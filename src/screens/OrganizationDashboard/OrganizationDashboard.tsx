@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useMutation, useQuery } from '@apollo/client';
@@ -8,6 +8,7 @@ import { Container } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { Trans } from 'react-i18next';
 
 import styles from './OrganizationDashboard.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
@@ -48,6 +49,8 @@ function OrganizationDashboard(): JSX.Element {
 
   const [del] = useMutation(DELETE_ORGANIZATION_MUTATION);
 
+  const [isDisabled, setIsDisabled] = useState(true);
+
   const delete_org = async () => {
     try {
       const { data } = await del({
@@ -71,6 +74,11 @@ function OrganizationDashboard(): JSX.Element {
       }
     }
   };
+
+  function handleConfirmDeleteOrg(e: any) {
+    const isMatchingOrgName = e.target.value === data.organizations[0].name;
+    setIsDisabled(!isMatchingOrgName);
+  }
 
   if (loading || loading_post || loading_event) {
     return (
@@ -112,7 +120,7 @@ function OrganizationDashboard(): JSX.Element {
                   data-testid="orgDashImgAbsent"
                 />
               )}
-              <p className={styles.tagdetailsGreen}>
+              <p className={styles.tagdetailsRed}>
                 <button
                   type="button"
                   className="mt-3"
@@ -320,20 +328,42 @@ function OrganizationDashboard(): JSX.Element {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div className="modal-body">{t('deleteMsg')}</div>
+            <div className="modal-body">
+              {t('deleteMsg')}
+              <p className={styles.orgDelConfirmTex}>
+                <Trans
+                  i18nKey="dashboard.confirmDeleteText"
+                  values={{
+                    orgName: data.organizations[0].name,
+                  }}
+                  components={{ bold: <strong /> }}
+                />
+              </p>
+              <input
+                className={styles.orgDeleteInput}
+                type="text"
+                id="orginput"
+                data-testid="orgName"
+                autoComplete="off"
+                required
+                onChange={handleConfirmDeleteOrg}
+              />
+            </div>
+
             <div className="modal-footer">
               <button
                 type="button"
-                className="btn btn-danger"
+                className="btn btn-success"
                 data-dismiss="modal"
               >
                 {t('no')}
               </button>
               <button
                 type="button"
-                className="btn btn-success"
+                className="btn btn-danger"
                 onClick={delete_org}
                 data-testid="deleteOrganizationBtn"
+                disabled={isDisabled}
               >
                 {t('yes')}
               </button>
