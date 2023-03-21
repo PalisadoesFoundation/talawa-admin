@@ -153,6 +153,27 @@ describe('Organisation Post Page', () => {
     expect(container.textContent).toMatch('+ Create Post');
   });
 
+  test('should render two radio buttons', async () => {
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    expect(container.textContent).not.toBe('Loading data...');
+
+    await wait();
+
+    expect(container.textContent).toMatch('Title');
+    expect(container.textContent).toMatch('Text');
+  });
+
   test('Testing create post functionality', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
