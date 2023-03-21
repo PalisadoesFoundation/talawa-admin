@@ -13,7 +13,8 @@
     "confirmPassword": "Confirmez le mot de passe",
     "forgotPassword": "Mot de passe oublié ?",
     "enterEmail": "entrez l'e-mail",
-    "enterPassword": "Entrer le mot de passe"
+    "enterPassword": "Entrer le mot de passe",
+    "doNotOwnAnAccount": "Vous n'avez pas de compte ?"
   },
   "listNavbar": {
     "talawa_portal": "Portail Talawa",
@@ -32,7 +33,6 @@
     "createOrganization": "Créer une organisation",
     "description": "La description",
     "location": "Emplacement",
-    "tags": "Balises (séparées par des virgules (,))",
     "isPublic": "Est publique",
     "visibleInSearch": "Visible dans la recherche",
     "displayImage": "Afficher l'image",
@@ -80,6 +80,7 @@
     "Block/Unblock": "Bloquer/Débloquer",
     "Plugins": "Plugins",
     "Plugin Store": "Magasin de plugins",
+    "allOrganizations": "Toutes les organisations",
     "notification": "Notification",
     "settings": "Réglages",
     "language": "Langue",
@@ -94,8 +95,6 @@
     "title": "Tableau de bord Talawa",
     "location": "Emplacement",
     "about": "À propos de",
-    "tags": "Mots clés",
-    "noTags": "Pas de balises",
     "deleteThisOrganization": "Supprimer cette organisation",
     "statistics": "Statistiques",
     "members": "Membres",
@@ -190,7 +189,7 @@
     "postsByTitle": "Messages par titre",
     "postsByText": "Messages par texte",
     "posts": "Des postes",
-    "createPost": "Créer un article",
+    "createPostnot found": "Créer un article",
     "postDetails": "Détails de la publication",
     "postTitle": "Titre",
     "information": "Informations",
@@ -201,6 +200,13 @@
     "searchText": "Rechercher par texte",
     "ptitle": "Titre de l'article",
     "postDes": "De quoi parlez-vous ?"
+  },
+  "postNotFound": {
+    "post": "Poste",
+    "not found!": "Pas Trouvé!",
+    "organization": "Organization",
+    "post not found!": "Poste Pas Trouvé!",
+    "organization not found!": "Organization Pas Trouvé!"
   },
   "orgPostCard": {
     "author": "Auteur",
@@ -271,6 +277,7 @@
   "orgSettings": {
     "title": "Paramètre Talawa",
     "updateYourDetails": "Mettre à jour vos informations",
+    "updateYourPassword": "Mettez à jour votre mot de passe",
     "updateOrganization": "Mettre à jour l'organisation",
     "deleteOrganization": "Supprimer l'organisation",
     "seeRequest": "Voir demande",
@@ -290,6 +297,15 @@
     "saveChanges": "Sauvegarder les modifications",
     "cancel": "Annuler"
   },
+
+  "userPasswordUpdate": {
+    "previousPassword": "mot de passe précédent",
+    "newPassword": "Nouveau mot de passe",
+    "confirmNewPassword": "Confirmer le nouveau mot de passe",
+    "saveChanges": "Sauvegarder les modifications",
+    "cancel": "Annuler"
+  },
+
   "orgDelete": {
     "deleteOrg": "Supprimer l'organisation"
   },
@@ -301,8 +317,7 @@
   "orgUpdate": {
     "name": "Nom",
     "description": "La description",
-    "creator": "Créateur",
-    "apiUrl": "URL de l'API",
+    "location": "emplacement",
     "displayImage": "Afficher l'image",
     "isPublic": "Est publique",
     "isRegistrable": "Est enregistrable",
@@ -337,5 +352,26 @@
     "enable": "Activé",
     "install": "Installer",
     "uninstall": "désinstaller"
+  },
+  "memberDetail": {
+    "title": "Détails de l'utilisateur",
+    "addAdmin": "Ajouter un administrateur",
+    "organizations": "Organisations",
+    "events": "Événements",
+    "role": "Rôle",
+    "email": "Email",
+    "createdOn": "Créé le",
+    "main": "Principal",
+    "firstName": "Prénom",
+    "lastName": "Nom de famille",
+    "memberOfOrganization": "Membre de l'organisation",
+    "language": "Langue",
+    "adminApproved": "Approuvé par l'administrateur",
+    "pluginCreationAllowed": "Autorisation de création de plugin",
+    "joined": "Rejoint",
+    "created": "Créé",
+    "adminForOrganizations": "Administrateur pour les organisations",
+    "membershipRequests": "Demandes d'adhésion",
+    "adminForEvents": "Administrateur pour les événements"
   }
 }

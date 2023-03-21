@@ -15,6 +15,7 @@ import {
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
 const MOCKS = [
   {
@@ -72,6 +73,26 @@ const MOCKS = [
     },
   },
 ];
+const MOCKS_EMPTY = [
+  {
+    request: {
+      query: ORGANIZATION_CONNECTION_LIST,
+    },
+    result: {
+      data: {
+        organizationsConnection: [],
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_ORGANIZATION_LIST,
+      variables: { id: '123' },
+    },
+  },
+];
+const link = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(MOCKS_EMPTY, true);
 
 async function wait(ms = 0) {
   await act(() => {
@@ -90,11 +111,58 @@ describe('Organisation List Page', () => {
     name: 'Dummy Organization',
     description: 'This is a dummy organization',
     location: 'Delhi, India',
-    tags: 'Shelter, NGO, Open Source',
     image: new File(['hello'], 'hello.png', { type: 'image/png' }),
   };
 
   global.alert = jest.fn();
+
+  test('Should render no organisation warning alert when there are no organization', async () => {
+    window.location.assign('/');
+
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgList />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(container.textContent).toMatch('Organizations Not Found');
+    expect(container.textContent).toMatch(
+      'Please create an organization through dashboard'
+    );
+    expect(window.location).toBeAt('/');
+  });
+
+  test('Should not render no organisation warning alert when there are no organization', async () => {
+    window.location.assign('/');
+
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgList />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(container.textContent).not.toMatch('Organizations Not Found');
+    expect(container.textContent).not.toMatch(
+      'Please create an organization through dashboard'
+    );
+    expect(window.location).toBeAt('/');
+  });
 
   test('Correct mock data should be queried', async () => {
     const dataQuery1 = MOCKS[0]?.result?.data?.organizationsConnection;
@@ -123,7 +191,7 @@ describe('Organisation List Page', () => {
     window.location.assign('/');
 
     const { container } = render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -148,7 +216,7 @@ describe('Organisation List Page', () => {
 
   test('Testing UserType from local storage', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <OrgList />
@@ -164,7 +232,7 @@ describe('Organisation List Page', () => {
 
   test('Testing Organization data is not present', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <OrgList />
@@ -180,7 +248,7 @@ describe('Organisation List Page', () => {
     localStorage.setItem('UserType', 'SUPERADMIN');
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <OrgList />
@@ -199,7 +267,7 @@ describe('Organisation List Page', () => {
     localStorage.setItem('UserType', 'SUPERADMIN');
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <OrgList />
@@ -223,7 +291,6 @@ describe('Organisation List Page', () => {
       formData.description
     );
     userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
-    userEvent.type(screen.getByPlaceholderText(/Tags/i), formData.tags);
     userEvent.click(screen.getByLabelText(/Is Public:/i));
     userEvent.click(screen.getByLabelText(/Visible In Search:/i));
     userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
@@ -237,7 +304,6 @@ describe('Organisation List Page', () => {
     expect(screen.getByPlaceholderText(/Location/i)).toHaveValue(
       formData.location
     );
-    expect(screen.getByPlaceholderText(/Tags/i)).toHaveValue(formData.tags);
     expect(screen.getByLabelText(/Is Public/i)).not.toBeChecked();
     expect(screen.getByLabelText(/Visible In Search:/i)).toBeChecked();
     expect(screen.getByLabelText(/Display Image:/i)).toBeTruthy();
@@ -248,7 +314,7 @@ describe('Organisation List Page', () => {
 
 test('Search bar filters organizations by name', async () => {
   const { container } = render(
-    <MockedProvider addTypename={false} mocks={MOCKS}>
+    <MockedProvider addTypename={false} link={link}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>

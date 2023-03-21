@@ -6,7 +6,10 @@ import { useTranslation } from 'react-i18next';
 
 import styles from './Requests.module.css';
 import ListNavbar from 'components/ListNavbar/ListNavbar';
-import { USER_LIST } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATION_CONNECTION_LIST,
+  USER_LIST,
+} from 'GraphQl/Queries/Queries';
 import {
   ACCPET_ADMIN_MUTATION,
   REJECT_ADMIN_MUTATION,
@@ -37,6 +40,18 @@ const Requests = () => {
 
   const [acceptAdminFunc] = useMutation(ACCPET_ADMIN_MUTATION);
   const [rejectAdminFunc] = useMutation(REJECT_ADMIN_MUTATION);
+
+  const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
+
+  useEffect(() => {
+    if (!dataOrgs) {
+      return;
+    }
+
+    if (dataOrgs.organizationsConnection.length === 0) {
+      toast.warning(t('noOrgError'));
+    }
+  }, [dataOrgs]);
 
   useEffect(() => {
     if (data) {
@@ -83,7 +98,14 @@ const Requests = () => {
         setUsersData(usersData.filter((user: any) => user._id !== userId));
       }
     } catch (error: any) {
-      toast.error(error.message);
+      /* istanbul ignore next */
+      if (error.message === 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
+      } else {
+        toast.error(error.message);
+      }
     }
   };
 
@@ -102,7 +124,13 @@ const Requests = () => {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error(error.message);
+      if (error.message === 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
+      } else {
+        toast.error(error.message);
+      }
     }
   };
 
@@ -202,7 +230,13 @@ const Requests = () => {
               </div>
             </div>
             <div>
-              <table>
+              <table
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
                 <tbody>
                   <tr>
                     <PaginationList

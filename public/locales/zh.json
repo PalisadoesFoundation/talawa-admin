@@ -13,7 +13,8 @@
     "confirmPassword": "確認密碼",
     "forgotPassword": "忘記密碼 ？",
     "enterEmail": "输入电子邮件",
-    "enterPassword": "输入密码"
+    "enterPassword": "输入密码",
+    "doNotOwnAnAccount": "沒有帳戶嗎？"
   },
   "listNavbar": {
     "talawa_portal": "塔拉瓦門戶",
@@ -32,7 +33,6 @@
     "createOrganization": "創建組織",
     "description": "描述",
     "location": "地點",
-    "tags": "標籤（逗號（，）分隔）",
     "isPublic": "是否公開",
     "visibleInSearch": "在搜索中可見",
     "displayImage": "顯示圖像",
@@ -80,6 +80,7 @@
     "Block/Unblock": "阻止/解除阻止",
     "Plugins": "插件",
     "Plugin Store": "插件商店",
+    "allOrganizations": "所有组织",
     "notification": "通知",
     "settings": "設置",
     "language": "語",
@@ -94,8 +95,6 @@
     "title": "塔拉瓦儀表板",
     "location": "地點",
     "about": "關於",
-    "tags": "標籤",
-    "noTags": "無標籤",
     "deleteThisOrganization": "刪除此組織",
     "statistics": "統計數據",
     "members": "成員",
@@ -202,6 +201,13 @@
     "ptitle": "帖子標題",
     "postDes": "你要談什麼？"
   },
+  "postNotFound": {
+    "post": "郵政",
+    "not found!": "未找到!",
+    "organization": "組織",
+    "post not found!": "郵政 未找到!",
+    "organization not found!": "組織 未找到!"
+  },
   "orgPostCard": {
     "author": "作者",
     "imageURL": "圖片網址",
@@ -271,6 +277,7 @@
   "orgSettings": {
     "title": "塔拉瓦設置",
     "updateYourDetails": "更新您的詳細信息",
+    "updateYourPassword": "更新您的密碼",
     "updateOrganization": "更新組織",
     "deleteOrganization": "刪除組織",
     "seeRequest": "查看請求",
@@ -290,6 +297,15 @@
     "saveChanges": "保存更改",
     "cancel": "取消"
   },
+
+  "userPasswordUpdate": {
+    "previousPassword": "以前的密碼",
+    "newPassword": "新密碼",
+    "confirmNewPassword": "確認新密碼",
+    "saveChanges": "保存更改",
+    "cancel": "取消"
+  },
+
   "orgDelete": {
     "deleteOrg": "刪除組織"
   },
@@ -301,8 +317,7 @@
   "orgUpdate": {
     "name": "姓名",
     "description": "描述",
-    "creator": "創造者",
-    "apiUrl": "API 網址",
+    "location": "地點",
     "displayImage": "顯示圖像",
     "isPublic": "是公開的",
     "isRegistrable": "可註冊",
@@ -337,5 +352,26 @@
     "enable": "启用",
     "install": "安装",
     "uninstall": "卸载"
+  },
+  "memberDetail": {
+    "title": "用户详细信息",
+    "addAdmin": "添加管理员",
+    "organizations": "组织",
+    "events": "事件",
+    "role": "角色",
+    "email": "电子邮件",
+    "createdOn": "创建于",
+    "main": "主要的",
+    "firstName": "名字",
+    "lastName": "姓氏",
+    "memberOfOrganization": "组织成员",
+    "language": "语言",
+    "adminApproved": "管理员已批准",
+    "pluginCreationAllowed": "允许创建插件",
+    "joined": "加入",
+    "created": "创建",
+    "adminForOrganizations": "组织管理员",
+    "membershipRequests": "会员申请",
+    "adminForEvents": "事件管理员"
   }
 }

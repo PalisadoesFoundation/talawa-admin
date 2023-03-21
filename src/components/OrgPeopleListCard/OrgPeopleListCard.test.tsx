@@ -7,6 +7,8 @@ import { I18nextProvider } from 'react-i18next';
 import OrgPeopleListCard from './OrgPeopleListCard';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
+import { BrowserRouter } from 'react-router-dom';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
 const MOCKS = [
   {
@@ -25,7 +27,7 @@ const MOCKS = [
     },
   },
 ];
-
+const link = new StaticMockLink(MOCKS, true);
 async function wait(ms = 0) {
   await act(() => {
     return new Promise((resolve) => {
@@ -50,10 +52,12 @@ describe('Testing Organization People List Card', () => {
     global.confirm = () => true;
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPeopleListCard {...props} />
-        </I18nextProvider>
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPeopleListCard {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
       </MockedProvider>
     );
 
@@ -71,17 +75,19 @@ describe('Testing Organization People List Card', () => {
     global.confirm = () => false;
 
     render(
-      <MockedProvider>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPeopleListCard
-            key="123"
-            id="1"
-            memberName=""
-            joinDate="20/03/2022"
-            memberImage=""
-            memberEmail=""
-          />
-        </I18nextProvider>
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPeopleListCard
+              key="123"
+              id="1"
+              memberName=""
+              joinDate="20/03/2022"
+              memberImage=""
+              memberEmail=""
+            />
+          </I18nextProvider>
+        </BrowserRouter>
       </MockedProvider>
     );
 

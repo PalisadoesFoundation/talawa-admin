@@ -13,7 +13,8 @@
     "confirmPassword": "पासवर्ड की पुष्टि कीजिये",
     "forgotPassword": "पासवर्ड भूल गए ?",
     "enterEmail": "ईमेल दर्ज करें",
-    "enterPassword": "पास वर्ड दर्ज करें"
+    "enterPassword": "पास वर्ड दर्ज करें",
+    "doNotOwnAnAccount": "क्या आपके पास खाता नहीं है?"
   },
   "listNavbar": {
     "talawa_portal": "तलावा पोर्टल",
@@ -32,7 +33,6 @@
     "createOrganization": "संगठन बनाएं",
     "description": "विवरण",
     "location": "स्थान",
-    "tags": "टैग (अल्पविराम (,) अलग)",
     "isPublic": "सार्वजनिक है",
     "visibleInSearch": "खोज में दृश्यमान",
     "displayImage": "प्रदर्शन छवि",
@@ -80,6 +80,7 @@
     "Block/Unblock": "ब्लॉक/अनब्लॉक करें",
     "Plugins": "प्लगइन्स",
     "Plugin Store": "प्लगइन स्टोर",
+    "allOrganizations": "सभी संगठन",
     "notification": "अधिसूचना",
     "settings": "समायोजन",
     "language": "भाषा",
@@ -94,8 +95,6 @@
     "title": "तलावा डैशबोर्ड",
     "location": "स्थान",
     "about": "के बारे में",
-    "tags": "टैग",
-    "noTags": "कोई टैग नहीं",
     "deleteThisOrganization": "इस संगठन को हटाएं",
     "statistics": "सांख्यिकी",
     "members": "सदस्य",
@@ -202,6 +201,13 @@
     "ptitle": "शीर्षक पोस्ट करें",
     "postDes": "आपको किस बारे में बात करनी है?"
   },
+  "postNotFound": {
+    "post": "पोस्ट",
+    "not found!": "नहीं मिला!",
+    "organization": "संगठन",
+    "post not found!": "पोस्ट नहीं मिला!",
+    "organization not found!": "संगठन नहीं मिला!"
+  },
   "orgPostCard": {
     "author": "लेखक",
     "imageURL": "छवि यूआरएल",
@@ -271,6 +277,7 @@
   "orgSettings": {
     "title": "तलावा सेटिंग",
     "updateYourDetails": "अपना विवरण अपडेट करें",
+    "updateYourPassword": "अपना पासवर्ड अपडेट करें",
     "updateOrganization": "अद्यतन संगठन",
     "deleteOrganization": "संगठन हटाएं",
     "seeRequest": "अनुरोध देखें",
@@ -290,6 +297,15 @@
     "saveChanges": "परिवर्तनों को सुरक्षित करें",
     "cancel": "रद्द करना"
   },
+
+  "userPasswordUpdate": {
+    "previousPassword": "पिछला पासवर्ड",
+    "newPassword": "नया पासवर्ड",
+    "confirmNewPassword": "नए पासवर्ड की पुष्टि करें",
+    "saveChanges": "परिवर्तनों को सुरक्षित करें",
+    "cancel": "रद्द करना"
+  },
+
   "orgDelete": {
     "deleteOrg": "संगठन हटाएं"
   },
@@ -301,8 +317,7 @@
   "orgUpdate": {
     "name": "नाम",
     "description": "विवरण",
-    "creator": "बनाने वाला",
-    "apiUrl": "एपी यूआरएल",
+    "location": "जगह",
     "displayImage": "प्रदर्शन छवि",
     "isPublic": "सार्वजनिक है",
     "isRegistrable": "पंजीकरण योग्य है",
@@ -337,5 +352,26 @@
     "enable": "सक्रिय",
     "install": "स्थापित करना",
     "uninstall": "स्थापना रद्द करें"
+  },
+  "memberDetail": {
+    "title": "उपयोगकर्ता विवरण",
+    "addAdmin": "व्यवस्थापक जोड़ें",
+    "organizations": "संगठन",
+    "events": "घटनाएं",
+    "role": "भूमिका",
+    "email": "ईमेल",
+    "createdOn": "पर बनाया गया",
+    "main": "मुख्य",
+    "firstName": "पहला नाम",
+    "lastName": "अंतिम नाम",
+    "memberOfOrganization": "संगठन का सदस्य",
+    "language": "भाषा",
+    "adminApproved": "व्यवस्थापक द्वारा स्वीकृत",
+    "pluginCreationAllowed": "प्लगइन निर्माण अनुमति दी गई",
+    "joined": "शामिल हुए",
+    "created": "बनाया गया",
+    "adminForOrganizations": "संगठनों के लिए व्यवस्थापक",
+    "membershipRequests": "सदस्यता अनुरोध",
+    "adminForEvents": "घटनाओं के लिए व्यवस्थापक"
   }
 }

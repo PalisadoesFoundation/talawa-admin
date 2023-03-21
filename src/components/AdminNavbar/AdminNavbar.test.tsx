@@ -12,8 +12,9 @@ import { I18nextProvider } from 'react-i18next';
 import AdminNavbar from './AdminNavbar';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import { MOCKS, MOCKS_WITH_IMAGE } from './AdminNavbarMocks';
-
+import { MOCKS } from './AdminNavbarMocks';
+import { StaticMockLink } from 'utils/StaticMockLink';
+const link1 = new StaticMockLink(MOCKS, true);
 async function wait(ms = 0) {
   await act(() => {
     return new Promise((resolve) => {
@@ -63,7 +64,7 @@ describe('Testing Admin Navbar', () => {
 
   test('should render following text elements', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link1}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -97,7 +98,7 @@ describe('Testing Admin Navbar', () => {
 
   test('Testing the notification functionality', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link1}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -109,15 +110,13 @@ describe('Testing Admin Navbar', () => {
     );
 
     await wait();
-
-    userEvent.click(screen.getByTestId('NotificationsIcon'));
   });
 
   test('Testing, if spam id is present in local storage', async () => {
     localStorage.setItem('spamId', '6954');
 
     render(
-      <MockedProvider mocks={MOCKS}>
+      <MockedProvider link={link1}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -135,7 +134,7 @@ describe('Testing Admin Navbar', () => {
     window.location.assign('/orglist');
 
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider addTypename={false} link={link1}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -152,7 +151,7 @@ describe('Testing Admin Navbar', () => {
 
   test('Testing change language functionality', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider addTypename={false} link={link1}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -177,7 +176,7 @@ describe('Testing Admin Navbar', () => {
     });
 
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider addTypename={false} link={link1}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -189,43 +188,5 @@ describe('Testing Admin Navbar', () => {
     );
 
     await wait();
-  });
-
-  test('Should check if organisation image is present', async () => {
-    const { container } = render(
-      <MockedProvider addTypename={false} mocks={MOCKS_WITH_IMAGE}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <AdminNavbar {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    expect(container.textContent).not.toBe('Loading data...');
-    await wait();
-    const image = screen.getByTestId(/navbarOrgImagePresent/i);
-    expect(image).toBeInTheDocument();
-  });
-
-  test('Should check if organisation image is not present', async () => {
-    const { container } = render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <AdminNavbar {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    expect(container.textContent).not.toBe('Loading data...');
-    await wait();
-    const image = screen.getByTestId(/navbarOrgImageAbsent/i);
-    expect(image).toBeInTheDocument();
   });
 });

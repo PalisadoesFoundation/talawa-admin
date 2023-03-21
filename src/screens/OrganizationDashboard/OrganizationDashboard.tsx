@@ -7,10 +7,11 @@ import { RootState } from 'state/reducers';
 import { Container } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 import styles from './OrganizationDashboard.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
-import AboutImg from 'assets/images/dogo.png';
+import AboutImg from 'assets/images/defaultImg.png';
 import {
   ORGANIZATIONS_LIST,
   ORGANIZATION_EVENT_LIST,
@@ -61,7 +62,13 @@ function OrganizationDashboard(): JSX.Element {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error(error.message);
+      if (error.message === 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
+      } else {
+        toast.error(error.message);
+      }
     }
   };
 
@@ -81,18 +88,17 @@ function OrganizationDashboard(): JSX.Element {
   return (
     <>
       <AdminNavbar targets={targets} url_1={configUrl} />
-      <Row className={styles.toporginfo}>
-        <p className={styles.toporgname}>{data.organizations[0].name}</p>
-        <p className={styles.toporgloc}>
-          {t('location')} : {data.organizations[0].location}
-        </p>
-      </Row>
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
               <h6 className={styles.titlename}>{t('about')}</h6>
-              <p>{data.organizations[0].description}</p>
+              <p className={styles.description}>
+                {data.organizations[0].description}
+              </p>
+              <p className={styles.toporgloc}>
+                {t('location')} : {data.organizations[0].location}
+              </p>
               {data.organizations[0].image ? (
                 <img
                   src={data.organizations[0].image}
@@ -106,22 +112,6 @@ function OrganizationDashboard(): JSX.Element {
                   data-testid="orgDashImgAbsent"
                 />
               )}
-              <h6 className={styles.titlename}>{t('tags')}</h6>
-              <p className={styles.tagdetails}>
-                {data.organizations[0].tags.length > 0 ? (
-                  data.organizations[0].tags.map(
-                    (tag: string, index: number) => (
-                      <button className="mb-3" key={index}>
-                        {tag}
-                      </button>
-                    )
-                  )
-                ) : (
-                  <button>{t('noTags')}</button>
-                )}
-              </p>
-              <p className={styles.tagdetails}></p>
-              <p className={styles.tagdetails}></p>
               <p className={styles.tagdetailsGreen}>
                 <button
                   type="button"
@@ -144,7 +134,17 @@ function OrganizationDashboard(): JSX.Element {
               </Row>
               <Row>
                 <Col sm={4} className="mb-5">
-                  <div className={`card ${styles.cardContainer}`}>
+                  <Link
+                    className={`card ${styles.cardContainer}`}
+                    to={`${targets
+                      .filter((target: any) => {
+                        const { name } = target;
+                        return name == 'People';
+                      })
+                      .map((target: any) => {
+                        return target.url;
+                      })}`}
+                  >
                     <div className="card-body">
                       <div className="text-center mb-3">
                         <i
@@ -158,27 +158,49 @@ function OrganizationDashboard(): JSX.Element {
                         <p className={styles.counterHead}>{t('members')}</p>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 </Col>
                 <Col sm={4} className="mb-5">
-                  <div className={`card ${styles.cardContainer}`}>
-                    <div className="card-body">
-                      <div className="text-center mb-3">
-                        <i
-                          className={`fas fa-user ${styles.dashboardIcon}`}
-                        ></i>
-                      </div>
-                      <div className="text-center">
-                        <p className={styles.counterNumber}>
-                          {data.organizations[0].admins.length}
-                        </p>
-                        <p className={styles.counterHead}>{t('admins')}</p>
+                  <Link
+                    className={`card ${styles.cardContainer}`}
+                    to={`${targets
+                      .filter((target: any) => {
+                        const { name } = target;
+                        return name == 'People';
+                      })
+                      .map((target: any) => {
+                        return target.url;
+                      })}`}
+                  >
+                    <div className={`card ${styles.cardContainer}`}>
+                      <div className="card-body">
+                        <div className="text-center mb-3">
+                          <i
+                            className={`fas fa-user ${styles.dashboardIcon}`}
+                          ></i>
+                        </div>
+                        <div className="text-center">
+                          <p className={styles.counterNumber}>
+                            {data.organizations[0].admins.length}
+                          </p>
+                          <p className={styles.counterHead}>{t('admins')}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 </Col>
                 <Col sm={4} className="mb-5">
-                  <div className={`card ${styles.cardContainer}`}>
+                  <Link
+                    className={`card ${styles.cardContainer}`}
+                    to={`${targets
+                      .filter((target: any) => {
+                        const { name } = target;
+                        return name == 'Posts';
+                      })
+                      .map((target: any) => {
+                        return target.url;
+                      })}`}
+                  >
                     <div className="card-body">
                       <div className="text-center mb-3">
                         <i
@@ -192,10 +214,20 @@ function OrganizationDashboard(): JSX.Element {
                         <p className={styles.counterHead}>{t('posts')}</p>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 </Col>
                 <Col sm={4} className="mb-5">
-                  <div className={`card ${styles.cardContainer}`}>
+                  <Link
+                    className={`card ${styles.cardContainer}`}
+                    to={`${targets
+                      .filter((target: any) => {
+                        const { name } = target;
+                        return name == 'Events';
+                      })
+                      .map((target: any) => {
+                        return target.url;
+                      })}`}
+                  >
                     <div className="card-body">
                       <div className="text-center mb-3">
                         <i
@@ -209,10 +241,20 @@ function OrganizationDashboard(): JSX.Element {
                         <p className={styles.counterHead}>{t('events')}</p>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 </Col>
                 <Col sm={4} className="mb-5">
-                  <div className={`card ${styles.cardContainer}`}>
+                  <Link
+                    className={`card ${styles.cardContainer}`}
+                    to={`${targets
+                      .filter((target: any) => {
+                        const { name } = target;
+                        return name == 'Block/Unblock';
+                      })
+                      .map((target: any) => {
+                        return target.url;
+                      })}`}
+                  >
                     <div className="card-body">
                       <div className="text-center mb-3">
                         <i
@@ -228,7 +270,7 @@ function OrganizationDashboard(): JSX.Element {
                         </p>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 </Col>
                 <Col sm={4} className="mb-5">
                   <div className={`card ${styles.cardContainer}`}>

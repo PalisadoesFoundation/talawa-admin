@@ -1,10 +1,11 @@
+import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATIONS_LIST,
   ORGANIZATION_EVENT_LIST,
   ORGANIZATION_POST_LIST,
 } from 'GraphQl/Queries/Queries';
 
-export const MOCKS_WITH_TAGGED = [
+export const MOCKS_WITHOUT_IMAGE = [
   {
     request: {
       query: ORGANIZATIONS_LIST,
@@ -49,7 +50,6 @@ export const MOCKS_WITH_TAGGED = [
               lastName: 'Smith',
               email: 'stevesmith@gmail.com',
             },
-            tags: ['Shelter', 'NGO', 'Open Source'],
             spamCount: [
               {
                 _id: '6954',
@@ -97,6 +97,20 @@ export const MOCKS_WITH_TAGGED = [
   },
   {
     request: {
+      query: DELETE_ORGANIZATION_MUTATION,
+    },
+    result: {
+      data: {
+        removeOrganization: [
+          {
+            _id: 1,
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
       query: ORGANIZATION_EVENT_LIST,
     },
     result: {
@@ -121,6 +135,7 @@ export const MOCKS_WITH_TAGGED = [
     },
   },
 ];
+
 export const MOCKS_NO_TAGS = [
   {
     request: {
@@ -166,7 +181,6 @@ export const MOCKS_NO_TAGS = [
               lastName: 'Smith',
               email: 'stevesmith@gmail.com',
             },
-            tags: [],
             spamCount: [
               {
                 _id: '6954',
@@ -238,6 +252,7 @@ export const MOCKS_NO_TAGS = [
     },
   },
 ];
+
 export const MOCKS_WITH_IMAGE = [
   {
     request: {
@@ -283,7 +298,6 @@ export const MOCKS_WITH_IMAGE = [
               lastName: 'Smith',
               email: 'stevesmith@gmail.com',
             },
-            tags: ['Shelter', 'NGO', 'Open Source'],
             spamCount: [
               {
                 _id: '6954',

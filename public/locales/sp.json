@@ -13,7 +13,8 @@
     "confirmPassword": "Confirmar contraseña",
     "forgotPassword": "Has olvidado tu contraseña ?",
     "enterEmail": "ingrese correo electrónico",
-    "enterPassword": "introducir la contraseña"
+    "enterPassword": "introducir la contraseña",
+    "doNotOwnAnAccount": "¿No tienes una cuenta?"
   },
   "listNavbar": {
     "talawa_portal": "Portal Talawa",
@@ -32,7 +33,6 @@
     "createOrganization": "Crear organización",
     "description": "Descripción",
     "location": "Ubicación",
-    "tags": "Etiquetas (coma (,) separado)",
     "isPublic": "Es público",
     "visibleInSearch": "Visible en la búsqueda",
     "displayImage": "Mostrar imagen",
@@ -80,6 +80,7 @@
     "Block/Unblock": "Bloquear/Desbloquear",
     "Plugins": "Complementos",
     "Plugin Store": "Tienda de complementos",
+    "allOrganizations": "Todas las organizaciones",
     "notification": "Notificación",
     "settings": "Ajustes",
     "language": "Idioma",
@@ -94,8 +95,6 @@
     "title": "Panel de Talawa",
     "location": "Ubicación",
     "about": "Sobre",
-    "tags": "Etiquetas",
-    "noTags": "No etiquetas",
     "deleteThisOrganization": "Eliminar esta organización",
     "statistics": "Estadísticas",
     "members": "Miembros",
@@ -202,6 +201,13 @@
     "ptitle": "Título de la entrada",
     "postDes": "¿De qué hablar?"
   },
+  "postNotFound": {
+    "post": "Publicaciones",
+    "not found!": "Extraviado!",
+    "organization": "Organización",
+    "post not found!": "Publicaciones Extraviado!",
+    "organization not found!": "Organización Extraviado!"
+  },
   "orgPostCard": {
     "author": "Autor",
     "imageURL": "URL de la imagen",
@@ -271,6 +277,7 @@
   "orgSettings": {
     "title": "Configuración Talawa",
     "updateYourDetails": "Actualiza tus datos",
+    "updateYourPassword": "Actualice su contraseña",
     "updateOrganization": "Actualizar Organización",
     "deleteOrganization": "Eliminar Organización",
     "seeRequest": "Ver Solicitud",
@@ -290,6 +297,15 @@
     "saveChanges": "Guardar cambios",
     "cancel": "Cancelar"
   },
+
+  "userPasswordUpdate": {
+    "previousPassword": "Contraseña anterior",
+    "newPassword": "Nueva contraseña",
+    "confirmNewPassword": "Confirmar nueva contraseña",
+    "saveChanges": "Guardar cambios",
+    "cancel": "Cancelar"
+  },
+
   "orgDelete": {
     "deleteOrg": "Eliminar organización"
   },
@@ -301,8 +317,7 @@
   "orgUpdate": {
     "name": "Nombre",
     "description": "Descripción",
-    "creator": "Creador",
-    "apiUrl": "URL API",
+    "location": "ubicación",
     "displayImage": "Mostrar imagen",
     "isPublic": "Es público",
     "isRegistrable": "Es registrable",
@@ -337,5 +352,26 @@
     "enable": "Activada",
     "install": "Instalar",
     "uninstall": "Desinstalar"
+  },
+  "memberDetail": {
+    "title": "Detalles del usuario",
+    "addAdmin": "Agregar administrador",
+    "organizations": "Organizaciones",
+    "events": "Eventos",
+    "role": "Rol",
+    "email": "Correo electrónico",
+    "createdOn": "Creado en",
+    "main": "Principal",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "memberOfOrganization": "Miembro de la organización",
+    "language": "Idioma",
+    "adminApproved": "Aprobado por el administrador",
+    "pluginCreationAllowed": "Permitir creación de complementos",
+    "joined": "Unido",
+    "created": "Creado",
+    "adminForOrganizations": "Administrador de organizaciones",
+    "membershipRequests": "Solicitudes de membresía",
+    "adminForEvents": "Administrador de eventos"
   }
 }

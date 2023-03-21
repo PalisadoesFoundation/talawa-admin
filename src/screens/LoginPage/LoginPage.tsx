@@ -29,6 +29,7 @@ function LoginPage(): JSX.Element {
 
   const [modalisOpen, setIsOpen] = React.useState(false);
   const [componentLoader, setComponentLoader] = useState(true);
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const [signformState, setSignFormState] = useState({
     signfirstName: '',
     signlastName: '',
@@ -40,7 +41,7 @@ function LoginPage(): JSX.Element {
     email: '',
     password: '',
   });
-
+  const [show, setShow] = useState<boolean>(false);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   const currentLanguageCode = cookies.get('i18next') || 'en';
@@ -69,6 +70,27 @@ function LoginPage(): JSX.Element {
   const [recaptcha, { loading: recaptchaLoading }] =
     useMutation(RECAPTCHA_MUTATION);
 
+  useEffect(() => {
+    async function loadResource() {
+      const resourceUrl = 'http://localhost:4000/graphql/';
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const response = await fetch(resourceUrl);
+      } catch (error: any) {
+        /* istanbul ignore next */
+        if (error.message === 'Failed to fetch') {
+          toast.error(
+            'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+          );
+        } else {
+          toast.error(error.message);
+        }
+      }
+    }
+
+    loadResource();
+  }, []);
+
   const verifyRecaptcha = async (recaptchaToken: any) => {
     try {
       const { data } = await recaptcha({
@@ -78,7 +100,7 @@ function LoginPage(): JSX.Element {
       });
 
       return data.recaptcha;
-    } catch (error) {
+    } catch (error: any) {
       /* istanbul ignore next */
       toast.error('Captcha Error!');
     }
@@ -94,7 +116,6 @@ function LoginPage(): JSX.Element {
     recaptchaRef.current?.reset();
 
     const isVerified = await verifyRecaptcha(recaptchaToken);
-
     /* istanbul ignore next */
     if (!isVerified) {
       toast.error('Please, check the captcha.');
@@ -134,17 +155,21 @@ function LoginPage(): JSX.Element {
           }
         } catch (error: any) {
           /* istanbul ignore next */
-          if (error.message) {
+          if (error.message === 'Failed to fetch') {
+            toast.error(
+              'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+            );
+          } else if (error.message) {
             toast.warn(error.message);
           } else {
             toast.error('Something went wrong, Please try after sometime.');
           }
         }
       } else {
-        toast.error('Password and Confirm password mismatches.');
+        toast.warn('Password and Confirm password mismatches.');
       }
     } else {
-      toast.error('Fill all the Details Correctly.');
+      toast.warn('Fill all the Details Correctly.');
     }
   };
 
@@ -155,7 +180,6 @@ function LoginPage(): JSX.Element {
     recaptchaRef.current?.reset();
 
     const isVerified = await verifyRecaptcha(recaptchaToken);
-
     /* istanbul ignore next */
     if (!isVerified) {
       toast.error('Please, check the captcha.');
@@ -192,8 +216,12 @@ function LoginPage(): JSX.Element {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message) {
-        toast.warn(error.message);
+      if (error.message == 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
+      } else if (error.message) {
+        toast.error(error.message);
       } else {
         toast.error('Something went wrong, Please try after sometime.');
       }
@@ -203,6 +231,10 @@ function LoginPage(): JSX.Element {
   if (componentLoader || loginLoading || signinLoading || recaptchaLoading) {
     return <div className={styles.loader}></div>;
   }
+
+  const handleShow = () => {
+    setShow(!show);
+  };
 
   return (
     <>
@@ -322,9 +354,12 @@ function LoginPage(): JSX.Element {
                   <div className={styles.passwordalert}>
                     <label>{t('password')}</label>
                     <input
-                      type="password"
+                      type={show ? 'text' : 'password'}
                       id="signpassword"
+                      data-testid="passwordField"
                       placeholder={t('password')}
+                      onFocus={() => setIsInputFocused(true)}
+                      onBlur={() => setIsInputFocused(false)}
                       required
                       value={signformState.signPassword}
                       onChange={(e) => {
@@ -334,11 +369,35 @@ function LoginPage(): JSX.Element {
                         });
                       }}
                     />
-                    <span>{t('atleast_8_char_long')}</span>
+                    <label
+                      id="showPasswordr"
+                      className={styles.showregister}
+                      onClick={handleShow}
+                      data-testid="showPasswordr"
+                    >
+                      {show ? (
+                        <i className="fas fa-eye"></i>
+                      ) : (
+                        <i className="fas fa-eye-slash"></i>
+                      )}
+                    </label>
+                    {isInputFocused &&
+                      signformState.signPassword.length < 8 && (
+                        <span data-testid="passwordCheck">
+                          {t('atleast_8_char_long')}
+                        </span>
+                      )}
+                    {!isInputFocused &&
+                      signformState.signPassword.length > 0 &&
+                      signformState.signPassword.length < 8 && (
+                        <span data-testid="passwordCheck">
+                          {t('atleast_8_char_long')}
+                        </span>
+                      )}
                   </div>
                   <label>{t('confirmPassword')}</label>
                   <input
-                    type="password"
+                    type={show ? 'text' : 'password'}
                     id="cpassword"
                     placeholder={t('confirmPassword')}
                     required
@@ -350,6 +409,12 @@ function LoginPage(): JSX.Element {
                       });
                     }}
                   />
+                  <label
+                    id="showPasswordr"
+                    className={styles.showregister}
+                    onClick={handleShow}
+                    data-testid="showPasswordr"
+                  ></label>
                   <div className="googleRecaptcha">
                     <ReCAPTCHA
                       ref={recaptchaRef}
@@ -406,21 +471,36 @@ function LoginPage(): JSX.Element {
                     });
                   }}
                 />
+
                 <label>{t('password')}</label>
-                <input
-                  type="password"
-                  id="password"
-                  className="input_box_second"
-                  placeholder={t('enterPassword')}
-                  required
-                  value={formState.password}
-                  onChange={(e) => {
-                    setFormState({
-                      ...formState,
-                      password: e.target.value,
-                    });
-                  }}
-                />
+                <div>
+                  <input
+                    type={show ? 'text' : 'password'}
+                    className="input_box_second"
+                    placeholder={t('enterPassword')}
+                    required
+                    value={formState.password}
+                    data-testid="password"
+                    onChange={(e) => {
+                      setFormState({
+                        ...formState,
+                        password: e.target.value,
+                      });
+                    }}
+                  />
+                  <label
+                    id="showPassword"
+                    className={styles.show}
+                    onClick={handleShow}
+                    data-testid="showPassword"
+                  >
+                    {show ? (
+                      <i className="fas fa-eye"></i>
+                    ) : (
+                      <i className="fas fa-eye-slash"></i>
+                    )}
+                  </label>
+                </div>
                 <div className="googleRecaptcha">
                   <ReCAPTCHA
                     ref={recaptchaRef}
@@ -429,7 +509,7 @@ function LoginPage(): JSX.Element {
                 </div>
                 <button
                   type="submit"
-                  className={styles.whiteloginbtn}
+                  className={styles.greenregbtn}
                   value="Login"
                   data-testid="loginBtn"
                 >
@@ -439,9 +519,12 @@ function LoginPage(): JSX.Element {
                   {t('forgotPassword')}
                 </Link>
                 <hr></hr>
+                <span className={styles.noaccount}>
+                  {t('doNotOwnAnAccount')}
+                </span>
                 <button
                   type="button"
-                  className={styles.greenregbtn}
+                  className={styles.whiteloginbtn}
                   value="Register"
                   onClick={hideModal}
                 >

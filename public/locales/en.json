@@ -13,7 +13,8 @@
     "confirmPassword": "Confirm Password",
     "forgotPassword": "Forgot Password ?",
     "enterEmail": "Enter Email",
-    "enterPassword": "Enter Password"
+    "enterPassword": "Enter Password",
+    "doNotOwnAnAccount": "Do not own an account?"
   },
   "listNavbar": {
     "talawa_portal": "Talawa Portal",
@@ -32,11 +33,12 @@
     "createOrganization": "Create Organization",
     "description": "Description",
     "location": "Location",
-    "tags": "Tags (Comma(,) Seperated)",
     "isPublic": "Is Public",
     "visibleInSearch": "Visible In Search",
     "displayImage": "Display Image",
-    "enterName": "Enter Name"
+    "enterName": "Enter Name",
+    "noOrgErrorTitle": "Organizations Not Found",
+    "noOrgErrorDescription": "Please create an organization through dashboard"
   },
   "superDashListCard": {
     "created": "Created",
@@ -58,7 +60,8 @@
     "admin": "ADMIN",
     "superAdmin": "SUPERADMIN",
     "user": "USER",
-    "enterName": "Enter Name"
+    "enterName": "Enter Name",
+    "noOrgError": "Organizations not found, please create an organization through dashboard"
   },
   "requests": {
     "title": "Talawa Requests",
@@ -68,7 +71,8 @@
     "email": "Email",
     "accept": "Accept",
     "reject": "Reject",
-    "enterName": "Enter Name"
+    "enterName": "Enter Name",
+    "noOrgError": "Organizations not found, please create an organization through dashboard"
   },
   "adminNavbar": {
     "talawa_portal": "Talawa Portal",
@@ -80,6 +84,7 @@
     "Block/Unblock": "Block/Unblock",
     "Plugins": "Plugins",
     "Plugin Store": "Plugin Store",
+    "allOrganizations": "All Organizations",
     "notification": "Notification",
     "settings": "Settings",
     "language": "Language",
@@ -94,8 +99,6 @@
     "title": "Talawa Dashboard",
     "location": "Location",
     "about": "About",
-    "tags": "Tags",
-    "noTags": "No Tags",
     "deleteThisOrganization": "Delete This Organization",
     "statistics": "Statistics",
     "members": "Members",
@@ -194,13 +197,20 @@
     "postDetails": "Post Details",
     "postTitle": "Title",
     "information": "Information",
-    "image": "Image",
+    "image": "Post Image",
     "video": "Video",
     "addPost": "Add Post",
     "searchTitle": "Search By Title",
     "searchText": "Search By Text",
     "ptitle": "Post Title",
     "postDes": "What do you to talk about?"
+  },
+  "postNotFound": {
+    "post": "Post",
+    "not found!": "Not Found!",
+    "organization": "Organization",
+    "post not found!": "Post Not Found!",
+    "organization not found!": "Organization Not Found!"
   },
   "orgPostCard": {
     "author": "Author",
@@ -271,6 +281,7 @@
   "orgSettings": {
     "title": "Talawa Setting",
     "updateYourDetails": "Update Your Details",
+    "updateYourPassword": "Update Your Password",
     "updateOrganization": "Update Organization",
     "deleteOrganization": "Delete Organization",
     "seeRequest": "See Request",
@@ -290,6 +301,15 @@
     "saveChanges": "Save Changes",
     "cancel": "Cancel"
   },
+
+  "userPasswordUpdate": {
+    "previousPassword": "Previous Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "saveChanges": "Save Changes",
+    "cancel": "Cancel"
+  },
+
   "orgDelete": {
     "deleteOrg": "Delete Org"
   },
@@ -301,8 +321,7 @@
   "orgUpdate": {
     "name": "Name",
     "description": "Description",
-    "creator": "Creator",
-    "apiUrl": "Api Url",
+    "location": "Location",
     "displayImage": "Display Image",
     "isPublic": "Is Public",
     "isRegistrable": "Is Registrable",
@@ -337,5 +356,26 @@
     "enable": "Enabled",
     "install": "Install",
     "uninstall": "Uninstall"
+  },
+  "memberDetail": {
+    "title": "User Details",
+    "addAdmin": "Add Admin",
+    "organizations": "Organizations",
+    "events": "Events",
+    "role": "Role",
+    "email": "Email",
+    "createdOn": "Created on",
+    "main": "Main",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "memberOfOrganization": "Member of Organization",
+    "language": "Language",
+    "adminApproved": "Admin approved",
+    "pluginCreationAllowed": "Plugin creation allowed",
+    "joined": "Joined",
+    "created": "Created",
+    "adminForOrganizations": "Admin for organizations",
+    "membershipRequests": "Membership requests",
+    "adminForEvents": "Admin for events"
   }
 }

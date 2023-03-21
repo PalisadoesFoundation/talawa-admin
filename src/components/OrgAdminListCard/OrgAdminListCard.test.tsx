@@ -7,6 +7,8 @@ import { I18nextProvider } from 'react-i18next';
 import { REMOVE_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import OrgAdminListCard from './OrgAdminListCard';
 import i18nForTest from 'utils/i18nForTest';
+import { BrowserRouter } from 'react-router-dom';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
 const MOCKS = [
   {
@@ -25,7 +27,7 @@ const MOCKS = [
     },
   },
 ];
-
+const link = new StaticMockLink(MOCKS, true);
 async function wait(ms = 0) {
   await act(() => {
     return new Promise((resolve) => {
@@ -48,10 +50,12 @@ describe('Testing Organization Admin List Card', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgAdminListCard {...props} />
-        </I18nextProvider>
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgAdminListCard {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
       </MockedProvider>
     );
 
@@ -75,10 +79,12 @@ describe('Testing Organization Admin List Card', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgAdminListCard {...props} />
-        </I18nextProvider>
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgAdminListCard {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
       </MockedProvider>
     );
 

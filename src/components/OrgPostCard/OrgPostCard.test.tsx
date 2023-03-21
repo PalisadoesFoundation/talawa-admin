@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, fireEvent } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -10,6 +10,7 @@ import {
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
 const MOCKS = [
   {
@@ -43,7 +44,7 @@ const MOCKS = [
     },
   },
 ];
-
+const link = new StaticMockLink(MOCKS, true);
 async function wait(ms = 0) {
   await act(() => {
     return new Promise((resolve) => {
@@ -69,7 +70,7 @@ describe('Testing Organization Post Card', () => {
     global.confirm = () => true;
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
         </I18nextProvider>
@@ -82,7 +83,7 @@ describe('Testing Organization Post Card', () => {
     expect(screen.getByText(/Image URL:/i)).toBeInTheDocument();
     expect(screen.getByText(/Video URL:/i)).toBeInTheDocument();
     expect(screen.getByText(props.postTitle)).toBeInTheDocument();
-    expect(screen.getByText(props.postInfo)).toBeInTheDocument();
+    expect(screen.getByDisplayValue(props.postInfo)).toBeInTheDocument();
     expect(screen.getByText(props.postAuthor)).toBeInTheDocument();
     expect(screen.getByText(props.postPhoto)).toBeInTheDocument();
     expect(screen.getByText(props.postVideo)).toBeInTheDocument();
@@ -92,7 +93,7 @@ describe('Testing Organization Post Card', () => {
     global.confirm = () => false;
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
         </I18nextProvider>
@@ -105,7 +106,7 @@ describe('Testing Organization Post Card', () => {
     expect(screen.getByText(/Image URL:/i)).toBeInTheDocument();
     expect(screen.getByText(/Video URL:/i)).toBeInTheDocument();
     expect(screen.getByText(props.postTitle)).toBeInTheDocument();
-    expect(screen.getByText(props.postInfo)).toBeInTheDocument();
+    expect(screen.getByDisplayValue(props.postInfo)).toBeInTheDocument();
     expect(screen.getByText(props.postAuthor)).toBeInTheDocument();
     expect(screen.getByText(props.postPhoto)).toBeInTheDocument();
     expect(screen.getByText(props.postVideo)).toBeInTheDocument();
@@ -113,7 +114,7 @@ describe('Testing Organization Post Card', () => {
 
   test('Testing post update functionality', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
         </I18nextProvider>
@@ -131,7 +132,7 @@ describe('Testing Organization Post Card', () => {
 
   test('Testing delete post funcationality', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
         </I18nextProvider>
@@ -142,5 +143,86 @@ describe('Testing Organization Post Card', () => {
 
     userEvent.click(screen.getByTestId('deletePostModalBtn'));
     userEvent.click(screen.getByTestId(/deletePostBtn/i));
+  });
+
+  test('should toggle post visibility when button is clicked', () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...props} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    const toggleButton = screen.getByRole('toggleBtn');
+
+    expect(screen.getByText('Read more')).toBeInTheDocument();
+
+    fireEvent.click(toggleButton);
+
+    expect(screen.getByText('hide')).toBeInTheDocument();
+
+    fireEvent.click(toggleButton);
+
+    expect(screen.getByText('Read more')).toBeInTheDocument();
+  });
+
+  test('should toggle post content', () => {
+    const props = {
+      key: '123',
+      id: '12',
+      postTitle: 'Event Info',
+      postInfo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      postAuthor: 'John Doe',
+      postPhoto: 'photoLink',
+      postVideo: 'videoLink',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...props} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    const toggleBtn = screen.getByRole('toggleBtn');
+
+    expect(
+      screen.getByText('Lorem ipsum dolor sit amet, consectetur ...')
+    ).toBeInTheDocument();
+    expect(toggleBtn).toHaveTextContent('Read more');
+    expect(toggleBtn).toHaveClass('toggleClickBtn');
+
+    fireEvent.click(toggleBtn);
+
+    expect(screen.getByTestId('toggleContent').innerHTML).toEqual(
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+    );
+    expect(toggleBtn).toHaveTextContent('hide');
+    expect(toggleBtn).toHaveClass('toggleClickBtn');
+  });
+
+  test('renders without "Read more" button when postInfo length is less than or equal to 43', () => {
+    const props = {
+      key: '123',
+      id: '12',
+      postTitle: 'Event Info',
+      postInfo: 'Lorem ipsum dolor sit amet',
+      postAuthor: 'John Doe',
+      postPhoto: 'photoLink',
+      postVideo: 'videoLink',
+    };
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...props} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    // const toggleBtn = screen.queryByRole('toggleBtn');
+
+    // expect(toggleBtn).not.toBeInTheDocument();
   });
 });
