@@ -46,9 +46,9 @@ function LoginPage(): JSX.Element {
 
   const {
     register,
-    handleSubmit,
     formState: { errors },
     getValues,
+    trigger,
   } = useForm({
     mode: 'onChange',
   });
@@ -279,7 +279,7 @@ function LoginPage(): JSX.Element {
               <div className={styles.homeright}>
                 <h1>{t('register')}</h1>
                 {/* <h2>to seamlessly manage your Organization.</h2> */}
-                <form onSubmit={handleSubmit(signup_link)}>
+                <form onSubmit={signup_link}>
                   <div className={styles.dispflex}>
                     <div>
                       <label>{t('firstName')}</label>
@@ -347,11 +347,12 @@ function LoginPage(): JSX.Element {
                           value: 8,
                           message: 'Atleast 8 Character long',
                         },
-                        onChange: (e) => {
+                        onChange: async (e) => {
                           setSignFormState({
                             ...signformState,
                             signPassword: e.target.value,
                           });
+                          await trigger('password');
                         },
                       })}
                     />
@@ -401,6 +402,9 @@ function LoginPage(): JSX.Element {
                     className={styles.greenregbtn}
                     value="Register"
                     data-testid="registrationBtn"
+                    disabled={
+                      errors.password || errors.userPassword ? true : false
+                    }
                   >
                     {t('register')}
                   </button>

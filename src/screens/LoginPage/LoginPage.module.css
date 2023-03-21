@@ -146,6 +146,10 @@ form > input {
   background-color: #1e7e34;
   border-color: #1c7430;
 }
+.greenregbtn:disabled {
+  background-color: rgba(49, 187, 107, 0.5);
+  cursor: not-allowed;
+}
 
 .navloginbtn {
   background-color: #31bb6b;
