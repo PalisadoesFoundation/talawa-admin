@@ -152,7 +152,7 @@ describe('Organisation Post Page', () => {
     expect(container.textContent).toMatch('Posts');
     expect(container.textContent).toMatch('+ Create Post');
   });
-
+  // Test : Render two radio buttons
   test('should render two radio buttons', async () => {
     const { container } = render(
       <MockedProvider addTypename={false} link={link}>
