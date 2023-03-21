@@ -1,6 +1,7 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+import userEvent from '@testing-library/user-event';
 import AddOnEntry from './AddOnEntry';
 import {
   ApolloClient,
@@ -30,9 +31,9 @@ describe('Testing AddOnEntry', () => {
   const props = {
     id: 'string',
     enabled: true,
-    title: 'string',
-    description: 'string',
-    createdBy: 'string',
+    title: 'title',
+    description: 'description',
+    createdBy: 'created',
     component: 'string',
     installed: true,
     configurable: true,
@@ -43,14 +44,24 @@ describe('Testing AddOnEntry', () => {
     },
   };
 
-  test('should render modal and take info to add plugin for registered organization', () => {
-    const { getByTestId } = render(
+  test('should render plugin info and button', () => {
+    render(
       <ApolloProvider client={client}>
         <Provider store={store}>
           <BrowserRouter>{<AddOnEntry {...props} />}</BrowserRouter>
         </Provider>
       </ApolloProvider>
     );
-    expect(getByTestId('AddOnEntry')).toBeInTheDocument();
+
+    expect(screen.getByTestId('AddOnEntry')).toBeInTheDocument();
+    expect(screen.getByLabelText('enable')).toBeEnabled();
+    expect(screen.getByText(props.title)).toBeInTheDocument();
+    expect(screen.getByText(props.description)).toBeInTheDocument();
+    expect(screen.getByText(props.createdBy)).toBeInTheDocument();
+    expect(screen.getByRole('button')).toBeInTheDocument();
+    expect(screen.getByText(/uninstall/i)).toBeInTheDocument();
+    expect(screen.getByText(/install/i)).toBeInTheDocument();
+
+
   });
 });
