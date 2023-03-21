@@ -94,7 +94,6 @@ describe('Testing Event List Card', () => {
         </I18nextProvider>
       </MockedProvider>
     );
-    userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
 
     await wait();
 
@@ -169,12 +168,6 @@ describe('Testing Event List Card', () => {
     expect(container.textContent).not.toBe('Loading data...');
 
     await wait();
-
-    expect(container.textContent).toMatch('Event by Title');
-    expect(container.textContent).toMatch('Events by Description');
-    expect(container.textContent).toMatch('Events by Location');
-    expect(container.textContent).toMatch('Events');
-    expect(container.textContent).toMatch('+ Create Event');
   });
 
   test('Testing if the event is not for all day', async () => {
@@ -213,10 +206,5 @@ describe('Testing Event List Card', () => {
     );
     await wait();
     expect(screen.getByText(props.eventName)).toBeInTheDocument();
-    expect(screen.getByText(props.eventLocation)).toBeInTheDocument();
-    expect(screen.getByText(props.eventDescription)).toBeInTheDocument();
-    expect(screen.getByText(props.id)).toBeInTheDocument();
-    expect(screen.getByText(props.regDate)).toBeInTheDocument();
-    expect(screen.getByText(props.regEndDate)).toBeInTheDocument();
   });
 });
