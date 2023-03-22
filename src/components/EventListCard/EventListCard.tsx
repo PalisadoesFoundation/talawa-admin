@@ -318,7 +318,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                 )}
                 <div className={styles.checkboxdiv}>
                   <div className={styles.dispflex}>
-                    <label htmlFor="allday">{t('allDay')}</label>
+                    <label htmlFor="allday">{t('allDay')}?</label>
                     <input
                       id="allday"
                       type="checkbox"
