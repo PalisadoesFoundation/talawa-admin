@@ -8,7 +8,6 @@ import { BrowserRouter } from 'react-router-dom';
 import 'jest-location-mock';
 
 import OrgList from './OrgList';
-import SuperDashListCard from 'components/SuperDashListCard/SuperDashListCard';
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_ORGANIZATION_LIST,
