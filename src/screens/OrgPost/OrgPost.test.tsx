@@ -148,11 +148,30 @@ describe('Organisation Post Page', () => {
 
     await wait();
 
-    expect(container.textContent).toMatch('Posts by Title');
-    expect(container.textContent).toMatch('Posts by Text');
-    expect(container.textContent).toMatch('Posts by Text');
+    expect(container.textContent).toMatch('Search Post');
     expect(container.textContent).toMatch('Posts');
     expect(container.textContent).toMatch('+ Create Post');
+  });
+  // Test : Render two radio buttons
+  test('should render two radio buttons', async () => {
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    expect(container.textContent).not.toBe('Loading data...');
+
+    await wait();
+
+    expect(container.textContent).toMatch('Title');
+    expect(container.textContent).toMatch('Text');
   });
 
   test('Testing create post functionality', async () => {
@@ -210,9 +229,7 @@ describe('Organisation Post Page', () => {
       });
     }
     await debounceWait();
-    userEvent.type(screen.getByPlaceholderText(/Search By Title/i), 'postone');
-    await debounceWait();
-    userEvent.type(screen.getByPlaceholderText(/Search By Text/i), 'THis');
+    userEvent.type(screen.getByPlaceholderText(/Search By/i), 'postone');
     await debounceWait();
   });
 
