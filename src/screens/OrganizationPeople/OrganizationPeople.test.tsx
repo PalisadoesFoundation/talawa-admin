@@ -8,14 +8,108 @@ import { I18nextProvider } from 'react-i18next';
 import OrganizationPeople from './OrganizationPeople';
 import { store } from 'state/store';
 import {
+  ORGANIZATIONS_LIST,
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST,
 } from 'GraphQl/Queries/Queries';
 import 'jest-location-mock';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import { faker } from '@faker-js/faker';
+import lodash from 'lodash';
+
+// This loop creates dummy data for members, admin and users
+const members: any[] = [];
+const admins: any[] = [];
+const users: any[] = [];
+for (let i = 0; i < 100; i++) {
+  members.push({
+    __typename: 'User',
+    _id: faker.datatype.uuid(),
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    image: null,
+    email: faker.internet.email(),
+    createdAt: faker.date.recent(),
+  });
+
+  admins.push({
+    __typename: 'User',
+    _id: faker.datatype.uuid(),
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    image: null,
+    email: faker.internet.email(),
+    createdAt: faker.date.recent(),
+  });
+
+  users.push({
+    __typename: 'User',
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    image: null,
+    _id: faker.datatype.uuid(),
+    email: faker.internet.email(),
+    userType: ['SUPERADMIN', 'USER'][i < 50 ? 0 : 1],
+    adminApproved: true,
+    organizationsBlockedBy: [],
+    createdAt: faker.date.recent(),
+  });
+}
 
 const MOCKS = [
+  {
+    request: {
+      query: ORGANIZATIONS_LIST,
+      variables: {
+        id: undefined,
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: faker.datatype.uuid(),
+            image: '',
+            creator: {
+              firstName: faker.name.firstName(),
+              lastName: faker.name.lastName(),
+              email: faker.internet.email(),
+            },
+            name: faker.company.name(),
+            description: faker.company.catchPhrase(),
+            location: faker.address.streetAddress(),
+            members: {
+              _id: faker.datatype.uuid(),
+              firstName: faker.name.firstName(),
+              lastName: faker.name.lastName(),
+              email: faker.internet.email(),
+            },
+            admins: {
+              _id: faker.datatype.uuid(),
+              firstName: faker.name.firstName(),
+              lastName: faker.name.lastName(),
+              email: faker.internet.email(),
+            },
+            membershipRequests: {
+              _id: faker.datatype.uuid(),
+              user: {
+                firstName: faker.name.firstName(),
+                lastName: faker.name.lastName(),
+                email: faker.internet.email(),
+              },
+            },
+            blockedUsers: {
+              _id: faker.datatype.uuid(),
+              firstName: faker.name.firstName(),
+              lastName: faker.name.lastName(),
+              email: faker.internet.email(),
+            },
+          },
+        ],
+      },
+    },
+  },
   {
     //These are mocks for 1st query (member list)
     request: {
@@ -40,6 +134,7 @@ const MOCKS = [
               email: 'member@gmail.com',
               createdAt: '2023-03-02T03:22:08.101Z',
             },
+            ...members,
           ],
         },
       },
@@ -59,6 +154,7 @@ const MOCKS = [
               email: 'member@gmail.com',
               createdAt: '2023-03-02T03:22:08.101Z',
             },
+            ...members,
           ],
         },
       },
@@ -89,6 +185,7 @@ const MOCKS = [
               email: 'admin@gmail.com',
               createdAt: '2023-03-02T03:22:08.101Z',
             },
+            ...admins,
           ],
         },
       },
@@ -107,6 +204,7 @@ const MOCKS = [
               email: 'admin@gmail.com',
               createdAt: '2023-03-02T03:22:08.101Z',
             },
+            ...admins,
           ],
         },
       },
@@ -145,6 +243,7 @@ const MOCKS = [
             organizationsBlockedBy: [],
             createdAt: '2023-03-03T14:24:13.084Z',
           },
+          ...users,
         ],
       },
     },
@@ -159,6 +258,22 @@ async function wait(ms = 2) {
   });
 }
 
+// The numbers added to the total number of each people type is based
+// on the number of the prepended objects in the mocks being added to
+// the generated ones
+const getTotalNumPeople = (userType: string) => {
+  switch (userType) {
+    case 'members':
+      return members.length + 1;
+    case 'users':
+      return users.length + 2;
+    case 'admins':
+      return admins.length + 1;
+  }
+};
+
+jest.setTimeout(10000);
+
 describe('Organisation People Page', () => {
   const searchData = {
     name: 'Aditya',
@@ -166,14 +281,108 @@ describe('Organisation People Page', () => {
     event: 'Event',
   };
 
+  test('The number of organizations people rendered on the DOM should be equal to the rowsPerPage state value', async () => {
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationPeople />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await screen.findByTestId('rowsPPSelect');
+
+    // Get the reference to all userTypes through the radio buttons in the DOM
+    const allPeopleTypes = Array.from(
+      screen.getByTestId('usertypelist').querySelectorAll('input[type="radio"]')
+    ).map((radioButton: HTMLInputElement | any) => radioButton.dataset?.testid);
+
+    // This variable represents the array index of currently selected UserType(i.e "member" or "admin" or "user")
+    let peopleTypeIndex = 0;
+
+    const changeRowsPerPage = async (currRowPPindex: number) => {
+      // currRowPPindex is the index of the currently selected option of rows per page dropdown
+
+      await screen.findByTestId('rowsPPSelect');
+
+      //Get the reference to the dropdown for rows per page
+      const rowsPerPageSelect: HTMLSelectElement | null =
+        screen.getByTestId('rowsPPSelect').querySelector('select') || null;
+
+      if (rowsPerPageSelect === null) {
+        throw new Error('rowsPerPageSelect is null');
+      }
+
+      // Get all possible dropdown options
+      const rowsPerPageOptions: any[] =
+        Array.from(rowsPerPageSelect?.querySelectorAll('option') || []) || [];
+
+      const peopleListContainer = screen.getByTestId('orgpeoplelist');
+
+      //Change the selected option of dropdown to the value of the current option
+      userEvent.selectOptions(
+        rowsPerPageSelect,
+        rowsPerPageOptions[currRowPPindex].textContent
+      );
+
+      const totalNumPeople =
+        rowsPerPageOptions[currRowPPindex].textContent === 'All'
+          ? getTotalNumPeople(allPeopleTypes[peopleTypeIndex])
+          : parseInt(rowsPerPageOptions[currRowPPindex].value);
+
+      expect(
+        Array.from(
+          peopleListContainer.querySelectorAll('[data-testid="peoplelistitem"]')
+        ).length
+      ).toBe(totalNumPeople);
+
+      if (rowsPerPageOptions[currRowPPindex].textContent === 'All') {
+        peopleTypeIndex += 1;
+
+        await changePeopleType();
+
+        return;
+      }
+
+      if (currRowPPindex < rowsPerPageOptions.length) {
+        currRowPPindex += 1;
+        await changeRowsPerPage(currRowPPindex);
+      }
+    };
+
+    const changePeopleType = async () => {
+      if (peopleTypeIndex === allPeopleTypes.length - 1) return;
+
+      const peopleTypeButton = screen
+        .getByTestId('usertypelist')
+        .querySelector(`input[data-testid=${allPeopleTypes[peopleTypeIndex]}]`);
+
+      if (peopleTypeButton === null) {
+        throw new Error('peopleTypeButton is null');
+      }
+
+      // Change people type
+      userEvent.click(peopleTypeButton);
+
+      await changeRowsPerPage(0);
+    };
+
+    await changePeopleType();
+  });
+
   test('Correct mock data should be queried', async () => {
     const dataQuery1 =
-      MOCKS[0]?.result?.data?.organizationsMemberConnection?.edges;
-    const dataQuery2 =
       MOCKS[1]?.result?.data?.organizationsMemberConnection?.edges;
-    const dataQuery3 = MOCKS[2]?.result?.data?.users;
+    const dataQuery2 =
+      MOCKS[2]?.result?.data?.organizationsMemberConnection?.edges;
+    const dataQuery3 = MOCKS[3]?.result?.data?.users;
 
-    expect(dataQuery1).toEqual([
+    // We use lodash to perform deep comparison on the specified objects
+    const queryMatch1 = lodash.isEqual(dataQuery1, [
       {
         __typename: 'User',
         _id: '64001660a711c62d5b4076a2',
@@ -183,9 +392,12 @@ describe('Organisation People Page', () => {
         email: 'member@gmail.com',
         createdAt: '2023-03-02T03:22:08.101Z',
       },
+      ...members,
     ]);
 
-    expect(dataQuery2).toEqual([
+    expect(queryMatch1).toBeTruthy();
+
+    const queryMatch2 = lodash.isEqual(dataQuery2, [
       {
         __typename: 'User',
         _id: '64001660a711c62d5b4076a2',
@@ -195,9 +407,11 @@ describe('Organisation People Page', () => {
         email: 'admin@gmail.com',
         createdAt: '2023-03-02T03:22:08.101Z',
       },
+      ...admins,
     ]);
+    expect(queryMatch2).toBeTruthy();
 
-    expect(dataQuery3).toEqual([
+    const queryMatch3 = lodash.isEqual(dataQuery3, [
       {
         __typename: 'User',
         firstName: 'Aditya',
@@ -222,7 +436,9 @@ describe('Organisation People Page', () => {
         organizationsBlockedBy: [],
         createdAt: '2023-03-03T14:24:13.084Z',
       },
+      ...users,
     ]);
+    expect(queryMatch3).toBeTruthy();
   });
 
   test('It is necessary to query the correct mock data.', async () => {
