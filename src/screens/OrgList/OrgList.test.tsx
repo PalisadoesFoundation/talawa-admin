@@ -16,6 +16,36 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import { faker } from '@faker-js/faker';
+import lodash from 'lodash';
+
+const organizations: any[] = [];
+
+let count = 0;
+
+for (let x = 0; x < 100; x++) {
+  count += 1;
+
+  organizations.push({
+    _id: count,
+    image: '',
+    name: faker.name.fullName(),
+    creator: {
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+    },
+    admins: [
+      {
+        _id: '1',
+      },
+    ],
+    members: {
+      _id: '123',
+    },
+    createdAt: faker.date.birthdate().toString().split('T')[0],
+    location: faker.address.city(),
+  });
+}
 
 const MOCKS = [
   {
@@ -27,12 +57,10 @@ const MOCKS = [
         organizationsConnection: [
           {
             _id: 1,
+            creator: { firstName: 'John', lastName: 'Doe' },
             image: '',
             name: 'Akatsuki',
-            creator: {
-              firstName: 'John',
-              lastName: 'Doe',
-            },
+            createdAt: '02/02/2022',
             admins: [
               {
                 _id: '123',
@@ -41,9 +69,9 @@ const MOCKS = [
             members: {
               _id: '234',
             },
-            createdAt: '02/02/2022',
             location: 'Washington DC',
           },
+          ...organizations,
         ],
       },
     },
@@ -55,20 +83,18 @@ const MOCKS = [
     },
     result: {
       data: {
-        user: [
-          {
-            firstName: 'John',
-            lastName: 'Doe',
+        user: {
+          firstName: 'John',
+          lastName: 'Doe',
+          image: '',
+          email: 'John_Does_Palasidoes@gmail.com',
+          userType: 'SUPERADMIN',
+          adminFor: {
+            _id: 1,
+            name: 'Akatsuki',
             image: '',
-            email: 'John_Does_Palasidoes@gmail.com',
-            userType: 'SUPERADMIN',
-            adminFor: {
-              _id: 1,
-              name: 'Akatsuki',
-              image: '',
-            },
           },
-        ],
+        },
       },
     },
   },
@@ -114,7 +140,55 @@ describe('Organisation List Page', () => {
     image: new File(['hello'], 'hello.png', { type: 'image/png' }),
   };
 
-  global.alert = jest.fn();
+  test('On dynamic setting of rowsPerPage, the number of organizations rendered on the dom should be changed to the selected option', async () => {
+    localStorage.setItem('id', '123');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgList />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    // Wait and confirm that the component has been rendered
+    await screen.findByTestId('rowsPPSelect');
+
+    //Get the reference to the dropdown for rows per page
+    const numRowsSelect: HTMLSelectElement | null = screen
+      .getByTestId('rowsPPSelect')
+      .querySelector('select');
+
+    if (numRowsSelect === null) {
+      throw new Error('numRowwsSelect is null');
+    }
+
+    // Get all possible options
+    const options = numRowsSelect?.querySelectorAll('option') || [];
+
+    // Change the  number of rows to display through the dropdown
+    options.forEach((option) => {
+      //Change the selected option to the value of the current option
+      userEvent.selectOptions(numRowsSelect, option.value);
+
+      // When the selected option from rowsPerPage is "All", the total number of organizations displayed
+      // is the number of organizations plus one (i.e an object is prepended to the list of mocked organizations)
+      const numOrgDisplayed =
+        option.textContent === 'All'
+          ? organizations.length + 1
+          : parseInt(option.value);
+
+      expect(
+        screen
+          .getByTestId('organizations-list')
+          .querySelectorAll('[data-testid="singleorg"]').length
+      ).toBe(numOrgDisplayed);
+    });
+  });
 
   test('Should render no organisation warning alert when there are no organization', async () => {
     window.location.assign('/');
@@ -167,7 +241,7 @@ describe('Organisation List Page', () => {
   test('Correct mock data should be queried', async () => {
     const dataQuery1 = MOCKS[0]?.result?.data?.organizationsConnection;
 
-    expect(dataQuery1).toEqual([
+    const queryMatch1 = lodash.isEqual(dataQuery1, [
       {
         _id: 1,
         creator: { firstName: 'John', lastName: 'Doe' },
@@ -184,7 +258,9 @@ describe('Organisation List Page', () => {
         },
         location: 'Washington DC',
       },
+      ...organizations,
     ]);
+    expect(queryMatch1).toBeTruthy();
   });
 
   test('Should render props and text elements test for the screen', async () => {
@@ -329,6 +405,9 @@ test('Search bar filters organizations by name', async () => {
   // Test that the search bar filters organizations by name
   const searchBar = screen.getByTestId(/searchByName/i);
   userEvent.type(searchBar, 'Akatsuki');
+
+  // Since the filtering of organizations is not done on the client side, the mocked data will always be returned
+  // All assertions written below willl therefore return a falsy result because it is not filtered based on the search query.
   expect(container.textContent).toMatch('Akatsuki');
 
   // Test that the search bar is case-insensitive
