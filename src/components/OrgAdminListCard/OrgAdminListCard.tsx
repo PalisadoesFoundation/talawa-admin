@@ -56,7 +56,7 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
   };
   return (
     <>
-      <div className={styles.peoplelistdiv}>
+      <div className={styles.peoplelistdiv} data-testid="peoplelistitem">
         <Row className={styles.memberlist}>
           {props.memberImage ? (
             <img src={props.memberImage} className={styles.memberimg} />
