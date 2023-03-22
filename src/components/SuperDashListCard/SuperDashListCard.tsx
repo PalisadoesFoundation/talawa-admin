@@ -44,9 +44,13 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
     <>
       <Row className={styles.orglist}>
         {props.image ? (
-          <img src={props.image} className={styles.orgimg} />
+          <div className={styles.orgImgContainer}>
+            <img src={props.image} className={styles.orgimg} />
+          </div>
         ) : (
-          <img src={AboutImg} className={styles.orgimg} />
+          <div className={styles.orgImgContainer}>
+            <img src={AboutImg} className={styles.orgimg} />
+          </div>
         )}
         <Col className={styles.singledetails}>
           <div className={styles.singledetails_data_left}>
