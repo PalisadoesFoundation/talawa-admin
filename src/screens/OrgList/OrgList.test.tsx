@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import 'jest-localstorage-mock';
 import userEvent from '@testing-library/user-event';
@@ -340,4 +340,12 @@ test('Search bar filters organizations by name', async () => {
   userEvent.clear(searchBar);
   userEvent.type(searchBar, 'Aka');
   expect(container.textContent).toMatch('Akatsuki');
+
+  // Test that the search bar filters all organization if there are is no search passed
+  userEvent.clear(searchBar);
+  fireEvent.change(searchBar, { target: { value: 'initial value' } });
+  expect(searchBar).toHaveValue('initial value');
+
+  fireEvent.change(searchBar, { target: { value: '' } });
+  expect(searchBar).toHaveValue('');
 });
