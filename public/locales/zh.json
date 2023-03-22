@@ -105,6 +105,7 @@
     "membershipRequests": "會員申請",
     "deleteOrganization": "刪除組織",
     "deleteMsg": "您要刪除此組織嗎？",
+    "confirmDeleteText": "請鍵入 <bold>{{orgName}}</bold> 進行確認",
     "no": "不",
     "yes": "是的"
   },

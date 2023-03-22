@@ -105,6 +105,7 @@
     "membershipRequests": "Demandes d'adhésion",
     "deleteOrganization": "Supprimer l'organisation",
     "deleteMsg": "Voulez-vous supprimer cette organisation ?",
+    "confirmDeleteText": "Veuillez saisir <bold>{{orgName}}</bold> pour confirmer",
     "no": "Non",
     "yes": "Oui"
   },

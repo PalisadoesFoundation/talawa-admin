@@ -105,6 +105,7 @@
     "membershipRequests": "Solicitudes de membresía",
     "deleteOrganization": "Eliminar Organización",
     "deleteMsg": "¿Desea eliminar esta organización?",
+    "confirmDeleteText": "Escriba <bold>{{orgName}}</bold> para confirmar",
     "no": "No",
     "yes": "Sí"
   },

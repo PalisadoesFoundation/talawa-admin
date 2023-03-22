@@ -6,9 +6,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'state/reducers';
 import { Container } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Trans } from 'react-i18next';
+import debounce from 'utils/debounce';
 
 import styles from './OrganizationDashboard.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
@@ -79,6 +79,8 @@ function OrganizationDashboard(): JSX.Element {
     const isMatchingOrgName = e.target.value === data.organizations[0].name;
     setIsDisabled(!isMatchingOrgName);
   }
+
+  const debouncedHandleConfirmDeleteOrg = debounce(handleConfirmDeleteOrg);
 
   if (loading || loading_post || loading_event) {
     return (
@@ -346,7 +348,7 @@ function OrganizationDashboard(): JSX.Element {
                 data-testid="orgName"
                 autoComplete="off"
                 required
-                onChange={handleConfirmDeleteOrg}
+                onChange={debouncedHandleConfirmDeleteOrg}
               />
             </div>
 

@@ -105,6 +105,7 @@
     "membershipRequests": "सदस्यता अनुरोध",
     "deleteOrganization": "संगठन हटाएं",
     "deleteMsg": "क्या आप इस संगठन को हटाना चाहते हैं?",
+    "confirmDeleteText": "कृपया पुष्टि करने के लिए <bold>{{orgName}}</bold> टाइप करें",
     "no": "नहीं",
     "yes": "हाँ"
   },
