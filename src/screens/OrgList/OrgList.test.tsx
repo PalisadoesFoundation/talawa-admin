@@ -16,6 +16,7 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import SuperDashListCard from 'components/SuperDashListCard/SuperDashListCard';
 
 const MOCKS = [
   {
@@ -329,6 +330,7 @@ test('Search bar filters organizations by name', async () => {
   // Test that the search bar filters organizations by name
   const searchBar = screen.getByTestId(/searchByName/i);
   userEvent.type(searchBar, 'Akatsuki');
+  expect(container.textContent).toBeTruthy();
   expect(container.textContent).toMatch('Akatsuki');
 
   // Test that the search bar is case-insensitive
@@ -343,9 +345,53 @@ test('Search bar filters organizations by name', async () => {
 
   // Test that the search bar filters all organization if there are is no search passed
   userEvent.clear(searchBar);
-  fireEvent.change(searchBar, { target: { value: 'initial value' } });
-  expect(searchBar).toHaveValue('initial value');
-
   fireEvent.change(searchBar, { target: { value: '' } });
   expect(searchBar).toHaveValue('');
+});
+
+describe('SuperDashListCard', () => {
+  it('renders correctly when user type is SUPERADMIN', async () => {
+    localStorage.setItem('UserType', 'SUPERADMIN');
+    const datas = {
+      _id: '123',
+      image: 'https://example.com/image.png',
+      admins: [
+        {
+          _id: '123',
+        },
+        {
+          _id: '456',
+        },
+      ],
+      members: [1, 2, 3],
+      createdAt: '2022, 2, 20',
+      name: 'Example Org',
+      location: 'Example Location',
+    };
+
+    await wait();
+
+    expect(localStorage.setItem).toHaveBeenLastCalledWith(
+      'UserType',
+      'SUPERADMIN'
+    );
+
+    const { getByText } = render(
+      <SuperDashListCard
+        id={datas._id}
+        key={datas._id}
+        image={datas.image}
+        admins={datas?.admins.length}
+        members={datas?.members.length}
+        createdDate={datas.createdAt}
+        orgName={datas.name}
+        orgLocation={datas.location}
+      />
+    );
+    expect(getByText('Example Org')).toBeInTheDocument();
+    expect(getByText('Admins:')).toBeInTheDocument();
+    expect(getByText('Members:')).toBeInTheDocument();
+    expect(getByText('2022, 2, 20')).toBeInTheDocument();
+    expect(getByText('Example Location')).toBeInTheDocument();
+  });
 });

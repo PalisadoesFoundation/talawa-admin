@@ -14,7 +14,7 @@ interface SuperDashListCardProps {
   createdDate: string;
   image: string;
   admins: any;
-  members: string;
+  members: any;
 }
 
 function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
