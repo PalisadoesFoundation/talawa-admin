@@ -181,12 +181,13 @@ function OrganizationPeople(): JSX.Element {
                 required
                 onChange={debouncedHandleEventTitleSearchChange}
               />
-              <div className={styles.radio_buttons}>
+              <div className={styles.radio_buttons} data-testid="usertypelist">
                 <input
                   id="userslist"
                   value="userslist"
                   name="displaylist"
                   type="radio"
+                  data-testid="users"
                   defaultChecked={state == 2 ? true : false}
                   onClick={() => {
                     setState(2);
@@ -197,6 +198,7 @@ function OrganizationPeople(): JSX.Element {
                   id="memberslist"
                   value="memberslist"
                   name="displaylist"
+                  data-testid="members"
                   type="radio"
                   defaultChecked={state == 0 ? true : false}
                   onClick={() => {
@@ -209,6 +211,7 @@ function OrganizationPeople(): JSX.Element {
                   value="adminslist"
                   name="displaylist"
                   type="radio"
+                  data-testid="admins"
                   defaultChecked={state == 1 ? true : false}
                   onClick={() => {
                     setState(1);
@@ -231,7 +234,7 @@ function OrganizationPeople(): JSX.Element {
                     : t('users')}
                 </p>
               </Row>
-              <div className={styles.list_box}>
+              <div className={styles.list_box} data-testid="orgpeoplelist">
                 {state == 0
                   ? data
                     ? (rowsPerPage > 0
@@ -347,7 +350,7 @@ function OrganizationPeople(): JSX.Element {
                 }}
               >
                 <tbody>
-                  <tr>
+                  <tr data-testid="rowsPPSelect">
                     {state == 0 ? (
                       <>
                         <PaginationList
