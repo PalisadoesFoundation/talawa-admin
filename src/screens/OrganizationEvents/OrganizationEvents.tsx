@@ -340,7 +340,12 @@ function OrganizationEvents(): JSX.Element {
               )}
               <div className={styles.checkboxdiv}>
                 <div className={styles.dispflex}>
-                  <label htmlFor="allday">{t('allDay')}?</label>
+                  <label
+                    htmlFor="allday"
+                    title="Does the event go on for the entire day"
+                  >
+                    {t('allDay')}?
+                  </label>
                   <input
                     id="allday"
                     type="checkbox"
@@ -350,7 +355,12 @@ function OrganizationEvents(): JSX.Element {
                   />
                 </div>
                 <div className={styles.dispflex}>
-                  <label htmlFor="recurring">{t('recurringEvent')}:</label>
+                  <label
+                    htmlFor="recurring"
+                    title="Events happening at regular intervals"
+                  >
+                    {t('recurringEvent')}:
+                  </label>
                   <input
                     id="recurring"
                     type="checkbox"
@@ -362,7 +372,12 @@ function OrganizationEvents(): JSX.Element {
               </div>
               <div className={styles.checkboxdiv}>
                 <div className={styles.dispflex}>
-                  <label htmlFor="ispublic">{t('isPublic')}?</label>
+                  <label
+                    htmlFor="ispublic"
+                    title="Is the event open to the public"
+                  >
+                    {t('isPublic')}?
+                  </label>
                   <input
                     id="ispublic"
                     type="checkbox"
@@ -372,7 +387,12 @@ function OrganizationEvents(): JSX.Element {
                   />
                 </div>
                 <div className={styles.dispflex}>
-                  <label htmlFor="registrable">{t('isRegistrable')}?</label>
+                  <label
+                    htmlFor="registrable"
+                    title="Does the event require registrations"
+                  >
+                    {t('isRegistrable')}?
+                  </label>
                   <input
                     id="registrable"
                     type="checkbox"
