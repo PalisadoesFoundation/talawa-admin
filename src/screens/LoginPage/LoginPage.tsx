@@ -354,7 +354,7 @@ function LoginPage(): JSX.Element {
                   <div className={styles.passwordalert}>
                     <label>{t('password')}</label>
                     <input
-                      type="password"
+                      type={show ? 'text' : 'password'}
                       id="signpassword"
                       data-testid="passwordField"
                       placeholder={t('password')}
@@ -369,6 +369,18 @@ function LoginPage(): JSX.Element {
                         });
                       }}
                     />
+                    <label
+                      id="showPasswordr"
+                      className={styles.showregister}
+                      onClick={handleShow}
+                      data-testid="showPasswordr"
+                    >
+                      {show ? (
+                        <i className="fas fa-eye"></i>
+                      ) : (
+                        <i className="fas fa-eye-slash"></i>
+                      )}
+                    </label>
                     {isInputFocused &&
                       signformState.signPassword.length < 8 && (
                         <span data-testid="passwordCheck">
@@ -385,7 +397,7 @@ function LoginPage(): JSX.Element {
                   </div>
                   <label>{t('confirmPassword')}</label>
                   <input
-                    type="password"
+                    type={show ? 'text' : 'password'}
                     id="cpassword"
                     placeholder={t('confirmPassword')}
                     required
@@ -397,6 +409,12 @@ function LoginPage(): JSX.Element {
                       });
                     }}
                   />
+                  <label
+                    id="showPasswordr"
+                    className={styles.showregister}
+                    onClick={handleShow}
+                    data-testid="showPasswordr"
+                  ></label>
                   <div className="googleRecaptcha">
                     <ReCAPTCHA
                       ref={recaptchaRef}
@@ -476,7 +494,11 @@ function LoginPage(): JSX.Element {
                     onClick={handleShow}
                     data-testid="showPassword"
                   >
-                    {show ? 'Hide' : 'Show'}
+                    {show ? (
+                      <i className="fas fa-eye"></i>
+                    ) : (
+                      <i className="fas fa-eye-slash"></i>
+                    )}
                   </label>
                 </div>
                 <div className="googleRecaptcha">
