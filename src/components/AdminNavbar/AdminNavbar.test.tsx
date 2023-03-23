@@ -189,4 +189,24 @@ describe('Testing Admin Navbar', () => {
 
     await wait();
   });
+  test('Should check if organisation image is not present', async () => {
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdminNavbar {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    expect(container.textContent).not.toBe('Loading data...');
+    await wait();
+    const imageOptions = screen.getByTestId(/navbarOrgImageAbsent/i);
+    const imageLogo = screen.getByTestId(/orgLogoAbsent/i);
+    expect(imageLogo).toBeInTheDocument();
+    expect(imageOptions).toBeInTheDocument();
+  });
 });
