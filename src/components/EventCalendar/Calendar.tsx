@@ -14,13 +14,32 @@ interface Event {
   endTime: string;
   allDay: boolean;
   recurring: boolean;
+  registrants?: Array<IEventAttendees>;
   isPublic: boolean;
   isRegisterable: boolean;
 }
+
 interface CalendarProps {
   eventData: Event[];
+  orgData?: IOrgList;
 }
-const Calendar: React.FC<CalendarProps> = ({ eventData }) => {
+
+enum Status {
+  ACTIVE = 'ACTIVE',
+  BLOCKED = 'BLOCKED',
+  DELETED = 'DELETED',
+}
+interface IEventAttendees {
+  userId: string;
+  user: string;
+  status: Status;
+  createdAT: Date;
+}
+
+interface IOrgList {
+  admins: { _id: string }[];
+}
+const Calendar: React.FC<CalendarProps> = ({ eventData, orgData }) => {
   const [selectedDate] = useState<Date | null>(null);
   const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const months = [
@@ -112,7 +131,33 @@ const Calendar: React.FC<CalendarProps> = ({ eventData }) => {
                   if (datas.startDate == dayjs(date).format('YYYY-MM-DD'))
                     return datas;
                 })
-
+                .filter((datas: Event) => {
+                  const userId: string | null = localStorage.getItem('id');
+                  const userRole: string | null =
+                    localStorage.getItem('UserType');
+                  const data: Event[] = [];
+                  if (userRole === 'SUPERADMIN') return datas;
+                  if (datas.isPublic) data.push(datas);
+                  if (!datas.isPublic) {
+                    if (userRole === 'ADMIN') {
+                      const filteredOrg: boolean | undefined =
+                        orgData &&
+                        orgData.admins?.some(
+                          (data: { _id: string }) =>
+                            userId && data._id === JSON.parse(userId)
+                        );
+                      if (filteredOrg) data.push(datas);
+                    } else {
+                      const userAttending = datas.registrants?.some(
+                        (data) => userId && data.userId === JSON.parse(userId)
+                      );
+                      if (userAttending) {
+                        data.push(datas);
+                      }
+                    }
+                  }
+                  return data;
+                })
                 .map((datas: Event) => {
                   return (
                     <EventListCard
