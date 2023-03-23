@@ -5,10 +5,9 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useSelector } from 'react-redux';
 import { RootState } from 'state/reducers';
 import { Container } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
-
 import styles from './OrganizationDashboard.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import AboutImg from 'assets/images/defaultImg.png';
@@ -138,8 +137,7 @@ function OrganizationDashboard(): JSX.Element {
                     className={`card ${styles.cardContainer}`}
                     to={`${targets
                       .filter((target: any) => {
-                        const { name } = target;
-                        return name == 'People';
+                        return target.name == 'People';
                       })
                       .map((target: any) => {
                         return target.url;
@@ -165,8 +163,7 @@ function OrganizationDashboard(): JSX.Element {
                     className={`card ${styles.cardContainer}`}
                     to={`${targets
                       .filter((target: any) => {
-                        const { name } = target;
-                        return name == 'People';
+                        return target.name == 'People';
                       })
                       .map((target: any) => {
                         return target.url;
@@ -194,8 +191,7 @@ function OrganizationDashboard(): JSX.Element {
                     className={`card ${styles.cardContainer}`}
                     to={`${targets
                       .filter((target: any) => {
-                        const { name } = target;
-                        return name == 'Posts';
+                        return target.name == 'Posts';
                       })
                       .map((target: any) => {
                         return target.url;
@@ -221,8 +217,7 @@ function OrganizationDashboard(): JSX.Element {
                     className={`card ${styles.cardContainer}`}
                     to={`${targets
                       .filter((target: any) => {
-                        const { name } = target;
-                        return name == 'Events';
+                        return target.name == 'Events';
                       })
                       .map((target: any) => {
                         return target.url;
@@ -248,8 +243,7 @@ function OrganizationDashboard(): JSX.Element {
                     className={`card ${styles.cardContainer}`}
                     to={`${targets
                       .filter((target: any) => {
-                        const { name } = target;
-                        return name == 'Block/Unblock';
+                        return target.name == 'Block/Unblock';
                       })
                       .map((target: any) => {
                         return target.url;
