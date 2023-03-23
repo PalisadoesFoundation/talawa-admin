@@ -11,6 +11,7 @@ import 'jest-location-mock';
 import { store } from 'state/store';
 import OrgSettings from './OrgSettings';
 import i18nForTest from 'utils/i18nForTest';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
 const MOCKS = [
   {
@@ -37,7 +38,7 @@ const MOCKS = [
     },
   },
 ];
-
+const link = new StaticMockLink(MOCKS, true);
 async function wait(ms = 0) {
   await act(() => {
     return new Promise((resolve) => {
@@ -67,7 +68,7 @@ describe('Organisation Settings Page', () => {
     window.location.assign('/orglist');
 
     const { container } = render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

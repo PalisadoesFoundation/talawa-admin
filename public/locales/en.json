@@ -13,7 +13,8 @@
     "confirmPassword": "Confirm Password",
     "forgotPassword": "Forgot Password ?",
     "enterEmail": "Enter Email",
-    "enterPassword": "Enter Password"
+    "enterPassword": "Enter Password",
+    "doNotOwnAnAccount": "Do not own an account?"
   },
   "listNavbar": {
     "talawa_portal": "Talawa Portal",
@@ -35,7 +36,9 @@
     "isPublic": "Is Public",
     "visibleInSearch": "Visible In Search",
     "displayImage": "Display Image",
-    "enterName": "Enter Name"
+    "enterName": "Enter Name",
+    "noOrgErrorTitle": "Organizations Not Found",
+    "noOrgErrorDescription": "Please create an organization through dashboard"
   },
   "superDashListCard": {
     "created": "Created",
@@ -57,7 +60,8 @@
     "admin": "ADMIN",
     "superAdmin": "SUPERADMIN",
     "user": "USER",
-    "enterName": "Enter Name"
+    "enterName": "Enter Name",
+    "noOrgError": "Organizations not found, please create an organization through dashboard"
   },
   "requests": {
     "title": "Talawa Requests",
@@ -67,7 +71,8 @@
     "email": "Email",
     "accept": "Accept",
     "reject": "Reject",
-    "enterName": "Enter Name"
+    "enterName": "Enter Name",
+    "noOrgError": "Organizations not found, please create an organization through dashboard"
   },
   "adminNavbar": {
     "talawa_portal": "Talawa Portal",
@@ -185,20 +190,28 @@
   },
   "orgPost": {
     "title": "Talawa Posts",
-    "postsByTitle": "Posts by Title",
-    "postsByText": "Posts by Text",
+    "searchPost": "Search Post",
     "posts": "Posts",
     "createPost": "Create Post",
     "postDetails": "Post Details",
     "postTitle": "Title",
     "information": "Information",
-    "image": "Image",
+    "image": "Post Image",
     "video": "Video",
     "addPost": "Add Post",
     "searchTitle": "Search By Title",
     "searchText": "Search By Text",
     "ptitle": "Post Title",
-    "postDes": "What do you to talk about?"
+    "postDes": "What do you to talk about?",
+    "Title": "Title",
+    "Text": "Text"
+  },
+  "postNotFound": {
+    "post": "Post",
+    "not found!": "Not Found!",
+    "organization": "Organization",
+    "post not found!": "Post Not Found!",
+    "organization not found!": "Organization Not Found!"
   },
   "orgPostCard": {
     "author": "Author",

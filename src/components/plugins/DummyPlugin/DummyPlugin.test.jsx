@@ -7,11 +7,12 @@ import { I18nextProvider } from 'react-i18next';
 import { store } from 'state/store';
 import DummyPlugin from './DummyPlugin';
 import i18nForTest from 'utils/i18nForTest';
-
+import { StaticMockLink } from 'utils/StaticMockLink';
+const link = new StaticMockLink([], true);
 describe('Testing dummy plugin', () => {
   test('should render props and text elements test for the page component', () => {
     const { getByText } = render(
-      <MockedProvider>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

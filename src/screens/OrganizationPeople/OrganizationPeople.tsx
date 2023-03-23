@@ -183,6 +183,17 @@ function OrganizationPeople(): JSX.Element {
               />
               <div className={styles.radio_buttons}>
                 <input
+                  id="userslist"
+                  value="userslist"
+                  name="displaylist"
+                  type="radio"
+                  defaultChecked={state == 2 ? true : false}
+                  onClick={() => {
+                    setState(2);
+                  }}
+                />
+                <label htmlFor="userslist">{t('users')}</label>
+                <input
                   id="memberslist"
                   value="memberslist"
                   name="displaylist"
@@ -204,17 +215,6 @@ function OrganizationPeople(): JSX.Element {
                   }}
                 />
                 <label htmlFor="adminslist">{t('admins')}</label>
-                <input
-                  id="userslist"
-                  value="userslist"
-                  name="displaylist"
-                  type="radio"
-                  defaultChecked={state == 2 ? true : false}
-                  onClick={() => {
-                    setState(2);
-                  }}
-                />
-                <label htmlFor="userslist">{t('users')}</label>
               </div>
             </div>
           </div>
@@ -223,7 +223,13 @@ function OrganizationPeople(): JSX.Element {
           <Container>
             <div className={styles.mainpageright}>
               <Row className={styles.justifysp}>
-                <p className={styles.logintitle}>{t('members')}</p>
+                <p className={styles.logintitle}>
+                  {state == 0
+                    ? t('members')
+                    : state == 1
+                    ? t('admins')
+                    : t('users')}
+                </p>
               </Row>
               <div className={styles.list_box}>
                 {state == 0

@@ -12,6 +12,7 @@ import { store } from 'state/store';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import userEvent from '@testing-library/user-event';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
 const MOCKS = [
   {
@@ -100,6 +101,8 @@ const MOCKS = [
     },
   },
 ];
+const link = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink([], true);
 
 async function wait(ms = 0) {
   await act(() => {
@@ -172,7 +175,7 @@ describe('Organisation Events Page', () => {
     window.location.assign('/orglist');
 
     const { container } = render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -195,7 +198,7 @@ describe('Organisation Events Page', () => {
 
   test('No mock data', async () => {
     render(
-      <MockedProvider>
+      <MockedProvider link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -211,7 +214,7 @@ describe('Organisation Events Page', () => {
 
   test('Testing filter functionality', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -245,7 +248,7 @@ describe('Organisation Events Page', () => {
 
   test('Testing toggling of Create event modal', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -265,7 +268,7 @@ describe('Organisation Events Page', () => {
 
   test('Testing Create event modal', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -338,7 +341,7 @@ describe('Organisation Events Page', () => {
 
   test('Testing if the event is not for all day', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

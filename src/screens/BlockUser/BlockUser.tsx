@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 
 import styles from './BlockUser.module.css';
-import { USER_LIST } from 'GraphQl/Queries/Queries';
+import { MEMBERS_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import { RootState } from 'state/reducers';
 import {
@@ -22,7 +22,7 @@ const Requests = () => {
 
   document.title = t('title');
 
-  const [usersData, setUsersData] = useState([]);
+  const [membersArray, setMembersArray] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [searchByName, setSearchByName] = useState('');
@@ -38,18 +38,31 @@ const Requests = () => {
     error,
     refetch,
   } = useQuery(USER_LIST);
+
+  const { data: data_2 } = useQuery(MEMBERS_LIST, {
+    variables: {
+      id: currentUrl,
+    },
+  });
+
   const [blockUser] = useMutation(BLOCK_USER_MUTATION);
   const [unBlockUser] = useMutation(UNBLOCK_USER_MUTATION);
 
   useEffect(() => {
-    if (data) {
-      setUsersData(data.users);
+    if (data_2) {
+      setMembersArray(data_2.organizations[0].members);
     }
-  }, [data]);
+  }, [data, data_2]);
 
   if (spammers_loading) {
     return <div className="loader"></div>;
   }
+
+  const memberIds = membersArray.map((user: { _id: string }) => user._id);
+
+  const memberUsersData = data.users.filter((user: { _id: string }) =>
+    memberIds.includes(user._id)
+  );
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -171,11 +184,11 @@ const Requests = () => {
                   </thead>
                   <tbody>
                     {(rowsPerPage > 0
-                      ? usersData.slice(
+                      ? memberUsersData.slice(
                           page * rowsPerPage,
                           page * rowsPerPage + rowsPerPage
                         )
-                      : usersData
+                      : memberUsersData
                     ).map(
                       (
                         user: {
@@ -232,7 +245,7 @@ const Requests = () => {
                 <tbody>
                   <tr>
                     <PaginationList
-                      count={usersData.length}
+                      count={memberUsersData.length}
                       rowsPerPage={rowsPerPage}
                       page={page}
                       onPageChange={handleChangePage}

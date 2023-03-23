@@ -13,7 +13,8 @@
     "confirmPassword": "Confirmar contraseña",
     "forgotPassword": "Has olvidado tu contraseña ?",
     "enterEmail": "ingrese correo electrónico",
-    "enterPassword": "introducir la contraseña"
+    "enterPassword": "introducir la contraseña",
+    "doNotOwnAnAccount": "¿No tienes una cuenta?"
   },
   "listNavbar": {
     "talawa_portal": "Portal Talawa",
@@ -185,8 +186,7 @@
   },
   "orgPost": {
     "title": "Puestos Talawa",
-    "postsByTitle": "Publicaciones por título",
-    "postsByText": "Publicaciones por Texto",
+    "searchPost": "Buscar publicación",
     "posts": "Publicaciones",
     "createPost": "Crear publicación",
     "postDetails": "Detalles de la publicación",
@@ -198,7 +198,16 @@
     "searchTitle": "Buscar por título",
     "searchText": "Buscar por texto",
     "ptitle": "Título de la entrada",
-    "postDes": "¿De qué hablar?"
+    "postDes": "¿De qué hablar?",
+    "Title": "Título",
+    "Text": "Texto"
+  },
+  "postNotFound": {
+    "post": "Publicaciones",
+    "not found!": "Extraviado!",
+    "organization": "Organización",
+    "post not found!": "Publicaciones Extraviado!",
+    "organization not found!": "Organización Extraviado!"
   },
   "orgPostCard": {
     "author": "Autor",

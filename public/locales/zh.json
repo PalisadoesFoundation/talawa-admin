@@ -13,7 +13,8 @@
     "confirmPassword": "確認密碼",
     "forgotPassword": "忘記密碼 ？",
     "enterEmail": "输入电子邮件",
-    "enterPassword": "输入密码"
+    "enterPassword": "输入密码",
+    "doNotOwnAnAccount": "沒有帳戶嗎？"
   },
   "listNavbar": {
     "talawa_portal": "塔拉瓦門戶",
@@ -185,8 +186,7 @@
   },
   "orgPost": {
     "title": "塔拉瓦郵報",
-    "postsByTitle": "按標題的帖子",
-    "postsByText": "文字帖子",
+    "searchPost": "搜索帖子",
     "posts": "帖子",
     "createPost": "創建帖子",
     "postDetails": "發布詳細信息",
@@ -198,7 +198,16 @@
     "searchTitle": "按標題搜索",
     "searchText": "按文本搜索",
     "ptitle": "帖子標題",
-    "postDes": "你要談什麼？"
+    "postDes": "你要談什麼？",
+    "Title": "標題",
+    "Text": "文本"
+  },
+  "postNotFound": {
+    "post": "郵政",
+    "not found!": "未找到!",
+    "organization": "組織",
+    "post not found!": "郵政 未找到!",
+    "organization not found!": "組織 未找到!"
   },
   "orgPostCard": {
     "author": "作者",

@@ -7,6 +7,7 @@ import OrgUpdate from './OrgUpdate';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
 const MOCKS = [
   {
@@ -102,7 +103,7 @@ const MOCKS = [
     },
   },
 ];
-
+const link = new StaticMockLink(MOCKS, true);
 async function wait(ms = 0) {
   await act(() => {
     return new Promise((resolve) => {
@@ -131,7 +132,7 @@ describe('Testing Organization Update', () => {
   test('should render props and text elements test for the page component', async () => {
     //window.location.assign('/orgsetting/id=123');
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgUpdate {...props} />
         </I18nextProvider>
@@ -148,7 +149,7 @@ describe('Testing Organization Update', () => {
     );
     userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
     userEvent.upload(
-      screen.getByLabelText(/display image:/i),
+      screen.getByLabelText(/Display Image:/i),
       formData.displayImage
     );
     userEvent.click(screen.getByLabelText(/Is Public:/i));
