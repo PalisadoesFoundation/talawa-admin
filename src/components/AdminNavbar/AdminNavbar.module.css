@@ -93,6 +93,11 @@ a {
   transition: smooth;
   padding-bottom: 10px;
 }
+.navlinks_dropdown {
+  margin-top: 5px !important;
+  color: rgba(0, 0, 0, 0.5) !important;
+  border-radius: 0px;
+}
 .navlinks:hover,
 .navlinks_dropdown:hover {
   text-decoration: none;
@@ -132,7 +137,7 @@ a {
 .dropdowntoggle {
   display: flex !important;
   align-items: center !important;
-  margin-top: 0px;
+  margin-top: 10px;
   margin-left: 15px;
 }
 
