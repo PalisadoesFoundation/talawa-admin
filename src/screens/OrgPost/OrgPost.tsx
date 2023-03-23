@@ -139,13 +139,13 @@ function OrgPost(): JSX.Element {
   const debouncedHandleSearchByTitle = debounce(handleSearchByTitle);
   const debouncedHandleSearchByText = debounce(handleSearchByText);
 
-  let ReversedPostsList;
-  //the above variable is defined to reverse the list of posts so the the most recently added posts should be displayed at the top.
-  if (data) {
-    ReversedPostsList = data.postsByOrganizationConnection.edges
-      .slice()
-      .reverse();
-  }
+  // let ReversedPostsList;
+  // //the above variable is defined to reverse the list of posts so the the most recently added posts should be displayed at the top.
+  // if (data) {
+  //   ReversedPostsList = data.postsByOrganizationConnection.edges
+  //     .slice()
+  //     .reverse();
+  // }
   return (
     <>
       <AdminNavbar targets={targets} url_1={configUrl} />
@@ -186,18 +186,18 @@ function OrgPost(): JSX.Element {
               </Button>
             </Row>
             <div className={`row ${styles.list_box}`}>
-              {data && ReversedPostsList.length > 0 ? (
+              {data && data.postsByOrganizationConnection.edges.length > 0 ? (
                 (rowsPerPage > 0
-                  ? ReversedPostsList.slice(
+                  ? data.postsByOrganizationConnection.edges.slice(
                       page * rowsPerPage,
                       page * rowsPerPage + rowsPerPage
                     )
                   : rowsPerPage > 0
-                  ? ReversedPostsList.slice(
+                  ? data.postsByOrganizationConnection.edges.slice(
                       page * rowsPerPage,
                       page * rowsPerPage + rowsPerPage
                     )
-                  : ReversedPostsList
+                  : data.postsByOrganizationConnection.edges
                 ).map(
                   (datas: {
                     _id: string;
