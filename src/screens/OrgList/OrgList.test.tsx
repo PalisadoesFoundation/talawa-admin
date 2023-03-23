@@ -1,6 +1,12 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen } from '@testing-library/react';
+import {
+  act,
+  getByTestId,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import { Provider } from 'react-redux';
 import 'jest-localstorage-mock';
 import userEvent from '@testing-library/user-event';
@@ -19,15 +25,29 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { faker } from '@faker-js/faker';
 import lodash from 'lodash';
 
-const organizations: any[] = [];
+type Organization = {
+  _id: string;
+  image: string;
+  name: string;
+  creator: {
+    firstName: string;
+    lastName: string;
+  };
+  admins: {
+    _id: string;
+  }[];
+  members: {
+    _id: string;
+  };
+  createdAt: string;
+  location: string;
+};
 
-let count = 0;
+const organizations: Organization[] = [];
 
 for (let x = 0; x < 100; x++) {
-  count += 1;
-
   organizations.push({
-    _id: count,
+    _id: faker.datatype.uuid(),
     image: '',
     name: faker.name.fullName(),
     creator: {
@@ -36,13 +56,13 @@ for (let x = 0; x < 100; x++) {
     },
     admins: [
       {
-        _id: '1',
+        _id: faker.datatype.uuid(),
       },
     ],
     members: {
-      _id: '123',
+      _id: faker.datatype.uuid(),
     },
-    createdAt: faker.date.birthdate().toString().split('T')[0],
+    createdAt: faker.date.birthdate().toString(),
     location: faker.address.city(),
   });
 }
