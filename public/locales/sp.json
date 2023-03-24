@@ -229,7 +229,16 @@
     "ptitle": "Título de la entrada",
     "postDes": "¿De qué hablar?",
     "toastSuccess": "¡Felicidades! Has publicado algo.",
-    "toastError": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
+    "toastError": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
+    "Title": "Título",
+    "Text": "Texto"
+  },
+  "postNotFound": {
+    "post": "Publicaciones",
+    "not found!": "Extraviado!",
+    "organization": "Organización",
+    "post not found!": "Publicaciones Extraviado!",
+    "organization not found!": "Organización Extraviado!"
   },
   "orgPostCard": {
     "author": "Autor",

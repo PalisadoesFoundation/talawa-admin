@@ -46,7 +46,9 @@
     "displayImage": "Display Image",
     "enterName": "Enter Name",
     "toastSuccess": "Congratulation the Organization is created",
-    "toastError": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
+    "toastError": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
+    "noOrgErrorTitle": "Organizations Not Found",
+    "noOrgErrorDescription": "Please create an organization through dashboard"
   },
   "superDashListCard": {
     "created": "Created",
@@ -70,7 +72,8 @@
     "user": "USER",
     "enterName": "Enter Name",
     "toastRoleUpdate": "Role Updated.",
-    "toastError": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
+    "toastError": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
+    "noOrgError": "Organizations not found, please create an organization through dashboard"
   },
   "requests": {
     "title": "Talawa Requests",
@@ -83,7 +86,8 @@
     "enterName": "Enter Name",
     "toastSuccess1": "User Approved",
     "toastSuccess2": "User Rejected",
-    "toastError": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
+    "toastError": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
+    "noOrgError": "Organizations not found, please create an organization through dashboard"
   },
   "adminNavbar": {
     "talawa_portal": "Talawa Portal",
@@ -229,7 +233,16 @@
     "ptitle": "Post Title",
     "postDes": "What do you to talk about?",
     "toastSuccess": "Congratulations! You have Posted Something.",
-    "toastError": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
+    "toastError": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
+    "Title": "Title",
+    "Text": "Text"
+  },
+  "postNotFound": {
+    "post": "Post",
+    "not found!": "Not Found!",
+    "organization": "Organization",
+    "post not found!": "Post Not Found!",
+    "organization not found!": "Organization Not Found!"
   },
   "orgPostCard": {
     "author": "Author",

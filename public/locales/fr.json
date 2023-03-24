@@ -229,7 +229,16 @@
     "ptitle": "Titre de l'article",
     "postDes": "De quoi parlez-vous ?",
     "toastSuccess": "Toutes nos félicitations! Vous avez posté quelque chose.",
-    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
+    "toastError": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau.",
+    "Title": "Titre",
+    "Text": "Texte"
+  },
+  "postNotFound": {
+    "post": "Poste",
+    "not found!": "Pas Trouvé!",
+    "organization": "Organization",
+    "post not found!": "Poste Pas Trouvé!",
+    "organization not found!": "Organization Pas Trouvé!"
   },
   "orgPostCard": {
     "author": "Auteur",

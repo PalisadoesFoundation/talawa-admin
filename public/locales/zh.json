@@ -229,7 +229,16 @@
     "ptitle": "帖子標題",
     "postDes": "你要談什麼？",
     "toastSuccess": "恭喜！你發布了一些東西。",
-    "toastError": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
+    "toastError": "服務不可用。它在運行嗎？還要檢查您的網絡連接。",
+    "Title": "標題",
+    "Text": "文本"
+  },
+  "postNotFound": {
+    "post": "郵政",
+    "not found!": "未找到!",
+    "organization": "組織",
+    "post not found!": "郵政 未找到!",
+    "organization not found!": "組織 未找到!"
   },
   "orgPostCard": {
     "author": "作者",
