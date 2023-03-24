@@ -10,3 +10,4 @@ deployments:
       - yarn
     launch_steps:
       - yarn serve
+    port_forwarding: 80:3000
