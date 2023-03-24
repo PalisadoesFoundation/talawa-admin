@@ -75,6 +75,7 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
                 onClick={handleClick}
                 disabled={
                   userType !== 'SUPERADMIN' &&
+                  props.admins.length > 0 &&
                   !props.admins.some((admin: any) => admin._id === userId)
                 }
               >

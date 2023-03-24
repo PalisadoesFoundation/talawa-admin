@@ -13,7 +13,7 @@ interface AdminDashListCardProps {
   createdDate: string;
   image: string;
   admins: any;
-  members: string;
+  members: any;
 }
 
 function AdminDashListCard(props: AdminDashListCardProps): JSX.Element {
@@ -61,6 +61,7 @@ function AdminDashListCard(props: AdminDashListCardProps): JSX.Element {
                 className={styles.orgfontcreatedbtn}
                 onClick={Click}
                 disabled={
+                  props.admins.length > 0 &&
                   !props.admins.some((admin: any) => admin._id === userId)
                 }
               >
