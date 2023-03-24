@@ -1,18 +1,11 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import {
-  act,
-  getByTestId,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import 'jest-localstorage-mock';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import 'jest-location-mock';
-
 import OrgList from './OrgList';
 import {
   ORGANIZATION_CONNECTION_LIST,
