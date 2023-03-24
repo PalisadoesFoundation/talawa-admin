@@ -137,7 +137,8 @@ function OrganizationDashboard(): JSX.Element {
                     className={`card ${styles.cardContainer}`}
                     to={`${targets
                       .filter((target: any) => {
-                        return target.name == 'People';
+                        const { name } = target;
+                        return name == 'People';
                       })
                       .map((target: any) => {
                         return target.url;
@@ -163,7 +164,8 @@ function OrganizationDashboard(): JSX.Element {
                     className={`card ${styles.cardContainer}`}
                     to={`${targets
                       .filter((target: any) => {
-                        return target.name == 'People';
+                        const { name } = target;
+                        return name == 'People';
                       })
                       .map((target: any) => {
                         return target.url;
@@ -191,7 +193,8 @@ function OrganizationDashboard(): JSX.Element {
                     className={`card ${styles.cardContainer}`}
                     to={`${targets
                       .filter((target: any) => {
-                        return target.name == 'Posts';
+                        const { name } = target;
+                        return name == 'Posts';
                       })
                       .map((target: any) => {
                         return target.url;
@@ -217,7 +220,8 @@ function OrganizationDashboard(): JSX.Element {
                     className={`card ${styles.cardContainer}`}
                     to={`${targets
                       .filter((target: any) => {
-                        return target.name == 'Events';
+                        const { name } = target;
+                        return name == 'Events';
                       })
                       .map((target: any) => {
                         return target.url;
@@ -243,7 +247,8 @@ function OrganizationDashboard(): JSX.Element {
                     className={`card ${styles.cardContainer}`}
                     to={`${targets
                       .filter((target: any) => {
-                        return target.name == 'Block/Unblock';
+                        const { name } = target;
+                        return name == 'Block/Unblock';
                       })
                       .map((target: any) => {
                         return target.url;
