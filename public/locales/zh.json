@@ -214,8 +214,7 @@
   },
   "orgPost": {
     "title": "塔拉瓦郵報",
-    "postsByTitle": "按標題的帖子",
-    "postsByText": "文字帖子",
+    "searchPost": "搜索帖子",
     "posts": "帖子",
     "createPost": "創建帖子",
     "postDetails": "發布詳細信息",

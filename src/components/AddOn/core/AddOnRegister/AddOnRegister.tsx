@@ -18,9 +18,8 @@ interface formStateTypes {
   pluginInstallStatus: boolean;
   installedOrgs: [string] | [];
 }
-const currentUrl = window.location.href.split('=')[1];
 
-console.log(currentUrl);
+const currentUrl = window.location.href.split('=')[1];
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'addOnRegister' });

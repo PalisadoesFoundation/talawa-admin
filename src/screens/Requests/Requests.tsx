@@ -6,7 +6,10 @@ import { useTranslation } from 'react-i18next';
 
 import styles from './Requests.module.css';
 import ListNavbar from 'components/ListNavbar/ListNavbar';
-import { USER_LIST } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATION_CONNECTION_LIST,
+  USER_LIST,
+} from 'GraphQl/Queries/Queries';
 import {
   ACCPET_ADMIN_MUTATION,
   REJECT_ADMIN_MUTATION,
@@ -37,6 +40,18 @@ const Requests = () => {
 
   const [acceptAdminFunc] = useMutation(ACCPET_ADMIN_MUTATION);
   const [rejectAdminFunc] = useMutation(REJECT_ADMIN_MUTATION);
+
+  const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
+
+  useEffect(() => {
+    if (!dataOrgs) {
+      return;
+    }
+
+    if (dataOrgs.organizationsConnection.length === 0) {
+      toast.warning(t('noOrgError'));
+    }
+  }, [dataOrgs]);
 
   useEffect(() => {
     if (data) {

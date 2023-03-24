@@ -141,15 +141,10 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                   <Dropdown className={styles.dropdowns}>
                     <Dropdown.Toggle
                       variant=""
-                      className={styles.dropdowntoggle}
+                      id={name}
+                      className={`${styles.dropdowntoggle} ${styles.navlinks_dropdown}`}
                     >
-                      <Nav.Link
-                        href={url}
-                        id={name}
-                        className={styles.navlinks_dropdown}
-                      >
-                        {t(name)}
-                      </Nav.Link>
+                      {t(name)}
                     </Dropdown.Toggle>
                     {subTargets && (
                       <Dropdown.Menu className={styles.dropdowns}>
@@ -183,24 +178,11 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
           >
             <Dropdown className={styles.dropdowns}>
               <Dropdown.Toggle
-                variant=""
+                variant="white"
                 id="dropdown-basic"
                 data-testid="logoutDropdown"
-              >
-                {data?.organizations[0].image ? (
-                  <img
-                    src={data?.organizations[0].image}
-                    className={styles.roundedcircle}
-                    data-testid="navbarOrgImagePresent"
-                  />
-                ) : (
-                  <img
-                    src={AboutImg}
-                    className={styles.roundedcircle}
-                    data-testid="navbarOrgImageAbsent"
-                  />
-                )}
-              </Dropdown.Toggle>
+                className="navbar-toggler-icon"
+              ></Dropdown.Toggle>
               <Dropdown.Menu className={styles.dropdownMenu}>
                 <Dropdown.Item
                   data-toggle="modal"

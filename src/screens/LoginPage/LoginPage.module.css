@@ -9,7 +9,15 @@ body {
   position: absolute;
   right: 10%;
   font-weight: normal;
-  top: 42%;
+  top: 40%;
+  cursor: pointer;
+}
+.showregister {
+  position: absolute;
+  right: 18%;
+  font-weight: normal;
+  top: 53%;
+  cursor: pointer;
 }
 #grid_wrapper {
   align-items: left;

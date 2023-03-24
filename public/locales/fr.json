@@ -214,8 +214,7 @@
   },
   "orgPost": {
     "title": "Postes de Talawa",
-    "postsByTitle": "Messages par titre",
-    "postsByText": "Messages par texte",
+    "searchPost": "Rechercher un article",
     "posts": "Des postes",
     "createPost": "Créer un article",
     "postDetails": "Détails de la publication",

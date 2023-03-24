@@ -214,8 +214,7 @@
   },
   "orgPost": {
     "title": "तलावा पोस्ट",
-    "postsByTitle": "शीर्षक द्वारा पोस्ट",
-    "postsByText": "पाठ द्वारा पोस्ट",
+    "searchPost": "खोज पोस्ट",
     "posts": "पोस्ट",
     "createPost": "पोस्ट बनाएं",
     "postDetails": "पोस्ट विवरण",
