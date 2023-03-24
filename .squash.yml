@@ -1,0 +1,12 @@
+deployments:
+  default:
+    dockerimage: ubuntu:latest
+    build_steps:
+      - apt-get update && apt-get install -y libssl-dev libpq-dev git build-essential libfontconfig1 libfontconfig1-dev curl
+      - RUN bash -c "curl -sL https://deb.nodesource.com/setup_18.x | bash -"
+      - apt install -y nodejs
+      - cd /code
+      - yarn
+    launch_steps:
+      - yarn serve
+    port_forwarding: 80:3000
