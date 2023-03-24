@@ -4,9 +4,6 @@
 .cards > h3 {
   font-size: 17px;
 }
-.postimage {
-  border-radius: 6px;
-}
 .cards > p {
   font-size: 14px;
   margin-top: 0px;
@@ -18,12 +15,6 @@
 }
 .cards a:hover {
   color: black;
-}
-.infodiv {
-  margin-bottom: 7px;
-}
-.infodiv > p {
-  margin: 0;
 }
 .dispflex {
   display: flex;
@@ -38,7 +29,7 @@
 }
 
 .cards {
-  width: 75%;
+  width: 80%;
   background: #fcfcfc;
   margin: 10px 40px;
   padding: 20px 30px;
