@@ -402,6 +402,41 @@ describe('Organisation List Page', () => {
 });
 
 test('Search bar filters organizations by name', async () => {
+    const Mocks = [
+      {
+        request: {
+          query: ORGANIZATION_CONNECTION_LIST,
+        },
+        result: {
+          data: {
+            organizationsConnection: [
+              {
+                _id: 1,
+                image: '',
+                name: 'Akatsuki',
+                creator: {
+                  firstName: 'John',
+                  lastName: 'Doe',
+                },
+                admins: [
+                  {
+                    _id: '123',
+                  },
+                ],
+                members: {
+                  _id: '234',
+                },
+                createdAt: '02/02/2022',
+                location: 'Washington DC',
+              },
+            ],
+          },
+        },
+      },
+    ]
+
+    const link = new StaticMockLink(Mocks, true);
+    
   const { container } = render(
     <MockedProvider addTypename={false} link={link}>
       <BrowserRouter>
@@ -419,8 +454,6 @@ test('Search bar filters organizations by name', async () => {
   const searchBar = screen.getByTestId(/searchByName/i);
   userEvent.type(searchBar, 'Akatsuki');
 
-  // Since the filtering of organizations is not done on the client side, the mocked data will always be returned
-  // All assertions written below willl therefore return a falsy result because it is not filtered based on the search query.
   expect(container.textContent).toMatch('Akatsuki');
 
   // Test that the search bar is case-insensitive
