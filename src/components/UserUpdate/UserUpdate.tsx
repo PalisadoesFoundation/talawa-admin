@@ -70,22 +70,20 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
         },
       });
       /* istanbul ignore next */
-      if (data) 
-        toast.success(t('toastSuccess'));
-        setFormState({
-          firstName: '',
-          lastName: '',
-          email: '',
-          password: '',
-          applangcode: '',
-          selectedOption: '',
-          file: '',
-        });
-        toast.success('Successful updated');
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
-      }
+      if (data) toast.success(t('toastSuccess'));
+      setFormState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        applangcode: '',
+        selectedOption: '',
+        file: '',
+      });
+      toast.success('Successful updated');
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } catch (error: any) {
       /* istanbul ignore next */
       if (error.message === 'Failed to fetch') {
