@@ -58,7 +58,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install Dependencies
-        run: npm ci
+        run: yarn
       - name: Check for type errors
         run: npm run typecheck
     
