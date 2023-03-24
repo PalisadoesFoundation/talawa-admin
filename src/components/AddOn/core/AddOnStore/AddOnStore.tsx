@@ -54,45 +54,11 @@ function AddOnStore(): JSX.Element {
   /* istanbul ignore next */
   const getInstalledPlugins: () => any = () => {
     setDataList(data);
-    // setRender((current) => !current);
-    // const {
-    //   data: newData,
-    //   loading: newLoading,
-    //   error: newError,
-    // } = useQuery(PLUGIN_GET);
-    // data = newData;
-    // loading = newLoading;
-    // error = newError;
-    // const plugins = await new PluginHelper().fetchInstalled();
-    // store.dispatch({ type: 'UPDATE_INSTALLED', payload: plugins });
-    // return plugins;
   };
 
   /* istanbul ignore next */
   const updateLinks = async (links: any[]) => {
     store.dispatch({ type: 'UPDATE_P_TARGETS', payload: links });
-  };
-
-  // /* istanbul ignore next */
-  const pluginModified = () => {
-    return getInstalledPlugins();
-    // .then((installedPlugins) => {
-    //   getStorePlugins();
-    //   return installedPlugins;
-    // });
-  };
-
-  // useEffect(() => {
-  //   pluginModified();
-  // }, []);
-
-  const updateSelectedTab = (tab: any) => {
-    setIsStore(tab === 'available');
-    isStore ? getStorePlugins() : getInstalledPlugins();
-  };
-
-  const filterChange = (ev: any) => {
-    setShowEnabled(ev.target.value === 'enabled');
   };
 
   /* istanbul ignore next */
@@ -102,14 +68,7 @@ function AddOnStore(): JSX.Element {
         <div data-testid="AddOnEntryStore" className={styles.loader}></div>
       </>
     );
-  }
-  // console.log(
-  //   'Filtered Data is  ',
-  //   data.getPlugins.filter((plugin: any) => plugin.pluginInstallStatus == true)
-  // );
-  // TODO: Update routes for other pages
-  // TODO: Implement Search
-  else {
+  } else {
     return (
       <>
         <div>
@@ -138,7 +97,9 @@ function AddOnStore(): JSX.Element {
                       name="radio-group"
                       type="radio"
                       value="enabled"
-                      onChange={filterChange}
+                      onChange={(ev: any) => {
+                        setShowEnabled(ev.target.value === 'enabled');
+                      }}
                       checked={showEnabled}
                       className={styles.actionradio}
                       id={`inline-radio-1`}
@@ -149,7 +110,9 @@ function AddOnStore(): JSX.Element {
                       name="radio-group"
                       type="radio"
                       value="disabled"
-                      onChange={filterChange}
+                      onChange={(ev: any) => {
+                        setShowEnabled(ev.target.value === 'enabled');
+                      }}
                       checked={!showEnabled}
                       className={styles.actionradio}
                       id={`inline-radio-2`}
@@ -172,7 +135,10 @@ function AddOnStore(): JSX.Element {
                 defaultActiveKey="available"
                 id="uncontrolled-tab-example"
                 className="mb-3"
-                onSelect={updateSelectedTab}
+                onSelect={(tab: any) => {
+                  setIsStore(tab === 'available');
+                  isStore ? getStorePlugins() : getInstalledPlugins();
+                }}
               >
                 <Tab eventKey="available" title={t('available')}>
                   {console.log(
@@ -363,53 +329,3 @@ AddOnStore.defaultProps = {};
 AddOnStore.propTypes = {};
 
 export default AddOnStore;
-
-// {addonStore.map((plugin: any, index: number) => {
-//   return (
-//     <AddOnEntry
-//       id={plugin.id}
-//       key={index}
-//       title={plugin.name}
-//       description={plugin.description}
-//       createdBy={plugin.createdBy}
-//       component={plugin.component}
-//       configurable={!plugin.installed}
-//       modified={() => {
-//         /* istanbul ignore next */
-//         pluginModified().then((installedPlugins) => {
-//           updateLinks(
-//             new PluginHelper().generateLinks(installedPlugins)
-//           );
-//         });
-//       }}
-//     />
-//   );
-// })}
-
-// {installed
-//   .filter((plugin: any) =>
-//     showEnabled ? plugin.enabled : !plugin.enabled
-//   )
-//   .map((plugin: any, index: number) => {
-//     return (
-//       <AddOnEntry
-//         id={plugin.id}
-//         key={index}
-//         title={plugin.name}
-//         description={plugin.description}
-//         createdBy={plugin.createdBy}
-//         component={plugin.component}
-//         enabled={plugin.enabled}
-//         installed={true}
-//         configurable={true}
-//         modified={() => {
-//           /* istanbul ignore next */
-//           pluginModified().then((installedPlugins) => {
-//             updateLinks(
-//               new PluginHelper().generateLinks(installedPlugins)
-//             );
-//           });
-//         }}
-//       />
-//     );
-//   })}
