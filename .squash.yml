@@ -11,4 +11,4 @@ deployments:
     launch_steps:
       - yarn serve
     port_forwarding: 80:3000
-    run_options: --env REACT_APP_TALAWA_URL=${REACT_APP_TALAWA_URL}
+    run_options: --env REACT_APP_TALAWA_URL="${REACT_APP_TALAWA_URL}"
