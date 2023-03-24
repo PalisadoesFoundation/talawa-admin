@@ -143,15 +143,10 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                   <Dropdown className={styles.dropdowns}>
                     <Dropdown.Toggle
                       variant=""
-                      className={styles.dropdowntoggle}
+                      id={name}
+                      className={`${styles.dropdowntoggle} ${styles.navlinks_dropdown}`}
                     >
-                      <Nav.Link
-                        href={url}
-                        id={name}
-                        className={styles.navlinks_dropdown}
-                      >
-                        {t(name)}
-                      </Nav.Link>
+                      {t(name)}
                     </Dropdown.Toggle>
                     {subTargets && (
                       <Dropdown.Menu className={styles.dropdowns}>
