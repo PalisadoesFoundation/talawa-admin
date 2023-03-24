@@ -134,43 +134,57 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
               </a>
             </div>
           </div>
-          <p>
-            {t('author')}:<span> {props.postAuthor}</span>
-          </p>
-
-          {togglePost === 'Read more' ? (
-            <p data-testid="toggleContent">
-              {props.postInfo.length > 43
-                ? props.postInfo.substring(0, 40) + '...'
-                : props.postInfo}
-            </p>
-          ) : (
-            <p data-testid="toggleContent">{props.postInfo}</p>
-          )}
-          <button
-            role="toggleBtn"
-            className={`${
-              props.postInfo.length > 43
-                ? styles.toggleClickBtn
-                : styles.toggleClickBtnNone
-            }`}
-            onClick={handletoggleClick}
-          >
-            {togglePost}
-          </button>
           {/* {props.postInfo.length > 43 && (
             <button role='toggleBtn' className={styles.toggleClickBtn} onClick={handletoggleClick}>
               {togglePost}
             </button>
           )} */}
           {/* <p>{props.postInfo}</p> */}
+          {props.postPhoto ? (
+            <p>
+              {/* {t('imageURL')}: */}
+              <span>
+                {' '}
+                <img
+                  className={styles.postimage}
+                  alt="image not found"
+                  height={'150px'}
+                  width={'210px'}
+                  src={props.postPhoto}
+                />
+              </span>
+            </p>
+          ) : (
+            <img
+              src="https://via.placeholder.com/200x100"
+              className={styles.postPhoto}
+            />
+          )}
           <p>
-            {t('imageURL')}:
-            <span>
-              {' '}
-              <a href={props.postPhoto}>{props.postPhoto}</a>
-            </span>
+            {t('author')}:<span> {props.postAuthor}</span>
           </p>
+          <div className={styles.infodiv}>
+            {togglePost == 'Read more' ? (
+              <p data-testid="toggleContent">
+                {props.postInfo.length > 43
+                  ? props.postInfo.substring(0, 40) + '...'
+                  : props.postInfo}
+              </p>
+            ) : (
+              <p data-testid="toggleContent">{props.postInfo}</p>
+            )}
+            <button
+              role="toggleBtn"
+              className={`${
+                props.postInfo.length > 43
+                  ? styles.toggleClickBtn
+                  : styles.toggleClickBtnNone
+              }`}
+              onClick={handletoggleClick}
+            >
+              {togglePost}
+            </button>
+          </div>
           <p>
             {t('videoURL')}:
             <span>
