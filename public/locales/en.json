@@ -232,7 +232,7 @@
     "ptitle": "Post Title",
     "postDes": "What do you to talk about?",
     "toastSuccess": "Congratulations! You have Posted Something.",
-    "toastError": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
+    "toastError": "Talawa-API service is unavailable. Is it running? Check your network connectivity too. ",
     "Title": "Title",
     "Text": "Text"
   },
