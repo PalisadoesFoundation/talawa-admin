@@ -176,5 +176,3 @@ describe('Testing User Password Update', () => {
     );
   });
 });
-
-
