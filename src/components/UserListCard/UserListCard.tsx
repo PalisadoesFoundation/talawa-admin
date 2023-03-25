@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import styles from './UserListCard.module.css';
 import { Link } from 'react-router-dom';
-import defaultImg from 'assets/images/defaultImg.png';
+import defaultImg from 'assets/third_image.png';
 
 interface UserListCardProps {
   key: string;

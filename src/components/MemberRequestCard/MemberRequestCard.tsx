@@ -9,7 +9,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import defaultImg from 'assets/images/defaultImg.png';
+import defaultImg from 'assets/third_image.png';
 
 interface MemberRequestCardProps {
   key: string;

@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { Link } from 'react-router-dom';
-import defaultImg from 'assets/images/defaultImg.png';
+import defaultImg from 'assets/third_image.png';
 
 interface OrgPeopleListCardProps {
   key: string;

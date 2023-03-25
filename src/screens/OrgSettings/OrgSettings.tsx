@@ -13,7 +13,7 @@ import { MEMBERSHIP_REQUEST } from 'GraphQl/Queries/Queries';
 import { useSelector } from 'react-redux';
 import { RootState } from 'state/reducers';
 import { useTranslation } from 'react-i18next';
-import defaultImg from 'assets/images/defaultImg.png';
+import defaultImg from 'assets/third_image.png';
 
 function OrgSettings(): JSX.Element {
   const { t } = useTranslation('translation', {
