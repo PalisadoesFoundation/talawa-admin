@@ -75,6 +75,9 @@ function OrganizationEvents(): JSX.Element {
     variables: { id: currentUrl },
   });
 
+  const userId = localStorage.getItem('id') as string;
+  const userRole = localStorage.getItem('UserType') as string;
+
   const [create, { loading: loading_2 }] = useMutation(CREATE_EVENT_MUTATION);
 
   const CreateEvent = async (e: ChangeEvent<HTMLFormElement>) => {
@@ -225,6 +228,8 @@ function OrganizationEvents(): JSX.Element {
           <Calendar
             eventData={data?.eventsByOrganizationConnection}
             orgData={orgData}
+            userRole={userRole}
+            userId={userId}
           />
         </Col>
       </Row>

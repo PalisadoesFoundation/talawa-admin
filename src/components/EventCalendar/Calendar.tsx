@@ -1,6 +1,6 @@
 import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Calendar.module.css';
 
 interface Event {
@@ -22,6 +22,8 @@ interface Event {
 interface CalendarProps {
   eventData: Event[];
   orgData?: IOrgList;
+  userRole?: string;
+  userId?: string;
 }
 
 enum Status {
@@ -29,17 +31,28 @@ enum Status {
   BLOCKED = 'BLOCKED',
   DELETED = 'DELETED',
 }
+
+enum Role {
+  USER = 'USER',
+  SUPERADMIN = 'SUPERADMIN',
+  ADMIN = 'ADMIN',
+}
 interface IEventAttendees {
   userId: string;
-  user: string;
-  status: Status;
-  createdAT: Date;
+  user?: string;
+  status?: Status;
+  createdAt?: Date;
 }
 
 interface IOrgList {
   admins: { _id: string }[];
 }
-const Calendar: React.FC<CalendarProps> = ({ eventData, orgData }) => {
+const Calendar: React.FC<CalendarProps> = ({
+  eventData,
+  orgData,
+  userRole,
+  userId,
+}) => {
   const [selectedDate] = useState<Date | null>(null);
   const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const months = [
@@ -60,6 +73,47 @@ const Calendar: React.FC<CalendarProps> = ({ eventData, orgData }) => {
   const today = new Date();
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
+  const [events, setEvents] = useState<Event[] | null>(null);
+
+  const filterData = (
+    eventData: Event[],
+    orgData?: IOrgList,
+    userRole?: string,
+    userId?: string
+  ) => {
+    const data: Event[] = [];
+    if (userRole === Role.SUPERADMIN) return eventData;
+    if (userRole === Role.ADMIN) {
+      eventData?.forEach((event) => {
+        if (event.isPublic) data.push(event);
+        if (!event.isPublic) {
+          const filteredOrg: boolean | undefined = orgData?.admins?.some(
+            (data) => data._id === userId
+          );
+
+          if (filteredOrg) {
+            data.push(event);
+          }
+        }
+      });
+    } else {
+      eventData?.forEach((event) => {
+        if (event.isPublic) data.push(event);
+        const userAttending = event.registrants?.some(
+          (data) => data.userId === userId
+        );
+        if (userAttending) {
+          data.push(event);
+        }
+      });
+    }
+    return data;
+  };
+
+  useEffect(() => {
+    const data = filterData(eventData, orgData, userRole, userId);
+    setEvents(data);
+  }, []);
 
   const handlePrevMonth = () => {
     if (currentMonth === 0) {
@@ -125,58 +179,30 @@ const Calendar: React.FC<CalendarProps> = ({ eventData, orgData }) => {
         >
           {date.getDate()}
           <div className={styles.list_box}>
-            {eventData &&
-              eventData
-                .filter((datas) => {
-                  if (datas.startDate == dayjs(date).format('YYYY-MM-DD'))
-                    return datas;
-                })
-                .filter((datas: Event) => {
-                  const userId: string | null = localStorage.getItem('id');
-                  const userRole: string | null =
-                    localStorage.getItem('UserType');
-                  const data: Event[] = [];
-                  if (userRole === 'SUPERADMIN') return datas;
-                  if (datas.isPublic) data.push(datas);
-                  if (!datas.isPublic) {
-                    if (userRole === 'ADMIN') {
-                      const filteredOrg: boolean | undefined =
-                        orgData &&
-                        orgData.admins?.some(
-                          (data: { _id: string }) =>
-                            userId && data._id === JSON.parse(userId)
-                        );
-                      if (filteredOrg) data.push(datas);
-                    } else {
-                      const userAttending = datas.registrants?.some(
-                        (data) => userId && data.userId === JSON.parse(userId)
-                      );
-                      if (userAttending) {
-                        data.push(datas);
-                      }
-                    }
-                  }
-                  return data;
-                })
-                .map((datas: Event) => {
-                  return (
-                    <EventListCard
-                      key={datas._id}
-                      id={datas._id}
-                      eventLocation={datas.location}
-                      eventName={datas.title}
-                      eventDescription={datas.description}
-                      regDate={datas.startDate}
-                      regEndDate={datas.endDate}
-                      startTime={datas.startTime}
-                      endTime={datas.endTime}
-                      allDay={datas.allDay}
-                      recurring={datas.recurring}
-                      isPublic={datas.isPublic}
-                      isRegisterable={datas.isRegisterable}
-                    />
-                  );
-                })}
+            {events
+              ?.filter((datas) => {
+                if (datas.startDate == dayjs(date).format('YYYY-MM-DD'))
+                  return datas;
+              })
+              .map((datas: Event) => {
+                return (
+                  <EventListCard
+                    key={datas._id}
+                    id={datas._id}
+                    eventLocation={datas.location}
+                    eventName={datas.title}
+                    eventDescription={datas.description}
+                    regDate={datas.startDate}
+                    regEndDate={datas.endDate}
+                    startTime={datas.startTime}
+                    endTime={datas.endTime}
+                    allDay={datas.allDay}
+                    recurring={datas.recurring}
+                    isPublic={datas.isPublic}
+                    isRegisterable={datas.isRegisterable}
+                  />
+                );
+              })}
           </div>
         </div>
       );
