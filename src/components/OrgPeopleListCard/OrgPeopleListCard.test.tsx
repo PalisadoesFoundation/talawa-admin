@@ -9,7 +9,6 @@ import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { BrowserRouter } from 'react-router-dom';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import defaultImg from 'assets/images/defaultImg.png';
 
 const MOCKS = [
   {
