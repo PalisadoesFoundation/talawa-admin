@@ -347,7 +347,7 @@ describe('Organisation People Page', () => {
     expect(findtext).toBeInTheDocument();
   });
 
-  test('No Mock Data', async () => {
+  test('No Mock Data test', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
