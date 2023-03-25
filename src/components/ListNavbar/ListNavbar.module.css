@@ -116,7 +116,21 @@
 }
 
 @media only screen and (max-width: 1200px) {
+  .navitems > .navlinks {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+  }
+
+  .languageBtn {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-left: 1rem;
+  }
+
   .logoutbtn {
-    margin-bottom: 10px;
+    margin: 10px auto;
+    min-width: 10rem;
   }
 }

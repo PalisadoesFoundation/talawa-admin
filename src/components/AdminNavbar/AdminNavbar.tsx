@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import Cookies from 'js-cookie';
 import i18next from 'i18next';
 import { toast } from 'react-toastify';
-
+import MenuIcon from '@mui/icons-material/Menu';
 import styles from './AdminNavbar.module.css';
 import AboutImg from 'assets/images/defaultImg.png';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
@@ -143,15 +143,10 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                   <Dropdown className={styles.dropdowns}>
                     <Dropdown.Toggle
                       variant=""
-                      className={styles.dropdowntoggle}
+                      id={name}
+                      className={`${styles.dropdowntoggle} ${styles.navlinks_dropdown}`}
                     >
-                      <Nav.Link
-                        href={url}
-                        id={name}
-                        className={styles.navlinks_dropdown}
-                      >
-                        {t(name)}
-                      </Nav.Link>
+                      {t(name)}
                     </Dropdown.Toggle>
                     {subTargets && (
                       <Dropdown.Menu className={styles.dropdowns}>
@@ -188,8 +183,19 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                 variant="white"
                 id="dropdown-basic"
                 data-testid="logoutDropdown"
-                className="navbar-toggler-icon"
-              ></Dropdown.Toggle>
+              >
+                {data?.organizations[0].image ? (
+                  <span>
+                    <MenuIcon></MenuIcon>
+                  </span>
+                ) : (
+                  <img
+                    src={AboutImg}
+                    className={styles.roundedcircle}
+                    data-testid="navbarOrgImageAbsent"
+                  />
+                )}
+              </Dropdown.Toggle>
               <Dropdown.Menu className={styles.dropdownMenu}>
                 <Dropdown.Item
                   data-toggle="modal"

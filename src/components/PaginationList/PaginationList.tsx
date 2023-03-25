@@ -51,11 +51,13 @@ const PaginationList = (props: PropsInterface) => {
       <Hidden smDown>
         <TablePagination
           rowsPerPageOptions={[
+            -1,
             5,
             10,
             30,
             { label: t('all'), value: Number.MAX_SAFE_INTEGER },
           ]}
+          data-testid={'table-pagination'}
           colSpan={4}
           count={props.count}
           rowsPerPage={props.rowsPerPage}
