@@ -113,23 +113,23 @@ function OrganizationPeople(): JSX.Element {
     }
   };
 
-  const handleEventTitleSearchChange = (e: any) => {
-    const { value } = e.target;
-    if (state === 0) {
-      const filterData = {
-        orgId: currentUrl,
-        event_title_contains: value,
-      };
-      refetchMembers(filterData);
-    } else if (state === 1) {
-      const filterData = {
-        orgId: currentUrl,
-        event_title_contains: value,
-        admin_for: currentUrl,
-      };
-      refetchAdmins(filterData);
-    }
-  };
+  // const handleEventTitleSearchChange = (e: any) => {
+  //   const { value } = e.target;
+  //   if (state === 0) {
+  //     const filterData = {
+  //       orgId: currentUrl,
+  //       event_title_contains: value,
+  //     };
+  //     refetchMembers(filterData);
+  //   } else if (state === 1) {
+  //     const filterData = {
+  //       orgId: currentUrl,
+  //       event_title_contains: value,
+  //       admin_for: currentUrl,
+  //     };
+  //     refetchAdmins(filterData);
+  //   }
+  // };
 
   /* istanbul ignore next */
   const handleChangePage = (
@@ -150,9 +150,6 @@ function OrganizationPeople(): JSX.Element {
   const debouncedHandleFirstNameSearchChange = debounce(
     handleFirstNameSearchChange
   );
-  const debouncedHandleEventTitleSearchChange = debounce(
-    handleEventTitleSearchChange
-  );
 
   return (
     <>
@@ -171,15 +168,6 @@ function OrganizationPeople(): JSX.Element {
                 autoComplete="off"
                 required
                 onChange={debouncedHandleFirstNameSearchChange}
-              />
-              <h6 className={styles.searchtitle}>{t('filterByEvent')}</h6>
-              <input
-                type="name"
-                id="searchevent"
-                placeholder={t('searchevent')}
-                autoComplete="off"
-                required
-                onChange={debouncedHandleEventTitleSearchChange}
               />
               <div className={styles.radio_buttons}>
                 <input
