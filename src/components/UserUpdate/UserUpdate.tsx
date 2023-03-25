@@ -222,12 +222,6 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
               multiple={false}
               onChange={async (e) => {
                 const file = e.target.files?.[0];
-                // if (file) {
-                //   setFormState({
-                //     ...formState,
-                //     file: await convertToBase64(file),
-                //   });
-                // }
                 file &&
                   setFormState({
                     ...formState,
