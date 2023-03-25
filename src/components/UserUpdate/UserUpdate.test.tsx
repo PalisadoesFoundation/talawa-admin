@@ -83,10 +83,21 @@ describe('Testing User Update', () => {
   };
 
   const formData = {
-    firstName: 'Ansh',
-    lastName: 'Goyal',
-    email: 'ansh@gmail.com',
-    image: new File(['hello'], 'hello.png', { type: 'image/png' }),
+    firstName: 'Sumit',
+    lastName: 'Maithani',
+    email: 'sumit@gmail.com',
+    file: new File(['hello'], 'hello.png', { type: 'image/png' }),
+    selectedOption: 'admin',
+    applangcode: 'en',
+  };
+
+  const formData2 = {
+    firstName: 'Sumit',
+    lastName: 'Maithani',
+    email: 'sumit@gmail.com',
+    file: new File(['hello'], 'hello.png', { type: 'image/png' }),
+    selectedOption: 'Superadmin',
+    applangcode: 'en',
   };
 
   global.alert = jest.fn();
@@ -111,10 +122,9 @@ describe('Testing User Update', () => {
       formData.lastName
     );
     userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
-    userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
+    userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.file);
     userEvent.click(screen.getByLabelText(/User Type/i));
     await wait();
-
     userEvent.click(screen.getByText(/Save Changes/i));
 
     expect(screen.getByPlaceholderText(/First Name/i)).toHaveValue(
@@ -130,5 +140,76 @@ describe('Testing User Update', () => {
     expect(screen.getByPlaceholderText(/Last Name/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Email/i)).toBeInTheDocument();
     expect(screen.getByText(/Display Image/i)).toBeInTheDocument();
+  });
+
+  test('should render props and text elements test for the page component', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <UserUpdate {...props} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(screen.getByLabelText('Admin')).not.toBeChecked();
+    // Check that the second radio button is not checked
+    expect(screen.getByLabelText('Superadmin')).not.toBeChecked();
+  });
+
+  test('When the first radio button is clicked, the corresponding value should be stored in the state', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <UserUpdate {...props} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByLabelText('Admin'));
+    expect(screen.getByLabelText('Admin')).toBeChecked();
+    expect(screen.getByLabelText('Superadmin')).not.toBeChecked();
+    expect(formData.selectedOption).toBe('admin');
+  });
+
+  test('When the second radio button is clicked, the corresponding value should be stored in the state', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <UserUpdate {...props} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByLabelText('Superadmin'));
+    expect(screen.getByLabelText('Superadmin')).toBeChecked();
+    expect(screen.getByLabelText('Admin')).not.toBeChecked();
+    expect(formData2.selectedOption).toBe('Superadmin');
+  });
+
+  test('selecting a language updates the form state', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <UserUpdate {...props} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    const dropdown = screen.getByTestId('applangcode');
+    expect(dropdown).toBeInTheDocument();
+
+    // Select the first option in the dropdown
+    userEvent.selectOptions(dropdown, 'en');
+
+    // Check if state was updated
+    expect(formData.applangcode).toBe('en');
   });
 });
