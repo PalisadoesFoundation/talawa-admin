@@ -4,26 +4,29 @@ This document provides instructions on how to set up and start a running instanc
 
 # Table of Contents
 
-1. [Prerequisites for Developers](#prerequisites-for-developers)
-1. [Installation](#installation)
-    1. [Clone this repository](#clone-this-repository)
-    1. [Change directory into the cloned repo](#change-directory-into-the-cloned-repo)
-    1. [Setting up yarn](#setting-up-yarn)
-    1. [Installing required packages/dependencies](#installing-required-packagesdependencies)
-1. [Configuration](#configuration)
-    1. [Creating .env file](#creating-env-file)
-    1. [Setting up REACT\_APP\_TALAWA\_URL in .env file](#setting-up-react_app_talawa_url-in-env-file)
-    1. [Setting up REACT\_APP\_RECAPTCHA\_SITE\_KEY in .env file](#setting-up-react_app_recaptcha_site_key-in-env-file)
-1. [Post Configuration Steps](#post-configuration-steps)
-    1. [Running Talawa-Admin](#running-talawa-admin)
-    1. [Accessing Talawa-Admin](#accessing-talawa-admin)
-    1. [Talawa-Admin Registration](#talawa-admin-registration)
-    1. [Talawa-Admin Login](#talawa-admin-login)
-1. [Testing](#testing)
-    1. [Running tests](#running-tests)
-    1. [Linting code files](#linting-code-files)
-    1. [Husky for Git Hooks](#husky-for-git-hooks)
-    1. [Setting up Talawa-Admin and API for Talawa App](#setting-up-talawa-admin-and-api-for-talawa-app)
+- [Talawa-Admin Installation](#talawa-admin-installation)
+- [Table of Contents](#table-of-contents)
+- [Prerequisites for Developers](#prerequisites-for-developers)
+- [Installation](#installation)
+  - [Clone This Repository](#clone-this-repository)
+  - [Change Directory into the Cloned Repo](#change-directory-into-the-cloned-repo)
+  - [Setting up NPM](#setting-up-npm)
+  - [Installing required packages/dependencies](#installing-required-packagesdependencies)
+- [Configuration](#configuration)
+  - [Creating .env file](#creating-env-file)
+  - [Setting up REACT\_APP\_TALAWA\_URL in .env file](#setting-up-react_app_talawa_url-in-env-file)
+  - [Setting up REACT\_APP\_RECAPTCHA\_SITE\_KEY in .env file](#setting-up-react_app_recaptcha_site_key-in-env-file)
+- [Post Configuration Steps](#post-configuration-steps)
+  - [Running Talawa-Admin](#running-talawa-admin)
+  - [Accessing Talawa-Admin](#accessing-talawa-admin)
+  - [Talawa-Admin Registration](#talawa-admin-registration)
+  - [Talawa-Admin Login](#talawa-admin-login)
+- [Testing](#testing)
+  - [Running tests](#running-tests)
+  - [Linting code files](#linting-code-files)
+  - [Husky for Git Hooks](#husky-for-git-hooks)
+      - [pre-commit hook](#pre-commit-hook)
+      - [post-merge hook](#post-merge-hook)
 
 # Prerequisites for Developers
 
@@ -56,32 +59,16 @@ cd talawa-admin
 
 **NOTE:** `All the commands we're going to execute in the following instructions will assume you are in the root directory of the cloned talawa-admin project. If you fail to do so, the commands will not work.`
 
-## Setting up Yarn
+## Setting up NPM
 
-If you've followed the previous steps you should have already set up node.js on your system. [Click here](https://yarnpkg.com/getting-started/install) for the official setup guide for yarn.
-Please note that Talawa's admin system is only compatible with yarn version 1. Using versions 2 or 3 may cause errors.
-To install yarn version you can use following command:
-
-*Windows/ Mac-OS*
-```
-npm install -g yarn@1.22.17
-```
-*Linux*
-```
-sudo npm install -g yarn@1.22.17
-```
-
-To verify yarn is correctly installed in your system use:
-```
-yarn -v
-```
+If you've followed the previous steps you should have already set up node.js on your system. [Click here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) for the official setup guide for npm.
 
 ## Installing required packages/dependencies
 
 Run the following command to install the packages and dependencies required by `talawa-admin`:
 
 ```
-yarn
+npm install --legacy-peer-deps
 ```
 # Configuration
 It's important to configure Talawa-Admin. Here's how to do it.
@@ -141,7 +128,7 @@ It's now time to start Talawa-Admin and get it running
 Run the following command to start `talawa-admin` development server:
 
 ```
-yarn serve
+npm run serve
 ```
 
 ## Accessing Talawa-Admin
@@ -169,7 +156,7 @@ It is important to test our code. If you are a contributor, please follow these 
 You can run the tests for `talawa-admin` using this command:
 
 ```
-yarn test
+npm run test
 ```
 
 ## Linting code files
@@ -177,7 +164,7 @@ yarn test
 You can lint your code files using this command:
 
 ```
-yarn lint:fix
+npm run lint:fix
 ```
 
 ## Husky for Git Hooks
@@ -200,7 +187,7 @@ If you don't want these pre-commit checks running on each commit, you can manual
 
 #### post-merge hook
 
-We are also running a post-merge(post-pull) hook which will automatically run "yarn" only if there is any change made to pakage.json file so that the developer has all the required dependencies when pulling files from remote.
+We are also running a post-merge(post-pull) hook which will automatically run "npm install --legacy-peer-deps" only if there is any change made to pakage.json file so that the developer has all the required dependencies when pulling files from remote.
 
 
 If you don't want this hook to run, you can manually opt out of this using the `no verify` flag while using the merge command(git pull):
