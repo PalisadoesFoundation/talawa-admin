@@ -71,6 +71,15 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
       });
       /* istanbul ignore next */
       if (data) toast.success(t('toastSuccess'));
+      // setFormState({
+      //   firstName: '',
+      //   lastName: '',
+      //   email: '',
+      //   password: '',
+      //   applangcode: '',
+      //   selectedOption: '',
+      //   file: '',
+      // });
       setTimeout(() => {
         window.location.reload();
       }, 2000);
