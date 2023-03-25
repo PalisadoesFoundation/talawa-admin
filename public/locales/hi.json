@@ -209,9 +209,9 @@
     "post not found!": "पोस्ट नहीं मिला!",
     "organization not found!": "संगठन नहीं मिला!"
   },
-  "userNotFound" : {
+  "userNotFound": {
     "user": "उपयोगकर्ता",
-    "not found!":"नहीं मिला!",
+    "not found!": "नहीं मिला!",
     "roles": "भूमिका",
     "user not found!": "उपयोगकर्ता नहीं मिले!",
     "roles not found!": "भूमिकाएँ नहीं मिलीं!"

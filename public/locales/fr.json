@@ -209,9 +209,9 @@
     "post not found!": "Poste Pas Trouvé!",
     "organization not found!": "Organization Pas Trouvé!"
   },
-  "userNotFound" : {
+  "userNotFound": {
     "user": "utilisateur",
-    "not found!":"pas trouvé!",
+    "not found!": "pas trouvé!",
     "roles": "les rôles",
     "user not found!": "utilisateur non trouvé!",
     "roles not found!": "utilisateur non trouvé!"
