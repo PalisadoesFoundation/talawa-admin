@@ -218,9 +218,5 @@ describe('Testing Organization Post Card', () => {
         </I18nextProvider>
       </MockedProvider>
     );
-
-    // const toggleBtn = screen.queryByRole('toggleBtn');
-
-    // expect(toggleBtn).not.toBeInTheDocument();
   });
 });
