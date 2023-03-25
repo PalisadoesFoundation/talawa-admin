@@ -60,7 +60,7 @@ describe('Testing Organization Post Card', () => {
     postTitle: 'Event Info',
     postInfo: 'Time change',
     postAuthor: 'John Doe',
-    postPhoto: 'https://via.placeholder.com/200x100',
+    postPhoto: 'photoLink',
     postVideo: 'videoLink',
   };
 

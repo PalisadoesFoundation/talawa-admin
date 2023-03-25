@@ -9,6 +9,7 @@ import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { BrowserRouter } from 'react-router-dom';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import defaultImg from 'assets/images/defaultImg.png';
 
 const MOCKS = [
   {
@@ -42,7 +43,7 @@ describe('Testing Organization People List Card', () => {
     id: '1',
     memberName: 'John Doe',
     joinDate: '20/03/2022',
-    memberImage: 'https://via.placeholder.com/200x100',
+    memberImage: 'image',
     memberEmail: 'johndoe@gmail.com',
   };
 

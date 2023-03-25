@@ -8,6 +8,7 @@ import {
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
+import defaultImg from 'assets/images/defaultImg.png';
 
 interface OrgPostCardProps {
   key: string;
@@ -153,7 +154,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
             </p>
           ) : (
             <img
-              src="https://via.placeholder.com/200x100"
+              src={defaultImg}
               alt="image not found"
               className={styles.postimage}
             />
