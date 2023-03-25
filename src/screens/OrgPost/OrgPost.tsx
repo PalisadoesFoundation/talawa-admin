@@ -230,7 +230,7 @@ function OrgPost(): JSX.Element {
                   }
                 )
               ) : (
-                <PostNotFound title="post" />
+                <PostNotFound title="post" keyPrefix="postNotFound" />
               )}
             </div>
           </div>

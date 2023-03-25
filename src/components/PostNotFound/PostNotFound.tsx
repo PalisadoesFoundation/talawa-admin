@@ -5,16 +5,18 @@ import styles from './PostNotFound.module.css';
 
 interface PostNotFoundProps {
   title: string;
+  keyPrefix: string;
 }
 
 function PostNotFound(props: PostNotFoundProps): JSX.Element {
+  const key = props.keyPrefix.toString();
   const { t } = useTranslation('translation', {
-    keyPrefix: 'postNotFound',
+    keyPrefix: key,
   });
   return (
     <>
       <section className={styles.section}>
-        <h2 className={styles.error}>{t(`${props.title} not found!`)}</h2>
+        <h2 className={styles.error}> {t(`${props.title} not found!`)} </h2>
       </section>
     </>
   );

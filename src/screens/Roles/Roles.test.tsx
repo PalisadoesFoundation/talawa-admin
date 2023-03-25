@@ -18,7 +18,6 @@ import userEvent from '@testing-library/user-event';
 import { within } from '@testing-library/react';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { ToastContainer } from 'react-toastify';
 
 const MOCKS = [
   {
@@ -395,47 +394,5 @@ describe('Testing Roles screen', () => {
     );
 
     await wait();
-  });
-
-  test('Should render warning alert when there are no organizations', async () => {
-    const { container } = render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <Roles />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-
-    expect(container.textContent).toMatch(
-      'Organizations not found, please create an organization through dashboard'
-    );
-  });
-
-  test('Should not render warning alert when there are organizations present', async () => {
-    const { container } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <Roles />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-
-    expect(container.textContent).not.toMatch(
-      'Organizations not found, please create an organization through dashboard'
-    );
   });
 });

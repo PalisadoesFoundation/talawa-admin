@@ -12,6 +12,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
 import PaginationList from 'components/PaginationList/PaginationList';
+import PostNotFound from 'components/PostNotFound/PostNotFound';
 
 const Roles = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'roles' });
@@ -44,9 +45,10 @@ const Roles = () => {
         });
       }
     }
+    // console.log(error?.graphQLErrors);
   }, [count, searchByName]);
 
-  const { data, loading: users_loading, refetch } = useQuery(USER_LIST);
+  const { loading: users_loading, error, data, refetch } = useQuery(USER_LIST);
 
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
 
@@ -156,7 +158,7 @@ const Roles = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {data &&
+                    {data && !error?.graphQLErrors ? (
                       (rowsPerPage > 0
                         ? data.users.slice(
                             page * rowsPerPage,
@@ -240,7 +242,10 @@ const Roles = () => {
                             </tr>
                           );
                         }
-                      )}
+                      )
+                    ) : (
+                      <PostNotFound title="user" keyPrefix="userNotFound" />
+                    )}
                   </tbody>
                 </table>
               </div>
