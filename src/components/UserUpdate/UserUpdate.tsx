@@ -70,19 +70,12 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
         },
       });
       /* istanbul ignore next */
-      if (data) toast.success(t('toastSuccess'));
-      // setFormState({
-      //   firstName: '',
-      //   lastName: '',
-      //   email: '',
-      //   password: '',
-      //   applangcode: '',
-      //   selectedOption: '',
-      //   file: '',
-      // });
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
+      if (data) {
+        toast.success(t('toastSuccess'));
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      }
     } catch (error: any) {
       /* istanbul ignore next */
       if (error.message === 'Failed to fetch') {
@@ -229,7 +222,13 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
               multiple={false}
               onChange={async (e) => {
                 const file = e.target.files?.[0];
-                if (file)
+                // if (file) {
+                //   setFormState({
+                //     ...formState,
+                //     file: await convertToBase64(file),
+                //   });
+                // }
+                file &&
                   setFormState({
                     ...formState,
                     file: await convertToBase64(file),

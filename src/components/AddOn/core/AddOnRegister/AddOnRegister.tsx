@@ -56,7 +56,6 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
         window.location.reload();
       }, 2000);
     }
-    console.log('Data is ', data);
   };
   return (
     <>
