@@ -72,6 +72,7 @@ jobs:
         run: npm install --legacy-peer-deps
       - name: Run tests
         run: npm run test
+        run: q
   
   Code-Coverage:
     name: Shows code coverage
@@ -84,6 +85,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm install --legacy-peer-deps
       - run: npm run test --watchAll=false --coverage
+      - run: q
       - name: Present and Upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
         uses: codecov/codecov-action@v3
         with:
