@@ -142,7 +142,7 @@ describe('Testing User Update', () => {
     expect(screen.getByText(/Display Image/i)).toBeInTheDocument();
   });
 
-  test('should render props and text elements test for the page component', async () => {
+  test('should render props component in first time component load', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
