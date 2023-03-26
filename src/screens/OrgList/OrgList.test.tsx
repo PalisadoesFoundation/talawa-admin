@@ -42,8 +42,8 @@ for (let x = 0; x < 100; x++) {
     image: '',
     name: 'name',
     creator: {
-      firstName: "firstName",
-      lastName: "lastName",
+      firstName: 'firstName',
+      lastName: 'lastName',
     },
     admins: [
       {
@@ -54,7 +54,7 @@ for (let x = 0; x < 100; x++) {
       _id: x + '2',
     },
     createdAt: new Date().toISOString(),
-    location: "location",
+    location: 'location',
   });
 }
 

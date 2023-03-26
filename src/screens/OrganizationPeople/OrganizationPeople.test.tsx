@@ -85,23 +85,23 @@ const MOCKS = [
             },
             admins: {
               _id: 'id',
-              firstName: "firstName",
-              lastName: "lastName",
-              email: "email",
+              firstName: 'firstName',
+              lastName: 'lastName',
+              email: 'email',
             },
             membershipRequests: {
-              _id: "id",
+              _id: 'id',
               user: {
-                firstName: "firstName",
-                lastName: "lastName",
-                email: "email",
+                firstName: 'firstName',
+                lastName: 'lastName',
+                email: 'email',
               },
             },
             blockedUsers: {
-              _id: "id",
-              firstName: "firstName",
-              lastName: "lastName",
-              email: "email",
+              _id: 'id',
+              firstName: 'firstName',
+              lastName: 'lastName',
+              email: 'email',
             },
           },
         ],
@@ -291,7 +291,7 @@ describe('Organisation People Page', () => {
     );
 
     await wait();
-    
+
     await screen.findByTestId('rowsPPSelect');
 
     // Get the reference to all userTypes through the radio buttons in the DOM
@@ -378,7 +378,6 @@ describe('Organisation People Page', () => {
     const dataQuery2 =
       MOCKS[2]?.result?.data?.organizationsMemberConnection?.edges;
     const dataQuery3 = MOCKS[3]?.result?.data?.users;
-
 
     expect(dataQuery1).toEqual([
       {
