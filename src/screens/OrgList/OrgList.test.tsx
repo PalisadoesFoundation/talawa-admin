@@ -15,8 +15,6 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { faker } from '@faker-js/faker';
-import lodash from 'lodash';
 
 type Organization = {
   _id: string;
@@ -40,23 +38,23 @@ const organizations: Organization[] = [];
 
 for (let x = 0; x < 100; x++) {
   organizations.push({
-    _id: faker.datatype.uuid(),
+    _id: 'a' + x,
     image: '',
-    name: faker.name.fullName(),
+    name: 'name',
     creator: {
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
+      firstName: "firstName",
+      lastName: "lastName",
     },
     admins: [
       {
-        _id: faker.datatype.uuid(),
+        _id: x + '1',
       },
     ],
     members: {
-      _id: faker.datatype.uuid(),
+      _id: x + '2',
     },
-    createdAt: faker.date.birthdate().toString(),
-    location: faker.address.city(),
+    createdAt: new Date().toISOString(),
+    location: "location",
   });
 }
 
@@ -254,7 +252,7 @@ describe('Organisation List Page', () => {
   test('Correct mock data should be queried', async () => {
     const dataQuery1 = MOCKS[0]?.result?.data?.organizationsConnection;
 
-    const queryMatch1 = lodash.isEqual(dataQuery1, [
+    expect(dataQuery1).toEqual([
       {
         _id: 1,
         creator: { firstName: 'John', lastName: 'Doe' },
@@ -273,7 +271,6 @@ describe('Organisation List Page', () => {
       },
       ...organizations,
     ]);
-    expect(queryMatch1).toBeTruthy();
   });
 
   test('Should render props and text elements test for the screen', async () => {
@@ -402,41 +399,41 @@ describe('Organisation List Page', () => {
 });
 
 test('Search bar filters organizations by name', async () => {
-    const Mocks = [
-      {
-        request: {
-          query: ORGANIZATION_CONNECTION_LIST,
-        },
-        result: {
-          data: {
-            organizationsConnection: [
-              {
-                _id: 1,
-                image: '',
-                name: 'Akatsuki',
-                creator: {
-                  firstName: 'John',
-                  lastName: 'Doe',
-                },
-                admins: [
-                  {
-                    _id: '123',
-                  },
-                ],
-                members: {
-                  _id: '234',
-                },
-                createdAt: '02/02/2022',
-                location: 'Washington DC',
+  const Mocks = [
+    {
+      request: {
+        query: ORGANIZATION_CONNECTION_LIST,
+      },
+      result: {
+        data: {
+          organizationsConnection: [
+            {
+              _id: 1,
+              image: '',
+              name: 'Akatsuki',
+              creator: {
+                firstName: 'John',
+                lastName: 'Doe',
               },
-            ],
-          },
+              admins: [
+                {
+                  _id: '123',
+                },
+              ],
+              members: {
+                _id: '234',
+              },
+              createdAt: '02/02/2022',
+              location: 'Washington DC',
+            },
+          ],
         },
       },
-    ]
+    },
+  ];
 
-    const link = new StaticMockLink(Mocks, true);
-    
+  const link = new StaticMockLink(Mocks, true);
+
   const { container } = render(
     <MockedProvider addTypename={false} link={link}>
       <BrowserRouter>

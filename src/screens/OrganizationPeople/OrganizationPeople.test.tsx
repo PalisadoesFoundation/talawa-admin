@@ -15,8 +15,6 @@ import {
 import 'jest-location-mock';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { faker } from '@faker-js/faker';
-import lodash from 'lodash';
 
 // This loop creates dummy data for members, admin and users
 const members: any[] = [];
@@ -25,35 +23,35 @@ const users: any[] = [];
 for (let i = 0; i < 100; i++) {
   members.push({
     __typename: 'User',
-    _id: faker.datatype.uuid(),
-    firstName: faker.name.firstName(),
-    lastName: faker.name.lastName(),
+    _id: i + '1',
+    firstName: 'firstName',
+    lastName: 'lastName',
     image: null,
-    email: faker.internet.email(),
-    createdAt: faker.date.recent(),
+    email: 'email',
+    createdAt: new Date().toISOString(),
   });
 
   admins.push({
     __typename: 'User',
-    _id: faker.datatype.uuid(),
-    firstName: faker.name.firstName(),
-    lastName: faker.name.lastName(),
+    _id: i + '1',
+    firstName: 'firstName',
+    lastName: 'lastName',
     image: null,
-    email: faker.internet.email(),
-    createdAt: faker.date.recent(),
+    email: 'email',
+    createdAt: new Date().toISOString(),
   });
 
   users.push({
     __typename: 'User',
-    firstName: faker.name.firstName(),
-    lastName: faker.name.lastName(),
+    firstName: 'firstName',
+    lastName: 'lastName',
     image: null,
-    _id: faker.datatype.uuid(),
-    email: faker.internet.email(),
+    _id: i + 'id',
+    email: 'email',
     userType: ['SUPERADMIN', 'USER'][i < 50 ? 0 : 1],
     adminApproved: true,
     organizationsBlockedBy: [],
-    createdAt: faker.date.recent(),
+    createdAt: new Date().toISOString(),
   });
 }
 
@@ -69,41 +67,41 @@ const MOCKS = [
       data: {
         organizations: [
           {
-            _id: faker.datatype.uuid(),
+            _id: 'orgid',
             image: '',
             creator: {
-              firstName: faker.name.firstName(),
-              lastName: faker.name.lastName(),
-              email: faker.internet.email(),
+              firstName: 'firstName',
+              lastName: 'lastName',
+              email: 'email',
             },
-            name: faker.company.name(),
-            description: faker.company.catchPhrase(),
-            location: faker.address.streetAddress(),
+            name: 'name',
+            description: 'description',
+            location: 'location',
             members: {
-              _id: faker.datatype.uuid(),
-              firstName: faker.name.firstName(),
-              lastName: faker.name.lastName(),
-              email: faker.internet.email(),
+              _id: 'id',
+              firstName: 'firstName',
+              lastName: 'lastName',
+              email: 'email',
             },
             admins: {
-              _id: faker.datatype.uuid(),
-              firstName: faker.name.firstName(),
-              lastName: faker.name.lastName(),
-              email: faker.internet.email(),
+              _id: 'id',
+              firstName: "firstName",
+              lastName: "lastName",
+              email: "email",
             },
             membershipRequests: {
-              _id: faker.datatype.uuid(),
+              _id: "id",
               user: {
-                firstName: faker.name.firstName(),
-                lastName: faker.name.lastName(),
-                email: faker.internet.email(),
+                firstName: "firstName",
+                lastName: "lastName",
+                email: "email",
               },
             },
             blockedUsers: {
-              _id: faker.datatype.uuid(),
-              firstName: faker.name.firstName(),
-              lastName: faker.name.lastName(),
-              email: faker.internet.email(),
+              _id: "id",
+              firstName: "firstName",
+              lastName: "lastName",
+              email: "email",
             },
           },
         ],
@@ -272,8 +270,6 @@ const getTotalNumPeople = (userType: string) => {
   }
 };
 
-jest.setTimeout(10000);
-
 describe('Organisation People Page', () => {
   const searchData = {
     name: 'Aditya',
@@ -294,6 +290,8 @@ describe('Organisation People Page', () => {
       </MockedProvider>
     );
 
+    await wait();
+    
     await screen.findByTestId('rowsPPSelect');
 
     // Get the reference to all userTypes through the radio buttons in the DOM
@@ -372,7 +370,7 @@ describe('Organisation People Page', () => {
     };
 
     await changePeopleType();
-  });
+  }, 15000);
 
   test('Correct mock data should be queried', async () => {
     const dataQuery1 =
@@ -381,8 +379,8 @@ describe('Organisation People Page', () => {
       MOCKS[2]?.result?.data?.organizationsMemberConnection?.edges;
     const dataQuery3 = MOCKS[3]?.result?.data?.users;
 
-    // We use lodash to perform deep comparison on the specified objects
-    const queryMatch1 = lodash.isEqual(dataQuery1, [
+
+    expect(dataQuery1).toEqual([
       {
         __typename: 'User',
         _id: '64001660a711c62d5b4076a2',
@@ -395,9 +393,7 @@ describe('Organisation People Page', () => {
       ...members,
     ]);
 
-    expect(queryMatch1).toBeTruthy();
-
-    const queryMatch2 = lodash.isEqual(dataQuery2, [
+    expect(dataQuery2).toEqual([
       {
         __typename: 'User',
         _id: '64001660a711c62d5b4076a2',
@@ -409,9 +405,8 @@ describe('Organisation People Page', () => {
       },
       ...admins,
     ]);
-    expect(queryMatch2).toBeTruthy();
 
-    const queryMatch3 = lodash.isEqual(dataQuery3, [
+    expect(dataQuery3).toEqual([
       {
         __typename: 'User',
         firstName: 'Aditya',
@@ -438,7 +433,6 @@ describe('Organisation People Page', () => {
       },
       ...users,
     ]);
-    expect(queryMatch3).toBeTruthy();
   });
 
   test('It is necessary to query the correct mock data.', async () => {
