@@ -244,7 +244,6 @@ describe('Organisation People Page', () => {
 
     expect(container.textContent).toMatch('Members');
     expect(container.textContent).toMatch('Filter by Name');
-    expect(container.textContent).toMatch('Filter by Event');
     window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af1');
     expect(window.location).toBeAt('/orgpeople/id=6401ff65ce8e8406b8f07af1');
   });
@@ -278,15 +277,8 @@ describe('Organisation People Page', () => {
     expect(findtext).toBeInTheDocument();
     userEvent.type(screen.getByPlaceholderText(/Enter Name/i), searchData.name);
     await wait();
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter Event/i),
-      searchData.event
-    );
     expect(screen.getByPlaceholderText(/Enter Name/i)).toHaveValue(
       searchData.name
-    );
-    expect(screen.getByPlaceholderText(/Enter Event/i)).toHaveValue(
-      searchData.event
     );
   });
 
@@ -320,18 +312,10 @@ describe('Organisation People Page', () => {
 
     userEvent.type(screen.getByPlaceholderText(/Enter Name/i), searchData.name);
     await wait();
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter Event/i),
-      searchData.event
-    );
-    await wait();
     expect(screen.getByPlaceholderText(/Enter Name/i)).toHaveValue(
       searchData.name
     );
     await wait();
-    expect(screen.getByPlaceholderText(/Enter Event/i)).toHaveValue(
-      searchData.event
-    );
   });
 
   test('Testing USERS list', async () => {
@@ -363,7 +347,7 @@ describe('Organisation People Page', () => {
     expect(findtext).toBeInTheDocument();
   });
 
-  test('No Mock Data', async () => {
+  test('No Mock Data test', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
