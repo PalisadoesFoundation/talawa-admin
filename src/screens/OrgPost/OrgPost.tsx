@@ -136,6 +136,13 @@ function OrgPost(): JSX.Element {
 
   const debouncedHandleSearch = debounce(handleSearch);
 
+  // let ReversedPostsList;
+  // //the above variable is defined to reverse the list of posts so the the most recently added posts should be displayed at the top.
+  // if (data) {
+  //   ReversedPostsList = data.postsByOrganizationConnection.edges
+  //     .slice()
+  //     .reverse();
+  // }
   return (
     <>
       <AdminNavbar targets={targets} url_1={configUrl} />

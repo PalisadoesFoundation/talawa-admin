@@ -4,6 +4,7 @@ import Col from 'react-bootstrap/Col';
 import { useTranslation } from 'react-i18next';
 
 import styles from './AdminDashListCard.module.css';
+import defaultImg from 'assets/third_image.png';
 
 interface AdminDashListCardProps {
   key: string;
@@ -13,7 +14,7 @@ interface AdminDashListCardProps {
   createdDate: string;
   image: string;
   admins: any;
-  members: string;
+  members: any;
 }
 
 function AdminDashListCard(props: AdminDashListCardProps): JSX.Element {
@@ -34,10 +35,7 @@ function AdminDashListCard(props: AdminDashListCardProps): JSX.Element {
         {props.image ? (
           <img src={props.image} className={styles.orgimg} />
         ) : (
-          <img
-            src="https://via.placeholder.com/200x100"
-            className={styles.orgimg}
-          />
+          <img src={defaultImg} className={styles.orgimg} />
         )}
         <Col className={styles.singledetails}>
           <div className={styles.singledetails_data_left}>
@@ -61,6 +59,7 @@ function AdminDashListCard(props: AdminDashListCardProps): JSX.Element {
                 className={styles.orgfontcreatedbtn}
                 onClick={Click}
                 disabled={
+                  props.admins.length > 0 &&
                   !props.admins.some((admin: any) => admin._id === userId)
                 }
               >

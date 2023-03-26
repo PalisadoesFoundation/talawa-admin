@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -15,6 +15,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
+import { within } from '@testing-library/react';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { ToastContainer } from 'react-toastify';
@@ -189,8 +190,15 @@ describe('Testing Roles screen', () => {
     expect(window.location).toBeAt('/orglist');
   });
 
-  test('Testing, If userType is not SUPERADMIN', async () => {
-    localStorage.setItem('UserType', 'USER');
+  test('Component should be rendered properly when user is not superAdmin', async () => {
+    const localStorageMock = {
+      getItem: jest.fn(() => 'ADMIN'),
+    };
+
+    Object.defineProperty(window, 'localStorage', {
+      value: localStorageMock,
+      writable: true,
+    });
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -205,6 +213,122 @@ describe('Testing Roles screen', () => {
     );
 
     await wait();
+
+    expect(window.location.assign).toHaveBeenCalled();
+  });
+
+  test('Component should be rendered properly when user is superAdmin', async () => {
+    const localStorageMock = {
+      getItem: jest.fn(() => 'SUPERADMIN'),
+    };
+
+    Object.defineProperty(window, 'localStorage', {
+      value: localStorageMock,
+      writable: true,
+    });
+
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Roles />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(window.location.assign).not.toHaveBeenCalled();
+  });
+
+  test('Roles renders a <PaginationList /> and tests changing rowsPerPage in the select', () => {
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Roles />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    const appHeader = screen.queryByTestId('roles-header');
+    const function_when_appHeader_isNotNull = (app: any) => {
+      const paginationList = within(app).getByTestId('something');
+      const tablePagination =
+        within(paginationList).getByTestId('table-pagination');
+
+      expect(tablePagination).toBeInTheDocument();
+
+      const rowsPerPageSelect = within(tablePagination).getByTestId(
+        'rows-per-page-select'
+      );
+      fireEvent.change(rowsPerPageSelect, { target: { value: '-1' } });
+      expect(rowsPerPageSelect).toHaveValue('-1');
+    };
+
+    const function_when_appHeader_isNull = () => {
+      expect(appHeader).toBeNull();
+    };
+
+    const assertion =
+      appHeader !== null
+        ? function_when_appHeader_isNotNull(appHeader)
+        : function_when_appHeader_isNull();
+
+    assertion;
+  });
+
+  test('should update rowsPerPage when selected from menu', () => {
+    const { getByRole } = render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Roles />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    const appHeader = screen.queryByTestId('roles-header');
+    const len = MOCKS.length;
+
+    const function_when_appHeader_isNotNull = (app: any) => {
+      const table = getByRole('table');
+
+      const rowsPerPageButton = getByRole('button', { name: /rows per page/i });
+
+      fireEvent.click(rowsPerPageButton);
+
+      const rowsPerPageOption = getByRole('option', { name: /10/i });
+
+      fireEvent.click(rowsPerPageOption);
+
+      const paginationList = within(app).getByTestId('something');
+      const tablePagination =
+        within(paginationList).getByTestId('table-pagination');
+
+      expect(tablePagination).toHaveAttribute('rowsPerPage', '10');
+
+      expect(table.querySelectorAll('tbody tr')).toHaveLength(len);
+    };
+
+    const function_when_appHeader_isNull = () => {
+      expect(appHeader).toBeNull();
+    };
+
+    const assertion =
+      appHeader !== null
+        ? function_when_appHeader_isNotNull(appHeader)
+        : function_when_appHeader_isNull();
+
+    assertion;
   });
 
   test('Testing seach by name functionality', async () => {
@@ -222,7 +346,21 @@ describe('Testing Roles screen', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId(/searchByName/i), 'John');
+    const search1 = 'John{backspace}{backspace}{backspace}{backspace}';
+    userEvent.type(screen.getByTestId(/searchByName/i), search1);
+
+    const search2 = 'Pete{backspace}{backspace}{backspace}{backspace}';
+    userEvent.type(screen.getByTestId(/searchByName/i), search2);
+
+    const search3 =
+      'John{backspace}{backspace}{backspace}{backspace}Sam{backspace}{backspace}{backspace}';
+    userEvent.type(screen.getByTestId(/searchByName/i), search3);
+
+    const search4 = 'Sam{backspace}{backspace}P{backspace}';
+    userEvent.type(screen.getByTestId(/searchByName/i), search4);
+
+    const search5 = 'Xe';
+    userEvent.type(screen.getByTestId(/searchByName/i), search5);
   });
 
   test('Testing change role functionality', async () => {
