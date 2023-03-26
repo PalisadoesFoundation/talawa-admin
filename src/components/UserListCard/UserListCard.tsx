@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import styles from './UserListCard.module.css';
 import { Link } from 'react-router-dom';
+import defaultImg from 'assets/third_image.png';
 
 interface UserListCardProps {
   key: string;
@@ -61,10 +62,7 @@ function UserListCard(props: UserListCardProps): JSX.Element {
           {props.memberImage ? (
             <img src={props.memberImage} className={styles.memberimg} />
           ) : (
-            <img
-              src="https://via.placeholder.com/200x100"
-              className={styles.memberimg}
-            />
+            <img src={defaultImg} className={styles.memberimg} />
           )}
           <Col className={styles.singledetails}>
             <div className={styles.singledetails_data_left}>
