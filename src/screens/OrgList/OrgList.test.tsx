@@ -181,7 +181,9 @@ describe('Organisation List Page', () => {
     }
 
     // Get all possible options
-    const options = Array.from(numRowsSelect?.querySelectorAll('option')).slice(1);
+    const options = Array.from(numRowsSelect?.querySelectorAll('option')).slice(
+      1
+    );
 
     // Change the  number of rows to display through the dropdown
     options.forEach((option) => {

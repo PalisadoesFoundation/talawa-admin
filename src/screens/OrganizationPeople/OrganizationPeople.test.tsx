@@ -316,8 +316,9 @@ describe('Organisation People Page', () => {
       }
 
       // Get all possible dropdown options
-      const rowsPerPageOptions: any[] =
-        Array.from(rowsPerPageSelect?.querySelectorAll('option'));
+      const rowsPerPageOptions: any[] = Array.from(
+        rowsPerPageSelect?.querySelectorAll('option')
+      );
 
       const peopleListContainer = screen.getByTestId('orgpeoplelist');
 
@@ -326,12 +327,12 @@ describe('Organisation People Page', () => {
         rowsPerPageSelect,
         rowsPerPageOptions[currRowPPindex].textContent
       );
-      
-         const totalNumPeople =
+
+      const totalNumPeople =
         rowsPerPageOptions[currRowPPindex].textContent === 'All'
           ? getTotalNumPeople(allPeopleTypes[peopleTypeIndex])
           : parseInt(rowsPerPageOptions[currRowPPindex].value);
-        
+
       expect(
         Array.from(
           peopleListContainer.querySelectorAll('[data-testid="peoplelistitem"]')
