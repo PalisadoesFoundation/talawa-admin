@@ -224,4 +224,13 @@ describe('Testing Forgot Password screen', () => {
 
     userEvent.click(screen.getByText('Change Password'));
   });
+
+  jest.mock('react-toastify', () => ({
+    toast: {
+      error: jest.fn(),
+      success: jest.fn(),
+    },
+
+    ToastContainer: jest.fn(),
+  }));
 });

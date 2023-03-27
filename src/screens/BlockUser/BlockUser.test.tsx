@@ -220,4 +220,10 @@ describe('Testing Block/Unblock user screen', () => {
     userEvent.click(screen.getByTestId('unBlockUser123'));
     userEvent.click(screen.getByTestId('blockUser456'));
   });
+
+  jest.mock('react-toastify', () => ({
+    toast: {
+      success: jest.fn(),
+    },
+  }));
 });

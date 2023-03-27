@@ -32,7 +32,7 @@ describe('Testing LandingPage', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('from Palisadoes')).toBeInTheDocument();
+      expect(screen.getByAltText('First slide')).toBeInTheDocument();
     });
   });
 });
