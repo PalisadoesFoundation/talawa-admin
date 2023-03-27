@@ -106,7 +106,7 @@ function OrgList(): JSX.Element {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if ((error.message === 'Failed to fetch', { autoClose: 2000 })) {
+      if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
           { autoClose: 2000 }
