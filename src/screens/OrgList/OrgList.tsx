@@ -23,6 +23,8 @@ import convertToBase64 from 'utils/convertToBase64';
 import AdminDashListCard from 'components/AdminDashListCard/AdminDashListCard';
 import PostNotFound from 'components/PostNotFound/PostNotFound';
 
+import close from 'assets/images/close.svg';
+
 function OrgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
 
@@ -304,6 +306,7 @@ function OrgList(): JSX.Element {
       </Row>
       <Modal
         isOpen={modalisOpen}
+        onRequestClose={() => setmodalIsOpen(false)}
         style={{
           overlay: { backgroundColor: 'grey' },
         }}
@@ -319,7 +322,13 @@ function OrgList(): JSX.Element {
                 className={styles.cancel}
                 data-testid="closeOrganizationModal"
               >
-                <i className="fa fa-times"></i>
+                <img
+                  src={close}
+                  alt="closing"
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                />
               </a>
             </div>
             <Form onSubmitCapture={CreateOrg}>
