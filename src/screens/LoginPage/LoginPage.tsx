@@ -30,6 +30,7 @@ function LoginPage(): JSX.Element {
   const [modalisOpen, setIsOpen] = React.useState(false);
   const [componentLoader, setComponentLoader] = useState(true);
   const [isInputFocused, setIsInputFocused] = useState(false);
+  const [isInputFocusedCon, setIsInputFocusedCon] = useState(false);
   const [signformState, setSignFormState] = useState({
     signfirstName: '',
     signlastName: '',
@@ -42,6 +43,7 @@ function LoginPage(): JSX.Element {
     password: '',
   });
   const [show, setShow] = useState<boolean>(false);
+  const [showCon, setShowCon] = useState<boolean>(false);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   const currentLanguageCode = cookies.get('i18next') || 'en';
@@ -236,6 +238,10 @@ function LoginPage(): JSX.Element {
     setShow(!show);
   };
 
+  const handleShowCon = () => {
+    setShowCon(!showCon);
+  };
+
   return (
     <>
       <section className={styles.login_background}>
@@ -395,26 +401,51 @@ function LoginPage(): JSX.Element {
                         </span>
                       )}
                   </div>
-                  <label>{t('confirmPassword')}</label>
-                  <input
-                    type={show ? 'text' : 'password'}
-                    id="cpassword"
-                    placeholder={t('confirmPassword')}
-                    required
-                    value={signformState.cPassword}
-                    onChange={(e) => {
-                      setSignFormState({
-                        ...signformState,
-                        cPassword: e.target.value,
-                      });
-                    }}
-                  />
-                  <label
-                    id="showPasswordr"
-                    className={styles.showregister}
-                    onClick={handleShow}
-                    data-testid="showPasswordr"
-                  ></label>
+                  <div className={styles.passwordalert}>
+                    <label>{t('confirmPassword')}</label>
+                    <input
+                      type={showCon ? 'text' : 'password'}
+                      id="signpassword"
+                      placeholder={t('confirmPassword')}
+                      required
+                      value={signformState.cPassword}
+                      onChange={(e) => {
+                        setSignFormState({
+                          ...signformState,
+                          cPassword: e.target.value,
+                        });
+                      }}
+                      onFocus={() => setIsInputFocusedCon(true)}
+                      onBlur={() => setIsInputFocusedCon(false)}
+                    />
+                    <label
+                      id="showPasswordr"
+                      className={styles.showregister}
+                      onClick={handleShowCon}
+                      data-testid="showPasswordr"
+                    >
+                      {showCon ? (
+                        <i className="fas fa-eye"></i>
+                      ) : (
+                        <i className="fas fa-eye-slash"></i>
+                      )}
+                    </label>
+                    {isInputFocusedCon &&
+                      signformState.signPassword !==
+                        signformState.cPassword && (
+                        <span data-testid="passwordCheck">
+                          {t('Password_and_Confirm_password_mismatches.')}
+                        </span>
+                      )}
+                    {!isInputFocusedCon &&
+                      signformState.cPassword.length > 0 &&
+                      signformState.signPassword !==
+                        signformState.cPassword && (
+                        <span data-testid="passwordCheck">
+                          {t('Password_and_Confirm_password_mismatches.')}
+                        </span>
+                      )}
+                  </div>
                   <div className="googleRecaptcha">
                     <ReCAPTCHA
                       ref={recaptchaRef}

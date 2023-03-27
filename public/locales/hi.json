@@ -10,6 +10,7 @@
     "email": "ईमेल",
     "password": "पासवर्ड",
     "atleast_8_char_long": "कम से कम 8 कैरेक्टर लंबा",
+    "Password_and_Confirm_password_mismatches.": "पासवर्ड और पुष्टि पासवर्ड बेमेल।",
     "confirmPassword": "पासवर्ड की पुष्टि कीजिये",
     "forgotPassword": "पासवर्ड भूल गए ?",
     "enterEmail": "ईमेल दर्ज करें",

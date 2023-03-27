@@ -11,16 +11,20 @@ html {
   top: 40%;
   cursor: pointer;
 }
+
 .showregister {
-  position: absolute;
-  right: 18%;
-  font-weight: normal;
-  top: 53%;
   cursor: pointer;
+  position: absolute;
+  right: 16%;
+  font-weight: normal;
+  cursor: pointer;
+  margin-top: -34px;
 }
+
 #grid_wrapper {
   align-items: left;
 }
+
 .login_background {
   overflow-x: hidden;
   overflow-y: visible;
@@ -36,6 +40,7 @@ html {
   right: 0;
   left: 0;
 }
+
 .flexdir {
   display: flex;
   flex-direction: row;
@@ -64,6 +69,7 @@ html {
   justify-content: left;
   flex-direction: column;
 }
+
 .logintitle {
   color: #707070;
   font-weight: 600;
@@ -73,14 +79,15 @@ html {
   border-bottom: 3px solid #31bb6b;
   width: 50%;
 }
-form > label {
+
+form>label {
   font-weight: bold;
   padding-bottom: 1px;
   font-size: 14px;
   color: #707070;
 }
 
-form > input {
+form>input {
   display: block;
   margin-bottom: 20px;
   border: 1px solid #e8e5e5;
@@ -126,10 +133,12 @@ form > input {
   transition: transform 0.2s, box-shadow 0.2s;
   width: 100%;
 }
+
 .whiteloginbtn:hover {
   background-color: #737373;
   color: white;
 }
+
 .greenregbtn {
   margin: 1rem 0 0;
   margin-top: 10px;
@@ -147,6 +156,7 @@ form > input {
   transition: transform 0.2s, box-shadow 0.2s;
   width: 100%;
 }
+
 .greenregbtn:hover {
   color: #fff;
   background-color: #1e7e34;
@@ -167,21 +177,26 @@ form > input {
   transition: transform 0.2s, box-shadow 0.2s;
   width: 130px;
 }
+
 .navloginbtn:hover {
   color: #fff;
   background-color: #1e7e34;
   border-color: #1c7430;
 }
+
 .languageBtn {
   font-size: 20px;
   color: #31bb6b;
 }
+
 .languageBtn:hover {
   color: #31bb6b;
 }
+
 .languageBtn:focus {
   color: #31bb6b;
 }
+
 .forgotpwd {
   text-align: right;
   justify-content: right;
@@ -190,12 +205,14 @@ form > input {
   margin-top: 10px;
   text-decoration: none !important;
 }
-form > hr {
+
+form>hr {
   margin-top: 20px;
   margin-bottom: 0px;
   border-bottom: 0rem solid #e8e5e5;
 }
-form > br {
+
+form>br {
   margin-top: 10px;
   margin-bottom: 10px;
   border-bottom: 0.2rem solid #e8e5e5;
@@ -234,7 +251,7 @@ form > br {
   width: 70px;
 }
 
-.logo > strong {
+.logo>strong {
   line-height: 1.5rem;
   margin-left: -5px;
   font-family: sans-serif;
@@ -242,12 +259,13 @@ form > br {
   color: #707070;
 }
 
-.cancel > i {
+.cancel>i {
   margin-top: 5px;
   transform: scale(1.2);
   cursor: pointer;
   color: #707070;
 }
+
 .modalbody {
   width: 50px;
 }
@@ -258,6 +276,7 @@ form > br {
   width: 10em;
   height: 10em;
 }
+
 .loader {
   margin: 60px auto;
   margin-top: 35vh !important;
@@ -280,16 +299,19 @@ form > br {
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
 }
+
 @keyframes load8 {
   0% {
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
@@ -314,6 +336,7 @@ form > br {
   height: 100%;
   background-color: white;
 }
+
 /* .leftmainbg{
   background-color: #fafafa;
   border-bottom-right-radius: 10%;
@@ -326,7 +349,7 @@ form > br {
   margin-bottom: 30px;
 }
 
-.homeright > h1 {
+.homeright>h1 {
   font-size: 20px;
   padding-top: 35px;
   width: 17%;
@@ -347,19 +370,27 @@ form > br {
   display: flex;
   flex-direction: row;
 }
-.dispflex > div {
+
+.dispflex>div {
   width: 95%;
   margin-right: 10px;
 }
-.passwordalert > input {
+
+.passwordalert {
+  margin-bottom: 15px;
+}
+
+.passwordalert>input {
   margin-bottom: 2px;
 }
-.passwordalert > span {
+
+.passwordalert>span {
   color: rgb(240, 48, 48);
   font-size: 9px;
   padding-bottom: 20px;
 }
-.homeright > form input {
+
+.homeright>form input {
   background-color: white;
   box-shadow: 1px 3px #e8e5e5;
 }
@@ -375,11 +406,14 @@ form > br {
   body::before {
     height: 118px;
   }
+
   .navbarbg {
     height: auto;
   }
+
   .languageBtn {
     margin-bottom: 10px;
   }
 }
+
 /* ===== Home Page CSS End ===== */
