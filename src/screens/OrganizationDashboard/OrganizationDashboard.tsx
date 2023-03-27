@@ -76,7 +76,8 @@ function OrganizationDashboard(): JSX.Element {
   };
 
   function handleConfirmDeleteOrg(e: any) {
-    const isMatchingOrgName = e.target.value === data.organizations[0].name;
+    const { value } = e.target;
+    const isMatchingOrgName = value === data.organizations[0].name;
     setIsDisabled(!isMatchingOrgName);
   }
 
@@ -332,7 +333,7 @@ function OrganizationDashboard(): JSX.Element {
             </div>
             <div className="modal-body">
               {t('deleteMsg')}
-              <p className={styles.orgDelConfirmTex}>
+              <p className={styles.orgDelConfirmText}>
                 <Trans
                   i18nKey="dashboard.confirmDeleteText"
                   values={{

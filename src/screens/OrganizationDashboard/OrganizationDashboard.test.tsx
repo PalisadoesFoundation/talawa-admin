@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
+import userEvent from '@testing-library/user-event';
 
 import OrganizationDashboard from './OrganizationDashboard';
 import {
@@ -65,6 +66,7 @@ describe('Organisation Dashboard Page', () => {
     fireEvent.click(screen.getByTestId(/deleteOrganizationBtn/i));
     expect(window.location).not.toBeNull();
   });
+
   test('Should check if organisation image is present', async () => {
     const { container } = render(
       <MockedProvider addTypename={false} mocks={MOCKS_WITH_IMAGE}>
@@ -83,6 +85,7 @@ describe('Organisation Dashboard Page', () => {
     const image = screen.getByTestId(/orgDashImgPresent/i);
     expect(image).toBeInTheDocument();
   });
+
   test('Should check if organisation image is not present', async () => {
     const { container } = render(
       <MockedProvider addTypename={false} mocks={MOCKS_WITHOUT_IMAGE}>
@@ -100,5 +103,37 @@ describe('Organisation Dashboard Page', () => {
     await wait();
     const image = screen.getByTestId(/orgDashImgAbsent/i);
     expect(image).toBeInTheDocument();
+  });
+
+  test('should check organization delete call', async () => {
+    const { container } = render(
+      <MockedProvider addTypename={false} mocks={MOCKS_WITHOUT_IMAGE}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationDashboard />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    expect(container.textContent).not.toBe('Loading data...');
+    await wait();
+    fireEvent.click(screen.getByText('Delete This Organization'));
+    const orgInput = screen.getByTestId(/orgName/i);
+    userEvent.type(orgInput, 'bar');
+    expect(screen.getByTestId(/deleteOrganizationBtn/i)).toHaveProperty(
+      'disabled',
+      true
+    );
+
+    userEvent.clear(orgInput);
+    userEvent.type(orgInput, 'Dummy Organization');
+    userEvent.tab();
+    expect(screen.getByTestId(/deleteOrganizationBtn/i)).toHaveProperty(
+      'disabled',
+      false
+    );
   });
 });
