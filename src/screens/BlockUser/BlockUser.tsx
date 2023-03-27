@@ -99,17 +99,18 @@ const Requests = () => {
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success('User blocked successfully');
+        toast.success('User blocked successfully', { autoClose: 2000 });
         refetch();
       }
     } catch (error: any) {
       /* istanbul ignore next */
       if (error.message === 'Failed to fetch') {
         toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
+          { autoClose: 2000 }
         );
       } else {
-        toast.error(error.message);
+        toast.error(error.message, { autoClose: 2000 });
       }
     }
   };
@@ -124,17 +125,18 @@ const Requests = () => {
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success('User Un-Blocked successfully');
+        toast.success('User Un-Blocked successfully', { autoClose: 2000 });
         refetch();
       }
     } catch (error: any) {
       /* istanbul ignore next */
       if (error.message === 'Failed to fetch') {
         toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
+          { autoClose: 2000 }
         );
       } else {
-        toast.error(error.message);
+        toast.error(error.message, { autoClose: 2000 });
       }
     }
   };

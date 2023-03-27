@@ -51,7 +51,9 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
     });
 
     if (data) {
-      toast.success('Plugin Added Successfully');
+      toast.success('Plugin Added Successfully', {
+        autoClose: 2000,
+      });
       setTimeout(() => {
         window.location.reload();
       }, 2000);

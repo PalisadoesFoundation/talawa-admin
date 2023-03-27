@@ -80,10 +80,11 @@ function LoginPage(): JSX.Element {
         /* istanbul ignore next */
         if (error.message === 'Failed to fetch') {
           toast.error(
-            'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+            'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
+            { autoClose: 2000 }
           );
         } else {
-          toast.error(error.message);
+          toast.error(error.message, { autoClose: 2000 });
         }
       }
     }
@@ -102,7 +103,7 @@ function LoginPage(): JSX.Element {
       return data.recaptcha;
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error('Captcha Error!');
+      toast.error('Captcha Error!', { autoClose: 2000 });
     }
   };
 
@@ -118,7 +119,7 @@ function LoginPage(): JSX.Element {
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
-      toast.error('Please, check the captcha.');
+      toast.error('Please, check the captcha.', { autoClose: 2000 });
       return;
     }
 
@@ -142,7 +143,8 @@ function LoginPage(): JSX.Element {
           /* istanbul ignore next */
           if (data) {
             toast.success(
-              'Successfully Registered. Please wait until you will be approved.'
+              'Successfully Registered. Please wait until you will be approved.',
+              { autoClose: 2000 }
             );
 
             setSignFormState({
@@ -157,19 +159,24 @@ function LoginPage(): JSX.Element {
           /* istanbul ignore next */
           if (error.message === 'Failed to fetch') {
             toast.error(
-              'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+              'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
+              { autoClose: 2000 }
             );
           } else if (error.message) {
-            toast.warn(error.message);
+            toast.warn(error.message, { autoClose: 2000 });
           } else {
-            toast.error('Something went wrong, Please try after sometime.');
+            toast.error('Something went wrong, Please try after sometime.', {
+              autoClose: 2000,
+            });
           }
         }
       } else {
-        toast.warn('Password and Confirm password mismatches.');
+        toast.warn('Password and Confirm password mismatches.', {
+          autoClose: 2000,
+        });
       }
     } else {
-      toast.warn('Fill all the Details Correctly.');
+      toast.warn('Fill all the Details Correctly.', { autoClose: 2000 });
     }
   };
 
@@ -182,7 +189,7 @@ function LoginPage(): JSX.Element {
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
-      toast.error('Please, check the captcha.');
+      toast.error('Please, check the captcha.', { autoClose: 2000 });
       return;
     }
 
@@ -209,21 +216,24 @@ function LoginPage(): JSX.Element {
             window.location.replace('/orglist');
           }
         } else {
-          toast.warn('Sorry! you are not Authorised!');
+          toast.warn('Sorry! you are not Authorised!', { autoClose: 2000 });
         }
       } else {
-        toast.warn('User not found!');
+        toast.warn('User not found!', { autoClose: 2000 });
       }
     } catch (error: any) {
       /* istanbul ignore next */
       if (error.message == 'Failed to fetch') {
         toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
+          { autoClose: 2000 }
         );
       } else if (error.message) {
-        toast.error(error.message);
+        toast.error(error.message, { autoClose: 2000 });
       } else {
-        toast.error('Something went wrong, Please try after sometime.');
+        toast.error('Something went wrong, Please try after sometime.', {
+          autoClose: 2000,
+        });
       }
     }
   };

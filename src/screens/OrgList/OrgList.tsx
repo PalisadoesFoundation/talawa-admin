@@ -90,7 +90,9 @@ function OrgList(): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Congratulation the Organization is created');
+        toast.success('Congratulation the Organization is created', {
+          autoClose: 2000,
+        });
         refetch();
         setFormState({
           name: '',
@@ -104,12 +106,13 @@ function OrgList(): JSX.Element {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
+      if ((error.message === 'Failed to fetch', { autoClose: 2000 })) {
         toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
+          { autoClose: 2000 }
         );
       } else {
-        toast.error(error.message);
+        toast.error(error.message, { autoClose: 2000 });
       }
     }
   };

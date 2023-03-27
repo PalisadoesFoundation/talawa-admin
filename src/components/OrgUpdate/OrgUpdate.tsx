@@ -60,7 +60,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success('Successful updated');
+        toast.success('Successful updated', { autoClose: 2000 });
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -69,10 +69,11 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
       /* istanbul ignore next */
       if (error.message === 'Failed to fetch') {
         toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
+          { autoClose: 2000 }
         );
       } else {
-        toast.error(error.message);
+        toast.error(error.message, { autoClose: 2000 });
       }
     }
   };

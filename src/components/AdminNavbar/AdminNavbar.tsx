@@ -62,10 +62,13 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
           /* istanbul ignore next */
           if (error.message === 'Failed to fetch') {
             toast.error(
-              'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+              'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
+              {
+                autoClose: 2000,
+              }
             );
           } else {
-            toast.error(error.message);
+            toast.error(error.message, { autoClose: 2000 });
           }
         }
       }

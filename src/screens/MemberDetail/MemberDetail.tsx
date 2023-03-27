@@ -66,7 +66,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('User is added as admin.');
+        toast.success('User is added as admin.', { autoClose: 2000 });
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -75,10 +75,11 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       /* istanbul ignore next */
       if (error.message === 'Failed to fetch') {
         toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
+          { autoClose: 2000 }
         );
       } else {
-        toast.error(error.message);
+        toast.error(error.message, { autoClose: 2000 });
       }
     }
   };

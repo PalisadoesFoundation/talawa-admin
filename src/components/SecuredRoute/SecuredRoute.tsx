@@ -29,7 +29,7 @@ setInterval(() => {
   const timeSinceLastActive = currentTime - lastActive;
 
   if (timeSinceLastActive > timeoutMilliseconds) {
-    toast.warn('Kindly relogin as sessison has expired');
+    toast.warn('Kindly relogin as sessison has expired', { autoClose: 2000 });
 
     window.location.href = '/';
     localStorage.setItem('IsLoggedIn', 'FALSE');
