@@ -304,7 +304,6 @@ function LoginPage(): JSX.Element {
             <Col sm={5} className={styles.rightmainbg}>
               <div className={styles.homeright}>
                 <h1>{t('register')}</h1>
-                {/* <h2>to seamlessly manage your Organization.</h2> */}
                 <form onSubmit={signup_link}>
                   <div className={styles.dispflex}>
                     <div>
