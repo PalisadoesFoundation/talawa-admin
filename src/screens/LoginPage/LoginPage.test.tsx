@@ -412,7 +412,7 @@ describe('Testing Login Page Screen', () => {
     await wait();
   });
 
-  test('Testing password preview feature', async () => {
+  test('Testing confirm password preview feature', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
