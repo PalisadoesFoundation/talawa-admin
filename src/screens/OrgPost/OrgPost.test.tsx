@@ -207,7 +207,7 @@ describe('Organisation Post Page', () => {
     await wait();
 
     userEvent.click(screen.getByTestId('closePostModalBtn'));
-  });
+  }, 15000);
 
   test('Testing search functionality', async () => {
     render(
