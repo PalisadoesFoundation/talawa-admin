@@ -266,7 +266,7 @@ describe('Organisation Events Page', () => {
     userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
   });
 
-  test('Testing Create event modal', async () => {
+  it('Testing Create event functionality', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>

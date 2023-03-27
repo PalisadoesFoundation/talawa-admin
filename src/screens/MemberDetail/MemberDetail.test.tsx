@@ -129,7 +129,7 @@ jest.mock('react-toastify');
 describe('MemberDetail', () => {
   global.alert = jest.fn();
 
-  test('should render the elements', async () => {
+  it('should render the elements', async () => {
     const props = {
       id: 'rishav-jha-mech',
     };

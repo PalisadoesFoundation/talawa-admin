@@ -20,7 +20,7 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 describe('Testing LandingPage', () => {
   const fallbackLoader = <div className="loader"></div>;
 
-  test('should render props and text elements test for the page component', async () => {
+  it('should render props and text elements test for the page component', async () => {
     render(
       <Suspense fallback={fallbackLoader}>
         <ApolloProvider client={client}>
@@ -32,7 +32,7 @@ describe('Testing LandingPage', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('loginPage.fromPalisadoes')).toBeInTheDocument();
+      expect(screen.getByText('from Palisadoes')).toBeInTheDocument();
     });
   });
 });

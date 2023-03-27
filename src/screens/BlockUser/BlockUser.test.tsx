@@ -199,4 +199,25 @@ describe('Testing Block/Unblock user screen', () => {
 
     userEvent.type(screen.getByTestId('searchByName'), 'john');
   });
+
+  test('Testing the timing on the toast alert', async () => {
+    window.location.assign('/blockuser/id=123');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <BlockUser />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('unBlockUser123'));
+    userEvent.click(screen.getByTestId('blockUser456'));
+  });
 });
