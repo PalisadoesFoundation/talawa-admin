@@ -122,7 +122,7 @@ const EMPTY_ORG_MOCKS = [
       },
     },
     result: {
-      data: undefined
+      data: undefined,
     },
   },
   {
@@ -134,7 +134,7 @@ const EMPTY_ORG_MOCKS = [
       },
     },
     result: {
-      data: undefined
+      data: undefined,
     },
   },
   {
