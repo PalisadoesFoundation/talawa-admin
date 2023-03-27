@@ -416,12 +416,13 @@ function LoginPage(): JSX.Element {
                       }}
                       onFocus={() => setIsInputFocusedCon(true)}
                       onBlur={() => setIsInputFocusedCon(false)}
+                      data-testid="cpassword"
                     />
                     <label
                       id="showPasswordr"
                       className={styles.showregister}
                       onClick={handleShowCon}
-                      data-testid="showPasswordr"
+                      data-testid="showPasswordrCon"
                     >
                       {showCon ? (
                         <i className="fas fa-eye"></i>
