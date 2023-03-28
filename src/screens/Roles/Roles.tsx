@@ -22,6 +22,8 @@ const Roles = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchByName, setSearchByName] = useState('');
+  const [count, setCount] = useState(0);
+  const autoClose = 2000;
 
   useEffect(() => {
     const userType = localStorage.getItem('UserType');
@@ -29,8 +31,25 @@ const Roles = () => {
       window.location.assign('/orglist');
     }
     setComponentLoader(false);
-  }, []);
-  const autoClose = 2000;
+  }, [])
+  
+
+
+
+  useEffect(() => {
+    if (searchByName !== '') {
+      refetch({
+        filter: searchByName,
+      });
+    } else {
+      if (count !== 0) {
+        refetch({
+          filter: searchByName,
+        });
+      }
+    }
+  }, [count, searchByName])
+  
   const { data, loading: users_loading, refetch } = useQuery(USER_LIST);
 
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
@@ -101,14 +120,11 @@ const Roles = () => {
   const handleSearchByName = (e: any) => {
     const { value } = e.target;
     setSearchByName(value);
-
-    refetch({
-      filter: searchByName,
-    });
+    setCount((prev) => prev + 1);
   };
 
   return (
-    <>
+    <div data-testid="roles-header">
       <ListNavbar />
       <Row>
         <Col sm={3}>
@@ -248,6 +264,7 @@ const Roles = () => {
                       count={data ? data.users.length : 0}
                       rowsPerPage={rowsPerPage}
                       page={page}
+                      data-testid="something"
                       onPageChange={handleChangePage}
                       onRowsPerPageChange={handleChangeRowsPerPage}
                     />
@@ -258,7 +275,7 @@ const Roles = () => {
           </div>
         </Col>
       </Row>
-    </>
+    </div>
   );
 };
 

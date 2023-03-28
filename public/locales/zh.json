@@ -186,8 +186,7 @@
   },
   "orgPost": {
     "title": "塔拉瓦郵報",
-    "postsByTitle": "按標題的帖子",
-    "postsByText": "文字帖子",
+    "searchPost": "搜索帖子",
     "posts": "帖子",
     "createPost": "創建帖子",
     "postDetails": "發布詳細信息",
@@ -199,7 +198,9 @@
     "searchTitle": "按標題搜索",
     "searchText": "按文本搜索",
     "ptitle": "帖子標題",
-    "postDes": "你要談什麼？"
+    "postDes": "你要談什麼？",
+    "Title": "標題",
+    "Text": "文本"
   },
   "postNotFound": {
     "post": "郵政",

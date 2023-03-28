@@ -373,6 +373,7 @@ export const ORGANIZATION_POST_CONNECTION_LIST = gql`
     postsByOrganizationConnection(
       id: $id
       where: { title_contains: $title_contains, text_contains: $text_contains }
+      orderBy: createdAt_DESC
     ) {
       edges {
         _id

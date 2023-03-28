@@ -37,7 +37,6 @@ function OrgList(): JSX.Element {
     location: '',
     image: '',
   });
-  const [, setSearchByName] = useState('');
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -149,18 +148,9 @@ function OrgList(): JSX.Element {
 
   const handleSearchByName = (e: any) => {
     const { value } = e.target;
-    setSearchByName(value);
-
-    if (value.length === 0) {
-      refetch({
-        filter: '',
-      });
-    } else {
-      setSearchByName(value);
-      refetch({
-        filter: value,
-      });
-    }
+    refetch({
+      filter: value,
+    });
   };
   let dataRevOrg;
   const debouncedHandleSearchByName = debounce(handleSearchByName);
@@ -247,7 +237,7 @@ function OrgList(): JSX.Element {
                     createdAt: string;
                     location: string | null;
                   }) => {
-                    if (data_2?.user.userType == 'SUPERADMIN') {
+                    if (data_2 && data_2.user.userType == 'SUPERADMIN') {
                       return (
                         <SuperDashListCard
                           id={datas._id}

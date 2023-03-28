@@ -186,8 +186,7 @@
   },
   "orgPost": {
     "title": "Puestos Talawa",
-    "postsByTitle": "Publicaciones por título",
-    "postsByText": "Publicaciones por Texto",
+    "searchPost": "Buscar publicación",
     "posts": "Publicaciones",
     "createPost": "Crear publicación",
     "postDetails": "Detalles de la publicación",
@@ -199,7 +198,9 @@
     "searchTitle": "Buscar por título",
     "searchText": "Buscar por texto",
     "ptitle": "Título de la entrada",
-    "postDes": "¿De qué hablar?"
+    "postDes": "¿De qué hablar?",
+    "Title": "Título",
+    "Text": "Texto"
   },
   "postNotFound": {
     "post": "Publicaciones",

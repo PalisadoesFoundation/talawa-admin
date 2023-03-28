@@ -42,7 +42,7 @@ describe('Testing Organization People List Card', () => {
     id: '1',
     memberName: 'John Doe',
     joinDate: '20/03/2022',
-    memberImage: 'https://via.placeholder.com/200x100',
+    memberImage: 'image',
     memberEmail: 'johndoe@gmail.com',
   };
 
