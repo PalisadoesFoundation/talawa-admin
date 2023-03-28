@@ -48,7 +48,7 @@ const PaginationList = (props: PropsInterface) => {
           ActionsComponent={Pagination}
         />
       </Hidden>
-      <Hidden smDown>
+      <Hidden smDown initialWidth={'lg'}>
         <TablePagination
           rowsPerPageOptions={[
             -1,
