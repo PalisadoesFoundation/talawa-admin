@@ -27,8 +27,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: yarn install
-      - run: yarn test --watchAll=false --coverage
+      - run: npm install --legacy-peer-deps
+      - run: npm run test -- --watchAll=false --coverage
       - name: Present and upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
         uses: codecov/codecov-action@v3
         with:

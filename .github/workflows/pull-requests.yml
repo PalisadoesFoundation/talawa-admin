@@ -26,9 +26,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install Dependencies
-        run: yarn
+        run: npm install --legacy-peer-deps
       - name: Run linting check
-        run: yarn lint:check
+        run: npm run lint:check
 
   Count-lines-of-code:
     name: Total number of lines in every file should not be more than 400
@@ -47,9 +47,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install Dependencies
-        run: yarn
+        run: npm install --legacy-peer-deps
       - name: Check formatting
-        run: yarn format:check
+        run: npm run format:check
 
   Type-Checker:
     name: Check for type errors
@@ -58,9 +58,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install Dependencies
-        run: yarn
+        run: npm install --legacy-peer-deps
       - name: Check for type errors
-        run: yarn typecheck
+        run: npm run typecheck
     
   Continuous-Integration:
     name: Continuous integration on pull request
@@ -69,9 +69,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install Dependencies
-        run: yarn
+        run: npm install --legacy-peer-deps
       - name: Run tests
-        run: yarn test
+        run: npm run test -- --watchAll=false --coverage
   
   Code-Coverage:
     name: Shows code coverage
@@ -82,8 +82,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: yarn install
-      - run: yarn test --watchAll=false --coverage
+      - run: npm install --legacy-peer-deps
+      - run: npm run test -- --watchAll=false --coverage
       - name: Present and Upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
         uses: codecov/codecov-action@v3
         with:
