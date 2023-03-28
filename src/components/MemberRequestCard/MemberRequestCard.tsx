@@ -28,6 +28,8 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
     keyPrefix: 'membershipRequest',
   });
 
+  const autoClose = 2000;
+
   const AddMember = async () => {
     try {
       await acceptMutation({
@@ -37,7 +39,7 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
       });
 
       /* istanbul ignore next */
-      toast.success('it is accepted', { autoClose: 2000 });
+      toast.success('it is accepted', { autoClose });
       /* istanbul ignore next */
       setTimeout(() => {
         window.location.reload();
@@ -47,10 +49,10 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose: 2000 }
+          { autoClose }
         );
       } else {
-        toast.error(error.message, { autoClose: 2000 });
+        toast.error(error.message, { autoClose });
       }
     }
   };
@@ -72,10 +74,10 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
         if (error.message === 'Failed to fetch') {
           toast.error(
             'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-            { autoClose: 2000 }
+            { autoClose }
           );
         } else {
-          toast.error(error.message, { autoClose: 2000 });
+          toast.error(error.message, { autoClose });
         }
       }
     }

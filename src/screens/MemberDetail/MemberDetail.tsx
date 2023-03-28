@@ -32,6 +32,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
+  const autoClose = 2000;
 
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
   const {
@@ -66,7 +67,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('User is added as admin.', { autoClose: 2000 });
+        toast.success('User is added as admin.', { autoClose });
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -76,10 +77,10 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose: 2000 }
+          { autoClose }
         );
       } else {
-        toast.error(error.message, { autoClose: 2000 });
+        toast.error(error.message, { autoClose });
       }
     }
   };

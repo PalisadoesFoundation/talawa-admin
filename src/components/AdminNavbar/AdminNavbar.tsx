@@ -40,6 +40,8 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
   });
   const [updateSpam] = useMutation(UPDATE_SPAM_NOTIFICATION_MUTATION);
 
+  const autoClose = 2000;
+
   useEffect(() => {
     const handleUpdateSpam = async () => {
       const spamId = localStorage.getItem('spamId');
@@ -64,11 +66,11 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
             toast.error(
               'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
               {
-                autoClose: 2000,
+                autoClose,
               }
             );
           } else {
-            toast.error(error.message, { autoClose: 2000 });
+            toast.error(error.message, { autoClose });
           }
         }
       }

@@ -64,6 +64,8 @@ const Requests = () => {
     memberIds.includes(user._id)
   );
 
+  const autoClose = 2000;
+
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
@@ -99,7 +101,7 @@ const Requests = () => {
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success('User blocked successfully', { autoClose: 2000 });
+        toast.success('User blocked successfully', { autoClose });
         refetch();
       }
     } catch (error: any) {
@@ -107,10 +109,10 @@ const Requests = () => {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose: 2000 }
+          { autoClose }
         );
       } else {
-        toast.error(error.message, { autoClose: 2000 });
+        toast.error(error.message, { autoClose });
       }
     }
   };
@@ -125,7 +127,7 @@ const Requests = () => {
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success('User Un-Blocked successfully', { autoClose: 2000 });
+        toast.success('User Un-Blocked successfully', { autoClose });
         refetch();
       }
     } catch (error: any) {
@@ -133,10 +135,10 @@ const Requests = () => {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose: 2000 }
+          { autoClose }
         );
       } else {
-        toast.error(error.message, { autoClose: 2000 });
+        toast.error(error.message, { autoClose });
       }
     }
   };

@@ -30,6 +30,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
   });
 
   const [login] = useMutation(UPDATE_USER_MUTATION);
+  const autoClose = 2000;
 
   const {
     data: data,
@@ -80,7 +81,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
           selectedOption: '',
           file: '',
         });
-        toast.success('Successful updated', { autoClose: 2000 });
+        toast.success('Successful updated', { autoClose });
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -90,10 +91,10 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose: 2000 }
+          { autoClose }
         );
       } else {
-        toast.error(error.message, { autoClose: 2000 });
+        toast.error(error.message, { autoClose });
       }
     }
   };

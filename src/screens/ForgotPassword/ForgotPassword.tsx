@@ -39,6 +39,8 @@ const ForgotPassword = () => {
     setComponentLoader(false);
   }, []);
 
+  const autoClose = 2000;
+
   const getOTP = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -53,20 +55,20 @@ const ForgotPassword = () => {
       if (data) {
         localStorage.setItem('otpToken', data.otp.otpToken);
         toast.success('OTP is sent to your registered email.', {
-          autoClose: 2000,
+          autoClose,
         });
       }
     } catch (error: any) {
       /* istanbul ignore next */
       if (error.message === 'User not found') {
-        toast.warn('Email is not registered.', { autoClose: 2000 });
+        toast.warn('Email is not registered.', { autoClose });
       } else if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose: 2000 }
+          { autoClose }
         );
       } else {
-        toast.error('Error in sending mail.', { autoClose: 2000 });
+        toast.error('Error in sending mail.', { autoClose });
       }
     }
   };
@@ -76,7 +78,7 @@ const ForgotPassword = () => {
     const { userOtp, newPassword, confirmNewPassword } = forgotPassFormData;
 
     if (newPassword !== confirmNewPassword) {
-      toast.error('Password and Confirm password mismatches.');
+      toast.error('Password and Confirm password mismatches.', { autoClose });
       return;
     }
 
@@ -97,7 +99,7 @@ const ForgotPassword = () => {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Password changes successfully.', { autoClose: 2000 });
+        toast.success('Password changes successfully.', { autoClose });
 
         setForgotPassFormData({
           userOtp: '',
@@ -110,10 +112,10 @@ const ForgotPassword = () => {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose: 2000 }
+          { autoClose }
         );
       } else {
-        toast.error(error.message, { autoClose: 2000 });
+        toast.error(error.message, { autoClose });
       }
     }
   };

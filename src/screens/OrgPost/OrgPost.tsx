@@ -54,6 +54,7 @@ function OrgPost(): JSX.Element {
   } = useQuery(ORGANIZATION_POST_CONNECTION_LIST, {
     variables: { id: currentUrl, title_contains: '', text_contains: '' },
   });
+  const autoClose = 2000;
   const [create, { loading }] = useMutation(CREATE_POST_MUTATION);
 
   const CreatePost = async (e: ChangeEvent<HTMLFormElement>) => {
@@ -70,7 +71,7 @@ function OrgPost(): JSX.Element {
       /* istanbul ignore next */
       if (data) {
         toast.success('Congratulations! You have Posted Something.', {
-          autoClose: 2000,
+          autoClose,
         });
         refetch();
         setPostFormState({
@@ -85,10 +86,10 @@ function OrgPost(): JSX.Element {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose: 2000 }
+          { autoClose }
         );
       } else {
-        toast.error(error.message, { autoClose: 2000 });
+        toast.error(error.message, { autoClose });
       }
     }
   };

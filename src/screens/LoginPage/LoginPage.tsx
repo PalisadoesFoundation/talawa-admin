@@ -43,6 +43,7 @@ function LoginPage(): JSX.Element {
   });
   const [show, setShow] = useState<boolean>(false);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const autoClose = 2000;
 
   const currentLanguageCode = cookies.get('i18next') || 'en';
 
@@ -81,10 +82,10 @@ function LoginPage(): JSX.Element {
         if (error.message === 'Failed to fetch') {
           toast.error(
             'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-            { autoClose: 2000 }
+            { autoClose }
           );
         } else {
-          toast.error(error.message, { autoClose: 2000 });
+          toast.error(error.message, { autoClose });
         }
       }
     }
@@ -103,7 +104,7 @@ function LoginPage(): JSX.Element {
       return data.recaptcha;
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error('Captcha Error!', { autoClose: 2000 });
+      toast.error('Captcha Error!', { autoClose });
     }
   };
 
@@ -119,7 +120,7 @@ function LoginPage(): JSX.Element {
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
-      toast.error('Please, check the captcha.', { autoClose: 2000 });
+      toast.error('Please, check the captcha.', { autoClose });
       return;
     }
 
@@ -144,7 +145,7 @@ function LoginPage(): JSX.Element {
           if (data) {
             toast.success(
               'Successfully Registered. Please wait until you will be approved.',
-              { autoClose: 2000 }
+              { autoClose }
             );
 
             setSignFormState({
@@ -160,23 +161,23 @@ function LoginPage(): JSX.Element {
           if (error.message === 'Failed to fetch') {
             toast.error(
               'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-              { autoClose: 2000 }
+              { autoClose }
             );
           } else if (error.message) {
-            toast.warn(error.message, { autoClose: 2000 });
+            toast.warn(error.message, { autoClose });
           } else {
             toast.error('Something went wrong, Please try after sometime.', {
-              autoClose: 2000,
+              autoClose,
             });
           }
         }
       } else {
         toast.warn('Password and Confirm password mismatches.', {
-          autoClose: 2000,
+          autoClose,
         });
       }
     } else {
-      toast.warn('Fill all the Details Correctly.', { autoClose: 2000 });
+      toast.warn('Fill all the Details Correctly.', { autoClose });
     }
   };
 
@@ -189,7 +190,7 @@ function LoginPage(): JSX.Element {
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
-      toast.error('Please, check the captcha.', { autoClose: 2000 });
+      toast.error('Please, check the captcha.', { autoClose });
       return;
     }
 
@@ -216,23 +217,23 @@ function LoginPage(): JSX.Element {
             window.location.replace('/orglist');
           }
         } else {
-          toast.warn('Sorry! you are not Authorised!', { autoClose: 2000 });
+          toast.warn('Sorry! you are not Authorised!', { autoClose });
         }
       } else {
-        toast.warn('User not found!', { autoClose: 2000 });
+        toast.warn('User not found!', { autoClose });
       }
     } catch (error: any) {
       /* istanbul ignore next */
       if (error.message == 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose: 2000 }
+          { autoClose }
         );
       } else if (error.message) {
-        toast.error(error.message, { autoClose: 2000 });
+        toast.error(error.message, { autoClose });
       } else {
         toast.error('Something went wrong, Please try after sometime.', {
-          autoClose: 2000,
+          autoClose,
         });
       }
     }

@@ -67,7 +67,7 @@ function OrganizationEvents(): JSX.Element {
       },
     }
   );
-
+  const autoClose = 2000;
   const [create, { loading: loading_2 }] = useMutation(CREATE_EVENT_MUTATION);
 
   const CreateEvent = async (e: ChangeEvent<HTMLFormElement>) => {
@@ -108,10 +108,10 @@ function OrganizationEvents(): JSX.Element {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose: 2000 }
+          { autoClose }
         );
       } else {
-        toast.error(error.message, { autoClose: 2000 });
+        toast.error(error.message, { autoClose });
       }
     }
   };

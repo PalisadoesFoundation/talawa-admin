@@ -30,6 +30,8 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
   const handleShow = () => setShow(true);
   const [create] = useMutation(ADD_PLUGIN_MUTATION);
 
+  // create a constant to make sure that the autoclose is 2000ms
+
   const [formState, setFormState] = useState<formStateTypes>({
     pluginName: '',
     pluginCreatedBy: '',
@@ -37,6 +39,7 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
     pluginInstallStatus: false,
     installedOrgs: [currentUrl],
   });
+  const autoClose = 2000;
 
   const handleRegister = async () => {
     console.log(formState);
@@ -52,7 +55,7 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
 
     if (data) {
       toast.success('Plugin Added Successfully', {
-        autoClose: 2000,
+        autoClose,
       });
       setTimeout(() => {
         window.location.reload();

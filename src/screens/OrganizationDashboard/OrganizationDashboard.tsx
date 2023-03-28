@@ -46,6 +46,7 @@ function OrganizationDashboard(): JSX.Element {
     variables: { id: currentUrl },
   });
 
+  const autoClose = 2000;
   const [del] = useMutation(DELETE_ORGANIZATION_MUTATION);
 
   const delete_org = async () => {
@@ -65,10 +66,10 @@ function OrganizationDashboard(): JSX.Element {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose: 2000 }
+          { autoClose }
         );
       } else {
-        toast.error(error.message, { autoClose: 2000 });
+        toast.error(error.message, { autoClose });
       }
     }
   };

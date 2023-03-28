@@ -21,6 +21,7 @@ const UserUpdate: React.FC<UserPasswordUpdateProps> = ({ id }): JSX.Element => {
   });
 
   const [login] = useMutation(UPDATE_USER_PASSWORD_MUTATION);
+  const autoClose = 2000;
 
   const login_link = async () => {
     if (
@@ -29,13 +30,13 @@ const UserUpdate: React.FC<UserPasswordUpdateProps> = ({ id }): JSX.Element => {
       !formState.confirmNewPassword
     ) {
       return toast.error('The password field cannot be empty.', {
-        autoClose: 2000,
+        autoClose,
       });
     }
 
     if (formState.newPassword !== formState.confirmNewPassword) {
       return toast.error('New and Confirm password do not match.', {
-        autoClose: 2000,
+        autoClose,
       });
     }
 
@@ -49,14 +50,14 @@ const UserUpdate: React.FC<UserPasswordUpdateProps> = ({ id }): JSX.Element => {
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success('Successful updated', { autoClose: 2000 });
+        toast.success('Successful updated', { autoClose });
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       }
     } catch (error) {
       /* istanbul ignore next */
-      toast.error(error, { autoClose: 2000 });
+      toast.error(error, { autoClose });
     }
   };
 

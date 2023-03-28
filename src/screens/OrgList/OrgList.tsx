@@ -41,6 +41,7 @@ function OrgList(): JSX.Element {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const autoClose = 2000;
 
   const isSuperAdmin = localStorage.getItem('UserType') !== 'SUPERADMIN';
 
@@ -91,7 +92,7 @@ function OrgList(): JSX.Element {
       /* istanbul ignore next */
       if (data) {
         toast.success('Congratulation the Organization is created', {
-          autoClose: 2000,
+          autoClose,
         });
         refetch();
         setFormState({
@@ -109,10 +110,10 @@ function OrgList(): JSX.Element {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose: 2000 }
+          { autoClose }
         );
       } else {
-        toast.error(error.message, { autoClose: 2000 });
+        toast.error(error.message, { autoClose });
       }
     }
   };
