@@ -66,7 +66,7 @@ describe('Testing Member Request Card', () => {
 
   global.alert = jest.fn();
 
-  it('should render props and text elements test for the page component', async () => {
+  test('should render props and text elements test for the page component', async () => {
     global.confirm = () => true;
 
     render(
@@ -89,7 +89,7 @@ describe('Testing Member Request Card', () => {
     expect(screen.getByText(props.email)).toBeInTheDocument();
   });
 
-  it('Should render text elements when props value is not passed', async () => {
+  test('Should render text elements when props value is not passed', async () => {
     global.confirm = () => false;
 
     render(
