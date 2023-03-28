@@ -62,7 +62,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
       if (data) {
         window.location.assign(`/orgdash/id=${props.orgid}`);
 
-        toast.success('Successful updated');
+        toast.success('Successfully updated');
       }
     } catch (error: any) {
       /* istanbul ignore next */
