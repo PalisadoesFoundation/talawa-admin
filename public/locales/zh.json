@@ -2,7 +2,7 @@
   "loginPage": {
     "title": "塔拉瓦管理員",
     "fromPalisadoes": "柵欄 基金会志愿者的开源应用程序",
-    "talawa_portal": "塔拉瓦門戶",
+    "talawa_portal": "塔拉瓦管理門戶",
     "login": "登錄",
     "register": "登記",
     "firstName": "名",
@@ -17,7 +17,7 @@
     "doNotOwnAnAccount": "沒有帳戶嗎？"
   },
   "listNavbar": {
-    "talawa_portal": "塔拉瓦門戶",
+    "talawa_portal": "塔拉瓦管理門戶",
     "roles": "角色",
     "requests": "要求",
     "logout": "登出"
@@ -71,7 +71,7 @@
     "enterName": "输入名字"
   },
   "adminNavbar": {
-    "talawa_portal": "塔拉瓦門戶",
+    "talawa_portal": "塔拉瓦管理門戶",
     "Dashboard": "儀表板",
     "People": "人們",
     "Events": "事件",
