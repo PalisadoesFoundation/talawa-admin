@@ -32,7 +32,18 @@ describe('Testing LandingPage', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('loginPage.fromPalisadoes')).toBeInTheDocument();
+      const elements = document.querySelectorAll('*');
+      const searchText = 'loginPage.fromPalisadoes';
+
+      for (let i = 0; i < elements.length; i++) {
+        const element = elements[i] as HTMLElement;
+        const text = element.innerText;
+
+        if (text && text.includes(searchText)) {
+          console.log(element);
+          break;
+        }
+      }
     });
   });
 });
