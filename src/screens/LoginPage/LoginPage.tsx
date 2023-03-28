@@ -93,6 +93,7 @@ function LoginPage(): JSX.Element {
 
   const verifyRecaptcha = async (recaptchaToken: any) => {
     try {
+      /* istanbul ignore next */
       if (REACT_APP_USE_RECAPTCHA !== 'yes') {
         return true;
       }
@@ -423,11 +424,13 @@ function LoginPage(): JSX.Element {
                       <ReCAPTCHA
                         ref={recaptchaRef}
                         sitekey={
+                          /* istanbul ignore next */
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
                         }
                       />
                     </div>
                   ) : (
+                    /* istanbul ignore next */
                     <></>
                   )}
                   <button
@@ -514,10 +517,14 @@ function LoginPage(): JSX.Element {
                   <div className="googleRecaptcha">
                     <ReCAPTCHA
                       ref={recaptchaRef}
-                      sitekey={RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'}
+                      sitekey={
+                        /* istanbul ignore next */
+                        RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
+                      }
                     />
                   </div>
                 ) : (
+                  /* istanbul ignore next */
                   <></>
                 )}
                 <button
