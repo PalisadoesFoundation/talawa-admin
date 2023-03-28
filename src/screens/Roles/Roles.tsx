@@ -31,10 +31,7 @@ const Roles = () => {
       window.location.assign('/orglist');
     }
     setComponentLoader(false);
-  }, [])
-  
-
-
+  }, []);
 
   useEffect(() => {
     if (searchByName !== '') {
@@ -48,8 +45,8 @@ const Roles = () => {
         });
       }
     }
-  }, [count, searchByName])
-  
+  }, [count, searchByName]);
+
   const { data, loading: users_loading, refetch } = useQuery(USER_LIST);
 
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
