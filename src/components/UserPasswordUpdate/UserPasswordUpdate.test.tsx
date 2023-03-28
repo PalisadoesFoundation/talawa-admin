@@ -89,10 +89,4 @@ describe('Testing User Password Update', () => {
       screen.getByPlaceholderText(/Confirm New Password/i)
     ).toBeInTheDocument();
   });
-
-  jest.mock('react-toastify', () => ({
-    toast: {
-      success: jest.fn(),
-    },
-  }));
 });

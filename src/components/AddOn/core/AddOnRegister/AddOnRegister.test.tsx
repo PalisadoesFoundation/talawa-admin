@@ -52,11 +52,4 @@ describe('Testing AddOnRegister', () => {
     );
     expect(screen.getByPlaceholderText(/cName/i)).toHaveValue('test creator');
   });
-
-  jest.mock('react-toastify', () => ({
-    toast: {
-      success: jest.fn(),
-      error: jest.fn(),
-    },
-  }));
 });
