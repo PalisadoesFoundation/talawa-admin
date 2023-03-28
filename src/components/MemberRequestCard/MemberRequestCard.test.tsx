@@ -60,7 +60,7 @@ describe('Testing Member Request Card', () => {
     memberName: 'John Doe',
     memberLocation: 'India',
     joinDate: '18/03/2022',
-    memberImage: 'https://via.placeholder.com/200x100',
+    memberImage: 'image',
     email: 'johndoe@gmail.com',
   };
 
