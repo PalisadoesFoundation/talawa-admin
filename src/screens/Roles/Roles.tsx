@@ -45,7 +45,6 @@ const Roles = () => {
         });
       }
     }
-    // console.log(error?.graphQLErrors);
   }, [count, searchByName]);
 
   const { loading: users_loading, error, data, refetch } = useQuery(USER_LIST);
