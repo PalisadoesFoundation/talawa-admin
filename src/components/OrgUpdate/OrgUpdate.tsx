@@ -60,10 +60,9 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
       });
       /* istanbul ignore next */
       if (data) {
+        window.location.assign(`/orgdash/id=${props.orgid}`);
+
         toast.success('Successful updated');
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */
