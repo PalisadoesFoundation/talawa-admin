@@ -1,4 +1,9 @@
-import { AUTH_TOKEN, BACKEND_URL, RECAPTCHA_SITE_KEY } from './constant';
+import {
+  AUTH_TOKEN,
+  BACKEND_URL,
+  RECAPTCHA_SITE_KEY,
+  REACT_APP_USE_RECAPTCHA,
+} from './constant';
 
 describe('constants', () => {
   it('AUTH_TOKEN should be an empty string', () => {
@@ -13,6 +18,12 @@ describe('constants', () => {
   it('RECAPTCHA_SITE_KEY should be equal to REACT_APP_RECAPTCHA_SITE_KEY environment variable', () => {
     expect(RECAPTCHA_SITE_KEY).toEqual(
       process.env.REACT_APP_RECAPTCHA_SITE_KEY
+    );
+  });
+
+  it('REACT_APP_USE_RECAPTCHA should be equal to REACT_APP_USE_RECAPTCHA environment variable', () => {
+    expect(REACT_APP_USE_RECAPTCHA).toEqual(
+      process.env.REACT_APP_USE_RECAPTCHA
     );
   });
 });
