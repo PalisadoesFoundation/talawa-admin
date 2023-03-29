@@ -61,16 +61,13 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
       });
       /* istanbul ignore next */
       if (data) {
-
         toast.success('Successful updated', { autoClose });
         setTimeout(() => {
           window.location.reload();
         }, 2000);
 
         window.location.assign(`/orgdash/id=${props.orgid}`);
-
         toast.success('Successfully updated');
-
       }
     } catch (error: any) {
       /* istanbul ignore next */
