@@ -44,6 +44,12 @@
     "members": "Membres",
     "manage": "Faire en sorte"
   },
+  "adminDashListCard": {
+    "view": "Voir",
+    "created": "Créé",
+    "admins": "Admins",
+    "members": "Membres"
+  },
   "paginationList": {
     "rowsPerPage": "lignes par page",
     "all": "Tout"
@@ -81,6 +87,7 @@
     "Plugins": "Plugins",
     "Plugin Store": "Magasin de plugins",
     "allOrganizations": "Toutes les organisations",
+    "yourOrganization": "Votre organisation",
     "notification": "Notification",
     "settings": "Réglages",
     "language": "Langue",

@@ -196,12 +196,13 @@ function OrgList(): JSX.Element {
               <p className={styles.logintitle}>{t('organizationList')}</p>
             </div>
             <div className={styles.search}>
-              <Button
+            <Button
                 variant="success"
                 className={styles.invitebtn}
                 disabled={isSuperAdmin}
                 onClick={showInviteModal}
                 data-testid="createOrganizationBtn"
+                style={{ display: isSuperAdmin ? 'none' : 'block' }}
               >
                 + {t('createOrganization')}
               </Button>

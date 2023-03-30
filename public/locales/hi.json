@@ -44,6 +44,12 @@
     "members": "सदस्य",
     "manage": "प्रबंधित करना"
   },
+  "adminDashListCard": {
+    "view": "देखें",
+    "created": "बनाया गया",
+    "admins": "व्यवस्थापक",
+    "members": "सदस्य"
+  },
   "paginationList": {
     "rowsPerPage": "प्रति पृष्ठ पंक्तियाँ",
     "all": "सभी"
@@ -81,6 +87,7 @@
     "Plugins": "प्लगइन्स",
     "Plugin Store": "प्लगइन स्टोर",
     "allOrganizations": "सभी संगठन",
+    "yourOrganization": "आपका संगठन",
     "notification": "अधिसूचना",
     "settings": "समायोजन",
     "language": "भाषा",
