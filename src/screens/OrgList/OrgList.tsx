@@ -196,7 +196,7 @@ function OrgList(): JSX.Element {
               <p className={styles.logintitle}>{t('organizationList')}</p>
             </div>
             <div className={styles.search}>
-              <Button
+            <Button
                 variant="success"
                 className={styles.invitebtn}
                 disabled={isSuperAdmin}
@@ -249,7 +249,10 @@ function OrgList(): JSX.Element {
                           orgLocation={datas.location}
                         />
                       );
-                    } else {
+                    } else if (
+                      data_2?.user.adminFor.length === 1 &&
+                      data_2?.user.adminFor[0]._id === datas._id
+                    ) {
                       return (
                         <AdminDashListCard
                           id={datas._id}
@@ -264,6 +267,8 @@ function OrgList(): JSX.Element {
                           orgLocation={datas.location}
                         />
                       );
+                    } else {
+                      return null;
                     }
                   }
                 )
@@ -285,15 +290,17 @@ function OrgList(): JSX.Element {
                 }}
               >
                 <tbody>
-                  <tr data-testid="rowsPPSelect">
-                    <PaginationList
-                      count={data ? data.organizationsConnection.length : 0}
-                      rowsPerPage={rowsPerPage}
-                      page={page}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                  </tr>
+                {data_2?.user.userType !== 'ADMIN' && (
+                    <tr data-testid="rowsPPSelect">
+                      <PaginationList
+                        count={data ? data.organizationsConnection.length : 0}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                      />
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
