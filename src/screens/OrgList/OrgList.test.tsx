@@ -128,9 +128,24 @@ const MOCKS_EMPTY = [
       query: USER_ORGANIZATION_LIST,
       variables: { id: '123' },
     },
+    result: {
+      data: {
+        user: {
+          firstName: 'John',
+          lastName: 'Doe',
+          image: '',
+          email: 'John_Does_Palasidoes@gmail.com',
+          userType: 'ADMIN',
+          adminFor: {
+            _id: 1,
+            name: 'Akatsuki',
+            image: '',
+          },
+        },
+      },
+    },
   },
 ];
-
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_EMPTY, true);
 
@@ -154,6 +169,27 @@ describe('Organisation List Page', () => {
     image: new File(['hello'], 'hello.png', { type: 'image/png' }),
   };
 
+  test('Search bar and pagination are rendered for SUPERADMIN', async () => {
+    // Render component for SUPERADMIN
+    const { container: containerSuperAdmin, rerender } = render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgList />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    await wait();
+  
+    // Check that the search bar and pagination are rendered for SUPERADMIN
+    expect(containerSuperAdmin.querySelector('#orgname')).toBeInTheDocument();
+    expect(screen.getByTestId('rowsPPSelect')).toBeInTheDocument();
+  
+    });
+ 
   test('On dynamic setting of rowsPerPage, the number of organizations rendered on the dom should be changed to the selected option', async () => {
     localStorage.setItem('id', '123');
 
