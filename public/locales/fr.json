@@ -10,6 +10,7 @@
     "email": "E-mail",
     "password": "Mot de passe",
     "atleast_8_char_long": "Au moins 8 caractères",
+    "Password_and_Confirm_password_mismatches.": "Le mot de passe et la confirmation du mot de passe ne correspondent pas.",
     "confirmPassword": "Confirmez le mot de passe",
     "forgotPassword": "Mot de passe oublié ?",
     "enterEmail": "entrez l'e-mail",

@@ -13,10 +13,10 @@ html {
 }
 .showregister {
   position: absolute;
-  right: 18%;
+  right: 16%;
   font-weight: normal;
-  top: 53%;
   cursor: pointer;
+  margin-top: -34px;
 }
 #grid_wrapper {
   align-items: left;
@@ -363,7 +363,9 @@ form > br {
   background-color: white;
   box-shadow: 1px 3px #e8e5e5;
 }
-
+.passwordalert {
+  margin-bottom: 15px;
+}
 .noaccount {
   text-align: center;
   color: #707070;
