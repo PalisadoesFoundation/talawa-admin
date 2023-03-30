@@ -40,7 +40,6 @@ describe('Testing LandingPage', () => {
         const text = element.innerText;
 
         if (text && text.includes(searchText)) {
-          console.log(element);
           break;
         }
       }
