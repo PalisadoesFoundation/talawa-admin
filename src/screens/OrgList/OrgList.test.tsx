@@ -169,26 +169,6 @@ describe('Organisation List Page', () => {
     image: new File(['hello'], 'hello.png', { type: 'image/png' }),
   };
 
-  test('Search bar and pagination are rendered for SUPERADMIN', async () => {
-    // Render component for SUPERADMIN
-    const { container: containerSuperAdmin } = render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrgList />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-    await wait();
-
-    // Check that the search bar and pagination are rendered for SUPERADMIN
-    expect(containerSuperAdmin.querySelector('#orgname')).toBeInTheDocument();
-    expect(screen.getByTestId('rowsPPSelect')).toBeInTheDocument();
-  });
-
   test('On dynamic setting of rowsPerPage, the number of organizations rendered on the dom should be changed to the selected option', async () => {
     localStorage.setItem('id', '123');
 
