@@ -447,7 +447,6 @@ describe('Testing Login Page Screen', () => {
     await wait();
   });
 
-
   test('Testing for the password error warning when user firsts lands on a page', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
