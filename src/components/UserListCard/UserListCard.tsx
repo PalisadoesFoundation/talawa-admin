@@ -21,6 +21,7 @@ interface UserListCardProps {
 function UserListCard(props: UserListCardProps): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
+  const autoClose = 2000;
 
   const { t } = useTranslation('translation', {
     keyPrefix: 'userListCard',
@@ -37,7 +38,7 @@ function UserListCard(props: UserListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('User is added as admin.');
+        toast.success('User is added as admin.', { autoClose });
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -46,10 +47,11 @@ function UserListCard(props: UserListCardProps): JSX.Element {
       /* istanbul ignore next */
       if (error.message === 'Failed to fetch') {
         toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
+          { autoClose }
         );
       } else {
-        toast.error(error.message);
+        toast.error(error.message, { autoClose });
       }
     }
   };

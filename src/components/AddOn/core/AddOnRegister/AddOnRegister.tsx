@@ -29,6 +29,7 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [create] = useMutation(ADD_PLUGIN_MUTATION);
+  const autoClose = 2000;
 
   const [formState, setFormState] = useState<formStateTypes>({
     pluginName: '',
@@ -51,7 +52,7 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
     });
 
     if (data) {
-      toast.success('Plugin Added Successfully');
+      toast.success('Plugin Added Successfully', { autoClose });
       setTimeout(() => {
         window.location.reload();
       }, 2000);

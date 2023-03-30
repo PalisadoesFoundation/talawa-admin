@@ -23,6 +23,7 @@ interface MemberRequestCardProps {
 function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
   const [acceptMutation] = useMutation(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
   const [rejectMutation] = useMutation(REJECT_ORGANIZATION_REQUEST_MUTATION);
+  const autoClose = 2000;
 
   const { t } = useTranslation('translation', {
     keyPrefix: 'membershipRequest',
@@ -37,7 +38,7 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
       });
 
       /* istanbul ignore next */
-      toast.success('it is accepted');
+      toast.success('it is accepted', { autoClose });
       /* istanbul ignore next */
       setTimeout(() => {
         window.location.reload();
@@ -46,10 +47,11 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
       /* istanbul ignore next */
       if (error.message === 'Failed to fetch') {
         toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
+          { autoClose }
         );
       } else {
-        toast.error(error.message);
+        toast.error(error.message, { autoClose });
       }
     }
   };
@@ -70,10 +72,11 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
         /* istanbul ignore next */
         if (error.message === 'Failed to fetch') {
           toast.error(
-            'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+            'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
+            { autoClose }
           );
         } else {
-          toast.error(error.message);
+          toast.error(error.message, { autoClose });
         }
       }
     }

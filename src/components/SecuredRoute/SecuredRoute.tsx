@@ -15,6 +15,7 @@ const SecuredRoute = (props: any): JSX.Element => {
 
 const timeoutMinutes = 15;
 const timeoutMilliseconds = timeoutMinutes * 60 * 1000;
+const autoClose = 2000;
 
 const inactiveIntervalMin = 1;
 const inactiveIntervalMilsec = inactiveIntervalMin * 60 * 1000;
@@ -29,7 +30,7 @@ setInterval(() => {
   const timeSinceLastActive = currentTime - lastActive;
 
   if (timeSinceLastActive > timeoutMilliseconds) {
-    toast.warn('Kindly relogin as sessison has expired');
+    toast.warn('Kindly relogin as sessison has expired', { autoClose });
 
     window.location.href = '/';
     localStorage.setItem('IsLoggedIn', 'FALSE');

@@ -19,6 +19,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userUpdate',
   });
+  const autoClose = 2000;
   const [formState, setFormState] = React.useState({
     firstName: '',
     lastName: '',
@@ -28,7 +29,6 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
     selectedOption: '',
     file: '',
   });
-
   const [login] = useMutation(UPDATE_USER_MUTATION);
 
   const {
@@ -80,7 +80,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
           selectedOption: '',
           file: '',
         });
-        toast.success('Successful updated');
+        toast.success('Successful updated', { autoClose });
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -89,10 +89,11 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
       /* istanbul ignore next */
       if (error.message === 'Failed to fetch') {
         toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
+          { autoClose }
         );
       } else {
-        toast.error(error.message);
+        toast.error(error.message, { autoClose });
       }
     }
   };

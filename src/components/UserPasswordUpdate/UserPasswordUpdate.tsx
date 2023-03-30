@@ -14,6 +14,7 @@ const UserUpdate: React.FC<UserPasswordUpdateProps> = ({ id }): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userPasswordUpdate',
   });
+  const autoClose = 2000;
   const [formState, setFormState] = React.useState({
     previousPassword: '',
     newPassword: '',
@@ -28,11 +29,13 @@ const UserUpdate: React.FC<UserPasswordUpdateProps> = ({ id }): JSX.Element => {
       !formState.newPassword ||
       !formState.confirmNewPassword
     ) {
-      return toast.error('The password field cannot be empty.');
+      return toast.error('The password field cannot be empty.', { autoClose });
     }
 
     if (formState.newPassword !== formState.confirmNewPassword) {
-      return toast.error('New and Confirm password do not match.');
+      return toast.error('New and Confirm password do not match.', {
+        autoClose,
+      });
     }
 
     try {
@@ -45,14 +48,14 @@ const UserUpdate: React.FC<UserPasswordUpdateProps> = ({ id }): JSX.Element => {
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success('Successful updated');
+        toast.success('Successful updated', { autoClose });
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       }
     } catch (error) {
       /* istanbul ignore next */
-      toast.error(error);
+      toast.error(error, { autoClose });
     }
   };
 

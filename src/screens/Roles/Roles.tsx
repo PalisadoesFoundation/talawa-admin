@@ -34,6 +34,7 @@ const Roles = () => {
   const { data, loading: users_loading, refetch } = useQuery(USER_LIST);
 
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
+  const autoClose = 2000;
 
   const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
 
@@ -43,7 +44,7 @@ const Roles = () => {
     }
 
     if (dataOrgs.organizationsConnection.length === 0) {
-      toast.warning(t('noOrgError'));
+      toast.warning(t('noOrgError', { autoClose }));
     }
   }, [dataOrgs]);
 
@@ -82,17 +83,18 @@ const Roles = () => {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Role Updated.');
+        toast.success('Role Updated.', { autoClose });
         refetch();
       }
     } catch (error: any) {
       /* istanbul ignore next */
       if (error.message === 'Failed to fetch') {
         toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
+          { autoClose }
         );
       } else {
-        toast.error(error.message);
+        toast.error(error.message, { autoClose });
       }
     }
   };

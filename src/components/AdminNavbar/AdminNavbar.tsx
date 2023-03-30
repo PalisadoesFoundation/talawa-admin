@@ -35,6 +35,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
 
   const currentUrl = window.location.href.split('=')[1];
 
+  const autoClose = 2000;
   const { data, error, refetch } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: currentUrl },
   });
@@ -62,10 +63,11 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
           /* istanbul ignore next */
           if (error.message === 'Failed to fetch') {
             toast.error(
-              'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+              'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
+              { autoClose }
             );
           } else {
-            toast.error(error.message);
+            toast.error(error.message, { autoClose });
           }
         }
       }

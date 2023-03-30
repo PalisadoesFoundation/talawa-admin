@@ -46,6 +46,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
     keyPrefix: 'orgPostCard',
   });
 
+  const autoClose = 2000;
   const [create] = useMutation(DELETE_POST_MUTATION);
   const [updatePost] = useMutation(UPDATE_POST_MUTATION);
 
@@ -59,7 +60,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Post deleted successfully.');
+        toast.success('Post deleted successfully.', { autoClose });
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -68,10 +69,11 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
       /* istanbul ignore next */
       if (error.message === 'Failed to fetch') {
         toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
+          { autoClose }
         );
       } else {
-        toast.error(error.message);
+        toast.error(error.message, { autoClose });
       }
     }
   };
@@ -98,14 +100,14 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Post Updated successfully.');
+        toast.success('Post Updated successfully.', { autoClose });
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error(error.message);
+      toast.error(error.message, { autoClose });
     }
   };
 

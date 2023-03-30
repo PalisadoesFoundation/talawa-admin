@@ -45,7 +45,6 @@ function OrgPost(): JSX.Element {
   const hideInviteModal = () => {
     setPostModalIsOpen(false);
   };
-
   const {
     data,
     loading: loading2,
@@ -55,6 +54,7 @@ function OrgPost(): JSX.Element {
     variables: { id: currentUrl, title_contains: '', text_contains: '' },
   });
   const [create, { loading }] = useMutation(CREATE_POST_MUTATION);
+  const autoClose = 2000;
 
   const CreatePost = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -69,7 +69,9 @@ function OrgPost(): JSX.Element {
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success('Congratulations! You have Posted Something.');
+        toast.success('Congratulations! You have Posted Something.', {
+          autoClose,
+        });
         refetch();
         setPostFormState({
           posttitle: '',
@@ -82,10 +84,11 @@ function OrgPost(): JSX.Element {
       /* istanbul ignore next */
       if (error.message === 'Failed to fetch') {
         toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
+          { autoClose }
         );
       } else {
-        toast.error(error.message);
+        toast.error(error.message, { autoClose });
       }
     }
   };

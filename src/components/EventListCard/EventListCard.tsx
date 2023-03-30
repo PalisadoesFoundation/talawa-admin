@@ -58,6 +58,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
 
   const [create] = useMutation(DELETE_EVENT_MUTATION);
   const [updateEvent] = useMutation(UPDATE_EVENT_MUTATION);
+  const autoClose = 2000;
 
   const DeleteEvent = async () => {
     try {
@@ -69,7 +70,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Event deleted successfully.');
+        toast.success('Event deleted successfully.', { autoClose });
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -78,10 +79,11 @@ function EventListCard(props: EventListCardProps): JSX.Element {
       /* istanbul ignore next */
       if (error.message === 'Failed to fetch') {
         toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
+          { autoClose }
         );
       } else {
-        toast.error(error.message);
+        toast.error(error.message, { autoClose });
       }
     }
   };
@@ -107,7 +109,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Event updated successfully.');
+        toast.success('Event updated successfully.', { autoClose });
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -116,10 +118,11 @@ function EventListCard(props: EventListCardProps): JSX.Element {
       /* istanbul ignore next */
       if (error.message === 'Failed to fetch') {
         toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
+          { autoClose }
         );
       } else {
-        toast.error(error.message);
+        toast.error(error.message, { autoClose });
       }
     }
   };
