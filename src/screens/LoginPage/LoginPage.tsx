@@ -42,6 +42,8 @@ function LoginPage(): JSX.Element {
     password: '',
   });
   const [show, setShow] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   const currentLanguageCode = cookies.get('i18next') || 'en';
@@ -60,6 +62,10 @@ function LoginPage(): JSX.Element {
 
   const hideModal = () => {
     setIsOpen(false);
+  };
+
+  const handleShowCon = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -399,26 +405,42 @@ function LoginPage(): JSX.Element {
                         </span>
                       )}
                   </div>
-                  <label>{t('confirmPassword')}</label>
-                  <input
-                    type={show ? 'text' : 'password'}
-                    id="cpassword"
-                    placeholder={t('confirmPassword')}
-                    required
-                    value={signformState.cPassword}
-                    onChange={(e) => {
-                      setSignFormState({
-                        ...signformState,
-                        cPassword: e.target.value,
-                      });
-                    }}
-                  />
-                  <label
-                    id="showPasswordr"
-                    className={styles.showregister}
-                    onClick={handleShow}
-                    data-testid="showPasswordr"
-                  ></label>
+                  <div className={styles.passwordalert}>
+                    <label>{t('confirmPassword')}</label>
+                    <input
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      id="signpassword"
+                      placeholder={t('confirmPassword')}
+                      required
+                      value={signformState.cPassword}
+                      onChange={(e) => {
+                        setSignFormState({
+                          ...signformState,
+                          cPassword: e.target.value,
+                        });
+                      }}
+                      data-testid="cpassword"
+                    />
+                    <label
+                      id="showPasswordr"
+                      className={styles.showregister}
+                      onClick={handleShowCon}
+                      data-testid="showPasswordrCon"
+                    >
+                      {showConfirmPassword ? (
+                        <i className="fas fa-eye"></i>
+                      ) : (
+                        <i className="fas fa-eye-slash"></i>
+                      )}
+                    </label>
+                    {signformState.cPassword.length > 0 &&
+                      signformState.signPassword !==
+                        signformState.cPassword && (
+                        <span data-testid="passwordCheck">
+                          {t('Password_and_Confirm_password_mismatches.')}
+                        </span>
+                      )}
+                  </div>
                   {REACT_APP_USE_RECAPTCHA === 'yes' ? (
                     <div className="googleRecaptcha">
                       <ReCAPTCHA
