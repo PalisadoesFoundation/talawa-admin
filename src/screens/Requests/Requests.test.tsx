@@ -113,7 +113,30 @@ const MOCKS = [
 ];
 
 const EMPTY_ORG_MOCKS = [
-  ...MOCKS,
+  {
+    request: {
+      query: ACCPET_ADMIN_MUTATION,
+      variables: {
+        id: '123',
+        userType: 'ADMIN',
+      },
+    },
+    result: {
+      data: undefined,
+    },
+  },
+  {
+    request: {
+      query: REJECT_ADMIN_MUTATION,
+      variables: {
+        id: '123',
+        userType: 'ADMIN',
+      },
+    },
+    result: {
+      data: undefined,
+    },
+  },
   {
     request: {
       query: ORGANIZATION_CONNECTION_LIST,

@@ -191,7 +191,7 @@ function OrgList(): JSX.Element {
           </div>
         </Col>
         <Col xl={8} className={styles.mainpagerightContainer}>
-          <div className={styles.mainpageright}>
+          <div className={styles.mainpageright} data-testid="mainpageright">
             <div className={styles.justifysp}>
               <p className={styles.logintitle}>{t('organizationList')}</p>
             </div>
@@ -215,7 +215,7 @@ function OrgList(): JSX.Element {
                 onChange={debouncedHandleSearchByName}
               />
             </div>
-            <div className={styles.list_box}>
+            <div className={styles.list_box} data-testid="organizations-list">
               {data?.organizationsConnection.length > 0 ? (
                 (rowsPerPage > 0
                   ? dataRevOrg.slice(
@@ -284,7 +284,7 @@ function OrgList(): JSX.Element {
                 }}
               >
                 <tbody>
-                  <tr>
+                  <tr data-testid="rowsPPSelect">
                     <PaginationList
                       count={data ? data.organizationsConnection.length : 0}
                       rowsPerPage={rowsPerPage}

@@ -20,7 +20,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import { languages } from 'utils/languages';
-import { RECAPTCHA_SITE_KEY } from 'Constant/constant';
+import { RECAPTCHA_SITE_KEY, REACT_APP_USE_RECAPTCHA } from 'Constant/constant';
 
 function LoginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -93,6 +93,10 @@ function LoginPage(): JSX.Element {
 
   const verifyRecaptcha = async (recaptchaToken: any) => {
     try {
+      /* istanbul ignore next */
+      if (REACT_APP_USE_RECAPTCHA !== 'yes') {
+        return true;
+      }
       const { data } = await recaptcha({
         variables: {
           recaptchaToken,
@@ -431,6 +435,40 @@ function LoginPage(): JSX.Element {
                       sitekey={RECAPTCHA_SITE_KEY ?? ''}
                     />
                   </div>
+                  <label>{t('confirmPassword')}</label>
+                  <input
+                    type={show ? 'text' : 'password'}
+                    id="cpassword"
+                    placeholder={t('confirmPassword')}
+                    required
+                    value={signformState.cPassword}
+                    onChange={(e) => {
+                      setSignFormState({
+                        ...signformState,
+                        cPassword: e.target.value,
+                      });
+                    }}
+                  />
+                  <label
+                    id="showPasswordr"
+                    className={styles.showregister}
+                    onClick={handleShow}
+                    data-testid="showPasswordr"
+                  ></label>
+                  {REACT_APP_USE_RECAPTCHA === 'yes' ? (
+                    <div className="googleRecaptcha">
+                      <ReCAPTCHA
+                        ref={recaptchaRef}
+                        sitekey={
+                          /* istanbul ignore next */
+                          RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
+                        }
+                      />
+                    </div>
+                  ) : (
+                    /* istanbul ignore next */
+                    <></>
+                  )}
                   <button
                     type="submit"
                     className={styles.greenregbtn}
@@ -511,12 +549,20 @@ function LoginPage(): JSX.Element {
                     )}
                   </label>
                 </div>
-                <div className="googleRecaptcha">
-                  <ReCAPTCHA
-                    ref={recaptchaRef}
-                    sitekey={RECAPTCHA_SITE_KEY ?? ''}
-                  />
-                </div>
+                {REACT_APP_USE_RECAPTCHA === 'yes' ? (
+                  <div className="googleRecaptcha">
+                    <ReCAPTCHA
+                      ref={recaptchaRef}
+                      sitekey={
+                        /* istanbul ignore next */
+                        RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
+                      }
+                    />
+                  </div>
+                ) : (
+                  /* istanbul ignore next */
+                  <></>
+                )}
                 <button
                   type="submit"
                   className={styles.greenregbtn}
