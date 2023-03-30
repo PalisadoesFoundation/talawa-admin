@@ -175,10 +175,10 @@ function OrgList(): JSX.Element {
               <div className={styles.userEmail}>
                 {t('email')}:
                 <p>
-                { (data_2?.user.email || '').substring(
-  0,
-  (data_2?.user.email || '').length / 2
-)}
+                  {(data_2?.user.email || '').substring(
+                    0,
+                    (data_2?.user.email || '').length / 2
+                  )}
                   <span>
                     {data_2?.user.email.substring(
                       data_2?.user.email.length / 2,
@@ -207,15 +207,24 @@ function OrgList(): JSX.Element {
                 + {t('createOrganization')}
               </Button>
               <input
-  type="name"
-  id="orgname"
-  placeholder="Search Organization"
-  data-testid="searchByName"
-  autoComplete="off"
-  required
-  onChange={data_2 && data_2.user.userType === 'SUPERADMIN' ? debouncedHandleSearchByName : undefined}
-  style={{ display: data_2 && data_2.user.userType !== 'SUPERADMIN' ? 'none' : 'block' }}
-/>
+                type="name"
+                id="orgname"
+                placeholder="Search Organization"
+                data-testid="searchByName"
+                autoComplete="off"
+                required
+                onChange={
+                  data_2 && data_2.user.userType === 'SUPERADMIN'
+                    ? debouncedHandleSearchByName
+                    : undefined
+                }
+                style={{
+                  display:
+                    data_2 && data_2.user.userType !== 'SUPERADMIN'
+                      ? 'none'
+                      : 'block',
+                }}
+              />
             </div>
             <div className={styles.list_box} data-testid="organizations-list">
               {data?.organizationsConnection.length > 0 ? (

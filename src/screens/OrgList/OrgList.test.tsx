@@ -354,8 +354,6 @@ describe('Organisation List Page', () => {
     userEvent.click(screen.getByTestId(/closeOrganizationModal/i));
   });
 
-  
-
   test('Create organization model should work properly', async () => {
     localStorage.setItem('UserType', 'SUPERADMIN');
 

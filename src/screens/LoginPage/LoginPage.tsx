@@ -125,8 +125,7 @@ function LoginPage(): JSX.Element {
     const recaptchaToken = recaptchaRef.current?.getValue();
     recaptchaRef.current?.reset();
 
-    let isVerified = await verifyRecaptcha(recaptchaToken);
-    isVerified = true;
+    const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
       toast.error('Please, check the captcha.');
@@ -190,8 +189,7 @@ function LoginPage(): JSX.Element {
     const recaptchaToken = recaptchaRef.current?.getValue();
     recaptchaRef.current?.reset();
 
-    let isVerified = await verifyRecaptcha(recaptchaToken);
-    isVerified = true;
+    const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
       toast.error('Please, check the captcha.');
