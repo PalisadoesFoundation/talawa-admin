@@ -10,6 +10,7 @@
     "email": "電子郵件",
     "password": "密碼",
     "atleast_8_char_long": "至少 8 個字符長",
+    "Password_and_Confirm_password_mismatches.": "密碼和確認密碼不匹配。",
     "confirmPassword": "確認密碼",
     "forgotPassword": "忘記密碼 ？",
     "enterEmail": "输入电子邮件",
