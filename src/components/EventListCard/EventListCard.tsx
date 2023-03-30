@@ -135,7 +135,11 @@ function EventListCard(props: EventListCardProps): JSX.Element {
   return (
     <>
       <div className="">
-        <div className={styles.cards} onClick={showViewModal}>
+        <div
+          className={styles.cards}
+          onClick={showViewModal}
+          data-testid="card"
+        >
           <div className={styles.dispflex}>
             <h2>
               {props.eventName ? <>{props.eventName}</> : <>Dogs Care</>}{' '}

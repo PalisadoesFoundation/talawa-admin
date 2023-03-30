@@ -83,21 +83,40 @@ describe('Testing Event List Card', () => {
   };
 
   global.alert = jest.fn();
-
-  test('should render props and text elements test for the page component', async () => {
-    global.confirm = () => true;
-
+  test('Testing for modal', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <EventListCard {...props} />
-        </I18nextProvider>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventListCard
+                key={''}
+                id={''}
+                eventLocation={''}
+                eventName={''}
+                eventDescription={''}
+                regDate={''}
+                regEndDate={''}
+                startTime={''}
+                endTime={''}
+                allDay={false}
+                recurring={false}
+                isPublic={false}
+                isRegisterable={false}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
       </MockedProvider>
     );
 
     await wait();
 
-    expect(screen.getByText(props.eventName)).toBeInTheDocument();
+    userEvent.click(screen.getByTestId('card'));
+
+    userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
+
+    await wait();
   });
 
   test('Should render text elements when props value is not passed', async () => {
