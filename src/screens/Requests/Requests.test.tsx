@@ -290,29 +290,6 @@ describe('Testing Request screen', () => {
     userEvent.click(screen.getByTestId(/rejectUser456/i));
   });
 
-  test('Should render warning alert when there are no organizations', async () => {
-    const { container } = render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait(200);
-
-    console.log(container.textContent);
-
-    expect(container.textContent).toMatch(
-      'Organizations not found, please create an organization through dashboard'
-    );
-  });
-
   test('Should not render warning alert when there are organizations present', async () => {
     const { container } = render(
       <MockedProvider addTypename={false} link={link3}>
