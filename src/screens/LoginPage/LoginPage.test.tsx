@@ -426,7 +426,6 @@ describe('Testing Login Page Screen', () => {
     );
 
     await wait();
-    //userEvent.click(screen.getByTestId('loginModalBtn'));
 
     const input = screen.getByTestId('cpassword') as HTMLInputElement;
     const toggleText = screen.getByTestId('showPasswordrCon');

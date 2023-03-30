@@ -29,8 +29,6 @@ function LoginPage(): JSX.Element {
 
   const [modalisOpen, setIsOpen] = React.useState(false);
   const [componentLoader, setComponentLoader] = useState(true);
-  const [isInputFocused, setIsInputFocused] = useState(false);
-  const [isInputFocusedCon, setIsInputFocusedCon] = useState(false);
   const [signformState, setSignFormState] = useState({
     signfirstName: '',
     signlastName: '',
@@ -363,8 +361,6 @@ function LoginPage(): JSX.Element {
                       id="signpassword"
                       data-testid="passwordField"
                       placeholder={t('password')}
-                      onFocus={() => setIsInputFocused(true)}
-                      onBlur={() => setIsInputFocused(false)}
                       required
                       value={signformState.signPassword}
                       onChange={(e) => {
@@ -386,14 +382,7 @@ function LoginPage(): JSX.Element {
                         <i className="fas fa-eye-slash"></i>
                       )}
                     </label>
-                    {isInputFocused &&
-                      signformState.signPassword.length < 8 && (
-                        <span data-testid="passwordCheck">
-                          {t('atleast_8_char_long')}
-                        </span>
-                      )}
-                    {!isInputFocused &&
-                      signformState.signPassword.length > 0 &&
+                    {signformState.signPassword.length > 0 &&
                       signformState.signPassword.length < 8 && (
                         <span data-testid="passwordCheck">
                           {t('atleast_8_char_long')}
@@ -414,8 +403,6 @@ function LoginPage(): JSX.Element {
                           cPassword: e.target.value,
                         });
                       }}
-                      onFocus={() => setIsInputFocusedCon(true)}
-                      onBlur={() => setIsInputFocusedCon(false)}
                       data-testid="cpassword"
                     />
                     <label
@@ -430,15 +417,7 @@ function LoginPage(): JSX.Element {
                         <i className="fas fa-eye-slash"></i>
                       )}
                     </label>
-                    {isInputFocusedCon &&
-                      signformState.signPassword !==
-                        signformState.cPassword && (
-                        <span data-testid="passwordCheck">
-                          {t('Password_and_Confirm_password_mismatches.')}
-                        </span>
-                      )}
-                    {!isInputFocusedCon &&
-                      signformState.cPassword.length > 0 &&
+                    {signformState.cPassword.length > 0 &&
                       signformState.signPassword !==
                         signformState.cPassword && (
                         <span data-testid="passwordCheck">
