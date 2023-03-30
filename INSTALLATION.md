@@ -85,6 +85,7 @@ This `.env` file must be populated with the following environment variables for 
 | Variable                     | Description                                 |
 | ---------------------------- | ------------------------------------------- |
 | REACT_APP_TALAWA_URL         | URL endpoint for talawa-api graphql service |
+| REACT_APP_USE_RECAPTCHA      | Whether you want to use reCAPTCHA or not    |
 | REACT_APP_RECAPTCHA_SITE_KEY | Site key for authentication using reCAPTCHA |
 
 Follow the instructions from section [Setting up REACT_APP_TALAWA_URL in .env file](#setting-up-REACT_APP_TALAWA_URL-in-env-file) up to and including section [Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-REACT_APP_RECAPTCHA_SITE_KEY-in-env-file) to set up these environment variables.
@@ -107,8 +108,11 @@ For additional details, please refer to to the `How to Access the Talawa-API URL
 
 ## Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file
 
-Refer to to the `RECAPTCHA` section in the INSTALLATION.md file found in [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api).
+You may not want to setup reCAPTCHA since the project will still work. Moreover, it is recommended to not set it up in development environment.
 
+Just skip to the [Post Configuration Steps](#post-configuration-steps) if you don't want to set it up. Else, read the following steps.
+
+If you want to setup Google reCAPTCHA now, you may refer to to the `RECAPTCHA` section in the INSTALLATION.md file found in [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api).
 
 `Talawa-admin` needs the `reCAPTCHA site key` for the `reCAPTCHA` service you set up during `talawa-api` installation as shown in this screenshot:
 
