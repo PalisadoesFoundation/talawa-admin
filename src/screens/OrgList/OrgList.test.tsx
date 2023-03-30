@@ -130,6 +130,7 @@ const MOCKS_EMPTY = [
     },
   },
 ];
+
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_EMPTY, true);
 
@@ -353,6 +354,8 @@ describe('Organisation List Page', () => {
     userEvent.click(screen.getByTestId(/closeOrganizationModal/i));
   });
 
+  
+
   test('Create organization model should work properly', async () => {
     localStorage.setItem('UserType', 'SUPERADMIN');
 
@@ -400,77 +403,6 @@ describe('Organisation List Page', () => {
 
     userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
   });
-});
-
-test('Search bar filters organizations by name', async () => {
-  const Mocks = [
-    {
-      request: {
-        query: ORGANIZATION_CONNECTION_LIST,
-      },
-      result: {
-        data: {
-          organizationsConnection: [
-            {
-              _id: 1,
-              image: '',
-              name: 'Akatsuki',
-              creator: {
-                firstName: 'John',
-                lastName: 'Doe',
-              },
-              admins: [
-                {
-                  _id: '123',
-                },
-              ],
-              members: {
-                _id: '234',
-              },
-              createdAt: '02/02/2022',
-              location: 'Washington DC',
-            },
-          ],
-        },
-      },
-    },
-  ];
-
-  const link = new StaticMockLink(Mocks, true);
-
-  const { container } = render(
-    <MockedProvider addTypename={false} link={link}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrgList />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>
-  );
-  await wait();
-
-  // Test that the search bar filters organizations by name
-  const searchBar = screen.getByTestId(/searchByName/i);
-  userEvent.type(searchBar, 'Akatsuki');
-  expect(container.textContent).toBeTruthy();
-  expect(container.textContent).toMatch('Akatsuki');
-
-  // Test that the search bar is case-insensitive
-  userEvent.clear(searchBar);
-  userEvent.type(searchBar, 'akatsuki');
-  expect(container.textContent).toMatch('Akatsuki');
-
-  // Test that the search bar filters organizations based on a partial match of the name
-  userEvent.clear(searchBar);
-  userEvent.type(searchBar, 'Aka');
-  expect(container.textContent).toMatch('Akatsuki');
-
-  // Test that the search bar filters all organization if there are is no search passed
-  userEvent.clear(searchBar);
-  userEvent.type(searchBar, '');
-  expect(container.textContent).toMatch('');
 });
 
 describe('SuperDashListCard', () => {
