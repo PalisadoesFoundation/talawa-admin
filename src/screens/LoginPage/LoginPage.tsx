@@ -20,7 +20,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import { languages } from 'utils/languages';
-import { RECAPTCHA_SITE_KEY } from 'Constant/constant';
+import { RECAPTCHA_SITE_KEY, REACT_APP_USE_RECAPTCHA } from 'Constant/constant';
 
 function LoginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -42,7 +42,12 @@ function LoginPage(): JSX.Element {
     password: '',
   });
   const [show, setShow] = useState<boolean>(false);
+
   const autoClose = 2000;
+
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
+
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   const currentLanguageCode = cookies.get('i18next') || 'en';
@@ -61,6 +66,10 @@ function LoginPage(): JSX.Element {
 
   const hideModal = () => {
     setIsOpen(false);
+  };
+
+  const handleShowCon = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -95,6 +104,10 @@ function LoginPage(): JSX.Element {
 
   const verifyRecaptcha = async (recaptchaToken: any) => {
     try {
+      /* istanbul ignore next */
+      if (REACT_APP_USE_RECAPTCHA !== 'yes') {
+        return true;
+      }
       const { data } = await recaptcha({
         variables: {
           recaptchaToken,
@@ -404,32 +417,56 @@ function LoginPage(): JSX.Element {
                         </span>
                       )}
                   </div>
-                  <label>{t('confirmPassword')}</label>
-                  <input
-                    type={show ? 'text' : 'password'}
-                    id="cpassword"
-                    placeholder={t('confirmPassword')}
-                    required
-                    value={signformState.cPassword}
-                    onChange={(e) => {
-                      setSignFormState({
-                        ...signformState,
-                        cPassword: e.target.value,
-                      });
-                    }}
-                  />
-                  <label
-                    id="showPasswordr"
-                    className={styles.showregister}
-                    onClick={handleShow}
-                    data-testid="showPasswordr"
-                  ></label>
-                  <div className="googleRecaptcha">
-                    <ReCAPTCHA
-                      ref={recaptchaRef}
-                      sitekey={RECAPTCHA_SITE_KEY ?? ''}
+                  <div className={styles.passwordalert}>
+                    <label>{t('confirmPassword')}</label>
+                    <input
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      id="signpassword"
+                      placeholder={t('confirmPassword')}
+                      required
+                      value={signformState.cPassword}
+                      onChange={(e) => {
+                        setSignFormState({
+                          ...signformState,
+                          cPassword: e.target.value,
+                        });
+                      }}
+                      data-testid="cpassword"
                     />
+                    <label
+                      id="showPasswordr"
+                      className={styles.showregister}
+                      onClick={handleShowCon}
+                      data-testid="showPasswordrCon"
+                    >
+                      {showConfirmPassword ? (
+                        <i className="fas fa-eye"></i>
+                      ) : (
+                        <i className="fas fa-eye-slash"></i>
+                      )}
+                    </label>
+                    {signformState.cPassword.length > 0 &&
+                      signformState.signPassword !==
+                        signformState.cPassword && (
+                        <span data-testid="passwordCheck">
+                          {t('Password_and_Confirm_password_mismatches.')}
+                        </span>
+                      )}
                   </div>
+                  {REACT_APP_USE_RECAPTCHA === 'yes' ? (
+                    <div className="googleRecaptcha">
+                      <ReCAPTCHA
+                        ref={recaptchaRef}
+                        sitekey={
+                          /* istanbul ignore next */
+                          RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
+                        }
+                      />
+                    </div>
+                  ) : (
+                    /* istanbul ignore next */
+                    <></>
+                  )}
                   <button
                     type="submit"
                     className={styles.greenregbtn}
@@ -510,12 +547,20 @@ function LoginPage(): JSX.Element {
                     )}
                   </label>
                 </div>
-                <div className="googleRecaptcha">
-                  <ReCAPTCHA
-                    ref={recaptchaRef}
-                    sitekey={RECAPTCHA_SITE_KEY ?? ''}
-                  />
-                </div>
+                {REACT_APP_USE_RECAPTCHA === 'yes' ? (
+                  <div className="googleRecaptcha">
+                    <ReCAPTCHA
+                      ref={recaptchaRef}
+                      sitekey={
+                        /* istanbul ignore next */
+                        RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
+                      }
+                    />
+                  </div>
+                ) : (
+                  /* istanbul ignore next */
+                  <></>
+                )}
                 <button
                   type="submit"
                   className={styles.greenregbtn}

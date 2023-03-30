@@ -37,7 +37,6 @@ function OrgList(): JSX.Element {
     location: '',
     image: '',
   });
-  const [, setSearchByName] = useState('');
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -149,18 +148,9 @@ function OrgList(): JSX.Element {
 
   const handleSearchByName = (e: any) => {
     const { value } = e.target;
-    setSearchByName(value);
-
-    if (value.length === 0) {
-      refetch({
-        filter: '',
-      });
-    } else {
-      setSearchByName(value);
-      refetch({
-        filter: value,
-      });
-    }
+    refetch({
+      filter: value,
+    });
   };
   let dataRevOrg;
   const debouncedHandleSearchByName = debounce(handleSearchByName);
@@ -205,7 +195,7 @@ function OrgList(): JSX.Element {
           </div>
         </Col>
         <Col xl={8} className={styles.mainpagerightContainer}>
-          <div className={styles.mainpageright}>
+          <div className={styles.mainpageright} data-testid="mainpageright">
             <div className={styles.justifysp}>
               <p className={styles.logintitle}>{t('organizationList')}</p>
             </div>
@@ -229,7 +219,7 @@ function OrgList(): JSX.Element {
                 onChange={debouncedHandleSearchByName}
               />
             </div>
-            <div className={styles.list_box}>
+            <div className={styles.list_box} data-testid="organizations-list">
               {data?.organizationsConnection.length > 0 ? (
                 (rowsPerPage > 0
                   ? dataRevOrg.slice(
@@ -247,7 +237,7 @@ function OrgList(): JSX.Element {
                     createdAt: string;
                     location: string | null;
                   }) => {
-                    if (data_2?.user.userType == 'SUPERADMIN') {
+                    if (data_2 && data_2.user.userType == 'SUPERADMIN') {
                       return (
                         <SuperDashListCard
                           id={datas._id}
@@ -298,7 +288,7 @@ function OrgList(): JSX.Element {
                 }}
               >
                 <tbody>
-                  <tr>
+                  <tr data-testid="rowsPPSelect">
                     <PaginationList
                       count={data ? data.organizationsConnection.length : 0}
                       rowsPerPage={rowsPerPage}

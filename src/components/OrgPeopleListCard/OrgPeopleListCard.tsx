@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { Link } from 'react-router-dom';
+import defaultImg from 'assets/third_image.png';
 
 interface OrgPeopleListCardProps {
   key: string;
@@ -56,15 +57,12 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
   };
   return (
     <>
-      <div className={styles.peoplelistdiv}>
+      <div className={styles.peoplelistdiv} data-testid="peoplelistitem">
         <Row className={styles.memberlist}>
           {props.memberImage ? (
             <img src={props.memberImage} className={styles.memberimg} />
           ) : (
-            <img
-              src="https://via.placeholder.com/200x100"
-              className={styles.memberimg}
-            />
+            <img src={defaultImg} className={styles.memberimg} />
           )}
           <Col className={styles.singledetails}>
             <div className={styles.singledetails_data_left}>

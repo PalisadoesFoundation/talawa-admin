@@ -10,6 +10,7 @@
     "email": "Email",
     "password": "Password",
     "atleast_8_char_long": "Atleast 8 Character long",
+    "Password_and_Confirm_password_mismatches.": "Password and Confirm password mismatches.",
     "confirmPassword": "Confirm Password",
     "forgotPassword": "Forgot Password ?",
     "enterEmail": "Enter Email",
@@ -190,8 +191,7 @@
   },
   "orgPost": {
     "title": "Talawa Posts",
-    "postsByTitle": "Posts by Title",
-    "postsByText": "Posts by Text",
+    "searchPost": "Search Post",
     "posts": "Posts",
     "createPost": "Create Post",
     "postDetails": "Post Details",
@@ -203,7 +203,9 @@
     "searchTitle": "Search By Title",
     "searchText": "Search By Text",
     "ptitle": "Post Title",
-    "postDes": "What do you to talk about?"
+    "postDes": "What do you to talk about?",
+    "Title": "Title",
+    "Text": "Text"
   },
   "postNotFound": {
     "post": "Post",
