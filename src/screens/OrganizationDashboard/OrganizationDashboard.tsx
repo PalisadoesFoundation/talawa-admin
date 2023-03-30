@@ -119,7 +119,7 @@ function OrganizationDashboard(): JSX.Element {
                 />
               )}
               <p className={styles.tagdetailsGreen}>
-              {canDelete && (
+                {canDelete && (
                   <button
                     type="button"
                     className="mt-3"

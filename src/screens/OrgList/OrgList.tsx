@@ -196,7 +196,7 @@ function OrgList(): JSX.Element {
               <p className={styles.logintitle}>{t('organizationList')}</p>
             </div>
             <div className={styles.search}>
-            <Button
+              <Button
                 variant="success"
                 className={styles.invitebtn}
                 disabled={isSuperAdmin}

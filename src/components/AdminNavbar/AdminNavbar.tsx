@@ -180,7 +180,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
             })}
           </Nav>
           <Link className={styles.allOrgBtn} to="/orglist">
-          {condtionalRender ? t('allOrganizations') : t('yourOrganization')}
+            {condtionalRender ? t('allOrganizations') : t('yourOrganization')}
           </Link>
           <Nav
             className="ml-auto items-center"

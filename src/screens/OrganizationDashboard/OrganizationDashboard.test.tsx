@@ -100,7 +100,7 @@ describe('Organisation Dashboard Page', () => {
       expect(queryByTestId('deleteClick')).not.toBeInTheDocument()
     );
   });
-  
+
   test('Should check if organisation image is present', async () => {
     const { container } = render(
       <MockedProvider addTypename={false} mocks={MOCKS_WITH_IMAGE}>

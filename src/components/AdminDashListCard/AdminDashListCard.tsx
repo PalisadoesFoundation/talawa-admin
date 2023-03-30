@@ -63,7 +63,7 @@ function AdminDashListCard(props: AdminDashListCardProps): JSX.Element {
                   !props.admins.some((admin: any) => admin._id === userId)
                 }
               >
-                  {t('view')}
+                {t('view')}
               </button>
             </div>
           </div>
