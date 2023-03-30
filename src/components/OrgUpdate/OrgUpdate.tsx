@@ -61,7 +61,6 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
       });
       /* istanbul ignore next */
       if (data) {
-
         toast.success('Successful updated', { autoClose });
         setTimeout(() => {
           window.location.reload();
@@ -70,7 +69,6 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
         window.location.assign(`/orgdash/id=${props.orgid}`);
 
         toast.success('Successfully updated');
-
       }
     } catch (error: any) {
       /* istanbul ignore next */

@@ -71,7 +71,6 @@ function OrganizationEvents(): JSX.Element {
     }
   );
 
-
   const autoClose = 2000;
 
   const { data: orgData } = useQuery(ORGANIZATIONS_LIST, {
@@ -80,7 +79,6 @@ function OrganizationEvents(): JSX.Element {
 
   const userId = localStorage.getItem('id') as string;
   const userRole = localStorage.getItem('UserType') as string;
-
 
   const [create, { loading: loading_2 }] = useMutation(CREATE_EVENT_MUTATION);
 
