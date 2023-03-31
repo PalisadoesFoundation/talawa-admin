@@ -69,6 +69,24 @@ function OrgList(): JSX.Element {
     error: error_list,
     refetch,
   } = useQuery(ORGANIZATION_CONNECTION_LIST);
+  /*istanbul ignore next*/
+  interface UserType {
+    adminFor: Array<{
+      _id: string;
+    }>;
+  }
+  /*istanbul ignore next*/
+  interface CurrentOrgType {
+    _id: string;
+  }
+  /*istanbul ignore next*/
+  const isAdminForCurrentOrg = (user: UserType | undefined, currentOrg: CurrentOrgType): boolean => {
+    return (
+      user?.adminFor.length === 1 &&
+      user?.adminFor[0]._id === currentOrg._id
+    );
+  };
+  
 
   const CreateOrg = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -112,7 +130,7 @@ function OrgList(): JSX.Element {
       }
     }
   };
-
+  
   const renderSuperDashListCard = (datas: any) => (
     <SuperDashListCard
       id={datas._id}
@@ -267,12 +285,35 @@ function OrgList(): JSX.Element {
                     location: string | null;
                   }) => {
                     if (data_2 && data_2.user.userType == 'SUPERADMIN') {
-                      return renderSuperDashListCard(datas);
-                    } else if (
-                      data_2?.user.adminFor.length === 1 &&
-                      data_2?.user.adminFor[0]._id === datas._id
-                    ) {
-                      return renderAdminDashListCard(datas);
+                      return (
+                        <SuperDashListCard
+                          id={datas._id}
+                          key={datas._id}
+                          image={datas.image}
+                          admins={datas.admins}
+                          members={datas.members.length}
+                          createdDate={dayjs(datas?.createdAt).format(
+                            'MMMM D, YYYY'
+                          )}
+                          orgName={datas.name}
+                          orgLocation={datas.location}
+                        />
+                      );
+                    } else if (isAdminForCurrentOrg(data_2?.user, datas)) {
+                      return (
+                        <AdminDashListCard
+                          id={datas._id}
+                          key={datas._id}
+                          image={datas.image}
+                          admins={datas.admins}
+                          members={datas.members.length}
+                          createdDate={dayjs(datas?.createdAt).format(
+                            'MMMM D, YYYY'
+                          )}
+                          orgName={datas.name}
+                          orgLocation={datas.location}
+                        />
+                      );
                     } else {
                       return null;
                     }
