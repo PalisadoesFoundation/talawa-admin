@@ -169,6 +169,7 @@ describe('Organisation List Page', () => {
     image: new File(['hello'], 'hello.png', { type: 'image/png' }),
   };
 
+  
   test('On dynamic setting of rowsPerPage, the number of organizations rendered on the dom should be changed to the selected option', async () => {
     localStorage.setItem('id', '123');
 
@@ -416,6 +417,8 @@ describe('Organisation List Page', () => {
 
     userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
   });
+
+  
 });
 
 describe('SuperDashListCard', () => {
@@ -520,5 +523,81 @@ describe('AdminDashListCard', () => {
     expect(getByText('Members:')).toBeInTheDocument();
     expect(getByText('2022, 2, 20')).toBeInTheDocument();
     expect(getByText('Example Location')).toBeInTheDocument();
+  });
+});
+
+describe('OrgList', () => {
+  it('renders AdminDashListCard when user is an admin for a single organization', async () => {
+    localStorage.setItem('UserType', 'SUPERADMIN');
+    const datas = {
+      _id: '123',
+      image: 'https://example.com/image.png',
+      admins: [
+        {
+          _id: '123',
+        },
+        {
+          _id: '456',
+        },
+      ],
+      members: [1, 2, 3],
+      createdAt: '2022, 2, 20',
+      name: 'Example Org',
+      location: 'Example Location',
+    };
+
+    const mocks = [
+      {
+        request: {
+          query: ORGANIZATION_CONNECTION_LIST,
+        },
+        result: {
+          data: {
+            organizationsConnection: [datas],
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_ORGANIZATION_LIST,
+          variables: { id: '123' },
+        },
+        result: {
+          data: {
+            user: {
+              firstName: 'John',
+              lastName: 'Doe',
+              image: '',
+              email: 'John_Does_Palasidoes@gmail.com',
+              userType: 'ADMIN',
+              adminFor: [{ _id: '123', name: 'Example Org', image: '' }],
+            },
+          },
+        },
+      },
+    ];
+
+    await act(async () => {
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <OrgList />
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+      await wait();
+    });
+
+    expect(localStorage.setItem).toHaveBeenLastCalledWith('UserType', 'SUPERADMIN');
+
+    expect(screen.getByText((content, element) => {
+      return element?.tagName.toLowerCase() === 'div' && content.includes('Example Org');
+    })).toBeInTheDocument();
+    expect(screen.getByText('Admins: 2')).toBeInTheDocument();
+    expect(screen.getByText('Members: 3')).toBeInTheDocument();
+    expect(screen.getByText('February 20, 2022')).toBeInTheDocument();
+    expect(screen.getByText('Example Location')).toBeInTheDocument();
   });
 });

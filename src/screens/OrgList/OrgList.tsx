@@ -80,13 +80,14 @@ function OrgList(): JSX.Element {
     _id: string;
   }
   /*istanbul ignore next*/
-  const isAdminForCurrentOrg = (user: UserType | undefined, currentOrg: CurrentOrgType): boolean => {
+  const isAdminForCurrentOrg = (
+    user: UserType | undefined,
+    currentOrg: CurrentOrgType
+  ): boolean => {
     return (
-      user?.adminFor.length === 1 &&
-      user?.adminFor[0]._id === currentOrg._id
+      user?.adminFor.length === 1 && user?.adminFor[0]._id === currentOrg._id
     );
   };
-  
 
   const CreateOrg = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -130,7 +131,7 @@ function OrgList(): JSX.Element {
       }
     }
   };
-  
+
   const renderSuperDashListCard = (datas: any) => (
     <SuperDashListCard
       id={datas._id}
