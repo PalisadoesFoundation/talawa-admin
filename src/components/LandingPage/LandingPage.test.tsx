@@ -42,6 +42,7 @@ describe('Testing LandingPage', () => {
         if (text && text.includes(searchText)) {
           break;
         }
+        
       }
     });
   });
