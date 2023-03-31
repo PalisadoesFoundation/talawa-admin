@@ -169,7 +169,6 @@ describe('Organisation List Page', () => {
     image: new File(['hello'], 'hello.png', { type: 'image/png' }),
   };
 
-  
   test('On dynamic setting of rowsPerPage, the number of organizations rendered on the dom should be changed to the selected option', async () => {
     localStorage.setItem('id', '123');
 
@@ -417,8 +416,6 @@ describe('Organisation List Page', () => {
 
     userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
   });
-
-  
 });
 
 describe('SuperDashListCard', () => {
@@ -590,11 +587,19 @@ describe('OrgList', () => {
       await wait();
     });
 
-    expect(localStorage.setItem).toHaveBeenLastCalledWith('UserType', 'SUPERADMIN');
+    expect(localStorage.setItem).toHaveBeenLastCalledWith(
+      'UserType',
+      'SUPERADMIN'
+    );
 
-    expect(screen.getByText((content, element) => {
-      return element?.tagName.toLowerCase() === 'div' && content.includes('Example Org');
-    })).toBeInTheDocument();
+    expect(
+      screen.getByText((content, element) => {
+        return (
+          element?.tagName.toLowerCase() === 'div' &&
+          content.includes('Example Org')
+        );
+      })
+    ).toBeInTheDocument();
     expect(screen.getByText('Admins: 2')).toBeInTheDocument();
     expect(screen.getByText('Members: 3')).toBeInTheDocument();
     expect(screen.getByText('February 20, 2022')).toBeInTheDocument();
