@@ -131,33 +131,7 @@ function OrgList(): JSX.Element {
       }
     }
   };
-
-  const renderSuperDashListCard = (datas: any) => (
-    <SuperDashListCard
-      id={datas._id}
-      key={datas._id}
-      image={datas.image}
-      admins={datas.admins}
-      members={datas.members.length}
-      createdDate={dayjs(datas?.createdAt).format('MMMM D, YYYY')}
-      orgName={datas.name}
-      orgLocation={datas.location}
-    />
-  );
-
-  const renderAdminDashListCard = (datas: any) => (
-    <AdminDashListCard
-      id={datas._id}
-      key={datas._id}
-      image={datas.image}
-      admins={datas.admins}
-      members={datas.members.length}
-      createdDate={dayjs(datas?.createdAt).format('MMMM D, YYYY')}
-      orgName={datas.name}
-      orgLocation={datas.location}
-    />
-  );
-
+  
   if (loading || loading_2 || loading_3) {
     return (
       <>
