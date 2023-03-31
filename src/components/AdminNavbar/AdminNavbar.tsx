@@ -46,7 +46,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
     variables: { id: localStorage.getItem('id') },
   });
 
-  const condtionalRender = data_2?.user.userType === 'SUPERADMIN';
+  const isSuperAdmin = data_2?.user.userType === 'SUPERADMIN';
 
   useEffect(() => {
     const handleUpdateSpam = async () => {
@@ -180,7 +180,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
             })}
           </Nav>
           <Link className={styles.allOrgBtn} to="/orglist">
-            {condtionalRender ? t('allOrganizations') : t('yourOrganization')}
+            {isSuperAdmin ? t('allOrganizations') : t('yourOrganization')}
           </Link>
           <Nav
             className="ml-auto items-center"

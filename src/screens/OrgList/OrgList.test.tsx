@@ -169,6 +169,7 @@ describe('Organisation List Page', () => {
     image: new File(['hello'], 'hello.png', { type: 'image/png' }),
   };
 
+  
   test('On dynamic setting of rowsPerPage, the number of organizations rendered on the dom should be changed to the selected option', async () => {
     localStorage.setItem('id', '123');
 
@@ -416,6 +417,8 @@ describe('Organisation List Page', () => {
 
     userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
   });
+
+  
 });
 
 describe('SuperDashListCard', () => {
@@ -522,3 +525,4 @@ describe('AdminDashListCard', () => {
     expect(getByText('Example Location')).toBeInTheDocument();
   });
 });
+

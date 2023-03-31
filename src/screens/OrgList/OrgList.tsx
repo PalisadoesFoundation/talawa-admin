@@ -113,6 +113,32 @@ function OrgList(): JSX.Element {
     }
   };
 
+  const renderSuperDashListCard = (datas:any) => (
+    <SuperDashListCard
+      id={datas._id}
+      key={datas._id}
+      image={datas.image}
+      admins={datas.admins}
+      members={datas.members.length}
+      createdDate={dayjs(datas?.createdAt).format('MMMM D, YYYY')}
+      orgName={datas.name}
+      orgLocation={datas.location}
+    />
+  );
+
+  const renderAdminDashListCard = (datas:any) => (
+    <AdminDashListCard
+      id={datas._id}
+      key={datas._id}
+      image={datas.image}
+      admins={datas.admins}
+      members={datas.members.length}
+      createdDate={dayjs(datas?.createdAt).format('MMMM D, YYYY')}
+      orgName={datas.name}
+      orgLocation={datas.location}
+    />
+  );
+
   if (loading || loading_2 || loading_3) {
     return (
       <>
@@ -207,24 +233,20 @@ function OrgList(): JSX.Element {
                 + {t('createOrganization')}
               </Button>
               <input
-                type="name"
-                id="orgname"
-                placeholder="Search Organization"
-                data-testid="searchByName"
-                autoComplete="off"
-                required
-                onChange={
-                  data_2 && data_2.user.userType === 'SUPERADMIN'
-                    ? debouncedHandleSearchByName
-                    : undefined
-                }
-                style={{
-                  display:
-                    data_2 && data_2.user.userType !== 'SUPERADMIN'
-                      ? 'none'
-                      : 'block',
-                }}
-              />
+  type="name"
+  id="orgname"
+  placeholder="Search Organization"
+  data-testid="searchByName"
+  autoComplete="off"
+  required
+  onChange={debouncedHandleSearchByName}
+  style={{
+    display:
+      data_2 && data_2.user.userType !== 'SUPERADMIN'
+        ? 'none'
+        : 'block',
+  }}
+/>
             </div>
             <div className={styles.list_box} data-testid="organizations-list">
               {data?.organizationsConnection.length > 0 ? (
@@ -245,38 +267,12 @@ function OrgList(): JSX.Element {
                     location: string | null;
                   }) => {
                     if (data_2 && data_2.user.userType == 'SUPERADMIN') {
-                      return (
-                        <SuperDashListCard
-                          id={datas._id}
-                          key={datas._id}
-                          image={datas.image}
-                          admins={datas.admins}
-                          members={datas.members.length}
-                          createdDate={dayjs(datas?.createdAt).format(
-                            'MMMM D, YYYY'
-                          )}
-                          orgName={datas.name}
-                          orgLocation={datas.location}
-                        />
-                      );
+                      return renderSuperDashListCard(datas);
                     } else if (
                       data_2?.user.adminFor.length === 1 &&
                       data_2?.user.adminFor[0]._id === datas._id
                     ) {
-                      return (
-                        <AdminDashListCard
-                          id={datas._id}
-                          key={datas._id}
-                          image={datas.image}
-                          admins={datas.admins}
-                          members={datas.members.length}
-                          createdDate={dayjs(datas?.createdAt).format(
-                            'MMMM D, YYYY'
-                          )}
-                          orgName={datas.name}
-                          orgLocation={datas.location}
-                        />
-                      );
+                      return renderAdminDashListCard(datas);
                     } else {
                       return null;
                     }
@@ -300,7 +296,7 @@ function OrgList(): JSX.Element {
                 }}
               >
                 <tbody>
-                  {data_2?.user.userType !== 'ADMIN' && (
+                  {data_2?.user.userType === 'SUPERADMIN' && (
                     <tr data-testid="rowsPPSelect">
                       <PaginationList
                         count={data ? data.organizationsConnection.length : 0}
