@@ -23,8 +23,6 @@ import convertToBase64 from 'utils/convertToBase64';
 import AdminDashListCard from 'components/AdminDashListCard/AdminDashListCard';
 import PostNotFound from 'components/PostNotFound/PostNotFound';
 
-import close from 'assets/images/close.svg';
-
 function OrgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
 
