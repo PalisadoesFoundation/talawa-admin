@@ -131,7 +131,7 @@ function OrgList(): JSX.Element {
       }
     }
   };
-  
+
   if (loading || loading_2 || loading_3) {
     return (
       <>
