@@ -2,7 +2,7 @@
   "loginPage": {
     "title": "तलवा व्यवस्थापक",
     "fromPalisadoes": "पलिसाडो के स्वयंसेवकों द्वारा एक खुला स्रोत अनुप्रयोग",
-    "talawa_portal": "तरावा प्रशासन पोर्टल",
+    "talawa_portal": "तलावा प्रशासन पोर्टल",
     "login": "लॉग इन करें",
     "register": "पंजीकरण करवाना",
     "firstName": "पहला नाम",
@@ -17,7 +17,7 @@
     "doNotOwnAnAccount": "क्या आपके पास खाता नहीं है?"
   },
   "listNavbar": {
-    "talawa_portal": "तरावा प्रशासन पोर्टल",
+    "talawa_portal": "तलावा प्रशासन पोर्टल",
     "roles": "भूमिकाएँ",
     "requests": "अनुरोध",
     "logout": "लॉग आउट"
@@ -71,7 +71,7 @@
     "enterName": "नाम दर्ज करें"
   },
   "adminNavbar": {
-    "talawa_portal": "तरावा प्रशासन पोर्टल",
+    "talawa_portal": "तलावा प्रशासन पोर्टल",
     "Dashboard": "डैशबोर्ड",
     "People": "लोग",
     "Events": "आयोजन",
