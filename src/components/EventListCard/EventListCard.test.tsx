@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, fireEvent } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -214,7 +214,6 @@ describe('Testing Event List Card', () => {
 
     userEvent.click(screen.getByTestId('updatePostBtn'));
   });
-
   test('Testing event preview modal', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -225,5 +224,48 @@ describe('Testing Event List Card', () => {
     );
     await wait();
     expect(screen.getByText(props.eventName)).toBeInTheDocument();
+  });
+  describe('EventListCard', () => {
+    it('should render the delete modal', () => {
+      render(
+        <MockedProvider mocks={MOCKS} addTypename={false}>
+          <EventListCard {...props} />
+        </MockedProvider>
+      );
+    });
+
+    it('should call the delete event mutation when the "Yes" button is clicked', async () => {
+      render(
+        <MockedProvider mocks={MOCKS} addTypename={false}>
+          <EventListCard {...props} />
+        </MockedProvider>
+      );
+
+      const deleteBtn = screen.getByTestId('deleteEventBtn');
+      fireEvent.click(deleteBtn);
+    });
+
+    it('should show an error toast when the delete event mutation fails', async () => {
+      const errorMocks = [
+        {
+          request: {
+            query: DELETE_EVENT_MUTATION,
+            variables: {
+              id: props.id,
+            },
+          },
+          error: new Error('Something went wrong'),
+        },
+      ];
+
+      render(
+        <MockedProvider mocks={errorMocks} addTypename={false}>
+          <EventListCard {...props} />
+        </MockedProvider>
+      );
+
+      const deleteBtn = screen.getByTestId('deleteEventBtn');
+      fireEvent.click(deleteBtn);
+    });
   });
 });
