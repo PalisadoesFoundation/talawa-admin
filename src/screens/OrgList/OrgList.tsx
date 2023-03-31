@@ -322,13 +322,12 @@ function OrgList(): JSX.Element {
                 className={styles.cancel}
                 data-testid="closeOrganizationModal"
               >
-                <img
-                  src={close}
-                  alt="closing"
+                <i
+                  className="fa fa-times"
                   style={{
                     cursor: 'pointer',
                   }}
-                />
+                ></i>
               </a>
             </div>
             <Form onSubmitCapture={CreateOrg}>
