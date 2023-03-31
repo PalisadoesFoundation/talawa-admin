@@ -80,12 +80,11 @@ describe('Testing Organization Post Card', () => {
     await wait();
 
     expect(screen.getByText(/Author:/i)).toBeInTheDocument();
-    expect(screen.getByText(/Image URL:/i)).toBeInTheDocument();
     expect(screen.getByText(/Video URL:/i)).toBeInTheDocument();
     expect(screen.getByText(props.postTitle)).toBeInTheDocument();
     expect(screen.getByDisplayValue(props.postInfo)).toBeInTheDocument();
     expect(screen.getByText(props.postAuthor)).toBeInTheDocument();
-    expect(screen.getByText(props.postPhoto)).toBeInTheDocument();
+    expect(screen.getByAltText(/image not found/i)).toBeInTheDocument();
     expect(screen.getByText(props.postVideo)).toBeInTheDocument();
   });
 
@@ -103,12 +102,11 @@ describe('Testing Organization Post Card', () => {
     await wait();
 
     expect(screen.getByText(/Author:/i)).toBeInTheDocument();
-    expect(screen.getByText(/Image URL:/i)).toBeInTheDocument();
     expect(screen.getByText(/Video URL:/i)).toBeInTheDocument();
     expect(screen.getByText(props.postTitle)).toBeInTheDocument();
     expect(screen.getByDisplayValue(props.postInfo)).toBeInTheDocument();
     expect(screen.getByText(props.postAuthor)).toBeInTheDocument();
-    expect(screen.getByText(props.postPhoto)).toBeInTheDocument();
+    expect(screen.getByAltText(/image not found/i)).toBeInTheDocument();
     expect(screen.getByText(props.postVideo)).toBeInTheDocument();
   });
 
@@ -220,9 +218,5 @@ describe('Testing Organization Post Card', () => {
         </I18nextProvider>
       </MockedProvider>
     );
-
-    // const toggleBtn = screen.queryByRole('toggleBtn');
-
-    // expect(toggleBtn).not.toBeInTheDocument();
   });
 });

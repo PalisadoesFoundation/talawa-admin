@@ -10,6 +10,19 @@
   box-shadow: 0px 0px 8px 2px #c8c8c8;
 }
 
+.checkboxdiv {
+  position: relative;
+  display: flex;
+}
+
+.checkboxdiv label {
+  margin-right: 4px;
+}
+
+.checkboxdiv input {
+  margin-right: 10px;
+}
+
 .logo {
   color: #707070;
   margin-left: 0;
@@ -81,6 +94,7 @@
   font-weight: 600;
   font-size: 18px;
   margin-bottom: 20px;
+  line-height: 25px;
   padding-bottom: 5px;
   border-bottom: 3px solid #31bb6b;
   width: 60%;
@@ -239,14 +253,22 @@ textarea {
 .sidebarsticky > input {
   text-decoration: none;
   margin-bottom: 50px;
-  border-color: #e8e5e5;
+  border: solid 1.5px #d3d3d3;
+  border-radius: 5px;
   width: 80%;
   border-radius: 7px;
   padding-top: 5px;
   padding-bottom: 5px;
   padding-right: 10px;
   padding-left: 10px;
+  text-decoration: none;
   box-shadow: none;
+}
+
+.sidebarsticky > input:focus {
+  border-color: #fff;
+  box-shadow: 0 0 5pt 0.5pt #d3d3d3;
+  outline: none;
 }
 
 .loader,

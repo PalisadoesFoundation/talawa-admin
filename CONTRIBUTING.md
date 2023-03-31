@@ -6,16 +6,18 @@ If you are new to contributing to open source, please read the Open Source Guide
 
 ## Table of Contents
 
-* [Code of Conduct](#code-of-conduct)
-* [Ways to Contribute](#ways-to-contribute)
-* [Our Development Process](#our-development-process)
-    * [Issues](#issues)
-    * [Pull Requests](#pull-requests)
-    * [Branching Strategy](#branching-strategy)
-    * [Conflict Resolution](#conflict-resolution)
-* [Contributing Code](#contributing-code)
-* Internships
-* [Community](#community)
+- [Contributing to Talawa-Admin](#contributing-to-talawa-admin)
+  - [Table of Contents](#table-of-contents)
+  - [Code of Conduct](#code-of-conduct)
+  - [Ways to Contribute](#ways-to-contribute)
+    - [Our Development Process](#our-development-process)
+      - [Issues](#issues)
+      - [Pull Requests](#pull-requests)
+      - [Branching Strategy](#branching-strategy)
+      - [Conflict Resolution](#conflict-resolution)
+    - [Contributing Code](#contributing-code)
+  - [Internships](#internships)
+  - [Community](#community)
 
 ## Code of Conduct
 
@@ -88,30 +90,30 @@ The process of proposing a change to Talawa Admin can be summarized as:
    1. **_Testing_:**
       1. Test using this set of commands:
       ```
-         yarn install
-         yarn test --watchAll=false --coverage
+         npm install --legacy-peer-deps
+         npm run test --watchAll=false --coverage
       ```
    1. **_Test Code Coverage_:**
       1. _General Information_
          1. The current code coverage of the repo is: [![codecov](https://codecov.io/gh/PalisadoesFoundation/talawa-admin/branch/develop/graph/badge.svg?token=II0R0RREES)](https://codecov.io/gh/PalisadoesFoundation/talawa-admin)
          1. You can determine the percentage test coverage of your code by running these two commands in sequence:
             ```
-            yarn install
-            yarn test --watchAll=false --coverage
+            npm install --legacy-peer-deps
+            npm run test --watchAll=false --coverage
             genhtml coverage/lcov.info -o coverage
             ```
-         1. The output of the `yarn test` command will give you a tablular coverage report per file
+         1. The output of the `npm run test` command will give you a tablular coverage report per file
          1. The overall coverage rate will be visible on the penultimate line of the `genhtml` command's output.
          1. The `genhtml` command is part of the Linux `lcov` package. Similar packages can be found for Windows and MacOS.
          1. The currently acceptable coverage rate can be found in the [GitHub Pull Request file](.github/workflows/pull-requests.yml). Search for the value below the line containing `min_coverage`.
       1. _Testing Individual Files_
          1. You can test an individual file by running this command:
              ```
-             yarn test --watchAll=false /path/to/test/file
+             npm run test --watchAll=false /path/to/test/file
              ```
          1. You can get the test coverage report for that file by running this command. The report will list all tests in the suite. Those tests that are not run will have zero values. You will need to look for the output line relevant to your test file.
              ```
-             yarn test --watchAll=false --coverage /path/to/test/file
+             npm run test --watchAll=false --coverage /path/to/test/file
              ```
       1. _Creating your code coverage account_
           1. You can also see your code coverage online for your fork of the repo. This is provided by `codecov.io`

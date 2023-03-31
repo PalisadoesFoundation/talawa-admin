@@ -14,7 +14,7 @@ interface SuperDashListCardProps {
   createdDate: string;
   image: string;
   admins: any;
-  members: string;
+  members: any;
 }
 
 function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
@@ -42,11 +42,15 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
 
   return (
     <>
-      <Row className={styles.orglist}>
+      <Row className={styles.orglist} data-testid="singleorg">
         {props.image ? (
-          <img src={props.image} className={styles.orgimg} />
+          <div className={styles.orgImgContainer}>
+            <img src={props.image} className={styles.orgimg} />
+          </div>
         ) : (
-          <img src={AboutImg} className={styles.orgimg} />
+          <div className={styles.orgImgContainer}>
+            <img src={AboutImg} className={styles.orgimg} />
+          </div>
         )}
         <Col className={styles.singledetails}>
           <div className={styles.singledetails_data_left}>
@@ -71,6 +75,7 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
                 onClick={handleClick}
                 disabled={
                   userType !== 'SUPERADMIN' &&
+                  props.admins.length > 0 &&
                   !props.admins.some((admin: any) => admin._id === userId)
                 }
               >

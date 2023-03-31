@@ -45,7 +45,7 @@ describe('Testing Organization Admin List Card', () => {
       id: '456',
       memberName: 'John Doe',
       joinDate: '05/05/2022',
-      memberImage: 'https://via.placeholder.com/200x100',
+      memberImage: 'image',
       memberEmail: 'johndoe@gmail.com',
     };
 

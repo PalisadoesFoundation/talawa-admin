@@ -96,6 +96,12 @@ jest.mock('react-toastify', () => ({
   },
 }));
 
+jest.mock('Constant/constant.ts', () => ({
+  ...jest.requireActual('Constant/constant.ts'),
+  REACT_APP_USE_RECAPTCHA: 'yes',
+  RECAPTCHA_SITE_KEY: 'xxx',
+}));
+
 describe('Talawa-API server fetch check', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -400,6 +406,35 @@ describe('Testing Login Page Screen', () => {
 
     const input = screen.getByTestId('password') as HTMLInputElement;
     const toggleText = screen.getByTestId('showPassword');
+    // password should be hidden
+    expect(input.type).toBe('password');
+    // click the toggle button to show password
+    userEvent.click(toggleText);
+    expect(input.type).toBe('text');
+    // click the toggle button to hide password
+    userEvent.click(toggleText);
+    expect(input.type).toBe('password');
+
+    await wait();
+  });
+
+  test('Testing confirm password preview feature', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    const input = screen.getByTestId('cpassword') as HTMLInputElement;
+    const toggleText = screen.getByTestId('showPasswordrCon');
     // password should be hidden
     expect(input.type).toBe('password');
     // click the toggle button to show password
