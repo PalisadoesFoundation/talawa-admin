@@ -522,4 +522,3 @@ describe('AdminDashListCard', () => {
     expect(getByText('Example Location')).toBeInTheDocument();
   });
 });
-
