@@ -23,10 +23,12 @@
 }
 .iconContainer {
   display: flex;
+  justify-content: flex-end;
 }
 .icon {
-  transform: scale(0.75);
+  transform: scale(1);
   cursor: pointer;
+  color: #31bb6b;
 }
 
 .cards {
@@ -117,4 +119,82 @@ form > input {
 }
 .checkboxdiv > div {
   width: 50%;
+}
+
+.preview {
+  display: flex;
+  flex-direction: row;
+  font-weight: 900;
+  font-size: 16px;
+  color: rgb(80, 80, 80);
+}
+.view {
+  margin-left: 2%;
+  font-weight: 600;
+  font-size: 16px;
+  color: #707070;
+}
+.flexdir {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border: none;
+}
+
+.form_wrapper {
+  margin-top: 27px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 30px;
+  background: #ffffff;
+  border-color: #e8e5e5;
+  border-width: 5px;
+  border-radius: 10px;
+  width: 40%;
+}
+
+.form_wrapper form {
+  display: flex;
+  align-items: left;
+  justify-content: left;
+  flex-direction: column;
+}
+form > label {
+  font-weight: bold;
+  padding-bottom: 1px;
+  font-size: 14px;
+  color: #707070;
+}
+.titlemodal {
+  color: #707070;
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid #31bb6b;
+  width: 65%;
+}
+.cancel > i {
+  margin-top: 5px;
+  transform: scale(1.2);
+  cursor: pointer;
+  color: #707070;
+}
+.modalbody {
+  width: 50px;
+}
+.list_box {
+  height: 70vh;
+  overflow-y: auto;
+  width: auto;
+}
+@media only screen and (max-width: 600px) {
+  .form_wrapper {
+    width: 90%;
+    top: 45%;
+  }
 }

@@ -183,7 +183,8 @@
     "isPublic": "Est publique",
     "isRegistrable": "Est enregistrable",
     "close": "Proche",
-    "updatePost": "Mettre à jour le message"
+    "updatePost": "Mettre à jour le message",
+    "eventDetails": "Détails de l'évènement"
   },
   "orgPost": {
     "title": "Postes de Talawa",

@@ -2,12 +2,14 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import Modal from 'react-modal';
 
 import styles from './EventListCard.module.css';
 import {
   DELETE_EVENT_MUTATION,
   UPDATE_EVENT_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+import { Form } from 'antd';
 
 interface EventListCardProps {
   key: string;
@@ -28,7 +30,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'eventListCard',
   });
-
+  const [eventmodalisOpen, setEventModalIsOpen] = useState(false);
   const [alldaychecked, setAllDayChecked] = useState(true);
   const [recurringchecked, setRecurringChecked] = useState(false);
   const [publicchecked, setPublicChecked] = useState(true);
@@ -40,6 +42,12 @@ function EventListCard(props: EventListCardProps): JSX.Element {
     startTime: '08:00:00',
     endTime: '18:00:00',
   });
+  const showViewModal = () => {
+    setEventModalIsOpen(true);
+  };
+  const hideViewModal = () => {
+    setEventModalIsOpen(false);
+  };
 
   useEffect(() => {
     setFormState({
@@ -127,43 +135,92 @@ function EventListCard(props: EventListCardProps): JSX.Element {
   return (
     <>
       <div className="">
-        <div className={styles.cards}>
+        <div
+          className={styles.cards}
+          onClick={showViewModal}
+          data-testid="card"
+        >
           <div className={styles.dispflex}>
-            <h2>{props.eventName ? <>{props.eventName}</> : <>Dogs Care</>}</h2>
-            <div className={styles.iconContainer}>
-              <a
-                data-testid="deleteEventModalBtn"
-                className={`${styles.icon} mr-1`}
-                data-toggle="modal"
-                data-target={`#deleteEventModal${props.id}`}
-              >
-                <i className="fa fa-trash"></i>
-              </a>
-              <a
-                data-testid="editEventModalBtn"
-                className={styles.icon}
-                data-toggle="modal"
-                data-target={`#editEventModal${props.id}`}
-              >
-                <i className="fas fa-edit"></i>
-              </a>
-            </div>
+            <h2>
+              {props.eventName ? <>{props.eventName}</> : <>Dogs Care</>}{' '}
+            </h2>
           </div>
-          {/* <p>
-            {t('location')}:{' '}
-            <span>
-              {props.eventLocation ? <>{props.eventLocation}</> : <>India</>}
-            </span>
-          </p>
-          <p>{props.eventDescription}</p>
-          <p>
-            {t('on')}: <span>{props.regDate}</span>
-          </p>
-          <p>
-            {t('end')}: <span>{props.regEndDate}</span>
-          </p> */}
         </div>
       </div>
+      {/* preview modal */}
+      <Modal
+        isOpen={eventmodalisOpen}
+        style={{
+          overlay: { backgroundColor: 'grey' },
+        }}
+        className={styles.modalbody}
+        ariaHideApp={false}
+      >
+        <section id={styles.grid_wrapper}>
+          <div className={styles.form_wrapper}>
+            <div className={styles.flexdir}>
+              <p className={styles.titlemodal}>{t('eventDetails')}</p>
+              <a
+                onClick={hideViewModal}
+                className={styles.cancel}
+                data-testid="createEventModalCloseBtn"
+              >
+                <i className="fa fa-times"></i>
+              </a>
+            </div>
+            <Form>
+              <div>
+                <p className={styles.preview}>
+                  {t('eventTitle')}:{' '}
+                  <span className={styles.view}>
+                    {props.eventName ? <>{props.eventName}</> : <>Dogs Care</>}{' '}
+                  </span>
+                </p>
+                <p className={styles.preview}>
+                  {t('location')}:
+                  <span className={styles.view}>
+                    {props.eventLocation ? (
+                      <>{props.eventLocation}</>
+                    ) : (
+                      <>India</>
+                    )}
+                  </span>
+                </p>
+                <p className={styles.preview}>
+                  {t('description')}:{' '}
+                  <span className={styles.view}>{props.eventDescription}</span>
+                </p>
+                <p className={styles.preview}>
+                  {t('on')}:{' '}
+                  <span className={styles.view}>{props.regDate}</span>
+                </p>
+                <p className={styles.preview}>
+                  {t('end')}:{' '}
+                  <span className={styles.view}>{props.regEndDate}</span>
+                </p>
+              </div>
+              <div className={styles.iconContainer}>
+                <a
+                  data-testid="editEventModalBtn"
+                  className={`${styles.icon} mr-2`}
+                  data-toggle="modal"
+                  data-target={`#editEventModal${props.id}`}
+                >
+                  <i className="fas fa-edit"></i>
+                </a>
+                <a
+                  data-testid="deleteEventModalBtn"
+                  className={styles.icon}
+                  data-toggle="modal"
+                  data-target={`#deleteEventModal${props.id}`}
+                >
+                  <i className="fa fa-trash"></i>
+                </a>
+              </div>
+            </Form>
+          </div>
+        </section>
+      </Modal>
 
       {/* delete modal */}
       <div
