@@ -140,7 +140,7 @@ function LoginPage(): JSX.Element {
     ) {
       if (cPassword == signPassword) {
         try {
-          const { data } = await signup({
+          const { data: singUpData } = await signup({
             variables: {
               firstName: signfirstName,
               lastName: signlastName,
@@ -150,7 +150,7 @@ function LoginPage(): JSX.Element {
           });
 
           /* istanbul ignore next */
-          if (data) {
+          if (singUpData) {
             toast.success(
               'Successfully Registered. Please wait until you will be approved.'
             );
@@ -197,7 +197,7 @@ function LoginPage(): JSX.Element {
     }
 
     try {
-      const { data } = await login({
+      const { data: loginData } = await login({
         variables: {
           email: formState.email,
           password: formState.password,
@@ -205,16 +205,16 @@ function LoginPage(): JSX.Element {
       });
 
       /* istanbul ignore next */
-      if (data) {
+      if (loginData) {
         if (
-          data.login.user.userType === 'SUPERADMIN' ||
-          (data.login.user.userType === 'ADMIN' &&
-            data.login.user.adminApproved === true)
+          loginData.login.user.userType === 'SUPERADMIN' ||
+          (loginData.login.user.userType === 'ADMIN' &&
+            loginData.login.user.adminApproved === true)
         ) {
-          localStorage.setItem('token', data.login.accessToken);
-          localStorage.setItem('id', data.login.user._id);
+          localStorage.setItem('token', loginData.login.accessToken);
+          localStorage.setItem('id', loginData.login.user._id);
           localStorage.setItem('IsLoggedIn', 'TRUE');
-          localStorage.setItem('UserType', data.login.user.userType);
+          localStorage.setItem('UserType', loginData.login.user.userType);
           if (localStorage.getItem('IsLoggedIn') == 'TRUE') {
             window.location.replace('/orglist');
           }

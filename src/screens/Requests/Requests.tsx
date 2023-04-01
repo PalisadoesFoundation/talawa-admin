@@ -36,7 +36,7 @@ const Requests = () => {
     setComponentLoader(false);
   }, []);
 
-  const { data, loading: users_loading, refetch } = useQuery(USER_LIST);
+  const { data: userData, loading: userLoading, refetch } = useQuery(USER_LIST);
 
   const [acceptAdminFunc] = useMutation(ACCPET_ADMIN_MUTATION);
   const [rejectAdminFunc] = useMutation(REJECT_ADMIN_MUTATION);
@@ -54,17 +54,17 @@ const Requests = () => {
   }, [dataOrgs]);
 
   useEffect(() => {
-    if (data) {
+    if (userData) {
       setUsersData(
-        data.users.filter(
+        userData.users.filter(
           (user: any) =>
             user.userType === 'ADMIN' && user.adminApproved === false
         )
       );
     }
-  }, [data]);
+  }, [userData]);
 
-  if (componentLoader || users_loading) {
+  if (componentLoader || userLoading) {
     return <div className="loader"></div>;
   }
 

@@ -28,7 +28,11 @@ function OrganizationDashboard(): JSX.Element {
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
 
-  const { data, loading, error } = useQuery(ORGANIZATIONS_LIST, {
+  const {
+    data: organizationsListData,
+    loading,
+    error,
+  } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: currentUrl },
   });
   const {
@@ -94,14 +98,15 @@ function OrganizationDashboard(): JSX.Element {
             <div className={styles.sidebarsticky}>
               <h6 className={styles.titlename}>{t('about')}</h6>
               <p className={styles.description}>
-                {data.organizations[0].description}
+                {organizationsListData.organizations[0].description}
               </p>
               <p className={styles.toporgloc}>
-                {t('location')} : {data.organizations[0].location}
+                {t('location')} :{' '}
+                {organizationsListData.organizations[0].location}
               </p>
-              {data.organizations[0].image ? (
+              {organizationsListData.organizations[0].image ? (
                 <img
-                  src={data.organizations[0].image}
+                  src={organizationsListData.organizations[0].image}
                   className={styles.org_about_img}
                   data-testid="orgDashImgPresent"
                 />
@@ -153,7 +158,10 @@ function OrganizationDashboard(): JSX.Element {
                       </div>
                       <div className="text-center">
                         <p className={styles.counterNumber}>
-                          {data.organizations[0].members.length}
+                          {
+                            organizationsListData.organizations[0].members
+                              .length
+                          }
                         </p>
                         <p className={styles.counterHead}>{t('members')}</p>
                       </div>
@@ -181,7 +189,10 @@ function OrganizationDashboard(): JSX.Element {
                         </div>
                         <div className="text-center">
                           <p className={styles.counterNumber}>
-                            {data.organizations[0].admins.length}
+                            {
+                              organizationsListData.organizations[0].admins
+                                .length
+                            }
                           </p>
                           <p className={styles.counterHead}>{t('admins')}</p>
                         </div>
@@ -263,7 +274,10 @@ function OrganizationDashboard(): JSX.Element {
                       </div>
                       <div className="text-center">
                         <p className={styles.counterNumber}>
-                          {data.organizations[0].blockedUsers.length}
+                          {
+                            organizationsListData.organizations[0].blockedUsers
+                              .length
+                          }
                         </p>
                         <p className={styles.counterHead}>
                           {t('blockedUsers')}
@@ -282,7 +296,10 @@ function OrganizationDashboard(): JSX.Element {
                       </div>
                       <div className="text-center">
                         <p className={styles.counterNumber}>
-                          {data.organizations[0].membershipRequests.length}
+                          {
+                            organizationsListData.organizations[0]
+                              .membershipRequests.length
+                          }
                         </p>
                         <p className={styles.counterHead}>
                           {t('membershipRequests')}

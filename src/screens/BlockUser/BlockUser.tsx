@@ -33,13 +33,13 @@ const Requests = () => {
   const { targets, configUrl } = appRoutes;
 
   const {
-    data,
+    data: usersData,
     loading: spammers_loading,
     error,
     refetch,
   } = useQuery(USER_LIST);
 
-  const { data: data_2 } = useQuery(MEMBERS_LIST, {
+  const { data: membersData } = useQuery(MEMBERS_LIST, {
     variables: {
       id: currentUrl,
     },
@@ -49,10 +49,10 @@ const Requests = () => {
   const [unBlockUser] = useMutation(UNBLOCK_USER_MUTATION);
 
   useEffect(() => {
-    if (data_2) {
-      setMembersArray(data_2.organizations[0].members);
+    if (membersData) {
+      setMembersArray(membersData.organizations[0].members);
     }
-  }, [data, data_2]);
+  }, [usersData, membersData]);
 
   if (spammers_loading) {
     return <div className="loader"></div>;
@@ -60,7 +60,7 @@ const Requests = () => {
 
   const memberIds = membersArray.map((user: { _id: string }) => user._id);
 
-  const memberUsersData = data.users.filter((user: { _id: string }) =>
+  const memberUsersData = usersData.users.filter((user: { _id: string }) =>
     memberIds.includes(user._id)
   );
 

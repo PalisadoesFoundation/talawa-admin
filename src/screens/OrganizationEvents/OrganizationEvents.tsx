@@ -59,17 +59,19 @@ function OrganizationEvents(): JSX.Element {
     setEventModalIsOpen(false);
   };
 
-  const { data, loading, error, refetch } = useQuery(
-    ORGANIZATION_EVENT_CONNECTION_LIST,
-    {
-      variables: {
-        organization_id: currentUrl,
-        title_contains: '',
-        description_contains: '',
-        location_contains: '',
-      },
-    }
-  );
+  const {
+    data: orgEventConnectionData,
+    loading,
+    error,
+    refetch,
+  } = useQuery(ORGANIZATION_EVENT_CONNECTION_LIST, {
+    variables: {
+      organization_id: currentUrl,
+      title_contains: '',
+      description_contains: '',
+      location_contains: '',
+    },
+  });
 
   const { data: orgData } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: currentUrl },
@@ -83,7 +85,7 @@ function OrganizationEvents(): JSX.Element {
   const CreateEvent = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const { data } = await create({
+      const { data: createEventData } = await create({
         variables: {
           title: formState.title,
           description: formState.eventdescrip,
@@ -101,7 +103,7 @@ function OrganizationEvents(): JSX.Element {
       });
 
       /* istanbul ignore next */
-      if (data) {
+      if (createEventData) {
         toast.success('Congratulations! The Event is created.');
         refetch();
         setFormState({
@@ -226,7 +228,7 @@ function OrganizationEvents(): JSX.Element {
             </Row>
           </div>
           <Calendar
-            eventData={data?.eventsByOrganizationConnection}
+            eventData={orgEventConnectionData?.eventsByOrganizationConnection}
             orgData={orgData}
             userRole={userRole}
             userId={userId}

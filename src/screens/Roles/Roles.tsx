@@ -46,7 +46,7 @@ const Roles = () => {
     }
   }, [count, searchByName]);
 
-  const { data, loading: users_loading, refetch } = useQuery(USER_LIST);
+  const { data: userData, loading: userLoading, refetch } = useQuery(USER_LIST);
 
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
 
@@ -62,7 +62,7 @@ const Roles = () => {
     }
   }, [dataOrgs]);
 
-  if (componentLoader || users_loading) {
+  if (componentLoader || userLoading) {
     return <div className="loader"></div>;
   }
 
@@ -156,13 +156,13 @@ const Roles = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {data &&
+                    {userData &&
                       (rowsPerPage > 0
-                        ? data.users.slice(
+                        ? userData.users.slice(
                             page * rowsPerPage,
                             page * rowsPerPage + rowsPerPage
                           )
-                        : data.users
+                        : userData.users
                       ).map(
                         (
                           user: {
@@ -256,7 +256,7 @@ const Roles = () => {
                 <tbody>
                   <tr>
                     <PaginationList
-                      count={data ? data.users.length : 0}
+                      count={userData ? userData.users.length : 0}
                       rowsPerPage={rowsPerPage}
                       page={page}
                       data-testid="something"

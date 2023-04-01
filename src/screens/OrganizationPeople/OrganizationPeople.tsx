@@ -28,7 +28,7 @@ function OrganizationPeople(): JSX.Element {
   document.title = t('title');
 
   const currentUrl = window.location.href.split('=')[1];
-  let data, loading, error, refetchMembers: any, refetchAdmins: any;
+  let peopleData, loading, error, refetchMembers: any, refetchAdmins: any;
 
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
@@ -39,9 +39,9 @@ function OrganizationPeople(): JSX.Element {
 
   if (state == 0) {
     const {
-      data: data_2,
-      loading: loading_2,
-      error: error_2,
+      data: orgMemberData,
+      loading: orgMemberLoading,
+      error: orgMemberError,
       refetch,
     } = useQuery(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {
       variables: {
@@ -51,14 +51,14 @@ function OrganizationPeople(): JSX.Element {
       },
     });
     refetchMembers = refetch;
-    data = data_2;
-    loading = loading_2;
-    error = error_2;
+    peopleData = orgMemberData;
+    loading = orgMemberLoading;
+    error = orgMemberError;
   } else if (state == 1) {
     const {
-      data: data_2,
-      loading: loading_2,
-      error: error_2,
+      data: orgMemberData,
+      loading: orgMemberLoading,
+      error: orgMemberError,
       refetch,
     } = useQuery(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {
       variables: {
@@ -68,18 +68,18 @@ function OrganizationPeople(): JSX.Element {
       },
     });
     refetchAdmins = refetch;
-    data = data_2;
-    loading = loading_2;
-    error = error_2;
+    peopleData = orgMemberData;
+    loading = orgMemberLoading;
+    error = orgMemberError;
   } else {
     const {
-      data: data_2,
-      loading: loading_2,
-      error: error_2,
+      data: orgMemberData,
+      loading: orgMemberLoading,
+      error: orgMemberError,
     } = useQuery(USER_LIST);
-    data = data_2;
-    loading = loading_2;
-    error = error_2;
+    peopleData = orgMemberData;
+    loading = orgMemberLoading;
+    error = orgMemberError;
   }
 
   if (loading) {
@@ -224,13 +224,13 @@ function OrganizationPeople(): JSX.Element {
               </Row>
               <div className={styles.list_box} data-testid="orgpeoplelist">
                 {state == 0
-                  ? data
+                  ? peopleData
                     ? (rowsPerPage > 0
-                        ? data.organizationsMemberConnection.edges.slice(
+                        ? peopleData.organizationsMemberConnection.edges.slice(
                             page * rowsPerPage,
                             page * rowsPerPage + rowsPerPage
                           )
-                        : data.organizationsMemberConnection.edges
+                        : peopleData.organizationsMemberConnection.edges
                       ).map(
                         (datas: {
                           _id: string;
@@ -258,13 +258,13 @@ function OrganizationPeople(): JSX.Element {
                       )
                     : null
                   : state == 1
-                  ? data
+                  ? peopleData
                     ? (rowsPerPage > 0
-                        ? data.organizationsMemberConnection.edges.slice(
+                        ? peopleData.organizationsMemberConnection.edges.slice(
                             page * rowsPerPage,
                             page * rowsPerPage + rowsPerPage
                           )
-                        : data.organizationsMemberConnection.edges
+                        : peopleData.organizationsMemberConnection.edges
                       ).map(
                         (datas: {
                           _id: string;
@@ -292,13 +292,13 @@ function OrganizationPeople(): JSX.Element {
                       )
                     : null
                   : state == 2
-                  ? data
+                  ? peopleData
                     ? (rowsPerPage > 0
-                        ? data.users.slice(
+                        ? peopleData.users.slice(
                             page * rowsPerPage,
                             page * rowsPerPage + rowsPerPage
                           )
-                        : data.users
+                        : peopleData.users
                       ).map(
                         (datas: {
                           _id: string;
@@ -343,8 +343,9 @@ function OrganizationPeople(): JSX.Element {
                       <>
                         <PaginationList
                           count={
-                            data
-                              ? data.organizationsMemberConnection.edges.length
+                            peopleData
+                              ? peopleData.organizationsMemberConnection.edges
+                                  .length
                               : 0
                           }
                           rowsPerPage={rowsPerPage}
@@ -357,8 +358,9 @@ function OrganizationPeople(): JSX.Element {
                       <>
                         <PaginationList
                           count={
-                            data
-                              ? data.organizationsMemberConnection.edges.length
+                            peopleData
+                              ? peopleData.organizationsMemberConnection.edges
+                                  .length
                               : 0
                           }
                           rowsPerPage={rowsPerPage}
@@ -370,7 +372,7 @@ function OrganizationPeople(): JSX.Element {
                     ) : state == 2 ? (
                       <>
                         <PaginationList
-                          count={data ? data.users.length : 0}
+                          count={peopleData ? peopleData.users.length : 0}
                           rowsPerPage={rowsPerPage}
                           page={page}
                           onPageChange={handleChangePage}
