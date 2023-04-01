@@ -398,7 +398,7 @@ describe('Testing Roles screen', () => {
   });
 
   test('Should render warning alert when there are no organizations', async () => {
-    const { container } = render(
+    render(
       <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
@@ -411,11 +411,11 @@ describe('Testing Roles screen', () => {
       </MockedProvider>
     );
 
-    await wait();
-
-    expect(container.textContent).toMatch(
-      'Organizations not found, please create an organization through dashboard'
-    );
+    expect(
+      await screen.findByText(
+        'Organizations not found, please create an organization through dashboard'
+      )
+    ).toBeInTheDocument();
   });
 
   test('Should not render warning alert when there are organizations present', async () => {

@@ -26,7 +26,7 @@ const Roles = () => {
 
   useEffect(() => {
     const userType = localStorage.getItem('UserType');
-    if (userType != 'SUPERADMIN') {
+    if (userType !== 'SUPERADMIN') {
       window.location.assign('/orglist');
     }
     setComponentLoader(false);
