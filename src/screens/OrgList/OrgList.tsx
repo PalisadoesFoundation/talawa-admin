@@ -301,6 +301,7 @@ function OrgList(): JSX.Element {
       </Row>
       <Modal
         isOpen={modalisOpen}
+        onRequestClose={() => setmodalIsOpen(false)}
         style={{
           overlay: { backgroundColor: 'grey' },
         }}
@@ -316,7 +317,12 @@ function OrgList(): JSX.Element {
                 className={styles.cancel}
                 data-testid="closeOrganizationModal"
               >
-                <i className="fa fa-times"></i>
+                <i
+                  className="fa fa-times"
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                ></i>
               </a>
             </div>
             <Form onSubmitCapture={CreateOrg}>
