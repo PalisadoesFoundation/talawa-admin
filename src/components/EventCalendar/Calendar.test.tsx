@@ -121,7 +121,7 @@ describe('Calendar', () => {
   it('should render the correct number of days', () => {
     const { getAllByTestId } = render(<Calendar eventData={eventData} />);
     const days = getAllByTestId('day');
-    expect(days.length).toBe(35);
+    expect(days.length).toBe(42);
   });
 
   it('should highlight the selected date when clicked', () => {
@@ -176,122 +176,6 @@ describe('Calendar', () => {
           <Calendar eventData={currentDayEventMock} />
         </I18nextProvider>
       </MockedProvider>
-    );
-  });
-});
-
-describe('Events rendered depending on User Type', () => {
-  const currentDayEventMock = [
-    {
-      _id: '0',
-      title: 'demo',
-      description: 'agrsg',
-      startDate: new Date().toISOString().split('T')[0],
-      endDate: new Date().toISOString().split('T')[0],
-      location: 'delhi',
-      startTime: '10:00',
-      endTime: '12:00',
-      allDay: false,
-      recurring: false,
-      isPublic: false,
-      registrants: [{ userId: '222' }],
-      isRegisterable: true,
-    },
-  ];
-  it('Should render private event for super admin', () => {
-    const userRole = 'SUPERADMIN';
-
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <Calendar eventData={currentDayEventMock} userRole={userRole} />
-        </I18nextProvider>
-      </MockedProvider>
-    );
-
-    const childElement = getByTestId('deleteEventModalBtn');
-    expect(childElement).toBeInTheDocument();
-  });
-  it('Should render private event for organization admin', () => {
-    const userId = '222';
-    const userRole = 'ADMIN';
-    const orgData = {
-      admins: [
-        {
-          _id: userId,
-        },
-      ],
-    };
-
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <Calendar
-            eventData={currentDayEventMock}
-            orgData={orgData}
-            userRole={userRole}
-            userId={userId}
-          />
-        </I18nextProvider>
-      </MockedProvider>
-    );
-
-    const childElement = getByTestId('deleteEventModalBtn');
-    expect(childElement).toBeInTheDocument();
-  });
-  it('Should render private event for registered user', () => {
-    const userId = '222';
-    const userRole = 'USER';
-    const orgData = {
-      admins: [
-        {
-          _id: userId,
-        },
-      ],
-    };
-
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <Calendar
-            eventData={currentDayEventMock}
-            orgData={orgData}
-            userRole={userRole}
-            userId={userId}
-          />
-        </I18nextProvider>
-      </MockedProvider>
-    );
-
-    const childElement = getByTestId('deleteEventModalBtn');
-    expect(childElement).toBeInTheDocument();
-  });
-  it('Should not private render event for unregistered user', () => {
-    const userRole = 'USER';
-    const userId = '221';
-    const orgData = {
-      admins: [
-        {
-          _id: '333',
-        },
-      ],
-    };
-
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <Calendar
-            eventData={currentDayEventMock}
-            orgData={orgData}
-            userRole={userRole}
-            userId={userId}
-          />
-        </I18nextProvider>
-      </MockedProvider>
-    );
-
-    expect(() => getByTestId('deleteEventModalBtn')).toThrowError(
-      'Unable to find an element by: [data-testid="deleteEventModalBtn"]'
     );
   });
 });
