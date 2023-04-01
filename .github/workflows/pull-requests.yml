@@ -20,7 +20,7 @@ env:
     
 jobs:
 
-  Continuous Integration:
+  Continuous-Integration:
 
     name: Performs linting, formatting, type-checking and testing on the application
     runs-on: ubuntu-latest
