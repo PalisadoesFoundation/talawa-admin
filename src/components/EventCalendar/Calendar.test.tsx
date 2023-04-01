@@ -121,7 +121,7 @@ describe('Calendar', () => {
   it('should render the correct number of days', () => {
     const { getAllByTestId } = render(<Calendar eventData={eventData} />);
     const days = getAllByTestId('day');
-    expect(days.length).toBe(35);
+    expect(days.length).toBe(42);
   });
 
   it('should highlight the selected date when clicked', () => {
