@@ -2,7 +2,7 @@
   "loginPage": {
     "title": "Administrador Talawa",
     "fromPalisadoes": "Una aplicación de código abierto de los voluntarios de la Fundación palisados",
-    "talawa_portal": "Portal Talawa",
+    "talawa_portal": "Portal De Administración Talawa",
     "login": "Acceso",
     "register": "Registro",
     "firstName": "Primer nombre",
@@ -18,7 +18,7 @@
     "doNotOwnAnAccount": "¿No tienes una cuenta?"
   },
   "listNavbar": {
-    "talawa_portal": "Portal Talawa",
+    "talawa_portal": "Portal De Administración Talawa",
     "roles": "Roles",
     "requests": "Peticiones",
     "logout": "Cerrar sesión"
@@ -72,7 +72,7 @@
     "enterName": "Ingrese su nombre"
   },
   "adminNavbar": {
-    "talawa_portal": "Portal Talawa",
+    "talawa_portal": "Portal De Administración Talawa",
     "Dashboard": "Tablero",
     "People": "Gente",
     "Events": "Eventos",
