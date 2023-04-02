@@ -2,7 +2,7 @@
   "loginPage": {
     "title": "Administrador Talawa",
     "fromPalisadoes": "Una aplicación de código abierto de los voluntarios de la Fundación palisados",
-    "talawa_portal": "Portal Talawa",
+    "talawa_portal": "Portal De Administración Talawa",
     "login": "Acceso",
     "register": "Registro",
     "firstName": "Primer nombre",
@@ -18,7 +18,7 @@
     "doNotOwnAnAccount": "¿No tienes una cuenta?"
   },
   "listNavbar": {
-    "talawa_portal": "Portal Talawa",
+    "talawa_portal": "Portal De Administración Talawa",
     "roles": "Roles",
     "requests": "Peticiones",
     "logout": "Cerrar sesión"
@@ -44,6 +44,12 @@
     "admins": "Administradores",
     "members": "Miembros",
     "manage": "Administrar"
+  },
+  "adminDashListCard": {
+    "view": "Ver",
+    "created": "Creado",
+    "admins": "Administradores",
+    "members": "Miembros"
   },
   "paginationList": {
     "rowsPerPage": "filas por página",
@@ -72,7 +78,7 @@
     "enterName": "Ingrese su nombre"
   },
   "adminNavbar": {
-    "talawa_portal": "Portal Talawa",
+    "talawa_portal": "Portal De Administración Talawa",
     "Dashboard": "Tablero",
     "People": "Gente",
     "Events": "Eventos",
@@ -82,6 +88,7 @@
     "Plugins": "Complementos",
     "Plugin Store": "Tienda de complementos",
     "allOrganizations": "Todas las organizaciones",
+    "yourOrganization": "Tu organización",
     "notification": "Notificación",
     "settings": "Ajustes",
     "language": "Idioma",
@@ -183,7 +190,8 @@
     "isPublic": "Es público",
     "isRegistrable": "Es registrable",
     "close": "Cerca",
-    "updatePost": "Actualizar publicación"
+    "updatePost": "Actualizar publicación",
+    "eventDetails": "Detalles del evento"
   },
   "orgPost": {
     "title": "Puestos Talawa",

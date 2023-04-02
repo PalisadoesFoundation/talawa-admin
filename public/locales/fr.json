@@ -1,7 +1,7 @@
 {
   "loginPage": {
     "title": "Administrateur Talawa",
-    "talawa_portal": "Portail Talawa",
+    "talawa_portal": "Portail D'Administrateur Talawa",
     "fromPalisadoes": "Une application open source par les volontaires de la Fondation Palissades",
     "login": "Connexion",
     "register": "S'inscrire",
@@ -18,7 +18,7 @@
     "doNotOwnAnAccount": "Vous n'avez pas de compte ?"
   },
   "listNavbar": {
-    "talawa_portal": "Portail Talawa",
+    "talawa_portal": "Portail D'Administrateur Talawa",
     "roles": "Les rôles",
     "requests": "Demandes",
     "logout": "Se déconnecter"
@@ -44,6 +44,12 @@
     "admins": "Administrateurs",
     "members": "Membres",
     "manage": "Faire en sorte"
+  },
+  "adminDashListCard": {
+    "view": "Voir",
+    "created": "Créé",
+    "admins": "Admins",
+    "members": "Membres"
   },
   "paginationList": {
     "rowsPerPage": "lignes par page",
@@ -72,7 +78,7 @@
     "enterName": "Entrez le nom"
   },
   "adminNavbar": {
-    "talawa_portal": "Portail Talawa",
+    "talawa_portal": "Portail D'Administrateur Talawa",
     "Dashboard": "Tableau de bord",
     "People": "Personnes",
     "Events": "Événements",
@@ -82,6 +88,7 @@
     "Plugins": "Plugins",
     "Plugin Store": "Magasin de plugins",
     "allOrganizations": "Toutes les organisations",
+    "yourOrganization": "Votre organisation",
     "notification": "Notification",
     "settings": "Réglages",
     "language": "Langue",
@@ -183,7 +190,8 @@
     "isPublic": "Est publique",
     "isRegistrable": "Est enregistrable",
     "close": "Proche",
-    "updatePost": "Mettre à jour le message"
+    "updatePost": "Mettre à jour le message",
+    "eventDetails": "Détails de l'évènement"
   },
   "orgPost": {
     "title": "Postes de Talawa",

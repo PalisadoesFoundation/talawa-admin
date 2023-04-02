@@ -2,7 +2,7 @@
   "loginPage": {
     "title": "Talawa Admin",
     "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
-    "talawa_portal": "Talawa Portal",
+    "talawa_portal": "Talawa Admin Portal",
     "login": "Login",
     "register": "Register",
     "firstName": "First Name",
@@ -18,7 +18,7 @@
     "doNotOwnAnAccount": "Do not own an account?"
   },
   "listNavbar": {
-    "talawa_portal": "Talawa Portal",
+    "talawa_portal": "Talawa Admin Portal",
     "roles": "Roles",
     "requests": "Requests",
     "logout": "Logout"
@@ -46,6 +46,12 @@
     "admins": "Admins",
     "members": "Members",
     "manage": "Manage"
+  },
+  "adminDashListCard": {
+    "created": "Created",
+    "admins": "Admins",
+    "members": "Members",
+    "view": "View"
   },
   "paginationList": {
     "rowsPerPage": "rows per page",
@@ -76,7 +82,7 @@
     "noOrgError": "Organizations not found, please create an organization through dashboard"
   },
   "adminNavbar": {
-    "talawa_portal": "Talawa Portal",
+    "talawa_portal": "Talawa Admin Portal",
     "Dashboard": "Dashboard",
     "People": "People",
     "Events": "Events",
@@ -86,6 +92,7 @@
     "Plugins": "Plugins",
     "Plugin Store": "Plugin Store",
     "allOrganizations": "All Organizations",
+    "yourOrganization": "Your Organization",
     "notification": "Notification",
     "settings": "Settings",
     "language": "Language",
@@ -187,7 +194,8 @@
     "isPublic": "Is Public",
     "isRegistrable": "Is Registrable",
     "close": "Close",
-    "updatePost": "Update Post"
+    "updatePost": "Update Post",
+    "eventDetails": "Event Details"
   },
   "orgPost": {
     "title": "Talawa Posts",

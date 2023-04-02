@@ -26,7 +26,7 @@ function AdminDashListCard(props: AdminDashListCardProps): JSX.Element {
   }
 
   const { t } = useTranslation('translation', {
-    keyPrefix: 'superDashListCard',
+    keyPrefix: 'adminDashListCard',
   });
 
   return (
@@ -63,7 +63,7 @@ function AdminDashListCard(props: AdminDashListCardProps): JSX.Element {
                   !props.admins.some((admin: any) => admin._id === userId)
                 }
               >
-                {t('manage')}
+                {t('view')}
               </button>
             </div>
           </div>

@@ -27,7 +27,7 @@ describe('Testing List navbar component', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText('Talawa Portal')).toBeInTheDocument();
+    expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
     expect(screen.getByText('Roles')).toBeInTheDocument();
     expect(screen.getByText('Requests')).toBeInTheDocument();
   });

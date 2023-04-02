@@ -2,7 +2,7 @@
   "loginPage": {
     "title": "塔拉瓦管理員",
     "fromPalisadoes": "柵欄 基金会志愿者的开源应用程序",
-    "talawa_portal": "塔拉瓦門戶",
+    "talawa_portal": "塔拉瓦管理門戶",
     "login": "登錄",
     "register": "登記",
     "firstName": "名",
@@ -18,7 +18,7 @@
     "doNotOwnAnAccount": "沒有帳戶嗎？"
   },
   "listNavbar": {
-    "talawa_portal": "塔拉瓦門戶",
+    "talawa_portal": "塔拉瓦管理門戶",
     "roles": "角色",
     "requests": "要求",
     "logout": "登出"
@@ -44,6 +44,12 @@
     "admins": "管理員",
     "members": "成員",
     "manage": "管理"
+  },
+  "adminDashListCard": {
+    "view": "查看",
+    "created": "创建于",
+    "admins": "管理员",
+    "members": "成员"
   },
   "paginationList": {
     "rowsPerPage": "每頁行數",
@@ -72,7 +78,7 @@
     "enterName": "输入名字"
   },
   "adminNavbar": {
-    "talawa_portal": "塔拉瓦門戶",
+    "talawa_portal": "塔拉瓦管理門戶",
     "Dashboard": "儀表板",
     "People": "人們",
     "Events": "事件",
@@ -82,6 +88,7 @@
     "Plugins": "插件",
     "Plugin Store": "插件商店",
     "allOrganizations": "所有组织",
+    "yourOrganization": "您的组织",
     "notification": "通知",
     "settings": "設置",
     "language": "語",
@@ -183,7 +190,8 @@
     "isPublic": "是公開的",
     "isRegistrable": "可註冊",
     "close": "關",
-    "updatePost": "更新帖子"
+    "updatePost": "更新帖子",
+    "eventDetails": "活動詳情"
   },
   "orgPost": {
     "title": "塔拉瓦郵報",
