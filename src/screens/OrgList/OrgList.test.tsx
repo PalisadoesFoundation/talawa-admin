@@ -17,6 +17,7 @@ import { I18nextProvider } from 'react-i18next';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import SuperDashListCard from 'components/SuperDashListCard/SuperDashListCard';
 import AdminDashListCard from 'components/AdminDashListCard/AdminDashListCard';
+import { ToastContainer } from 'react-toastify';
 
 type Organization = {
   _id: string;
@@ -166,6 +167,13 @@ describe('Organisation List Page', () => {
     name: 'Dummy Organization',
     description: 'This is a dummy organization',
     location: 'Delhi, India',
+    image: new File(['hello'], 'hello.png', { type: 'image/png' }),
+  };
+
+  const formDataEmpty = {
+    name: '   ',
+    description: '   ',
+    location: '   ',
     image: new File(['hello'], 'hello.png', { type: 'image/png' }),
   };
 
@@ -415,6 +423,61 @@ describe('Organisation List Page', () => {
     expect(screen.getByLabelText(/Display Image:/i)).toBeTruthy();
 
     userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
+  });
+
+  test('Create organization should throw error when empty strings have been entered', async () => {
+    localStorage.setItem('UserType', 'SUPERADMIN');
+
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <ToastContainer />
+            <OrgList />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(localStorage.setItem).toHaveBeenLastCalledWith(
+      'UserType',
+      'SUPERADMIN'
+    );
+
+    userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
+
+    userEvent.type(
+      screen.getByTestId(/modalOrganizationName/i),
+      formDataEmpty.name
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Description/i),
+      formDataEmpty.description
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Location/i),
+      formDataEmpty.location
+    );
+
+    expect(screen.getByTestId(/modalOrganizationName/i)).toHaveValue(
+      formDataEmpty.name
+    );
+    expect(screen.getByPlaceholderText(/Description/i)).toHaveValue(
+      formDataEmpty.description
+    );
+    expect(screen.getByPlaceholderText(/Location/i)).toHaveValue(
+      formDataEmpty.location
+    );
+
+    userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
+
+    await wait();
+
+    expect(container.textContent).toMatch(
+      'Text fields cannot be empty strings'
+    );
   });
 });
 

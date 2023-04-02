@@ -64,13 +64,27 @@ function OrgPost(): JSX.Element {
 
   const CreatePost = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const {
+      posttitle: _posttitle,
+      postinfo: _postinfo,
+      postImage,
+    } = postformState;
+
+    const posttitle = _posttitle.trim();
+    const postinfo = _postinfo.trim();
+
     try {
+      if (!posttitle || !postinfo) {
+        throw new Error('Text fields cannot be empty strings');
+      }
+
       const { data } = await create({
         variables: {
-          title: postformState.posttitle,
-          text: postformState.postinfo,
+          title: posttitle,
+          text: postinfo,
           organizationId: currentUrl,
-          file: postformState.postImage,
+          file: postImage,
         },
       });
       /* istanbul ignore next */
