@@ -19,9 +19,7 @@ env:
     CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
     
 jobs:
-
   Continuous-Integration:
-
     name: Performs linting, formatting, type-checking and testing on the application
     runs-on: ubuntu-latest
     steps:
