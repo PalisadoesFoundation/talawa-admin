@@ -47,6 +47,12 @@
     "members": "Members",
     "manage": "Manage"
   },
+  "adminDashListCard": {
+    "created": "Created",
+    "admins": "Admins",
+    "members": "Members",
+    "view": "View"
+  },
   "paginationList": {
     "rowsPerPage": "rows per page",
     "all": "All"
@@ -86,6 +92,7 @@
     "Plugins": "Plugins",
     "Plugin Store": "Plugin Store",
     "allOrganizations": "All Organizations",
+    "yourOrganization": "Your Organization",
     "notification": "Notification",
     "settings": "Settings",
     "language": "Language",
