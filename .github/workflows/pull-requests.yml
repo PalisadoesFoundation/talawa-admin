@@ -1,14 +1,3 @@
-##############################################################################
-##############################################################################
-#
-# NOTE!
-#
-# Please read the README.md file in this directory that defines what should
-# be placed in this file
-#
-##############################################################################
-##############################################################################
-
 name: PR Workflow
 on:
   pull_request:
@@ -16,10 +5,10 @@ on:
       - '**'
 
 env:
-    CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
-    
+  CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
+
 jobs:
-  Continuous-Integration:
+  Continuous Integration:
     name: Performs linting, formatting, type-checking and testing on the application
     runs-on: ubuntu-latest
     steps:
@@ -32,10 +21,9 @@ jobs:
         run: npm run lint:check
       
       - name: Count number of lines
-      - run: chmod +x ./.github/workflows/countline.py
-      - run: |
+        run: |
+          chmod +x ./.github/workflows/countline.py
           ./.github/workflows/countline.py --exclude_files src/screens/LoginPage/LoginPage.tsx
-
       - name: Check formatting
         run: npm run format:check
 
