@@ -1,11 +1,5 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-// import * as reactRedux from 'react-redux';
-// import { BrowserRouter } from 'react-router-dom';
-// import userEvent from '@testing-library/user-event';
-
-// import AddOnStore from './AddOnStore';
-// import { store } from 'state/store';
 import {
   ApolloClient,
   NormalizedCacheObject,
