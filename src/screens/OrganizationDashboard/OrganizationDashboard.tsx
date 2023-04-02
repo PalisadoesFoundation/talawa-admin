@@ -8,7 +8,6 @@ import { Container } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-
 import styles from './OrganizationDashboard.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import AboutImg from 'assets/images/defaultImg.png';
@@ -18,6 +17,7 @@ import {
   ORGANIZATION_POST_LIST,
 } from 'GraphQl/Queries/Queries';
 import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import { toastAutoCloseTimeout } from 'Constant/constant';
 
 function OrganizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
@@ -47,8 +47,6 @@ function OrganizationDashboard(): JSX.Element {
   });
 
   const [del] = useMutation(DELETE_ORGANIZATION_MUTATION);
-  const autoClose = 2000;
-
   const delete_org = async () => {
     try {
       const { data } = await del({
@@ -66,10 +64,10 @@ function OrganizationDashboard(): JSX.Element {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose }
+          { autoClose: toastAutoCloseTimeout }
         );
       } else {
-        toast.error(error.message, { autoClose });
+        toast.error(error.message, { autoClose: toastAutoCloseTimeout });
       }
     }
   };

@@ -21,6 +21,7 @@ import {
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import { languages } from 'utils/languages';
 import { RECAPTCHA_SITE_KEY, REACT_APP_USE_RECAPTCHA } from 'Constant/constant';
+import { toastAutoCloseTimeout } from 'Constant/constant';
 
 function LoginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -42,9 +43,6 @@ function LoginPage(): JSX.Element {
     password: '',
   });
   const [show, setShow] = useState<boolean>(false);
-
-  const autoClose = 2000;
-
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
 
@@ -91,10 +89,10 @@ function LoginPage(): JSX.Element {
         if (error.message === 'Failed to fetch') {
           toast.error(
             'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-            { autoClose }
+            { autoClose: toastAutoCloseTimeout }
           );
         } else {
-          toast.error(error.message, { autoClose });
+          toast.error(error.message, { autoClose: toastAutoCloseTimeout });
         }
       }
     }
@@ -117,7 +115,7 @@ function LoginPage(): JSX.Element {
       return data.recaptcha;
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error('Captcha Error!', { autoClose });
+      toast.error('Captcha Error!', { autoClose: toastAutoCloseTimeout });
     }
   };
 
@@ -133,7 +131,9 @@ function LoginPage(): JSX.Element {
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
-      toast.error('Please, check the captcha.', { autoClose });
+      toast.error('Please, check the captcha.', {
+        autoClose: toastAutoCloseTimeout,
+      });
       return;
     }
 
@@ -158,7 +158,7 @@ function LoginPage(): JSX.Element {
           if (data) {
             toast.success(
               'Successfully Registered. Please wait until you will be approved.',
-              { autoClose }
+              { autoClose: toastAutoCloseTimeout }
             );
 
             setSignFormState({
@@ -174,21 +174,25 @@ function LoginPage(): JSX.Element {
           if (error.message === 'Failed to fetch') {
             toast.error(
               'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-              { autoClose }
+              { autoClose: toastAutoCloseTimeout }
             );
           } else if (error.message) {
-            toast.warn(error.message, { autoClose });
+            toast.warn(error.message, { autoClose: toastAutoCloseTimeout });
           } else {
             toast.error('Something went wrong, Please try after sometime.', {
-              autoClose,
+              autoClose: toastAutoCloseTimeout,
             });
           }
         }
       } else {
-        toast.warn('Password and Confirm password mismatches.', { autoClose });
+        toast.warn('Password and Confirm password mismatches.', {
+          autoClose: toastAutoCloseTimeout,
+        });
       }
     } else {
-      toast.warn('Fill all the Details Correctly.', { autoClose });
+      toast.warn('Fill all the Details Correctly.', {
+        autoClose: toastAutoCloseTimeout,
+      });
     }
   };
 
@@ -201,7 +205,9 @@ function LoginPage(): JSX.Element {
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
-      toast.error('Please, check the captcha.', { autoClose });
+      toast.error('Please, check the captcha.', {
+        autoClose: toastAutoCloseTimeout,
+      });
       return;
     }
 
@@ -228,23 +234,25 @@ function LoginPage(): JSX.Element {
             window.location.replace('/orglist');
           }
         } else {
-          toast.warn('Sorry! you are not Authorised!', { autoClose });
+          toast.warn('Sorry! you are not Authorised!', {
+            autoClose: toastAutoCloseTimeout,
+          });
         }
       } else {
-        toast.warn('User not found!', { autoClose });
+        toast.warn('User not found!', { autoClose: toastAutoCloseTimeout });
       }
     } catch (error: any) {
       /* istanbul ignore next */
       if (error.message == 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose }
+          { autoClose: toastAutoCloseTimeout }
         );
       } else if (error.message) {
-        toast.error(error.message, { autoClose });
+        toast.error(error.message, { autoClose: toastAutoCloseTimeout });
       } else {
         toast.error('Something went wrong, Please try after sometime.', {
-          autoClose,
+          autoClose: toastAutoCloseTimeout,
         });
       }
     }

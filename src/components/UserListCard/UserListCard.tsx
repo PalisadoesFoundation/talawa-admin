@@ -9,6 +9,7 @@ import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import styles from './UserListCard.module.css';
 import { Link } from 'react-router-dom';
 import defaultImg from 'assets/third_image.png';
+import { toastAutoCloseTimeout } from 'Constant/constant';
 
 interface UserListCardProps {
   key: string;
@@ -22,7 +23,6 @@ interface UserListCardProps {
 function UserListCard(props: UserListCardProps): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
-  const autoClose = 2000;
 
   const { t } = useTranslation('translation', {
     keyPrefix: 'userListCard',
@@ -39,7 +39,9 @@ function UserListCard(props: UserListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('User is added as admin.', { autoClose });
+        toast.success('User is added as admin.', {
+          autoClose: toastAutoCloseTimeout,
+        });
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -49,10 +51,10 @@ function UserListCard(props: UserListCardProps): JSX.Element {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose }
+          { autoClose: toastAutoCloseTimeout }
         );
       } else {
-        toast.error(error.message, { autoClose });
+        toast.error(error.message, { autoClose: toastAutoCloseTimeout });
       }
     }
   };

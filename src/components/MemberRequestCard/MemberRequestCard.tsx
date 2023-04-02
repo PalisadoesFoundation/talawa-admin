@@ -10,6 +10,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import defaultImg from 'assets/third_image.png';
+import { toastAutoCloseTimeout } from 'Constant/constant';
 
 interface MemberRequestCardProps {
   key: string;
@@ -24,7 +25,6 @@ interface MemberRequestCardProps {
 function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
   const [acceptMutation] = useMutation(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
   const [rejectMutation] = useMutation(REJECT_ORGANIZATION_REQUEST_MUTATION);
-  const autoClose = 2000;
 
   const { t } = useTranslation('translation', {
     keyPrefix: 'membershipRequest',
@@ -39,7 +39,7 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
       });
 
       /* istanbul ignore next */
-      toast.success('it is accepted', { autoClose });
+      toast.success('it is accepted', { autoClose: toastAutoCloseTimeout });
       /* istanbul ignore next */
       setTimeout(() => {
         window.location.reload();
@@ -49,10 +49,10 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose }
+          { autoClose: toastAutoCloseTimeout }
         );
       } else {
-        toast.error(error.message, { autoClose });
+        toast.error(error.message, { autoClose: toastAutoCloseTimeout });
       }
     }
   };
@@ -74,10 +74,10 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
         if (error.message === 'Failed to fetch') {
           toast.error(
             'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-            { autoClose }
+            { autoClose: toastAutoCloseTimeout }
           );
         } else {
-          toast.error(error.message, { autoClose });
+          toast.error(error.message, { autoClose: toastAutoCloseTimeout });
         }
       }
     }

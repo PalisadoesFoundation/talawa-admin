@@ -14,6 +14,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import PaginationList from 'components/PaginationList/PaginationList';
+import { toastAutoCloseTimeout } from 'Constant/constant';
 
 const Requests = () => {
   const { t } = useTranslation('translation', {
@@ -59,8 +60,6 @@ const Requests = () => {
   }
 
   const memberIds = membersArray.map((user: { _id: string }) => user._id);
-  const autoClose = 2000;
-
   const memberUsersData = data.users.filter((user: { _id: string }) =>
     memberIds.includes(user._id)
   );
@@ -100,7 +99,9 @@ const Requests = () => {
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success('User blocked successfully', { autoClose });
+        toast.success('User blocked successfully', {
+          autoClose: toastAutoCloseTimeout,
+        });
         refetch();
       }
     } catch (error: any) {
@@ -108,10 +109,10 @@ const Requests = () => {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose }
+          { autoClose: toastAutoCloseTimeout }
         );
       } else {
-        toast.error(error.message, { autoClose });
+        toast.error(error.message, { autoClose: toastAutoCloseTimeout });
       }
     }
   };
@@ -126,7 +127,9 @@ const Requests = () => {
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success('User Un-Blocked successfully', { autoClose });
+        toast.success('User Un-Blocked successfully', {
+          autoClose: toastAutoCloseTimeout,
+        });
         refetch();
       }
     } catch (error: any) {
@@ -134,10 +137,10 @@ const Requests = () => {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose }
+          { autoClose: toastAutoCloseTimeout }
         );
       } else {
-        toast.error(error.message, { autoClose });
+        toast.error(error.message, { autoClose: toastAutoCloseTimeout });
       }
     }
   };

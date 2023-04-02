@@ -14,6 +14,7 @@ import AboutImg from 'assets/images/defaultImg.png';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { UPDATE_SPAM_NOTIFICATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { languages } from 'utils/languages';
+import { toastAutoCloseTimeout } from 'Constant/constant';
 
 interface NavbarProps {
   targets: {
@@ -30,12 +31,8 @@ interface NavbarProps {
 
 function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'adminNavbar' });
-
   const [spamCountData, setSpamCountData] = useState([]);
-
   const currentUrl = window.location.href.split('=')[1];
-
-  const autoClose = 2000;
   const { data, error, refetch } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: currentUrl },
   });
@@ -64,10 +61,10 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
           if (error.message === 'Failed to fetch') {
             toast.error(
               'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-              { autoClose }
+              { autoClose: toastAutoCloseTimeout }
             );
           } else {
-            toast.error(error.message, { autoClose });
+            toast.error(error.message, { autoClose: toastAutoCloseTimeout });
           }
         }
       }

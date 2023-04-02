@@ -3,7 +3,6 @@ import { Col, Row } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-
 import styles from './Requests.module.css';
 import ListNavbar from 'components/ListNavbar/ListNavbar';
 import {
@@ -15,6 +14,7 @@ import {
   REJECT_ADMIN_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import PaginationList from 'components/PaginationList/PaginationList';
+import { toastAutoCloseTimeout } from 'Constant/constant';
 
 const Requests = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'requests' });
@@ -37,8 +37,6 @@ const Requests = () => {
   }, []);
 
   const { data, loading: users_loading, refetch } = useQuery(USER_LIST);
-  const autoClose = 2000;
-
   const [acceptAdminFunc] = useMutation(ACCPET_ADMIN_MUTATION);
   const [rejectAdminFunc] = useMutation(REJECT_ADMIN_MUTATION);
 
@@ -50,7 +48,7 @@ const Requests = () => {
     }
 
     if (dataOrgs.organizationsConnection.length === 0) {
-      toast.warning(t('noOrgError', { autoClose }));
+      toast.warning(t('noOrgError', { autoClose: toastAutoCloseTimeout }));
     }
   }, [dataOrgs]);
 
@@ -95,7 +93,7 @@ const Requests = () => {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('User Approved', { autoClose });
+        toast.success('User Approved', { autoClose: toastAutoCloseTimeout });
         setUsersData(usersData.filter((user: any) => user._id !== userId));
       }
     } catch (error: any) {
@@ -103,10 +101,10 @@ const Requests = () => {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose }
+          { autoClose: toastAutoCloseTimeout }
         );
       } else {
-        toast.error(error.message, { autoClose });
+        toast.error(error.message, { autoClose: toastAutoCloseTimeout });
       }
     }
   };
@@ -121,7 +119,7 @@ const Requests = () => {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('User Rejected', { autoClose });
+        toast.success('User Rejected', { autoClose: toastAutoCloseTimeout });
         setUsersData(usersData.filter((user: any) => user._id !== userId));
       }
     } catch (error: any) {
@@ -129,10 +127,10 @@ const Requests = () => {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose }
+          { autoClose: toastAutoCloseTimeout }
         );
       } else {
-        toast.error(error.message, { autoClose });
+        toast.error(error.message, { autoClose: toastAutoCloseTimeout });
       }
     }
   };

@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { Link } from 'react-router-dom';
 import defaultImg from 'assets/third_image.png';
+import { toastAutoCloseTimeout } from 'Constant/constant';
 
 interface OrgPeopleListCardProps {
   key: string;
@@ -25,8 +26,6 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgPeopleListCard',
   });
-  const autoClose = 2000;
-
   const RemoveMember = async () => {
     try {
       const { data } = await remove({
@@ -38,7 +37,9 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('The Member is removed', { autoClose });
+        toast.success('The Member is removed', {
+          autoClose: toastAutoCloseTimeout,
+        });
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -48,10 +49,10 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose }
+          { autoClose: toastAutoCloseTimeout }
         );
       } else {
-        toast.error(error.message, { autoClose });
+        toast.error(error.message, { autoClose: toastAutoCloseTimeout });
       }
     }
   };

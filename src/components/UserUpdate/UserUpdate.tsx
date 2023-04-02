@@ -8,6 +8,7 @@ import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 
 import { languages } from 'utils/languages';
 import { toast } from 'react-toastify';
+import { toastAutoCloseTimeout } from 'Constant/constant';
 
 interface UserUpdateProps {
   id: string;
@@ -19,7 +20,6 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userUpdate',
   });
-  const autoClose = 2000;
   const [formState, setFormState] = React.useState({
     firstName: '',
     lastName: '',
@@ -80,7 +80,9 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
           selectedOption: '',
           file: '',
         });
-        toast.success('Successful updated', { autoClose });
+        toast.success('Successful updated', {
+          autoClose: toastAutoCloseTimeout,
+        });
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -90,10 +92,10 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose }
+          { autoClose: toastAutoCloseTimeout }
         );
       } else {
-        toast.error(error.message, { autoClose });
+        toast.error(error.message, { autoClose: toastAutoCloseTimeout });
       }
     }
   };

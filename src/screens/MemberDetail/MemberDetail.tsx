@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import UserUpdate from 'components/UserUpdate/UserUpdate';
-
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { RootState } from 'state/reducers';
@@ -14,6 +13,7 @@ import styles from './MemberDetail.module.css';
 import { languages } from 'utils/languages';
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
+import { toastAutoCloseTimeout } from 'Constant/constant';
 
 type MemberDetailProps = {
   id: string; // This is the userId
@@ -32,8 +32,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
-  const autoClose = 2000;
-
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
   const {
     data: data,
@@ -67,7 +65,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('User is added as admin.', { autoClose });
+        toast.success('User is added as admin.', {
+          autoClose: toastAutoCloseTimeout,
+        });
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -77,10 +77,10 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose }
+          { autoClose: toastAutoCloseTimeout }
         );
       } else {
-        toast.error(error.message, { autoClose });
+        toast.error(error.message, { autoClose: toastAutoCloseTimeout });
       }
     }
   };

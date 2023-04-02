@@ -6,6 +6,7 @@ import { useMutation } from '@apollo/client';
 import { ADD_PLUGIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { toastAutoCloseTimeout } from 'Constant/constant';
 
 interface AddOnRegisterProps {
   id?: string; // OrgId
@@ -29,7 +30,6 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [create] = useMutation(ADD_PLUGIN_MUTATION);
-  const autoClose = 2000;
 
   const [formState, setFormState] = useState<formStateTypes>({
     pluginName: '',
@@ -52,7 +52,9 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
     });
 
     if (data) {
-      toast.success('Plugin Added Successfully', { autoClose });
+      toast.success('Plugin Added Successfully', {
+        autoClose: toastAutoCloseTimeout,
+      });
       setTimeout(() => {
         window.location.reload();
       }, 2000);

@@ -3,7 +3,6 @@ import { Col, Row } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-
 import styles from './Roles.module.css';
 import ListNavbar from 'components/ListNavbar/ListNavbar';
 import {
@@ -12,6 +11,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
 import PaginationList from 'components/PaginationList/PaginationList';
+import { toastAutoCloseTimeout } from 'Constant/constant';
 
 const Roles = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'roles' });
@@ -49,8 +49,6 @@ const Roles = () => {
   const { data, loading: users_loading, refetch } = useQuery(USER_LIST);
 
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
-  const autoClose = 2000;
-
   const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
 
   useEffect(() => {
@@ -59,7 +57,7 @@ const Roles = () => {
     }
 
     if (dataOrgs.organizationsConnection.length === 0) {
-      toast.warning(t('noOrgError', { autoClose }));
+      toast.warning(t('noOrgError', { autoClose: toastAutoCloseTimeout }));
     }
   }, [dataOrgs]);
 
@@ -98,7 +96,7 @@ const Roles = () => {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Role Updated.', { autoClose });
+        toast.success('Role Updated.', { autoClose: toastAutoCloseTimeout });
         refetch();
       }
     } catch (error: any) {
@@ -106,10 +104,10 @@ const Roles = () => {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose }
+          { autoClose: toastAutoCloseTimeout }
         );
       } else {
-        toast.error(error.message, { autoClose });
+        toast.error(error.message, { autoClose: toastAutoCloseTimeout });
       }
     }
   };

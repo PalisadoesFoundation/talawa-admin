@@ -9,6 +9,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import defaultImg from 'assets/third_image.png';
+import { toastAutoCloseTimeout } from 'Constant/constant';
 
 interface OrgPostCardProps {
   key: string;
@@ -46,8 +47,6 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgPostCard',
   });
-
-  const autoClose = 2000;
   const [create] = useMutation(DELETE_POST_MUTATION);
   const [updatePost] = useMutation(UPDATE_POST_MUTATION);
 
@@ -61,7 +60,9 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Post deleted successfully.', { autoClose });
+        toast.success('Post deleted successfully.', {
+          autoClose: toastAutoCloseTimeout,
+        });
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -71,10 +72,10 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose }
+          { autoClose: toastAutoCloseTimeout }
         );
       } else {
-        toast.error(error.message, { autoClose });
+        toast.error(error.message, { autoClose: toastAutoCloseTimeout });
       }
     }
   };
@@ -101,14 +102,16 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Post Updated successfully.', { autoClose });
+        toast.success('Post Updated successfully.', {
+          autoClose: toastAutoCloseTimeout,
+        });
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error(error.message, { autoClose });
+      toast.error(error.message, { autoClose: toastAutoCloseTimeout });
     }
   };
 

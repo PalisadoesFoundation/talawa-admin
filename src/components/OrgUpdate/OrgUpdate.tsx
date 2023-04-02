@@ -2,11 +2,11 @@ import React from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import styles from './OrgUpdate.module.css';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import convertToBase64 from 'utils/convertToBase64';
+import { toastAutoCloseTimeout } from 'Constant/constant';
 
 interface OrgUpdateProps {
   id: string;
@@ -28,7 +28,6 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgUpdate',
   });
-  const autoClose = 2000;
   const { data, loading: loadingdata } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: currentUrl },
   });
@@ -61,24 +60,28 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success('Successful updated', { autoClose });
+        toast.success('Successful updated', {
+          autoClose: toastAutoCloseTimeout,
+        });
         setTimeout(() => {
           window.location.reload();
         }, 2000);
 
         window.location.assign(`/orgdash/id=${props.orgid}`);
 
-        toast.success('Successfully updated');
+        toast.success('Successfully updated', {
+          autoClose: toastAutoCloseTimeout,
+        });
       }
     } catch (error: any) {
       /* istanbul ignore next */
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose }
+          { autoClose: toastAutoCloseTimeout }
         );
       } else {
-        toast.error(error.message, { autoClose });
+        toast.error(error.message, { autoClose: toastAutoCloseTimeout });
       }
     }
   };

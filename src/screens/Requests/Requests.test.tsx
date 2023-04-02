@@ -238,7 +238,7 @@ describe('Testing Request screen', () => {
 
   test('Testing seach by name functionality', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -310,4 +310,6 @@ describe('Testing Request screen', () => {
       'Organizations not found, please create an organization through dashboard'
     );
   });
+
+  // test that checks the link2 mock
 });

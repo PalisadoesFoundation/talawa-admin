@@ -4,6 +4,7 @@ import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import styles from './UserPasswordUpdate.module.css';
 import { toast } from 'react-toastify';
+import { toastAutoCloseTimeout } from 'Constant/constant';
 
 interface UserPasswordUpdateProps {
   id: string;
@@ -14,7 +15,6 @@ const UserUpdate: React.FC<UserPasswordUpdateProps> = ({ id }): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userPasswordUpdate',
   });
-  const autoClose = 2000;
   const [formState, setFormState] = React.useState({
     previousPassword: '',
     newPassword: '',
@@ -29,12 +29,14 @@ const UserUpdate: React.FC<UserPasswordUpdateProps> = ({ id }): JSX.Element => {
       !formState.newPassword ||
       !formState.confirmNewPassword
     ) {
-      return toast.error('The password field cannot be empty.', { autoClose });
+      return toast.error('The password field cannot be empty.', {
+        autoClose: toastAutoCloseTimeout,
+      });
     }
 
     if (formState.newPassword !== formState.confirmNewPassword) {
       return toast.error('New and Confirm password do not match.', {
-        autoClose,
+        autoClose: toastAutoCloseTimeout,
       });
     }
 
@@ -48,14 +50,16 @@ const UserUpdate: React.FC<UserPasswordUpdateProps> = ({ id }): JSX.Element => {
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success('Successful updated', { autoClose });
+        toast.success('Successful updated', {
+          autoClose: toastAutoCloseTimeout,
+        });
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       }
     } catch (error) {
       /* istanbul ignore next */
-      toast.error(error, { autoClose });
+      toast.error(error, { autoClose: toastAutoCloseTimeout });
     }
   };
 

@@ -8,7 +8,6 @@ import Button from 'react-bootstrap/Button';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-
 import styles from './OrgList.module.css';
 import SuperDashListCard from 'components/SuperDashListCard/SuperDashListCard';
 import {
@@ -22,6 +21,7 @@ import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
 import AdminDashListCard from 'components/AdminDashListCard/AdminDashListCard';
 import { Alert, AlertTitle } from '@mui/material';
+import { toastAutoCloseTimeout } from 'Constant/constant';
 
 function OrgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
@@ -62,8 +62,6 @@ function OrgList(): JSX.Element {
   } = useQuery(USER_ORGANIZATION_LIST, {
     variables: { id: localStorage.getItem('id') },
   });
-  const autoClose = 2000;
-
   const {
     data,
     loading,
@@ -91,7 +89,7 @@ function OrgList(): JSX.Element {
       /* istanbul ignore next */
       if (data) {
         toast.success('Congratulation the Organization is created', {
-          autoClose,
+          autoClose: toastAutoCloseTimeout,
         });
         refetch();
         setFormState({
@@ -109,10 +107,10 @@ function OrgList(): JSX.Element {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose }
+          { autoClose: toastAutoCloseTimeout }
         );
       } else {
-        toast.error(error.message, { autoClose });
+        toast.error(error.message, { autoClose: toastAutoCloseTimeout });
       }
     }
   };

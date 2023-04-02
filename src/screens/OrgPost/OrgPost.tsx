@@ -8,7 +8,6 @@ import { useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-
 import styles from './OrgPost.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
@@ -20,6 +19,7 @@ import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
 import PostNotFound from 'components/PostNotFound/PostNotFound';
 import { Form as StyleBox } from 'react-bootstrap';
+import { toastAutoCloseTimeout } from 'Constant/constant';
 
 function OrgPost(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -60,8 +60,6 @@ function OrgPost(): JSX.Element {
     variables: { id: currentUrl, title_contains: '', text_contains: '' },
   });
   const [create, { loading }] = useMutation(CREATE_POST_MUTATION);
-  const autoClose = 2000;
-
   const CreatePost = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -76,7 +74,7 @@ function OrgPost(): JSX.Element {
       /* istanbul ignore next */
       if (data) {
         toast.success('Congratulations! You have Posted Something.', {
-          autoClose,
+          autoClose: toastAutoCloseTimeout,
         });
         refetch();
         setPostFormState({
@@ -91,10 +89,10 @@ function OrgPost(): JSX.Element {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose }
+          { autoClose: toastAutoCloseTimeout }
         );
       } else {
-        toast.error(error.message, { autoClose });
+        toast.error(error.message, { autoClose: toastAutoCloseTimeout });
       }
     }
   };

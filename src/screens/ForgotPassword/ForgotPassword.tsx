@@ -2,6 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { toastAutoCloseTimeout } from 'Constant/constant';
 
 import {
   FORGOT_PASSWORD_MUTATION,
@@ -17,7 +18,6 @@ const ForgotPassword = () => {
   });
 
   document.title = t('title');
-  const autoClose = 2000;
   const [componentLoader, setComponentLoader] = useState(true);
   const [registeredEmail, setregisteredEmail] = useState('');
   const [forgotPassFormData, setForgotPassFormData] = useState({
@@ -25,7 +25,6 @@ const ForgotPassword = () => {
     newPassword: '',
     confirmNewPassword: '',
   });
-
   const [otp, { loading: otpLoading }] = useMutation(GENERATE_OTP_MUTATION);
   const [forgotPassword, { loading: forgotPasswordLoading }] = useMutation(
     FORGOT_PASSWORD_MUTATION
@@ -52,19 +51,25 @@ const ForgotPassword = () => {
       /* istanbul ignore next */
       if (data) {
         localStorage.setItem('otpToken', data.otp.otpToken);
-        toast.success('OTP is sent to your registered email.', { autoClose });
+        toast.success('OTP is sent to your registered email.', {
+          autoClose: toastAutoCloseTimeout,
+        });
       }
     } catch (error: any) {
       /* istanbul ignore next */
       if (error.message === 'User not found') {
-        toast.warn('Email is not registered.', { autoClose });
+        toast.warn('Email is not registered.', {
+          autoClose: toastAutoCloseTimeout,
+        });
       } else if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose }
+          { autoClose: toastAutoCloseTimeout }
         );
       } else {
-        toast.error('Error in sending mail.', { autoClose });
+        toast.error('Error in sending mail.', {
+          autoClose: toastAutoCloseTimeout,
+        });
       }
     }
   };
@@ -74,7 +79,9 @@ const ForgotPassword = () => {
     const { userOtp, newPassword, confirmNewPassword } = forgotPassFormData;
 
     if (newPassword !== confirmNewPassword) {
-      toast.error('Password and Confirm password mismatches.', { autoClose });
+      toast.error('Password and Confirm password mismatches.', {
+        autoClose: toastAutoCloseTimeout,
+      });
       return;
     }
 
@@ -95,7 +102,9 @@ const ForgotPassword = () => {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Password changes successfully.', { autoClose });
+        toast.success('Password changes successfully.', {
+          autoClose: toastAutoCloseTimeout,
+        });
 
         setForgotPassFormData({
           userOtp: '',
@@ -108,10 +117,10 @@ const ForgotPassword = () => {
       if (error.message === 'Failed to fetch') {
         toast.error(
           'Talawa-API service is unavailable. Is it running? Check your network connectivity too.',
-          { autoClose }
+          { autoClose: toastAutoCloseTimeout }
         );
       } else {
-        toast.error(error.message, { autoClose });
+        toast.error(error.message, { autoClose: toastAutoCloseTimeout });
       }
     }
   };
