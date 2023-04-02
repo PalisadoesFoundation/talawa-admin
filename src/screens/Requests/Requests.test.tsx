@@ -306,6 +306,27 @@ describe('Testing Request screen', () => {
 
     await wait();
 
+    expect(container.textContent).toMatch(
+      'Organizations not found, please create an organization through dashboard'
+    );
+  });
+
+  test('Should render warning alert when there are no organizations present', async () => {
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
     expect(container.textContent).not.toMatch(
       'Organizations not found, please create an organization through dashboard'
     );
