@@ -35,7 +35,7 @@ jobs:
         run: npm run lint:check
       
       - name: Count number of lines
-      - run: |
+        run: |
           chmod +x ./.github/workflows/countline.py
           ./.github/workflows/countline.py --exclude_files src/screens/LoginPage/LoginPage.tsx
 
