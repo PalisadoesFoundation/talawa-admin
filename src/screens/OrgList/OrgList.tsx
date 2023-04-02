@@ -69,6 +69,25 @@ function OrgList(): JSX.Element {
     error: error_list,
     refetch,
   } = useQuery(ORGANIZATION_CONNECTION_LIST);
+  /*istanbul ignore next*/
+  interface UserType {
+    adminFor: Array<{
+      _id: string;
+    }>;
+  }
+  /*istanbul ignore next*/
+  interface CurrentOrgType {
+    _id: string;
+  }
+  /*istanbul ignore next*/
+  const isAdminForCurrentOrg = (
+    user: UserType | undefined,
+    currentOrg: CurrentOrgType
+  ): boolean => {
+    return (
+      user?.adminFor.length === 1 && user?.adminFor[0]._id === currentOrg._id
+    );
+  };
 
   const CreateOrg = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -141,7 +160,7 @@ function OrgList(): JSX.Element {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
+  /* istanbul ignore next */
   const handleSearchByName = (e: any) => {
     const { value } = e.target;
     refetch({
@@ -175,9 +194,9 @@ function OrgList(): JSX.Element {
               <div className={styles.userEmail}>
                 {t('email')}:
                 <p>
-                  {data_2?.user.email.substring(
+                  {(data_2?.user.email || '').substring(
                     0,
-                    data_2?.user.email.length / 2
+                    (data_2?.user.email || '').length / 2
                   )}
                   <span>
                     {data_2?.user.email.substring(
@@ -202,6 +221,7 @@ function OrgList(): JSX.Element {
                 disabled={isSuperAdmin}
                 onClick={showInviteModal}
                 data-testid="createOrganizationBtn"
+                style={{ display: isSuperAdmin ? 'none' : 'block' }}
               >
                 + {t('createOrganization')}
               </Button>
@@ -213,6 +233,12 @@ function OrgList(): JSX.Element {
                 autoComplete="off"
                 required
                 onChange={debouncedHandleSearchByName}
+                style={{
+                  display:
+                    data_2 && data_2.user.userType !== 'SUPERADMIN'
+                      ? 'none'
+                      : 'block',
+                }}
               />
             </div>
             <div className={styles.list_box} data-testid="organizations-list">
@@ -248,7 +274,7 @@ function OrgList(): JSX.Element {
                           orgLocation={datas.location}
                         />
                       );
-                    } else {
+                    } else if (isAdminForCurrentOrg(data_2?.user, datas)) {
                       return (
                         <AdminDashListCard
                           id={datas._id}
@@ -263,6 +289,8 @@ function OrgList(): JSX.Element {
                           orgLocation={datas.location}
                         />
                       );
+                    } else {
+                      return null;
                     }
                   }
                 )
@@ -284,15 +312,17 @@ function OrgList(): JSX.Element {
                 }}
               >
                 <tbody>
-                  <tr data-testid="rowsPPSelect">
-                    <PaginationList
-                      count={data ? data.organizationsConnection.length : 0}
-                      rowsPerPage={rowsPerPage}
-                      page={page}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                  </tr>
+                  {data_2?.user.userType === 'SUPERADMIN' && (
+                    <tr data-testid="rowsPPSelect">
+                      <PaginationList
+                        count={data ? data.organizationsConnection.length : 0}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                      />
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
@@ -301,6 +331,7 @@ function OrgList(): JSX.Element {
       </Row>
       <Modal
         isOpen={modalisOpen}
+        onRequestClose={() => setmodalIsOpen(false)}
         style={{
           overlay: { backgroundColor: 'grey' },
         }}
@@ -316,7 +347,12 @@ function OrgList(): JSX.Element {
                 className={styles.cancel}
                 data-testid="closeOrganizationModal"
               >
-                <i className="fa fa-times"></i>
+                <i
+                  className="fa fa-times"
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                ></i>
               </a>
             </div>
             <Form onSubmitCapture={CreateOrg}>
