@@ -37,11 +37,4 @@ describe('Testing AddOnStore Component', () => {
     );
     expect(getByTestId('AddOnEntryStore')).toBeInTheDocument();
   });
-  // const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
-  // const useDispatchMock = jest.spyOn(reactRedux, 'useDispatch');
-
-  // beforeEach(() => {
-  //   useSelectorMock.mockClear();
-  //   useDispatchMock.mockClear();
-  // });
 });
