@@ -167,7 +167,7 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    expect(screen.getByText(/Talawa Portal/i)).toBeInTheDocument();
+    expect(screen.getByText(/Talawa Admin Portal/i)).toBeInTheDocument();
     expect(window.location).toBeAt('/orglist');
   });
 
