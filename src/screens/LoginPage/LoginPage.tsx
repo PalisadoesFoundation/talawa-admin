@@ -116,17 +116,17 @@ function LoginPage(): JSX.Element {
     }
   };
 
-  interface SignupFormData {
+  type SignupFormData = {
     signfirstName: string;
     signlastName: string;
     signEmail: string;
     signPassword: string;
     cPassword: string;
-  }
-  interface ValidationResult {
+  };
+  type ValidationResult = {
     isValid: boolean;
-    errorMessage?: string;
-  }
+    errorMessages?: string[];
+  };
 
   const validateForm = ({
     signfirstName,
@@ -136,62 +136,44 @@ function LoginPage(): JSX.Element {
     cPassword,
   }: SignupFormData): ValidationResult => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const errors: string[] = [];
 
     if (signfirstName.length < 2) {
-      return {
-        isValid: false,
-        errorMessage: 'First name must be at least 2 characters long',
-      };
+      errors.push('First name must be at least 2 characters long');
     }
     if (signlastName.length < 2) {
-      return {
-        isValid: false,
-        errorMessage: 'Last name must be at least 2 characters long',
-      };
+      errors.push('Last name must be at least 2 characters long');
     }
     if (!emailRegex.test(signEmail)) {
-      return {
-        isValid: false,
-        errorMessage: 'Please enter a valid email address',
-      };
+      errors.push('Please enter a valid email address');
     }
     if (signPassword.length < 8) {
-      return {
-        isValid: false,
-        errorMessage: 'Password must be at least 8 characters long',
-      };
+      errors.push('Password must be at least 8 characters long');
     }
     if (!/\d/.test(signPassword)) {
-      return {
-        isValid: false,
-        errorMessage: 'Password must contain at least one number',
-      };
+      errors.push('Password must contain at least one number');
     }
     if (!/[a-zA-Z]/.test(signPassword)) {
-      return {
-        isValid: false,
-        errorMessage: 'Password must contain at least one letter',
-      };
+      errors.push('Password must contain at least one letter');
     }
     if (!/[\W_]/.test(signPassword)) {
-      return {
-        isValid: false,
-        errorMessage: 'Password must contain at least one special character',
-      };
+      errors.push('Password must contain at least one special character');
     }
     if (cPassword !== signPassword) {
-      return {
-        isValid: false,
-        errorMessage: 'Password and Confirm password do not match',
-      };
+      errors.push('Password and Confirm password do not match');
     }
+
+    if (errors.length > 0) {
+      return { isValid: false, errorMessages: errors };
+    }
+
     return { isValid: true };
   };
 
   const signup_link = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { isValid, errorMessage } = validateForm(signformState);
+    const { isValid, errorMessages } = validateForm(signformState);
 
     const recaptchaToken = recaptchaRef.current?.getValue();
     recaptchaRef.current?.reset();
@@ -204,7 +186,7 @@ function LoginPage(): JSX.Element {
     }
 
     if (!isValid) {
-      toast.warn(errorMessage);
+      errorMessages?.forEach((message) => toast.warn(message));
       return;
     }
 
