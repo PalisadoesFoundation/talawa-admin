@@ -180,62 +180,31 @@ const Roles = () => {
                               <td>{`${user.firstName} ${user.lastName}`}</td>
                               <td>{user.email}</td>
                               <td>
-                                {user.userType === 'ADMIN' ? (
-                                  <select
-                                    className="form-control"
-                                    name={`role${user._id}`}
-                                    onChange={changeRole}
+                                <select
+                                  className="form-control"
+                                  name={`role${user._id}`}
+                                  data-testid={`changeRole${user._id}`}
+                                  onChange={changeRole}
+                                >
+                                  <option
+                                    value={`ADMIN?${user._id}`}
+                                    selected={user.userType === 'ADMIN'}
                                   >
-                                    <option
-                                      value={`ADMIN?${user._id}`}
-                                      selected
-                                    >
-                                      {t('admin')}
-                                    </option>
-                                    <option value={`SUPERADMIN?${user._id}`}>
-                                      {t('superAdmin')}
-                                    </option>
-                                    <option value={`USER?${user._id}`}>
-                                      {t('user')}
-                                    </option>
-                                  </select>
-                                ) : user.userType === 'SUPERADMIN' ? (
-                                  <select
-                                    className="form-control"
-                                    name={`role${user._id}`}
-                                    data-testid={`changeRole${user._id}`}
-                                    onChange={changeRole}
+                                    {t('admin')}
+                                  </option>
+                                  <option
+                                    value={`SUPERADMIN?${user._id}`}
+                                    selected={user.userType === 'SUPERADMIN'}
                                   >
-                                    <option value={`ADMIN?${user._id}`}>
-                                      {t('admin')}
-                                    </option>
-                                    <option
-                                      value={`SUPERADMIN?${user._id}`}
-                                      selected
-                                    >
-                                      {t('superAdmin')}
-                                    </option>
-                                    <option value={`USER?${user._id}`}>
-                                      {t('user')}
-                                    </option>
-                                  </select>
-                                ) : (
-                                  <select
-                                    className="form-control"
-                                    name={`role${user._id}`}
-                                    onChange={changeRole}
+                                    {t('superAdmin')}
+                                  </option>
+                                  <option
+                                    value={`USER?${user._id}`}
+                                    selected={user.userType === 'USER'}
                                   >
-                                    <option value={`ADMIN?${user._id}`}>
-                                      {t('admin')}
-                                    </option>
-                                    <option value={`SUPERADMIN?${user._id}`}>
-                                      {t('superAdmin')}
-                                    </option>
-                                    <option value={`USER?${user._id}`} selected>
-                                      {t('user')}
-                                    </option>
-                                  </select>
-                                )}
+                                    {t('user')}
+                                  </option>
+                                </select>
                               </td>
                             </tr>
                           );
