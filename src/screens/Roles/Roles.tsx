@@ -24,8 +24,10 @@ const Roles = () => {
   const [searchByName, setSearchByName] = useState('');
   const [count, setCount] = useState(0);
 
+  const userType = localStorage.getItem('UserType');
+  const userId = localStorage.getItem('id');
+
   useEffect(() => {
-    const userType = localStorage.getItem('UserType');
     if (userType != 'SUPERADMIN') {
       window.location.assign('/orglist');
     }
@@ -185,6 +187,7 @@ const Roles = () => {
                                   name={`role${user._id}`}
                                   data-testid={`changeRole${user._id}`}
                                   onChange={changeRole}
+                                  disabled={user._id === userId}
                                 >
                                   <option
                                     value={`ADMIN?${user._id}`}
