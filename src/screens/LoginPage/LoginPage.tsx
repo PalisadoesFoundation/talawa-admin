@@ -11,22 +11,25 @@ import { toast } from 'react-toastify';
 import cookies from 'js-cookie';
 import i18next from 'i18next';
 
+
 import styles from './LoginPage.module.css';
 import Logo from 'assets/talawa-logo-200x200.png';
 import LandingPage from 'components/LandingPage/LandingPage';
 import {
   LOGIN_MUTATION,
   RECAPTCHA_MUTATION,
+  EMAIL_OTP_MUTATION,
+  OTP_COMPARE_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import { languages } from 'utils/languages';
-import { RECAPTCHA_SITE_KEY, REACT_APP_USE_RECAPTCHA } from 'Constant/constant';
+import { RECAPTCHA_SITE_KEY } from 'Constant/constant';
 
 function LoginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
 
   document.title = t('title');
-
+  const [showOTPInput, setShowOTPInput] = useState(false);
   const [modalisOpen, setIsOpen] = React.useState(false);
   const [componentLoader, setComponentLoader] = useState(true);
   const [isInputFocused, setIsInputFocused] = useState(false);
@@ -42,11 +45,85 @@ function LoginPage(): JSX.Element {
     password: '',
   });
   const [show, setShow] = useState<boolean>(false);
-  const [showConfirmPassword, setShowConfirmPassword] =
-    useState<boolean>(false);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
-
+  const [OTP, setOTP] = useState('');
+  const [OTPverified,setOTPverified]= useState<boolean>(false);
+  const [dummy,setdummy]= useState('abc');
+  const [emailVerification, { loading: otpLoading }] = useMutation(EMAIL_OTP_MUTATION);
+  
   const currentLanguageCode = cookies.get('i18next') || 'en';
+  const [otpCheck, { loading: forgotPasswordLoading }] = useMutation(
+    OTP_COMPARE_MUTATION
+  );
+
+  const handleOTPChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setOTP(e.target.value);
+  };
+
+  const handleVerifyEmail = async (e: ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setShowOTPInput(true);
+    try {
+      const { data } = await emailVerification({
+        variables: {
+          email: signformState.signEmail,
+        },
+      });
+
+      /* istanbul ignore next */
+      if (data) {
+        localStorage.setItem('otpToken', data.otpToken);
+        toast.success('OTP is sent to your registered email.');
+      }
+    } catch (error: any) {
+      /* istanbul ignore next */
+      if (error.message === 'User not found') {
+        toast.warn('Email is not registered.');
+      } else if (error.message === 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
+      } else {
+        toast.error('Error in sending mail.');
+      }
+    }
+    
+  };
+  const submitOtp = async (e: ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const otpToken = localStorage.getItem('otpToken');
+      if (!otpToken) {
+        return;
+      }
+      const userOtp = OTP;
+      const newPassword = dummy;
+      const { data } = await otpCheck({
+        variables: {
+          userOtp,
+          newPassword,
+          otpToken,
+        },
+      });
+    
+
+      /* istanbul ignore next */
+    if (data) {
+       toast.success('Otp verified successfully.');
+       setOTPverified(true) ;
+      }
+    }catch (error: any) {
+      /* istanbul ignore next */
+      if (error.message === 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
+      } else {
+        toast.error(error.message);
+      }
+    }
+  }
+      
 
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('IsLoggedIn');
@@ -62,10 +139,6 @@ function LoginPage(): JSX.Element {
 
   const hideModal = () => {
     setIsOpen(false);
-  };
-
-  const handleShowCon = () => {
-    setShowConfirmPassword(!showConfirmPassword);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -99,10 +172,6 @@ function LoginPage(): JSX.Element {
 
   const verifyRecaptcha = async (recaptchaToken: any) => {
     try {
-      /* istanbul ignore next */
-      if (REACT_APP_USE_RECAPTCHA !== 'yes') {
-        return true;
-      }
       const { data } = await recaptcha({
         variables: {
           recaptchaToken,
@@ -127,6 +196,12 @@ function LoginPage(): JSX.Element {
 
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
+    if(OTPverified ===false)
+    {
+      toast.error("Please,verify email");
+      return;
+    }
+
     if (!isVerified) {
       toast.error('Please, check the captcha.');
       return;
@@ -238,7 +313,7 @@ function LoginPage(): JSX.Element {
     }
   };
 
-  if (componentLoader || loginLoading || signinLoading || recaptchaLoading) {
+  if (componentLoader || loginLoading || signinLoading || recaptchaLoading|| otpLoading||forgotPasswordLoading) {
     return <div className={styles.loader}></div>;
   }
 
@@ -309,6 +384,42 @@ function LoginPage(): JSX.Element {
               <div className={styles.homeright}>
                 <h1>{t('register')}</h1>
                 {/* <h2>to seamlessly manage your Organization.</h2> */}
+                <form>
+                  <input
+                    type="email"
+                    id="signemail"
+                    placeholder={t('email')}
+                    autoComplete="on"
+                    required
+                    value={signformState.signEmail}
+                    onChange={(e) => {
+                      setSignFormState({
+                        ...signformState,
+                        signEmail: e.target.value.toLowerCase(),
+                      });
+                    }}
+                  />
+                </form>
+                <br />
+                {showOTPInput && (
+                  <form onSubmit={submitOtp}>
+                    <label>OTP:</label>
+                    <input type="text" value={OTP} onChange={handleOTPChange} />
+                    <button type="submit"className={styles.whiteloginbtn} >Submit OTP</button>
+                  </form>
+                )}
+                <br />
+                <form onSubmit={handleVerifyEmail}>
+                  <button
+                    type="submit"
+                    className={styles.navloginbtn}
+                    value="Verify Email"
+                  >
+                  Verify Email
+                  </button>
+                </form>
+                <br/>
+                <br/>
                 <form onSubmit={signup_link}>
                   <div className={styles.dispflex}>
                     <div>
@@ -345,22 +456,7 @@ function LoginPage(): JSX.Element {
                         }}
                       />
                     </div>
-                  </div>
-                  <label>{t('email')}</label>
-                  <input
-                    type="email"
-                    id="signemail"
-                    placeholder={t('email')}
-                    autoComplete="on"
-                    required
-                    value={signformState.signEmail}
-                    onChange={(e) => {
-                      setSignFormState({
-                        ...signformState,
-                        signEmail: e.target.value.toLowerCase(),
-                      });
-                    }}
-                  />
+                  </div>  
                   <div className={styles.passwordalert}>
                     <label>{t('password')}</label>
                     <input
@@ -405,56 +501,33 @@ function LoginPage(): JSX.Element {
                         </span>
                       )}
                   </div>
-                  <div className={styles.passwordalert}>
-                    <label>{t('confirmPassword')}</label>
-                    <input
-                      type={showConfirmPassword ? 'text' : 'password'}
-                      id="signpassword"
-                      placeholder={t('confirmPassword')}
-                      required
-                      value={signformState.cPassword}
-                      onChange={(e) => {
-                        setSignFormState({
-                          ...signformState,
-                          cPassword: e.target.value,
-                        });
-                      }}
-                      data-testid="cpassword"
+                  <br/>
+                  <label>{t('confirmPassword')}</label>
+                  <input
+                    type={show ? 'text' : 'password'}
+                    id="cpassword"
+                    placeholder={t('confirmPassword')}
+                    required
+                    value={signformState.cPassword}
+                    onChange={(e) => {
+                      setSignFormState({
+                        ...signformState,
+                        cPassword: e.target.value,
+                      });
+                    }}
+                  />
+                  <label
+                    id="showPasswordr"
+                    className={styles.showregister}
+                    onClick={handleShow}
+                    data-testid="showPasswordr"
+                  ></label>
+                  <div className="googleRecaptcha">
+                    <ReCAPTCHA
+                      ref={recaptchaRef}
+                      sitekey={RECAPTCHA_SITE_KEY ?? ''}
                     />
-                    <label
-                      id="showPasswordr"
-                      className={styles.showregister}
-                      onClick={handleShowCon}
-                      data-testid="showPasswordrCon"
-                    >
-                      {showConfirmPassword ? (
-                        <i className="fas fa-eye"></i>
-                      ) : (
-                        <i className="fas fa-eye-slash"></i>
-                      )}
-                    </label>
-                    {signformState.cPassword.length > 0 &&
-                      signformState.signPassword !==
-                        signformState.cPassword && (
-                        <span data-testid="passwordCheck">
-                          {t('Password_and_Confirm_password_mismatches.')}
-                        </span>
-                      )}
                   </div>
-                  {REACT_APP_USE_RECAPTCHA === 'yes' ? (
-                    <div className="googleRecaptcha">
-                      <ReCAPTCHA
-                        ref={recaptchaRef}
-                        sitekey={
-                          /* istanbul ignore next */
-                          RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
-                        }
-                      />
-                    </div>
-                  ) : (
-                    /* istanbul ignore next */
-                    <></>
-                  )}
                   <button
                     type="submit"
                     className={styles.greenregbtn}
@@ -535,20 +608,12 @@ function LoginPage(): JSX.Element {
                     )}
                   </label>
                 </div>
-                {REACT_APP_USE_RECAPTCHA === 'yes' ? (
-                  <div className="googleRecaptcha">
-                    <ReCAPTCHA
-                      ref={recaptchaRef}
-                      sitekey={
-                        /* istanbul ignore next */
-                        RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
-                      }
-                    />
-                  </div>
-                ) : (
-                  /* istanbul ignore next */
-                  <></>
-                )}
+                <div className="googleRecaptcha">
+                  <ReCAPTCHA
+                    ref={recaptchaRef}
+                    sitekey={RECAPTCHA_SITE_KEY ?? ''}
+                  />
+                </div>
                 <button
                   type="submit"
                   className={styles.greenregbtn}
