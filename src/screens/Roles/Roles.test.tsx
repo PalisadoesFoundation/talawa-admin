@@ -475,4 +475,44 @@ describe('Testing Roles screen', () => {
       true
     );
   });
+
+  test('Should not disable select when user is not self', async () => {
+    const localStorageMock = (function () {
+      const store: any = {
+        UserType: 'SUPERADMIN',
+        id: '123',
+      };
+
+      return {
+        getItem: jest.fn((key: string) => store[key]),
+      };
+    })();
+
+    Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <Roles />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(screen.getByTestId('changeRole456')).toHaveProperty(
+      'disabled',
+      false
+    );
+
+    expect(screen.getByTestId('changeRole789')).toHaveProperty(
+      'disabled',
+      false
+    );
+  });
 });
