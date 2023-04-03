@@ -167,7 +167,7 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    expect(screen.getByText(/Talawa Admin Portal/i)).toBeInTheDocument();
+    expect(screen.getByText(/Talawa Portal/i)).toBeInTheDocument();
     expect(window.location).toBeAt('/orglist');
   });
 
@@ -219,6 +219,129 @@ describe('Testing Login Page Screen', () => {
       email: 'johndoe@gmail.com',
       password: 'johndoe@123',
       confirmPassword: 'doeJohn@123',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.type(
+      screen.getByPlaceholderText(/First Name/i),
+      formData.firstName
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Last Name/i),
+      formData.lastName
+    );
+    userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
+    userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
+    userEvent.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      formData.confirmPassword
+    );
+
+    userEvent.click(screen.getByTestId('registrationBtn'));
+  });
+
+  test('Testing registration functionality, when password does not contain any special character', async () => {
+    const formData = {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'johndoe@gmail.com',
+      password: 'johndoe123',
+      confirmPassword: 'johndoe123',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.type(
+      screen.getByPlaceholderText(/First Name/i),
+      formData.firstName
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Last Name/i),
+      formData.lastName
+    );
+    userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
+    userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
+    userEvent.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      formData.confirmPassword
+    );
+
+    userEvent.click(screen.getByTestId('registrationBtn'));
+  });
+
+  test('Testing registration functionality, when password does not contain any letter', async () => {
+    const formData = {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'johndoe@gmail.com',
+      password: '123456789',
+      confirmPassword: '123456789',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.type(
+      screen.getByPlaceholderText(/First Name/i),
+      formData.firstName
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Last Name/i),
+      formData.lastName
+    );
+    userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
+    userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
+    userEvent.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      formData.confirmPassword
+    );
+
+    userEvent.click(screen.getByTestId('registrationBtn'));
+  });
+
+  test('Testing registration functionality, when email is not valid', async () => {
+    const formData = {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'johndoe@gmail',
+      password: '123456789',
+      confirmPassword: '123456789',
     };
 
     render(
