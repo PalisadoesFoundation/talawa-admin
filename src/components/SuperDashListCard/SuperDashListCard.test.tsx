@@ -4,7 +4,6 @@ import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { I18nextProvider } from 'react-i18next';
 import 'jest-location-mock';
-
 import SuperDashListCard from './SuperDashListCard';
 import i18nForTest from 'utils/i18nForTest';
 
