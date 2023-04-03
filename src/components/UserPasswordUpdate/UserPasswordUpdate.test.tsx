@@ -3,7 +3,6 @@ import { act, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-
 import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import UserPasswordUpdate from './UserPasswordUpdate';
@@ -89,4 +88,11 @@ describe('Testing User Password Update', () => {
       screen.getByPlaceholderText(/Confirm New Password/i)
     ).toBeInTheDocument();
   });
+
+  jest.mock('react-toastify', () => ({
+    toast: {
+      success: jest.fn(),
+      error: jest.fn(),
+    },
+  }));
 });
