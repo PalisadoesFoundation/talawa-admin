@@ -312,6 +312,14 @@ export const GENERATE_OTP_MUTATION = gql`
   }
 `;
 
+export const EMAIL_OTP_MUTATION = gql`
+  mutation EmailVerification($email: EmailAddress!) {
+    emailVerification(data: { email: $email }) {
+      otpToken
+    }
+  }
+`;
+
 export const FORGOT_PASSWORD_MUTATION = gql`
   mutation ForgotPassword(
     $userOtp: String!
@@ -319,6 +327,22 @@ export const FORGOT_PASSWORD_MUTATION = gql`
     $otpToken: String!
   ) {
     forgotPassword(
+      data: {
+        userOtp: $userOtp
+        newPassword: $newPassword
+        otpToken: $otpToken
+      }
+    )
+  }
+`;
+
+export const OTP_COMPARE_MUTATION = gql`
+  mutation OtpCheck(
+    $userOtp: String!
+    $newPassword: String!
+    $otpToken: String!
+  ) {
+    otpCheck(
       data: {
         userOtp: $userOtp
         newPassword: $newPassword
