@@ -92,9 +92,24 @@ function OrgList(): JSX.Element {
   const CreateOrg = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { name, descrip, location, visible, ispublic, image } = formState;
+    const {
+      name: _name,
+      descrip: _descrip,
+      location: _location,
+      visible,
+      ispublic,
+      image,
+    } = formState;
+
+    const name = _name.trim();
+    const descrip = _descrip.trim();
+    const location = _location.trim();
 
     try {
+      if (!name || !descrip || !location) {
+        throw new Error('Text fields cannot be empty strings');
+      }
+
       const { data } = await create({
         variables: {
           name: name,
