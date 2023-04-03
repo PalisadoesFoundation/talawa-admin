@@ -188,23 +188,15 @@ const Roles = () => {
                                   data-testid={`changeRole${user._id}`}
                                   onChange={changeRole}
                                   disabled={user._id === userId}
+                                  defaultValue={`${user.userType}?${user._id}`}
                                 >
-                                  <option
-                                    value={`ADMIN?${user._id}`}
-                                    selected={user.userType === 'ADMIN'}
-                                  >
+                                  <option value={`ADMIN?${user._id}`}>
                                     {t('admin')}
                                   </option>
-                                  <option
-                                    value={`SUPERADMIN?${user._id}`}
-                                    selected={user.userType === 'SUPERADMIN'}
-                                  >
+                                  <option value={`SUPERADMIN?${user._id}`}>
                                     {t('superAdmin')}
                                   </option>
-                                  <option
-                                    value={`USER?${user._id}`}
-                                    selected={user.userType === 'USER'}
-                                  >
+                                  <option value={`USER?${user._id}`}>
                                     {t('user')}
                                   </option>
                                 </select>
