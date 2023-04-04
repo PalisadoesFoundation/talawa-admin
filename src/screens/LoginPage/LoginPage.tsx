@@ -137,10 +137,11 @@ function LoginPage(): JSX.Element {
       signlastName.length > 1 &&
       signEmail.length >= 8 &&
       signPassword.length >= 8 &&
-      (/[A-Z]/.test(signPassword)) &&
-      (/[0-9]/.test(signPassword)) &&
-      (/[^A-Za-z0-9]/.test(signPassword))
+      /[A-Z]/.test(signPassword) &&
+      /[0-9]/.test(signPassword) &&
+      /[^A-Za-z0-9]/.test(signPassword)
     ) {
+      console.log('yes');
       if (cPassword == signPassword) {
         try {
           const { data } = await signup({
@@ -405,6 +406,27 @@ function LoginPage(): JSX.Element {
                       signformState.signPassword.length < 8 && (
                         <span data-testid="passwordCheck">
                           {t('atleast_8_char_long')}
+                        </span>
+                      )}
+                    {isInputFocused &&
+                      !/[A-Z]/.test(signformState.signPassword) &&
+                      signformState.signPassword.length > 8 && (
+                        <span data-testid="passwordCheck">
+                          {t('atleast_1_caps')}
+                        </span>
+                      )}
+                    {isInputFocused &&
+                      !/0-9]/.test(signformState.signPassword) &&
+                      signformState.signPassword.length > 8 && (
+                        <span data-testid="passwordCheck">
+                          {t('atleast_1_number')}
+                        </span>
+                      )}
+                    {isInputFocused &&
+                      !/[^A-Za-z0-9]/.test(signformState.signPassword) &&
+                      signformState.signPassword.length > 8 && (
+                        <span data-testid="passwordCheck">
+                          {t('atleast_1_unique')}
                         </span>
                       )}
                   </div>
