@@ -24,7 +24,7 @@ const MOCKS = [
       query: LOGIN_MUTATION,
       variables: {
         email: 'johndoe@gmail.com',
-        password: 'johndoe',
+        password: 'Johndoe@1',
       },
     },
     result: {
@@ -48,7 +48,7 @@ const MOCKS = [
         firstName: 'John',
         lastName: 'Doe',
         email: 'johndoe@gmail.com',
-        password: 'johnDoe',
+        password: 'Johndoe@1',
       },
     },
     result: {
@@ -176,8 +176,8 @@ describe('Testing Login Page Screen', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'johndoe@gmail.com',
-      password: 'johndoe',
-      confirmPassword: 'johndoe',
+      password: 'Johndoe@1',
+      confirmPassword: 'Johndoe@1',
     };
 
     render(
@@ -258,8 +258,8 @@ describe('Testing Login Page Screen', () => {
       firstName: 'J',
       lastName: 'D',
       email: 'johndoe@gmail.com',
-      password: 'joe',
-      confirmPassword: 'joe',
+      password: 'Johndoe@2',
+      confirmPassword: 'Johndoe@2',
     };
 
     render(
@@ -319,7 +319,7 @@ describe('Testing Login Page Screen', () => {
   test('Testing login functionality', async () => {
     const formData = {
       email: 'johndoe@gmail.com',
-      password: 'johndoe',
+      password: 'Johndoe@1',
     };
 
     render(
