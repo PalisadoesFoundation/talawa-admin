@@ -136,7 +136,10 @@ function LoginPage(): JSX.Element {
       signfirstName.length > 1 &&
       signlastName.length > 1 &&
       signEmail.length >= 8 &&
-      signPassword.length > 1
+      signPassword.length >= 8 &&
+      (/[A-Z]/.test(signPassword)) &&
+      (/[0-9]/.test(signPassword)) &&
+      (/[^A-Za-z0-9]/.test(signPassword))
     ) {
       if (cPassword == signPassword) {
         try {
