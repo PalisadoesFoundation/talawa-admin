@@ -125,6 +125,7 @@ const MOCKS = [
     },
   },
 ];
+
 const EMPTY_MOCKS = [
   {
     request: {
@@ -156,6 +157,7 @@ const EMPTY_MOCKS = [
     },
   },
 ];
+
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_MOCKS, true);
 
@@ -436,6 +438,81 @@ describe('Testing Roles screen', () => {
 
     expect(container.textContent).not.toMatch(
       'Organizations not found, please create an organization through dashboard'
+    );
+  });
+
+  test('Should disable select when user is self', async () => {
+    const localStorageMock = (function () {
+      const store: any = {
+        UserType: 'SUPERADMIN',
+        id: '123',
+      };
+
+      return {
+        getItem: jest.fn((key: string) => store[key]),
+      };
+    })();
+
+    Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <Roles />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(screen.getByTestId('changeRole123')).toHaveProperty(
+      'disabled',
+      true
+    );
+  });
+
+  test('Should not disable select when user is not self', async () => {
+    const localStorageMock = (function () {
+      const store: any = {
+        UserType: 'SUPERADMIN',
+        id: '123',
+      };
+
+      return {
+        getItem: jest.fn((key: string) => store[key]),
+      };
+    })();
+
+    Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <Roles />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(screen.getByTestId('changeRole456')).toHaveProperty(
+      'disabled',
+      false
+    );
+
+    expect(screen.getByTestId('changeRole789')).toHaveProperty(
+      'disabled',
+      false
     );
   });
 });
