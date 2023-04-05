@@ -408,25 +408,25 @@ function LoginPage(): JSX.Element {
                           {t('atleast_8_char_long')}
                         </span>
                       )}
-                    {isInputFocused &&
-                      !/[A-Z]/.test(signformState.signPassword) &&
-                      signformState.signPassword.length > 8 && (
+                    {signformState.signPassword.length >= 8 &&
+                      !/[A-Z]/.test(signformState.signPassword) && (
                         <span data-testid="passwordCheck">
                           {t('atleast_1_caps')}
                         </span>
                       )}
-                    {isInputFocused &&
-                      !/0-9]/.test(signformState.signPassword) &&
-                      signformState.signPassword.length > 8 && (
+                    {signformState.signPassword.length >= 8 &&
+                      /[A-Z]/.test(signformState.signPassword) &&
+                      !/[0-9]/.test(signformState.signPassword) && (
                         <span data-testid="passwordCheck">
                           {t('atleast_1_number')}
                         </span>
                       )}
-                    {isInputFocused &&
-                      !/[^A-Za-z0-9]/.test(signformState.signPassword) &&
-                      signformState.signPassword.length > 8 && (
+                    {signformState.signPassword.length >= 8 &&
+                      /[A-Z]/.test(signformState.signPassword) &&
+                      /[0-9]/.test(signformState.signPassword) &&
+                      !/[^A-Za-z0-9]/.test(signformState.signPassword) && (
                         <span data-testid="passwordCheck">
-                          {t('atleast_1_unique')}
+                          {t('atleast_1_special')}
                         </span>
                       )}
                   </div>
