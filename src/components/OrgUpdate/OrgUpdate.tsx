@@ -16,32 +16,21 @@ interface OrgUpdateProps {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function OrgUpdate(props: OrgUpdateProps): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
-
-  const [formState, setFormState] = React.useState<{
-    orgName: string;
-    orgDescrip: string;
-    location: string;
-    orgImage: string | null;
-  }>({
+  const [formState, setFormState] = React.useState({
     orgName: '',
     orgDescrip: '',
     location: '',
-    orgImage: null,
+    orgImage: '',
   });
-
   const [publicchecked, setPublicChecked] = React.useState(true);
   const [visiblechecked, setVisibleChecked] = React.useState(false);
-
   const [login] = useMutation(UPDATE_ORGANIZATION_MUTATION);
-
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgUpdate',
   });
-
   const { data, loading: loadingdata } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: currentUrl },
   });
-
   React.useEffect(() => {
     if (data) {
       setFormState({
@@ -49,15 +38,14 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
         orgName: data.organizations[0].name,
         orgDescrip: data.organizations[0].description,
         location: data.organizations[0].location,
+        orgImage: data.organizations[0].image,
       });
     }
   }, [data]);
-
   if (loadingdata) {
     return <div className="loader"></div>;
   }
-
-  const onSaveChangesClicked = async () => {
+  const login_link = async () => {
     try {
       const { data } = await login({
         variables: {
@@ -199,7 +187,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
               type="button"
               className={styles.greenregbtn}
               value="savechanges"
-              onClick={onSaveChangesClicked}
+              onClick={login_link}
             >
               {t('saveChanges')}
             </button>
