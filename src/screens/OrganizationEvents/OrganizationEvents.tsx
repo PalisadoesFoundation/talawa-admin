@@ -102,7 +102,7 @@ function OrganizationEvents(): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Congratulations! The Event is created.');
+        toast.success(t('eventCreated'));
         refetch();
         setFormState({
           title: '',
@@ -116,9 +116,7 @@ function OrganizationEvents(): JSX.Element {
     } catch (error: any) {
       /* istanbul ignore next */
       if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
+        toast.error(t('talawaApiUnavailable'));
       } else {
         toast.error(error.message);
       }

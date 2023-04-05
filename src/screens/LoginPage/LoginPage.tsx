@@ -85,9 +85,7 @@ function LoginPage(): JSX.Element {
       } catch (error: any) {
         /* istanbul ignore next */
         if (error.message === 'Failed to fetch') {
-          toast.error(
-            'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-          );
+          toast.error(t('talawaApiUnavailable'));
         } else {
           toast.error(error.message);
         }
@@ -112,7 +110,7 @@ function LoginPage(): JSX.Element {
       return data.recaptcha;
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error('Captcha Error!');
+      toast.error(t('captchaError'));
     }
   };
 
@@ -128,7 +126,7 @@ function LoginPage(): JSX.Element {
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
-      toast.error('Please, check the captcha.');
+      toast.error(t('Please_check_the_captcha'));
       return;
     }
 
@@ -151,9 +149,7 @@ function LoginPage(): JSX.Element {
 
           /* istanbul ignore next */
           if (data) {
-            toast.success(
-              'Successfully Registered. Please wait until you will be approved.'
-            );
+            toast.success(t('successfullyRegistered'));
 
             setSignFormState({
               signfirstName: '',
@@ -166,20 +162,18 @@ function LoginPage(): JSX.Element {
         } catch (error: any) {
           /* istanbul ignore next */
           if (error.message === 'Failed to fetch') {
-            toast.error(
-              'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-            );
+            toast.error(t('talawaApiUnavailable'));
           } else if (error.message) {
             toast.warn(error.message);
           } else {
-            toast.error('Something went wrong, Please try after sometime.');
+            toast.error(t('Something_went_wrong'));
           }
         }
       } else {
-        toast.warn('Password and Confirm password mismatches.');
+        toast.warn(t('passwordMismatches'));
       }
     } else {
-      toast.warn('Fill all the Details Correctly.');
+      toast.warn(t('fillCorrectly'));
     }
   };
 
@@ -192,7 +186,7 @@ function LoginPage(): JSX.Element {
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
-      toast.error('Please, check the captcha.');
+      toast.error(t('Please_check_the_captcha'));
       return;
     }
 
@@ -219,21 +213,19 @@ function LoginPage(): JSX.Element {
             window.location.replace('/orglist');
           }
         } else {
-          toast.warn('Sorry! you are not Authorised!');
+          toast.warn(t('notAuthorised'));
         }
       } else {
-        toast.warn('User not found!');
+        toast.warn(t('notFound'));
       }
     } catch (error: any) {
       /* istanbul ignore next */
       if (error.message == 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
+        toast.error(t('talawaApiUnavailable'));
       } else if (error.message) {
         toast.error(error.message);
       } else {
-        toast.error('Something went wrong, Please try after sometime.');
+        toast.error(t('Something_went_wrong'));
       }
     }
   };
