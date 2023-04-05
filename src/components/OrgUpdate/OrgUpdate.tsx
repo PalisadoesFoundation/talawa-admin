@@ -62,14 +62,12 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
       if (data) {
         window.location.assign(`/orgdash/id=${props.orgid}`);
 
-        toast.success('Successfully updated');
+        toast.success(t('successfulUpdated'));
       }
     } catch (error: any) {
       /* istanbul ignore next */
       if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
+        toast.error(t('talawaApiUnavailable'));
       } else {
         toast.error(error.message);
       }

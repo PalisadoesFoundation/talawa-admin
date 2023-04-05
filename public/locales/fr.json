@@ -15,7 +15,16 @@
     "forgotPassword": "Mot de passe oublié ?",
     "enterEmail": "entrez l'e-mail",
     "enterPassword": "Entrer le mot de passe",
-    "doNotOwnAnAccount": "Vous n'avez pas de compte ?"
+    "doNotOwnAnAccount": "Vous n'avez pas de compte ?",
+    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau.",
+    "captchaError": "Erreur de captcha !",
+    "Please_check_the_captcha": "Veuillez vérifier le captcha.",
+    "Something_went_wrong": "Quelque chose s'est mal passé, veuillez réessayer plus tard.",
+    "passwordMismatches": "Le mot de passe et la confirmation du mot de passe ne correspondent pas.",
+    "fillCorrectly": "Remplissez tous les détails correctement.",
+    "notAuthorised": "Désolé ! vous n'êtes pas autorisé !",
+    "notFound": "Utilisateur introuvable !",
+    "successfullyRegistered": "Enregistré avec succès. Veuillez patienter jusqu'à ce que vous soyez approuvé."
   },
   "listNavbar": {
     "talawa_portal": "Portail D'Administrateur Talawa",
@@ -65,7 +74,9 @@
     "admin": "ADMIN",
     "superAdmin": "SUPERADMIN",
     "user": "UTILISATEUR",
-    "enterName": "Entrez le nom"
+    "enterName": "Entrez le nom",
+    "roleUpdated": "Rôle mis à jour.",
+    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "requests": {
     "title": "Demandes Talawa",
@@ -75,7 +86,10 @@
     "email": "E-mail",
     "accept": "Accepter",
     "reject": "Rejeter",
-    "enterName": "Entrez le nom"
+    "enterName": "Entrez le nom",
+    "userApproved": "Approuvé par l'utilisateur",
+    "userRejected": "Utilisateur rejeté",
+    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "adminNavbar": {
     "talawa_portal": "Portail D'Administrateur Talawa",
@@ -114,7 +128,8 @@
     "deleteOrganization": "Supprimer l'organisation",
     "deleteMsg": "Voulez-vous supprimer cette organisation ?",
     "no": "Non",
-    "yes": "Oui"
+    "yes": "Oui",
+    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "organizationPeople": {
     "title": "Membres Talawa",
@@ -129,7 +144,9 @@
   },
   "userListCard": {
     "joined": "Inscrit",
-    "addAdmin": "Ajouter un administrateur"
+    "addAdmin": "Ajouter un administrateur",
+    "addedAsAdmin": "L'utilisateur est ajouté en tant qu'administrateur.",
+    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "orgAdminListCard": {
     "joined": "Inscrit",
@@ -137,7 +154,9 @@
     "removeAdmin": "Supprimer l'administrateur",
     "removeAdminMsg": "Voulez-vous supprimer cet administrateur ?",
     "no": "Non",
-    "yes": "Oui"
+    "yes": "Oui",
+    "adminRemoved": "L'administrateur est supprimé.",
+    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "orgPeopleListCard": {
     "joined": "Inscrit",
@@ -145,7 +164,9 @@
     "removeMember": "Supprimer le membre",
     "removeMemberMsg": "Voulez-vous supprimer ce membre ?",
     "no": "Non",
-    "yes": "Oui"
+    "yes": "Oui",
+    "memberRemoved": "Le membre est supprimé",
+    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "organizationEvents": {
     "title": "Événements Talawa",
@@ -170,7 +191,9 @@
     "enterFilter": "Entrez le filtre",
     "enterTitle": "Entrez le titre",
     "enterDescrip": "Entrez la description",
-    "eventLocation": "Entrez l'emplacement"
+    "eventLocation": "Entrez l'emplacement",
+    "eventCreated": "Toutes nos félicitations! L'événement est créé.",
+    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "eventListCard": {
     "location": "Emplacement",
@@ -191,7 +214,10 @@
     "isRegistrable": "Est enregistrable",
     "close": "Proche",
     "updatePost": "Mettre à jour le message",
-    "eventDetails": "Détails de l'évènement"
+    "eventDetails": "Détails de l'évènement",
+    "eventDeleted": "Événement supprimé avec succès.",
+    "eventUpdated": "Événement mis à jour avec succès.",
+    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "orgPost": {
     "title": "Postes de Talawa",
@@ -232,7 +258,10 @@
     "image": "Image",
     "video": "Vidéo",
     "close": "Proche",
-    "updatePost": "Mettre à jour le message"
+    "updatePost": "Mettre à jour le message",
+    "postDeleted": "Message supprimé avec succès.",
+    "postUpdated": "Message mis à jour avec succès.",
+    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "blockUnblockUser": {
     "title": "Talawa Bloquer/Débloquer l'utilisateur",
@@ -243,7 +272,10 @@
     "block_unblock": "Bloquer/Débloquer",
     "unblock": "Débloquer",
     "block": "Bloquer",
-    "orgName": "Entrez le nom"
+    "orgName": "Entrez le nom",
+    "blockedSuccessfully": "Utilisateur bloqué avec succès",
+    "Un-BlockedSuccessfully": "Utilisateur débloqué avec succès",
+    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "forgotPassword": {
     "title": "Mot de passe oublié Talawa",
@@ -256,7 +288,13 @@
     "changePassword": "Changer le mot de passe",
     "backToHome": "De retour à la maison",
     "userOtp": "par exemple. 12345",
-    "password": "Mot de passe"
+    "password": "Mot de passe",
+    "emailNotRegistered": "L'e-mail n'est pas enregistré.",
+    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau.",
+    "errorSendingMail": "Erreur lors de l'envoi du courrier.",
+    "passwordMismatches": "Le mot de passe et la confirmation du mot de passe ne correspondent pas.",
+    "passwordChanges": "Mot de passe modifié avec succès.",
+    "OTPsent": "OTP est envoyé à votre adresse e-mail enregistrée."
   },
   "pageNotFound": {
     "title": "404 introuvable",
@@ -307,7 +345,6 @@
     "saveChanges": "Sauvegarder les modifications",
     "cancel": "Annuler"
   },
-
   "userPasswordUpdate": {
     "previousPassword": "mot de passe précédent",
     "newPassword": "Nouveau mot de passe",
@@ -315,14 +352,15 @@
     "saveChanges": "Sauvegarder les modifications",
     "cancel": "Annuler"
   },
-
   "orgDelete": {
     "deleteOrg": "Supprimer l'organisation"
   },
   "membershipRequest": {
     "joined": "Inscrit",
     "accept": "Accepter",
-    "reject": "Rejeter"
+    "reject": "Rejeter",
+    "memberAdded": "c'est accepté",
+    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "orgUpdate": {
     "name": "Nom",
@@ -333,7 +371,9 @@
     "isRegistrable": "Est enregistrable",
     "saveChanges": "Sauvegarder les modifications",
     "cancel": "Annuler",
-    "enterNameOrganization": "Entrez le nom de l'organisation"
+    "enterNameOrganization": "Entrez le nom de l'organisation",
+    "successfulUpdated": "Mise à jour réussie",
+    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "addOnRegister": {
     "addNew": "Ajouter nouveau",
@@ -382,6 +422,8 @@
     "created": "Créé",
     "adminForOrganizations": "Administrateur pour les organisations",
     "membershipRequests": "Demandes d'adhésion",
-    "adminForEvents": "Administrateur pour les événements"
+    "adminForEvents": "Administrateur pour les événements",
+    "addedAsAdmin": "L'utilisateur est ajouté en tant qu'administrateur.",
+    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   }
 }

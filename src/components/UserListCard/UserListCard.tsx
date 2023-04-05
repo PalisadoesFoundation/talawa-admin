@@ -38,7 +38,7 @@ function UserListCard(props: UserListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('User is added as admin.');
+        toast.success(t('addedAsAdmin'));
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -46,9 +46,7 @@ function UserListCard(props: UserListCardProps): JSX.Element {
     } catch (error: any) {
       /* istanbul ignore next */
       if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
+        toast.error(t('talawaApiUnavailable'));
       } else {
         toast.error(error.message);
       }
