@@ -14,6 +14,7 @@ import styles from './MemberDetail.module.css';
 import { languages } from 'utils/languages';
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
+import { errorHandler } from 'utils/errorHandler';
 
 type MemberDetailProps = {
   id: string; // This is the userId
@@ -73,11 +74,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(t('talawaApiUnavailable'));
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
 

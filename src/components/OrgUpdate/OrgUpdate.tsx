@@ -7,6 +7,7 @@ import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import styles from './OrgUpdate.module.css';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import convertToBase64 from 'utils/convertToBase64';
+import { errorHandler } from 'utils/errorHandler';
 
 interface OrgUpdateProps {
   id: string;
@@ -78,11 +79,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(t('talawaApiUnavailable'));
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
 

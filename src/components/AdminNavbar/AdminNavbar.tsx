@@ -7,7 +7,6 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import Cookies from 'js-cookie';
 import i18next from 'i18next';
-import { toast } from 'react-toastify';
 import MenuIcon from '@mui/icons-material/Menu';
 import styles from './AdminNavbar.module.css';
 import AboutImg from 'assets/images/defaultImg.png';
@@ -17,6 +16,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { UPDATE_SPAM_NOTIFICATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { languages } from 'utils/languages';
+import { errorHandler } from 'utils/errorHandler';
 
 interface NavbarProps {
   targets: {
@@ -68,13 +68,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
           }
         } catch (error: any) {
           /* istanbul ignore next */
-          if (error.message === 'Failed to fetch') {
-            toast.error(
-              'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-            );
-          } else {
-            toast.error(error.message);
-          }
+          errorHandler(t, error);
         }
       }
     };

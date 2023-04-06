@@ -5,7 +5,6 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useSelector } from 'react-redux';
 import { RootState } from 'state/reducers';
 import { Container } from 'react-bootstrap';
-import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
@@ -19,6 +18,7 @@ import {
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import { errorHandler } from 'utils/errorHandler';
 
 function OrganizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
@@ -68,11 +68,7 @@ function OrganizationDashboard(): JSX.Element {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(t('talawaApiUnavailable'));
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
 
