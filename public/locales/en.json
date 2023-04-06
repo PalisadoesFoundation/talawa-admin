@@ -378,7 +378,7 @@
     "saveChanges": "Save Changes",
     "cancel": "Cancel",
     "enterNameOrganization": "Enter Organization Name",
-    "successfulUpdated": "Successfully updated",
+    "successfulUpdated": "Organization updated successfully",
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "addOnRegister": {
