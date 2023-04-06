@@ -139,7 +139,6 @@ function LoginPage(): JSX.Element {
       /[0-9]/.test(signPassword) &&
       /[^A-Za-z0-9]/.test(signPassword)
     ) {
-      console.log('yes');
       if (cPassword == signPassword) {
         try {
           const { data } = await signup({
