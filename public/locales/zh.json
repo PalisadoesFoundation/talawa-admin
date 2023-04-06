@@ -15,7 +15,16 @@
     "forgotPassword": "忘記密碼 ？",
     "enterEmail": "输入电子邮件",
     "enterPassword": "输入密码",
-    "doNotOwnAnAccount": "沒有帳戶嗎？"
+    "doNotOwnAnAccount": "沒有帳戶嗎？",
+    "talawaApiUnavailable": "服務不可用。它正在運行嗎？還要檢查您的網絡連接。",
+    "captchaError": "驗證碼錯誤！",
+    "Please_check_the_captcha": "請檢查驗證碼。",
+    "Something_went_wrong": "出了點問題，請稍後再試。",
+    "passwordMismatches": "密碼和確認密碼不匹配。",
+    "fillCorrectly": "正確填寫所有細節。",
+    "notAuthorised": "抱歉！你沒有被授權！",
+    "notFound": "找不到用戶！",
+    "successfullyRegistered": "註冊成功，請等待審核通過。"
   },
   "listNavbar": {
     "talawa_portal": "塔拉瓦管理門戶",
@@ -65,7 +74,9 @@
     "admin": "行政",
     "superAdmin": "超級管理員",
     "user": "用戶",
-    "enterName": "输入名字"
+    "enterName": "输入名字",
+    "roleUpdated": "角色已更新。",
+    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "requests": {
     "title": "塔拉瓦請求",
@@ -75,7 +86,10 @@
     "email": "電子郵件",
     "accept": "接受",
     "reject": "拒絕",
-    "enterName": "输入名字"
+    "enterName": "输入名字",
+    "userApproved": "用戶批准",
+    "userRejected": "用戶被拒絕",
+    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "adminNavbar": {
     "talawa_portal": "塔拉瓦管理門戶",
@@ -114,7 +128,8 @@
     "deleteOrganization": "刪除組織",
     "deleteMsg": "您要刪除此組織嗎？",
     "no": "不",
-    "yes": "是的"
+    "yes": "是的",
+    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "organizationPeople": {
     "title": "塔拉瓦成員",
@@ -129,7 +144,9 @@
   },
   "userListCard": {
     "joined": "加入",
-    "addAdmin": "添加管理員"
+    "addAdmin": "添加管理員",
+    "addedAsAdmin": "用戶被添加為管理員。",
+    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "orgAdminListCard": {
     "joined": "加入",
@@ -137,7 +154,9 @@
     "removeAdmin": "刪除管理員",
     "removeAdminMsg": "您要刪除此管理員嗎？",
     "no": "不",
-    "yes": "是的"
+    "yes": "是的",
+    "adminRemoved": "管理員被刪除。",
+    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "orgPeopleListCard": {
     "joined": "加入",
@@ -145,7 +164,9 @@
     "removeMember": "刪除成員",
     "removeMemberMsg": "您要刪除此成員嗎？",
     "no": "不",
-    "yes": "是的"
+    "yes": "是的",
+    "memberRemoved": "該會員已被刪除",
+    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "organizationEvents": {
     "title": "塔拉瓦事件",
@@ -170,7 +191,9 @@
     "enterFilter": "輸入過濾器",
     "enterTitle": "輸入標題",
     "enterDescrip": "輸入說明",
-    "eventLocation": "輸入位置"
+    "eventLocation": "輸入位置",
+    "eventCreated": "恭喜！事件已創建。",
+    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "eventListCard": {
     "location": "地點",
@@ -191,7 +214,10 @@
     "isRegistrable": "可註冊",
     "close": "關",
     "updatePost": "更新帖子",
-    "eventDetails": "活動詳情"
+    "eventDetails": "活動詳情",
+    "eventDeleted": "活动删除成功。",
+    "eventUpdated": "活動更新成功。",
+    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "orgPost": {
     "title": "塔拉瓦郵報",
@@ -232,7 +258,10 @@
     "image": "圖片",
     "video": "視頻",
     "close": "關",
-    "updatePost": "更新帖子"
+    "updatePost": "更新帖子",
+    "postDeleted": "帖子刪除成功。",
+    "postUpdated": "帖子更新成功。",
+    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "blockUnblockUser": {
     "title": "塔拉瓦封鎖/解除封鎖用戶",
@@ -243,7 +272,10 @@
     "block_unblock": "阻止/解除阻止",
     "unblock": "解除封鎖",
     "block": "堵塞",
-    "orgName": "輸入名字"
+    "orgName": "輸入名字",
+    "blockedSuccessfully": "用戶被成功阻止",
+    "Un-BlockedSuccessfully": "用戶解封成功",
+    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "forgotPassword": {
     "title": "塔拉瓦忘記密碼",
@@ -256,7 +288,13 @@
     "changePassword": "更改密碼",
     "backToHome": "回到家",
     "userOtp": "舉個例子。 12345",
-    "password": "密碼"
+    "password": "密碼",
+    "emailNotRegistered": "電子郵件未註冊。",
+    "talawaApiUnavailable": "服務不可用。它正在運行嗎？還要檢查您的網絡連接。",
+    "errorSendingMail": "發送郵件時出錯。",
+    "passwordMismatches": "密碼和確認密碼不匹配。",
+    "passwordChanges": "密碼修改成功。",
+    "OTPsent": "已發送到您的註冊郵箱。"
   },
   "pageNotFound": {
     "title": "404 未找到",
@@ -322,7 +360,9 @@
   "membershipRequest": {
     "joined": "加入",
     "accept": "接受",
-    "reject": "拒絕"
+    "reject": "拒絕",
+    "memberAdded": "它被接受",
+    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "orgUpdate": {
     "name": "姓名",
@@ -333,7 +373,9 @@
     "isRegistrable": "可註冊",
     "saveChanges": "保存更改",
     "cancel": "取消",
-    "enterNameOrganization": "輸入組織名稱"
+    "enterNameOrganization": "輸入組織名稱",
+    "successfulUpdated": "更新成功",
+    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "addOnRegister": {
     "addNew": "添新",
@@ -382,6 +424,8 @@
     "created": "创建",
     "adminForOrganizations": "组织管理员",
     "membershipRequests": "会员申请",
-    "adminForEvents": "事件管理员"
+    "adminForEvents": "事件管理员",
+    "addedAsAdmin": "用戶被添加為管理員。",
+    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   }
 }

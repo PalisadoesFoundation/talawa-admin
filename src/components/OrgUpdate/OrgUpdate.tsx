@@ -16,21 +16,32 @@ interface OrgUpdateProps {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function OrgUpdate(props: OrgUpdateProps): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
-  const [formState, setFormState] = React.useState({
+
+  const [formState, setFormState] = React.useState<{
+    orgName: string;
+    orgDescrip: string;
+    location: string;
+    orgImage: string | null;
+  }>({
     orgName: '',
     orgDescrip: '',
     location: '',
-    orgImage: '',
+    orgImage: null,
   });
+
   const [publicchecked, setPublicChecked] = React.useState(true);
   const [visiblechecked, setVisibleChecked] = React.useState(false);
+
   const [login] = useMutation(UPDATE_ORGANIZATION_MUTATION);
+
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgUpdate',
   });
+
   const { data, loading: loadingdata } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: currentUrl },
   });
+
   React.useEffect(() => {
     if (data) {
       setFormState({
@@ -38,14 +49,15 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
         orgName: data.organizations[0].name,
         orgDescrip: data.organizations[0].description,
         location: data.organizations[0].location,
-        orgImage: data.organizations[0].image,
       });
     }
   }, [data]);
+
   if (loadingdata) {
     return <div className="loader"></div>;
   }
-  const login_link = async () => {
+
+  const onSaveChangesClicked = async () => {
     try {
       const { data } = await login({
         variables: {
@@ -62,14 +74,12 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
       if (data) {
         window.location.assign(`/orgdash/id=${props.orgid}`);
 
-        toast.success('Successfully updated');
+        toast.success(t('successfulUpdated'));
       }
     } catch (error: any) {
       /* istanbul ignore next */
       if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
+        toast.error(t('talawaApiUnavailable'));
       } else {
         toast.error(error.message);
       }
@@ -189,7 +199,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
               type="button"
               className={styles.greenregbtn}
               value="savechanges"
-              onClick={login_link}
+              onClick={onSaveChangesClicked}
             >
               {t('saveChanges')}
             </button>
