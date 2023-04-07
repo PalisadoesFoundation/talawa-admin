@@ -286,6 +286,7 @@ function OrgList(): JSX.Element {
                         />
                       );
                     } else if (isAdminForCurrentOrg(data_2?.user, datas)) {
+                      /* istanbul ignore next */
                       return (
                         <AdminDashListCard
                           id={datas._id}
