@@ -281,7 +281,10 @@ const getTotalNumPeople = (userType: string) => {
 
 describe('Organisation People Page', () => {
   const searchData = {
-    name: 'Aditya',
+    firstName: 'Aditya',
+    lastNameMember: 'Memberguy',
+    lastNameAdmin: 'Adminguy',
+    lastNameUser: 'Userguytwo',
     location: 'Delhi, India',
     event: 'Event',
   };
@@ -501,12 +504,66 @@ describe('Organisation People Page', () => {
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter First Name/i),
-      searchData.name
+      searchData.firstName
     );
     await wait();
     expect(screen.getByPlaceholderText(/Enter First Name/i)).toHaveValue(
-      searchData.name
+      searchData.firstName
     );
+  });
+
+  test('Testing MEMBERS list with filters', async () => {
+    render(
+      <MockedProvider
+        addTypename={true}
+        link={link}
+        defaultOptions={{
+          watchQuery: { fetchPolicy: 'no-cache' },
+          query: { fetchPolicy: 'no-cache' },
+        }}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationPeople />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    await wait();
+
+    userEvent.click(screen.getByLabelText(/Members/i));
+    await wait();
+    expect(screen.getByLabelText(/Members/i)).toBeChecked();
+    await wait();
+
+    const firstNameInput = screen.getByPlaceholderText(/Enter First Name/i);
+    const lastNameInput = screen.getByPlaceholderText(/Enter Last Name/i);
+
+    // Only First Name
+    userEvent.type(firstNameInput, searchData.firstName);
+    await wait();
+
+    let findtext = screen.getByText(/Aditya Memberguy/i);
+    await wait();
+    expect(findtext).toBeInTheDocument();
+
+    // First & Last Name
+    userEvent.type(lastNameInput, searchData.lastNameMember);
+    await wait();
+
+    findtext = screen.getByText(/Aditya Memberguy/i);
+    await wait();
+    expect(findtext).toBeInTheDocument();
+
+    // Only Last Name
+    userEvent.type(firstNameInput, '');
+    await wait();
+
+    findtext = screen.getByText(/Aditya Memberguy/i);
+    await wait();
+    expect(findtext).toBeInTheDocument();
   });
 
   test('Testing ADMIN LIST', async () => {
@@ -542,13 +599,69 @@ describe('Organisation People Page', () => {
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter First Name/i),
-      searchData.name
+      searchData.firstName
     );
     await wait();
     expect(screen.getByPlaceholderText(/Enter First Name/i)).toHaveValue(
-      searchData.name
+      searchData.firstName
     );
     await wait();
+  });
+
+  test('Testing ADMIN list with filters', async () => {
+    window.location.assign('/orgpeople/id=orgid');
+    render(
+      <MockedProvider
+        addTypename={true}
+        link={link}
+        defaultOptions={{
+          watchQuery: { fetchPolicy: 'no-cache' },
+          query: { fetchPolicy: 'no-cache' },
+        }}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationPeople />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByLabelText(/Admins/i));
+    await wait();
+    expect(screen.getByLabelText(/Admins/i)).toBeChecked();
+    await wait();
+
+    const firstNameInput = screen.getByPlaceholderText(/Enter First Name/i);
+    const lastNameInput = screen.getByPlaceholderText(/Enter Last Name/i);
+
+    // Only First Name
+    userEvent.type(firstNameInput, searchData.firstName);
+    await wait();
+
+    let findtext = screen.getByText(/Aditya Adminguy/i);
+    await wait();
+    expect(findtext).toBeInTheDocument();
+
+    // First & Last Name
+    userEvent.type(lastNameInput, searchData.lastNameAdmin);
+    await wait();
+
+    findtext = screen.getByText(/Aditya Adminguy/i);
+    await wait();
+    expect(findtext).toBeInTheDocument();
+
+    // Only Last Name
+    userEvent.type(firstNameInput, '');
+    await wait();
+
+    findtext = screen.getByText(/Aditya Adminguy/i);
+    await wait();
+    expect(findtext).toBeInTheDocument();
   });
 
   test('Testing USERS list', async () => {
@@ -576,6 +689,59 @@ describe('Organisation People Page', () => {
     expect(screen.getByLabelText(/Users/i)).toBeChecked();
     await wait();
     const findtext = screen.getByText('Aditya Userguy');
+    expect(findtext).toBeInTheDocument();
+  });
+
+  test('Testing USERS list with filters', async () => {
+    render(
+      <MockedProvider
+        addTypename={true}
+        link={link}
+        defaultOptions={{
+          watchQuery: { fetchPolicy: 'no-cache' },
+          query: { fetchPolicy: 'no-cache' },
+        }}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationPeople />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    await wait();
+    userEvent.click(screen.getByLabelText(/Users/i));
+    await wait();
+    expect(screen.getByLabelText(/Users/i)).toBeChecked();
+    await wait();
+
+    const firstNameInput = screen.getByPlaceholderText(/Enter First Name/i);
+    const lastNameInput = screen.getByPlaceholderText(/Enter Last Name/i);
+
+    // Only First Name
+    userEvent.type(firstNameInput, searchData.firstName);
+    await wait();
+
+    let findtext = screen.getByText(/Aditya Userguytwo/i);
+    await wait();
+    expect(findtext).toBeInTheDocument();
+
+    // First & Last Name
+    userEvent.type(lastNameInput, searchData.lastNameUser);
+    await wait();
+
+    findtext = screen.getByText(/Aditya Userguytwo/i);
+    await wait();
+    expect(findtext).toBeInTheDocument();
+
+    // Only Last Name
+    userEvent.type(firstNameInput, '');
+    await wait();
+
+    findtext = screen.getByText(/Aditya Userguytwo/i);
+    await wait();
     expect(findtext).toBeInTheDocument();
   });
 
