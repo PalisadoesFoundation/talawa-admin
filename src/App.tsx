@@ -16,7 +16,6 @@ import OrgPost from 'screens/OrgPost/OrgPost';
 import OrgSettings from 'screens/OrgSettings/OrgSettings';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import AddOnStore from 'components/AddOn/core/AddOnStore/AddOnStore';
-import * as installedPlugins from 'components/plugins/index';
 import ForgotPassword from 'screens/ForgotPassword/ForgotPassword';
 import Roles from 'screens/Roles/Roles';
 import Requests from 'screens/Requests/Requests';
@@ -51,19 +50,6 @@ function App(): JSX.Element {
 
   const { data, loading } = useQuery(CHECK_AUTH);
 
-  const extraRoutes = Object.entries(installedPlugins).map(
-    (plugin: any, index) => {
-      const ExtraComponent = plugin[1];
-      return (
-        <SecuredRoute
-          key={index}
-          path={`/plugin/${plugin[0].toLowerCase()}`}
-          component={ExtraComponent}
-        />
-      );
-    }
-  );
-
   if (loading) {
     return <div className={styles.loader}></div>;
   }
@@ -97,7 +83,6 @@ function App(): JSX.Element {
         <SecuredRoute path="/roles" component={Roles} />
         <SecuredRoute path="/requests" component={Requests} />
         <SecuredRoute path="/blockuser" component={BlockUser} />
-        {extraRoutes}
         <Route exact path="/forgotPassword" component={ForgotPassword} />
         <Route exact path="*" component={PageNotFound} />
       </Switch>
