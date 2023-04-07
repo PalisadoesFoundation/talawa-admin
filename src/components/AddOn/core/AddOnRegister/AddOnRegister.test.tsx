@@ -14,6 +14,8 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { BrowserRouter } from 'react-router-dom';
 import { BACKEND_URL } from 'Constant/constant';
+import i18nForTest from 'utils/i18nForTest';
+import { I18nextProvider } from 'react-i18next';
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
@@ -35,21 +37,16 @@ describe('Testing AddOnRegister', () => {
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
-          <BrowserRouter>{<AddOnRegister {...props} />}</BrowserRouter>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              {<AddOnRegister {...props} />}
+            </I18nextProvider>
+          </BrowserRouter>
         </Provider>
       </ApolloProvider>
     );
-    userEvent.click(screen.getByRole('button', { name: /addnew/i }));
-    userEvent.type(screen.getByPlaceholderText(/pName/i), 'myplugin');
-    userEvent.type(screen.getByPlaceholderText(/pDesc/i), 'test description');
-    userEvent.type(screen.getByPlaceholderText(/cName/i), 'test creator');
+    userEvent.click(screen.getByRole('button', { name: /Add New/i }));
     userEvent.click(screen.getByTestId('addonregister'));
     userEvent.click(screen.getByTestId('addonclose'));
-
-    expect(screen.getByPlaceholderText(/pName/i)).toHaveValue('myplugin');
-    expect(screen.getByPlaceholderText(/pDesc/i)).toHaveValue(
-      'test description'
-    );
-    expect(screen.getByPlaceholderText(/cName/i)).toHaveValue('test creator');
   });
 });

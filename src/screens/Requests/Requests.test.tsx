@@ -306,8 +306,6 @@ describe('Testing Request screen', () => {
 
     await wait(200);
 
-    console.log(container.textContent);
-
     expect(container.textContent).toMatch(
       'Organizations not found, please create an organization through dashboard'
     );

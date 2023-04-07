@@ -106,10 +106,6 @@ function OrgList(): JSX.Element {
     const location = _location.trim();
 
     try {
-      if (!name || !descrip || !location) {
-        throw new Error('Text fields cannot be empty strings');
-      }
-
       const { data } = await create({
         variables: {
           name: name,
