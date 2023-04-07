@@ -254,6 +254,59 @@ const MOCKS = [
       },
     },
   },
+
+  {
+    request: {
+      query: ORGANIZATIONS_LIST,
+      variables: {
+        id: 'orgid',
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: 'orgid',
+            image: '',
+            creator: {
+              firstName: 'firstName',
+              lastName: 'lastName',
+              email: 'email',
+            },
+            name: 'name',
+            description: 'description',
+            location: 'location',
+            members: {
+              _id: 'id',
+              firstName: 'firstName',
+              lastName: 'lastName',
+              email: 'email',
+            },
+            admins: {
+              _id: 'id',
+              firstName: 'firstName',
+              lastName: 'lastName',
+              email: 'email',
+            },
+            membershipRequests: {
+              _id: 'id',
+              user: {
+                firstName: 'firstName',
+                lastName: 'lastName',
+                email: 'email',
+              },
+            },
+            blockedUsers: {
+              _id: 'id',
+              firstName: 'firstName',
+              lastName: 'lastName',
+              email: 'email',
+            },
+          },
+        ],
+      },
+    },
+  },
 ];
 
 const link = new StaticMockLink(MOCKS, true);
@@ -568,6 +621,7 @@ describe('Organisation People Page', () => {
 
   test('Testing ADMIN LIST', async () => {
     window.location.assign('/orgpeople/id=orgid');
+
     render(
       <MockedProvider
         addTypename={true}
