@@ -274,20 +274,6 @@ async function wait(ms = 2) {
   });
 }
 
-// The numbers added to the total number of each people type is based
-// on the number of the prepended objects in the mocks being added to
-// the generated ones
-const getTotalNumPeople = (userType: string) => {
-  switch (userType) {
-    case 'members':
-      return members.length + 1;
-    case 'users':
-      return users.length + 2;
-    case 'admins':
-      return admins.length + 1;
-  }
-};
-
 describe('Organisation People Page', () => {
   const searchData = {
     name: 'Aditya',
@@ -337,8 +323,6 @@ describe('Organisation People Page', () => {
       const rowsPerPageOptions: any[] = Array.from(
         rowsPerPageSelect?.querySelectorAll('option')
       );
-
-      const peopleListContainer = screen.getByTestId('orgpeoplelist');
 
       //Change the selected option of dropdown to the value of the current option
       userEvent.selectOptions(
