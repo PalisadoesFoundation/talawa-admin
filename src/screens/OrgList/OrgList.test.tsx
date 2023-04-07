@@ -147,7 +147,7 @@ const MOCKS_EMPTY = [
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_EMPTY, true);
 
-async function wait(ms = 0) {
+async function wait(ms = 100) {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);

@@ -22,7 +22,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { USER_ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
-async function wait(ms = 0) {
+async function wait(ms = 100) {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
