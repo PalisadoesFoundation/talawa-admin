@@ -20,6 +20,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 const members: any[] = [];
 const admins: any[] = [];
 const users: any[] = [];
+
 for (let i = 0; i < 100; i++) {
   members.push({
     __typename: 'User',
@@ -108,6 +109,7 @@ const MOCKS = [
       },
     },
   },
+
   {
     //These are mocks for 1st query (member list)
     request: {
@@ -115,7 +117,7 @@ const MOCKS = [
       variables: {
         orgId: undefined,
         firstName_contains: '',
-        event_title_contains: '',
+        lastName_contains: '',
       },
     },
     result: {
@@ -164,9 +166,10 @@ const MOCKS = [
     request: {
       query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
       variables: {
-        orgId: undefined,
+        orgId: 'orgid',
         firstName_contains: '',
-        admin_for: undefined,
+        lastName_contains: '',
+        admin_for: 'orgid',
       },
     },
     result: {
@@ -201,6 +204,7 @@ const MOCKS = [
               image: null,
               email: 'admin@gmail.com',
               createdAt: '2023-03-02T03:22:08.101Z',
+              lol: true,
             },
             ...admins,
           ],
@@ -213,6 +217,10 @@ const MOCKS = [
     //This is mock for user list
     request: {
       query: USER_LIST,
+      variables: {
+        firstName_contains: '',
+        lastName_contains: '',
+      },
     },
     result: {
       data: {
@@ -247,6 +255,7 @@ const MOCKS = [
     },
   },
 ];
+
 const link = new StaticMockLink(MOCKS, true);
 async function wait(ms = 2) {
   await act(() => {
@@ -295,6 +304,7 @@ describe('Organisation People Page', () => {
     await screen.findByTestId('rowsPPSelect');
 
     // Get the reference to all userTypes through the radio buttons in the DOM
+    // => users, members, admins
     const allPeopleTypes = Array.from(
       screen.getByTestId('usertypelist').querySelectorAll('input[type="radio"]')
     ).map((radioButton: HTMLInputElement | any) => radioButton.dataset?.testid);
@@ -316,13 +326,14 @@ describe('Organisation People Page', () => {
       }
 
       // Get all possible dropdown options
+      // => -1, 5, 10, 30
       const rowsPerPageOptions: any[] = Array.from(
         rowsPerPageSelect?.querySelectorAll('option')
       );
 
       const peopleListContainer = screen.getByTestId('orgpeoplelist');
 
-      //Change the selected option of dropdown to the value of the current option
+      // Change the selected option of dropdown to the value of the current option
       userEvent.selectOptions(
         rowsPerPageSelect,
         rowsPerPageOptions[currRowPPindex].textContent
@@ -478,22 +489,28 @@ describe('Organisation People Page', () => {
       </MockedProvider>
     );
     await wait();
+
     userEvent.click(screen.getByLabelText(/Members/i));
     await wait();
     expect(screen.getByLabelText(/Members/i)).toBeChecked();
     await wait();
+
     const findtext = screen.getByText(/Aditya Memberguy/i);
     await wait();
     expect(findtext).toBeInTheDocument();
-    userEvent.type(screen.getByPlaceholderText(/Enter Name/i), searchData.name);
+
+    userEvent.type(
+      screen.getByPlaceholderText(/Enter First Name/i),
+      searchData.name
+    );
     await wait();
-    expect(screen.getByPlaceholderText(/Enter Name/i)).toHaveValue(
+    expect(screen.getByPlaceholderText(/Enter First Name/i)).toHaveValue(
       searchData.name
     );
   });
 
   test('Testing ADMIN LIST', async () => {
-    window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af1');
+    window.location.assign('/orgpeople/id=orgid');
     render(
       <MockedProvider
         addTypename={true}
@@ -512,24 +529,29 @@ describe('Organisation People Page', () => {
         </BrowserRouter>
       </MockedProvider>
     );
+
     await wait();
+
     userEvent.click(screen.getByLabelText(/Admins/i));
     await wait();
     expect(screen.getByLabelText(/Admins/i)).toBeChecked();
     await wait();
+
     const findtext = screen.getByText('Aditya Adminguy');
     expect(findtext).toBeInTheDocument();
 
-    userEvent.type(screen.getByPlaceholderText(/Enter Name/i), searchData.name);
+    userEvent.type(
+      screen.getByPlaceholderText(/Enter First Name/i),
+      searchData.name
+    );
     await wait();
-    expect(screen.getByPlaceholderText(/Enter Name/i)).toHaveValue(
+    expect(screen.getByPlaceholderText(/Enter First Name/i)).toHaveValue(
       searchData.name
     );
     await wait();
   });
 
   test('Testing USERS list', async () => {
-    window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af1');
     render(
       <MockedProvider
         addTypename={true}
