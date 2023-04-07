@@ -79,6 +79,9 @@ export const USER_LIST = gql`
         _id
         name
       }
+      joinedOrganizations {
+        _id
+      }
       createdAt
     }
   }

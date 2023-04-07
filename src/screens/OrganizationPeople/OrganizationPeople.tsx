@@ -299,31 +299,52 @@ function OrganizationPeople(): JSX.Element {
                             page * rowsPerPage + rowsPerPage
                           )
                         : data.users
-                      ).map(
-                        (datas: {
-                          _id: string;
-                          lastName: string;
-                          firstName: string;
-                          image: string;
-                          email: string;
-                          createdAt: string;
-                        }) => {
-                          return (
-                            <UserListCard
-                              key={datas._id}
-                              id={datas._id}
-                              memberImage={datas.image}
-                              joinDate={dayjs(datas.createdAt).format(
-                                'DD/MM/YYYY'
-                              )}
-                              memberName={
-                                datas.firstName + ' ' + datas.lastName
-                              }
-                              memberEmail={datas.email}
-                            />
-                          );
-                        }
                       )
+                        .filter(
+                          (datas: {
+                            _id: string;
+                            lastName: string;
+                            firstName: string;
+                            image: string;
+                            email: string;
+                            createdAt: string;
+                            joinedOrganizations: {
+                              __typename: string;
+                              _id: string;
+                            }[];
+                          }) => {
+                            const pathname = window.location.pathname;
+                            const id = pathname.split('=')[1];
+                            return datas.joinedOrganizations.some(
+                              (org) => org._id === id
+                            );
+                          }
+                        )
+                        .map(
+                          (datas: {
+                            _id: string;
+                            lastName: string;
+                            firstName: string;
+                            image: string;
+                            email: string;
+                            createdAt: string;
+                          }) => {
+                            return (
+                              <UserListCard
+                                key={datas._id}
+                                id={datas._id}
+                                memberImage={datas.image}
+                                joinDate={dayjs(datas.createdAt).format(
+                                  'DD/MM/YYYY'
+                                )}
+                                memberName={
+                                  datas.firstName + ' ' + datas.lastName
+                                }
+                                memberEmail={datas.email}
+                              />
+                            );
+                          }
+                        )
                     : null
                   : /* istanbul ignore next */
                     null}
