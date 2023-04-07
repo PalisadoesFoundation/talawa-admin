@@ -94,7 +94,7 @@ function OrganizationPeople(): JSX.Element {
   if (error) {
     window.location.assign('/orglist');
   }
-  
+
   /* istanbul ignore next */
   const handleFirstNameSearchChange = (e: any) => {
     const { value } = e.target;
