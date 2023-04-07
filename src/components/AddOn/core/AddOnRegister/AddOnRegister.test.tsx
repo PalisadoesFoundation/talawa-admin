@@ -1,7 +1,8 @@
 // import React from 'react';
 // import { render, screen } from '@testing-library/react';
 // import userEvent from '@testing-library/user-event';
-// import AddOnRegister from './AddOnRegister';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import AddOnRegister from './AddOnRegister';
 // import {
 //   ApolloClient,
 //   NormalizedCacheObject,
