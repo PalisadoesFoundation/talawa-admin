@@ -18,7 +18,7 @@ import { RootState } from 'state/reducers';
 import PaginationList from 'components/PaginationList/PaginationList';
 import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
-import PostNotFound from 'components/PostNotFound/PostNotFound';
+import NotFound from 'components/NotFound/NotFound';
 import { Form as StyleBox } from 'react-bootstrap';
 
 function OrgPost(): JSX.Element {
@@ -230,7 +230,7 @@ function OrgPost(): JSX.Element {
                   }
                 )
               ) : (
-                <PostNotFound title="post" keyPrefix="postNotFound" />
+                <NotFound title="post" keyPrefix="postNotFound" />
               )}
             </div>
           </div>

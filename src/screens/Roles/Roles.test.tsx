@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
+import { ToastContainer } from 'react-toastify';
 
 import Roles from './Roles';
 import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -394,5 +395,47 @@ describe('Testing Roles screen', () => {
     );
 
     await wait();
+  });
+
+  test('Should render warning alert when there are no organizations', async () => {
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <Roles />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(container.textContent).toMatch(
+      'Organizations not found, please create an organization through dashboard'
+    );
+  });
+
+  test('Should not render warning alert when there are organizations present', async () => {
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <Roles />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(container.textContent).not.toMatch(
+      'Organizations not found, please create an organization through dashboard'
+    );
   });
 });

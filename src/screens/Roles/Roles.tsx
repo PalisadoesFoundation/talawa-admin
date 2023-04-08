@@ -12,7 +12,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
 import PaginationList from 'components/PaginationList/PaginationList';
-import PostNotFound from 'components/PostNotFound/PostNotFound';
+import NotFound from 'components/NotFound/NotFound';
 
 const Roles = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'roles' });
@@ -243,7 +243,7 @@ const Roles = () => {
                         }
                       )
                     ) : (
-                      <PostNotFound title="user" keyPrefix="userNotFound" />
+                      <NotFound title="user" keyPrefix="userNotFound" />
                     )}
                   </tbody>
                 </table>
