@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-
+import * as installedPlugins from 'components/plugins/index';
 // import './App.css';
 import styles from './App.module.css';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
@@ -50,6 +50,19 @@ function App(): JSX.Element {
 
   const { data, loading } = useQuery(CHECK_AUTH);
 
+  const extraRoutes = Object.entries(installedPlugins).map(
+    (plugin: any, index) => {
+      const ExtraComponent = plugin[1];
+      return (
+        <SecuredRoute
+          key={index}
+          path={`/plugin/${plugin[0].toLowerCase()}`}
+          component={ExtraComponent}
+        />
+      );
+    }
+  );
+
   if (loading) {
     return <div className={styles.loader}></div>;
   }
@@ -83,6 +96,7 @@ function App(): JSX.Element {
         <SecuredRoute path="/roles" component={Roles} />
         <SecuredRoute path="/requests" component={Requests} />
         <SecuredRoute path="/blockuser" component={BlockUser} />
+        {extraRoutes}
         <Route exact path="/forgotPassword" component={ForgotPassword} />
         <Route exact path="*" component={PageNotFound} />
       </Switch>
