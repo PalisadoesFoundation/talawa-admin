@@ -56,7 +56,155 @@ for (let i = 0; i < 100; i++) {
   });
 }
 
-const MOCKS = [
+const createMemberMock = (
+  orgId = '',
+  firstName_contains = '',
+  lastName_contains = ''
+) => ({
+  request: {
+    query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+    variables: {
+      orgId: orgId,
+      firstName_contains,
+      lastName_contains,
+    },
+  },
+  result: {
+    data: {
+      organizationsMemberConnection: {
+        __typename: 'UserConnection',
+        edges: [
+          {
+            __typename: 'User',
+            _id: '64001660a711c62d5b4076a2',
+            firstName: 'Aditya',
+            lastName: 'Memberguy',
+            image: null,
+            email: 'member@gmail.com',
+            createdAt: '2023-03-02T03:22:08.101Z',
+          },
+          ...members,
+        ],
+      },
+    },
+  },
+  newData: () => ({
+    data: {
+      organizationsMemberConnection: {
+        __typename: 'UserConnection',
+        edges: [
+          {
+            __typename: 'User',
+            _id: '64001660a711c62d5b4076a2',
+            firstName: 'Aditya',
+            lastName: 'Memberguy',
+            image: null,
+            email: 'member@gmail.com',
+            createdAt: '2023-03-02T03:22:08.101Z',
+          },
+          ...members,
+        ],
+      },
+    },
+  }),
+});
+
+const createAdminMock = (
+  orgId = '',
+  firstName_contains = '',
+  lastName_contains = '',
+  admin_for = ''
+) => ({
+  request: {
+    query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+    variables: {
+      orgId,
+      firstName_contains,
+      lastName_contains,
+      admin_for,
+    },
+  },
+  result: {
+    data: {
+      organizationsMemberConnection: {
+        __typename: 'UserConnection',
+        edges: [
+          {
+            __typename: 'User',
+            _id: '64001660a711c62d5b4076a2',
+            firstName: 'Aditya',
+            lastName: 'Adminguy',
+            image: null,
+            email: 'admin@gmail.com',
+            createdAt: '2023-03-02T03:22:08.101Z',
+          },
+          ...admins,
+        ],
+      },
+    },
+  },
+  newData: () => ({
+    data: {
+      organizationsMemberConnection: {
+        __typename: 'UserConnection',
+        edges: [
+          {
+            __typename: 'User',
+            _id: '64001660a711c62d5b4076a2',
+            firstName: 'Aditya',
+            lastName: 'Adminguy',
+            image: null,
+            email: 'admin@gmail.com',
+            createdAt: '2023-03-02T03:22:08.101Z',
+            lol: true,
+          },
+        ],
+      },
+    },
+  }),
+});
+
+const createUserMock = (firstName_contains = '', lastName_contains = '') => ({
+  request: {
+    query: USER_LIST,
+    variables: {
+      firstName_contains,
+      lastName_contains,
+    },
+  },
+  result: {
+    data: {
+      users: [
+        {
+          __typename: 'User',
+          firstName: 'Aditya',
+          lastName: 'Userguy',
+          image: null,
+          _id: '64001660a711c62d5b4076a2',
+          email: 'adidacreator1@gmail.com',
+          userType: 'SUPERADMIN',
+          adminApproved: true,
+          organizationsBlockedBy: [],
+          createdAt: '2023-03-02T03:22:08.101Z',
+        },
+        {
+          __typename: 'User',
+          firstName: 'Aditya',
+          lastName: 'Userguytwo',
+          image: null,
+          _id: '6402030dce8e8406b8f07b0e',
+          email: 'adi1@gmail.com',
+          userType: 'USER',
+          adminApproved: true,
+          organizationsBlockedBy: [],
+          createdAt: '2023-03-03T14:24:13.084Z',
+        },
+      ],
+    },
+  },
+});
+
+const MOCKS: any[] = [
   {
     request: {
       query: ORGANIZATIONS_LIST,
@@ -115,7 +263,7 @@ const MOCKS = [
     request: {
       query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
       variables: {
-        orgId: undefined,
+        orgId: 'orgid',
         firstName_contains: '',
         lastName_contains: '',
       },
@@ -162,7 +310,6 @@ const MOCKS = [
   },
 
   {
-    //This is mock for Admin list
     request: {
       query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
       variables: {
@@ -307,6 +454,18 @@ const MOCKS = [
       },
     },
   },
+
+  createMemberMock('orgid', 'Aditya', ''),
+  createMemberMock('orgid', '', 'Memberguy'),
+  createMemberMock('orgid', 'Aditya', 'Memberguy'),
+
+  createAdminMock('orgid', 'Aditya', '', 'orgid'),
+  createAdminMock('orgid', '', 'Adminguy', 'orgid'),
+  createAdminMock('orgid', 'Aditya', 'Adminguy', 'orgid'),
+
+  createUserMock('Aditya', ''),
+  createUserMock('', 'Userguytwo'),
+  createUserMock('Aditya', 'Userguytwo'),
 ];
 
 const link = new StaticMockLink(MOCKS, true);
@@ -332,7 +491,7 @@ const getTotalNumPeople = (userType: string) => {
   }
 };
 
-describe('Organisation People Page', () => {
+describe('Organization People Page', () => {
   const searchData = {
     firstName: 'Aditya',
     lastNameMember: 'Memberguy',
@@ -445,6 +604,7 @@ describe('Organisation People Page', () => {
       MOCKS[1]?.result?.data?.organizationsMemberConnection?.edges;
     const dataQuery2 =
       MOCKS[2]?.result?.data?.organizationsMemberConnection?.edges;
+
     const dataQuery3 = MOCKS[3]?.result?.data?.users;
 
     expect(dataQuery1).toEqual([
@@ -526,6 +686,7 @@ describe('Organisation People Page', () => {
   });
 
   test('Testing MEMBERS list', async () => {
+    window.location.assign('/orgpeople/id=orgid');
     render(
       <MockedProvider
         addTypename={true}
@@ -563,9 +724,13 @@ describe('Organisation People Page', () => {
     expect(screen.getByPlaceholderText(/Enter First Name/i)).toHaveValue(
       searchData.firstName
     );
+
+    await wait();
+    expect(window.location).toBeAt('/orgpeople/id=orgid');
   });
 
   test('Testing MEMBERS list with filters', async () => {
+    window.location.assign('/orgpeople/id=orgid');
     render(
       <MockedProvider
         addTypename={true}
@@ -617,6 +782,9 @@ describe('Organisation People Page', () => {
     findtext = screen.getByText(/Aditya Memberguy/i);
     await wait();
     expect(findtext).toBeInTheDocument();
+
+    await wait();
+    expect(window.location).toBeAt('/orgpeople/id=orgid');
   });
 
   test('Testing ADMIN LIST', async () => {
@@ -660,6 +828,9 @@ describe('Organisation People Page', () => {
       searchData.firstName
     );
     await wait();
+
+    await wait();
+    expect(window.location).toBeAt('/orgpeople/id=orgid');
   });
 
   test('Testing ADMIN list with filters', async () => {
@@ -716,9 +887,14 @@ describe('Organisation People Page', () => {
     findtext = screen.getByText(/Aditya Adminguy/i);
     await wait();
     expect(findtext).toBeInTheDocument();
+
+    await wait();
+    expect(window.location).toBeAt('/orgpeople/id=orgid');
   });
 
   test('Testing USERS list', async () => {
+    window.location.assign('/orgpeople/id=orgid');
+
     render(
       <MockedProvider
         addTypename={true}
@@ -744,9 +920,14 @@ describe('Organisation People Page', () => {
     await wait();
     const findtext = screen.getByText('Aditya Userguy');
     expect(findtext).toBeInTheDocument();
+
+    await wait();
+    expect(window.location).toBeAt('/orgpeople/id=orgid');
   });
 
   test('Testing USERS list with filters', async () => {
+    window.location.assign('/orgpeople/id=orgid');
+
     render(
       <MockedProvider
         addTypename={true}
@@ -797,6 +978,9 @@ describe('Organisation People Page', () => {
     findtext = screen.getByText(/Aditya Userguytwo/i);
     await wait();
     expect(findtext).toBeInTheDocument();
+
+    await wait();
+    expect(window.location).toBeAt('/orgpeople/id=orgid');
   });
 
   test('No Mock Data test', async () => {
