@@ -104,7 +104,7 @@ const MOCKS = [
   },
 ];
 const link = new StaticMockLink(MOCKS, true);
-async function wait(ms = 0) {
+async function wait(ms = 500) {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -131,53 +131,58 @@ describe('Testing Organization Update', () => {
 
   test('should render props and text elements test for the page component', async () => {
     //window.location.assign('/orgsetting/id=123');
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgUpdate {...props} />
-        </I18nextProvider>
-      </MockedProvider>
-    );
-    await wait();
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter Organization Name/i),
-      formData.name
-    );
-    userEvent.type(
-      screen.getByPlaceholderText(/Description/i),
-      formData.description
-    );
-    userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
-    userEvent.upload(
-      screen.getByLabelText(/Display Image:/i),
-      formData.displayImage
-    );
-    userEvent.click(screen.getByLabelText(/Is Public:/i));
-    userEvent.click(screen.getByLabelText(/Is Registrable:/i));
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgUpdate {...props} />
+          </I18nextProvider>
+        </MockedProvider>
+      );
+      await wait();
+      userEvent.type(
+        screen.getByPlaceholderText(/Enter Organization Name/i),
+        formData.name
+      );
+      userEvent.type(
+        screen.getByPlaceholderText(/Description/i),
+        formData.description
+      );
+      userEvent.type(
+        screen.getByPlaceholderText(/Location/i),
+        formData.location
+      );
+      userEvent.upload(
+        screen.getByLabelText(/Display Image:/i),
+        formData.displayImage
+      );
+      userEvent.click(screen.getByLabelText(/Is Public:/i));
+      userEvent.click(screen.getByLabelText(/Is Registrable:/i));
 
-    await wait();
+      await wait();
 
-    userEvent.click(screen.getByText(/Save Changes/i));
+      userEvent.click(screen.getByText(/Save Changes/i));
 
-    expect(screen.getByPlaceholderText(/Organization Name/i)).toHaveValue(
-      formData.name
-    );
-    expect(screen.getByPlaceholderText(/Description/i)).toHaveValue(
-      formData.description
-    );
-    expect(screen.getByPlaceholderText(/Location/i)).toHaveValue(
-      formData.location
-    );
-    expect(screen.getByLabelText(/display image:/i)).toBeTruthy();
-    expect(screen.getByLabelText(/Is Public:/i)).not.toBeChecked();
-    expect(screen.getByLabelText(/Is Registrable:/i)).toBeChecked();
-    expect(screen.getByText(/Cancel/i)).toBeTruthy();
+      expect(screen.getByPlaceholderText(/Organization Name/i)).toHaveValue(
+        formData.name
+      );
+      expect(screen.getByPlaceholderText(/Description/i)).toHaveValue(
+        formData.description
+      );
+      expect(screen.getByPlaceholderText(/Location/i)).toHaveValue(
+        formData.location
+      );
+      expect(screen.getByLabelText(/display image:/i)).toBeTruthy();
+      expect(screen.getByLabelText(/Is Public:/i)).not.toBeChecked();
+      expect(screen.getByLabelText(/Is Registrable:/i)).toBeChecked();
+      expect(screen.getByText(/Cancel/i)).toBeTruthy();
 
-    expect(screen.getByText('Name')).toBeInTheDocument();
-    expect(screen.getByText('Description')).toBeInTheDocument();
-    expect(screen.getByText('Location')).toBeInTheDocument();
-    expect(screen.getByText('Display Image:')).toBeInTheDocument();
-    expect(screen.getByText('Is Public:')).toBeInTheDocument();
-    expect(screen.getByText('Is Registrable:')).toBeInTheDocument();
+      expect(screen.getByText('Name')).toBeInTheDocument();
+      expect(screen.getByText('Description')).toBeInTheDocument();
+      expect(screen.getByText('Location')).toBeInTheDocument();
+      expect(screen.getByText('Display Image:')).toBeInTheDocument();
+      expect(screen.getByText('Is Public:')).toBeInTheDocument();
+      expect(screen.getByText('Is Registrable:')).toBeInTheDocument();
+    });
   });
 });

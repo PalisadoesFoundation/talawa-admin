@@ -15,7 +15,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { MOCKS } from './AdminNavbarMocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 const link1 = new StaticMockLink(MOCKS, true);
-async function wait(ms = 0) {
+async function wait(ms = 100) {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);

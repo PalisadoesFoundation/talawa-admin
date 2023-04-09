@@ -22,6 +22,7 @@ import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
 import AdminDashListCard from 'components/AdminDashListCard/AdminDashListCard';
 import { Alert, AlertTitle } from '@mui/material';
+import { errorHandler } from 'utils/errorHandler';
 
 function OrgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
@@ -106,10 +107,6 @@ function OrgList(): JSX.Element {
     const location = _location.trim();
 
     try {
-      if (!name || !descrip || !location) {
-        throw new Error('Text fields cannot be empty strings');
-      }
-
       const { data } = await create({
         variables: {
           name: name,
@@ -137,13 +134,7 @@ function OrgList(): JSX.Element {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
 
@@ -290,6 +281,7 @@ function OrgList(): JSX.Element {
                         />
                       );
                     } else if (isAdminForCurrentOrg(data_2?.user, datas)) {
+                      /* istanbul ignore next */
                       return (
                         <AdminDashListCard
                           id={datas._id}

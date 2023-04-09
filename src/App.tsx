@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-
+import * as installedPlugins from 'components/plugins/index';
 // import './App.css';
 import styles from './App.module.css';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
@@ -16,7 +16,6 @@ import OrgPost from 'screens/OrgPost/OrgPost';
 import OrgSettings from 'screens/OrgSettings/OrgSettings';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import AddOnStore from 'components/AddOn/core/AddOnStore/AddOnStore';
-import * as installedPlugins from 'components/plugins/index';
 import ForgotPassword from 'screens/ForgotPassword/ForgotPassword';
 import Roles from 'screens/Roles/Roles';
 import Requests from 'screens/Requests/Requests';

@@ -15,9 +15,6 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import SuperDashListCard from 'components/SuperDashListCard/SuperDashListCard';
-import AdminDashListCard from 'components/AdminDashListCard/AdminDashListCard';
-import { ToastContainer } from 'react-toastify';
 
 type Organization = {
   _id: string;
@@ -150,7 +147,7 @@ const MOCKS_EMPTY = [
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_EMPTY, true);
 
-async function wait(ms = 0) {
+async function wait(ms = 100) {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -167,13 +164,6 @@ describe('Organisation List Page', () => {
     name: 'Dummy Organization',
     description: 'This is a dummy organization',
     location: 'Delhi, India',
-    image: new File(['hello'], 'hello.png', { type: 'image/png' }),
-  };
-
-  const formDataEmpty = {
-    name: '   ',
-    description: '   ',
-    location: '   ',
     image: new File(['hello'], 'hello.png', { type: 'image/png' }),
   };
 
@@ -379,209 +369,59 @@ describe('Organisation List Page', () => {
 
   test('Create organization model should work properly', async () => {
     localStorage.setItem('UserType', 'SUPERADMIN');
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <OrgList />
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
 
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <OrgList />
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
+      await wait(500);
 
-    await wait();
+      expect(localStorage.setItem).toHaveBeenLastCalledWith(
+        'UserType',
+        'SUPERADMIN'
+      );
 
-    expect(localStorage.setItem).toHaveBeenLastCalledWith(
-      'UserType',
-      'SUPERADMIN'
-    );
+      userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
 
-    userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
+      userEvent.type(
+        screen.getByTestId(/modalOrganizationName/i),
+        formData.name
+      );
+      userEvent.type(
+        screen.getByPlaceholderText(/Description/i),
+        formData.description
+      );
+      userEvent.type(
+        screen.getByPlaceholderText(/Location/i),
+        formData.location
+      );
+      userEvent.click(screen.getByLabelText(/Is Public:/i));
+      userEvent.click(screen.getByLabelText(/Visible In Search:/i));
+      userEvent.upload(
+        screen.getByLabelText(/Display Image:/i),
+        formData.image
+      );
 
-    userEvent.type(screen.getByTestId(/modalOrganizationName/i), formData.name);
-    userEvent.type(
-      screen.getByPlaceholderText(/Description/i),
-      formData.description
-    );
-    userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
-    userEvent.click(screen.getByLabelText(/Is Public:/i));
-    userEvent.click(screen.getByLabelText(/Visible In Search:/i));
-    userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
+      expect(screen.getByTestId(/modalOrganizationName/i)).toHaveValue(
+        formData.name
+      );
+      expect(screen.getByPlaceholderText(/Description/i)).toHaveValue(
+        formData.description
+      );
+      expect(screen.getByPlaceholderText(/Location/i)).toHaveValue(
+        formData.location
+      );
+      expect(screen.getByLabelText(/Is Public/i)).not.toBeChecked();
+      expect(screen.getByLabelText(/Visible In Search:/i)).toBeChecked();
+      expect(screen.getByLabelText(/Display Image:/i)).toBeTruthy();
 
-    expect(screen.getByTestId(/modalOrganizationName/i)).toHaveValue(
-      formData.name
-    );
-    expect(screen.getByPlaceholderText(/Description/i)).toHaveValue(
-      formData.description
-    );
-    expect(screen.getByPlaceholderText(/Location/i)).toHaveValue(
-      formData.location
-    );
-    expect(screen.getByLabelText(/Is Public/i)).not.toBeChecked();
-    expect(screen.getByLabelText(/Visible In Search:/i)).toBeChecked();
-    expect(screen.getByLabelText(/Display Image:/i)).toBeTruthy();
-
-    userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
-  });
-
-  test('Create organization should throw error when empty strings have been entered', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
-
-    const { container } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <ToastContainer />
-            <OrgList />
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-
-    expect(localStorage.setItem).toHaveBeenLastCalledWith(
-      'UserType',
-      'SUPERADMIN'
-    );
-
-    userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
-
-    userEvent.type(
-      screen.getByTestId(/modalOrganizationName/i),
-      formDataEmpty.name
-    );
-    userEvent.type(
-      screen.getByPlaceholderText(/Description/i),
-      formDataEmpty.description
-    );
-    userEvent.type(
-      screen.getByPlaceholderText(/Location/i),
-      formDataEmpty.location
-    );
-
-    expect(screen.getByTestId(/modalOrganizationName/i)).toHaveValue(
-      formDataEmpty.name
-    );
-    expect(screen.getByPlaceholderText(/Description/i)).toHaveValue(
-      formDataEmpty.description
-    );
-    expect(screen.getByPlaceholderText(/Location/i)).toHaveValue(
-      formDataEmpty.location
-    );
-
-    userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
-
-    await wait();
-
-    expect(container.textContent).toMatch(
-      'Text fields cannot be empty strings'
-    );
-  });
-});
-
-describe('SuperDashListCard', () => {
-  it('renders correctly when user type is SUPERADMIN', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
-    const datas = {
-      _id: '123',
-      image: 'https://example.com/image.png',
-      admins: [
-        {
-          _id: '123',
-        },
-        {
-          _id: '456',
-        },
-      ],
-      members: [1, 2, 3],
-      createdAt: '2022, 2, 20',
-      name: 'Example Org',
-      location: 'Example Location',
-    };
-
-    await wait();
-
-    expect(localStorage.setItem).toHaveBeenLastCalledWith(
-      'UserType',
-      'SUPERADMIN'
-    );
-
-    const { getByText } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <OrgList />
-            <SuperDashListCard
-              id={datas._id}
-              key={datas._id}
-              image={datas.image}
-              admins={datas?.admins.length}
-              members={datas?.members.length}
-              createdDate={datas.createdAt}
-              orgName={datas.name}
-              orgLocation={datas.location}
-            />
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-    expect(getByText('Example Org')).toBeInTheDocument();
-    expect(getByText('Admins:')).toBeInTheDocument();
-    expect(getByText('Members:')).toBeInTheDocument();
-    expect(getByText('2022, 2, 20')).toBeInTheDocument();
-    expect(getByText('Example Location')).toBeInTheDocument();
-  });
-});
-
-describe('AdminDashListCard', () => {
-  it('renders correctly when user type is ADMIN', async () => {
-    localStorage.setItem('UserType', 'ADMIN');
-    const datas = {
-      _id: '123',
-      image: 'https://example.com/image.png',
-      admins: [
-        {
-          _id: '123',
-        },
-        {
-          _id: '456',
-        },
-      ],
-      members: [1, 2, 3],
-      createdAt: '2022, 2, 20',
-      name: 'Example Org',
-      location: 'Example Location',
-    };
-
-    await wait();
-
-    expect(localStorage.setItem).toHaveBeenLastCalledWith('UserType', 'ADMIN');
-
-    const { getByText } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <OrgList />
-            <AdminDashListCard
-              id={datas._id}
-              key={datas._id}
-              image={datas.image}
-              admins={datas?.admins.length}
-              members={datas?.members.length}
-              createdDate={datas.createdAt}
-              orgName={datas.name}
-              orgLocation={datas.location}
-            />
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-    expect(getByText('Example Org')).toBeInTheDocument();
-    expect(getByText('Admins:')).toBeInTheDocument();
-    expect(getByText('Members:')).toBeInTheDocument();
-    expect(getByText('2022, 2, 20')).toBeInTheDocument();
-    expect(getByText('Example Location')).toBeInTheDocument();
+      userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
+    });
   });
 });

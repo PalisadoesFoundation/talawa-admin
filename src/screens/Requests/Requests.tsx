@@ -15,6 +15,7 @@ import {
   REJECT_ADMIN_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import PaginationList from 'components/PaginationList/PaginationList';
+import { errorHandler } from 'utils/errorHandler';
 
 const Requests = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'requests' });
@@ -99,11 +100,7 @@ const Requests = () => {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(t('talawaApiUnavailable'));
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
 
@@ -122,11 +119,7 @@ const Requests = () => {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(t('talawaApiUnavailable'));
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
 

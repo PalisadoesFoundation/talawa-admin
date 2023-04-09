@@ -10,6 +10,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import defaultImg from 'assets/third_image.png';
+import { errorHandler } from 'utils/errorHandler';
 
 interface MemberRequestCardProps {
   key: string;
@@ -45,11 +46,7 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
       }, 2000);
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(t('talawaApiUnavailable'));
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
 
@@ -67,11 +64,7 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
         window.location.reload();
       } catch (error: any) {
         /* istanbul ignore next */
-        if (error.message === 'Failed to fetch') {
-          toast.error(t('talawaApiUnavailable'));
-        } else {
-          toast.error(error.message);
-        }
+        errorHandler(t, error);
       }
     }
   };
