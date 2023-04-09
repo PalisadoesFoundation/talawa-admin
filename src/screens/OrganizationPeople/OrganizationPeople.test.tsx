@@ -83,7 +83,6 @@ const createMemberMock = (
             email: 'member@gmail.com',
             createdAt: '2023-03-02T03:22:08.101Z',
           },
-          ...members,
         ],
       },
     },
@@ -102,7 +101,6 @@ const createMemberMock = (
             email: 'member@gmail.com',
             createdAt: '2023-03-02T03:22:08.101Z',
           },
-          ...members,
         ],
       },
     },
@@ -209,7 +207,7 @@ const MOCKS: any[] = [
     request: {
       query: ORGANIZATIONS_LIST,
       variables: {
-        id: undefined,
+        id: 'orgid',
       },
     },
     result: {
@@ -402,59 +400,6 @@ const MOCKS: any[] = [
     },
   },
 
-  {
-    request: {
-      query: ORGANIZATIONS_LIST,
-      variables: {
-        id: 'orgid',
-      },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: 'orgid',
-            image: '',
-            creator: {
-              firstName: 'firstName',
-              lastName: 'lastName',
-              email: 'email',
-            },
-            name: 'name',
-            description: 'description',
-            location: 'location',
-            members: {
-              _id: 'id',
-              firstName: 'firstName',
-              lastName: 'lastName',
-              email: 'email',
-            },
-            admins: {
-              _id: 'id',
-              firstName: 'firstName',
-              lastName: 'lastName',
-              email: 'email',
-            },
-            membershipRequests: {
-              _id: 'id',
-              user: {
-                firstName: 'firstName',
-                lastName: 'lastName',
-                email: 'email',
-              },
-            },
-            blockedUsers: {
-              _id: 'id',
-              firstName: 'firstName',
-              lastName: 'lastName',
-              email: 'email',
-            },
-          },
-        ],
-      },
-    },
-  },
-
   createMemberMock('orgid', 'Aditya', ''),
   createMemberMock('orgid', '', 'Memberguy'),
   createMemberMock('orgid', 'Aditya', 'Memberguy'),
@@ -502,6 +447,8 @@ describe('Organization People Page', () => {
   };
 
   test('The number of organizations people rendered on the DOM should be equal to the rowsPerPage state value', async () => {
+    window.location.assign('orgpeople/id=orgid');
+
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -597,9 +544,13 @@ describe('Organization People Page', () => {
     };
 
     await changePeopleType();
+
+    expect(window.location).toBeAt('orgpeople/id=orgid');
   }, 15000);
 
   test('Correct mock data should be queried', async () => {
+    window.location.assign('/orgpeople/id=orgid');
+
     const dataQuery1 =
       MOCKS[1]?.result?.data?.organizationsMemberConnection?.edges;
     const dataQuery2 =
@@ -660,9 +611,13 @@ describe('Organization People Page', () => {
       },
       ...users,
     ]);
+
+    expect(window.location).toBeAt('/orgpeople/id=orgid');
   });
 
   test('It is necessary to query the correct mock data.', async () => {
+    window.location.assign('/orgpeople/id=orgid');
+
     const { container } = render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -681,8 +636,8 @@ describe('Organization People Page', () => {
 
     expect(container.textContent).toMatch('Members');
     expect(container.textContent).toMatch('Filter by Name');
-    window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af1');
-    expect(window.location).toBeAt('/orgpeople/id=6401ff65ce8e8406b8f07af1');
+
+    expect(window.location).toBeAt('/orgpeople/id=orgid');
   });
 
   test('Testing MEMBERS list', async () => {
@@ -984,6 +939,8 @@ describe('Organization People Page', () => {
   });
 
   test('No Mock Data test', async () => {
+    window.location.assign('/orgpeople/id=orgid');
+
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -1005,5 +962,6 @@ describe('Organization People Page', () => {
     userEvent.click(screen.getByLabelText(/Users/i));
 
     await wait();
+    expect(window.location).toBeAt('/orgpeople/id=orgid');
   });
 });
