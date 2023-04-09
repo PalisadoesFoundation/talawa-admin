@@ -13,7 +13,7 @@ import { onError } from '@apollo/link-error';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import 'react-datepicker/dist/react-datepicker.css';
-import 'flag-icon-css/css/flag-icons.min.css';
+import 'flag-icons/css/flag-icons.min.css';
 import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

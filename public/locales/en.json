@@ -15,7 +15,16 @@
     "forgotPassword": "Forgot Password ?",
     "enterEmail": "Enter Email",
     "enterPassword": "Enter Password",
-    "doNotOwnAnAccount": "Do not own an account?"
+    "doNotOwnAnAccount": "Do not own an account?",
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
+    "captchaError": "Captcha Error!",
+    "Please_check_the_captcha": "Please, check the captcha.",
+    "Something_went_wrong": "Something went wrong, Please try after sometime.",
+    "passwordMismatches": "Password and Confirm password mismatches.",
+    "fillCorrectly": "Fill all the Details Correctly.",
+    "notAuthorised": "Sorry! you are not Authorised!",
+    "notFound": "User not found!",
+    "successfullyRegistered": "Successfully Registered. Please wait until you will be approved."
   },
   "listNavbar": {
     "talawa_portal": "Talawa Admin Portal",
@@ -68,7 +77,9 @@
     "superAdmin": "SUPERADMIN",
     "user": "USER",
     "enterName": "Enter Name",
-    "noOrgError": "Organizations not found, please create an organization through dashboard"
+    "noOrgError": "Organizations not found, please create an organization through dashboard",
+    "roleUpdated": "Role Updated.",
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "requests": {
     "title": "Talawa Requests",
@@ -79,7 +90,10 @@
     "accept": "Accept",
     "reject": "Reject",
     "enterName": "Enter Name",
-    "noOrgError": "Organizations not found, please create an organization through dashboard"
+    "noOrgError": "Organizations not found, please create an organization through dashboard",
+    "userApproved": "User Approved",
+    "userRejected": "User Rejected",
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "adminNavbar": {
     "talawa_portal": "Talawa Admin Portal",
@@ -118,7 +132,8 @@
     "deleteOrganization": "Delete Organization",
     "deleteMsg": "Do you want to delete this organization?",
     "no": "No",
-    "yes": "Yes"
+    "yes": "Yes",
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "organizationPeople": {
     "title": "Talawa Members",
@@ -133,7 +148,9 @@
   },
   "userListCard": {
     "joined": "Joined",
-    "addAdmin": "Add Admin"
+    "addAdmin": "Add Admin",
+    "addedAsAdmin": "User is added as admin.",
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "orgAdminListCard": {
     "joined": "Joined",
@@ -141,7 +158,9 @@
     "removeAdmin": "Remove Admin",
     "removeAdminMsg": "Do you want to remove this admin?",
     "no": "No",
-    "yes": "Yes"
+    "yes": "Yes",
+    "adminRemoved": "The admin is removed.",
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "orgPeopleListCard": {
     "joined": "Joined",
@@ -149,7 +168,9 @@
     "removeMember": "Remove Member",
     "removeMemberMsg": "Do you want to remove this member?",
     "no": "No",
-    "yes": "Yes"
+    "yes": "Yes",
+    "memberRemoved": "The Member is removed",
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "organizationEvents": {
     "title": "Talawa Events",
@@ -174,7 +195,9 @@
     "enterFilter": "Enter Filter",
     "enterTitle": "Enter Title",
     "enterDescrip": "Enter Description",
-    "eventLocation": "Enter Location"
+    "eventLocation": "Enter Location",
+    "eventCreated": "Congratulations! The Event is created.",
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "eventListCard": {
     "location": "Location",
@@ -195,7 +218,10 @@
     "isRegistrable": "Is Registrable",
     "close": "Close",
     "updatePost": "Update Post",
-    "eventDetails": "Event Details"
+    "eventDetails": "Event Details",
+    "eventDeleted": "Event deleted successfully.",
+    "eventUpdated": "Event updated successfully.",
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "orgPost": {
     "title": "Talawa Posts",
@@ -236,7 +262,10 @@
     "image": "Image",
     "video": "Video",
     "close": "Close",
-    "updatePost": "Update Post"
+    "updatePost": "Update Post",
+    "postDeleted": "Post deleted successfully.",
+    "postUpdated": "Post Updated successfully.",
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "blockUnblockUser": {
     "title": "Talawa Block/Unblock User",
@@ -247,7 +276,10 @@
     "block_unblock": "Block/Unblock",
     "unblock": "UnBlock",
     "block": "Block",
-    "orgName": "Enter Name"
+    "orgName": "Enter Name",
+    "blockedSuccessfully": "User blocked successfully",
+    "Un-BlockedSuccessfully": "User Un-Blocked successfully",
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "forgotPassword": {
     "title": "Talawa Forgot Password",
@@ -260,7 +292,13 @@
     "changePassword": "Change Password",
     "backToHome": "Back to Home",
     "userOtp": "e.g. 12345",
-    "password": "Password"
+    "password": "Password",
+    "emailNotRegistered": "Email is not registered.",
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
+    "errorSendingMail": "Error in sending mail.",
+    "passwordMismatches": "Password and Confirm password mismatches.",
+    "passwordChanges": "Password changes successfully.",
+    "OTPsent": "OTP is sent to your registered email."
   },
   "pageNotFound": {
     "title": "404 Not Found",
@@ -326,7 +364,9 @@
   "membershipRequest": {
     "joined": "Joined",
     "accept": "Accept",
-    "reject": "Reject"
+    "reject": "Reject",
+    "memberAdded": "it is accepted",
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "orgUpdate": {
     "name": "Name",
@@ -337,7 +377,9 @@
     "isRegistrable": "Is Registrable",
     "saveChanges": "Save Changes",
     "cancel": "Cancel",
-    "enterNameOrganization": "Enter Organization Name"
+    "enterNameOrganization": "Enter Organization Name",
+    "successfulUpdated": "Organization updated successfully",
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "addOnRegister": {
     "addNew": "Add New",
@@ -386,6 +428,8 @@
     "created": "Created",
     "adminForOrganizations": "Admin for organizations",
     "membershipRequests": "Membership requests",
-    "adminForEvents": "Admin for events"
+    "adminForEvents": "Admin for events",
+    "addedAsAdmin": "User is added as admin.",
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   }
 }

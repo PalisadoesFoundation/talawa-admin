@@ -279,7 +279,7 @@ describe('Organisation People Page', () => {
 
   test('The number of organizations people rendered on the DOM should be equal to the rowsPerPage state value', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
