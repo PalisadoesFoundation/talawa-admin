@@ -10,6 +10,7 @@ import { REMOVE_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import defaultImg from 'assets/third_image.png';
+import { errorHandler } from 'utils/errorHandler';
 
 interface OrgPeopleListCardProps {
   key: string;
@@ -46,11 +47,7 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(t('talawaApiUnavailable'));
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
   return (

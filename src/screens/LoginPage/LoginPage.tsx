@@ -21,6 +21,7 @@ import {
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import { languages } from 'utils/languages';
 import { RECAPTCHA_SITE_KEY, REACT_APP_USE_RECAPTCHA } from 'Constant/constant';
+import { errorHandler } from 'utils/errorHandler';
 
 function LoginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -84,11 +85,7 @@ function LoginPage(): JSX.Element {
         const response = await fetch(resourceUrl);
       } catch (error: any) {
         /* istanbul ignore next */
-        if (error.message === 'Failed to fetch') {
-          toast.error(t('talawaApiUnavailable'));
-        } else {
-          toast.error(error.message);
-        }
+        errorHandler(t, error);
       }
     }
 
@@ -161,13 +158,7 @@ function LoginPage(): JSX.Element {
           }
         } catch (error: any) {
           /* istanbul ignore next */
-          if (error.message === 'Failed to fetch') {
-            toast.error(t('talawaApiUnavailable'));
-          } else if (error.message) {
-            toast.warn(error.message);
-          } else {
-            toast.error(t('Something_went_wrong'));
-          }
+          errorHandler(t, error);
         }
       } else {
         toast.warn(t('passwordMismatches'));
@@ -220,13 +211,7 @@ function LoginPage(): JSX.Element {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message == 'Failed to fetch') {
-        toast.error(t('talawaApiUnavailable'));
-      } else if (error.message) {
-        toast.error(error.message);
-      } else {
-        toast.error(t('Something_went_wrong'));
-      }
+      errorHandler(t, error);
     }
   };
 

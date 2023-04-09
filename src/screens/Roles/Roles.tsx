@@ -12,6 +12,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
 import PaginationList from 'components/PaginationList/PaginationList';
+import { errorHandler } from 'utils/errorHandler';
 
 const Roles = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'roles' });
@@ -104,11 +105,7 @@ const Roles = () => {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(t('talawaApiUnavailable'));
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
 
