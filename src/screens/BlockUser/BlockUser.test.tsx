@@ -182,7 +182,7 @@ describe('Testing Block/Unblock user screen', () => {
     userEvent.click(screen.getByTestId('blockUser456'));
   });
 
-  test('Testing seach functionality', async () => {
+  test('Testing search functionality', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -198,5 +198,24 @@ describe('Testing Block/Unblock user screen', () => {
     await wait();
 
     userEvent.type(screen.getByTestId('searchByName'), 'john');
+  });
+
+  test('Testing empty response from server', async () => {
+    const link = new StaticMockLink([], true);
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <BlockUser />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(screen.getByText('Users not found')).toBeInTheDocument();
   });
 });
