@@ -273,6 +273,7 @@
     "unblock": "解除封鎖",
     "block": "堵塞",
     "orgName": "輸入名字",
+    "usersNotFound": "未找到用户",
     "blockedSuccessfully": "用戶被成功阻止",
     "Un-BlockedSuccessfully": "用戶解封成功",
     "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
