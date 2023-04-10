@@ -140,7 +140,9 @@
     "admins": "व्यवस्थापक",
     "users": "उपयोगकर्ता",
     "searchName": "नाम दर्ज करें",
-    "searchevent": "घटना दर्ज करें"
+    "searchevent": "घटना दर्ज करें",
+    "searchFirstName": "प्रथम नाम दर्ज करें",
+    "searchLastName": "अंतिम नाम दर्ज करो"
   },
   "userListCard": {
     "joined": "में शामिल हो गए",

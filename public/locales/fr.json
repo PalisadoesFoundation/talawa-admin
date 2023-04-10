@@ -140,7 +140,9 @@
     "admins": "Administrateurs",
     "users": "Utilisateurs",
     "searchName": "Entrez le nom",
-    "searchevent": "Entrez l'événement"
+    "searchevent": "Entrez l'événement",
+    "searchFirstName": "Entrez votre prénom",
+    "searchLastName": "Entrer le nom de famille"
   },
   "userListCard": {
     "joined": "Inscrit",

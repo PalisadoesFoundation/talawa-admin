@@ -140,7 +140,9 @@
     "admins": "管理員",
     "users": "用戶",
     "searchName": "輸入名字",
-    "searchevent": "輸入事件"
+    "searchevent": "輸入事件",
+    "searchFirstName": "输入名字",
+    "searchLastName": "输入姓氏"
   },
   "userListCard": {
     "joined": "加入",
