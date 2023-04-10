@@ -144,7 +144,9 @@
     "admins": "Admins",
     "users": "Users",
     "searchName": "Enter Name",
-    "searchevent": "Enter Event"
+    "searchevent": "Enter Event",
+    "searchFirstName": "Enter First Name",
+    "searchLastName": "Enter Last Name"
   },
   "userListCard": {
     "joined": "Joined",

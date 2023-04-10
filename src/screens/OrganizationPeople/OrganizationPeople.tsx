@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { useQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { useSelector } from 'react-redux';
 import { Container } from 'react-bootstrap';
 import dayjs from 'dayjs';
@@ -20,6 +20,8 @@ import PaginationList from 'components/PaginationList/PaginationList';
 import { useTranslation } from 'react-i18next';
 import debounce from 'utils/debounce';
 
+import { toast } from 'react-toastify';
+
 function OrganizationPeople(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
@@ -28,7 +30,6 @@ function OrganizationPeople(): JSX.Element {
   document.title = t('title');
 
   const currentUrl = window.location.href.split('=')[1];
-  let data, loading, error, refetchMembers: any, refetchAdmins: any;
 
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
@@ -37,100 +38,97 @@ function OrganizationPeople(): JSX.Element {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  if (state == 0) {
-    const {
-      data: data_2,
-      loading: loading_2,
-      error: error_2,
-      refetch,
-    } = useQuery(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {
-      variables: {
-        orgId: currentUrl,
-        firstName_contains: '',
-        event_title_contains: '',
-      },
-    });
-    refetchMembers = refetch;
-    data = data_2;
-    loading = loading_2;
-    error = error_2;
-  } else if (state == 1) {
-    const {
-      data: data_2,
-      loading: loading_2,
-      error: error_2,
-      refetch,
-    } = useQuery(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {
-      variables: {
-        orgId: currentUrl,
-        firstName_contains: '',
-        admin_for: currentUrl,
-      },
-    });
-    refetchAdmins = refetch;
-    data = data_2;
-    loading = loading_2;
-    error = error_2;
-  } else {
-    const {
-      data: data_2,
-      loading: loading_2,
-      error: error_2,
-    } = useQuery(USER_LIST);
-    data = data_2;
-    loading = loading_2;
-    error = error_2;
-  }
+  const [filterData, setFilterData] = useState({
+    firstName_contains: '',
+    lastName_contains: '',
+  });
 
-  if (loading) {
-    return (
-      <>
-        <div className={styles.loader}></div>
-      </>
-    );
-  }
+  const {
+    data: memberData,
+    loading: memberLoading,
+    error: memberError,
+    refetch: memberRefetch,
+  } = useLazyQuery(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {
+    variables: {
+      firstName_contains: '',
+      lastName_contains: '',
+      orgId: currentUrl,
+    },
+  })[1];
 
-  /* istanbul ignore next */
-  if (error) {
-    window.location.assign('/orglist');
-  }
+  const {
+    data: adminData,
+    loading: adminLoading,
+    error: adminError,
+    refetch: adminRefetch,
+  } = useLazyQuery(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {
+    variables: {
+      firstName_contains: '',
+      lastName_contains: '',
+      orgId: currentUrl,
+      admin_for: currentUrl,
+    },
+  })[1];
 
-  /* istanbul ignore next */
-  const handleFirstNameSearchChange = (e: any) => {
-    const { value } = e.target;
+  const {
+    data: usersData,
+    loading: usersLoading,
+    error: usersError,
+    refetch: usersRefetch,
+  } = useLazyQuery(USER_LIST, {
+    variables: {
+      firstName_contains: '',
+      lastName_contains: '',
+    },
+  })[1];
+
+  useEffect(() => {
     if (state === 0) {
-      const filterData = {
+      memberRefetch({
+        ...filterData,
         orgId: currentUrl,
-        firstName_contains: value,
-      };
-      refetchMembers(filterData);
+      });
     } else if (state === 1) {
-      const filterData = {
+      adminRefetch({
+        ...filterData,
         orgId: currentUrl,
-        firstName_contains: value,
         admin_for: currentUrl,
-      };
-      refetchAdmins(filterData);
+      });
+    } else {
+      usersRefetch({
+        ...filterData,
+      });
+    }
+  }, [state]);
+
+  /* istanbul ignore next */
+  if (memberError || usersError || adminError) {
+    const error = memberError ?? usersError ?? adminError;
+
+    console.log(error);
+    toast.error(error?.message);
+  }
+
+  /* istanbul ignore next */
+  const handleFirstNameSearchChange = (filterData: any) => {
+    /* istanbul ignore next */
+    if (state === 0) {
+      memberRefetch({
+        ...filterData,
+        orgId: currentUrl,
+      });
+    } else if (state === 1) {
+      adminRefetch({
+        ...filterData,
+        orgId: currentUrl,
+        admin_for: currentUrl,
+      });
+    } else {
+      usersRefetch({
+        ...filterData,
+      });
     }
   };
-
-  // const handleEventTitleSearchChange = (e: any) => {
-  //   const { value } = e.target;
-  //   if (state === 0) {
-  //     const filterData = {
-  //       orgId: currentUrl,
-  //       event_title_contains: value,
-  //     };
-  //     refetchMembers(filterData);
-  //   } else if (state === 1) {
-  //     const filterData = {
-  //       orgId: currentUrl,
-  //       event_title_contains: value,
-  //       admin_for: currentUrl,
-  //     };
-  //     refetchAdmins(filterData);
-  //   }
-  // };
 
   /* istanbul ignore next */
   const handleChangePage = (
@@ -165,10 +163,40 @@ function OrganizationPeople(): JSX.Element {
               <input
                 type="name"
                 id="searchname"
-                placeholder={t('searchName')}
+                placeholder={t('searchFirstName')}
                 autoComplete="off"
                 required
-                onChange={debouncedHandleFirstNameSearchChange}
+                value={filterData.firstName_contains}
+                onChange={(e) => {
+                  const { value } = e.target;
+
+                  const newFilterData = {
+                    ...filterData,
+                    firstName_contains: value?.trim(),
+                  };
+
+                  setFilterData(newFilterData);
+                  debouncedHandleFirstNameSearchChange(newFilterData);
+                }}
+              />
+              <input
+                type="name"
+                id="searchLastName"
+                placeholder={t('searchLastName')}
+                autoComplete="off"
+                required
+                value={filterData.lastName_contains}
+                onChange={(e) => {
+                  const { value } = e.target;
+
+                  const newFilterData = {
+                    ...filterData,
+                    lastName_contains: value?.trim(),
+                  };
+
+                  setFilterData(newFilterData);
+                  debouncedHandleFirstNameSearchChange(newFilterData);
+                }}
               />
               <div className={styles.radio_buttons} data-testid="usertypelist">
                 <input
@@ -223,112 +251,121 @@ function OrganizationPeople(): JSX.Element {
                     : t('users')}
                 </p>
               </Row>
-              <div className={styles.list_box} data-testid="orgpeoplelist">
-                {state == 0
-                  ? data
-                    ? (rowsPerPage > 0
-                        ? data.organizationsMemberConnection.edges.slice(
-                            page * rowsPerPage,
-                            page * rowsPerPage + rowsPerPage
+              {memberLoading || usersLoading || adminLoading ? (
+                <>
+                  <div className={styles.loader}></div>
+                </>
+              ) : (
+                <div className={styles.list_box} data-testid="orgpeoplelist">
+                  {
+                    /* istanbul ignore next */
+                    state == 0
+                      ? memberData
+                        ? (rowsPerPage > 0
+                            ? memberData.organizationsMemberConnection.edges.slice(
+                                page * rowsPerPage,
+                                page * rowsPerPage + rowsPerPage
+                              )
+                            : memberData.organizationsMemberConnection.edges
+                          ).map(
+                            (datas: {
+                              _id: string;
+                              lastName: string;
+                              firstName: string;
+                              image: string;
+                              email: string;
+                              createdAt: string;
+                            }) => {
+                              return (
+                                <OrgPeopleListCard
+                                  key={datas._id}
+                                  id={datas._id}
+                                  memberImage={datas.image}
+                                  joinDate={dayjs(datas.createdAt).format(
+                                    'DD/MM/YYYY'
+                                  )}
+                                  memberName={
+                                    datas.firstName + ' ' + datas.lastName
+                                  }
+                                  memberEmail={datas.email}
+                                />
+                              );
+                            }
                           )
-                        : data.organizationsMemberConnection.edges
-                      ).map(
-                        (datas: {
-                          _id: string;
-                          lastName: string;
-                          firstName: string;
-                          image: string;
-                          email: string;
-                          createdAt: string;
-                        }) => {
-                          return (
-                            <OrgPeopleListCard
-                              key={datas._id}
-                              id={datas._id}
-                              memberImage={datas.image}
-                              joinDate={dayjs(datas.createdAt).format(
-                                'DD/MM/YYYY'
-                              )}
-                              memberName={
-                                datas.firstName + ' ' + datas.lastName
-                              }
-                              memberEmail={datas.email}
-                            />
-                          );
-                        }
-                      )
-                    : null
-                  : state == 1
-                  ? data
-                    ? (rowsPerPage > 0
-                        ? data.organizationsMemberConnection.edges.slice(
-                            page * rowsPerPage,
-                            page * rowsPerPage + rowsPerPage
+                        : null
+                      : state == 1
+                      ? adminData
+                        ? (rowsPerPage > 0
+                            ? adminData.organizationsMemberConnection.edges.slice(
+                                page * rowsPerPage,
+                                page * rowsPerPage + rowsPerPage
+                              )
+                            : adminData.organizationsMemberConnection.edges
+                          ).map(
+                            (datas: {
+                              _id: string;
+                              lastName: string;
+                              firstName: string;
+                              image: string;
+                              email: string;
+                              createdAt: string;
+                            }) => {
+                              return (
+                                <OrgAdminListCard
+                                  key={datas._id}
+                                  id={datas._id}
+                                  memberImage={datas.image}
+                                  joinDate={dayjs(datas.createdAt).format(
+                                    'DD/MM/YYYY'
+                                  )}
+                                  memberName={
+                                    datas.firstName + ' ' + datas.lastName
+                                  }
+                                  memberEmail={datas.email}
+                                />
+                              );
+                            }
                           )
-                        : data.organizationsMemberConnection.edges
-                      ).map(
-                        (datas: {
-                          _id: string;
-                          lastName: string;
-                          firstName: string;
-                          image: string;
-                          email: string;
-                          createdAt: string;
-                        }) => {
-                          return (
-                            <OrgAdminListCard
-                              key={datas._id}
-                              id={datas._id}
-                              memberImage={datas.image}
-                              joinDate={dayjs(datas.createdAt).format(
-                                'DD/MM/YYYY'
-                              )}
-                              memberName={
-                                datas.firstName + ' ' + datas.lastName
-                              }
-                              memberEmail={datas.email}
-                            />
-                          );
-                        }
-                      )
-                    : null
-                  : state == 2
-                  ? data
-                    ? (rowsPerPage > 0
-                        ? data.users.slice(
-                            page * rowsPerPage,
-                            page * rowsPerPage + rowsPerPage
+                        : null
+                      : state == 2
+                      ? usersData
+                        ? (rowsPerPage > 0
+                            ? usersData.users.slice(
+                                page * rowsPerPage,
+                                page * rowsPerPage + rowsPerPage
+                              )
+                            : usersData.users
+                          ).map(
+                            (datas: {
+                              _id: string;
+                              lastName: string;
+                              firstName: string;
+                              image: string;
+                              email: string;
+                              createdAt: string;
+                            }) => {
+                              return (
+                                <UserListCard
+                                  key={datas._id}
+                                  id={datas._id}
+                                  memberImage={datas.image}
+                                  joinDate={dayjs(datas.createdAt).format(
+                                    'DD/MM/YYYY'
+                                  )}
+                                  memberName={
+                                    datas.firstName + ' ' + datas.lastName
+                                  }
+                                  memberEmail={datas.email}
+                                />
+                              );
+                            }
                           )
-                        : data.users
-                      ).map(
-                        (datas: {
-                          _id: string;
-                          lastName: string;
-                          firstName: string;
-                          image: string;
-                          email: string;
-                          createdAt: string;
-                        }) => {
-                          return (
-                            <UserListCard
-                              key={datas._id}
-                              id={datas._id}
-                              memberImage={datas.image}
-                              joinDate={dayjs(datas.createdAt).format(
-                                'DD/MM/YYYY'
-                              )}
-                              memberName={
-                                datas.firstName + ' ' + datas.lastName
-                              }
-                              memberEmail={datas.email}
-                            />
-                          );
-                        }
-                      )
-                    : null
-                  : /* istanbul ignore next */
-                    null}
-              </div>
+                        : null
+                      : /* istanbul ignore next */
+                        null
+                  }
+                </div>
+              )}
             </div>
             <div>
               <table
@@ -340,46 +377,23 @@ function OrganizationPeople(): JSX.Element {
               >
                 <tbody>
                   <tr data-testid="rowsPPSelect">
-                    {state == 0 ? (
-                      <>
-                        <PaginationList
-                          count={
-                            data
-                              ? data.organizationsMemberConnection.edges.length
-                              : 0
-                          }
-                          rowsPerPage={rowsPerPage}
-                          page={page}
-                          onPageChange={handleChangePage}
-                          onRowsPerPageChange={handleChangeRowsPerPage}
-                        />
-                      </>
-                    ) : state == 1 ? (
-                      <>
-                        <PaginationList
-                          count={
-                            data
-                              ? data.organizationsMemberConnection.edges.length
-                              : 0
-                          }
-                          rowsPerPage={rowsPerPage}
-                          page={page}
-                          onPageChange={handleChangePage}
-                          onRowsPerPageChange={handleChangeRowsPerPage}
-                        />
-                      </>
-                    ) : state == 2 ? (
-                      <>
-                        <PaginationList
-                          count={data ? data.users.length : 0}
-                          rowsPerPage={rowsPerPage}
-                          page={page}
-                          onPageChange={handleChangePage}
-                          onRowsPerPageChange={handleChangeRowsPerPage}
-                        />
-                      </>
-                    ) : /* istanbul ignore next */
-                    null}
+                    <>
+                      <PaginationList
+                        count={
+                          state === 0
+                            ? memberData?.organizationsMemberConnection.edges
+                                .length ?? 0
+                            : state === 1
+                            ? adminData?.organizationsMemberConnection.edges
+                                .length ?? 0
+                            : usersData?.users.length ?? 0
+                        }
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                      />
+                    </>
                   </tr>
                 </tbody>
               </table>
