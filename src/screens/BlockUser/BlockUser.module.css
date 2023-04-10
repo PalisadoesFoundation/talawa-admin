@@ -2,12 +2,14 @@
   display: flex;
   flex-direction: row;
 }
+
 .sidebar {
   z-index: 0;
   padding-top: 5px;
   margin: 0;
   height: 100%;
 }
+
 .sidebar:after {
   content: '';
   background-color: #f7f7f7;
@@ -18,10 +20,12 @@
   left: 94%;
   display: block;
 }
+
 .sidebarsticky {
   padding-left: 45px;
 }
-.sidebarsticky > input {
+
+.sidebarsticky>input {
   text-decoration: none;
   margin-bottom: 50px;
   border-color: #e8e5e5;
@@ -61,13 +65,14 @@
   width: 30%;
 }
 
-.mainpageright > hr {
+.mainpageright>hr {
   margin-top: 20px;
   width: 100%;
   margin-left: -15px;
   margin-right: -15px;
   margin-bottom: 20px;
 }
+
 .justifysp {
   display: flex;
   justify-content: space-between;
@@ -98,11 +103,13 @@
     position: relative;
     bottom: 18px;
   }
+
   .invitebtn {
     width: 135px;
     position: relative;
     right: 10px;
   }
+
   .userListTable {
     margin-left: 40px;
   }
@@ -116,6 +123,7 @@
   width: 10em;
   height: 10em;
 }
+
 .loader {
   margin: 60px auto;
   margin-top: 35vh !important;
@@ -132,28 +140,27 @@
   -webkit-animation: load8 1.1s infinite linear;
   animation: load8 1.1s infinite linear;
 }
+
 @-webkit-keyframes load8 {
   0% {
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-@keyframes load8 {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
+
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
 }
 
-.noData {
-  font-size: 1.25rem;
-  margin-top: 1rem;
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
 }

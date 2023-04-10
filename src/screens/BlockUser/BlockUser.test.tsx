@@ -200,25 +200,6 @@ describe('Testing Block/Unblock user screen', () => {
     userEvent.type(screen.getByTestId('searchByName'), 'john');
   });
 
-  test('case when no users found', async () => {
-    const link = new StaticMockLink([], true);
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <BlockUser />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-
-    expect(screen.getByText('Users not found')).toBeInTheDocument();
-  });
-
   test('Testing table data getting rendered', async () => {
     window.location.assign('/orglist/id=123');
     const link = new StaticMockLink(MOCKS, true);

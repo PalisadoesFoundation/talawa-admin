@@ -275,7 +275,6 @@
     "unblock": "Desatascar",
     "block": "Bloquear",
     "orgName": "Ingrese su nombre",
-    "usersNotFound": "Usuarios no encontrados",
     "blockedSuccessfully": "Usuario bloqueado con éxito",
     "Un-BlockedSuccessfully": "Usuario desbloqueado con éxito",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
