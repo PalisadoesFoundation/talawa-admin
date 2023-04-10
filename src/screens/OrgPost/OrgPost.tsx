@@ -20,6 +20,7 @@ import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
 import PostNotFound from 'components/PostNotFound/PostNotFound';
 import { Form as StyleBox } from 'react-bootstrap';
+import { errorHandler } from 'utils/errorHandler';
 
 function OrgPost(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -100,13 +101,7 @@ function OrgPost(): JSX.Element {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
 

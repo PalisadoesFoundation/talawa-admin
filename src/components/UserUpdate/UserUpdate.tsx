@@ -8,6 +8,7 @@ import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 
 import { languages } from 'utils/languages';
 import { toast } from 'react-toastify';
+import { errorHandler } from 'utils/errorHandler';
 
 interface UserUpdateProps {
   id: string;
@@ -87,13 +88,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
 

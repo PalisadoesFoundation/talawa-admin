@@ -9,6 +9,7 @@ import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import styles from './UserListCard.module.css';
 import { Link } from 'react-router-dom';
 import defaultImg from 'assets/third_image.png';
+import { errorHandler } from 'utils/errorHandler';
 
 interface UserListCardProps {
   key: string;
@@ -38,20 +39,14 @@ function UserListCard(props: UserListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('User is added as admin.');
+        toast.success(t('addedAsAdmin'));
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
 

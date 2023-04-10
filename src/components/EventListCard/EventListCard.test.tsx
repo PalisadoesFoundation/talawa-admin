@@ -57,7 +57,7 @@ const MOCKS = [
 
 const link = new StaticMockLink(MOCKS, true);
 
-async function wait(ms = 0) {
+async function wait(ms = 100) {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -228,7 +228,7 @@ describe('Testing Event List Card', () => {
   describe('EventListCard', () => {
     it('should render the delete modal', () => {
       render(
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider link={link} addTypename={false}>
           <EventListCard {...props} />
         </MockedProvider>
       );
@@ -236,7 +236,7 @@ describe('Testing Event List Card', () => {
 
     it('should call the delete event mutation when the "Yes" button is clicked', async () => {
       render(
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider link={link} addTypename={false}>
           <EventListCard {...props} />
         </MockedProvider>
       );
@@ -257,9 +257,9 @@ describe('Testing Event List Card', () => {
           error: new Error('Something went wrong'),
         },
       ];
-
+      const link2 = new StaticMockLink(errorMocks, true);
       render(
-        <MockedProvider mocks={errorMocks} addTypename={false}>
+        <MockedProvider link={link2} addTypename={false}>
           <EventListCard {...props} />
         </MockedProvider>
       );

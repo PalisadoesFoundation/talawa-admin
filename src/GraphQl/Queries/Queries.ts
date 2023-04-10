@@ -66,8 +66,13 @@ export const ORGANIZATION_CONNECTION_LIST = gql`
 // Query to take the User list
 
 export const USER_LIST = gql`
-  query Users($filter: String) {
-    users(where: { firstName_contains: $filter }) {
+  query Users($firstName_contains: String, $lastName_contains: String) {
+    users(
+      where: {
+        firstName_contains: $firstName_contains
+        lastName_contains: $lastName_contains
+      }
+    ) {
       firstName
       lastName
       image
@@ -152,6 +157,7 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
   query Organizations(
     $orgId: ID!
     $firstName_contains: String
+    $lastName_contains: String
     $admin_for: ID
     $event_title_contains: String
   ) {
@@ -159,6 +165,7 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
       orgId: $orgId
       where: {
         firstName_contains: $firstName_contains
+        lastName_contains: $lastName_contains
         admin_for: $admin_for
         event_title_contains: $event_title_contains
       }
