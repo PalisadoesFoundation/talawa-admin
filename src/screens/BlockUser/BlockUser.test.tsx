@@ -216,7 +216,7 @@ describe('Testing Block/Unblock user screen', () => {
 
     await wait();
 
-    expect(screen.getByText('No users found')).toBeInTheDocument();
+    expect(screen.getByText('Users not found')).toBeInTheDocument();
   });
 
   test('Testing table data getting rendered', async () => {
