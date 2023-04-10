@@ -56,18 +56,15 @@ const Requests = () => {
   }, [data, data_2]);
 
   if (spammers_loading) {
-    return (
-      <>
-        <div className={styles.loader}></div>
-      </>
-    );
+    return <div className={styles.loader}></div>;
   }
 
   const memberIds = membersArray.map((user: { _id: string }) => user._id);
 
-  const memberUsersData = data?.users.filter((user: { _id: string }) =>
-    memberIds.includes(user._id)
-  );
+  const memberUsersData =
+    data?.users.filter((user: { _id: string }) =>
+      memberIds.includes(user._id)
+    ) ?? [];
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -152,7 +149,6 @@ const Requests = () => {
                 data-testid="searchByName"
                 autoComplete="off"
                 required
-                value={searchByName}
                 onChange={handleSearchByName}
               />
             </div>
@@ -165,75 +161,67 @@ const Requests = () => {
             </Row>
             <div className={styles.list_box}>
               <div className="table-responsive">
-                {memberUsersData && memberUsersData.length != 0 ? (
-                  <table
-                    className={`table table-hover ${styles.userListTable}`}
-                  >
-                    <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">{t('name')}</th>
-                        <th scope="col">{t('email')}</th>
-                        <th scope="col" className="text-center">
-                          {t('block_unblock')}
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {(rowsPerPage > 0
-                        ? memberUsersData.slice(
-                            page * rowsPerPage,
-                            page * rowsPerPage + rowsPerPage
-                          )
-                        : memberUsersData
-                      ).map(
-                        (
-                          user: {
-                            _id: string;
-                            firstName: string;
-                            lastName: string;
-                            email: string;
-                            organizationsBlockedBy: [];
-                          },
-                          index: number
-                        ) => {
-                          return (
-                            <tr key={user._id}>
-                              <th scope="row">{page * 10 + (index + 1)}</th>
-                              <td>{`${user.firstName} ${user.lastName}`}</td>
-                              <td>{user.email}</td>
-                              <td className="text-center">
-                                {user.organizationsBlockedBy.some(
-                                  (spam: any) => spam._id === currentUrl
-                                ) ? (
-                                  <button
-                                    className="btn btn-danger"
-                                    onClick={() => handleUnBlockUser(user._id)}
-                                    data-testid={`unBlockUser${user._id}`}
-                                  >
-                                    {t('unblock')}
-                                  </button>
-                                ) : (
-                                  <button
-                                    className="btn btn-success"
-                                    onClick={() => handleBlockUser(user._id)}
-                                    data-testid={`blockUser${user._id}`}
-                                  >
-                                    {t('block')}
-                                  </button>
-                                )}
-                              </td>
-                            </tr>
-                          );
-                        }
-                      )}
-                    </tbody>
-                  </table>
-                ) : (
-                  <div className={styles.noData}>
-                    <p>{t('usersNotFound')}</p>
-                  </div>
-                )}
+                <table className={`table table-hover ${styles.userListTable}`}>
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">{t('name')}</th>
+                      <th scope="col">{t('email')}</th>
+                      <th scope="col" className="text-center">
+                        {t('block_unblock')}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(rowsPerPage > 0
+                      ? memberUsersData.slice(
+                          page * rowsPerPage,
+                          page * rowsPerPage + rowsPerPage
+                        )
+                      : memberUsersData
+                    ).map(
+                      (
+                        user: {
+                          _id: string;
+                          firstName: string;
+                          lastName: string;
+                          email: string;
+                          organizationsBlockedBy: [];
+                        },
+                        index: number
+                      ) => {
+                        return (
+                          <tr key={user._id}>
+                            <th scope="row">{page * 10 + (index + 1)}</th>
+                            <td>{`${user.firstName} ${user.lastName}`}</td>
+                            <td>{user.email}</td>
+                            <td className="text-center">
+                              {user.organizationsBlockedBy.some(
+                                (spam: any) => spam._id === currentUrl
+                              ) ? (
+                                <button
+                                  className="btn btn-danger"
+                                  onClick={() => handleUnBlockUser(user._id)}
+                                  data-testid={`unBlockUser${user._id}`}
+                                >
+                                  {t('unblock')}
+                                </button>
+                              ) : (
+                                <button
+                                  className="btn btn-success"
+                                  onClick={() => handleBlockUser(user._id)}
+                                  data-testid={`blockUser${user._id}`}
+                                >
+                                  {t('block')}
+                                </button>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      }
+                    )}
+                  </tbody>
+                </table>
               </div>
             </div>
             <div>
@@ -247,7 +235,7 @@ const Requests = () => {
                 <tbody>
                   <tr>
                     <PaginationList
-                      count={memberUsersData?.length ?? 0}
+                      count={memberUsersData.length}
                       rowsPerPage={rowsPerPage}
                       page={page}
                       onPageChange={handleChangePage}
