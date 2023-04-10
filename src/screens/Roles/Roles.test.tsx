@@ -299,6 +299,22 @@ describe('Testing Roles screen', () => {
 
     assertion;
   });
+  describe('handleChangePage function', () => {
+    test('should call setPage with the new page when button is clicked', () => {
+      // Arrange
+      const setPage = jest.fn();
+      const newPage = 2;
+      const { getByRole } = render(
+        <button onClick={() => setPage(2)}>Change Page</button>
+      );
+
+      // Act
+      fireEvent.click(getByRole('button'));
+
+      // Assert
+      expect(setPage).toHaveBeenCalledWith(newPage);
+    });
+  });
 
   test('should update rowsPerPage when selected from menu', () => {
     const { getByRole } = render(
