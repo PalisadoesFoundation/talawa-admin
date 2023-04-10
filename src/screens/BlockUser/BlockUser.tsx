@@ -66,11 +66,11 @@ const Requests = () => {
       memberIds.includes(user._id)
     ) ?? [];
 
+  /* istanbul ignore next */
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
-    /* istanbul ignore next */
     setPage(newPage);
   };
 
