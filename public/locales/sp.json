@@ -140,7 +140,9 @@
     "admins": "Administradores",
     "users": "Usuarios",
     "searchName": "Ingrese su nombre",
-    "searchevent": "Ingresar evento"
+    "searchevent": "Ingresar evento",
+    "searchFirstName": "Ingrese el nombre",
+    "searchLastName": "Introduzca el apellido"
   },
   "userListCard": {
     "joined": "Unido",
