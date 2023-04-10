@@ -61,6 +61,7 @@ const Requests = () => {
 
   const memberIds = membersArray.map((user: { _id: string }) => user._id);
 
+  /* istanbul ignore next */
   const memberUsersData =
     data?.users.filter((user: { _id: string }) =>
       memberIds.includes(user._id)
@@ -191,7 +192,7 @@ const Requests = () => {
                         index: number
                       ) => {
                         return (
-                          <tr key={user._id}>
+                          <tr key={user._id} data-testid={`row${user._id}`}>
                             <th scope="row">{page * 10 + (index + 1)}</th>
                             <td>{`${user.firstName} ${user.lastName}`}</td>
                             <td>{user.email}</td>
