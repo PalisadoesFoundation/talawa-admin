@@ -200,7 +200,7 @@ describe('Testing Block/Unblock user screen', () => {
     userEvent.type(screen.getByTestId('searchByName'), 'john');
   });
 
-  test('Test case when no users found', async () => {
+  test('case when no users found', async () => {
     const link = new StaticMockLink([], true);
     render(
       <MockedProvider addTypename={false} link={link}>
