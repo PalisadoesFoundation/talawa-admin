@@ -25,7 +25,7 @@
   padding-left: 45px;
 }
 
-.sidebarsticky>input {
+.sidebarsticky > input {
   text-decoration: none;
   margin-bottom: 50px;
   border-color: #e8e5e5;
@@ -65,7 +65,7 @@
   width: 30%;
 }
 
-.mainpageright>hr {
+.mainpageright > hr {
   margin-top: 20px;
   width: 100%;
   margin-left: -15px;
