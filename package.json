@@ -62,7 +62,7 @@
   "scripts": {
     "serve": "react-scripts start",
     "build": "react-scripts build",
-    "test": "NODE_ENV=test node scripts/test.js",
+    "test": "cross-env NODE_ENV=test node scripts/test.js --watchAll --coverage",
     "eject": "react-scripts eject",
     "lint:check": "eslint \"**/*.{ts,tsx}\" --max-warnings=0",
     "lint:fix": "eslint \"**/*.{ts,tsx}\" --fix",
@@ -100,6 +100,7 @@
     "@types/react-router-dom": "^5.1.8",
     "@typescript-eslint/eslint-plugin": "^5.9.0",
     "@typescript-eslint/parser": "^5.9.0",
+    "cross-env": "^7.0.3",
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^8.0.3",
     "jest-enzyme": "^7.1.2",
