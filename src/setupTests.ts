@@ -15,7 +15,10 @@ global.console.error = function (...args) {
 global.console.warn = function (...args) {
   throw new Error(format(...args));
 };
+
 import { jestPreviewConfigure } from 'jest-preview';
+import { configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 
 // TODO: To add your global css here
 import 'bootstrap/dist/css/bootstrap.css';
@@ -26,6 +29,8 @@ import './css/index.css';
 
 import './css/bootstrap.min.css';
 import './css/index.css';
+
+configure({ adapter: new Adapter() });
 
 jestPreviewConfigure({
   // Opt-in to automatic mode to preview failed test case automatically.

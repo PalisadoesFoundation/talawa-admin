@@ -55,4 +55,9 @@ export default {
       statements: 20,
     },
   },
+  testPathIgnorePatterns: [
+    '<rootDir>/node_modules/',
+    '<rootDir>/build/',
+    '<rootDir>/public/',
+  ],
 };
