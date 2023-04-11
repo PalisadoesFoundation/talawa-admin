@@ -15,6 +15,7 @@ process.on('unhandledRejection', (err) => {
 // Ensure environment variables are read.
 import 'react-scripts/config/env.js';
 
+// eslint-disable-next-line jest/no-jest-import
 import jest from 'jest';
 import { execSync } from 'child_process';
 

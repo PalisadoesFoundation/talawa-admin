@@ -20,7 +20,7 @@ import { jestPreviewConfigure } from 'jest-preview';
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
-// TODO: To add your global css here
+// Global CSS here
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import 'react-datepicker/dist/react-datepicker.css';
