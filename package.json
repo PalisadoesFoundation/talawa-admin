@@ -62,7 +62,7 @@
   "scripts": {
     "serve": "react-scripts start",
     "build": "react-scripts build",
-    "test": "node scripts/test.js",
+    "test": "NODE_ENV=test node scripts/test.js",
     "eject": "react-scripts eject",
     "lint:check": "eslint \"**/*.{ts,tsx}\" --max-warnings=0",
     "lint:fix": "eslint \"**/*.{ts,tsx}\" --fix",
@@ -112,25 +112,5 @@
     "@types/react": "17.0.2",
     "@types/react-dom": "17.0.2",
     "graphql": "^16.5.0"
-  },
-  "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.{ts,tsx}",
-      "!src/index.tsx"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "lines": 20,
-        "statements": 20
-      }
-    },
-    "resetMocks": false,
-    "coveragePathIgnorePatterns": [
-      "src/state/index.ts",
-      "src/components/plugins/index.ts",
-      "src/components/AddOn/support/services/Render.helper.ts",
-      "src/components/SecuredRoute/SecuredRoute.tsx",
-      "src/reportWebVitals.ts"
-    ]
   }
 }

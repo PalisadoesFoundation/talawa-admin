@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   roots: ['<rootDir>/src'],
   collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/index.tsx'],
   setupFiles: ['react-app-polyfill/jsdom'],
