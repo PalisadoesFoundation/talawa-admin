@@ -23,6 +23,7 @@ export default {
   ],
   moduleNameMapper: {
     '^react-native$': 'react-native-web',
+    '^@mui/(.*)$': '<rootDir>/node_modules/@mui/$1',
   },
   moduleFileExtensions: [
     'web.js',
