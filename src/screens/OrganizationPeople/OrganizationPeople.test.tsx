@@ -966,7 +966,6 @@ describe('Organization People Page', () => {
     await wait();
 
     const firstNameInput = screen.getByPlaceholderText(/Enter First Name/i);
-    const lastNameInput = screen.getByPlaceholderText(/Enter Last Name/i);
 
     // Only First Name
     userEvent.type(firstNameInput, searchData.firstName);
