@@ -105,7 +105,8 @@
     "jest-localstorage-mock": "^2.4.19",
     "jest-location-mock": "^1.0.9",
     "jest-preview": "^0.3.1",
-    "jquery": "^3.2.1"
+    "jquery": "^3.2.1",
+    "postcss-modules": "^6.0.0"
   },
   "resolutions": {
     "@apollo/client": "^3.4.0-beta.19",
