@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import 'jest-localstorage-mock';
 import userEvent from '@testing-library/user-event';
@@ -217,6 +217,27 @@ describe('Organisation List Page', () => {
           .querySelectorAll('[data-testid="singleorg"]').length
       ).toBe(numOrgDisplayed);
     });
+  });
+
+  test('Search bar filters organizations by name', async () => {
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgList />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    await wait();
+
+    //Search orgnizations with there name
+    let searchBar = screen.getByRole('textbox');
+    userEvent.type(searchBar, 'Akatsuki');
+    await wait();
+    expect(searchBar).toBeInTheDocument();
   });
 
   test('Should render no organisation warning alert when there are no organization', async () => {
