@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import 'jest-localstorage-mock';
 import userEvent from '@testing-library/user-event';
@@ -220,7 +220,7 @@ describe('Organisation List Page', () => {
   });
 
   test('Search bar filters organizations by name', async () => {
-    const { container } = render(
+    render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
@@ -234,7 +234,7 @@ describe('Organisation List Page', () => {
     await wait();
 
     //Search orgnizations with there name
-    let searchBar = screen.getByRole('textbox');
+    const searchBar = screen.getByRole('textbox');
     userEvent.type(searchBar, 'Akatsuki');
     await wait();
     expect(searchBar).toBeInTheDocument();
