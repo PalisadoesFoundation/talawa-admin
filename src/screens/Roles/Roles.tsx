@@ -39,12 +39,12 @@ const Roles = () => {
   useEffect(() => {
     if (searchByName !== '') {
       refetch({
-        filter: searchByName,
+        firstName_contains: searchByName,
       });
     } else {
       if (count !== 0) {
         refetch({
-          filter: searchByName,
+          firstName_contains: searchByName,
         });
       }
     }
@@ -202,7 +202,11 @@ const Roles = () => {
                         }
                       )
                     ) : (
-                      <NotFound title="user" keyPrefix="userNotFound" />
+                      <tr>
+                        <td>
+                          <NotFound title="user" keyPrefix="userNotFound" />
+                        </td>
+                      </tr>
                     )}
                   </tbody>
                 </table>
