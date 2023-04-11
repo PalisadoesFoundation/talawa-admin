@@ -8,7 +8,7 @@ import 'jest-localstorage-mock';
 import ListNavbar from './ListNavbar';
 import i18nForTest from 'utils/i18nForTest';
 
-async function wait(ms = 0) {
+async function wait(ms = 100) {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -27,7 +27,7 @@ describe('Testing List navbar component', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText('Talawa Portal')).toBeInTheDocument();
+    expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
     expect(screen.getByText('Roles')).toBeInTheDocument();
     expect(screen.getByText('Requests')).toBeInTheDocument();
   });

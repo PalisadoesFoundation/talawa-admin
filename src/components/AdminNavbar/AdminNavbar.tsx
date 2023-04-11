@@ -7,13 +7,16 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import Cookies from 'js-cookie';
 import i18next from 'i18next';
-import { toast } from 'react-toastify';
 import MenuIcon from '@mui/icons-material/Menu';
 import styles from './AdminNavbar.module.css';
 import AboutImg from 'assets/images/defaultImg.png';
-import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATIONS_LIST,
+  USER_ORGANIZATION_LIST,
+} from 'GraphQl/Queries/Queries';
 import { UPDATE_SPAM_NOTIFICATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { languages } from 'utils/languages';
+import { errorHandler } from 'utils/errorHandler';
 
 interface NavbarProps {
   targets: {
@@ -39,6 +42,11 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
     variables: { id: currentUrl },
   });
   const [updateSpam] = useMutation(UPDATE_SPAM_NOTIFICATION_MUTATION);
+  const { data: data_2 } = useQuery(USER_ORGANIZATION_LIST, {
+    variables: { id: localStorage.getItem('id') },
+  });
+
+  const isSuperAdmin = data_2?.user.userType === 'SUPERADMIN';
 
   useEffect(() => {
     const handleUpdateSpam = async () => {
@@ -60,13 +68,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
           }
         } catch (error: any) {
           /* istanbul ignore next */
-          if (error.message === 'Failed to fetch') {
-            toast.error(
-              'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-            );
-          } else {
-            toast.error(error.message);
-          }
+          errorHandler(t, error);
         }
       }
     };
@@ -172,7 +174,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
             })}
           </Nav>
           <Link className={styles.allOrgBtn} to="/orglist">
-            {t('allOrganizations')}
+            {isSuperAdmin ? t('allOrganizations') : t('yourOrganization')}
           </Link>
           <Nav
             className="ml-auto items-center"
@@ -227,7 +229,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                           data-testid={`changeLanguageBtn${index}`}
                         >
                           <span
-                            className={`flag-icon flag-icon-${language.country_code} mr-2`}
+                            className={`fi fi-${language.country_code} mr-2`}
                           ></span>
                           {language.name}
                         </button>

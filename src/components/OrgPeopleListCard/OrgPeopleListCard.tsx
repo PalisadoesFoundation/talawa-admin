@@ -7,6 +7,8 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { Link } from 'react-router-dom';
+import defaultImg from 'assets/third_image.png';
+import { errorHandler } from 'utils/errorHandler';
 
 interface OrgPeopleListCardProps {
   key: string;
@@ -36,33 +38,24 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('The Member is removed');
+        toast.success(t('memberRemoved'));
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
   return (
     <>
-      <div className={styles.peoplelistdiv}>
+      <div className={styles.peoplelistdiv} data-testid="peoplelistitem">
         <Row className={styles.memberlist}>
           {props.memberImage ? (
             <img src={props.memberImage} className={styles.memberimg} />
           ) : (
-            <img
-              src="https://via.placeholder.com/200x100"
-              className={styles.memberimg}
-            />
+            <img src={defaultImg} className={styles.memberimg} />
           )}
           <Col className={styles.singledetails}>
             <div className={styles.singledetails_data_left}>

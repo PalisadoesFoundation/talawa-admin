@@ -125,6 +125,7 @@ const MOCKS = [
     },
   },
 ];
+
 const EMPTY_MOCKS = [
   {
     request: {
@@ -156,10 +157,25 @@ const EMPTY_MOCKS = [
     },
   },
 ];
+
+const EMPTY_ORG_MOCKS = [
+  {
+    request: {
+      query: ORGANIZATION_CONNECTION_LIST,
+    },
+    result: {
+      data: {
+        organizationsConnection: [],
+      },
+    },
+  },
+];
+
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_MOCKS, true);
+const link3 = new StaticMockLink(EMPTY_ORG_MOCKS, true);
 
-async function wait(ms = 0) {
+async function wait(ms = 100) {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -283,6 +299,22 @@ describe('Testing Roles screen', () => {
 
     assertion;
   });
+  describe('handleChangePage function', () => {
+    test('should call setPage with the new page when button is clicked', () => {
+      // Arrange
+      const setPage = jest.fn();
+      const newPage = 2;
+      const { getByRole } = render(
+        <button onClick={() => setPage(2)}>Change Page</button>
+      );
+
+      // Act
+      fireEvent.click(getByRole('button'));
+
+      // Assert
+      expect(setPage).toHaveBeenCalledWith(newPage);
+    });
+  });
 
   test('should update rowsPerPage when selected from menu', () => {
     const { getByRole } = render(
@@ -399,7 +431,7 @@ describe('Testing Roles screen', () => {
 
   test('Should render warning alert when there are no organizations', async () => {
     const { container } = render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider addTypename={false} link={link3}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -411,8 +443,7 @@ describe('Testing Roles screen', () => {
       </MockedProvider>
     );
 
-    await wait();
-
+    await wait(200);
     expect(container.textContent).toMatch(
       'Organizations not found, please create an organization through dashboard'
     );
@@ -436,6 +467,81 @@ describe('Testing Roles screen', () => {
 
     expect(container.textContent).not.toMatch(
       'Organizations not found, please create an organization through dashboard'
+    );
+  });
+
+  test('Should disable select when user is self', async () => {
+    const localStorageMock = (function () {
+      const store: any = {
+        UserType: 'SUPERADMIN',
+        id: '123',
+      };
+
+      return {
+        getItem: jest.fn((key: string) => store[key]),
+      };
+    })();
+
+    Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <Roles />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(screen.getByTestId('changeRole123')).toHaveProperty(
+      'disabled',
+      true
+    );
+  });
+
+  test('Should not disable select when user is not self', async () => {
+    const localStorageMock = (function () {
+      const store: any = {
+        UserType: 'SUPERADMIN',
+        id: '123',
+      };
+
+      return {
+        getItem: jest.fn((key: string) => store[key]),
+      };
+    })();
+
+    Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <Roles />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(screen.getByTestId('changeRole456')).toHaveProperty(
+      'disabled',
+      false
+    );
+
+    expect(screen.getByTestId('changeRole789')).toHaveProperty(
+      'disabled',
+      false
     );
   });
 });

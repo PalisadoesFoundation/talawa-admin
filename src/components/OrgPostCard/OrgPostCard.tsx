@@ -8,6 +8,8 @@ import {
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
+import defaultImg from 'assets/third_image.png';
+import { errorHandler } from 'utils/errorHandler';
 
 interface OrgPostCardProps {
   key: string;
@@ -59,20 +61,14 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Post deleted successfully.');
+        toast.success(t('postDeleted'));
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
 
@@ -98,7 +94,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Post Updated successfully.');
+        toast.success(t('postUpdated'));
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -134,43 +130,55 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
               </a>
             </div>
           </div>
-          <p>
-            {t('author')}:<span> {props.postAuthor}</span>
-          </p>
-
-          {togglePost === 'Read more' ? (
-            <p data-testid="toggleContent">
-              {props.postInfo.length > 43
-                ? props.postInfo.substring(0, 40) + '...'
-                : props.postInfo}
-            </p>
-          ) : (
-            <p data-testid="toggleContent">{props.postInfo}</p>
-          )}
-          <button
-            role="toggleBtn"
-            className={`${
-              props.postInfo.length > 43
-                ? styles.toggleClickBtn
-                : styles.toggleClickBtnNone
-            }`}
-            onClick={handletoggleClick}
-          >
-            {togglePost}
-          </button>
           {/* {props.postInfo.length > 43 && (
             <button role='toggleBtn' className={styles.toggleClickBtn} onClick={handletoggleClick}>
               {togglePost}
             </button>
           )} */}
           {/* <p>{props.postInfo}</p> */}
+          {props.postPhoto ? (
+            <p>
+              <span>
+                {' '}
+                <img
+                  className={styles.postimage}
+                  alt="image not found"
+                  src={props?.postPhoto}
+                />
+              </span>
+            </p>
+          ) : (
+            <img
+              src={defaultImg}
+              alt="image not found"
+              className={styles.postimage}
+            />
+          )}
           <p>
-            {t('imageURL')}:
-            <span>
-              {' '}
-              <a href={props.postPhoto}>{props.postPhoto}</a>
-            </span>
+            {t('author')}:<span> {props.postAuthor}</span>
           </p>
+          <div className={styles.infodiv}>
+            {togglePost === 'Read more' ? (
+              <p data-testid="toggleContent">
+                {props.postInfo.length > 43
+                  ? props.postInfo.substring(0, 40) + '...'
+                  : props.postInfo}
+              </p>
+            ) : (
+              <p data-testid="toggleContent">{props.postInfo}</p>
+            )}
+            <button
+              role="toggleBtn"
+              className={`${
+                props.postInfo.length > 43
+                  ? styles.toggleClickBtn
+                  : styles.toggleClickBtnNone
+              }`}
+              onClick={handletoggleClick}
+            >
+              {togglePost}
+            </button>
+          </div>
           <p>
             {t('videoURL')}:
             <span>

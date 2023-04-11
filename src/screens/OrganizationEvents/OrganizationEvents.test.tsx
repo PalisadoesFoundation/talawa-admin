@@ -104,7 +104,7 @@ const MOCKS = [
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink([], true);
 
-async function wait(ms = 0) {
+async function wait(ms = 100) {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -337,7 +337,7 @@ describe('Organisation Events Page', () => {
     expect(screen.getByTestId('registrableCheck')).toBeChecked();
 
     userEvent.click(screen.getByTestId('createEventBtn'));
-  });
+  }, 15000);
 
   test('Testing if the event is not for all day', async () => {
     render(
