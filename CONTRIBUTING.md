@@ -99,6 +99,10 @@ The process of proposing a change to Talawa Admin can be summarized as:
          npm install --legacy-peer-deps
          npm run jest-preview
          npm run test --watchAll=false --coverage
+      ```
+      
+      The preview for failed tests will be visible at http://localhost:3336 
+
    1. **_Test Code Coverage_:**
       1. _General Information_
          1. The current code coverage of the repo is: [![codecov](https://codecov.io/gh/PalisadoesFoundation/talawa-admin/branch/develop/graph/badge.svg?token=II0R0RREES)](https://codecov.io/gh/PalisadoesFoundation/talawa-admin)
