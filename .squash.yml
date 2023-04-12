@@ -4,6 +4,7 @@ deployments:
     build_steps:
       - apt-get update && apt-get install -y libssl-dev libpq-dev git build-essential libfontconfig1 libfontconfig1-dev curl
       - RUN bash -c "curl -sL https://deb.nodesource.com/setup_18.x | bash -"
+      - apt install -y nodejs
       - cd /code
       - npm install --legacy-peer-deps
     launch_steps:
