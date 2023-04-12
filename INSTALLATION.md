@@ -175,7 +175,7 @@ npm run test
 
 You don't need to re-run the `npm run jest-preview` command each time, simply run the `npm run test` command if the Jest Preview server is already running in the background, it'll automatically detect any failing tests and show the preview at `http://localhost:3336` as shown in this screenshot -
 
-![Debugging Test Demo](./public/jest-preview.webp)
+![Debugging Test Demo](./public/images/jest-preview.webp)
 
 
 ## Linting code files
