@@ -250,6 +250,13 @@
     "post not found!": "Post Not Found!",
     "organization not found!": "Organization Not Found!"
   },
+  "userNotFound": {
+    "user": "User",
+    "not found!": "Not Found!",
+    "roles": "Roles",
+    "user not found!": "User Not Found!",
+    "roles not found!": "Roles Not Found!"
+  },
   "orgPostCard": {
     "author": "Author",
     "imageURL": "Image URL",

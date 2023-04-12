@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
+import { ToastContainer } from 'react-toastify';
 
 import Roles from './Roles';
 import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -18,7 +19,6 @@ import userEvent from '@testing-library/user-event';
 import { within } from '@testing-library/react';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { ToastContainer } from 'react-toastify';
 
 const MOCKS = [
   {

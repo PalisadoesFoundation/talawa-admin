@@ -246,6 +246,13 @@
     "post not found!": "Publicaciones Extraviado!",
     "organization not found!": "Organización Extraviado!"
   },
+  "userNotFound": {
+    "user": "usuari(a/o)",
+    "not found!": "extraviado!",
+    "roles": "papeles",
+    "user not found!": "usuario no encontrado!",
+    "roles not found!": "roles no encontrados!"
+  },
   "orgPostCard": {
     "author": "Autor",
     "imageURL": "URL de la imagen",

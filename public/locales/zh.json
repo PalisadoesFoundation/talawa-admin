@@ -246,6 +246,13 @@
     "post not found!": "郵政 未找到!",
     "organization not found!": "組織 未找到!"
   },
+  "userNotFound": {
+    "user": "用户",
+    "not found!": "未找到!",
+    "roles": "角色",
+    "user not found!": "找不到用户!",
+    "roles not found!": "找不到角色!"
+  },
   "orgPostCard": {
     "author": "作者",
     "imageURL": "圖片網址",
