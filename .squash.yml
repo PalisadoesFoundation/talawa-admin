@@ -4,13 +4,10 @@ deployments:
     build_steps:
       - apt-get update && apt-get install -y libssl-dev libpq-dev git build-essential libfontconfig1 libfontconfig1-dev curl
       - RUN bash -c "curl -sL https://deb.nodesource.com/setup_18.x | bash -"
-      - apt install -y nodejs
       - cd /code
-      - npm install -g yarn@1.22.17
-      - yarn
+      - npm install --legacy-peer-deps
     launch_steps:
-      - yarn serve
+      - npm run serve
     port_forwarding: 80:3000
     run_options: 
-      - --env REACT_APP_TALAWA_URL="${REACT_APP_TALAWA_URL}"
-      - --env REACT_APP_RECAPTCHA_SITE_KEY="${REACT_APP_RECAPTCHA_SITE_KEY}"
+      - --env REACT_APP_TALAWA_URL="https://talawaapi.azurewebsites.net/graphql"
