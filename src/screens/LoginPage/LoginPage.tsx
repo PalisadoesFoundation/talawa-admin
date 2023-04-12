@@ -111,11 +111,64 @@ function LoginPage(): JSX.Element {
     }
   };
 
+  type SignupFormData = {
+    signfirstName: string;
+    signlastName: string;
+    signEmail: string;
+    signPassword: string;
+    cPassword: string;
+  };
+  type ValidationResult = {
+    isValid: boolean;
+    errorMessages?: string[];
+  };
+
+  const validateForm = ({
+    signfirstName,
+    signlastName,
+    signEmail,
+    signPassword,
+    cPassword,
+  }: SignupFormData): ValidationResult => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const errors: string[] = [];
+
+    if (signfirstName.length < 2) {
+      errors.push('First name must be at least 2 characters long');
+    }
+    if (signlastName.length < 2) {
+      errors.push('Last name must be at least 2 characters long');
+    }
+    if (!emailRegex.test(signEmail)) {
+      errors.push('Please enter a valid email address');
+    }
+    if (signPassword.length < 8) {
+      errors.push('Password must be at least 8 characters long');
+    }
+    if (!/\d/.test(signPassword)) {
+      errors.push('Password must contain at least one number');
+    }
+    if (!/[a-zA-Z]/.test(signPassword)) {
+      errors.push('Password must contain at least one letter');
+    }
+    if (!/[\W_]/.test(signPassword)) {
+      errors.push('Password must contain at least one special character');
+    }
+    if (cPassword !== signPassword) {
+      errors.push('Password and Confirm password do not match');
+    }
+
+    if (errors.length > 0) {
+      return { isValid: false, errorMessages: errors };
+    }
+
+    return { isValid: true };
+  };
+
   const signup_link = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { signfirstName, signlastName, signEmail, signPassword, cPassword } =
-      signformState;
+    const { isValid, errorMessages } = validateForm(signformState);
 
     const recaptchaToken = recaptchaRef.current?.getValue();
     recaptchaRef.current?.reset();
@@ -127,44 +180,41 @@ function LoginPage(): JSX.Element {
       return;
     }
 
-    if (
-      signfirstName.length > 1 &&
-      signlastName.length > 1 &&
-      signEmail.length >= 8 &&
-      signPassword.length > 1
-    ) {
-      if (cPassword == signPassword) {
-        try {
-          const { data } = await signup({
-            variables: {
-              firstName: signfirstName,
-              lastName: signlastName,
-              email: signEmail,
-              password: signPassword,
-            },
-          });
+    if (!isValid) {
+      errorMessages?.forEach((message) => toast.warn(message));
+      return;
+    }
 
-          /* istanbul ignore next */
-          if (data) {
-            toast.success(t('successfullyRegistered'));
+    try {
+      const { data } = await signup({
+        variables: signformState,
+      });
 
-            setSignFormState({
-              signfirstName: '',
-              signlastName: '',
-              signEmail: '',
-              signPassword: '',
-              cPassword: '',
-            });
-          }
-        } catch (error: any) {
-          /* istanbul ignore next */
-          errorHandler(t, error);
-        }
-      } else {
-        toast.warn(t('passwordMismatches'));
+      /* istanbul ignore next */
+      if (data) {
+        toast.success(
+          'Successfully Registered. Please wait until you will be approved.'
+        );
+
+        setSignFormState({
+          signfirstName: '',
+          signlastName: '',
+          signEmail: '',
+          signPassword: '',
+          cPassword: '',
+        });
       }
-    } else {
-      toast.warn(t('fillCorrectly'));
+    } catch (error: any) {
+      /* istanbul ignore next */
+      if (error.message === 'Failed to fetch') {
+        toast.error(
+          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
+        );
+      } else if (error.message) {
+        toast.warn(error.message);
+      } else {
+        toast.error('Something went wrong, Please try after sometime.');
+      }
     }
   };
 

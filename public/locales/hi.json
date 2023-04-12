@@ -246,6 +246,13 @@
     "post not found!": "पोस्ट नहीं मिला!",
     "organization not found!": "संगठन नहीं मिला!"
   },
+  "userNotFound": {
+    "user": "उपयोगकर्ता",
+    "not found!": "नहीं मिला!",
+    "roles": "भूमिका",
+    "user not found!": "उपयोगकर्ता नहीं मिले!",
+    "roles not found!": "भूमिकाएँ नहीं मिलीं!"
+  },
   "orgPostCard": {
     "author": "लेखक",
     "imageURL": "छवि यूआरएल",
