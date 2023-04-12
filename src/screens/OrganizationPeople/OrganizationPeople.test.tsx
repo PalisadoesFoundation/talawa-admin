@@ -515,7 +515,7 @@ describe('Organization People Page', () => {
         rowsPerPageOptions[currRowPPindex].textContent
       );
 
-      const totalNumPeople = MOCKS[3]?.result?.data?.users?.filter(
+      const expectedUsersLength = MOCKS[3]?.result?.data?.users?.filter(
         (datas: {
           _id: string;
           lastName: string;
@@ -536,8 +536,8 @@ describe('Organization People Page', () => {
       ).length;
 
       await wait();
-      const expectedUsersLength = screen.getAllByTestId('orgpeoplelist').length;
-      expect(expectedUsersLength).toBe(totalNumPeople);
+      const totalNumPeople = screen.getAllByTestId('orgpeoplelist').length;
+      expect(totalNumPeople).toBe(expectedUsersLength);
 
       if (rowsPerPageOptions[currRowPPindex].textContent === 'All') {
         peopleTypeIndex += 1;
