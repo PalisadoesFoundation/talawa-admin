@@ -32,6 +32,7 @@ function OrganizationDashboard(): JSX.Element {
   const { data, loading, error } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: currentUrl },
   });
+
   const {
     data: postData,
     loading: loading_post,
@@ -39,6 +40,7 @@ function OrganizationDashboard(): JSX.Element {
   } = useQuery(ORGANIZATION_POST_LIST, {
     variables: { id: currentUrl },
   });
+
   const {
     data: eventData,
     loading: loading_event,
@@ -46,6 +48,7 @@ function OrganizationDashboard(): JSX.Element {
   } = useQuery(ORGANIZATION_EVENT_LIST, {
     variables: { id: currentUrl },
   });
+
   const { data: data_2 } = useQuery(USER_ORGANIZATION_LIST, {
     variables: { id: localStorage.getItem('id') },
   });
