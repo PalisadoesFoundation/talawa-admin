@@ -117,7 +117,7 @@ If you want to setup Google reCAPTCHA now, you may refer to to the `RECAPTCHA` s
 
 `Talawa-admin` needs the `reCAPTCHA site key` for the `reCAPTCHA` service you set up during `talawa-api` installation as shown in this screenshot:
 
-![reCAPTCHA site key](./public/REACT_SITE_KEY.webp)
+![reCAPTCHA site key](./public/images/REACT_SITE_KEY.webp)
 
 Copy/paste this `reCAPTCHA site key` to the variable named `REACT_APP_RECAPTCHA_SITE_KEY` in `.env` file.
 
