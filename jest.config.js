@@ -24,7 +24,6 @@ export default {
   moduleNameMapper: {
     '^react-native$': 'react-native-web',
     '^@mui/(.*)$': '<rootDir>/node_modules/@mui/$1',
-    '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
   },
   moduleFileExtensions: [
     'web.js',

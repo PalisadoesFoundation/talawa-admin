@@ -154,7 +154,7 @@ describe('Testing Organization Post Card', () => {
       </MockedProvider>
     );
 
-    const toggleButton = screen.getByRole('toggleBtn');
+    const toggleButton = screen.getByTestId('toggleBtn');
 
     expect(screen.getByText('Read more')).toBeInTheDocument();
 
