@@ -61,8 +61,8 @@
   "scripts": {
     "serve": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --watchAll --coverage",
-    "test:debug": "cross-env NODE_ENV=test node scripts/test.js --watchAll --coverage",
+    "test:legacy": "react-scripts test --watchAll --coverage",
+    "test": "cross-env NODE_ENV=test node scripts/test.js --watchAll --coverage",
     "eject": "react-scripts eject",
     "lint:check": "eslint \"**/*.{ts,tsx}\" --max-warnings=0",
     "lint:fix": "eslint \"**/*.{ts,tsx}\" --fix",
