@@ -20,6 +20,7 @@ export default {
   ],
   modulePaths: [
     '/Users/prathamesh/Desktop/Open-Source/palisadoes/talawa-admin/src',
+    '<rootDir>',
   ],
   moduleNameMapper: {
     '^react-native$': 'react-native-web',
