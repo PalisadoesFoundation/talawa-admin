@@ -87,29 +87,31 @@ The process of proposing a change to Talawa Admin can be summarized as:
    1. **_General_:** 
       1. We need to get to 100% test coverage for the app. We periodically increase the desired test coverage for our pull requests to meet this goal.
       1. Pull requests that don't meet the minimum test coverage levels will not be accepted. This may mean that you will have to create tests for code you did not write. You can decide which part of the code base needs additional tests if this happens to you.
-   1. **_Testing_:**
+   
+   2. **_Testing_:**
+
       1. Test using this set of commands:
-      ```
+
+         ```
          npm install --legacy-peer-deps
          npm run test --watchAll=false --coverage
-      ```
+         ```
       
       2. Debug tests in browser 
    
-      You can see the output of failing tests in broswer by running `jest-preview` package before running your tests
+         You can see the output of failing tests in broswer by running `jest-preview` package before running your tests
 
-      ```
+         ```
          npm install --legacy-peer-deps
          npm run jest-preview
          npm run test --watchAll=false --coverage
-      ```
+         ```
       
-      The preview for failed tests will automatically be visible at `http://localhost:3336`, as shown below -
+         You don't need to re-run the `npm run jest-preview` command each time, simply run the `npm run test` command if the Jest Preview server is already running in the background, it'll automatically detect any failing tests and show the preview at `http://localhost:3336` as shown below -
 
-      <img width="1904" alt="Debug Test Demo" src="https://user-images.githubusercontent.com/28570857/231282474-5ce3d47b-cba2-469d-891a-408e1b18c060.png">
+         <img width="1904" alt="Debug Test Demo" src="https://user-images.githubusercontent.com/28570857/231282474-5ce3d47b-cba2-469d-891a-408e1b18c060.png">
 
-
-   2. **_Test Code Coverage_:**
+   3. **_Test Code Coverage_:**
       1. _General Information_
          1. The current code coverage of the repo is: [![codecov](https://codecov.io/gh/PalisadoesFoundation/talawa-admin/branch/develop/graph/badge.svg?token=II0R0RREES)](https://codecov.io/gh/PalisadoesFoundation/talawa-admin)
          2. You can determine the percentage test coverage of your code by running these two commands in sequence:
