@@ -49,7 +49,7 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
     }
   };
   return (
-    <>
+    <div>
       <div className={styles.peoplelistdiv} data-testid="peoplelistitem">
         <Row className={styles.memberlist}>
           {props.memberImage ? (
@@ -135,7 +135,7 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 export {};
