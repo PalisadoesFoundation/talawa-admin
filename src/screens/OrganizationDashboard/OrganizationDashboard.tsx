@@ -105,7 +105,11 @@ function OrganizationDashboard(): JSX.Element {
               <img
                 src={data?.organizations[0].image ?? AboutImg}
                 className={styles.org_about_img}
-                data-testid="orgDashImgPresent"
+                data-testid={
+                  data?.organizations[0].image
+                    ? 'orgDashImgPresent'
+                    : 'orgDashImgAbsent'
+                }
               />
               <p className={styles.tagdetailsGreen}>
                 {canDelete && (
