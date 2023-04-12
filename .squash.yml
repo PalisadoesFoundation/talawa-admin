@@ -10,5 +10,3 @@ deployments:
     launch_steps:
       - npm run serve
     port_forwarding: 80:3000
-    run_options: 
-      - --env REACT_APP_TALAWA_URL="https://talawaapi.azurewebsites.net/graphql"
