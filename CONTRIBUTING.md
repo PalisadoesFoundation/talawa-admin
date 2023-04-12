@@ -107,9 +107,10 @@ The process of proposing a change to Talawa Admin can be summarized as:
          npm run test --watchAll=false --coverage
          ```
       
-         You don't need to re-run the `npm run jest-preview` command each time, simply run the `npm run test` command if the Jest Preview server is already running in the background, it'll automatically detect any failing tests and show the preview at `http://localhost:3336` as shown below -
+         You don't need to re-run the `npm run jest-preview` command each time, simply run the `npm run test` command if the Jest Preview server is already running in the background, it'll automatically detect any failing tests and show the preview at `http://localhost:3336` as shown in this screenshot -
 
-         <img width="1904" alt="Debug Test Demo" src="https://user-images.githubusercontent.com/28570857/231282474-5ce3d47b-cba2-469d-891a-408e1b18c060.png">
+         ![Debugging Test Demo](./public/jest-preview.webp)
+
 
    3. **_Test Code Coverage_:**
       1. _General Information_

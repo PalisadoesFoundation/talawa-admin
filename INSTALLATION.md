@@ -23,6 +23,7 @@ This document provides instructions on how to set up and start a running instanc
   - [Talawa-Admin Login](#talawa-admin-login)
 - [Testing](#testing)
   - [Running tests](#running-tests)
+  - [Debugging tests](#debugging-tests)
   - [Linting code files](#linting-code-files)
   - [Husky for Git Hooks](#husky-for-git-hooks)
       - [pre-commit hook](#pre-commit-hook)
@@ -162,6 +163,20 @@ You can run the tests for `talawa-admin` using this command:
 ```
 npm run test
 ```
+
+## Debugging tests
+
+You can see the output of failing tests in broswer by running `jest-preview` package before running your tests
+
+```
+npm run jest-preview
+npm run test
+```
+
+You don't need to re-run the `npm run jest-preview` command each time, simply run the `npm run test` command if the Jest Preview server is already running in the background, it'll automatically detect any failing tests and show the preview at `http://localhost:3336` as shown in this screenshot -
+
+![Debugging Test Demo](./public/jest-preview.webp)
+
 
 ## Linting code files
 
