@@ -17,16 +17,16 @@ All the pull requests must have code that is properly linted and formatted, so t
 Before opening a PR, you can run the following scripts to automatically lint and format the code properly:
 
 ```
-yarn lint:fix
-yarn format:fix
+npm run lint:fix
+npm run format:fix
 ```
 
 Both of these scripts also have a `check` counterpart, which would be used by the GitHub CI to ensure that the code is properly formatted.
 You can run the following scripts yourself to ensure that your pull request doesn't fail due to linting and formatting errors:
 
 ```
-yarn lint:check
-yarn format:check
+npm run lint:check
+npm run format:check
 ```
 
 ## Testing

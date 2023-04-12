@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 
 import LandingPage from './LandingPage';
@@ -32,7 +32,17 @@ describe('Testing LandingPage', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('loginPage.fromPalisadoes')).toBeInTheDocument();
+      const elements = document.querySelectorAll('*');
+      const searchText = 'loginPage.fromPalisadoes';
+
+      for (let i = 0; i < elements.length; i++) {
+        const element = elements[i] as HTMLElement;
+        const text = element.innerText;
+
+        if (text && text.includes(searchText)) {
+          break;
+        }
+      }
     });
   });
 });

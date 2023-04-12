@@ -24,7 +24,7 @@ const MOCKS = [
       query: LOGIN_MUTATION,
       variables: {
         email: 'johndoe@gmail.com',
-        password: 'johndoe',
+        password: 'johndoe@123',
       },
     },
     result: {
@@ -48,7 +48,7 @@ const MOCKS = [
         firstName: 'John',
         lastName: 'Doe',
         email: 'johndoe@gmail.com',
-        password: 'johnDoe',
+        password: 'johndoe@123',
       },
     },
     result: {
@@ -80,7 +80,7 @@ const MOCKS = [
 
 const link = new StaticMockLink(MOCKS, true);
 
-async function wait(ms = 0) {
+async function wait(ms = 100) {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -94,6 +94,12 @@ jest.mock('react-toastify', () => ({
     warn: jest.fn(),
     error: jest.fn(),
   },
+}));
+
+jest.mock('Constant/constant.ts', () => ({
+  ...jest.requireActual('Constant/constant.ts'),
+  REACT_APP_USE_RECAPTCHA: 'yes',
+  RECAPTCHA_SITE_KEY: 'xxx',
 }));
 
 describe('Talawa-API server fetch check', () => {
@@ -161,7 +167,7 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    expect(screen.getByText(/Talawa Portal/i)).toBeInTheDocument();
+    expect(screen.getByText(/Talawa Admin Portal/i)).toBeInTheDocument();
     expect(window.location).toBeAt('/orglist');
   });
 
@@ -170,8 +176,8 @@ describe('Testing Login Page Screen', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'johndoe@gmail.com',
-      password: 'johndoe',
-      confirmPassword: 'johndoe',
+      password: 'johndoe@123',
+      confirmPassword: 'johndoe@123',
     };
 
     render(
@@ -211,8 +217,131 @@ describe('Testing Login Page Screen', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'johndoe@gmail.com',
-      password: 'johndoe',
-      confirmPassword: 'doeJohn',
+      password: 'johndoe@123',
+      confirmPassword: 'doeJohn@123',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.type(
+      screen.getByPlaceholderText(/First Name/i),
+      formData.firstName
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Last Name/i),
+      formData.lastName
+    );
+    userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
+    userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
+    userEvent.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      formData.confirmPassword
+    );
+
+    userEvent.click(screen.getByTestId('registrationBtn'));
+  });
+
+  test('Testing registration functionality, when password does not contain any special character', async () => {
+    const formData = {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'johndoe@gmail.com',
+      password: 'johndoe123',
+      confirmPassword: 'johndoe123',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.type(
+      screen.getByPlaceholderText(/First Name/i),
+      formData.firstName
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Last Name/i),
+      formData.lastName
+    );
+    userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
+    userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
+    userEvent.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      formData.confirmPassword
+    );
+
+    userEvent.click(screen.getByTestId('registrationBtn'));
+  });
+
+  test('Testing registration functionality, when password does not contain any letter', async () => {
+    const formData = {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'johndoe@gmail.com',
+      password: '123456789',
+      confirmPassword: '123456789',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.type(
+      screen.getByPlaceholderText(/First Name/i),
+      formData.firstName
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Last Name/i),
+      formData.lastName
+    );
+    userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
+    userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
+    userEvent.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      formData.confirmPassword
+    );
+
+    userEvent.click(screen.getByTestId('registrationBtn'));
+  });
+
+  test('Testing registration functionality, when email is not valid', async () => {
+    const formData = {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'johndoe@gmail',
+      password: '123456789',
+      confirmPassword: '123456789',
     };
 
     render(
@@ -313,7 +442,7 @@ describe('Testing Login Page Screen', () => {
   test('Testing login functionality', async () => {
     const formData = {
       email: 'johndoe@gmail.com',
-      password: 'johndoe',
+      password: 'johndoe@123',
     };
 
     render(
@@ -400,6 +529,35 @@ describe('Testing Login Page Screen', () => {
 
     const input = screen.getByTestId('password') as HTMLInputElement;
     const toggleText = screen.getByTestId('showPassword');
+    // password should be hidden
+    expect(input.type).toBe('password');
+    // click the toggle button to show password
+    userEvent.click(toggleText);
+    expect(input.type).toBe('text');
+    // click the toggle button to hide password
+    userEvent.click(toggleText);
+    expect(input.type).toBe('password');
+
+    await wait();
+  });
+
+  test('Testing confirm password preview feature', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    const input = screen.getByTestId('cpassword') as HTMLInputElement;
+    const toggleText = screen.getByTestId('showPasswordrCon');
     // password should be hidden
     expect(input.type).toBe('password');
     // click the toggle button to show password

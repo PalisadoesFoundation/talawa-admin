@@ -5,7 +5,6 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useSelector } from 'react-redux';
 import { RootState } from 'state/reducers';
 import { Container } from 'react-bootstrap';
-import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
@@ -16,8 +15,10 @@ import {
   ORGANIZATIONS_LIST,
   ORGANIZATION_EVENT_LIST,
   ORGANIZATION_POST_LIST,
+  USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import { errorHandler } from 'utils/errorHandler';
 
 function OrganizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
@@ -45,6 +46,11 @@ function OrganizationDashboard(): JSX.Element {
   } = useQuery(ORGANIZATION_EVENT_LIST, {
     variables: { id: currentUrl },
   });
+  const { data: data_2 } = useQuery(USER_ORGANIZATION_LIST, {
+    variables: { id: localStorage.getItem('id') },
+  });
+
+  const canDelete = data_2?.user.userType === 'SUPERADMIN';
 
   const [del] = useMutation(DELETE_ORGANIZATION_MUTATION);
 
@@ -62,13 +68,7 @@ function OrganizationDashboard(): JSX.Element {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
 
@@ -113,15 +113,17 @@ function OrganizationDashboard(): JSX.Element {
                 />
               )}
               <p className={styles.tagdetailsGreen}>
-                <button
-                  type="button"
-                  className="mt-3"
-                  data-testid="deleteClick"
-                  data-toggle="modal"
-                  data-target="#deleteOrganizationModal"
-                >
-                  {t('deleteThisOrganization')}
-                </button>
+                {canDelete && (
+                  <button
+                    type="button"
+                    className="mt-3"
+                    data-testid="deleteClick"
+                    data-toggle="modal"
+                    data-target="#deleteOrganizationModal"
+                  >
+                    {t('deleteOrganization')}
+                  </button>
+                )}
               </p>
             </div>
           </div>

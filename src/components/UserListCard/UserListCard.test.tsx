@@ -28,7 +28,7 @@ const MOCKS = [
   },
 ];
 const link = new StaticMockLink(MOCKS, true);
-async function wait(ms = 0) {
+async function wait(ms = 100) {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -45,7 +45,7 @@ describe('Testing User List Card', () => {
       id: '456',
       memberName: 'John Doe',
       joinDate: '07/05/2022',
-      memberImage: 'https://via.placeholder.com/200x100',
+      memberImage: 'image',
       memberEmail: 'johndoe@gmail.com',
     };
 
