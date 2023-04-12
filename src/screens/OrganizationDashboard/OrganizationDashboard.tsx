@@ -94,24 +94,16 @@ function OrganizationDashboard(): JSX.Element {
             <div className={styles.sidebarsticky}>
               <h6 className={styles.titlename}>{t('about')}</h6>
               <p className={styles.description}>
-                {data.organizations[0].description}
+                {data?.organizations[0].description}
               </p>
               <p className={styles.toporgloc}>
-                {t('location')} : {data.organizations[0].location}
+                {t('location')} : {data?.organizations[0].location}
               </p>
-              {data.organizations[0].image ? (
-                <img
-                  src={data.organizations[0].image}
-                  className={styles.org_about_img}
-                  data-testid="orgDashImgPresent"
-                />
-              ) : (
-                <img
-                  src={AboutImg}
-                  className={styles.org_about_img}
-                  data-testid="orgDashImgAbsent"
-                />
-              )}
+              <img
+                src={data?.organizations[0].image ?? AboutImg}
+                className={styles.org_about_img}
+                data-testid="orgDashImgPresent"
+              />
               <p className={styles.tagdetailsGreen}>
                 {canDelete && (
                   <button
@@ -155,7 +147,7 @@ function OrganizationDashboard(): JSX.Element {
                       </div>
                       <div className="text-center">
                         <p className={styles.counterNumber}>
-                          {data.organizations[0].members.length}
+                          {data?.organizations[0].members.length}
                         </p>
                         <p className={styles.counterHead}>{t('members')}</p>
                       </div>
@@ -183,7 +175,7 @@ function OrganizationDashboard(): JSX.Element {
                         </div>
                         <div className="text-center">
                           <p className={styles.counterNumber}>
-                            {data.organizations[0].admins.length}
+                            {data?.organizations[0].admins.length}
                           </p>
                           <p className={styles.counterHead}>{t('admins')}</p>
                         </div>
@@ -211,7 +203,7 @@ function OrganizationDashboard(): JSX.Element {
                       </div>
                       <div className="text-center">
                         <p className={styles.counterNumber}>
-                          {postData.postsByOrganization.length}
+                          {postData?.postsByOrganization.length}
                         </p>
                         <p className={styles.counterHead}>{t('posts')}</p>
                       </div>
@@ -238,7 +230,7 @@ function OrganizationDashboard(): JSX.Element {
                       </div>
                       <div className="text-center">
                         <p className={styles.counterNumber}>
-                          {eventData.eventsByOrganization.length}
+                          {eventData?.eventsByOrganization.length}
                         </p>
                         <p className={styles.counterHead}>{t('events')}</p>
                       </div>
@@ -265,7 +257,7 @@ function OrganizationDashboard(): JSX.Element {
                       </div>
                       <div className="text-center">
                         <p className={styles.counterNumber}>
-                          {data.organizations[0].blockedUsers.length}
+                          {data?.organizations[0].blockedUsers.length}
                         </p>
                         <p className={styles.counterHead}>
                           {t('blockedUsers')}
@@ -284,7 +276,7 @@ function OrganizationDashboard(): JSX.Element {
                       </div>
                       <div className="text-center">
                         <p className={styles.counterNumber}>
-                          {data.organizations[0].membershipRequests.length}
+                          {data?.organizations[0].membershipRequests.length}
                         </p>
                         <p className={styles.counterHead}>
                           {t('membershipRequests')}
