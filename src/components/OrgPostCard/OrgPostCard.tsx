@@ -169,6 +169,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
             )}
             <button
               role="toggleBtn"
+              data-testid="toggleBtn"
               className={`${
                 props.postInfo.length > 43
                   ? styles.toggleClickBtn
