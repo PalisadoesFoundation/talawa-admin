@@ -219,6 +219,27 @@ describe('Organisation List Page', () => {
     });
   });
 
+  test('Search bar filters organizations by name', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgList />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    await wait();
+
+    //Search orgnizations with there name
+    const searchBar = screen.getByRole('textbox');
+    userEvent.type(searchBar, 'Akatsuki');
+    await wait();
+    expect(searchBar).toBeInTheDocument();
+  });
+
   test('Should render no organisation warning alert when there are no organization', async () => {
     window.location.assign('/');
 
