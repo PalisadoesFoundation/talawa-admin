@@ -30,7 +30,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
     file: '',
   });
 
-  const [login] = useMutation(UPDATE_USER_MUTATION);
+  const [updateUser] = useMutation(UPDATE_USER_MUTATION);
 
   const {
     data: data,
@@ -65,8 +65,12 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
 
   const login_link = async () => {
     try {
-      const { data } = await login({
+      const { data } = await updateUser({
         variables: {
+          //Currently on these  fields are supported by the api
+          firstName: formState.firstName,
+          lastName: formState.lastName,
+          email: formState.email,
           file: formState.file,
         },
       });
@@ -84,7 +88,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
         toast.success('Successful updated');
         setTimeout(() => {
           window.location.reload();
-        }, 2000);
+        }, 500);
       }
     } catch (error: any) {
       /* istanbul ignore next */
