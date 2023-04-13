@@ -26,7 +26,6 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
     email: '',
     password: '',
     applangcode: '',
-    selectedOption: '',
     file: '',
   });
 
@@ -82,7 +81,6 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
           email: '',
           password: '',
           applangcode: '',
-          selectedOption: '',
           file: '',
         });
         toast.success('Successful updated');
@@ -184,41 +182,6 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
                     </option>
                   ))}
                 </select>
-              </label>
-            </div>
-            <div>
-              <label>
-                {t('userType')}
-                <div className={styles.radio_buttons}>
-                  <input
-                    type="radio"
-                    id="admin"
-                    value="selectadmin"
-                    name="selectRole"
-                    checked={formState.selectedOption === 'selectadmin'}
-                    onChange={(e) => {
-                      setFormState({
-                        ...formState,
-                        selectedOption: e.target.value,
-                      });
-                    }}
-                  />
-                  <label htmlFor="admin">{t('admin')}</label>
-                  <input
-                    type="radio"
-                    id="superadmin"
-                    value="selectsuperadmin"
-                    name="selectRole"
-                    checked={formState.selectedOption === 'selectsuperadmin'}
-                    onChange={(e) => {
-                      setFormState({
-                        ...formState,
-                        selectedOption: e.target.value,
-                      });
-                    }}
-                  />
-                  <label htmlFor="superadmin">{t('superAdmin')}</label>
-                </div>
               </label>
             </div>
           </div>
