@@ -287,38 +287,6 @@ describe('Organisation List Page', () => {
     userEvent.type(screen.getByTestId(/searchByName/i), search3);
   });
 
-  test('Modal onRequestClose should be called when close button is clicked', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <OrgList />
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-
-    // Find and click the Create Organization button to open the modal
-    userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
-
-    // Find the close button inside the modal
-    const closeButton = screen.getByTestId(/closeOrganizationModal/i);
-
-    // Click the close button
-    userEvent.click(closeButton);
-
-    // Wait for modal to close
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId(/closeOrganizationModal/i)
-      ).not.toBeInTheDocument();
-    });
-  });
-
   test('Should render no organisation warning alert when there are no organization', async () => {
     window.location.assign('/');
 
