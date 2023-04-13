@@ -103,25 +103,6 @@ const Requests = () => {
     setPage(0);
   };
 
-  const handleSearch = (filters: typeof filterData) => {
-    memberRefetch(filters);
-  };
-
-  const handleSearchDebounced = debounce(handleSearch);
-
-  const updateFilters = (
-    name: 'firstName_contains' | 'lastName_contains',
-    value: string
-  ) => {
-    const newFilterData = {
-      ...filterData,
-      [name]: value,
-    };
-
-    setFilterData(newFilterData);
-    handleSearchDebounced(newFilterData);
-  };
-
   const handleBlockUser = async (userId: string) => {
     try {
       const { data } = await blockUser({
@@ -165,6 +146,18 @@ const Requests = () => {
     window.location.replace('/orglist');
   }
 
+  const handleSearch = (e: any) => {
+    const newFilterData = {
+      ...filterData,
+      [e.target.name]: e.target.value,
+    };
+
+    setFilterData(newFilterData);
+    memberRefetch(newFilterData);
+  };
+
+  const handleSearchDebounced = debounce(handleSearch);
+
   return (
     <>
       <AdminNavbar targets={targets} url_1={configUrl} />
@@ -178,13 +171,10 @@ const Requests = () => {
                 id="firstName"
                 placeholder={t('searchFirstName')}
                 name="firstName_contains"
-                value={filterData.firstName_contains}
                 data-testid="searchByFirstName"
                 autoComplete="off"
                 required
-                onChange={(e) => {
-                  updateFilters('firstName_contains', e.target.value);
-                }}
+                onChange={handleSearchDebounced}
               />
 
               <input
@@ -192,13 +182,10 @@ const Requests = () => {
                 id="lastName"
                 placeholder={t('searchLastName')}
                 name="lastName_contains"
-                value={filterData.lastName_contains}
                 data-testid="searchByLastName"
                 autoComplete="off"
                 required
-                onChange={(e) => {
-                  updateFilters('lastName_contains', e.target.value);
-                }}
+                onChange={handleSearchDebounced}
               />
 
               <div className={styles.radio_buttons} data-testid="usertypelist">
