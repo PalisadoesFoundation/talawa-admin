@@ -286,7 +286,11 @@
     "orgName": "輸入名字",
     "blockedSuccessfully": "用戶被成功阻止",
     "Un-BlockedSuccessfully": "用戶解封成功",
-    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
+    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。",
+    "allUsers": "所有成员",
+    "blockedUsers": "被阻止的成员",
+    "searchFirstName": "输入名字",
+    "searchLastName": "输入姓氏"
   },
   "forgotPassword": {
     "title": "塔拉瓦忘記密碼",
