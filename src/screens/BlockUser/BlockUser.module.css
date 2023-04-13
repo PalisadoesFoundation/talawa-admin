@@ -78,6 +78,20 @@
   justify-content: space-between;
 }
 
+.radio_buttons {
+  color: #707070;
+  font-weight: 600;
+  font-size: 14px;
+}
+.radio_buttons > input {
+  transform: scale(1.2);
+}
+.radio_buttons > label {
+  margin-top: -4px;
+  margin-left: 5px;
+  margin-right: 15px;
+}
+
 @media screen and (max-width: 575.5px) {
   .justifysp {
     padding-left: 55px;

@@ -33,6 +33,8 @@ const Requests = () => {
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
 
+  const [state, setState] = useState(0);
+
   const {
     data,
     loading: spammers_loading,
@@ -152,6 +154,34 @@ const Requests = () => {
                 required
                 onChange={handleSearchByName}
               />
+
+              <div className={styles.radio_buttons} data-testid="usertypelist">
+                <input
+                  id="allusers"
+                  value="allusers"
+                  name="displaylist"
+                  type="radio"
+                  data-testid="allusers"
+                  defaultChecked={state == 0}
+                  onClick={() => {
+                    setState(0);
+                  }}
+                />
+                <label htmlFor="userslist">{t('allUsers')}</label>
+                <input
+                  id="blockedusers"
+                  value="blockedusers"
+                  name="displaylist"
+                  data-testid="blockedusers"
+                  type="radio"
+                  defaultChecked={state == 1}
+                  onClick={() => {
+                    setState(1);
+                  }}
+                />
+
+                <label htmlFor="adminslist">{t('blockedUsers')}</label>
+              </div>
             </div>
           </div>
         </Col>

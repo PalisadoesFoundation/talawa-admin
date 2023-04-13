@@ -290,7 +290,9 @@
     "orgName": "Enter Name",
     "blockedSuccessfully": "User blocked successfully",
     "Un-BlockedSuccessfully": "User Un-Blocked successfully",
-    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
+    "allUsers": "All Members",
+    "blockedUsers": "Blocked Users"
   },
   "forgotPassword": {
     "title": "Talawa Forgot Password",
