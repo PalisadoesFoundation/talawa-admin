@@ -111,8 +111,8 @@ describe('Testing User Update', () => {
       formData.lastName
     );
     userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
+    userEvent.selectOptions(screen.getByTestId('applangcode'), 'Français');
     userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
-    userEvent.click(screen.getByLabelText(/User Type/i));
     await wait();
 
     userEvent.click(screen.getByText(/Save Changes/i));
