@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 
 import styles from './BlockUser.module.css';
-import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
+import { BLOCKED_USERS_LIST } from 'GraphQl/Queries/Queries';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import { RootState } from 'state/reducers';
 import {
@@ -15,6 +15,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import PaginationList from 'components/PaginationList/PaginationList';
 import { errorHandler } from 'utils/errorHandler';
+import debounce from 'utils/debounce';
 
 const Requests = () => {
   const { t } = useTranslation('translation', {
@@ -25,7 +26,6 @@ const Requests = () => {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [searchByName, setSearchByName] = useState('');
 
   const currentUrl = window.location.href.split('=')[1];
 
@@ -33,15 +33,22 @@ const Requests = () => {
   const { targets, configUrl } = appRoutes;
 
   const [state, setState] = useState(0);
+  const [filterData, setFilterData] = useState({
+    member_of: currentUrl,
+    firstName_contains: '',
+    lastName_contains: '',
+  });
 
   const {
     data: membersData,
     loading: membersLoading,
     error: membersError,
     refetch: memberRefetch,
-  } = useQuery(MEMBERS_LIST, {
+  } = useQuery(BLOCKED_USERS_LIST, {
     variables: {
-      id: currentUrl,
+      member_of: currentUrl,
+      firstName_contains: '',
+      lastName_containe: '',
     },
   });
 
@@ -67,13 +74,23 @@ const Requests = () => {
     setPage(0);
   };
 
-  const handleSearchByName = (e: any) => {
-    const { value } = e.target;
-    setSearchByName(value);
+  const handleSearch = (filters: typeof filterData) => {
+    memberRefetch(filters);
+  };
 
-    memberRefetch({
-      // filter: searchByName,
-    });
+  const handleSearchDebounced = debounce(handleSearch);
+
+  const updateFilters = (
+    name: 'firstName_contains' | 'lastName_contains',
+    value: string
+  ) => {
+    const newFilterData = {
+      ...filterData,
+      [name]: value,
+    };
+
+    setFilterData(newFilterData);
+    handleSearchDebounced(newFilterData);
   };
 
   const handleBlockUser = async (userId: string) => {
@@ -129,12 +146,30 @@ const Requests = () => {
               <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
               <input
                 type="name"
-                id="orgname"
+                id="firstName"
                 placeholder={t('orgName')}
-                data-testid="searchByName"
+                name="firstName_contains"
+                value={filterData.firstName_contains}
+                data-testid="searchByFirstName"
                 autoComplete="off"
                 required
-                onChange={handleSearchByName}
+                onChange={(e) => {
+                  updateFilters('firstName_contains', e.target.value);
+                }}
+              />
+
+              <input
+                type="name"
+                id="lastName"
+                placeholder={t('orgName')}
+                name="lastName_contains"
+                value={filterData.lastName_contains}
+                data-testid="searchByLastName"
+                autoComplete="off"
+                required
+                onChange={(e) => {
+                  updateFilters('lastName_contains', e.target.value);
+                }}
               />
 
               <div className={styles.radio_buttons} data-testid="usertypelist">
@@ -189,11 +224,11 @@ const Requests = () => {
 
                   <tbody>
                     {(rowsPerPage > 0
-                      ? membersData.organizations[0].members.slice(
+                      ? membersData.users.slice(
                           page * rowsPerPage,
                           page * rowsPerPage + rowsPerPage
                         )
-                      : membersData.organizations[0].members
+                      : membersData.users
                     ).map(
                       (
                         user: {
@@ -250,7 +285,7 @@ const Requests = () => {
                 <tbody>
                   <tr>
                     <PaginationList
-                      count={membersData.organizations[0].members.length}
+                      count={membersData.users.length}
                       rowsPerPage={rowsPerPage}
                       page={page}
                       onPageChange={handleChangePage}

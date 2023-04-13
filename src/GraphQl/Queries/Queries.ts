@@ -158,6 +158,30 @@ export const MEMBERS_LIST = gql`
   }
 `;
 
+export const BLOCKED_USERS_LIST = gql`
+  query Users(
+    $member_of: ID!
+    $firstName_contains: String
+    $lastName_contains: String
+  ) {
+    users(
+      where: {
+        member_of: $member_of
+        firstName_contains: $firstName_contains
+        lastName_contains: $lastName_contains
+      }
+    ) {
+      firstName
+      lastName
+      _id
+      email
+      organizationsBlockedBy {
+        _id
+      }
+    }
+  }
+`;
+
 // Query to filter out all the members with the macthing query and a particular OrgId
 export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
   query Organizations(
