@@ -318,7 +318,7 @@ describe('Organisation List Page', () => {
       ).not.toBeInTheDocument();
     });
   });
-  
+
   test('Should render no organisation warning alert when there are no organization', async () => {
     window.location.assign('/');
 
