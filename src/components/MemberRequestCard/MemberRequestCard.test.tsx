@@ -10,6 +10,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import MemberRequestCard from './MemberRequestCard';
 import i18nForTest from 'utils/i18nForTest';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
 const MOCKS = [
   {
@@ -43,8 +44,8 @@ const MOCKS = [
     },
   },
 ];
-
-async function wait(ms = 0) {
+const link = new StaticMockLink(MOCKS, true);
+async function wait(ms = 100) {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -59,7 +60,7 @@ describe('Testing Member Request Card', () => {
     memberName: 'John Doe',
     memberLocation: 'India',
     joinDate: '18/03/2022',
-    memberImage: 'https://via.placeholder.com/200x100',
+    memberImage: 'image',
     email: 'johndoe@gmail.com',
   };
 
@@ -69,7 +70,7 @@ describe('Testing Member Request Card', () => {
     global.confirm = () => true;
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <MemberRequestCard {...props} />
         </I18nextProvider>
@@ -92,7 +93,7 @@ describe('Testing Member Request Card', () => {
     global.confirm = () => false;
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <MemberRequestCard
             key="123"

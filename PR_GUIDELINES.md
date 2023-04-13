@@ -17,16 +17,16 @@ All the pull requests must have code that is properly linted and formatted, so t
 Before opening a PR, you can run the following scripts to automatically lint and format the code properly:
 
 ```
-yarn lint:fix
-yarn format:fix
+npm run lint:fix
+npm run format:fix
 ```
 
 Both of these scripts also have a `check` counterpart, which would be used by the GitHub CI to ensure that the code is properly formatted.
 You can run the following scripts yourself to ensure that your pull request doesn't fail due to linting and formatting errors:
 
 ```
-yarn lint:check
-yarn format:check
+npm run lint:check
+npm run format:check
 ```
 
 ## Testing
@@ -37,6 +37,7 @@ yarn format:check
 ## Pull Request Processing
 
 1. We do not accept draft Pull Requests. They will be closed if submitted. We focus on work that is ready for immediate review.
+1. Removing assigned reviewers from your Pull Request will cause it to be closed. The quality of our code is very important to us. Therefore we make experienced maintainers of our code base review your code. Removing these assigned persons is not in the best interest of this goal.
 1. If you have not done so already, please read the `Pull Requests and Issues` and `Testing` sections above.
 1. Each contributor may only create one pull request at a time. We have this rule in place due to our limited resources - if everyone was allowed to post multiple pull requests, we would not be able to review them properly. It is also better for contributors because you can focus on creating one quality PR - so spend time making sure it is as good as it can be.
 1. Upon successful push to the fork, check if all tests are passing; if not, fix the issues and then create a pull request.

@@ -3,6 +3,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import styles from './OrgSettings.module.css';
 import UserUpdate from 'components/UserUpdate/UserUpdate';
+import UserPasswordUpdate from 'components/UserPasswordUpdate/UserPasswordUpdate';
 import OrgUpdate from 'components/OrgUpdate/OrgUpdate';
 import OrgDelete from 'components/OrgDelete/OrgDelete';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
@@ -12,6 +13,7 @@ import { MEMBERSHIP_REQUEST } from 'GraphQl/Queries/Queries';
 import { useSelector } from 'react-redux';
 import { RootState } from 'state/reducers';
 import { useTranslation } from 'react-i18next';
+import defaultImg from 'assets/third_image.png';
 
 function OrgSettings(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -20,6 +22,26 @@ function OrgSettings(): JSX.Element {
 
   document.title = t('title');
   const [screenVariable, setScreenVariable] = React.useState(0);
+  const [screenDisplayVariable, setDisplayScreenVariable] = React.useState('');
+
+  const handleClick = (number: any) => {
+    if (number === 1) {
+      setDisplayScreenVariable('updateYourDetails');
+      setScreenVariable(1);
+    } else if (number === 2) {
+      setDisplayScreenVariable('updateOrganization');
+      setScreenVariable(2);
+    } else if (number === 3) {
+      setDisplayScreenVariable('deleteOrganization');
+      setScreenVariable(3);
+    } else if (number === 4) {
+      setDisplayScreenVariable('seeRequest');
+      setScreenVariable(4);
+    } else {
+      setDisplayScreenVariable('updateYourPassword');
+      setScreenVariable(5);
+    }
+  };
 
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
@@ -40,7 +62,7 @@ function OrgSettings(): JSX.Element {
 
   /* istanbul ignore next */
   if (error) {
-    window.location.href = '/orglist';
+    window.location.replace('/orglist');
   }
 
   return (
@@ -56,16 +78,28 @@ function OrgSettings(): JSX.Element {
                   type="button"
                   value="userupdate"
                   data-testid="userUpdateBtn"
-                  onClick={() => setScreenVariable(1)}
+                  onClick={() => handleClick(1)}
+                  // onClick={() => setScreenVariable(1)}
                 >
                   {t('updateYourDetails')}
                 </button>
                 <button
                   className={styles.greenregbtn}
                   type="button"
+                  value="userPasswordUpdate"
+                  data-testid="userPasswordUpdateBtn"
+                  onClick={() => handleClick(5)}
+                  // onClick={() => setScreenVariable(1)}
+                >
+                  {t('updateYourPassword')}
+                </button>
+                <button
+                  className={styles.greenregbtn}
+                  type="button"
                   value="orgupdate"
                   data-testid="orgUpdateBtn"
-                  onClick={() => setScreenVariable(2)}
+                  onClick={() => handleClick(2)}
+                  // onClick={() => setScreenVariable(2)}
                 >
                   {t('updateOrganization')}
                 </button>
@@ -74,7 +108,8 @@ function OrgSettings(): JSX.Element {
                   type="button"
                   value="orgdelete"
                   data-testid="orgDeleteBtn"
-                  onClick={() => setScreenVariable(3)}
+                  onClick={() => handleClick(3)}
+                  // onClick={() => setScreenVariable(3)}
                 >
                   {t('deleteOrganization')}
                 </button>
@@ -83,7 +118,8 @@ function OrgSettings(): JSX.Element {
                   type="button"
                   value="orgdelete"
                   data-testid="orgDeleteBtn2"
-                  onClick={() => setScreenVariable(4)}
+                  onClick={() => handleClick(4)}
+                  // onClick={() => setScreenVariable(4)}
                 >
                   {t('seeRequest')}
                 </button>
@@ -94,9 +130,22 @@ function OrgSettings(): JSX.Element {
         <Col sm={8}>
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
-              <p className={styles.logintitle}>{t('settings')}</p>
+              <div className={styles.headerDiv}>
+                <p className={styles.logintitle}>{t('settings')}</p>
+                {screenDisplayVariable != '' && (
+                  <p className={styles.loginSubtitle}>
+                    {t(screenDisplayVariable)}
+                  </p>
+                )}
+                {/* <p className={styles.loginSubtitle}>{t("abc")}</p> */}
+              </div>
+
+              {/* <p className={styles.logintitle}>{t('settings')}</p> */}
             </Row>
             <div>{screenVariable == 1 ? <UserUpdate id="abcd" /> : null}</div>
+            <div>
+              {screenVariable == 5 ? <UserPasswordUpdate id="abcd" /> : null}
+            </div>
             <div>
               {screenVariable == 2 ? (
                 <OrgUpdate
@@ -108,8 +157,10 @@ function OrgSettings(): JSX.Element {
             <div>{screenVariable == 3 ? <OrgDelete /> : null}</div>
             <div>
               {screenVariable == 4 ? (
-                data.organizations.membershipRequests ? (
+                data?.organizations?.membershipRequests ? (
+                  /* istanbul ignore next */
                   data.organizations.map(
+                    /* istanbul ignore next */
                     (datas: {
                       _id: string;
                       membershipRequests: {
@@ -122,6 +173,7 @@ function OrgSettings(): JSX.Element {
                         };
                       };
                     }) => {
+                      /* istanbul ignore next */
                       return (
                         <MemberRequestCard
                           key={datas.membershipRequests._id}
@@ -129,7 +181,7 @@ function OrgSettings(): JSX.Element {
                           memberName={datas.membershipRequests.user.firstName}
                           memberLocation="India"
                           joinDate="12/12/2012"
-                          memberImage="https://via.placeholder.com/200x100"
+                          memberImage={defaultImg}
                           email={datas.membershipRequests.user.email}
                         />
                       );

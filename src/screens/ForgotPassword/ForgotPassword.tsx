@@ -10,6 +10,7 @@ import {
 
 import styles from './ForgotPassword.module.css';
 import { useTranslation } from 'react-i18next';
+import { errorHandler } from 'utils/errorHandler';
 
 const ForgotPassword = () => {
   const { t } = useTranslation('translation', {
@@ -52,14 +53,16 @@ const ForgotPassword = () => {
       /* istanbul ignore next */
       if (data) {
         localStorage.setItem('otpToken', data.otp.otpToken);
-        toast.success('OTP is sent to your registered email.');
+        toast.success(t('OTPsent'));
       }
     } catch (error: any) {
       /* istanbul ignore next */
       if (error.message === 'User not found') {
-        toast.warn('Email is not registered.');
+        toast.warn(t('emailNotRegistered'));
+      } else if (error.message === 'Failed to fetch') {
+        toast.error(t('talawaApiUnavailable'));
       } else {
-        toast.error('Error in sending mail.');
+        toast.error(t('errorSendingMail'));
       }
     }
   };
@@ -69,7 +72,7 @@ const ForgotPassword = () => {
     const { userOtp, newPassword, confirmNewPassword } = forgotPassFormData;
 
     if (newPassword !== confirmNewPassword) {
-      toast.error('Password and Confirm password mismatches.');
+      toast.error(t('passwordMismatches'));
       return;
     }
 
@@ -90,7 +93,7 @@ const ForgotPassword = () => {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Password changes successfully.');
+        toast.success(t('passwordChanges'));
 
         setForgotPassFormData({
           userOtp: '',
@@ -100,7 +103,7 @@ const ForgotPassword = () => {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error(error.message);
+      errorHandler(t, error);
     }
   };
 

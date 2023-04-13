@@ -12,10 +12,15 @@ import {
   ACCPET_ADMIN_MUTATION,
   REJECT_ADMIN_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { USER_LIST } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATION_CONNECTION_LIST,
+  USER_LIST,
+} from 'GraphQl/Queries/Queries';
 import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
 import i18nForTest from 'utils/i18nForTest';
+import { StaticMockLink } from 'utils/StaticMockLink';
+import { ToastContainer } from 'react-toastify';
 
 const MOCKS = [
   {
@@ -107,7 +112,82 @@ const MOCKS = [
   },
 ];
 
-async function wait(ms = 0) {
+const EMPTY_ORG_MOCKS = [
+  {
+    request: {
+      query: ACCPET_ADMIN_MUTATION,
+      variables: {
+        id: '123',
+        userType: 'ADMIN',
+      },
+    },
+    result: {
+      data: undefined,
+    },
+  },
+  {
+    request: {
+      query: REJECT_ADMIN_MUTATION,
+      variables: {
+        id: '123',
+        userType: 'ADMIN',
+      },
+    },
+    result: {
+      data: undefined,
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_CONNECTION_LIST,
+    },
+    result: {
+      data: {
+        organizationsConnection: [],
+      },
+    },
+  },
+];
+
+const ORG_LIST_MOCK = [
+  ...MOCKS,
+  {
+    request: {
+      query: ORGANIZATION_CONNECTION_LIST,
+    },
+    result: {
+      data: {
+        organizationsConnection: [
+          {
+            _id: 1,
+            image: '',
+            name: 'Akatsuki',
+            creator: {
+              firstName: 'John',
+              lastName: 'Doe',
+            },
+            admins: [
+              {
+                _id: '123',
+              },
+            ],
+            members: {
+              _id: '234',
+            },
+            createdAt: '02/02/2022',
+            location: 'Washington DC',
+          },
+        ],
+      },
+    },
+  },
+];
+
+const link = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(EMPTY_ORG_MOCKS, true);
+const link3 = new StaticMockLink(ORG_LIST_MOCK, true);
+
+async function wait(ms = 100) {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -120,7 +200,7 @@ describe('Testing Request screen', () => {
     window.location.assign('/orglist');
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -142,7 +222,7 @@ describe('Testing Request screen', () => {
     localStorage.setItem('UserType', 'USER');
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -158,7 +238,7 @@ describe('Testing Request screen', () => {
 
   test('Testing seach by name functionality', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -176,7 +256,7 @@ describe('Testing Request screen', () => {
 
   test('Testing accept user functionality', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -194,7 +274,7 @@ describe('Testing Request screen', () => {
 
   test('Testing reject user functionality', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -208,5 +288,47 @@ describe('Testing Request screen', () => {
     await wait();
 
     userEvent.click(screen.getByTestId(/rejectUser456/i));
+  });
+
+  test('Should render warning alert when there are no organizations', async () => {
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait(200);
+
+    expect(container.textContent).toMatch(
+      'Organizations not found, please create an organization through dashboard'
+    );
+  });
+
+  test('Should not render warning alert when there are organizations present', async () => {
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link3}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(container.textContent).not.toMatch(
+      'Organizations not found, please create an organization through dashboard'
+    );
   });
 });

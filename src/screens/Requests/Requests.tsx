@@ -6,12 +6,16 @@ import { useTranslation } from 'react-i18next';
 
 import styles from './Requests.module.css';
 import ListNavbar from 'components/ListNavbar/ListNavbar';
-import { USER_LIST } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATION_CONNECTION_LIST,
+  USER_LIST,
+} from 'GraphQl/Queries/Queries';
 import {
   ACCPET_ADMIN_MUTATION,
   REJECT_ADMIN_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import PaginationList from 'components/PaginationList/PaginationList';
+import { errorHandler } from 'utils/errorHandler';
 
 const Requests = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'requests' });
@@ -37,6 +41,18 @@ const Requests = () => {
 
   const [acceptAdminFunc] = useMutation(ACCPET_ADMIN_MUTATION);
   const [rejectAdminFunc] = useMutation(REJECT_ADMIN_MUTATION);
+
+  const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
+
+  useEffect(() => {
+    if (!dataOrgs) {
+      return;
+    }
+
+    if (dataOrgs.organizationsConnection.length === 0) {
+      toast.warning(t('noOrgError'));
+    }
+  }, [dataOrgs]);
 
   useEffect(() => {
     if (data) {
@@ -79,11 +95,12 @@ const Requests = () => {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('User Approved');
+        toast.success(t('userApproved'));
         setUsersData(usersData.filter((user: any) => user._id !== userId));
       }
     } catch (error: any) {
-      toast.error(error.message);
+      /* istanbul ignore next */
+      errorHandler(t, error);
     }
   };
 
@@ -97,12 +114,12 @@ const Requests = () => {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('User Rejected');
+        toast.success(t('userRejected'));
         setUsersData(usersData.filter((user: any) => user._id !== userId));
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error(error.message);
+      errorHandler(t, error);
     }
   };
 
@@ -202,7 +219,13 @@ const Requests = () => {
               </div>
             </div>
             <div>
-              <table>
+              <table
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
                 <tbody>
                   <tr>
                     <PaginationList

@@ -7,15 +7,51 @@ import { I18nextProvider } from 'react-i18next';
 import UserUpdate from './UserUpdate';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
+import { USER_DETAILS } from 'GraphQl/Queries/Queries';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
 const MOCKS = [
   {
     request: {
+      query: USER_DETAILS,
+      variables: {
+        id: '1',
+      },
+    },
+    result: {
+      data: {
+        user: {
+          __typename: 'User',
+          image: null,
+          firstName: '',
+          lastName: '',
+          email: '',
+          role: 'SUPERADMIN',
+          appLanguageCode: 'en',
+          userType: 'SUPERADMIN',
+          pluginCreationAllowed: true,
+          adminApproved: true,
+          createdAt: '2023-02-18T09:22:27.969Z',
+          adminFor: [],
+          createdOrganizations: [],
+          joinedOrganizations: [],
+          organizationUserBelongsTo: null,
+          organizationsBlockedBy: [],
+          createdEvents: [],
+          registeredEvents: [],
+          eventAdmin: [],
+          membershipRequests: [],
+        },
+      },
+    },
+  },
+  {
+    request: {
       query: UPDATE_USER_MUTATION,
       variable: {
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'johndoe@gmail.com',
+        firstName: '',
+        lastName: '',
+        email: '',
       },
     },
     result: {
@@ -30,7 +66,9 @@ const MOCKS = [
   },
 ];
 
-async function wait(ms = 0) {
+const link = new StaticMockLink(MOCKS, true);
+
+async function wait(ms = 5) {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -41,29 +79,28 @@ async function wait(ms = 0) {
 describe('Testing User Update', () => {
   const props = {
     key: '123',
-    id: '456',
+    id: '1',
   };
 
   const formData = {
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'johndoe@gmail.com',
-    password: 'qwerty',
-    applangcode: '2',
-    selectedOption: 'selectadmin',
-    displayImage: new File(['hello'], 'hello.png', { type: 'image/png' }),
+    firstName: 'Ansh',
+    lastName: 'Goyal',
+    email: 'ansh@gmail.com',
+    image: new File(['hello'], 'hello.png', { type: 'image/png' }),
   };
 
   global.alert = jest.fn();
 
   test('should render props and text elements test for the page component', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <UserUpdate {...props} />
         </I18nextProvider>
       </MockedProvider>
     );
+
+    await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/First Name/i),
@@ -74,18 +111,8 @@ describe('Testing User Update', () => {
       formData.lastName
     );
     userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
-    userEvent.type(screen.getByPlaceholderText(/Password/i), formData.password);
-    userEvent.type(
-      screen.getByPlaceholderText(/App Language Code/i),
-      formData.applangcode
-    );
-    userEvent.click(screen.getByLabelText('Admin'));
-    userEvent.click(screen.getByRole('radio', { name: /superadmin/i }));
-    userEvent.upload(
-      screen.getByLabelText(/display image:/i),
-      formData.displayImage
-    );
-
+    userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
+    userEvent.click(screen.getByLabelText(/User Type/i));
     await wait();
 
     userEvent.click(screen.getByText(/Save Changes/i));
@@ -97,26 +124,11 @@ describe('Testing User Update', () => {
       formData.lastName
     );
     expect(screen.getByPlaceholderText(/Email/i)).toHaveValue(formData.email);
-    expect(screen.getByPlaceholderText(/Password/i)).toHaveValue(
-      formData.password
-    );
-    expect(screen.getByPlaceholderText(/App Language Code/i)).toHaveValue(
-      formData.applangcode
-    );
-    expect(screen.getByLabelText('Admin')).not.toBeChecked();
-    expect(screen.getByRole('radio', { name: /superadmin/i })).toBeChecked();
-    expect(screen.getByLabelText(/display image:/i)).toBeTruthy();
 
     expect(screen.getByText(/Cancel/i)).toBeTruthy();
     expect(screen.getByPlaceholderText(/First Name/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Last Name/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Email/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/Password/i)).toBeInTheDocument();
-    expect(
-      screen.getByPlaceholderText(/App Language Code/i)
-    ).toBeInTheDocument();
-    expect(screen.getByText('User Type')).toBeInTheDocument();
-    expect(screen.getByText('Admin')).toBeInTheDocument();
-    expect(screen.getByText('Superadmin')).toBeInTheDocument();
+    expect(screen.getByText(/Display Image/i)).toBeInTheDocument();
   });
 });

@@ -19,6 +19,8 @@ import AddOnStore from './AddOnStore';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { BACKEND_URL } from 'Constant/constant';
+import i18nForTest from 'utils/i18nForTest';
+import { I18nextProvider } from 'react-i18next';
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
@@ -37,7 +39,11 @@ describe('Testing AddOnStore Component', () => {
     const { getByTestId } = render(
       <ApolloProvider client={client}>
         <Provider store={store}>
-          <BrowserRouter>{<AddOnStore />}</BrowserRouter>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              {<AddOnStore />}
+            </I18nextProvider>
+          </BrowserRouter>
         </Provider>
       </ApolloProvider>
     );

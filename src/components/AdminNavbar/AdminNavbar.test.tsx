@@ -10,97 +10,12 @@ import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 
 import AdminNavbar from './AdminNavbar';
-import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
-import { UPDATE_SPAM_NOTIFICATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-
-const MOCKS = [
-  {
-    request: {
-      query: ORGANIZATIONS_LIST,
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: 1,
-            image: '',
-            name: 'Dummy Organization',
-            description: 'This is a Dummy Organization',
-            creator: {
-              firstName: '',
-              lastName: '',
-              email: '',
-            },
-            location: 'New Delhi',
-            apiUrl: 'www.dummyWebsite.com',
-            members: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
-              email: 'johndoe@gmail.com',
-            },
-            admins: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
-              email: 'johndoe@gmail.com',
-            },
-            membershipRequests: {
-              _id: '456',
-              user: {
-                firstName: 'Sam',
-                lastName: 'Smith',
-                email: 'samsmith@gmail.com',
-              },
-            },
-            blockedUsers: {
-              _id: '789',
-              firstName: 'Steve',
-              lastName: 'Smith',
-              email: 'stevesmith@gmail.com',
-            },
-            tags: ['Shelter', 'NGO', 'Open Source'],
-            isPublic: true,
-            visibleInSearch: false,
-            spamCount: [
-              {
-                _id: '6954',
-                user: {
-                  _id: '878',
-                  firstName: 'Joe',
-                  lastName: 'Root',
-                  email: 'joeroot@gmail.com',
-                },
-                isReaded: false,
-                groupchat: {
-                  _id: '321',
-                  title: 'Dummy',
-                },
-              },
-            ],
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_SPAM_NOTIFICATION_MUTATION,
-      variables: { orgId: undefined, spamId: '6954', isReaded: true },
-    },
-    result: {
-      data: {
-        updateSpamNotification: {
-          _id: '900',
-        },
-      },
-    },
-  },
-];
-
-async function wait(ms = 0) {
+import { MOCKS } from './AdminNavbarMocks';
+import { StaticMockLink } from 'utils/StaticMockLink';
+const link1 = new StaticMockLink(MOCKS, true);
+async function wait(ms = 100) {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -149,7 +64,7 @@ describe('Testing Admin Navbar', () => {
 
   test('should render following text elements', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link1}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -183,7 +98,7 @@ describe('Testing Admin Navbar', () => {
 
   test('Testing the notification functionality', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link1}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -195,15 +110,13 @@ describe('Testing Admin Navbar', () => {
     );
 
     await wait();
-
-    userEvent.click(screen.getByTestId('NotificationsIcon'));
   });
 
   test('Testing, if spam id is present in local storage', async () => {
     localStorage.setItem('spamId', '6954');
 
     render(
-      <MockedProvider mocks={MOCKS}>
+      <MockedProvider link={link1}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -221,7 +134,7 @@ describe('Testing Admin Navbar', () => {
     window.location.assign('/orglist');
 
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider addTypename={false} link={link1}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -238,7 +151,7 @@ describe('Testing Admin Navbar', () => {
 
   test('Testing change language functionality', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider addTypename={false} link={link1}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -263,7 +176,7 @@ describe('Testing Admin Navbar', () => {
     });
 
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider addTypename={false} link={link1}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -275,5 +188,25 @@ describe('Testing Admin Navbar', () => {
     );
 
     await wait();
+  });
+  test('Should check if organisation image is not present', async () => {
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdminNavbar {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    expect(container.textContent).not.toBe('Loading data...');
+    await wait();
+    const imageOptions = screen.getByTestId(/navbarOrgImageAbsent/i);
+    const imageLogo = screen.getByTestId(/orgLogoAbsent/i);
+    expect(imageLogo).toBeInTheDocument();
+    expect(imageOptions).toBeInTheDocument();
   });
 });

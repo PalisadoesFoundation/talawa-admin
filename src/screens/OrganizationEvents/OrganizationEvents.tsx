@@ -9,15 +9,19 @@ import { Form } from 'antd';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import Calendar from 'components/EventCalendar/Calendar';
 
 import styles from './OrganizationEvents.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
-import EventListCard from 'components/EventListCard/EventListCard';
-import { ORGANIZATION_EVENT_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATION_EVENT_CONNECTION_LIST,
+  ORGANIZATIONS_LIST,
+} from 'GraphQl/Queries/Queries';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { RootState } from 'state/reducers';
-import PaginationList from 'components/PaginationList/PaginationList';
 import debounce from 'utils/debounce';
+import dayjs from 'dayjs';
+import { errorHandler } from 'utils/errorHandler';
 
 function OrganizationEvents(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -26,8 +30,6 @@ function OrganizationEvents(): JSX.Element {
 
   document.title = t('title');
   const [eventmodalisOpen, setEventModalIsOpen] = useState(false);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [startDate, setStartDate] = React.useState<Date | null>(new Date());
   const [endDate, setEndDate] = React.useState<Date | null>(new Date());
@@ -43,8 +45,8 @@ function OrganizationEvents(): JSX.Element {
     eventdescrip: '',
     date: '',
     location: '',
-    startTime: '',
-    endTime: '',
+    startTime: '08:00:00',
+    endTime: '18:00:00',
   });
   const currentUrl = window.location.href.split('=')[1];
 
@@ -70,6 +72,13 @@ function OrganizationEvents(): JSX.Element {
     }
   );
 
+  const { data: orgData } = useQuery(ORGANIZATIONS_LIST, {
+    variables: { id: currentUrl },
+  });
+
+  const userId = localStorage.getItem('id') as string;
+  const userRole = localStorage.getItem('UserType') as string;
+
   const [create, { loading: loading_2 }] = useMutation(CREATE_EVENT_MUTATION);
 
   const CreateEvent = async (e: ChangeEvent<HTMLFormElement>) => {
@@ -83,31 +92,31 @@ function OrganizationEvents(): JSX.Element {
           recurring: recurringchecked,
           isRegisterable: registrablechecked,
           organizationId: currentUrl,
-          startDate: startDate?.toDateString(),
-          endDate: endDate?.toDateString(),
+          startDate: dayjs(startDate).format('YYYY-MM-DD'),
+          endDate: dayjs(endDate).format('YYYY-MM-DD'),
           allDay: alldaychecked,
           location: formState.location,
-          startTime: formState.startTime,
-          endTime: formState.endTime,
+          startTime: !alldaychecked ? formState.startTime + 'Z' : null,
+          endTime: !alldaychecked ? formState.endTime + 'Z' : null,
         },
       });
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Congratulations! The Event is created.');
+        toast.success(t('eventCreated'));
         refetch();
         setFormState({
           title: '',
           eventdescrip: '',
           date: '',
           location: '',
-          startTime: '',
-          endTime: '',
+          startTime: '08:00:00',
+          endTime: '18:00:00',
         });
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error(error.message);
+      errorHandler(t, error);
     }
   };
 
@@ -125,19 +134,6 @@ function OrganizationEvents(): JSX.Element {
   }
 
   /* istanbul ignore next */
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
-    setPage(newPage);
-  };
-  /* istanbul ignore next */
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
 
   const handleSearchByTitle = (e: any) => {
     const { value } = e.target;
@@ -223,68 +219,13 @@ function OrganizationEvents(): JSX.Element {
                 <i className="fa fa-plus"></i> {t('addEvent')}
               </Button>
             </Row>
-            <div className={`row ${styles.list_box}`}>
-              {data
-                ? (rowsPerPage > 0
-                    ? data.eventsByOrganizationConnection.slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
-                      )
-                    : data.eventsByOrganizationConnection
-                  ).map(
-                    (datas: {
-                      _id: string;
-                      title: string;
-                      description: string;
-                      startDate: string;
-                      endDate: string;
-                      location: string;
-                      startTime: string;
-                      endTime: string;
-                      allDay: boolean;
-                      recurring: boolean;
-                      isPublic: boolean;
-                      isRegisterable: boolean;
-                    }) => {
-                      return (
-                        <EventListCard
-                          key={datas._id}
-                          id={datas._id}
-                          eventLocation={datas.location}
-                          eventName={datas.title}
-                          eventDescription={datas.description}
-                          regDate={datas.startDate}
-                          regEndDate={datas.endDate}
-                          startTime={datas.startTime}
-                          endTime={datas.endTime}
-                          allDay={datas.allDay}
-                          recurring={datas.recurring}
-                          isPublic={datas.isPublic}
-                          isRegisterable={datas.isRegisterable}
-                        />
-                      );
-                    }
-                  )
-                : null}
-            </div>
           </div>
-          <div>
-            <table>
-              <tbody>
-                <tr>
-                  <PaginationList
-                    count={
-                      data ? data.eventsByOrganizationConnection.length : 0
-                    }
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <Calendar
+            eventData={data?.eventsByOrganizationConnection}
+            orgData={orgData}
+            userRole={userRole}
+            userId={userId}
+          />
         </Col>
       </Row>
       <Modal
@@ -413,7 +354,7 @@ function OrganizationEvents(): JSX.Element {
                   <input
                     id="allday"
                     type="checkbox"
-                    defaultChecked={alldaychecked}
+                    checked={alldaychecked}
                     data-testid="alldayCheck"
                     onChange={() => setAllDayChecked(!alldaychecked)}
                   />
@@ -424,7 +365,7 @@ function OrganizationEvents(): JSX.Element {
                     id="recurring"
                     type="checkbox"
                     data-testid="recurringCheck"
-                    defaultChecked={recurringchecked}
+                    checked={recurringchecked}
                     onChange={() => setRecurringChecked(!recurringchecked)}
                   />
                 </div>
@@ -436,7 +377,7 @@ function OrganizationEvents(): JSX.Element {
                     id="ispublic"
                     type="checkbox"
                     data-testid="ispublicCheck"
-                    defaultChecked={publicchecked}
+                    checked={publicchecked}
                     onChange={() => setPublicChecked(!publicchecked)}
                   />
                 </div>
@@ -446,7 +387,7 @@ function OrganizationEvents(): JSX.Element {
                     id="registrable"
                     type="checkbox"
                     data-testid="registrableCheck"
-                    defaultChecked={registrablechecked}
+                    checked={registrablechecked}
                     onChange={() => setRegistrableChecked(!registrablechecked)}
                   />
                 </div>

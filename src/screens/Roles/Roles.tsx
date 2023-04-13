@@ -6,9 +6,14 @@ import { useTranslation } from 'react-i18next';
 
 import styles from './Roles.module.css';
 import ListNavbar from 'components/ListNavbar/ListNavbar';
-import { USER_LIST } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATION_CONNECTION_LIST,
+  USER_LIST,
+} from 'GraphQl/Queries/Queries';
 import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
 import PaginationList from 'components/PaginationList/PaginationList';
+import NotFound from 'components/NotFound/NotFound';
+import { errorHandler } from 'utils/errorHandler';
 
 const Roles = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'roles' });
@@ -19,18 +24,47 @@ const Roles = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchByName, setSearchByName] = useState('');
+  const [count, setCount] = useState(0);
+
+  const userType = localStorage.getItem('UserType');
+  const userId = localStorage.getItem('id');
 
   useEffect(() => {
-    const userType = localStorage.getItem('UserType');
     if (userType != 'SUPERADMIN') {
       window.location.assign('/orglist');
     }
     setComponentLoader(false);
   }, []);
 
-  const { data, loading: users_loading, refetch } = useQuery(USER_LIST);
+  useEffect(() => {
+    if (searchByName !== '') {
+      refetch({
+        firstName_contains: searchByName,
+      });
+    } else {
+      if (count !== 0) {
+        refetch({
+          firstName_contains: searchByName,
+        });
+      }
+    }
+  }, [count, searchByName]);
+
+  const { loading: users_loading, error, data, refetch } = useQuery(USER_LIST);
 
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
+
+  const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
+
+  useEffect(() => {
+    if (!dataOrgs) {
+      return;
+    }
+
+    if (dataOrgs.organizationsConnection.length === 0) {
+      toast.warning(t('noOrgError'));
+    }
+  }, [dataOrgs]);
 
   if (componentLoader || users_loading) {
     return <div className="loader"></div>;
@@ -67,25 +101,23 @@ const Roles = () => {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Role Updated.');
+        toast.success(t('roleUpdated'));
+        refetch();
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error(error.message);
+      errorHandler(t, error);
     }
   };
 
   const handleSearchByName = (e: any) => {
     const { value } = e.target;
     setSearchByName(value);
-
-    refetch({
-      filter: searchByName,
-    });
+    setCount((prev) => prev + 1);
   };
 
   return (
-    <>
+    <div data-testid="roles-header">
       <ListNavbar />
       <Row>
         <Col sm={3}>
@@ -109,6 +141,7 @@ const Roles = () => {
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>{t('usersList')}</p>
             </Row>
+
             <div className={styles.list_box}>
               <div className="table-responsive">
                 <table className={`table table-hover ${styles.userListTable}`}>
@@ -121,7 +154,7 @@ const Roles = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {data &&
+                    {data && !error?.graphQLErrors ? (
                       (rowsPerPage > 0
                         ? data.users.slice(
                             page * rowsPerPage,
@@ -145,79 +178,55 @@ const Roles = () => {
                               <td>{`${user.firstName} ${user.lastName}`}</td>
                               <td>{user.email}</td>
                               <td>
-                                {user.userType === 'ADMIN' ? (
-                                  <select
-                                    className="form-control"
-                                    name={`role${user._id}`}
-                                    onChange={changeRole}
-                                  >
-                                    <option
-                                      value={`ADMIN?${user._id}`}
-                                      selected
-                                    >
-                                      {t('admin')}
-                                    </option>
-                                    <option value={`SUPERADMIN?${user._id}`}>
-                                      {t('superAdmin')}
-                                    </option>
-                                    <option value={`USER?${user._id}`}>
-                                      {t('user')}
-                                    </option>
-                                  </select>
-                                ) : user.userType === 'SUPERADMIN' ? (
-                                  <select
-                                    className="form-control"
-                                    name={`role${user._id}`}
-                                    data-testid={`changeRole${user._id}`}
-                                    onChange={changeRole}
-                                  >
-                                    <option value={`ADMIN?${user._id}`}>
-                                      {t('admin')}
-                                    </option>
-                                    <option
-                                      value={`SUPERADMIN?${user._id}`}
-                                      selected
-                                    >
-                                      {t('superAdmin')}
-                                    </option>
-                                    <option value={`USER?${user._id}`}>
-                                      {t('user')}
-                                    </option>
-                                  </select>
-                                ) : (
-                                  <select
-                                    className="form-control"
-                                    name={`role${user._id}`}
-                                    onChange={changeRole}
-                                  >
-                                    <option value={`ADMIN?${user._id}`}>
-                                      {t('admin')}
-                                    </option>
-                                    <option value={`SUPERADMIN?${user._id}`}>
-                                      {t('superAdmin')}
-                                    </option>
-                                    <option value={`USER?${user._id}`} selected>
-                                      {t('user')}
-                                    </option>
-                                  </select>
-                                )}
+                                <select
+                                  className="form-control"
+                                  name={`role${user._id}`}
+                                  data-testid={`changeRole${user._id}`}
+                                  onChange={changeRole}
+                                  disabled={user._id === userId}
+                                  defaultValue={`${user.userType}?${user._id}`}
+                                >
+                                  <option value={`ADMIN?${user._id}`}>
+                                    {t('admin')}
+                                  </option>
+                                  <option value={`SUPERADMIN?${user._id}`}>
+                                    {t('superAdmin')}
+                                  </option>
+                                  <option value={`USER?${user._id}`}>
+                                    {t('user')}
+                                  </option>
+                                </select>
                               </td>
                             </tr>
                           );
                         }
-                      )}
+                      )
+                    ) : (
+                      <tr>
+                        <td>
+                          <NotFound title="user" keyPrefix="userNotFound" />
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
             </div>
             <div>
-              <table>
+              <table
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
                 <tbody>
                   <tr>
                     <PaginationList
                       count={data ? data.users.length : 0}
                       rowsPerPage={rowsPerPage}
                       page={page}
+                      data-testid="something"
                       onPageChange={handleChangePage}
                       onRowsPerPageChange={handleChangeRowsPerPage}
                     />
@@ -228,7 +237,7 @@ const Roles = () => {
           </div>
         </Col>
       </Row>
-    </>
+    </div>
   );
 };
 

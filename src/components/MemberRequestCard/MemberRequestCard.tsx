@@ -8,6 +8,9 @@ import {
   REJECT_ORGANIZATION_REQUEST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import defaultImg from 'assets/third_image.png';
+import { errorHandler } from 'utils/errorHandler';
 
 interface MemberRequestCardProps {
   key: string;
@@ -36,11 +39,14 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
       });
 
       /* istanbul ignore next */
-      window.alert('it is accepted');
+      toast.success(t('memberAdded'));
       /* istanbul ignore next */
-      window.location.reload();
-    } catch (error) {
-      window.alert(error);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    } catch (error: any) {
+      /* istanbul ignore next */
+      errorHandler(t, error);
     }
   };
 
@@ -56,8 +62,9 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
 
         /* istanbul ignore next */
         window.location.reload();
-      } catch (error) {
-        window.alert(error);
+      } catch (error: any) {
+        /* istanbul ignore next */
+        errorHandler(t, error);
       }
     }
   };
@@ -74,7 +81,7 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
             />
           ) : (
             <img
-              src="https://via.placeholder.com/200x100"
+              src={defaultImg}
               className={styles.memberimg}
               alt="userImage"
             />

@@ -2,19 +2,21 @@ import React, { useEffect, useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { Nav } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { Badge, IconButton } from '@mui/material';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import { Link, NavLink } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import Cookies from 'js-cookie';
 import i18next from 'i18next';
-
+import MenuIcon from '@mui/icons-material/Menu';
 import styles from './AdminNavbar.module.css';
-import Logo from 'assets/talawa-logo-200x200.png';
-import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import AboutImg from 'assets/images/defaultImg.png';
+import {
+  ORGANIZATIONS_LIST,
+  USER_ORGANIZATION_LIST,
+} from 'GraphQl/Queries/Queries';
 import { UPDATE_SPAM_NOTIFICATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { languages } from 'utils/languages';
+import { errorHandler } from 'utils/errorHandler';
 
 interface NavbarProps {
   targets: {
@@ -40,6 +42,11 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
     variables: { id: currentUrl },
   });
   const [updateSpam] = useMutation(UPDATE_SPAM_NOTIFICATION_MUTATION);
+  const { data: data_2 } = useQuery(USER_ORGANIZATION_LIST, {
+    variables: { id: localStorage.getItem('id') },
+  });
+
+  const isSuperAdmin = data_2?.user.userType === 'SUPERADMIN';
 
   useEffect(() => {
     const handleUpdateSpam = async () => {
@@ -59,9 +66,9 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
             localStorage.removeItem('spamId');
             refetch();
           }
-        } catch (error) {
+        } catch (error: any) {
           /* istanbul ignore next */
-          console.log(error);
+          errorHandler(t, error);
         }
       }
     };
@@ -70,9 +77,9 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
   }, []);
 
   useEffect(() => {
-    if (data && data.organizations[0].spamCount) {
+    if (data && data?.organizations[0].spamCount) {
       setSpamCountData(
-        data.organizations[0].spamCount.filter(
+        data?.organizations[0].spamCount.filter(
           (spam: any) => spam.isReaded === false
         )
       );
@@ -91,14 +98,31 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
     window.location.replace('/orglist');
   }
 
+  let OrgName;
+  if (data) {
+    OrgName = data?.organizations[0].name;
+  }
+
   return (
     <>
       <Navbar className={styles.navbarbg} expand="xl" fixed="top">
-        <Navbar.Brand>
-          <Link className={styles.logo} to="/orglist">
-            <img src={Logo} />
-            <strong>{t('talawa_portal')}</strong>
-          </Link>
+        <Navbar.Brand className={styles.navbarBrandLogo}>
+          <div className={styles.logo}>
+            {data?.organizations[0].image ? (
+              <img
+                src={data?.organizations[0].image}
+                className={styles.roundedcircle}
+                data-testid={'orgLogoPresent'}
+              />
+            ) : (
+              <img
+                src={AboutImg}
+                className={styles.roundedcircle}
+                data-testid={'orgLogoAbsent'}
+              />
+            )}
+            <strong>{OrgName}</strong>
+          </div>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
@@ -107,10 +131,11 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
               return url ? (
                 <Nav.Item key={name} className={styles.navitems}>
                   <Nav.Link
-                    as={Link}
+                    as={NavLink}
                     to={url}
                     id={name}
                     className={styles.navlinks}
+                    activeClassName={styles.navlinks_active}
                   >
                     {t(name)}
                   </Nav.Link>
@@ -120,18 +145,13 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                   <Dropdown className={styles.dropdowns}>
                     <Dropdown.Toggle
                       variant=""
-                      className={styles.dropdowntoggle}
+                      id={name}
+                      className={`${styles.dropdowntoggle} ${styles.navlinks_dropdown}`}
                     >
-                      <Nav.Link
-                        href={url}
-                        id={name}
-                        className={styles.navlinks}
-                      >
-                        {t(name)}
-                      </Nav.Link>
+                      {t(name)}
                     </Dropdown.Toggle>
                     {subTargets && (
-                      <Dropdown.Menu>
+                      <Dropdown.Menu className={styles.dropdowns}>
                         {subTargets.map((subTarget: any, index: number) => (
                           <Dropdown.Item
                             key={index}
@@ -153,30 +173,30 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
               );
             })}
           </Nav>
-          <Nav className="ml-auto ">
-            <div className={styles.notificationIcon}>
-              <IconButton
-                data-toggle="modal"
-                data-target="#notificationModal"
-                data-placement="bottom"
-                title="Notification"
-              >
-                <Badge
-                  color="success"
-                  badgeContent={spamCountData.length}
-                  max={9}
-                >
-                  <NotificationsIcon htmlColor="black" />
-                </Badge>
-              </IconButton>
-            </div>
+          <Link className={styles.allOrgBtn} to="/orglist">
+            {isSuperAdmin ? t('allOrganizations') : t('yourOrganization')}
+          </Link>
+          <Nav
+            className="ml-auto items-center"
+            style={{ alignItems: 'center' }}
+          >
             <Dropdown className={styles.dropdowns}>
-              <Dropdown.Toggle variant="" id="dropdown-basic">
-                <img
-                  src="https://via.placeholder.com/45x45"
-                  className={styles.roundedcircle}
-                  data-testid="logoutDropdown"
-                />
+              <Dropdown.Toggle
+                variant="white"
+                id="dropdown-basic"
+                data-testid="logoutDropdown"
+              >
+                {data?.organizations[0].image ? (
+                  <span>
+                    <MenuIcon></MenuIcon>
+                  </span>
+                ) : (
+                  <img
+                    src={AboutImg}
+                    className={styles.roundedcircle}
+                    data-testid="navbarOrgImageAbsent"
+                  />
+                )}
               </Dropdown.Toggle>
               <Dropdown.Menu className={styles.dropdownMenu}>
                 <Dropdown.Item
@@ -209,7 +229,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                           data-testid={`changeLanguageBtn${index}`}
                         >
                           <span
-                            className={`flag-icon flag-icon-${language.country_code} mr-2`}
+                            className={`fi fi-${language.country_code} mr-2`}
                           ></span>
                           {language.name}
                         </button>

@@ -19,6 +19,10 @@ import { CREATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import ListNavbar from 'components/ListNavbar/ListNavbar';
 import PaginationList from 'components/PaginationList/PaginationList';
 import debounce from 'utils/debounce';
+import convertToBase64 from 'utils/convertToBase64';
+import AdminDashListCard from 'components/AdminDashListCard/AdminDashListCard';
+import { Alert, AlertTitle } from '@mui/material';
+import { errorHandler } from 'utils/errorHandler';
 
 function OrgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
@@ -32,9 +36,8 @@ function OrgList(): JSX.Element {
     ispublic: true,
     visible: false,
     location: '',
-    tags: '',
+    image: '',
   });
-  const [, setSearchByName] = useState('');
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -67,15 +70,43 @@ function OrgList(): JSX.Element {
     error: error_list,
     refetch,
   } = useQuery(ORGANIZATION_CONNECTION_LIST);
+  /*istanbul ignore next*/
+  interface UserType {
+    adminFor: Array<{
+      _id: string;
+    }>;
+  }
+  /*istanbul ignore next*/
+  interface CurrentOrgType {
+    _id: string;
+  }
+  /*istanbul ignore next*/
+  const isAdminForCurrentOrg = (
+    user: UserType | undefined,
+    currentOrg: CurrentOrgType
+  ): boolean => {
+    return (
+      user?.adminFor.length === 1 && user?.adminFor[0]._id === currentOrg._id
+    );
+  };
 
   const CreateOrg = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { name, descrip, location, visible, ispublic, tags } = formState;
+    const {
+      name: _name,
+      descrip: _descrip,
+      location: _location,
+      visible,
+      ispublic,
+      image,
+    } = formState;
+
+    const name = _name.trim();
+    const descrip = _descrip.trim();
+    const location = _location.trim();
 
     try {
-      const tagsArray = tags.split(',').map((tag) => tag.trim());
-
       const { data } = await create({
         variables: {
           name: name,
@@ -83,7 +114,7 @@ function OrgList(): JSX.Element {
           location: location,
           visibleInSearch: visible,
           isPublic: ispublic,
-          tags: tagsArray,
+          image: image,
         },
       });
 
@@ -97,12 +128,13 @@ function OrgList(): JSX.Element {
           ispublic: true,
           visible: false,
           location: '',
-          tags: '',
+          image: '',
         });
+        setmodalIsOpen(false);
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error(error.message);
+      errorHandler(t, error);
     }
   };
 
@@ -134,33 +166,28 @@ function OrgList(): JSX.Element {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
+  /* istanbul ignore next */
   const handleSearchByName = (e: any) => {
     const { value } = e.target;
-    setSearchByName(value);
-
-    if (value.length === 0) {
-      refetch({
-        filter: '',
-      });
-    } else {
-      setSearchByName(value);
-      refetch({
-        filter: value,
-      });
-    }
+    refetch({
+      filter: value,
+    });
   };
-
+  let dataRevOrg;
   const debouncedHandleSearchByName = debounce(handleSearchByName);
-
+  if (data) {
+    dataRevOrg = data.organizationsConnection.slice().reverse();
+  }
   return (
     <>
       <ListNavbar />
       <Row>
         <Col xl={3}>
           <div className={styles.sidebar}>
-            <div className={styles.sidebarsticky}>
-              <h6 className={styles.logintitle}>{t('you')}</h6>
+            <div className={`${styles.mainpageright} ${styles.sidebarsticky}`}>
+              <h6 className={`${styles.logintitle} ${styles.youheader}`}>
+                {t('you')}
+              </h6>
               <p>
                 {t('name')}:
                 <span>
@@ -173,9 +200,9 @@ function OrgList(): JSX.Element {
               <div className={styles.userEmail}>
                 {t('email')}:
                 <p>
-                  {data_2?.user.email.substring(
+                  {(data_2?.user.email || '').substring(
                     0,
-                    data_2?.user.email.length / 2
+                    (data_2?.user.email || '').length / 2
                   )}
                   <span>
                     {data_2?.user.email.substring(
@@ -185,38 +212,45 @@ function OrgList(): JSX.Element {
                   </span>
                 </p>
               </div>
-
-              <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
-              <input
-                type="name"
-                id="orgname"
-                placeholder={t('enterName')}
-                data-testid="searchByName"
-                autoComplete="off"
-                required
-                onChange={debouncedHandleSearchByName}
-              />
             </div>
           </div>
         </Col>
-        <Col xl={8}>
-          <div className={styles.mainpageright}>
-            <Row className={styles.justifysp}>
+        <Col xl={8} className={styles.mainpagerightContainer}>
+          <div className={styles.mainpageright} data-testid="mainpageright">
+            <div className={styles.justifysp}>
               <p className={styles.logintitle}>{t('organizationList')}</p>
+            </div>
+            <div className={styles.search}>
               <Button
                 variant="success"
                 className={styles.invitebtn}
                 disabled={isSuperAdmin}
                 onClick={showInviteModal}
                 data-testid="createOrganizationBtn"
+                style={{ display: isSuperAdmin ? 'none' : 'block' }}
               >
                 + {t('createOrganization')}
               </Button>
-            </Row>
-            <div className={styles.list_box}>
-              {data &&
+              <input
+                type="name"
+                id="orgname"
+                placeholder="Search Organization"
+                data-testid="searchByName"
+                autoComplete="off"
+                required
+                onChange={debouncedHandleSearchByName}
+                style={{
+                  display:
+                    data_2 && data_2.user.userType !== 'SUPERADMIN'
+                      ? 'none'
+                      : 'block',
+                }}
+              />
+            </div>
+            <div className={styles.list_box} data-testid="organizations-list">
+              {data?.organizationsConnection.length > 0 ? (
                 (rowsPerPage > 0
-                  ? data.organizationsConnection.slice(
+                  ? dataRevOrg.slice(
                       page * rowsPerPage,
                       page * rowsPerPage + rowsPerPage
                     )
@@ -231,35 +265,71 @@ function OrgList(): JSX.Element {
                     createdAt: string;
                     location: string | null;
                   }) => {
-                    return (
-                      <SuperDashListCard
-                        id={datas._id}
-                        key={datas._id}
-                        image={datas.image}
-                        admins={datas.admins}
-                        members={datas.members.length}
-                        createdDate={dayjs(parseInt(datas?.createdAt)).format(
-                          'DD/MM/YYYY'
-                        )}
-                        orgName={datas.name}
-                        orgLocation={datas.location}
-                      />
-                    );
+                    if (data_2 && data_2.user.userType == 'SUPERADMIN') {
+                      return (
+                        <SuperDashListCard
+                          id={datas._id}
+                          key={datas._id}
+                          image={datas.image}
+                          admins={datas.admins}
+                          members={datas.members.length}
+                          createdDate={dayjs(datas?.createdAt).format(
+                            'MMMM D, YYYY'
+                          )}
+                          orgName={datas.name}
+                          orgLocation={datas.location}
+                        />
+                      );
+                    } else if (isAdminForCurrentOrg(data_2?.user, datas)) {
+                      /* istanbul ignore next */
+                      return (
+                        <AdminDashListCard
+                          id={datas._id}
+                          key={datas._id}
+                          image={datas.image}
+                          admins={datas.admins}
+                          members={datas.members.length}
+                          createdDate={dayjs(datas?.createdAt).format(
+                            'MMMM D, YYYY'
+                          )}
+                          orgName={datas.name}
+                          orgLocation={datas.location}
+                        />
+                      );
+                    } else {
+                      return null;
+                    }
                   }
-                )}
+                )
+              ) : (
+                <div>
+                  <Alert variant="filled" severity="error">
+                    <AlertTitle>{t('noOrgErrorTitle')}</AlertTitle>
+                    {t('noOrgErrorDescription')}
+                  </Alert>
+                </div>
+              )}
             </div>
             <div>
-              <table>
+              <table
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
                 <tbody>
-                  <tr>
-                    <PaginationList
-                      count={data ? data.organizationsConnection.length : 0}
-                      rowsPerPage={rowsPerPage}
-                      page={page}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                  </tr>
+                  {data_2?.user.userType === 'SUPERADMIN' && (
+                    <tr data-testid="rowsPPSelect">
+                      <PaginationList
+                        count={data ? data.organizationsConnection.length : 0}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                      />
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
@@ -268,6 +338,7 @@ function OrgList(): JSX.Element {
       </Row>
       <Modal
         isOpen={modalisOpen}
+        onRequestClose={() => setmodalIsOpen(false)}
         style={{
           overlay: { backgroundColor: 'grey' },
         }}
@@ -283,7 +354,12 @@ function OrgList(): JSX.Element {
                 className={styles.cancel}
                 data-testid="closeOrganizationModal"
               >
-                <i className="fa fa-times"></i>
+                <i
+                  className="fa fa-times"
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                ></i>
               </a>
             </div>
             <Form onSubmitCapture={CreateOrg}>
@@ -333,21 +409,7 @@ function OrgList(): JSX.Element {
                   });
                 }}
               />
-              <label htmlFor="tags">{t('tags')}</label>
-              <input
-                type="text"
-                id="tags"
-                placeholder={t('tags')}
-                autoComplete="off"
-                required
-                value={formState.tags}
-                onChange={(e) => {
-                  setFormState({
-                    ...formState,
-                    tags: e.target.value,
-                  });
-                }}
-              />
+
               <div className={styles.checkboxdiv}>
                 <div className={styles.dispflex}>
                   <label htmlFor="ispublic">{t('isPublic')}:</label>
@@ -386,7 +448,15 @@ function OrgList(): JSX.Element {
                   name="photo"
                   type="file"
                   multiple={false}
-                  //onChange=""
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file)
+                      setFormState({
+                        ...formState,
+                        image: await convertToBase64(file),
+                      });
+                  }}
+                  data-testid="organisationImage"
                 />
               </label>
               <button

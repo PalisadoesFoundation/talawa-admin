@@ -49,8 +49,10 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
     $id: ID!
     $name: String
     $description: String
+    $location: String
     $isPublic: Boolean
     $visibleInSearch: Boolean
+    $file: String
   ) {
     updateOrganization(
       id: $id
@@ -59,7 +61,9 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
         description: $description
         isPublic: $isPublic
         visibleInSearch: $visibleInSearch
+        location: $location
       }
+      file: $file
     ) {
       _id
     }
@@ -72,10 +76,32 @@ export const UPDATE_USER_MUTATION = gql`
   mutation UpdateUserProfile(
     $firstName: String
     $lastName: String
-    $email: String
+    $email: EmailAddress
+    $file: String
   ) {
     updateUserProfile(
       data: { firstName: $firstName, lastName: $lastName, email: $email }
+      file: $file
+    ) {
+      _id
+    }
+  }
+`;
+
+// to update the password of user
+
+export const UPDATE_USER_PASSWORD_MUTATION = gql`
+  mutation UpdateUserPassword(
+    $previousPassword: String!
+    $newPassword: String!
+    $confirmNewPassword: String!
+  ) {
+    updateUserPassword(
+      data: {
+        previousPassword: $previousPassword
+        newPassword: $newPassword
+        confirmNewPassword: $confirmNewPassword
+      }
     ) {
       _id
     }
@@ -88,7 +114,7 @@ export const SIGNUP_MUTATION = gql`
   mutation SignUp(
     $firstName: String!
     $lastName: String!
-    $email: String!
+    $email: EmailAddress!
     $password: String!
   ) {
     signUp(
@@ -111,7 +137,7 @@ export const SIGNUP_MUTATION = gql`
 // to login in the talawa admin
 
 export const LOGIN_MUTATION = gql`
-  mutation Login($email: String!, $password: String!) {
+  mutation Login($email: EmailAddress!, $password: String!) {
     login(data: { email: $email, password: $password }) {
       user {
         _id
@@ -141,7 +167,7 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
     $name: String!
     $visibleInSearch: Boolean!
     $isPublic: Boolean!
-    $tags: [String!]!
+    $image: String
   ) {
     createOrganization(
       data: {
@@ -150,8 +176,8 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
         name: $name
         visibleInSearch: $visibleInSearch
         isPublic: $isPublic
-        tags: $tags
       }
+      file: $image
     ) {
       _id
     }
@@ -178,11 +204,11 @@ export const CREATE_EVENT_MUTATION = gql`
     $isPublic: Boolean!
     $isRegisterable: Boolean!
     $organizationId: ID!
-    $startDate: String!
-    $endDate: String
+    $startDate: Date!
+    $endDate: Date
     $allDay: Boolean!
-    $startTime: String
-    $endTime: String
+    $startTime: Time
+    $endTime: Time
     $location: String
   ) {
     createEvent(
@@ -229,8 +255,8 @@ export const REMOVE_ADMIN_MUTATION = gql`
 // to Remove member from an organization
 
 export const REMOVE_MEMBER_MUTATION = gql`
-  mutation RemoveAdmin($orgid: ID!, $userid: ID!) {
-    removeAdmin(data: { organizationId: $orgid, userId: $userid }) {
+  mutation RemoveMember($orgid: ID!, $userid: ID!) {
+    removeMember(data: { organizationId: $orgid, userId: $userid }) {
       _id
     }
   }
@@ -250,9 +276,10 @@ export const CREATE_POST_MUTATION = gql`
   mutation CreatePost(
     $text: String!
     $title: String!
-    $imageUrl: String
-    $videoUrl: String
+    $imageUrl: URL
+    $videoUrl: URL
     $organizationId: ID!
+    $file: String
   ) {
     createPost(
       data: {
@@ -262,6 +289,7 @@ export const CREATE_POST_MUTATION = gql`
         videoUrl: $videoUrl
         organizationId: $organizationId
       }
+      file: $file
     ) {
       _id
     }
@@ -277,7 +305,7 @@ export const DELETE_POST_MUTATION = gql`
 `;
 
 export const GENERATE_OTP_MUTATION = gql`
-  mutation Otp($email: String!) {
+  mutation Otp($email: EmailAddress!) {
     otp(data: { email: $email }) {
       otpToken
     }
@@ -317,6 +345,7 @@ export const REJECT_ADMIN_MUTATION = gql`
     rejectAdmin(id: $id)
   }
 `;
+
 /**
  * @name UPDATE_INSTALL_STATUS_PLUGIN_MUTATION
  * @description used to toggle `installStatus` (boolean value) of a Plugin
@@ -332,6 +361,7 @@ export const UPDATE_INSTALL_STATUS_PLUGIN_MUTATION = gql`
     }
   }
 `;
+
 /**
  * @name UPDATE_ORG_STATUS_PLUGIN_MUTATION
  * @description used  `updateTempPluginInstalledOrgs`to add or remove the current Organization the in the plugin list `installedOrgs`
@@ -348,6 +378,7 @@ export const UPDATE_ORG_STATUS_PLUGIN_MUTATION = gql`
     }
   }
 `;
+
 /**
  * @name ADD_PLUGIN_MUTATION
  * @description used  `createPlugin` to add new Plugin in database
@@ -394,8 +425,8 @@ export const UPDATE_EVENT_MUTATION = gql`
     $isPublic: Boolean!
     $isRegisterable: Boolean!
     $allDay: Boolean!
-    $startTime: String
-    $endTime: String
+    $startTime: Time
+    $endTime: Time
     $location: String
   ) {
     updateEvent(

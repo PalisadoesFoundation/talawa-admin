@@ -8,6 +8,8 @@ import {
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
+import defaultImg from 'assets/third_image.png';
+import { errorHandler } from 'utils/errorHandler';
 
 interface OrgPostCardProps {
   key: string;
@@ -24,6 +26,16 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
     posttitle: '',
     postinfo: '',
   });
+
+  const [togglePost, setPostToggle] = useState('Read more');
+
+  function handletoggleClick() {
+    if (togglePost === 'Read more') {
+      setPostToggle('hide');
+    } else {
+      setPostToggle('Read more');
+    }
+  }
 
   useEffect(() => {
     setPostFormState({
@@ -49,16 +61,20 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Post deleted successfully.');
-        window.location.reload();
+        toast.success(t('postDeleted'));
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error(error.message);
+      errorHandler(t, error);
     }
   };
 
-  const handleInputEvent = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleInputEvent = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
 
     setPostFormState({ ...postformState, [name]: value });
@@ -78,8 +94,10 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Post Updated successfully.');
-        window.location.reload();
+        toast.success(t('postUpdated'));
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -112,17 +130,56 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
               </a>
             </div>
           </div>
+          {/* {props.postInfo.length > 43 && (
+            <button role='toggleBtn' className={styles.toggleClickBtn} onClick={handletoggleClick}>
+              {togglePost}
+            </button>
+          )} */}
+          {/* <p>{props.postInfo}</p> */}
+          {props.postPhoto ? (
+            <p>
+              <span>
+                {' '}
+                <img
+                  className={styles.postimage}
+                  alt="image not found"
+                  src={props?.postPhoto}
+                />
+              </span>
+            </p>
+          ) : (
+            <img
+              src={defaultImg}
+              alt="image not found"
+              className={styles.postimage}
+            />
+          )}
           <p>
             {t('author')}:<span> {props.postAuthor}</span>
           </p>
-          <p>{props.postInfo}</p>
-          <p>
-            {t('imageURL')}:
-            <span>
-              {' '}
-              <a href={props.postPhoto}>{props.postPhoto}</a>
-            </span>
-          </p>
+          <div className={styles.infodiv}>
+            {togglePost === 'Read more' ? (
+              <p data-testid="toggleContent">
+                {props.postInfo.length > 43
+                  ? props.postInfo.substring(0, 40) + '...'
+                  : props.postInfo}
+              </p>
+            ) : (
+              <p data-testid="toggleContent">{props.postInfo}</p>
+            )}
+            <button
+              role="toggleBtn"
+              data-testid="toggleBtn"
+              className={`${
+                props.postInfo.length > 43
+                  ? styles.toggleClickBtn
+                  : styles.toggleClickBtnNone
+              }`}
+              onClick={handletoggleClick}
+            >
+              {togglePost}
+            </button>
+          </div>
           <p>
             {t('videoURL')}:
             <span>
@@ -226,12 +283,11 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
                   <label htmlFor="postText" className="col-form-label">
                     {t('information')}
                   </label>
-                  <input
-                    type="text"
+                  <textarea
                     className="form-control"
-                    id="postText"
                     name="postinfo"
                     value={postformState.postinfo}
+                    autoComplete="off"
                     onChange={handleInputEvent}
                     data-testid="updateText"
                     required

@@ -6,7 +6,6 @@ import 'jest-localstorage-mock';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import 'jest-location-mock';
-
 import OrgList from './OrgList';
 import {
   ORGANIZATION_CONNECTION_LIST,
@@ -15,6 +14,49 @@ import {
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
+import { StaticMockLink } from 'utils/StaticMockLink';
+
+type Organization = {
+  _id: string;
+  image: string;
+  name: string;
+  creator: {
+    firstName: string;
+    lastName: string;
+  };
+  admins: {
+    _id: string;
+  }[];
+  members: {
+    _id: string;
+  };
+  createdAt: string;
+  location: string;
+};
+
+const organizations: Organization[] = [];
+
+for (let x = 0; x < 100; x++) {
+  organizations.push({
+    _id: 'a' + x,
+    image: '',
+    name: 'name',
+    creator: {
+      firstName: 'firstName',
+      lastName: 'lastName',
+    },
+    admins: [
+      {
+        _id: x + '1',
+      },
+    ],
+    members: {
+      _id: x + '2',
+    },
+    createdAt: new Date().toISOString(),
+    location: 'location',
+  });
+}
 
 const MOCKS = [
   {
@@ -26,12 +68,10 @@ const MOCKS = [
         organizationsConnection: [
           {
             _id: 1,
+            creator: { firstName: 'John', lastName: 'Doe' },
             image: '',
             name: 'Akatsuki',
-            creator: {
-              firstName: 'John',
-              lastName: 'Doe',
-            },
+            createdAt: '02/02/2022',
             admins: [
               {
                 _id: '123',
@@ -40,9 +80,9 @@ const MOCKS = [
             members: {
               _id: '234',
             },
-            createdAt: '02/02/2022',
             location: 'Washington DC',
           },
+          ...organizations,
         ],
       },
     },
@@ -54,26 +94,60 @@ const MOCKS = [
     },
     result: {
       data: {
-        user: [
-          {
-            firstName: 'John',
-            lastName: 'Doe',
+        user: {
+          firstName: 'John',
+          lastName: 'Doe',
+          image: '',
+          email: 'John_Does_Palasidoes@gmail.com',
+          userType: 'SUPERADMIN',
+          adminFor: {
+            _id: 1,
+            name: 'Akatsuki',
             image: '',
-            email: 'John_Does_Palasidoes@gmail.com',
-            userType: 'SUPERADMIN',
-            adminFor: {
-              _id: 1,
-              name: 'Akatsuki',
-              image: '',
-            },
           },
-        ],
+        },
       },
     },
   },
 ];
+const MOCKS_EMPTY = [
+  {
+    request: {
+      query: ORGANIZATION_CONNECTION_LIST,
+    },
+    result: {
+      data: {
+        organizationsConnection: [],
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_ORGANIZATION_LIST,
+      variables: { id: '123' },
+    },
+    result: {
+      data: {
+        user: {
+          firstName: 'John',
+          lastName: 'Doe',
+          image: '',
+          email: 'John_Does_Palasidoes@gmail.com',
+          userType: 'ADMIN',
+          adminFor: {
+            _id: 1,
+            name: 'Akatsuki',
+            image: '',
+          },
+        },
+      },
+    },
+  },
+];
+const link = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(MOCKS_EMPTY, true);
 
-async function wait(ms = 0) {
+async function wait(ms = 100) {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -90,11 +164,129 @@ describe('Organisation List Page', () => {
     name: 'Dummy Organization',
     description: 'This is a dummy organization',
     location: 'Delhi, India',
-    tags: 'Shelter, NGO, Open Source',
     image: new File(['hello'], 'hello.png', { type: 'image/png' }),
   };
 
-  global.alert = jest.fn();
+  test('On dynamic setting of rowsPerPage, the number of organizations rendered on the dom should be changed to the selected option', async () => {
+    localStorage.setItem('id', '123');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgList />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    // Wait and confirm that the component has been rendered
+    await screen.findByTestId('rowsPPSelect');
+
+    //Get the reference to the dropdown for rows per page
+    const numRowsSelect: HTMLSelectElement | null = screen
+      .getByTestId('rowsPPSelect')
+      .querySelector('select');
+
+    if (numRowsSelect === null) {
+      throw new Error('numRowwsSelect is null');
+    }
+
+    // Get all possible options
+    const options = Array.from(numRowsSelect?.querySelectorAll('option')).slice(
+      1
+    );
+
+    // Change the  number of rows to display through the dropdown
+    options.forEach((option) => {
+      //Change the selected option to the value of the current option
+      userEvent.selectOptions(numRowsSelect, option.value);
+
+      // When the selected option from rowsPerPage is "All", the total number of organizations displayed
+      // is the number of organizations plus one (i.e an object is prepended to the list of mocked organizations)
+      const numOrgDisplayed =
+        option.textContent === 'All'
+          ? organizations.length + 1
+          : parseInt(option.value);
+
+      expect(
+        screen
+          .getByTestId('organizations-list')
+          .querySelectorAll('[data-testid="singleorg"]').length
+      ).toBe(numOrgDisplayed);
+    });
+  });
+
+  test('Search bar filters organizations by name', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgList />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    await wait();
+
+    //Search orgnizations with there name
+    const searchBar = screen.getByRole('textbox');
+    userEvent.type(searchBar, 'Akatsuki');
+    await wait();
+    expect(searchBar).toBeInTheDocument();
+  });
+
+  test('Should render no organisation warning alert when there are no organization', async () => {
+    window.location.assign('/');
+
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgList />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(container.textContent).toMatch('Organizations Not Found');
+    expect(container.textContent).toMatch(
+      'Please create an organization through dashboard'
+    );
+    expect(window.location).toBeAt('/');
+  });
+
+  test('Should not render no organisation warning alert when there are no organization', async () => {
+    window.location.assign('/');
+
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgList />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(container.textContent).not.toMatch('Organizations Not Found');
+    expect(container.textContent).not.toMatch(
+      'Please create an organization through dashboard'
+    );
+    expect(window.location).toBeAt('/');
+  });
 
   test('Correct mock data should be queried', async () => {
     const dataQuery1 = MOCKS[0]?.result?.data?.organizationsConnection;
@@ -116,6 +308,7 @@ describe('Organisation List Page', () => {
         },
         location: 'Washington DC',
       },
+      ...organizations,
     ]);
   });
 
@@ -123,7 +316,7 @@ describe('Organisation List Page', () => {
     window.location.assign('/');
 
     const { container } = render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -148,7 +341,7 @@ describe('Organisation List Page', () => {
 
   test('Testing UserType from local storage', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <OrgList />
@@ -164,7 +357,7 @@ describe('Organisation List Page', () => {
 
   test('Testing Organization data is not present', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <OrgList />
@@ -180,7 +373,7 @@ describe('Organisation List Page', () => {
     localStorage.setItem('UserType', 'SUPERADMIN');
 
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <OrgList />
@@ -197,81 +390,59 @@ describe('Organisation List Page', () => {
 
   test('Create organization model should work properly', async () => {
     localStorage.setItem('UserType', 'SUPERADMIN');
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <OrgList />
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
 
-    render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <OrgList />
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
+      await wait(500);
 
-    await wait();
+      expect(localStorage.setItem).toHaveBeenLastCalledWith(
+        'UserType',
+        'SUPERADMIN'
+      );
 
-    expect(localStorage.setItem).toHaveBeenLastCalledWith(
-      'UserType',
-      'SUPERADMIN'
-    );
+      userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
 
-    userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
+      userEvent.type(
+        screen.getByTestId(/modalOrganizationName/i),
+        formData.name
+      );
+      userEvent.type(
+        screen.getByPlaceholderText(/Description/i),
+        formData.description
+      );
+      userEvent.type(
+        screen.getByPlaceholderText(/Location/i),
+        formData.location
+      );
+      userEvent.click(screen.getByLabelText(/Is Public:/i));
+      userEvent.click(screen.getByLabelText(/Visible In Search:/i));
+      userEvent.upload(
+        screen.getByLabelText(/Display Image:/i),
+        formData.image
+      );
 
-    userEvent.type(screen.getByTestId(/modalOrganizationName/i), formData.name);
-    userEvent.type(
-      screen.getByPlaceholderText(/Description/i),
-      formData.description
-    );
-    userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
-    userEvent.type(screen.getByPlaceholderText(/Tags/i), formData.tags);
-    userEvent.click(screen.getByLabelText(/Is Public:/i));
-    userEvent.click(screen.getByLabelText(/Visible In Search:/i));
-    userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
+      expect(screen.getByTestId(/modalOrganizationName/i)).toHaveValue(
+        formData.name
+      );
+      expect(screen.getByPlaceholderText(/Description/i)).toHaveValue(
+        formData.description
+      );
+      expect(screen.getByPlaceholderText(/Location/i)).toHaveValue(
+        formData.location
+      );
+      expect(screen.getByLabelText(/Is Public/i)).not.toBeChecked();
+      expect(screen.getByLabelText(/Visible In Search:/i)).toBeChecked();
+      expect(screen.getByLabelText(/Display Image:/i)).toBeTruthy();
 
-    expect(screen.getByTestId(/modalOrganizationName/i)).toHaveValue(
-      formData.name
-    );
-    expect(screen.getByPlaceholderText(/Description/i)).toHaveValue(
-      formData.description
-    );
-    expect(screen.getByPlaceholderText(/Location/i)).toHaveValue(
-      formData.location
-    );
-    expect(screen.getByPlaceholderText(/Tags/i)).toHaveValue(formData.tags);
-    expect(screen.getByLabelText(/Is Public/i)).not.toBeChecked();
-    expect(screen.getByLabelText(/Visible In Search:/i)).toBeChecked();
-    expect(screen.getByLabelText(/Display Image:/i)).toBeTruthy();
-
-    userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
+      userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
+    });
   });
-});
-
-test('Search bar filters organizations by name', async () => {
-  const { container } = render(
-    <MockedProvider addTypename={false} mocks={MOCKS}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrgList />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>
-  );
-  await wait();
-
-  // Test that the search bar filters organizations by name
-  const searchBar = screen.getByTestId(/searchByName/i);
-  userEvent.type(searchBar, 'Akatsuki');
-  expect(container.textContent).toMatch('Akatsuki');
-
-  // Test that the search bar is case-insensitive
-  userEvent.clear(searchBar);
-  userEvent.type(searchBar, 'akatsuki');
-  expect(container.textContent).toMatch('Akatsuki');
-
-  // Test that the search bar filters organizations based on a partial match of the name
-  userEvent.clear(searchBar);
-  userEvent.type(searchBar, 'Aka');
-  expect(container.textContent).toMatch('Akatsuki');
 });

@@ -17,6 +17,10 @@ import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { RootState } from 'state/reducers';
 import PaginationList from 'components/PaginationList/PaginationList';
 import debounce from 'utils/debounce';
+import convertToBase64 from 'utils/convertToBase64';
+import NotFound from 'components/NotFound/NotFound';
+import { Form as StyleBox } from 'react-bootstrap';
+import { errorHandler } from 'utils/errorHandler';
 
 function OrgPost(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -28,7 +32,13 @@ function OrgPost(): JSX.Element {
   const [postformState, setPostFormState] = useState({
     posttitle: '',
     postinfo: '',
+    postImage: '',
   });
+  const [showTitle, setShowTitle] = useState(true);
+
+  const searchChange = (ev: any) => {
+    setShowTitle(ev.target.value === 'searchTitle');
+  };
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -55,12 +65,27 @@ function OrgPost(): JSX.Element {
 
   const CreatePost = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const {
+      posttitle: _posttitle,
+      postinfo: _postinfo,
+      postImage,
+    } = postformState;
+
+    const posttitle = _posttitle.trim();
+    const postinfo = _postinfo.trim();
+
     try {
+      if (!posttitle || !postinfo) {
+        throw new Error('Text fields cannot be empty strings');
+      }
+
       const { data } = await create({
         variables: {
-          title: postformState.posttitle,
-          text: postformState.postinfo,
+          title: posttitle,
+          text: postinfo,
           organizationId: currentUrl,
+          file: postImage,
         },
       });
       /* istanbul ignore next */
@@ -70,10 +95,13 @@ function OrgPost(): JSX.Element {
         setPostFormState({
           posttitle: '',
           postinfo: '',
+          postImage: '',
         });
+        setPostModalIsOpen(false); // close the modal
       }
     } catch (error: any) {
-      toast.error(error.message);
+      /* istanbul ignore next */
+      errorHandler(t, error);
     }
   };
 
@@ -105,27 +133,25 @@ function OrgPost(): JSX.Element {
     setPage(0);
   };
 
-  const handleSearchByTitle = (e: any) => {
+  const handleSearch = (e: any) => {
     const { value } = e.target;
     const filterData = {
       id: currentUrl,
-      title_contains: value,
+      title_contains: showTitle ? value : null,
+      text_contains: !showTitle ? value : null,
     };
     refetch(filterData);
   };
 
-  const handleSearchByText = (e: any) => {
-    const { value } = e.target;
-    const filterData = {
-      id: currentUrl,
-      text_contains: value,
-    };
-    refetch(filterData);
-  };
+  const debouncedHandleSearch = debounce(handleSearch);
 
-  const debouncedHandleSearchByTitle = debounce(handleSearchByTitle);
-  const debouncedHandleSearchByText = debounce(handleSearchByText);
-
+  // let ReversedPostsList;
+  // //the above variable is defined to reverse the list of posts so the the most recently added posts should be displayed at the top.
+  // if (data) {
+  //   ReversedPostsList = data.postsByOrganizationConnection.edges
+  //     .slice()
+  //     .reverse();
+  // }
   return (
     <>
       <AdminNavbar targets={targets} url_1={configUrl} />
@@ -133,21 +159,39 @@ function OrgPost(): JSX.Element {
         <Col sm={3}>
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
-              <h6 className={styles.searchtitle}>{t('postsByTitle')}</h6>
+              <h6 className={styles.searchtitle}>{t('searchPost')}</h6>
+              <div className={styles.checkboxdiv}>
+                <div key={`inline-radio`} className="mb-3">
+                  <StyleBox.Check
+                    inline
+                    label={t('Title')}
+                    name="radio-group"
+                    type="radio"
+                    value="searchTitle"
+                    onChange={searchChange}
+                    checked={showTitle}
+                    className={styles.actionradio}
+                    id={`inline-radio-1`}
+                  />
+                  <StyleBox.Check
+                    inline
+                    label={t('Text')}
+                    name="radio-group"
+                    type="radio"
+                    value="searchText"
+                    onChange={searchChange}
+                    checked={!showTitle}
+                    className={styles.actionradio}
+                    id={`inline-radio-2`}
+                  />
+                </div>
+              </div>
               <input
                 type="text"
                 id="posttitle"
-                placeholder={t('searchTitle')}
+                placeholder={showTitle ? t('searchTitle') : t('searchText')}
                 autoComplete="off"
-                onChange={debouncedHandleSearchByTitle}
-              />
-              <h6 className={styles.searchtitle}>{t('postsByText')}</h6>
-              <input
-                type="name"
-                id="orgname"
-                placeholder={t('searchText')}
-                autoComplete="off"
-                onChange={debouncedHandleSearchByText}
+                onChange={debouncedHandleSearch}
               />
             </div>
           </div>
@@ -165,11 +209,8 @@ function OrgPost(): JSX.Element {
                 + {t('createPost')}
               </Button>
             </Row>
-            <div
-              className={`row ${styles.list_box}`}
-              data-testid="orgpostcards"
-            >
-              {data ? (
+            <div className={`row ${styles.list_box}`}>
+              {data && data.postsByOrganizationConnection.edges.length > 0 ? (
                 (rowsPerPage > 0
                   ? data.postsByOrganizationConnection.edges.slice(
                       page * rowsPerPage,
@@ -193,7 +234,6 @@ function OrgPost(): JSX.Element {
                   }) => {
                     return (
                       <OrgPostCard
-                        data-testid="singlepostcard"
                         key={datas._id}
                         id={datas._id}
                         postTitle={datas.title}
@@ -206,26 +246,9 @@ function OrgPost(): JSX.Element {
                   }
                 )
               ) : (
-                <div data-testid="singlepostcardnotfound"></div>
+                <NotFound title="post" keyPrefix="postNotFound" />
               )}
             </div>
-          </div>
-          <div>
-            <table>
-              <tbody>
-                <tr>
-                  <PaginationList
-                    count={
-                      data ? data.postsByOrganizationConnection.edges.length : 0
-                    }
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </tr>
-              </tbody>
-            </table>
           </div>
           <div>
             <table>
@@ -295,16 +318,23 @@ function OrgPost(): JSX.Element {
               />
               <label htmlFor="postphoto" className={styles.orgphoto}>
                 {t('image')}:
+                <input
+                  accept="image/*"
+                  id="postphoto"
+                  name="photo"
+                  type="file"
+                  multiple={false}
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file)
+                      setPostFormState({
+                        ...postformState,
+                        postImage: await convertToBase64(file),
+                      });
+                  }}
+                  data-testid="organisationImage"
+                />
               </label>
-              <input
-                accept="image/*"
-                id="postphoto"
-                name="photo"
-                type="file"
-                placeholder={t('image')}
-                multiple={false}
-                //onChange=""
-              />
               <label htmlFor="postvideo">{t('video')}:</label>
               <input
                 accept="image/*"

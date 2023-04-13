@@ -66,8 +66,13 @@ export const ORGANIZATION_CONNECTION_LIST = gql`
 // Query to take the User list
 
 export const USER_LIST = gql`
-  query Users($filter: String) {
-    users(where: { firstName_contains: $filter }) {
+  query Users($firstName_contains: String, $lastName_contains: String) {
+    users(
+      where: {
+        firstName_contains: $firstName_contains
+        lastName_contains: $lastName_contains
+      }
+    ) {
       firstName
       lastName
       image
@@ -125,7 +130,6 @@ export const ORGANIZATIONS_LIST = gql`
         lastName
         email
       }
-      tags
     }
   }
 `;
@@ -153,6 +157,7 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
   query Organizations(
     $orgId: ID!
     $firstName_contains: String
+    $lastName_contains: String
     $admin_for: ID
     $event_title_contains: String
   ) {
@@ -160,6 +165,7 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
       orgId: $orgId
       where: {
         firstName_contains: $firstName_contains
+        lastName_contains: $lastName_contains
         admin_for: $admin_for
         event_title_contains: $event_title_contains
       }
@@ -189,6 +195,50 @@ export const USER_ORGANIZATION_LIST = gql`
         _id
         name
         image
+      }
+    }
+  }
+`;
+
+// To take the details of a user
+export const USER_DETAILS = gql`
+  query User($id: ID!) {
+    user(id: $id) {
+      image
+      firstName
+      lastName
+      email
+      appLanguageCode
+      userType
+      pluginCreationAllowed
+      adminApproved
+      createdAt
+      adminFor {
+        _id
+      }
+      createdOrganizations {
+        _id
+      }
+      joinedOrganizations {
+        _id
+      }
+      organizationUserBelongsTo {
+        _id
+      }
+      organizationsBlockedBy {
+        _id
+      }
+      createdEvents {
+        _id
+      }
+      registeredEvents {
+        _id
+      }
+      eventAdmin {
+        _id
+      }
+      membershipRequests {
+        _id
       }
     }
   }
@@ -330,6 +380,7 @@ export const ORGANIZATION_POST_CONNECTION_LIST = gql`
     postsByOrganizationConnection(
       id: $id
       where: { title_contains: $title_contains, text_contains: $text_contains }
+      orderBy: createdAt_DESC
     ) {
       edges {
         _id
