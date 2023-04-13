@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
@@ -17,6 +17,18 @@ import PaginationList from 'components/PaginationList/PaginationList';
 import { errorHandler } from 'utils/errorHandler';
 import debounce from 'utils/debounce';
 
+interface Member {
+  _id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  organizationsBlockedBy: {
+    _id: string;
+    __typename: 'Organization';
+  }[];
+  __typename: 'User';
+}
+
 const Requests = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'blockUnblockUser',
@@ -32,6 +44,7 @@ const Requests = () => {
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
 
+  const [membersData, setMembersData] = useState<Member[]>([]);
   const [state, setState] = useState(0);
   const [filterData, setFilterData] = useState({
     member_of: currentUrl,
@@ -40,9 +53,9 @@ const Requests = () => {
   });
 
   const {
-    data: membersData,
-    loading: membersLoading,
-    error: membersError,
+    data,
+    loading,
+    error,
     refetch: memberRefetch,
   } = useQuery(BLOCKED_USERS_LIST, {
     variables: {
@@ -55,7 +68,23 @@ const Requests = () => {
   const [blockUser] = useMutation(BLOCK_USER_MUTATION);
   const [unBlockUser] = useMutation(UNBLOCK_USER_MUTATION);
 
-  if (membersLoading) {
+  useEffect(() => {
+    if (!data) {
+      return;
+    }
+
+    if (state === 0) {
+      setMembersData(data.users);
+    } else {
+      const blockUsers = data.users.filter((user: Member) =>
+        user.organizationsBlockedBy.some((org) => org._id === currentUrl)
+      );
+
+      setMembersData(blockUsers);
+    }
+  }, [state, data]);
+
+  if (loading) {
     return <div className="loader"></div>;
   }
 
@@ -132,7 +161,7 @@ const Requests = () => {
   };
 
   /* istanbul ignore next */
-  if (membersError) {
+  if (error) {
     window.location.replace('/orglist');
   }
 
@@ -147,7 +176,7 @@ const Requests = () => {
               <input
                 type="name"
                 id="firstName"
-                placeholder={t('orgName')}
+                placeholder={t('searchFirstName')}
                 name="firstName_contains"
                 value={filterData.firstName_contains}
                 data-testid="searchByFirstName"
@@ -161,7 +190,7 @@ const Requests = () => {
               <input
                 type="name"
                 id="lastName"
-                placeholder={t('orgName')}
+                placeholder={t('searchLastName')}
                 name="lastName_contains"
                 value={filterData.lastName_contains}
                 data-testid="searchByLastName"
@@ -224,52 +253,41 @@ const Requests = () => {
 
                   <tbody>
                     {(rowsPerPage > 0
-                      ? membersData.users.slice(
+                      ? membersData.slice(
                           page * rowsPerPage,
                           page * rowsPerPage + rowsPerPage
                         )
-                      : membersData.users
-                    ).map(
-                      (
-                        user: {
-                          _id: string;
-                          firstName: string;
-                          lastName: string;
-                          email: string;
-                          organizationsBlockedBy: [];
-                        },
-                        index: number
-                      ) => {
-                        return (
-                          <tr key={user._id} data-testid={`row${user._id}`}>
-                            <th scope="row">{page * 10 + (index + 1)}</th>
-                            <td>{`${user.firstName} ${user.lastName}`}</td>
-                            <td>{user.email}</td>
-                            <td className="text-center">
-                              {user.organizationsBlockedBy.some(
-                                (spam: any) => spam._id === currentUrl
-                              ) ? (
-                                <button
-                                  className="btn btn-danger"
-                                  onClick={() => handleUnBlockUser(user._id)}
-                                  data-testid={`unBlockUser${user._id}`}
-                                >
-                                  {t('unblock')}
-                                </button>
-                              ) : (
-                                <button
-                                  className="btn btn-success"
-                                  onClick={() => handleBlockUser(user._id)}
-                                  data-testid={`blockUser${user._id}`}
-                                >
-                                  {t('block')}
-                                </button>
-                              )}
-                            </td>
-                          </tr>
-                        );
-                      }
-                    )}
+                      : membersData
+                    ).map((user, index: number) => {
+                      return (
+                        <tr key={user._id}>
+                          <th scope="row">{page * 10 + (index + 1)}</th>
+                          <td>{`${user.firstName} ${user.lastName}`}</td>
+                          <td>{user.email}</td>
+                          <td className="text-center">
+                            {user.organizationsBlockedBy.some(
+                              (spam: any) => spam._id === currentUrl
+                            ) ? (
+                              <button
+                                className="btn btn-danger"
+                                onClick={() => handleUnBlockUser(user._id)}
+                                data-testid={`unBlockUser${user._id}`}
+                              >
+                                {t('unblock')}
+                              </button>
+                            ) : (
+                              <button
+                                className="btn btn-success"
+                                onClick={() => handleBlockUser(user._id)}
+                                data-testid={`blockUser${user._id}`}
+                              >
+                                {t('block')}
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -285,7 +303,7 @@ const Requests = () => {
                 <tbody>
                   <tr>
                     <PaginationList
-                      count={membersData.users.length}
+                      count={membersData.length}
                       rowsPerPage={rowsPerPage}
                       page={page}
                       onPageChange={handleChangePage}
