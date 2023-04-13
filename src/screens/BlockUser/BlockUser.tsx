@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 
 import styles from './BlockUser.module.css';
-import { MEMBERS_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
+import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import { RootState } from 'state/reducers';
 import {
@@ -23,7 +23,6 @@ const Requests = () => {
 
   document.title = t('title');
 
-  const [membersArray, setMembersArray] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [searchByName, setSearchByName] = useState('');
@@ -36,13 +35,11 @@ const Requests = () => {
   const [state, setState] = useState(0);
 
   const {
-    data,
-    loading: spammers_loading,
-    error,
-    refetch,
-  } = useQuery(USER_LIST);
-
-  const { data: data_2 } = useQuery(MEMBERS_LIST, {
+    data: membersData,
+    loading: membersLoading,
+    error: membersError,
+    refetch: memberRefetch,
+  } = useQuery(MEMBERS_LIST, {
     variables: {
       id: currentUrl,
     },
@@ -51,25 +48,10 @@ const Requests = () => {
   const [blockUser] = useMutation(BLOCK_USER_MUTATION);
   const [unBlockUser] = useMutation(UNBLOCK_USER_MUTATION);
 
-  useEffect(() => {
-    if (data_2) {
-      setMembersArray(data_2.organizations[0].members);
-    }
-  }, [data, data_2]);
-
-  if (spammers_loading) {
-    return <div className={styles.loader}></div>;
+  if (membersLoading) {
+    return <div className="loader"></div>;
   }
 
-  const memberIds = membersArray.map((user: { _id: string }) => user._id);
-
-  /* istanbul ignore next */
-  const memberUsersData =
-    data?.users.filter((user: { _id: string }) =>
-      memberIds.includes(user._id)
-    ) ?? [];
-
-  /* istanbul ignore next */
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
@@ -89,8 +71,8 @@ const Requests = () => {
     const { value } = e.target;
     setSearchByName(value);
 
-    refetch({
-      filter: searchByName,
+    memberRefetch({
+      // filter: searchByName,
     });
   };
 
@@ -105,7 +87,7 @@ const Requests = () => {
       /* istanbul ignore next */
       if (data) {
         toast.success(t('blockedSuccessfully'));
-        refetch();
+        memberRefetch();
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -124,7 +106,7 @@ const Requests = () => {
       /* istanbul ignore next */
       if (data) {
         toast.success(t('Un-BlockedSuccessfully'));
-        refetch();
+        memberRefetch();
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -133,7 +115,7 @@ const Requests = () => {
   };
 
   /* istanbul ignore next */
-  if (error) {
+  if (membersError) {
     window.location.replace('/orglist');
   }
 
@@ -185,6 +167,7 @@ const Requests = () => {
             </div>
           </div>
         </Col>
+
         <Col sm={8}>
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
@@ -203,13 +186,14 @@ const Requests = () => {
                       </th>
                     </tr>
                   </thead>
+
                   <tbody>
                     {(rowsPerPage > 0
-                      ? memberUsersData.slice(
+                      ? membersData.organizations[0].members.slice(
                           page * rowsPerPage,
                           page * rowsPerPage + rowsPerPage
                         )
-                      : memberUsersData
+                      : membersData.organizations[0].members
                     ).map(
                       (
                         user: {
@@ -266,7 +250,7 @@ const Requests = () => {
                 <tbody>
                   <tr>
                     <PaginationList
-                      count={memberUsersData.length}
+                      count={membersData.organizations[0].members.length}
                       rowsPerPage={rowsPerPage}
                       page={page}
                       onPageChange={handleChangePage}

@@ -150,6 +150,9 @@ export const MEMBERS_LIST = gql`
         image
         email
         createdAt
+        organizationsBlockedBy {
+          _id
+        }
       }
     }
   }
