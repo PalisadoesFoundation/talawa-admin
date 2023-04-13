@@ -61,7 +61,7 @@ const Requests = () => {
     variables: {
       member_of: currentUrl,
       firstName_contains: '',
-      lastName_containe: '',
+      lastName_contains: '',
     },
   });
 
