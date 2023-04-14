@@ -399,7 +399,7 @@ function LoginPage(): JSX.Element {
                           {t('atleast_8_char_long')}
                         </span>
                       )}
-                      {signformState.signPassword.length >= 8 &&
+                    {signformState.signPassword.length >= 8 &&
                       !/[A-Z]/.test(signformState.signPassword) && (
                         <span data-testid="passwordCheck">
                           {t('atleast_1_caps')}
