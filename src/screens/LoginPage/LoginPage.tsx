@@ -134,7 +134,10 @@ function LoginPage(): JSX.Element {
       signfirstName.length > 1 &&
       signlastName.length > 1 &&
       signEmail.length >= 8 &&
-      signPassword.length > 1
+      signPassword.length >= 8 &&
+      /[A-Z]/.test(signPassword) &&
+      /[0-9]/.test(signPassword) &&
+      /[^A-Za-z0-9]/.test(signPassword)
     ) {
       if (cPassword == signPassword) {
         try {
@@ -394,6 +397,27 @@ function LoginPage(): JSX.Element {
                       signformState.signPassword.length < 8 && (
                         <span data-testid="passwordCheck">
                           {t('atleast_8_char_long')}
+                        </span>
+                      )}
+                      {signformState.signPassword.length >= 8 &&
+                      !/[A-Z]/.test(signformState.signPassword) && (
+                        <span data-testid="passwordCheck">
+                          {t('atleast_1_caps')}
+                        </span>
+                      )}
+                    {signformState.signPassword.length >= 8 &&
+                      /[A-Z]/.test(signformState.signPassword) &&
+                      !/[0-9]/.test(signformState.signPassword) && (
+                        <span data-testid="passwordCheck">
+                          {t('atleast_1_number')}
+                        </span>
+                      )}
+                    {signformState.signPassword.length >= 8 &&
+                      /[A-Z]/.test(signformState.signPassword) &&
+                      /[0-9]/.test(signformState.signPassword) &&
+                      !/[^A-Za-z0-9]/.test(signformState.signPassword) && (
+                        <span data-testid="passwordCheck">
+                          {t('atleast_1_special')}
                         </span>
                       )}
                   </div>
