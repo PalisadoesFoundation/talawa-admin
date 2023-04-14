@@ -251,6 +251,8 @@
     "not found!": "pas trouvé!",
     "roles": "les rôles",
     "user not found!": "utilisateur non trouvé!",
+    "member not found!": "Membre introuvable!",
+    "admin not found!": "Administrateur introuvable!",
     "roles not found!": "utilisateur non trouvé!"
   },
   "orgPostCard": {
