@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
@@ -46,11 +46,9 @@ const Requests = () => {
 
   const [membersData, setMembersData] = useState<Member[]>([]);
   const [state, setState] = useState(0);
-  const [filterData, setFilterData] = useState({
-    member_of: currentUrl,
-    firstName_contains: '',
-    lastName_contains: '',
-  });
+
+  const firstNameRef = useRef<HTMLInputElement>(null);
+  const lastNameRef = useRef<HTMLInputElement>(null);
 
   const {
     data,
@@ -146,14 +144,14 @@ const Requests = () => {
     window.location.replace('/orglist');
   }
 
-  const handleSearch = (e: any) => {
-    const newFilterData = {
-      ...filterData,
-      [e.target.name]: e.target.value,
+  const handleSearch = () => {
+    const filterData = {
+      member_of: currentUrl,
+      firstName_contains: firstNameRef.current?.value ?? '',
+      lastName_contains: lastNameRef.current?.value ?? '',
     };
 
-    setFilterData(newFilterData);
-    memberRefetch(newFilterData);
+    memberRefetch(filterData);
   };
 
   const handleSearchDebounced = debounce(handleSearch);
@@ -175,6 +173,7 @@ const Requests = () => {
                 autoComplete="off"
                 required
                 onChange={handleSearchDebounced}
+                ref={firstNameRef}
               />
 
               <input
@@ -186,6 +185,7 @@ const Requests = () => {
                 autoComplete="off"
                 required
                 onChange={handleSearchDebounced}
+                ref={lastNameRef}
               />
 
               <div className={styles.radio_buttons} data-testid="usertypelist">
