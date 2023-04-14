@@ -171,7 +171,6 @@ const Requests = () => {
                 name="firstName_contains"
                 data-testid="searchByFirstName"
                 autoComplete="off"
-                required
                 onChange={handleSearchDebounced}
                 ref={firstNameRef}
               />
@@ -183,7 +182,6 @@ const Requests = () => {
                 name="lastName_contains"
                 data-testid="searchByLastName"
                 autoComplete="off"
-                required
                 onChange={handleSearchDebounced}
                 ref={lastNameRef}
               />
