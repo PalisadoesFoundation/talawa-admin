@@ -223,27 +223,29 @@ const Requests = () => {
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>{t('listOfUsers')}</p>
             </Row>
-            <div className={styles.list_box}>
-              <div className="table-responsive">
-                <table className={`table table-hover ${styles.userListTable}`}>
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">{t('name')}</th>
-                      <th scope="col">{t('email')}</th>
-                      <th scope="col" className="text-center">
-                        {t('block_unblock')}
-                      </th>
-                    </tr>
-                  </thead>
+            {loading ? (
+              <>
+                <div className="loader"></div>
+              </>
+            ) : (
+              <div className={styles.list_box}>
+                <div className="table-responsive">
+                  <table
+                    className={`table table-hover ${styles.userListTable}`}
+                  >
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">{t('name')}</th>
+                        <th scope="col">{t('email')}</th>
+                        <th scope="col" className="text-center">
+                          {t('block_unblock')}
+                        </th>
+                      </tr>
+                    </thead>
 
-                  <tbody>
-                    {loading ? (
-                      <>
-                        <div className="loader"></div>
-                      </>
-                    ) : (
-                      (rowsPerPage > 0
+                    <tbody>
+                      {(rowsPerPage > 0
                         ? membersData.slice(
                             page * rowsPerPage,
                             page * rowsPerPage + rowsPerPage
@@ -278,12 +280,12 @@ const Requests = () => {
                             </td>
                           </tr>
                         );
-                      })
-                    )}
-                  </tbody>
-                </table>
+                      })}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
+            )}
             <div>
               <table
                 style={{
