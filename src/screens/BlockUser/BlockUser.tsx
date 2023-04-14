@@ -68,6 +68,7 @@ const Requests = () => {
 
   useEffect(() => {
     if (!data) {
+      setMembersData([]);
       return;
     }
 
@@ -81,10 +82,6 @@ const Requests = () => {
       setMembersData(blockUsers);
     }
   }, [state, data]);
-
-  if (loading) {
-    return <div className="loader"></div>;
-  }
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -141,7 +138,9 @@ const Requests = () => {
 
   /* istanbul ignore next */
   if (error) {
-    window.location.replace('/orglist');
+    console.error(error);
+
+    toast.error(error.message);
   }
 
   const handleSearch = () => {
@@ -239,42 +238,48 @@ const Requests = () => {
                   </thead>
 
                   <tbody>
-                    {(rowsPerPage > 0
-                      ? membersData.slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage
-                        )
-                      : membersData
-                    ).map((user, index: number) => {
-                      return (
-                        <tr key={user._id}>
-                          <th scope="row">{page * 10 + (index + 1)}</th>
-                          <td>{`${user.firstName} ${user.lastName}`}</td>
-                          <td>{user.email}</td>
-                          <td className="text-center">
-                            {user.organizationsBlockedBy.some(
-                              (spam: any) => spam._id === currentUrl
-                            ) ? (
-                              <button
-                                className="btn btn-danger"
-                                onClick={() => handleUnBlockUser(user._id)}
-                                data-testid={`unBlockUser${user._id}`}
-                              >
-                                {t('unblock')}
-                              </button>
-                            ) : (
-                              <button
-                                className="btn btn-success"
-                                onClick={() => handleBlockUser(user._id)}
-                                data-testid={`blockUser${user._id}`}
-                              >
-                                {t('block')}
-                              </button>
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
+                    {loading ? (
+                      <>
+                        <div className="loader"></div>
+                      </>
+                    ) : (
+                      (rowsPerPage > 0
+                        ? membersData.slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage
+                          )
+                        : membersData
+                      ).map((user, index: number) => {
+                        return (
+                          <tr key={user._id}>
+                            <th scope="row">{page * 10 + (index + 1)}</th>
+                            <td>{`${user.firstName} ${user.lastName}`}</td>
+                            <td>{user.email}</td>
+                            <td className="text-center">
+                              {user.organizationsBlockedBy.some(
+                                (spam: any) => spam._id === currentUrl
+                              ) ? (
+                                <button
+                                  className="btn btn-danger"
+                                  onClick={() => handleUnBlockUser(user._id)}
+                                  data-testid={`unBlockUser${user._id}`}
+                                >
+                                  {t('unblock')}
+                                </button>
+                              ) : (
+                                <button
+                                  className="btn btn-success"
+                                  onClick={() => handleBlockUser(user._id)}
+                                  data-testid={`blockUser${user._id}`}
+                                >
+                                  {t('block')}
+                                </button>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })
+                    )}
                   </tbody>
                 </table>
               </div>
