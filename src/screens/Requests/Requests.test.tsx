@@ -45,6 +45,12 @@ const MOCKS = [
                 name: 'ABC',
               },
             ],
+            joinedOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '6401ff65ce8e8406b8f07af1',
+              },
+            ],
           },
           {
             _id: '456',
@@ -61,6 +67,12 @@ const MOCKS = [
                 name: 'ABC',
               },
             ],
+            joinedOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '6401ff65ce8e8406b8f07af2',
+              },
+            ],
           },
           {
             _id: '789',
@@ -75,6 +87,12 @@ const MOCKS = [
               {
                 _id: '256',
                 name: 'ABC',
+              },
+            ],
+            joinedOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '6401ff65ce8e8406b8f07af3',
               },
             ],
           },
