@@ -9,9 +9,12 @@ import { Form } from 'antd';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import Calendar from 'components/EventCalendar/Calendar';
+import Calendars from 'components/EventCalendar/Calendars';
+import Calendar from 'react-calendar';
+import './Calendar.css';
 
 import styles from './OrganizationEvents.module.css';
+
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import {
   ORGANIZATION_EVENT_CONNECTION_LIST,
@@ -19,7 +22,6 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { RootState } from 'state/reducers';
-import debounce from 'utils/debounce';
 import dayjs from 'dayjs';
 import { errorHandler } from 'utils/errorHandler';
 
@@ -135,37 +137,16 @@ function OrganizationEvents(): JSX.Element {
 
   /* istanbul ignore next */
 
-  const handleSearchByTitle = (e: any) => {
-    const { value } = e.target;
-    const filterData = {
-      organization_id: currentUrl,
-      title_contains: value,
-    };
-    refetch(filterData);
-  };
-  const handleSearchByDescription = (e: any) => {
-    const { value } = e.target;
-    const filterData = {
-      organization_id: currentUrl,
-      description_contains: value,
-    };
-    refetch(filterData);
-  };
-  const handleSearchByLocation = (e: any) => {
-    const { value } = e.target;
-    const filterData = {
-      organization_id: currentUrl,
-      location_contains: value,
-    };
-    refetch(filterData);
-  };
+  // const handleSearchByTitle = (e: any) => {
+  //   const { value } = e.target;
+  //   const filterData = {
+  //     organization_id: currentUrl,
+  //     title_contains: value,
+  //   };
+  //   refetch(filterData);
+  // };
 
-  const debouncedHandleSearchByTitle = debounce(handleSearchByTitle);
-  const debouncedHandleSearchByDescription = debounce(
-    handleSearchByDescription
-  );
-  const debouncedHandleSearchByLocation = debounce(handleSearchByLocation);
-
+  // const debouncedHandleSearchByTitle = debounce(handleSearchByTitle);
   return (
     <>
       <AdminNavbar targets={targets} url_1={configUrl} />
@@ -173,36 +154,8 @@ function OrganizationEvents(): JSX.Element {
         <Col sm={3}>
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
-              <h6 className={styles.searchtitle}>{t('filterByTitle')}</h6>
-              <input
-                type="name"
-                id="searchTitle"
-                placeholder={t('enterFilter')}
-                autoComplete="off"
-                required
-                onChange={debouncedHandleSearchByTitle}
-                data-testid="serachByTitle"
-              />
-              <h6 className={styles.searchtitle}>{t('filterByLocation')}</h6>
-              <input
-                type="name"
-                id="searchlocation"
-                placeholder={t('enterFilter')}
-                autoComplete="off"
-                required
-                onChange={debouncedHandleSearchByLocation}
-                data-testid="searchByLocation"
-              />
-              <h6 className={styles.searchtitle}>{t('filterByDescription')}</h6>
-              <input
-                type="name"
-                id="searchDescription"
-                placeholder={t('enterFilter')}
-                autoComplete="off"
-                required
-                onChange={debouncedHandleSearchByDescription}
-                data-testid="serachByDescription"
-              />
+              <h6 className={styles.searchtitle}>Search Date</h6>
+              <Calendar />
             </div>
           </div>
         </Col>
@@ -220,7 +173,7 @@ function OrganizationEvents(): JSX.Element {
               </Button>
             </Row>
           </div>
-          <Calendar
+          <Calendars
             eventData={data?.eventsByOrganizationConnection}
             orgData={orgData}
             userRole={userRole}

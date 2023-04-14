@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import Calendar from './Calendar';
+import Calendar from './Calendars';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
