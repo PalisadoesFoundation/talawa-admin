@@ -15,3 +15,24 @@ global.console.error = function (...args) {
 global.console.warn = function (...args) {
   throw new Error(format(...args));
 };
+
+import { jestPreviewConfigure } from 'jest-preview';
+import { configure } from 'enzyme';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+
+// Global CSS here
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.min.js';
+import 'react-datepicker/dist/react-datepicker.css';
+import 'flag-icons/css/flag-icons.min.css';
+import './css/index.css';
+
+import './css/bootstrap.min.css';
+import './css/index.css';
+
+configure({ adapter: new Adapter() });
+
+jestPreviewConfigure({
+  // Opt-in to automatic mode to preview failed test case automatically.
+  autoPreview: true,
+});

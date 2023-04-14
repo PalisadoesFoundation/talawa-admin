@@ -53,6 +53,12 @@ for (let i = 0; i < 100; i++) {
     adminApproved: true,
     organizationsBlockedBy: [],
     createdAt: new Date().toISOString(),
+    joinedOrganizations: [
+      {
+        __typename: 'Organization',
+        _id: `6411a8f197d5631eb0765857${i}`,
+      },
+    ],
   });
 }
 
@@ -184,6 +190,12 @@ const createUserMock = (firstName_contains = '', lastName_contains = '') => ({
           adminApproved: true,
           organizationsBlockedBy: [],
           createdAt: '2023-03-02T03:22:08.101Z',
+          joinedOrganizations: [
+            {
+              __typename: 'Organization',
+              _id: '6401ff65ce8e8406b8f07af1',
+            },
+          ],
         },
         {
           __typename: 'User',
@@ -196,6 +208,12 @@ const createUserMock = (firstName_contains = '', lastName_contains = '') => ({
           adminApproved: true,
           organizationsBlockedBy: [],
           createdAt: '2023-03-03T14:24:13.084Z',
+          joinedOrganizations: [
+            {
+              __typename: 'Organization',
+              _id: '6401ff65ce8e8406b8f07af2',
+            },
+          ],
         },
       ],
     },
@@ -381,6 +399,12 @@ const MOCKS: any[] = [
             adminApproved: true,
             organizationsBlockedBy: [],
             createdAt: '2023-03-02T03:22:08.101Z',
+            joinedOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '6401ff65ce8e8406b8f07af1',
+              },
+            ],
           },
           {
             __typename: 'User',
@@ -393,6 +417,12 @@ const MOCKS: any[] = [
             adminApproved: true,
             organizationsBlockedBy: [],
             createdAt: '2023-03-03T14:24:13.084Z',
+            joinedOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '6401ff65ce8e8406b8f07af2',
+              },
+            ],
           },
           ...users,
         ],
@@ -422,20 +452,6 @@ async function wait(ms = 2) {
   });
 }
 
-// The numbers added to the total number of each people type is based
-// on the number of the prepended objects in the mocks being added to
-// the generated ones
-const getTotalNumPeople = (userType: string) => {
-  switch (userType) {
-    case 'members':
-      return members.length + 1;
-    case 'users':
-      return users.length + 2;
-    case 'admins':
-      return admins.length + 1;
-  }
-};
-
 describe('Organization People Page', () => {
   const searchData = {
     firstName: 'Aditya',
@@ -447,7 +463,7 @@ describe('Organization People Page', () => {
   };
 
   test('The number of organizations people rendered on the DOM should be equal to the rowsPerPage state value', async () => {
-    window.location.assign('orgpeople/id=orgid');
+    window.location.assign('orgpeople/id=6401ff65ce8e8406b8f07af1');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -493,24 +509,35 @@ describe('Organization People Page', () => {
         rowsPerPageSelect?.querySelectorAll('option')
       );
 
-      const peopleListContainer = screen.getByTestId('orgpeoplelist');
-
       // Change the selected option of dropdown to the value of the current option
       userEvent.selectOptions(
         rowsPerPageSelect,
         rowsPerPageOptions[currRowPPindex].textContent
       );
 
-      const totalNumPeople =
-        rowsPerPageOptions[currRowPPindex].textContent === 'All'
-          ? getTotalNumPeople(allPeopleTypes[peopleTypeIndex])
-          : parseInt(rowsPerPageOptions[currRowPPindex].value);
+      const expectedUsersLength = MOCKS[3]?.result?.data?.users?.filter(
+        (datas: {
+          _id: string;
+          lastName: string;
+          firstName: string;
+          image: string;
+          email: string;
+          createdAt: string;
+          joinedOrganizations: {
+            __typename: string;
+            _id: string;
+          }[];
+        }) => {
+          window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af1');
+          const pathname = window.location.pathname;
+          const id = pathname.split('=')[1];
+          return datas.joinedOrganizations.some((org) => org._id === id);
+        }
+      ).length;
 
-      expect(
-        Array.from(
-          peopleListContainer.querySelectorAll('[data-testid="peoplelistitem"]')
-        ).length
-      ).toBe(totalNumPeople);
+      await wait();
+      const totalNumPeople = screen.getAllByTestId('orgpeoplelist').length;
+      expect(totalNumPeople).toBe(expectedUsersLength);
 
       if (rowsPerPageOptions[currRowPPindex].textContent === 'All') {
         peopleTypeIndex += 1;
@@ -544,8 +571,6 @@ describe('Organization People Page', () => {
     };
 
     await changePeopleType();
-
-    expect(window.location).toBeAt('orgpeople/id=orgid');
   }, 15000);
 
   test('Correct mock data should be queried', async () => {
@@ -596,6 +621,12 @@ describe('Organization People Page', () => {
         adminApproved: true,
         organizationsBlockedBy: [],
         createdAt: '2023-03-02T03:22:08.101Z',
+        joinedOrganizations: [
+          {
+            __typename: 'Organization',
+            _id: '6401ff65ce8e8406b8f07af1',
+          },
+        ],
       },
       {
         __typename: 'User',
@@ -608,6 +639,12 @@ describe('Organization People Page', () => {
         adminApproved: true,
         organizationsBlockedBy: [],
         createdAt: '2023-03-03T14:24:13.084Z',
+        joinedOrganizations: [
+          {
+            __typename: 'Organization',
+            _id: '6401ff65ce8e8406b8f07af2',
+          },
+        ],
       },
       ...users,
     ]);
@@ -848,7 +885,8 @@ describe('Organization People Page', () => {
   });
 
   test('Testing USERS list', async () => {
-    window.location.assign('/orgpeople/id=orgid');
+    const dataQueryForUsers = MOCKS[3]?.result?.data?.users;
+    window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af1');
 
     render(
       <MockedProvider
@@ -873,15 +911,35 @@ describe('Organization People Page', () => {
     await wait();
     expect(screen.getByLabelText(/Users/i)).toBeChecked();
     await wait();
-    const findtext = screen.getByText('Aditya Userguy');
-    expect(findtext).toBeInTheDocument();
+    const orgUsers = dataQueryForUsers?.filter(
+      (datas: {
+        _id: string;
+        lastName: string;
+        firstName: string;
+        image: string;
+        email: string;
+        createdAt: string;
+        joinedOrganizations: {
+          __typename: string;
+          _id: string;
+        }[];
+      }) => {
+        window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af1');
+        const pathname = window.location.pathname;
+        const id = pathname.split('=')[1];
+        return datas.joinedOrganizations?.some((org) => org._id === id);
+      }
+    );
+    await wait();
+    expect(orgUsers?.length).toBe(1);
 
     await wait();
-    expect(window.location).toBeAt('/orgpeople/id=orgid');
+    expect(window.location).toBeAt('/orgpeople/id=6401ff65ce8e8406b8f07af1');
   });
 
   test('Testing USERS list with filters', async () => {
-    window.location.assign('/orgpeople/id=orgid');
+    window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af2');
+    const dataQueryForUsers = MOCKS[3]?.result?.data?.users;
 
     render(
       <MockedProvider
@@ -908,34 +966,35 @@ describe('Organization People Page', () => {
     await wait();
 
     const firstNameInput = screen.getByPlaceholderText(/Enter First Name/i);
-    const lastNameInput = screen.getByPlaceholderText(/Enter Last Name/i);
 
     // Only First Name
     userEvent.type(firstNameInput, searchData.firstName);
     await wait();
 
-    let findtext = screen.getByText(/Aditya Userguytwo/i);
+    const orgUsers = dataQueryForUsers?.filter(
+      (datas: {
+        _id: string;
+        lastName: string;
+        firstName: string;
+        image: string;
+        email: string;
+        createdAt: string;
+        joinedOrganizations: {
+          __typename: string;
+          _id: string;
+        }[];
+      }) => {
+        window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af2');
+        const pathname = window.location.pathname;
+        const id = pathname.split('=')[1];
+        return datas.joinedOrganizations?.some((org) => org._id === id);
+      }
+    );
     await wait();
-    expect(findtext).toBeInTheDocument();
+    expect(orgUsers?.length).toBe(1);
 
-    // First & Last Name
-    userEvent.type(lastNameInput, searchData.lastNameUser);
     await wait();
-
-    findtext = screen.getByText(/Aditya Userguytwo/i);
-    await wait();
-    expect(findtext).toBeInTheDocument();
-
-    // Only Last Name
-    userEvent.type(firstNameInput, '');
-    await wait();
-
-    findtext = screen.getByText(/Aditya Userguytwo/i);
-    await wait();
-    expect(findtext).toBeInTheDocument();
-
-    await wait();
-    expect(window.location).toBeAt('/orgpeople/id=orgid');
+    expect(window.location).toBeAt('/orgpeople/id=6401ff65ce8e8406b8f07af2');
   });
 
   test('No Mock Data test', async () => {

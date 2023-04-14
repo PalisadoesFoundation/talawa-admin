@@ -12,6 +12,8 @@ import {
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
+import mockedStyles from './OrgPostCard.module.css';
+
 const MOCKS = [
   {
     request: {
@@ -152,7 +154,7 @@ describe('Testing Organization Post Card', () => {
       </MockedProvider>
     );
 
-    const toggleButton = screen.getByRole('toggleBtn');
+    const toggleButton = screen.getByTestId('toggleBtn');
 
     expect(screen.getByText('Read more')).toBeInTheDocument();
 
@@ -190,7 +192,7 @@ describe('Testing Organization Post Card', () => {
       screen.getByText('Lorem ipsum dolor sit amet, consectetur ...')
     ).toBeInTheDocument();
     expect(toggleBtn).toHaveTextContent('Read more');
-    expect(toggleBtn).toHaveClass('toggleClickBtn');
+    expect(toggleBtn).toHaveClass(mockedStyles.toggleClickBtn);
 
     fireEvent.click(toggleBtn);
 
@@ -198,7 +200,7 @@ describe('Testing Organization Post Card', () => {
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
     );
     expect(toggleBtn).toHaveTextContent('hide');
-    expect(toggleBtn).toHaveClass('toggleClickBtn');
+    expect(toggleBtn).toHaveClass(mockedStyles.toggleClickBtn);
   });
 
   test('renders without "Read more" button when postInfo length is less than or equal to 43', () => {
