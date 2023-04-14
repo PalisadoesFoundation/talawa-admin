@@ -200,7 +200,8 @@ const Requests = () => {
                     setState(0);
                   }}
                 />
-                <label htmlFor="userslist">{t('allUsers')}</label>
+                <label htmlFor="allusers">{t('allUsers')}</label>
+
                 <input
                   id="blockedusers"
                   value="blockedusers"
@@ -212,8 +213,7 @@ const Requests = () => {
                     setState(1);
                   }}
                 />
-
-                <label htmlFor="adminslist">{t('blockedUsers')}</label>
+                <label htmlFor="blockedusers">{t('blockedUsers')}</label>
               </div>
             </div>
           </div>
