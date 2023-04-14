@@ -113,12 +113,6 @@ async function wait(ms = 100) {
 }
 
 describe('Organisation Events Page', () => {
-  const searchData = {
-    byTitle: 'Dummy title',
-    byDescription: 'This is a dummy description',
-    byLocation: 'New Delhi',
-  };
-
   const formData = {
     title: 'Dummy Org',
     description: 'This is a dummy organization',
