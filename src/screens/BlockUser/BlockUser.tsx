@@ -224,7 +224,7 @@ const Requests = () => {
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>{t('listOfUsers')}</p>
             </Row>
-            {!loading ? (
+            {loading ? (
               <div className={styles.loader}>
                 <CircularProgress />
               </div>

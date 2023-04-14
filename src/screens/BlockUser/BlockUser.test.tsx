@@ -22,28 +22,29 @@ import { ToastContainer } from 'react-toastify';
 
 let userQueryCalled = false;
 
+const USER_BLOCKED = {
+  _id: '123',
+  firstName: 'John',
+  lastName: 'Doe',
+  email: 'johndoe@gmail.com',
+  organizationsBlockedBy: [
+    {
+      _id: 'orgid',
+    },
+  ],
+};
+
+const USER_UNBLOCKED = {
+  _id: '456',
+  firstName: 'Sam',
+  lastName: 'Smith',
+  email: 'samsmith@gmail.com',
+  organizationsBlockedBy: [],
+};
+
 const DATA_INITIAL = {
   data: {
-    users: [
-      {
-        _id: '123',
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'johndoe@gmail.com',
-        organizationsBlockedBy: [
-          {
-            _id: 'orgid',
-          },
-        ],
-      },
-      {
-        _id: '456',
-        firstName: 'Sam',
-        lastName: 'Smith',
-        email: 'samsmith@gmail.com',
-        organizationsBlockedBy: [],
-      },
-    ],
+    users: [USER_BLOCKED, USER_UNBLOCKED],
   },
 };
 
@@ -192,15 +193,7 @@ const MOCKS = [
     },
     result: {
       data: {
-        users: [
-          {
-            _id: '123',
-            firstName: 'John',
-            lastName: 'Doe',
-            email: 'johndoe@gmail.com',
-            organizationsBlockedBy: [],
-          },
-        ],
+        users: [USER_BLOCKED],
       },
     },
   },
@@ -216,15 +209,7 @@ const MOCKS = [
     },
     result: {
       data: {
-        users: [
-          {
-            _id: '123',
-            firstName: 'John',
-            lastName: 'Doe',
-            email: 'johndoe@gmail.com',
-            organizationsBlockedBy: [],
-          },
-        ],
+        users: [USER_BLOCKED],
       },
     },
   },
@@ -240,19 +225,7 @@ const MOCKS = [
     },
     result: {
       data: {
-        users: [
-          {
-            _id: '456',
-            firstName: 'Sam',
-            lastName: 'Smith',
-            email: 'samsmith@gmail.com',
-            organizationsBlockedBy: [
-              {
-                _id: 'orgid',
-              },
-            ],
-          },
-        ],
+        users: [USER_UNBLOCKED],
       },
     },
   },
