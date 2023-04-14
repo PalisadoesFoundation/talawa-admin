@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import PaginationList from 'components/PaginationList/PaginationList';
 import { errorHandler } from 'utils/errorHandler';
 import debounce from 'utils/debounce';
+import { CircularProgress } from '@mui/material';
 
 interface Member {
   _id: string;
@@ -223,10 +224,10 @@ const Requests = () => {
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>{t('listOfUsers')}</p>
             </Row>
-            {loading ? (
-              <>
-                <div className="loader"></div>
-              </>
+            {!loading ? (
+              <div className={styles.loader}>
+                <CircularProgress />
+              </div>
             ) : (
               <div className={styles.list_box}>
                 <div className="table-responsive">

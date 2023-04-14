@@ -92,6 +92,10 @@
   margin-right: 15px;
 }
 
+.loader {
+  text-align: center;
+}
+
 @media screen and (max-width: 575.5px) {
   .justifysp {
     padding-left: 55px;
