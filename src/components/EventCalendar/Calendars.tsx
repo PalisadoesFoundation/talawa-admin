@@ -50,7 +50,6 @@ const Calendar: React.FC<CalendarProps> = ({ eventData }) => {
       setCurrentMonth(currentMonth - 1);
     }
   };
-
   const handleNextMonth = () => {
     if (currentMonth === 11) {
       setCurrentMonth(0);
@@ -102,54 +101,57 @@ const Calendar: React.FC<CalendarProps> = ({ eventData }) => {
           }}
           key={index}
           className={className}
+          data-testid="day"
         >
           {date.getDate()}
           <div className={styles.list_box}>
-            {eventData
-              .filter((datas) => {
-                if (datas.startDate == dayjs(date).format('YYYY-MM-DD'))
-                  return datas;
-              })
+            {eventData &&
+              eventData
+                .filter((datas) => {
+                  if (datas.startDate == dayjs(date).format('YYYY-MM-DD'))
+                    return datas;
+                })
 
-              .map((datas: Event) => {
-                return (
-                  <EventListCard
-                    key={datas._id}
-                    id={datas._id}
-                    eventLocation={datas.location}
-                    eventName={datas.title}
-                    eventDescription={datas.description}
-                    regDate={datas.startDate}
-                    regEndDate={datas.endDate}
-                    startTime={datas.startTime}
-                    endTime={datas.endTime}
-                    allDay={datas.allDay}
-                    recurring={datas.recurring}
-                    isPublic={datas.isPublic}
-                    isRegisterable={datas.isRegisterable}
-                  />
-                );
-              })}
+                .map((datas: Event) => {
+                  return (
+                    <EventListCard
+                      key={datas._id}
+                      id={datas._id}
+                      eventLocation={datas.location}
+                      eventName={datas.title}
+                      eventDescription={datas.description}
+                      regDate={datas.startDate}
+                      regEndDate={datas.endDate}
+                      startTime={datas.startTime}
+                      endTime={datas.endTime}
+                      allDay={datas.allDay}
+                      recurring={datas.recurring}
+                      isPublic={datas.isPublic}
+                      isRegisterable={datas.isRegisterable}
+                    />
+                  );
+                })}
           </div>
         </div>
       );
     });
   };
-
   return (
     <div className={styles.calendar}>
       <div className={styles.calendar__header}>
         <button className={styles.button} onClick={handlePrevMonth}>
           {'<'}
         </button>
-        <div className={styles.calendar__header_month}>
+        <div
+          className={styles.calendar__header_month}
+          data-testid="current-date"
+        >
           {months[currentMonth]} {currentYear}
         </div>
         <button className={styles.button} onClick={handleNextMonth}>
           {'>'}
         </button>
       </div>
-
       <div className={styles.calendar__weekdays}>
         {weekdays.map((weekday, index) => (
           <div key={index} className={styles.weekday}>
@@ -161,5 +163,4 @@ const Calendar: React.FC<CalendarProps> = ({ eventData }) => {
     </div>
   );
 };
-
 export default Calendar;
