@@ -1,7 +1,7 @@
 import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
-import styles from './Calendar.module.css';
+import styles from './Calendars.module.css';
 
 interface Event {
   _id: string;
