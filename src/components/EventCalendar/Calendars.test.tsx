@@ -178,4 +178,52 @@ describe('Calendar', () => {
       </MockedProvider>
     );
   });
+  describe('Events rendered depending on User Type', () => {
+    const currentDayEventMock = [
+      {
+        _id: '0',
+        title: 'demo',
+        description: 'agrsg',
+        startDate: new Date().toISOString().split('T')[0],
+        endDate: new Date().toISOString().split('T')[0],
+        location: 'delhi',
+        startTime: '10:00',
+        endTime: '12:00',
+        allDay: false,
+        recurring: false,
+        isPublic: false,
+        registrants: [{ userId: '222' }],
+        isRegisterable: true,
+      },
+    ];
+
+    it('Should not private render event for unregistered user', () => {
+      const userRole = 'USER';
+      const userId = '221';
+      const orgData = {
+        admins: [
+          {
+            _id: '333',
+          },
+        ],
+      };
+
+      const { getByTestId } = render(
+        <MockedProvider addTypename={false} link={link}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Calendar
+              eventData={currentDayEventMock}
+              orgData={orgData}
+              userRole={userRole}
+              userId={userId}
+            />
+          </I18nextProvider>
+        </MockedProvider>
+      );
+
+      expect(() => getByTestId('deleteEventModalBtn')).toThrowError(
+        'Unable to find an element by: [data-testid="deleteEventModalBtn"]'
+      );
+    });
+  });
 });
