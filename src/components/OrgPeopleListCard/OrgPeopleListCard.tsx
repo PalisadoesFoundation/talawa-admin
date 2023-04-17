@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { Link } from 'react-router-dom';
 import defaultImg from 'assets/third_image.png';
+import { errorHandler } from 'utils/errorHandler';
 
 interface OrgPeopleListCardProps {
   key: string;
@@ -44,15 +45,11 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(t('talawaApiUnavailable'));
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
   return (
-    <>
+    <div>
       <div className={styles.peoplelistdiv} data-testid="peoplelistitem">
         <Row className={styles.memberlist}>
           {props.memberImage ? (
@@ -138,7 +135,7 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 export {};

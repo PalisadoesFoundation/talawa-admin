@@ -78,7 +78,7 @@ const ListNavbar = () => {
                   data-testid={`changeLanguageBtn${index}`}
                 >
                   <span
-                    className={`flag-icon flag-icon-${language.country_code} mr-2`}
+                    className={`fi fi-${language.country_code} mr-2`}
                   ></span>
                   {language.name}
                 </button>

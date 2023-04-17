@@ -10,6 +10,7 @@ import {
 
 import styles from './ForgotPassword.module.css';
 import { useTranslation } from 'react-i18next';
+import { errorHandler } from 'utils/errorHandler';
 
 const ForgotPassword = () => {
   const { t } = useTranslation('translation', {
@@ -102,11 +103,7 @@ const ForgotPassword = () => {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(t('talawaApiUnavailable'));
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
 

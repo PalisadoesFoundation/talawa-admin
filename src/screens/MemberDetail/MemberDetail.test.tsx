@@ -246,7 +246,7 @@ describe('MemberDetail', () => {
     };
 
     const { container } = render(
-      <MockedProvider addTypename={false} mocks={MOCKS1}>
+      <MockedProvider addTypename={false} link={link1}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

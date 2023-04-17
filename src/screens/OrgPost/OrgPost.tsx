@@ -18,8 +18,9 @@ import { RootState } from 'state/reducers';
 import PaginationList from 'components/PaginationList/PaginationList';
 import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
-import PostNotFound from 'components/PostNotFound/PostNotFound';
+import NotFound from 'components/NotFound/NotFound';
 import { Form as StyleBox } from 'react-bootstrap';
+import { errorHandler } from 'utils/errorHandler';
 
 function OrgPost(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -100,13 +101,7 @@ function OrgPost(): JSX.Element {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
 
@@ -251,7 +246,7 @@ function OrgPost(): JSX.Element {
                   }
                 )
               ) : (
-                <PostNotFound title="post" />
+                <NotFound title="post" keyPrefix="postNotFound" />
               )}
             </div>
           </div>

@@ -7,6 +7,7 @@ import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import styles from './OrgUpdate.module.css';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import convertToBase64 from 'utils/convertToBase64';
+import { errorHandler } from 'utils/errorHandler';
 
 interface OrgUpdateProps {
   id: string;
@@ -16,21 +17,32 @@ interface OrgUpdateProps {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function OrgUpdate(props: OrgUpdateProps): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
-  const [formState, setFormState] = React.useState({
+
+  const [formState, setFormState] = React.useState<{
+    orgName: string;
+    orgDescrip: string;
+    location: string;
+    orgImage: string | null;
+  }>({
     orgName: '',
     orgDescrip: '',
     location: '',
-    orgImage: '',
+    orgImage: null,
   });
+
   const [publicchecked, setPublicChecked] = React.useState(true);
   const [visiblechecked, setVisibleChecked] = React.useState(false);
+
   const [login] = useMutation(UPDATE_ORGANIZATION_MUTATION);
+
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgUpdate',
   });
+
   const { data, loading: loadingdata } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: currentUrl },
   });
+
   React.useEffect(() => {
     if (data) {
       setFormState({
@@ -38,14 +50,15 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
         orgName: data.organizations[0].name,
         orgDescrip: data.organizations[0].description,
         location: data.organizations[0].location,
-        orgImage: data.organizations[0].image,
       });
     }
   }, [data]);
+
   if (loadingdata) {
     return <div className="loader"></div>;
   }
-  const login_link = async () => {
+
+  const onSaveChangesClicked = async () => {
     try {
       const { data } = await login({
         variables: {
@@ -66,11 +79,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(t('talawaApiUnavailable'));
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
 
@@ -187,7 +196,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
               type="button"
               className={styles.greenregbtn}
               value="savechanges"
-              onClick={login_link}
+              onClick={onSaveChangesClicked}
             >
               {t('saveChanges')}
             </button>

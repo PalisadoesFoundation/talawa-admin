@@ -12,6 +12,8 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
 import PaginationList from 'components/PaginationList/PaginationList';
+import NotFound from 'components/NotFound/NotFound';
+import { errorHandler } from 'utils/errorHandler';
 
 const Roles = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'roles' });
@@ -37,18 +39,18 @@ const Roles = () => {
   useEffect(() => {
     if (searchByName !== '') {
       refetch({
-        filter: searchByName,
+        firstName_contains: searchByName,
       });
     } else {
       if (count !== 0) {
         refetch({
-          filter: searchByName,
+          firstName_contains: searchByName,
         });
       }
     }
   }, [count, searchByName]);
 
-  const { data, loading: users_loading, refetch } = useQuery(USER_LIST);
+  const { loading: users_loading, error, data, refetch } = useQuery(USER_LIST);
 
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
 
@@ -104,11 +106,7 @@ const Roles = () => {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(t('talawaApiUnavailable'));
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
 
@@ -156,7 +154,7 @@ const Roles = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {data &&
+                    {data && !error?.graphQLErrors ? (
                       (rowsPerPage > 0
                         ? data.users.slice(
                             page * rowsPerPage,
@@ -202,7 +200,14 @@ const Roles = () => {
                             </tr>
                           );
                         }
-                      )}
+                      )
+                    ) : (
+                      <tr>
+                        <td>
+                          <NotFound title="user" keyPrefix="userNotFound" />
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
