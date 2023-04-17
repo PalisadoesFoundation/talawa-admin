@@ -16,10 +16,7 @@ import './Calendar.css';
 import styles from './OrganizationEvents.module.css';
 
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
-import {
-  ORGANIZATION_EVENT_CONNECTION_LIST,
-  ORGANIZATIONS_LIST,
-} from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_EVENT_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { RootState } from 'state/reducers';
 import dayjs from 'dayjs';
@@ -73,13 +70,6 @@ function OrganizationEvents(): JSX.Element {
       },
     }
   );
-
-  const { data: orgData } = useQuery(ORGANIZATIONS_LIST, {
-    variables: { id: currentUrl },
-  });
-
-  const userId = localStorage.getItem('id') as string;
-  const userRole = localStorage.getItem('UserType') as string;
 
   const [create, { loading: loading_2 }] = useMutation(CREATE_EVENT_MUTATION);
 
@@ -173,12 +163,7 @@ function OrganizationEvents(): JSX.Element {
               </Button>
             </Row>
           </div>
-          <Calendars
-            eventData={data?.eventsByOrganizationConnection}
-            orgData={orgData}
-            userRole={userRole}
-            userId={userId}
-          />
+          <Calendars eventData={data?.eventsByOrganizationConnection} />
         </Col>
       </Row>
       <Modal
