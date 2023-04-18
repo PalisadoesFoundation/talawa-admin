@@ -166,7 +166,7 @@ function OrgList(): JSX.Element {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  /* istanbul ignore next */
+
   const handleSearchByName = (e: any) => {
     const { value } = e.target;
     refetch({
