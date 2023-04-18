@@ -2,12 +2,14 @@
   display: flex;
   flex-direction: row;
 }
+
 .sidebar {
   z-index: 0;
   padding-top: 5px;
   margin: 0;
   height: 100%;
 }
+
 .sidebar:after {
   content: '';
   background-color: #f7f7f7;
@@ -18,9 +20,11 @@
   left: 94%;
   display: block;
 }
+
 .sidebarsticky {
   padding-left: 45px;
 }
+
 .sidebarsticky > input {
   text-decoration: none;
   margin-bottom: 50px;
@@ -68,6 +72,7 @@
   margin-right: -15px;
   margin-bottom: 20px;
 }
+
 .justifysp {
   display: flex;
   justify-content: space-between;
@@ -98,12 +103,64 @@
     position: relative;
     bottom: 18px;
   }
+
   .invitebtn {
     width: 135px;
     position: relative;
     right: 10px;
   }
+
   .userListTable {
     margin-left: 40px;
+  }
+}
+
+/* Loader CSS */
+
+.loader,
+.loader:after {
+  border-radius: 50%;
+  width: 10em;
+  height: 10em;
+}
+
+.loader {
+  margin: 60px auto;
+  margin-top: 35vh !important;
+  font-size: 10px;
+  position: relative;
+  text-indent: -9999em;
+  border-top: 1.1em solid rgba(255, 255, 255, 0.2);
+  border-right: 1.1em solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1.1em solid rgba(255, 255, 255, 0.2);
+  border-left: 1.1em solid #febc59;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation: load8 1.1s infinite linear;
+  animation: load8 1.1s infinite linear;
+}
+
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }

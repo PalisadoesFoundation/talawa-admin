@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Modal from 'react-modal';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Nav, Navbar } from 'react-bootstrap';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { toast } from 'react-toastify';
@@ -68,6 +68,7 @@ function LoginPage(): JSX.Element {
   const handleShowCon = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
+  const history = useHistory();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [login, { loading: loginLoading }] = useMutation(LOGIN_MUTATION);
@@ -201,7 +202,9 @@ function LoginPage(): JSX.Element {
           localStorage.setItem('IsLoggedIn', 'TRUE');
           localStorage.setItem('UserType', data.login.user.userType);
           if (localStorage.getItem('IsLoggedIn') == 'TRUE') {
-            window.location.replace('/orglist');
+            // Removing the next 2 lines will cause Authorization header to be copied to clipboard
+            navigator.clipboard.writeText('');
+            history.replace('/orglist');
           }
         } else {
           toast.warn(t('notAuthorised'));
