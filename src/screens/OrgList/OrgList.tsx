@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from 'react';
 import Modal from 'react-modal';
-import { Form } from 'antd';
+import { Form } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useMutation, useQuery } from '@apollo/client';

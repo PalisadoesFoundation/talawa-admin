@@ -9,7 +9,7 @@ import {
   DELETE_EVENT_MUTATION,
   UPDATE_EVENT_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { Form } from 'antd';
+import { Form } from 'react-bootstrap';
 import { errorHandler } from 'utils/errorHandler';
 
 interface EventListCardProps {
