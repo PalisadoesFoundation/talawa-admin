@@ -23,7 +23,6 @@
     "@types/react-dom": "^17.0.9",
     "@types/react-google-recaptcha": "^2.1.5",
     "@types/react-modal": "^3.12.1",
-    "antd": "^4.16.9",
     "bootstrap": "^4.2.1",
     "dayjs": "^1.10.7",
     "detect-newline": "^4.0.0",
