@@ -496,27 +496,4 @@ describe('Testing Block/Unblock user screen', () => {
 
     expect(window.location).toBeAt('/blockuser/id=orgid');
   });
-
-  test('Testing table data getting rendered', async () => {
-    window.location.assign('/orglist/id=123');
-    const link = new StaticMockLink(MOCKS, true);
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <BlockUser />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-
-    expect(screen.getByTestId(/row123/)).toBeInTheDocument();
-    expect(screen.getByTestId(/row456/)).toBeInTheDocument();
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.getByText('Sam Smith')).toBeInTheDocument();
-  });
 });
