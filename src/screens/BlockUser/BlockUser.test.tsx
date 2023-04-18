@@ -496,4 +496,27 @@ describe('Testing Block/Unblock user screen', () => {
 
     expect(window.location).toBeAt('/blockuser/id=orgid');
   });
+
+  test('Testing table data getting rendered', async () => {
+    window.location.assign('/orglist/id=orgid');
+    const link = new StaticMockLink(MOCKS, true);
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <BlockUser />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(screen.getByTestId(/blockedusers/)).toBeInTheDocument();
+    expect(screen.getByTestId(/allusers/)).toBeInTheDocument();
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    expect(screen.getByText('Sam Smith')).toBeInTheDocument();
+  });
 });
