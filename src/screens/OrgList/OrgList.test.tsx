@@ -476,7 +476,7 @@ describe('Organisation List Page', () => {
         formData.image
       );
 
-      await wait(500); // Since the function
+      await wait(500);
 
       expect(screen.getByTestId(/modalOrganizationName/i)).toHaveValue(
         formData.name
