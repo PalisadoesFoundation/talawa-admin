@@ -18,8 +18,9 @@ import { RootState } from 'state/reducers';
 import PaginationList from 'components/PaginationList/PaginationList';
 import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
-import PostNotFound from 'components/PostNotFound/PostNotFound';
+import NotFound from 'components/NotFound/NotFound';
 import { Form as StyleBox } from 'react-bootstrap';
+import { errorHandler } from 'utils/errorHandler';
 
 function OrgPost(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -65,13 +66,27 @@ function OrgPost(): JSX.Element {
 
   const CreatePost = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const {
+      posttitle: _posttitle,
+      postinfo: _postinfo,
+      postImage,
+    } = postformState;
+
+    const posttitle = _posttitle.trim();
+    const postinfo = _postinfo.trim();
+
     try {
+      if (!posttitle || !postinfo) {
+        throw new Error('Text fields cannot be empty strings');
+      }
+
       const { data } = await create({
         variables: {
-          title: postformState.posttitle,
-          text: postformState.postinfo,
+          title: posttitle,
+          text: postinfo,
           organizationId: currentUrl,
-          file: postformState.postImage,
+          file: postImage,
         },
       });
       /* istanbul ignore next */
@@ -87,13 +102,7 @@ function OrgPost(): JSX.Element {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
 
@@ -239,7 +248,7 @@ function OrgPost(): JSX.Element {
                   }
                 )
               ) : (
-                <PostNotFound title="post" />
+                <NotFound title="post" keyPrefix="postNotFound" />
               )}
             </div>
           </div>

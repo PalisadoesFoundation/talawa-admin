@@ -45,6 +45,12 @@ const MOCKS = [
                 name: 'ABC',
               },
             ],
+            joinedOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '6401ff65ce8e8406b8f07af1',
+              },
+            ],
           },
           {
             _id: '456',
@@ -61,6 +67,12 @@ const MOCKS = [
                 name: 'ABC',
               },
             ],
+            joinedOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '6401ff65ce8e8406b8f07af2',
+              },
+            ],
           },
           {
             _id: '789',
@@ -75,6 +87,12 @@ const MOCKS = [
               {
                 _id: '256',
                 name: 'ABC',
+              },
+            ],
+            joinedOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '6401ff65ce8e8406b8f07af3',
               },
             ],
           },
@@ -187,7 +205,7 @@ const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_ORG_MOCKS, true);
 const link3 = new StaticMockLink(ORG_LIST_MOCK, true);
 
-async function wait(ms = 0) {
+async function wait(ms = 100) {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -305,8 +323,6 @@ describe('Testing Request screen', () => {
     );
 
     await wait(200);
-
-    console.log(container.textContent);
 
     expect(container.textContent).toMatch(
       'Organizations not found, please create an organization through dashboard'

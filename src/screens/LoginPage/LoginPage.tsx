@@ -21,6 +21,7 @@ import {
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import { languages } from 'utils/languages';
 import { RECAPTCHA_SITE_KEY, REACT_APP_USE_RECAPTCHA } from 'Constant/constant';
+import { errorHandler } from 'utils/errorHandler';
 
 function LoginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -84,13 +85,7 @@ function LoginPage(): JSX.Element {
         const response = await fetch(resourceUrl);
       } catch (error: any) {
         /* istanbul ignore next */
-        if (error.message === 'Failed to fetch') {
-          toast.error(
-            'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-          );
-        } else {
-          toast.error(error.message);
-        }
+        errorHandler(t, error);
       }
     }
 
@@ -112,7 +107,7 @@ function LoginPage(): JSX.Element {
       return data.recaptcha;
     } catch (error: any) {
       /* istanbul ignore next */
-      toast.error('Captcha Error!');
+      toast.error(t('captchaError'));
     }
   };
 
@@ -128,7 +123,7 @@ function LoginPage(): JSX.Element {
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
-      toast.error('Please, check the captcha.');
+      toast.error(t('Please_check_the_captcha'));
       return;
     }
 
@@ -140,7 +135,7 @@ function LoginPage(): JSX.Element {
     ) {
       if (cPassword == signPassword) {
         try {
-          const { data: singUpData } = await signup({
+          const { data: signUpData } = await signup({
             variables: {
               firstName: signfirstName,
               lastName: signlastName,
@@ -150,7 +145,7 @@ function LoginPage(): JSX.Element {
           });
 
           /* istanbul ignore next */
-          if (singUpData) {
+          if (signUpData) {
             toast.success(
               'Successfully Registered. Please wait until you will be approved.'
             );
@@ -165,21 +160,13 @@ function LoginPage(): JSX.Element {
           }
         } catch (error: any) {
           /* istanbul ignore next */
-          if (error.message === 'Failed to fetch') {
-            toast.error(
-              'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-            );
-          } else if (error.message) {
-            toast.warn(error.message);
-          } else {
-            toast.error('Something went wrong, Please try after sometime.');
-          }
+          errorHandler(t, error);
         }
       } else {
-        toast.warn('Password and Confirm password mismatches.');
+        toast.warn(t('passwordMismatches'));
       }
     } else {
-      toast.warn('Fill all the Details Correctly.');
+      toast.warn(t('fillCorrectly'));
     }
   };
 
@@ -192,7 +179,7 @@ function LoginPage(): JSX.Element {
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
-      toast.error('Please, check the captcha.');
+      toast.error(t('Please_check_the_captcha'));
       return;
     }
 
@@ -219,22 +206,14 @@ function LoginPage(): JSX.Element {
             window.location.replace('/orglist');
           }
         } else {
-          toast.warn('Sorry! you are not Authorised!');
+          toast.warn(t('notAuthorised'));
         }
       } else {
-        toast.warn('User not found!');
+        toast.warn(t('notFound'));
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message == 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
-      } else if (error.message) {
-        toast.error(error.message);
-      } else {
-        toast.error('Something went wrong, Please try after sometime.');
-      }
+      errorHandler(t, error);
     }
   };
 
@@ -279,7 +258,7 @@ function LoginPage(): JSX.Element {
                       data-testid={`changeLanguageBtn${index}`}
                     >
                       <span
-                        className={`flag-icon flag-icon-${language.country_code} mr-2`}
+                        className={`fi fi-${language.country_code} mr-2`}
                       ></span>
                       {language.name}
                     </button>

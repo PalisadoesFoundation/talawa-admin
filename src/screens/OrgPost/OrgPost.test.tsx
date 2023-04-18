@@ -13,6 +13,7 @@ import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import { ToastContainer } from 'react-toastify';
 
 const MOCKS = [
   {
@@ -112,6 +113,12 @@ describe('Organisation Post Page', () => {
     postImage: new File(['hello'], 'hello.png', { type: 'image/png' }),
   };
 
+  const formDataEmpty = {
+    posttitle: '   ',
+    postinfo: '   ',
+    postImage: new File(['hello'], 'hello.png', { type: 'image/png' }),
+  };
+
   test('correct mock data should be queried', async () => {
     const dataQuery1 =
       MOCKS[0]?.result?.data?.postsByOrganizationConnection.edges[0];
@@ -207,6 +214,48 @@ describe('Organisation Post Page', () => {
     await wait();
 
     userEvent.click(screen.getByTestId('closePostModalBtn'));
+  }, 15000);
+
+  test('Create Post should throw error when empty strings have been entered', async () => {
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+    userEvent.type(
+      screen.getByPlaceholderText(/Post Title/i),
+      formDataEmpty.posttitle
+    );
+
+    userEvent.type(
+      screen.getByPlaceholderText(/What do you to talk about?/i),
+      formDataEmpty.postinfo
+    );
+
+    userEvent.upload(
+      screen.getByLabelText(/Post Image:/i),
+      formDataEmpty.postImage
+    );
+
+    userEvent.click(screen.getByTestId('createPostBtn'));
+
+    await wait();
+
+    expect(container.textContent).toMatch(
+      'Text fields cannot be empty strings'
+    );
   }, 15000);
 
   test('Testing search functionality', async () => {

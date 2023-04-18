@@ -10,6 +10,7 @@ import { REMOVE_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import defaultImg from 'assets/third_image.png';
+import { errorHandler } from 'utils/errorHandler';
 
 interface OrgPeopleListCardProps {
   key: string;
@@ -39,24 +40,18 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('The admin is removed.');
+        toast.success(t('adminRemoved'));
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
   return (
-    <>
+    <div>
       <div className={styles.peoplelistdiv} data-testid="peoplelistitem">
         <Row className={styles.memberlist}>
           {props.memberImage ? (
@@ -141,7 +136,7 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 export {};

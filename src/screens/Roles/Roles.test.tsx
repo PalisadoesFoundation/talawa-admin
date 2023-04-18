@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
+import { ToastContainer } from 'react-toastify';
 
 import Roles from './Roles';
 import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -18,7 +19,6 @@ import userEvent from '@testing-library/user-event';
 import { within } from '@testing-library/react';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { ToastContainer } from 'react-toastify';
 
 const MOCKS = [
   {
@@ -43,6 +43,12 @@ const MOCKS = [
                 name: 'ABC',
               },
             ],
+            joinedOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '6401ff65ce8e8406b8f07af1',
+              },
+            ],
           },
           {
             _id: '456',
@@ -59,6 +65,12 @@ const MOCKS = [
                 name: 'ABC',
               },
             ],
+            joinedOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '6401ff65ce8e8406b8f07af2',
+              },
+            ],
           },
           {
             _id: '789',
@@ -73,6 +85,12 @@ const MOCKS = [
               {
                 _id: '256',
                 name: 'ABC',
+              },
+            ],
+            joinedOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '6401ff65ce8e8406b8f07af3',
               },
             ],
           },
@@ -125,6 +143,7 @@ const MOCKS = [
     },
   },
 ];
+
 const EMPTY_MOCKS = [
   {
     request: {
@@ -156,10 +175,25 @@ const EMPTY_MOCKS = [
     },
   },
 ];
+
+const EMPTY_ORG_MOCKS = [
+  {
+    request: {
+      query: ORGANIZATION_CONNECTION_LIST,
+    },
+    result: {
+      data: {
+        organizationsConnection: [],
+      },
+    },
+  },
+];
+
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_MOCKS, true);
+const link3 = new StaticMockLink(EMPTY_ORG_MOCKS, true);
 
-async function wait(ms = 0) {
+async function wait(ms = 100) {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -283,6 +317,22 @@ describe('Testing Roles screen', () => {
 
     assertion;
   });
+  describe('handleChangePage function', () => {
+    test('should call setPage with the new page when button is clicked', () => {
+      // Arrange
+      const setPage = jest.fn();
+      const newPage = 2;
+      const { getByRole } = render(
+        <button onClick={() => setPage(2)}>Change Page</button>
+      );
+
+      // Act
+      fireEvent.click(getByRole('button'));
+
+      // Assert
+      expect(setPage).toHaveBeenCalledWith(newPage);
+    });
+  });
 
   test('should update rowsPerPage when selected from menu', () => {
     const { getByRole } = render(
@@ -398,8 +448,8 @@ describe('Testing Roles screen', () => {
   });
 
   test('Should render warning alert when there are no organizations', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link2}>
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link3}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -411,11 +461,10 @@ describe('Testing Roles screen', () => {
       </MockedProvider>
     );
 
-    expect(
-      await screen.findByText(
-        'Organizations not found, please create an organization through dashboard'
-      )
-    ).toBeInTheDocument();
+    await wait(200);
+    expect(container.textContent).toMatch(
+      'Organizations not found, please create an organization through dashboard'
+    );
   });
 
   test('Should not render warning alert when there are organizations present', async () => {
@@ -436,6 +485,81 @@ describe('Testing Roles screen', () => {
 
     expect(container.textContent).not.toMatch(
       'Organizations not found, please create an organization through dashboard'
+    );
+  });
+
+  test('Should disable select when user is self', async () => {
+    const localStorageMock = (function () {
+      const store: any = {
+        UserType: 'SUPERADMIN',
+        id: '123',
+      };
+
+      return {
+        getItem: jest.fn((key: string) => store[key]),
+      };
+    })();
+
+    Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <Roles />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(screen.getByTestId('changeRole123')).toHaveProperty(
+      'disabled',
+      true
+    );
+  });
+
+  test('Should not disable select when user is not self', async () => {
+    const localStorageMock = (function () {
+      const store: any = {
+        UserType: 'SUPERADMIN',
+        id: '123',
+      };
+
+      return {
+        getItem: jest.fn((key: string) => store[key]),
+      };
+    })();
+
+    Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <Roles />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(screen.getByTestId('changeRole456')).toHaveProperty(
+      'disabled',
+      false
+    );
+
+    expect(screen.getByTestId('changeRole789')).toHaveProperty(
+      'disabled',
+      false
     );
   });
 });

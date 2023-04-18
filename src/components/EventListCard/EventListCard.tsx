@@ -10,6 +10,7 @@ import {
   UPDATE_EVENT_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { Form } from 'antd';
+import { errorHandler } from 'utils/errorHandler';
 
 interface EventListCardProps {
   key: string;
@@ -77,20 +78,14 @@ function EventListCard(props: EventListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Event deleted successfully.');
+        toast.success(t('eventDeleted'));
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
 
@@ -115,20 +110,14 @@ function EventListCard(props: EventListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Event updated successfully.');
+        toast.success(t('eventUpdated'));
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
 

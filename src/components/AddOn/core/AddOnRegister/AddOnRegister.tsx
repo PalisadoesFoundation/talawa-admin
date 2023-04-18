@@ -39,7 +39,6 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
   });
 
   const handleRegister = async () => {
-    console.log(formState);
     const { data } = await create({
       variables: {
         $pluginName: formState.pluginName,
@@ -56,7 +55,6 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
         window.location.reload();
       }, 2000);
     }
-    console.log('Data is ', data);
   };
   return (
     <>

@@ -12,6 +12,8 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
 import PaginationList from 'components/PaginationList/PaginationList';
+import NotFound from 'components/NotFound/NotFound';
+import { errorHandler } from 'utils/errorHandler';
 
 const Roles = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'roles' });
@@ -24,9 +26,11 @@ const Roles = () => {
   const [searchByName, setSearchByName] = useState('');
   const [count, setCount] = useState(0);
 
+  const userType = localStorage.getItem('UserType');
+  const userId = localStorage.getItem('id');
+
   useEffect(() => {
-    const userType = localStorage.getItem('UserType');
-    if (userType !== 'SUPERADMIN') {
+    if (userType != 'SUPERADMIN') {
       window.location.assign('/orglist');
     }
     setComponentLoader(false);
@@ -34,19 +38,24 @@ const Roles = () => {
 
   useEffect(() => {
     if (searchByName !== '') {
-      refetch({
-        filter: searchByName,
+      userRefetch({
+        firstName_contains: searchByName,
       });
     } else {
       if (count !== 0) {
-        refetch({
-          filter: searchByName,
+        userRefetch({
+          firstName_contains: searchByName,
         });
       }
     }
   }, [count, searchByName]);
 
-  const { data: userData, loading: userLoading, refetch } = useQuery(USER_LIST);
+  const {
+    loading: usersLoading,
+    error: userError,
+    data: userData,
+    refetch: userRefetch,
+  } = useQuery(USER_LIST);
 
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
 
@@ -62,7 +71,7 @@ const Roles = () => {
     }
   }, [dataOrgs]);
 
-  if (componentLoader || userLoading) {
+  if (componentLoader || usersLoading) {
     return <div className="loader"></div>;
   }
 
@@ -97,18 +106,12 @@ const Roles = () => {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Role Updated.');
-        refetch();
+        toast.success(t('roleUpdated'));
+        userRefetch();
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
 
@@ -156,7 +159,7 @@ const Roles = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {userData &&
+                    {userData && !userError?.graphQLErrors ? (
                       (rowsPerPage > 0
                         ? userData.users.slice(
                             page * rowsPerPage,
@@ -180,67 +183,36 @@ const Roles = () => {
                               <td>{`${user.firstName} ${user.lastName}`}</td>
                               <td>{user.email}</td>
                               <td>
-                                {user.userType === 'ADMIN' ? (
-                                  <select
-                                    className="form-control"
-                                    name={`role${user._id}`}
-                                    onChange={changeRole}
-                                  >
-                                    <option
-                                      value={`ADMIN?${user._id}`}
-                                      selected
-                                    >
-                                      {t('admin')}
-                                    </option>
-                                    <option value={`SUPERADMIN?${user._id}`}>
-                                      {t('superAdmin')}
-                                    </option>
-                                    <option value={`USER?${user._id}`}>
-                                      {t('user')}
-                                    </option>
-                                  </select>
-                                ) : user.userType === 'SUPERADMIN' ? (
-                                  <select
-                                    className="form-control"
-                                    name={`role${user._id}`}
-                                    data-testid={`changeRole${user._id}`}
-                                    onChange={changeRole}
-                                  >
-                                    <option value={`ADMIN?${user._id}`}>
-                                      {t('admin')}
-                                    </option>
-                                    <option
-                                      value={`SUPERADMIN?${user._id}`}
-                                      selected
-                                    >
-                                      {t('superAdmin')}
-                                    </option>
-                                    <option value={`USER?${user._id}`}>
-                                      {t('user')}
-                                    </option>
-                                  </select>
-                                ) : (
-                                  <select
-                                    className="form-control"
-                                    name={`role${user._id}`}
-                                    onChange={changeRole}
-                                  >
-                                    <option value={`ADMIN?${user._id}`}>
-                                      {t('admin')}
-                                    </option>
-                                    <option value={`SUPERADMIN?${user._id}`}>
-                                      {t('superAdmin')}
-                                    </option>
-                                    <option value={`USER?${user._id}`} selected>
-                                      {t('user')}
-                                    </option>
-                                  </select>
-                                )}
+                                <select
+                                  className="form-control"
+                                  name={`role${user._id}`}
+                                  data-testid={`changeRole${user._id}`}
+                                  onChange={changeRole}
+                                  disabled={user._id === userId}
+                                  defaultValue={`${user.userType}?${user._id}`}
+                                >
+                                  <option value={`ADMIN?${user._id}`}>
+                                    {t('admin')}
+                                  </option>
+                                  <option value={`SUPERADMIN?${user._id}`}>
+                                    {t('superAdmin')}
+                                  </option>
+                                  <option value={`USER?${user._id}`}>
+                                    {t('user')}
+                                  </option>
+                                </select>
                               </td>
                             </tr>
                           );
                         }
-                      )}
+                      )
+                    ) : (
+                      <tr>
+                        <td>
+                          <NotFound title="user" keyPrefix="userNotFound" />
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>

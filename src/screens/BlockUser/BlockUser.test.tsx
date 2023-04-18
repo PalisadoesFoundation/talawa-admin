@@ -40,6 +40,12 @@ const MOCKS = [
                 name: 'ABC',
               },
             ],
+            joinedOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '6401ff65ce8e8406b8f07af1',
+              },
+            ],
           },
           {
             _id: '456',
@@ -54,6 +60,12 @@ const MOCKS = [
               {
                 _id: '443',
                 name: 'DEF',
+              },
+            ],
+            joinedOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '6401ff65ce8e8406b8f07af2',
               },
             ],
           },
@@ -130,7 +142,7 @@ const MOCKS = [
   },
 ];
 const link = new StaticMockLink(MOCKS, true);
-async function wait(ms = 0) {
+async function wait(ms = 100) {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -197,6 +209,6 @@ describe('Testing Block/Unblock user screen', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('searchByName'), 'john');
+    userEvent.type(screen.getByRole('textbox'), 'john');
   });
 });

@@ -9,6 +9,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import defaultImg from 'assets/third_image.png';
+import { errorHandler } from 'utils/errorHandler';
 
 interface OrgPostCardProps {
   key: string;
@@ -60,20 +61,14 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Post deleted successfully.');
+        toast.success(t('postDeleted'));
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
 
@@ -99,7 +94,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('Post Updated successfully.');
+        toast.success(t('postUpdated'));
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -174,6 +169,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
             )}
             <button
               role="toggleBtn"
+              data-testid="toggleBtn"
               className={`${
                 props.postInfo.length > 43
                   ? styles.toggleClickBtn

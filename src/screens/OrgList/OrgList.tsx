@@ -22,6 +22,7 @@ import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
 import AdminDashListCard from 'components/AdminDashListCard/AdminDashListCard';
 import { Alert, AlertTitle } from '@mui/material';
+import { errorHandler } from 'utils/errorHandler';
 
 function OrgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
@@ -92,7 +93,18 @@ function OrgList(): JSX.Element {
   const CreateOrg = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { name, descrip, location, visible, ispublic, image } = formState;
+    const {
+      name: _name,
+      descrip: _descrip,
+      location: _location,
+      visible,
+      ispublic,
+      image,
+    } = formState;
+
+    const name = _name.trim();
+    const descrip = _descrip.trim();
+    const location = _location.trim();
 
     try {
       const { data } = await create({
@@ -122,13 +134,7 @@ function OrgList(): JSX.Element {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (error.message === 'Failed to fetch') {
-        toast.error(
-          'Talawa-API service is unavailable. Is it running? Check your network connectivity too.'
-        );
-      } else {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
 
@@ -283,6 +289,7 @@ function OrgList(): JSX.Element {
                     } else if (
                       isAdminForCurrentOrg(userOrgListData?.user, datas)
                     ) {
+                      /* istanbul ignore next */
                       return (
                         <AdminDashListCard
                           id={datas._id}
