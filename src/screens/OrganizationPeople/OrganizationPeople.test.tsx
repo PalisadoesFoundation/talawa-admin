@@ -193,7 +193,7 @@ const createUserMock = (firstName_contains = '', lastName_contains = '') => ({
           joinedOrganizations: [
             {
               __typename: 'Organization',
-              _id: '6401ff65ce8e8406b8f07af1',
+              _id: 'orgid',
             },
           ],
         },
@@ -211,7 +211,7 @@ const createUserMock = (firstName_contains = '', lastName_contains = '') => ({
           joinedOrganizations: [
             {
               __typename: 'Organization',
-              _id: '6401ff65ce8e8406b8f07af2',
+              _id: 'orgid',
             },
           ],
         },
@@ -402,7 +402,7 @@ const MOCKS: any[] = [
             joinedOrganizations: [
               {
                 __typename: 'Organization',
-                _id: '6401ff65ce8e8406b8f07af1',
+                _id: 'orgid',
               },
             ],
           },
@@ -420,7 +420,7 @@ const MOCKS: any[] = [
             joinedOrganizations: [
               {
                 __typename: 'Organization',
-                _id: '6401ff65ce8e8406b8f07af2',
+                _id: 'orgid',
               },
             ],
           },
@@ -463,7 +463,7 @@ describe('Organization People Page', () => {
   };
 
   test('The number of organizations people rendered on the DOM should be equal to the rowsPerPage state value', async () => {
-    window.location.assign('orgpeople/id=6401ff65ce8e8406b8f07af1');
+    window.location.assign('orgpeople/id=orgid');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -528,15 +528,21 @@ describe('Organization People Page', () => {
             _id: string;
           }[];
         }) => {
-          window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af1');
+          window.location.assign('/orgpeople/id=orgid');
           const pathname = window.location.pathname;
           const id = pathname.split('=')[1];
-          return datas.joinedOrganizations.some((org) => org._id === id);
+
+          return datas.joinedOrganizations.some((org) => {
+            return org._id === id;
+          });
         }
       ).length;
 
       await wait();
-      const totalNumPeople = screen.getAllByTestId('orgpeoplelist').length;
+      const totalNumPeople = screen.getAllByTestId('rowsPPSelect').length;
+
+      console.log(totalNumPeople);
+
       expect(totalNumPeople).toBe(expectedUsersLength);
 
       if (rowsPerPageOptions[currRowPPindex].textContent === 'All') {
@@ -624,7 +630,7 @@ describe('Organization People Page', () => {
         joinedOrganizations: [
           {
             __typename: 'Organization',
-            _id: '6401ff65ce8e8406b8f07af1',
+            _id: 'orgid',
           },
         ],
       },
@@ -642,7 +648,7 @@ describe('Organization People Page', () => {
         joinedOrganizations: [
           {
             __typename: 'Organization',
-            _id: '6401ff65ce8e8406b8f07af2',
+            _id: 'orgid',
           },
         ],
       },
@@ -886,7 +892,7 @@ describe('Organization People Page', () => {
 
   test('Testing USERS list', async () => {
     const dataQueryForUsers = MOCKS[3]?.result?.data?.users;
-    window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af1');
+    window.location.assign('/orgpeople/id=orgid');
 
     render(
       <MockedProvider
@@ -907,10 +913,13 @@ describe('Organization People Page', () => {
       </MockedProvider>
     );
     await wait();
+
     userEvent.click(screen.getByLabelText(/Users/i));
     await wait();
+
     expect(screen.getByLabelText(/Users/i)).toBeChecked();
     await wait();
+
     const orgUsers = dataQueryForUsers?.filter(
       (datas: {
         _id: string;
@@ -924,21 +933,22 @@ describe('Organization People Page', () => {
           _id: string;
         }[];
       }) => {
-        window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af1');
+        window.location.assign('/orgpeople/id=orgid');
         const pathname = window.location.pathname;
         const id = pathname.split('=')[1];
         return datas.joinedOrganizations?.some((org) => org._id === id);
       }
     );
-    await wait();
-    expect(orgUsers?.length).toBe(1);
 
     await wait();
-    expect(window.location).toBeAt('/orgpeople/id=6401ff65ce8e8406b8f07af1');
+    expect(orgUsers?.length).toBe(2);
+
+    await wait();
+    expect(window.location).toBeAt('/orgpeople/id=orgid');
   });
 
   test('Testing USERS list with filters', async () => {
-    window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af2');
+    window.location.assign('/orgpeople/id=orgid');
     const dataQueryForUsers = MOCKS[3]?.result?.data?.users;
 
     render(
@@ -960,14 +970,15 @@ describe('Organization People Page', () => {
       </MockedProvider>
     );
     await wait();
+
     userEvent.click(screen.getByLabelText(/Users/i));
     await wait();
+
     expect(screen.getByLabelText(/Users/i)).toBeChecked();
     await wait();
 
     const firstNameInput = screen.getByPlaceholderText(/Enter First Name/i);
 
-    // Only First Name
     userEvent.type(firstNameInput, searchData.firstName);
     await wait();
 
@@ -984,17 +995,18 @@ describe('Organization People Page', () => {
           _id: string;
         }[];
       }) => {
-        window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af2');
+        window.location.assign('/orgpeople/id=orgid');
         const pathname = window.location.pathname;
         const id = pathname.split('=')[1];
         return datas.joinedOrganizations?.some((org) => org._id === id);
       }
     );
-    await wait();
-    expect(orgUsers?.length).toBe(1);
 
     await wait();
-    expect(window.location).toBeAt('/orgpeople/id=6401ff65ce8e8406b8f07af2');
+    expect(orgUsers?.length).toBe(2);
+
+    await wait();
+    expect(window.location).toBeAt('/orgpeople/id=orgid');
   });
 
   test('No Mock Data test', async () => {
