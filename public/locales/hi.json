@@ -251,6 +251,8 @@
     "not found!": "नहीं मिला!",
     "roles": "भूमिका",
     "user not found!": "उपयोगकर्ता नहीं मिले!",
+    "member not found!": "सदस्य अनुपस्थित!",
+    "admin not found!": "व्यवस्थापक नहीं मिला!",
     "roles not found!": "भूमिकाएँ नहीं मिलीं!"
   },
   "orgPostCard": {

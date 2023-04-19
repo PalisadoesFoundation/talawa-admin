@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-modal';
-import { Form } from 'antd';
+import { Form } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';

@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
 import DatePicker from 'react-datepicker';
-import { Form } from 'antd';
+import { Form } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';

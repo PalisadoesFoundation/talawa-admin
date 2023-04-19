@@ -19,6 +19,7 @@ import { RootState } from '../../state/reducers';
 import PaginationList from 'components/PaginationList/PaginationList';
 import { useTranslation } from 'react-i18next';
 import debounce from 'utils/debounce';
+import NotFound from 'components/NotFound/NotFound';
 
 import { toast } from 'react-toastify';
 
@@ -259,131 +260,122 @@ function OrganizationPeople(): JSX.Element {
                 <div className={styles.list_box} data-testid="orgpeoplelist">
                   {
                     /* istanbul ignore next */
-                    state == 0
-                      ? memberData
-                        ? (rowsPerPage > 0
-                            ? memberData.organizationsMemberConnection.edges.slice(
-                                page * rowsPerPage,
-                                page * rowsPerPage + rowsPerPage
-                              )
-                            : memberData.organizationsMemberConnection.edges
-                          ).map(
-                            (datas: {
-                              _id: string;
-                              lastName: string;
-                              firstName: string;
-                              image: string;
-                              email: string;
-                              createdAt: string;
-                            }) => {
-                              return (
-                                <OrgPeopleListCard
-                                  key={datas._id}
-                                  id={datas._id}
-                                  memberImage={datas.image}
-                                  joinDate={dayjs(datas.createdAt).format(
-                                    'DD/MM/YYYY'
-                                  )}
-                                  memberName={
-                                    datas.firstName + ' ' + datas.lastName
-                                  }
-                                  memberEmail={datas.email}
-                                />
-                              );
-                            }
-                          )
-                        : null
-                      : state == 1
-                      ? adminData
-                        ? (rowsPerPage > 0
-                            ? adminData.organizationsMemberConnection.edges.slice(
-                                page * rowsPerPage,
-                                page * rowsPerPage + rowsPerPage
-                              )
-                            : adminData.organizationsMemberConnection.edges
-                          ).map(
-                            (datas: {
-                              _id: string;
-                              lastName: string;
-                              firstName: string;
-                              image: string;
-                              email: string;
-                              createdAt: string;
-                            }) => {
-                              return (
-                                <OrgAdminListCard
-                                  key={datas._id}
-                                  id={datas._id}
-                                  memberImage={datas.image}
-                                  joinDate={dayjs(datas.createdAt).format(
-                                    'DD/MM/YYYY'
-                                  )}
-                                  memberName={
-                                    datas.firstName + ' ' + datas.lastName
-                                  }
-                                  memberEmail={datas.email}
-                                />
-                              );
-                            }
-                          )
-                        : null
-                      : state == 2
-                      ? usersData
-                        ? (rowsPerPage > 0
-                            ? usersData.users.slice(
-                                page * rowsPerPage,
-                                page * rowsPerPage + rowsPerPage
-                              )
-                            : usersData.users
-                          )
-                            .filter(
-                              (datas: {
-                                _id: string;
-                                lastName: string;
-                                firstName: string;
-                                image: string;
-                                email: string;
-                                createdAt: string;
-                                joinedOrganizations: {
-                                  __typename: string;
-                                  _id: string;
-                                }[];
-                              }) => {
-                                const pathname = window.location.pathname;
-                                const id = pathname.split('=')[1];
-                                return datas.joinedOrganizations.some(
-                                  (org) => org._id === id
-                                );
-                              }
+                    state == 0 ? (
+                      memberData &&
+                      memberData.organizationsMemberConnection.edges.length >
+                        0 ? (
+                        (rowsPerPage > 0
+                          ? memberData.organizationsMemberConnection.edges.slice(
+                              page * rowsPerPage,
+                              page * rowsPerPage + rowsPerPage
                             )
-                            .map(
-                              (datas: {
-                                _id: string;
-                                lastName: string;
-                                firstName: string;
-                                image: string;
-                                email: string;
-                                createdAt: string;
-                              }) => {
-                                return (
-                                  <UserListCard
-                                    key={datas._id}
-                                    id={datas._id}
-                                    memberImage={datas.image}
-                                    joinDate={dayjs(datas.createdAt).format(
-                                      'DD/MM/YYYY'
-                                    )}
-                                    memberName={
-                                      datas.firstName + ' ' + datas.lastName
-                                    }
-                                    memberEmail={datas.email}
-                                  />
-                                );
-                              }
+                          : memberData.organizationsMemberConnection.edges
+                        ).map(
+                          (datas: {
+                            _id: string;
+                            lastName: string;
+                            firstName: string;
+                            image: string;
+                            email: string;
+                            createdAt: string;
+                          }) => {
+                            return (
+                              <OrgPeopleListCard
+                                key={datas._id}
+                                id={datas._id}
+                                memberImage={datas.image}
+                                joinDate={dayjs(datas.createdAt).format(
+                                  'DD/MM/YYYY'
+                                )}
+                                memberName={
+                                  datas.firstName + ' ' + datas.lastName
+                                }
+                                memberEmail={datas.email}
+                              />
+                            );
+                          }
+                        )
+                      ) : (
+                        <NotFound title="member" keyPrefix="userNotFound" />
+                      )
+                    ) : state == 1 ? (
+                      adminData &&
+                      adminData.organizationsMemberConnection.edges.length >
+                        0 ? (
+                        (rowsPerPage > 0
+                          ? adminData.organizationsMemberConnection.edges.slice(
+                              page * rowsPerPage,
+                              page * rowsPerPage + rowsPerPage
                             )
-                        : null
-                      : /* istanbul ignore next */
-                        null
+                          : adminData.organizationsMemberConnection.edges
+                        ).map(
+                          (datas: {
+                            _id: string;
+                            lastName: string;
+                            firstName: string;
+                            image: string;
+                            email: string;
+                            createdAt: string;
+                          }) => {
+                            return (
+                              <OrgAdminListCard
+                                key={datas._id}
+                                id={datas._id}
+                                memberImage={datas.image}
+                                joinDate={dayjs(datas.createdAt).format(
+                                  'DD/MM/YYYY'
+                                )}
+                                memberName={
+                                  datas.firstName + ' ' + datas.lastName
+                                }
+                                memberEmail={datas.email}
+                              />
+                            );
+                          }
+                        )
+                      ) : (
+                        <NotFound title="admin" keyPrefix="userNotFound" />
+                      )
+                    ) : state == 2 ? (
+                      usersData && usersData.users.length > 0 ? (
+                        (rowsPerPage > 0
+                          ? usersData.users.slice(
+                              page * rowsPerPage,
+                              page * rowsPerPage + rowsPerPage
+                            )
+                          : usersData.users
+                        ).map(
+                          (datas: {
+                            _id: string;
+                            lastName: string;
+                            firstName: string;
+                            image: string;
+                            email: string;
+                            createdAt: string;
+                          }) => {
+                            return (
+                              <UserListCard
+                                key={datas._id}
+                                id={datas._id}
+                                memberImage={datas.image}
+                                joinDate={dayjs(datas.createdAt).format(
+                                  'DD/MM/YYYY'
+                                )}
+                                memberName={
+                                  datas.firstName + ' ' + datas.lastName
+                                }
+                                memberEmail={datas.email}
+                              />
+                            );
+                          }
+                        )
+                      ) : (
+                        <NotFound title="user" keyPrefix="userNotFound" />
+                      )
+                    ) : (
+                      /* istanbul ignore next */
+                      <NotFound title="user" keyPrefix="userNotFound" />
+                    )
                   }
                 </div>
               )}
