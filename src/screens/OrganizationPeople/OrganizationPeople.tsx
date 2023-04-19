@@ -109,7 +109,8 @@ function OrganizationPeople(): JSX.Element {
   if (memberError || usersError || adminError) {
     const error = memberError ?? usersError ?? adminError;
 
-    console.log(error);
+    console.error(error);
+
     toast.error(error?.message);
   }
 

@@ -452,6 +452,20 @@ async function wait(ms = 2) {
   });
 }
 
+// The numbers added to the total number of each people type is based
+// on the number of the prepended objects in the mocks being added to
+// the generated ones
+const getTotalNumPeople = (userType: string) => {
+  switch (userType) {
+    case 'members':
+      return members.length + 1;
+    case 'users':
+      return users.length + 2;
+    case 'admins':
+      return admins.length + 1;
+  }
+};
+
 describe('Organization People Page', () => {
   const searchData = {
     firstName: 'Aditya',
@@ -509,41 +523,24 @@ describe('Organization People Page', () => {
         rowsPerPageSelect?.querySelectorAll('option')
       );
 
+      const peopleListContainer = screen.getByTestId('orgpeoplelist');
+
       // Change the selected option of dropdown to the value of the current option
       userEvent.selectOptions(
         rowsPerPageSelect,
         rowsPerPageOptions[currRowPPindex].textContent
       );
 
-      const expectedUsersLength = MOCKS[3]?.result?.data?.users?.filter(
-        (datas: {
-          _id: string;
-          lastName: string;
-          firstName: string;
-          image: string;
-          email: string;
-          createdAt: string;
-          joinedOrganizations: {
-            __typename: string;
-            _id: string;
-          }[];
-        }) => {
-          window.location.assign('/orgpeople/id=orgid');
-          const pathname = window.location.pathname;
-          const id = pathname.split('=')[1];
+      const totalNumPeople =
+        rowsPerPageOptions[currRowPPindex].textContent === 'All'
+          ? getTotalNumPeople(allPeopleTypes[peopleTypeIndex])
+          : parseInt(rowsPerPageOptions[currRowPPindex].value);
 
-          return datas.joinedOrganizations.some((org) => {
-            return org._id === id;
-          });
-        }
-      ).length;
-
-      await wait();
-      const totalNumPeople = screen.getAllByTestId('rowsPPSelect').length;
-
-      console.log(totalNumPeople);
-
-      expect(totalNumPeople).toBe(expectedUsersLength);
+      expect(
+        Array.from(
+          peopleListContainer.querySelectorAll('[data-testid="peoplelistitem"]')
+        ).length
+      ).toBe(totalNumPeople);
 
       if (rowsPerPageOptions[currRowPPindex].textContent === 'All') {
         peopleTypeIndex += 1;
@@ -577,6 +574,8 @@ describe('Organization People Page', () => {
     };
 
     await changePeopleType();
+
+    expect(window.location).toBeAt('orgpeople/id=orgid');
   }, 15000);
 
   test('Correct mock data should be queried', async () => {
