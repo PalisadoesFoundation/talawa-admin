@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useLazyQuery } from '@apollo/client';
@@ -35,14 +35,12 @@ function OrganizationPeople(): JSX.Element {
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
 
-  const [state, setState] = useState(0);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const [filterData, setFilterData] = useState({
-    firstName_contains: '',
-    lastName_contains: '',
-  });
+  const [state, setState] = useState(0);
+  const firstNameRef = useRef<HTMLInputElement>(null);
+  const lastNameRef = useRef<HTMLInputElement>(null);
 
   const {
     data: memberData,
@@ -84,6 +82,11 @@ function OrganizationPeople(): JSX.Element {
   })[1];
 
   useEffect(() => {
+    const filterData = {
+      firstName_contains: firstNameRef.current?.value ?? '',
+      lastName_contains: lastNameRef.current?.value ?? '',
+    };
+
     if (state === 0) {
       memberRefetch({
         ...filterData,
@@ -110,9 +113,12 @@ function OrganizationPeople(): JSX.Element {
     toast.error(error?.message);
   }
 
-  /* istanbul ignore next */
-  const handleFirstNameSearchChange = (filterData: any) => {
-    /* istanbul ignore next */
+  const handleSearch = () => {
+    const filterData = {
+      firstName_contains: firstNameRef.current?.value ?? '',
+      lastName_contains: lastNameRef.current?.value ?? '',
+    };
+
     if (state === 0) {
       memberRefetch({
         ...filterData,
@@ -131,6 +137,8 @@ function OrganizationPeople(): JSX.Element {
     }
   };
 
+  const handleSearchDebounced = debounce(handleSearch);
+
   /* istanbul ignore next */
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -147,15 +155,12 @@ function OrganizationPeople(): JSX.Element {
     setPage(0);
   };
 
-  const debouncedHandleFirstNameSearchChange = debounce(
-    handleFirstNameSearchChange
-  );
-
   return (
     <>
       <div>
         <AdminNavbar targets={targets} url_1={configUrl} />
       </div>
+
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
@@ -166,38 +171,16 @@ function OrganizationPeople(): JSX.Element {
                 id="searchname"
                 placeholder={t('searchFirstName')}
                 autoComplete="off"
-                required
-                value={filterData.firstName_contains}
-                onChange={(e) => {
-                  const { value } = e.target;
-
-                  const newFilterData = {
-                    ...filterData,
-                    firstName_contains: value?.trim(),
-                  };
-
-                  setFilterData(newFilterData);
-                  debouncedHandleFirstNameSearchChange(newFilterData);
-                }}
+                ref={firstNameRef}
+                onChange={handleSearchDebounced}
               />
               <input
                 type="name"
                 id="searchLastName"
                 placeholder={t('searchLastName')}
                 autoComplete="off"
-                required
-                value={filterData.lastName_contains}
-                onChange={(e) => {
-                  const { value } = e.target;
-
-                  const newFilterData = {
-                    ...filterData,
-                    lastName_contains: value?.trim(),
-                  };
-
-                  setFilterData(newFilterData);
-                  debouncedHandleFirstNameSearchChange(newFilterData);
-                }}
+                ref={lastNameRef}
+                onChange={handleSearchDebounced}
               />
               <div className={styles.radio_buttons} data-testid="usertypelist">
                 <input
