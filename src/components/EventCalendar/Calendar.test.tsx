@@ -10,6 +10,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import styles from './Calendar.module.css';
 
 const eventData = [
   {
@@ -128,7 +129,7 @@ describe('Calendar', () => {
     const { getByText } = render(<Calendar eventData={eventData} />);
     const selectedDate = getByText('15');
     fireEvent.click(selectedDate);
-    expect(selectedDate).toHaveClass('day');
+    expect(selectedDate).toHaveClass(styles.day);
   });
 
   it('Should show prev and next month on clicking < & > buttons', () => {
@@ -177,5 +178,44 @@ describe('Calendar', () => {
         </I18nextProvider>
       </MockedProvider>
     );
+  });
+  it('Test for superadmin case', () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+  });
+  it('Today Cell is having correct styles', () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+    const todayDate = new Date().getDate();
+    const todayElement = screen.getByText(todayDate.toString());
+    expect(todayElement).toHaveClass(styles.day__today);
+  });
+  it('Today button should show today cell', () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+    //Changing the month
+    const prevButton = screen.getByText('<');
+    fireEvent.click(prevButton);
+
+    // Clicking today button
+    const todayButton = screen.getByText('Today');
+    fireEvent.click(todayButton);
+    const todayCell = screen.getByText(new Date().getDate().toString());
+    expect(todayCell).toHaveClass(styles.day__today);
   });
 });
