@@ -79,7 +79,15 @@
     "enterName": "Enter Name",
     "noOrgError": "Organizations not found, please create an organization through dashboard",
     "roleUpdated": "Role Updated.",
-    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
+    "selectRoleAndOrg": "Please select role and organzation",
+    "adminRemoved": "Admin Removed",
+    "memberRemoved": "Member Removed",
+    "role": "Role",
+    "organization": "Organization",
+    "add": "Add",
+    "noOrganizationJoin": "No organization join",
+    "select": "select"
   },
   "requests": {
     "title": "Talawa Requests",
@@ -360,7 +368,6 @@
     "saveChanges": "Save Changes",
     "cancel": "Cancel"
   },
-
   "userPasswordUpdate": {
     "previousPassword": "Previous Password",
     "newPassword": "New Password",
@@ -368,7 +375,6 @@
     "saveChanges": "Save Changes",
     "cancel": "Cancel"
   },
-
   "orgDelete": {
     "deleteOrg": "Delete Org"
   },

@@ -132,7 +132,7 @@ const Roles = () => {
   const handleRole = async () => {
     if (role === '') {
       /* istanbul ignore next */
-      return toast.error('Please select role and organzation');
+      return toast.error(t('selectRoleAndOrg'));
     }
 
     /* istanbul ignore next */
@@ -229,7 +229,7 @@ const Roles = () => {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('admin removed');
+        toast.success(t('adminRemoved'));
         refetch();
       }
     } catch (error) {
@@ -250,7 +250,7 @@ const Roles = () => {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success('member removed');
+        toast.success(t('memberRemoved'));
         refetch();
       }
     } catch (error) {
@@ -299,9 +299,9 @@ const Roles = () => {
                       <th scope="col">{t('name')}</th>
                       <th scope="col">{t('email')}</th>
                       <th scope="col">{t('roles_userType')}</th>
-                      <th scope="col">Role</th>
-                      <th scope="col">Organization</th>
-                      <th scope="col">Add</th>
+                      <th scope="col">{t('role')}</th>
+                      <th scope="col">{t('organization')}</th>
+                      <th scope="col">{t('add')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -321,7 +321,7 @@ const Roles = () => {
                             <td>
                               {user.userType === 'SUPERADMIN' && (
                                 <p className={styles.userRole_container}>
-                                  SUPERADMIN{' '}
+                                  {t('superAdmin')}{' '}
                                   {user._id !== userId && (
                                     <button
                                       type="button"
@@ -344,7 +344,7 @@ const Roles = () => {
                                       key={org._id}
                                       className={styles.userRole_container}
                                     >
-                                      {org.name} - ADMIN{' '}
+                                      {org.name} - {t('admin')}{' '}
                                       <button
                                         type="button"
                                         className="btn btn-success"
@@ -376,7 +376,7 @@ const Roles = () => {
                                         key={org._id}
                                         className={styles.userRole_container}
                                       >
-                                        {org.name} - MEMBER{' '}
+                                        {org.name} - {t('user')}{' '}
                                         <button
                                           type="button"
                                           className="btn btn-success"
@@ -409,7 +409,7 @@ const Roles = () => {
                                     )
                                 ).length === 0 && (
                                   <p className="noOrgJoin_text">
-                                    No organization join
+                                    {t('noOrganizationJoin')}
                                   </p>
                                 )}
                             </td>
@@ -425,7 +425,7 @@ const Roles = () => {
                                 defaultValue=""
                               >
                                 <option value="" disabled>
-                                  select
+                                  {t('select')}
                                 </option>
                                 <option value={`ADMIN?${user._id}`}>
                                   {t('admin')}
@@ -453,7 +453,7 @@ const Roles = () => {
                                 defaultValue=""
                               >
                                 <option value="" disabled>
-                                  select
+                                  {t('select')}
                                 </option>
                                 {dataOrgs?.organizationsConnection?.map(
                                   (org: {
