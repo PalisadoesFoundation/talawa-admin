@@ -86,6 +86,23 @@ export const USER_LIST = gql`
       }
       joinedOrganizations {
         _id
+        name
+        members {
+          _id
+          firstName
+          lastName
+          email
+        }
+        admins {
+          _id
+          firstName
+          lastName
+          email
+        }
+      }
+      adminFor {
+        _id
+        name
       }
       createdAt
     }
