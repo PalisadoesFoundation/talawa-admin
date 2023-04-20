@@ -13,6 +13,9 @@ import {
 import {
   UPDATE_USERTYPE_MUTATION,
   ADD_ADMIN_MUTATION,
+  REMOVE_ADMIN_MUTATION,
+  ADD_MEMBER_MUTATION,
+  REMOVE_MEMBER_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import PaginationList from 'components/PaginationList/PaginationList';
 import NotFound from 'components/NotFound/NotFound';
@@ -35,17 +38,17 @@ interface Organization {
 }
 
 interface Data {
-  adminApproved: boolean;
-  createdAt: string;
-  email: string;
-  firstName: string;
-  image: string;
-  joinedOrganizations: Organization[];
-  lastName: string;
-  organizationsBlockedBy: any[];
-  userType: string;
-  __typename: string;
   _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  userType: string;
+  joinedOrganizations: Organization[];
+  adminFor: {
+    _id: string;
+    __typename: string;
+    name: string;
+  }[];
 }
 
 const Roles = () => {
@@ -89,6 +92,9 @@ const Roles = () => {
 
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
   const [createAdmin] = useMutation(ADD_ADMIN_MUTATION);
+  const [removeAdmin] = useMutation(REMOVE_ADMIN_MUTATION);
+  const [createMember] = useMutation(ADD_MEMBER_MUTATION);
+  const [removeMember] = useMutation(REMOVE_MEMBER_MUTATION);
 
   const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
 
@@ -97,7 +103,6 @@ const Roles = () => {
       return;
     }
 
-    console.log(data);
     if (dataOrgs.organizationsConnection.length === 0) {
       toast.warning(t('noOrgError'));
     }
@@ -123,16 +128,80 @@ const Roles = () => {
     setPage(0);
   };
 
-  const changeRole = async (e: any) => {
-    const { value } = e.target;
+  /* istanbul ignore next */
+  const handleRole = async () => {
+    if (role === '') {
+      /* istanbul ignore next */
+      return toast.error('Please select role and organzation');
+    }
 
-    const inputData = value.split('?');
+    /* istanbul ignore next */
+    if (role.split('?')[0] === 'SUPERADMIN') {
+      try {
+        /* istanbul ignore next */
+        const { data } = await updateUserType({
+          variables: {
+            id: role.split('?')[1],
+            userType: role.split('?')[0],
+          },
+        });
 
+        /* istanbul ignore next */
+        if (data) {
+          toast.success(t('roleUpdated'));
+          refetch();
+        }
+      } catch (error: any) {
+        /* istanbul ignore next */
+        errorHandler(t, error);
+      }
+    } else if (role.split('?')[0] === 'ADMIN') {
+      try {
+        const { data } = await createAdmin({
+          variables: {
+            orgid: organization,
+            userid: role.split('?')[1],
+          },
+        });
+
+        /* istanbul ignore next */
+        if (data) {
+          toast.success(t('roleUpdated'));
+          refetch();
+        }
+      } catch (error: any) {
+        /* istanbul ignore next */
+        errorHandler(t, error);
+      }
+    } else {
+      try {
+        const { data } = await createMember({
+          variables: {
+            orgid: organization,
+            userid: role.split('?')[1],
+          },
+        });
+
+        /* istanbul ignore next */
+        if (data) {
+          toast.success(t('roleUpdated'));
+          refetch();
+        }
+      } catch (error: any) {
+        /* istanbul ignore next */
+        errorHandler(t, error);
+      }
+    }
+  };
+
+  /* istanbul ignore next */
+  const handleRemoveSuperadmin = async (userId: any) => {
     try {
+      /* istanbul ignore next */
       const { data } = await updateUserType({
         variables: {
-          id: inputData[1],
-          userType: inputData[0],
+          id: userId,
+          userType: 'USER',
         },
       });
 
@@ -147,23 +216,44 @@ const Roles = () => {
     }
   };
 
-  const handleRole = async () => {
-    console.log(role, role.split('?'), organization);
+  /* istanbul ignore next */
+  const handleRemoveAdmin = async (orgId: any, userId: any) => {
     try {
-      const { data } = await createAdmin({
+      /* istanbul ignore next */
+      const { data } = await removeAdmin({
         variables: {
-          orgid: organization,
-          userid: role.split('?')[1],
+          orgid: orgId,
+          userid: userId,
         },
       });
 
       /* istanbul ignore next */
       if (data) {
-        toast.success(t('roleUpdated'));
+        toast.success('admin removed');
         refetch();
       }
-    } catch (error: any) {
+    } catch (error) {
+      errorHandler(t, error);
+    }
+  };
+
+  /* istanbul ignore next */
+  const handleRemoveMember = async (orgId: any, userId: any) => {
+    try {
       /* istanbul ignore next */
+      const { data } = await removeMember({
+        variables: {
+          orgid: orgId,
+          userid: userId,
+        },
+      });
+
+      /* istanbul ignore next */
+      if (data) {
+        toast.success('member removed');
+        refetch();
+      }
+    } catch (error) {
       errorHandler(t, error);
     }
   };
@@ -178,7 +268,7 @@ const Roles = () => {
     <div data-testid="roles-header">
       <ListNavbar />
       <Row>
-        <Col sm={3}>
+        <Col sm={2}>
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
               <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
@@ -194,7 +284,7 @@ const Roles = () => {
             </div>
           </div>
         </Col>
-        <Col sm={8}>
+        <Col sm={10}>
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>{t('usersList')}</p>
@@ -209,6 +299,9 @@ const Roles = () => {
                       <th scope="col">{t('name')}</th>
                       <th scope="col">{t('email')}</th>
                       <th scope="col">{t('roles_userType')}</th>
+                      <th scope="col">Role</th>
+                      <th scope="col">Organization</th>
+                      <th scope="col">Add</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -219,234 +312,180 @@ const Roles = () => {
                             page * rowsPerPage + rowsPerPage
                           )
                         : data.users
-                      ).map(
-                        (
-                          user: {
-                            _id: string;
-                            firstName: string;
-                            lastName: string;
-                            email: string;
-                            userType: string;
-                            joinedOrganizations: {
-                              admins: {
-                                __typename: string;
-                                _id: string;
-                                firstName: string;
-                                lastName: string;
-                                email: string;
-                              }[];
-                              members: {
-                                __typename: string;
-                                _id: string;
-                                firstName: string;
-                                lastName: string;
-                                email: string;
-                              }[];
-                              name: string;
-                              __typename: string;
-                              _id: string;
-                            }[];
-                          },
-                          index: number
-                        ) => {
-                          console.log(user);
-                          return (
-                            <tr key={user._id}>
-                              <th scope="row">{page * 10 + (index + 1)}</th>
-                              <td>{`${user.firstName} ${user.lastName}`}</td>
-                              <td>{user.email}</td>
-                              <td>
-                                {user.userType === 'SUPERADMIN' && (
-                                  <p className={styles.userRole_container}>
-                                    SUPERADMIN
-                                  </p>
-                                )}
-                                {user?.joinedOrganizations?.length > 0 &&
-                                user.userType !== 'SUPERADMIN'
-                                  ? user.joinedOrganizations
-                                      .filter((org) =>
-                                        org.admins.some(
-                                          (admin) => admin._id === user._id
-                                        )
-                                      )
-                                      .map((org: Organization) => {
-                                        console.log('org', org);
-                                        return (
-                                          <p
-                                            key={org._id}
-                                            className={
-                                              styles.userRole_container
-                                            }
-                                          >
-                                            {org.admins.length > 0 ? (
-                                              <p>{org.name} - ADMIN</p>
-                                            ) : (
-                                              user.joinedOrganizations
-                                                .filter((org) =>
-                                                  org.members.some(
-                                                    (member) =>
-                                                      member._id === user._id
-                                                  )
-                                                )
-                                                .map((org: Organization) => {
-                                                  console.log('org', org);
-                                                  return (
-                                                    <p
-                                                      key={org._id}
-                                                      className={
-                                                        styles.userRole_container
-                                                      }
-                                                    >
-                                                      {org.name} - MEMBER
-                                                    </p>
-                                                  );
-                                                })
-                                            )}
-                                          </p>
-                                        );
-                                      })
-                                  : null}
-                                {user.userType !== 'SUPERADMIN' &&
-                                  user.joinedOrganizations.length === 0 && (
-                                    <p className="noOrgJoin_text">
-                                      No organization join
-                                    </p>
+                      ).map((user: Data, index: number) => {
+                        return (
+                          <tr key={user._id}>
+                            <th scope="row">{page * 10 + (index + 1)}</th>
+                            <td>{`${user.firstName} ${user.lastName}`}</td>
+                            <td>{user.email}</td>
+                            <td>
+                              {user.userType === 'SUPERADMIN' && (
+                                <p className={styles.userRole_container}>
+                                  SUPERADMIN{' '}
+                                  {user._id !== userId && (
+                                    <button
+                                      type="button"
+                                      className="btn btn-success"
+                                      onClick={() =>
+                                        handleRemoveSuperadmin(user._id)
+                                      }
+                                    >
+                                      <i className="fas fa-trash"></i>
+                                    </button>
                                   )}
-                              </td>
+                                </p>
+                              )}
 
-                              <td>
-                                <button
-                                  type="button"
-                                  className="btn btn-success"
-                                  data-toggle="modal"
-                                  data-target="#exampleModalCenter"
-                                >
-                                  <i className="fas fa-edit"></i>
-                                </button>
-                                <div
-                                  className="modal fade"
-                                  id="exampleModalCenter"
-                                  role="dialog"
-                                  aria-labelledby="exampleModalCenterTitle"
-                                  aria-hidden="true"
-                                >
-                                  <div
-                                    className="modal-dialog modal-dialog-centered"
-                                    role="document"
-                                  >
-                                    <div className="modal-content">
-                                      <div className="modal-header">
-                                        <h5
-                                          className="modal-title"
-                                          id="exampleModalLongTitle"
-                                        >
-                                          Role
-                                        </h5>
-                                        <button
-                                          type="button"
-                                          className="close"
-                                          data-dismiss="modal"
-                                          aria-label="Close"
-                                        >
-                                          <span aria-hidden="true">
-                                            &times;
-                                          </span>
-                                        </button>
-                                      </div>
-                                      <div className="modal-body">
-                                        <div>
-                                          <label htmlFor="userRole">
-                                            User Role
-                                          </label>
-                                          <select
-                                            className="form-control"
-                                            name={`role${user._id}`}
-                                            data-testid={`changeRole${user._id}`}
-                                            onChange={(e) =>
-                                              setRole(e.target.value)
-                                            }
-                                            //disabled={user._id === userId}
-                                            //defaultValue={`${user.userType}?${user._id}`}
-                                          >
-                                            <option selected disabled>
-                                              select
-                                            </option>
-                                            <option value={`ADMIN?${user._id}`}>
-                                              {t('admin')}
-                                            </option>
-                                            <option
-                                              value={`SUPERADMIN?${user._id}`}
-                                            >
-                                              {t('superAdmin')}
-                                            </option>
-                                            <option value={`USER?${user._id}`}>
-                                              {t('user')}
-                                            </option>
-                                          </select>
+                              {user?.adminFor?.length > 0 &&
+                                user.userType !== 'SUPERADMIN' &&
+                                user?.adminFor.map((org) => {
+                                  return (
+                                    <p
+                                      key={org._id}
+                                      className={styles.userRole_container}
+                                    >
+                                      {org.name} - ADMIN{' '}
+                                      <button
+                                        type="button"
+                                        className="btn btn-success"
+                                        onClick={() =>
+                                          handleRemoveAdmin(org._id, user._id)
+                                        }
+                                      >
+                                        <i className="fas fa-trash"></i>
+                                      </button>
+                                    </p>
+                                  );
+                                })}
 
-                                          <label htmlFor="userRole">
-                                            Organization
-                                          </label>
-                                          <select
-                                            className="form-control"
-                                            name={`role${user._id}`}
-                                            data-testid={`changeRole${user._id}`}
-                                            onChange={(e) =>
-                                              setOrganization(e.target.value)
-                                            }
-                                            //disabled={user._id === userId}
-                                            //defaultValue={`${user.userType}?${user._id}`}
-                                          >
-                                            <option selected disabled>
-                                              select
-                                            </option>
-                                            {dataOrgs?.organizationsConnection?.map(
-                                              (org: {
-                                                _id: string;
-                                                image: string;
-                                                name: string;
-                                                admins: any;
-                                                members: any;
-                                                createdAt: string;
-                                                location: string | null;
-                                              }) => {
-                                                return (
-                                                  <option
-                                                    key={org._id}
-                                                    value={org._id}
-                                                  >
-                                                    {org.name}
-                                                  </option>
-                                                );
-                                              }
-                                            )}
-                                          </select>
-                                        </div>
-                                      </div>
-                                      <div className="modal-footer">
-                                        <button
-                                          type="button"
-                                          className="btn btn-secondary"
-                                          data-dismiss="modal"
-                                        >
-                                          Close
-                                        </button>
+                              {user?.joinedOrganizations?.length > 0 &&
+                                user.userType !== 'SUPERADMIN' &&
+                                user.joinedOrganizations
+                                  .filter(
+                                    (org) =>
+                                      !user.adminFor.some(
+                                        (adminOrg) => adminOrg._id === org._id
+                                      ) &&
+                                      org.members.some(
+                                        (member) => member._id === user._id
+                                      )
+                                  )
+                                  .map((org: Organization) => {
+                                    return (
+                                      <p
+                                        key={org._id}
+                                        className={styles.userRole_container}
+                                      >
+                                        {org.name} - MEMBER{' '}
                                         <button
                                           type="button"
                                           className="btn btn-success"
-                                          onClick={handleRole}
+                                          onClick={() =>
+                                            handleRemoveMember(
+                                              org._id,
+                                              user._id
+                                            )
+                                          }
                                         >
-                                          Save changes
+                                          <i className="fas fa-trash"></i>
                                         </button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-                          );
-                        }
-                      )
+                                      </p>
+                                    );
+                                  })}
+
+                              {user.userType !== 'SUPERADMIN' &&
+                                user.adminFor.length === 0 &&
+                                /* istanbul ignore next */
+                                user.joinedOrganizations.filter(
+                                  /* istanbul ignore next */
+                                  (org) =>
+                                    !user.adminFor.some(
+                                      /* istanbul ignore next */
+                                      (adminOrg) => adminOrg._id === org._id
+                                    ) &&
+                                    org.members.some(
+                                      /* istanbul ignore next */
+                                      (member) => member._id === user._id
+                                    )
+                                ).length === 0 && (
+                                  <p className="noOrgJoin_text">
+                                    No organization join
+                                  </p>
+                                )}
+                            </td>
+                            <td>
+                              <select
+                                className="form-control"
+                                name={`role${user._id}`}
+                                data-testid={`changeRole${user._id}`}
+                                onChange={(e) => {
+                                  setRole(e.target.value);
+                                }}
+                                disabled={user._id === userId}
+                                defaultValue=""
+                              >
+                                <option value="" disabled>
+                                  select
+                                </option>
+                                <option value={`ADMIN?${user._id}`}>
+                                  {t('admin')}
+                                </option>
+                                <option value={`SUPERADMIN?${user._id}`}>
+                                  {t('superAdmin')}
+                                </option>
+                                <option value={`USER?${user._id}`}>
+                                  {t('user')}
+                                </option>
+                              </select>
+                            </td>
+                            <td>
+                              <select
+                                className="form-control"
+                                name={`role${user._id}`}
+                                data-testid={`changeOrganization${user._id}`}
+                                onChange={(e) => {
+                                  setOrganization(e.target.value);
+                                }}
+                                disabled={
+                                  user._id === userId ||
+                                  role === `SUPERADMIN?${user._id}`
+                                }
+                                defaultValue=""
+                              >
+                                <option value="" disabled>
+                                  select
+                                </option>
+                                {dataOrgs?.organizationsConnection?.map(
+                                  (org: {
+                                    _id: string;
+                                    image: string;
+                                    name: string;
+                                    admins: any;
+                                    members: any;
+                                    createdAt: string;
+                                    location: string | null;
+                                  }) => {
+                                    return (
+                                      <option key={org._id} value={org._id}>
+                                        {org.name}
+                                      </option>
+                                    );
+                                  }
+                                )}
+                              </select>
+                            </td>
+                            <td>
+                              <button
+                                type="button"
+                                className="btn btn-success"
+                                onClick={handleRole}
+                              >
+                                <i className="fas fa-plus"></i>
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })
                     ) : (
                       <tr>
                         <td>

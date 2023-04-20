@@ -100,6 +100,10 @@ export const USER_LIST = gql`
           email
         }
       }
+      adminFor {
+        _id
+        name
+      }
       createdAt
     }
   }
