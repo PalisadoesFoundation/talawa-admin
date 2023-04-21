@@ -416,7 +416,10 @@ const Roles = () => {
                                       (member) => member._id === user._id
                                     )
                                 ).length === 0 && (
-                                  <p className="noOrgJoin_text">
+                                  <p
+                                    data-testid={`noOrgJoin${user._id}`}
+                                    className="noOrgJoin_text"
+                                  >
                                     {t('noOrganizationJoin')}
                                   </p>
                                 )}

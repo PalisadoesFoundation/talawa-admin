@@ -212,6 +212,24 @@ const MOCKS = [
               },
             ],
           },
+          {
+            _id: '000',
+            firstName: 'Peter',
+            lastName: 'Parker',
+            image: 'dummyImage',
+            email: 'peterparker@gmail.com',
+            userType: 'USER',
+            adminApproved: true,
+            createdAt: '20/06/2022',
+            organizationsBlockedBy: [
+              {
+                _id: '256',
+                name: 'ABC',
+              },
+            ],
+            adminFor: [],
+            joinedOrganizations: [],
+          },
         ],
       },
     },
@@ -812,5 +830,40 @@ describe('Testing Roles screen', () => {
 
     expect(userText).toBeInTheDocument();
     expect(userBtn).toBeInTheDocument();
+  });
+
+  test('If user have no organization has join then the text msg of no org join should show', async () => {
+    const localStorageMock = (function () {
+      const store: any = {
+        UserType: 'SUPERADMIN',
+        id: '123',
+      };
+
+      return {
+        getItem: jest.fn((key: string) => store[key]),
+      };
+    })();
+
+    Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Roles />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    const noOrgJoin = screen.getByTestId('noOrgJoin000');
+
+    await wait();
+
+    expect(noOrgJoin).toBeInTheDocument();
   });
 });
