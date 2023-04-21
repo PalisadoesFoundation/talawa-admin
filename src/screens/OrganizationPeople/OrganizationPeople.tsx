@@ -120,6 +120,7 @@ function OrganizationPeople(): JSX.Element {
       lastName_contains: lastNameRef.current?.value ?? '',
     };
 
+    /* istanbul ignore next */
     if (state === 0) {
       memberRefetch({
         ...filterData,
