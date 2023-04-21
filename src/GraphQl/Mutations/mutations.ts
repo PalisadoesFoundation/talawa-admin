@@ -252,16 +252,6 @@ export const REMOVE_ADMIN_MUTATION = gql`
   }
 `;
 
-// to add member from an organization
-
-export const ADD_MEMBER_MUTATION = gql`
-  mutation createMember($orgid: ID!, $userid: ID!) {
-    createMember(data: { organizationId: $orgid, userId: $userid }) {
-      _id
-    }
-  }
-`;
-
 // to Remove member from an organization
 
 export const REMOVE_MEMBER_MUTATION = gql`
