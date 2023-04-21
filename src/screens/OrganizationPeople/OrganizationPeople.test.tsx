@@ -53,34 +53,10 @@ for (let i = 0; i < 100; i++) {
     adminApproved: true,
     organizationsBlockedBy: [],
     createdAt: new Date().toISOString(),
-    adminFor: [
-      {
-        name: 'pokemn',
-        __typename: 'Organization',
-        _id: '6411aa2a97d5631eb0765945',
-      },
-    ],
     joinedOrganizations: [
       {
         __typename: 'Organization',
         _id: `6411a8f197d5631eb0765857${i}`,
-        name: 'WHO',
-        members: [
-          {
-            _id: `6411a8f197d5631eb07658${i}`,
-            firstName: 'John',
-            lastName: 'Doe',
-            email: 'John@gmail.com',
-          },
-        ],
-        admins: [
-          {
-            _id: `6411a8f197d5631eb07658${i}`,
-            firstName: 'John',
-            lastName: 'Doe',
-            email: 'John@gmail.com',
-          },
-        ],
       },
     ],
   });
@@ -214,34 +190,10 @@ const createUserMock = (firstName_contains = '', lastName_contains = '') => ({
           adminApproved: true,
           organizationsBlockedBy: [],
           createdAt: '2023-03-02T03:22:08.101Z',
-          adminFor: [
-            {
-              name: 'pokemn',
-              __typename: 'Organization',
-              _id: '6411aa2a97d5631eb0765945',
-            },
-          ],
           joinedOrganizations: [
             {
               __typename: 'Organization',
               _id: '6401ff65ce8e8406b8f07af1',
-              name: 'WHO',
-              members: [
-                {
-                  _id: '6411a8f197d5631eb07658',
-                  firstName: 'John',
-                  lastName: 'Doe',
-                  email: 'John@gmail.com',
-                },
-              ],
-              admins: [
-                {
-                  _id: '6411a8f197d5631eb07658',
-                  firstName: 'John',
-                  lastName: 'Doe',
-                  email: 'John@gmail.com',
-                },
-              ],
             },
           ],
         },
@@ -256,34 +208,10 @@ const createUserMock = (firstName_contains = '', lastName_contains = '') => ({
           adminApproved: true,
           organizationsBlockedBy: [],
           createdAt: '2023-03-03T14:24:13.084Z',
-          adminFor: [
-            {
-              name: 'pokemn',
-              __typename: 'Organization',
-              _id: '6411aa2a97d5631eb0765945',
-            },
-          ],
           joinedOrganizations: [
             {
               __typename: 'Organization',
               _id: '6401ff65ce8e8406b8f07af2',
-              name: 'WHO',
-              members: [
-                {
-                  _id: '6411a8f197d5631eb07658',
-                  firstName: 'John',
-                  lastName: 'Doe',
-                  email: 'John@gmail.com',
-                },
-              ],
-              admins: [
-                {
-                  _id: '6411a8f197d5631eb07658',
-                  firstName: 'John',
-                  lastName: 'Doe',
-                  email: 'John@gmail.com',
-                },
-              ],
             },
           ],
         },
@@ -471,34 +399,10 @@ const MOCKS: any[] = [
             adminApproved: true,
             organizationsBlockedBy: [],
             createdAt: '2023-03-02T03:22:08.101Z',
-            adminFor: [
-              {
-                name: 'pokemn',
-                __typename: 'Organization',
-                _id: '6411aa2a97d5631eb0765945',
-              },
-            ],
             joinedOrganizations: [
               {
                 __typename: 'Organization',
                 _id: '6401ff65ce8e8406b8f07af1',
-                name: 'WHO',
-                members: [
-                  {
-                    _id: '6411a8f197d5631eb07658',
-                    firstName: 'John',
-                    lastName: 'Doe',
-                    email: 'John@gmail.com',
-                  },
-                ],
-                admins: [
-                  {
-                    _id: '6411a8f197d5631eb07658',
-                    firstName: 'John',
-                    lastName: 'Doe',
-                    email: 'John@gmail.com',
-                  },
-                ],
               },
             ],
           },
@@ -513,34 +417,10 @@ const MOCKS: any[] = [
             adminApproved: true,
             organizationsBlockedBy: [],
             createdAt: '2023-03-03T14:24:13.084Z',
-            adminFor: [
-              {
-                name: 'pokemn',
-                __typename: 'Organization',
-                _id: '6411aa2a97d5631eb0765945',
-              },
-            ],
             joinedOrganizations: [
               {
                 __typename: 'Organization',
                 _id: '6401ff65ce8e8406b8f07af2',
-                name: 'WHO',
-                members: [
-                  {
-                    _id: '6411a8f197d5631eb07658',
-                    firstName: 'John',
-                    lastName: 'Doe',
-                    email: 'John@gmail.com',
-                  },
-                ],
-                admins: [
-                  {
-                    _id: '6411a8f197d5631eb07658',
-                    firstName: 'John',
-                    lastName: 'Doe',
-                    email: 'John@gmail.com',
-                  },
-                ],
               },
             ],
           },
@@ -741,34 +621,10 @@ describe('Organization People Page', () => {
         adminApproved: true,
         organizationsBlockedBy: [],
         createdAt: '2023-03-02T03:22:08.101Z',
-        adminFor: [
-          {
-            name: 'pokemn',
-            __typename: 'Organization',
-            _id: '6411aa2a97d5631eb0765945',
-          },
-        ],
         joinedOrganizations: [
           {
             __typename: 'Organization',
             _id: '6401ff65ce8e8406b8f07af1',
-            name: 'WHO',
-            members: [
-              {
-                _id: '6411a8f197d5631eb07658',
-                firstName: 'John',
-                lastName: 'Doe',
-                email: 'John@gmail.com',
-              },
-            ],
-            admins: [
-              {
-                _id: '6411a8f197d5631eb07658',
-                firstName: 'John',
-                lastName: 'Doe',
-                email: 'John@gmail.com',
-              },
-            ],
           },
         ],
       },
@@ -783,34 +639,10 @@ describe('Organization People Page', () => {
         adminApproved: true,
         organizationsBlockedBy: [],
         createdAt: '2023-03-03T14:24:13.084Z',
-        adminFor: [
-          {
-            name: 'pokemn',
-            __typename: 'Organization',
-            _id: '6411aa2a97d5631eb0765945',
-          },
-        ],
         joinedOrganizations: [
           {
             __typename: 'Organization',
             _id: '6401ff65ce8e8406b8f07af2',
-            name: 'WHO',
-            members: [
-              {
-                _id: '6411a8f197d5631eb07658',
-                firstName: 'John',
-                lastName: 'Doe',
-                email: 'John@gmail.com',
-              },
-            ],
-            admins: [
-              {
-                _id: '6411a8f197d5631eb07658',
-                firstName: 'John',
-                lastName: 'Doe',
-                email: 'John@gmail.com',
-              },
-            ],
           },
         ],
       },

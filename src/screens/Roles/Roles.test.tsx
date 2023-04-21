@@ -43,34 +43,10 @@ const MOCKS = [
                 name: 'ABC',
               },
             ],
-            adminFor: [
-              {
-                name: 'pokemn',
-                __typename: 'Organization',
-                _id: '6411aa2a97d5631eb0765945',
-              },
-            ],
             joinedOrganizations: [
               {
                 __typename: 'Organization',
                 _id: '6401ff65ce8e8406b8f07af1',
-                name: 'WHO',
-                members: [
-                  {
-                    _id: '6411a8f197d5631eb07658',
-                    firstName: 'John',
-                    lastName: 'Doe',
-                    email: 'John@gmail.com',
-                  },
-                ],
-                admins: [
-                  {
-                    _id: '6411a8f197d5631eb07658',
-                    firstName: 'John',
-                    lastName: 'Doe',
-                    email: 'John@gmail.com',
-                  },
-                ],
               },
             ],
           },
@@ -89,34 +65,10 @@ const MOCKS = [
                 name: 'ABC',
               },
             ],
-            adminFor: [
-              {
-                name: 'pokemn',
-                __typename: 'Organization',
-                _id: '6411aa2a97d5631eb0765945',
-              },
-            ],
             joinedOrganizations: [
               {
                 __typename: 'Organization',
                 _id: '6401ff65ce8e8406b8f07af2',
-                name: 'WHO',
-                members: [
-                  {
-                    _id: '6411a8f197d5631eb07658',
-                    firstName: 'John',
-                    lastName: 'Doe',
-                    email: 'John@gmail.com',
-                  },
-                ],
-                admins: [
-                  {
-                    _id: '6411a8f197d5631eb07658',
-                    firstName: 'John',
-                    lastName: 'Doe',
-                    email: 'John@gmail.com',
-                  },
-                ],
               },
             ],
           },
@@ -135,34 +87,10 @@ const MOCKS = [
                 name: 'ABC',
               },
             ],
-            adminFor: [
-              {
-                name: 'pokemn',
-                __typename: 'Organization',
-                _id: '6411aa2a97d5631eb0765945',
-              },
-            ],
             joinedOrganizations: [
               {
                 __typename: 'Organization',
                 _id: '6401ff65ce8e8406b8f07af3',
-                name: 'WHO',
-                members: [
-                  {
-                    _id: '6411a8f197d5631eb07658',
-                    firstName: 'John',
-                    lastName: 'Doe',
-                    email: 'John@gmail.com',
-                  },
-                ],
-                admins: [
-                  {
-                    _id: '6411a8f197d5631eb07658',
-                    firstName: 'John',
-                    lastName: 'Doe',
-                    email: 'John@gmail.com',
-                  },
-                ],
               },
             ],
           },
