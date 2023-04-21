@@ -29,6 +29,52 @@ const MOCKS = [
       data: {
         users: [
           {
+            _id: '001',
+            firstName: 'John',
+            lastName: 'Doe',
+            image: 'dummyImage',
+            email: 'johndoe@gmail.com',
+            userType: 'SUPERADMIN',
+            adminApproved: true,
+            createdAt: '20/06/2022',
+            organizationsBlockedBy: [
+              {
+                _id: '256',
+                name: 'ABC',
+              },
+            ],
+            adminFor: [
+              {
+                name: 'pokemn',
+                __typename: 'Organization',
+                _id: '6411aa2a97d5631eb0765945',
+              },
+            ],
+            joinedOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '6401ff65ce8e8406b8f07af1',
+                name: 'WHO',
+                members: [
+                  {
+                    _id: '6411a8f197d5631eb07658',
+                    firstName: 'John',
+                    lastName: 'Doe',
+                    email: 'John@gmail.com',
+                  },
+                ],
+                admins: [
+                  {
+                    _id: '6411a8f197d5631eb07658',
+                    firstName: 'John',
+                    lastName: 'Doe',
+                    email: 'John@gmail.com',
+                  },
+                ],
+              },
+            ],
+          },
+          {
             _id: '123',
             firstName: 'John',
             lastName: 'Doe',
@@ -149,7 +195,7 @@ const MOCKS = [
                 name: 'WHO',
                 members: [
                   {
-                    _id: '6411a8f197d5631eb07658',
+                    _id: '789',
                     firstName: 'John',
                     lastName: 'Doe',
                     email: 'John@gmail.com',
@@ -192,9 +238,28 @@ const MOCKS = [
       data: {
         organizationsConnection: [
           {
-            _id: 1,
+            _id: 'org1',
             image: '',
             name: 'Akatsuki',
+            creator: {
+              firstName: 'John',
+              lastName: 'Doe',
+            },
+            admins: [
+              {
+                _id: '123',
+              },
+            ],
+            members: {
+              _id: '234',
+            },
+            createdAt: '02/02/2022',
+            location: 'Washington DC',
+          },
+          {
+            _id: 'org2',
+            image: '',
+            name: 'RealTalk',
             creator: {
               firstName: 'John',
               lastName: 'Doe',
@@ -633,5 +698,119 @@ describe('Testing Roles screen', () => {
       'disabled',
       false
     );
+  });
+
+  test('If User is superadmin it should contain SUPERADMIN text with remove btn', async () => {
+    const localStorageMock = (function () {
+      const store: any = {
+        UserType: 'SUPERADMIN',
+        id: '123',
+      };
+
+      return {
+        getItem: jest.fn((key: string) => store[key]),
+      };
+    })();
+
+    Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Roles />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    const SuperAdminText = screen.getByTestId('superAdminText001');
+    const SuperAdminBtn = screen.getByTestId('superAdminBtn001');
+    userEvent.click(SuperAdminBtn);
+
+    await wait();
+
+    expect(SuperAdminText).toBeInTheDocument();
+    expect(SuperAdminBtn).toBeInTheDocument();
+  });
+
+  test('If User is superadmin it should contain ADMIN text with remove btn', async () => {
+    const localStorageMock = (function () {
+      const store: any = {
+        UserType: 'SUPERADMIN',
+        id: '123',
+      };
+
+      return {
+        getItem: jest.fn((key: string) => store[key]),
+      };
+    })();
+
+    Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Roles />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    const adminText = screen.getByTestId('adminText456');
+    const adminBtn = screen.getByTestId('adminBtn456');
+    userEvent.click(adminBtn);
+
+    await wait();
+
+    expect(adminText).toBeInTheDocument();
+    expect(adminBtn).toBeInTheDocument();
+  });
+
+  test('If User is superadmin it should contain USER text with remove btn', async () => {
+    const localStorageMock = (function () {
+      const store: any = {
+        UserType: 'SUPERADMIN',
+        id: '123',
+      };
+
+      return {
+        getItem: jest.fn((key: string) => store[key]),
+      };
+    })();
+
+    Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Roles />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    const userText = screen.getByTestId('userText789');
+    const userBtn = screen.getByTestId('userBtn789');
+    userEvent.click(userBtn);
+
+    await wait();
+
+    expect(userText).toBeInTheDocument();
+    expect(userBtn).toBeInTheDocument();
   });
 });

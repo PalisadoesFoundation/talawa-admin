@@ -320,12 +320,16 @@ const Roles = () => {
                             <td>{user.email}</td>
                             <td>
                               {user.userType === 'SUPERADMIN' && (
-                                <p className={styles.userRole_container}>
+                                <p
+                                  data-testid={`superAdminText${user._id}`}
+                                  className={styles.userRole_container}
+                                >
                                   {t('superAdmin')}{' '}
                                   {user._id !== userId && (
                                     <button
                                       type="button"
                                       className="btn btn-success"
+                                      data-testid={`superAdminBtn${user._id}`}
                                       onClick={() =>
                                         handleRemoveSuperadmin(user._id)
                                       }
@@ -342,12 +346,14 @@ const Roles = () => {
                                   return (
                                     <p
                                       key={org._id}
+                                      data-testid={`adminText${user._id}`}
                                       className={styles.userRole_container}
                                     >
                                       {org.name} - {t('admin')}{' '}
                                       <button
                                         type="button"
                                         className="btn btn-success"
+                                        data-testid={`adminBtn${user._id}`}
                                         onClick={() =>
                                           handleRemoveAdmin(org._id, user._id)
                                         }
@@ -374,12 +380,14 @@ const Roles = () => {
                                     return (
                                       <p
                                         key={org._id}
+                                        data-testid={`userText${user._id}`}
                                         className={styles.userRole_container}
                                       >
                                         {org.name} - {t('user')}{' '}
                                         <button
                                           type="button"
                                           className="btn btn-success"
+                                          data-testid={`userBtn${user._id}`}
                                           onClick={() =>
                                             handleRemoveMember(
                                               org._id,
