@@ -76,7 +76,15 @@
     "user": "USUARIO",
     "enterName": "Ingrese su nombre",
     "roleUpdated": "Rol actualizado.",
-    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
+    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
+    "selectRoleAndOrg": "Seleccione el rol y la organización",
+    "adminRemoved": "Administrador eliminado",
+    "memberRemoved": "Miembro eliminado",
+    "role": "Rol",
+    "organisation": "Organización",
+    "add": "Agregar",
+    "noOrganizationJoin": "Ninguna organización se une",
+    "select": "seleccionar"
   },
   "requests": {
     "title": "Solicitudes Talawa",
