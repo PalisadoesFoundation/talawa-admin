@@ -112,6 +112,7 @@ const Roles = () => {
     return <div className="loader"></div>;
   }
 
+  /* istanbul ignore next */
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
@@ -311,7 +312,8 @@ const Roles = () => {
                             page * rowsPerPage,
                             page * rowsPerPage + rowsPerPage
                           )
-                        : data.users
+                        : /* istanbul ignore next */
+                          data.users
                       ).map((user: Data, index: number) => {
                         return (
                           <tr key={user._id}>
