@@ -21,23 +21,23 @@ import PaginationList from 'components/PaginationList/PaginationList';
 import NotFound from 'components/NotFound/NotFound';
 import { errorHandler } from 'utils/errorHandler';
 
-interface User {
+type User = {
   __typename: string;
   _id: string;
   firstName: string;
   lastName: string;
   email: string;
-}
+};
 
-interface Organization {
+type Organization = {
   __typename: string;
   _id: string;
   name: string;
   admins: User[];
   members: User[];
-}
+};
 
-interface Data {
+type Data = {
   _id: string;
   firstName: string;
   lastName: string;
@@ -49,7 +49,7 @@ interface Data {
     __typename: string;
     name: string;
   }[];
-}
+};
 
 const Roles = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'roles' });
