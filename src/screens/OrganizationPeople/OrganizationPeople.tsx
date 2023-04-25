@@ -82,27 +82,7 @@ function OrganizationPeople(): JSX.Element {
   })[1];
 
   useEffect(() => {
-    const filterData = {
-      firstName_contains: firstNameRef.current?.value ?? '',
-      lastName_contains: lastNameRef.current?.value ?? '',
-    };
-
-    if (state === 0) {
-      memberRefetch({
-        ...filterData,
-        orgId: currentUrl,
-      });
-    } else if (state === 1) {
-      adminRefetch({
-        ...filterData,
-        orgId: currentUrl,
-        admin_for: currentUrl,
-      });
-    } else {
-      usersRefetch({
-        ...filterData,
-      });
-    }
+    handleSearch();
   }, [state]);
 
   /* istanbul ignore next */
