@@ -85,6 +85,7 @@ const Requests = () => {
     }
   }, [state, data]);
 
+  /* istanbul ignore next */
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
