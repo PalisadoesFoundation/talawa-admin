@@ -477,7 +477,7 @@ describe('Testing Block/Unblock user screen', () => {
     expect(window.location).toBeAt('/blockuser/id=orgid');
   });
 
-  test('Testing Blocked Members', async () => {
+  test('Testing Blocked Users', async () => {
     window.location.assign('/blockuser/id=orgid');
 
     render(
@@ -495,10 +495,10 @@ describe('Testing Block/Unblock user screen', () => {
 
     await wait();
 
-    userEvent.click(screen.getByLabelText(/Blocked Members/i));
+    userEvent.click(screen.getByLabelText(/Blocked Users/i));
     await wait();
 
-    expect(screen.getByLabelText(/Blocked Members/i)).toBeChecked();
+    expect(screen.getByLabelText(/Blocked Users/i)).toBeChecked();
     await wait();
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
