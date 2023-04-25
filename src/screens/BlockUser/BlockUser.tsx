@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 
 import styles from './BlockUser.module.css';
-import { BLOCKED_USERS_LIST } from 'GraphQl/Queries/Queries';
+import { BLOCK_PAGE_MEMBER_LIST } from 'GraphQl/Queries/Queries';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import { RootState } from 'state/reducers';
 import {
@@ -56,9 +56,9 @@ const Requests = () => {
     loading,
     error,
     refetch: memberRefetch,
-  } = useQuery(BLOCKED_USERS_LIST, {
+  } = useQuery(BLOCK_PAGE_MEMBER_LIST, {
     variables: {
-      member_of: currentUrl,
+      orgId: currentUrl,
       firstName_contains: '',
       lastName_contains: '',
     },
@@ -74,10 +74,11 @@ const Requests = () => {
     }
 
     if (state === 0) {
-      setMembersData(data.users);
+      setMembersData(data?.organizationsMemberConnection.edges);
     } else {
-      const blockUsers = data.users.filter((user: Member) =>
-        user.organizationsBlockedBy.some((org) => org._id === currentUrl)
+      const blockUsers = data?.organizationsMemberConnection.edges.filter(
+        (user: Member) =>
+          user.organizationsBlockedBy.some((org) => org._id === currentUrl)
       );
 
       setMembersData(blockUsers);
@@ -146,7 +147,7 @@ const Requests = () => {
 
   const handleSearch = () => {
     const filterData = {
-      member_of: currentUrl,
+      orgId: currentUrl,
       firstName_contains: firstNameRef.current?.value ?? '',
       lastName_contains: lastNameRef.current?.value ?? '',
     };

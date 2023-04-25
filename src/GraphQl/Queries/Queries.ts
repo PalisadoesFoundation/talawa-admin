@@ -158,25 +158,27 @@ export const MEMBERS_LIST = gql`
   }
 `;
 
-export const BLOCKED_USERS_LIST = gql`
-  query Users(
-    $member_of: ID!
+export const BLOCK_PAGE_MEMBER_LIST = gql`
+  query Organizations(
+    $orgId: ID!
     $firstName_contains: String
     $lastName_contains: String
   ) {
-    users(
+    organizationsMemberConnection(
+      orgId: $orgId
       where: {
-        member_of: $member_of
         firstName_contains: $firstName_contains
         lastName_contains: $lastName_contains
       }
     ) {
-      firstName
-      lastName
-      _id
-      email
-      organizationsBlockedBy {
+      edges {
         _id
+        firstName
+        lastName
+        email
+        organizationsBlockedBy {
+          _id
+        }
       }
     }
   }
