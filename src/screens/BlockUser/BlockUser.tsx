@@ -200,7 +200,7 @@ const Requests = () => {
                     setState(0);
                   }}
                 />
-                <label htmlFor="allusers">{t('allUsers')}</label>
+                <label htmlFor="allusers">{t('allMembers')}</label>
 
                 <input
                   id="blockedusers"

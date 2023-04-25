@@ -287,8 +287,8 @@
     "blockedSuccessfully": "Utilisateur bloqué avec succès",
     "Un-BlockedSuccessfully": "Utilisateur débloqué avec succès",
     "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau.",
-    "allUsers": "Tous les membres",
-    "blockedUsers": "Membres bloqués",
+    "allMembers": "Tous les membres",
+    "blockedUsers": "Utilisateurs bloqués",
     "searchFirstName": "Entrez votre prénom",
     "searchLastName": "Entrer le nom de famille"
   },
