@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import BlockUser from './BlockUser';
 import {
-  BLOCKED_USERS_LIST,
+  BLOCK_PAGE_MEMBER_LIST,
   ORGANIZATIONS_LIST,
 } from 'GraphQl/Queries/Queries';
 import {
@@ -44,32 +44,36 @@ const USER_UNBLOCKED = {
 
 const DATA_INITIAL = {
   data: {
-    users: [USER_BLOCKED, USER_UNBLOCKED],
+    organizationsMemberConnection: {
+      edges: [USER_BLOCKED, USER_UNBLOCKED],
+    },
   },
 };
 
 const DATA_AFTER_MUTATION = {
   data: {
-    users: [
-      {
-        _id: '123',
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'johndoe@gmail.com',
-        organizationsBlockedBy: [],
-      },
-      {
-        _id: '456',
-        firstName: 'Sam',
-        lastName: 'Smith',
-        email: 'samsmith@gmail.com',
-        organizationsBlockedBy: [
-          {
-            _id: 'orgid',
-          },
-        ],
-      },
-    ],
+    organizationsMemberConnection: {
+      edges: [
+        {
+          _id: '123',
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'johndoe@gmail.com',
+          organizationsBlockedBy: [],
+        },
+        {
+          _id: '456',
+          firstName: 'Sam',
+          lastName: 'Smith',
+          email: 'samsmith@gmail.com',
+          organizationsBlockedBy: [
+            {
+              _id: 'orgid',
+            },
+          ],
+        },
+      ],
+    },
   },
 };
 
@@ -163,11 +167,11 @@ const MOCKS = [
 
   {
     request: {
-      query: BLOCKED_USERS_LIST,
+      query: BLOCK_PAGE_MEMBER_LIST,
       variables: {
         firstName_contains: '',
         lastName_contains: '',
-        member_of: 'orgid',
+        orgId: 'orgid',
       },
     },
     result: DATA_INITIAL,
@@ -184,48 +188,54 @@ const MOCKS = [
 
   {
     request: {
-      query: BLOCKED_USERS_LIST,
+      query: BLOCK_PAGE_MEMBER_LIST,
       variables: {
         firstName_contains: 'john',
         lastName_contains: '',
-        member_of: 'orgid',
+        orgId: 'orgid',
       },
     },
     result: {
       data: {
-        users: [USER_BLOCKED],
+        organizationsMemberConnection: {
+          edges: [USER_BLOCKED],
+        },
       },
     },
   },
 
   {
     request: {
-      query: BLOCKED_USERS_LIST,
+      query: BLOCK_PAGE_MEMBER_LIST,
       variables: {
         firstName_contains: '',
         lastName_contains: 'doe',
-        member_of: 'orgid',
+        orgId: 'orgid',
       },
     },
     result: {
       data: {
-        users: [USER_BLOCKED],
+        organizationsMemberConnection: {
+          edges: [USER_BLOCKED],
+        },
       },
     },
   },
 
   {
     request: {
-      query: BLOCKED_USERS_LIST,
+      query: BLOCK_PAGE_MEMBER_LIST,
       variables: {
         firstName_contains: 'sam',
         lastName_contains: 'smith',
-        member_of: 'orgid',
+        orgId: 'orgid',
       },
     },
     result: {
       data: {
-        users: [USER_UNBLOCKED],
+        organizationsMemberConnection: {
+          edges: [USER_UNBLOCKED],
+        },
       },
     },
   },
