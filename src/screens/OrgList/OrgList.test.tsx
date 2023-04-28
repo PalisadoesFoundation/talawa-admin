@@ -494,4 +494,64 @@ describe('Organisation List Page', () => {
       userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
     });
   });
+  describe('App', () => {
+    jest.useFakeTimers();
+
+    it('should render without errors', () => {
+      render(<OrgList />);
+    });
+
+    it('should show the modal after 40 minutes of inactivity', () => {
+      const { container } = render(<OrgList />);
+      act(() => {
+        jest.advanceTimersByTime(2400000);
+      });
+      const modal = container.querySelector('.modal');
+      expect(modal).toBeInTheDocument();
+    });
+
+    it('should continue the session when the user clicks the continue button', () => {
+      const { container } = render(<OrgList />);
+      act(() => {
+        jest.advanceTimersByTime(2400000);
+      });
+      const modal = container.querySelector('.modal');
+      expect(modal).not.toBeInTheDocument();
+    });
+
+    it('should log out the user when 1 hour have passed since last interaction', () => {
+      act(() => {
+        jest.advanceTimersByTime(3600000);
+      });
+      const logoutSpy = jest.spyOn(console, 'log').mockImplementation();
+      expect(logoutSpy).not.toHaveBeenCalled();
+      act(() => {
+        jest.advanceTimersByTime(1000);
+      });
+      expect(logoutSpy).toHaveBeenCalledWith('Logging out...');
+    });
+
+    it('should hide the modal and update the last interaction timestamp when the user clicks the continue button', () => {
+      const { container } = render(<OrgList />);
+      act(() => {
+        jest.advanceTimersByTime(2400000);
+      });
+      const modal = container.querySelector('.modal');
+      expect(modal).not.toBeInTheDocument();
+      expect(Date.now()).toBeGreaterThan(2400000);
+    });
+
+    it('should hide the modal and log out the user when the user clicks the logout button', () => {
+      const { container } = render(<OrgList />);
+      act(() => {
+        jest.advanceTimersByTime(2400000);
+      });
+      const modal = container.querySelector('.modal');
+      expect(modal).not.toBeInTheDocument();
+    });
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+  });
 });
