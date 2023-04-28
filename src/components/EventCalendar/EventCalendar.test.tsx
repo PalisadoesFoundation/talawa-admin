@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import Calendar from './Calendar';
+import Calendar from './EventCalendar';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -10,7 +10,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import styles from './Calendar.module.css';
+import styles from './EventCalendar.module.css';
 
 const eventData = [
   {
