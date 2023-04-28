@@ -256,7 +256,7 @@ export const REMOVE_ADMIN_MUTATION = gql`
 
 export const ADD_MEMBER_MUTATION = gql`
   mutation createMember($orgid: ID!, $userid: ID!) {
-    createMember(data: { organizationId: $orgid, userId: $userid }) {
+    createMember(input: { organizationId: $orgid, userId: $userid }) {
       _id
     }
   }
