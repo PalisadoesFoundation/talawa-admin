@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import { Form } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
@@ -49,6 +49,35 @@ function OrgList(): JSX.Element {
   };
   const hideInviteModal = () => {
     setmodalIsOpen(false);
+  };
+  const [lastInteraction, setLastInteraction] = useState(Date.now());
+  const [showModal, setShowModal] = useState(false);
+  useEffect(() => {
+    const checkInactivity = setInterval(() => {
+      const now = Date.now();
+      const elapsedTime = now - lastInteraction;
+
+      if (elapsedTime >= 2400000 && !showModal) {
+        setShowModal(true);
+      } else if (elapsedTime >= 3600000) {
+        localStorage.clear();
+        window.location.replace('/');
+      }
+    }, 1000);
+
+    return () => clearInterval(checkInactivity);
+  }, [lastInteraction, showModal]);
+
+  const handleInteraction = () => setLastInteraction(Date.now());
+
+  const handleContinue = () => {
+    setShowModal(false);
+    setLastInteraction(Date.now());
+  };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.replace('/');
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -180,162 +209,223 @@ function OrgList(): JSX.Element {
   }
   return (
     <>
-      <ListNavbar />
-      <Row>
-        <Col xl={3}>
-          <div className={styles.sidebar}>
-            <div className={`${styles.mainpageright} ${styles.sidebarsticky}`}>
-              <h6 className={`${styles.logintitle} ${styles.youheader}`}>
-                {t('you')}
-              </h6>
-              <p>
-                {t('name')}:
-                <span>
-                  {data_2?.user.firstName} {data_2?.user.lastName}
-                </span>
-              </p>
-              <p>
-                {t('designation')}:<span> {data_2?.user.userType}</span>
-              </p>
-              <div className={styles.userEmail}>
-                {t('email')}:
+      <div onClick={handleInteraction} onKeyDown={handleInteraction}>
+        <ListNavbar />
+        <Row>
+          <Col xl={3}>
+            <div className={styles.sidebar}>
+              <div
+                className={`${styles.mainpageright} ${styles.sidebarsticky}`}
+              >
+                <h6 className={`${styles.logintitle} ${styles.youheader}`}>
+                  {t('you')}
+                </h6>
                 <p>
-                  {(data_2?.user.email || '').substring(
-                    0,
-                    (data_2?.user.email || '').length / 2
-                  )}
+                  {t('name')}:
                   <span>
-                    {data_2?.user.email.substring(
-                      data_2?.user.email.length / 2,
-                      data_2?.user.email.length
-                    )}
+                    {data_2?.user.firstName} {data_2?.user.lastName}
                   </span>
                 </p>
+                <p>
+                  {t('designation')}:<span> {data_2?.user.userType}</span>
+                </p>
+                <div className={styles.userEmail}>
+                  {t('email')}:
+                  <p>
+                    {(data_2?.user.email || '').substring(
+                      0,
+                      (data_2?.user.email || '').length / 2
+                    )}
+                    <span>
+                      {data_2?.user.email.substring(
+                        data_2?.user.email.length / 2,
+                        data_2?.user.email.length
+                      )}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Col>
+          <Col xl={8} className={styles.mainpagerightContainer}>
+            <div className={styles.mainpageright} data-testid="mainpageright">
+              <div className={styles.justifysp}>
+                <p className={styles.logintitle}>{t('organizationList')}</p>
+              </div>
+              <div className={styles.search}>
+                <Button
+                  variant="success"
+                  className={styles.invitebtn}
+                  disabled={isSuperAdmin}
+                  onClick={showInviteModal}
+                  data-testid="createOrganizationBtn"
+                  style={{ display: isSuperAdmin ? 'none' : 'block' }}
+                >
+                  + {t('createOrganization')}
+                </Button>
+                <input
+                  type="name"
+                  id="orgname"
+                  placeholder="Search Organization"
+                  data-testid="searchByName"
+                  autoComplete="off"
+                  required
+                  onChange={debouncedHandleSearchByName}
+                  style={{
+                    display:
+                      data_2 && data_2.user.userType !== 'SUPERADMIN'
+                        ? 'none'
+                        : 'block',
+                  }}
+                />
+              </div>
+              <div className={styles.list_box} data-testid="organizations-list">
+                {data?.organizationsConnection.length > 0 ? (
+                  (rowsPerPage > 0
+                    ? dataRevOrg.slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                    : data.organizationsConnection
+                  ).map(
+                    (datas: {
+                      _id: string;
+                      image: string;
+                      name: string;
+                      admins: any;
+                      members: any;
+                      createdAt: string;
+                      location: string | null;
+                    }) => {
+                      if (data_2 && data_2.user.userType == 'SUPERADMIN') {
+                        return (
+                          <SuperDashListCard
+                            id={datas._id}
+                            key={datas._id}
+                            image={datas.image}
+                            admins={datas.admins}
+                            members={datas.members.length}
+                            createdDate={dayjs(datas?.createdAt).format(
+                              'MMMM D, YYYY'
+                            )}
+                            orgName={datas.name}
+                            orgLocation={datas.location}
+                          />
+                        );
+                      } else if (isAdminForCurrentOrg(data_2?.user, datas)) {
+                        /* istanbul ignore next */
+                        return (
+                          <AdminDashListCard
+                            id={datas._id}
+                            key={datas._id}
+                            image={datas.image}
+                            admins={datas.admins}
+                            members={datas.members.length}
+                            createdDate={dayjs(datas?.createdAt).format(
+                              'MMMM D, YYYY'
+                            )}
+                            orgName={datas.name}
+                            orgLocation={datas.location}
+                          />
+                        );
+                      } else {
+                        return null;
+                      }
+                    }
+                  )
+                ) : (
+                  <div>
+                    <Alert variant="filled" severity="error">
+                      <AlertTitle>{t('noOrgErrorTitle')}</AlertTitle>
+                      {t('noOrgErrorDescription')}
+                    </Alert>
+                  </div>
+                )}
+              </div>
+              <div>
+                <table
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <tbody>
+                    {data_2?.user.userType === 'SUPERADMIN' && (
+                      <tr data-testid="rowsPPSelect">
+                        <PaginationList
+                          count={data ? data.organizationsConnection.length : 0}
+                          rowsPerPage={rowsPerPage}
+                          page={page}
+                          onPageChange={handleChangePage}
+                          onRowsPerPageChange={handleChangeRowsPerPage}
+                        />
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </Col>
+        </Row>
+        {showModal && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: '#808080',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              opacity: '1',
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: '#fff',
+                padding: '20px',
+                borderRadius: '5px',
+                boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <p style={{ marginBottom: '20px' }}>
+                Your session will expire soon. Do you want to continue?
+              </p>
+              <div style={{ display: 'flex' }}>
+                <button
+                  style={{
+                    backgroundColor: 'green',
+                    color: '#fff',
+                    padding: '10px',
+                    borderRadius: '5px',
+                    marginRight: '10px',
+                  }}
+                  onClick={handleContinue}
+                >
+                  Continue
+                </button>
+                <button
+                  style={{
+                    backgroundColor: 'green',
+                    color: '#fff',
+                    padding: '10px',
+                    borderRadius: '5px',
+                  }}
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
               </div>
             </div>
           </div>
-        </Col>
-        <Col xl={8} className={styles.mainpagerightContainer}>
-          <div className={styles.mainpageright} data-testid="mainpageright">
-            <div className={styles.justifysp}>
-              <p className={styles.logintitle}>{t('organizationList')}</p>
-            </div>
-            <div className={styles.search}>
-              <Button
-                variant="success"
-                className={styles.invitebtn}
-                disabled={isSuperAdmin}
-                onClick={showInviteModal}
-                data-testid="createOrganizationBtn"
-                style={{ display: isSuperAdmin ? 'none' : 'block' }}
-              >
-                + {t('createOrganization')}
-              </Button>
-              <input
-                type="name"
-                id="orgname"
-                placeholder="Search Organization"
-                data-testid="searchByName"
-                autoComplete="off"
-                required
-                onChange={debouncedHandleSearchByName}
-                style={{
-                  display:
-                    data_2 && data_2.user.userType !== 'SUPERADMIN'
-                      ? 'none'
-                      : 'block',
-                }}
-              />
-            </div>
-            <div className={styles.list_box} data-testid="organizations-list">
-              {data?.organizationsConnection.length > 0 ? (
-                (rowsPerPage > 0
-                  ? dataRevOrg.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
-                    )
-                  : data.organizationsConnection
-                ).map(
-                  (datas: {
-                    _id: string;
-                    image: string;
-                    name: string;
-                    admins: any;
-                    members: any;
-                    createdAt: string;
-                    location: string | null;
-                  }) => {
-                    if (data_2 && data_2.user.userType == 'SUPERADMIN') {
-                      return (
-                        <SuperDashListCard
-                          id={datas._id}
-                          key={datas._id}
-                          image={datas.image}
-                          admins={datas.admins}
-                          members={datas.members.length}
-                          createdDate={dayjs(datas?.createdAt).format(
-                            'MMMM D, YYYY'
-                          )}
-                          orgName={datas.name}
-                          orgLocation={datas.location}
-                        />
-                      );
-                    } else if (isAdminForCurrentOrg(data_2?.user, datas)) {
-                      /* istanbul ignore next */
-                      return (
-                        <AdminDashListCard
-                          id={datas._id}
-                          key={datas._id}
-                          image={datas.image}
-                          admins={datas.admins}
-                          members={datas.members.length}
-                          createdDate={dayjs(datas?.createdAt).format(
-                            'MMMM D, YYYY'
-                          )}
-                          orgName={datas.name}
-                          orgLocation={datas.location}
-                        />
-                      );
-                    } else {
-                      return null;
-                    }
-                  }
-                )
-              ) : (
-                <div>
-                  <Alert variant="filled" severity="error">
-                    <AlertTitle>{t('noOrgErrorTitle')}</AlertTitle>
-                    {t('noOrgErrorDescription')}
-                  </Alert>
-                </div>
-              )}
-            </div>
-            <div>
-              <table
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <tbody>
-                  {data_2?.user.userType === 'SUPERADMIN' && (
-                    <tr data-testid="rowsPPSelect">
-                      <PaginationList
-                        count={data ? data.organizationsConnection.length : 0}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                      />
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </Col>
-      </Row>
+        )}
+      </div>
       <Modal
         isOpen={modalisOpen}
         onRequestClose={() => setmodalIsOpen(false)}
