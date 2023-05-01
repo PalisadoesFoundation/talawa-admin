@@ -112,7 +112,7 @@ describe('Testing Organization Post Card', () => {
     expect(screen.getByText(props.postVideo)).toBeInTheDocument();
   });
 
-  test('Testing  post update functionality', async () => {
+  test('Testing post update functionality', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -156,15 +156,15 @@ describe('Testing Organization Post Card', () => {
 
     const toggleButton = screen.getByTestId('toggleBtn');
 
-    expect(screen.getByText('Hide')).toBeInTheDocument();
+    expect(screen.getByText('Read more')).toBeInTheDocument();
 
     fireEvent.click(toggleButton);
 
-    expect(screen.getByText('Read More')).toBeInTheDocument();
+    expect(screen.getByText('hide')).toBeInTheDocument();
 
     fireEvent.click(toggleButton);
 
-    expect(screen.getByText('Hide')).toBeInTheDocument();
+    expect(screen.getByText('Read more')).toBeInTheDocument();
   });
 
   test('should toggle post content', () => {
@@ -191,15 +191,15 @@ describe('Testing Organization Post Card', () => {
     expect(
       screen.getByText('Lorem ipsum dolor sit amet, consectetur ...')
     ).toBeInTheDocument();
-    expect(toggleBtn).toHaveTextContent('Read More');
+    expect(toggleBtn).toHaveTextContent('Read more');
     expect(toggleBtn).toHaveClass(mockedStyles.toggleClickBtn);
 
     fireEvent.click(toggleBtn);
 
-    expect(screen.getByTestId('PostInfo').innerHTML).toEqual(
+    expect(screen.getByTestId('toggleContent').innerHTML).toEqual(
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
     );
-    expect(toggleBtn).toHaveTextContent('Hide');
+    expect(toggleBtn).toHaveTextContent('hide');
     expect(toggleBtn).toHaveClass(mockedStyles.toggleClickBtn);
   });
 
