@@ -8,7 +8,6 @@ import {
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
-import defaultImg from 'assets/third_image.png';
 import { errorHandler } from 'utils/errorHandler';
 
 interface OrgPostCardProps {
@@ -27,14 +26,30 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
     postinfo: '',
   });
 
-  const [togglePost, setPostToggle] = useState('Read more');
+  const [showMoreInfo, setShowMoreInfo] = useState<boolean>(false);
+
+  const initialSlice = () => {
+    if (!props.postPhoto) {
+      // post photo do  not exist
+      setShowMoreInfo(true);
+      return props.postInfo;
+    } else if (props.postInfo.length > 50) {
+      return props.postInfo.substring(0, 40);
+    } else {
+      setShowMoreInfo(true);
+      return props.postInfo;
+    }
+  };
+
+  const [slicedMoreInfo, setSlicedMoreInfo] = useState<string>(initialSlice);
 
   function handletoggleClick() {
-    if (togglePost === 'Read more') {
-      setPostToggle('hide');
+    if (!showMoreInfo) {
+      setSlicedMoreInfo(props.postInfo);
     } else {
-      setPostToggle('Read more');
+      setSlicedMoreInfo(props.postInfo.substring(0, 40));
     }
+    setShowMoreInfo(!showMoreInfo);
   }
 
   useEffect(() => {
@@ -147,26 +162,14 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
                 />
               </span>
             </p>
-          ) : (
-            <img
-              src={defaultImg}
-              alt="image not found"
-              className={styles.postimage}
-            />
-          )}
+          ) : null}
           <p>
             {t('author')}:<span> {props.postAuthor}</span>
           </p>
           <div className={styles.infodiv}>
-            {togglePost === 'Read more' ? (
-              <p data-testid="toggleContent">
-                {props.postInfo.length > 43
-                  ? props.postInfo.substring(0, 40) + '...'
-                  : props.postInfo}
-              </p>
-            ) : (
-              <p data-testid="toggleContent">{props.postInfo}</p>
-            )}
+            <p data-testid="PostInfo">
+              {slicedMoreInfo.concat(!showMoreInfo ? '...' : '')}
+            </p>
             <button
               role="toggleBtn"
               data-testid="toggleBtn"
@@ -177,16 +180,19 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
               }`}
               onClick={handletoggleClick}
             >
-              {togglePost}
+              {showMoreInfo ? 'Hide' : 'Read More'}
             </button>
           </div>
-          <p>
-            {t('videoURL')}:
-            <span>
-              {' '}
-              <a href={props.postVideo}>{props.postVideo}</a>
-            </span>
-          </p>
+          {/* Check for video url and render video url */}
+          {props.postVideo ? (
+            <p>
+              {t('videoURL')}:
+              <span>
+                {' '}
+                <a href={props.postVideo}>{props.postVideo}</a>
+              </span>
+            </p>
+          ) : null}
         </div>
       </div>
 
