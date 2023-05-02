@@ -113,12 +113,6 @@ async function wait(ms = 100) {
 }
 
 describe('Organisation Events Page', () => {
-  const searchData = {
-    byTitle: 'Dummy title',
-    byDescription: 'This is a dummy description',
-    byLocation: 'New Delhi',
-  };
-
   const formData = {
     title: 'Dummy Org',
     description: 'This is a dummy organization',
@@ -189,9 +183,7 @@ describe('Organisation Events Page', () => {
     expect(container.textContent).not.toBe('Loading data...');
     await wait();
     expect(container.textContent).toMatch('Events');
-    expect(container.textContent).toMatch('Filter by Title');
-    expect(container.textContent).toMatch('Filter by Description');
-    expect(container.textContent).toMatch('Filter by Location');
+    expect(container.textContent).toMatch('Search Date');
     expect(container.textContent).toMatch('Events');
     expect(window.location).toBeAt('/orglist');
   });
@@ -210,40 +202,6 @@ describe('Organisation Events Page', () => {
     );
 
     await wait();
-  });
-
-  test('Testing filter functionality', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationEvents />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-
-    userEvent.type(screen.getByTestId('serachByTitle'), searchData.byTitle);
-    userEvent.type(
-      screen.getByTestId('serachByDescription'),
-      searchData.byDescription
-    );
-    userEvent.type(
-      screen.getByTestId('searchByLocation'),
-      searchData.byLocation
-    );
-
-    expect(screen.getByTestId('serachByTitle')).toHaveValue(searchData.byTitle);
-    expect(screen.getByTestId('serachByDescription')).toHaveValue(
-      searchData.byDescription
-    );
-    expect(screen.getByTestId('searchByLocation')).toHaveValue(
-      searchData.byLocation
-    );
   });
 
   test('Testing toggling of Create event modal', async () => {

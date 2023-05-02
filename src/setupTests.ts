@@ -25,10 +25,6 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'flag-icons/css/flag-icons.min.css';
-import './css/index.css';
-
-import './css/bootstrap.min.css';
-import './css/index.css';
 
 configure({ adapter: new Adapter() });
 

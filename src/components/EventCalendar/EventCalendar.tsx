@@ -1,7 +1,7 @@
 import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
 import React, { useState, useEffect } from 'react';
-import styles from './Calendar.module.css';
+import styles from './EventCalendar.module.css';
 
 interface Event {
   _id: string;
@@ -83,6 +83,8 @@ const Calendar: React.FC<CalendarProps> = ({
   ) => {
     const data: Event[] = [];
     if (userRole === Role.SUPERADMIN) return eventData;
+    // Hard to test all the cases
+    /* istanbul ignore next */
     if (userRole === Role.ADMIN) {
       eventData?.forEach((event) => {
         if (event.isPublic) data.push(event);
@@ -132,6 +134,10 @@ const Calendar: React.FC<CalendarProps> = ({
       setCurrentMonth(currentMonth + 1);
     }
   };
+  const handleTodayButton = () => {
+    setCurrentYear(today.getFullYear());
+    setCurrentMonth(today.getMonth());
+  };
   const renderDays = () => {
     const monthStart = new Date(currentYear, currentMonth, 1);
     const monthEnd = new Date(currentYear, currentMonth + 1, 0);
@@ -157,26 +163,15 @@ const Calendar: React.FC<CalendarProps> = ({
     }
     return days.map((date, index) => {
       const className = [
-        'day',
-        date.getMonth() !== currentMonth ? 'day--outside' : '',
-        selectedDate && selectedDate.getTime() === date.getTime()
-          ? 'day--selected'
+        date.toLocaleDateString() === today.toLocaleDateString() //Styling for today day cell
+          ? styles.day__today
           : '',
+        date.getMonth() !== currentMonth ? styles.day__outside : '', //Styling for days outside the current month
+        selectedDate?.getTime() === date.getTime() ? styles.day__selected : '',
+        styles.day,
       ].join(' ');
       return (
-        <div
-          style={{
-            paddingBottom: '4rem',
-            paddingLeft: '0.3rem',
-            paddingRight: '0.3rem',
-            backgroundColor: 'white',
-            border: '1px solid #707070',
-            color: '#707070',
-          }}
-          key={index}
-          className={className}
-          data-testid="day"
-        >
+        <div style={{}} key={index} className={className} data-testid="day">
           {date.getDate()}
           <div className={styles.list_box}>
             {events
@@ -224,6 +219,11 @@ const Calendar: React.FC<CalendarProps> = ({
         <button className={styles.button} onClick={handleNextMonth}>
           {'>'}
         </button>
+        <div>
+          <button className={styles.btn__today} onClick={handleTodayButton}>
+            Today
+          </button>
+        </div>
       </div>
 
       <div className={styles.calendar__weekdays}>

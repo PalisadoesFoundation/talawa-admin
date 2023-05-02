@@ -251,6 +251,8 @@
     "not found!": "未找到!",
     "roles": "角色",
     "user not found!": "找不到用户!",
+    "member not found!": "找不到会员！",
+    "admin not found!": "找不到管理员！",
     "roles not found!": "找不到角色!"
   },
   "orgPostCard": {
