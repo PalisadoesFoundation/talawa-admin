@@ -167,6 +167,35 @@ export const MEMBERS_LIST = gql`
         image
         email
         createdAt
+        organizationsBlockedBy {
+          _id
+        }
+      }
+    }
+  }
+`;
+
+export const BLOCK_PAGE_MEMBER_LIST = gql`
+  query Organizations(
+    $orgId: ID!
+    $firstName_contains: String
+    $lastName_contains: String
+  ) {
+    organizationsMemberConnection(
+      orgId: $orgId
+      where: {
+        firstName_contains: $firstName_contains
+        lastName_contains: $lastName_contains
+      }
+    ) {
+      edges {
+        _id
+        firstName
+        lastName
+        email
+        organizationsBlockedBy {
+          _id
+        }
       }
     }
   }

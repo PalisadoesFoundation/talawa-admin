@@ -294,7 +294,11 @@
     "orgName": "Entrez le nom",
     "blockedSuccessfully": "Utilisateur bloqué avec succès",
     "Un-BlockedSuccessfully": "Utilisateur débloqué avec succès",
-    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
+    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau.",
+    "allMembers": "Tous les membres",
+    "blockedUsers": "Utilisateurs bloqués",
+    "searchFirstName": "Entrez votre prénom",
+    "searchLastName": "Entrer le nom de famille"
   },
   "forgotPassword": {
     "title": "Mot de passe oublié Talawa",
