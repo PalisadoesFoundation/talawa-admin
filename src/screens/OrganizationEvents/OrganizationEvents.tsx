@@ -61,19 +61,17 @@ function OrganizationEvents(): JSX.Element {
     setEventModalIsOpen(false);
   };
 
-  const {
-    data: orgEventConnectionData,
-    loading,
-    error,
-    refetch,
-  } = useQuery(ORGANIZATION_EVENT_CONNECTION_LIST, {
-    variables: {
-      organization_id: currentUrl,
-      title_contains: '',
-      description_contains: '',
-      location_contains: '',
-    },
-  });
+  const { data, loading, error, refetch } = useQuery(
+    ORGANIZATION_EVENT_CONNECTION_LIST,
+    {
+      variables: {
+        organization_id: currentUrl,
+        title_contains: '',
+        description_contains: '',
+        location_contains: '',
+      },
+    }
+  );
 
   const { data: orgData } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: currentUrl },

@@ -50,7 +50,11 @@ const Roles = () => {
     }
   }, [count, searchByName]);
 
-  const { loading: users_loading, data, refetch } = useQuery(USER_LIST);
+  const {
+    loading: usersLoading,
+    data: userData,
+    refetch: userRefetch,
+  } = useQuery(USER_LIST);
 
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
 
@@ -154,7 +158,7 @@ const Roles = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {data && data.users.length > 0 ? (
+                    {userData && userData.users.length > 0 ? (
                       (rowsPerPage > 0
                         ? userData.users.slice(
                             page * rowsPerPage,

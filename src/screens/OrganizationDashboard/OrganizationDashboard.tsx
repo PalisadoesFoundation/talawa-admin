@@ -29,11 +29,7 @@ function OrganizationDashboard(): JSX.Element {
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
 
-  const {
-    data: organizationsListData,
-    loading,
-    error,
-  } = useQuery(ORGANIZATIONS_LIST, {
+  const { data, loading, error } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: currentUrl },
   });
 
