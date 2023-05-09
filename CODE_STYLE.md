@@ -9,30 +9,36 @@ code style should not be changed and must be followed.
 
 ## Tech Stack
 
-. React.js 
+- Typescript
 
-. CSS module
+- React.js 
 
-. Axios (for fetching data)
+- CSS module
 
-. React bootstrap
+- React bootstrap
+
+- Material UI
+
+- GraphQL
+
+- Jest & Enzyme for testing
 
 ## Component Structure
 
-. Components should be strictly functional components
+- Components should be strictly functional components
 
-. Should make use of React hooks where appropriate
+- Should make use of React hooks where appropriate
 
 
 ## Code Style and Naming Conventions
 
-. All React components *must* be written in PascalCase, with their file names, and associated CSS modules being written in PascalCase
+- All React components *must* be written in PascalCase, with their file names, and associated CSS modules being written in PascalCase
 
-. All other files may follow the camelCase naming convention
+- All other files may follow the camelCase naming convention
 
-. All the Return fragment should be closed in empty tag
+- All the Return fragment should be closed in empty tag
 
-. Use of classes is refrained 
+- Use of classes is refrained 
 
 
 ## Test and Code Linting 
@@ -44,17 +50,20 @@ the code submitted must also be linted ESLint and formatted with Prettier.
 
 ### Sub Directories of `src`
 
+`assets` - This houses all of the static assets (only images/svgs not css and js) used in the project
+
 `components`  - The directory for base components that will be used in the various views/screens
+
+`Constant` - This houses all of the constants used in the project
+
+`GraphQl` - This houses all of the GraphQL queries and mutations used in the project
 
 `screens` - This houses all of the views/screens to be navigated through in Talawa-Admin
 
-`hooks` - This houses the user defined hooks to be used within Talawa-Admin
+`state` - This houses all of the state management code for the project
 
-`util` - This holds the utility functions that do not fall into any of the other categories
+`utils` - This holds the utility functions that do not fall into any of the other categories
 
-`axios` - This houses all of the functions and code that is related to handling data with axios
-
-`reducers` - This houses the reducers created to be used with Redux for state management
 
 ## Imports
 

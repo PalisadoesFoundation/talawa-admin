@@ -219,7 +219,42 @@ describe('Organisation List Page', () => {
     });
   });
 
-  test('Search bar filters organizations by name', async () => {
+  test('Testing search functionality', async () => {
+    const Mocks = [
+      {
+        request: {
+          query: ORGANIZATION_CONNECTION_LIST,
+        },
+        result: {
+          data: {
+            organizationsConnection: [
+              {
+                _id: 1,
+                image: '',
+                name: 'Akatsuki',
+                creator: {
+                  firstName: 'John',
+                  lastName: 'Doe',
+                },
+                admins: [
+                  {
+                    _id: '123',
+                  },
+                ],
+                members: {
+                  _id: '234',
+                },
+                createdAt: '02/02/2022',
+                location: 'Washington DC',
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    const link = new StaticMockLink(Mocks, true);
+
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -233,11 +268,23 @@ describe('Organisation List Page', () => {
     );
     await wait();
 
-    //Search orgnizations with there name
-    const searchBar = screen.getByRole('textbox');
-    userEvent.type(searchBar, 'Akatsuki');
-    await wait();
+    // Test that the search bar filters organizations by name
+    const searchBar = screen.getByTestId(/searchByName/i);
+    const search1 = 'Akatsuki';
     expect(searchBar).toBeInTheDocument();
+    userEvent.type(screen.getByTestId(/searchByName/i), search1);
+
+    // Test that the search bar is case-insensitive
+    userEvent.clear(searchBar);
+    const search2 = 'aKaTsUkI';
+    expect(searchBar).toBeInTheDocument();
+    userEvent.type(screen.getByTestId(/searchByName/i), search2);
+
+    // Test that the search bar filters all organization if there are is no search passed
+    userEvent.clear(searchBar);
+    const search3 = '';
+    expect(searchBar).toBeInTheDocument();
+    userEvent.type(screen.getByTestId(/searchByName/i), search3);
   });
 
   test('Should render no organisation warning alert when there are no organization', async () => {
@@ -428,6 +475,8 @@ describe('Organisation List Page', () => {
         screen.getByLabelText(/Display Image:/i),
         formData.image
       );
+
+      await wait(500);
 
       expect(screen.getByTestId(/modalOrganizationName/i)).toHaveValue(
         formData.name

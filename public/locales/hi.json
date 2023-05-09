@@ -251,6 +251,8 @@
     "not found!": "नहीं मिला!",
     "roles": "भूमिका",
     "user not found!": "उपयोगकर्ता नहीं मिले!",
+    "member not found!": "सदस्य अनुपस्थित!",
+    "admin not found!": "व्यवस्थापक नहीं मिला!",
     "roles not found!": "भूमिकाएँ नहीं मिलीं!"
   },
   "orgPostCard": {
@@ -284,7 +286,11 @@
     "orgName": "नाम दर्ज करें",
     "blockedSuccessfully": "उपयोगकर्ता को सफलतापूर्वक अवरोधित किया गया",
     "Un-BlockedSuccessfully": "उपयोगकर्ता अन-ब्लॉक किया गया सफलतापूर्वक",
-    "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।"
+    "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।",
+    "allMembers": "सभी सदस्य",
+    "blockedUsers": "रोके गए उपयोगकर्ता",
+    "searchFirstName": "प्रथम नाम दर्ज करें",
+    "searchLastName": "अंतिम नाम दर्ज करो"
   },
   "forgotPassword": {
     "title": "तलवा पासवर्ड भूल गए",
