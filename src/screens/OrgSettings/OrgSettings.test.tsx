@@ -101,4 +101,117 @@ describe('Organisation Settings Page', () => {
     expect(container.textContent).toMatch('See Request');
     expect(window.location).toBeAt('/orglist');
   });
+  test('should render User update form in clicking user update button', async () => {
+    window.location.assign('/orglist');
+
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgSettings />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    expect(container.textContent).not.toBe('Loading data...');
+    await wait();
+
+    userEvent.click(screen.getByTestId('userUpdateBtn'));
+
+    await wait();
+    const firstNameInput = screen.getByText(/first name/i);
+    const lastNameInput = screen.getByText(/last name/i);
+    const emailInput = screen.getByText(/email/i);
+    const imageInput = screen.getByText(/display image:/i);
+    const saveBtn = screen.getByRole('button', { name: /save changes/i });
+    const cancelBtn = screen.getByRole('button', { name: /cancel/i });
+
+    await wait();
+
+    expect(firstNameInput).toBeInTheDocument();
+    expect(lastNameInput).toBeInTheDocument();
+    expect(emailInput).toBeInTheDocument();
+    expect(imageInput).toBeInTheDocument();
+    expect(saveBtn).toBeInTheDocument();
+    expect(cancelBtn).toBeInTheDocument();
+  });
+
+  test('should render password update form in clicking update your password button', async () => {
+    window.location.assign('/orglist');
+
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgSettings />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    expect(container.textContent).not.toBe('Loading data...');
+    await wait();
+
+    userEvent.click(screen.getByTestId('userPasswordUpdateBtn'));
+
+    await wait();
+    const previousPasswordInput = screen.getByText(/previous password/i);
+    const confirmPasswordInput = screen.getByText(/confirm new password/i);
+    const saveBtn = screen.getByRole('button', { name: /save changes/i });
+    const cancelBtn = screen.getByRole('button', { name: /cancel/i });
+
+    await wait();
+
+    expect(previousPasswordInput).toBeInTheDocument();
+    expect(confirmPasswordInput).toBeInTheDocument();
+    expect(saveBtn).toBeInTheDocument();
+    expect(cancelBtn).toBeInTheDocument();
+  });
+
+  test('should render update orgnization form in clicking update orgnization button', async () => {
+    window.location.assign('/orglist');
+
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgSettings />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    expect(container.textContent).not.toBe('Loading data...');
+    await wait();
+
+    userEvent.click(screen.getByTestId('orgUpdateBtn'));
+
+    await wait();
+    const nameInput = screen.getByText(/name/i);
+    const descriptionInput = screen.getByText(/description/i);
+    const locationInput = screen.getByText(/location/i);
+    const displayImageInput = screen.getByText(/display image:/i);
+    const isPublicInput = screen.getByText(/is public:/i);
+    const isRegistrableInput = screen.getByText(/is registrable:/i);
+    const saveBtn = screen.getByRole('button', { name: /save changes/i });
+    const cancelBtn = screen.getByRole('button', { name: /cancel/i });
+
+    await wait();
+
+    expect(nameInput).toBeInTheDocument();
+    expect(descriptionInput).toBeInTheDocument();
+    expect(locationInput).toBeInTheDocument();
+    expect(displayImageInput).toBeInTheDocument();
+    expect(isPublicInput).toBeInTheDocument();
+    expect(isRegistrableInput).toBeInTheDocument();
+    expect(saveBtn).toBeInTheDocument();
+    expect(cancelBtn).toBeInTheDocument();
+  });
 });
