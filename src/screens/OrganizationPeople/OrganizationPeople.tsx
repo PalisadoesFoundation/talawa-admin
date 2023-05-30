@@ -15,7 +15,7 @@ import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST,
 } from 'GraphQl/Queries/Queries';
-import { RootState } from '../../state/reducers';
+import type { RootState } from '../../state/reducers';
 import PaginationList from 'components/PaginationList/PaginationList';
 import { useTranslation } from 'react-i18next';
 import debounce from 'utils/debounce';
@@ -23,7 +23,7 @@ import NotFound from 'components/NotFound/NotFound';
 
 import { toast } from 'react-toastify';
 
-function OrganizationPeople(): JSX.Element {
+function organizationPeople(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
   });
@@ -111,7 +111,7 @@ function OrganizationPeople(): JSX.Element {
   }
 
   /* istanbul ignore next */
-  const handleFirstNameSearchChange = (filterData: any) => {
+  const handleFirstNameSearchChange = (filterData: any): void => {
     /* istanbul ignore next */
     if (state === 0) {
       memberRefetch({
@@ -135,14 +135,14 @@ function OrganizationPeople(): JSX.Element {
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
-  ) => {
+  ): void => {
     setPage(newPage);
   };
 
   /* istanbul ignore next */
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  ): void => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -154,7 +154,7 @@ function OrganizationPeople(): JSX.Element {
   return (
     <>
       <div>
-        <AdminNavbar targets={targets} url_1={configUrl} />
+        <AdminNavbar targets={targets} url1={configUrl} />
       </div>
       <Row>
         <Col sm={3}>
@@ -168,7 +168,7 @@ function OrganizationPeople(): JSX.Element {
                 autoComplete="off"
                 required
                 value={filterData.firstName_contains}
-                onChange={(e) => {
+                onChange={(e): void => {
                   const { value } = e.target;
 
                   const newFilterData = {
@@ -187,7 +187,7 @@ function OrganizationPeople(): JSX.Element {
                 autoComplete="off"
                 required
                 value={filterData.lastName_contains}
-                onChange={(e) => {
+                onChange={(e): void => {
                   const { value } = e.target;
 
                   const newFilterData = {
@@ -207,7 +207,7 @@ function OrganizationPeople(): JSX.Element {
                   type="radio"
                   data-testid="users"
                   defaultChecked={state == 2 ? true : false}
-                  onClick={() => {
+                  onClick={(): void => {
                     setState(2);
                   }}
                 />
@@ -219,7 +219,7 @@ function OrganizationPeople(): JSX.Element {
                   data-testid="members"
                   type="radio"
                   defaultChecked={state == 0 ? true : false}
-                  onClick={() => {
+                  onClick={(): void => {
                     setState(0);
                   }}
                 />
@@ -231,7 +231,7 @@ function OrganizationPeople(): JSX.Element {
                   type="radio"
                   data-testid="admins"
                   defaultChecked={state == 1 ? true : false}
-                  onClick={() => {
+                  onClick={(): void => {
                     setState(1);
                   }}
                 />
@@ -418,4 +418,4 @@ function OrganizationPeople(): JSX.Element {
   );
 }
 
-export default OrganizationPeople;
+export default organizationPeople;

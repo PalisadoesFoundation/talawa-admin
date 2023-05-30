@@ -10,12 +10,14 @@ import { languages } from 'utils/languages';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 
-interface UserUpdateProps {
+interface InterfaceUserUpdateProps {
   id: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
+const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
+  id,
+}): JSX.Element => {
   const currentUrl = localStorage.getItem('id');
   const { t } = useTranslation('translation', {
     keyPrefix: 'userUpdate',
@@ -62,7 +64,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
     window.location.assign(`/orgsettings/id=${currentUrl}`);
   }
 
-  const login_link = async () => {
+  const loginLink = async (): Promise<void> => {
     try {
       const { data } = await updateUser({
         variables: {
@@ -95,7 +97,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
   };
 
   /* istanbul ignore next */
-  const cancelUpdate = () => {
+  const cancelUpdate = (): void => {
     window.location.reload();
   };
 
@@ -114,7 +116,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
                 autoComplete="off"
                 required
                 value={formState.firstName}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
                     firstName: e.target.value,
@@ -133,7 +135,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
                 autoComplete="off"
                 required
                 value={formState.lastName}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
                     lastName: e.target.value,
@@ -152,7 +154,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
                 autoComplete="off"
                 required
                 value={formState.email}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
                     email: e.target.value,
@@ -169,7 +171,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
                 <select
                   className="form-control"
                   data-testid="applangcode"
-                  onChange={(e) => {
+                  onChange={(e): void => {
                     setFormState({
                       ...formState,
                       applangcode: e.target.value,
@@ -193,7 +195,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
               name="photo"
               type="file"
               multiple={false}
-              onChange={async (e) => {
+              onChange={async (e): Promise<void> => {
                 const file = e.target.files?.[0];
                 if (file)
                   setFormState({
@@ -209,7 +211,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
               type="button"
               className={styles.greenregbtn}
               value="savechanges"
-              onClick={login_link}
+              onClick={loginLink}
             >
               {t('saveChanges')}
             </button>

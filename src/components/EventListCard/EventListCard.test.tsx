@@ -57,7 +57,7 @@ const MOCKS = [
 
 const link = new StaticMockLink(MOCKS, true);
 
-async function wait(ms = 100) {
+async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -120,7 +120,7 @@ describe('Testing Event List Card', () => {
   });
 
   test('Should render text elements when props value is not passed', async () => {
-    global.confirm = () => false;
+    global.confirm = (): boolean => false;
 
     render(
       <MockedProvider addTypename={false} link={link}>

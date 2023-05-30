@@ -15,7 +15,7 @@ import PaginationList from 'components/PaginationList/PaginationList';
 import NotFound from 'components/NotFound/NotFound';
 import { errorHandler } from 'utils/errorHandler';
 
-const Roles = () => {
+const Roles = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'roles' });
 
   document.title = t('title');
@@ -50,7 +50,7 @@ const Roles = () => {
     }
   }, [count, searchByName]);
 
-  const { loading: users_loading, data, refetch } = useQuery(USER_LIST);
+  const { loading: usersLoading, data, refetch } = useQuery(USER_LIST);
 
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
 
@@ -66,14 +66,14 @@ const Roles = () => {
     }
   }, [dataOrgs]);
 
-  if (componentLoader || users_loading) {
+  if (componentLoader || usersLoading) {
     return <div className="loader"></div>;
   }
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
-  ) => {
+  ): void => {
     /* istanbul ignore next */
     setPage(newPage);
   };
@@ -81,12 +81,12 @@ const Roles = () => {
   /* istanbul ignore next */
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  ): void => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
-  const changeRole = async (e: any) => {
+  const changeRole = async (e: any): Promise<void> => {
     const { value } = e.target;
 
     const inputData = value.split('?');
@@ -110,7 +110,7 @@ const Roles = () => {
     }
   };
 
-  const handleSearchByName = (e: any) => {
+  const handleSearchByName = (e: any): void => {
     const { value } = e.target;
     setSearchByName(value);
     setCount((prev) => prev + 1);

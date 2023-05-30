@@ -13,7 +13,9 @@ describe('Testing Pagination component', () => {
     count: 5,
     page: 10,
     rowsPerPage: 5,
-    onPageChange: () => 10,
+    onPageChange: (): number => {
+      return 10;
+    },
   };
 
   test('Component should be rendered properly on rtl', () => {
@@ -34,7 +36,9 @@ const props = {
   count: 5,
   page: 10,
   rowsPerPage: 5,
-  onPageChange: () => 10,
+  onPageChange: (): number => {
+    return 10;
+  },
   theme: { direction: 'rtl' },
 };
 

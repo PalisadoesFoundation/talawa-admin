@@ -9,6 +9,7 @@ import styles from './ListNavbar.module.css';
 import Logo from 'assets/talawa-logo-200x200.png';
 import { languages } from 'utils/languages';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const ListNavbar = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'listNavbar' });
 
@@ -16,7 +17,7 @@ const ListNavbar = () => {
 
   const currentLanguageCode = Cookies.get('i18next') || 'en';
 
-  const logout = () => {
+  const logout = (): void => {
     localStorage.clear();
     window.location.replace('/');
   };
@@ -73,7 +74,9 @@ const ListNavbar = () => {
                 <button
                   key={index}
                   className="dropdown-item"
-                  onClick={() => i18next.changeLanguage(language.code)}
+                  onClick={async (): Promise<void> => {
+                    await i18next.changeLanguage(language.code);
+                  }}
                   disabled={currentLanguageCode === language.code}
                   data-testid={`changeLanguageBtn${index}`}
                 >

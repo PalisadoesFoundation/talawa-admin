@@ -64,15 +64,15 @@ for (let i = 0; i < 100; i++) {
 
 const createMemberMock = (
   orgId = '',
-  firstName_contains = '',
-  lastName_contains = ''
-) => ({
+  firstNameContains = '',
+  lastNameContains = ''
+): any => ({
   request: {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     variables: {
       orgId: orgId,
-      firstName_contains,
-      lastName_contains,
+      firstNameContains,
+      lastNameContains,
     },
   },
   result: {
@@ -115,17 +115,17 @@ const createMemberMock = (
 
 const createAdminMock = (
   orgId = '',
-  firstName_contains = '',
-  lastName_contains = '',
-  admin_for = ''
-) => ({
+  firstNameContains = '',
+  lastNameContains = '',
+  adminFor = ''
+): any => ({
   request: {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     variables: {
       orgId,
-      firstName_contains,
-      lastName_contains,
-      admin_for,
+      firstNameContains,
+      lastNameContains,
+      adminFor,
     },
   },
   result: {
@@ -168,12 +168,15 @@ const createAdminMock = (
   }),
 });
 
-const createUserMock = (firstName_contains = '', lastName_contains = '') => ({
+const createUserMock = (
+  firstNameContains = '',
+  lastNameContains = ''
+): any => ({
   request: {
     query: USER_LIST,
     variables: {
-      firstName_contains,
-      lastName_contains,
+      firstNameContains,
+      lastNameContains,
     },
   },
   result: {
@@ -444,7 +447,7 @@ const MOCKS: any[] = [
 ];
 
 const link = new StaticMockLink(MOCKS, true);
-async function wait(ms = 2) {
+async function wait(ms = 2): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -490,7 +493,7 @@ describe('Organization People Page', () => {
     // This variable represents the array index of currently selected UserType(i.e "member" or "admin" or "user")
     let peopleTypeIndex = 0;
 
-    const changeRowsPerPage = async (currRowPPindex: number) => {
+    const changeRowsPerPage = async (currRowPPindex: number): Promise<void> => {
       // currRowPPindex is the index of the currently selected option of rows per page dropdown
 
       await screen.findByTestId('rowsPPSelect');
@@ -553,7 +556,7 @@ describe('Organization People Page', () => {
       }
     };
 
-    const changePeopleType = async () => {
+    const changePeopleType = async (): Promise<void> => {
       if (peopleTypeIndex === allPeopleTypes.length - 1) return;
 
       const peopleTypeButton = screen
