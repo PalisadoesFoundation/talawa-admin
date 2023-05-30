@@ -88,7 +88,7 @@
         "format": ["camelCase"],
         "leadingUnderscore": "require"
       },
-      
+
       { "selector": "variable", "modifiers": ["exported"], "format": null }
     ],
     // Ensures that components are always written in PascalCase
@@ -129,5 +129,4 @@
       "version": "detect"
     }
   }
-  
 }
