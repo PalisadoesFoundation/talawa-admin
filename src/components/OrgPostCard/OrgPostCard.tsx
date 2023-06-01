@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
+import Button from 'react-bootstrap/Button';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 
@@ -131,9 +132,9 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
             </div>
           </div>
           {/* {props.postInfo.length > 43 && (
-            <button role='toggleBtn' className={styles.toggleClickBtn} onClick={handletoggleClick}>
+            <Button role='toggleBtn' className={styles.toggleClickBtn} onClick={handletoggleClick}>
               {togglePost}
-            </button>
+            </Button>
           )} */}
           {/* <p>{props.postInfo}</p> */}
           {props.postPhoto ? (
@@ -167,7 +168,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
             ) : (
               <p data-testid="toggleContent">{props.postInfo}</p>
             )}
-            <button
+            <Button
               role="toggleBtn"
               data-testid="toggleBtn"
               className={`${
@@ -178,7 +179,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
               onClick={handletoggleClick}
             >
               {togglePost}
-            </button>
+            </Button>
           </div>
           <p>
             {t('videoURL')}:
@@ -208,32 +209,32 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
               >
                 {t('deletePost')}
               </h5>
-              <button
+              <Button
                 type="button"
                 className="close"
                 data-dismiss="modal"
                 aria-label="Close"
               >
                 <span aria-hidden="true">&times;</span>
-              </button>
+              </Button>
             </div>
             <div className="modal-body">{t('deletePostMsg')}</div>
             <div className="modal-footer">
-              <button
+              <Button
                 type="button"
                 className="btn btn-danger"
                 data-dismiss="modal"
               >
                 {t('no')}
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
                 className="btn btn-success"
                 onClick={DeletePost}
                 data-testid="deletePostBtn"
               >
                 {t('yes')}
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -253,14 +254,14 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
               <h5 className="modal-title" id={`editPostModal${props.id}Label`}>
                 {t('editPost')}
               </h5>
-              <button
+              <Button
                 type="button"
                 className="close"
                 data-dismiss="modal"
                 aria-label="Close"
               >
                 <span aria-hidden="true">&times;</span>
-              </button>
+              </Button>
             </div>
             <form onSubmit={updatePostHandler}>
               <div className="modal-body">
@@ -323,20 +324,20 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
                 </div>
               </div>
               <div className="modal-footer">
-                <button
+                <Button
                   type="button"
                   className="btn btn-danger"
                   data-dismiss="modal"
                 >
                   {t('close')}
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
                   className="btn btn-success"
                   data-testid="updatePostBtn"
                 >
                   {t('updatePost')}
-                </button>
+                </Button>
               </div>
             </form>
           </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Nav, Navbar } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import { Link, NavLink } from 'react-router-dom';
 import i18next from 'i18next';
 import Cookies from 'js-cookie';
@@ -59,7 +60,7 @@ const ListNavbar = () => {
         </Nav>
         <Nav className="ml-auto">
           <div className="dropdown mr-4">
-            <button
+            <Button
               className={`btn dropdown-toggle ${styles.languageBtn}`}
               type="button"
               data-toggle="dropdown"
@@ -67,10 +68,10 @@ const ListNavbar = () => {
               title="Change Langauge"
             >
               <i className="fas fa-globe"></i>
-            </button>
+            </Button>
             <div className="dropdown-menu">
               {languages.map((language, index: number) => (
-                <button
+                <Button
                   key={index}
                   className="dropdown-item"
                   onClick={() => i18next.changeLanguage(language.code)}
@@ -81,17 +82,17 @@ const ListNavbar = () => {
                     className={`fi fi-${language.country_code} mr-2`}
                   ></span>
                   {language.name}
-                </button>
+                </Button>
               ))}
             </div>
           </div>
-          <button
+          <Button
             className={styles.logoutbtn}
             data-testid="logoutBtn"
             onClick={logout}
           >
             {t('logout')}
-          </button>
+          </Button>
         </Nav>
       </Navbar.Collapse>
     </Navbar>

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
@@ -264,21 +265,21 @@ const Requests = () => {
                                 {user.organizationsBlockedBy.some(
                                   (spam: any) => spam._id === currentUrl
                                 ) ? (
-                                  <button
+                                  <Button
                                     className="btn btn-danger"
                                     onClick={() => handleUnBlockUser(user._id)}
                                     data-testid={`unBlockUser${user._id}`}
                                   >
                                     {t('unblock')}
-                                  </button>
+                                  </Button>
                                 ) : (
-                                  <button
+                                  <Button
                                     className="btn btn-success"
                                     onClick={() => handleBlockUser(user._id)}
                                     data-testid={`blockUser${user._id}`}
                                   >
                                     {t('block')}
-                                  </button>
+                                  </Button>
                                 )}
                               </td>
                             </tr>

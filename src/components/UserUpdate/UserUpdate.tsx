@@ -2,6 +2,7 @@ import React from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
+import Button from 'react-bootstrap/Button';
 import styles from './UserUpdate.module.css';
 import convertToBase64 from 'utils/convertToBase64';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
@@ -205,22 +206,22 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
             />
           </label>
           <div className={styles.dispbtnflex}>
-            <button
+            <Button
               type="button"
               className={styles.greenregbtn}
               value="savechanges"
               onClick={login_link}
             >
               {t('saveChanges')}
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               className={styles.whitebtn}
               value="cancelchanges"
               onClick={cancelUpdate}
             >
               {t('cancel')}
-            </button>
+            </Button>
           </div>
         </form>
       </div>

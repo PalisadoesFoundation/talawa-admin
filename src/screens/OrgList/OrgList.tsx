@@ -459,14 +459,14 @@ function OrgList(): JSX.Element {
                   data-testid="organisationImage"
                 />
               </label>
-              <button
+              <Button
                 type="submit"
                 className={styles.greenregbtn}
                 value="invite"
                 data-testid="submitOrganizationForm"
               >
                 {t('createOrganization')}
-              </button>
+              </Button>
             </Form>
           </div>
         </section>

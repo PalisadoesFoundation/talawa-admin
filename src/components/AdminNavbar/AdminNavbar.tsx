@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Dropdown from 'react-bootstrap/Dropdown';
+import Button from 'react-bootstrap/Button';
 import { Nav } from 'react-bootstrap';
 import { Link, NavLink } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
@@ -222,7 +223,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                   <Dropdown.Menu>
                     {languages.map((language, index: number) => (
                       <Dropdown.Item key={index}>
-                        <button
+                        <Button
                           className="dropdown-item"
                           onClick={() => i18next.changeLanguage(language.code)}
                           disabled={currentLanguageCode === language.code}
@@ -232,7 +233,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                             className={`fi fi-${language.country_code} mr-2`}
                           ></span>
                           {language.name}
-                        </button>
+                        </Button>
                       </Dropdown.Item>
                     ))}
                   </Dropdown.Menu>
@@ -266,14 +267,14 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
               <h5 className="modal-title" id="notificationModalLabel">
                 {t('notifications')}
               </h5>
-              <button
+              <Button
                 type="button"
                 className="close"
                 data-dismiss="modal"
                 aria-label="Close"
               >
                 <span aria-hidden="true">&times;</span>
-              </button>
+              </Button>
             </div>
             <div className="modal-body">
               {spamCountData.length > 0 ? (
@@ -293,13 +294,13 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
               )}
             </div>
             <div className="modal-footer">
-              <button
+              <Button
                 type="button"
                 className="btn btn-success"
                 data-dismiss="modal"
               >
                 {t('close')}
-              </button>
+              </Button>
             </div>
           </div>
         </div>

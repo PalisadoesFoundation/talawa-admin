@@ -1,5 +1,6 @@
 import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
+import Button from 'react-bootstrap/Button';
 import React, { useState, useEffect } from 'react';
 import styles from './EventCalendar.module.css';
 
@@ -207,22 +208,22 @@ const Calendar: React.FC<CalendarProps> = ({
   return (
     <div className={styles.calendar}>
       <div className={styles.calendar__header}>
-        <button className={styles.button} onClick={handlePrevMonth}>
+        <Button className={styles.button} onClick={handlePrevMonth}>
           {'<'}
-        </button>
+        </Button>
         <div
           className={styles.calendar__header_month}
           data-testid="current-date"
         >
           {months[currentMonth]} {currentYear}
         </div>
-        <button className={styles.button} onClick={handleNextMonth}>
+        <Button className={styles.button} onClick={handleNextMonth}>
           {'>'}
-        </button>
+        </Button>
         <div>
-          <button className={styles.btn__today} onClick={handleTodayButton}>
+          <Button className={styles.btn__today} onClick={handleTodayButton}>
             Today
-          </button>
+          </Button>
         </div>
       </div>
 

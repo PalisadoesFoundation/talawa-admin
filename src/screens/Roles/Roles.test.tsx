@@ -3,6 +3,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import Button from 'react-bootstrap/Button';
 import { I18nextProvider } from 'react-i18next';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
@@ -323,7 +324,7 @@ describe('Testing Roles screen', () => {
       const setPage = jest.fn();
       const newPage = 2;
       const { getByRole } = render(
-        <button onClick={() => setPage(2)}>Change Page</button>
+        <Button onClick={() => setPage(2)}>Change Page</Button>
       );
 
       // Act

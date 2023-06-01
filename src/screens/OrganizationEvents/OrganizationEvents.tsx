@@ -334,14 +334,14 @@ function OrganizationEvents(): JSX.Element {
                   />
                 </div>
               </div>
-              <button
+              <Button
                 type="submit"
                 className={styles.greenregbtn}
                 value="createevent"
                 data-testid="createEventBtn"
               >
                 {t('createEvent')}
-              </button>
+              </Button>
             </Form>
           </div>
         </section>

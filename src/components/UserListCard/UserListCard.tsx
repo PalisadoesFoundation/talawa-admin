@@ -1,6 +1,7 @@
 import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -76,12 +77,12 @@ function UserListCard(props: UserListCardProps): JSX.Element {
               <p className={styles.memberfont}>
                 {t('joined')}: <span>{props.joinDate}</span>
               </p>
-              <button
+              <Button
                 className={styles.memberfontcreatedbtn}
                 onClick={AddAdmin}
               >
                 {t('addAdmin')}
-              </button>
+              </Button>
             </div>
           </Col>
         </Row>

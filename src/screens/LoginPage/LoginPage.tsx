@@ -5,6 +5,7 @@ import Modal from 'react-modal';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Link, useHistory } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
 import { Nav, Navbar } from 'react-bootstrap';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { toast } from 'react-toastify';
@@ -240,7 +241,7 @@ function LoginPage(): JSX.Element {
           <Navbar.Collapse id="navbarScroll">
             <Nav className="ml-auto">
               <div className="dropdown mr-4">
-                <button
+                <Button
                   className={`btn dropdown-toggle ${styles.languageBtn}`}
                   type="button"
                   data-toggle="dropdown"
@@ -248,10 +249,10 @@ function LoginPage(): JSX.Element {
                   title="Change Langauge"
                 >
                   <i className="fas fa-globe"></i>
-                </button>
+                </Button>
                 <div className="dropdown-menu">
                   {languages.map((language, index: number) => (
-                    <button
+                    <Button
                       key={index}
                       className="dropdown-item"
                       onClick={() => i18next.changeLanguage(language.code)}
@@ -262,11 +263,11 @@ function LoginPage(): JSX.Element {
                         className={`fi fi-${language.country_code} mr-2`}
                       ></span>
                       {language.name}
-                    </button>
+                    </Button>
                   ))}
                 </div>
               </div>
-              <button
+              <Button
                 type="button"
                 className={styles.navloginbtn}
                 value="Login"
@@ -274,7 +275,7 @@ function LoginPage(): JSX.Element {
                 data-testid="loginModalBtn"
               >
                 {t('login')}
-              </button>
+              </Button>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
@@ -435,14 +436,14 @@ function LoginPage(): JSX.Element {
                     /* istanbul ignore next */
                     <></>
                   )}
-                  <button
+                  <Button
                     type="submit"
                     className={styles.greenregbtn}
                     value="Register"
                     data-testid="registrationBtn"
                   >
                     {t('register')}
-                  </button>
+                  </Button>
                 </form>
               </div>
             </Col>
@@ -529,14 +530,14 @@ function LoginPage(): JSX.Element {
                   /* istanbul ignore next */
                   <></>
                 )}
-                <button
+                <Button
                   type="submit"
                   className={styles.greenregbtn}
                   value="Login"
                   data-testid="loginBtn"
                 >
                   {t('login')}
-                </button>
+                </Button>
                 <Link to="/forgotPassword" className={styles.forgotpwd}>
                   {t('forgotPassword')}
                 </Link>
@@ -544,14 +545,14 @@ function LoginPage(): JSX.Element {
                 <span className={styles.noaccount}>
                   {t('doNotOwnAnAccount')}
                 </span>
-                <button
+                <Button
                   type="button"
                   className={styles.whiteloginbtn}
                   value="Register"
                   onClick={hideModal}
                 >
                   {t('register')}
-                </button>
+                </Button>
               </form>
             </div>
           </section>

@@ -11,6 +11,7 @@ import {
 import styles from './ForgotPassword.module.css';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
+import Button from 'react-bootstrap/Button';
 
 const ForgotPassword = () => {
   const { t } = useTranslation('translation', {
@@ -141,12 +142,12 @@ const ForgotPassword = () => {
                   />
                 </div>
                 <div className="col-sm-3">
-                  <button
+                  <Button
                     type="submit"
                     className={`btn btn-success btn-block ${styles.talawaBackgroundColor}`}
                   >
                     <i className="fa fa-key"></i> {t('getOtp')}
-                  </button>
+                  </Button>
                 </div>
               </div>
             </form>
@@ -229,12 +230,12 @@ const ForgotPassword = () => {
                 </div>
               </div>
               <div className="submitBtn">
-                <button
+                <Button
                   type="submit"
                   className={`btn btn-success btn-block ${styles.talawaBackgroundColor}`}
                 >
                   {t('changePassword')}
-                </button>
+                </Button>
               </div>
               <div className={`homeBtn mt-3 ${styles.talawaBackgroundColor}`}>
                 <Link to="/" className="btn btn-info btn-block">

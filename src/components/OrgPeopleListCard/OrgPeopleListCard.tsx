@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './OrgPeopleListCard.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -74,14 +75,14 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
               <p className={styles.memberfont}>
                 {t('joined')}: <span>{props.joinDate}</span>
               </p>
-              <button
+              <Button
                 className={styles.memberfontcreatedbtn}
                 data-toggle="modal"
                 data-target={`#removeMemberModal${props.id}`}
                 data-testid="removeMemberModalBtn"
               >
                 {t('remove')}
-              </button>
+              </Button>
             </div>
           </Col>
         </Row>
@@ -105,32 +106,32 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
               >
                 {t('removeMember')}
               </h5>
-              <button
+              <Button
                 type="button"
                 className="close"
                 data-dismiss="modal"
                 aria-label="Close"
               >
                 <span aria-hidden="true">&times;</span>
-              </button>
+              </Button>
             </div>
             <div className="modal-body">{t('removeMemberMsg')}</div>
             <div className="modal-footer">
-              <button
+              <Button
                 type="button"
                 className="btn btn-danger"
                 data-dismiss="modal"
               >
                 {t('no')}
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
                 className="btn btn-success"
                 onClick={RemoveMember}
                 data-testid="removeMemberBtn"
               >
                 {t('yes')}
-              </button>
+              </Button>
             </div>
           </div>
         </div>

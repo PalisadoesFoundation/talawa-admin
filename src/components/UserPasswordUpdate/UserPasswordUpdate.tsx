@@ -2,6 +2,7 @@ import React from 'react';
 import { useMutation } from '@apollo/client';
 import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
+import Button from 'react-bootstrap/Button';
 import styles from './UserPasswordUpdate.module.css';
 import { toast } from 'react-toastify';
 
@@ -124,22 +125,22 @@ const UserUpdate: React.FC<UserPasswordUpdateProps> = ({ id }): JSX.Element => {
             </div>
           </div>
           <div className={styles.dispbtnflex}>
-            <button
+            <Button
               type="button"
               className={styles.greenregbtn}
               value="savechanges"
               onClick={login_link}
             >
               {t('saveChanges')}
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               className={styles.whitebtn}
               value="cancelchanges"
               onClick={cancelUpdate}
             >
               {t('cancel')}
-            </button>
+            </Button>
           </div>
         </form>
       </div>

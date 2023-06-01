@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'state/reducers';
 import { Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 
 import styles from './OrganizationDashboard.module.css';
@@ -113,7 +114,7 @@ function OrganizationDashboard(): JSX.Element {
               />
               <p className={styles.tagdetailsGreen}>
                 {canDelete && (
-                  <button
+                  <Button
                     type="button"
                     className="mt-3"
                     data-testid="deleteClick"
@@ -121,7 +122,7 @@ function OrganizationDashboard(): JSX.Element {
                     data-target="#deleteOrganizationModal"
                   >
                     {t('deleteOrganization')}
-                  </button>
+                  </Button>
                 )}
               </p>
             </div>
@@ -312,32 +313,32 @@ function OrganizationDashboard(): JSX.Element {
               <h5 className="modal-title" id="deleteOrganizationModalLabel">
                 {t('deleteOrganization')}
               </h5>
-              <button
+              <Button
                 type="button"
                 className="close"
                 data-dismiss="modal"
                 aria-label="Close"
               >
                 <span aria-hidden="true">&times;</span>
-              </button>
+              </Button>
             </div>
             <div className="modal-body">{t('deleteMsg')}</div>
             <div className="modal-footer">
-              <button
+              <Button
                 type="button"
                 className="btn btn-danger"
                 data-dismiss="modal"
               >
                 {t('no')}
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
                 className="btn btn-success"
                 onClick={delete_org}
                 data-testid="deleteOrganizationBtn"
               >
                 {t('yes')}
-              </button>
+              </Button>
             </div>
           </div>
         </div>

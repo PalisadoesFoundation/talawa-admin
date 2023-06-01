@@ -1,6 +1,7 @@
 import React from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -192,22 +193,22 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
             </div>
           </div>
           <div className={styles.dispbtnflex}>
-            <button
+            <Button
               type="button"
               className={styles.greenregbtn}
               value="savechanges"
               onClick={onSaveChangesClicked}
             >
               {t('saveChanges')}
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               className={styles.whitebtn}
               value="cancelchanges"
               onClick={cancelUpdate}
             >
               {t('cancel')}
-            </button>
+            </Button>
           </div>
         </form>
       </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 // import { ApolloProvider } from '@apollo/react-hooks';
@@ -76,14 +77,14 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
               <p className={styles.memberfont}>
                 {t('joined')}: <span>{props.joinDate}</span>
               </p>
-              <button
+              <Button
                 className={styles.memberfontcreatedbtn}
                 data-toggle="modal"
                 data-target={`#removeAdminModal${props.id}`}
                 data-testid="removeAdminModalBtn"
               >
                 {t('remove')}
-              </button>
+              </Button>
             </div>
           </Col>
         </Row>
@@ -106,32 +107,32 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
               >
                 {t('removeAdmin')}
               </h5>
-              <button
+              <Button
                 type="button"
                 className="close"
                 data-dismiss="modal"
                 aria-label="Close"
               >
                 <span aria-hidden="true">&times;</span>
-              </button>
+              </Button>
             </div>
             <div className="modal-body">{t('removeAdminMsg')}</div>
             <div className="modal-footer">
-              <button
+              <Button
                 type="button"
                 className="btn btn-danger"
                 data-dismiss="modal"
               >
                 {t('no')}
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
                 className="btn btn-success"
                 onClick={RemoveAdmin}
                 data-testid="removeAdminBtn"
               >
                 {t('yes')}
-              </button>
+              </Button>
             </div>
           </div>
         </div>

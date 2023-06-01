@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
+import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import Modal from 'react-modal';
@@ -229,32 +230,32 @@ function EventListCard(props: EventListCardProps): JSX.Element {
               >
                 {t('deleteEvent')}
               </h5>
-              <button
+              <Button
                 type="button"
                 className="close"
                 data-dismiss="modal"
                 aria-label="Close"
               >
                 <span aria-hidden="true">&times;</span>
-              </button>
+              </Button>
             </div>
             <div className="modal-body">{t('deleteEventMsg')}</div>
             <div className="modal-footer">
-              <button
+              <Button
                 type="button"
                 className="btn btn-danger"
                 data-dismiss="modal"
               >
                 {t('no')}
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
                 className="btn btn-success"
                 onClick={DeleteEvent}
                 data-testid="deleteEventBtn"
               >
                 {t('yes')}
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -274,14 +275,14 @@ function EventListCard(props: EventListCardProps): JSX.Element {
               <h5 className="modal-title" id={`editEventModal${props.id}Label`}>
                 {t('editEvent')}
               </h5>
-              <button
+              <Button
                 type="button"
                 className="close"
                 data-dismiss="modal"
                 aria-label="Close"
               >
                 <span aria-hidden="true">&times;</span>
-              </button>
+              </Button>
             </div>
             <form onSubmit={updateEventHandler}>
               <div className="modal-body">
@@ -410,20 +411,20 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                 </div>
               </div>
               <div className="modal-footer">
-                <button
+                <Button
                   type="button"
                   className="btn btn-danger"
                   data-dismiss="modal"
                 >
                   {t('close')}
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
                   className="btn btn-success"
                   data-testid="updatePostBtn"
                 >
                   {t('updatePost')}
-                </button>
+                </Button>
               </div>
             </form>
           </div>
