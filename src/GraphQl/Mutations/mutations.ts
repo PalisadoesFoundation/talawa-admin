@@ -461,3 +461,28 @@ export const UPDATE_SPAM_NOTIFICATION_MUTATION = gql`
     }
   }
 `;
+
+export const ADD_EVENT_PROJECT_MUTATION = gql`
+  mutation AddEventProject(
+    $title: String!
+    $description: String!
+    $eventId: ID!
+  ) {
+    createEventProject(
+      data: { title: $title, description: $description, eventId: $eventId }
+    ) {
+      _id
+    }
+  }
+`;
+
+export const UPDATE_EVENT_PROJECT_MUTATION = gql`
+  mutation UpdateEventProject($title: String, $description: String, $id: ID!) {
+    updateEventProject(
+      id: $id
+      data: { title: $title, description: $description }
+    ) {
+      _id
+    }
+  }
+`;

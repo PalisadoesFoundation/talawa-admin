@@ -20,6 +20,7 @@ import ForgotPassword from 'screens/ForgotPassword/ForgotPassword';
 import Roles from 'screens/Roles/Roles';
 import Requests from 'screens/Requests/Requests';
 import BlockUser from 'screens/BlockUser/BlockUser';
+import EventDashboard from 'screens/EventDashboard/EventDashboard';
 import MemberDetail from 'screens/MemberDetail/MemberDetail';
 
 function App(): JSX.Element {
@@ -96,6 +97,7 @@ function App(): JSX.Element {
         <SecuredRoute path="/roles" component={Roles} />
         <SecuredRoute path="/requests" component={Requests} />
         <SecuredRoute path="/blockuser" component={BlockUser} />
+        <SecuredRoute path="/event/:eventId" component={EventDashboard} />
         {extraRoutes}
         <Route exact path="/forgotPassword" component={ForgotPassword} />
         <Route exact path="*" component={PageNotFound} />

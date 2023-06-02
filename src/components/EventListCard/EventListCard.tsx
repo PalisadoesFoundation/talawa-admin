@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import Modal from 'react-modal';
-
+import Button from 'react-bootstrap/Button';
 import styles from './EventListCard.module.css';
 import {
   DELETE_EVENT_MUTATION,
@@ -121,6 +121,9 @@ function EventListCard(props: EventListCardProps): JSX.Element {
     }
   };
 
+  const openEventDashboard = () => {
+    window.location.assign(`/event/${props.id}`);
+  };
   return (
     <>
       <div className="">
@@ -187,6 +190,14 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                   {t('end')}:{' '}
                   <span className={styles.view}>{props.regEndDate}</span>
                 </p>
+                <Button
+                  className={styles.customButton}
+                  variant="success"
+                  onClick={openEventDashboard}
+                >
+                  {' '}
+                  Show Event Dashboard{' '}
+                </Button>
               </div>
               <div className={styles.iconContainer}>
                 <a

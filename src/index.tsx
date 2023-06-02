@@ -47,7 +47,7 @@ ReactDOM.render(
       <BrowserRouter>
         <Provider store={store}>
           <App />
-          <ToastContainer limit={1} />
+          <ToastContainer limit={3} />
         </Provider>
       </BrowserRouter>
     </ApolloProvider>

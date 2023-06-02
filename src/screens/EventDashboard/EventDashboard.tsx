@@ -1,0 +1,189 @@
+import React, { useState } from 'react';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import { useQuery } from '@apollo/client';
+import { Container } from 'react-bootstrap';
+import styles from './EventDashboard.module.css';
+import ListNavbar from 'components/ListNavbar/ListNavbar';
+import { AddEventProjectModal } from './EventProjectModals/AddEventProjectModal';
+import { UpdateEventProjectModal } from './EventProjectModals/UpdateEventProjectModal';
+import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
+import Button from 'react-bootstrap/Button';
+
+interface EventProjectInterface {
+  _id: string;
+  title: string;
+  description: string;
+}
+
+function EventDashboard(): JSX.Element {
+  // Get the Event ID from the URL
+  document.title = 'Event Dashboard';
+  const eventId = window.location.href.split('/')[4];
+
+  // Data fetching
+  const {
+    data: eventData,
+    loading: eventInfoLoading,
+    refetch: refetchEventData,
+  } = useQuery(EVENT_DETAILS, {
+    variables: { id: eventId },
+  });
+
+  // State management for Add Event Project Modal
+  const [showAddEventProjectModal, setShowAddEventProjectModal] =
+    useState(false);
+  function handleCloseAddEventProjectModal() {
+    setShowAddEventProjectModal(false);
+  }
+  function displayAddEventProjectModal() {
+    setShowAddEventProjectModal(true);
+  }
+
+  // State management for Update Event Project Modal
+  const [showUpdateEventProjectModal, setShowUpdateEventProjectModal] =
+    useState(false);
+  const [currentProject, setCurrentProject] = useState({
+    _id: '',
+    title: '',
+    description: '',
+  });
+  function handleCloseUpdateEventProjectModal() {
+    setShowUpdateEventProjectModal(false);
+  }
+  function displayUpdateProjectModal(project: EventProjectInterface) {
+    setCurrentProject(project);
+    setShowUpdateEventProjectModal(true);
+  }
+
+  // Render the loading screen
+  if (eventInfoLoading) {
+    return (
+      <>
+        <div className={styles.loader}></div>
+      </>
+    );
+  }
+
+  console.log(eventData);
+
+  return (
+    <>
+      <ListNavbar />
+      <Row>
+        <Col sm={3}>
+          <div className={styles.sidebar}>
+            <div className={styles.sidebarsticky}>
+              {/* Side Bar - Static Information about the Event */}
+              <h4 className={styles.titlename}>{eventData.event.title}</h4>
+              <p className={styles.description}>
+                {eventData.event.description}
+              </p>
+              <p className={styles.toporgloc}>
+                <b>Location:</b> {eventData.event.location}
+              </p>
+              <p className={styles.toporgloc}>
+                <b>Start:</b> {eventData.event.startDate}{' '}
+                {eventData.event.startTime
+                  ? ` - ${eventData.event.startTime}`
+                  : ``}
+              </p>
+              <p className={styles.toporgloc}>
+                <b>End:</b> {eventData.event.endDate}{' '}
+                {eventData.event.endTime ? ` - ${eventData.event.endTime}` : ``}
+              </p>
+              <p className={styles.toporgloc}>
+                <b>Attendees:</b> {eventData.event.attendees.length}
+              </p>
+              <br />
+              {/* Buttons to trigger different modals */}
+              <p className={styles.tagdetailsGreen}>
+                {
+                  <button
+                    type="button"
+                    className="mt-3"
+                    data-testid="addEventProjectClick"
+                    data-toggle="addEventProjectModal"
+                    data-target="#addEventProjectModel"
+                    onClick={displayAddEventProjectModal}
+                  >
+                    Add an Event Project
+                  </button>
+                }
+              </p>
+            </div>
+          </div>
+        </Col>
+        <Col sm={8} className="mt-sm-0 mt-5 ml-4 ml-sm-0">
+          {/* Main Screen Container */}
+          <Container>
+            <div className={styles.mainpageright}>
+              <Row className={styles.justifysp}>
+                <p className={styles.titlename}>Event Projects</p>
+              </Row>
+              <Row>
+                {eventData.event.projects.length == 0
+                  ? `There are no active projects for this event!`
+                  : null}
+                {eventData.event.projects.map(
+                  (project: EventProjectInterface) => (
+                    <Col sm={4} className="mb-5" key={project._id}>
+                      <div className={`card ${styles.cardContainer}`}>
+                        <div className="card-body">
+                          <div className="text-center"></div>
+                          <div className="text-center">
+                            <p className={`pb-2 ${styles.counterNumber}`}>
+                              {project.title}
+                            </p>
+                            <p className={styles.counterHead}>
+                              {project.description}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="pr-3 mr-2">
+                          <Button
+                            type="button"
+                            variant="success"
+                            className="m-2 ml-3"
+                            size="sm"
+                            onClick={() => displayUpdateProjectModal(project)}
+                          >
+                            <i className="fas fa-edit"></i>
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="danger"
+                            className="m-1"
+                            size="sm"
+                          >
+                            <i className="fa fa-trash"></i>
+                          </Button>
+                        </div>
+                      </div>
+                    </Col>
+                  )
+                )}
+              </Row>
+            </div>
+          </Container>
+        </Col>
+      </Row>
+
+      {/* Wrapper for Different Modals */}
+      <AddEventProjectModal
+        show={showAddEventProjectModal}
+        handleClose={handleCloseAddEventProjectModal}
+        eventId={eventId}
+        refetchData={refetchEventData}
+      />
+      <UpdateEventProjectModal
+        show={showUpdateEventProjectModal}
+        handleClose={handleCloseUpdateEventProjectModal}
+        refetchData={refetchEventData}
+        project={currentProject}
+      />
+    </>
+  );
+}
+
+export default EventDashboard;

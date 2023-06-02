@@ -92,8 +92,30 @@ export const USER_LIST = gql`
   }
 `;
 
-// Query to take the Organization with data
+export const EVENT_DETAILS = gql`
+  query Event($id: ID!) {
+    event(id: $id) {
+      title
+      description
+      startDate
+      endDate
+      startTime
+      endTime
+      allDay
+      location
+      attendees {
+        _id
+      }
+      projects {
+        _id
+        title
+        description
+      }
+    }
+  }
+`;
 
+// Query to take the Organization with data
 export const ORGANIZATIONS_LIST = gql`
   query Organizations($id: ID!) {
     organizations(id: $id) {

@@ -198,3 +198,8 @@ form > label {
     top: 45%;
   }
 }
+
+.customButton {
+  background-color: #31bb6b;
+  border: #31bb6b;
+}
