@@ -8,13 +8,23 @@ import ListNavbar from 'components/ListNavbar/ListNavbar';
 import { AddEventProjectModal } from './EventProjectModals/AddEventProjectModal';
 import { UpdateEventProjectModal } from './EventProjectModals/UpdateEventProjectModal';
 import { DeleteEventProjectModal } from './EventProjectModals/DeleteEventProjectModal';
+import { AddTaskModal } from './TaskModals/AddTaskModal';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import Button from 'react-bootstrap/Button';
-
+import List from '@mui/material/List';
+import { TaskListItem } from './TaskListItem';
 interface EventProjectInterface {
   _id: string;
   title: string;
   description: string;
+  tasks: [
+    {
+      _id: string;
+      title: string;
+      description: string;
+      deadline: string;
+    }
+  ];
 }
 
 function EventDashboard(): JSX.Element {
@@ -37,37 +47,14 @@ function EventDashboard(): JSX.Element {
     description: '',
   });
 
-  // State management for Add Event Project Modal
+  // State management for modals
   const [showAddEventProjectModal, setShowAddEventProjectModal] =
     useState(false);
-  function handleCloseAddEventProjectModal() {
-    setShowAddEventProjectModal(false);
-  }
-  function displayAddEventProjectModal() {
-    setShowAddEventProjectModal(true);
-  }
-
-  // State management for Update Event Project Modal
+  const [showAddTaskModal, setShowAddTaskModal] = useState(false);
   const [showUpdateEventProjectModal, setShowUpdateEventProjectModal] =
     useState(false);
-  function handleCloseUpdateEventProjectModal() {
-    setShowUpdateEventProjectModal(false);
-  }
-  function displayUpdateProjectModal(project: EventProjectInterface) {
-    setCurrentProject(project);
-    setShowUpdateEventProjectModal(true);
-  }
-
-  // State management for Delete Event Project Modal
   const [showDeleteEventProjectModal, setShowDeleteEventProjectModal] =
     useState(false);
-  function handleCloseDeleteEventProjectModal() {
-    setShowDeleteEventProjectModal(false);
-  }
-  function displayDeleteProjectModal(project: EventProjectInterface) {
-    setCurrentProject(project);
-    setShowDeleteEventProjectModal(true);
-  }
 
   // Render the loading screen
   if (eventInfoLoading) {
@@ -118,7 +105,9 @@ function EventDashboard(): JSX.Element {
                     data-testid="addEventProjectClick"
                     data-toggle="addEventProjectModal"
                     data-target="#addEventProjectModel"
-                    onClick={displayAddEventProjectModal}
+                    onClick={() => {
+                      setShowAddEventProjectModal(true);
+                    }}
                   >
                     Add an Event Project
                   </button>
@@ -143,7 +132,6 @@ function EventDashboard(): JSX.Element {
                     <Col sm={4} className="mb-5" key={project._id}>
                       <div className={`card ${styles.cardContainer}`}>
                         <div className="card-body">
-                          <div className="text-center"></div>
                           <div className="text-center">
                             <p className={`pb-2 ${styles.counterNumber}`}>
                               {project.title}
@@ -153,13 +141,34 @@ function EventDashboard(): JSX.Element {
                             </p>
                           </div>
                         </div>
+                        <div className="text-center">
+                          <h5>Tasks</h5>
+                        </div>
+                        <List
+                          sx={{
+                            width: '100%',
+                            bgcolor: 'background.paper',
+                          }}
+                        >
+                          <div className="text-center">
+                            {!project.tasks.length
+                              ? `There are no tasks for this project.`
+                              : null}
+                          </div>
+                          {project.tasks.map((task) => (
+                            <TaskListItem task={task} key={task._id} />
+                          ))}
+                        </List>
                         <div className="pr-3 mr-2">
                           <Button
                             type="button"
                             variant="success"
                             className="m-2 ml-3"
                             size="sm"
-                            onClick={() => displayUpdateProjectModal(project)}
+                            onClick={() => {
+                              setCurrentProject(project);
+                              setShowUpdateEventProjectModal(true);
+                            }}
                           >
                             <i className="fas fa-edit"></i>
                           </Button>
@@ -168,9 +177,24 @@ function EventDashboard(): JSX.Element {
                             variant="danger"
                             className="m-1"
                             size="sm"
-                            onClick={() => displayDeleteProjectModal(project)}
+                            onClick={() => {
+                              setCurrentProject(project);
+                              setShowDeleteEventProjectModal(true);
+                            }}
                           >
                             <i className="fa fa-trash"></i>
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="outline-success"
+                            className="m-1 ml-8"
+                            size="sm"
+                            onClick={() => {
+                              setCurrentProject(project);
+                              setShowAddTaskModal(true);
+                            }}
+                          >
+                            <i className="fa fa-plus"></i>
                           </Button>
                         </div>
                       </div>
@@ -186,21 +210,38 @@ function EventDashboard(): JSX.Element {
       {/* Wrapper for Different Modals */}
       <AddEventProjectModal
         show={showAddEventProjectModal}
-        handleClose={handleCloseAddEventProjectModal}
+        handleClose={() => {
+          setShowAddEventProjectModal(false);
+        }}
         eventId={eventId}
         refetchData={refetchEventData}
       />
+
       <UpdateEventProjectModal
         show={showUpdateEventProjectModal}
-        handleClose={handleCloseUpdateEventProjectModal}
+        handleClose={() => {
+          setShowUpdateEventProjectModal(false);
+        }}
         refetchData={refetchEventData}
         project={currentProject}
       />
+
       <DeleteEventProjectModal
         show={showDeleteEventProjectModal}
-        handleClose={handleCloseDeleteEventProjectModal}
+        handleClose={() => {
+          setShowDeleteEventProjectModal(false);
+        }}
         refetchData={refetchEventData}
         project={currentProject}
+      />
+
+      <AddTaskModal
+        show={showAddTaskModal}
+        handleClose={() => {
+          setShowAddTaskModal(false);
+        }}
+        refetchData={refetchEventData}
+        projectId={currentProject._id}
       />
     </>
   );

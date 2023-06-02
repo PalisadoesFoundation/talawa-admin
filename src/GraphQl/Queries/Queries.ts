@@ -110,6 +110,12 @@ export const EVENT_DETAILS = gql`
         _id
         title
         description
+        tasks {
+          _id
+          title
+          description
+          deadline
+        }
       }
     }
   }
