@@ -486,3 +486,11 @@ export const UPDATE_EVENT_PROJECT_MUTATION = gql`
     }
   }
 `;
+
+export const DELETE_EVENT_PROJECT_MUTATION = gql`
+  mutation DeleteEventProject($id: ID!) {
+    removeEventProject(id: $id) {
+      _id
+    }
+  }
+`;

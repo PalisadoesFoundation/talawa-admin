@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/client';
@@ -16,12 +16,15 @@ interface ModalPropType {
 }
 
 export const UpdateEventProjectModal = (props: ModalPropType) => {
-  const [title, setTitle] = useState(() => props.project.title);
-  const [description, setDescription] = useState(
-    () => props.project.description
-  );
+  console.log(props.project);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
-  console.log(title);
+  useEffect(() => {
+    setTitle(props.project.title);
+    setDescription(props.project.description);
+  }, [props.project]);
+
   const [updateMutation] = useMutation(UPDATE_EVENT_PROJECT_MUTATION);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

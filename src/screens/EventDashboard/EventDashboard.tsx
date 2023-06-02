@@ -7,6 +7,7 @@ import styles from './EventDashboard.module.css';
 import ListNavbar from 'components/ListNavbar/ListNavbar';
 import { AddEventProjectModal } from './EventProjectModals/AddEventProjectModal';
 import { UpdateEventProjectModal } from './EventProjectModals/UpdateEventProjectModal';
+import { DeleteEventProjectModal } from './EventProjectModals/DeleteEventProjectModal';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import Button from 'react-bootstrap/Button';
 
@@ -30,6 +31,12 @@ function EventDashboard(): JSX.Element {
     variables: { id: eventId },
   });
 
+  const [currentProject, setCurrentProject] = useState({
+    _id: '',
+    title: '',
+    description: '',
+  });
+
   // State management for Add Event Project Modal
   const [showAddEventProjectModal, setShowAddEventProjectModal] =
     useState(false);
@@ -43,17 +50,23 @@ function EventDashboard(): JSX.Element {
   // State management for Update Event Project Modal
   const [showUpdateEventProjectModal, setShowUpdateEventProjectModal] =
     useState(false);
-  const [currentProject, setCurrentProject] = useState({
-    _id: '',
-    title: '',
-    description: '',
-  });
   function handleCloseUpdateEventProjectModal() {
     setShowUpdateEventProjectModal(false);
   }
   function displayUpdateProjectModal(project: EventProjectInterface) {
     setCurrentProject(project);
     setShowUpdateEventProjectModal(true);
+  }
+
+  // State management for Delete Event Project Modal
+  const [showDeleteEventProjectModal, setShowDeleteEventProjectModal] =
+    useState(false);
+  function handleCloseDeleteEventProjectModal() {
+    setShowDeleteEventProjectModal(false);
+  }
+  function displayDeleteProjectModal(project: EventProjectInterface) {
+    setCurrentProject(project);
+    setShowDeleteEventProjectModal(true);
   }
 
   // Render the loading screen
@@ -155,6 +168,7 @@ function EventDashboard(): JSX.Element {
                             variant="danger"
                             className="m-1"
                             size="sm"
+                            onClick={() => displayDeleteProjectModal(project)}
                           >
                             <i className="fa fa-trash"></i>
                           </Button>
@@ -179,6 +193,12 @@ function EventDashboard(): JSX.Element {
       <UpdateEventProjectModal
         show={showUpdateEventProjectModal}
         handleClose={handleCloseUpdateEventProjectModal}
+        refetchData={refetchEventData}
+        project={currentProject}
+      />
+      <DeleteEventProjectModal
+        show={showDeleteEventProjectModal}
+        handleClose={handleCloseDeleteEventProjectModal}
         refetchData={refetchEventData}
         project={currentProject}
       />
