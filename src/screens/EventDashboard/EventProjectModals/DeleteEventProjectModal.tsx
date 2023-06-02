@@ -43,7 +43,7 @@ export const DeleteEventProjectModal = (props: ModalPropType) => {
           <Modal.Title>Delete Event Project</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="m-1 text-lg mb-0">
+          <div className="m-1 text-lg mb-0" id="deleteEventProjectConfirm">
             Are you sure you want to delete this?
           </div>
           <br />
