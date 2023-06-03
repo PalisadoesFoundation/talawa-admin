@@ -496,7 +496,7 @@ export const DELETE_EVENT_PROJECT_MUTATION = gql`
 `;
 
 export const ADD_EVENT_PROJECT_TASK_MUTATION = gql`
-  mutation AddEventProject(
+  mutation AddEventTask(
     $title: String!
     $description: String!
     $projectId: ID!
@@ -504,6 +504,22 @@ export const ADD_EVENT_PROJECT_TASK_MUTATION = gql`
   ) {
     createTask(
       eventProjectId: $projectId
+      data: { title: $title, description: $description, deadline: $deadline }
+    ) {
+      _id
+    }
+  }
+`;
+
+export const UPDATE_EVENT_PROJECT_TASK_MUTATION = gql`
+  mutation UpdateEventTask(
+    $title: String!
+    $description: String!
+    $taskId: ID!
+    $deadline: DateTime!
+  ) {
+    updateTask(
+      id: $projectId
       data: { title: $title, description: $description, deadline: $deadline }
     ) {
       _id
