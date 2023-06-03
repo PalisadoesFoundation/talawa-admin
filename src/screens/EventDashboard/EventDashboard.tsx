@@ -13,18 +13,18 @@ import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import Button from 'react-bootstrap/Button';
 import List from '@mui/material/List';
 import { TaskListItem } from './TaskListItem';
+
+interface EventTaskInterface {
+  _id: string;
+  title: string;
+  description: string;
+  deadline: string;
+}
 interface EventProjectInterface {
   _id: string;
   title: string;
   description: string;
-  tasks: [
-    {
-      _id: string;
-      title: string;
-      description: string;
-      deadline: string;
-    }
-  ];
+  tasks: [EventTaskInterface];
 }
 
 function EventDashboard(): JSX.Element {
@@ -156,7 +156,11 @@ function EventDashboard(): JSX.Element {
                               : null}
                           </div>
                           {project.tasks.map((task) => (
-                            <TaskListItem task={task} key={task._id} />
+                            <TaskListItem
+                              task={task}
+                              key={task._id}
+                              refetchData={refetchEventData}
+                            />
                           ))}
                         </List>
                         <div className="pr-3 mr-2">

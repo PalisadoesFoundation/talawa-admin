@@ -519,7 +519,7 @@ export const UPDATE_EVENT_PROJECT_TASK_MUTATION = gql`
     $deadline: DateTime!
   ) {
     updateTask(
-      id: $projectId
+      id: $taskId
       data: { title: $title, description: $description, deadline: $deadline }
     ) {
       _id

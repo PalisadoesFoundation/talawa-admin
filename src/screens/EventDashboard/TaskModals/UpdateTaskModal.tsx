@@ -97,6 +97,7 @@ export const UpdateTaskModal = (props: ModalPropType) => {
             <Form.Group controlId="formBasicDeadline">
               <DateTimePicker
                 label="Deadline"
+                defaultValue={deadline}
                 onChange={(date: Dayjs | null) => {
                   setDeadline(date);
                 }}

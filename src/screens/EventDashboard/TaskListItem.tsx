@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
@@ -9,6 +9,7 @@ import Avatar from '@mui/material/Avatar';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { green } from '@mui/material/colors';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import { UpdateTaskModal } from './TaskModals/UpdateTaskModal';
 
 interface TaskInterface {
   _id: string;
@@ -17,48 +18,68 @@ interface TaskInterface {
   description: string;
 }
 
-export const TaskListItem = ({ task }: { task: TaskInterface }) => {
+interface PropType {
+  task: TaskInterface;
+  refetchData: () => void;
+}
+
+export const TaskListItem = ({ task, refetchData }: PropType) => {
+  const [showUpdateTaskModal, setShowUpdateTaskModal] = useState(false);
+
   return (
     <>
-      <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar
-            sx={{
-              bgcolor: green[500],
-              width: 36,
-              height: 36,
+      <div>
+        <ListItem alignItems="flex-start">
+          <ListItemAvatar>
+            <Avatar
+              sx={{
+                bgcolor: green[500],
+                width: 36,
+                height: 36,
+              }}
+              variant="rounded"
+            >
+              {' '}
+              <AssignmentIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            primary={task.title}
+            secondary={
+              <React.Fragment>
+                <Typography
+                  sx={{ display: 'inline' }}
+                  component="span"
+                  variant="body2"
+                  color="text.primary"
+                >
+                  {task.description}
+                </Typography>
+              </React.Fragment>
+            }
+          />
+          <Chip
+            icon={<EditOutlinedIcon fontSize="small" />}
+            label="View"
+            variant="outlined"
+            onClick={() => {
+              setShowUpdateTaskModal(true);
             }}
-            variant="rounded"
-          >
-            {' '}
-            <AssignmentIcon />
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText
-          primary={task.title}
-          secondary={
-            <React.Fragment>
-              <Typography
-                sx={{ display: 'inline' }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                {task.description}
-              </Typography>
-            </React.Fragment>
-          }
-        />
-        <Chip
-          icon={<EditOutlinedIcon fontSize="small" />}
-          label="View"
-          variant="outlined"
-          onClick={() => {
-            console.log('Hi');
-          }}
-        />
-      </ListItem>
-      <Divider component="li" />
+          />
+        </ListItem>
+        <Divider component="li" />
+        <div>
+          {/* Wrapper Div for all the relevant modals */}
+          <UpdateTaskModal
+            show={showUpdateTaskModal}
+            handleClose={() => {
+              setShowUpdateTaskModal(false);
+            }}
+            task={task}
+            refetchData={refetchData}
+          />
+        </div>
+      </div>
     </>
   );
 };
