@@ -443,7 +443,7 @@
   },
   "userLogin": {
     "login": "Connexion",
-    "forgotPassword":"Mot de passe oublié?",
+    "forgotPassword": "Mot de passe oublié?",
     "loginIntoYourAccount": "Connectez-vous à votre compte",
     "emailAddress": "Email Address",
     "enterEmail": "Entrez votre adresse email",

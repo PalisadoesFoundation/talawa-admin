@@ -445,7 +445,7 @@
   },
   "userLogin": {
     "login": "登錄",
-    "forgotPassword":"忘記密碼 ？",
+    "forgotPassword": "忘記密碼 ？",
     "loginIntoYourAccount": "登錄您的賬戶",
     "emailAddress": "電子郵件地址",
     "enterEmail": "輸入你的電子郵箱地址",

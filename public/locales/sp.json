@@ -445,7 +445,7 @@
   },
   "userLogin": {
     "login": "Acceso",
-    "forgotPassword":"Has olvidado tu contraseña ?",
+    "forgotPassword": "Has olvidado tu contraseña ?",
     "loginIntoYourAccount": "Inicie sesión en su cuenta",
     "emailAddress": "correo electrónico",
     "enterEmail": "Ingrese su dirección de correo electrónico",

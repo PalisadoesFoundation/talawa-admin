@@ -443,7 +443,7 @@
   },
   "userLogin": {
     "login": "लॉगिन",
-    "forgotPassword":"पासवर्ड भूल गए ?",
+    "forgotPassword": "पासवर्ड भूल गए ?",
     "loginIntoYourAccount": "अपने खाते में प्रवेश करें",
     "emailAddress": "ईमेल एड्रेस",
     "enterEmail": "अपना ईमेल पता दर्ज करें",
