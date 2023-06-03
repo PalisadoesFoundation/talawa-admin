@@ -22,6 +22,10 @@ import Requests from 'screens/Requests/Requests';
 import BlockUser from 'screens/BlockUser/BlockUser';
 import MemberDetail from 'screens/MemberDetail/MemberDetail';
 
+// User Portal Components
+import UserLoginPage from 'screens/UserPortal/UserLoginPage/UserLoginPage';
+import Organizations from 'screens/UserPortal/Organizations/Organizations';
+
 function App(): JSX.Element {
   /*const { updatePluginLinks, updateInstalled } = bindActionCreators(
     actionCreators,
@@ -98,6 +102,11 @@ function App(): JSX.Element {
         <SecuredRoute path="/blockuser" component={BlockUser} />
         {extraRoutes}
         <Route exact path="/forgotPassword" component={ForgotPassword} />
+
+        {/* User Portal Routes */}
+        <Route exact path="/user" component={UserLoginPage} />
+        <Route path="/user/organizations" component={Organizations} />
+
         <Route exact path="*" component={PageNotFound} />
       </Switch>
     </>

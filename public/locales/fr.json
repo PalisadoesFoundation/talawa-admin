@@ -440,5 +440,38 @@
     "adminForEvents": "Administrateur pour les événements",
     "addedAsAdmin": "L'utilisateur est ajouté en tant qu'administrateur.",
     "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
+  },
+  "userLogin": {
+    "login": "Connexion",
+    "forgotPassword":"Mot de passe oublié?",
+    "loginIntoYourAccount": "Connectez-vous à votre compte",
+    "emailAddress": "Email Address",
+    "enterEmail": "Entrez votre adresse email",
+    "password": "Mot de passe",
+    "enterPassword": "Tapez votre mot de passe",
+    "register": "Enregistrer",
+    "invalidDetailsMessage": "Veuillez saisir un e-mail et un mot de passe valides.",
+    "notAuthorised": "Désolé! vous n'êtes pas autorisé !",
+    "invalidCredentials": "Les informations d'identification saisies sont incorrectes. Veuillez entrer des informations d'identification valides.",
+    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
+  },
+  "userRegister": {
+    "register": "Enregistrer",
+    "firstName": "Prénom",
+    "enterFirstName": "Entrez votre prénom",
+    "lastName": "Nom de famille",
+    "enterLastName": "Entrez votre nom de famille",
+    "emailAddress": "Email Address",
+    "enterEmail": "Entrez votre adresse email",
+    "password": "Mot de passe",
+    "enterPassword": "Tapez votre mot de passe",
+    "confirmPassword": "Confirmez le mot de passe",
+    "enterConfirmPassword": "Entrez votre mot de passe pour confirmer",
+    "alreadyhaveAnAccount": "Vous avez déjà un compte?",
+    "login": "Connexion",
+    "afterRegister": "Enregistré avec succès. Veuillez attendre que l'administrateur approuve votre demande.",
+    "passwordNotMatch": "Confirmez le mot de passe et le mot de passe ne correspond pas.",
+    "invalidDetailsMessage": "Veuillez entrer des détails valides.",
+    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   }
 }

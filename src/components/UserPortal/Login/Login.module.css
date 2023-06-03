@@ -1,0 +1,20 @@
+.forgotPasswordContainer {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+  margin: 5px 0px;
+}
+
+.forgotPasswordText {
+  color: black;
+  font-size: 12px;
+  margin: 2px 0px;
+}
+
+.borderNone {
+  border: none;
+}
+
+.colorWhite {
+  color: white;
+}
