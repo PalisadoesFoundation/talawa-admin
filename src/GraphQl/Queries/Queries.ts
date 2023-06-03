@@ -103,6 +103,14 @@ export const EVENT_DETAILS = gql`
       endTime
       allDay
       location
+      organization {
+        _id
+        members {
+          _id
+          firstName
+          lastName
+        }
+      }
       attendees {
         _id
       }
@@ -115,6 +123,11 @@ export const EVENT_DETAILS = gql`
           title
           description
           deadline
+          volunteers {
+            _id
+            firstName
+            lastName
+          }
         }
       }
     }

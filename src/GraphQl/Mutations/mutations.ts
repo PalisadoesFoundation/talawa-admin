@@ -526,3 +526,11 @@ export const UPDATE_EVENT_PROJECT_TASK_MUTATION = gql`
     }
   }
 `;
+
+export const DELETE_EVENT_TASK_MUTATION = gql`
+  mutation DeleteTask($id: ID!) {
+    removeTask(id: $id) {
+      _id
+    }
+  }
+`;

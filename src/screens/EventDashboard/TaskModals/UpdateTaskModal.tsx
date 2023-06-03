@@ -5,15 +5,27 @@ import { useMutation } from '@apollo/client';
 import dayjs, { Dayjs } from 'dayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { UPDATE_EVENT_PROJECT_TASK_MUTATION } from 'GraphQl/Mutations/mutations';
+import { DeleteTaskModal } from './DeleteTaskModal';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+import Avatar from '@mui/material/Avatar';
+
+interface UserInterface {
+  _id: string;
+  firstName: string;
+  lastName: string;
+}
+interface TaskInterface {
+  _id: string;
+  title: string;
+  deadline: string;
+  description: string;
+  volunteers: [UserInterface];
+}
 
 interface ModalPropType {
   show: boolean;
-  task: {
-    _id: string;
-    title: string;
-    description: string;
-    deadline: string;
-  };
+  task: TaskInterface;
   handleClose: () => void;
   refetchData: () => void;
 }
@@ -22,6 +34,8 @@ export const UpdateTaskModal = (props: ModalPropType) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [deadline, setDeadline] = useState<null | Dayjs>(null);
+
+  const [showDeleteTaskModal, setShowDeleteTaskModal] = useState(false);
 
   useEffect(() => {
     setTitle(props.task.title);
@@ -104,13 +118,58 @@ export const UpdateTaskModal = (props: ModalPropType) => {
                 disablePast
               />
             </Form.Group>
+
+            <Form.Group controlId="formVolunteers">
+              <Form.Label>Volunteers</Form.Label>
+              <br />
+              {!props.task.volunteers.length
+                ? `There are no volunteers assigned for this task.`
+                : null}
+              <Stack direction="row" spacing={1}>
+                {props.task.volunteers.map((user) => (
+                  <Chip
+                    key={user._id}
+                    avatar={
+                      <Avatar>{`${user.firstName[0].toUpperCase()}${user.lastName[0].toUpperCase()}`}</Avatar>
+                    }
+                    label={`${user.firstName} ${user.lastName}`}
+                    variant="outlined"
+                    onClick={() => {
+                      console.log('I was clicked.');
+                    }}
+                    onDelete={() => {
+                      console.log('I was deleted');
+                    }}
+                  />
+                ))}
+              </Stack>
+            </Form.Group>
+
             <br />
             <Button variant="success" type="submit" block>
               Update Task
             </Button>
+            <Button
+              variant="danger"
+              block
+              onClick={() => {
+                setShowDeleteTaskModal(true);
+                props.handleClose();
+              }}
+            >
+              Delete Task
+            </Button>
           </Form>
         </Modal.Body>
       </Modal>
+      <DeleteTaskModal
+        show={showDeleteTaskModal}
+        taskId={props.task._id}
+        refetchData={props.refetchData}
+        handleClose={() => {
+          setShowDeleteTaskModal(false);
+        }}
+      />
     </>
   );
 };

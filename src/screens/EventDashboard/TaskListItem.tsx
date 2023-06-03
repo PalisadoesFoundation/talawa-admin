@@ -11,16 +11,26 @@ import { green } from '@mui/material/colors';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { UpdateTaskModal } from './TaskModals/UpdateTaskModal';
 
+interface UserInterface {
+  _id: string;
+  firstName: string;
+  lastName: string;
+}
 interface TaskInterface {
   _id: string;
   title: string;
   deadline: string;
   description: string;
+  volunteers: [UserInterface];
 }
 
 interface PropType {
   task: TaskInterface;
   refetchData: () => void;
+  organization: {
+    _id: string;
+    members: [UserInterface];
+  };
 }
 
 export const TaskListItem = ({ task, refetchData }: PropType) => {

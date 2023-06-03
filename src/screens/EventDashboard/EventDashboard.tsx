@@ -19,6 +19,13 @@ interface EventTaskInterface {
   title: string;
   description: string;
   deadline: string;
+  volunteers: [
+    {
+      _id: string;
+      firstName: string;
+      lastName: string;
+    }
+  ];
 }
 interface EventProjectInterface {
   _id: string;
@@ -158,6 +165,7 @@ function EventDashboard(): JSX.Element {
                           {project.tasks.map((task) => (
                             <TaskListItem
                               task={task}
+                              organization={eventData.event.organization}
                               key={task._id}
                               refetchData={refetchEventData}
                             />
