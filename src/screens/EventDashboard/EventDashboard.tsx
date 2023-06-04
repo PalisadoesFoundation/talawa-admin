@@ -19,19 +19,17 @@ interface EventTaskInterface {
   title: string;
   description: string;
   deadline: string;
-  volunteers: [
-    {
-      _id: string;
-      firstName: string;
-      lastName: string;
-    }
-  ];
+  volunteers: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  }[];
 }
 interface EventProjectInterface {
   _id: string;
   title: string;
   description: string;
-  tasks: [EventTaskInterface];
+  tasks: EventTaskInterface[];
 }
 
 function EventDashboard(): JSX.Element {

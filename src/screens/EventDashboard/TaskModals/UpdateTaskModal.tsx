@@ -23,7 +23,7 @@ interface TaskInterface {
   title: string;
   deadline: string;
   description: string;
-  volunteers: [UserInterface];
+  volunteers: UserInterface[];
 }
 
 interface ModalPropType {
@@ -31,7 +31,7 @@ interface ModalPropType {
   task: TaskInterface;
   organization: {
     _id: string;
-    members: [UserInterface];
+    members: UserInterface[];
   };
   handleClose: () => void;
   refetchData: () => void;
@@ -143,27 +143,21 @@ export const UpdateTaskModal = (props: ModalPropType) => {
                     }
                     label={`${user.firstName} ${user.lastName}`}
                     variant="outlined"
-                    onClick={() => {
-                      console.log('I was clicked.');
-                    }}
-                    onDelete={() => {
-                      console.log('I was deleted');
-                    }}
                   />
                 ))}
-                <Button
-                  variant="outlined"
-                  endIcon={<ModeEditIcon />}
-                  color="primary"
-                  className="pt-2 mt-2"
-                  onClick={() => {
-                    setShowManageVolunteerModal(true);
-                    props.handleClose();
-                  }}
-                >
-                  Manage Volunteers
-                </Button>
               </Stack>
+              <Button
+                variant="outlined"
+                endIcon={<ModeEditIcon />}
+                color="primary"
+                className="pt-2 mt-2"
+                onClick={() => {
+                  setShowManageVolunteerModal(true);
+                  props.handleClose();
+                }}
+              >
+                Manage Volunteers
+              </Button>
             </Form.Group>
 
             <br />
@@ -199,6 +193,7 @@ export const UpdateTaskModal = (props: ModalPropType) => {
         }}
         volunteers={props.task.volunteers}
         organization={props.organization}
+        taskId={props.task._id}
       />
     </>
   );

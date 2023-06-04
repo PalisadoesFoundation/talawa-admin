@@ -534,3 +534,11 @@ export const DELETE_EVENT_TASK_MUTATION = gql`
     }
   }
 `;
+
+export const SET_TASK_VOLUNTEERS_MUTATION = gql`
+  mutation SetTaskVolunteers($id: ID!, $volunteers: [ID]!) {
+    setTaskVolunteers(id: $id, volunteers: $volunteers) {
+      _id
+    }
+  }
+`;

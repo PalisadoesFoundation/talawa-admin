@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import { useMutation } from '@apollo/client';
+import { SET_TASK_VOLUNTEERS_MUTATION } from 'GraphQl/Mutations/mutations';
+import { toast } from 'react-toastify';
 
 interface UserInterface {
   _id: string;
@@ -13,24 +16,40 @@ interface UserInterface {
 
 interface ModalPropType {
   show: boolean;
+  taskId: string;
   organization: {
     _id: string;
-    members: [UserInterface];
+    members: UserInterface[];
   };
-  volunteers: [UserInterface];
+  volunteers: UserInterface[];
   handleClose: () => void;
   refetchData: () => void;
 }
 
 export const ManageVolunteerModal = (props: ModalPropType) => {
-  const [volunteers, setVolunteers] = useState<UserInterface[]>([]);
+  const [volunteers, setVolunteers] = useState<UserInterface[]>(
+    props.volunteers
+  );
 
-  useEffect(() => {
-    setVolunteers(props.volunteers);
-  }, [props.volunteers]);
+  const [setMutation] = useMutation(SET_TASK_VOLUNTEERS_MUTATION);
 
   const handleSubmit = () => {
-    console.log('The form is now submitted');
+    toast.warn('Updating the volunteers...');
+    setMutation({
+      variables: {
+        volunteers: volunteers.map((volunteer) => volunteer._id),
+        id: props.taskId,
+      },
+    })
+      .then(() => {
+        toast.success('Successfully updated the volunteers!');
+        props.refetchData();
+        props.handleClose();
+      })
+      .catch((err) => {
+        toast.error('There was an error in updating the volunteers!');
+        toast.error(err.message);
+      });
   };
 
   return (

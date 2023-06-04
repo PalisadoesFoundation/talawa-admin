@@ -21,7 +21,7 @@ interface TaskInterface {
   title: string;
   deadline: string;
   description: string;
-  volunteers: [UserInterface];
+  volunteers: UserInterface[];
 }
 
 interface PropType {
@@ -29,7 +29,7 @@ interface PropType {
   refetchData: () => void;
   organization: {
     _id: string;
-    members: [UserInterface];
+    members: UserInterface[];
   };
 }
 
