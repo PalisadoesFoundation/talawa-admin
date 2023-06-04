@@ -11,11 +11,11 @@ import MemberRequestCard from 'components/MemberRequestCard/MemberRequestCard';
 import { useQuery } from '@apollo/client';
 import { MEMBERSHIP_REQUEST } from 'GraphQl/Queries/Queries';
 import { useSelector } from 'react-redux';
-import { RootState } from 'state/reducers';
+import type { RootState } from 'state/reducers';
 import { useTranslation } from 'react-i18next';
 import defaultImg from 'assets/third_image.png';
 
-function OrgSettings(): JSX.Element {
+function orgSettings(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgSettings',
   });
@@ -24,7 +24,7 @@ function OrgSettings(): JSX.Element {
   const [screenVariable, setScreenVariable] = React.useState(0);
   const [screenDisplayVariable, setDisplayScreenVariable] = React.useState('');
 
-  const handleClick = (number: any) => {
+  const handleClick = (number: any): void => {
     if (number === 1) {
       setDisplayScreenVariable('updateYourDetails');
       setScreenVariable(1);
@@ -67,7 +67,7 @@ function OrgSettings(): JSX.Element {
 
   return (
     <>
-      <AdminNavbar targets={targets} url_1={configUrl} />
+      <AdminNavbar targets={targets} url1={configUrl} />
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
@@ -78,7 +78,7 @@ function OrgSettings(): JSX.Element {
                   type="button"
                   value="userupdate"
                   data-testid="userUpdateBtn"
-                  onClick={() => handleClick(1)}
+                  onClick={(): void => handleClick(1)}
                   // onClick={() => setScreenVariable(1)}
                 >
                   {t('updateYourDetails')}
@@ -88,7 +88,7 @@ function OrgSettings(): JSX.Element {
                   type="button"
                   value="userPasswordUpdate"
                   data-testid="userPasswordUpdateBtn"
-                  onClick={() => handleClick(5)}
+                  onClick={(): void => handleClick(5)}
                   // onClick={() => setScreenVariable(1)}
                 >
                   {t('updateYourPassword')}
@@ -98,7 +98,7 @@ function OrgSettings(): JSX.Element {
                   type="button"
                   value="orgupdate"
                   data-testid="orgUpdateBtn"
-                  onClick={() => handleClick(2)}
+                  onClick={(): void => handleClick(2)}
                   // onClick={() => setScreenVariable(2)}
                 >
                   {t('updateOrganization')}
@@ -108,7 +108,7 @@ function OrgSettings(): JSX.Element {
                   type="button"
                   value="orgdelete"
                   data-testid="orgDeleteBtn"
-                  onClick={() => handleClick(3)}
+                  onClick={(): void => handleClick(3)}
                   // onClick={() => setScreenVariable(3)}
                 >
                   {t('deleteOrganization')}
@@ -118,7 +118,7 @@ function OrgSettings(): JSX.Element {
                   type="button"
                   value="orgdelete"
                   data-testid="orgDeleteBtn2"
-                  onClick={() => handleClick(4)}
+                  onClick={(): void => handleClick(4)}
                   // onClick={() => setScreenVariable(4)}
                 >
                   {t('seeRequest')}
@@ -199,4 +199,4 @@ function OrgSettings(): JSX.Element {
   );
 }
 
-export default OrgSettings;
+export default orgSettings;

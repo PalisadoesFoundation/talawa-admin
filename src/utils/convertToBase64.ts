@@ -3,8 +3,8 @@ const convertToBase64 = async (file: File): Promise<string> => {
     const res = await new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
+      reader.onload = (): void => resolve(reader.result);
+      reader.onerror = (error): void => reject(error);
     });
     return `${res}`;
   } catch (error) {

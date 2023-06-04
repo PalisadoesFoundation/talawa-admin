@@ -1,4 +1,4 @@
-export interface Action {
+export interface InterfaceAction {
   type: string;
   payload: any;
 }

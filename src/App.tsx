@@ -22,7 +22,7 @@ import Requests from 'screens/Requests/Requests';
 import BlockUser from 'screens/BlockUser/BlockUser';
 import MemberDetail from 'screens/MemberDetail/MemberDetail';
 
-function App(): JSX.Element {
+function app(): JSX.Element {
   /*const { updatePluginLinks, updateInstalled } = bindActionCreators(
     actionCreators,
     dispatch
@@ -52,12 +52,12 @@ function App(): JSX.Element {
 
   const extraRoutes = Object.entries(installedPlugins).map(
     (plugin: any, index) => {
-      const ExtraComponent = plugin[1];
+      const extraComponent = plugin[1];
       return (
         <SecuredRoute
           key={index}
           path={`/plugin/${plugin[0].toLowerCase()}`}
-          component={ExtraComponent}
+          component={extraComponent}
         />
       );
     }
@@ -104,4 +104,4 @@ function App(): JSX.Element {
   );
 }
 
-export default App;
+export default app;

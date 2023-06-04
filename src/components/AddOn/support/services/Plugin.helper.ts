@@ -1,15 +1,15 @@
 class PluginHelper {
-  fetchStore = async () => {
+  fetchStore = async (): Promise<any> => {
     const result = await fetch(`http://localhost:3005/store`);
     return await result.json();
   };
 
-  fetchInstalled = async () => {
+  fetchInstalled = async (): Promise<any> => {
     const result = await fetch(`http://localhost:3005/installed`);
     return await result.json();
   };
 
-  generateLinks = (plugins: any[]) => {
+  generateLinks = (plugins: any[]): { name: string; url: string }[] => {
     return plugins
       .filter((plugin: any) => plugin.enabled)
       .map((installedPlugin: any) => {

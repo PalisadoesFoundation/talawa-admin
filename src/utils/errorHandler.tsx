@@ -1,4 +1,4 @@
-import { TFunction } from 'react-i18next';
+import type { TFunction } from 'react-i18next';
 import { toast } from 'react-toastify';
 /* 
   This function is used to handle api errors in the application.
@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 export const errorHandler = (
   t: TFunction<'translation', string>,
   error: any
-) => {
+): void => {
   if (error?.message === 'Failed to fetch') {
     toast.error(t('talawaApiUnavailable'));
   } else {

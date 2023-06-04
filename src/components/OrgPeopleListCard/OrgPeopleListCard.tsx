@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import defaultImg from 'assets/third_image.png';
 import { errorHandler } from 'utils/errorHandler';
 
-interface OrgPeopleListCardProps {
+interface InterfaceOrgPeopleListCardProps {
   key: string;
   id: string;
   memberName: string;
@@ -19,7 +19,9 @@ interface OrgPeopleListCardProps {
   memberEmail: string;
 }
 
-function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
+function orgPeopleListCard(
+  props: InterfaceOrgPeopleListCardProps
+): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
   const [remove] = useMutation(REMOVE_MEMBER_MUTATION);
 
@@ -27,7 +29,7 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
     keyPrefix: 'orgPeopleListCard',
   });
 
-  const RemoveMember = async () => {
+  const removeMember = async (): Promise<void> => {
     try {
       const { data } = await remove({
         variables: {
@@ -126,7 +128,7 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
               <button
                 type="button"
                 className="btn btn-success"
-                onClick={RemoveMember}
+                onClick={removeMember}
                 data-testid="removeMemberBtn"
               >
                 {t('yes')}
@@ -139,4 +141,4 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
   );
 }
 export {};
-export default OrgPeopleListCard;
+export default orgPeopleListCard;

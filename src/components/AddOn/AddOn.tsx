@@ -2,21 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import { useSelector } from 'react-redux';
-import { RootState } from 'state/reducers';
+import type { RootState } from 'state/reducers';
 
-interface AddOnProps {
+interface InterfaceAddOnProps {
   extras: any;
   name: string;
   children: any;
 }
 
 // Validate Extras
-function AddOn({ children }: AddOnProps): JSX.Element {
+function addOn({ children }: InterfaceAddOnProps): JSX.Element {
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
   return (
     <>
-      <AdminNavbar targets={targets} url_1={configUrl} />
+      <AdminNavbar targets={targets} url1={configUrl} />
       <div className="plugin-container" data-testid="pluginContainer">
         {children}
       </div>
@@ -24,13 +24,13 @@ function AddOn({ children }: AddOnProps): JSX.Element {
   );
 }
 
-AddOn.defaultProps = {
+addOn.defaultProps = {
   extras: {},
   name: '',
   children: null,
 };
 
-AddOn.propTypes = {
+addOn.propTypes = {
   extras: PropTypes.shape({
     components: PropTypes.shape({}),
     actions: PropTypes.shape({}),
@@ -39,4 +39,4 @@ AddOn.propTypes = {
   children: PropTypes.any,
 };
 
-export default AddOn;
+export default addOn;

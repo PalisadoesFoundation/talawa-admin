@@ -8,12 +8,13 @@ import { render } from '@testing-library/react';
 // import { store } from 'state/store';
 import {
   ApolloClient,
-  NormalizedCacheObject,
   ApolloProvider,
   InMemoryCache,
   ApolloLink,
   HttpLink,
 } from '@apollo/client';
+
+import type { NormalizedCacheObject } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
 import AddOnStore from './AddOnStore';
 import { Provider } from 'react-redux';

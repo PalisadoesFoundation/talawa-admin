@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import styles from './ContriStats.module.css';
 
-interface ContriStatsProps {
+interface InterfaceContriStatsProps {
   key: string;
   id: string;
   recentAmount: string;
@@ -11,7 +11,7 @@ interface ContriStatsProps {
   totalAmount: string;
 }
 
-function ContriStats(props: ContriStatsProps): JSX.Element {
+function contriStats(props: InterfaceContriStatsProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'contriStats',
   });
@@ -30,4 +30,4 @@ function ContriStats(props: ContriStatsProps): JSX.Element {
     </>
   );
 }
-export default ContriStats;
+export default contriStats;
