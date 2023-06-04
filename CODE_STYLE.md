@@ -38,7 +38,94 @@ code style should not be changed and must be followed.
 
 - All the Return fragment should be closed in empty tag
 
-- Use of classes is refrained 
+- Imports should be grouped in the following order:
+
+    - React imports
+
+    - Third party imports
+
+    - Local imports
+
+
+- If there is more than one import from a single library, they should be grouped together
+  
+Example - 
+
+If there is single import from a library, both ways will work
+
+```
+import Row from 'react-bootstrap/Row';
+// OR
+import { Row } from 'react-bootstrap';
+```
+
+If there are multiple imports from a library, they should be grouped together
+
+```
+import { Row, Col, Container } from 'react-bootstrap';
+```
+
+- Use of custom classes directly are refrained, use of modular css is encouraged along with bootstrap classes
+
+**Wrong way ❌**
+```
+<div className="myCustomClass">...</div>
+<div className={`${styles.myCustomClass1} myCustomClass2`}>...</div> // No using personal custom classes directly, here you should  not use myCustomClass2
+.container{...} // No changing the property of already existing classes reserved by boostrap directly in css files
+```
+
+**Correct ways ✅** 
+```
+<div className={styles.myCustomClass}>...</div> // Use custom class defined in modular css file
+<div className={`${styles.myCustomClass} relative bg-danger`}>...</div> // Use classes already defined in Bootstrap
+<div className={styles.myCustomClass + ' relative bg-danger' }>...</div> // Use classes already defined in Bootstrap
+```
+
+- All components should be either imported from React-Bootstrap library or Material UI library, components should not be written using plain Bootstrap classes and attributes without leveraging the React-Bootstrap library.
+
+**Example: Bootstrap Dropdown**
+
+**Wrong way ❌**
+
+Using plain Bootstrap classes and attributes without leveraging the React-Bootstrap library should be refrained. While it may work for basic functionality, it doesn't fully integrate with React and may cause issues when dealing with more complex state management or component interactions. 
+```
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Dropdown button
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+        </ul>
+    </div>
+```
+    
+
+**Correct way ✅**
+
+It's recommended to use the React-Bootstrap library for seamless integration of Bootstrap components in a React application.
+```
+import Dropdown from 'react-bootstrap/Dropdown';
+
+function BasicExample() {
+  return (
+    <Dropdown>
+      <Dropdown.Toggle variant="success" id="dropdown-basic">
+        Dropdown Button
+      </Dropdown.Toggle>
+
+      <Dropdown.Menu>
+        <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+        <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+        <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
+  );
+}
+
+export default BasicExample;
+```
 
 
 ## Test and Code Linting 
