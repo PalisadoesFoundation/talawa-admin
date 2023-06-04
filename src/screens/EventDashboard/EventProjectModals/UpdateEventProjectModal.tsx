@@ -16,7 +16,6 @@ interface ModalPropType {
 }
 
 export const UpdateEventProjectModal = (props: ModalPropType) => {
-  console.log(props.project);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 

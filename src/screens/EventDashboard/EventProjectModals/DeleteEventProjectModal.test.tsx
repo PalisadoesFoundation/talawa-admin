@@ -36,8 +36,6 @@ const unsuccessfulMutationMock = [
   },
 ];
 
-// const link = new StaticMockLink(MOCKS, true);
-
 describe('Testing Delete Event Project Modal', () => {
   const props = {
     show: true,
