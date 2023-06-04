@@ -33,7 +33,11 @@ interface PropType {
   };
 }
 
-export const TaskListItem = ({ task, refetchData }: PropType) => {
+export const TaskListItem = ({
+  task,
+  refetchData,
+  organization: organizationData,
+}: PropType) => {
   const [showUpdateTaskModal, setShowUpdateTaskModal] = useState(false);
 
   return (
@@ -87,6 +91,7 @@ export const TaskListItem = ({ task, refetchData }: PropType) => {
             }}
             task={task}
             refetchData={refetchData}
+            organization={organizationData}
           />
         </div>
       </div>

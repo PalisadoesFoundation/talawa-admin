@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Modal, Button as BootstrapButton, Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/client';
 import dayjs, { Dayjs } from 'dayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { UPDATE_EVENT_PROJECT_TASK_MUTATION } from 'GraphQl/Mutations/mutations';
 import { DeleteTaskModal } from './DeleteTaskModal';
+import { ManageVolunteerModal } from './ManageVolunteerModal';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import Button from '@mui/material/Button';
 
 interface UserInterface {
   _id: string;
@@ -26,6 +29,10 @@ interface TaskInterface {
 interface ModalPropType {
   show: boolean;
   task: TaskInterface;
+  organization: {
+    _id: string;
+    members: [UserInterface];
+  };
   handleClose: () => void;
   refetchData: () => void;
 }
@@ -36,6 +43,8 @@ export const UpdateTaskModal = (props: ModalPropType) => {
   const [deadline, setDeadline] = useState<null | Dayjs>(null);
 
   const [showDeleteTaskModal, setShowDeleteTaskModal] = useState(false);
+  const [showManageVolunteerModal, setShowManageVolunteerModal] =
+    useState(false);
 
   useEffect(() => {
     setTitle(props.task.title);
@@ -142,14 +151,26 @@ export const UpdateTaskModal = (props: ModalPropType) => {
                     }}
                   />
                 ))}
+                <Button
+                  variant="outlined"
+                  endIcon={<ModeEditIcon />}
+                  color="primary"
+                  className="pt-2 mt-2"
+                  onClick={() => {
+                    setShowManageVolunteerModal(true);
+                    props.handleClose();
+                  }}
+                >
+                  Manage Volunteers
+                </Button>
               </Stack>
             </Form.Group>
 
             <br />
-            <Button variant="success" type="submit" block>
+            <BootstrapButton variant="success" type="submit" block>
               Update Task
-            </Button>
-            <Button
+            </BootstrapButton>
+            <BootstrapButton
               variant="danger"
               block
               onClick={() => {
@@ -158,7 +179,7 @@ export const UpdateTaskModal = (props: ModalPropType) => {
               }}
             >
               Delete Task
-            </Button>
+            </BootstrapButton>
           </Form>
         </Modal.Body>
       </Modal>
@@ -169,6 +190,15 @@ export const UpdateTaskModal = (props: ModalPropType) => {
         handleClose={() => {
           setShowDeleteTaskModal(false);
         }}
+      />
+      <ManageVolunteerModal
+        show={showManageVolunteerModal}
+        refetchData={props.refetchData}
+        handleClose={() => {
+          setShowManageVolunteerModal(false);
+        }}
+        volunteers={props.task.volunteers}
+        organization={props.organization}
       />
     </>
   );
