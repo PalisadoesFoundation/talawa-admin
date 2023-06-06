@@ -147,7 +147,7 @@ const MOCKS_EMPTY = [
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_EMPTY, true);
 
-async function wait(ms = 100) {
+async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -220,7 +220,7 @@ describe('Organisation List Page', () => {
   });
 
   test('Testing search functionality', async () => {
-    const Mocks = [
+    const mocks = [
       {
         request: {
           query: ORGANIZATION_CONNECTION_LIST,
@@ -253,7 +253,7 @@ describe('Organisation List Page', () => {
       },
     ];
 
-    const link = new StaticMockLink(Mocks, true);
+    const link = new StaticMockLink(mocks, true);
 
     render(
       <MockedProvider addTypename={false} link={link}>

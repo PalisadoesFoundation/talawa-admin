@@ -1,4 +1,5 @@
-import React, { ChangeEvent, SetStateAction } from 'react';
+import type { ChangeEvent, SetStateAction } from 'react';
+import React from 'react';
 import { Button, Form, InputGroup } from 'react-bootstrap';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
@@ -11,16 +12,16 @@ import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 
-interface RegisterProps {
+interface InterfaceRegisterProps {
   setCurrentMode: React.Dispatch<SetStateAction<string>>;
 }
 
-export default function Register(props: RegisterProps) {
+export default function register(props: InterfaceRegisterProps): JSX.Element {
   const { setCurrentMode } = props;
 
   const { t } = useTranslation('translation', { keyPrefix: 'userRegister' });
 
-  const handleModeChangeToLogin = () => {
+  const handleModeChangeToLogin = (): void => {
     setCurrentMode('login');
   };
 
@@ -34,7 +35,7 @@ export default function Register(props: RegisterProps) {
     confirmPassword: '',
   });
 
-  const handleRegister = async () => {
+  const handleRegister = async (): Promise<void> => {
     if (
       !(
         registerVariables.email &&
@@ -76,31 +77,33 @@ export default function Register(props: RegisterProps) {
     }
   };
 
-  const handleFirstName = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleFirstName = (e: ChangeEvent<HTMLInputElement>): void => {
     const firstName = e.target.value;
 
     setRegisterVariables({ ...registerVariables, firstName });
   };
 
-  const handleLastName = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleLastName = (e: ChangeEvent<HTMLInputElement>): void => {
     const lastName = e.target.value;
 
     setRegisterVariables({ ...registerVariables, lastName });
   };
 
-  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const email = e.target.value;
 
     setRegisterVariables({ ...registerVariables, email });
   };
 
-  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const password = e.target.value;
 
     setRegisterVariables({ ...registerVariables, password });
   };
 
-  const handleConfirmPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleConfirmPasswordChange = (
+    e: ChangeEvent<HTMLInputElement>
+  ): void => {
     const confirmPassword = e.target.value;
 
     setRegisterVariables({ ...registerVariables, confirmPassword });

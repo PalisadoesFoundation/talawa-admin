@@ -1,8 +1,11 @@
-import { Action } from 'state/helpers/Action';
+import type { InterfaceAction } from 'state/helpers/Action';
 
 const currentOrg = window.location.href.split('=')[1];
 
-const reducer = (state = INITIAL_STATE, action: Action) => {
+const reducer = (
+  state = INITIAL_STATE,
+  action: InterfaceAction
+): typeof INITIAL_STATE => {
   switch (action.type) {
     case 'UPDATE_TARGETS': {
       return Object.assign({}, INITIAL_STATE, {
@@ -66,7 +69,7 @@ const components = [
   { name: '', comp_id: 'member', component: 'MemberDetail' },
 ];
 
-const generateRoutes = (comps: any[]) => {
+const generateRoutes = (comps: any[]): any[] => {
   return comps
     .filter((comp) => comp.name && comp.name !== '')
     .map((comp) => {

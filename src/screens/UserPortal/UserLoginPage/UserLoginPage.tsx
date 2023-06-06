@@ -11,7 +11,7 @@ import TalawaImage from 'assets/talawa-logo-200x200.png';
 import Login from 'components/UserPortal/Login/Login';
 import Register from 'components/UserPortal/Register/Register';
 
-export default function UserLoginPage() {
+export default function userLoginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
 
   const currentLanguageCode = cookies.get('i18next') || 'en';
@@ -43,7 +43,9 @@ export default function UserLoginPage() {
           {languages.map((language, index: number) => (
             <Dropdown.Item
               key={index}
-              onClick={() => i18next.changeLanguage(language.code)}
+              onClick={async (): Promise<void> => {
+                await i18next.changeLanguage(language.code);
+              }}
               disabled={currentLanguageCode === language.code}
               data-testid={`changeLanguageBtn${index}`}
             >

@@ -1,4 +1,5 @@
-import React, { ChangeEvent, SetStateAction } from 'react';
+import type { ChangeEvent, SetStateAction } from 'react';
+import React from 'react';
 import { Button, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
@@ -11,16 +12,16 @@ import { LOGIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import styles from './Login.module.css';
 import { errorHandler } from 'utils/errorHandler';
 
-interface LoginProps {
+interface InterfaceLoginProps {
   setCurrentMode: React.Dispatch<SetStateAction<string>>;
 }
 
-export default function Login(props: LoginProps) {
+export default function login(props: InterfaceLoginProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userLogin' });
 
   const { setCurrentMode } = props;
 
-  const handleModeChangeToRegister = () => {
+  const handleModeChangeToRegister = (): void => {
     setCurrentMode('register');
   };
 
@@ -33,7 +34,7 @@ export default function Login(props: LoginProps) {
 
   const history = useHistory();
 
-  const handleLogin = async () => {
+  const handleLogin = async (): Promise<void> => {
     if (!(loginVariables.email && loginVariables.password)) {
       toast.error(t('invalidDetailsMessage'));
     } else {
@@ -64,7 +65,7 @@ export default function Login(props: LoginProps) {
     }
   };
 
-  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const email = e.target.value;
 
     setLoginVariables({
@@ -73,7 +74,7 @@ export default function Login(props: LoginProps) {
     });
   };
 
-  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const password = e.target.value;
 
     setLoginVariables({

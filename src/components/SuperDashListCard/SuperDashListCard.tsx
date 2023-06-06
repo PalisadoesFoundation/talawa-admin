@@ -6,7 +6,7 @@ import styles from './SuperDashListCard.module.css';
 import { useHistory } from 'react-router-dom';
 import AboutImg from 'assets/images/defaultImg.png';
 
-interface SuperDashListCardProps {
+interface InterfaceSuperDashListCardProps {
   key: string;
   id: string;
   orgName: string;
@@ -17,12 +17,14 @@ interface SuperDashListCardProps {
   members: any;
 }
 
-function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
+function superDashListCard(
+  props: InterfaceSuperDashListCardProps
+): JSX.Element {
   const userId = localStorage.getItem('id');
   const userType = localStorage.getItem('UserType');
   const history = useHistory();
 
-  function handleClick() {
+  function handleClick(): void {
     const url = '/orgdash/id=' + props.id;
 
     /*
@@ -90,4 +92,4 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
   );
 }
 export {};
-export default SuperDashListCard;
+export default superDashListCard;

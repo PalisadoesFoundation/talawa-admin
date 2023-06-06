@@ -4,12 +4,12 @@ import userEvent from '@testing-library/user-event';
 import AddOnRegister from './AddOnRegister';
 import {
   ApolloClient,
-  NormalizedCacheObject,
   ApolloProvider,
   InMemoryCache,
   ApolloLink,
   HttpLink,
 } from '@apollo/client';
+import type { NormalizedCacheObject } from '@apollo/client';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { BrowserRouter } from 'react-router-dom';
@@ -24,7 +24,7 @@ const httpLink = new HttpLink({
   },
 });
 
-async function wait(ms = 500) {
+async function wait(ms = 500): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);

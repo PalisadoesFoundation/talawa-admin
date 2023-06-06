@@ -8,11 +8,11 @@ global.fetch = jest.fn();
 
 import { format } from 'util';
 
-global.console.error = function (...args) {
+global.console.error = function (...args): void {
   throw new Error(format(...args));
 };
 
-global.console.warn = function (...args) {
+global.console.warn = function (...args): void {
   throw new Error(format(...args));
 };
 

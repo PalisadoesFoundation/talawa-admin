@@ -1,14 +1,16 @@
 import React from 'react';
 import styles from './OrganizationCardStart.module.css';
 
-interface OrganizationCardStartProps {
+interface InterfaceOrganizationCardStartProps {
   key: any;
   image: string;
   id: string;
   name: string;
 }
 
-function OrganizationCardStart(props: OrganizationCardStartProps): JSX.Element {
+function organizationCardStart(
+  props: InterfaceOrganizationCardStartProps
+): JSX.Element {
   const uri = '/orghome/i=' + props.id;
 
   return (
@@ -36,4 +38,4 @@ function OrganizationCardStart(props: OrganizationCardStartProps): JSX.Element {
   );
 }
 
-export default OrganizationCardStart;
+export default organizationCardStart;

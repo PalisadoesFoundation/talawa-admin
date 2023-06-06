@@ -1,11 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import {
-  ApolloClient,
-  NormalizedCacheObject,
-  ApolloProvider,
-  InMemoryCache,
-} from '@apollo/client';
+import type { NormalizedCacheObject } from '@apollo/client';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { I18nextProvider } from 'react-i18next';
 
 import OrgDelete from './OrgDelete';

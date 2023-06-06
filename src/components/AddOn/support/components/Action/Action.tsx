@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 
 // TODO: UI logic for embedded actions (hide label)
-interface ActionProps {
+interface InterfaceActionProps {
   children: any;
   label: string;
 }
 
 // TODO: props => Validate child element type, register functions from children for global use?,
-function Action(props: ActionProps): JSX.Element {
+function action(props: InterfaceActionProps): JSX.Element {
   const actionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -22,4 +22,4 @@ function Action(props: ActionProps): JSX.Element {
   );
 }
 
-export default Action;
+export default action;

@@ -1,4 +1,5 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 
@@ -11,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 import defaultImg from 'assets/third_image.png';
 import { errorHandler } from 'utils/errorHandler';
 
-interface OrgPostCardProps {
+interface InterfaceOrgPostCardProps {
   key: string;
   id: string;
   postTitle: string;
@@ -21,7 +22,7 @@ interface OrgPostCardProps {
   postVideo: string;
 }
 
-function OrgPostCard(props: OrgPostCardProps): JSX.Element {
+function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
   const [postformState, setPostFormState] = useState({
     posttitle: '',
     postinfo: '',
@@ -29,7 +30,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
 
   const [togglePost, setPostToggle] = useState('Read more');
 
-  function handletoggleClick() {
+  function handletoggleClick(): void {
     if (togglePost === 'Read more') {
       setPostToggle('hide');
     } else {
@@ -51,7 +52,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
   const [create] = useMutation(DELETE_POST_MUTATION);
   const [updatePost] = useMutation(UPDATE_POST_MUTATION);
 
-  const DeletePost = async () => {
+  const deletePost = async (): Promise<void> => {
     try {
       const { data } = await create({
         variables: {
@@ -74,13 +75,15 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
 
   const handleInputEvent = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  ): void => {
     const { name, value } = e.target;
 
     setPostFormState({ ...postformState, [name]: value });
   };
 
-  const updatePostHandler = async (e: ChangeEvent<HTMLFormElement>) => {
+  const updatePostHandler = async (
+    e: ChangeEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
 
     try {
@@ -229,7 +232,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
               <button
                 type="button"
                 className="btn btn-success"
-                onClick={DeletePost}
+                onClick={deletePost}
                 data-testid="deletePostBtn"
               >
                 {t('yes')}
@@ -345,4 +348,4 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
     </>
   );
 }
-export default OrgPostCard;
+export default orgPostCard;
