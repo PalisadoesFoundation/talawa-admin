@@ -53,22 +53,22 @@ function orgList(): JSX.Element {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [create, { loading: createOrgLoading }] = useMutation(
+  const [create, { loading: loading3 }] = useMutation(
     CREATE_ORGANIZATION_MUTATION
   );
 
   const {
-    data: userOrgListData,
-    loading: userOrgListLoading,
-    error: userOrgListError,
+    data: data2,
+    loading: loading2,
+    error: errorUser,
   } = useQuery(USER_ORGANIZATION_LIST, {
     variables: { id: localStorage.getItem('id') },
   });
 
   const {
-    data: orgListData,
-    loading: orgListLoading,
-    error: orgListError,
+    data,
+    loading,
+    error: errorList,
     refetch,
   } = useQuery(ORGANIZATION_CONNECTION_LIST);
   /*istanbul ignore next*/
@@ -139,7 +139,7 @@ function orgList(): JSX.Element {
     }
   };
 
-  if (orgListLoading || userOrgListLoading || createOrgLoading) {
+  if (loading || loading2 || loading3) {
     return (
       <>
         <div className={styles.loader}></div>
@@ -148,7 +148,7 @@ function orgList(): JSX.Element {
   }
 
   /* istanbul ignore next */
-  if (orgListError || userOrgListError) {
+  if (errorList || errorUser) {
     window.location.assign('/');
   }
 
@@ -176,8 +176,8 @@ function orgList(): JSX.Element {
   };
   let dataRevOrg;
   const debouncedHandleSearchByName = debounce(handleSearchByName);
-  if (orgListData) {
-    dataRevOrg = orgListData.organizationsConnection.slice().reverse();
+  if (data) {
+    dataRevOrg = data.organizationsConnection.slice().reverse();
   }
   return (
     <>
@@ -192,25 +192,23 @@ function orgList(): JSX.Element {
               <p>
                 {t('name')}:
                 <span>
-                  {userOrgListData?.user.firstName}{' '}
-                  {userOrgListData?.user.lastName}
+                  {data2?.user.firstName} {data2?.user.lastName}
                 </span>
               </p>
               <p>
-                {t('designation')}:
-                <span> {userOrgListData?.user.userType}</span>
+                {t('designation')}:<span> {data2?.user.userType}</span>
               </p>
               <div className={styles.userEmail}>
                 {t('email')}:
                 <p>
-                  {(userOrgListData?.user.email || '').substring(
+                  {(data2?.user.email || '').substring(
                     0,
-                    (userOrgListData?.user.email || '').length / 2
+                    (data2?.user.email || '').length / 2
                   )}
                   <span>
-                    {userOrgListData?.user.email.substring(
-                      userOrgListData?.user.email.length / 2,
-                      userOrgListData?.user.email.length
+                    {data2?.user.email.substring(
+                      data2?.user.email.length / 2,
+                      data2?.user.email.length
                     )}
                   </span>
                 </p>
@@ -244,21 +242,20 @@ function orgList(): JSX.Element {
                 onChange={debouncedHandleSearchByName}
                 style={{
                   display:
-                    userOrgListData &&
-                    userOrgListData.user.userType !== 'SUPERADMIN'
+                    data2 && data2.user.userType !== 'SUPERADMIN'
                       ? 'none'
                       : 'block',
                 }}
               />
             </div>
             <div className={styles.list_box} data-testid="organizations-list">
-              {orgListData?.organizationsConnection.length > 0 ? (
+              {data?.organizationsConnection.length > 0 ? (
                 (rowsPerPage > 0
                   ? dataRevOrg.slice(
                       page * rowsPerPage,
                       page * rowsPerPage + rowsPerPage
                     )
-                  : orgListData.organizationsConnection
+                  : data.organizationsConnection
                 ).map(
                   (datas: {
                     _id: string;
@@ -269,10 +266,7 @@ function orgList(): JSX.Element {
                     createdAt: string;
                     location: string | null;
                   }) => {
-                    if (
-                      userOrgListData &&
-                      userOrgListData.user.userType == 'SUPERADMIN'
-                    ) {
+                    if (data2 && data2.user.userType == 'SUPERADMIN') {
                       return (
                         <SuperDashListCard
                           id={datas._id}
@@ -287,9 +281,7 @@ function orgList(): JSX.Element {
                           orgLocation={datas.location}
                         />
                       );
-                    } else if (
-                      isAdminForCurrentOrg(userOrgListData?.user, datas)
-                    ) {
+                    } else if (isAdminForCurrentOrg(data2?.user, datas)) {
                       /* istanbul ignore next */
                       return (
                         <AdminDashListCard
@@ -328,14 +320,10 @@ function orgList(): JSX.Element {
                 }}
               >
                 <tbody>
-                  {userOrgListData?.user.userType === 'SUPERADMIN' && (
+                  {data2?.user.userType === 'SUPERADMIN' && (
                     <tr data-testid="rowsPPSelect">
                       <PaginationList
-                        count={
-                          orgListData
-                            ? orgListData.organizationsConnection.length
-                            : 0
-                        }
+                        count={data ? data.organizationsConnection.length : 0}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}
