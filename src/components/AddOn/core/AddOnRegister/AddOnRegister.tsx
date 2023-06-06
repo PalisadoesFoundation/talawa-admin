@@ -7,11 +7,11 @@ import { ADD_PLUGIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
-interface AddOnRegisterProps {
+interface InterfaceAddOnRegisterProps {
   id?: string; // OrgId
   createdBy?: string; // User
 }
-interface formStateTypes {
+interface InterfaceFormStateTypes {
   pluginName: string;
   pluginCreatedBy: string;
   pluginDesc: string;
@@ -21,16 +21,19 @@ interface formStateTypes {
 
 const currentUrl = window.location.href.split('=')[1];
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
+function addOnRegister({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  createdBy,
+}: InterfaceAddOnRegisterProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'addOnRegister' });
 
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClose = (): void => setShow(false);
+  const handleShow = (): void => setShow(true);
   const [create] = useMutation(ADD_PLUGIN_MUTATION);
 
-  const [formState, setFormState] = useState<formStateTypes>({
+  const [formState, setFormState] = useState<InterfaceFormStateTypes>({
     pluginName: '',
     pluginCreatedBy: '',
     pluginDesc: '',
@@ -38,7 +41,7 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
     installedOrgs: [currentUrl],
   });
 
-  const handleRegister = async () => {
+  const handleRegister = async (): Promise<void> => {
     const { data } = await create({
       variables: {
         $pluginName: formState.pluginName,
@@ -81,7 +84,7 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
                 autoComplete="off"
                 required
                 value={formState.pluginName}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
                     pluginName: e.target.value,
@@ -97,7 +100,7 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
                 autoComplete="off"
                 required
                 value={formState.pluginCreatedBy}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
                     pluginCreatedBy: e.target.value,
@@ -114,7 +117,7 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
                 placeholder={t('pDesc')}
                 required
                 value={formState.pluginDesc}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
                     pluginDesc: e.target.value,
@@ -145,12 +148,12 @@ function AddOnRegister({ createdBy }: AddOnRegisterProps): JSX.Element {
   );
 }
 
-AddOnRegister.defaultProps = {
+addOnRegister.defaultProps = {
   createdBy: 'Admin',
 };
 
-AddOnRegister.propTypes = {
+addOnRegister.propTypes = {
   createdBy: PropTypes.string,
 };
 
-export default AddOnRegister;
+export default addOnRegister;

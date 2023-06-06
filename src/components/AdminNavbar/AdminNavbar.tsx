@@ -18,7 +18,7 @@ import { UPDATE_SPAM_NOTIFICATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { languages } from 'utils/languages';
 import { errorHandler } from 'utils/errorHandler';
 
-interface NavbarProps {
+interface InterfaceNavbarProps {
   targets: {
     url?: string;
     name: string;
@@ -28,10 +28,10 @@ interface NavbarProps {
       icon?: string;
     }[];
   }[];
-  url_1: string;
+  url1: string;
 }
 
-function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
+function adminNavbar({ targets, url1 }: InterfaceNavbarProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'adminNavbar' });
 
   const [spamCountData, setSpamCountData] = useState([]);
@@ -46,14 +46,14 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
     variables: { id: currentUrl },
   });
   const [updateSpam] = useMutation(UPDATE_SPAM_NOTIFICATION_MUTATION);
-  const { data: data_2 } = useQuery(USER_ORGANIZATION_LIST, {
+  const { data: data2 } = useQuery(USER_ORGANIZATION_LIST, {
     variables: { id: localStorage.getItem('id') },
   });
 
-  const isSuperAdmin = data_2?.user.userType === 'SUPERADMIN';
+  const isSuperAdmin = data2?.user.userType === 'SUPERADMIN';
 
   useEffect(() => {
-    const handleUpdateSpam = async () => {
+    const handleUpdateSpam = async (): Promise<void> => {
       const spamId = localStorage.getItem('spamId');
       if (spamId) {
         try {
@@ -92,9 +92,9 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
 
   const currentLanguageCode = Cookies.get('i18next') || 'en';
 
-  const handleSpamNotification = (spamId: string) => {
+  const handleSpamNotification = (spamId: string): void => {
     localStorage.setItem('spamId', spamId);
-    window.location.assign(`/blockuser/id=${url_1}`);
+    window.location.assign(`/blockuser/id=${url1}`);
   };
 
   /* istanbul ignore next */
@@ -102,9 +102,9 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
     window.location.replace('/orglist');
   }
 
-  let OrgName;
+  let orgName;
   if (orgData) {
-    OrgName = orgData?.organizations[0].name;
+    orgName = orgData?.organizations[0].name;
   }
 
   return (
@@ -125,7 +125,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                 data-testid={'orgLogoAbsent'}
               />
             )}
-            <strong>{OrgName}</strong>
+            <strong>{orgName}</strong>
           </div>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
@@ -212,7 +212,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                     {spamCountData.length}
                   </span>
                 </Dropdown.Item>
-                <Dropdown.Item as={Link} to={`/orgsetting/id=${url_1}`}>
+                <Dropdown.Item as={Link} to={`/orgsetting/id=${url1}`}>
                   <i className="fa fa-cogs"></i>&ensp; {t('settings')}
                 </Dropdown.Item>
                 <Dropdown className={styles.languageDropdown}>
@@ -228,7 +228,9 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                       <Dropdown.Item key={index}>
                         <button
                           className="dropdown-item"
-                          onClick={() => i18next.changeLanguage(language.code)}
+                          onClick={async (): Promise<void> => {
+                            await i18next.changeLanguage(language.code);
+                          }}
                           disabled={currentLanguageCode === language.code}
                           data-testid={`changeLanguageBtn${index}`}
                         >
@@ -242,7 +244,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                   </Dropdown.Menu>
                 </Dropdown>
                 <Dropdown.Item
-                  onClick={() => {
+                  onClick={(): void => {
                     localStorage.clear();
                     window.location.replace('/');
                   }}
@@ -284,7 +286,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                 spamCountData.map((spam: any) => (
                   <div
                     className={`border rounded p-3 mb-2 ${styles.notificationList}`}
-                    onClick={() => handleSpamNotification(spam._id)}
+                    onClick={(): void => handleSpamNotification(spam._id)}
                     key={spam._id}
                     data-testid={`spamNotification${spam._id}`}
                   >
@@ -312,4 +314,4 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
   );
 }
 
-export default AdminNavbar;
+export default adminNavbar;

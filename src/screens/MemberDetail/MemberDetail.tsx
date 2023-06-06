@@ -9,7 +9,7 @@ import UserUpdate from 'components/UserUpdate/UserUpdate';
 
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
-import { RootState } from 'state/reducers';
+import type { RootState } from 'state/reducers';
 import styles from './MemberDetail.module.css';
 import { languages } from 'utils/languages';
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -56,7 +56,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     window.location.assign(`/orgpeople/id=${currentUrl}`);
   }
 
-  const AddAdmin = async () => {
+  const addAdmin = async (): Promise<void> => {
     try {
       const { data } = await adda({
         variables: {
@@ -80,7 +80,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
   return (
     <>
-      <AdminNavbar targets={targets} url_1={configUrl} />
+      <AdminNavbar targets={targets} url1={configUrl} />
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
@@ -105,14 +105,14 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 <p className={styles.logintitle}>{t('title')}</p>
                 <button
                   className={styles.memberfontcreatedbtn}
-                  onClick={AddAdmin}
+                  onClick={addAdmin}
                 >
                   {t('addAdmin')}
                 </button>
                 <button
                   className={styles.memberfontcreatedbtn}
                   role="stateBtn"
-                  onClick={() => {
+                  onClick={(): void => {
                     setState(2);
                   }}
                 >

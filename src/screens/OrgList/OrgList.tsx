@@ -1,4 +1,5 @@
-import React, { ChangeEvent, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { Form } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
@@ -24,7 +25,7 @@ import AdminDashListCard from 'components/AdminDashListCard/AdminDashListCard';
 import { Alert, AlertTitle } from '@mui/material';
 import { errorHandler } from 'utils/errorHandler';
 
-function OrgList(): JSX.Element {
+function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
 
   document.title = t('title');
@@ -44,10 +45,10 @@ function OrgList(): JSX.Element {
 
   const isSuperAdmin = localStorage.getItem('UserType') !== 'SUPERADMIN';
 
-  const showInviteModal = () => {
+  const showInviteModal = (): void => {
     setmodalIsOpen(true);
   };
-  const hideInviteModal = () => {
+  const hideInviteModal = (): void => {
     setmodalIsOpen(false);
   };
 
@@ -71,26 +72,26 @@ function OrgList(): JSX.Element {
     refetch,
   } = useQuery(ORGANIZATION_CONNECTION_LIST);
   /*istanbul ignore next*/
-  interface UserType {
-    adminFor: Array<{
+  interface InterfaceUserType {
+    adminFor: {
       _id: string;
-    }>;
+    }[];
   }
   /*istanbul ignore next*/
-  interface CurrentOrgType {
+  interface InterfaceCurrentOrgType {
     _id: string;
   }
   /*istanbul ignore next*/
   const isAdminForCurrentOrg = (
-    user: UserType | undefined,
-    currentOrg: CurrentOrgType
+    user: InterfaceUserType | undefined,
+    currentOrg: InterfaceCurrentOrgType
   ): boolean => {
     return (
       user?.adminFor.length === 1 && user?.adminFor[0]._id === currentOrg._id
     );
   };
 
-  const CreateOrg = async (e: ChangeEvent<HTMLFormElement>) => {
+  const createOrg = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
     const {
@@ -155,19 +156,19 @@ function OrgList(): JSX.Element {
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
-  ) => {
+  ): void => {
     setPage(newPage);
   };
 
   /* istanbul ignore next */
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  ): void => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
-  const handleSearchByName = (e: any) => {
+  const handleSearchByName = (e: any): void => {
     const { value } = e.target;
     refetch({
       filter: value,
@@ -350,7 +351,7 @@ function OrgList(): JSX.Element {
       </Row>
       <Modal
         isOpen={modalisOpen}
-        onRequestClose={() => setmodalIsOpen(false)}
+        onRequestClose={(): void => setmodalIsOpen(false)}
         style={{
           overlay: { backgroundColor: 'grey' },
         }}
@@ -374,7 +375,7 @@ function OrgList(): JSX.Element {
                 ></i>
               </a>
             </div>
-            <Form onSubmitCapture={CreateOrg}>
+            <Form onSubmitCapture={createOrg}>
               <label htmlFor="orgname">{t('name')}</label>
               <input
                 type="name"
@@ -384,7 +385,7 @@ function OrgList(): JSX.Element {
                 autoComplete="off"
                 required
                 value={formState.name}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
                     name: e.target.value,
@@ -399,7 +400,7 @@ function OrgList(): JSX.Element {
                 autoComplete="off"
                 required
                 value={formState.descrip}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
                     descrip: e.target.value,
@@ -414,7 +415,7 @@ function OrgList(): JSX.Element {
                 autoComplete="off"
                 required
                 value={formState.location}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
                     location: e.target.value,
@@ -429,7 +430,7 @@ function OrgList(): JSX.Element {
                     id="ispublic"
                     type="checkbox"
                     defaultChecked={formState.ispublic}
-                    onChange={() =>
+                    onChange={(): void =>
                       setFormState({
                         ...formState,
                         ispublic: !formState.ispublic,
@@ -443,7 +444,7 @@ function OrgList(): JSX.Element {
                     id="visible"
                     type="checkbox"
                     defaultChecked={formState.visible}
-                    onChange={() =>
+                    onChange={(): void =>
                       setFormState({
                         ...formState,
                         visible: !formState.visible,
@@ -460,7 +461,7 @@ function OrgList(): JSX.Element {
                   name="photo"
                   type="file"
                   multiple={false}
-                  onChange={async (e) => {
+                  onChange={async (e): Promise<void> => {
                     const file = e.target.files?.[0];
                     if (file)
                       setFormState({
@@ -487,4 +488,4 @@ function OrgList(): JSX.Element {
   );
 }
 
-export default OrgList;
+export default orgList;

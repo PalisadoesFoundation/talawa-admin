@@ -1,4 +1,5 @@
-import React, { ChangeEvent, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
@@ -20,11 +21,11 @@ import {
   ORGANIZATIONS_LIST,
 } from 'GraphQl/Queries/Queries';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
-import { RootState } from 'state/reducers';
+import type { RootState } from 'state/reducers';
 import dayjs from 'dayjs';
 import { errorHandler } from 'utils/errorHandler';
 
-function OrganizationEvents(): JSX.Element {
+function organizationEvents(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationEvents',
   });
@@ -54,10 +55,10 @@ function OrganizationEvents(): JSX.Element {
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
 
-  const showInviteModal = () => {
+  const showInviteModal = (): void => {
     setEventModalIsOpen(true);
   };
-  const hideInviteModal = () => {
+  const hideInviteModal = (): void => {
     setEventModalIsOpen(false);
   };
 
@@ -80,9 +81,11 @@ function OrganizationEvents(): JSX.Element {
   const userId = localStorage.getItem('id') as string;
   const userRole = localStorage.getItem('UserType') as string;
 
-  const [create, { loading: loading_2 }] = useMutation(CREATE_EVENT_MUTATION);
+  const [create, { loading: loading2 }] = useMutation(CREATE_EVENT_MUTATION);
 
-  const CreateEvent = async (e: ChangeEvent<HTMLFormElement>) => {
+  const createEvent = async (
+    e: ChangeEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
     try {
       const { data: createEventData } = await create({
@@ -121,7 +124,7 @@ function OrganizationEvents(): JSX.Element {
     }
   };
 
-  if (loading || loading_2) {
+  if (loading || loading2) {
     return (
       <>
         <div className={styles.loader}></div>
@@ -138,7 +141,7 @@ function OrganizationEvents(): JSX.Element {
 
   return (
     <>
-      <AdminNavbar targets={targets} url_1={configUrl} />
+      <AdminNavbar targets={targets} url1={configUrl} />
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
@@ -190,7 +193,7 @@ function OrganizationEvents(): JSX.Element {
                 <i className="fa fa-times"></i>
               </a>
             </div>
-            <Form onSubmitCapture={CreateEvent}>
+            <Form onSubmitCapture={createEvent}>
               <label htmlFor="eventtitle">{t('eventTitle')}</label>
               <input
                 type="title"
@@ -199,7 +202,7 @@ function OrganizationEvents(): JSX.Element {
                 autoComplete="off"
                 required
                 value={formState.title}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
                     title: e.target.value,
@@ -214,7 +217,7 @@ function OrganizationEvents(): JSX.Element {
                 autoComplete="off"
                 required
                 value={formState.eventdescrip}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
                     eventdescrip: e.target.value,
@@ -229,7 +232,7 @@ function OrganizationEvents(): JSX.Element {
                 autoComplete="off"
                 required
                 value={formState.location}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
                     location: e.target.value,
@@ -243,7 +246,7 @@ function OrganizationEvents(): JSX.Element {
                     className={styles.datebox}
                     id="startdate"
                     selected={startDate}
-                    onChange={(date: Date | null) => setStartDate(date)}
+                    onChange={(date: Date | null): void => setStartDate(date)}
                     placeholderText={t('startDate')}
                   />
                 </div>
@@ -253,7 +256,7 @@ function OrganizationEvents(): JSX.Element {
                     className={styles.datebox}
                     id="enddate"
                     selected={endDate}
-                    onChange={(date: Date | null) => setEndDate(date)}
+                    onChange={(date: Date | null): void => setEndDate(date)}
                     placeholderText={t('endDate')}
                   />
                 </div>
@@ -266,7 +269,7 @@ function OrganizationEvents(): JSX.Element {
                       id="startTime"
                       placeholder={t('startTime')}
                       value={formState.startTime}
-                      onChange={(e) =>
+                      onChange={(e): void =>
                         setFormState({
                           ...formState,
                           startTime: e.target.value,
@@ -280,7 +283,7 @@ function OrganizationEvents(): JSX.Element {
                       id="endTime"
                       placeholder={t('endTime')}
                       value={formState.endTime}
-                      onChange={(e) =>
+                      onChange={(e): void =>
                         setFormState({
                           ...formState,
                           endTime: e.target.value,
@@ -298,7 +301,7 @@ function OrganizationEvents(): JSX.Element {
                     type="checkbox"
                     checked={alldaychecked}
                     data-testid="alldayCheck"
-                    onChange={() => setAllDayChecked(!alldaychecked)}
+                    onChange={(): void => setAllDayChecked(!alldaychecked)}
                   />
                 </div>
                 <div className={styles.dispflex}>
@@ -308,7 +311,9 @@ function OrganizationEvents(): JSX.Element {
                     type="checkbox"
                     data-testid="recurringCheck"
                     checked={recurringchecked}
-                    onChange={() => setRecurringChecked(!recurringchecked)}
+                    onChange={(): void =>
+                      setRecurringChecked(!recurringchecked)
+                    }
                   />
                 </div>
               </div>
@@ -320,7 +325,7 @@ function OrganizationEvents(): JSX.Element {
                     type="checkbox"
                     data-testid="ispublicCheck"
                     checked={publicchecked}
-                    onChange={() => setPublicChecked(!publicchecked)}
+                    onChange={(): void => setPublicChecked(!publicchecked)}
                   />
                 </div>
                 <div className={styles.dispflex}>
@@ -330,7 +335,9 @@ function OrganizationEvents(): JSX.Element {
                     type="checkbox"
                     data-testid="registrableCheck"
                     checked={registrablechecked}
-                    onChange={() => setRegistrableChecked(!registrablechecked)}
+                    onChange={(): void =>
+                      setRegistrableChecked(!registrablechecked)
+                    }
                   />
                 </div>
               </div>
@@ -350,4 +357,4 @@ function OrganizationEvents(): JSX.Element {
   );
 }
 
-export default OrganizationEvents;
+export default organizationEvents;
