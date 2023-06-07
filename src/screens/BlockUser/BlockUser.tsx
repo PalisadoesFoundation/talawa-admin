@@ -141,8 +141,6 @@ const Requests = () => {
 
   /* istanbul ignore next */
   if (error) {
-    console.error(error);
-
     toast.error(error.message);
   }
 
