@@ -26,7 +26,7 @@ interface TaskInterface {
   volunteers: UserInterface[];
 }
 
-interface ModalPropType {
+export interface ModalPropType {
   show: boolean;
   task: TaskInterface;
   organization: {
@@ -68,7 +68,7 @@ export const UpdateTaskModal = (props: ModalPropType) => {
     }
 
     if (toSubmit) {
-      toast.warn('Adding the task...');
+      toast.warn('Updating the task...');
       updateMutation({
         variables: {
           taskId: props.task._id,

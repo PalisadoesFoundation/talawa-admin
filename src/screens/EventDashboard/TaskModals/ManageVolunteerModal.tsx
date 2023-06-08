@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
@@ -27,9 +27,9 @@ interface ModalPropType {
 }
 
 export const ManageVolunteerModal = (props: ModalPropType) => {
-  const [volunteers, setVolunteers] = useState<UserInterface[]>(
-    props.volunteers
-  );
+  const [volunteers, setVolunteers] = useState<UserInterface[]>([]);
+
+  useEffect(() => setVolunteers(props.volunteers), [props.volunteers]);
 
   const [setMutation] = useMutation(SET_TASK_VOLUNTEERS_MUTATION);
 
@@ -37,8 +37,8 @@ export const ManageVolunteerModal = (props: ModalPropType) => {
     toast.warn('Updating the volunteers...');
     setMutation({
       variables: {
-        volunteers: volunteers.map((volunteer) => volunteer._id),
         id: props.taskId,
+        volunteers: volunteers.map((volunteer) => volunteer._id),
       },
     })
       .then(() => {
@@ -56,7 +56,7 @@ export const ManageVolunteerModal = (props: ModalPropType) => {
     <>
       <Modal show={props.show} onHide={props.handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Add Volunteers</Modal.Title>
+          <Modal.Title>Manage Volunteers</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <p>
@@ -66,17 +66,19 @@ export const ManageVolunteerModal = (props: ModalPropType) => {
           </p>
           <Stack spacing={3}>
             <Autocomplete
+              value={volunteers}
               multiple
               id="volunteers-assigned-outlined"
               options={props.organization.members}
               getOptionLabel={(memberOption) =>
                 `${memberOption.firstName} ${memberOption.lastName}`
               }
-              defaultValue={volunteers}
-              filterSelectedOptions
+              filterSelectedOptions={true}
+              // defaultValue={volunteers}
               onChange={(_, value) => {
                 setVolunteers(value);
               }}
+              autoHighlight={true}
               renderInput={(params) => (
                 <TextField
                   {...params}
