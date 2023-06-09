@@ -5,14 +5,14 @@ import { useQuery } from '@apollo/client';
 import { Container } from 'react-bootstrap';
 import styles from './EventDashboard.module.css';
 import ListNavbar from 'components/ListNavbar/ListNavbar';
-import { AddEventProjectModal } from './EventProjectModals/AddEventProjectModal';
-import { UpdateEventProjectModal } from './EventProjectModals/UpdateEventProjectModal';
-import { DeleteEventProjectModal } from './EventProjectModals/DeleteEventProjectModal';
-import { AddTaskModal } from './TaskModals/AddTaskModal';
+import { AddEventProjectModal } from 'components/EventProjectModals/AddEventProjectModal';
+import { UpdateEventProjectModal } from 'components/EventProjectModals/UpdateEventProjectModal';
+import { DeleteEventProjectModal } from 'components/EventProjectModals/DeleteEventProjectModal';
+import { AddTaskModal } from 'components/TaskModals/AddTaskModal';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import Button from 'react-bootstrap/Button';
 import List from '@mui/material/List';
-import { TaskListItem } from './TaskListItem';
+import { TaskListItem } from 'components/TaskListItem/TaskListItem';
 
 interface EventTaskInterface {
   _id: string;

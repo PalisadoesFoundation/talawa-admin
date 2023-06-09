@@ -10,7 +10,7 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { common } from '@mui/material/colors';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
-import { UpdateTaskModal } from './TaskModals/UpdateTaskModal';
+import { UpdateTaskModal } from 'components/TaskModals/UpdateTaskModal';
 
 interface UserInterface {
   _id: string;
