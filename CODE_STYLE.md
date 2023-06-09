@@ -38,6 +38,33 @@ code style should not be changed and must be followed.
 
 - All the Return fragment should be closed in empty tag
 
+- Imports should be grouped in the following order:
+
+    - React imports
+
+    - Third party imports
+
+    - Local imports
+
+
+- If there is more than one import from a single library, they should be grouped together
+  
+Example - 
+
+If there is single import from a library, both ways will work
+
+```
+import Row from 'react-bootstrap/Row';
+// OR
+import { Row } from 'react-bootstrap';
+```
+
+If there are multiple imports from a library, they should be grouped together
+
+```
+import { Row, Col, Container } from 'react-bootstrap';
+```
+
 - Use of custom classes directly are refrained, use of modular css is encouraged along with bootstrap classes
 
 **Wrong way ❌**
