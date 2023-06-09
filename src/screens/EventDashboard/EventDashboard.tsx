@@ -71,8 +71,6 @@ function EventDashboard(): JSX.Element {
     );
   }
 
-  console.log(eventData);
-
   return (
     <>
       <ListNavbar />
@@ -90,13 +88,15 @@ function EventDashboard(): JSX.Element {
               </p>
               <p className={styles.toporgloc}>
                 <b>Start:</b> {eventData.event.startDate}{' '}
-                {eventData.event.startTime
-                  ? ` - ${eventData.event.startTime}`
+                {eventData.event.startTime !== null
+                  ? `- ${eventData.event.startTime}`
                   : ``}
               </p>
               <p className={styles.toporgloc}>
                 <b>End:</b> {eventData.event.endDate}{' '}
-                {eventData.event.endTime ? ` - ${eventData.event.endTime}` : ``}
+                {eventData.event.endTime !== null
+                  ? `- ${eventData.event.endTime}`
+                  : ``}
               </p>
               <p className={styles.toporgloc}>
                 <b>Attendees:</b> {eventData.event.attendees.length}
@@ -105,18 +105,17 @@ function EventDashboard(): JSX.Element {
               {/* Buttons to trigger different modals */}
               <p className={styles.tagdetailsGreen}>
                 {
-                  <button
+                  <Button
                     type="button"
                     className="mt-3"
-                    data-testid="addEventProjectClick"
-                    data-toggle="addEventProjectModal"
-                    data-target="#addEventProjectModel"
+                    variant="success"
+                    aria-label="addEventProject"
                     onClick={() => {
                       setShowAddEventProjectModal(true);
                     }}
                   >
                     Add an Event Project
-                  </button>
+                  </Button>
                 }
               </p>
             </div>
@@ -173,6 +172,7 @@ function EventDashboard(): JSX.Element {
                         <div className="pr-3 mr-2">
                           <Button
                             type="button"
+                            aria-label="editEventProject"
                             variant="success"
                             className="m-2 ml-3"
                             size="sm"
@@ -186,6 +186,7 @@ function EventDashboard(): JSX.Element {
                           <Button
                             type="button"
                             variant="danger"
+                            aria-label="deleteEventProject"
                             className="m-1"
                             size="sm"
                             onClick={() => {
@@ -198,6 +199,7 @@ function EventDashboard(): JSX.Element {
                           <Button
                             type="button"
                             variant="outline-success"
+                            aria-label="addTask"
                             className="m-1 ml-8"
                             size="sm"
                             onClick={() => {
