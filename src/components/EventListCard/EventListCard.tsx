@@ -287,7 +287,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
             <form onSubmit={updateEventHandler}>
               <div className="modal-body">
                 <label htmlFor="eventtitle">{t('eventTitle')}</label>
-                <input
+                <Form.Control
                   type="title"
                   id="eventitle"
                   autoComplete="off"
@@ -302,7 +302,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                   }}
                 />
                 <label htmlFor="eventdescrip">{t('description')}</label>
-                <input
+                <Form.Control
                   type="eventdescrip"
                   id="eventdescrip"
                   autoComplete="off"
@@ -317,7 +317,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                   }}
                 />
                 <label htmlFor="eventLocation">{t('location')}</label>
-                <input
+                <Form.Control
                   type="text"
                   id="eventLocation"
                   autoComplete="off"
@@ -335,7 +335,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                   <div className={styles.datediv}>
                     <div className="mr-3">
                       <label htmlFor="startTime">{t('startTime')}</label>
-                      <input
+                      <Form.Control
                         id="startTime"
                         value={formState.startTime}
                         data-testid="updateStartTime"
@@ -349,7 +349,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                     </div>
                     <div>
                       <label htmlFor="endTime">{t('endTime')}</label>
-                      <input
+                      <Form.Control
                         id="endTime"
                         value={formState.endTime}
                         data-testid="updateEndTime"
@@ -366,7 +366,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                 <div className={styles.checkboxdiv}>
                   <div className={styles.dispflex}>
                     <label htmlFor="allday">{t('allDay')}?</label>
-                    <input
+                    <Form.Control
                       id="allday"
                       type="checkbox"
                       data-testid="updateAllDay"
@@ -376,7 +376,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                   </div>
                   <div className={styles.dispflex}>
                     <label htmlFor="recurring">{t('recurringEvent')}:</label>
-                    <input
+                    <Form.Control
                       id="recurring"
                       type="checkbox"
                       data-testid="updateRecurring"
@@ -388,7 +388,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                 <div className={styles.checkboxdiv}>
                   <div className={styles.dispflex}>
                     <label htmlFor="ispublic">{t('isPublic')}?</label>
-                    <input
+                    <Form.Control
                       id="ispublic"
                       type="checkbox"
                       data-testid="updateIsPublic"
@@ -398,7 +398,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                   </div>
                   <div className={styles.dispflex}>
                     <label htmlFor="registrable">{t('isRegistrable')}?</label>
-                    <input
+                    <Form.Control
                       id="registrable"
                       type="checkbox"
                       data-testid="updateRegistrable"

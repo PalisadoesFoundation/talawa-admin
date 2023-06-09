@@ -12,6 +12,7 @@ import styles from './ForgotPassword.module.css';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import Button from 'react-bootstrap/Button';
+import { Form } from 'react-bootstrap';
 
 const ForgotPassword = () => {
   const { t } = useTranslation('translation', {
@@ -130,7 +131,7 @@ const ForgotPassword = () => {
                   {t('registeredEmail')}:
                 </label>
                 <div className="col-sm-7">
-                  <input
+                  <Form.Control
                     type="email"
                     className="form-control"
                     id="registeredEmail"
@@ -160,7 +161,7 @@ const ForgotPassword = () => {
                   {t('enterOtp')}:
                 </label>
                 <div className="col-sm-10">
-                  <input
+                  <Form.Control
                     type="number"
                     className="form-control"
                     id="userOtp"
@@ -185,7 +186,7 @@ const ForgotPassword = () => {
                   {t('enterNewPassword')}:
                 </label>
                 <div className="col-sm-10">
-                  <input
+                  <Form.Control
                     type="password"
                     className="form-control"
                     id="newPassword"
@@ -211,7 +212,7 @@ const ForgotPassword = () => {
                   {t('cofirmNewPassword')}:
                 </label>
                 <div className="col-sm-10">
-                  <input
+                  <Form.Control
                     type="password"
                     className="form-control"
                     id="confirmNewPassword"

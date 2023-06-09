@@ -6,7 +6,7 @@ import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Link, useHistory } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
-import { Dropdown, Nav, Navbar } from 'react-bootstrap';
+import { Dropdown, Form, Nav, Navbar } from 'react-bootstrap';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { toast } from 'react-toastify';
 import cookies from 'js-cookie';
@@ -297,7 +297,7 @@ function LoginPage(): JSX.Element {
                   <div className={styles.dispflex}>
                     <div>
                       <label>{t('firstName')}</label>
-                      <input
+                      <Form.Control
                         type="text"
                         id="signfirstname"
                         placeholder={t('firstName')}
@@ -314,7 +314,7 @@ function LoginPage(): JSX.Element {
                     </div>
                     <div>
                       <label>{t('lastName')}</label>
-                      <input
+                      <Form.Control
                         type="text"
                         id="signlastname"
                         placeholder={t('lastName')}
@@ -331,7 +331,7 @@ function LoginPage(): JSX.Element {
                     </div>
                   </div>
                   <label>{t('email')}</label>
-                  <input
+                  <Form.Control
                     type="email"
                     id="signemail"
                     placeholder={t('email')}
@@ -347,7 +347,7 @@ function LoginPage(): JSX.Element {
                   />
                   <div className={styles.passwordalert}>
                     <label>{t('password')}</label>
-                    <input
+                    <Form.Control
                       type={show ? 'text' : 'password'}
                       id="signpassword"
                       data-testid="passwordField"
@@ -391,7 +391,7 @@ function LoginPage(): JSX.Element {
                   </div>
                   <div className={styles.passwordalert}>
                     <label>{t('confirmPassword')}</label>
-                    <input
+                    <Form.Control
                       type={showConfirmPassword ? 'text' : 'password'}
                       id="signpassword"
                       placeholder={t('confirmPassword')}
@@ -474,7 +474,7 @@ function LoginPage(): JSX.Element {
               </div>
               <form onSubmit={login_link}>
                 <label>{t('email')}</label>
-                <input
+                <Form.Control
                   type="email"
                   id="email"
                   className="input_box"
@@ -492,7 +492,7 @@ function LoginPage(): JSX.Element {
 
                 <label>{t('password')}</label>
                 <div>
-                  <input
+                  <Form.Control
                     type={show ? 'text' : 'password'}
                     className="input_box_second"
                     placeholder={t('enterPassword')}

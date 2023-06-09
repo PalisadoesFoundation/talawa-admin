@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import styles from './UserPasswordUpdate.module.css';
 import { toast } from 'react-toastify';
+import { Form } from 'react-bootstrap';
 
 interface UserPasswordUpdateProps {
   id: string;
@@ -70,7 +71,7 @@ const UserUpdate: React.FC<UserPasswordUpdateProps> = ({ id }): JSX.Element => {
           <div className={styles.dispflex}>
             <div>
               <label>{t('previousPassword')}</label>
-              <input
+              <Form.Control
                 type="password"
                 id="previousPassword"
                 placeholder={t('previousPassword')}
@@ -89,7 +90,7 @@ const UserUpdate: React.FC<UserPasswordUpdateProps> = ({ id }): JSX.Element => {
           <div className={styles.dispflex}>
             <div>
               <label>{t('newPassword')}</label>
-              <input
+              <Form.Control
                 type="password"
                 id="newPassword"
                 placeholder={t('newPassword')}
@@ -108,7 +109,7 @@ const UserUpdate: React.FC<UserPasswordUpdateProps> = ({ id }): JSX.Element => {
           <div className={styles.dispflex}>
             <div>
               <label>{t('confirmNewPassword')}</label>
-              <input
+              <Form.Control
                 type="password"
                 id="confirmNewPassword"
                 placeholder={t('confirmNewPassword')}

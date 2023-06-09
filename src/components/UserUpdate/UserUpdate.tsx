@@ -10,6 +10,7 @@ import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { languages } from 'utils/languages';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
+import { Form } from 'react-bootstrap';
 
 interface UserUpdateProps {
   id: string;
@@ -108,7 +109,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
           <div className={styles.dispflex}>
             <div>
               <label>{t('firstName')}</label>
-              <input
+              <Form.Control
                 type="input"
                 id="firstname"
                 placeholder={t('firstName')}
@@ -127,7 +128,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
           <div className={styles.dispflex}>
             <div>
               <label>{t('lastName')}</label>
-              <input
+              <Form.Control
                 type="input"
                 id="lastname"
                 placeholder={t('lastName')}
@@ -146,7 +147,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
           <div className={styles.dispflex}>
             <div>
               <label>{t('email')}</label>
-              <input
+              <Form.Control
                 type="email"
                 id="email"
                 placeholder={t('email')}
@@ -188,14 +189,15 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
           </div>
           <label htmlFor="orgphoto" className={styles.orgphoto}>
             {t('displayImage')}:
-            <input
+            <Form.Control
               accept="image/*"
               id="orgphoto"
               name="photo"
               type="file"
               multiple={false}
-              onChange={async (e) => {
-                const file = e.target.files?.[0];
+              onChange={async (e: React.ChangeEvent) => {
+                const target = e.target as HTMLInputElement;
+                const file = target.files && target.files[0];
                 if (file)
                   setFormState({
                     ...formState,

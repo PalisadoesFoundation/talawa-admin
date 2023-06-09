@@ -186,7 +186,7 @@ function OrgPost(): JSX.Element {
                   />
                 </div>
               </div>
-              <input
+              <Form.Control
                 type="text"
                 id="posttitle"
                 placeholder={showTitle ? t('searchTitle') : t('searchText')}
@@ -287,7 +287,7 @@ function OrgPost(): JSX.Element {
             </div>
             <Form onSubmitCapture={CreatePost}>
               <label htmlFor="posttitle">{t('postTitle')}</label>
-              <input
+              <Form.Control
                 type="title"
                 id="postitle"
                 placeholder={t('ptitle')}
@@ -318,14 +318,15 @@ function OrgPost(): JSX.Element {
               />
               <label htmlFor="postphoto" className={styles.orgphoto}>
                 {t('image')}:
-                <input
+                <Form.Control
                   accept="image/*"
                   id="postphoto"
                   name="photo"
                   type="file"
                   multiple={false}
-                  onChange={async (e) => {
-                    const file = e.target.files?.[0];
+                  onChange={async (e: React.ChangeEvent) => {
+                    const target = e.target as HTMLInputElement;
+                    const file = target.files && target.files[0];
                     if (file)
                       setPostFormState({
                         ...postformState,
@@ -336,7 +337,7 @@ function OrgPost(): JSX.Element {
                 />
               </label>
               <label htmlFor="postvideo">{t('video')}:</label>
-              <input
+              <Form.Control
                 accept="image/*"
                 id="postvideo"
                 name="video"

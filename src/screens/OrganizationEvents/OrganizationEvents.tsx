@@ -192,7 +192,7 @@ function OrganizationEvents(): JSX.Element {
             </div>
             <Form onSubmitCapture={CreateEvent}>
               <label htmlFor="eventtitle">{t('eventTitle')}</label>
-              <input
+              <Form.Control
                 type="title"
                 id="eventitle"
                 placeholder={t('enterTitle')}
@@ -207,7 +207,7 @@ function OrganizationEvents(): JSX.Element {
                 }}
               />
               <label htmlFor="eventdescrip">{t('description')}</label>
-              <input
+              <Form.Control
                 type="eventdescrip"
                 id="eventdescrip"
                 placeholder={t('enterDescrip')}
@@ -222,7 +222,7 @@ function OrganizationEvents(): JSX.Element {
                 }}
               />
               <label htmlFor="eventLocation">{t('location')}</label>
-              <input
+              <Form.Control
                 type="text"
                 id="eventLocation"
                 placeholder={t('eventLocation')}
@@ -262,7 +262,7 @@ function OrganizationEvents(): JSX.Element {
                 <div className={styles.datediv}>
                   <div className="mr-3">
                     <label htmlFor="startTime">{t('startTime')}</label>
-                    <input
+                    <Form.Control
                       id="startTime"
                       placeholder={t('startTime')}
                       value={formState.startTime}
@@ -276,7 +276,7 @@ function OrganizationEvents(): JSX.Element {
                   </div>
                   <div>
                     <label htmlFor="endTime">{t('endTime')}</label>
-                    <input
+                    <Form.Control
                       id="endTime"
                       placeholder={t('endTime')}
                       value={formState.endTime}
@@ -293,7 +293,8 @@ function OrganizationEvents(): JSX.Element {
               <div className={styles.checkboxdiv}>
                 <div className={styles.dispflex}>
                   <label htmlFor="allday">{t('allDay')}?</label>
-                  <input
+                  <Form.Switch
+                    className="ms-2 mt-3"
                     id="allday"
                     type="checkbox"
                     checked={alldaychecked}
@@ -303,7 +304,8 @@ function OrganizationEvents(): JSX.Element {
                 </div>
                 <div className={styles.dispflex}>
                   <label htmlFor="recurring">{t('recurringEvent')}:</label>
-                  <input
+                  <Form.Switch
+                    className="ms-2 mt-3"
                     id="recurring"
                     type="checkbox"
                     data-testid="recurringCheck"
@@ -315,7 +317,8 @@ function OrganizationEvents(): JSX.Element {
               <div className={styles.checkboxdiv}>
                 <div className={styles.dispflex}>
                   <label htmlFor="ispublic">{t('isPublic')}?</label>
-                  <input
+                  <Form.Switch
+                    className="ms-2 mt-3"
                     id="ispublic"
                     type="checkbox"
                     data-testid="ispublicCheck"
@@ -325,7 +328,8 @@ function OrganizationEvents(): JSX.Element {
                 </div>
                 <div className={styles.dispflex}>
                   <label htmlFor="registrable">{t('isRegistrable')}?</label>
-                  <input
+                  <Form.Switch
+                    className="ms-2 mt-3"
                     id="registrable"
                     type="checkbox"
                     data-testid="registrableCheck"

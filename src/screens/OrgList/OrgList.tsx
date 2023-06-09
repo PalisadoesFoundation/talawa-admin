@@ -231,7 +231,7 @@ function OrgList(): JSX.Element {
               >
                 + {t('createOrganization')}
               </Button>
-              <input
+              <Form.Control
                 type="name"
                 id="orgname"
                 placeholder="Search Organization"
@@ -364,7 +364,7 @@ function OrgList(): JSX.Element {
             </div>
             <Form onSubmitCapture={CreateOrg}>
               <label htmlFor="orgname">{t('name')}</label>
-              <input
+              <Form.Control
                 type="name"
                 id="orgname"
                 placeholder={t('enterName')}
@@ -380,7 +380,7 @@ function OrgList(): JSX.Element {
                 }}
               />
               <label htmlFor="descrip">{t('description')}</label>
-              <input
+              <Form.Control
                 type="descrip"
                 id="descrip"
                 placeholder={t('description')}
@@ -395,7 +395,7 @@ function OrgList(): JSX.Element {
                 }}
               />
               <label htmlFor="location">{t('location')}</label>
-              <input
+              <Form.Control
                 type="text"
                 id="location"
                 placeholder={t('location')}
@@ -413,7 +413,7 @@ function OrgList(): JSX.Element {
               <div className={styles.checkboxdiv}>
                 <div className={styles.dispflex}>
                   <label htmlFor="ispublic">{t('isPublic')}:</label>
-                  <input
+                  <Form.Control
                     id="ispublic"
                     type="checkbox"
                     defaultChecked={formState.ispublic}
@@ -427,7 +427,7 @@ function OrgList(): JSX.Element {
                 </div>
                 <div className={styles.dispflex}>
                   <label htmlFor="visible">{t('visibleInSearch')}: </label>
-                  <input
+                  <Form.Control
                     id="visible"
                     type="checkbox"
                     defaultChecked={formState.visible}
@@ -442,14 +442,15 @@ function OrgList(): JSX.Element {
               </div>
               <label htmlFor="orgphoto" className={styles.orgphoto}>
                 {t('displayImage')}:
-                <input
+                <Form.Control
                   accept="image/*"
                   id="orgphoto"
                   name="photo"
                   type="file"
                   multiple={false}
-                  onChange={async (e) => {
-                    const file = e.target.files?.[0];
+                  onChange={async (e: React.ChangeEvent) => {
+                    const target = e.target as HTMLInputElement;
+                    const file = target.files && target.files[0];
                     if (file)
                       setFormState({
                         ...formState,
