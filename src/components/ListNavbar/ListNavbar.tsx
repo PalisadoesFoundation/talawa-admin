@@ -1,5 +1,5 @@
 import React from 'react';
-import { Nav, Navbar } from 'react-bootstrap';
+import { Dropdown, Nav, Navbar } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { Link, NavLink } from 'react-router-dom';
 import i18next from 'i18next';
@@ -59,19 +59,22 @@ const ListNavbar = () => {
           )}
         </Nav>
         <Nav className="ml-auto">
-          <div className="dropdown mr-4">
-            <Button
-              className={`btn dropdown-toggle ${styles.languageBtn}`}
-              type="button"
-              data-toggle="dropdown"
-              aria-expanded="false"
-              title="Change Langauge"
+          <Dropdown
+            className={styles.languageBtn}
+            data-toggle="dropdown"
+            aria-expanded="false"
+            title="Change Langauge"
+          >
+            <Dropdown.Toggle
+              variant="success"
+              id="dropdown-basic"
+              data-testid="languageDropdownBtn"
             >
               <i className="fas fa-globe"></i>
-            </Button>
-            <div className="dropdown-menu">
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
               {languages.map((language, index: number) => (
-                <Button
+                <Dropdown.Item
                   key={index}
                   className="dropdown-item"
                   onClick={() => i18next.changeLanguage(language.code)}
@@ -79,13 +82,13 @@ const ListNavbar = () => {
                   data-testid={`changeLanguageBtn${index}`}
                 >
                   <span
-                    className={`fi fi-${language.country_code} mr-2`}
+                    className={`fi fi-${language.country_code} me-2`}
                   ></span>
                   {language.name}
-                </Button>
+                </Dropdown.Item>
               ))}
-            </div>
-          </div>
+            </Dropdown.Menu>
+          </Dropdown>
           <Button
             className={styles.logoutbtn}
             data-testid="logoutBtn"
