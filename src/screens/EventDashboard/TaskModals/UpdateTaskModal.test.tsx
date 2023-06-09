@@ -26,6 +26,7 @@ const successfulMutationMock = [
         title: 'Title',
         description: 'Description',
         taskId: 'task1',
+        completed: true,
         deadline: null,
       },
     },
@@ -47,6 +48,7 @@ const unsuccessfulMutationMock = [
         title: 'Title',
         description: 'Description',
         taskId: 'task1',
+        completed: true,
         deadline: null,
       },
     },
@@ -62,6 +64,7 @@ describe('Testing Update Event Task Modal', () => {
       title: 'Task 1',
       description: 'Description 1',
       deadline: oldDeadline.toString(),
+      completed: false,
       volunteers: [],
     },
     organization: {
@@ -120,6 +123,7 @@ describe('Testing Update Event Task Modal', () => {
     fireEvent.change(queryByLabelText('Deadline') as Element, {
       target: { value: newDeadline },
     });
+    fireEvent.click(queryByLabelText('Completed') as Element);
 
     // Click the update button
     fireEvent.click(queryByText('Update Task') as Element);
@@ -216,6 +220,7 @@ describe('Testing Update Event Task Modal', () => {
     fireEvent.change(queryByLabelText('Deadline') as Element, {
       target: { value: newDeadline },
     });
+    fireEvent.click(queryByLabelText('Completed') as Element);
 
     fireEvent.click(queryByText('Update Task') as Element);
 

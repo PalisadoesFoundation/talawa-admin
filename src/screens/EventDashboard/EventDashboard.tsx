@@ -19,6 +19,7 @@ interface EventTaskInterface {
   title: string;
   description: string;
   deadline: string;
+  completed: boolean;
   volunteers: {
     _id: string;
     firstName: string;

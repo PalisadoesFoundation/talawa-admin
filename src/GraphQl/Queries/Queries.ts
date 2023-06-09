@@ -123,6 +123,7 @@ export const EVENT_DETAILS = gql`
           title
           description
           deadline
+          completed
           volunteers {
             _id
             firstName

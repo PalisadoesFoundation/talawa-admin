@@ -7,8 +7,9 @@ import Typography from '@mui/material/Typography';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import { green } from '@mui/material/colors';
+import { common } from '@mui/material/colors';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import { UpdateTaskModal } from './TaskModals/UpdateTaskModal';
 
 interface UserInterface {
@@ -21,6 +22,7 @@ interface TaskInterface {
   title: string;
   deadline: string;
   description: string;
+  completed: boolean;
   volunteers: UserInterface[];
 }
 
@@ -47,14 +49,18 @@ export const TaskListItem = ({
           <ListItemAvatar>
             <Avatar
               sx={{
-                bgcolor: green[500],
+                bgcolor: common['white'],
                 width: 36,
                 height: 36,
               }}
               variant="rounded"
             >
               {' '}
-              <AssignmentIcon />
+              {task.completed ? (
+                <AssignmentTurnedInIcon color="success" fontSize="large" />
+              ) : (
+                <AssignmentIcon color="primary" fontSize="large" />
+              )}
             </Avatar>
           </ListItemAvatar>
           <ListItemText

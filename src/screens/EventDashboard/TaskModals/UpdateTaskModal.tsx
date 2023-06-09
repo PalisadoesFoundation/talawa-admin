@@ -23,6 +23,7 @@ interface TaskInterface {
   title: string;
   deadline: string;
   description: string;
+  completed: boolean;
   volunteers: UserInterface[];
 }
 
@@ -41,6 +42,7 @@ export const UpdateTaskModal = (props: ModalPropType) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [deadline, setDeadline] = useState<null | Dayjs>(null);
+  const [completed, setCompleted] = useState(false);
 
   const [showDeleteTaskModal, setShowDeleteTaskModal] = useState(false);
   const [showManageVolunteerModal, setShowManageVolunteerModal] =
@@ -50,6 +52,7 @@ export const UpdateTaskModal = (props: ModalPropType) => {
     setTitle(props.task.title);
     setDescription(props.task.description);
     setDeadline(dayjs(props.task.deadline));
+    setCompleted(props.task.completed);
   }, [props.task]);
 
   const [updateMutation] = useMutation(UPDATE_EVENT_PROJECT_TASK_MUTATION);
@@ -75,6 +78,7 @@ export const UpdateTaskModal = (props: ModalPropType) => {
           title,
           description,
           deadline,
+          completed,
         },
       })
         .then(() => {
@@ -125,6 +129,15 @@ export const UpdateTaskModal = (props: ModalPropType) => {
                   setDeadline(date);
                 }}
                 disablePast
+              />
+            </Form.Group>
+
+            <Form.Group controlId="formBasicCompleted">
+              <Form.Check
+                type="switch"
+                label="Completed"
+                checked={completed}
+                onChange={() => setCompleted(!completed)}
               />
             </Form.Group>
 
