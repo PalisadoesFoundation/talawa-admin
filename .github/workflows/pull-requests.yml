@@ -60,3 +60,22 @@ jobs:
         with:
           path: "./coverage/lcov.info"
           min_coverage: 91.0
+  Graphql-Inspector:
+    name: Runs Introspection on the github talawa-api repo on the schema.graphql file
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the Repository
+        uses: actions/checkout@v3
+      
+      - name: Install Dependencies
+        run: npm install --legacy-peer-deps
+      
+      - name: Install Graphql-Inspector Globally
+        run: npm install -g graphql-inspector
+      
+      - name: Validate Documents
+        run: graphql-inspector validate './src/GraphQl/**/*.ts' github:PalisadoesFoundation/talawa-api#develop:schema.graphql --token '${{secrets.INSPECTOR}}'
+
+      
+       
