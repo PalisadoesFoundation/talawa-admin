@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Modal from 'react-bootstrap/modal';
+import Modal from 'react-bootstrap/Modal';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Link, useHistory } from 'react-router-dom';

@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import Modal from 'react-modal';
+import Modal from 'react-bootstrap/Modal';
 
 import styles from './EventListCard.module.css';
 import {
@@ -138,78 +138,67 @@ function EventListCard(props: EventListCardProps): JSX.Element {
         </div>
       </div>
       {/* preview modal */}
-      <Modal
-        isOpen={eventmodalisOpen}
-        style={{
-          overlay: { backgroundColor: 'grey' },
-        }}
-        className={styles.modalbody}
-        ariaHideApp={false}
-      >
-        <section id={styles.grid_wrapper}>
-          <div className={styles.form_wrapper}>
-            <div className={styles.flexdir}>
-              <p className={styles.titlemodal}>{t('eventDetails')}</p>
+      <Modal show={eventmodalisOpen}>
+        <Modal.Header>
+          <p className={styles.titlemodal}>{t('eventDetails')}</p>
+          <Button
+            onClick={hideViewModal}
+            data-testid="createEventModalCloseBtn"
+          >
+            <i className="fa fa-times"></i>
+          </Button>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <div>
+              <p className={styles.preview}>
+                {t('eventTitle')}:{' '}
+                <span className={styles.view}>
+                  {props.eventName ? <>{props.eventName}</> : <>Dogs Care</>}{' '}
+                </span>
+              </p>
+              <p className={styles.preview}>
+                {t('location')}:
+                <span className={styles.view}>
+                  {props.eventLocation ? (
+                    <>{props.eventLocation}</>
+                  ) : (
+                    <>India</>
+                  )}
+                </span>
+              </p>
+              <p className={styles.preview}>
+                {t('description')}:{' '}
+                <span className={styles.view}>{props.eventDescription}</span>
+              </p>
+              <p className={styles.preview}>
+                {t('on')}: <span className={styles.view}>{props.regDate}</span>
+              </p>
+              <p className={styles.preview}>
+                {t('end')}:{' '}
+                <span className={styles.view}>{props.regEndDate}</span>
+              </p>
+            </div>
+            <div className={styles.iconContainer}>
               <a
-                onClick={hideViewModal}
-                className={styles.cancel}
-                data-testid="createEventModalCloseBtn"
+                data-testid="editEventModalBtn"
+                className={`${styles.icon} mr-2`}
+                data-toggle="modal"
+                data-target={`#editEventModal${props.id}`}
               >
-                <i className="fa fa-times"></i>
+                <i className="fas fa-edit"></i>
+              </a>
+              <a
+                data-testid="deleteEventModalBtn"
+                className={styles.icon}
+                data-toggle="modal"
+                data-target={`#deleteEventModal${props.id}`}
+              >
+                <i className="fa fa-trash"></i>
               </a>
             </div>
-            <Form>
-              <div>
-                <p className={styles.preview}>
-                  {t('eventTitle')}:{' '}
-                  <span className={styles.view}>
-                    {props.eventName ? <>{props.eventName}</> : <>Dogs Care</>}{' '}
-                  </span>
-                </p>
-                <p className={styles.preview}>
-                  {t('location')}:
-                  <span className={styles.view}>
-                    {props.eventLocation ? (
-                      <>{props.eventLocation}</>
-                    ) : (
-                      <>India</>
-                    )}
-                  </span>
-                </p>
-                <p className={styles.preview}>
-                  {t('description')}:{' '}
-                  <span className={styles.view}>{props.eventDescription}</span>
-                </p>
-                <p className={styles.preview}>
-                  {t('on')}:{' '}
-                  <span className={styles.view}>{props.regDate}</span>
-                </p>
-                <p className={styles.preview}>
-                  {t('end')}:{' '}
-                  <span className={styles.view}>{props.regEndDate}</span>
-                </p>
-              </div>
-              <div className={styles.iconContainer}>
-                <a
-                  data-testid="editEventModalBtn"
-                  className={`${styles.icon} mr-2`}
-                  data-toggle="modal"
-                  data-target={`#editEventModal${props.id}`}
-                >
-                  <i className="fas fa-edit"></i>
-                </a>
-                <a
-                  data-testid="deleteEventModalBtn"
-                  className={styles.icon}
-                  data-toggle="modal"
-                  data-target={`#deleteEventModal${props.id}`}
-                >
-                  <i className="fa fa-trash"></i>
-                </a>
-              </div>
-            </Form>
-          </div>
-        </section>
+          </Form>
+        </Modal.Body>
       </Modal>
 
       {/* delete modal */}
