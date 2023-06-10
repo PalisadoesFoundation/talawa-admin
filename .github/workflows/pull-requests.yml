@@ -72,15 +72,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16.14.1'
-      
+        
       - name: resolve dependency
-        run: npm install && npm install core-js@3.0.0-beta.11
+        run: npm install -g @grapqhl-inspector/cli
 
-      - name: Install Graphql-Inspector Globally
-        run: npm install -g graphql-inspector
       
       - name: Validate Documents
-        run: npx graphql-inspector validate './src/GraphQl/**/*.ts' github:PalisadoesFoundation/talawa-api#develop:schema.graphql --token '${{secrets.INSPECTOR}}'
+        run: graphql-inspector validate './src/GraphQl/**/*.ts' github:PalisadoesFoundation/talawa-api#develop:schema.graphql --token '${{secrets.INSPECTOR}}'
 
       
        
