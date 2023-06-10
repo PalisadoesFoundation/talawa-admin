@@ -71,10 +71,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
-      
-      - name: Install Dependencies
-        run: npm install --legacy-peer-deps
+          node-version: '16.14.1'
       
       - name: Install Graphql-Inspector Globally
         run: npm install -g graphql-inspector
