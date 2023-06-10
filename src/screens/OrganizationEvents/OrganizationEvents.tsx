@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import Modal from 'react-modal';
+import Modal from 'react-bootstrap/Modal';
 import { useSelector } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import { Form } from 'react-bootstrap';
@@ -170,185 +170,176 @@ function OrganizationEvents(): JSX.Element {
           />
         </Col>
       </Row>
-      <Modal
-        isOpen={eventmodalisOpen}
-        style={{
-          overlay: { backgroundColor: 'grey' },
-        }}
-        className={styles.modalbody}
-        ariaHideApp={false}
-      >
-        <section id={styles.grid_wrapper}>
-          <div className={styles.form_wrapper}>
-            <div className={styles.flexdir}>
-              <p className={styles.titlemodal}>{t('eventDetails')}</p>
-              <a
-                onClick={hideInviteModal}
-                className={styles.cancel}
-                data-testid="createEventModalCloseBtn"
-              >
-                <i className="fa fa-times"></i>
-              </a>
+      <Modal show={eventmodalisOpen} onHide={hideInviteModal}>
+        <Modal.Header>
+          <p className={styles.titlemodal}>{t('eventDetails')}</p>
+          <Button
+            variant="danger"
+            onClick={hideInviteModal}
+            data-testid="createEventModalCloseBtn"
+          >
+            <i className="fa fa-times"></i>
+          </Button>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmitCapture={CreateEvent}>
+            <label htmlFor="eventtitle">{t('eventTitle')}</label>
+            <Form.Control
+              type="title"
+              id="eventitle"
+              placeholder={t('enterTitle')}
+              autoComplete="off"
+              required
+              value={formState.title}
+              onChange={(e) => {
+                setFormState({
+                  ...formState,
+                  title: e.target.value,
+                });
+              }}
+            />
+            <label htmlFor="eventdescrip">{t('description')}</label>
+            <Form.Control
+              type="eventdescrip"
+              id="eventdescrip"
+              placeholder={t('enterDescrip')}
+              autoComplete="off"
+              required
+              value={formState.eventdescrip}
+              onChange={(e) => {
+                setFormState({
+                  ...formState,
+                  eventdescrip: e.target.value,
+                });
+              }}
+            />
+            <label htmlFor="eventLocation">{t('location')}</label>
+            <Form.Control
+              type="text"
+              id="eventLocation"
+              placeholder={t('eventLocation')}
+              autoComplete="off"
+              required
+              value={formState.location}
+              onChange={(e) => {
+                setFormState({
+                  ...formState,
+                  location: e.target.value,
+                });
+              }}
+            />
+            <div className={styles.datediv}>
+              <div>
+                <label htmlFor="startdate">{t('startDate')}</label>
+                <DatePicker
+                  className={styles.datebox}
+                  id="startdate"
+                  selected={startDate}
+                  onChange={(date: Date | null) => setStartDate(date)}
+                  placeholderText={t('startDate')}
+                />
+              </div>
+              <div>
+                <label htmlFor="enddate">{t('endDate')}</label>
+                <DatePicker
+                  className={styles.datebox}
+                  id="enddate"
+                  selected={endDate}
+                  onChange={(date: Date | null) => setEndDate(date)}
+                  placeholderText={t('endDate')}
+                />
+              </div>
             </div>
-            <Form onSubmitCapture={CreateEvent}>
-              <label htmlFor="eventtitle">{t('eventTitle')}</label>
-              <Form.Control
-                type="title"
-                id="eventitle"
-                placeholder={t('enterTitle')}
-                autoComplete="off"
-                required
-                value={formState.title}
-                onChange={(e) => {
-                  setFormState({
-                    ...formState,
-                    title: e.target.value,
-                  });
-                }}
-              />
-              <label htmlFor="eventdescrip">{t('description')}</label>
-              <Form.Control
-                type="eventdescrip"
-                id="eventdescrip"
-                placeholder={t('enterDescrip')}
-                autoComplete="off"
-                required
-                value={formState.eventdescrip}
-                onChange={(e) => {
-                  setFormState({
-                    ...formState,
-                    eventdescrip: e.target.value,
-                  });
-                }}
-              />
-              <label htmlFor="eventLocation">{t('location')}</label>
-              <Form.Control
-                type="text"
-                id="eventLocation"
-                placeholder={t('eventLocation')}
-                autoComplete="off"
-                required
-                value={formState.location}
-                onChange={(e) => {
-                  setFormState({
-                    ...formState,
-                    location: e.target.value,
-                  });
-                }}
-              />
+            {!alldaychecked && (
               <div className={styles.datediv}>
-                <div>
-                  <label htmlFor="startdate">{t('startDate')}</label>
-                  <DatePicker
-                    className={styles.datebox}
-                    id="startdate"
-                    selected={startDate}
-                    onChange={(date: Date | null) => setStartDate(date)}
-                    placeholderText={t('startDate')}
+                <div className="mr-3">
+                  <label htmlFor="startTime">{t('startTime')}</label>
+                  <Form.Control
+                    id="startTime"
+                    placeholder={t('startTime')}
+                    value={formState.startTime}
+                    onChange={(e) =>
+                      setFormState({
+                        ...formState,
+                        startTime: e.target.value,
+                      })
+                    }
                   />
                 </div>
                 <div>
-                  <label htmlFor="enddate">{t('endDate')}</label>
-                  <DatePicker
-                    className={styles.datebox}
-                    id="enddate"
-                    selected={endDate}
-                    onChange={(date: Date | null) => setEndDate(date)}
-                    placeholderText={t('endDate')}
+                  <label htmlFor="endTime">{t('endTime')}</label>
+                  <Form.Control
+                    id="endTime"
+                    placeholder={t('endTime')}
+                    value={formState.endTime}
+                    onChange={(e) =>
+                      setFormState({
+                        ...formState,
+                        endTime: e.target.value,
+                      })
+                    }
                   />
                 </div>
               </div>
-              {!alldaychecked && (
-                <div className={styles.datediv}>
-                  <div className="mr-3">
-                    <label htmlFor="startTime">{t('startTime')}</label>
-                    <Form.Control
-                      id="startTime"
-                      placeholder={t('startTime')}
-                      value={formState.startTime}
-                      onChange={(e) =>
-                        setFormState({
-                          ...formState,
-                          startTime: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="endTime">{t('endTime')}</label>
-                    <Form.Control
-                      id="endTime"
-                      placeholder={t('endTime')}
-                      value={formState.endTime}
-                      onChange={(e) =>
-                        setFormState({
-                          ...formState,
-                          endTime: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-              )}
-              <div className={styles.checkboxdiv}>
-                <div className={styles.dispflex}>
-                  <label htmlFor="allday">{t('allDay')}?</label>
-                  <Form.Switch
-                    className="ms-2 mt-3"
-                    id="allday"
-                    type="checkbox"
-                    checked={alldaychecked}
-                    data-testid="alldayCheck"
-                    onChange={() => setAllDayChecked(!alldaychecked)}
-                  />
-                </div>
-                <div className={styles.dispflex}>
-                  <label htmlFor="recurring">{t('recurringEvent')}:</label>
-                  <Form.Switch
-                    className="ms-2 mt-3"
-                    id="recurring"
-                    type="checkbox"
-                    data-testid="recurringCheck"
-                    checked={recurringchecked}
-                    onChange={() => setRecurringChecked(!recurringchecked)}
-                  />
-                </div>
+            )}
+            <div className={styles.checkboxdiv}>
+              <div className={styles.dispflex}>
+                <label htmlFor="allday">{t('allDay')}?</label>
+                <Form.Switch
+                  className="ms-2 mt-3"
+                  id="allday"
+                  type="checkbox"
+                  checked={alldaychecked}
+                  data-testid="alldayCheck"
+                  onChange={() => setAllDayChecked(!alldaychecked)}
+                />
               </div>
-              <div className={styles.checkboxdiv}>
-                <div className={styles.dispflex}>
-                  <label htmlFor="ispublic">{t('isPublic')}?</label>
-                  <Form.Switch
-                    className="ms-2 mt-3"
-                    id="ispublic"
-                    type="checkbox"
-                    data-testid="ispublicCheck"
-                    checked={publicchecked}
-                    onChange={() => setPublicChecked(!publicchecked)}
-                  />
-                </div>
-                <div className={styles.dispflex}>
-                  <label htmlFor="registrable">{t('isRegistrable')}?</label>
-                  <Form.Switch
-                    className="ms-2 mt-3"
-                    id="registrable"
-                    type="checkbox"
-                    data-testid="registrableCheck"
-                    checked={registrablechecked}
-                    onChange={() => setRegistrableChecked(!registrablechecked)}
-                  />
-                </div>
+              <div className={styles.dispflex}>
+                <label htmlFor="recurring">{t('recurringEvent')}:</label>
+                <Form.Switch
+                  className="ms-2 mt-3"
+                  id="recurring"
+                  type="checkbox"
+                  data-testid="recurringCheck"
+                  checked={recurringchecked}
+                  onChange={() => setRecurringChecked(!recurringchecked)}
+                />
               </div>
-              <Button
-                type="submit"
-                className={styles.greenregbtn}
-                value="createevent"
-                data-testid="createEventBtn"
-              >
-                {t('createEvent')}
-              </Button>
-            </Form>
-          </div>
-        </section>
+            </div>
+            <div className={styles.checkboxdiv}>
+              <div className={styles.dispflex}>
+                <label htmlFor="ispublic">{t('isPublic')}?</label>
+                <Form.Switch
+                  className="ms-2 mt-3"
+                  id="ispublic"
+                  type="checkbox"
+                  data-testid="ispublicCheck"
+                  checked={publicchecked}
+                  onChange={() => setPublicChecked(!publicchecked)}
+                />
+              </div>
+              <div className={styles.dispflex}>
+                <label htmlFor="registrable">{t('isRegistrable')}?</label>
+                <Form.Switch
+                  className="ms-2 mt-3"
+                  id="registrable"
+                  type="checkbox"
+                  data-testid="registrableCheck"
+                  checked={registrablechecked}
+                  onChange={() => setRegistrableChecked(!registrablechecked)}
+                />
+              </div>
+            </div>
+            <Button
+              type="submit"
+              className={styles.greenregbtn}
+              value="createevent"
+              data-testid="createEventBtn"
+            >
+              {t('createEvent')}
+            </Button>
+          </Form>
+        </Modal.Body>
       </Modal>
     </>
   );
