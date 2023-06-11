@@ -297,7 +297,7 @@ function OrganizationDashboard(): JSX.Element {
           </Container>
         </Col>
       </Row>
-      <Modal show={showDeleteModal}>
+      <Modal show={showDeleteModal} onHide={toggleDeleteModal}>
         <Modal.Header>
           <h5 className="modal-title" id="deleteOrganizationModalLabel">
             {t('deleteOrganization')}

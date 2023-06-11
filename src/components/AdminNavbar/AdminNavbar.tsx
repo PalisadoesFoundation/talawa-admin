@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
-import { Nav } from 'react-bootstrap';
+import { Nav, Modal } from 'react-bootstrap';
 import { Link, NavLink } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
@@ -36,6 +36,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'adminNavbar' });
 
   const [spamCountData, setSpamCountData] = useState([]);
+  const [showNotifModal, setShowNotifModal] = useState(false);
 
   const currentUrl = window.location.href.split('=')[1];
 
@@ -88,6 +89,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
   }, [data]);
 
   const currentLanguageCode = Cookies.get('i18next') || 'en';
+  const toggleNotifModal = () => setShowNotifModal(!showNotifModal);
 
   const handleSpamNotification = (spamId: string) => {
     localStorage.setItem('spamId', spamId);
@@ -200,12 +202,9 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                 )}
               </Dropdown.Toggle>
               <Dropdown.Menu className={styles.dropdownMenu}>
-                <Dropdown.Item
-                  data-toggle="modal"
-                  data-target="#notificationModal"
-                >
+                <Dropdown.Item onClick={toggleNotifModal}>
                   <i className="fa fa-bell"></i>&ensp; {t('notification')}{' '}
-                  <span className="badge badge-success">
+                  <span className="badge text-bg-success">
                     {spamCountData.length}
                   </span>
                 </Dropdown.Item>
@@ -254,57 +253,38 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
       </Navbar>
 
       {/* Notification Modal */}
-      <div
-        className="modal fade"
-        id="notificationModal"
-        tabIndex={-1}
-        aria-labelledby="notificationModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-scrollable">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="notificationModalLabel">
-                {t('notifications')}
-              </h5>
-              <Button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close"
+      <Modal show={showNotifModal} onHide={toggleNotifModal}>
+        <Modal.Header>
+          <h5 className="modal-title" id="notificationModalLabel">
+            {t('notifications')}
+          </h5>
+          <Button variant="danger" onClick={toggleNotifModal}>
+            <i className="fa fa-times"></i>
+          </Button>
+        </Modal.Header>
+        <Modal.Body>
+          {spamCountData.length > 0 ? (
+            spamCountData.map((spam: any) => (
+              <div
+                className={`border rounded p-3 mb-2 ${styles.notificationList}`}
+                onClick={() => handleSpamNotification(spam._id)}
+                key={spam._id}
+                data-testid={`spamNotification${spam._id}`}
               >
-                <span aria-hidden="true">&times;</span>
-              </Button>
-            </div>
-            <div className="modal-body">
-              {spamCountData.length > 0 ? (
-                spamCountData.map((spam: any) => (
-                  <div
-                    className={`border rounded p-3 mb-2 ${styles.notificationList}`}
-                    onClick={() => handleSpamNotification(spam._id)}
-                    key={spam._id}
-                    data-testid={`spamNotification${spam._id}`}
-                  >
-                    {`${spam.user.firstName} ${spam.user.lastName}`}{' '}
-                    {t('spamsThe')} {spam.groupchat.title} {t('group')}.
-                  </div>
-                ))
-              ) : (
-                <p className="text-center">{t('noNotifications')}</p>
-              )}
-            </div>
-            <div className="modal-footer">
-              <Button
-                type="button"
-                className="btn btn-success"
-                data-dismiss="modal"
-              >
-                {t('close')}
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
+                {`${spam.user.firstName} ${spam.user.lastName}`} {t('spamsThe')}{' '}
+                {spam.groupchat.title} {t('group')}.
+              </div>
+            ))
+          ) : (
+            <p className="text-center">{t('noNotifications')}</p>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={toggleNotifModal}>
+            {t('close')}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
