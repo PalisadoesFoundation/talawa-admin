@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useMutation, useQuery } from '@apollo/client';
 import { useSelector } from 'react-redux';
 import { RootState } from 'state/reducers';
-import { Container } from 'react-bootstrap';
+import { Container, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
@@ -23,7 +23,7 @@ import { errorHandler } from 'utils/errorHandler';
 
 function OrganizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
-
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   document.title = t('title');
   const currentUrl = window.location.href.split('=')[1];
 
@@ -55,7 +55,7 @@ function OrganizationDashboard(): JSX.Element {
   });
 
   const canDelete = data_2?.user.userType === 'SUPERADMIN';
-
+  const toggleDeleteModal = () => setShowDeleteModal(!showDeleteModal);
   const [del] = useMutation(DELETE_ORGANIZATION_MUTATION);
 
   const delete_org = async () => {
@@ -115,11 +115,10 @@ function OrganizationDashboard(): JSX.Element {
               <p className={styles.tagdetailsGreen}>
                 {canDelete && (
                   <Button
-                    type="button"
+                    variant="danger"
                     className="mt-3"
                     data-testid="deleteClick"
-                    data-toggle="modal"
-                    data-target="#deleteOrganizationModal"
+                    onClick={toggleDeleteModal}
                   >
                     {t('deleteOrganization')}
                   </Button>
@@ -298,51 +297,29 @@ function OrganizationDashboard(): JSX.Element {
           </Container>
         </Col>
       </Row>
-
-      <div
-        className="modal fade"
-        id="deleteOrganizationModal"
-        tabIndex={-1}
-        role="dialog"
-        aria-labelledby="deleteOrganizationModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="deleteOrganizationModalLabel">
-                {t('deleteOrganization')}
-              </h5>
-              <Button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </Button>
-            </div>
-            <div className="modal-body">{t('deleteMsg')}</div>
-            <div className="modal-footer">
-              <Button
-                type="button"
-                className="btn btn-danger"
-                data-dismiss="modal"
-              >
-                {t('no')}
-              </Button>
-              <Button
-                type="button"
-                className="btn btn-success"
-                onClick={delete_org}
-                data-testid="deleteOrganizationBtn"
-              >
-                {t('yes')}
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Modal show={showDeleteModal}>
+        <Modal.Header>
+          <h5 className="modal-title" id="deleteOrganizationModalLabel">
+            {t('deleteOrganization')}
+          </h5>
+          <Button variant="danger" onClick={toggleDeleteModal}>
+            <i className="fa fa-times"></i>
+          </Button>
+        </Modal.Header>
+        <Modal.Body>{t('deleteMsg')}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={toggleDeleteModal}>
+            {t('no')}
+          </Button>
+          <Button
+            variant="success"
+            onClick={delete_org}
+            data-testid="deleteOrganizationBtn"
+          >
+            {t('yes')}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
