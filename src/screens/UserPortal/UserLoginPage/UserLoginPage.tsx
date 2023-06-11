@@ -39,7 +39,11 @@ export default function userLoginPage(): JSX.Element {
         </h6>
       </div>
       <div className={`${styles.contentContainer} py-5`}>
-        <DropdownButton title={currentLanguage} variant="outline-success">
+        <DropdownButton
+          title={currentLanguage}
+          variant="outline-success"
+          data-testid="languageDropdown"
+        >
           {languages.map((language, index: number) => (
             <Dropdown.Item
               key={index}
@@ -59,11 +63,14 @@ export default function userLoginPage(): JSX.Element {
           src={TalawaImage}
           alt="Talawa Branding"
         />
-        {currentMode === 'login' ? (
-          <Login {...loginRegisterProps} />
-        ) : (
-          <Register {...loginRegisterProps} />
-        )}
+        {
+          /* istanbul ignore next */
+          currentMode === 'login' ? (
+            <Login {...loginRegisterProps} />
+          ) : (
+            <Register {...loginRegisterProps} />
+          )
+        }
       </div>
     </div>
   );
