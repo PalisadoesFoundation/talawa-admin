@@ -1,3 +1,4 @@
+import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { act, render } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
