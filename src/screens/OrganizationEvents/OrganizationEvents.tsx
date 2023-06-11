@@ -88,7 +88,7 @@ function organizationEvents(): JSX.Element {
   ): Promise<void> => {
     e.preventDefault();
     try {
-      const { data } = await create({
+      const { data: createEventData } = await create({
         variables: {
           title: formState.title,
           description: formState.eventdescrip,
@@ -106,7 +106,7 @@ function organizationEvents(): JSX.Element {
       });
 
       /* istanbul ignore next */
-      if (data) {
+      if (createEventData) {
         toast.success(t('eventCreated'));
         refetch();
         setFormState({

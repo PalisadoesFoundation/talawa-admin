@@ -38,7 +38,11 @@ function adminNavbar({ targets, url1 }: InterfaceNavbarProps): JSX.Element {
 
   const currentUrl = window.location.href.split('=')[1];
 
-  const { data, error, refetch } = useQuery(ORGANIZATIONS_LIST, {
+  const {
+    data: orgData,
+    error: orgError,
+    refetch: orgRefetch,
+  } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: currentUrl },
   });
   const [updateSpam] = useMutation(UPDATE_SPAM_NOTIFICATION_MUTATION);
@@ -64,7 +68,7 @@ function adminNavbar({ targets, url1 }: InterfaceNavbarProps): JSX.Element {
           /* istanbul ignore next */
           if (data) {
             localStorage.removeItem('spamId');
-            refetch();
+            orgRefetch();
           }
         } catch (error: any) {
           /* istanbul ignore next */
@@ -77,14 +81,14 @@ function adminNavbar({ targets, url1 }: InterfaceNavbarProps): JSX.Element {
   }, []);
 
   useEffect(() => {
-    if (data && data?.organizations[0].spamCount) {
+    if (orgData && orgData?.organizations[0].spamCount) {
       setSpamCountData(
-        data?.organizations[0].spamCount.filter(
+        orgData?.organizations[0].spamCount.filter(
           (spam: any) => spam.isReaded === false
         )
       );
     }
-  }, [data]);
+  }, [orgData]);
 
   const currentLanguageCode = Cookies.get('i18next') || 'en';
 
@@ -94,13 +98,13 @@ function adminNavbar({ targets, url1 }: InterfaceNavbarProps): JSX.Element {
   };
 
   /* istanbul ignore next */
-  if (error) {
+  if (orgError) {
     window.location.replace('/orglist');
   }
 
   let orgName;
-  if (data) {
-    orgName = data?.organizations[0].name;
+  if (orgData) {
+    orgName = orgData?.organizations[0].name;
   }
 
   return (
@@ -108,9 +112,9 @@ function adminNavbar({ targets, url1 }: InterfaceNavbarProps): JSX.Element {
       <Navbar className={styles.navbarbg} expand="xl" fixed="top">
         <Navbar.Brand className={styles.navbarBrandLogo}>
           <div className={styles.logo}>
-            {data?.organizations[0].image ? (
+            {orgData?.organizations[0].image ? (
               <img
-                src={data?.organizations[0].image}
+                src={orgData?.organizations[0].image}
                 className={styles.roundedcircle}
                 data-testid={'orgLogoPresent'}
               />
@@ -186,7 +190,7 @@ function adminNavbar({ targets, url1 }: InterfaceNavbarProps): JSX.Element {
                 id="dropdown-basic"
                 data-testid="logoutDropdown"
               >
-                {data?.organizations[0].image ? (
+                {orgData?.organizations[0].image ? (
                   <span>
                     <MenuIcon></MenuIcon>
                   </span>

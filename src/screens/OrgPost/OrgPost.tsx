@@ -55,14 +55,15 @@ function orgPost(): JSX.Element {
   };
 
   const {
-    data,
-    loading: loading2,
-    error: errorPost,
+    data: orgPostListData,
+    loading: orgPostListLoading,
+    error: orgPostListError,
     refetch,
   } = useQuery(ORGANIZATION_POST_CONNECTION_LIST, {
     variables: { id: currentUrl, title_contains: '', text_contains: '' },
   });
-  const [create, { loading }] = useMutation(CREATE_POST_MUTATION);
+  const [create, { loading: createPostLoading }] =
+    useMutation(CREATE_POST_MUTATION);
 
   const createPost = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
@@ -106,7 +107,7 @@ function orgPost(): JSX.Element {
     }
   };
 
-  if (loading || loading2) {
+  if (createPostLoading || orgPostListLoading) {
     return (
       <>
         <div className={styles.loader}></div>
@@ -115,7 +116,7 @@ function orgPost(): JSX.Element {
   }
 
   /* istanbul ignore next */
-  if (errorPost) {
+  if (orgPostListError) {
     window.location.assign('/orglist');
   }
 
@@ -211,18 +212,19 @@ function orgPost(): JSX.Element {
               </Button>
             </Row>
             <div className={`row ${styles.list_box}`}>
-              {data && data.postsByOrganizationConnection.edges.length > 0 ? (
+              {orgPostListData &&
+              orgPostListData.postsByOrganizationConnection.edges.length > 0 ? (
                 (rowsPerPage > 0
-                  ? data.postsByOrganizationConnection.edges.slice(
+                  ? orgPostListData.postsByOrganizationConnection.edges.slice(
                       page * rowsPerPage,
                       page * rowsPerPage + rowsPerPage
                     )
                   : rowsPerPage > 0
-                  ? data.postsByOrganizationConnection.edges.slice(
+                  ? orgPostListData.postsByOrganizationConnection.edges.slice(
                       page * rowsPerPage,
                       page * rowsPerPage + rowsPerPage
                     )
-                  : data.postsByOrganizationConnection.edges
+                  : orgPostListData.postsByOrganizationConnection.edges
                 ).map(
                   (datas: {
                     _id: string;
@@ -257,7 +259,10 @@ function orgPost(): JSX.Element {
                 <tr>
                   <PaginationList
                     count={
-                      data ? data.postsByOrganizationConnection.edges.length : 0
+                      orgPostListData
+                        ? orgPostListData.postsByOrganizationConnection.edges
+                            .length
+                        : 0
                     }
                     rowsPerPage={rowsPerPage}
                     page={page}

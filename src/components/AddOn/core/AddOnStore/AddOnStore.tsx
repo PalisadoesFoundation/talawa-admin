@@ -103,12 +103,6 @@ function addOnStore(): JSX.Element {
       </>
     );
   }
-  // console.log(
-  //   'Filtered Data is  ',
-  //   data.getPlugins.filter((plugin: any) => plugin.pluginInstallStatus == true)
-  // );
-  // TODO: Update routes for other pages
-  // TODO: Implement Search
   return (
     <>
       <div>

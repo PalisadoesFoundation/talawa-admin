@@ -105,8 +105,6 @@ function organizationPeople(): JSX.Element {
   /* istanbul ignore next */
   if (memberError || usersError || adminError) {
     const error = memberError ?? usersError ?? adminError;
-
-    console.log(error);
     toast.error(error?.message);
   }
 

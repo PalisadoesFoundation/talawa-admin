@@ -52,9 +52,9 @@ const Requests = (): JSX.Element => {
   const lastNameRef = useRef<HTMLInputElement>(null);
 
   const {
-    data,
-    loading,
-    error,
+    data: memberData,
+    loading: memberLoading,
+    error: memberError,
     refetch: memberRefetch,
   } = useQuery(BLOCK_PAGE_MEMBER_LIST, {
     variables: {
@@ -68,22 +68,22 @@ const Requests = (): JSX.Element => {
   const [unBlockUser] = useMutation(UNBLOCK_USER_MUTATION);
 
   useEffect(() => {
-    if (!data) {
+    if (!memberData) {
       setMembersData([]);
       return;
     }
 
     if (state === 0) {
-      setMembersData(data?.organizationsMemberConnection.edges);
+      setMembersData(memberData?.organizationsMemberConnection.edges);
     } else {
-      const blockUsers = data?.organizationsMemberConnection.edges.filter(
+      const blockUsers = memberData?.organizationsMemberConnection.edges.filter(
         (user: InterfaceMember) =>
           user.organizationsBlockedBy.some((org) => org._id === currentUrl)
       );
 
       setMembersData(blockUsers);
     }
-  }, [state, data]);
+  }, [state, memberData]);
 
   /* istanbul ignore next */
   const handleChangePage = (
@@ -140,10 +140,8 @@ const Requests = (): JSX.Element => {
   };
 
   /* istanbul ignore next */
-  if (error) {
-    console.error(error);
-
-    toast.error(error.message);
+  if (memberError) {
+    toast.error(memberError.message);
   }
 
   const handleSearch = (): void => {
@@ -224,7 +222,7 @@ const Requests = (): JSX.Element => {
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>{t('listOfUsers')}</p>
             </Row>
-            {loading ? (
+            {memberLoading ? (
               <div className={styles.loader}>
                 <CircularProgress />
               </div>

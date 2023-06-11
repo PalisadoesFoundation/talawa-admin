@@ -38,19 +38,23 @@ const Roles = (): JSX.Element => {
 
   useEffect(() => {
     if (searchByName !== '') {
-      refetch({
+      userRefetch({
         firstName_contains: searchByName,
       });
     } else {
       if (count !== 0) {
-        refetch({
+        userRefetch({
           firstName_contains: searchByName,
         });
       }
     }
   }, [count, searchByName]);
 
-  const { loading: usersLoading, data, refetch } = useQuery(USER_LIST);
+  const {
+    loading: usersLoading,
+    data: userData,
+    refetch: userRefetch,
+  } = useQuery(USER_LIST);
 
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
 
@@ -102,7 +106,7 @@ const Roles = (): JSX.Element => {
       /* istanbul ignore next */
       if (data) {
         toast.success(t('roleUpdated'));
-        refetch();
+        userRefetch();
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -154,13 +158,13 @@ const Roles = (): JSX.Element => {
                     </tr>
                   </thead>
                   <tbody>
-                    {data && data.users.length > 0 ? (
+                    {userData && userData.users.length > 0 ? (
                       (rowsPerPage > 0
-                        ? data.users.slice(
+                        ? userData.users.slice(
                             page * rowsPerPage,
                             page * rowsPerPage + rowsPerPage
                           )
-                        : data.users
+                        : userData.users
                       ).map(
                         (
                           user: {
@@ -223,7 +227,7 @@ const Roles = (): JSX.Element => {
                 <tbody>
                   <tr>
                     <PaginationList
-                      count={data ? data.users.length : 0}
+                      count={userData ? userData.users.length : 0}
                       rowsPerPage={rowsPerPage}
                       page={page}
                       data-testid="something"
