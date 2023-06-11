@@ -3,6 +3,7 @@ import styles from './OrgPeopleListCard.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -23,6 +24,10 @@ interface OrgPeopleListCardProps {
 function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
   const [remove] = useMutation(REMOVE_MEMBER_MUTATION);
+  const [showRemoveAdminModal, setShowRemoveAdminModal] = React.useState(false);
+
+  const toggleRemoveAdminModal = () =>
+    setShowRemoveAdminModal(!showRemoveAdminModal);
 
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgPeopleListCard',
@@ -77,9 +82,8 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
               </p>
               <Button
                 className={styles.memberfontcreatedbtn}
-                data-toggle="modal"
-                data-target={`#removeMemberModal${props.id}`}
                 data-testid="removeMemberModalBtn"
+                onClick={toggleRemoveAdminModal}
               >
                 {t('remove')}
               </Button>
@@ -88,54 +92,28 @@ function OrgPeopleListCard(props: OrgPeopleListCardProps): JSX.Element {
         </Row>
       </div>
       <hr></hr>
-
-      <div
-        className="modal fade"
-        id={`removeMemberModal${props.id}`}
-        tabIndex={-1}
-        role="dialog"
-        aria-labelledby={`removeMemberModalLabel${props.id}`}
-        aria-hidden="true"
-      >
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5
-                className="modal-title"
-                id={`removeMemberModalLabel${props.id}`}
-              >
-                {t('removeMember')}
-              </h5>
-              <Button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </Button>
-            </div>
-            <div className="modal-body">{t('removeMemberMsg')}</div>
-            <div className="modal-footer">
-              <Button
-                type="button"
-                className="btn btn-danger"
-                data-dismiss="modal"
-              >
-                {t('no')}
-              </Button>
-              <Button
-                type="button"
-                className="btn btn-success"
-                onClick={RemoveMember}
-                data-testid="removeMemberBtn"
-              >
-                {t('yes')}
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Modal show={showRemoveAdminModal} onHide={toggleRemoveAdminModal}>
+        <Modal.Header>
+          <h5>{t('removeMember')}</h5>
+          <Button variant="danger" onClick={toggleRemoveAdminModal}>
+            <i className="fa fa-times"></i>
+          </Button>
+        </Modal.Header>
+        <Modal.Body>{t('removeMemberMsg')}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={toggleRemoveAdminModal}>
+            {t('no')}
+          </Button>
+          <Button
+            type="button"
+            className="btn btn-success"
+            onClick={RemoveMember}
+            data-testid="removeMemberBtn"
+          >
+            {t('yes')}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

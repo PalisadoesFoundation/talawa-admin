@@ -96,9 +96,7 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
       <hr></hr>
       <Modal show={showRemoveAdminModal} onHide={toggleRemoveAdminModal}>
         <Modal.Header>
-          <h5 id={`removeAdminModalLabel${props.id}`}>
-            {t('removeAdmin')}
-          </h5>
+          <h5 id={`removeAdminModalLabel${props.id}`}>{t('removeAdmin')}</h5>
           <Button variant="danger" onClick={toggleRemoveAdminModal}>
             <i className="fas fa-times"></i>
           </Button>
