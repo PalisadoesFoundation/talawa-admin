@@ -299,9 +299,7 @@ function OrganizationDashboard(): JSX.Element {
       </Row>
       <Modal show={showDeleteModal} onHide={toggleDeleteModal}>
         <Modal.Header>
-          <h5 className="modal-title" id="deleteOrganizationModalLabel">
-            {t('deleteOrganization')}
-          </h5>
+          <h5 id="deleteOrganizationModalLabel">{t('deleteOrganization')}</h5>
           <Button variant="danger" onClick={toggleDeleteModal}>
             <i className="fa fa-times"></i>
           </Button>

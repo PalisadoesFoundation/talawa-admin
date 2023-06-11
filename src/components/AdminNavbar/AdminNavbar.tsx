@@ -255,9 +255,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
       {/* Notification Modal */}
       <Modal show={showNotifModal} onHide={toggleNotifModal}>
         <Modal.Header>
-          <h5 className="modal-title" id="notificationModalLabel">
-            {t('notifications')}
-          </h5>
+          <h5 id="notificationModalLabel">{t('notifications')}</h5>
           <Button variant="danger" onClick={toggleNotifModal}>
             <i className="fa fa-times"></i>
           </Button>
