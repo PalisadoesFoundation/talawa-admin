@@ -548,3 +548,19 @@ export const SET_TASK_VOLUNTEERS_MUTATION = gql`
     }
   }
 `;
+
+export const ADD_EVENT_ATTENDEE = gql`
+  mutation addEventAttendee($userId: ID!, $eventId: ID!) {
+    addEventAttendee(data: { userId: $userId, eventId: $eventId }) {
+      _id
+    }
+  }
+`;
+
+export const REMOVE_EVENT_ATTENDEE = gql`
+  mutation removeEventAttendee($userId: ID!, $eventId: ID!) {
+    removeEventAttendee(data: { userId: $userId, eventId: $eventId }) {
+      _id
+    }
+  }
+`;

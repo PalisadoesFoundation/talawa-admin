@@ -135,6 +135,18 @@ export const EVENT_DETAILS = gql`
   }
 `;
 
+export const EVENT_ATTENDEES = gql`
+  query Event($id: ID!) {
+    event(id: $id) {
+      attendees {
+        _id
+        firstName
+        lastName
+      }
+    }
+  }
+`;
+
 // Query to take the Organization with data
 export const ORGANIZATIONS_LIST = gql`
   query Organizations($id: ID!) {

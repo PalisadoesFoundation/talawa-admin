@@ -50,7 +50,7 @@ ReactDOM.render(
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Provider store={store}>
             <App />
-            <ToastContainer limit={3} />
+            <ToastContainer limit={5} />
           </Provider>
         </LocalizationProvider>
       </BrowserRouter>
