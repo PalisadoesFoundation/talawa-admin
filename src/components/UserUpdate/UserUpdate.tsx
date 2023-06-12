@@ -2,6 +2,7 @@ import React from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
+import Button from 'react-bootstrap/Button';
 import styles from './UserUpdate.module.css';
 import convertToBase64 from 'utils/convertToBase64';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
@@ -9,6 +10,7 @@ import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { languages } from 'utils/languages';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
+import { Form } from 'react-bootstrap';
 
 interface UserUpdateProps {
   id: string;
@@ -107,7 +109,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
           <div className={styles.dispflex}>
             <div>
               <label>{t('firstName')}</label>
-              <input
+              <Form.Control
                 type="input"
                 id="firstname"
                 placeholder={t('firstName')}
@@ -126,7 +128,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
           <div className={styles.dispflex}>
             <div>
               <label>{t('lastName')}</label>
-              <input
+              <Form.Control
                 type="input"
                 id="lastname"
                 placeholder={t('lastName')}
@@ -145,7 +147,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
           <div className={styles.dispflex}>
             <div>
               <label>{t('email')}</label>
-              <input
+              <Form.Control
                 type="email"
                 id="email"
                 placeholder={t('email')}
@@ -187,14 +189,15 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
           </div>
           <label htmlFor="orgphoto" className={styles.orgphoto}>
             {t('displayImage')}:
-            <input
+            <Form.Control
               accept="image/*"
               id="orgphoto"
               name="photo"
               type="file"
               multiple={false}
-              onChange={async (e) => {
-                const file = e.target.files?.[0];
+              onChange={async (e: React.ChangeEvent) => {
+                const target = e.target as HTMLInputElement;
+                const file = target.files && target.files[0];
                 if (file)
                   setFormState({
                     ...formState,
@@ -205,22 +208,22 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
             />
           </label>
           <div className={styles.dispbtnflex}>
-            <button
+            <Button
               type="button"
               className={styles.greenregbtn}
               value="savechanges"
               onClick={login_link}
             >
               {t('saveChanges')}
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               className={styles.whitebtn}
               value="cancelchanges"
               onClick={cancelUpdate}
             >
               {t('cancel')}
-            </button>
+            </Button>
           </div>
         </form>
       </div>

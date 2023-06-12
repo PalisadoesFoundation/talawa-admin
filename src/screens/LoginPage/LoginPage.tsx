@@ -1,11 +1,12 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Modal from 'react-modal';
+import Modal from 'react-bootstrap/Modal';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Link, useHistory } from 'react-router-dom';
-import { Nav, Navbar } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Dropdown, Form, Nav, Navbar } from 'react-bootstrap';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { toast } from 'react-toastify';
 import cookies from 'js-cookie';
@@ -28,7 +29,7 @@ function LoginPage(): JSX.Element {
 
   document.title = t('title');
 
-  const [modalisOpen, setIsOpen] = React.useState(false);
+  const [showModal, setShowModal] = React.useState(false);
   const [componentLoader, setComponentLoader] = useState(true);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [signformState, setSignFormState] = useState({
@@ -42,10 +43,11 @@ function LoginPage(): JSX.Element {
     email: '',
     password: '',
   });
-  const [show, setShow] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const history = useHistory();
 
   const currentLanguageCode = cookies.get('i18next') || 'en';
 
@@ -57,18 +59,10 @@ function LoginPage(): JSX.Element {
     setComponentLoader(false);
   }, []);
 
-  const showModal = () => {
-    setIsOpen(true);
-  };
-
-  const hideModal = () => {
-    setIsOpen(false);
-  };
-
-  const handleShowCon = () => {
+  const toggleLoginModal = () => setShowModal(!showModal);
+  const togglePassword = () => setShowPassword(!showPassword);
+  const toggleConfirmPassword = () =>
     setShowConfirmPassword(!showConfirmPassword);
-  };
-  const history = useHistory();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [login, { loading: loginLoading }] = useMutation(LOGIN_MUTATION);
@@ -222,10 +216,6 @@ function LoginPage(): JSX.Element {
     return <div className={styles.loader}></div>;
   }
 
-  const handleShow = () => {
-    setShow(!show);
-  };
-
   return (
     <>
       <section className={styles.login_background}>
@@ -238,20 +228,23 @@ function LoginPage(): JSX.Element {
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
-            <Nav className="ml-auto">
-              <div className="dropdown mr-4">
-                <button
-                  className={`btn dropdown-toggle ${styles.languageBtn}`}
-                  type="button"
-                  data-toggle="dropdown"
-                  aria-expanded="false"
-                  title="Change Langauge"
+            <Nav className="ms-auto">
+              <Dropdown
+                className={styles.languageBtn}
+                data-toggle="dropdown"
+                aria-expanded="false"
+                title="Change Langauge"
+              >
+                <Dropdown.Toggle
+                  variant="success"
+                  id="dropdown-basic"
+                  data-testid="languageDropdownBtn"
                 >
                   <i className="fas fa-globe"></i>
-                </button>
-                <div className="dropdown-menu">
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
                   {languages.map((language, index: number) => (
-                    <button
+                    <Dropdown.Item
                       key={index}
                       className="dropdown-item"
                       onClick={() => i18next.changeLanguage(language.code)}
@@ -259,22 +252,22 @@ function LoginPage(): JSX.Element {
                       data-testid={`changeLanguageBtn${index}`}
                     >
                       <span
-                        className={`fi fi-${language.country_code} mr-2`}
+                        className={`fi fi-${language.country_code} me-2`}
                       ></span>
                       {language.name}
-                    </button>
+                    </Dropdown.Item>
                   ))}
-                </div>
-              </div>
-              <button
+                </Dropdown.Menu>
+              </Dropdown>
+              <Button
                 type="button"
                 className={styles.navloginbtn}
                 value="Login"
-                onClick={showModal}
+                onClick={toggleLoginModal}
                 data-testid="loginModalBtn"
               >
                 {t('login')}
-              </button>
+              </Button>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
@@ -293,7 +286,7 @@ function LoginPage(): JSX.Element {
                   <div className={styles.dispflex}>
                     <div>
                       <label>{t('firstName')}</label>
-                      <input
+                      <Form.Control
                         type="text"
                         id="signfirstname"
                         placeholder={t('firstName')}
@@ -310,7 +303,7 @@ function LoginPage(): JSX.Element {
                     </div>
                     <div>
                       <label>{t('lastName')}</label>
-                      <input
+                      <Form.Control
                         type="text"
                         id="signlastname"
                         placeholder={t('lastName')}
@@ -327,7 +320,7 @@ function LoginPage(): JSX.Element {
                     </div>
                   </div>
                   <label>{t('email')}</label>
-                  <input
+                  <Form.Control
                     type="email"
                     id="signemail"
                     placeholder={t('email')}
@@ -343,8 +336,8 @@ function LoginPage(): JSX.Element {
                   />
                   <div className={styles.passwordalert}>
                     <label>{t('password')}</label>
-                    <input
-                      type={show ? 'text' : 'password'}
+                    <Form.Control
+                      type={showPassword ? 'text' : 'password'}
                       id="signpassword"
                       data-testid="passwordField"
                       placeholder={t('password')}
@@ -362,10 +355,10 @@ function LoginPage(): JSX.Element {
                     <label
                       id="showPasswordr"
                       className={styles.showregister}
-                      onClick={handleShow}
+                      onClick={togglePassword}
                       data-testid="showPasswordr"
                     >
-                      {show ? (
+                      {showPassword ? (
                         <i className="fas fa-eye"></i>
                       ) : (
                         <i className="fas fa-eye-slash"></i>
@@ -387,7 +380,7 @@ function LoginPage(): JSX.Element {
                   </div>
                   <div className={styles.passwordalert}>
                     <label>{t('confirmPassword')}</label>
-                    <input
+                    <Form.Control
                       type={showConfirmPassword ? 'text' : 'password'}
                       id="signpassword"
                       placeholder={t('confirmPassword')}
@@ -404,7 +397,7 @@ function LoginPage(): JSX.Element {
                     <label
                       id="showPasswordr"
                       className={styles.showregister}
-                      onClick={handleShowCon}
+                      onClick={toggleConfirmPassword}
                       data-testid="showPasswordrCon"
                     >
                       {showConfirmPassword ? (
@@ -435,126 +428,122 @@ function LoginPage(): JSX.Element {
                     /* istanbul ignore next */
                     <></>
                   )}
-                  <button
+                  <Button
                     type="submit"
                     className={styles.greenregbtn}
                     value="Register"
                     data-testid="registrationBtn"
                   >
                     {t('register')}
-                  </button>
+                  </Button>
                 </form>
               </div>
             </Col>
           </Row>
         </div>
+
         <Modal
-          isOpen={modalisOpen}
-          style={{
-            overlay: { backgroundColor: 'grey', zIndex: 20 },
-          }}
-          className={styles.modalbody}
-          ariaHideApp={false}
+          show={showModal}
+          size="sm"
+          aria-labelledby="contained-modal-title-vcenter"
+          onHide={toggleLoginModal}
+          centered
         >
-          <section id={styles.grid_wrapper}>
-            <div className={styles.form_wrapper}>
-              <div className={styles.flexdir}>
-                <p className={styles.logintitle}>{t('login')}</p>
-                <a
-                  onClick={hideModal}
-                  className={styles.cancel}
-                  data-testid="hideModalBtn"
-                >
-                  <i className="fa fa-times"></i>
-                </a>
-              </div>
-              <form onSubmit={login_link}>
-                <label>{t('email')}</label>
-                <input
-                  type="email"
-                  id="email"
-                  className="input_box"
-                  placeholder={t('enterEmail')}
-                  autoComplete="off"
+          <Modal.Header>
+            <p className={styles.logintitle}>{t('login')} </p>
+            <a
+              onClick={toggleLoginModal}
+              className={styles.cancel}
+              data-testid="hideModalBtn"
+            >
+              <i className="fa fa-times"></i>
+            </a>
+          </Modal.Header>
+          <Modal.Body>
+            <form onSubmit={login_link}>
+              <label>{t('email')}</label>
+              <Form.Control
+                type="email"
+                id="email"
+                className="input_box"
+                placeholder={t('enterEmail')}
+                autoComplete="off"
+                required
+                value={formState.email}
+                onChange={(e) => {
+                  setFormState({
+                    ...formState,
+                    email: e.target.value,
+                  });
+                }}
+              />
+
+              <label>{t('password')}</label>
+              <div>
+                <Form.Control
+                  type={showPassword ? 'text' : 'password'}
+                  className="input_box_second"
+                  placeholder={t('enterPassword')}
                   required
-                  value={formState.email}
+                  value={formState.password}
+                  data-testid="password"
                   onChange={(e) => {
                     setFormState({
                       ...formState,
-                      email: e.target.value,
+                      password: e.target.value,
                     });
                   }}
                 />
-
-                <label>{t('password')}</label>
-                <div>
-                  <input
-                    type={show ? 'text' : 'password'}
-                    className="input_box_second"
-                    placeholder={t('enterPassword')}
-                    required
-                    value={formState.password}
-                    data-testid="password"
-                    onChange={(e) => {
-                      setFormState({
-                        ...formState,
-                        password: e.target.value,
-                      });
-                    }}
+                <label
+                  id="showPassword"
+                  className={styles.showPassword}
+                  onClick={togglePassword}
+                  data-testid="showPassword"
+                >
+                  {showPassword ? (
+                    <i className="fas fa-eye"></i>
+                  ) : (
+                    <i className="fas fa-eye-slash"></i>
+                  )}
+                </label>
+              </div>
+              {REACT_APP_USE_RECAPTCHA === 'yes' ? (
+                <div className="googleRecaptcha">
+                  <ReCAPTCHA
+                    ref={recaptchaRef}
+                    sitekey={
+                      /* istanbul ignore next */
+                      RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
+                    }
                   />
-                  <label
-                    id="showPassword"
-                    className={styles.show}
-                    onClick={handleShow}
-                    data-testid="showPassword"
-                  >
-                    {show ? (
-                      <i className="fas fa-eye"></i>
-                    ) : (
-                      <i className="fas fa-eye-slash"></i>
-                    )}
-                  </label>
                 </div>
-                {REACT_APP_USE_RECAPTCHA === 'yes' ? (
-                  <div className="googleRecaptcha">
-                    <ReCAPTCHA
-                      ref={recaptchaRef}
-                      sitekey={
-                        /* istanbul ignore next */
-                        RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
-                      }
-                    />
-                  </div>
-                ) : (
-                  /* istanbul ignore next */
-                  <></>
-                )}
-                <button
-                  type="submit"
-                  className={styles.greenregbtn}
-                  value="Login"
-                  data-testid="loginBtn"
-                >
-                  {t('login')}
-                </button>
-                <Link to="/forgotPassword" className={styles.forgotpwd}>
-                  {t('forgotPassword')}
-                </Link>
-                <hr></hr>
-                <span className={styles.noaccount}>
-                  {t('doNotOwnAnAccount')}
-                </span>
-                <button
-                  type="button"
-                  className={styles.whiteloginbtn}
-                  value="Register"
-                  onClick={hideModal}
-                >
-                  {t('register')}
-                </button>
-              </form>
-            </div>
-          </section>
+              ) : (
+                /* istanbul ignore next */
+                <></>
+              )}
+              <Button
+                type="submit"
+                className={styles.greenregbtn}
+                value="Login"
+                data-testid="loginBtn"
+              >
+                {t('login')}
+              </Button>
+              <Link to="/forgotPassword" className={styles.forgotpwd}>
+                {t('forgotPassword')}
+              </Link>
+              <hr></hr>
+              <span className={styles.noaccount}>{t('doNotOwnAnAccount')}</span>
+              <Button
+                type="button"
+                className={styles.whiteloginbtn}
+                value="Register"
+                onClick={toggleLoginModal}
+              >
+                {t('register')}
+              </Button>
+            </form>
+          </Modal.Body>
         </Modal>
       </section>
     </>

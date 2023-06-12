@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './MemberRequestCard.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import { useMutation } from '@apollo/client';
 import {
   ACCEPT_ORGANIZATION_REQUEST_MUTATION,
@@ -98,18 +99,18 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
               <p className={styles.memberfont}>
                 {t('joined')}: <span>{props.joinDate}</span>
               </p>
-              <button
+              <Button
                 className={styles.memberfontcreatedbtn}
                 onClick={AddMember}
               >
                 {t('accept')}
-              </button>
-              <button
+              </Button>
+              <Button
                 className={styles.memberfontcreatedbtn}
                 onClick={RejectMember}
               >
                 {t('reject')}
-              </button>
+              </Button>
             </div>
           </Col>
         </Row>

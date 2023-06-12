@@ -1,8 +1,9 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
+import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import Modal from 'react-modal';
+import Modal from 'react-bootstrap/Modal';
 
 import styles from './EventListCard.module.css';
 import {
@@ -137,78 +138,67 @@ function EventListCard(props: EventListCardProps): JSX.Element {
         </div>
       </div>
       {/* preview modal */}
-      <Modal
-        isOpen={eventmodalisOpen}
-        style={{
-          overlay: { backgroundColor: 'grey' },
-        }}
-        className={styles.modalbody}
-        ariaHideApp={false}
-      >
-        <section id={styles.grid_wrapper}>
-          <div className={styles.form_wrapper}>
-            <div className={styles.flexdir}>
-              <p className={styles.titlemodal}>{t('eventDetails')}</p>
+      <Modal show={eventmodalisOpen}>
+        <Modal.Header>
+          <p className={styles.titlemodal}>{t('eventDetails')}</p>
+          <Button
+            onClick={hideViewModal}
+            data-testid="createEventModalCloseBtn"
+          >
+            <i className="fa fa-times"></i>
+          </Button>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <div>
+              <p className={styles.preview}>
+                {t('eventTitle')}:{' '}
+                <span className={styles.view}>
+                  {props.eventName ? <>{props.eventName}</> : <>Dogs Care</>}{' '}
+                </span>
+              </p>
+              <p className={styles.preview}>
+                {t('location')}:
+                <span className={styles.view}>
+                  {props.eventLocation ? (
+                    <>{props.eventLocation}</>
+                  ) : (
+                    <>India</>
+                  )}
+                </span>
+              </p>
+              <p className={styles.preview}>
+                {t('description')}:{' '}
+                <span className={styles.view}>{props.eventDescription}</span>
+              </p>
+              <p className={styles.preview}>
+                {t('on')}: <span className={styles.view}>{props.regDate}</span>
+              </p>
+              <p className={styles.preview}>
+                {t('end')}:{' '}
+                <span className={styles.view}>{props.regEndDate}</span>
+              </p>
+            </div>
+            <div className={styles.iconContainer}>
               <a
-                onClick={hideViewModal}
-                className={styles.cancel}
-                data-testid="createEventModalCloseBtn"
+                data-testid="editEventModalBtn"
+                className={`${styles.icon} mr-2`}
+                data-toggle="modal"
+                data-target={`#editEventModal${props.id}`}
               >
-                <i className="fa fa-times"></i>
+                <i className="fas fa-edit"></i>
+              </a>
+              <a
+                data-testid="deleteEventModalBtn"
+                className={styles.icon}
+                data-toggle="modal"
+                data-target={`#deleteEventModal${props.id}`}
+              >
+                <i className="fa fa-trash"></i>
               </a>
             </div>
-            <Form>
-              <div>
-                <p className={styles.preview}>
-                  {t('eventTitle')}:{' '}
-                  <span className={styles.view}>
-                    {props.eventName ? <>{props.eventName}</> : <>Dogs Care</>}{' '}
-                  </span>
-                </p>
-                <p className={styles.preview}>
-                  {t('location')}:
-                  <span className={styles.view}>
-                    {props.eventLocation ? (
-                      <>{props.eventLocation}</>
-                    ) : (
-                      <>India</>
-                    )}
-                  </span>
-                </p>
-                <p className={styles.preview}>
-                  {t('description')}:{' '}
-                  <span className={styles.view}>{props.eventDescription}</span>
-                </p>
-                <p className={styles.preview}>
-                  {t('on')}:{' '}
-                  <span className={styles.view}>{props.regDate}</span>
-                </p>
-                <p className={styles.preview}>
-                  {t('end')}:{' '}
-                  <span className={styles.view}>{props.regEndDate}</span>
-                </p>
-              </div>
-              <div className={styles.iconContainer}>
-                <a
-                  data-testid="editEventModalBtn"
-                  className={`${styles.icon} mr-2`}
-                  data-toggle="modal"
-                  data-target={`#editEventModal${props.id}`}
-                >
-                  <i className="fas fa-edit"></i>
-                </a>
-                <a
-                  data-testid="deleteEventModalBtn"
-                  className={styles.icon}
-                  data-toggle="modal"
-                  data-target={`#deleteEventModal${props.id}`}
-                >
-                  <i className="fa fa-trash"></i>
-                </a>
-              </div>
-            </Form>
-          </div>
-        </section>
+          </Form>
+        </Modal.Body>
       </Modal>
 
       {/* delete modal */}
@@ -229,32 +219,32 @@ function EventListCard(props: EventListCardProps): JSX.Element {
               >
                 {t('deleteEvent')}
               </h5>
-              <button
+              <Button
                 type="button"
                 className="close"
                 data-dismiss="modal"
                 aria-label="Close"
               >
                 <span aria-hidden="true">&times;</span>
-              </button>
+              </Button>
             </div>
             <div className="modal-body">{t('deleteEventMsg')}</div>
             <div className="modal-footer">
-              <button
+              <Button
                 type="button"
                 className="btn btn-danger"
                 data-dismiss="modal"
               >
                 {t('no')}
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
                 className="btn btn-success"
                 onClick={DeleteEvent}
                 data-testid="deleteEventBtn"
               >
                 {t('yes')}
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -274,19 +264,19 @@ function EventListCard(props: EventListCardProps): JSX.Element {
               <h5 className="modal-title" id={`editEventModal${props.id}Label`}>
                 {t('editEvent')}
               </h5>
-              <button
+              <Button
                 type="button"
                 className="close"
                 data-dismiss="modal"
                 aria-label="Close"
               >
                 <span aria-hidden="true">&times;</span>
-              </button>
+              </Button>
             </div>
             <form onSubmit={updateEventHandler}>
               <div className="modal-body">
                 <label htmlFor="eventtitle">{t('eventTitle')}</label>
-                <input
+                <Form.Control
                   type="title"
                   id="eventitle"
                   autoComplete="off"
@@ -301,7 +291,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                   }}
                 />
                 <label htmlFor="eventdescrip">{t('description')}</label>
-                <input
+                <Form.Control
                   type="eventdescrip"
                   id="eventdescrip"
                   autoComplete="off"
@@ -316,7 +306,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                   }}
                 />
                 <label htmlFor="eventLocation">{t('location')}</label>
-                <input
+                <Form.Control
                   type="text"
                   id="eventLocation"
                   autoComplete="off"
@@ -334,7 +324,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                   <div className={styles.datediv}>
                     <div className="mr-3">
                       <label htmlFor="startTime">{t('startTime')}</label>
-                      <input
+                      <Form.Control
                         id="startTime"
                         value={formState.startTime}
                         data-testid="updateStartTime"
@@ -348,7 +338,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                     </div>
                     <div>
                       <label htmlFor="endTime">{t('endTime')}</label>
-                      <input
+                      <Form.Control
                         id="endTime"
                         value={formState.endTime}
                         data-testid="updateEndTime"
@@ -365,7 +355,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                 <div className={styles.checkboxdiv}>
                   <div className={styles.dispflex}>
                     <label htmlFor="allday">{t('allDay')}?</label>
-                    <input
+                    <Form.Control
                       id="allday"
                       type="checkbox"
                       data-testid="updateAllDay"
@@ -375,7 +365,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                   </div>
                   <div className={styles.dispflex}>
                     <label htmlFor="recurring">{t('recurringEvent')}:</label>
-                    <input
+                    <Form.Control
                       id="recurring"
                       type="checkbox"
                       data-testid="updateRecurring"
@@ -387,7 +377,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                 <div className={styles.checkboxdiv}>
                   <div className={styles.dispflex}>
                     <label htmlFor="ispublic">{t('isPublic')}?</label>
-                    <input
+                    <Form.Control
                       id="ispublic"
                       type="checkbox"
                       data-testid="updateIsPublic"
@@ -397,7 +387,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                   </div>
                   <div className={styles.dispflex}>
                     <label htmlFor="registrable">{t('isRegistrable')}?</label>
-                    <input
+                    <Form.Control
                       id="registrable"
                       type="checkbox"
                       data-testid="updateRegistrable"
@@ -410,20 +400,20 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                 </div>
               </div>
               <div className="modal-footer">
-                <button
+                <Button
                   type="button"
                   className="btn btn-danger"
                   data-dismiss="modal"
                 >
                   {t('close')}
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
                   className="btn btn-success"
                   data-testid="updatePostBtn"
                 >
                   {t('updatePost')}
-                </button>
+                </Button>
               </div>
             </form>
           </div>

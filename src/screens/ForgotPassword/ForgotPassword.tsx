@@ -11,6 +11,8 @@ import {
 import styles from './ForgotPassword.module.css';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
+import Button from 'react-bootstrap/Button';
+import { Form } from 'react-bootstrap';
 
 const ForgotPassword = () => {
   const { t } = useTranslation('translation', {
@@ -129,7 +131,7 @@ const ForgotPassword = () => {
                   {t('registeredEmail')}:
                 </label>
                 <div className="col-sm-7">
-                  <input
+                  <Form.Control
                     type="email"
                     className="form-control"
                     id="registeredEmail"
@@ -141,12 +143,12 @@ const ForgotPassword = () => {
                   />
                 </div>
                 <div className="col-sm-3">
-                  <button
+                  <Button
                     type="submit"
                     className={`btn btn-success btn-block ${styles.talawaBackgroundColor}`}
                   >
                     <i className="fa fa-key"></i> {t('getOtp')}
-                  </button>
+                  </Button>
                 </div>
               </div>
             </form>
@@ -159,7 +161,7 @@ const ForgotPassword = () => {
                   {t('enterOtp')}:
                 </label>
                 <div className="col-sm-10">
-                  <input
+                  <Form.Control
                     type="number"
                     className="form-control"
                     id="userOtp"
@@ -184,7 +186,7 @@ const ForgotPassword = () => {
                   {t('enterNewPassword')}:
                 </label>
                 <div className="col-sm-10">
-                  <input
+                  <Form.Control
                     type="password"
                     className="form-control"
                     id="newPassword"
@@ -210,7 +212,7 @@ const ForgotPassword = () => {
                   {t('cofirmNewPassword')}:
                 </label>
                 <div className="col-sm-10">
-                  <input
+                  <Form.Control
                     type="password"
                     className="form-control"
                     id="confirmNewPassword"
@@ -229,12 +231,12 @@ const ForgotPassword = () => {
                 </div>
               </div>
               <div className="submitBtn">
-                <button
+                <Button
                   type="submit"
                   className={`btn btn-success btn-block ${styles.talawaBackgroundColor}`}
                 >
                   {t('changePassword')}
-                </button>
+                </Button>
               </div>
               <div className={`homeBtn mt-3 ${styles.talawaBackgroundColor}`}>
                 <Link to="/" className="btn btn-info btn-block">

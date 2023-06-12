@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Form, Row } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
@@ -166,7 +167,7 @@ const Requests = () => {
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
               <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
-              <input
+              <Form.Control
                 type="name"
                 id="firstName"
                 placeholder={t('searchFirstName')}
@@ -177,7 +178,7 @@ const Requests = () => {
                 ref={firstNameRef}
               />
 
-              <input
+              <Form.Control
                 type="name"
                 id="lastName"
                 placeholder={t('searchLastName')}
@@ -189,7 +190,7 @@ const Requests = () => {
               />
 
               <div className={styles.radio_buttons} data-testid="usertypelist">
-                <input
+                <Form.Check
                   id="allusers"
                   value="allusers"
                   name="displaylist"
@@ -202,7 +203,7 @@ const Requests = () => {
                 />
                 <label htmlFor="allusers">{t('allMembers')}</label>
 
-                <input
+                <Form.Check
                   id="blockedusers"
                   value="blockedusers"
                   name="displaylist"
@@ -264,21 +265,21 @@ const Requests = () => {
                                 {user.organizationsBlockedBy.some(
                                   (spam: any) => spam._id === currentUrl
                                 ) ? (
-                                  <button
+                                  <Button
                                     className="btn btn-danger"
                                     onClick={() => handleUnBlockUser(user._id)}
                                     data-testid={`unBlockUser${user._id}`}
                                   >
                                     {t('unblock')}
-                                  </button>
+                                  </Button>
                                 ) : (
-                                  <button
+                                  <Button
                                     className="btn btn-success"
                                     onClick={() => handleBlockUser(user._id)}
                                     data-testid={`blockUser${user._id}`}
                                   >
                                     {t('block')}
-                                  </button>
+                                  </Button>
                                 )}
                               </td>
                             </tr>

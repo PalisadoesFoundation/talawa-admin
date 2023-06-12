@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -86,7 +87,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
               <br />
-              <button
+              <Button
                 className={styles.activeBtn}
                 data-testid="dashboardTitleBtn"
               >
@@ -94,7 +95,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   <i className="fa fa-user" />
                 </div>
                 {t('title')}
-              </button>
+              </Button>
             </div>
           </div>
         </Col>
@@ -103,13 +104,13 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             <div className={styles.mainpageright}>
               <Row className={styles.justifysp}>
                 <p className={styles.logintitle}>{t('title')}</p>
-                <button
+                <Button
                   className={styles.memberfontcreatedbtn}
                   onClick={AddAdmin}
                 >
                   {t('addAdmin')}
-                </button>
-                <button
+                </Button>
+                <Button
                   className={styles.memberfontcreatedbtn}
                   role="stateBtn"
                   onClick={() => {
@@ -117,7 +118,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   }}
                 >
                   edit
-                </button>
+                </Button>
               </Row>
               <Row className={styles.justifysp}>
                 <Col sm={6} lg={4}>

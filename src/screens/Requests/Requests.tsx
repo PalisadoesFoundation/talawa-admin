@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Form, Row } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import Button from 'react-bootstrap/Button';
 
 import styles from './Requests.module.css';
 import ListNavbar from 'components/ListNavbar/ListNavbar';
@@ -140,7 +141,7 @@ const Requests = () => {
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
               <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
-              <input
+              <Form.Control
                 type="name"
                 id="orgname"
                 placeholder={t('enterName')}
@@ -193,22 +194,22 @@ const Requests = () => {
                             <td>{`${user.firstName} ${user.lastName}`}</td>
                             <td>{user.email}</td>
                             <td>
-                              <button
+                              <Button
                                 className="btn btn-success btn-sm"
                                 onClick={() => accpetAdmin(user._id)}
                                 data-testid={`acceptUser${user._id}`}
                               >
                                 {t('accept')}
-                              </button>
+                              </Button>
                             </td>
                             <td>
-                              <button
+                              <Button
                                 className="btn btn-danger btn-sm"
                                 onClick={() => rejectAdmin(user._id)}
                                 data-testid={`rejectUser${user._id}`}
                               >
                                 {t('reject')}
-                              </button>
+                              </Button>
                             </td>
                           </tr>
                         );

@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState } from 'react';
-import Modal from 'react-modal';
+import Modal from 'react-bootstrap/Modal';
 import { Form } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -29,7 +29,7 @@ function OrgList(): JSX.Element {
 
   document.title = t('title');
 
-  const [modalisOpen, setmodalIsOpen] = useState(false);
+  const [showAddEventModal, setShowAddEventModal] = useState(false);
   const [formState, setFormState] = useState({
     name: '',
     descrip: '',
@@ -44,12 +44,7 @@ function OrgList(): JSX.Element {
 
   const isSuperAdmin = localStorage.getItem('UserType') !== 'SUPERADMIN';
 
-  const showInviteModal = () => {
-    setmodalIsOpen(true);
-  };
-  const hideInviteModal = () => {
-    setmodalIsOpen(false);
-  };
+  const toggleAddEventModal = () => setShowAddEventModal(!showAddEventModal);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [create, { loading: loading_3 }] = useMutation(
@@ -130,7 +125,7 @@ function OrgList(): JSX.Element {
           location: '',
           image: '',
         });
-        setmodalIsOpen(false);
+        toggleAddEventModal();
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -225,13 +220,13 @@ function OrgList(): JSX.Element {
                 variant="success"
                 className={styles.invitebtn}
                 disabled={isSuperAdmin}
-                onClick={showInviteModal}
+                onClick={toggleAddEventModal}
                 data-testid="createOrganizationBtn"
                 style={{ display: isSuperAdmin ? 'none' : 'block' }}
               >
                 + {t('createOrganization')}
               </Button>
-              <input
+              <Form.Control
                 type="name"
                 id="orgname"
                 placeholder="Search Organization"
@@ -336,140 +331,133 @@ function OrgList(): JSX.Element {
           </div>
         </Col>
       </Row>
-      <Modal
-        isOpen={modalisOpen}
-        onRequestClose={() => setmodalIsOpen(false)}
-        style={{
-          overlay: { backgroundColor: 'grey' },
-        }}
-        className={styles.modalbody}
-        ariaHideApp={false}
-      >
-        <section id={styles.grid_wrapper}>
-          <div className={styles.form_wrapper}>
-            <div className={styles.flexdir}>
-              <p className={styles.titlemodal}>{t('createOrganization')}</p>
-              <a
-                onClick={hideInviteModal}
-                className={styles.cancel}
-                data-testid="closeOrganizationModal"
-              >
-                <i
-                  className="fa fa-times"
-                  style={{
-                    cursor: 'pointer',
-                  }}
-                ></i>
-              </a>
-            </div>
-            <Form onSubmitCapture={CreateOrg}>
-              <label htmlFor="orgname">{t('name')}</label>
-              <input
-                type="name"
-                id="orgname"
-                placeholder={t('enterName')}
-                data-testid="modalOrganizationName"
-                autoComplete="off"
-                required
-                value={formState.name}
-                onChange={(e) => {
-                  setFormState({
-                    ...formState,
-                    name: e.target.value,
-                  });
-                }}
-              />
-              <label htmlFor="descrip">{t('description')}</label>
-              <input
-                type="descrip"
-                id="descrip"
-                placeholder={t('description')}
-                autoComplete="off"
-                required
-                value={formState.descrip}
-                onChange={(e) => {
-                  setFormState({
-                    ...formState,
-                    descrip: e.target.value,
-                  });
-                }}
-              />
-              <label htmlFor="location">{t('location')}</label>
-              <input
-                type="text"
-                id="location"
-                placeholder={t('location')}
-                autoComplete="off"
-                required
-                value={formState.location}
-                onChange={(e) => {
-                  setFormState({
-                    ...formState,
-                    location: e.target.value,
-                  });
-                }}
-              />
+      <Modal show={showAddEventModal} onHide={toggleAddEventModal}>
+        <Modal.Header>
+          <p className={styles.titlemodal}>{t('createOrganization')}</p>
+          <Button
+            variant="danger"
+            onClick={toggleAddEventModal}
+            data-testid="closeOrganizationModal"
+          >
+            <i
+              className="fa fa-times"
+              style={{
+                cursor: 'pointer',
+              }}
+            ></i>
+          </Button>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmitCapture={CreateOrg}>
+            <label htmlFor="orgname">{t('name')}</label>
+            <Form.Control
+              type="name"
+              id="orgname"
+              placeholder={t('enterName')}
+              data-testid="modalOrganizationName"
+              autoComplete="off"
+              required
+              value={formState.name}
+              onChange={(e) => {
+                setFormState({
+                  ...formState,
+                  name: e.target.value,
+                });
+              }}
+            />
+            <label htmlFor="descrip">{t('description')}</label>
+            <Form.Control
+              type="descrip"
+              id="descrip"
+              placeholder={t('description')}
+              autoComplete="off"
+              required
+              value={formState.descrip}
+              onChange={(e) => {
+                setFormState({
+                  ...formState,
+                  descrip: e.target.value,
+                });
+              }}
+            />
+            <label htmlFor="location">{t('location')}</label>
+            <Form.Control
+              type="text"
+              id="location"
+              placeholder={t('location')}
+              autoComplete="off"
+              required
+              value={formState.location}
+              onChange={(e) => {
+                setFormState({
+                  ...formState,
+                  location: e.target.value,
+                });
+              }}
+            />
 
-              <div className={styles.checkboxdiv}>
-                <div className={styles.dispflex}>
-                  <label htmlFor="ispublic">{t('isPublic')}:</label>
-                  <input
-                    id="ispublic"
-                    type="checkbox"
-                    defaultChecked={formState.ispublic}
-                    onChange={() =>
-                      setFormState({
-                        ...formState,
-                        ispublic: !formState.ispublic,
-                      })
-                    }
-                  />
-                </div>
-                <div className={styles.dispflex}>
-                  <label htmlFor="visible">{t('visibleInSearch')}: </label>
-                  <input
-                    id="visible"
-                    type="checkbox"
-                    defaultChecked={formState.visible}
-                    onChange={() =>
-                      setFormState({
-                        ...formState,
-                        visible: !formState.visible,
-                      })
-                    }
-                  />
-                </div>
-              </div>
-              <label htmlFor="orgphoto" className={styles.orgphoto}>
-                {t('displayImage')}:
-                <input
-                  accept="image/*"
-                  id="orgphoto"
-                  name="photo"
-                  type="file"
-                  multiple={false}
-                  onChange={async (e) => {
-                    const file = e.target.files?.[0];
-                    if (file)
-                      setFormState({
-                        ...formState,
-                        image: await convertToBase64(file),
-                      });
-                  }}
-                  data-testid="organisationImage"
+            <div className={styles.checkboxdiv}>
+              <div className={styles.dispflex}>
+                <label htmlFor="ispublic">{t('isPublic')}:</label>
+                <Form.Switch
+                  id="ispublic"
+                  type="checkbox"
+                  className={'ms-3'}
+                  defaultChecked={formState.ispublic}
+                  onChange={() =>
+                    setFormState({
+                      ...formState,
+                      ispublic: !formState.ispublic,
+                    })
+                  }
                 />
-              </label>
-              <button
-                type="submit"
-                className={styles.greenregbtn}
-                value="invite"
-                data-testid="submitOrganizationForm"
-              >
-                {t('createOrganization')}
-              </button>
-            </Form>
-          </div>
-        </section>
+              </div>
+              <div className={styles.dispflex}>
+                <label htmlFor="visible">{t('visibleInSearch')}: </label>
+                <Form.Switch
+                  id="visible"
+                  type="checkbox"
+                  className={'ms-3'}
+                  defaultChecked={formState.visible}
+                  onChange={() =>
+                    setFormState({
+                      ...formState,
+                      visible: !formState.visible,
+                    })
+                  }
+                />
+              </div>
+            </div>
+            <label htmlFor="orgphoto" className={styles.orgphoto}>
+              {t('displayImage')}:
+              <Form.Control
+                accept="image/*"
+                id="orgphoto"
+                name="photo"
+                type="file"
+                multiple={false}
+                onChange={async (e: React.ChangeEvent) => {
+                  const target = e.target as HTMLInputElement;
+                  const file = target.files && target.files[0];
+                  if (file)
+                    setFormState({
+                      ...formState,
+                      image: await convertToBase64(file),
+                    });
+                }}
+                data-testid="organisationImage"
+              />
+            </label>
+            <Button
+              type="submit"
+              className={styles.greenregbtn}
+              value="invite"
+              data-testid="submitOrganizationForm"
+            >
+              {t('createOrganization')}
+            </Button>
+          </Form>
+        </Modal.Body>
       </Modal>
     </>
   );

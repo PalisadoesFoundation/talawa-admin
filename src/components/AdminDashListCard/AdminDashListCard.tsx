@@ -1,6 +1,7 @@
 import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 
 import styles from './AdminDashListCard.module.css';
@@ -55,7 +56,7 @@ function AdminDashListCard(props: AdminDashListCardProps): JSX.Element {
               {t('members')}: <span>{props?.members}</span>
             </p>
             <div className={styles.orgCreateBtnDiv}>
-              <button
+              <Button
                 className={styles.orgfontcreatedbtn}
                 onClick={Click}
                 disabled={
@@ -64,7 +65,7 @@ function AdminDashListCard(props: AdminDashListCardProps): JSX.Element {
                 }
               >
                 {t('view')}
-              </button>
+              </Button>
             </div>
           </div>
         </Col>

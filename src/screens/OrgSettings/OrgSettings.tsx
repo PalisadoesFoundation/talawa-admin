@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'state/reducers';
 import { useTranslation } from 'react-i18next';
 import defaultImg from 'assets/third_image.png';
+import Button from 'react-bootstrap/Button';
 
 function OrgSettings(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -73,7 +74,7 @@ function OrgSettings(): JSX.Element {
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
               <div>
-                <button
+                <Button
                   className={styles.greenregbtn}
                   type="button"
                   value="userupdate"
@@ -82,8 +83,8 @@ function OrgSettings(): JSX.Element {
                   // onClick={() => setScreenVariable(1)}
                 >
                   {t('updateYourDetails')}
-                </button>
-                <button
+                </Button>
+                <Button
                   className={styles.greenregbtn}
                   type="button"
                   value="userPasswordUpdate"
@@ -92,8 +93,8 @@ function OrgSettings(): JSX.Element {
                   // onClick={() => setScreenVariable(1)}
                 >
                   {t('updateYourPassword')}
-                </button>
-                <button
+                </Button>
+                <Button
                   className={styles.greenregbtn}
                   type="button"
                   value="orgupdate"
@@ -102,8 +103,8 @@ function OrgSettings(): JSX.Element {
                   // onClick={() => setScreenVariable(2)}
                 >
                   {t('updateOrganization')}
-                </button>
-                <button
+                </Button>
+                <Button
                   className={styles.greenregbtn}
                   type="button"
                   value="orgdelete"
@@ -112,8 +113,8 @@ function OrgSettings(): JSX.Element {
                   // onClick={() => setScreenVariable(3)}
                 >
                   {t('deleteOrganization')}
-                </button>
-                <button
+                </Button>
+                <Button
                   className={styles.greenregbtn}
                   type="button"
                   value="orgdelete"
@@ -122,7 +123,7 @@ function OrgSettings(): JSX.Element {
                   // onClick={() => setScreenVariable(4)}
                 >
                   {t('seeRequest')}
-                </button>
+                </Button>
               </div>
             </div>
           </div>
