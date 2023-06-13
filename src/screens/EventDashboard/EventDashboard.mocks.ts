@@ -1,4 +1,50 @@
-import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
+import {
+  EVENT_DETAILS,
+  EVENT_ATTENDEES,
+  MEMBERS_LIST,
+} from 'GraphQl/Queries/Queries';
+
+const attendeeMocks = [
+  {
+    request: {
+      query: EVENT_ATTENDEES,
+      variables: { id: 'event123' },
+    },
+    result: {
+      data: {
+        event: {
+          attendees: [],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: MEMBERS_LIST,
+      variables: { id: 'org123' },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: 'org123',
+            members: [
+              {
+                _id: 'user1',
+                firstName: 'John',
+                lastName: 'Doe',
+                email: 'johndoe@palisadoes.com',
+                image: '',
+                createdAt: '12/12/22',
+                organizationsBlockedBy: [],
+              },
+            ],
+          },
+        ],
+      },
+    },
+  },
+];
 
 // Mock 1
 export const queryMockWithTime = [
@@ -30,6 +76,7 @@ export const queryMockWithTime = [
       },
     },
   },
+  ...attendeeMocks,
 ];
 
 // Mock 2
