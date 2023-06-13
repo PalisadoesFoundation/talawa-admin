@@ -8,11 +8,11 @@ import ListNavbar from 'components/ListNavbar/ListNavbar';
 import { AddEventProjectModal } from 'components/EventProjectModals/AddEventProjectModal';
 import { UpdateEventProjectModal } from 'components/EventProjectModals/UpdateEventProjectModal';
 import { DeleteEventProjectModal } from 'components/EventProjectModals/DeleteEventProjectModal';
-import { EventAttendeesModal } from 'components/EventAttendeesModal/EventAttendeesModal';
 import { AddTaskModal } from 'components/TaskModals/AddTaskModal';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import Button from 'react-bootstrap/Button';
 import List from '@mui/material/List';
+import { EventAttendeeWrapper } from 'components/EventAttendeesModal/EventAttendeeWrapper';
 import { TaskListItem } from 'components/TaskListItem/TaskListItem';
 
 interface EventTaskInterface {
@@ -62,7 +62,6 @@ function EventDashboard(): JSX.Element {
     useState(false);
   const [showDeleteEventProjectModal, setShowDeleteEventProjectModal] =
     useState(false);
-  const [showAttendeesModal, setShowAttendeesModal] = useState(false);
 
   // Render the loading screen
   if (eventInfoLoading) {
@@ -117,18 +116,10 @@ function EventDashboard(): JSX.Element {
                 >
                   Add an Event Project
                 </Button>
-
-                <Button
-                  type="button"
-                  className="mt-3"
-                  variant="success"
-                  aria-label="showAttendees"
-                  onClick={() => {
-                    setShowAttendeesModal(true);
-                  }}
-                >
-                  Show Attendees
-                </Button>
+                <EventAttendeeWrapper
+                  eventId={eventId}
+                  orgId={eventData.event.organization._id}
+                />
               </p>
             </div>
           </div>
@@ -267,14 +258,6 @@ function EventDashboard(): JSX.Element {
         }}
         refetchData={refetchEventData}
         projectId={currentProject._id}
-      />
-      <EventAttendeesModal
-        show={showAttendeesModal}
-        handleClose={() => {
-          setShowAttendeesModal(false);
-        }}
-        eventId={eventId}
-        orgId={eventData.event.organization._id}
       />
     </>
   );

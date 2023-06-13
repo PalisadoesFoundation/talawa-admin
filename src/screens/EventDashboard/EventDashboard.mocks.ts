@@ -1,50 +1,4 @@
-import {
-  EVENT_DETAILS,
-  EVENT_ATTENDEES,
-  MEMBERS_LIST,
-} from 'GraphQl/Queries/Queries';
-
-const attendeeMocks = [
-  {
-    request: {
-      query: EVENT_ATTENDEES,
-      variables: { id: 'event123' },
-    },
-    result: {
-      data: {
-        event: {
-          attendees: [],
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: MEMBERS_LIST,
-      variables: { id: 'org123' },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: 'org123',
-            members: [
-              {
-                _id: 'user1',
-                firstName: 'John',
-                lastName: 'Doe',
-                email: 'johndoe@palisadoes.com',
-                image: '',
-                createdAt: '12/12/22',
-                organizationsBlockedBy: [],
-              },
-            ],
-          },
-        ],
-      },
-    },
-  },
-];
+import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 
 // Mock 1
 export const queryMockWithTime = [
@@ -68,7 +22,7 @@ export const queryMockWithTime = [
           location: 'India',
           organization: {
             _id: 'org1',
-            members: [],
+            members: [{ _id: 'user1', firstName: 'John', lastName: 'Doe' }],
           },
           attendees: [{ _id: 'user1' }],
           projects: [],
@@ -76,7 +30,6 @@ export const queryMockWithTime = [
       },
     },
   },
-  ...attendeeMocks,
 ];
 
 // Mock 2
@@ -101,7 +54,7 @@ export const queryMockWithoutTime = [
           location: 'India',
           organization: {
             _id: 'org1',
-            members: [],
+            members: [{ _id: 'user1', firstName: 'John', lastName: 'Doe' }],
           },
           attendees: [{ _id: 'user1' }],
           projects: [],
@@ -133,7 +86,7 @@ export const queryMockWithProject = [
           location: 'India',
           organization: {
             _id: 'org1',
-            members: [],
+            members: [{ _id: 'user1', firstName: 'John', lastName: 'Doe' }],
           },
           attendees: [{ _id: 'user1' }],
           projects: [
@@ -150,7 +103,7 @@ export const queryMockWithProject = [
   },
 ];
 
-// Mock $
+// Mock 4
 export const queryMockWithProjectAndTask = [
   {
     request: {
@@ -172,7 +125,7 @@ export const queryMockWithProjectAndTask = [
           location: 'India',
           organization: {
             _id: 'org1',
-            members: [],
+            members: [{ _id: 'user1', firstName: 'John', lastName: 'Doe' }],
           },
           attendees: [{ _id: 'user1' }],
           projects: [
