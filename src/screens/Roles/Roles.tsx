@@ -52,6 +52,7 @@ type Data = {
 };
 
 const Roles = () => {
+const Roles = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'roles' });
 
   document.title = t('title');
@@ -76,19 +77,23 @@ const Roles = () => {
 
   useEffect(() => {
     if (searchByName !== '') {
-      refetch({
+      userRefetch({
         firstName_contains: searchByName,
       });
     } else {
       if (count !== 0) {
-        refetch({
+        userRefetch({
           firstName_contains: searchByName,
         });
       }
     }
   }, [count, searchByName]);
 
-  const { loading: users_loading, data, refetch } = useQuery(USER_LIST);
+  const {
+    loading: usersLoading,
+    data: userData,
+    refetch: userRefetch,
+  } = useQuery(USER_LIST);
 
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
   const [createAdmin] = useMutation(ADD_ADMIN_MUTATION);
@@ -108,7 +113,7 @@ const Roles = () => {
     }
   }, [dataOrgs]);
 
-  if (componentLoader || users_loading) {
+  if (componentLoader || usersLoading) {
     return <div className="loader"></div>;
   }
 
@@ -116,7 +121,7 @@ const Roles = () => {
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
-  ) => {
+  ): void => {
     /* istanbul ignore next */
     setPage(newPage);
   };
@@ -124,7 +129,7 @@ const Roles = () => {
   /* istanbul ignore next */
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  ): void => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -146,6 +151,9 @@ const Roles = () => {
             userType: role.split('?')[0],
           },
         });
+        
+  const changeRole = async (e: any): Promise<void> => {
+    const { value } = e.target;
 
         /* istanbul ignore next */
         if (data) {
@@ -209,7 +217,7 @@ const Roles = () => {
       /* istanbul ignore next */
       if (data) {
         toast.success(t('roleUpdated'));
-        refetch();
+        userRefetch();
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -260,6 +268,7 @@ const Roles = () => {
   };
 
   const handleSearchByName = (e: any) => {
+  const handleSearchByName = (e: any): void => {
     const { value } = e.target;
     setSearchByName(value);
     setCount((prev) => prev + 1);
@@ -306,9 +315,9 @@ const Roles = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {data && data.users.length > 0 ? (
+                    {userData && userData.users.length > 0 ? (
                       (rowsPerPage > 0
-                        ? data.users.slice(
+                        ? userData.users.slice(
                             page * rowsPerPage,
                             page * rowsPerPage + rowsPerPage
                           )
@@ -325,6 +334,31 @@ const Roles = () => {
                                 <p
                                   data-testid={`superAdminText${user._id}`}
                                   className={styles.userRole_container}
+                        : userData.users
+                      ).map(
+                        (
+                          user: {
+                            _id: string;
+                            firstName: string;
+                            lastName: string;
+                            email: string;
+                            userType: string;
+                          },
+                          index: number
+                        ) => {
+                          return (
+                            <tr key={user._id}>
+                              <th scope="row">{page * 10 + (index + 1)}</th>
+                              <td>{`${user.firstName} ${user.lastName}`}</td>
+                              <td>{user.email}</td>
+                              <td>
+                                <select
+                                  className="form-control"
+                                  name={`role${user._id}`}
+                                  data-testid={`changeRole${user._id}`}
+                                  onChange={changeRole}
+                                  disabled={user._id === userId}
+                                  defaultValue={`${user.userType}?${user._id}`}
                                 >
                                   {t('superAdmin')}{' '}
                                   {user._id !== userId && (
@@ -521,7 +555,7 @@ const Roles = () => {
                 <tbody>
                   <tr>
                     <PaginationList
-                      count={data ? data.users.length : 0}
+                      count={userData ? userData.users.length : 0}
                       rowsPerPage={rowsPerPage}
                       page={page}
                       data-testid="something"

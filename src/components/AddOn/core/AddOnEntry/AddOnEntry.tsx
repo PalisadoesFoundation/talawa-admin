@@ -9,7 +9,7 @@ import {
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
-interface AddOnEntryProps {
+interface InterfaceAddOnEntryProps {
   id: string;
   enabled: boolean;
   title: string;
@@ -23,7 +23,7 @@ interface AddOnEntryProps {
   getInstalledPlugins: () => any;
 }
 
-function AddOnEntry({
+function addOnEntry({
   id,
   enabled,
   title,
@@ -32,7 +32,7 @@ function AddOnEntry({
   installed,
   isInstalled,
   getInstalledPlugins,
-}: AddOnEntryProps): JSX.Element {
+}: InterfaceAddOnEntryProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'addOnEntry' });
 
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -46,17 +46,16 @@ function AddOnEntry({
 
   const currentOrg = window.location.href.split('=')[1];
 
-  const updateOrgList = async () => {
+  const updateOrgList = async (): Promise<void> => {
     await updateOrgStatus({
       variables: {
         id: id.toString(),
         orgId: currentOrg.toString(),
       },
     });
-    // console.log('orgs pushed', data);
   };
 
-  const updateInstallStatusFunc = async () => {
+  const updateInstallStatusFunc = async (): Promise<void> => {
     setButtonLoading(true);
     await updateInstallStatus({
       variables: {
@@ -66,8 +65,6 @@ function AddOnEntry({
     });
 
     setIsInstalledLocal(!isInstalledLocal);
-    // console.log('AddOnEntry Data IS =>', data);
-
     setButtonLoading(false);
   };
 
@@ -150,7 +147,7 @@ function AddOnEntry({
             label={t('enable')}
             className={styles.entrytoggle}
             // eslint-disable-next-line @typescript-eslint/no-empty-function
-            onChange={() => {}}
+            onChange={(): void => {}}
             disabled={switchInProgress}
             checked={enabled}
           />
@@ -166,7 +163,7 @@ function AddOnEntry({
             variant="primary"
             // disabled={buttonLoading || !configurable}
             disabled={buttonLoading}
-            onClick={() => {
+            onClick={(): void => {
               updateOrgList();
               updateInstallStatusFunc();
               getInstalledPlugins();
@@ -190,7 +187,7 @@ function AddOnEntry({
   );
 }
 
-AddOnEntry.defaultProps = {
+addOnEntry.defaultProps = {
   enabled: false,
   configurable: true,
   title: '',
@@ -198,7 +195,7 @@ AddOnEntry.defaultProps = {
   isInstalled: false,
 };
 
-AddOnEntry.propTypes = {
+addOnEntry.propTypes = {
   enabled: PropTypes.bool,
   configurable: PropTypes.bool,
   title: PropTypes.string,
@@ -206,4 +203,4 @@ AddOnEntry.propTypes = {
   isInstalled: PropTypes.bool,
 };
 
-export default AddOnEntry;
+export default addOnEntry;

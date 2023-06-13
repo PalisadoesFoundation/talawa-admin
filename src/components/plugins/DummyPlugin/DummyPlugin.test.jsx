@@ -1,3 +1,5 @@
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/jsx-filename-extension */
 import { MockedProvider } from '@apollo/react-testing';
 import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';

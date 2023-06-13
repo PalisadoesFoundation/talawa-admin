@@ -1,4 +1,5 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -12,7 +13,7 @@ import {
 import { Form } from 'react-bootstrap';
 import { errorHandler } from 'utils/errorHandler';
 
-interface EventListCardProps {
+interface InterfaceEventListCardProps {
   key: string;
   id: string;
   eventLocation: string;
@@ -27,7 +28,7 @@ interface EventListCardProps {
   isPublic: boolean;
   isRegisterable: boolean;
 }
-function EventListCard(props: EventListCardProps): JSX.Element {
+function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'eventListCard',
   });
@@ -43,10 +44,10 @@ function EventListCard(props: EventListCardProps): JSX.Element {
     startTime: '08:00:00',
     endTime: '18:00:00',
   });
-  const showViewModal = () => {
+  const showViewModal = (): void => {
     setEventModalIsOpen(true);
   };
-  const hideViewModal = () => {
+  const hideViewModal = (): void => {
     setEventModalIsOpen(false);
   };
 
@@ -68,7 +69,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
   const [create] = useMutation(DELETE_EVENT_MUTATION);
   const [updateEvent] = useMutation(UPDATE_EVENT_MUTATION);
 
-  const DeleteEvent = async () => {
+  const deleteEvent = async (): Promise<void> => {
     try {
       const { data } = await create({
         variables: {
@@ -89,7 +90,9 @@ function EventListCard(props: EventListCardProps): JSX.Element {
     }
   };
 
-  const updateEventHandler = async (e: ChangeEvent<HTMLFormElement>) => {
+  const updateEventHandler = async (
+    e: ChangeEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
 
     try {
@@ -250,7 +253,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
               <button
                 type="button"
                 className="btn btn-success"
-                onClick={DeleteEvent}
+                onClick={deleteEvent}
                 data-testid="deleteEventBtn"
               >
                 {t('yes')}
@@ -293,7 +296,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                   data-testid="updateTitle"
                   required
                   value={formState.title}
-                  onChange={(e) => {
+                  onChange={(e): void => {
                     setFormState({
                       ...formState,
                       title: e.target.value,
@@ -308,7 +311,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                   data-testid="updateDescription"
                   required
                   value={formState.eventdescrip}
-                  onChange={(e) => {
+                  onChange={(e): void => {
                     setFormState({
                       ...formState,
                       eventdescrip: e.target.value,
@@ -323,7 +326,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                   data-testid="updateLocation"
                   required
                   value={formState.location}
-                  onChange={(e) => {
+                  onChange={(e): void => {
                     setFormState({
                       ...formState,
                       location: e.target.value,
@@ -338,7 +341,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                         id="startTime"
                         value={formState.startTime}
                         data-testid="updateStartTime"
-                        onChange={(e) =>
+                        onChange={(e): void =>
                           setFormState({
                             ...formState,
                             startTime: e.target.value,
@@ -352,7 +355,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                         id="endTime"
                         value={formState.endTime}
                         data-testid="updateEndTime"
-                        onChange={(e) =>
+                        onChange={(e): void =>
                           setFormState({
                             ...formState,
                             endTime: e.target.value,
@@ -370,7 +373,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                       type="checkbox"
                       data-testid="updateAllDay"
                       checked={alldaychecked}
-                      onChange={() => setAllDayChecked(!alldaychecked)}
+                      onChange={(): void => setAllDayChecked(!alldaychecked)}
                     />
                   </div>
                   <div className={styles.dispflex}>
@@ -380,7 +383,9 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                       type="checkbox"
                       data-testid="updateRecurring"
                       checked={recurringchecked}
-                      onChange={() => setRecurringChecked(!recurringchecked)}
+                      onChange={(): void =>
+                        setRecurringChecked(!recurringchecked)
+                      }
                     />
                   </div>
                 </div>
@@ -392,7 +397,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                       type="checkbox"
                       data-testid="updateIsPublic"
                       checked={publicchecked}
-                      onChange={() => setPublicChecked(!publicchecked)}
+                      onChange={(): void => setPublicChecked(!publicchecked)}
                     />
                   </div>
                   <div className={styles.dispflex}>
@@ -402,7 +407,7 @@ function EventListCard(props: EventListCardProps): JSX.Element {
                       type="checkbox"
                       data-testid="updateRegistrable"
                       checked={registrablechecked}
-                      onChange={() =>
+                      onChange={(): void =>
                         setRegistrableChecked(!registrablechecked)
                       }
                     />
@@ -433,4 +438,4 @@ function EventListCard(props: EventListCardProps): JSX.Element {
   );
 }
 export {};
-export default EventListCard;
+export default eventListCard;

@@ -348,7 +348,7 @@ const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_MOCKS, true);
 const link3 = new StaticMockLink(EMPTY_ORG_MOCKS, true);
 
-async function wait(ms = 100) {
+async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -447,7 +447,7 @@ describe('Testing Roles screen', () => {
     );
 
     const appHeader = screen.queryByTestId('roles-header');
-    const function_when_appHeader_isNotNull = (app: any) => {
+    const functionWhenAppHeaderIsNotNull = (app: any): void => {
       const paginationList = within(app).getByTestId('something');
       const tablePagination =
         within(paginationList).getByTestId('table-pagination');
@@ -461,14 +461,14 @@ describe('Testing Roles screen', () => {
       expect(rowsPerPageSelect).toHaveValue('-1');
     };
 
-    const function_when_appHeader_isNull = () => {
+    const functionWhenAppHeaderIsNull = (): void => {
       expect(appHeader).toBeNull();
     };
 
     const assertion =
       appHeader !== null
-        ? function_when_appHeader_isNotNull(appHeader)
-        : function_when_appHeader_isNull();
+        ? functionWhenAppHeaderIsNotNull(appHeader)
+        : functionWhenAppHeaderIsNull();
 
     assertion;
   });
@@ -478,7 +478,7 @@ describe('Testing Roles screen', () => {
       const setPage = jest.fn();
       const newPage = 2;
       const { getByRole } = render(
-        <button onClick={() => setPage(2)}>Change Page</button>
+        <button onClick={(): void => setPage(2)}>Change Page</button>
       );
 
       // Act
@@ -504,7 +504,7 @@ describe('Testing Roles screen', () => {
     const appHeader = screen.queryByTestId('roles-header');
     const len = MOCKS.length;
 
-    const function_when_appHeader_isNotNull = (app: any) => {
+    const functionWhenAppHeaderIsNotNull = (app: any): void => {
       const table = getByRole('table');
 
       const rowsPerPageButton = getByRole('button', { name: /rows per page/i });
@@ -524,14 +524,14 @@ describe('Testing Roles screen', () => {
       expect(table.querySelectorAll('tbody tr')).toHaveLength(len);
     };
 
-    const function_when_appHeader_isNull = () => {
+    const functionWhenAppHeaderIsNull = (): void => {
       expect(appHeader).toBeNull();
     };
 
     const assertion =
       appHeader !== null
-        ? function_when_appHeader_isNotNull(appHeader)
-        : function_when_appHeader_isNull();
+        ? functionWhenAppHeaderIsNotNull(appHeader)
+        : functionWhenAppHeaderIsNull();
 
     assertion;
   });
@@ -644,7 +644,7 @@ describe('Testing Roles screen', () => {
   });
 
   test('Should disable select when user is self', async () => {
-    const localStorageMock = (function () {
+    const localStorageMock = (function (): any {
       const store: any = {
         UserType: 'SUPERADMIN',
         id: '123',
@@ -679,7 +679,7 @@ describe('Testing Roles screen', () => {
   });
 
   test('Should not disable select when user is not self', async () => {
-    const localStorageMock = (function () {
+    const localStorageMock = (function (): any {
       const store: any = {
         UserType: 'SUPERADMIN',
         id: '123',
