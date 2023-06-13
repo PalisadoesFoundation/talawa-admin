@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next';
 
 import styles from './NotFound.module.css';
 
-interface NotFoundProps {
+interface InterfaceNotFoundProps {
   title: string;
   keyPrefix: string;
 }
 
-function NotFound(props: NotFoundProps): JSX.Element {
+function notFound(props: InterfaceNotFoundProps): JSX.Element {
   const key = props.keyPrefix.toString();
   const { t } = useTranslation('translation', {
     keyPrefix: key,
@@ -22,4 +22,4 @@ function NotFound(props: NotFoundProps): JSX.Element {
   );
 }
 
-export default NotFound;
+export default notFound;

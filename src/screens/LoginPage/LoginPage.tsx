@@ -1,4 +1,5 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-modal';
@@ -23,7 +24,7 @@ import { languages } from 'utils/languages';
 import { RECAPTCHA_SITE_KEY, REACT_APP_USE_RECAPTCHA } from 'Constant/constant';
 import { errorHandler } from 'utils/errorHandler';
 
-function LoginPage(): JSX.Element {
+function loginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
 
   document.title = t('title');
@@ -57,15 +58,15 @@ function LoginPage(): JSX.Element {
     setComponentLoader(false);
   }, []);
 
-  const showModal = () => {
+  const showModal = (): void => {
     setIsOpen(true);
   };
 
-  const hideModal = () => {
+  const hideModal = (): void => {
     setIsOpen(false);
   };
 
-  const handleShowCon = () => {
+  const handleShowCon = (): void => {
     setShowConfirmPassword(!showConfirmPassword);
   };
   const history = useHistory();
@@ -79,7 +80,7 @@ function LoginPage(): JSX.Element {
     useMutation(RECAPTCHA_MUTATION);
 
   useEffect(() => {
-    async function loadResource() {
+    async function loadResource(): Promise<void> {
       const resourceUrl = 'http://localhost:4000/graphql/';
       try {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -93,7 +94,9 @@ function LoginPage(): JSX.Element {
     loadResource();
   }, []);
 
-  const verifyRecaptcha = async (recaptchaToken: any) => {
+  const verifyRecaptcha = async (
+    recaptchaToken: any
+  ): Promise<boolean | void> => {
     try {
       /* istanbul ignore next */
       if (REACT_APP_USE_RECAPTCHA !== 'yes') {
@@ -112,7 +115,7 @@ function LoginPage(): JSX.Element {
     }
   };
 
-  const signup_link = async (e: ChangeEvent<HTMLFormElement>) => {
+  const signupLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
     const { signfirstName, signlastName, signEmail, signPassword, cPassword } =
@@ -136,7 +139,7 @@ function LoginPage(): JSX.Element {
     ) {
       if (cPassword == signPassword) {
         try {
-          const { data } = await signup({
+          const { data: signUpData } = await signup({
             variables: {
               firstName: signfirstName,
               lastName: signlastName,
@@ -146,8 +149,10 @@ function LoginPage(): JSX.Element {
           });
 
           /* istanbul ignore next */
-          if (data) {
-            toast.success(t('successfullyRegistered'));
+          if (signUpData) {
+            toast.success(
+              'Successfully Registered. Please wait until you will be approved.'
+            );
 
             setSignFormState({
               signfirstName: '',
@@ -169,7 +174,7 @@ function LoginPage(): JSX.Element {
     }
   };
 
-  const login_link = async (e: ChangeEvent<HTMLFormElement>) => {
+  const loginLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
     const recaptchaToken = recaptchaRef.current?.getValue();
@@ -183,7 +188,7 @@ function LoginPage(): JSX.Element {
     }
 
     try {
-      const { data } = await login({
+      const { data: loginData } = await login({
         variables: {
           email: formState.email,
           password: formState.password,
@@ -191,16 +196,16 @@ function LoginPage(): JSX.Element {
       });
 
       /* istanbul ignore next */
-      if (data) {
+      if (loginData) {
         if (
-          data.login.user.userType === 'SUPERADMIN' ||
-          (data.login.user.userType === 'ADMIN' &&
-            data.login.user.adminApproved === true)
+          loginData.login.user.userType === 'SUPERADMIN' ||
+          (loginData.login.user.userType === 'ADMIN' &&
+            loginData.login.user.adminApproved === true)
         ) {
-          localStorage.setItem('token', data.login.accessToken);
-          localStorage.setItem('id', data.login.user._id);
+          localStorage.setItem('token', loginData.login.accessToken);
+          localStorage.setItem('id', loginData.login.user._id);
           localStorage.setItem('IsLoggedIn', 'TRUE');
-          localStorage.setItem('UserType', data.login.user.userType);
+          localStorage.setItem('UserType', loginData.login.user.userType);
           if (localStorage.getItem('IsLoggedIn') == 'TRUE') {
             // Removing the next 2 lines will cause Authorization header to be copied to clipboard
             navigator.clipboard.writeText('');
@@ -222,7 +227,7 @@ function LoginPage(): JSX.Element {
     return <div className={styles.loader}></div>;
   }
 
-  const handleShow = () => {
+  const handleShow = (): void => {
     setShow(!show);
   };
 
@@ -254,7 +259,9 @@ function LoginPage(): JSX.Element {
                     <button
                       key={index}
                       className="dropdown-item"
-                      onClick={() => i18next.changeLanguage(language.code)}
+                      onClick={async (): Promise<void> => {
+                        await i18next.changeLanguage(language.code);
+                      }}
                       disabled={currentLanguageCode === language.code}
                       data-testid={`changeLanguageBtn${index}`}
                     >
@@ -289,7 +296,7 @@ function LoginPage(): JSX.Element {
               <div className={styles.homeright}>
                 <h1>{t('register')}</h1>
                 {/* <h2>to seamlessly manage your Organization.</h2> */}
-                <form onSubmit={signup_link}>
+                <form onSubmit={signupLink}>
                   <div className={styles.dispflex}>
                     <div>
                       <label>{t('firstName')}</label>
@@ -300,7 +307,7 @@ function LoginPage(): JSX.Element {
                         autoComplete="on"
                         required
                         value={signformState.signfirstName}
-                        onChange={(e) => {
+                        onChange={(e): void => {
                           setSignFormState({
                             ...signformState,
                             signfirstName: e.target.value,
@@ -317,7 +324,7 @@ function LoginPage(): JSX.Element {
                         autoComplete="on"
                         required
                         value={signformState.signlastName}
-                        onChange={(e) => {
+                        onChange={(e): void => {
                           setSignFormState({
                             ...signformState,
                             signlastName: e.target.value,
@@ -334,7 +341,7 @@ function LoginPage(): JSX.Element {
                     autoComplete="on"
                     required
                     value={signformState.signEmail}
-                    onChange={(e) => {
+                    onChange={(e): void => {
                       setSignFormState({
                         ...signformState,
                         signEmail: e.target.value.toLowerCase(),
@@ -348,11 +355,11 @@ function LoginPage(): JSX.Element {
                       id="signpassword"
                       data-testid="passwordField"
                       placeholder={t('password')}
-                      onFocus={() => setIsInputFocused(true)}
-                      onBlur={() => setIsInputFocused(false)}
+                      onFocus={(): void => setIsInputFocused(true)}
+                      onBlur={(): void => setIsInputFocused(false)}
                       required
                       value={signformState.signPassword}
-                      onChange={(e) => {
+                      onChange={(e): void => {
                         setSignFormState({
                           ...signformState,
                           signPassword: e.target.value,
@@ -393,7 +400,7 @@ function LoginPage(): JSX.Element {
                       placeholder={t('confirmPassword')}
                       required
                       value={signformState.cPassword}
-                      onChange={(e) => {
+                      onChange={(e): void => {
                         setSignFormState({
                           ...signformState,
                           cPassword: e.target.value,
@@ -468,7 +475,7 @@ function LoginPage(): JSX.Element {
                   <i className="fa fa-times"></i>
                 </a>
               </div>
-              <form onSubmit={login_link}>
+              <form onSubmit={loginLink}>
                 <label>{t('email')}</label>
                 <input
                   type="email"
@@ -478,7 +485,7 @@ function LoginPage(): JSX.Element {
                   autoComplete="off"
                   required
                   value={formState.email}
-                  onChange={(e) => {
+                  onChange={(e): void => {
                     setFormState({
                       ...formState,
                       email: e.target.value,
@@ -495,7 +502,7 @@ function LoginPage(): JSX.Element {
                     required
                     value={formState.password}
                     data-testid="password"
-                    onChange={(e) => {
+                    onChange={(e): void => {
                       setFormState({
                         ...formState,
                         password: e.target.value,
@@ -561,4 +568,4 @@ function LoginPage(): JSX.Element {
   );
 }
 
-export default LoginPage;
+export default loginPage;

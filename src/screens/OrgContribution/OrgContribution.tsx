@@ -8,9 +8,9 @@ import styles from './OrgContribution.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import OrgContriCards from 'components/OrgContriCards/OrgContriCards';
 import ContriStats from 'components/ContriStats/ContriStats';
-import { RootState } from 'state/reducers';
+import type { RootState } from 'state/reducers';
 
-function OrgContribution(): JSX.Element {
+function orgContribution(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgContribution',
   });
@@ -22,7 +22,7 @@ function OrgContribution(): JSX.Element {
 
   return (
     <>
-      <AdminNavbar targets={targets} url_1={configUrl} />
+      <AdminNavbar targets={targets} url1={configUrl} />
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
@@ -77,4 +77,4 @@ function OrgContribution(): JSX.Element {
   );
 }
 
-export default OrgContribution;
+export default orgContribution;

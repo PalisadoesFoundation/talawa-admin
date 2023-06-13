@@ -175,7 +175,7 @@ const MOCKS = [
       },
     },
     result: DATA_INITIAL,
-    newData: () => {
+    newData: (): typeof DATA_AFTER_MUTATION | typeof DATA_INITIAL => {
       if (userQueryCalled) {
         return DATA_AFTER_MUTATION;
       } else {
@@ -243,7 +243,7 @@ const MOCKS = [
 
 const link = new StaticMockLink(MOCKS, true);
 
-async function wait(ms = 500) {
+async function wait(ms = 500): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);

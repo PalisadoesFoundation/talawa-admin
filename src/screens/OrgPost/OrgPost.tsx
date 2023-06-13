@@ -1,4 +1,5 @@
-import React, { ChangeEvent, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-modal';
@@ -14,7 +15,7 @@ import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
 import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
-import { RootState } from 'state/reducers';
+import type { RootState } from 'state/reducers';
 import PaginationList from 'components/PaginationList/PaginationList';
 import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
@@ -22,7 +23,7 @@ import NotFound from 'components/NotFound/NotFound';
 import { Form as StyleBox } from 'react-bootstrap';
 import { errorHandler } from 'utils/errorHandler';
 
-function OrgPost(): JSX.Element {
+function orgPost(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgPost',
   });
@@ -36,7 +37,7 @@ function OrgPost(): JSX.Element {
   });
   const [showTitle, setShowTitle] = useState(true);
 
-  const searchChange = (ev: any) => {
+  const searchChange = (ev: any): void => {
     setShowTitle(ev.target.value === 'searchTitle');
   };
   const [page, setPage] = useState(0);
@@ -46,24 +47,25 @@ function OrgPost(): JSX.Element {
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
 
-  const showInviteModal = () => {
+  const showInviteModal = (): void => {
     setPostModalIsOpen(true);
   };
-  const hideInviteModal = () => {
+  const hideInviteModal = (): void => {
     setPostModalIsOpen(false);
   };
 
   const {
-    data,
-    loading: loading2,
-    error: error_post,
+    data: orgPostListData,
+    loading: orgPostListLoading,
+    error: orgPostListError,
     refetch,
   } = useQuery(ORGANIZATION_POST_CONNECTION_LIST, {
     variables: { id: currentUrl, title_contains: '', text_contains: '' },
   });
-  const [create, { loading }] = useMutation(CREATE_POST_MUTATION);
+  const [create, { loading: createPostLoading }] =
+    useMutation(CREATE_POST_MUTATION);
 
-  const CreatePost = async (e: ChangeEvent<HTMLFormElement>) => {
+  const createPost = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
     const {
@@ -105,7 +107,7 @@ function OrgPost(): JSX.Element {
     }
   };
 
-  if (loading || loading2) {
+  if (createPostLoading || orgPostListLoading) {
     return (
       <>
         <div className={styles.loader}></div>
@@ -114,7 +116,7 @@ function OrgPost(): JSX.Element {
   }
 
   /* istanbul ignore next */
-  if (error_post) {
+  if (orgPostListError) {
     window.location.assign('/orglist');
   }
 
@@ -122,18 +124,18 @@ function OrgPost(): JSX.Element {
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
-  ) => {
+  ): void => {
     setPage(newPage);
   };
   /* istanbul ignore next */
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  ): void => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
-  const handleSearch = (e: any) => {
+  const handleSearch = (e: any): void => {
     const { value } = e.target;
     const filterData = {
       id: currentUrl,
@@ -154,7 +156,7 @@ function OrgPost(): JSX.Element {
   // }
   return (
     <>
-      <AdminNavbar targets={targets} url_1={configUrl} />
+      <AdminNavbar targets={targets} url1={configUrl} />
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
@@ -210,18 +212,19 @@ function OrgPost(): JSX.Element {
               </Button>
             </Row>
             <div className={`row ${styles.list_box}`}>
-              {data && data.postsByOrganizationConnection.edges.length > 0 ? (
+              {orgPostListData &&
+              orgPostListData.postsByOrganizationConnection.edges.length > 0 ? (
                 (rowsPerPage > 0
-                  ? data.postsByOrganizationConnection.edges.slice(
+                  ? orgPostListData.postsByOrganizationConnection.edges.slice(
                       page * rowsPerPage,
                       page * rowsPerPage + rowsPerPage
                     )
                   : rowsPerPage > 0
-                  ? data.postsByOrganizationConnection.edges.slice(
+                  ? orgPostListData.postsByOrganizationConnection.edges.slice(
                       page * rowsPerPage,
                       page * rowsPerPage + rowsPerPage
                     )
-                  : data.postsByOrganizationConnection.edges
+                  : orgPostListData.postsByOrganizationConnection.edges
                 ).map(
                   (datas: {
                     _id: string;
@@ -256,7 +259,10 @@ function OrgPost(): JSX.Element {
                 <tr>
                   <PaginationList
                     count={
-                      data ? data.postsByOrganizationConnection.edges.length : 0
+                      orgPostListData
+                        ? orgPostListData.postsByOrganizationConnection.edges
+                            .length
+                        : 0
                     }
                     rowsPerPage={rowsPerPage}
                     page={page}
@@ -285,7 +291,7 @@ function OrgPost(): JSX.Element {
                 <i className="fa fa-times" data-testid="closePostModalBtn"></i>
               </a>
             </div>
-            <Form onSubmitCapture={CreatePost}>
+            <Form onSubmitCapture={createPost}>
               <label htmlFor="posttitle">{t('postTitle')}</label>
               <input
                 type="title"
@@ -294,7 +300,7 @@ function OrgPost(): JSX.Element {
                 autoComplete="off"
                 required
                 value={postformState.posttitle}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setPostFormState({
                     ...postformState,
                     posttitle: e.target.value,
@@ -309,7 +315,7 @@ function OrgPost(): JSX.Element {
                 autoComplete="off"
                 required
                 value={postformState.postinfo}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setPostFormState({
                     ...postformState,
                     postinfo: e.target.value,
@@ -324,7 +330,7 @@ function OrgPost(): JSX.Element {
                   name="photo"
                   type="file"
                   multiple={false}
-                  onChange={async (e) => {
+                  onChange={async (e): Promise<void> => {
                     const file = e.target.files?.[0];
                     if (file)
                       setPostFormState({
@@ -360,4 +366,4 @@ function OrgPost(): JSX.Element {
     </>
   );
 }
-export default OrgPost;
+export default orgPost;

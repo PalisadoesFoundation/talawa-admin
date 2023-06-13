@@ -1,9 +1,9 @@
 import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
+import type { NormalizedCacheObject } from '@apollo/client';
 import {
   ApolloClient,
-  NormalizedCacheObject,
   ApolloProvider,
   InMemoryCache,
   ApolloLink,

@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 import defaultImg from 'assets/third_image.png';
 import { errorHandler } from 'utils/errorHandler';
 
-interface OrgPeopleListCardProps {
+interface InterfaceOrgPeopleListCardProps {
   key: string;
   id: string;
   memberName: string;
@@ -22,14 +22,14 @@ interface OrgPeopleListCardProps {
 }
 const currentUrl = window.location.href.split('=')[1];
 
-function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
+function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
   const [remove] = useMutation(REMOVE_ADMIN_MUTATION);
 
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgAdminListCard',
   });
 
-  const RemoveAdmin = async () => {
+  const removeAdmin = async (): Promise<void> => {
     try {
       const { data } = await remove({
         variables: {
@@ -127,7 +127,7 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
               <button
                 type="button"
                 className="btn btn-success"
-                onClick={RemoveAdmin}
+                onClick={removeAdmin}
                 data-testid="removeAdminBtn"
               >
                 {t('yes')}
@@ -140,4 +140,4 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
   );
 }
 export {};
-export default OrgAdminListCard;
+export default orgAdminListCard;
