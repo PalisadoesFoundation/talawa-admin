@@ -1,19 +1,21 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useMutation } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 
-import styles from './OrgPostCard.module.css';
 import {
   DELETE_POST_MUTATION,
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { useTranslation } from 'react-i18next';
 import defaultImg from 'assets/third_image.png';
+import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
+import styles from './OrgPostCard.module.css';
+import { Form } from 'react-bootstrap';
 
-interface OrgPostCardProps {
+interface InterfaceOrgPostCardProps {
   key: string;
   id: string;
   postTitle: string;
@@ -23,7 +25,7 @@ interface OrgPostCardProps {
   postVideo: string;
 }
 
-function OrgPostCard(props: OrgPostCardProps): JSX.Element {
+function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
   const [postformState, setPostFormState] = useState({
     posttitle: '',
     postinfo: '',
@@ -33,9 +35,11 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const toggleShowEditModal = () => setShowEditModal(!showEditModal);
-  const toggleShowDeleteModal = () => setShowDeleteModal(!showDeleteModal);
-  function handletoggleClick() {
+  const toggleShowEditModal = (): void => setShowEditModal(!showEditModal);
+  const toggleShowDeleteModal = (): void =>
+    setShowDeleteModal(!showDeleteModal);
+
+  function handletoggleClick(): void {
     if (togglePost === 'Read more') {
       setPostToggle('hide');
     } else {
@@ -57,7 +61,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
   const [create] = useMutation(DELETE_POST_MUTATION);
   const [updatePost] = useMutation(UPDATE_POST_MUTATION);
 
-  const DeletePost = async () => {
+  const deletePost = async (): Promise<void> => {
     try {
       const { data } = await create({
         variables: {
@@ -80,13 +84,15 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
 
   const handleInputEvent = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  ): void => {
     const { name, value } = e.target;
 
     setPostFormState({ ...postformState, [name]: value });
   };
 
-  const updatePostHandler = async (e: ChangeEvent<HTMLFormElement>) => {
+  const updatePostHandler = async (
+    e: ChangeEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
 
     try {
@@ -192,7 +198,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
         </div>
       </div>
 
-      {/* delete modal */}
+      {/* Delete Modal */}
       <Modal show={showDeleteModal} onHide={toggleShowDeleteModal}>
         <Modal.Header>
           <h5>{t('deletePost')}</h5>
@@ -208,7 +214,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
           <Button
             type="button"
             className="btn btn-success"
-            onClick={DeletePost}
+            onClick={deletePost}
             data-testid="deletePostBtn"
           >
             {t('yes')}
@@ -219,9 +225,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
       {/* Edit Modal */}
       <Modal show={showEditModal} onHide={toggleShowEditModal}>
         <Modal.Header>
-          <h5 className="modal-title" id={`editPostModal${props.id}Label`}>
-            {t('editPost')}
-          </h5>
+          <h5>{t('editPost')}</h5>
           <Button variant="danger" onClick={toggleShowEditModal}>
             <i className="fa fa-times"></i>
           </Button>
@@ -232,7 +236,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
               <label htmlFor="postTitle" className="col-form-label">
                 {t('postTitle')}
               </label>
-              <input
+              <Form.Control
                 type="text"
                 className="form-control"
                 id="postTitle"
@@ -247,7 +251,8 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
               <label htmlFor="postText" className="col-form-label">
                 {t('information')}
               </label>
-              <textarea
+              <Form.Control
+                as="textarea"
                 className="form-control"
                 name="postinfo"
                 value={postformState.postinfo}
@@ -261,7 +266,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
               <label htmlFor="postImageUrl" className="col-form-label">
                 {t('image')}:
               </label>
-              <input
+              <Form.Control
                 accept="image/*"
                 id="postImageUrl"
                 name="photo"
@@ -275,7 +280,7 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
               <label htmlFor="postVideoUrl" className="col-form-label">
                 {t('video')}:
               </label>
-              <input
+              <Form.Control
                 accept="image/*"
                 id="postVideoUrl"
                 name="video"
@@ -303,4 +308,4 @@ function OrgPostCard(props: OrgPostCardProps): JSX.Element {
     </>
   );
 }
-export default OrgPostCard;
+export default orgPostCard;

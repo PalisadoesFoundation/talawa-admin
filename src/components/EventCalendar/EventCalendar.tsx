@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import React, { useState, useEffect } from 'react';
 import styles from './EventCalendar.module.css';
 
-interface Event {
+interface InterfaceEvent {
   _id: string;
   title: string;
   description: string;
@@ -15,14 +15,14 @@ interface Event {
   endTime: string;
   allDay: boolean;
   recurring: boolean;
-  registrants?: Array<IEventAttendees>;
+  registrants?: InterfaceIEventAttendees[];
   isPublic: boolean;
   isRegisterable: boolean;
 }
 
-interface CalendarProps {
-  eventData: Event[];
-  orgData?: IOrgList;
+interface InterfaceCalendarProps {
+  eventData: InterfaceEvent[];
+  orgData?: InterfaceIOrgList;
   userRole?: string;
   userId?: string;
 }
@@ -38,17 +38,17 @@ enum Role {
   SUPERADMIN = 'SUPERADMIN',
   ADMIN = 'ADMIN',
 }
-interface IEventAttendees {
+interface InterfaceIEventAttendees {
   userId: string;
   user?: string;
   status?: Status;
   createdAt?: Date;
 }
 
-interface IOrgList {
+interface InterfaceIOrgList {
   admins: { _id: string }[];
 }
-const Calendar: React.FC<CalendarProps> = ({
+const Calendar: React.FC<InterfaceCalendarProps> = ({
   eventData,
   orgData,
   userRole,
@@ -74,15 +74,15 @@ const Calendar: React.FC<CalendarProps> = ({
   const today = new Date();
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
-  const [events, setEvents] = useState<Event[] | null>(null);
+  const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
 
   const filterData = (
-    eventData: Event[],
-    orgData?: IOrgList,
+    eventData: InterfaceEvent[],
+    orgData?: InterfaceIOrgList,
     userRole?: string,
     userId?: string
-  ) => {
-    const data: Event[] = [];
+  ): InterfaceEvent[] => {
+    const data: InterfaceEvent[] = [];
     if (userRole === Role.SUPERADMIN) return eventData;
     // Hard to test all the cases
     /* istanbul ignore next */
@@ -118,7 +118,7 @@ const Calendar: React.FC<CalendarProps> = ({
     setEvents(data);
   }, []);
 
-  const handlePrevMonth = () => {
+  const handlePrevMonth = (): void => {
     if (currentMonth === 0) {
       setCurrentMonth(11);
       setCurrentYear(currentYear - 1);
@@ -127,7 +127,7 @@ const Calendar: React.FC<CalendarProps> = ({
     }
   };
 
-  const handleNextMonth = () => {
+  const handleNextMonth = (): void => {
     if (currentMonth === 11) {
       setCurrentMonth(0);
       setCurrentYear(currentYear + 1);
@@ -135,11 +135,11 @@ const Calendar: React.FC<CalendarProps> = ({
       setCurrentMonth(currentMonth + 1);
     }
   };
-  const handleTodayButton = () => {
+  const handleTodayButton = (): void => {
     setCurrentYear(today.getFullYear());
     setCurrentMonth(today.getMonth());
   };
-  const renderDays = () => {
+  const renderDays = (): JSX.Element[] => {
     const monthStart = new Date(currentYear, currentMonth, 1);
     const monthEnd = new Date(currentYear, currentMonth + 1, 0);
     const startDate = new Date(
@@ -180,7 +180,7 @@ const Calendar: React.FC<CalendarProps> = ({
                 if (datas.startDate == dayjs(date).format('YYYY-MM-DD'))
                   return datas;
               })
-              .map((datas: Event) => {
+              .map((datas: InterfaceEvent) => {
                 return (
                   <EventListCard
                     key={datas._id}

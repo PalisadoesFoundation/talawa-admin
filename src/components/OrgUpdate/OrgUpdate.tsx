@@ -11,13 +11,13 @@ import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import { Form } from 'react-bootstrap';
 
-interface OrgUpdateProps {
+interface InterfaceOrgUpdateProps {
   id: string;
   orgid: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function OrgUpdate(props: OrgUpdateProps): JSX.Element {
+function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
 
   const [formState, setFormState] = React.useState<{
@@ -60,7 +60,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
     return <div className="loader"></div>;
   }
 
-  const onSaveChangesClicked = async () => {
+  const onSaveChangesClicked = async (): Promise<void> => {
     try {
       const { data } = await login({
         variables: {
@@ -86,7 +86,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
   };
 
   /* istanbul ignore next */
-  const cancelUpdate = () => {
+  const cancelUpdate = (): void => {
     window.location.reload();
   };
 
@@ -105,7 +105,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
                 autoComplete="off"
                 required
                 value={formState.orgName}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
                     orgName: e.target.value,
@@ -122,7 +122,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
                 autoComplete="off"
                 required
                 value={formState.orgDescrip}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
                     orgDescrip: e.target.value,
@@ -141,7 +141,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
                 autoComplete="off"
                 required
                 value={formState.location}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
                     location: e.target.value,
@@ -160,7 +160,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
                   name="photo"
                   type="file"
                   multiple={false}
-                  onChange={async (e: React.ChangeEvent) => {
+                  onChange={async (e: React.ChangeEvent): Promise<void> => {
                     const target = e.target as HTMLInputElement;
                     const file = target.files && target.files[0];
                     if (file)
@@ -180,7 +180,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
                   id="ispublic"
                   type="checkbox"
                   defaultChecked={publicchecked}
-                  onChange={() => setPublicChecked(!publicchecked)}
+                  onChange={(): void => setPublicChecked(!publicchecked)}
                 />
               </div>
               <div>
@@ -189,7 +189,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
                   id="registrable"
                   type="checkbox"
                   defaultChecked={visiblechecked}
-                  onChange={() => setVisibleChecked(!visiblechecked)}
+                  onChange={(): void => setVisibleChecked(!visiblechecked)}
                 />
               </div>
             </div>
@@ -217,4 +217,4 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
     </>
   );
 }
-export default OrgUpdate;
+export default orgUpdate;

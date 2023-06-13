@@ -5,7 +5,6 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
-// import { ApolloProvider } from '@apollo/react-hooks';
 
 import styles from './OrgAdminListCard.module.css';
 import { REMOVE_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -14,7 +13,7 @@ import { Link } from 'react-router-dom';
 import defaultImg from 'assets/third_image.png';
 import { errorHandler } from 'utils/errorHandler';
 
-interface OrgPeopleListCardProps {
+interface InterfaceOrgPeopleListCardProps {
   key: string;
   id: string;
   memberName: string;
@@ -24,7 +23,7 @@ interface OrgPeopleListCardProps {
 }
 const currentUrl = window.location.href.split('=')[1];
 
-function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
+function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
   const [remove] = useMutation(REMOVE_ADMIN_MUTATION);
   const [showRemoveAdminModal, setShowRemoveAdminModal] = React.useState(false);
 
@@ -32,10 +31,10 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
     keyPrefix: 'orgAdminListCard',
   });
 
-  const toggleRemoveAdminModal = () =>
+  const toggleRemoveAdminModal = (): void =>
     setShowRemoveAdminModal(!showRemoveAdminModal);
 
-  const RemoveAdmin = async () => {
+  const removeAdmin = async (): Promise<void> => {
     try {
       const { data } = await remove({
         variables: {
@@ -108,7 +107,7 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
           </Button>
           <Button
             variant="success"
-            onClick={RemoveAdmin}
+            onClick={removeAdmin}
             data-testid="removeAdminBtn"
           >
             {t('yes')}
@@ -118,5 +117,4 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
     </div>
   );
 }
-export {};
-export default OrgAdminListCard;
+export default orgAdminListCard;

@@ -10,11 +10,14 @@ import i18nForTest from 'utils/i18nForTest';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-jest.mock('react-router-dom', () => ({
-  useHistory: () => ({
-    push: jest.fn(),
-  }),
-}));
+jest.mock(
+  'react-router-dom',
+  (): { useHistory: () => { push: jest.Mock } } => ({
+    useHistory: (): { push: jest.Mock } => ({
+      push: jest.fn(),
+    }),
+  })
+);
 
 describe('Testing the Super Dash List', () => {
   test('should render props and text elements test for the page component', () => {

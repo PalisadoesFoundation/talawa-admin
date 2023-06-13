@@ -3,12 +3,8 @@ import { render, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 
 import LandingPage from './LandingPage';
-import {
-  ApolloClient,
-  NormalizedCacheObject,
-  ApolloProvider,
-  InMemoryCache,
-} from '@apollo/client';
+import type { NormalizedCacheObject } from '@apollo/client';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import i18n from 'utils/i18n';
 import { BACKEND_URL } from 'Constant/constant';
 
