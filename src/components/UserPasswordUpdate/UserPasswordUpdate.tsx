@@ -2,8 +2,10 @@ import React from 'react';
 import { useMutation } from '@apollo/client';
 import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
+import Button from 'react-bootstrap/Button';
 import styles from './UserPasswordUpdate.module.css';
 import { toast } from 'react-toastify';
+import { Form } from 'react-bootstrap';
 
 interface InterfaceUserPasswordUpdateProps {
   id: string;
@@ -74,7 +76,7 @@ const UserUpdate: React.FC<InterfaceUserPasswordUpdateProps> = ({
           <div className={styles.dispflex}>
             <div>
               <label>{t('previousPassword')}</label>
-              <input
+              <Form.Control
                 type="password"
                 id="previousPassword"
                 placeholder={t('previousPassword')}
@@ -93,7 +95,7 @@ const UserUpdate: React.FC<InterfaceUserPasswordUpdateProps> = ({
           <div className={styles.dispflex}>
             <div>
               <label>{t('newPassword')}</label>
-              <input
+              <Form.Control
                 type="password"
                 id="newPassword"
                 placeholder={t('newPassword')}
@@ -112,7 +114,7 @@ const UserUpdate: React.FC<InterfaceUserPasswordUpdateProps> = ({
           <div className={styles.dispflex}>
             <div>
               <label>{t('confirmNewPassword')}</label>
-              <input
+              <Form.Control
                 type="password"
                 id="confirmNewPassword"
                 placeholder={t('confirmNewPassword')}
@@ -129,22 +131,22 @@ const UserUpdate: React.FC<InterfaceUserPasswordUpdateProps> = ({
             </div>
           </div>
           <div className={styles.dispbtnflex}>
-            <button
+            <Button
               type="button"
               className={styles.greenregbtn}
               value="savechanges"
               onClick={loginLink}
             >
               {t('saveChanges')}
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               className={styles.whitebtn}
               value="cancelchanges"
               onClick={cancelUpdate}
             >
               {t('cancel')}
-            </button>
+            </Button>
           </div>
         </form>
       </div>

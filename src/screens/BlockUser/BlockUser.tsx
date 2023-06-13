@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Form, Row } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
@@ -164,7 +165,7 @@ const Requests = (): JSX.Element => {
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
               <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
-              <input
+              <Form.Control
                 type="name"
                 id="firstName"
                 placeholder={t('searchFirstName')}
@@ -175,7 +176,7 @@ const Requests = (): JSX.Element => {
                 ref={firstNameRef}
               />
 
-              <input
+              <Form.Control
                 type="name"
                 id="lastName"
                 placeholder={t('searchLastName')}
@@ -187,7 +188,7 @@ const Requests = (): JSX.Element => {
               />
 
               <div className={styles.radio_buttons} data-testid="usertypelist">
-                <input
+                <Form.Check
                   id="allusers"
                   value="allusers"
                   name="displaylist"
@@ -200,7 +201,7 @@ const Requests = (): JSX.Element => {
                 />
                 <label htmlFor="allusers">{t('allMembers')}</label>
 
-                <input
+                <Form.Check
                   id="blockedusers"
                   value="blockedusers"
                   name="displaylist"
@@ -262,7 +263,7 @@ const Requests = (): JSX.Element => {
                                 {user.organizationsBlockedBy.some(
                                   (spam: any) => spam._id === currentUrl
                                 ) ? (
-                                  <button
+                                  <Button
                                     className="btn btn-danger"
                                     onClick={async (): Promise<void> => {
                                       await handleUnBlockUser(user._id);
@@ -270,9 +271,9 @@ const Requests = (): JSX.Element => {
                                     data-testid={`unBlockUser${user._id}`}
                                   >
                                     {t('unblock')}
-                                  </button>
+                                  </Button>
                                 ) : (
-                                  <button
+                                  <Button
                                     className="btn btn-success"
                                     onClick={async (): Promise<void> => {
                                       await handleBlockUser(user._id);
@@ -280,7 +281,7 @@ const Requests = (): JSX.Element => {
                                     data-testid={`blockUser${user._id}`}
                                   >
                                     {t('block')}
-                                  </button>
+                                  </Button>
                                 )}
                               </td>
                             </tr>

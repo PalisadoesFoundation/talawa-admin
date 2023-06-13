@@ -111,7 +111,7 @@ function addOnStore(): JSX.Element {
       <div className={styles.container}>
         <SidePanel>
           <Action label={t('search')}>
-            <input
+            <Form.Control
               type="name"
               id="searchname"
               className={styles.actioninput}

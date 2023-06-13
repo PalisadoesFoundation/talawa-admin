@@ -43,7 +43,11 @@ describe('Testing List navbar component', () => {
 
     await wait();
 
+    userEvent.click(screen.getByTestId('languageDropdownBtn'));
     userEvent.click(screen.getByTestId('changeLanguageBtn1'));
+    userEvent.click(screen.getByTestId('changeLanguageBtn2'));
+    userEvent.click(screen.getByTestId('changeLanguageBtn3'));
+    userEvent.click(screen.getByTestId('changeLanguageBtn4'));
   });
 
   test('Testing when language cookie is not set', async () => {

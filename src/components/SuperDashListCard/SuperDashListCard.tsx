@@ -1,6 +1,7 @@
 import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import styles from './SuperDashListCard.module.css';
 import { useHistory } from 'react-router-dom';
@@ -72,7 +73,7 @@ function superDashListCard(
               {t('members')}: <span>{props?.members}</span>
             </p>
             <div className={styles.orgCreateBtnDiv}>
-              <button
+              <Button
                 className={styles.orgfontcreatedbtn}
                 onClick={handleClick}
                 disabled={
@@ -82,7 +83,7 @@ function superDashListCard(
                 }
               >
                 {t('manage')}
-              </button>
+              </Button>
             </div>
           </div>
         </Col>
