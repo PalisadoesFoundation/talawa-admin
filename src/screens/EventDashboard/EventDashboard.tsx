@@ -14,6 +14,7 @@ import Button from 'react-bootstrap/Button';
 import List from '@mui/material/List';
 import { EventAttendeeWrapper } from 'components/EventAttendeesModal/EventAttendeeWrapper';
 import { TaskListItem } from 'components/TaskListItem/TaskListItem';
+import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
 
 interface EventTaskInterface {
   _id: string;
@@ -120,6 +121,7 @@ function EventDashboard(): JSX.Element {
                   eventId={eventId}
                   orgId={eventData.event.organization._id}
                 />
+                <CheckInWrapper eventId={eventId} />
               </p>
             </div>
           </div>
