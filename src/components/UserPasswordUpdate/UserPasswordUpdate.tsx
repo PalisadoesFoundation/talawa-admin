@@ -7,12 +7,15 @@ import styles from './UserPasswordUpdate.module.css';
 import { toast } from 'react-toastify';
 import { Form } from 'react-bootstrap';
 
-interface UserPasswordUpdateProps {
+interface InterfaceUserPasswordUpdateProps {
   id: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const UserUpdate: React.FC<UserPasswordUpdateProps> = ({ id }): JSX.Element => {
+const UserUpdate: React.FC<InterfaceUserPasswordUpdateProps> = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  id,
+}): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userPasswordUpdate',
   });
@@ -24,17 +27,19 @@ const UserUpdate: React.FC<UserPasswordUpdateProps> = ({ id }): JSX.Element => {
 
   const [login] = useMutation(UPDATE_USER_PASSWORD_MUTATION);
 
-  const login_link = async () => {
+  const loginLink = async (): Promise<string | void> => {
     if (
       !formState.previousPassword ||
       !formState.newPassword ||
       !formState.confirmNewPassword
     ) {
-      return toast.error('The password field cannot be empty.');
+      toast.error('The password field cannot be empty.');
+      return;
     }
 
     if (formState.newPassword !== formState.confirmNewPassword) {
-      return toast.error('New and Confirm password do not match.');
+      toast.error('New and Confirm password do not match.');
+      return;
     }
 
     try {
@@ -52,14 +57,14 @@ const UserUpdate: React.FC<UserPasswordUpdateProps> = ({ id }): JSX.Element => {
           window.location.reload();
         }, 2000);
       }
-    } catch (error) {
+    } catch (error: any) {
       /* istanbul ignore next */
-      toast.error(error);
+      toast.error(error.toString());
     }
   };
 
   /* istanbul ignore next */
-  const cancelUpdate = () => {
+  const cancelUpdate = (): void => {
     window.location.reload();
   };
 
@@ -78,7 +83,7 @@ const UserUpdate: React.FC<UserPasswordUpdateProps> = ({ id }): JSX.Element => {
                 autoComplete="off"
                 required
                 value={formState.previousPassword}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
                     previousPassword: e.target.value,
@@ -97,7 +102,7 @@ const UserUpdate: React.FC<UserPasswordUpdateProps> = ({ id }): JSX.Element => {
                 autoComplete="off"
                 required
                 value={formState.newPassword}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
                     newPassword: e.target.value,
@@ -116,7 +121,7 @@ const UserUpdate: React.FC<UserPasswordUpdateProps> = ({ id }): JSX.Element => {
                 autoComplete="off"
                 required
                 value={formState.confirmNewPassword}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
                     confirmNewPassword: e.target.value,
@@ -130,7 +135,7 @@ const UserUpdate: React.FC<UserPasswordUpdateProps> = ({ id }): JSX.Element => {
               type="button"
               className={styles.greenregbtn}
               value="savechanges"
-              onClick={login_link}
+              onClick={loginLink}
             >
               {t('saveChanges')}
             </Button>

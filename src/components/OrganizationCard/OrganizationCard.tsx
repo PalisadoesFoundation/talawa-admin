@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './OrganizationCard.module.css';
 
-interface OrganizationCardProps {
+interface InterfaceOrganizationCardProps {
   key: any;
   image: string;
   id: string;
@@ -10,7 +10,7 @@ interface OrganizationCardProps {
   firstName: string;
 }
 
-function OrganizationCard(props: OrganizationCardProps): JSX.Element {
+function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
   const uri = '/superorghome/i=' + props.id;
 
   return (
@@ -46,4 +46,4 @@ function OrganizationCard(props: OrganizationCardProps): JSX.Element {
 }
 
 export {};
-export default OrganizationCard;
+export default organizationCard;

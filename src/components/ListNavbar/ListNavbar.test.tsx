@@ -8,7 +8,7 @@ import 'jest-localstorage-mock';
 import ListNavbar from './ListNavbar';
 import i18nForTest from 'utils/i18nForTest';
 
-async function wait(ms = 100) {
+async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);

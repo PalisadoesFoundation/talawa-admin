@@ -15,7 +15,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { MOCKS } from './AdminNavbarMocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 const link1 = new StaticMockLink(MOCKS, true);
-async function wait(ms = 100) {
+async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -68,7 +68,7 @@ describe('Testing Admin Navbar', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <AdminNavbar {...props} />
+              <AdminNavbar url1={''} {...props} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -102,7 +102,7 @@ describe('Testing Admin Navbar', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <AdminNavbar {...props} />
+              <AdminNavbar url1={''} {...props} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -120,7 +120,7 @@ describe('Testing Admin Navbar', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <AdminNavbar {...props} />
+              <AdminNavbar url1={''} {...props} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -138,7 +138,7 @@ describe('Testing Admin Navbar', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <AdminNavbar {...props} />
+              <AdminNavbar url1={''} {...props} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -155,7 +155,7 @@ describe('Testing Admin Navbar', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <AdminNavbar {...props} />
+              <AdminNavbar url1={''} {...props} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -183,7 +183,7 @@ describe('Testing Admin Navbar', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <AdminNavbar {...props} />
+              <AdminNavbar url1={''} {...props} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -198,7 +198,7 @@ describe('Testing Admin Navbar', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <AdminNavbar {...props} />
+              <AdminNavbar url1={''} {...props} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>

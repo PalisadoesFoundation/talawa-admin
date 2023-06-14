@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 import defaultImg from 'assets/third_image.png';
 import { errorHandler } from 'utils/errorHandler';
 
-interface UserListCardProps {
+interface InterfaceUserListCardProps {
   key: string;
   id: string;
   memberName: string;
@@ -21,7 +21,7 @@ interface UserListCardProps {
   memberEmail: string;
 }
 
-function UserListCard(props: UserListCardProps): JSX.Element {
+function userListCard(props: InterfaceUserListCardProps): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
 
@@ -29,7 +29,7 @@ function UserListCard(props: UserListCardProps): JSX.Element {
     keyPrefix: 'userListCard',
   });
 
-  const AddAdmin = async () => {
+  const addAdmin = async (): Promise<void> => {
     try {
       const { data } = await adda({
         variables: {
@@ -79,7 +79,7 @@ function UserListCard(props: UserListCardProps): JSX.Element {
               </p>
               <Button
                 className={styles.memberfontcreatedbtn}
-                onClick={AddAdmin}
+                onClick={addAdmin}
               >
                 {t('addAdmin')}
               </Button>
@@ -92,4 +92,4 @@ function UserListCard(props: UserListCardProps): JSX.Element {
   );
 }
 export {};
-export default UserListCard;
+export default userListCard;

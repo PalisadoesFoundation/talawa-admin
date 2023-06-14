@@ -1,4 +1,5 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -14,7 +15,7 @@ import { errorHandler } from 'utils/errorHandler';
 import Button from 'react-bootstrap/Button';
 import { Form } from 'react-bootstrap';
 
-const ForgotPassword = () => {
+const ForgotPassword = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'forgotPassword',
   });
@@ -42,7 +43,7 @@ const ForgotPassword = () => {
     setComponentLoader(false);
   }, []);
 
-  const getOTP = async (e: ChangeEvent<HTMLFormElement>) => {
+  const getOTP = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
     try {
@@ -69,7 +70,9 @@ const ForgotPassword = () => {
     }
   };
 
-  const submitForgotPassword = async (e: ChangeEvent<HTMLFormElement>) => {
+  const submitForgotPassword = async (
+    e: ChangeEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
     const { userOtp, newPassword, confirmNewPassword } = forgotPassFormData;
 
@@ -139,7 +142,7 @@ const ForgotPassword = () => {
                     value={registeredEmail}
                     name="registeredEmail"
                     required
-                    onChange={(e) => setregisteredEmail(e.target.value)}
+                    onChange={(e): void => setregisteredEmail(e.target.value)}
                   />
                 </div>
                 <div className="col-sm-3">
@@ -169,7 +172,7 @@ const ForgotPassword = () => {
                     name="userOtp"
                     value={forgotPassFormData.userOtp}
                     required
-                    onChange={(e) =>
+                    onChange={(e): void =>
                       setForgotPassFormData({
                         ...forgotPassFormData,
                         userOtp: e.target.value,
@@ -195,7 +198,7 @@ const ForgotPassword = () => {
                     name="newPassword"
                     value={forgotPassFormData.newPassword}
                     required
-                    onChange={(e) =>
+                    onChange={(e): void =>
                       setForgotPassFormData({
                         ...forgotPassFormData,
                         newPassword: e.target.value,
@@ -221,7 +224,7 @@ const ForgotPassword = () => {
                     name="confirmNewPassword"
                     value={forgotPassFormData.confirmNewPassword}
                     required
-                    onChange={(e) =>
+                    onChange={(e): void =>
                       setForgotPassFormData({
                         ...forgotPassFormData,
                         confirmNewPassword: e.target.value,

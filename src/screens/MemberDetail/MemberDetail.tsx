@@ -10,7 +10,7 @@ import UserUpdate from 'components/UserUpdate/UserUpdate';
 
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
-import { RootState } from 'state/reducers';
+import type { RootState } from 'state/reducers';
 import styles from './MemberDetail.module.css';
 import { languages } from 'utils/languages';
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -37,7 +37,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
   const {
-    data: data,
+    data: userData,
     loading: loading,
     error: error,
   } = useQuery(USER_DETAILS, {
@@ -57,7 +57,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     window.location.assign(`/orgpeople/id=${currentUrl}`);
   }
 
-  const AddAdmin = async () => {
+  const addAdmin = async (): Promise<void> => {
     try {
       const { data } = await adda({
         variables: {
@@ -81,7 +81,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
   return (
     <>
-      <AdminNavbar targets={targets} url_1={configUrl} />
+      <AdminNavbar targets={targets} url1={configUrl} />
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
@@ -106,14 +106,14 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 <p className={styles.logintitle}>{t('title')}</p>
                 <Button
                   className={styles.memberfontcreatedbtn}
-                  onClick={AddAdmin}
+                  onClick={addAdmin}
                 >
                   {t('addAdmin')}
                 </Button>
                 <Button
                   className={styles.memberfontcreatedbtn}
                   role="stateBtn"
-                  onClick={() => {
+                  onClick={(): void => {
                     setState(2);
                   }}
                 >
@@ -123,16 +123,16 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               <Row className={styles.justifysp}>
                 <Col sm={6} lg={4}>
                   <div>
-                    {data?.user?.image ? (
+                    {userData?.user?.image ? (
                       <img
                         className={styles.userImage}
-                        src={data?.user?.image}
+                        src={userData?.user?.image}
                         data-testid="userImagePresent"
                       />
                     ) : (
                       <img
                         className={styles.userImage}
-                        src={`https://api.dicebear.com/5.x/initials/svg?seed=${data?.user?.firstName} ${data?.user?.lastName}`}
+                        src={`https://api.dicebear.com/5.x/initials/svg?seed=${userData?.user?.firstName} ${userData?.user?.lastName}`}
                         data-testid="userImageAbsent"
                       />
                     )}
@@ -143,20 +143,20 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   <div>
                     <h2 className="mt-3 mb-4">
                       <strong>
-                        {data?.user?.firstName} {data?.user?.lastName}
+                        {userData?.user?.firstName} {userData?.user?.lastName}
                       </strong>
                     </h2>
                     <p>
                       <strong>{t('role')} :</strong>{' '}
-                      <span>{data?.user?.userType}</span>
+                      <span>{userData?.user?.userType}</span>
                     </p>
                     <p>
                       <strong>{t('email')} :</strong>{' '}
-                      <span>{data?.user?.email}</span>
+                      <span>{userData?.user?.email}</span>
                     </p>
                     <p>
                       <strong>{t('createdOn')} :</strong>{' '}
-                      {prettyDate(data?.user?.createdAt)}
+                      {prettyDate(userData?.user?.createdAt)}
                     </p>
                   </div>
                 </Col>
@@ -178,44 +178,47 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       <div className="card-body">
                         <Row className="border-bottom pt-2 pb-3">
                           <Col sm={6}>{t('firstName')}</Col>
-                          <Col sm={6}>{data?.user?.firstName}</Col>
+                          <Col sm={6}>{userData?.user?.firstName}</Col>
                         </Row>
                         <Row className="border-bottom py-3">
                           <Col sm={6}>{t('lastName')}</Col>
-                          <Col sm={6}>{data?.user?.lastName}</Col>
+                          <Col sm={6}>{userData?.user?.lastName}</Col>
                         </Row>
                         <Row className="border-bottom py-3">
                           <Col sm={6}>{t('role')}</Col>
-                          <Col sm={6}>{data?.user?.userType}</Col>
+                          <Col sm={6}>{userData?.user?.userType}</Col>
                         </Row>
                         <Row className="border-bottom py-3">
                           <Col sm={6}>{t('memberOfOrganization')}</Col>
                           <Col sm={6}>
-                            {data?.user?.organizationUserBelongsTo ?? 'None'}
+                            {userData?.user?.organizationUserBelongsTo ??
+                              'None'}
                           </Col>
                         </Row>
                         <Row className="border-bottom py-3">
                           <Col sm={6}>{t('language')}</Col>
                           <Col sm={6}>
-                            {getLanguageName(data?.user?.appLanguageCode)}
+                            {getLanguageName(userData?.user?.appLanguageCode)}
                           </Col>
                         </Row>
                         <Row className="border-bottom py-3">
                           <Col sm={6}>{t('adminApproved')}</Col>
                           <Col sm={6} data-testid="adminApproved">
-                            {data?.user?.adminApproved ? 'Yes' : 'No'}
+                            {userData?.user?.adminApproved ? 'Yes' : 'No'}
                           </Col>
                         </Row>
                         <Row className="border-bottom py-3">
                           <Col sm={6}>{t('pluginCreationAllowed')}</Col>
                           <Col sm={6} data-testid="pluginCreationAllowed">
-                            {data?.user?.pluginCreationAllowed ? 'Yes' : 'No'}
+                            {userData?.user?.pluginCreationAllowed
+                              ? 'Yes'
+                              : 'No'}
                           </Col>
                         </Row>
                         <Row className="pt-3">
                           <Col sm={6}>{t('createdOn')}</Col>
                           <Col data-testid="createdOn" sm={6}>
-                            {prettyDate(data?.user?.createdAt)}
+                            {prettyDate(userData?.user?.createdAt)}
                           </Col>
                         </Row>
                       </div>
@@ -234,23 +237,23 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         <Row className="border-bottom pt-2 pb-3">
                           <Col sm={8}>{t('created')}</Col>
                           <Col sm={4}>
-                            {data?.user?.createdOrganizations?.length}
+                            {userData?.user?.createdOrganizations?.length}
                           </Col>
                         </Row>
                         <Row className="border-bottom py-3">
                           <Col sm={8}>{t('joined')}</Col>
                           <Col sm={4}>
-                            {data?.user?.joinedOrganizations?.length}
+                            {userData?.user?.joinedOrganizations?.length}
                           </Col>
                         </Row>
                         <Row className="border-bottom py-3">
                           <Col sm={8}>{t('adminForOrganizations')}</Col>
-                          <Col sm={4}>{data?.user?.adminFor?.length}</Col>
+                          <Col sm={4}>{userData?.user?.adminFor?.length}</Col>
                         </Row>
                         <Row className="pt-3">
                           <Col sm={8}>{t('membershipRequests')}</Col>
                           <Col sm={4}>
-                            {data?.user?.membershipRequests?.length}
+                            {userData?.user?.membershipRequests?.length}
                           </Col>
                         </Row>
                       </div>
@@ -265,17 +268,19 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       <div className="card-body">
                         <Row className="border-bottom pt-2 pb-3">
                           <Col sm={8}>{t('created')}</Col>
-                          <Col sm={4}>{data?.user?.createdEvents?.length}</Col>
+                          <Col sm={4}>
+                            {userData?.user?.createdEvents?.length}
+                          </Col>
                         </Row>
                         <Row className="border-bottom py-3">
                           <Col sm={8}>{t('joined')}</Col>
                           <Col sm={4}>
-                            {data?.user?.registeredEvents?.length}
+                            {userData?.user?.registeredEvents?.length}
                           </Col>
                         </Row>
                         <Row className="pt-3">
                           <Col sm={8}>{t('adminForEvents')}</Col>
-                          <Col sm={4}>{data?.user?.eventAdmin?.length}</Col>
+                          <Col sm={4}>{userData?.user?.eventAdmin?.length}</Col>
                         </Row>
                       </div>
                     </div>

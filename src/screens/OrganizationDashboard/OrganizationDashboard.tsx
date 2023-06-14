@@ -3,7 +3,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useMutation, useQuery } from '@apollo/client';
 import { useSelector } from 'react-redux';
-import { RootState } from 'state/reducers';
+import type { RootState } from 'state/reducers';
 import { Container, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
@@ -21,7 +21,7 @@ import {
 import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
 
-function OrganizationDashboard(): JSX.Element {
+function organizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   document.title = t('title');
@@ -36,29 +36,29 @@ function OrganizationDashboard(): JSX.Element {
 
   const {
     data: postData,
-    loading: loading_post,
-    error: error_post,
+    loading: loadingPost,
+    error: errorPost,
   } = useQuery(ORGANIZATION_POST_LIST, {
     variables: { id: currentUrl },
   });
 
   const {
     data: eventData,
-    loading: loading_event,
-    error: error_event,
+    loading: loadingEvent,
+    error: errorEvent,
   } = useQuery(ORGANIZATION_EVENT_LIST, {
     variables: { id: currentUrl },
   });
 
-  const { data: data_2 } = useQuery(USER_ORGANIZATION_LIST, {
+  const { data: data2 } = useQuery(USER_ORGANIZATION_LIST, {
     variables: { id: localStorage.getItem('id') },
   });
 
-  const canDelete = data_2?.user.userType === 'SUPERADMIN';
-  const toggleDeleteModal = () => setShowDeleteModal(!showDeleteModal);
+  const canDelete = data2?.user.userType === 'SUPERADMIN';
+  const toggleDeleteModal = (): void => setShowDeleteModal(!showDeleteModal);
   const [del] = useMutation(DELETE_ORGANIZATION_MUTATION);
 
-  const delete_org = async () => {
+  const deleteOrg = async (): Promise<void> => {
     try {
       const { data } = await del({
         variables: {
@@ -76,7 +76,7 @@ function OrganizationDashboard(): JSX.Element {
     }
   };
 
-  if (loading || loading_post || loading_event) {
+  if (loading || loadingPost || loadingEvent) {
     return (
       <>
         <div className={styles.loader}></div>
@@ -85,13 +85,13 @@ function OrganizationDashboard(): JSX.Element {
   }
 
   /* istanbul ignore next */
-  if (error || error_post || error_event) {
+  if (error || errorPost || errorEvent) {
     window.location.replace('/orglist');
   }
 
   return (
     <>
-      <AdminNavbar targets={targets} url_1={configUrl} />
+      <AdminNavbar targets={targets} url1={configUrl} />
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
@@ -311,7 +311,7 @@ function OrganizationDashboard(): JSX.Element {
           </Button>
           <Button
             variant="success"
-            onClick={delete_org}
+            onClick={deleteOrg}
             data-testid="deleteOrganizationBtn"
           >
             {t('yes')}
@@ -322,4 +322,4 @@ function OrganizationDashboard(): JSX.Element {
   );
 }
 
-export default OrganizationDashboard;
+export default organizationDashboard;

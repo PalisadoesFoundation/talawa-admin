@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import styles from './OrgContriCards.module.css';
 
-interface OrgContriCardsProps {
+interface InterfaceOrgContriCardsProps {
   key: string;
   id: string;
   userName: string;
@@ -14,7 +14,7 @@ interface OrgContriCardsProps {
   contriTransactionId: string;
   userEmail: string;
 }
-function OrgContriCards(props: OrgContriCardsProps): JSX.Element {
+function orgContriCards(props: InterfaceOrgContriCardsProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgContriCards',
   });
@@ -39,4 +39,4 @@ function OrgContriCards(props: OrgContriCardsProps): JSX.Element {
     </>
   );
 }
-export default OrgContriCards;
+export default orgContriCards;

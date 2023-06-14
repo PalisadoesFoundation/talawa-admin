@@ -1,13 +1,16 @@
 import React from 'react';
 import styles from './SidePanel.module.css';
-interface SidePanelProps {
+interface InterfaceSidePanelProps {
   collapse?: boolean;
   children: any;
 }
 
 // TODO: Implement Extras Plugin
 // id - [plugin-name]-side-panel
-function SidePanel({ collapse, children }: SidePanelProps): JSX.Element {
+function sidePanel({
+  collapse,
+  children,
+}: InterfaceSidePanelProps): JSX.Element {
   return (
     <div
       data-testid="SidePanel"
@@ -20,4 +23,4 @@ function SidePanel({ collapse, children }: SidePanelProps): JSX.Element {
   );
 }
 
-export default SidePanel;
+export default sidePanel;

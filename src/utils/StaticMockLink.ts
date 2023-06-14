@@ -2,7 +2,8 @@ import { print } from 'graphql';
 import { equal } from '@wry/equality';
 import { invariant } from 'ts-invariant';
 
-import { ApolloLink, Operation, FetchResult } from '@apollo/client/link/core';
+import type { Operation, FetchResult } from '@apollo/client/link/core';
+import { ApolloLink } from '@apollo/client/link/core';
 
 import {
   Observable,
@@ -12,7 +13,7 @@ import {
   cloneDeep,
 } from '@apollo/client/utilities';
 
-import { MockedResponse, ResultFunction } from '@apollo/react-testing';
+import type { MockedResponse, ResultFunction } from '@apollo/react-testing';
 
 function requestToKey(request: any, addTypename: boolean): string {
   const queryString =
@@ -29,12 +30,9 @@ function requestToKey(request: any, addTypename: boolean): string {
 export class StaticMockLink extends ApolloLink {
   public operation?: Operation;
   public addTypename = true;
-  private mockedResponsesByKey: { [key: string]: MockedResponse[] } = {};
+  private _mockedResponsesByKey: { [key: string]: MockedResponse[] } = {};
 
-  constructor(
-    mockedResponses: ReadonlyArray<MockedResponse>,
-    addTypename = true
-  ) {
+  constructor(mockedResponses: readonly MockedResponse[], addTypename = true) {
     super();
     this.addTypename = addTypename;
     if (mockedResponses) {
@@ -44,17 +42,17 @@ export class StaticMockLink extends ApolloLink {
     }
   }
 
-  public addMockedResponse(mockedResponse: MockedResponse) {
+  public addMockedResponse(mockedResponse: MockedResponse): void {
     const normalizedMockedResponse =
-      this.normalizeMockedResponse(mockedResponse);
+      this._normalizeMockedResponse(mockedResponse);
     const key = requestToKey(
       normalizedMockedResponse.request,
       this.addTypename
     );
-    let mockedResponses = this.mockedResponsesByKey[key];
+    let mockedResponses = this._mockedResponsesByKey[key];
     if (!mockedResponses) {
       mockedResponses = [];
-      this.mockedResponsesByKey[key] = mockedResponses;
+      this._mockedResponsesByKey[key] = mockedResponses;
     }
     mockedResponses.push(normalizedMockedResponse);
   }
@@ -63,7 +61,7 @@ export class StaticMockLink extends ApolloLink {
     this.operation = operation;
     const key = requestToKey(operation, this.addTypename);
     let responseIndex = 0;
-    const response = (this.mockedResponsesByKey[key] || []).find(
+    const response = (this._mockedResponsesByKey[key] || []).find(
       (res, index) => {
         const requestVariables = operation.variables || {};
         const mockedResponseVariables = res.request.variables || {};
@@ -87,7 +85,7 @@ export class StaticMockLink extends ApolloLink {
       const { newData } = response;
       if (newData) {
         response.result = newData();
-        this.mockedResponsesByKey[key].push(response);
+        this._mockedResponsesByKey[key].push(response);
       }
 
       if (!response.result && !response.error) {
@@ -134,7 +132,7 @@ export class StaticMockLink extends ApolloLink {
     });
   }
 
-  private normalizeMockedResponse(
+  private _normalizeMockedResponse(
     mockedResponse: MockedResponse
   ): MockedResponse {
     const newMockedResponse = cloneDeep(mockedResponse);
@@ -152,14 +150,16 @@ export class StaticMockLink extends ApolloLink {
   }
 }
 
-export interface MockApolloLink extends ApolloLink {
+export interface InterfaceMockApolloLink extends ApolloLink {
   operation?: Operation;
 }
 
 // Pass in multiple mocked responses, so that you can test flows that end up
 // making multiple queries to the server.
 // NOTE: The last arg can optionally be an `addTypename` arg.
-export function mockSingleLink(...mockedResponses: Array<any>): MockApolloLink {
+export function mockSingleLink(
+  ...mockedResponses: any[]
+): InterfaceMockApolloLink {
   // To pull off the potential typename. If this isn't a boolean, we'll just
   // set it true later.
   let maybeTypename = mockedResponses[mockedResponses.length - 1];
