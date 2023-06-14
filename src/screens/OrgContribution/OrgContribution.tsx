@@ -9,6 +9,7 @@ import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import OrgContriCards from 'components/OrgContriCards/OrgContriCards';
 import ContriStats from 'components/ContriStats/ContriStats';
 import type { RootState } from 'state/reducers';
+import { Form } from 'react-bootstrap';
 
 function orgContribution(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -28,7 +29,7 @@ function orgContribution(): JSX.Element {
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
               <h6 className={styles.searchtitle}>{t('filterByName')}</h6>
-              <input
+              <Form.Control
                 type="name"
                 id="orgname"
                 placeholder={t('orgname')}
@@ -37,7 +38,7 @@ function orgContribution(): JSX.Element {
               />
 
               <h6 className={styles.searchtitle}>{t('filterByTransId')}</h6>
-              <input
+              <Form.Control
                 type="transaction"
                 id="searchtransaction"
                 placeholder={t('searchtransaction')}

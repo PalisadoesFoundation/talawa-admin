@@ -1,16 +1,19 @@
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import { toast } from 'react-toastify';
 
-import styles from './OrgPostCard.module.css';
 import {
   DELETE_POST_MUTATION,
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { useTranslation } from 'react-i18next';
 import defaultImg from 'assets/third_image.png';
+import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
+import styles from './OrgPostCard.module.css';
+import { Form } from 'react-bootstrap';
 
 interface InterfaceOrgPostCardProps {
   key: string;
@@ -29,6 +32,12 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
   });
 
   const [togglePost, setPostToggle] = useState('Read more');
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const toggleShowEditModal = (): void => setShowEditModal(!showEditModal);
+  const toggleShowDeleteModal = (): void =>
+    setShowDeleteModal(!showDeleteModal);
 
   function handletoggleClick(): void {
     if (togglePost === 'Read more') {
@@ -114,31 +123,7 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
         <div className={styles.cards}>
           <div className={styles.dispflex}>
             <h2>{props.postTitle}</h2>
-            <div className={styles.iconContainer}>
-              <a
-                data-testid="deletePostModalBtn"
-                className={`${styles.icon} mr-1`}
-                data-toggle="modal"
-                data-target={`#deletePostModal${props.id}`}
-              >
-                <i className="fa fa-trash"></i>
-              </a>
-              <a
-                data-testid="editPostModalBtn"
-                className={styles.icon}
-                data-toggle="modal"
-                data-target={`#editPostModal${props.id}`}
-              >
-                <i className="fas fa-edit"></i>
-              </a>
-            </div>
           </div>
-          {/* {props.postInfo.length > 43 && (
-            <button role='toggleBtn' className={styles.toggleClickBtn} onClick={handletoggleClick}>
-              {togglePost}
-            </button>
-          )} */}
-          {/* <p>{props.postInfo}</p> */}
           {props.postPhoto ? (
             <p>
               <span>
@@ -170,7 +155,7 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
             ) : (
               <p data-testid="toggleContent">{props.postInfo}</p>
             )}
-            <button
+            <Button
               role="toggleBtn"
               data-testid="toggleBtn"
               className={`${
@@ -181,7 +166,7 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
               onClick={handletoggleClick}
             >
               {togglePost}
-            </button>
+            </Button>
           </div>
           <p>
             {t('videoURL')}:
@@ -190,161 +175,136 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
               <a href={props.postVideo}>{props.postVideo}</a>
             </span>
           </p>
-        </div>
-      </div>
 
-      {/* delete modal */}
-      <div
-        className="modal fade"
-        id={`deletePostModal${props.id}`}
-        tabIndex={-1}
-        role="dialog"
-        aria-labelledby={`deletePostModalLabel${props.id}`}
-        aria-hidden="true"
-      >
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5
-                className="modal-title"
-                id={`deletePostModalLabel${props.id}`}
-              >
-                {t('deletePost')}
-              </h5>
-              <button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">{t('deletePostMsg')}</div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-danger"
-                data-dismiss="modal"
-              >
-                {t('no')}
-              </button>
-              <button
-                type="button"
-                className="btn btn-success"
-                onClick={deletePost}
-                data-testid="deletePostBtn"
-              >
-                {t('yes')}
-              </button>
-            </div>
+          <div className={styles.iconContainer}>
+            <Button
+              className="me-3"
+              size="sm"
+              variant="danger"
+              data-testid="deletePostModalBtn"
+              onClick={toggleShowDeleteModal}
+            >
+              Delete <i className="fa fa-trash"></i>
+            </Button>
+            <Button
+              variant="success"
+              size="sm"
+              onClick={toggleShowEditModal}
+              data-testid="editPostModalBtn"
+            >
+              Edit <i className="fas fa-edit"></i>
+            </Button>
           </div>
         </div>
       </div>
+
+      {/* Delete Modal */}
+      <Modal show={showDeleteModal} onHide={toggleShowDeleteModal}>
+        <Modal.Header>
+          <h5>{t('deletePost')}</h5>
+          <Button variant="danger" onClick={toggleShowDeleteModal}>
+            <i className="fa fa-times"></i>
+          </Button>
+        </Modal.Header>
+        <Modal.Body>{t('deletePostMsg')}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={toggleShowDeleteModal}>
+            {t('no')}
+          </Button>
+          <Button
+            type="button"
+            className="btn btn-success"
+            onClick={deletePost}
+            data-testid="deletePostBtn"
+          >
+            {t('yes')}
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       {/* Edit Modal */}
-      <div
-        className="modal fade"
-        id={`editPostModal${props.id}`}
-        tabIndex={-1}
-        aria-labelledby={`editPostModal${props.id}Label`}
-        aria-hidden="true"
-      >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id={`editPostModal${props.id}Label`}>
-                {t('editPost')}
-              </h5>
-              <button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
+      <Modal show={showEditModal} onHide={toggleShowEditModal}>
+        <Modal.Header>
+          <h5>{t('editPost')}</h5>
+          <Button variant="danger" onClick={toggleShowEditModal}>
+            <i className="fa fa-times"></i>
+          </Button>
+        </Modal.Header>
+        <form onSubmit={updatePostHandler}>
+          <Modal.Body>
+            <div className="form-group">
+              <label htmlFor="postTitle" className="col-form-label">
+                {t('postTitle')}
+              </label>
+              <Form.Control
+                type="text"
+                className="form-control"
+                id="postTitle"
+                name="posttitle"
+                value={postformState.posttitle}
+                onChange={handleInputEvent}
+                data-testid="updateTitle"
+                required
+              />
             </div>
-            <form onSubmit={updatePostHandler}>
-              <div className="modal-body">
-                <div className="form-group">
-                  <label htmlFor="postTitle" className="col-form-label">
-                    {t('postTitle')}
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="postTitle"
-                    name="posttitle"
-                    value={postformState.posttitle}
-                    onChange={handleInputEvent}
-                    data-testid="updateTitle"
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="postText" className="col-form-label">
-                    {t('information')}
-                  </label>
-                  <textarea
-                    className="form-control"
-                    name="postinfo"
-                    value={postformState.postinfo}
-                    autoComplete="off"
-                    onChange={handleInputEvent}
-                    data-testid="updateText"
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="postImageUrl" className="col-form-label">
-                    {t('image')}:
-                  </label>
-                  <input
-                    accept="image/*"
-                    id="postImageUrl"
-                    name="photo"
-                    type="file"
-                    placeholder={t('image')}
-                    multiple={false}
-                    //onChange=""
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="postVideoUrl" className="col-form-label">
-                    {t('video')}:
-                  </label>
-                  <input
-                    accept="image/*"
-                    id="postVideoUrl"
-                    name="video"
-                    type="file"
-                    placeholder={t('video')}
-                    multiple={false}
-                    //onChange=""
-                  />
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-danger"
-                  data-dismiss="modal"
-                >
-                  {t('close')}
-                </button>
-                <button
-                  type="submit"
-                  className="btn btn-success"
-                  data-testid="updatePostBtn"
-                >
-                  {t('updatePost')}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
+            <div className="form-group">
+              <label htmlFor="postText" className="col-form-label">
+                {t('information')}
+              </label>
+              <Form.Control
+                as="textarea"
+                className="form-control"
+                name="postinfo"
+                value={postformState.postinfo}
+                autoComplete="off"
+                onChange={handleInputEvent}
+                data-testid="updateText"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="postImageUrl" className="col-form-label">
+                {t('image')}:
+              </label>
+              <Form.Control
+                accept="image/*"
+                id="postImageUrl"
+                name="photo"
+                type="file"
+                placeholder={t('image')}
+                multiple={false}
+                //onChange=""
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="postVideoUrl" className="col-form-label">
+                {t('video')}:
+              </label>
+              <Form.Control
+                accept="image/*"
+                id="postVideoUrl"
+                name="video"
+                type="file"
+                placeholder={t('video')}
+                multiple={false}
+                //onChange=""
+              />
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="danger" onClick={toggleShowEditModal}>
+              {t('close')}
+            </Button>
+            <Button
+              type="submit"
+              className="btn btn-success"
+              data-testid="updatePostBtn"
+            >
+              {t('updatePost')}
+            </Button>
+          </Modal.Footer>
+        </form>
+      </Modal>
     </>
   );
 }

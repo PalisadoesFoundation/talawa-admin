@@ -2,7 +2,7 @@ import type { ChangeEvent } from 'react';
 import React, { useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Modal from 'react-modal';
+import Modal from 'react-bootstrap/Modal';
 import { Form } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { useSelector } from 'react-redux';
@@ -188,7 +188,7 @@ function orgPost(): JSX.Element {
                   />
                 </div>
               </div>
-              <input
+              <Form.Control
                 type="text"
                 id="posttitle"
                 placeholder={showTitle ? t('searchTitle') : t('searchText')}
@@ -275,93 +275,80 @@ function orgPost(): JSX.Element {
           </div>
         </Col>
       </Row>
-      <Modal
-        isOpen={postmodalisOpen}
-        style={{
-          overlay: { backgroundColor: 'grey' },
-        }}
-        className={styles.modalbody}
-        ariaHideApp={false}
-      >
-        <section id={styles.grid_wrapper}>
-          <div className={styles.form_wrapper}>
-            <div className={styles.flexdir}>
-              <p className={styles.titlemodal}>{t('postDetails')}</p>
-              <a onClick={hideInviteModal} className={styles.cancel}>
-                <i className="fa fa-times" data-testid="closePostModalBtn"></i>
-              </a>
-            </div>
-            <Form onSubmitCapture={createPost}>
-              <label htmlFor="posttitle">{t('postTitle')}</label>
-              <input
-                type="title"
-                id="postitle"
-                placeholder={t('ptitle')}
-                autoComplete="off"
-                required
-                value={postformState.posttitle}
-                onChange={(e): void => {
-                  setPostFormState({
-                    ...postformState,
-                    posttitle: e.target.value,
-                  });
-                }}
-              />
-              <label htmlFor="postinfo">{t('information')}</label>
-              <textarea
-                id="postinfo"
-                className={styles.postinfo}
-                placeholder={t('postDes')}
-                autoComplete="off"
-                required
-                value={postformState.postinfo}
-                onChange={(e): void => {
-                  setPostFormState({
-                    ...postformState,
-                    postinfo: e.target.value,
-                  });
-                }}
-              />
-              <label htmlFor="postphoto" className={styles.orgphoto}>
-                {t('image')}:
-                <input
-                  accept="image/*"
-                  id="postphoto"
-                  name="photo"
-                  type="file"
-                  multiple={false}
-                  onChange={async (e): Promise<void> => {
-                    const file = e.target.files?.[0];
-                    if (file)
-                      setPostFormState({
-                        ...postformState,
-                        postImage: await convertToBase64(file),
-                      });
-                  }}
-                  data-testid="organisationImage"
-                />
-              </label>
-              <label htmlFor="postvideo">{t('video')}:</label>
-              <input
+      <Modal show={postmodalisOpen}>
+        <Modal.Header>
+          <p className={styles.titlemodal}>{t('postDetails')}</p>
+          <Button variant="danger" onClick={hideInviteModal}>
+            <i className="fa fa-times" data-testid="closePostModalBtn"></i>
+          </Button>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmitCapture={createPost}>
+            <label htmlFor="posttitle">{t('postTitle')}</label>
+            <Form.Control
+              type="title"
+              id="postitle"
+              placeholder={t('ptitle')}
+              autoComplete="off"
+              required
+              value={postformState.posttitle}
+              onChange={(e): void => {
+                setPostFormState({
+                  ...postformState,
+                  posttitle: e.target.value,
+                });
+              }}
+            />
+            <label htmlFor="postinfo">{t('information')}</label>
+            <textarea
+              id="postinfo"
+              className={styles.postinfo}
+              placeholder={t('postDes')}
+              autoComplete="off"
+              required
+              value={postformState.postinfo}
+              onChange={(e): void => {
+                setPostFormState({
+                  ...postformState,
+                  postinfo: e.target.value,
+                });
+              }}
+            />
+            <label htmlFor="postphoto" className={styles.orgphoto}>
+              {t('image')}:
+              <Form.Control
                 accept="image/*"
-                id="postvideo"
-                name="video"
+                id="postphoto"
+                name="photo"
                 type="file"
-                placeholder={t('video')}
                 multiple={false}
-                //onChange=""
+                onChange={async (e: React.ChangeEvent): Promise<void> => {
+                  const target = e.target as HTMLInputElement;
+                  const file = target.files && target.files[0];
+                  if (file)
+                    setPostFormState({
+                      ...postformState,
+                      postImage: await convertToBase64(file),
+                    });
+                }}
+                data-testid="organisationImage"
               />
-              <Button
-                type="submit"
-                className={styles.greenregbtn}
-                variant="success"
-                data-testid="createPostBtn"
-              >
-                <i className="fa fa-plus"></i> {t('addPost')}
-              </Button>
-            </Form>
-          </div>
-        </section>
+            </label>
+            <label htmlFor="postvideo">{t('video')}:</label>
+            <Form.Control
+              accept="image/*"
+              id="postvideo"
+              name="video"
+              type="file"
+              placeholder={t('video')}
+              multiple={false}
+              //onChange=""
+            />
+            <Button type="submit" variant="success" data-testid="createPostBtn">
+              <i className="fa fa-plus"></i> {t('addPost')}
+            </Button>
+          </Form>
+        </Modal.Body>
       </Modal>
     </>
   );

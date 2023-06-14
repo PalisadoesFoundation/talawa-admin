@@ -167,6 +167,9 @@ describe('Testing Admin Navbar', () => {
     userEvent.click(screen.getByTestId('logoutDropdown'));
     userEvent.click(screen.getByTestId('languageDropdown'));
     userEvent.click(screen.getByTestId('changeLanguageBtn1'));
+    userEvent.click(screen.getByTestId('changeLanguageBtn2'));
+    userEvent.click(screen.getByTestId('changeLanguageBtn3'));
+    userEvent.click(screen.getByTestId('changeLanguageBtn4'));
   });
 
   test('Testing when language cookie is not set', async () => {
