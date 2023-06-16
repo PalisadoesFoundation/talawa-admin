@@ -8,7 +8,7 @@ import 'jest-localstorage-mock';
 import ListNavbar from './ListNavbar';
 import i18nForTest from 'utils/i18nForTest';
 
-async function wait(ms = 100) {
+async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -43,7 +43,11 @@ describe('Testing List navbar component', () => {
 
     await wait();
 
+    userEvent.click(screen.getByTestId('languageDropdownBtn'));
     userEvent.click(screen.getByTestId('changeLanguageBtn1'));
+    userEvent.click(screen.getByTestId('changeLanguageBtn2'));
+    userEvent.click(screen.getByTestId('changeLanguageBtn3'));
+    userEvent.click(screen.getByTestId('changeLanguageBtn4'));
   });
 
   test('Testing when language cookie is not set', async () => {

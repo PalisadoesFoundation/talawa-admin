@@ -1,6 +1,9 @@
-import { Action } from 'state/helpers/Action';
+import type { InterfaceAction } from 'state/helpers/Action';
 
-const reducer = (state = INITIAL_STATE, action: Action) => {
+const reducer = (
+  state = INITIAL_STATE,
+  action: InterfaceAction
+): typeof INITIAL_STATE => {
   switch (action.type) {
     case 'UPDATE_INSTALLED':
       return Object.assign({}, state, {

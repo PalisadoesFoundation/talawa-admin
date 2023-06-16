@@ -47,7 +47,7 @@ const MOCKS = [
   },
 ];
 const link = new StaticMockLink(MOCKS, true);
-async function wait(ms = 100) {
+async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -69,7 +69,7 @@ describe('Testing Organization Post Card', () => {
   global.alert = jest.fn();
 
   test('should render props and text elements test for the page component', async () => {
-    global.confirm = () => true;
+    global.confirm = (): boolean => true;
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -84,14 +84,14 @@ describe('Testing Organization Post Card', () => {
     expect(screen.getByText(/Author:/i)).toBeInTheDocument();
     expect(screen.getByText(/Video URL:/i)).toBeInTheDocument();
     expect(screen.getByText(props.postTitle)).toBeInTheDocument();
-    expect(screen.getByDisplayValue(props.postInfo)).toBeInTheDocument();
+    expect(screen.getByText(props.postInfo)).toBeInTheDocument();
     expect(screen.getByText(props.postAuthor)).toBeInTheDocument();
     expect(screen.getByAltText(/image not found/i)).toBeInTheDocument();
     expect(screen.getByText(props.postVideo)).toBeInTheDocument();
   });
 
   test('Should render text elements when props value is not passed', async () => {
-    global.confirm = () => false;
+    global.confirm = (): boolean => false;
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -106,7 +106,7 @@ describe('Testing Organization Post Card', () => {
     expect(screen.getByText(/Author:/i)).toBeInTheDocument();
     expect(screen.getByText(/Video URL:/i)).toBeInTheDocument();
     expect(screen.getByText(props.postTitle)).toBeInTheDocument();
-    expect(screen.getByDisplayValue(props.postInfo)).toBeInTheDocument();
+    expect(screen.getByText(props.postInfo)).toBeInTheDocument();
     expect(screen.getByText(props.postAuthor)).toBeInTheDocument();
     expect(screen.getByAltText(/image not found/i)).toBeInTheDocument();
     expect(screen.getByText(props.postVideo)).toBeInTheDocument();

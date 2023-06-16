@@ -1,12 +1,13 @@
 import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 
 import styles from './AdminDashListCard.module.css';
 import defaultImg from 'assets/third_image.png';
 
-interface AdminDashListCardProps {
+interface InterfaceAdminDashListCardProps {
   key: string;
   id: string;
   orgName: string;
@@ -17,10 +18,12 @@ interface AdminDashListCardProps {
   members: any;
 }
 
-function AdminDashListCard(props: AdminDashListCardProps): JSX.Element {
+function adminDashListCard(
+  props: InterfaceAdminDashListCardProps
+): JSX.Element {
   const userId = localStorage.getItem('id');
 
-  function Click() {
+  function click(): void {
     const url = '/orgdash/id=' + props.id;
     window.location.replace(url);
   }
@@ -55,16 +58,16 @@ function AdminDashListCard(props: AdminDashListCardProps): JSX.Element {
               {t('members')}: <span>{props?.members}</span>
             </p>
             <div className={styles.orgCreateBtnDiv}>
-              <button
+              <Button
                 className={styles.orgfontcreatedbtn}
-                onClick={Click}
+                onClick={click}
                 disabled={
                   props.admins.length > 0 &&
                   !props.admins.some((admin: any) => admin._id === userId)
                 }
               >
                 {t('view')}
-              </button>
+              </Button>
             </div>
           </div>
         </Col>
@@ -74,4 +77,4 @@ function AdminDashListCard(props: AdminDashListCardProps): JSX.Element {
   );
 }
 export {};
-export default AdminDashListCard;
+export default adminDashListCard;

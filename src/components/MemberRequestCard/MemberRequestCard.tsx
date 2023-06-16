@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './MemberRequestCard.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import { useMutation } from '@apollo/client';
 import {
   ACCEPT_ORGANIZATION_REQUEST_MUTATION,
@@ -12,7 +13,7 @@ import { toast } from 'react-toastify';
 import defaultImg from 'assets/third_image.png';
 import { errorHandler } from 'utils/errorHandler';
 
-interface MemberRequestCardProps {
+interface InterfaceMemberRequestCardProps {
   key: string;
   id: string;
   memberName: string;
@@ -22,7 +23,9 @@ interface MemberRequestCardProps {
   email: string;
 }
 
-function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
+function memberRequestCard(
+  props: InterfaceMemberRequestCardProps
+): JSX.Element {
   const [acceptMutation] = useMutation(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
   const [rejectMutation] = useMutation(REJECT_ORGANIZATION_REQUEST_MUTATION);
 
@@ -30,7 +33,7 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
     keyPrefix: 'membershipRequest',
   });
 
-  const AddMember = async () => {
+  const addMember = async (): Promise<void> => {
     try {
       await acceptMutation({
         variables: {
@@ -50,7 +53,7 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
     }
   };
 
-  const RejectMember = async () => {
+  const rejectMember = async (): Promise<void> => {
     const sure = window.confirm('Are you sure you want to Reject Request ?');
     if (sure) {
       try {
@@ -98,18 +101,18 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
               <p className={styles.memberfont}>
                 {t('joined')}: <span>{props.joinDate}</span>
               </p>
-              <button
+              <Button
                 className={styles.memberfontcreatedbtn}
-                onClick={AddMember}
+                onClick={addMember}
               >
                 {t('accept')}
-              </button>
-              <button
+              </Button>
+              <Button
                 className={styles.memberfontcreatedbtn}
-                onClick={RejectMember}
+                onClick={rejectMember}
               >
                 {t('reject')}
-              </button>
+              </Button>
             </div>
           </Col>
         </Row>
@@ -119,4 +122,4 @@ function MemberRequestCard(props: MemberRequestCardProps): JSX.Element {
   );
 }
 export {};
-export default MemberRequestCard;
+export default memberRequestCard;

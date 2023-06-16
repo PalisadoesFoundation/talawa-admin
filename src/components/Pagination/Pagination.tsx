@@ -7,7 +7,7 @@ import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 
-interface TablePaginationActionsProps {
+interface InterfaceTablePaginationActionsProps {
   count: number;
   page: number;
   rowsPerPage: number;
@@ -17,34 +17,34 @@ interface TablePaginationActionsProps {
   ) => void;
 }
 
-function Pagination(props: TablePaginationActionsProps) {
+function pagination(props: InterfaceTablePaginationActionsProps): JSX.Element {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
 
   /* istanbul ignore next */
   const handleFirstPageButtonClick = (
     event: React.MouseEvent<HTMLButtonElement>
-  ) => {
+  ): void => {
     onPageChange(event, 0);
   };
 
   const handleBackButtonClick = (
     event: React.MouseEvent<HTMLButtonElement>
-  ) => {
+  ): void => {
     onPageChange(event, page - 1);
   };
 
   /* istanbul ignore next */
   const handleNextButtonClick = (
     event: React.MouseEvent<HTMLButtonElement>
-  ) => {
+  ): void => {
     onPageChange(event, page + 1);
   };
 
   /* istanbul ignore next */
   const handleLastPageButtonClick = (
     event: React.MouseEvent<HTMLButtonElement>
-  ) => {
+  ): void => {
     onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
   };
 
@@ -94,4 +94,4 @@ function Pagination(props: TablePaginationActionsProps) {
   );
 }
 
-export default Pagination;
+export default pagination;

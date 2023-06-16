@@ -311,9 +311,9 @@ form > input {
 }
 .dispflex {
   display: flex;
+  align-items: center;
 }
 .dispflex > input {
-  width: 20%;
   border: none;
   box-shadow: none;
   margin-top: 5px;

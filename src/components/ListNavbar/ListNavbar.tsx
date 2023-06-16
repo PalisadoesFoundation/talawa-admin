@@ -1,5 +1,6 @@
 import React from 'react';
-import { Nav, Navbar } from 'react-bootstrap';
+import { Dropdown, Nav, Navbar } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import { Link, NavLink } from 'react-router-dom';
 import i18next from 'i18next';
 import Cookies from 'js-cookie';
@@ -9,6 +10,7 @@ import styles from './ListNavbar.module.css';
 import Logo from 'assets/talawa-logo-200x200.png';
 import { languages } from 'utils/languages';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const ListNavbar = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'listNavbar' });
 
@@ -16,7 +18,7 @@ const ListNavbar = () => {
 
   const currentLanguageCode = Cookies.get('i18next') || 'en';
 
-  const logout = () => {
+  const logout = (): void => {
     localStorage.clear();
     window.location.replace('/');
   };
@@ -58,40 +60,45 @@ const ListNavbar = () => {
           )}
         </Nav>
         <Nav className="ml-auto">
-          <div className="dropdown mr-4">
-            <button
-              className={`btn dropdown-toggle ${styles.languageBtn}`}
-              type="button"
-              data-toggle="dropdown"
-              aria-expanded="false"
-              title="Change Langauge"
+          <Dropdown
+            className={styles.languageBtn}
+            data-toggle="dropdown"
+            aria-expanded="false"
+            title="Change Langauge"
+          >
+            <Dropdown.Toggle
+              variant="success"
+              id="dropdown-basic"
+              data-testid="languageDropdownBtn"
             >
               <i className="fas fa-globe"></i>
-            </button>
-            <div className="dropdown-menu">
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
               {languages.map((language, index: number) => (
-                <button
+                <Dropdown.Item
                   key={index}
                   className="dropdown-item"
-                  onClick={() => i18next.changeLanguage(language.code)}
+                  onClick={async (): Promise<void> => {
+                    await i18next.changeLanguage(language.code);
+                  }}
                   disabled={currentLanguageCode === language.code}
                   data-testid={`changeLanguageBtn${index}`}
                 >
                   <span
-                    className={`fi fi-${language.country_code} mr-2`}
+                    className={`fi fi-${language.country_code} me-2`}
                   ></span>
                   {language.name}
-                </button>
+                </Dropdown.Item>
               ))}
-            </div>
-          </div>
-          <button
+            </Dropdown.Menu>
+          </Dropdown>
+          <Button
             className={styles.logoutbtn}
             data-testid="logoutBtn"
             onClick={logout}
           >
             {t('logout')}
-          </button>
+          </Button>
         </Nav>
       </Navbar.Collapse>
     </Navbar>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-function OrgDelete(): JSX.Element {
+function orgDelete(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgDelete',
   });
@@ -14,4 +14,4 @@ function OrgDelete(): JSX.Element {
     </>
   );
 }
-export default OrgDelete;
+export default orgDelete;

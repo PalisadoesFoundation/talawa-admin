@@ -4,12 +4,13 @@ import { BrowserRouter } from 'react-router-dom';
 import AddOnEntry from './AddOnEntry';
 import {
   ApolloClient,
-  NormalizedCacheObject,
   ApolloProvider,
   InMemoryCache,
   ApolloLink,
   HttpLink,
 } from '@apollo/client';
+
+import type { NormalizedCacheObject } from '@apollo/client';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { BACKEND_URL } from 'Constant/constant';
@@ -40,7 +41,7 @@ describe('Testing AddOnEntry', () => {
     configurable: true,
     modified: true,
     isInstalled: true,
-    getInstalledPlugins: () => {
+    getInstalledPlugins: (): { sample: string } => {
       return { sample: 'sample' };
     },
   };

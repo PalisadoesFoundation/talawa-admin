@@ -10,11 +10,14 @@ import i18nForTest from 'utils/i18nForTest';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-jest.mock('react-router-dom', () => ({
-  useHistory: () => ({
-    push: jest.fn(),
-  }),
-}));
+jest.mock(
+  'react-router-dom',
+  (): { useHistory: () => { push: jest.Mock } } => ({
+    useHistory: (): { push: jest.Mock } => ({
+      push: jest.fn(),
+    }),
+  })
+);
 
 describe('Testing the Super Dash List', () => {
   test('should render props and text elements test for the page component', () => {
@@ -37,7 +40,7 @@ describe('Testing the Super Dash List', () => {
     };
 
     const buttonInstance = shallow(<SuperDashListCard {...props} />);
-    const clickButton = buttonInstance.find('button');
+    const clickButton = buttonInstance.find('Button');
 
     render(
       <I18nextProvider i18n={i18nForTest}>
@@ -88,7 +91,7 @@ describe('Testing the Super Dash List', () => {
     };
 
     const buttonInstance = shallow(<SuperDashListCard {...props} />);
-    const clickButton = buttonInstance.find('button');
+    const clickButton = buttonInstance.find('Button');
 
     render(
       <I18nextProvider i18n={i18nForTest}>

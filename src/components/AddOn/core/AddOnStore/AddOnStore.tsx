@@ -15,14 +15,14 @@ import {
   USER_LIST,
 } from 'GraphQl/Queries/Queries'; // PLUGIN_LIST
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../../state/reducers';
+import type { RootState } from '../../../../state/reducers';
 import { Form, Tab, Tabs } from 'react-bootstrap';
 import AddOnRegister from '../AddOnRegister/AddOnRegister';
 import PluginHelper from 'components/AddOn/support/services/Plugin.helper';
 import { store } from './../../../../state/store';
 import { useTranslation } from 'react-i18next';
 
-function AddOnStore(): JSX.Element {
+function addOnStore(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'addOnStore' });
 
   const [isStore, setIsStore] = useState(true);
@@ -39,6 +39,7 @@ function AddOnStore(): JSX.Element {
   // type plugData = { pluginName: String, plug };
   const { data, loading, error } = useQuery(PLUGIN_GET);
   /* istanbul ignore next */
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const getStorePlugins = async () => {
     let plugins = await new PluginHelper().fetchStore();
     const installIds = (await new PluginHelper().fetchInstalled()).map(
@@ -69,12 +70,11 @@ function AddOnStore(): JSX.Element {
   };
 
   /* istanbul ignore next */
-  const updateLinks = async (links: any[]) => {
+  const updateLinks = async (links: any[]): Promise<void> => {
     store.dispatch({ type: 'UPDATE_P_TARGETS', payload: links });
   };
-
   // /* istanbul ignore next */
-  const pluginModified = () => {
+  const pluginModified = (): void => {
     return getInstalledPlugins();
     // .then((installedPlugins) => {
     //   getStorePlugins();
@@ -86,12 +86,12 @@ function AddOnStore(): JSX.Element {
   //   pluginModified();
   // }, []);
 
-  const updateSelectedTab = (tab: any) => {
+  const updateSelectedTab = (tab: any): void => {
     setIsStore(tab === 'available');
     isStore ? getStorePlugins() : getInstalledPlugins();
   };
 
-  const filterChange = (ev: any) => {
+  const filterChange = (ev: any): void => {
     setShowEnabled(ev.target.value === 'enabled');
   };
 
@@ -103,28 +103,22 @@ function AddOnStore(): JSX.Element {
       </>
     );
   }
-  // console.log(
-  //   'Filtered Data is  ',
-  //   data.getPlugins.filter((plugin: any) => plugin.pluginInstallStatus == true)
-  // );
-  // TODO: Update routes for other pages
-  // TODO: Implement Search
   return (
     <>
       <div>
-        <AdminNavbar targets={targets} url_1={configUrl} />
+        <AdminNavbar targets={targets} url1={configUrl} />
       </div>
       <div className={styles.container}>
         <SidePanel>
           <Action label={t('search')}>
-            <input
+            <Form.Control
               type="name"
               id="searchname"
               className={styles.actioninput}
               placeholder={t('searchName')}
               autoComplete="off"
               required
-              onChange={(e) => setSearchText(e.target.value)}
+              onChange={(e): void => setSearchText(e.target.value)}
             />
           </Action>
           {!isStore && (
@@ -260,7 +254,7 @@ function AddOnStore(): JSX.Element {
                           isInstalled={plug.pluginInstallStatus}
                           configurable={plug.pluginInstallStatus}
                           component={'Special  Component'}
-                          modified={() => {
+                          modified={(): void => {
                             console.log('Plugin is modified');
                           }}
                           getInstalledPlugins={getInstalledPlugins}
@@ -337,7 +331,7 @@ function AddOnStore(): JSX.Element {
                           isInstalled={plug.pluginInstallStatus}
                           configurable={plug.pluginInstallStatus}
                           component={'Special  Component'}
-                          modified={() => {
+                          modified={(): void => {
                             console.log('Plugin is modified');
                           }}
                           getInstalledPlugins={getInstalledPlugins}
@@ -354,11 +348,11 @@ function AddOnStore(): JSX.Element {
   );
 }
 
-AddOnStore.defaultProps = {};
+addOnStore.defaultProps = {};
 
-AddOnStore.propTypes = {};
+addOnStore.propTypes = {};
 
-export default AddOnStore;
+export default addOnStore;
 
 // {addonStore.map((plugin: any, index: number) => {
 //   return (

@@ -1,4 +1,5 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -11,8 +12,10 @@ import {
 import styles from './ForgotPassword.module.css';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
+import Button from 'react-bootstrap/Button';
+import { Form } from 'react-bootstrap';
 
-const ForgotPassword = () => {
+const ForgotPassword = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'forgotPassword',
   });
@@ -40,7 +43,7 @@ const ForgotPassword = () => {
     setComponentLoader(false);
   }, []);
 
-  const getOTP = async (e: ChangeEvent<HTMLFormElement>) => {
+  const getOTP = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
     try {
@@ -67,7 +70,9 @@ const ForgotPassword = () => {
     }
   };
 
-  const submitForgotPassword = async (e: ChangeEvent<HTMLFormElement>) => {
+  const submitForgotPassword = async (
+    e: ChangeEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
     const { userOtp, newPassword, confirmNewPassword } = forgotPassFormData;
 
@@ -129,7 +134,7 @@ const ForgotPassword = () => {
                   {t('registeredEmail')}:
                 </label>
                 <div className="col-sm-7">
-                  <input
+                  <Form.Control
                     type="email"
                     className="form-control"
                     id="registeredEmail"
@@ -137,16 +142,16 @@ const ForgotPassword = () => {
                     value={registeredEmail}
                     name="registeredEmail"
                     required
-                    onChange={(e) => setregisteredEmail(e.target.value)}
+                    onChange={(e): void => setregisteredEmail(e.target.value)}
                   />
                 </div>
                 <div className="col-sm-3">
-                  <button
+                  <Button
                     type="submit"
                     className={`btn btn-success btn-block ${styles.talawaBackgroundColor}`}
                   >
                     <i className="fa fa-key"></i> {t('getOtp')}
-                  </button>
+                  </Button>
                 </div>
               </div>
             </form>
@@ -159,7 +164,7 @@ const ForgotPassword = () => {
                   {t('enterOtp')}:
                 </label>
                 <div className="col-sm-10">
-                  <input
+                  <Form.Control
                     type="number"
                     className="form-control"
                     id="userOtp"
@@ -167,7 +172,7 @@ const ForgotPassword = () => {
                     name="userOtp"
                     value={forgotPassFormData.userOtp}
                     required
-                    onChange={(e) =>
+                    onChange={(e): void =>
                       setForgotPassFormData({
                         ...forgotPassFormData,
                         userOtp: e.target.value,
@@ -184,7 +189,7 @@ const ForgotPassword = () => {
                   {t('enterNewPassword')}:
                 </label>
                 <div className="col-sm-10">
-                  <input
+                  <Form.Control
                     type="password"
                     className="form-control"
                     id="newPassword"
@@ -193,7 +198,7 @@ const ForgotPassword = () => {
                     name="newPassword"
                     value={forgotPassFormData.newPassword}
                     required
-                    onChange={(e) =>
+                    onChange={(e): void =>
                       setForgotPassFormData({
                         ...forgotPassFormData,
                         newPassword: e.target.value,
@@ -210,7 +215,7 @@ const ForgotPassword = () => {
                   {t('cofirmNewPassword')}:
                 </label>
                 <div className="col-sm-10">
-                  <input
+                  <Form.Control
                     type="password"
                     className="form-control"
                     id="confirmNewPassword"
@@ -219,7 +224,7 @@ const ForgotPassword = () => {
                     name="confirmNewPassword"
                     value={forgotPassFormData.confirmNewPassword}
                     required
-                    onChange={(e) =>
+                    onChange={(e): void =>
                       setForgotPassFormData({
                         ...forgotPassFormData,
                         confirmNewPassword: e.target.value,
@@ -229,12 +234,12 @@ const ForgotPassword = () => {
                 </div>
               </div>
               <div className="submitBtn">
-                <button
+                <Button
                   type="submit"
                   className={`btn btn-success btn-block ${styles.talawaBackgroundColor}`}
                 >
                   {t('changePassword')}
-                </button>
+                </Button>
               </div>
               <div className={`homeBtn mt-3 ${styles.talawaBackgroundColor}`}>
                 <Link to="/" className="btn btn-info btn-block">

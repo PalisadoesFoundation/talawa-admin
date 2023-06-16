@@ -1,9 +1,10 @@
 import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
-// import { ApolloProvider } from '@apollo/react-hooks';
 
 import styles from './OrgAdminListCard.module.css';
 import { REMOVE_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -12,7 +13,7 @@ import { Link } from 'react-router-dom';
 import defaultImg from 'assets/third_image.png';
 import { errorHandler } from 'utils/errorHandler';
 
-interface OrgPeopleListCardProps {
+interface InterfaceOrgPeopleListCardProps {
   key: string;
   id: string;
   memberName: string;
@@ -22,14 +23,18 @@ interface OrgPeopleListCardProps {
 }
 const currentUrl = window.location.href.split('=')[1];
 
-function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
+function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
   const [remove] = useMutation(REMOVE_ADMIN_MUTATION);
+  const [showRemoveAdminModal, setShowRemoveAdminModal] = React.useState(false);
 
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgAdminListCard',
   });
 
-  const RemoveAdmin = async () => {
+  const toggleRemoveAdminModal = (): void =>
+    setShowRemoveAdminModal(!showRemoveAdminModal);
+
+  const removeAdmin = async (): Promise<void> => {
     try {
       const { data } = await remove({
         variables: {
@@ -76,68 +81,40 @@ function OrgAdminListCard(props: OrgPeopleListCardProps): JSX.Element {
               <p className={styles.memberfont}>
                 {t('joined')}: <span>{props.joinDate}</span>
               </p>
-              <button
+              <Button
                 className={styles.memberfontcreatedbtn}
-                data-toggle="modal"
-                data-target={`#removeAdminModal${props.id}`}
+                onClick={toggleRemoveAdminModal}
                 data-testid="removeAdminModalBtn"
               >
                 {t('remove')}
-              </button>
+              </Button>
             </div>
           </Col>
         </Row>
       </div>
       <hr></hr>
-      <div
-        className="modal fade"
-        id={`removeAdminModal${props.id}`}
-        tabIndex={-1}
-        role="dialog"
-        aria-labelledby={`removeAdminModalLabel${props.id}`}
-        aria-hidden="true"
-      >
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5
-                className="modal-title"
-                id={`removeAdminModalLabel${props.id}`}
-              >
-                {t('removeAdmin')}
-              </h5>
-              <button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">{t('removeAdminMsg')}</div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-danger"
-                data-dismiss="modal"
-              >
-                {t('no')}
-              </button>
-              <button
-                type="button"
-                className="btn btn-success"
-                onClick={RemoveAdmin}
-                data-testid="removeAdminBtn"
-              >
-                {t('yes')}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Modal show={showRemoveAdminModal} onHide={toggleRemoveAdminModal}>
+        <Modal.Header>
+          <h5 id={`removeAdminModalLabel${props.id}`}>{t('removeAdmin')}</h5>
+          <Button variant="danger" onClick={toggleRemoveAdminModal}>
+            <i className="fas fa-times"></i>
+          </Button>
+        </Modal.Header>
+        <Modal.Body>{t('removeAdminMsg')}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={toggleRemoveAdminModal}>
+            {t('no')}
+          </Button>
+          <Button
+            variant="success"
+            onClick={removeAdmin}
+            data-testid="removeAdminBtn"
+          >
+            {t('yes')}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
-export {};
-export default OrgAdminListCard;
+export default orgAdminListCard;

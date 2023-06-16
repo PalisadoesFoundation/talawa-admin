@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import Pagination from '../Pagination/Pagination';
 import './PaginationList.css';
 
-interface PropsInterface {
+interface InterfacePropsInterface {
   count: number;
   rowsPerPage: number;
   page: number;
@@ -18,7 +18,7 @@ interface PropsInterface {
   ) => void;
 }
 
-const PaginationList = (props: PropsInterface) => {
+const PaginationList = (props: InterfacePropsInterface): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'paginationList',
   });
