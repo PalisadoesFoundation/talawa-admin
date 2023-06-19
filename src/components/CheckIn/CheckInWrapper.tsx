@@ -22,15 +22,13 @@ export const CheckInWrapper = (props: propType) => {
       >
         Check In Attendees
       </Button>
-      {showModal ? (
+      {showModal && (
         <CheckInModal
           show={showModal}
-          handleClose={() => {
-            setShowModal(false);
-          }}
+          handleClose={() => setShowModal(false)}
           eventId={props.eventId}
         />
-      ) : null}
+      )}
     </>
   );
 };

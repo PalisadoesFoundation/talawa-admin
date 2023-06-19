@@ -46,11 +46,13 @@ export const TableRow = ({
 
   return (
     <>
-      {data.checkedIn ? (
+      {data.checkIn !== null ? (
         <div>
           <Button variant="contained" disabled className="m-2 p-2">
             Checked In
           </Button>
+          {data.checkIn.allotedRoom} {data.checkIn.allotedSeat}{' '}
+          {data.checkIn.time}
         </div>
       ) : (
         <Box component="form" noValidate autoComplete="off" className="m-2 p-2">

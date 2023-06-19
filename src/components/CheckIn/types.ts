@@ -7,7 +7,12 @@ export interface UserInterface {
 export interface AttendeeCheckInInterface {
   _id: string;
   user: UserInterface;
-  checkedIn: boolean;
+  checkIn: null | {
+    _id: string;
+    time: string;
+    allotedRoom: string;
+    allotedSeat: string;
+  };
 }
 
 export interface AttendeeQueryResponseInterface {
@@ -26,7 +31,12 @@ export interface ModalPropInterface {
 export interface TableCheckInInterface {
   id: string;
   userId: string;
-  checkedIn: boolean;
+  checkIn: null | {
+    _id: string;
+    time: string;
+    allotedRoom: string;
+    allotedSeat: string;
+  };
   eventId: string;
 }
 

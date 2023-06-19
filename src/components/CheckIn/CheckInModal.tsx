@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal } from 'react-bootstrap';
 import { useQuery } from '@apollo/client';
 import { EVENT_CHECKINS } from 'GraphQl/Queries/Queries';
@@ -6,7 +6,6 @@ import styles from 'components/CheckIn/CheckInModal.module.css';
 import { TableRow } from './TableRow';
 import {
   AttendeeCheckInInterface,
-  AttendeeQueryResponseInterface,
   ModalPropInterface,
   TableDataInterface,
 } from './types';
@@ -15,43 +14,38 @@ import TextField from '@mui/material/TextField';
 
 export const CheckInModal = (props: ModalPropInterface) => {
   const [tableData, setTableData] = useState<TableDataInterface[]>([]);
+
   const [userFilterQuery, setUserFilterQuery] = useState('');
   const [filterQueryModel, setFilterQueryModel] = useState({
     items: [{ field: 'userName', operator: 'contains', value: '' }],
   });
 
+  const {
+    data: checkInData,
+    loading: checkInLoading,
+    refetch: checkInRefetch,
+  } = useQuery(EVENT_CHECKINS, {
+    variables: { id: props.eventId },
+  });
+
   useEffect(() => {
-    setFilterQueryModel({
-      items: [
-        { field: 'userName', operator: 'contains', value: userFilterQuery },
-      ],
-    });
-  }, [userFilterQuery]);
-
-  const updateTableData = (data: AttendeeQueryResponseInterface) => {
-    setTableData(
-      data.event.attendeesCheckInStatus.map(
-        (checkIn: AttendeeCheckInInterface) => ({
-          userName: `${checkIn.user.firstName} ${checkIn.user.lastName}`,
-          id: checkIn._id,
-          checkInData: {
+    if (checkInLoading) setTableData([]);
+    else
+      setTableData(
+        checkInData.event.attendeesCheckInStatus.map(
+          (checkIn: AttendeeCheckInInterface) => ({
+            userName: `${checkIn.user.firstName} ${checkIn.user.lastName}`,
             id: checkIn._id,
-            userId: checkIn.user._id,
-            checkedIn: checkIn.checkedIn,
-            eventId: props.eventId,
-          },
-        })
-      )
-    );
-  };
-
-  const { loading: checkInLoading, refetch: checkInRefetch } = useQuery(
-    EVENT_CHECKINS,
-    {
-      variables: { id: props.eventId },
-      onCompleted: (response) => updateTableData(response),
-    }
-  );
+            checkInData: {
+              id: checkIn._id,
+              userId: checkIn.user._id,
+              checkIn: checkIn.checkIn,
+              eventId: props.eventId,
+            },
+          })
+        )
+      );
+  }, [checkInData, props.eventId, checkInLoading]);
 
   const columns: GridColDef[] = [
     { field: 'userName', headerName: 'User', width: 300 },
@@ -73,7 +67,6 @@ export const CheckInModal = (props: ModalPropInterface) => {
       </>
     );
   }
-
   return (
     <>
       <Modal show={props.show} onHide={props.handleClose} size="lg">
@@ -86,7 +79,19 @@ export const CheckInModal = (props: ModalPropInterface) => {
               id="searchAttendees"
               label="Search Attendees"
               variant="outlined"
-              onChange={(e) => setUserFilterQuery(e.target.value)}
+              value={userFilterQuery}
+              onChange={(e) => {
+                setUserFilterQuery(e.target.value);
+                setFilterQueryModel({
+                  items: [
+                    {
+                      field: 'userName',
+                      operator: 'contains',
+                      value: e.target.value,
+                    },
+                  ],
+                });
+              }}
               fullWidth
             />
           </div>

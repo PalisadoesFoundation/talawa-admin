@@ -158,7 +158,12 @@ export const EVENT_CHECKINS = gql`
           firstName
           lastName
         }
-        checkedIn
+        checkIn {
+          _id
+          time
+          allotedRoom
+          allotedSeat
+        }
       }
     }
   }
