@@ -7,6 +7,8 @@ import Stack from '@mui/material/Stack';
 import { useMutation } from '@apollo/client';
 import { MARK_CHECKIN } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
+import { generate } from '@pdfme/generator';
+import { tagTemplate } from './tagTemplate';
 
 export const TableRow = ({
   data,
@@ -44,12 +46,26 @@ export const TableRow = ({
       });
   };
 
+  const generateTag = () => {
+    toast.warning('Generating pdf...');
+    const inputs = [{ greeting: 'Hi!', name: 'John Doe' }];
+
+    generate({ template: tagTemplate, inputs }).then((pdf) => {
+      toast.success('PDF generated successfully!');
+      const blob = new Blob([pdf.buffer], { type: 'application/pdf' });
+      window.open(URL.createObjectURL(blob));
+    });
+  };
+
   return (
     <>
       {data.checkIn !== null ? (
         <div>
           <Button variant="contained" disabled className="m-2 p-2">
             Checked In
+          </Button>
+          <Button variant="contained" className="m-2 p-2" onClick={generateTag}>
+            Download Tag
           </Button>
           {data.checkIn.allotedRoom} {data.checkIn.allotedSeat}{' '}
           {data.checkIn.time}

@@ -18,7 +18,7 @@ describe('Testing CheckIn Wrapper', () => {
   };
 
   test('The button to open and close the modal should work properly', async () => {
-    const { queryByText, queryByRole } = render(
+    const { queryByText } = render(
       <MockedProvider addTypename={false} mocks={checkInQueryMock}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
