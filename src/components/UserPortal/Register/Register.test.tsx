@@ -225,7 +225,7 @@ describe('Testing Register Component [User Portal]', () => {
     userEvent.click(screen.getByTestId('registerBtn'));
 
     expect(toast.error).toBeCalledWith(
-      "Confirm password and password doesn't match."
+      "Password doesn't match. Confirm Password and try again."
     );
   });
 

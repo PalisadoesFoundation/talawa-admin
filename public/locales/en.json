@@ -494,7 +494,7 @@
     "close": "Close"
   },
   "userOrganizations": {
-    "allOrganizations":"All Organizations",
+    "allOrganizations": "All Organizations",
     "joinedOrganizations": "Joined Organizations",
     "createdOrganizations": "Created Organizations",
     "search": "Search",

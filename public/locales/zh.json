@@ -490,7 +490,7 @@
     "close": "關閉"
   },
   "userOrganizations": {
-    "allOrganizations":"所有組織",
+    "allOrganizations": "所有組織",
     "joinedOrganizations": "加入組織",
     "createdOrganizations": "創建的組織",
     "search": "搜索",

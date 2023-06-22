@@ -488,7 +488,7 @@
     "close": "Fermer"
   },
   "userOrganizations": {
-    "allOrganizations":"Toutes les organisations",
+    "allOrganizations": "Toutes les organisations",
     "joinedOrganizations": "Organisations jointes",
     "createdOrganizations": "Organisations créées",
     "search": "Recherche",

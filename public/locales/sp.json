@@ -490,7 +490,7 @@
     "close": "Cerca"
   },
   "userOrganizations": {
-    "allOrganizations":"Todas las organizaciones",
+    "allOrganizations": "Todas las organizaciones",
     "joinedOrganizations": "Organizaciones unidas",
     "createdOrganizations": "Organizaciones creadas",
     "search": "Buscar",
