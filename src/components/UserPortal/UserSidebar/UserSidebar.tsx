@@ -60,10 +60,10 @@ function userSidebar(): JSX.Element {
         </div>
         <ListGroup variant="flush">
           {organizations.length ? (
-            organizations.map((organization: any, _index) => {
+            organizations.map((organization: any, index) => {
               return (
                 <ListGroup.Item
-                  key={organization._id}
+                  key={index}
                   action
                   className={`${styles.rounded} ${styles.colorLight}`}
                 >
