@@ -4,7 +4,7 @@ import { Button, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import { LockOutlined } from '@mui/icons-material';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 
@@ -32,8 +32,6 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
     password: '',
   });
 
-  const history = useHistory();
-
   const handleLogin = async (): Promise<void> => {
     if (!(loginVariables.email && loginVariables.password)) {
       toast.error(t('invalidDetailsMessage'));
@@ -47,12 +45,12 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
         });
 
         if (data.login.user.adminApproved) {
-          localStorage.setItem('userToken', data.login.accessToken);
+          localStorage.setItem('token', data.login.accessToken);
           localStorage.setItem('userId', data.login.user._id);
 
           navigator.clipboard.writeText('');
           /* istanbul ignore next */
-          history.replace('/user/organizations');
+          window.location.assign('/user/organizations');
         } else {
           toast.warn(t('notAuthorised'));
         }

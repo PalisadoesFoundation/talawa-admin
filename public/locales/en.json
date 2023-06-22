@@ -445,20 +445,7 @@
     "membershipRequests": "Membership requests",
     "adminForEvents": "Admin for events",
     "addedAsAdmin": "User is added as admin.",
-    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
-  },
-  "userNavbar": {
-    "talawa_portal": "Talawa",
-    "home": "Home",
-    "people": "People",
-    "events": "Events",
-    "chat": "Chat",
-    "donate": "Donate",
-    "myTasks": "My Tasks",
-    "settings": "Settings",
-    "language": "Language",
-    "logout": "Logout",
-    "close": "Close"
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Kindly check your network connection and wait for a while."
   },
   "userLogin": {
     "login": "Login",
@@ -472,7 +459,7 @@
     "invalidDetailsMessage": "Please enter a valid email and password.",
     "notAuthorised": "Sorry! you are not Authorised!",
     "invalidCredentials": "Entered credentials are incorrect. Please enter valid credentials.",
-    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Kindly check your network connection and wait for a while."
   },
   "userRegister": {
     "register": "Register",
@@ -489,8 +476,33 @@
     "alreadyhaveAnAccount": "Already have an account?",
     "login": "Login",
     "afterRegister": "Successfully registered. Please wait for admin to approve your request.",
-    "passwordNotMatch": "Confirm password and password doesn't match.",
+    "passwordNotMatch": "Password doesn't match. Confirm Password and try again.",
     "invalidDetailsMessage": "Please enter valid details.",
-    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Kindly check your network connection and wait for a while."
+  },
+  "userNavbar": {
+    "talawa": "Talawa",
+    "home": "Home",
+    "people": "People",
+    "events": "Events",
+    "chat": "Chat",
+    "donate": "Donate",
+    "myTasks": "My Tasks",
+    "settings": "Settings",
+    "language": "Language",
+    "logout": "Logout",
+    "close": "Close"
+  },
+  "userOrganizations": {
+    "allOrganizations":"All Organizations",
+    "joinedOrganizations": "Joined Organizations",
+    "createdOrganizations": "Created Organizations",
+    "search": "Search",
+    "nothingToShow": "Nothing to show here."
+  },
+  "userSidebar": {
+    "yourOrganizations": "Your Organizations",
+    "noOrganizations": "You haven't joined any organization yet.",
+    "viewAll": "View all"
   }
 }

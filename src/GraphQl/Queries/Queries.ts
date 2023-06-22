@@ -430,6 +430,55 @@ export const ORGANIZATION_POST_CONNECTION_LIST = gql`
     }
   }
 `;
+
+export const USER_ORGANIZATION_CONNECTION = gql`
+  query organizationsConnection($first: Int, $skip: Int, $filter: String) {
+    organizationsConnection(
+      first: $first
+      skip: $skip
+      where: { name_contains: $filter }
+      orderBy: name_ASC
+    ) {
+      image
+      _id
+      name
+      image
+      description
+      isPublic
+      creator {
+        firstName
+        lastName
+      }
+    }
+  }
+`;
+
+export const USER_JOINED_ORGANIZATIONS = gql`
+  query UserJoinedOrganizations($id: ID!) {
+    users(where: { id: $id }) {
+      joinedOrganizations {
+        _id
+        name
+        description
+        image
+      }
+    }
+  }
+`;
+
+export const USER_CREATED_ORGANIZATIONS = gql`
+  query UserJoinedOrganizations($id: ID!) {
+    users(where: { id: $id }) {
+      createdOrganizations {
+        _id
+        name
+        description
+        image
+      }
+    }
+  }
+`;
+
 /**
  * @name PLUGIN_GET
  * @description used to fetch list of plugins
