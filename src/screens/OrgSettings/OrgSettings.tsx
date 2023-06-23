@@ -13,7 +13,7 @@ import { MEMBERSHIP_REQUEST } from 'GraphQl/Queries/Queries';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'state/reducers';
 import { useTranslation } from 'react-i18next';
-import defaultImg from 'assets//images/blank.png';
+import defaultImg from 'assets/images/blank.png';
 import Button from 'react-bootstrap/Button';
 
 function orgSettings(): JSX.Element {
