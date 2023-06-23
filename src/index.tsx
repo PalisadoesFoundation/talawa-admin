@@ -10,7 +10,7 @@ import {
   HttpLink,
 } from '@apollo/client';
 import { onError } from '@apollo/link-error';
-import 'bootstrap/dist/css/bootstrap.css';
+import './assets/css/app.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'flag-icons/css/flag-icons.min.css';

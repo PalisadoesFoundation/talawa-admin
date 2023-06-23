@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 
 import styles from './AdminDashListCard.module.css';
-import defaultImg from 'assets/third_image.png';
+import defaultImg from 'assets/images/blank.png';
 
 interface InterfaceAdminDashListCardProps {
   key: string;

@@ -1,0 +1,12 @@
+$form-floating-height: add(3.5rem, $input-height-border);
+$form-floating-line-height: 1.25;
+$form-floating-padding-x: $input-padding-x;
+$form-floating-padding-y: 1rem;
+$form-floating-input-padding-t: 1.625rem;
+$form-floating-input-padding-b: 0.625rem;
+$form-floating-label-height: 1.5em;
+$form-floating-label-opacity: 0.65;
+$form-floating-label-transform: scale(0.85) translateY(-0.5rem)
+  translateX(0.15rem);
+$form-floating-label-disabled-color: $gray-600;
+$form-floating-transition: opacity 0.1s ease-in-out, transform 0.1s ease-in-out;

@@ -9,7 +9,7 @@ import {
   DELETE_POST_MUTATION,
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import defaultImg from 'assets/third_image.png';
+import defaultImg from 'assets/images/blank.png';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './OrgPostCard.module.css';
