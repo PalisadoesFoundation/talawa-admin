@@ -61,6 +61,7 @@ jobs:
           path: "./coverage/lcov.info"
           min_coverage: 91.0
   Graphql-Inspector:
+    
     name: Runs Introspection on the github talawa-api repo on the schema.graphql file
     runs-on: ubuntu-latest
 
