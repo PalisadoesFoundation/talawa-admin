@@ -166,7 +166,7 @@ describe('Testing Organizations Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.queryByTestId('searchInput')!, '2');
+    userEvent.type(screen.getByTestId('searchInput'), '2');
     await wait();
 
     expect(screen.queryByText('anyOrganization2')).toBeInTheDocument();
