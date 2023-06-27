@@ -180,8 +180,9 @@ describe('Testing UserSidebar Component [User Portal]', () => {
     );
 
     await wait();
-
-    localStorage.setItem('userId', beforeUserId!);
+    if (beforeUserId) {
+      localStorage.setItem('userId', beforeUserId);
+    }
   });
 
   test('Component should be rendered properly when organizationImage is not undefined', async () => {
@@ -203,6 +204,8 @@ describe('Testing UserSidebar Component [User Portal]', () => {
 
     await wait();
 
-    localStorage.setItem('userId', beforeUserId!);
+    if (beforeUserId) {
+      localStorage.setItem('userId', beforeUserId);
+    }
   });
 });

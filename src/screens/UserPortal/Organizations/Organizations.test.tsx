@@ -188,9 +188,9 @@ describe('Testing Organizations Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.queryByTestId('modeChangeBtn')!);
+    userEvent.click(screen.getByTestId('modeChangeBtn'));
     await wait();
-    userEvent.click(screen.queryByTestId('modeBtn1')!);
+    userEvent.click(screen.getByTestId('modeBtn1'));
     await wait();
 
     expect(screen.queryAllByText('joinedOrganization')).not.toBe([]);
@@ -211,9 +211,9 @@ describe('Testing Organizations Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.queryByTestId('modeChangeBtn')!);
+    userEvent.click(screen.getByTestId('modeChangeBtn'));
     await wait();
-    userEvent.click(screen.queryByTestId('modeBtn2')!);
+    userEvent.click(screen.getByTestId('modeBtn2'));
     await wait();
 
     expect(screen.queryAllByText('createdOrganization')).not.toBe([]);
