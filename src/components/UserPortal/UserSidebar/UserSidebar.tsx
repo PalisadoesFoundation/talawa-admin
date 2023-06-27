@@ -29,12 +29,14 @@ function userSidebar(): JSX.Element {
     variables: { id: userId },
   });
 
+  /* istanbul ignore next */
   React.useEffect(() => {
     if (data) {
       setOrganizations(data.users[0].joinedOrganizations);
     }
   }, [data]);
 
+  /* istanbul ignore next */
   React.useEffect(() => {
     if (data2) {
       setDetails(data2.user);

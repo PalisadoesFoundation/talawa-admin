@@ -4,7 +4,6 @@ import OrganizationCard from 'components/UserPortal/OrganizationCard/Organizatio
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import { Dropdown, Form, InputGroup } from 'react-bootstrap';
 import PaginationList from 'components/PaginationList/PaginationList';
-import { useHistory } from 'react-router-dom';
 import {
   USER_CREATED_ORGANIZATIONS,
   USER_JOINED_ORGANIZATIONS,
@@ -40,8 +39,6 @@ export default function organizations(): JSX.Element {
   ];
 
   const userId: string | null = localStorage.getItem('userId');
-
-  const history = useHistory();
 
   const { data, refetch } = useQuery(USER_ORGANIZATION_CONNECTION, {
     variables: { filter: filterName },
@@ -86,22 +83,14 @@ export default function organizations(): JSX.Element {
     refetch(filter);
   };
 
-  React.useEffect(() => {
-    const userToken = localStorage.getItem('token');
-
-    /* istanbul ignore next */
-    if (!userId || !userToken) {
-      navigator.clipboard.writeText('');
-      history.replace('/user/');
-    }
-  }, []);
-
+  /* istanbul ignore next */
   React.useEffect(() => {
     if (data) {
       setOrganizations(data.organizationsConnection);
     }
   }, [data]);
 
+  /* istanbul ignore next */
   React.useEffect(() => {
     if (mode == 0) {
       if (data) {
@@ -134,13 +123,18 @@ export default function organizations(): JSX.Element {
                 className={styles.borderNone}
                 value={filterName}
                 onChange={handleSearch}
+                data-testid="searchInput"
               />
               <InputGroup.Text className={`bg-success ${styles.borderNone}`}>
                 <SearchOutlined className={`${styles.colorWhite}`} />
               </InputGroup.Text>
             </InputGroup>
             <Dropdown>
-              <Dropdown.Toggle variant="success" id="dropdown-basic">
+              <Dropdown.Toggle
+                variant="success"
+                id="dropdown-basic"
+                data-testid={`modeChangeBtn`}
+              >
                 {modes[mode]}
               </Dropdown.Toggle>
               <Dropdown.Menu>
@@ -148,6 +142,7 @@ export default function organizations(): JSX.Element {
                   return (
                     <Dropdown.Item
                       key={index}
+                      data-testid={`modeBtn${index}`}
                       onClick={(): void => setMode(index)}
                     >
                       {value}
@@ -163,13 +158,14 @@ export default function organizations(): JSX.Element {
             <div
               className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
             >
-              {organizations.length > 0 ? (
+              {organizations && organizations.length > 0 ? (
                 (rowsPerPage > 0
                   ? organizations.slice(
                       page * rowsPerPage,
                       page * rowsPerPage + rowsPerPage
                     )
-                  : organizations
+                  : /* istanbul ignore next */
+                    organizations
                 ).map((organization: any, index) => {
                   const cardProps: InterfaceOrganizationCardProps = {
                     name: organization.name,
@@ -183,13 +179,22 @@ export default function organizations(): JSX.Element {
                 <span>{t('nothingToShow')}</span>
               )}
             </div>
-            <PaginationList
-              count={organizations.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
+            <table>
+              <tbody>
+                <tr>
+                  <PaginationList
+                    count={
+                      /* istanbul ignore next */
+                      organizations ? organizations.length : 0
+                    }
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

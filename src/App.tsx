@@ -6,6 +6,7 @@ import * as installedPlugins from 'components/plugins/index';
 import styles from './App.module.css';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
+import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
 import LoginPage from 'screens/LoginPage/LoginPage';
 import OrganizationEvents from 'screens/OrganizationEvents/OrganizationEvents';
 import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
@@ -105,7 +106,10 @@ function app(): JSX.Element {
 
         {/* User Portal Routes */}
         <Route exact path="/user" component={UserLoginPage} />
-        <Route path="/user/organizations" component={Organizations} />
+        <SecuredRouteForUser
+          path="/user/organizations"
+          component={Organizations}
+        />
 
         <Route exact path="*" component={PageNotFound} />
       </Switch>

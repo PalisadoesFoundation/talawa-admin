@@ -439,7 +439,6 @@ export const USER_ORGANIZATION_CONNECTION = gql`
       where: { name_contains: $filter }
       orderBy: name_ASC
     ) {
-      image
       _id
       name
       image

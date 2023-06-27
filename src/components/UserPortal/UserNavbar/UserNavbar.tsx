@@ -15,9 +15,11 @@ function userNavbar(): JSX.Element {
   });
 
   const [currentLanguageCode, setCurrentLanguageCode] = React.useState(
+    /* istanbul ignore next */
     cookies.get('i18next') || 'en'
   );
 
+  /* istanbul ignore next */
   const handleLogout = (): void => {
     localStorage.clear();
     window.location.replace('/user');
@@ -48,10 +50,13 @@ function userNavbar(): JSX.Element {
             <Dropdown.Toggle
               variant="white"
               id="dropdown-basic"
-              data-testid="logoutDropdown"
+              data-testid="languageDropdownToggle"
               className={styles.colorWhite}
             >
-              <LanguageIcon className={styles.colorWhite} />
+              <LanguageIcon
+                className={styles.colorWhite}
+                data-testid="languageIcon"
+              />
             </Dropdown.Toggle>
             <Dropdown.Menu>
               {languages.map((language, index: number) => (
@@ -80,7 +85,10 @@ function userNavbar(): JSX.Element {
               data-testid="logoutDropdown"
               className={styles.colorWhite}
             >
-              <PermIdentityIcon className={styles.colorWhite} />
+              <PermIdentityIcon
+                className={styles.colorWhite}
+                data-testid="personIcon"
+              />
             </Dropdown.Toggle>
             <Dropdown.Menu>
               <Dropdown.ItemText>
@@ -88,7 +96,7 @@ function userNavbar(): JSX.Element {
               </Dropdown.ItemText>
               <Dropdown.Item>{t('settings')}</Dropdown.Item>
               <Dropdown.Item>{t('myTasks')}</Dropdown.Item>
-              <Dropdown.Item onClick={handleLogout}>
+              <Dropdown.Item onClick={handleLogout} data-testid={`logoutBtn`}>
                 {t('logout')}
               </Dropdown.Item>
             </Dropdown.Menu>

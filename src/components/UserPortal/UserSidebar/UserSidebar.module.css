@@ -8,6 +8,12 @@
   flex-grow: 1;
 }
 
+@media screen and (max-width: 700px) {
+  .mainContainer {
+    display: none;
+  }
+}
+
 .userDetails {
   display: flex;
   flex-direction: column;
