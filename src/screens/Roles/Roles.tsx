@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Form, Row } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
@@ -38,19 +38,23 @@ const Roles = (): JSX.Element => {
 
   useEffect(() => {
     if (searchByName !== '') {
-      refetch({
+      userRefetch({
         firstName_contains: searchByName,
       });
     } else {
       if (count !== 0) {
-        refetch({
+        userRefetch({
           firstName_contains: searchByName,
         });
       }
     }
   }, [count, searchByName]);
 
-  const { loading: usersLoading, data, refetch } = useQuery(USER_LIST);
+  const {
+    loading: usersLoading,
+    data: userData,
+    refetch: userRefetch,
+  } = useQuery(USER_LIST);
 
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
 
@@ -102,7 +106,7 @@ const Roles = (): JSX.Element => {
       /* istanbul ignore next */
       if (data) {
         toast.success(t('roleUpdated'));
-        refetch();
+        userRefetch();
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -124,7 +128,7 @@ const Roles = (): JSX.Element => {
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
               <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
-              <input
+              <Form.Control
                 type="name"
                 id="orgname"
                 placeholder={t('enterName')}
@@ -154,13 +158,13 @@ const Roles = (): JSX.Element => {
                     </tr>
                   </thead>
                   <tbody>
-                    {data && data.users.length > 0 ? (
+                    {userData && userData.users.length > 0 ? (
                       (rowsPerPage > 0
-                        ? data.users.slice(
+                        ? userData.users.slice(
                             page * rowsPerPage,
                             page * rowsPerPage + rowsPerPage
                           )
-                        : data.users
+                        : userData.users
                       ).map(
                         (
                           user: {
@@ -223,7 +227,7 @@ const Roles = (): JSX.Element => {
                 <tbody>
                   <tr>
                     <PaginationList
-                      count={data ? data.users.length : 0}
+                      count={userData ? userData.users.length : 0}
                       rowsPerPage={rowsPerPage}
                       page={page}
                       data-testid="something"

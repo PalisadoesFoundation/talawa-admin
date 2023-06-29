@@ -31,7 +31,7 @@ describe('Testing the Super Dash List', () => {
     };
 
     const buttonInstance = shallow(<AdminDashListCard {...props} />);
-    const clickButton = buttonInstance.find('button');
+    const clickButton = buttonInstance.find('Button');
 
     render(
       <I18nextProvider i18n={i18nForTest}>

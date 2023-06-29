@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Form, Row } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import Button from 'react-bootstrap/Button';
 
 import styles from './Requests.module.css';
 import ListNavbar from 'components/ListNavbar/ListNavbar';
@@ -37,7 +38,7 @@ const Requests = (): JSX.Element => {
     setComponentLoader(false);
   }, []);
 
-  const { data, loading: usersLoading, refetch } = useQuery(USER_LIST);
+  const { data: userData, loading: userLoading, refetch } = useQuery(USER_LIST);
 
   const [acceptAdminFunc] = useMutation(ACCPET_ADMIN_MUTATION);
   const [rejectAdminFunc] = useMutation(REJECT_ADMIN_MUTATION);
@@ -55,17 +56,17 @@ const Requests = (): JSX.Element => {
   }, [dataOrgs]);
 
   useEffect(() => {
-    if (data) {
+    if (userData) {
       setUsersData(
-        data.users.filter(
+        userData.users.filter(
           (user: any) =>
             user.userType === 'ADMIN' && user.adminApproved === false
         )
       );
     }
-  }, [data]);
+  }, [userData]);
 
-  if (componentLoader || usersLoading) {
+  if (componentLoader || userLoading) {
     return <div className="loader"></div>;
   }
 
@@ -140,7 +141,7 @@ const Requests = (): JSX.Element => {
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
               <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
-              <input
+              <Form.Control
                 type="name"
                 id="orgname"
                 placeholder={t('enterName')}
@@ -193,7 +194,7 @@ const Requests = (): JSX.Element => {
                             <td>{`${user.firstName} ${user.lastName}`}</td>
                             <td>{user.email}</td>
                             <td>
-                              <button
+                              <Button
                                 className="btn btn-success btn-sm"
                                 onClick={async (): Promise<void> => {
                                   await accpetAdmin(user._id);
@@ -201,10 +202,10 @@ const Requests = (): JSX.Element => {
                                 data-testid={`acceptUser${user._id}`}
                               >
                                 {t('accept')}
-                              </button>
+                              </Button>
                             </td>
                             <td>
-                              <button
+                              <Button
                                 className="btn btn-danger btn-sm"
                                 onClick={async (): Promise<void> => {
                                   await rejectAdmin(user._id);
@@ -212,7 +213,7 @@ const Requests = (): JSX.Element => {
                                 data-testid={`rejectUser${user._id}`}
                               >
                                 {t('reject')}
-                              </button>
+                              </Button>
                             </td>
                           </tr>
                         );

@@ -3,7 +3,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useLazyQuery } from '@apollo/client';
 import { useSelector } from 'react-redux';
-import { Container } from 'react-bootstrap';
+import { Container, Form } from 'react-bootstrap';
 import dayjs from 'dayjs';
 
 import styles from './OrganizationPeople.module.css';
@@ -105,8 +105,6 @@ function organizationPeople(): JSX.Element {
   /* istanbul ignore next */
   if (memberError || usersError || adminError) {
     const error = memberError ?? usersError ?? adminError;
-
-    console.log(error);
     toast.error(error?.message);
   }
 
@@ -161,7 +159,7 @@ function organizationPeople(): JSX.Element {
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
               <h6 className={styles.searchtitle}>{t('filterByName')}</h6>
-              <input
+              <Form.Control
                 type="name"
                 id="searchname"
                 placeholder={t('searchFirstName')}
@@ -180,7 +178,7 @@ function organizationPeople(): JSX.Element {
                   debouncedHandleFirstNameSearchChange(newFilterData);
                 }}
               />
-              <input
+              <Form.Control
                 type="name"
                 id="searchLastName"
                 placeholder={t('searchLastName')}
@@ -200,11 +198,12 @@ function organizationPeople(): JSX.Element {
                 }}
               />
               <div className={styles.radio_buttons} data-testid="usertypelist">
-                <input
+                <Form.Check
+                  type="radio"
+                  inline
                   id="userslist"
                   value="userslist"
                   name="displaylist"
-                  type="radio"
                   data-testid="users"
                   defaultChecked={state == 2 ? true : false}
                   onClick={(): void => {
@@ -212,23 +211,25 @@ function organizationPeople(): JSX.Element {
                   }}
                 />
                 <label htmlFor="userslist">{t('users')}</label>
-                <input
+                <Form.Check
+                  type="radio"
+                  inline
                   id="memberslist"
                   value="memberslist"
                   name="displaylist"
                   data-testid="members"
-                  type="radio"
                   defaultChecked={state == 0 ? true : false}
                   onClick={(): void => {
                     setState(0);
                   }}
                 />
                 <label htmlFor="memberslist">{t('members')}</label>
-                <input
+                <Form.Check
+                  type="radio"
+                  inline
                   id="adminslist"
                   value="adminslist"
                   name="displaylist"
-                  type="radio"
                   data-testid="admins"
                   defaultChecked={state == 1 ? true : false}
                   onClick={(): void => {

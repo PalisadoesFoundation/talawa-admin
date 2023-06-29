@@ -70,6 +70,7 @@
 }
 .languageBtn {
   font-size: 20px;
+  margin-right: 16px;
   color: #31bb6b;
 }
 .languageBtn:hover {

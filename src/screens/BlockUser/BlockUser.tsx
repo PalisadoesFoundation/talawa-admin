@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Form, Row } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
@@ -52,9 +53,9 @@ const Requests = (): JSX.Element => {
   const lastNameRef = useRef<HTMLInputElement>(null);
 
   const {
-    data,
-    loading,
-    error,
+    data: memberData,
+    loading: memberLoading,
+    error: memberError,
     refetch: memberRefetch,
   } = useQuery(BLOCK_PAGE_MEMBER_LIST, {
     variables: {
@@ -68,22 +69,22 @@ const Requests = (): JSX.Element => {
   const [unBlockUser] = useMutation(UNBLOCK_USER_MUTATION);
 
   useEffect(() => {
-    if (!data) {
+    if (!memberData) {
       setMembersData([]);
       return;
     }
 
     if (state === 0) {
-      setMembersData(data?.organizationsMemberConnection.edges);
+      setMembersData(memberData?.organizationsMemberConnection.edges);
     } else {
-      const blockUsers = data?.organizationsMemberConnection.edges.filter(
+      const blockUsers = memberData?.organizationsMemberConnection.edges.filter(
         (user: InterfaceMember) =>
           user.organizationsBlockedBy.some((org) => org._id === currentUrl)
       );
 
       setMembersData(blockUsers);
     }
-  }, [state, data]);
+  }, [state, memberData]);
 
   /* istanbul ignore next */
   const handleChangePage = (
@@ -140,10 +141,8 @@ const Requests = (): JSX.Element => {
   };
 
   /* istanbul ignore next */
-  if (error) {
-    console.error(error);
-
-    toast.error(error.message);
+  if (memberError) {
+    toast.error(memberError.message);
   }
 
   const handleSearch = (): void => {
@@ -166,7 +165,7 @@ const Requests = (): JSX.Element => {
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
               <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
-              <input
+              <Form.Control
                 type="name"
                 id="firstName"
                 placeholder={t('searchFirstName')}
@@ -177,7 +176,7 @@ const Requests = (): JSX.Element => {
                 ref={firstNameRef}
               />
 
-              <input
+              <Form.Control
                 type="name"
                 id="lastName"
                 placeholder={t('searchLastName')}
@@ -189,7 +188,7 @@ const Requests = (): JSX.Element => {
               />
 
               <div className={styles.radio_buttons} data-testid="usertypelist">
-                <input
+                <Form.Check
                   id="allusers"
                   value="allusers"
                   name="displaylist"
@@ -202,7 +201,7 @@ const Requests = (): JSX.Element => {
                 />
                 <label htmlFor="allusers">{t('allMembers')}</label>
 
-                <input
+                <Form.Check
                   id="blockedusers"
                   value="blockedusers"
                   name="displaylist"
@@ -224,7 +223,7 @@ const Requests = (): JSX.Element => {
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>{t('listOfUsers')}</p>
             </Row>
-            {loading ? (
+            {memberLoading ? (
               <div className={styles.loader}>
                 <CircularProgress />
               </div>
@@ -264,7 +263,7 @@ const Requests = (): JSX.Element => {
                                 {user.organizationsBlockedBy.some(
                                   (spam: any) => spam._id === currentUrl
                                 ) ? (
-                                  <button
+                                  <Button
                                     className="btn btn-danger"
                                     onClick={async (): Promise<void> => {
                                       await handleUnBlockUser(user._id);
@@ -272,9 +271,9 @@ const Requests = (): JSX.Element => {
                                     data-testid={`unBlockUser${user._id}`}
                                   >
                                     {t('unblock')}
-                                  </button>
+                                  </Button>
                                 ) : (
-                                  <button
+                                  <Button
                                     className="btn btn-success"
                                     onClick={async (): Promise<void> => {
                                       await handleBlockUser(user._id);
@@ -282,7 +281,7 @@ const Requests = (): JSX.Element => {
                                     data-testid={`blockUser${user._id}`}
                                   >
                                     {t('block')}
-                                  </button>
+                                  </Button>
                                 )}
                               </td>
                             </tr>

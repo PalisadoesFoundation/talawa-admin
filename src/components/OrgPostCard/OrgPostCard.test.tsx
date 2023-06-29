@@ -84,7 +84,7 @@ describe('Testing Organization Post Card', () => {
     expect(screen.getByText(/Author:/i)).toBeInTheDocument();
     expect(screen.getByText(/Video URL:/i)).toBeInTheDocument();
     expect(screen.getByText(props.postTitle)).toBeInTheDocument();
-    expect(screen.getByDisplayValue(props.postInfo)).toBeInTheDocument();
+    expect(screen.getByText(props.postInfo)).toBeInTheDocument();
     expect(screen.getByText(props.postAuthor)).toBeInTheDocument();
     expect(screen.getByAltText(/image not found/i)).toBeInTheDocument();
     expect(screen.getByText(props.postVideo)).toBeInTheDocument();
@@ -106,7 +106,7 @@ describe('Testing Organization Post Card', () => {
     expect(screen.getByText(/Author:/i)).toBeInTheDocument();
     expect(screen.getByText(/Video URL:/i)).toBeInTheDocument();
     expect(screen.getByText(props.postTitle)).toBeInTheDocument();
-    expect(screen.getByDisplayValue(props.postInfo)).toBeInTheDocument();
+    expect(screen.getByText(props.postInfo)).toBeInTheDocument();
     expect(screen.getByText(props.postAuthor)).toBeInTheDocument();
     expect(screen.getByAltText(/image not found/i)).toBeInTheDocument();
     expect(screen.getByText(props.postVideo)).toBeInTheDocument();

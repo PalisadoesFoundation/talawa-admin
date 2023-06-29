@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 
 // TODO: UI logic for embedded actions (hide label)
 interface InterfaceActionProps {
@@ -10,10 +10,6 @@ interface InterfaceActionProps {
 function action(props: InterfaceActionProps): JSX.Element {
   const actionRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    // console.log('Props', props.children); // Validate Type
-    // console.log('Ref', actionRef); // Fetch Events
-  });
   return (
     <div ref={actionRef}>
       <h6 className="action-label">{props.label}</h6>

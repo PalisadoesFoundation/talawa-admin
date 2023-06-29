@@ -53,7 +53,6 @@ function addOnEntry({
         orgId: currentOrg.toString(),
       },
     });
-    // console.log('orgs pushed', data);
   };
 
   const updateInstallStatusFunc = async (): Promise<void> => {
@@ -66,8 +65,6 @@ function addOnEntry({
     });
 
     setIsInstalledLocal(!isInstalledLocal);
-    // console.log('AddOnEntry Data IS =>', data);
-
     setButtonLoading(false);
   };
 
