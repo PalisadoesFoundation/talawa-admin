@@ -53,7 +53,7 @@ export default function userLoginPage(): JSX.Element {
               disabled={currentLanguageCode === language.code}
               data-testid={`changeLanguageBtn${index}`}
             >
-              <span className={`fi fi-${language.country_code} mr-2`}></span>
+              <span className={`fi fi-${language.country_code} mr-2`}></span>{' '}
               {language.name}
             </Dropdown.Item>
           ))}

@@ -29,10 +29,8 @@ function userNavbar(): JSX.Element {
 
   return (
     <Navbar
-      expand="lg"
       variant="dark"
-      bg="success"
-      className={styles.boxShadow}
+      className={`${styles.boxShadow} ${styles.colorPrimary}`}
     >
       <Container fluid>
         <Navbar.Brand href="#">
@@ -46,7 +44,7 @@ function userNavbar(): JSX.Element {
 
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
-          <Dropdown data-testid="languageDropdown" drop="left">
+          <Dropdown data-testid="languageDropdown" drop="start">
             <Dropdown.Toggle
               variant="white"
               id="dropdown-basic"
@@ -71,14 +69,14 @@ function userNavbar(): JSX.Element {
                 >
                   <span
                     className={`fi fi-${language.country_code} mr-2`}
-                  ></span>
+                  ></span>{' '}
                   {language.name}
                 </Dropdown.Item>
               ))}
             </Dropdown.Menu>
           </Dropdown>
 
-          <Dropdown drop="left">
+          <Dropdown drop="start">
             <Dropdown.Toggle
               variant="white"
               id="dropdown-basic"

@@ -96,7 +96,9 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
             value={loginVariables.email}
             onChange={handleEmailChange}
           />
-          <InputGroup.Text className={`bg-success ${styles.borderNone}`}>
+          <InputGroup.Text
+            className={`${styles.colorPrimary} ${styles.borderNone}`}
+          >
             <EmailOutlinedIcon className={`${styles.colorWhite}`} />
           </InputGroup.Text>
         </InputGroup>
@@ -109,7 +111,9 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
             value={loginVariables.password}
             onChange={handlePasswordChange}
           />
-          <InputGroup.Text className={`bg-success ${styles.borderNone}`}>
+          <InputGroup.Text
+            className={`${styles.colorPrimary} ${styles.borderNone}`}
+          >
             <LockOutlined className={`${styles.colorWhite}`} />
           </InputGroup.Text>
         </InputGroup>
@@ -121,11 +125,17 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
         </Link>
       </div>
 
-      <Button variant="success" onClick={handleLogin} data-testid="loginBtn">
+      <Button
+        className={`${styles.colorPrimary} ${styles.borderNone}`}
+        variant="success"
+        onClick={handleLogin}
+        data-testid="loginBtn"
+      >
         {t('login')}
       </Button>
       <hr />
       <Button
+        className={`${styles.colorPrimaryHover}`}
         variant="outline-success"
         onClick={handleModeChangeToRegister}
         data-testid="setRegisterBtn"

@@ -127,7 +127,9 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
             onChange={handleFirstName}
             data-testid="firstNameInput"
           />
-          <InputGroup.Text className={`bg-success ${styles.borderNone}`}>
+          <InputGroup.Text
+            className={`${styles.colorPrimary} ${styles.borderNone}`}
+          >
             <BadgeOutlinedIcon className={`${styles.colorWhite}`} />
           </InputGroup.Text>
         </InputGroup>
@@ -140,7 +142,9 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
             onChange={handleLastName}
             data-testid="lastNameInput"
           />
-          <InputGroup.Text className={`bg-success ${styles.borderNone}`}>
+          <InputGroup.Text
+            className={`${styles.colorPrimary} ${styles.borderNone}`}
+          >
             <BadgeOutlinedIcon className={`${styles.colorWhite}`} />
           </InputGroup.Text>
         </InputGroup>
@@ -154,7 +158,9 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
             onChange={handleEmailChange}
             data-testid="emailInput"
           />
-          <InputGroup.Text className={`bg-success ${styles.borderNone}`}>
+          <InputGroup.Text
+            className={`${styles.colorPrimary} ${styles.borderNone}`}
+          >
             <EmailOutlinedIcon className={`${styles.colorWhite}`} />
           </InputGroup.Text>
         </InputGroup>
@@ -168,7 +174,9 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
             onChange={handlePasswordChange}
             data-testid="passwordInput"
           />
-          <InputGroup.Text className={`bg-success ${styles.borderNone}`}>
+          <InputGroup.Text
+            className={`${styles.colorPrimary} ${styles.borderNone}`}
+          >
             <LockOutlined className={`${styles.colorWhite}`} />
           </InputGroup.Text>
         </InputGroup>
@@ -182,12 +190,15 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
             onChange={handleConfirmPasswordChange}
             data-testid="confirmPasswordInput"
           />
-          <InputGroup.Text className={`bg-success ${styles.borderNone}`}>
+          <InputGroup.Text
+            className={`${styles.colorPrimary} ${styles.borderNone}`}
+          >
             <LockOutlined className={`${styles.colorWhite}`} />
           </InputGroup.Text>
         </InputGroup>
       </div>
       <Button
+        className={`${styles.colorPrimary} ${styles.borderNone}`}
         variant="success"
         onClick={handleRegister}
         data-testid="registerBtn"

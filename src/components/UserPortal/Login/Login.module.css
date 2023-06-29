@@ -18,3 +18,12 @@
 .colorWhite {
   color: white;
 }
+
+.colorPrimary {
+  background: #31bb6b;
+}
+
+.colorPrimaryHover:hover {
+  background: #31bb6b;
+  border: none;
+}

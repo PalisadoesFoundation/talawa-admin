@@ -125,12 +125,15 @@ export default function organizations(): JSX.Element {
                 onChange={handleSearch}
                 data-testid="searchInput"
               />
-              <InputGroup.Text className={`bg-success ${styles.borderNone}`}>
+              <InputGroup.Text
+                className={`${styles.colorPrimary} ${styles.borderNone}`}
+              >
                 <SearchOutlined className={`${styles.colorWhite}`} />
               </InputGroup.Text>
             </InputGroup>
-            <Dropdown>
+            <Dropdown drop="down-centered">
               <Dropdown.Toggle
+                className={`${styles.colorPrimary} ${styles.borderNone}`}
                 variant="success"
                 id="dropdown-basic"
                 data-testid={`modeChangeBtn`}

@@ -38,3 +38,7 @@
 .containerHeight {
   height: calc(100vh - 61px);
 }
+
+.colorPrimary {
+  background: #31bb6b;
+}
