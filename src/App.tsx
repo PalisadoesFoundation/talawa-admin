@@ -6,6 +6,7 @@ import * as installedPlugins from 'components/plugins/index';
 import styles from './App.module.css';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
+import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
 import LoginPage from 'screens/LoginPage/LoginPage';
 import OrganizationEvents from 'screens/OrganizationEvents/OrganizationEvents';
 import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
@@ -21,6 +22,10 @@ import Roles from 'screens/Roles/Roles';
 import Requests from 'screens/Requests/Requests';
 import BlockUser from 'screens/BlockUser/BlockUser';
 import MemberDetail from 'screens/MemberDetail/MemberDetail';
+
+// User Portal Components
+import UserLoginPage from 'screens/UserPortal/UserLoginPage/UserLoginPage';
+import Organizations from 'screens/UserPortal/Organizations/Organizations';
 
 function app(): JSX.Element {
   /*const { updatePluginLinks, updateInstalled } = bindActionCreators(
@@ -98,6 +103,14 @@ function app(): JSX.Element {
         <SecuredRoute path="/blockuser" component={BlockUser} />
         {extraRoutes}
         <Route exact path="/forgotPassword" component={ForgotPassword} />
+
+        {/* User Portal Routes */}
+        <Route exact path="/user" component={UserLoginPage} />
+        <SecuredRouteForUser
+          path="/user/organizations"
+          component={Organizations}
+        />
+
         <Route exact path="*" component={PageNotFound} />
       </Switch>
     </>

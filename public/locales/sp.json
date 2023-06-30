@@ -441,6 +441,64 @@
     "membershipRequests": "Solicitudes de membresía",
     "adminForEvents": "Administrador de eventos",
     "addedAsAdmin": "El usuario se agrega como administrador.",
-    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
+    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. Compruebe amablemente su conexión de red y espere un momento."
+  },
+  "userLogin": {
+    "login": "Acceso",
+    "forgotPassword": "Has olvidado tu contraseña ?",
+    "loginIntoYourAccount": "Inicie sesión en su cuenta",
+    "emailAddress": "correo electrónico",
+    "enterEmail": "Ingrese su dirección de correo electrónico",
+    "password": "Contraseña",
+    "enterPassword": "Ingresa tu contraseña",
+    "register": "Registro",
+    "invalidDetailsMessage": "Por favor, introduzca un correo electrónico y una contraseña válidos.",
+    "notAuthorised": "¡Lo siento! usted no está autorizado!",
+    "invalidCredentials": "Las credenciales ingresadas son incorrectas. Ingrese credenciales válidas.",
+    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. Compruebe amablemente su conexión de red y espere un momento."
+  },
+  "userRegister": {
+    "register": "Registro",
+    "firstName": "Nombre de pila",
+    "enterFirstName": "Ponga su primer nombre",
+    "lastName": "Apellido",
+    "enterLastName": "Ingresa tu apellido",
+    "emailAddress": "correo electrónico",
+    "enterEmail": "Ingrese su dirección de correo electrónico",
+    "password": "Contraseña",
+    "enterPassword": "Ingresa tu contraseña",
+    "confirmPassword": "confirmar Contraseña",
+    "enterConfirmPassword": "Ingrese su contraseña para confirmar",
+    "alreadyhaveAnAccount": "¿Ya tienes una cuenta?",
+    "login": "Acceso",
+    "afterRegister": "Registrado exitosamente. Espere a que el administrador apruebe su solicitud.",
+    "passwordNotMatch": "La contraseña no coincide. Confirme la contraseña y vuelva a intentarlo.",
+    "invalidDetailsMessage": "Ingrese detalles válidos.",
+    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. Compruebe amablemente su conexión de red y espere un momento."
+  },
+  "userNavbar": {
+    "talawa": "Talawa",
+    "home": "Hogar",
+    "people": "Gente",
+    "events": "Eventos",
+    "chat": "Charlar",
+    "donate": "Donar",
+    "myTasks": "Mis tareas",
+    "settings": "Ajustes",
+    "language": "Idioma",
+    "logout": "Cerrar sesión",
+    "close": "Cerca"
+  },
+  "userOrganizations": {
+    "allOrganizations": "Todas las organizaciones",
+    "joinedOrganizations": "Organizaciones unidas",
+    "createdOrganizations": "Organizaciones creadas",
+    "search": "Buscar",
+    "nothingToShow": "Nada que mostrar aquí."
+  },
+  "userSidebar": {
+    "yourOrganizations": "Tus Organizaciones",
+    "noOrganizations": "Aún no te has unido a ninguna organización.",
+    "viewAll": "Ver todo"
   }
 }
