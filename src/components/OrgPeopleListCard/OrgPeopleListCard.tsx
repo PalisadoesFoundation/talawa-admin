@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { Link } from 'react-router-dom';
-import defaultImg from 'assets/third_image.png';
+import defaultImg from 'assets/images/blank.png';
 import { errorHandler } from 'utils/errorHandler';
 
 interface InterfaceOrgPeopleListCardProps {

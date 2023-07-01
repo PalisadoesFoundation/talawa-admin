@@ -7,7 +7,7 @@ import i18next from 'i18next';
 
 import styles from './UserLoginPage.module.css';
 import PalisadoesImage from 'assets/images/palisadoes_logo.png';
-import TalawaImage from 'assets/talawa-logo-200x200.png';
+import TalawaImage from 'assets/images/talawa-logo-200x200.png';
 import Login from 'components/UserPortal/Login/Login';
 import Register from 'components/UserPortal/Register/Register';
 

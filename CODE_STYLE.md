@@ -38,33 +38,6 @@ code style should not be changed and must be followed.
 
 - All the Return fragment should be closed in empty tag
 
-- Imports should be grouped in the following order:
-
-    - React imports
-
-    - Third party imports
-
-    - Local imports
-
-
-- If there is more than one import from a single library, they should be grouped together
-  
-Example - 
-
-If there is single import from a library, both ways will work
-
-```
-import Row from 'react-bootstrap/Row';
-// OR
-import { Row } from 'react-bootstrap';
-```
-
-If there are multiple imports from a library, they should be grouped together
-
-```
-import { Row, Col, Container } from 'react-bootstrap';
-```
-
 - Use of custom classes directly are refrained, use of modular css is encouraged along with bootstrap classes
 
 **Wrong way ❌**
@@ -137,7 +110,17 @@ the code submitted must also be linted ESLint and formatted with Prettier.
 
 ### Sub Directories of `src`
 
-`assets` - This houses all of the static assets (only images/svgs not css and js) used in the project
+`assets` - This houses all of the static assets used in the project
+  - `css` - This houses all of the css files used in the project
+  - `images` - This houses all of the images used in the project
+  - `scss` - This houses all of the scss files used in the project
+    - `components -` All Sass files for components
+    - `content -` All Sass files for content
+    - `forms -` All Sass files for forms
+    - `_talawa.scss` - Partial Sass file for Talawa
+    - `_utilities.scss` - Partial Sass file for utilities
+    - `_variables.scss` - Partial Sass file for variables
+    - `app.scss` - Main Sass file for the app, imports all other partial Sass files
 
 `components`  - The directory for base components that will be used in the various views/screens
 
@@ -162,3 +145,89 @@ An example being
 import Navbar from 'components/Navbar/Navbar';
 ```
 
+Imports should be grouped in the following order:
+
+  - React imports
+  - Third party imports
+  - Local imports
+
+
+If there is more than one import from a single library, they should be grouped together
+  
+Example - If there is single import from a library, both ways will work
+
+```
+import Row from 'react-bootstrap/Row';
+// OR
+import { Row } from 'react-bootstrap';
+```
+
+If there are multiple imports from a library, they should be grouped together
+
+```
+import { Row, Col, Container } from 'react-bootstrap';
+```
+
+## Customising Bootstrap
+
+Bootstrap v5.3.0 is used in the project.
+Follow this [link](https://getbootstrap.com/docs/5.3/customize/sass/) to learn how to customise bootstrap.
+
+**File Structure**
+
+- `src/assets/scss/components/{partialFile}.scss` - where the {partialFile} are the following files
+  - **_accordion.scss**
+  - **_alert.scss**
+  - **_badge.scss**
+  - **_breadcrumb.scss**
+  - **_buttons.scss**
+  - **_card.scss**
+  - **_carousel.scss**
+  - **_close.scss**
+  - **_dropdown.scss**
+  - **_list-group.scss**
+  - **_modal.scss**
+  - **_nav.scss**
+  - **_navbar.scss**
+  - **_offcanvas.scss**
+  - **_pagination.scss**
+  - **_placeholder.scss**
+  - **_progress.scss**
+  - **_spinners.scss**
+
+- `src/assets/scss/content/{partialFile}.scss` - where the {partialFile} are the following files
+  - **_table.scss**
+  - **_typography.scss**
+
+
+- `src/assets/scss/forms/{partialFile}.scss` - where the {partialFile} are the following files
+  - **_check-radios.scss**
+  - **_floating-label.scss**
+  - **_form-control.scss**
+  - **_input-group.scss**
+  - **_range.scss**
+  - **_select.scss**
+  - **_validation.scss**
+
+- `src/assets/scss/_utilities.scss` - The utility API is a Sass-based tool to generate utility classes.
+- `src/assets/scss/_variables.scss` - This file contains all the Sass variables used in the project
+- `src/assets/scss/_talawa.scss` - This files contains all the partial Sass files imported into it
+
+**How to compile Sass file**
+
+`src/assets/scss/app.scss` is the main Sass file for the app, it imports all other partial Sass files.
+According to naming convention the file name of the partial Sass files should start with an underscore `_` and end with `.scss`, these partial Sass files are not meant to be compiled directly, they are meant to be imported into another Sass file. Only the main Sass file `src/assets/scss/app.scss` should be compiled.
+
+The compiled CSS file is `src/assets/css/app.css` and it is imported into `src/index.tsx` file.
+
+To compile the Sass file once, run the following command in the terminal
+
+```
+node-sass src/assets/scss/app.scss src/assets/css/app.css
+```
+
+To watch the Sass file for changes and compile it automatically, run the following command in the terminal
+
+```
+node-sass src/assets/scss/app.scss src/assets/css/app.css --watch
+```

@@ -7,7 +7,7 @@ import Cookies from 'js-cookie';
 import { useTranslation } from 'react-i18next';
 
 import styles from './ListNavbar.module.css';
-import Logo from 'assets/talawa-logo-200x200.png';
+import Logo from 'assets/images/talawa-logo-200x200.png';
 import { languages } from 'utils/languages';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import styles from './PageNotFound.module.css';
-import Logo from 'assets/talawa-logo-200x200.png';
+import Logo from 'assets/images/talawa-logo-200x200.png';
 
 const PageNotFound = (): JSX.Element => {
   const { t } = useTranslation('translation', {
