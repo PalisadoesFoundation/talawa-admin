@@ -24,6 +24,7 @@ import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import { languages } from 'utils/languages';
 import { RECAPTCHA_SITE_KEY, REACT_APP_USE_RECAPTCHA } from 'Constant/constant';
 import { errorHandler } from 'utils/errorHandler';
+import Loader from 'components/Loader/Loader';
 
 function loginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -218,7 +219,7 @@ function loginPage(): JSX.Element {
   };
 
   if (componentLoader || loginLoading || signinLoading || recaptchaLoading) {
-    return <div className={styles.loader}></div>;
+    return <Loader />;
   }
 
   return (

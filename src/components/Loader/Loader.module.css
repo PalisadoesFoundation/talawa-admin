@@ -1,51 +1,13 @@
-/* Animation */
-body {
+.spinner_wrapper {
   height: 100vh;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--bs-body-bg);
 }
 
-.loader {
-  border: 1rem solid var(--bs-white);
-  border-top: 1rem solid var(--bs-primary);
-  border-radius: 50%;
-  width: 8rem;
-  height: 8rem;
-  animation: spin 1.1s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-@-webkit-keyframes load8 {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes load8 {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
+.spinner {
+  width: 6rem;
+  height: 6rem;
+  border-width: 0.5rem;
 }

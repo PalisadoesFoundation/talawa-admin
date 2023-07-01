@@ -16,6 +16,7 @@ import { languages } from 'utils/languages';
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
+import Loader from 'components/Loader/Loader';
 
 type MemberDetailProps = {
   id: string; // This is the userId
@@ -45,11 +46,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   });
 
   if (loading) {
-    return (
-      <>
-        <div className={styles.loader}></div>
-      </>
-    );
+    return <Loader />;
   }
 
   /* istanbul ignore next */
