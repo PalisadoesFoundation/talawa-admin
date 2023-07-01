@@ -1,0 +1,44 @@
+.borderNone {
+  border: none;
+}
+
+.colorWhite {
+  color: white;
+}
+
+.maxWidth {
+  max-width: 300px;
+}
+
+.colorLight {
+  background-color: #f5f5f5;
+}
+
+.mainContainer {
+  width: 50%;
+  flex-grow: 3;
+  padding: 40px;
+  max-height: 100%;
+  overflow: auto;
+}
+
+.content {
+  height: fit-content;
+  min-height: calc(100% - 40px);
+}
+
+.gap {
+  gap: 20px;
+}
+
+.paddingY {
+  padding: 30px 0px;
+}
+
+.containerHeight {
+  height: calc(100vh - 61px);
+}
+
+.colorPrimary {
+  background: #31bb6b;
+}
