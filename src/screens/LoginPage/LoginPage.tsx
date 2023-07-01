@@ -202,9 +202,7 @@ function loginPage(): JSX.Element {
           localStorage.setItem('IsLoggedIn', 'TRUE');
           localStorage.setItem('UserType', loginData.login.user.userType);
           if (localStorage.getItem('IsLoggedIn') == 'TRUE') {
-            // Removing the next 2 lines will cause Authorization header to be copied to clipboard
-            navigator.clipboard.writeText('');
-            history.replace('/orglist');
+            window.location.replace('/orglist');
           }
         } else {
           toast.warn(t('notAuthorised'));
