@@ -1,34 +1,34 @@
+import { useMutation } from '@apollo/client';
+import i18next from 'i18next';
+import cookies from 'js-cookie';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
-import Row from 'react-bootstrap/Row';
+import { Dropdown, Form, Nav, Navbar } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
-import { useMutation } from '@apollo/client';
-import { useTranslation } from 'react-i18next';
-import { Link, useHistory } from 'react-router-dom';
-import Button from 'react-bootstrap/Button';
-import { Dropdown, Form, Nav, Navbar } from 'react-bootstrap';
+import Row from 'react-bootstrap/Row';
 import ReCAPTCHA from 'react-google-recaptcha';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import cookies from 'js-cookie';
-import i18next from 'i18next';
 
-import styles from './LoginPage.module.css';
-import Logo from 'assets/images/talawa-logo-200x200.png';
-import LandingPage from 'components/LandingPage/LandingPage';
+import {
+  BACKEND_URL,
+  REACT_APP_USE_RECAPTCHA,
+  RECAPTCHA_SITE_KEY,
+} from 'Constant/constant';
 import {
   LOGIN_MUTATION,
   RECAPTCHA_MUTATION,
+  SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
-import { languages } from 'utils/languages';
-import {
-  RECAPTCHA_SITE_KEY,
-  REACT_APP_USE_RECAPTCHA,
-  BACKEND_URL,
-} from 'Constant/constant';
-import { errorHandler } from 'utils/errorHandler';
+import Logo from 'assets/images/talawa-logo-200x200.png';
+import LandingPage from 'components/LandingPage/LandingPage';
 import Loader from 'components/Loader/Loader';
+import { errorHandler } from 'utils/errorHandler';
+import { languages } from 'utils/languages';
+import styles from './LoginPage.module.css';
 
 function loginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -53,7 +53,6 @@ function loginPage(): JSX.Element {
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
-  const history = useHistory();
 
   const currentLanguageCode = cookies.get('i18next') || 'en';
 
