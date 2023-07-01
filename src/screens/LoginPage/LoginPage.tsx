@@ -1,9 +1,7 @@
 import { useMutation } from '@apollo/client';
-import i18next from 'i18next';
-import cookies from 'js-cookie';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
-import { Dropdown, Form, Nav, Navbar } from 'react-bootstrap';
+import { Form, Nav, Navbar } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
@@ -24,10 +22,10 @@ import {
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import Logo from 'assets/images/talawa-logo-200x200.png';
+import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
 import LandingPage from 'components/LandingPage/LandingPage';
 import Loader from 'components/Loader/Loader';
 import { errorHandler } from 'utils/errorHandler';
-import { languages } from 'utils/languages';
 import styles from './LoginPage.module.css';
 
 function loginPage(): JSX.Element {
@@ -53,8 +51,6 @@ function loginPage(): JSX.Element {
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
-
-  const currentLanguageCode = cookies.get('i18next') || 'en';
 
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('IsLoggedIn');
@@ -237,38 +233,11 @@ function loginPage(): JSX.Element {
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
             <Nav className="ms-auto">
-              <Dropdown
-                className={styles.languageBtn}
-                data-toggle="dropdown"
-                aria-expanded="false"
-                title="Change Langauge"
-              >
-                <Dropdown.Toggle
-                  variant="success"
-                  id="dropdown-basic"
-                  data-testid="languageDropdownBtn"
-                >
-                  <i className="fas fa-globe"></i>
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  {languages.map((language, index: number) => (
-                    <Dropdown.Item
-                      key={index}
-                      className="dropdown-item"
-                      onClick={async (): Promise<void> => {
-                        await i18next.changeLanguage(language.code);
-                      }}
-                      disabled={currentLanguageCode === language.code}
-                      data-testid={`changeLanguageBtn${index}`}
-                    >
-                      <span
-                        className={`fi fi-${language.country_code} me-2`}
-                      ></span>
-                      {language.name}
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown.Menu>
-              </Dropdown>
+              <ChangeLanguageDropDown
+                parentContainerStyle={'me-3'}
+                btnStyle={'py-2'}
+                btnTextStyle={'me-3'}
+              />
               <Button
                 type="button"
                 className={styles.navloginbtn}

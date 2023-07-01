@@ -16,6 +16,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
+import { BACKEND_URL } from 'Constant/constant';
 
 const MOCKS = [
   {
@@ -123,7 +124,9 @@ describe('Talawa-API server fetch check', () => {
       );
     });
 
-    expect(fetch).toHaveBeenCalledWith('http://localhost:4000/graphql/');
+    expect(fetch).toHaveBeenCalledWith(
+      BACKEND_URL ?? 'http://localhost:4000/graphql/'
+    );
   });
 
   test('displays warning message when resource loading fails', async () => {
@@ -144,7 +147,9 @@ describe('Talawa-API server fetch check', () => {
       );
     });
 
-    expect(fetch).toHaveBeenCalledWith('http://localhost:4000/graphql/');
+    expect(fetch).toHaveBeenCalledWith(
+      BACKEND_URL ?? 'http://localhost:4000/graphql/'
+    );
   });
 });
 
@@ -344,49 +349,6 @@ describe('Testing Login Page Screen', () => {
     );
 
     userEvent.click(screen.getByTestId('loginBtn'));
-
-    await wait();
-  });
-
-  test('Testing change language functionality', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-
-    userEvent.click(screen.getByTestId('languageDropdownBtn'));
-    userEvent.click(screen.getByTestId('changeLanguageBtn1'));
-    userEvent.click(screen.getByTestId('changeLanguageBtn2'));
-    userEvent.click(screen.getByTestId('changeLanguageBtn3'));
-    userEvent.click(screen.getByTestId('changeLanguageBtn4'));
-  });
-
-  test('Testing when language cookie is not set', async () => {
-    Object.defineProperty(window.document, 'cookie', {
-      writable: true,
-      value: 'i18next=',
-    });
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
 
     await wait();
   });
