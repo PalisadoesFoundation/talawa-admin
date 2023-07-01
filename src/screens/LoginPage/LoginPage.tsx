@@ -22,7 +22,11 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import { languages } from 'utils/languages';
-import { RECAPTCHA_SITE_KEY, REACT_APP_USE_RECAPTCHA } from 'Constant/constant';
+import {
+  RECAPTCHA_SITE_KEY,
+  REACT_APP_USE_RECAPTCHA,
+  BACKEND_URL,
+} from 'Constant/constant';
 import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
 
@@ -76,10 +80,9 @@ function loginPage(): JSX.Element {
 
   useEffect(() => {
     async function loadResource(): Promise<void> {
-      const resourceUrl = 'http://localhost:4000/graphql/';
       try {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const response = await fetch(resourceUrl);
+        const response = await fetch(BACKEND_URL ?? 'http://localhost:4000');
       } catch (error: any) {
         /* istanbul ignore next */
         errorHandler(t, error);
