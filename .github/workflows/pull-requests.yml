@@ -17,7 +17,6 @@ on:
 
 env:
     CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
-    READ_ONLY: ${{secrets.REPO_READ_ONLY}}
     
 jobs:
 
@@ -67,6 +66,8 @@ jobs:
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v3
+        with:
+          token: ${{secrets.REPO_READ_ONLY}}
        
       
       - name: Set up Node.js
@@ -80,7 +81,9 @@ jobs:
 
       
       - name: Validate Documents
-        run: echo `${{env.READ_ONLY}}`
+        run: graphql-inspector validate './src/GraphQl/**/*.ts' github:PalisadoesFoundation/talawa-api#develop:schema.graphql --token `${{ secrets.INSPECTOR}}`
+       
+        
 
       
        
