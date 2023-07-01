@@ -150,7 +150,7 @@ The process of proposing a change to Talawa Admin can be summarized as:
 
 ## Internships
 
-If you are participating in any of the various internship programs we ar members of then please read the [introduction guides on our documentation website](https://docs.talawa.io/docs/).
+If you are participating in any of the various internship programs we are members of, then please read the [introduction guides on our documentation website](https://docs.talawa.io/docs/).
 
 ## Community
 There are many ways to communicate with the community.
