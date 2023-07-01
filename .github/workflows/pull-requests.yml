@@ -78,7 +78,7 @@ jobs:
 
       
       - name: Validate Documents
-        run: graphql-inspector validate './src/GraphQl/**/*.ts' github:PalisadoesFoundation/talawa-api#develop:schema.graphql --token '${{secrets.REPO_READ_ONLY}}'
+        run: graphql-inspector validate './src/GraphQl/**/*.ts' github:PalisadoesFoundation/talawa-api#develop:schema.graphql --token '${{secrets.REPO_READ_ONLY }}'
 
       
        
