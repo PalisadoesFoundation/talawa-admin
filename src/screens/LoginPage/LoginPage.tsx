@@ -81,7 +81,9 @@ function loginPage(): JSX.Element {
     async function loadResource(): Promise<void> {
       try {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const response = await fetch(BACKEND_URL ?? 'http://localhost:4000');
+        const response = await fetch(
+          BACKEND_URL ?? 'http://localhost:4000/graphql/'
+        );
       } catch (error: any) {
         /* istanbul ignore next */
         errorHandler(t, error);
