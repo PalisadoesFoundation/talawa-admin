@@ -78,11 +78,11 @@ jobs:
         run: npm install -g @graphql-inspector/cli
 
       - name: Clone API repository
-        run: git clone https://github.com/PalisadoesFoundation/talawa-api
+        run: git clone https://github.com/PalisadoesFoundation/talawa-api && ls -a
 
       
       - name: Validate Documents
-        run: graphql-inspector validate './src/GraphQl/**/*.ts' '/talawa-api/schema.graphql'
+        run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
        
         
 
