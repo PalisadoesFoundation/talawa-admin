@@ -4,6 +4,8 @@ import { useMutation } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { toast } from 'react-toastify';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import CloseIcon from '@mui/icons-material/Close';
 
 import {
   DELETE_POST_MUTATION,
@@ -34,10 +36,19 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
   const [togglePost, setPostToggle] = useState('Read more');
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
 
-  const toggleShowEditModal = (): void => setShowEditModal(!showEditModal);
-  const toggleShowDeleteModal = (): void =>
-    setShowDeleteModal(!showDeleteModal);
+  const toggleShowEditModal = (): void => setShowEditModal((prev) => !prev);
+  const toggleShowDeleteModal = (): void => setShowDeleteModal((prev) => !prev);
+
+  const handleCardClick = (): void => {
+    setModalVisible(true);
+  };
+
+  const handleMoreOptionsClick = (): void => {
+    setMenuVisible(true);
+  };
 
   function handletoggleClick(): void {
     if (togglePost === 'Read more') {
@@ -45,6 +56,18 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
     } else {
       setPostToggle('Read more');
     }
+  }
+
+  function handleEditModal(): void {
+    setModalVisible(false);
+    setMenuVisible(false);
+    setShowEditModal(true);
+  }
+
+  function handleDeleteModal(): void {
+    setModalVisible(false);
+    setMenuVisible(false);
+    setShowDeleteModal(true);
   }
 
   useEffect(() => {
@@ -58,18 +81,17 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
     keyPrefix: 'orgPostCard',
   });
 
-  const [create] = useMutation(DELETE_POST_MUTATION);
-  const [updatePost] = useMutation(UPDATE_POST_MUTATION);
+  const [deletePostMutation] = useMutation(DELETE_POST_MUTATION);
+  const [updatePostMutation] = useMutation(UPDATE_POST_MUTATION);
 
   const deletePost = async (): Promise<void> => {
     try {
-      const { data } = await create({
+      const { data } = await deletePostMutation({
         variables: {
           id: props.id,
         },
       });
 
-      /* istanbul ignore next */
       if (data) {
         toast.success(t('postDeleted'));
         setTimeout(() => {
@@ -77,7 +99,6 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
         }, 2000);
       }
     } catch (error: any) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
@@ -86,7 +107,6 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
     const { name, value } = e.target;
-
     setPostFormState({ ...postformState, [name]: value });
   };
 
@@ -96,7 +116,7 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
     e.preventDefault();
 
     try {
-      const { data } = await updatePost({
+      const { data } = await updatePostMutation({
         variables: {
           id: props.id,
           title: postformState.posttitle,
@@ -104,7 +124,6 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
         },
       });
 
-      /* istanbul ignore next */
       if (data) {
         toast.success(t('postUpdated'));
         setTimeout(() => {
@@ -112,92 +131,120 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
         }, 2000);
       }
     } catch (error: any) {
-      /* istanbul ignore next */
       toast.error(error.message);
     }
   };
 
   return (
     <>
-      <div className="col-sm-6">
-        <div className={styles.cards}>
-          <div className={styles.dispflex}>
-            <h2>{props.postTitle}</h2>
-          </div>
+      <div className="col-xl-4 col-lg-4 col-md-6">
+        <div className={styles.cards} onClick={handleCardClick}>
           {props.postPhoto ? (
             <p>
               <span>
                 {' '}
                 <img
                   className={styles.postimage}
-                  alt="image not found"
-                  src={props?.postPhoto}
+                  alt="image not found 1"
+                  src={props.postPhoto}
                 />
+                <span className={styles.knowMoreText}>Know More</span>
               </span>
             </p>
           ) : (
-            <img
-              src={defaultImg}
-              alt="image not found"
-              className={styles.postimage}
-            />
-          )}
-          <p>
-            {t('author')}:<span> {props.postAuthor}</span>
-          </p>
-          <div className={styles.infodiv}>
-            {togglePost === 'Read more' ? (
-              <p data-testid="toggleContent">
-                {props.postInfo.length > 43
-                  ? props.postInfo.substring(0, 40) + '...'
-                  : props.postInfo}
-              </p>
-            ) : (
-              <p data-testid="toggleContent">{props.postInfo}</p>
-            )}
-            <Button
-              role="toggleBtn"
-              data-testid="toggleBtn"
-              className={`${
-                props.postInfo.length > 43
-                  ? styles.toggleClickBtn
-                  : styles.toggleClickBtnNone
-              }`}
-              onClick={handletoggleClick}
-            >
-              {togglePost}
-            </Button>
-          </div>
-          <p>
-            {t('videoURL')}:
             <span>
-              {' '}
-              <a href={props.postVideo}>{props.postVideo}</a>
+              <img
+                src={defaultImg}
+                alt="image not found"
+                className={styles.postimage}
+              />
+              <span className={styles.knowMoreText}>Know More</span>
             </span>
-          </p>
-
-          <div className={styles.iconContainer}>
-            <Button
-              className="me-3"
-              size="sm"
-              variant="danger"
-              data-testid="deletePostModalBtn"
-              onClick={toggleShowDeleteModal}
-            >
-              Delete <i className="fa fa-trash"></i>
-            </Button>
-            <Button
-              variant="success"
-              size="sm"
-              onClick={toggleShowEditModal}
-              data-testid="editPostModalBtn"
-            >
-              Edit <i className="fas fa-edit"></i>
-            </Button>
-          </div>
+          )}
         </div>
       </div>
+      {modalVisible && (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <div className={styles.modalImage}>
+              <img src={props.postPhoto} alt="Post Image" />
+            </div>
+            <div className={styles.modalInfo}>
+              <p>
+                {t('author')}:<span> {props.postAuthor}</span>
+              </p>
+              <div className={styles.infodiv}>
+                {togglePost === 'Read more' ? (
+                  <p data-testid="toggleContent">
+                    {props.postInfo.length > 43
+                      ? props.postInfo.substring(0, 40) + '...'
+                      : props.postInfo}
+                  </p>
+                ) : (
+                  <p data-testid="toggleContent">{props.postInfo}</p>
+                )}
+                <button
+                  role="toggleBtn"
+                  data-testid="toggleBtn"
+                  className={`${
+                    props.postInfo.length > 43
+                      ? styles.toggleClickBtn
+                      : styles.toggleClickBtnNone
+                  }`}
+                  onClick={handletoggleClick}
+                >
+                  {togglePost}
+                </button>
+              </div>
+            </div>
+            <button
+              className={styles.moreOptionsButton}
+              onClick={handleMoreOptionsClick}
+            >
+              <MoreVertIcon />
+            </button>
+            <button
+              className={styles.closeButton}
+              onClick={(): void => setModalVisible(false)}
+            >
+              <CloseIcon />
+            </button>
+          </div>
+        </div>
+      )}
 
+      {menuVisible && (
+        <div className={styles.menuModal}>
+          <div className={styles.menuContent}>
+            <ul className={styles.menuOptions}>
+              <li
+                data-toggle="modal"
+                data-target={`#editPostModal${props.id}`}
+                onClick={handleEditModal}
+                data-testid="editPostModalBtn"
+              >
+                Edit Post{' '}
+              </li>
+              <li
+                data-toggle="modal"
+                data-target={`#deletePostModal${props.id}`}
+                onClick={handleDeleteModal}
+              >
+                Delete Post{' '}
+              </li>
+              <li>Pin post</li>
+              <li>Report</li>
+              <li>Share</li>
+              <li
+                className={styles.list}
+                onClick={(): void => setMenuVisible(false)}
+              >
+                Close
+              </li>
+            </ul>
+          </div>
+        </div>
+      )}
       {/* Delete Modal */}
       <Modal show={showDeleteModal} onHide={toggleShowDeleteModal}>
         <Modal.Header>
@@ -269,11 +316,11 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
               <Form.Control
                 accept="image/*"
                 id="postImageUrl"
-                name="photo"
+                name="postphoto"
                 type="file"
                 placeholder={t('image')}
                 multiple={false}
-                //onChange=""
+                onChange={handleInputEvent}
               />
             </div>
             <div className="form-group">
@@ -281,13 +328,13 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                 {t('video')}:
               </label>
               <Form.Control
-                accept="image/*"
+                accept="video/*"
                 id="postVideoUrl"
-                name="video"
+                name="postvideo"
                 type="file"
                 placeholder={t('video')}
                 multiple={false}
-                //onChange=""
+                onChange={handleInputEvent}
               />
             </div>
           </Modal.Body>
@@ -308,4 +355,5 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
     </>
   );
 }
+
 export default orgPostCard;
