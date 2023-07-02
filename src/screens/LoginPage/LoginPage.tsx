@@ -27,6 +27,8 @@ import LandingPage from 'components/LandingPage/LandingPage';
 import Loader from 'components/Loader/Loader';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './LoginPage.module.css';
+import Palisadoes from 'assets/images/palisadoes_logo.png';
+import Talawa from 'assets/images/talawa-logo-200x200.png';
 
 function loginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -223,48 +225,31 @@ function loginPage(): JSX.Element {
   return (
     <>
       <section className={styles.login_background}>
-        <Navbar className={styles.navbarbg} expand="xl">
-          <Navbar.Brand className={styles.navbarBrand}>
-            <a className={styles.logo}>
-              <img src={Logo} />
-              <strong>{t('talawa_portal')}</strong>
-            </a>
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="navbarScroll" />
-          <Navbar.Collapse id="navbarScroll">
-            <Nav className="ms-auto">
-              <ChangeLanguageDropDown
-                parentContainerStyle={'me-3'}
-                btnStyle={'py-2'}
-                btnTextStyle={'me-3'}
+        <Row>
+          <Col sm={7} className={styles.left_portion}>
+            <div>
+              <img
+                className={styles.palisadoes_logo}
+                src={Palisadoes}
+                alt="Palisadoes logo"
               />
-              <Button
-                type="button"
-                className={styles.navloginbtn}
-                value="Login"
-                onClick={toggleLoginModal}
-                data-testid="loginModalBtn"
-              >
-                {t('login')}
-              </Button>
-            </Nav>
-          </Navbar.Collapse>
-        </Navbar>
-        <div className={styles.reg_bg}>
-          <Row>
-            <Col sm={7} className={styles.leftmainbg}>
-              <div className={styles.homeleft}>
-                <LandingPage />
-              </div>
-            </Col>
-            <Col sm={5} className={styles.rightmainbg}>
-              <div className={styles.homeright}>
-                <h1>{t('register')}</h1>
-                {/* <h2>to seamlessly manage your Organization.</h2> */}
-                <form onSubmit={signupLink}>
-                  <div className={styles.dispflex}>
+              <p className="text-center">{t('fromPalisadoes')}</p>
+            </div>
+          </Col>
+          <Col sm={5}>
+            <div className={styles.right_portion}>
+              <ChangeLanguageDropDown parentContainerStyle="mx-0" />
+              <img
+                className={styles.talawa_logo}
+                src={Talawa}
+                alt="Talawa Logo"
+              />
+              <h1 className="fs-2 fw-bold text-dark mb-3">{t('register')}</h1>
+              <form onSubmit={signupLink}>
+                <Row className="mb-3">
+                  <Col sm={6}>
                     <div>
-                      <label>{t('firstName')}</label>
+                      <Form.Label>{t('firstName')}</Form.Label>
                       <Form.Control
                         type="text"
                         id="signfirstname"
@@ -280,8 +265,10 @@ function loginPage(): JSX.Element {
                         }}
                       />
                     </div>
+                  </Col>
+                  <Col sm={6}>
                     <div>
-                      <label>{t('lastName')}</label>
+                      <Form.Label>{t('lastName')}</Form.Label>
                       <Form.Control
                         type="text"
                         id="signlastname"
@@ -297,27 +284,31 @@ function loginPage(): JSX.Element {
                         }}
                       />
                     </div>
-                  </div>
-                  <label>{t('email')}</label>
-                  <Form.Control
-                    type="email"
-                    id="signemail"
-                    placeholder={t('email')}
-                    autoComplete="on"
-                    required
-                    value={signformState.signEmail}
-                    onChange={(e): void => {
-                      setSignFormState({
-                        ...signformState,
-                        signEmail: e.target.value.toLowerCase(),
-                      });
-                    }}
-                  />
-                  <div className={styles.passwordalert}>
-                    <label>{t('password')}</label>
+                  </Col>
+                </Row>
+                <Form.Label>{t('email')}</Form.Label>
+                <Form.Control
+                  type="email"
+                  id="signemail"
+                  className="mb-3"
+                  placeholder={t('email')}
+                  autoComplete="on"
+                  required
+                  value={signformState.signEmail}
+                  onChange={(e): void => {
+                    setSignFormState({
+                      ...signformState,
+                      signEmail: e.target.value.toLowerCase(),
+                    });
+                  }}
+                />
+                <div className={styles.passwordalert}>
+                  <Form.Label>{t('password')}</Form.Label>
+                  <div className="postion-relative d-block">
                     <Form.Control
                       type={showPassword ? 'text' : 'password'}
                       id="signpassword"
+                      className="mb-3"
                       data-testid="passwordField"
                       placeholder={t('password')}
                       onFocus={(): void => setIsInputFocused(true)}
@@ -331,199 +322,94 @@ function loginPage(): JSX.Element {
                         });
                       }}
                     />
-                    <label
-                      id="showPasswordr"
-                      className={styles.showregister}
-                      onClick={togglePassword}
-                      data-testid="showPasswordr"
-                    >
-                      {showPassword ? (
-                        <i className="fas fa-eye"></i>
-                      ) : (
-                        <i className="fas fa-eye-slash"></i>
-                      )}
-                    </label>
-                    {isInputFocused &&
-                      signformState.signPassword.length < 8 && (
-                        <span data-testid="passwordCheck">
-                          {t('atleast_8_char_long')}
-                        </span>
-                      )}
-                    {!isInputFocused &&
-                      signformState.signPassword.length > 0 &&
-                      signformState.signPassword.length < 8 && (
-                        <span data-testid="passwordCheck">
-                          {t('atleast_8_char_long')}
-                        </span>
-                      )}
-                  </div>
-                  <div className={styles.passwordalert}>
-                    <label>{t('confirmPassword')}</label>
-                    <Form.Control
-                      type={showConfirmPassword ? 'text' : 'password'}
-                      id="signpassword"
-                      placeholder={t('confirmPassword')}
-                      required
-                      value={signformState.cPassword}
-                      onChange={(e): void => {
-                        setSignFormState({
-                          ...signformState,
-                          cPassword: e.target.value,
-                        });
-                      }}
-                      data-testid="cpassword"
-                    />
-                    <label
-                      id="showPasswordr"
-                      className={styles.showregister}
-                      onClick={toggleConfirmPassword}
-                      data-testid="showPasswordrCon"
-                    >
-                      {showConfirmPassword ? (
-                        <i className="fas fa-eye"></i>
-                      ) : (
-                        <i className="fas fa-eye-slash"></i>
-                      )}
-                    </label>
-                    {signformState.cPassword.length > 0 &&
-                      signformState.signPassword !==
-                        signformState.cPassword && (
-                        <span data-testid="passwordCheck">
-                          {t('Password_and_Confirm_password_mismatches.')}
-                        </span>
-                      )}
-                  </div>
-                  {REACT_APP_USE_RECAPTCHA === 'yes' ? (
-                    <div className="googleRecaptcha">
-                      <ReCAPTCHA
-                        ref={recaptchaRef}
-                        sitekey={
-                          /* istanbul ignore next */
-                          RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
-                        }
-                      />
+                    <div className={'position-absolute top-0 end-0'}>
+                      <button
+                        id="showPasswordr"
+                        onClick={togglePassword}
+                        data-testid="showPasswordr"
+                      >
+                        {showPassword ? (
+                          <i className="fas fa-eye"></i>
+                        ) : (
+                          <i className="fas fa-eye-slash"></i>
+                        )}
+                      </button>
                     </div>
-                  ) : (
-                    /* istanbul ignore next */
-                    <></>
+                  </div>
+                  {isInputFocused && signformState.signPassword.length < 8 && (
+                    <div className="form-text" data-testid="passwordCheck">
+                      {t('atleast_8_char_long')}
+                    </div>
                   )}
-                  <Button
-                    type="submit"
-                    className={styles.greenregbtn}
-                    value="Register"
-                    data-testid="registrationBtn"
-                  >
-                    {t('register')}
-                  </Button>
-                </form>
-              </div>
-            </Col>
-          </Row>
-        </div>
-
-        <Modal
-          show={showModal}
-          size="sm"
-          aria-labelledby="contained-modal-title-vcenter"
-          onHide={toggleLoginModal}
-          centered
-        >
-          <Modal.Header>
-            <p className={styles.logintitle}>{t('login')} </p>
-            <a
-              onClick={toggleLoginModal}
-              className={styles.cancel}
-              data-testid="hideModalBtn"
-            >
-              <i className="fa fa-times"></i>
-            </a>
-          </Modal.Header>
-          <Modal.Body>
-            <form onSubmit={loginLink}>
-              <label>{t('email')}</label>
-              <Form.Control
-                type="email"
-                id="email"
-                className="input_box"
-                placeholder={t('enterEmail')}
-                autoComplete="off"
-                required
-                value={formState.email}
-                onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    email: e.target.value,
-                  });
-                }}
-              />
-
-              <label>{t('password')}</label>
-              <div>
-                <Form.Control
-                  type={showPassword ? 'text' : 'password'}
-                  className="input_box_second"
-                  placeholder={t('enterPassword')}
-                  required
-                  value={formState.password}
-                  data-testid="password"
-                  onChange={(e): void => {
-                    setFormState({
-                      ...formState,
-                      password: e.target.value,
-                    });
-                  }}
-                />
-                <label
-                  id="showPassword"
-                  className={styles.showPassword}
-                  onClick={togglePassword}
-                  data-testid="showPassword"
-                >
-                  {showPassword ? (
-                    <i className="fas fa-eye"></i>
-                  ) : (
-                    <i className="fas fa-eye-slash"></i>
-                  )}
-                </label>
-              </div>
-              {REACT_APP_USE_RECAPTCHA === 'yes' ? (
-                <div className="googleRecaptcha">
-                  <ReCAPTCHA
-                    ref={recaptchaRef}
-                    sitekey={
-                      /* istanbul ignore next */
-                      RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
-                    }
-                  />
+                  {!isInputFocused &&
+                    signformState.signPassword.length > 0 &&
+                    signformState.signPassword.length < 8 && (
+                      <div className="form-text" data-testid="passwordCheck">
+                        {t('atleast_8_char_long')}
+                      </div>
+                    )}
                 </div>
-              ) : (
-                /* istanbul ignore next */
-                <></>
-              )}
-              <Button
-                type="submit"
-                className={styles.greenregbtn}
-                value="Login"
-                data-testid="loginBtn"
-              >
-                {t('login')}
-              </Button>
-              <Link to="/forgotPassword" className={styles.forgotpwd}>
-                {t('forgotPassword')}
-              </Link>
-              <hr></hr>
-              <span className={styles.noaccount}>{t('doNotOwnAnAccount')}</span>
-              <Button
-                type="button"
-                className={styles.whiteloginbtn}
-                value="Register"
-                onClick={toggleLoginModal}
-              >
-                {t('register')}
-              </Button>
-            </form>
-          </Modal.Body>
-        </Modal>
+                <div className={styles.passwordalert}>
+                  <Form.Label>{t('confirmPassword')}</Form.Label>
+                  <Form.Control
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    id="signpassword"
+                    placeholder={t('confirmPassword')}
+                    required
+                    value={signformState.cPassword}
+                    onChange={(e): void => {
+                      setSignFormState({
+                        ...signformState,
+                        cPassword: e.target.value,
+                      });
+                    }}
+                    data-testid="cpassword"
+                  />
+                  <label
+                    id="showPasswordr"
+                    className={styles.showregister}
+                    onClick={toggleConfirmPassword}
+                    data-testid="showPasswordrCon"
+                  >
+                    {showConfirmPassword ? (
+                      <i className="fas fa-eye"></i>
+                    ) : (
+                      <i className="fas fa-eye-slash"></i>
+                    )}
+                  </label>
+                  {signformState.cPassword.length > 0 &&
+                    signformState.signPassword !== signformState.cPassword && (
+                      <div className="form-text" data-testid="passwordCheck">
+                        {t('Password_and_Confirm_password_mismatches.')}
+                      </div>
+                    )}
+                </div>
+                {REACT_APP_USE_RECAPTCHA === 'yes' ? (
+                  <div className="googleRecaptcha">
+                    <ReCAPTCHA
+                      ref={recaptchaRef}
+                      sitekey={
+                        /* istanbul ignore next */
+                        RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
+                      }
+                    />
+                  </div>
+                ) : (
+                  /* istanbul ignore next */
+                  <></>
+                )}
+                <Button
+                  type="submit"
+                  className={styles.greenregbtn}
+                  value="Register"
+                  data-testid="registrationBtn"
+                >
+                  {t('register')}
+                </Button>
+              </form>
+            </div>
+          </Col>
+        </Row>
       </section>
     </>
   );

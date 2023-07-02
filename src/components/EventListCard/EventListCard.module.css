@@ -50,27 +50,6 @@
   grid-column: auto / span 1;
 }
 
-form > label {
-  font-weight: bold;
-  padding-bottom: 1px;
-  font-size: 14px;
-  color: #707070;
-}
-form > input {
-  display: block;
-  margin-bottom: 20px;
-  border: 1px solid #e8e5e5;
-  box-shadow: 2px 1px #e8e5e5;
-  padding: 10px 20px;
-  border-radius: 5px;
-  background: none;
-  width: 100%;
-  transition: all 0.3s ease-in-out;
-  -webkit-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-in-out;
-  -ms-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
-}
 .sidebarsticky > input {
   text-decoration: none;
   margin-bottom: 50px;
@@ -162,12 +141,6 @@ form > input {
   align-items: left;
   justify-content: left;
   flex-direction: column;
-}
-form > label {
-  font-weight: bold;
-  padding-bottom: 1px;
-  font-size: 14px;
-  color: #707070;
 }
 .titlemodal {
   color: #707070;
