@@ -9,6 +9,9 @@
   justify-content: space-between;
   box-shadow: 0px 0px 8px 2px #c8c8c8;
 }
+.head {
+  margin-top: 5rem;
+}
 
 .checkboxdiv {
   position: relative;
@@ -79,6 +82,21 @@
   padding-bottom: 12px;
   cursor: pointer;
 }
+.preview {
+  display: flex;
+  position: relative;
+  width: 100%;
+  margin-top: 10px;
+  justify-content: center;
+}
+.preview img {
+  width: 400px;
+  height: auto;
+}
+.preview video {
+  width: 400px;
+  height: auto;
+}
 
 .logintitle {
   color: #707070;
@@ -147,6 +165,7 @@
   border-radius: 5px;
   font-size: 16px;
   height: 60%;
+  width: 20%;
   color: white;
   outline: none;
   font-weight: 600;
@@ -159,7 +178,6 @@
   justify-content: space-between;
   border: none;
 }
-
 .form_wrapper {
   margin-top: 27px;
   top: 50%;
@@ -237,18 +255,32 @@ textarea {
 .modalbody {
   width: 50px;
 }
-.greenregbtn {
+/* .greenregbtn {
   border: 1px solid #e8e5e5;
   box-shadow: 0 2px 2px #e8e5e5;
   border-radius: 5px;
   background-color: #31bb6b;
   font-size: 16px;
-  height: 60%;
+  height: 10%;
+  width: 50%;
   color: white;
   outline: none;
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
+} */
+.closeButton {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background: transparent;
+  transform: scale(1.2);
+  cursor: pointer;
+  border: none;
+  color: #707070;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
 }
 .sidebarsticky > input {
   text-decoration: none;
@@ -270,7 +302,9 @@ textarea {
   box-shadow: 0 0 5pt 0.5pt #d3d3d3;
   outline: none;
 }
-
+button[data-testid='createPostBtn'] {
+  display: block;
+}
 .loader,
 .loader:after {
   border-radius: 50%;
