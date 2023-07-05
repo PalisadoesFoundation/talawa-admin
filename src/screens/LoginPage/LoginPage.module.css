@@ -1,33 +1,111 @@
 .login_background {
-  /* background-color: #000; */
   min-height: 100vh;
 }
 
-.left_portion {
+.row .left_portion {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   height: 100vh;
 }
-.palisadoes_logo {
+
+.row .left_portion .inner .palisadoes_logo {
   width: 600px;
 }
 
-.right_portion {
+.row .right_portion {
   height: 100vh;
+  position: relative;
   overflow-y: scroll;
-  padding: 1rem 2rem;
+  padding: 1rem 2.5rem;
   background: var(--bs-white);
 }
-.right_portion > .talawa_logo {
-  height: 150px;
-  display: block;
-  margin: 0 auto;
+
+.row .right_portion .langChangeBtn {
+  margin: 0;
+  position: absolute;
+  top: 1rem;
+  left: 2rem;
 }
 
-.rightBtn {
+.row .right_portion .talawa_logo {
+  height: 150px;
+  display: block;
+  margin: 1rem auto;
+}
+
+.row .orText {
+  display: block;
   position: absolute;
-  top: 0;
-  right: 0;
+  top: calc(-0.7rem - 0.5rem);
+  left: calc(50% - 2.6rem);
+  margin: 0 auto;
+  padding: 0.5rem 2rem;
+  z-index: 100;
+  background: var(--bs-white);
+  color: var(--bs-secondary);
+}
+
+@media (max-width: 992px) {
+  .row .left_portion {
+    padding: 0 2rem;
+  }
+
+  .row .left_portion .inner .palisadoes_logo {
+    width: 100%;
+  }
+}
+
+@media (max-width: 769px) {
+  .row {
+    flex-direction: column-reverse;
+  }
+
+  .row .right_portion,
+  .row .left_portion {
+    height: unset;
+  }
+
+  .row .right_portion {
+    min-height: 100vh;
+    overflow-y: unset;
+  }
+
+  .row .left_portion .inner {
+    display: flex;
+    justify-content: center;
+  }
+
+  .row .left_portion .inner .palisadoes_logo {
+    height: 70px;
+    width: unset;
+    position: absolute;
+    top: 0.25rem;
+    right: 0;
+    z-index: 100;
+  }
+
+  .row .left_portion .inner p {
+    margin-bottom: 0;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 577px) {
+  .row .right_portion {
+    padding: 1rem 1rem 0 1rem;
+  }
+
+  .row .right_portion .langChangeBtn {
+    position: relative;
+    margin: 0;
+    left: 0;
+    top: 0;
+  }
+
+  .row .right_portion .talawa_logo {
+    height: 120px;
+    margin: 0.75rem auto;
+  }
 }

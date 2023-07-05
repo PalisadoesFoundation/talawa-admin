@@ -35,7 +35,7 @@ function loginPage(): JSX.Element {
 
   document.title = t('title');
 
-  const [showModal, setShowModal] = React.useState(false);
+  const [showLogin, setShowLogin] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
   const [componentLoader, setComponentLoader] = useState(true);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [signformState, setSignFormState] = useState({
@@ -62,7 +62,6 @@ function loginPage(): JSX.Element {
     setComponentLoader(false);
   }, []);
 
-  const toggleLoginModal = (): void => setShowModal(!showModal);
   const togglePassword = (): void => setShowPassword(!showPassword);
   const toggleConfirmPassword = (): void =>
     setShowConfirmPassword(!showConfirmPassword);
@@ -225,9 +224,9 @@ function loginPage(): JSX.Element {
   return (
     <>
       <section className={styles.login_background}>
-        <Row>
-          <Col sm={7} className={styles.left_portion}>
-            <div>
+        <Row className={styles.row}>
+          <Col sm={0} md={6} lg={7} className={styles.left_portion}>
+            <div className={styles.inner}>
               <img
                 className={styles.palisadoes_logo}
                 src={Palisadoes}
@@ -236,177 +235,305 @@ function loginPage(): JSX.Element {
               <p className="text-center">{t('fromPalisadoes')}</p>
             </div>
           </Col>
-          <Col sm={5}>
+          <Col sm={12} md={6} lg={5}>
             <div className={styles.right_portion}>
-              <ChangeLanguageDropDown parentContainerStyle="mx-0" />
+              <ChangeLanguageDropDown
+                parentContainerStyle={styles.langChangeBtn}
+              />
               <img
                 className={styles.talawa_logo}
                 src={Talawa}
                 alt="Talawa Logo"
               />
-              <h1 className="fs-2 fw-bold text-dark mb-3">{t('register')}</h1>
-              <form onSubmit={signupLink}>
-                <Row className="mb-3">
-                  <Col sm={6}>
-                    <div>
-                      <Form.Label>{t('firstName')}</Form.Label>
-                      <Form.Control
-                        type="text"
-                        id="signfirstname"
-                        placeholder={t('firstName')}
-                        autoComplete="on"
-                        required
-                        value={signformState.signfirstName}
-                        onChange={(e): void => {
-                          setSignFormState({
-                            ...signformState,
-                            signfirstName: e.target.value,
-                          });
-                        }}
-                      />
-                    </div>
-                  </Col>
-                  <Col sm={6}>
-                    <div>
-                      <Form.Label>{t('lastName')}</Form.Label>
-                      <Form.Control
-                        type="text"
-                        id="signlastname"
-                        placeholder={t('lastName')}
-                        autoComplete="on"
-                        required
-                        value={signformState.signlastName}
-                        onChange={(e): void => {
-                          setSignFormState({
-                            ...signformState,
-                            signlastName: e.target.value,
-                          });
-                        }}
-                      />
-                    </div>
-                  </Col>
-                </Row>
-                <Form.Label>{t('email')}</Form.Label>
-                <Form.Control
-                  type="email"
-                  id="signemail"
-                  className="mb-3"
-                  placeholder={t('email')}
-                  autoComplete="on"
-                  required
-                  value={signformState.signEmail}
-                  onChange={(e): void => {
-                    setSignFormState({
-                      ...signformState,
-                      signEmail: e.target.value.toLowerCase(),
-                    });
-                  }}
-                />
-                <div className={styles.passwordalert}>
-                  <Form.Label>{t('password')}</Form.Label>
-                  <div className="postion-relative d-block">
+              {showLogin === 'LOGIN' ? (
+                /* LOGIN FORM */
+                <div className="fade-in-top">
+                  <form onSubmit={loginLink}>
+                    <h1 className="fs-2 fw-bold text-dark mb-3">
+                      {t('login')}
+                    </h1>
+                    <Form.Label>{t('email')}</Form.Label>
                     <Form.Control
-                      type={showPassword ? 'text' : 'password'}
-                      id="signpassword"
+                      type="email"
+                      id="email"
                       className="mb-3"
-                      data-testid="passwordField"
-                      placeholder={t('password')}
-                      onFocus={(): void => setIsInputFocused(true)}
-                      onBlur={(): void => setIsInputFocused(false)}
+                      placeholder={t('enterEmail')}
+                      autoComplete="off"
                       required
-                      value={signformState.signPassword}
+                      value={formState.email}
                       onChange={(e): void => {
-                        setSignFormState({
-                          ...signformState,
-                          signPassword: e.target.value,
+                        setFormState({
+                          ...formState,
+                          email: e.target.value,
                         });
                       }}
                     />
-                    <div className={'position-absolute top-0 end-0'}>
-                      <button
+                    <Form.Label>{t('password')}</Form.Label>
+                    <div className="position-relative">
+                      <Form.Control
+                        type={showPassword ? 'text' : 'password'}
+                        className="input_box_second"
+                        placeholder={t('enterPassword')}
+                        required
+                        value={formState.password}
+                        data-testid="password"
+                        onChange={(e): void => {
+                          setFormState({
+                            ...formState,
+                            password: e.target.value,
+                          });
+                        }}
+                      />
+                      <Button
                         id="showPasswordr"
                         onClick={togglePassword}
                         data-testid="showPasswordr"
+                        className={'position-absolute z-10 bottom-0 end-0'}
                       >
                         {showPassword ? (
                           <i className="fas fa-eye"></i>
                         ) : (
                           <i className="fas fa-eye-slash"></i>
                         )}
-                      </button>
+                      </Button>
                     </div>
-                  </div>
-                  {isInputFocused && signformState.signPassword.length < 8 && (
-                    <div className="form-text" data-testid="passwordCheck">
-                      {t('atleast_8_char_long')}
+                    <div className="text-end mt-3">
+                      <Link to="/forgotPassword" className="text-secondary">
+                        {t('forgotPassword')}
+                      </Link>
                     </div>
-                  )}
-                  {!isInputFocused &&
-                    signformState.signPassword.length > 0 &&
-                    signformState.signPassword.length < 8 && (
-                      <div className="form-text" data-testid="passwordCheck">
-                        {t('atleast_8_char_long')}
+                    {REACT_APP_USE_RECAPTCHA === 'yes' ? (
+                      <div className="googleRecaptcha">
+                        <ReCAPTCHA
+                          ref={recaptchaRef}
+                          className="mt-3"
+                          sitekey={
+                            /* istanbul ignore next */
+                            RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
+                          }
+                        />
                       </div>
-                    )}
-                </div>
-                <div className={styles.passwordalert}>
-                  <Form.Label>{t('confirmPassword')}</Form.Label>
-                  <Form.Control
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    id="signpassword"
-                    placeholder={t('confirmPassword')}
-                    required
-                    value={signformState.cPassword}
-                    onChange={(e): void => {
-                      setSignFormState({
-                        ...signformState,
-                        cPassword: e.target.value,
-                      });
-                    }}
-                    data-testid="cpassword"
-                  />
-                  <label
-                    id="showPasswordr"
-                    className={styles.showregister}
-                    onClick={toggleConfirmPassword}
-                    data-testid="showPasswordrCon"
-                  >
-                    {showConfirmPassword ? (
-                      <i className="fas fa-eye"></i>
                     ) : (
-                      <i className="fas fa-eye-slash"></i>
+                      /* istanbul ignore next */
+                      <></>
                     )}
-                  </label>
-                  {signformState.cPassword.length > 0 &&
-                    signformState.signPassword !== signformState.cPassword && (
-                      <div className="form-text" data-testid="passwordCheck">
-                        {t('Password_and_Confirm_password_mismatches.')}
-                      </div>
-                    )}
+                    <Button
+                      type="submit"
+                      className="mt-3 mb-3 w-100"
+                      value="Login"
+                      data-testid="loginBtn"
+                    >
+                      {t('login')}
+                    </Button>
+                    <div className="position-relative">
+                      <hr />
+                      <span className={styles.orText}>OR</span>
+                    </div>
+                    <Button
+                      variant="outline-secondary"
+                      value="Register"
+                      className="mt-3 mb-3 w-100"
+                      onClick={(): void => setShowLogin('REGISTER')}
+                    >
+                      {t('register')}
+                    </Button>
+                  </form>
                 </div>
-                {REACT_APP_USE_RECAPTCHA === 'yes' ? (
-                  <div className="googleRecaptcha">
-                    <ReCAPTCHA
-                      ref={recaptchaRef}
-                      sitekey={
-                        /* istanbul ignore next */
-                        RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
-                      }
+              ) : (
+                /* REGISTER FORM */
+                <div className="fade-in-top">
+                  <Form onSubmit={signupLink}>
+                    <h1 className="fs-2 fw-bold text-dark mb-3">
+                      {t('register')}
+                    </h1>
+                    <Row>
+                      <Col sm={6}>
+                        <div>
+                          <Form.Label>{t('firstName')}</Form.Label>
+                          <Form.Control
+                            type="text"
+                            id="signfirstname"
+                            className="mb-3"
+                            placeholder={t('firstName')}
+                            autoComplete="on"
+                            required
+                            value={signformState.signfirstName}
+                            onChange={(e): void => {
+                              setSignFormState({
+                                ...signformState,
+                                signfirstName: e.target.value,
+                              });
+                            }}
+                          />
+                        </div>
+                      </Col>
+                      <Col sm={6}>
+                        <div>
+                          <Form.Label>{t('lastName')}</Form.Label>
+                          <Form.Control
+                            type="text"
+                            id="signlastname"
+                            className="mb-3"
+                            placeholder={t('lastName')}
+                            autoComplete="on"
+                            required
+                            value={signformState.signlastName}
+                            onChange={(e): void => {
+                              setSignFormState({
+                                ...signformState,
+                                signlastName: e.target.value,
+                              });
+                            }}
+                          />
+                        </div>
+                      </Col>
+                    </Row>
+                    <Form.Label>{t('email')}</Form.Label>
+                    <Form.Control
+                      type="email"
+                      id="signemail"
+                      className="mb-3"
+                      placeholder={t('email')}
+                      autoComplete="on"
+                      required
+                      value={signformState.signEmail}
+                      onChange={(e): void => {
+                        setSignFormState({
+                          ...signformState,
+                          signEmail: e.target.value.toLowerCase(),
+                        });
+                      }}
                     />
-                  </div>
-                ) : (
-                  /* istanbul ignore next */
-                  <></>
-                )}
-                <Button
-                  type="submit"
-                  className={styles.greenregbtn}
-                  value="Register"
-                  data-testid="registrationBtn"
-                >
-                  {t('register')}
-                </Button>
-              </form>
+                    <div className="position-relative mb-3">
+                      <Form.Label>{t('password')}</Form.Label>
+                      <div className="position-relative">
+                        <Form.Control
+                          type={showPassword ? 'text' : 'password'}
+                          id="signpassword"
+                          data-testid="passwordField"
+                          placeholder={t('password')}
+                          onFocus={(): void => setIsInputFocused(true)}
+                          onBlur={(): void => setIsInputFocused(false)}
+                          required
+                          value={signformState.signPassword}
+                          onChange={(e): void => {
+                            setSignFormState({
+                              ...signformState,
+                              signPassword: e.target.value,
+                            });
+                          }}
+                        />
+                        <Button
+                          id="showPasswordr"
+                          onClick={togglePassword}
+                          data-testid="showPasswordr"
+                          className={'position-absolute z-10 bottom-0 end-0'}
+                        >
+                          {showPassword ? (
+                            <i className="fas fa-eye"></i>
+                          ) : (
+                            <i className="fas fa-eye-slash"></i>
+                          )}
+                        </Button>
+                      </div>
+                      {isInputFocused &&
+                        signformState.signPassword.length < 8 && (
+                          <div
+                            className="form-text text-danger"
+                            data-testid="passwordCheck"
+                          >
+                            {t('atleast_8_char_long')}
+                          </div>
+                        )}
+                      {!isInputFocused &&
+                        signformState.signPassword.length > 0 &&
+                        signformState.signPassword.length < 8 && (
+                          <div
+                            className="form-text text-danger"
+                            data-testid="passwordCheck"
+                          >
+                            {t('atleast_8_char_long')}
+                          </div>
+                        )}
+                    </div>
+                    <div className="position-relative">
+                      <Form.Label>{t('confirmPassword')}</Form.Label>
+                      <div className="position-relative">
+                        <Form.Control
+                          type={showConfirmPassword ? 'text' : 'password'}
+                          id="signpassword"
+                          placeholder={t('confirmPassword')}
+                          required
+                          value={signformState.cPassword}
+                          onChange={(e): void => {
+                            setSignFormState({
+                              ...signformState,
+                              cPassword: e.target.value,
+                            });
+                          }}
+                          data-testid="cpassword"
+                        />
+                        <Button
+                          id="showPasswordr"
+                          data-testid="showPasswordrCon"
+                          onClick={toggleConfirmPassword}
+                          className={'position-absolute z-10 bottom-0 end-0'}
+                        >
+                          {showConfirmPassword ? (
+                            <i className="fas fa-eye"></i>
+                          ) : (
+                            <i className="fas fa-eye-slash"></i>
+                          )}
+                        </Button>
+                      </div>
+                      {signformState.cPassword.length > 0 &&
+                        signformState.signPassword !==
+                          signformState.cPassword && (
+                          <div
+                            className="form-text text-danger"
+                            data-testid="passwordCheck"
+                          >
+                            {t('Password_and_Confirm_password_mismatches.')}
+                          </div>
+                        )}
+                    </div>
+                    {REACT_APP_USE_RECAPTCHA === 'yes' ? (
+                      <div className="mt-3">
+                        <ReCAPTCHA
+                          ref={recaptchaRef}
+                          sitekey={
+                            /* istanbul ignore next */
+                            RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
+                          }
+                        />
+                      </div>
+                    ) : (
+                      /* istanbul ignore next */
+                      <></>
+                    )}
+                    <Button
+                      type="submit"
+                      className="mt-4 w-100 mb-3"
+                      value="Register"
+                      data-testid="registrationBtn"
+                    >
+                      {t('register')}
+                    </Button>
+                    <div className="position-relative">
+                      <hr />
+                      <span className={styles.orText}>OR</span>
+                    </div>
+                    <Button
+                      variant="outline-secondary"
+                      value="Register"
+                      className="mt-3 mb-5 w-100"
+                      onClick={(): void => setShowLogin('LOGIN')}
+                    >
+                      {t('login')}
+                    </Button>
+                  </Form>
+                </div>
+              )}
             </div>
           </Col>
         </Row>
