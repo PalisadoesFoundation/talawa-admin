@@ -100,7 +100,7 @@ function addOnStore(): JSX.Element {
   if (loading) {
     return (
       <>
-        <Loader />
+        <div data-testid="AddOnEntryStore" className={styles.loader}></div>
       </>
     );
   }
