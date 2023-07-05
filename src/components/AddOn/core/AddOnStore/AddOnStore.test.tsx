@@ -37,7 +37,6 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 describe('Testing AddOnStore Component', () => {
   test('Temporary test for AddOnStore', () => {
     expect(true).toBe(true);
-    //  @typescript-eslint/no-unused-vars
     const { getByTestId } = render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -49,7 +48,7 @@ describe('Testing AddOnStore Component', () => {
         </Provider>
       </ApolloProvider>
     );
-    // expect(getByTestId('AddOnEntryStore')).toBeInTheDocument();
+    expect(getByTestId('AddOnEntryStore')).toBeInTheDocument();
   });
   // const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
   // const useDispatchMock = jest.spyOn(reactRedux, 'useDispatch');
