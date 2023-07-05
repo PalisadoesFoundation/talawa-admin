@@ -24,7 +24,8 @@
     "fillCorrectly": "सभी विवरण सही ढंग से भरें।",
     "notAuthorised": "क्षमा करें! आप अधिकृत नहीं हैं!",
     "notFound": "उपयोगकर्ता नहीं मिला!",
-    "successfullyRegistered": "सफलतापूर्वक पंजीकृत। कृपया स्वीकृत होने तक प्रतीक्षा करें।"
+    "successfullyRegistered": "सफलतापूर्वक पंजीकृत। कृपया स्वीकृत होने तक प्रतीक्षा करें।",
+    "login_to_admin_portal": "एडमिन पोर्टल लॉगिन"
   },
   "listNavbar": {
     "talawa_portal": "तलावा प्रशासन पोर्टल",
