@@ -9,6 +9,8 @@
 2. Content
 3. Forms
 4. Utilities
+5. General
+6. Colors
 
 */
 
@@ -118,3 +120,17 @@
 */
 
 @import './utilities';
+
+/*
+
+    5. General
+
+*/
+@import './general';
+
+/*
+
+    6. COLORS
+
+*/
+@import './colors';

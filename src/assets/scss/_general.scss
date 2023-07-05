@@ -1,0 +1,22 @@
+:root {
+  --bs-body-font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+body {
+  background-color: var(--bs-body-bg);
+}
+
+#root {
+  min-height: 100vh;
+  background-color: #f2f7ff;
+}
