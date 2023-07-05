@@ -26,6 +26,10 @@ import Loader from 'components/Loader/Loader';
 import UserLoginPage from 'screens/UserPortal/UserLoginPage/UserLoginPage';
 import Organizations from 'screens/UserPortal/Organizations/Organizations';
 
+// User Portal Components
+import UserLoginPage from 'screens/UserPortal/UserLoginPage/UserLoginPage';
+import Organizations from 'screens/UserPortal/Organizations/Organizations';
+
 function app(): JSX.Element {
   /*const { updatePluginLinks, updateInstalled } = bindActionCreators(
     actionCreators,
