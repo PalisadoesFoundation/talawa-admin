@@ -44,7 +44,7 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
           },
         });
 
-        if (data.login.user.adminApproved) {
+        if (data) {
           localStorage.setItem('token', data.login.accessToken);
           localStorage.setItem('userId', data.login.user._id);
 
