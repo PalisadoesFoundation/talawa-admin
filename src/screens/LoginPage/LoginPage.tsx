@@ -1,34 +1,27 @@
 import { useMutation } from '@apollo/client';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
-import { Form, Nav, Navbar } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
-import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import {
-  BACKEND_URL,
-  REACT_APP_USE_RECAPTCHA,
-  RECAPTCHA_SITE_KEY,
-} from 'Constant/constant';
+import { REACT_APP_USE_RECAPTCHA, RECAPTCHA_SITE_KEY } from 'Constant/constant';
 import {
   LOGIN_MUTATION,
   RECAPTCHA_MUTATION,
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import Logo from 'assets/images/talawa-logo-200x200.png';
+import Palisadoes from 'assets/images/palisadoes_logo.png';
+import Talawa from 'assets/images/talawa-logo-200x200.png';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
-import LandingPage from 'components/LandingPage/LandingPage';
 import Loader from 'components/Loader/Loader';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './LoginPage.module.css';
-import Palisadoes from 'assets/images/palisadoes_logo.png';
-import Talawa from 'assets/images/talawa-logo-200x200.png';
 
 function loginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -78,9 +71,7 @@ function loginPage(): JSX.Element {
     async function loadResource(): Promise<void> {
       try {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const response = await fetch(
-          BACKEND_URL ?? 'http://localhost:4000/graphql/'
-        );
+        const response = await fetch('http://localhost:4000/graphql/');
       } catch (error: any) {
         /* istanbul ignore next */
         errorHandler(t, error);
@@ -250,7 +241,7 @@ function loginPage(): JSX.Element {
                 <div className="fade-in-top">
                   <form onSubmit={loginLink}>
                     <h1 className="fs-2 fw-bold text-dark mb-3">
-                      {t('login')}
+                      {t('login_to_admin_portal')}
                     </h1>
                     <Form.Label>{t('email')}</Form.Label>
                     <Form.Control
@@ -285,9 +276,9 @@ function loginPage(): JSX.Element {
                         }}
                       />
                       <Button
-                        id="showPasswordr"
+                        id="showPassword"
                         onClick={togglePassword}
-                        data-testid="showPasswordr"
+                        data-testid="showPassword"
                         className={'position-absolute z-10 bottom-0 end-0'}
                       >
                         {showPassword ? (
@@ -333,6 +324,7 @@ function loginPage(): JSX.Element {
                       variant="outline-secondary"
                       value="Register"
                       className="mt-3 mb-3 w-100"
+                      data-testid="goToRegisterPortion"
                       onClick={(): void => setShowLogin('REGISTER')}
                     >
                       {t('register')}
@@ -424,9 +416,9 @@ function loginPage(): JSX.Element {
                           }}
                         />
                         <Button
-                          id="showPasswordr"
+                          id="showPassword"
                           onClick={togglePassword}
-                          data-testid="showPasswordr"
+                          data-testid="showPassword"
                           className={'position-absolute z-10 bottom-0 end-0'}
                         >
                           {showPassword ? (
@@ -474,8 +466,8 @@ function loginPage(): JSX.Element {
                           data-testid="cpassword"
                         />
                         <Button
-                          id="showPasswordr"
-                          data-testid="showPasswordrCon"
+                          id="showPassword"
+                          data-testid="showPasswordCon"
                           onClick={toggleConfirmPassword}
                           className={'position-absolute z-10 bottom-0 end-0'}
                         >
@@ -527,6 +519,7 @@ function loginPage(): JSX.Element {
                       variant="outline-secondary"
                       value="Register"
                       className="mt-3 mb-5 w-100"
+                      data-testid="goToLoginPortion"
                       onClick={(): void => setShowLogin('LOGIN')}
                     >
                       {t('login')}

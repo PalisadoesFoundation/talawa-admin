@@ -24,7 +24,8 @@
     "fillCorrectly": "正確填寫所有細節。",
     "notAuthorised": "抱歉！你沒有被授權！",
     "notFound": "找不到用戶！",
-    "successfullyRegistered": "註冊成功，請等待審核通過。"
+    "successfullyRegistered": "註冊成功，請等待審核通過。",
+    "login_to_admin_portal": " 管理员门户登录 "
   },
   "listNavbar": {
     "talawa_portal": "塔拉瓦管理門戶",
