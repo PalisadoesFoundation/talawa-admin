@@ -14,7 +14,7 @@
 .cardActionBtn:hover {
   background-color: ghostwhite;
   border: none;
-  color: black;
+  color: black !important;
 }
 
 .imageContainer {

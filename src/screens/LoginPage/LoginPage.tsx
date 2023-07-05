@@ -14,7 +14,7 @@ import cookies from 'js-cookie';
 import i18next from 'i18next';
 
 import styles from './LoginPage.module.css';
-import Logo from 'assets/talawa-logo-200x200.png';
+import Logo from 'assets/images/talawa-logo-200x200.png';
 import LandingPage from 'components/LandingPage/LandingPage';
 import {
   LOGIN_MUTATION,

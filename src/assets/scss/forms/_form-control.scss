@@ -1,0 +1,106 @@
+$input-btn-padding-y: 0.375rem;
+$input-btn-padding-x: 0.75rem;
+$input-btn-font-family: null;
+$input-btn-font-size: $font-size-base;
+$input-btn-line-height: $line-height-base;
+
+$input-btn-focus-width: $focus-ring-width;
+$input-btn-focus-color-opacity: $focus-ring-opacity;
+$input-btn-focus-color: $focus-ring-color;
+$input-btn-focus-blur: $focus-ring-blur;
+$input-btn-focus-box-shadow: $focus-ring-box-shadow;
+
+$input-btn-padding-y-sm: 0.25rem;
+$input-btn-padding-x-sm: 0.5rem;
+$input-btn-font-size-sm: $font-size-sm;
+
+$input-btn-padding-y-lg: 0.5rem;
+$input-btn-padding-x-lg: 1rem;
+$input-btn-font-size-lg: $font-size-lg;
+
+$input-btn-border-width: var(--#{$prefix}border-width);
+
+$input-padding-y: $input-btn-padding-y;
+$input-padding-x: $input-btn-padding-x;
+$input-font-family: $input-btn-font-family;
+$input-font-size: $input-btn-font-size;
+$input-font-weight: $font-weight-base;
+$input-line-height: $input-btn-line-height;
+
+$input-padding-y-sm: $input-btn-padding-y-sm;
+$input-padding-x-sm: $input-btn-padding-x-sm;
+$input-font-size-sm: $input-btn-font-size-sm;
+
+$input-padding-y-lg: $input-btn-padding-y-lg;
+$input-padding-x-lg: $input-btn-padding-x-lg;
+$input-font-size-lg: $input-btn-font-size-lg;
+
+$input-bg: var(--#{$prefix}body-bg);
+$input-disabled-color: null;
+$input-disabled-bg: var(--#{$prefix}secondary-bg);
+$input-disabled-border-color: null;
+
+$input-color: var(--#{$prefix}body-color);
+$input-border-color: var(--#{$prefix}border-color);
+$input-border-width: $input-btn-border-width;
+$input-box-shadow: $box-shadow-inset;
+
+$input-border-radius: var(--#{$prefix}border-radius);
+$input-border-radius-sm: var(--#{$prefix}border-radius-sm);
+$input-border-radius-lg: var(--#{$prefix}border-radius-lg);
+
+$input-focus-bg: $input-bg;
+$input-focus-border-color: tint-color($component-active-bg, 50%);
+$input-focus-color: $input-color;
+$input-focus-width: $input-btn-focus-width;
+$input-focus-box-shadow: $input-btn-focus-box-shadow;
+
+$input-placeholder-color: var(--#{$prefix}secondary-color);
+$input-plaintext-color: var(--#{$prefix}body-color);
+
+$input-height-border: calc(
+  #{$input-border-width} * 2
+); // stylelint-disable-line function-disallowed-list
+
+$input-height-inner: add($input-line-height * 1em, $input-padding-y * 2);
+$input-height-inner-half: add($input-line-height * 0.5em, $input-padding-y);
+$input-height-inner-quarter: add(
+  $input-line-height * 0.25em,
+  $input-padding-y * 0.5
+);
+
+$input-height: add(
+  $input-line-height * 1em,
+  add($input-padding-y * 2, $input-height-border, false)
+);
+$input-height-sm: add(
+  $input-line-height * 1em,
+  add($input-padding-y-sm * 2, $input-height-border, false)
+);
+$input-height-lg: add(
+  $input-line-height * 1em,
+  add($input-padding-y-lg * 2, $input-height-border, false)
+);
+
+$input-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+$form-color-width: 3rem;
+
+// Form Label Text
+$form-label-margin-bottom: 0.5rem;
+$form-label-font-size: null;
+$form-label-font-style: null;
+$form-label-font-weight: null;
+$form-label-color: null;
+
+// Form Text
+$form-text-margin-top: 0.25rem;
+$form-text-font-size: $small-font-size;
+$form-text-font-style: null;
+$form-text-font-weight: null;
+$form-text-color: var(--#{$prefix}secondary-color);
+
+// Form File Button
+$form-file-button-color: $input-color;
+$form-file-button-bg: var(--#{$prefix}tertiary-bg);
+$form-file-button-hover-bg: var(--#{$prefix}secondary-bg);
