@@ -326,7 +326,7 @@ function loginPage(): JSX.Element {
                     </Button>
                     <div className="position-relative">
                       <hr />
-                      <span className={styles.orText}>OR</span>
+                      <span className={styles.orText}>{t('OR')}</span>
                     </div>
                     <Button
                       variant="outline-secondary"
@@ -529,7 +529,7 @@ function loginPage(): JSX.Element {
                     </Button>
                     <div className="position-relative">
                       <hr />
-                      <span className={styles.orText}>OR</span>
+                      <span className={styles.orText}>{t('OR')}</span>
                     </div>
                     <Button
                       variant="outline-secondary"

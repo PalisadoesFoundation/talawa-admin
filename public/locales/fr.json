@@ -25,7 +25,8 @@
     "notAuthorised": "Désolé ! vous n'êtes pas autorisé !",
     "notFound": "Utilisateur introuvable !",
     "successfullyRegistered": "Enregistré avec succès. Veuillez patienter jusqu'à ce que vous soyez approuvé.",
-    "login_to_admin_portal": "Connexion à l'administration du portail"
+    "login_to_admin_portal": "Connexion à l'administration du portail",
+    "OR": "OU"
   },
   "listNavbar": {
     "talawa_portal": "Portail D'Administrateur Talawa",

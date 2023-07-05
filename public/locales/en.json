@@ -25,7 +25,8 @@
     "notAuthorised": "Sorry! you are not Authorised!",
     "notFound": "User not found!",
     "successfullyRegistered": "Successfully Registered. Please wait until you will be approved.",
-    "login_to_admin_portal": "Admin Portal Login"
+    "login_to_admin_portal": "Admin Portal Login",
+    "OR": "OR"
   },
   "listNavbar": {
     "talawa_portal": "Talawa Admin Portal",
