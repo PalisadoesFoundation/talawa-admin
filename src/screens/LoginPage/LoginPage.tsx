@@ -22,6 +22,7 @@ import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLang
 import Loader from 'components/Loader/Loader';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './LoginPage.module.css';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 
 function loginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -244,21 +245,28 @@ function loginPage(): JSX.Element {
                       {t('login_to_admin_portal')}
                     </h1>
                     <Form.Label>{t('email')}</Form.Label>
-                    <Form.Control
-                      type="email"
-                      id="email"
-                      className="mb-3"
-                      placeholder={t('enterEmail')}
-                      autoComplete="off"
-                      required
-                      value={formState.email}
-                      onChange={(e): void => {
-                        setFormState({
-                          ...formState,
-                          email: e.target.value,
-                        });
-                      }}
-                    />
+                    <div className="position-relative">
+                      <Form.Control
+                        type="email"
+                        id="email"
+                        className="mb-3"
+                        placeholder={t('enterEmail')}
+                        autoComplete="off"
+                        required
+                        value={formState.email}
+                        onChange={(e): void => {
+                          setFormState({
+                            ...formState,
+                            email: e.target.value,
+                          });
+                        }}
+                      />
+                      <Button
+                        className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                      >
+                        <EmailOutlinedIcon />
+                      </Button>
+                    </div>
                     <Form.Label>{t('password')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
@@ -279,7 +287,7 @@ function loginPage(): JSX.Element {
                         id="showPassword"
                         onClick={togglePassword}
                         data-testid="showPassword"
-                        className={'position-absolute z-10 bottom-0 end-0'}
+                        className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
                       >
                         {showPassword ? (
                           <i className="fas fa-eye"></i>
@@ -381,21 +389,29 @@ function loginPage(): JSX.Element {
                       </Col>
                     </Row>
                     <Form.Label>{t('email')}</Form.Label>
-                    <Form.Control
-                      type="email"
-                      id="signemail"
-                      className="mb-3"
-                      placeholder={t('email')}
-                      autoComplete="on"
-                      required
-                      value={signformState.signEmail}
-                      onChange={(e): void => {
-                        setSignFormState({
-                          ...signformState,
-                          signEmail: e.target.value.toLowerCase(),
-                        });
-                      }}
-                    />
+                    <div className="position-relative">
+                      <Form.Control
+                        type="email"
+                        id="signemail"
+                        className="mb-3"
+                        placeholder={t('email')}
+                        autoComplete="on"
+                        required
+                        value={signformState.signEmail}
+                        onChange={(e): void => {
+                          setSignFormState({
+                            ...signformState,
+                            signEmail: e.target.value.toLowerCase(),
+                          });
+                        }}
+                      />
+                      <Button
+                        className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                      >
+                        <EmailOutlinedIcon />
+                      </Button>
+                    </div>
+
                     <div className="position-relative mb-3">
                       <Form.Label>{t('password')}</Form.Label>
                       <div className="position-relative">
@@ -419,7 +435,7 @@ function loginPage(): JSX.Element {
                           id="showPassword"
                           onClick={togglePassword}
                           data-testid="showPassword"
-                          className={'position-absolute z-10 bottom-0 end-0'}
+                          className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
                         >
                           {showPassword ? (
                             <i className="fas fa-eye"></i>
@@ -469,7 +485,7 @@ function loginPage(): JSX.Element {
                           id="showPassword"
                           data-testid="showPasswordCon"
                           onClick={toggleConfirmPassword}
-                          className={'position-absolute z-10 bottom-0 end-0'}
+                          className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
                         >
                           {showConfirmPassword ? (
                             <i className="fas fa-eye"></i>
