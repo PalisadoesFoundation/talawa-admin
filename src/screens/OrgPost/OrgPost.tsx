@@ -16,6 +16,7 @@ import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
 import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import type { RootState } from 'state/reducers';
+import PaginationList from 'components/PaginationList/PaginationList';
 import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
 import NotFound from 'components/NotFound/NotFound';
@@ -34,13 +35,14 @@ function orgPost(): JSX.Element {
     posttitle: '',
     postinfo: '',
     postImage: '',
-    postVideo: '',
   });
   const [showTitle, setShowTitle] = useState(true);
 
   const searchChange = (ev: any): void => {
     setShowTitle(ev.target.value === 'searchTitle');
   };
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const currentUrl = window.location.href.split('=')[1];
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
@@ -89,7 +91,6 @@ function orgPost(): JSX.Element {
           file: postImage,
         },
       });
-      console.log(data, postImage);
       /* istanbul ignore next */
       if (data) {
         toast.success('Congratulations! You have Posted Something.');
@@ -98,7 +99,6 @@ function orgPost(): JSX.Element {
           posttitle: '',
           postinfo: '',
           postImage: '',
-          postVideo: '',
         });
         setPostModalIsOpen(false); // close the modal
       }
@@ -117,6 +117,21 @@ function orgPost(): JSX.Element {
     window.location.assign('/orglist');
   }
 
+  /* istanbul ignore next */
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ): void => {
+    setPage(newPage);
+  };
+  /* istanbul ignore next */
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ): void => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   const handleSearch = (e: any): void => {
     const { value } = e.target;
     const filterData = {
@@ -129,10 +144,17 @@ function orgPost(): JSX.Element {
 
   const debouncedHandleSearch = debounce(handleSearch);
 
+  // let ReversedPostsList;
+  // //the above variable is defined to reverse the list of posts so the the most recently added posts should be displayed at the top.
+  // if (data) {
+  //   ReversedPostsList = data.postsByOrganizationConnection.edges
+  //     .slice()
+  //     .reverse();
+  // }
   return (
     <>
       <AdminNavbar targets={targets} url1={configUrl} />
-      <Row className={styles.head}>
+      <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
@@ -189,7 +211,18 @@ function orgPost(): JSX.Element {
             <div className={`row ${styles.list_box}`}>
               {orgPostListData &&
               orgPostListData.postsByOrganizationConnection.edges.length > 0 ? (
-                orgPostListData.postsByOrganizationConnection.edges.map(
+                (rowsPerPage > 0
+                  ? orgPostListData.postsByOrganizationConnection.edges.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : rowsPerPage > 0
+                  ? orgPostListData.postsByOrganizationConnection.edges.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : orgPostListData.postsByOrganizationConnection.edges
+                ).map(
                   (datas: {
                     _id: string;
                     title: string;
@@ -198,22 +231,44 @@ function orgPost(): JSX.Element {
                     videoUrl: string;
                     organizationId: string;
                     creator: { firstName: string; lastName: string };
-                  }) => (
-                    <OrgPostCard
-                      key={datas._id}
-                      id={datas._id}
-                      postTitle={datas.title}
-                      postInfo={datas.text}
-                      postAuthor={`${datas.creator.firstName} ${datas.creator.lastName}`}
-                      postPhoto={datas.imageUrl}
-                      postVideo={datas.videoUrl}
-                    />
-                  )
+                  }) => {
+                    return (
+                      <OrgPostCard
+                        key={datas._id}
+                        id={datas._id}
+                        postTitle={datas.title}
+                        postInfo={datas.text}
+                        postAuthor={`${datas.creator.firstName} ${datas.creator.lastName}`}
+                        postPhoto={datas.imageUrl}
+                        postVideo={datas.videoUrl}
+                      />
+                    );
+                  }
                 )
               ) : (
                 <NotFound title="post" keyPrefix="postNotFound" />
               )}
             </div>
+          </div>
+          <div>
+            <table>
+              <tbody>
+                <tr>
+                  <PaginationList
+                    count={
+                      orgPostListData
+                        ? orgPostListData.postsByOrganizationConnection.edges
+                            .length
+                        : 0
+                    }
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </tr>
+              </tbody>
+            </table>
           </div>
         </Col>
       </Row>
@@ -256,109 +311,36 @@ function orgPost(): JSX.Element {
                 });
               }}
             />
-            {!postformState.postVideo && (
-              <>
-                <label htmlFor="postphoto" className={styles.orgphoto}>
-                  {t('image')}:
-                  <Form.Control
-                    accept="image/*"
-                    id="postphoto"
-                    name="photo"
-                    type="file"
-                    multiple={false}
-                    onChange={async (
-                      e: React.ChangeEvent<HTMLInputElement>
-                    ): Promise<void> => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        setPostFormState({
-                          ...postformState,
-                          postImage: await convertToBase64(file),
-                        });
-                      }
-                    }}
-                    data-testid="organisationImage"
-                  />
-                  {postformState.postImage && (
-                    <div className={styles.preview}>
-                      <img
-                        src={postformState.postImage}
-                        alt="Post Image Preview"
-                      />
-                      <button
-                        className={styles.closeButton}
-                        onClick={(): void => {
-                          setPostFormState({
-                            ...postformState,
-                            postImage: '',
-                          });
-                          const fileInput = document.getElementById(
-                            'postphoto'
-                          ) as HTMLInputElement;
-                          if (fileInput) {
-                            fileInput.value = '';
-                          }
-                        }}
-                      >
-                        <i className="fa fa-times"></i>
-                      </button>
-                    </div>
-                  )}
-                </label>
-              </>
-            )}
-            {!postformState.postImage && (
-              <>
-                <label htmlFor="postvideo">
-                  {t('video')}:
-                  <Form.Control
-                    accept="video/*"
-                    id="postvideo"
-                    name="video"
-                    type="file"
-                    placeholder={t('video')}
-                    multiple={false}
-                    onChange={(
-                      e: React.ChangeEvent<HTMLInputElement>
-                    ): void => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        setPostFormState({
-                          ...postformState,
-                          postVideo: URL.createObjectURL(file),
-                        });
-                      }
-                    }}
-                    data-testid="organisationVideo"
-                  />
-                </label>
-                {postformState.postVideo && (
-                  <div className={styles.preview}>
-                    <video controls>
-                      <source src={postformState.postVideo} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                    <button
-                      className={styles.closeButton}
-                      onClick={(): void => {
-                        setPostFormState({
-                          ...postformState,
-                          postVideo: '',
-                        });
-                        const fileInput = document.getElementById(
-                          'postvideo'
-                        ) as HTMLInputElement;
-                        if (fileInput) {
-                          fileInput.value = '';
-                        }
-                      }}
-                    >
-                      <i className="fa fa-times"></i>
-                    </button>
-                  </div>
-                )}
-              </>
-            )}
+            <label htmlFor="postphoto" className={styles.orgphoto}>
+              {t('image')}:
+              <Form.Control
+                accept="image/*"
+                id="postphoto"
+                name="photo"
+                type="file"
+                multiple={false}
+                onChange={async (e: React.ChangeEvent): Promise<void> => {
+                  const target = e.target as HTMLInputElement;
+                  const file = target.files && target.files[0];
+                  if (file)
+                    setPostFormState({
+                      ...postformState,
+                      postImage: await convertToBase64(file),
+                    });
+                }}
+                data-testid="organisationImage"
+              />
+            </label>
+            <label htmlFor="postvideo">{t('video')}:</label>
+            <Form.Control
+              accept="image/*"
+              id="postvideo"
+              name="video"
+              type="file"
+              placeholder={t('video')}
+              multiple={false}
+              //onChange=""
+            />
             <Button type="submit" variant="success" data-testid="createPostBtn">
               <i className="fa fa-plus"></i> {t('addPost')}
             </Button>
