@@ -15,3 +15,8 @@
 .colorPrimary {
   background: #31bb6b;
 }
+
+.offcanvasContainer {
+  background-color: #31bb6b;
+  color: white;
+}

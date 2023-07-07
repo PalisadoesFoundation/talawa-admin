@@ -104,6 +104,7 @@ export default function postCard(props: InterfacePostCardProps): JSX.Element {
           <Button
             className={`${styles.cardActionBtn}`}
             onClick={handleToggleLike}
+            data-testid={'likePostBtn'}
           >
             {likeLoading || unlikeLoading ? (
               <HourglassBottomIcon fontSize="small" />

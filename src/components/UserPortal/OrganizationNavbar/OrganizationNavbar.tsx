@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './OrganizationNavbar.module.css';
 import TalawaImage from 'assets/images/talawa-logo-200x200.png';
-import { Container, Dropdown, Nav, Navbar } from 'react-bootstrap';
+import { Container, Dropdown, Nav, Navbar, Offcanvas } from 'react-bootstrap';
 import { languages } from 'utils/languages';
 import i18next from 'i18next';
 import cookies from 'js-cookie';
@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
 import { USER_ORGANIZATION_CONNECTION } from 'GraphQl/Queries/Queries';
 import getOrganizationId from 'utils/getOrganizationId';
+import type { DropDirection } from 'react-bootstrap/esm/DropdownContext';
 
 interface InterfaceNavbarProps {
   currentPage: string | null;
@@ -21,6 +22,8 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     keyPrefix: 'userNavbar',
   });
   const [organizationDetails, setOrganizationDetails]: any = React.useState({});
+  // const dropDirection: DropDirection = screen.width > 767 ? 'start' : 'down';
+  const dropDirection: DropDirection = 'start';
 
   const organizationId = getOrganizationId(window.location.href);
 
@@ -47,7 +50,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   }, [data]);
 
   return (
-    <Navbar variant="dark" className={`${styles.colorPrimary}`}>
+    <Navbar expand={'md'} variant="dark" className={`${styles.colorPrimary}`}>
       <Container fluid>
         <Navbar.Brand href="#">
           <img
@@ -57,79 +60,96 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
           />
           <b>{organizationDetails.name}</b>
         </Navbar.Brand>
-
-        <Nav className="me-auto" variant="dark">
-          <Nav.Link active={props.currentPage === 'home'}>{t('home')}</Nav.Link>
-          <Nav.Link active={props.currentPage === 'events'}>
-            {t('events')}
-          </Nav.Link>
-          <Nav.Link active={props.currentPage === 'people'}>
-            {t('people')}
-          </Nav.Link>
-          <Nav.Link active={props.currentPage === 'chat'}>{t('chat')}</Nav.Link>
-          <Nav.Link active={props.currentPage === 'donate'}>
-            {t('donate')}
-          </Nav.Link>
-        </Nav>
-
-        <Navbar.Toggle />
-        <Navbar.Collapse className="justify-content-end">
-          <Dropdown data-testid="languageDropdown" drop="start">
-            <Dropdown.Toggle
-              variant="white"
-              id="dropdown-basic"
-              data-testid="languageDropdownToggle"
-              className={styles.colorWhite}
-            >
-              <LanguageIcon
-                className={styles.colorWhite}
-                data-testid="languageIcon"
-              />
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {languages.map((language, index: number) => (
-                <Dropdown.Item
-                  key={index}
-                  onClick={async (): Promise<void> => {
-                    setCurrentLanguageCode(language.code);
-                    await i18next.changeLanguage(language.code);
-                  }}
-                  disabled={currentLanguageCode === language.code}
-                  data-testid={`changeLanguageBtn${index}`}
+        <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-md}`} />
+        <Navbar.Offcanvas
+          id={`offcanvasNavbar-expand-md`}
+          aria-labelledby={`offcanvasNavbar-expand-md`}
+          placement="end"
+          className={styles.offcanvasContainer}
+        >
+          <Offcanvas.Header closeButton>
+            <Offcanvas.Title>Talawa</Offcanvas.Title>
+          </Offcanvas.Header>
+          <Offcanvas.Body>
+            <Nav className="me-auto flex-grow-1 pe-3" variant="dark">
+              <Nav.Link active={props.currentPage === 'home'}>
+                {t('home')}
+              </Nav.Link>
+              <Nav.Link active={props.currentPage === 'events'}>
+                {t('events')}
+              </Nav.Link>
+              <Nav.Link active={props.currentPage === 'people'}>
+                {t('people')}
+              </Nav.Link>
+              <Nav.Link active={props.currentPage === 'chat'}>
+                {t('chat')}
+              </Nav.Link>
+              <Nav.Link active={props.currentPage === 'donate'}>
+                {t('donate')}
+              </Nav.Link>
+            </Nav>
+            <Navbar.Collapse className="justify-content-end">
+              <Dropdown data-testid="languageDropdown" drop={dropDirection}>
+                <Dropdown.Toggle
+                  variant="white"
+                  id="dropdown-basic"
+                  data-testid="languageDropdownToggle"
+                  className={styles.colorWhite}
                 >
-                  <span
-                    className={`fi fi-${language.country_code} mr-2`}
-                  ></span>{' '}
-                  {language.name}
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
+                  <LanguageIcon
+                    className={styles.colorWhite}
+                    data-testid="languageIcon"
+                  />
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {languages.map((language, index: number) => (
+                    <Dropdown.Item
+                      key={index}
+                      onClick={async (): Promise<void> => {
+                        setCurrentLanguageCode(language.code);
+                        await i18next.changeLanguage(language.code);
+                      }}
+                      disabled={currentLanguageCode === language.code}
+                      data-testid={`changeLanguageBtn${index}`}
+                    >
+                      <span
+                        className={`fi fi-${language.country_code} mr-2`}
+                      ></span>{' '}
+                      {language.name}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
 
-          <Dropdown drop="start">
-            <Dropdown.Toggle
-              variant="white"
-              id="dropdown-basic"
-              data-testid="logoutDropdown"
-              className={styles.colorWhite}
-            >
-              <PermIdentityIcon
-                className={styles.colorWhite}
-                data-testid="personIcon"
-              />
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.ItemText>
-                <b>{userName}</b>
-              </Dropdown.ItemText>
-              <Dropdown.Item>{t('settings')}</Dropdown.Item>
-              <Dropdown.Item>{t('myTasks')}</Dropdown.Item>
-              <Dropdown.Item onClick={handleLogout} data-testid={`logoutBtn`}>
-                {t('logout')}
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </Navbar.Collapse>
+              <Dropdown drop={dropDirection}>
+                <Dropdown.Toggle
+                  variant="white"
+                  id="dropdown-basic"
+                  data-testid="logoutDropdown"
+                  className={styles.colorWhite}
+                >
+                  <PermIdentityIcon
+                    className={styles.colorWhite}
+                    data-testid="personIcon"
+                  />
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.ItemText>
+                    <b>{userName}</b>
+                  </Dropdown.ItemText>
+                  <Dropdown.Item>{t('settings')}</Dropdown.Item>
+                  <Dropdown.Item>{t('myTasks')}</Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={handleLogout}
+                    data-testid={`logoutBtn`}
+                  >
+                    {t('logout')}
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Navbar.Collapse>
+          </Offcanvas.Body>
+        </Navbar.Offcanvas>
       </Container>
     </Navbar>
   );

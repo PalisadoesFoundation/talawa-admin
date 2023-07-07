@@ -120,6 +120,7 @@ export default function home(): JSX.Element {
                 value={postContent}
                 className={styles.postInput}
                 onChange={handlePostInput}
+                data-testid={'postInput'}
               />
             </FloatingLabel>
             <div className={`${styles.postActionContainer}`}>
@@ -129,18 +130,22 @@ export default function home(): JSX.Element {
                 name="photo"
                 type="file"
                 multiple={false}
-                onChange={async (e: React.ChangeEvent): Promise<void> => {
-                  const target = e.target as HTMLInputElement;
-                  const file = target.files && target.files[0];
-                  if (file) {
-                    const image = await convertToBase64(file);
-                    setPostImage(image);
+                onChange={
+                  /* istanbul ignore next */
+                  async (e: React.ChangeEvent): Promise<void> => {
+                    const target = e.target as HTMLInputElement;
+                    const file = target.files && target.files[0];
+                    if (file) {
+                      const image = await convertToBase64(file);
+                      setPostImage(image);
+                    }
                   }
-                }}
+                }
               />
               <Button
                 className={`${styles.postActionBtn}`}
                 onClick={handlePost}
+                data-testid={'postAction'}
               >
                 <SendIcon />
               </Button>

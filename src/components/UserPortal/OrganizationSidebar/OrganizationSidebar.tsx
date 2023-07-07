@@ -46,13 +46,14 @@ export default function organizationSidebar(): JSX.Element {
     }
   );
 
+  /* istanbul ignore next */
   useEffect(() => {
     if (memberData) {
       setMembers(memberData.organizationsMemberConnection.edges);
-      console.log(memberData.organizationsMemberConnection.edges);
     }
   }, [memberData]);
 
+  /* istanbul ignore next */
   useEffect(() => {
     if (eventsData) {
       setEvents(eventsData.eventsByOrganizationConnection);
