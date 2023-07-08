@@ -2,6 +2,7 @@ import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
+import userEvent from '@testing-library/user-event';
 
 import OrgPostCard from './OrgPostCard';
 import {
@@ -95,7 +96,23 @@ describe('Testing Organization Post Card', () => {
 
     expect(screen.getByAltText(/image not found/i)).toBeInTheDocument();
   });
+  test('Testing post update functionality', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...props} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
 
+    await wait();
+
+    userEvent.click(screen.getByTestId('editPostModalBtn'));
+
+    userEvent.type(screen.getByTestId('updateTitle'), 'updated title');
+    userEvent.type(screen.getByTestId('updateText'), 'This is a updated text');
+    userEvent.click(screen.getByTestId('updatePostBtn'));
+  });
   test('renders without "Read more" button when postInfo length is less than or equal to 43', () => {
     const props = {
       key: '123',

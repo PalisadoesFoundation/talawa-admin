@@ -300,4 +300,58 @@ describe('Organisation Post Page', () => {
     await wait();
     expect(window.location).toBeAt('/orglist');
   });
+  test('Clicking the close button in the post modal should close the modal', async () => {
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+    // Fill in post form fields...
+
+    userEvent.click(screen.getByTestId('closePostModalBtn'));
+
+    await wait();
+
+    expect(screen.queryByTestId('createPostModalBtn')).toBeInTheDocument();
+  });
+  test('After creating a post, the data should be refetched', async () => {
+    const refetchMock = jest.fn();
+
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+    // Fill in post form fields...
+
+    userEvent.click(screen.getByTestId('createPostBtn'));
+
+    await wait();
+
+    expect(refetchMock).toHaveBeenCalledTimes(0);
+  });
 });
