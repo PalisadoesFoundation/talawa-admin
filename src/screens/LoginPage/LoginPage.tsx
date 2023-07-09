@@ -265,6 +265,7 @@ function loginPage(): JSX.Element {
                       autoComplete="username"
                     />
                     <Button
+                      tabIndex={-1}
                       className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
                     >
                       <EmailOutlinedIcon />
@@ -300,7 +301,11 @@ function loginPage(): JSX.Element {
                     </Button>
                   </div>
                   <div className="text-end mt-3">
-                    <Link to="/forgotPassword" className="text-secondary">
+                    <Link
+                      to="/forgotPassword"
+                      className="text-secondary"
+                      tabIndex={-1}
+                    >
                       {t('forgotPassword')}
                     </Link>
                   </div>
@@ -336,7 +341,10 @@ function loginPage(): JSX.Element {
                     value="Register"
                     className="mt-3 mb-3 w-100"
                     data-testid="goToRegisterPortion"
-                    onClick={(): void => setShowTab('REGISTER')}
+                    onClick={(): void => {
+                      setShowTab('REGISTER');
+                      setShowPassword(false);
+                    }}
                   >
                     {t('register')}
                   </Button>
@@ -410,6 +418,7 @@ function loginPage(): JSX.Element {
                       }}
                     />
                     <Button
+                      tabIndex={-1}
                       className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
                     >
                       <EmailOutlinedIcon />
@@ -538,7 +547,10 @@ function loginPage(): JSX.Element {
                     value="Register"
                     className="mt-3 mb-5 w-100"
                     data-testid="goToLoginPortion"
-                    onClick={(): void => setShowTab('LOGIN')}
+                    onClick={(): void => {
+                      setShowTab('LOGIN');
+                      setShowPassword(false);
+                    }}
                   >
                     {t('login')}
                   </Button>
