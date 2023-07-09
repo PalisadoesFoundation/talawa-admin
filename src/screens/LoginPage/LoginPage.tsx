@@ -251,7 +251,6 @@ function loginPage(): JSX.Element {
                   <div className="position-relative">
                     <Form.Control
                       type="email"
-                      id="email"
                       className="mb-3"
                       placeholder={t('enterEmail')}
                       required
@@ -263,6 +262,7 @@ function loginPage(): JSX.Element {
                         });
                       }}
                       autoComplete="username"
+                      data-testid="loginEmail"
                     />
                     <Button
                       tabIndex={-1}
@@ -290,7 +290,7 @@ function loginPage(): JSX.Element {
                     />
                     <Button
                       onClick={togglePassword}
-                      data-testid="showPassword"
+                      data-testid="showLoginPassword"
                       className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
                     >
                       {showPassword ? (
@@ -404,7 +404,7 @@ function loginPage(): JSX.Element {
                   <div className="position-relative">
                     <Form.Control
                       type="email"
-                      id="signemail"
+                      data-testid="signInEmail"
                       className="mb-3"
                       placeholder={t('email')}
                       autoComplete="username"

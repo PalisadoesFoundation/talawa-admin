@@ -205,7 +205,7 @@ describe('Testing Login Page Screen', () => {
       screen.getByPlaceholderText(/Last name/i),
       formData.lastName
     );
-    userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
+    userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
     userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
     userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
@@ -248,7 +248,7 @@ describe('Testing Login Page Screen', () => {
       screen.getByPlaceholderText(/Last Name/i),
       formData.lastName
     );
-    userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
+    userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
     userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
     userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
@@ -291,7 +291,7 @@ describe('Testing Login Page Screen', () => {
       screen.getByPlaceholderText(/Last Name/i),
       formData.lastName
     );
-    userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
+    userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
     userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
     userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
@@ -343,7 +343,7 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    userEvent.type(screen.getByPlaceholderText(/Enter Email/i), formData.email);
+    userEvent.type(screen.getByTestId(/loginEmail/i), formData.email);
     userEvent.type(
       screen.getByPlaceholderText(/Enter Password/i),
       formData.password
@@ -370,7 +370,7 @@ describe('Testing Login Page Screen', () => {
     await wait();
 
     const input = screen.getByTestId('password') as HTMLInputElement;
-    const toggleText = screen.getByTestId('showPassword');
+    const toggleText = screen.getByTestId('showLoginPassword');
     // password should be hidden
     expect(input.type).toBe('password');
     // click the toggle button to show password
