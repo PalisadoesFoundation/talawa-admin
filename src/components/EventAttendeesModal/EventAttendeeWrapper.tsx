@@ -7,7 +7,7 @@ type PropType = {
   orgId: string;
 };
 
-export const EventAttendeeWrapper = (props: PropType) => {
+export const EventAttendeeWrapper = (props: PropType): JSX.Element => {
   const [showModal, setShowModal] = useState(false);
 
   return (

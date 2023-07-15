@@ -16,13 +16,13 @@ export const TableRow = ({
 }: {
   data: InterfaceTableCheckIn;
   refetch: () => void;
-}) => {
+}): JSX.Element => {
   const [allotedSeat, setAllotedSeat] = useState('');
   const [allotedRoom, setAllotedRoom] = useState('');
 
   const [checkInMutation] = useMutation(MARK_CHECKIN);
 
-  const markCheckIn = () => {
+  const markCheckIn = (): void => {
     if (allotedSeat === '')
       toast.warning('You have not alloted any seat to the attendee!');
     if (allotedRoom === '')
@@ -46,7 +46,7 @@ export const TableRow = ({
       });
   };
 
-  const generateTag = () => {
+  const generateTag = (): void => {
     toast.warning('Generating pdf...');
     const inputs = [{ greeting: 'Hi!', name: 'John Doe' }];
 

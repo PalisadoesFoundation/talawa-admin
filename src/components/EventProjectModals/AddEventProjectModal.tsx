@@ -16,13 +16,13 @@ export const AddEventProjectModal = ({
   handleClose,
   refetchData,
   eventId,
-}: ModalPropType) => {
+}: ModalPropType): JSX.Element => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
   const [addMutation] = useMutation(ADD_EVENT_PROJECT_MUTATION);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     let toSubmit = true;
 

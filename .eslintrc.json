@@ -50,7 +50,7 @@
     "@typescript-eslint/consistent-type-assertions": "error",
     "@typescript-eslint/consistent-type-imports": "error",
     "@typescript-eslint/explicit-function-return-type": [
-      1,
+      2,
       {
         "allowExpressions": true,
         "allowTypedFunctionExpressions": true

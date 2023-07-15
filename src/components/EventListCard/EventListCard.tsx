@@ -124,7 +124,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
     }
   };
 
-  const openEventDashboard = () => {
+  const openEventDashboard = (): void => {
     window.location.assign(`/event/${props.id}`);
   };
 

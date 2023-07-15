@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/client';
 import { DELETE_EVENT_PROJECT_MUTATION } from 'GraphQl/Mutations/mutations';
 
-interface ModalPropType {
+type ModalPropType = {
   show: boolean;
   project: {
     _id: string;
@@ -13,12 +13,12 @@ interface ModalPropType {
   };
   handleClose: () => void;
   refetchData: () => void;
-}
+};
 
-export const DeleteEventProjectModal = (props: ModalPropType) => {
+export const DeleteEventProjectModal = (props: ModalPropType): JSX.Element => {
   const [deleteMutation] = useMutation(DELETE_EVENT_PROJECT_MUTATION);
 
-  const deleteProject = () => {
+  const deleteProject = (): void => {
     toast.warn('Deleting the project...');
     deleteMutation({
       variables: {

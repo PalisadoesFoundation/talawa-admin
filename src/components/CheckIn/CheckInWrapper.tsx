@@ -6,7 +6,7 @@ type PropType = {
   eventId: string;
 };
 
-export const CheckInWrapper = (props: PropType) => {
+export const CheckInWrapper = (props: PropType): JSX.Element => {
   const [showModal, setShowModal] = useState(false);
 
   return (

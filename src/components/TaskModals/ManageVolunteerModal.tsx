@@ -26,14 +26,14 @@ type ModalPropType = {
   refetchData: () => void;
 };
 
-export const ManageVolunteerModal = (props: ModalPropType) => {
+export const ManageVolunteerModal = (props: ModalPropType): JSX.Element => {
   const [volunteers, setVolunteers] = useState<InterfaceUser[]>([]);
 
   useEffect(() => setVolunteers(props.volunteers), [props.volunteers]);
 
   const [setMutation] = useMutation(SET_TASK_VOLUNTEERS_MUTATION);
 
-  const handleSubmit = () => {
+  const handleSubmit = (): void => {
     toast.warn('Updating the volunteers...');
     setMutation({
       variables: {

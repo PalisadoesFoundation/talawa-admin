@@ -11,10 +11,10 @@ type ModalPropType = {
   refetchData: () => void;
 };
 
-export const DeleteTaskModal = (props: ModalPropType) => {
+export const DeleteTaskModal = (props: ModalPropType): JSX.Element => {
   const [deleteMutation] = useMutation(DELETE_EVENT_TASK_MUTATION);
 
-  const deleteProject = () => {
+  const deleteProject = (): void => {
     toast.warn('Deleting the task...');
     deleteMutation({
       variables: {

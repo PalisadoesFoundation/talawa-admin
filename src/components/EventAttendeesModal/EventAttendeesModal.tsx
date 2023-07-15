@@ -28,7 +28,7 @@ interface InterfaceUser {
   lastName: string;
 }
 
-export const EventAttendeesModal = (props: ModalPropType) => {
+export const EventAttendeesModal = (props: ModalPropType): JSX.Element => {
   const [member, setMember] = useState<InterfaceUser | null>(null);
 
   const [addAttendeeMutation] = useMutation(ADD_EVENT_ATTENDEE);
@@ -46,7 +46,7 @@ export const EventAttendeesModal = (props: ModalPropType) => {
     variables: { id: props.orgId },
   });
 
-  const addAttendee = () => {
+  const addAttendee = (): void => {
     if (member == null) {
       toast.warning('Please choose an user to add first!');
       return;
@@ -68,7 +68,7 @@ export const EventAttendeesModal = (props: ModalPropType) => {
       });
   };
 
-  const deleteAttendee = (userId: string) => {
+  const deleteAttendee = (userId: string): void => {
     toast.warn('Removing the attendee...');
     removeAttendeeMutation({
       variables: {

@@ -19,7 +19,7 @@ export const AddTaskModal = ({
   handleClose,
   refetchData,
   projectId,
-}: ModalPropType) => {
+}: ModalPropType): JSX.Element => {
   const today = dayjs(new Date());
 
   const [title, setTitle] = useState('');
@@ -28,7 +28,7 @@ export const AddTaskModal = ({
 
   const [addMutation] = useMutation(ADD_EVENT_PROJECT_TASK_MUTATION);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     let toSubmit = true;
 

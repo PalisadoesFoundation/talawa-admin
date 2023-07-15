@@ -39,7 +39,7 @@ export const TaskListItem = ({
   task,
   refetchData,
   organization: organizationData,
-}: PropType) => {
+}: PropType): JSX.Element => {
   const [showUpdateTaskModal, setShowUpdateTaskModal] = useState(false);
 
   return (

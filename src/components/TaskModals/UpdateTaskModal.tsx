@@ -39,7 +39,7 @@ export type ModalPropType = {
   refetchData: () => void;
 };
 
-export const UpdateTaskModal = (props: ModalPropType) => {
+export const UpdateTaskModal = (props: ModalPropType): JSX.Element => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [deadline, setDeadline] = useState<null | Dayjs>(null);
@@ -58,7 +58,7 @@ export const UpdateTaskModal = (props: ModalPropType) => {
 
   const [updateMutation] = useMutation(UPDATE_EVENT_PROJECT_TASK_MUTATION);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     let toSubmit = true;
 

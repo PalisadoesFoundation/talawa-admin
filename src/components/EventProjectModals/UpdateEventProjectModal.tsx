@@ -15,7 +15,7 @@ type ModalPropType = {
   refetchData: () => void;
 };
 
-export const UpdateEventProjectModal = (props: ModalPropType) => {
+export const UpdateEventProjectModal = (props: ModalPropType): JSX.Element => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
@@ -26,7 +26,7 @@ export const UpdateEventProjectModal = (props: ModalPropType) => {
 
   const [updateMutation] = useMutation(UPDATE_EVENT_PROJECT_MUTATION);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     let toSubmit = true;
 
