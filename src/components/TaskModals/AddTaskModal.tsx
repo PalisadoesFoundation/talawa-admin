@@ -2,16 +2,17 @@ import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/client';
-import dayjs, { Dayjs } from 'dayjs';
+import type { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { ADD_EVENT_PROJECT_TASK_MUTATION } from 'GraphQl/Mutations/mutations';
 
-interface ModalPropType {
+type ModalPropType = {
   show: boolean;
   projectId: string;
   handleClose: () => void;
   refetchData: () => void;
-}
+};
 
 export const AddTaskModal = ({
   show,
@@ -103,7 +104,7 @@ export const AddTaskModal = ({
               />
             </Form.Group>
             <br />
-            <Button variant="success" type="submit" block>
+            <Button variant="success" type="submit">
               Create Task
             </Button>
           </Form>

@@ -116,7 +116,7 @@ const MOCKS2 = [
 ];
 const link1 = new StaticMockLink(MOCKS1, true);
 const link2 = new StaticMockLink(MOCKS2, true);
-async function wait(ms = 2) {
+async function wait(ms = 2): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);

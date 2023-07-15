@@ -4,12 +4,12 @@ import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/client';
 import { ADD_EVENT_PROJECT_MUTATION } from 'GraphQl/Mutations/mutations';
 
-interface ModalPropType {
+type ModalPropType = {
   show: boolean;
   eventId: string;
   handleClose: () => void;
   refetchData: () => void;
-}
+};
 
 export const AddEventProjectModal = ({
   show,
@@ -86,7 +86,7 @@ export const AddEventProjectModal = ({
               />
             </Form.Group>
             <br />
-            <Button variant="success" type="submit" block>
+            <Button variant="success" type="submit">
               Create Project
             </Button>
           </Form>

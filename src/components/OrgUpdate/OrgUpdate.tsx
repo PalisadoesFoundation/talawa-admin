@@ -1,6 +1,7 @@
 import React from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -8,14 +9,15 @@ import styles from './OrgUpdate.module.css';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
+import { Form } from 'react-bootstrap';
 
-interface OrgUpdateProps {
+interface InterfaceOrgUpdateProps {
   id: string;
   orgid: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function OrgUpdate(props: OrgUpdateProps): JSX.Element {
+function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
 
   const [formState, setFormState] = React.useState<{
@@ -58,7 +60,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
     return <div className="loader"></div>;
   }
 
-  const onSaveChangesClicked = async () => {
+  const onSaveChangesClicked = async (): Promise<void> => {
     try {
       const { data } = await login({
         variables: {
@@ -84,7 +86,7 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
   };
 
   /* istanbul ignore next */
-  const cancelUpdate = () => {
+  const cancelUpdate = (): void => {
     window.location.reload();
   };
 
@@ -96,14 +98,14 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
           <div className={styles.dispflex}>
             <div>
               <label>{t('name')}</label>
-              <input
+              <Form.Control
                 type="input"
                 id="orgname"
                 placeholder={t('enterNameOrganization')}
                 autoComplete="off"
                 required
                 value={formState.orgName}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
                     orgName: e.target.value,
@@ -113,14 +115,14 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
             </div>
             <div>
               <label>{t('description')}</label>
-              <input
+              <Form.Control
                 type="input"
                 id="orgdescrip"
                 placeholder={t('description')}
                 autoComplete="off"
                 required
                 value={formState.orgDescrip}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
                     orgDescrip: e.target.value,
@@ -132,14 +134,14 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
           <div className={styles.dispflex}>
             <div>
               <label>{t('location')}</label>
-              <input
+              <Form.Control
                 type="location"
                 id="location"
                 placeholder={t('location')}
                 autoComplete="off"
                 required
                 value={formState.location}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
                     location: e.target.value,
@@ -152,14 +154,15 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
             <div>
               <label htmlFor="orgphoto" className={styles.orgphoto}>
                 {t('displayImage')}:
-                <input
+                <Form.Control
                   accept="image/*"
                   id="orgphoto"
                   name="photo"
                   type="file"
                   multiple={false}
-                  onChange={async (e) => {
-                    const file = e.target.files?.[0];
+                  onChange={async (e: React.ChangeEvent): Promise<void> => {
+                    const target = e.target as HTMLInputElement;
+                    const file = target.files && target.files[0];
                     if (file)
                       setFormState({
                         ...formState,
@@ -173,45 +176,45 @@ function OrgUpdate(props: OrgUpdateProps): JSX.Element {
             <div className={styles.checkboxdiv}>
               <div>
                 <label htmlFor="ispublic">{t('isPublic')}:</label>
-                <input
+                <Form.Control
                   id="ispublic"
                   type="checkbox"
                   defaultChecked={publicchecked}
-                  onChange={() => setPublicChecked(!publicchecked)}
+                  onChange={(): void => setPublicChecked(!publicchecked)}
                 />
               </div>
               <div>
                 <label htmlFor="registrable">{t('isRegistrable')}:</label>
-                <input
+                <Form.Control
                   id="registrable"
                   type="checkbox"
                   defaultChecked={visiblechecked}
-                  onChange={() => setVisibleChecked(!visiblechecked)}
+                  onChange={(): void => setVisibleChecked(!visiblechecked)}
                 />
               </div>
             </div>
           </div>
           <div className={styles.dispbtnflex}>
-            <button
+            <Button
               type="button"
               className={styles.greenregbtn}
               value="savechanges"
               onClick={onSaveChangesClicked}
             >
               {t('saveChanges')}
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               className={styles.whitebtn}
               value="cancelchanges"
               onClick={cancelUpdate}
             >
               {t('cancel')}
-            </button>
+            </Button>
           </div>
         </form>
       </div>
     </>
   );
 }
-export default OrgUpdate;
+export default orgUpdate;

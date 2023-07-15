@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Form, Row } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
@@ -7,7 +8,7 @@ import { useSelector } from 'react-redux';
 import styles from './BlockUser.module.css';
 import { BLOCK_PAGE_MEMBER_LIST } from 'GraphQl/Queries/Queries';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
-import { RootState } from 'state/reducers';
+import type { RootState } from 'state/reducers';
 import {
   BLOCK_USER_MUTATION,
   UNBLOCK_USER_MUTATION,
@@ -18,7 +19,7 @@ import { errorHandler } from 'utils/errorHandler';
 import debounce from 'utils/debounce';
 import { CircularProgress } from '@mui/material';
 
-interface Member {
+interface InterfaceMember {
   _id: string;
   email: string;
   firstName: string;
@@ -30,7 +31,7 @@ interface Member {
   __typename: 'User';
 }
 
-const Requests = () => {
+const Requests = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'blockUnblockUser',
   });
@@ -45,16 +46,16 @@ const Requests = () => {
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
 
-  const [membersData, setMembersData] = useState<Member[]>([]);
+  const [membersData, setMembersData] = useState<InterfaceMember[]>([]);
   const [state, setState] = useState(0);
 
   const firstNameRef = useRef<HTMLInputElement>(null);
   const lastNameRef = useRef<HTMLInputElement>(null);
 
   const {
-    data,
-    loading,
-    error,
+    data: memberData,
+    loading: memberLoading,
+    error: memberError,
     refetch: memberRefetch,
   } = useQuery(BLOCK_PAGE_MEMBER_LIST, {
     variables: {
@@ -68,40 +69,40 @@ const Requests = () => {
   const [unBlockUser] = useMutation(UNBLOCK_USER_MUTATION);
 
   useEffect(() => {
-    if (!data) {
+    if (!memberData) {
       setMembersData([]);
       return;
     }
 
     if (state === 0) {
-      setMembersData(data?.organizationsMemberConnection.edges);
+      setMembersData(memberData?.organizationsMemberConnection.edges);
     } else {
-      const blockUsers = data?.organizationsMemberConnection.edges.filter(
-        (user: Member) =>
+      const blockUsers = memberData?.organizationsMemberConnection.edges.filter(
+        (user: InterfaceMember) =>
           user.organizationsBlockedBy.some((org) => org._id === currentUrl)
       );
 
       setMembersData(blockUsers);
     }
-  }, [state, data]);
+  }, [state, memberData]);
 
   /* istanbul ignore next */
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
-  ) => {
+  ): void => {
     setPage(newPage);
   };
 
   /* istanbul ignore next */
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  ): void => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
-  const handleBlockUser = async (userId: string) => {
+  const handleBlockUser = async (userId: string): Promise<void> => {
     try {
       const { data } = await blockUser({
         variables: {
@@ -120,7 +121,7 @@ const Requests = () => {
     }
   };
 
-  const handleUnBlockUser = async (userId: string) => {
+  const handleUnBlockUser = async (userId: string): Promise<void> => {
     try {
       const { data } = await unBlockUser({
         variables: {
@@ -140,11 +141,11 @@ const Requests = () => {
   };
 
   /* istanbul ignore next */
-  if (error) {
-    toast.error(error.message);
+  if (memberError) {
+    toast.error(memberError.message);
   }
 
-  const handleSearch = () => {
+  const handleSearch = (): void => {
     const filterData = {
       orgId: currentUrl,
       firstName_contains: firstNameRef.current?.value ?? '',
@@ -158,13 +159,13 @@ const Requests = () => {
 
   return (
     <>
-      <AdminNavbar targets={targets} url_1={configUrl} />
+      <AdminNavbar targets={targets} url1={configUrl} />
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
               <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
-              <input
+              <Form.Control
                 type="name"
                 id="firstName"
                 placeholder={t('searchFirstName')}
@@ -175,7 +176,7 @@ const Requests = () => {
                 ref={firstNameRef}
               />
 
-              <input
+              <Form.Control
                 type="name"
                 id="lastName"
                 placeholder={t('searchLastName')}
@@ -187,27 +188,27 @@ const Requests = () => {
               />
 
               <div className={styles.radio_buttons} data-testid="usertypelist">
-                <input
+                <Form.Check
                   id="allusers"
                   value="allusers"
                   name="displaylist"
                   type="radio"
                   data-testid="allusers"
                   defaultChecked={state == 0}
-                  onClick={() => {
+                  onClick={(): void => {
                     setState(0);
                   }}
                 />
                 <label htmlFor="allusers">{t('allMembers')}</label>
 
-                <input
+                <Form.Check
                   id="blockedusers"
                   value="blockedusers"
                   name="displaylist"
                   data-testid="blockedusers"
                   type="radio"
                   defaultChecked={state == 1}
-                  onClick={() => {
+                  onClick={(): void => {
                     setState(1);
                   }}
                 />
@@ -222,7 +223,7 @@ const Requests = () => {
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>{t('listOfUsers')}</p>
             </Row>
-            {loading ? (
+            {memberLoading ? (
               <div className={styles.loader}>
                 <CircularProgress />
               </div>
@@ -262,21 +263,25 @@ const Requests = () => {
                                 {user.organizationsBlockedBy.some(
                                   (spam: any) => spam._id === currentUrl
                                 ) ? (
-                                  <button
+                                  <Button
                                     className="btn btn-danger"
-                                    onClick={() => handleUnBlockUser(user._id)}
+                                    onClick={async (): Promise<void> => {
+                                      await handleUnBlockUser(user._id);
+                                    }}
                                     data-testid={`unBlockUser${user._id}`}
                                   >
                                     {t('unblock')}
-                                  </button>
+                                  </Button>
                                 ) : (
-                                  <button
+                                  <Button
                                     className="btn btn-success"
-                                    onClick={() => handleBlockUser(user._id)}
+                                    onClick={async (): Promise<void> => {
+                                      await handleBlockUser(user._id);
+                                    }}
                                     data-testid={`blockUser${user._id}`}
                                   >
                                     {t('block')}
-                                  </button>
+                                  </Button>
                                 )}
                               </td>
                             </tr>

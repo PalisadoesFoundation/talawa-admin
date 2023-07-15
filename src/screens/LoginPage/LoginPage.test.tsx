@@ -8,7 +8,6 @@ import { I18nextProvider } from 'react-i18next';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
 import { StaticMockLink } from 'utils/StaticMockLink';
-
 import LoginPage from './LoginPage';
 import {
   LOGIN_MUTATION,
@@ -80,7 +79,7 @@ const MOCKS = [
 
 const link = new StaticMockLink(MOCKS, true);
 
-async function wait(ms = 100) {
+async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -364,7 +363,11 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
+    userEvent.click(screen.getByTestId('languageDropdownBtn'));
     userEvent.click(screen.getByTestId('changeLanguageBtn1'));
+    userEvent.click(screen.getByTestId('changeLanguageBtn2'));
+    userEvent.click(screen.getByTestId('changeLanguageBtn3'));
+    userEvent.click(screen.getByTestId('changeLanguageBtn4'));
   });
 
   test('Testing when language cookie is not set', async () => {

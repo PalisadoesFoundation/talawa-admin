@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { EventAttendeesModal } from './EventAttendeesModal';
 import { Button } from 'react-bootstrap';
 
-type propType = {
+type PropType = {
   eventId: string;
   orgId: string;
 };
 
-export const EventAttendeeWrapper = (props: propType) => {
+export const EventAttendeeWrapper = (props: PropType) => {
   const [showModal, setShowModal] = useState(false);
 
   return (

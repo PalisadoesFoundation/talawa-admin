@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/client';
 import { UPDATE_EVENT_PROJECT_MUTATION } from 'GraphQl/Mutations/mutations';
 
-interface ModalPropType {
+type ModalPropType = {
   show: boolean;
   project: {
     _id: string;
@@ -13,7 +13,7 @@ interface ModalPropType {
   };
   handleClose: () => void;
   refetchData: () => void;
-}
+};
 
 export const UpdateEventProjectModal = (props: ModalPropType) => {
   const [title, setTitle] = useState('');
@@ -88,7 +88,7 @@ export const UpdateEventProjectModal = (props: ModalPropType) => {
               />
             </Form.Group>
             <br />
-            <Button variant="success" type="submit" block>
+            <Button variant="success" type="submit">
               Update Details
             </Button>
           </Form>

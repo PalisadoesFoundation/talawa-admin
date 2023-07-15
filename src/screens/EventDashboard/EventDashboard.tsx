@@ -16,7 +16,7 @@ import { EventAttendeeWrapper } from 'components/EventAttendeesModal/EventAttend
 import { TaskListItem } from 'components/TaskListItem/TaskListItem';
 import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
 
-interface EventTaskInterface {
+interface InterfaceEventTask {
   _id: string;
   title: string;
   description: string;
@@ -28,14 +28,14 @@ interface EventTaskInterface {
     lastName: string;
   }[];
 }
-interface EventProjectInterface {
+interface InterfaceEventProject {
   _id: string;
   title: string;
   description: string;
-  tasks: EventTaskInterface[];
+  tasks: InterfaceEventTask[];
 }
 
-function EventDashboard(): JSX.Element {
+const EventDashboard = (): JSX.Element => {
   // Get the Event ID from the URL
   document.title = 'Event Dashboard';
   const eventId = window.location.href.split('/')[4];
@@ -138,7 +138,7 @@ function EventDashboard(): JSX.Element {
                   ? `There are no active projects for this event!`
                   : null}
                 {eventData.event.projects.map(
-                  (project: EventProjectInterface) => (
+                  (project: InterfaceEventProject) => (
                     <Col sm={4} className="mb-5" key={project._id}>
                       <div className={`card ${styles.cardContainer}`}>
                         <div className="card-body">
@@ -263,6 +263,6 @@ function EventDashboard(): JSX.Element {
       />
     </>
   );
-}
+};
 
 export default EventDashboard;

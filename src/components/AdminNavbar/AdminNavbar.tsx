@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Dropdown from 'react-bootstrap/Dropdown';
-import { Nav } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Nav, Modal } from 'react-bootstrap';
 import { Link, NavLink } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
@@ -18,7 +19,7 @@ import { UPDATE_SPAM_NOTIFICATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { languages } from 'utils/languages';
 import { errorHandler } from 'utils/errorHandler';
 
-interface NavbarProps {
+interface InterfaceNavbarProps {
   targets: {
     url?: string;
     name: string;
@@ -28,28 +29,33 @@ interface NavbarProps {
       icon?: string;
     }[];
   }[];
-  url_1: string;
+  url1: string;
 }
 
-function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
+function adminNavbar({ targets, url1 }: InterfaceNavbarProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'adminNavbar' });
 
   const [spamCountData, setSpamCountData] = useState([]);
+  const [showNotifModal, setShowNotifModal] = useState(false);
 
   const currentUrl = window.location.href.split('=')[1];
 
-  const { data, error, refetch } = useQuery(ORGANIZATIONS_LIST, {
+  const {
+    data: orgData,
+    error: orgError,
+    refetch: orgRefetch,
+  } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: currentUrl },
   });
   const [updateSpam] = useMutation(UPDATE_SPAM_NOTIFICATION_MUTATION);
-  const { data: data_2 } = useQuery(USER_ORGANIZATION_LIST, {
+  const { data: data2 } = useQuery(USER_ORGANIZATION_LIST, {
     variables: { id: localStorage.getItem('id') },
   });
 
-  const isSuperAdmin = data_2?.user.userType === 'SUPERADMIN';
+  const isSuperAdmin = data2?.user.userType === 'SUPERADMIN';
 
   useEffect(() => {
-    const handleUpdateSpam = async () => {
+    const handleUpdateSpam = async (): Promise<void> => {
       const spamId = localStorage.getItem('spamId');
       if (spamId) {
         try {
@@ -64,7 +70,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
           /* istanbul ignore next */
           if (data) {
             localStorage.removeItem('spamId');
-            refetch();
+            orgRefetch();
           }
         } catch (error: any) {
           /* istanbul ignore next */
@@ -77,30 +83,31 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
   }, []);
 
   useEffect(() => {
-    if (data && data?.organizations[0].spamCount) {
+    if (orgData && orgData?.organizations[0].spamCount) {
       setSpamCountData(
-        data?.organizations[0].spamCount.filter(
+        orgData?.organizations[0].spamCount.filter(
           (spam: any) => spam.isReaded === false
         )
       );
     }
-  }, [data]);
+  }, [orgData]);
 
   const currentLanguageCode = Cookies.get('i18next') || 'en';
+  const toggleNotifModal = (): void => setShowNotifModal(!showNotifModal);
 
-  const handleSpamNotification = (spamId: string) => {
+  const handleSpamNotification = (spamId: string): void => {
     localStorage.setItem('spamId', spamId);
-    window.location.assign(`/blockuser/id=${url_1}`);
+    window.location.assign(`/blockuser/id=${url1}`);
   };
 
   /* istanbul ignore next */
-  if (error) {
+  if (orgError) {
     window.location.replace('/orglist');
   }
 
-  let OrgName;
-  if (data) {
-    OrgName = data?.organizations[0].name;
+  let orgName;
+  if (orgData) {
+    orgName = orgData?.organizations[0].name;
   }
 
   return (
@@ -108,9 +115,9 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
       <Navbar className={styles.navbarbg} expand="xl" fixed="top">
         <Navbar.Brand className={styles.navbarBrandLogo}>
           <div className={styles.logo}>
-            {data?.organizations[0].image ? (
+            {orgData?.organizations[0].image ? (
               <img
-                src={data?.organizations[0].image}
+                src={orgData?.organizations[0].image}
                 className={styles.roundedcircle}
                 data-testid={'orgLogoPresent'}
               />
@@ -121,7 +128,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                 data-testid={'orgLogoAbsent'}
               />
             )}
-            <strong>{OrgName}</strong>
+            <strong>{orgName}</strong>
           </div>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
@@ -186,7 +193,7 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                 id="dropdown-basic"
                 data-testid="logoutDropdown"
               >
-                {data?.organizations[0].image ? (
+                {orgData?.organizations[0].image ? (
                   <span>
                     <MenuIcon></MenuIcon>
                   </span>
@@ -199,16 +206,13 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                 )}
               </Dropdown.Toggle>
               <Dropdown.Menu className={styles.dropdownMenu}>
-                <Dropdown.Item
-                  data-toggle="modal"
-                  data-target="#notificationModal"
-                >
+                <Dropdown.Item onClick={toggleNotifModal}>
                   <i className="fa fa-bell"></i>&ensp; {t('notification')}{' '}
-                  <span className="badge badge-success">
+                  <span className="badge text-bg-success">
                     {spamCountData.length}
                   </span>
                 </Dropdown.Item>
-                <Dropdown.Item as={Link} to={`/orgsetting/id=${url_1}`}>
+                <Dropdown.Item as={Link} to={`/orgsetting/id=${url1}`}>
                   <i className="fa fa-cogs"></i>&ensp; {t('settings')}
                 </Dropdown.Item>
                 <Dropdown className={styles.languageDropdown}>
@@ -222,9 +226,11 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                   <Dropdown.Menu>
                     {languages.map((language, index: number) => (
                       <Dropdown.Item key={index}>
-                        <button
+                        <Button
                           className="dropdown-item"
-                          onClick={() => i18next.changeLanguage(language.code)}
+                          onClick={async (): Promise<void> => {
+                            await i18next.changeLanguage(language.code);
+                          }}
                           disabled={currentLanguageCode === language.code}
                           data-testid={`changeLanguageBtn${index}`}
                         >
@@ -232,13 +238,13 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
                             className={`fi fi-${language.country_code} mr-2`}
                           ></span>
                           {language.name}
-                        </button>
+                        </Button>
                       </Dropdown.Item>
                     ))}
                   </Dropdown.Menu>
                 </Dropdown>
                 <Dropdown.Item
-                  onClick={() => {
+                  onClick={(): void => {
                     localStorage.clear();
                     window.location.replace('/');
                   }}
@@ -253,59 +259,38 @@ function AdminNavbar({ targets, url_1 }: NavbarProps): JSX.Element {
       </Navbar>
 
       {/* Notification Modal */}
-      <div
-        className="modal fade"
-        id="notificationModal"
-        tabIndex={-1}
-        aria-labelledby="notificationModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-scrollable">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="notificationModalLabel">
-                {t('notifications')}
-              </h5>
-              <button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close"
+      <Modal show={showNotifModal} onHide={toggleNotifModal}>
+        <Modal.Header>
+          <h5 id="notificationModalLabel">{t('notifications')}</h5>
+          <Button variant="danger" onClick={toggleNotifModal}>
+            <i className="fa fa-times"></i>
+          </Button>
+        </Modal.Header>
+        <Modal.Body>
+          {spamCountData.length > 0 ? (
+            spamCountData.map((spam: any) => (
+              <div
+                className={`border rounded p-3 mb-2 ${styles.notificationList}`}
+                onClick={(): void => handleSpamNotification(spam._id)}
+                key={spam._id}
+                data-testid={`spamNotification${spam._id}`}
               >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              {spamCountData.length > 0 ? (
-                spamCountData.map((spam: any) => (
-                  <div
-                    className={`border rounded p-3 mb-2 ${styles.notificationList}`}
-                    onClick={() => handleSpamNotification(spam._id)}
-                    key={spam._id}
-                    data-testid={`spamNotification${spam._id}`}
-                  >
-                    {`${spam.user.firstName} ${spam.user.lastName}`}{' '}
-                    {t('spamsThe')} {spam.groupchat.title} {t('group')}.
-                  </div>
-                ))
-              ) : (
-                <p className="text-center">{t('noNotifications')}</p>
-              )}
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-success"
-                data-dismiss="modal"
-              >
-                {t('close')}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+                {`${spam.user.firstName} ${spam.user.lastName}`} {t('spamsThe')}{' '}
+                {spam.groupchat.title} {t('group')}.
+              </div>
+            ))
+          ) : (
+            <p className="text-center">{t('noNotifications')}</p>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={toggleNotifModal}>
+            {t('close')}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
 
-export default AdminNavbar;
+export default adminNavbar;

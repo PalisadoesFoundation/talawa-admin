@@ -12,7 +12,7 @@ import { ToastContainer } from 'react-toastify';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { ModalPropType } from './UpdateTaskModal';
+import type { ModalPropType } from './UpdateTaskModal';
 
 const today = dayjs(new Date());
 const oldDeadline = today.add(7, 'days');

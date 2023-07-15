@@ -1,16 +1,16 @@
 import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
+import type { NormalizedCacheObject } from '@apollo/client';
 import {
   ApolloClient,
-  NormalizedCacheObject,
   ApolloProvider,
   InMemoryCache,
   ApolloLink,
   HttpLink,
 } from '@apollo/client';
 import { onError } from '@apollo/link-error';
-import 'bootstrap/dist/css/bootstrap.css';
+import './assets/css/app.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'flag-icons/css/flag-icons.min.css';

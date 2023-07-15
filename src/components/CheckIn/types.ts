@@ -1,12 +1,12 @@
-export interface UserInterface {
+export interface InterfaceUser {
   _id: string;
   firstName: string;
   lastName: string;
 }
 
-export interface AttendeeCheckInInterface {
+export interface InterfaceAttendeeCheckIn {
   _id: string;
-  user: UserInterface;
+  user: InterfaceUser;
   checkIn: null | {
     _id: string;
     time: string;
@@ -15,20 +15,20 @@ export interface AttendeeCheckInInterface {
   };
 }
 
-export interface AttendeeQueryResponseInterface {
+export interface InterfaceAttendeeQueryResponse {
   event: {
     _id: string;
-    attendeesCheckInStatus: AttendeeCheckInInterface[];
+    attendeesCheckInStatus: InterfaceAttendeeCheckIn[];
   };
 }
 
-export interface ModalPropInterface {
+export interface InterfaceModalProp {
   show: boolean;
   eventId: string;
   handleClose: () => void;
 }
 
-export interface TableCheckInInterface {
+export interface InterfaceTableCheckIn {
   id: string;
   userId: string;
   checkIn: null | {
@@ -40,8 +40,8 @@ export interface TableCheckInInterface {
   eventId: string;
 }
 
-export interface TableDataInterface {
+export interface InterfaceTableData {
   userName: string;
   id: string;
-  checkInData: TableCheckInInterface;
+  checkInData: InterfaceTableCheckIn;
 }

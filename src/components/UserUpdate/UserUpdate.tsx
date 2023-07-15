@@ -2,6 +2,7 @@ import React from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
+import Button from 'react-bootstrap/Button';
 import styles from './UserUpdate.module.css';
 import convertToBase64 from 'utils/convertToBase64';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
@@ -9,13 +10,16 @@ import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { languages } from 'utils/languages';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
+import { Form } from 'react-bootstrap';
 
-interface UserUpdateProps {
+interface InterfaceUserUpdateProps {
   id: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
+const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
+  id,
+}): JSX.Element => {
   const currentUrl = localStorage.getItem('id');
   const { t } = useTranslation('translation', {
     keyPrefix: 'userUpdate',
@@ -62,7 +66,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
     window.location.assign(`/orgsettings/id=${currentUrl}`);
   }
 
-  const login_link = async () => {
+  const loginLink = async (): Promise<void> => {
     try {
       const { data } = await updateUser({
         variables: {
@@ -95,7 +99,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
   };
 
   /* istanbul ignore next */
-  const cancelUpdate = () => {
+  const cancelUpdate = (): void => {
     window.location.reload();
   };
 
@@ -107,14 +111,14 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
           <div className={styles.dispflex}>
             <div>
               <label>{t('firstName')}</label>
-              <input
+              <Form.Control
                 type="input"
                 id="firstname"
                 placeholder={t('firstName')}
                 autoComplete="off"
                 required
                 value={formState.firstName}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
                     firstName: e.target.value,
@@ -126,14 +130,14 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
           <div className={styles.dispflex}>
             <div>
               <label>{t('lastName')}</label>
-              <input
+              <Form.Control
                 type="input"
                 id="lastname"
                 placeholder={t('lastName')}
                 autoComplete="off"
                 required
                 value={formState.lastName}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
                     lastName: e.target.value,
@@ -145,14 +149,14 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
           <div className={styles.dispflex}>
             <div>
               <label>{t('email')}</label>
-              <input
+              <Form.Control
                 type="email"
                 id="email"
                 placeholder={t('email')}
                 autoComplete="off"
                 required
                 value={formState.email}
-                onChange={(e) => {
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
                     email: e.target.value,
@@ -169,7 +173,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
                 <select
                   className="form-control"
                   data-testid="applangcode"
-                  onChange={(e) => {
+                  onChange={(e): void => {
                     setFormState({
                       ...formState,
                       applangcode: e.target.value,
@@ -187,14 +191,15 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
           </div>
           <label htmlFor="orgphoto" className={styles.orgphoto}>
             {t('displayImage')}:
-            <input
+            <Form.Control
               accept="image/*"
               id="orgphoto"
               name="photo"
               type="file"
               multiple={false}
-              onChange={async (e) => {
-                const file = e.target.files?.[0];
+              onChange={async (e: React.ChangeEvent): Promise<void> => {
+                const target = e.target as HTMLInputElement;
+                const file = target.files && target.files[0];
                 if (file)
                   setFormState({
                     ...formState,
@@ -205,22 +210,22 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ id }): JSX.Element => {
             />
           </label>
           <div className={styles.dispbtnflex}>
-            <button
+            <Button
               type="button"
               className={styles.greenregbtn}
               value="savechanges"
-              onClick={login_link}
+              onClick={loginLink}
             >
               {t('saveChanges')}
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               className={styles.whitebtn}
               value="cancelchanges"
               onClick={cancelUpdate}
             >
               {t('cancel')}
-            </button>
+            </Button>
           </div>
         </form>
       </div>

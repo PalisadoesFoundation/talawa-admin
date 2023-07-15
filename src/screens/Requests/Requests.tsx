@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Form, Row } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import Button from 'react-bootstrap/Button';
 
 import styles from './Requests.module.css';
 import ListNavbar from 'components/ListNavbar/ListNavbar';
@@ -17,7 +18,7 @@ import {
 import PaginationList from 'components/PaginationList/PaginationList';
 import { errorHandler } from 'utils/errorHandler';
 
-const Requests = () => {
+const Requests = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'requests' });
 
   document.title = t('title');
@@ -37,7 +38,7 @@ const Requests = () => {
     setComponentLoader(false);
   }, []);
 
-  const { data, loading: users_loading, refetch } = useQuery(USER_LIST);
+  const { data: userData, loading: userLoading, refetch } = useQuery(USER_LIST);
 
   const [acceptAdminFunc] = useMutation(ACCPET_ADMIN_MUTATION);
   const [rejectAdminFunc] = useMutation(REJECT_ADMIN_MUTATION);
@@ -55,24 +56,24 @@ const Requests = () => {
   }, [dataOrgs]);
 
   useEffect(() => {
-    if (data) {
+    if (userData) {
       setUsersData(
-        data.users.filter(
+        userData.users.filter(
           (user: any) =>
             user.userType === 'ADMIN' && user.adminApproved === false
         )
       );
     }
-  }, [data]);
+  }, [userData]);
 
-  if (componentLoader || users_loading) {
+  if (componentLoader || userLoading) {
     return <div className="loader"></div>;
   }
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
-  ) => {
+  ): void => {
     /* istanbul ignore next */
     setPage(newPage);
   };
@@ -80,12 +81,12 @@ const Requests = () => {
   /* istanbul ignore next */
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  ): void => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
-  const accpetAdmin = async (userId: any) => {
+  const accpetAdmin = async (userId: any): Promise<void> => {
     try {
       const { data } = await acceptAdminFunc({
         variables: {
@@ -104,7 +105,7 @@ const Requests = () => {
     }
   };
 
-  const rejectAdmin = async (userId: any) => {
+  const rejectAdmin = async (userId: any): Promise<void> => {
     try {
       const { data } = await rejectAdminFunc({
         variables: {
@@ -123,7 +124,7 @@ const Requests = () => {
     }
   };
 
-  const handleSearchByName = (e: any) => {
+  const handleSearchByName = (e: any): any => {
     const { value } = e.target;
     setSearchByName(value);
 
@@ -140,7 +141,7 @@ const Requests = () => {
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
               <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
-              <input
+              <Form.Control
                 type="name"
                 id="orgname"
                 placeholder={t('enterName')}
@@ -193,22 +194,26 @@ const Requests = () => {
                             <td>{`${user.firstName} ${user.lastName}`}</td>
                             <td>{user.email}</td>
                             <td>
-                              <button
+                              <Button
                                 className="btn btn-success btn-sm"
-                                onClick={() => accpetAdmin(user._id)}
+                                onClick={async (): Promise<void> => {
+                                  await accpetAdmin(user._id);
+                                }}
                                 data-testid={`acceptUser${user._id}`}
                               >
                                 {t('accept')}
-                              </button>
+                              </Button>
                             </td>
                             <td>
-                              <button
+                              <Button
                                 className="btn btn-danger btn-sm"
-                                onClick={() => rejectAdmin(user._id)}
+                                onClick={async (): Promise<void> => {
+                                  await rejectAdmin(user._id);
+                                }}
                                 data-testid={`rejectUser${user._id}`}
                               >
                                 {t('reject')}
-                              </button>
+                              </Button>
                             </td>
                           </tr>
                         );

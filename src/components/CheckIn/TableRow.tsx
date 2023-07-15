@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TableCheckInInterface } from './types';
+import type { InterfaceTableCheckIn } from './types';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -14,7 +14,7 @@ export const TableRow = ({
   data,
   refetch,
 }: {
-  data: TableCheckInInterface;
+  data: InterfaceTableCheckIn;
   refetch: () => void;
 }) => {
   const [allotedSeat, setAllotedSeat] = useState('');

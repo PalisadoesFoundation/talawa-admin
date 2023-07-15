@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Button as BootstrapButton, Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/client';
-import dayjs, { Dayjs } from 'dayjs';
+import type { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { UPDATE_EVENT_PROJECT_TASK_MUTATION } from 'GraphQl/Mutations/mutations';
 import { DeleteTaskModal } from './DeleteTaskModal';
@@ -13,30 +14,30 @@ import Avatar from '@mui/material/Avatar';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import Button from '@mui/material/Button';
 
-interface UserInterface {
+interface InterfaceUser {
   _id: string;
   firstName: string;
   lastName: string;
 }
-interface TaskInterface {
+interface InterfaceTask {
   _id: string;
   title: string;
   deadline: string;
   description: string;
   completed: boolean;
-  volunteers: UserInterface[];
+  volunteers: InterfaceUser[];
 }
 
-export interface ModalPropType {
+export type ModalPropType = {
   show: boolean;
-  task: TaskInterface;
+  task: InterfaceTask;
   organization: {
     _id: string;
-    members: UserInterface[];
+    members: InterfaceUser[];
   };
   handleClose: () => void;
   refetchData: () => void;
-}
+};
 
 export const UpdateTaskModal = (props: ModalPropType) => {
   const [title, setTitle] = useState('');
@@ -174,12 +175,11 @@ export const UpdateTaskModal = (props: ModalPropType) => {
             </Form.Group>
 
             <br />
-            <BootstrapButton variant="success" type="submit" block>
+            <BootstrapButton variant="success" type="submit" className="m-2">
               Update Task
             </BootstrapButton>
             <BootstrapButton
               variant="danger"
-              block
               onClick={() => {
                 setShowDeleteTaskModal(true);
                 props.handleClose();

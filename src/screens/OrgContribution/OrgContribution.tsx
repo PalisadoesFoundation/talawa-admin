@@ -8,9 +8,10 @@ import styles from './OrgContribution.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import OrgContriCards from 'components/OrgContriCards/OrgContriCards';
 import ContriStats from 'components/ContriStats/ContriStats';
-import { RootState } from 'state/reducers';
+import type { RootState } from 'state/reducers';
+import { Form } from 'react-bootstrap';
 
-function OrgContribution(): JSX.Element {
+function orgContribution(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgContribution',
   });
@@ -22,13 +23,13 @@ function OrgContribution(): JSX.Element {
 
   return (
     <>
-      <AdminNavbar targets={targets} url_1={configUrl} />
+      <AdminNavbar targets={targets} url1={configUrl} />
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
               <h6 className={styles.searchtitle}>{t('filterByName')}</h6>
-              <input
+              <Form.Control
                 type="name"
                 id="orgname"
                 placeholder={t('orgname')}
@@ -37,7 +38,7 @@ function OrgContribution(): JSX.Element {
               />
 
               <h6 className={styles.searchtitle}>{t('filterByTransId')}</h6>
-              <input
+              <Form.Control
                 type="transaction"
                 id="searchtransaction"
                 placeholder={t('searchtransaction')}
@@ -77,4 +78,4 @@ function OrgContribution(): JSX.Element {
   );
 }
 
-export default OrgContribution;
+export default orgContribution;

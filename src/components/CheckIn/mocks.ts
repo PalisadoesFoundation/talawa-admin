@@ -1,7 +1,7 @@
 import { EVENT_CHECKINS } from 'GraphQl/Queries/Queries';
-import { AttendeeQueryResponseInterface } from './types';
+import type { InterfaceAttendeeQueryResponse } from './types';
 
-const checkInQueryData: AttendeeQueryResponseInterface = {
+const checkInQueryData: InterfaceAttendeeQueryResponse = {
   event: {
     _id: 'event123',
     attendeesCheckInStatus: [

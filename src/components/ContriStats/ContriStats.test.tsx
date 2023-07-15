@@ -2,12 +2,8 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import ContriStats from './ContriStats';
 import { I18nextProvider } from 'react-i18next';
-import {
-  ApolloClient,
-  NormalizedCacheObject,
-  ApolloProvider,
-  InMemoryCache,
-} from '@apollo/client';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import type { NormalizedCacheObject } from '@apollo/client';
 import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
 

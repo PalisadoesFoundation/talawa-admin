@@ -8,26 +8,26 @@ import { useMutation } from '@apollo/client';
 import { SET_TASK_VOLUNTEERS_MUTATION } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
 
-interface UserInterface {
+interface InterfaceUser {
   _id: string;
   firstName: string;
   lastName: string;
 }
 
-interface ModalPropType {
+type ModalPropType = {
   show: boolean;
   taskId: string;
   organization: {
     _id: string;
-    members: UserInterface[];
+    members: InterfaceUser[];
   };
-  volunteers: UserInterface[];
+  volunteers: InterfaceUser[];
   handleClose: () => void;
   refetchData: () => void;
-}
+};
 
 export const ManageVolunteerModal = (props: ModalPropType) => {
-  const [volunteers, setVolunteers] = useState<UserInterface[]>([]);
+  const [volunteers, setVolunteers] = useState<InterfaceUser[]>([]);
 
   useEffect(() => setVolunteers(props.volunteers), [props.volunteers]);
 

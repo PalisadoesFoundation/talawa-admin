@@ -1,12 +1,13 @@
 import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import styles from './SuperDashListCard.module.css';
 import { useHistory } from 'react-router-dom';
 import AboutImg from 'assets/images/defaultImg.png';
 
-interface SuperDashListCardProps {
+interface InterfaceSuperDashListCardProps {
   key: string;
   id: string;
   orgName: string;
@@ -17,12 +18,14 @@ interface SuperDashListCardProps {
   members: any;
 }
 
-function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
+function superDashListCard(
+  props: InterfaceSuperDashListCardProps
+): JSX.Element {
   const userId = localStorage.getItem('id');
   const userType = localStorage.getItem('UserType');
   const history = useHistory();
 
-  function handleClick() {
+  function handleClick(): void {
     const url = '/orgdash/id=' + props.id;
 
     /*
@@ -70,7 +73,7 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
               {t('members')}: <span>{props?.members}</span>
             </p>
             <div className={styles.orgCreateBtnDiv}>
-              <button
+              <Button
                 className={styles.orgfontcreatedbtn}
                 onClick={handleClick}
                 disabled={
@@ -80,7 +83,7 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
                 }
               >
                 {t('manage')}
-              </button>
+              </Button>
             </div>
           </div>
         </Col>
@@ -90,4 +93,4 @@ function SuperDashListCard(props: SuperDashListCardProps): JSX.Element {
   );
 }
 export {};
-export default SuperDashListCard;
+export default superDashListCard;

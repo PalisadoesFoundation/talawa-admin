@@ -4,12 +4,12 @@ import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/client';
 import { DELETE_EVENT_TASK_MUTATION } from 'GraphQl/Mutations/mutations';
 
-interface ModalPropType {
+type ModalPropType = {
   show: boolean;
   taskId: string;
   handleClose: () => void;
   refetchData: () => void;
-}
+};
 
 export const DeleteTaskModal = (props: ModalPropType) => {
   const [deleteMutation] = useMutation(DELETE_EVENT_TASK_MUTATION);

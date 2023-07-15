@@ -15,21 +15,21 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
-interface ModalPropType {
+type ModalPropType = {
   show: boolean;
   eventId: string;
   orgId: string;
   handleClose: () => void;
-}
+};
 
-interface UserInterface {
+interface InterfaceUser {
   _id: string;
   firstName: string;
   lastName: string;
 }
 
 export const EventAttendeesModal = (props: ModalPropType) => {
-  const [member, setMember] = useState<UserInterface | null>(null);
+  const [member, setMember] = useState<InterfaceUser | null>(null);
 
   const [addAttendeeMutation] = useMutation(ADD_EVENT_ATTENDEE);
   const [removeAttendeeMutation] = useMutation(REMOVE_EVENT_ATTENDEE);
@@ -107,7 +107,7 @@ export const EventAttendeesModal = (props: ModalPropType) => {
             ? `There are no registered attendees for this event.`
             : null}
           <Stack direction="row" spacing={1}>
-            {attendeesData.event.attendees.map((attendee: UserInterface) => (
+            {attendeesData.event.attendees.map((attendee: InterfaceUser) => (
               <Chip
                 avatar={
                   <Avatar>{`${attendee.firstName[0]}${attendee.lastName[0]}`}</Avatar>
@@ -127,7 +127,7 @@ export const EventAttendeesModal = (props: ModalPropType) => {
               setMember(newMember);
             }}
             options={memberData.organizations[0].members}
-            getOptionLabel={(member: UserInterface) =>
+            getOptionLabel={(member: InterfaceUser) =>
               `${member.firstName} ${member.lastName}`
             }
             renderInput={(params) => (
@@ -139,7 +139,7 @@ export const EventAttendeesModal = (props: ModalPropType) => {
             )}
           />
           <br />
-          <Button variant="success" onClick={addAttendee} block>
+          <Button variant="success" onClick={addAttendee}>
             Add Attendee
           </Button>
         </Modal.Body>

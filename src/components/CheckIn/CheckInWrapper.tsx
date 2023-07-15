@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { CheckInModal } from './CheckInModal';
 import { Button } from 'react-bootstrap';
 
-type propType = {
+type PropType = {
   eventId: string;
 };
 
-export const CheckInWrapper = (props: propType) => {
+export const CheckInWrapper = (props: PropType) => {
   const [showModal, setShowModal] = useState(false);
 
   return (

@@ -1,5 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
+import type { RenderResult } from '@testing-library/react';
 import {
   act,
   render,
@@ -22,7 +23,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { USER_ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
-async function wait(ms = 100) {
+async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -31,7 +32,7 @@ async function wait(ms = 100) {
 }
 const link2 = new StaticMockLink(MOCKS_WITH_IMAGE, true);
 const link3 = new StaticMockLink(MOCKS_WITHOUT_IMAGE, true);
-const customRender = (userType: any) => {
+const customRender = (userType: any): RenderResult => {
   const mockedUser = {
     request: {
       query: USER_ORGANIZATION_LIST,

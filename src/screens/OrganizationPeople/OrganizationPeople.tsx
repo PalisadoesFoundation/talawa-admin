@@ -3,7 +3,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useLazyQuery } from '@apollo/client';
 import { useSelector } from 'react-redux';
-import { Container } from 'react-bootstrap';
+import { Container, Form } from 'react-bootstrap';
 import dayjs from 'dayjs';
 
 import styles from './OrganizationPeople.module.css';
@@ -15,7 +15,7 @@ import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST,
 } from 'GraphQl/Queries/Queries';
-import { RootState } from '../../state/reducers';
+import type { RootState } from '../../state/reducers';
 import PaginationList from 'components/PaginationList/PaginationList';
 import { useTranslation } from 'react-i18next';
 import debounce from 'utils/debounce';
@@ -23,7 +23,7 @@ import NotFound from 'components/NotFound/NotFound';
 
 import { toast } from 'react-toastify';
 
-function OrganizationPeople(): JSX.Element {
+function organizationPeople(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
   });
@@ -109,7 +109,7 @@ function OrganizationPeople(): JSX.Element {
   }
 
   /* istanbul ignore next */
-  const handleFirstNameSearchChange = (filterData: any) => {
+  const handleFirstNameSearchChange = (filterData: any): void => {
     /* istanbul ignore next */
     if (state === 0) {
       memberRefetch({
@@ -133,14 +133,14 @@ function OrganizationPeople(): JSX.Element {
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
-  ) => {
+  ): void => {
     setPage(newPage);
   };
 
   /* istanbul ignore next */
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  ): void => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -152,21 +152,21 @@ function OrganizationPeople(): JSX.Element {
   return (
     <>
       <div>
-        <AdminNavbar targets={targets} url_1={configUrl} />
+        <AdminNavbar targets={targets} url1={configUrl} />
       </div>
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
               <h6 className={styles.searchtitle}>{t('filterByName')}</h6>
-              <input
+              <Form.Control
                 type="name"
                 id="searchname"
                 placeholder={t('searchFirstName')}
                 autoComplete="off"
                 required
                 value={filterData.firstName_contains}
-                onChange={(e) => {
+                onChange={(e): void => {
                   const { value } = e.target;
 
                   const newFilterData = {
@@ -178,14 +178,14 @@ function OrganizationPeople(): JSX.Element {
                   debouncedHandleFirstNameSearchChange(newFilterData);
                 }}
               />
-              <input
+              <Form.Control
                 type="name"
                 id="searchLastName"
                 placeholder={t('searchLastName')}
                 autoComplete="off"
                 required
                 value={filterData.lastName_contains}
-                onChange={(e) => {
+                onChange={(e): void => {
                   const { value } = e.target;
 
                   const newFilterData = {
@@ -198,38 +198,41 @@ function OrganizationPeople(): JSX.Element {
                 }}
               />
               <div className={styles.radio_buttons} data-testid="usertypelist">
-                <input
+                <Form.Check
+                  type="radio"
+                  inline
                   id="userslist"
                   value="userslist"
                   name="displaylist"
-                  type="radio"
                   data-testid="users"
                   defaultChecked={state == 2 ? true : false}
-                  onClick={() => {
+                  onClick={(): void => {
                     setState(2);
                   }}
                 />
                 <label htmlFor="userslist">{t('users')}</label>
-                <input
+                <Form.Check
+                  type="radio"
+                  inline
                   id="memberslist"
                   value="memberslist"
                   name="displaylist"
                   data-testid="members"
-                  type="radio"
                   defaultChecked={state == 0 ? true : false}
-                  onClick={() => {
+                  onClick={(): void => {
                     setState(0);
                   }}
                 />
                 <label htmlFor="memberslist">{t('members')}</label>
-                <input
+                <Form.Check
+                  type="radio"
+                  inline
                   id="adminslist"
                   value="adminslist"
                   name="displaylist"
-                  type="radio"
                   data-testid="admins"
                   defaultChecked={state == 1 ? true : false}
-                  onClick={() => {
+                  onClick={(): void => {
                     setState(1);
                   }}
                 />
@@ -416,4 +419,4 @@ function OrganizationPeople(): JSX.Element {
   );
 }
 
-export default OrganizationPeople;
+export default organizationPeople;

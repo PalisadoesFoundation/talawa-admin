@@ -4,16 +4,17 @@ import { useQuery } from '@apollo/client';
 import { EVENT_CHECKINS } from 'GraphQl/Queries/Queries';
 import styles from 'components/CheckIn/CheckInModal.module.css';
 import { TableRow } from './TableRow';
-import {
-  AttendeeCheckInInterface,
-  ModalPropInterface,
-  TableDataInterface,
+import type {
+  InterfaceAttendeeCheckIn,
+  InterfaceModalProp,
+  InterfaceTableData,
 } from './types';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import type { GridColDef } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import TextField from '@mui/material/TextField';
 
-export const CheckInModal = (props: ModalPropInterface) => {
-  const [tableData, setTableData] = useState<TableDataInterface[]>([]);
+export const CheckInModal = (props: InterfaceModalProp): JSX.Element => {
+  const [tableData, setTableData] = useState<InterfaceTableData[]>([]);
 
   const [userFilterQuery, setUserFilterQuery] = useState('');
   const [filterQueryModel, setFilterQueryModel] = useState({
@@ -33,7 +34,7 @@ export const CheckInModal = (props: ModalPropInterface) => {
     else
       setTableData(
         checkInData.event.attendeesCheckInStatus.map(
-          (checkIn: AttendeeCheckInInterface) => ({
+          (checkIn: InterfaceAttendeeCheckIn) => ({
             userName: `${checkIn.user.firstName} ${checkIn.user.lastName}`,
             id: checkIn._id,
             checkInData: {

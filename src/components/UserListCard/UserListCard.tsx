@@ -1,6 +1,7 @@
 import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -8,10 +9,10 @@ import { useTranslation } from 'react-i18next';
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import styles from './UserListCard.module.css';
 import { Link } from 'react-router-dom';
-import defaultImg from 'assets/third_image.png';
+import defaultImg from 'assets/images/blank.png';
 import { errorHandler } from 'utils/errorHandler';
 
-interface UserListCardProps {
+interface InterfaceUserListCardProps {
   key: string;
   id: string;
   memberName: string;
@@ -20,7 +21,7 @@ interface UserListCardProps {
   memberEmail: string;
 }
 
-function UserListCard(props: UserListCardProps): JSX.Element {
+function userListCard(props: InterfaceUserListCardProps): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
 
@@ -28,7 +29,7 @@ function UserListCard(props: UserListCardProps): JSX.Element {
     keyPrefix: 'userListCard',
   });
 
-  const AddAdmin = async () => {
+  const addAdmin = async (): Promise<void> => {
     try {
       const { data } = await adda({
         variables: {
@@ -76,12 +77,12 @@ function UserListCard(props: UserListCardProps): JSX.Element {
               <p className={styles.memberfont}>
                 {t('joined')}: <span>{props.joinDate}</span>
               </p>
-              <button
+              <Button
                 className={styles.memberfontcreatedbtn}
-                onClick={AddAdmin}
+                onClick={addAdmin}
               >
                 {t('addAdmin')}
-              </button>
+              </Button>
             </div>
           </Col>
         </Row>
@@ -91,4 +92,4 @@ function UserListCard(props: UserListCardProps): JSX.Element {
   );
 }
 export {};
-export default UserListCard;
+export default userListCard;

@@ -6,6 +6,7 @@ import * as installedPlugins from 'components/plugins/index';
 import styles from './App.module.css';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
+import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
 import LoginPage from 'screens/LoginPage/LoginPage';
 import OrganizationEvents from 'screens/OrganizationEvents/OrganizationEvents';
 import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
@@ -23,7 +24,11 @@ import BlockUser from 'screens/BlockUser/BlockUser';
 import EventDashboard from 'screens/EventDashboard/EventDashboard';
 import MemberDetail from 'screens/MemberDetail/MemberDetail';
 
-function App(): JSX.Element {
+// User Portal Components
+import UserLoginPage from 'screens/UserPortal/UserLoginPage/UserLoginPage';
+import Organizations from 'screens/UserPortal/Organizations/Organizations';
+
+function app(): JSX.Element {
   /*const { updatePluginLinks, updateInstalled } = bindActionCreators(
     actionCreators,
     dispatch
@@ -53,12 +58,12 @@ function App(): JSX.Element {
 
   const extraRoutes = Object.entries(installedPlugins).map(
     (plugin: any, index) => {
-      const ExtraComponent = plugin[1];
+      const extraComponent = plugin[1];
       return (
         <SecuredRoute
           key={index}
           path={`/plugin/${plugin[0].toLowerCase()}`}
-          component={ExtraComponent}
+          component={extraComponent}
         />
       );
     }
@@ -100,10 +105,18 @@ function App(): JSX.Element {
         <SecuredRoute path="/event/:eventId" component={EventDashboard} />
         {extraRoutes}
         <Route exact path="/forgotPassword" component={ForgotPassword} />
+
+        {/* User Portal Routes */}
+        <Route exact path="/user" component={UserLoginPage} />
+        <SecuredRouteForUser
+          path="/user/organizations"
+          component={Organizations}
+        />
+
         <Route exact path="*" component={PageNotFound} />
       </Switch>
     </>
   );
 }
 
-export default App;
+export default app;

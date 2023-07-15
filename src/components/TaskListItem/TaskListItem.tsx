@@ -12,28 +12,28 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import { UpdateTaskModal } from 'components/TaskModals/UpdateTaskModal';
 
-interface UserInterface {
+interface InterfaceUser {
   _id: string;
   firstName: string;
   lastName: string;
 }
-interface TaskInterface {
+interface InterfaceTask {
   _id: string;
   title: string;
   deadline: string;
   description: string;
   completed: boolean;
-  volunteers: UserInterface[];
+  volunteers: InterfaceUser[];
 }
 
-interface PropType {
-  task: TaskInterface;
+type PropType = {
+  task: InterfaceTask;
   refetchData: () => void;
   organization: {
     _id: string;
-    members: UserInterface[];
+    members: InterfaceUser[];
   };
-}
+};
 
 export const TaskListItem = ({
   task,
