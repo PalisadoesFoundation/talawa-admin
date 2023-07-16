@@ -20,3 +20,8 @@
   background-color: #31bb6b;
   color: white;
 }
+
+.link {
+  text-decoration: none !important;
+  color: inherit;
+}

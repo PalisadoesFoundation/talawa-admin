@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
-import { Nav, Modal } from 'react-bootstrap';
+import { Nav } from 'react-bootstrap';
 import { Link, NavLink } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import Cookies from 'js-cookie';
 import i18next from 'i18next';
@@ -15,9 +15,7 @@ import {
   ORGANIZATIONS_LIST,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-import { UPDATE_SPAM_NOTIFICATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { languages } from 'utils/languages';
-import { errorHandler } from 'utils/errorHandler';
 
 interface InterfaceNavbarProps {
   targets: {
@@ -34,71 +32,18 @@ interface InterfaceNavbarProps {
 
 function adminNavbar({ targets, url1 }: InterfaceNavbarProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'adminNavbar' });
-
-  const [spamCountData, setSpamCountData] = useState([]);
-  const [showNotifModal, setShowNotifModal] = useState(false);
-
   const currentUrl = window.location.href.split('=')[1];
 
-  const {
-    data: orgData,
-    error: orgError,
-    refetch: orgRefetch,
-  } = useQuery(ORGANIZATIONS_LIST, {
+  const { data: orgData, error: orgError } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: currentUrl },
   });
-  const [updateSpam] = useMutation(UPDATE_SPAM_NOTIFICATION_MUTATION);
+
   const { data: data2 } = useQuery(USER_ORGANIZATION_LIST, {
     variables: { id: localStorage.getItem('id') },
   });
 
   const isSuperAdmin = data2?.user.userType === 'SUPERADMIN';
-
-  useEffect(() => {
-    const handleUpdateSpam = async (): Promise<void> => {
-      const spamId = localStorage.getItem('spamId');
-      if (spamId) {
-        try {
-          const { data } = await updateSpam({
-            variables: {
-              orgId: currentUrl,
-              spamId,
-              isReaded: true,
-            },
-          });
-
-          /* istanbul ignore next */
-          if (data) {
-            localStorage.removeItem('spamId');
-            orgRefetch();
-          }
-        } catch (error: any) {
-          /* istanbul ignore next */
-          errorHandler(t, error);
-        }
-      }
-    };
-
-    handleUpdateSpam();
-  }, []);
-
-  useEffect(() => {
-    if (orgData && orgData?.organizations[0].spamCount) {
-      setSpamCountData(
-        orgData?.organizations[0].spamCount.filter(
-          (spam: any) => spam.isReaded === false
-        )
-      );
-    }
-  }, [orgData]);
-
   const currentLanguageCode = Cookies.get('i18next') || 'en';
-  const toggleNotifModal = (): void => setShowNotifModal(!showNotifModal);
-
-  const handleSpamNotification = (spamId: string): void => {
-    localStorage.setItem('spamId', spamId);
-    window.location.assign(`/blockuser/id=${url1}`);
-  };
 
   /* istanbul ignore next */
   if (orgError) {
@@ -151,7 +96,7 @@ function adminNavbar({ targets, url1 }: InterfaceNavbarProps): JSX.Element {
                 <Nav.Item key={name} className={styles.navitems}>
                   <Dropdown className={styles.dropdowns}>
                     <Dropdown.Toggle
-                      variant=""
+                      variant="light"
                       id={name}
                       className={`${styles.dropdowntoggle} ${styles.navlinks_dropdown}`}
                     >
@@ -193,25 +138,9 @@ function adminNavbar({ targets, url1 }: InterfaceNavbarProps): JSX.Element {
                 id="dropdown-basic"
                 data-testid="logoutDropdown"
               >
-                {orgData?.organizations[0].image ? (
-                  <span>
-                    <MenuIcon></MenuIcon>
-                  </span>
-                ) : (
-                  <img
-                    src={AboutImg}
-                    className={styles.roundedcircle}
-                    data-testid="navbarOrgImageAbsent"
-                  />
-                )}
+                <MenuIcon />
               </Dropdown.Toggle>
               <Dropdown.Menu className={styles.dropdownMenu}>
-                <Dropdown.Item onClick={toggleNotifModal}>
-                  <i className="fa fa-bell"></i>&ensp; {t('notification')}{' '}
-                  <span className="badge text-bg-success">
-                    {spamCountData.length}
-                  </span>
-                </Dropdown.Item>
                 <Dropdown.Item as={Link} to={`/orgsetting/id=${url1}`}>
                   <i className="fa fa-cogs"></i>&ensp; {t('settings')}
                 </Dropdown.Item>
@@ -257,38 +186,6 @@ function adminNavbar({ targets, url1 }: InterfaceNavbarProps): JSX.Element {
           </Nav>
         </Navbar.Collapse>
       </Navbar>
-
-      {/* Notification Modal */}
-      <Modal show={showNotifModal} onHide={toggleNotifModal}>
-        <Modal.Header>
-          <h5 id="notificationModalLabel">{t('notifications')}</h5>
-          <Button variant="danger" onClick={toggleNotifModal}>
-            <i className="fa fa-times"></i>
-          </Button>
-        </Modal.Header>
-        <Modal.Body>
-          {spamCountData.length > 0 ? (
-            spamCountData.map((spam: any) => (
-              <div
-                className={`border rounded p-3 mb-2 ${styles.notificationList}`}
-                onClick={(): void => handleSpamNotification(spam._id)}
-                key={spam._id}
-                data-testid={`spamNotification${spam._id}`}
-              >
-                {`${spam.user.firstName} ${spam.user.lastName}`} {t('spamsThe')}{' '}
-                {spam.groupchat.title} {t('group')}.
-              </div>
-            ))
-          ) : (
-            <p className="text-center">{t('noNotifications')}</p>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={toggleNotifModal}>
-            {t('close')}
-          </Button>
-        </Modal.Footer>
-      </Modal>
     </>
   );
 }

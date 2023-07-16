@@ -1,0 +1,17 @@
+.mainContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  cursor: pointer;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 2px 2px 8px 0px #c8c8c8;
+  overflow: hidden;
+}
+
+.personDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

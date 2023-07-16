@@ -12,6 +12,7 @@ import { useQuery } from '@apollo/client';
 import { USER_ORGANIZATION_CONNECTION } from 'GraphQl/Queries/Queries';
 import getOrganizationId from 'utils/getOrganizationId';
 import type { DropDirection } from 'react-bootstrap/esm/DropdownContext';
+import { useHistory } from 'react-router-dom';
 
 interface InterfaceNavbarProps {
   currentPage: string | null;
@@ -21,6 +22,9 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userNavbar',
   });
+
+  const history = useHistory();
+
   const [organizationDetails, setOrganizationDetails]: any = React.useState({});
   // const dropDirection: DropDirection = screen.width > 767 ? 'start' : 'down';
   const dropDirection: DropDirection = 'start';
@@ -49,6 +53,12 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     }
   }, [data]);
 
+  const homeLink = `/user/organization/id=${organizationId}`;
+  const peopleLink = `/user/people/id=${organizationId}`;
+  const eventsLink = `/user/events/id=${organizationId}`;
+  const chatLink = `/user/chat/id=${organizationId}`;
+  const donationLink = `/user/donation/id=${organizationId}`;
+
   return (
     <Navbar expand={'md'} variant="dark" className={`${styles.colorPrimary}`}>
       <Container fluid>
@@ -72,19 +82,34 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className="me-auto flex-grow-1 pe-3" variant="dark">
-              <Nav.Link active={props.currentPage === 'home'}>
+              <Nav.Link
+                active={props.currentPage === 'home'}
+                onClick={(): void => history.push(homeLink)}
+              >
                 {t('home')}
               </Nav.Link>
-              <Nav.Link active={props.currentPage === 'events'}>
+              <Nav.Link
+                active={props.currentPage === 'events'}
+                onClick={(): void => history.push(eventsLink)}
+              >
                 {t('events')}
               </Nav.Link>
-              <Nav.Link active={props.currentPage === 'people'}>
+              <Nav.Link
+                active={props.currentPage === 'people'}
+                onClick={(): void => history.push(peopleLink)}
+              >
                 {t('people')}
               </Nav.Link>
-              <Nav.Link active={props.currentPage === 'chat'}>
+              <Nav.Link
+                active={props.currentPage === 'chat'}
+                onClick={(): void => history.push(chatLink)}
+              >
                 {t('chat')}
               </Nav.Link>
-              <Nav.Link active={props.currentPage === 'donate'}>
+              <Nav.Link
+                active={props.currentPage === 'donate'}
+                onClick={(): void => history.push(donationLink)}
+              >
                 {t('donate')}
               </Nav.Link>
             </Nav>

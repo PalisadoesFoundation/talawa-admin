@@ -498,6 +498,21 @@ export const USER_CREATED_ORGANIZATIONS = gql`
   }
 `;
 
+export const ORGANIZATION_ADMINS_LIST = gql`
+  query Organizations($id: ID!) {
+    organizations(id: $id) {
+      _id
+      admins {
+        _id
+        image
+        firstName
+        lastName
+        email
+      }
+    }
+  }
+`;
+
 /**
  * @name PLUGIN_GET
  * @description used to fetch list of plugins
