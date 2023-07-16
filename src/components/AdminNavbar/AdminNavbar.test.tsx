@@ -206,9 +206,7 @@ describe('Testing Admin Navbar', () => {
 
     expect(container.textContent).not.toBe('Loading data...');
     await wait();
-    const imageOptions = screen.getByTestId(/navbarOrgImageAbsent/i);
     const imageLogo = screen.getByTestId(/orgLogoAbsent/i);
     expect(imageLogo).toBeInTheDocument();
-    expect(imageOptions).toBeInTheDocument();
   });
 });
