@@ -55,34 +55,6 @@ function adminNavbar({ targets, url1 }: InterfaceNavbarProps): JSX.Element {
   const isSuperAdmin = data2?.user.userType === 'SUPERADMIN';
 
   useEffect(() => {
-    const handleUpdateSpam = async (): Promise<void> => {
-      const spamId = localStorage.getItem('spamId');
-      if (spamId) {
-        try {
-          const { data } = await updateSpam({
-            variables: {
-              orgId: currentUrl,
-              spamId,
-              isReaded: true,
-            },
-          });
-
-          /* istanbul ignore next */
-          if (data) {
-            localStorage.removeItem('spamId');
-            orgRefetch();
-          }
-        } catch (error: any) {
-          /* istanbul ignore next */
-          errorHandler(t, error);
-        }
-      }
-    };
-
-    handleUpdateSpam();
-  }, []);
-
-  useEffect(() => {
     if (orgData && orgData?.organizations[0].spamCount) {
       setSpamCountData(
         orgData?.organizations[0].spamCount.filter(

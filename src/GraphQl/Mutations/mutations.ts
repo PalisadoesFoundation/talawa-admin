@@ -447,17 +447,3 @@ export const UPDATE_EVENT_MUTATION = gql`
     }
   }
 `;
-
-export const UPDATE_SPAM_NOTIFICATION_MUTATION = gql`
-  mutation UpdateSpamNotification(
-    $orgId: ID!
-    $spamId: ID!
-    $isReaded: Boolean
-  ) {
-    updateSpamNotification(
-      data: { orgId: $orgId, spamId: $spamId, isReaded: $isReaded }
-    ) {
-      _id
-    }
-  }
-`;
