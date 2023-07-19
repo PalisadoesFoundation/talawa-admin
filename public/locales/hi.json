@@ -498,5 +498,21 @@
     "yourOrganizations": "आपके संगठन",
     "noOrganizations": "आप अभी तक किसी संगठन में शामिल नहीं हुए हैं.",
     "viewAll": "सभी को देखें"
+  },
+  "organizationSidebar": {
+    "viewAll": "सभी को देखें",
+    "events": "आयोजन",
+    "members": "सदस्य",
+    "noEvents": "दिखाने के लिए कोई ईवेंट नहीं",
+    "noMembers": "दिखाने के लिए कोई सदस्य नहीं"
+  },
+  "postCard": {
+    "likes": "पसंद",
+    "comments": "टिप्पणियाँ"
+  },
+  "home": {
+    "feed": "फ़ीड",
+    "pinnedPosts": "पिन किए गए पोस्ट देखें",
+    "somethingOnYourMind": "आपके मन में कुछ है?"
   }
 }

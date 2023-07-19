@@ -41,6 +41,9 @@ const MOCKS = [
                 lastName: 'Shelke',
                 email: 'adidacreator1@gmail.com',
               },
+              likeCount: 0,
+              commentCount: 0,
+              likedBy: [],
             },
             {
               _id: '6411e54835d7ba2344a78e29',
@@ -54,6 +57,9 @@ const MOCKS = [
                 lastName: 'Shelke',
                 email: 'adidacreator1@gmail.com',
               },
+              likeCount: 0,
+              commentCount: 0,
+              likedBy: [],
             },
           ],
         },
@@ -135,6 +141,9 @@ describe('Organisation Post Page', () => {
         lastName: 'Shelke',
         email: 'adidacreator1@gmail.com',
       },
+      likeCount: 0,
+      commentCount: 0,
+      likedBy: [],
     });
   });
 

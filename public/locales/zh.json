@@ -500,5 +500,21 @@
     "yourOrganizations": "您的組織",
     "noOrganizations": "您還沒有加入任何組織。",
     "viewAll": "查看全部"
+  },
+  "organizationSidebar": {
+    "viewAll": "查看全部",
+    "events": "事件",
+    "members": "成员",
+    "noEvents": "沒有可顯示的活動",
+    "noMembers": "沒有可顯示的會員"
+  },
+  "postCard": {
+    "likes": "喜歡",
+    "comments": "評論"
+  },
+  "home": {
+    "feed": "餵養",
+    "pinnedPosts": "查看固定帖子",
+    "somethingOnYourMind": "你有什麼心事嗎？"
   }
 }

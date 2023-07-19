@@ -10,13 +10,8 @@
   overflow: hidden;
 }
 
-.organizationDetails {
+.personDetails {
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-
-.removeDecoration {
-  text-decoration: none !important;
-  color: black;
 }

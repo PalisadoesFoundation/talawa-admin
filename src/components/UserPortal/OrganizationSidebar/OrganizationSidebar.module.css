@@ -1,15 +1,15 @@
 .mainContainer {
   display: flex;
-  overflow: hidden;
+  overflow: auto;
   flex-direction: column;
-  align-items: center;
-  padding: 0px 10px;
-  padding-top: 50px;
-  flex-grow: 1;
+  /* align-items: center; */
+  padding: 20px;
+  /* padding-top: 20px; */
   width: 250px;
+  flex-grow: 1;
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 900px) {
   .mainContainer {
     display: none;
   }
@@ -32,7 +32,6 @@
 }
 
 .heading {
-  text-align: center;
   padding: 10px 0px;
 }
 
@@ -63,4 +62,9 @@
 
 .marginTop {
   margin-top: -2px;
+}
+
+.eventDetails {
+  font-size: small;
+  gap: 5px;
 }
