@@ -8,6 +8,7 @@ import { BrowserRouter } from 'react-router-dom';
 import i18nForTest from 'utils/i18nForTest';
 import { languages } from 'utils/languages';
 import ChangeLanguageDropDown from './ChangeLanguageDropDown';
+import cookies from 'js-cookie';
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -38,8 +39,10 @@ describe('Testing Change Language Dropdown', () => {
     userEvent.click(getByTestId('dropdown-btn-0'));
     await wait();
 
-    languages.map((language, index) => {
-      expect(getByTestId(`change-language-btn-${index}`)).toBeInTheDocument();
+    languages.map((language) => {
+      expect(
+        getByTestId(`change-language-btn-${language.code}`)
+      ).toBeInTheDocument();
     });
   });
 
@@ -76,39 +79,10 @@ describe('Testing Change Language Dropdown', () => {
     );
 
     await wait();
+    expect(cookies.get('i18next')).toBe('');
   });
 
-  test('Testing when language cookie is set', async () => {
-    Object.defineProperty(window.document, 'cookie', {
-      writable: true,
-      value: 'i18next=en',
-    });
-
-    render(
-      <I18nextProvider i18n={i18nForTest}>
-        <ChangeLanguageDropDown />
-      </I18nextProvider>
-    );
-
-    await wait();
-  });
-
-  test('Testing when language cookie is set but not in languages list', async () => {
-    Object.defineProperty(window.document, 'cookie', {
-      writable: true,
-      value: 'i18next=xx',
-    });
-
-    render(
-      <I18nextProvider i18n={i18nForTest}>
-        <ChangeLanguageDropDown />
-      </I18nextProvider>
-    );
-
-    await wait();
-  });
-
-  test('Testing when change language button is clicked', async () => {
+  test('Testing change language functionality', async () => {
     Object.defineProperty(window.document, 'cookie', {
       writable: true,
       value: 'i18next=en',
@@ -122,6 +96,13 @@ describe('Testing Change Language Dropdown', () => {
 
     userEvent.click(getByTestId('language-dropdown-btn'));
     await wait();
-    getByTestId('change-language-btn-1').click();
+    languages.map((language) => {
+      const changeLanguageBtn = getByTestId(
+        `change-language-btn-${language.code}`
+      );
+      expect(changeLanguageBtn).toBeInTheDocument();
+      userEvent.click(changeLanguageBtn);
+      expect(cookies.get('i18next')).toBe(language.code);
+    });
   });
 });

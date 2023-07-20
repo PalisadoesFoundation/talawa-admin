@@ -54,7 +54,7 @@ const ChangeLanguageDropDown = (
             className={`dropdown-item ${styles.dropdownItem}`}
             onClick={async (): Promise<void> => changeLanguage(language.code)}
             disabled={currentLanguageCode === language.code}
-            data-testid={`change-language-btn-${index}`}
+            data-testid={`change-language-btn-${language.code}`}
           >
             <span className={`fi fi-${language.country_code} me-2`}></span>
             {language.name}
