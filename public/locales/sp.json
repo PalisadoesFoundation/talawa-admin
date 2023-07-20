@@ -502,5 +502,21 @@
     "yourOrganizations": "Tus Organizaciones",
     "noOrganizations": "Aún no te has unido a ninguna organización.",
     "viewAll": "Ver todo"
+  },
+  "organizationSidebar": {
+    "viewAll": "Ver todo",
+    "events": "Eventos",
+    "members": "Miembros",
+    "noEvents": "No hay eventos para mostrar",
+    "noMembers": "No hay miembros para mostrar"
+  },
+  "postCard": {
+    "likes": "Gustos",
+    "comments": "Comentarios"
+  },
+  "home": {
+    "feed": "Alimentar",
+    "pinnedPosts": "Ver publicaciones fijadas",
+    "somethingOnYourMind": "¿Algo en tu mente?"
   }
 }

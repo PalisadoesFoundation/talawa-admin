@@ -500,5 +500,21 @@
     "yourOrganizations": "Vos organisations",
     "noOrganizations": "Vous n'avez encore rejoint aucune organisation.",
     "viewAll": "Voir tout"
+  },
+  "organizationSidebar": {
+    "viewAll": "Voir tout",
+    "events": "Événements",
+    "members": "Membres",
+    "noEvents": "Aucun événement à afficher",
+    "noMembers": "Aucun membre à afficher"
+  },
+  "postCard": {
+    "likes": "Aime",
+    "comments": "commentaires"
+  },
+  "home": {
+    "feed": "Alimentation",
+    "pinnedPosts": "Afficher les publications épinglées",
+    "somethingOnYourMind": "Quelque chose dans votre esprit?"
   }
 }
