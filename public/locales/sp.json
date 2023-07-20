@@ -24,7 +24,9 @@
     "fillCorrectly": "Complete todos los detalles correctamente.",
     "notAuthorised": "¡Lo siento! ¡No estás autorizado!",
     "notFound": "¡Usuario no encontrado!",
-    "successfullyRegistered": "Registrado con éxito. Espere hasta que sea aprobado"
+    "successfullyRegistered": "Registrado con éxito. Espere hasta que sea aprobado",
+    "login_to_admin_portal": "Inicio de sesión en el portal de administración",
+    "OR": "O"
   },
   "listNavbar": {
     "talawa_portal": "Portal De Administración Talawa",
