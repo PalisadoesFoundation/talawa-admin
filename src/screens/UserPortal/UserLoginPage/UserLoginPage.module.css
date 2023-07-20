@@ -38,7 +38,7 @@ body::before {
   flex-direction: column;
   justify-content: center;
   padding: 20px 50px;
-  background-color: #f5f5f5;
+  background-color: var(--bs-white);
 }
 
 @media only screen and (max-width: 800px) {
