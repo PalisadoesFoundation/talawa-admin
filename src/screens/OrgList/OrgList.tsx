@@ -23,6 +23,11 @@ import debounce from 'utils/debounce';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceUserType } from 'utils/interfaces';
 import styles from './OrgList.module.css';
+import SortIcon from '@mui/icons-material/Sort';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import AddIcon from '@mui/icons-material/Add';
+import { Search } from '@mui/icons-material';
+
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
 
@@ -174,33 +179,48 @@ function orgList(): JSX.Element {
       <div className={styles.pageContainer} data-testid="mainpageright">
         <h2>{t('organizationList')}</h2>
         <div className={styles.btnsContainer}>
-          <Form.Control
-            type="name"
-            id="orgname"
-            className="bg-white"
-            placeholder="Search Organization"
-            data-testid="searchByName"
-            autoComplete="off"
-            required
-            onChange={debouncedHandleSearchByName}
-            style={{
-              display:
-                userData && userData.user.userType !== 'SUPERADMIN'
-                  ? 'none'
-                  : 'block',
-            }}
-          />
-          <Button variant="outline-success">Sort</Button>
-          <Button variant="outline-success">Filter</Button>
+          <div className={`${styles.input} position-relative`}>
+            <Form.Control
+              type="name"
+              id="orgname"
+              className="bg-white"
+              placeholder="Search Organization"
+              data-testid="searchByName"
+              autoComplete="off"
+              required
+              onChange={debouncedHandleSearchByName}
+              style={{
+                display:
+                  userData && userData.user.userType !== 'SUPERADMIN'
+                    ? 'none'
+                    : 'block',
+              }}
+            />
+            <Button
+              tabIndex={-1}
+              className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+            >
+              <Search />
+            </Button>
+          </div>
+          <Button className={styles.sortBtn} variant="outline-success">
+            <SortIcon className={'me-1'} />
+            Sort
+          </Button>
+          <Button variant="outline-success" className={styles.sortBtn}>
+            <FilterListIcon className={'me-1'} />
+            Filter
+          </Button>
           <Button
             variant="success"
-            className={styles.invitebtn}
+            className={styles.createOrgBtn}
             disabled={isSuperAdmin}
             onClick={toggleAddEventModal}
             data-testid="createOrganizationBtn"
             style={{ display: isSuperAdmin ? 'none' : 'block' }}
           >
-            + {t('createOrganization')}
+            <i className={'fa fa-plus me-1'} />
+            {t('createOrganization')}
           </Button>
         </div>
         <div className={styles.listBox} data-testid="organizations-list">

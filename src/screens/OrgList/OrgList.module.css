@@ -7,12 +7,19 @@
   margin: 2.5rem 0 2.5rem 0;
 }
 
-.pageContainer .btnsContainer input,
 .pageContainer .btnsContainer button {
-  margin: 0 0.5rem;
+  margin-left: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.pageContainer .btnsContainer input {
+.pageContainer .btnsContainer .input {
   flex: 1;
-  margin-left: 0;
+}
+.pageContainer .btnsContainer input {
+  outline: 1px solid var(--bs-gray-400);
+}
+.pageContainer .btnsContainer .input button {
+  width: 52px;
 }
