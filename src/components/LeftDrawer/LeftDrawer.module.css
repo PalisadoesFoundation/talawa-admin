@@ -1,0 +1,127 @@
+.leftDrawer {
+    width: calc(300px + 2rem);
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1rem 0 1rem;
+    background-color: var(--bs-white);
+}
+
+.leftDrawer .talawaLogo {
+    width: 100%;
+    height: 65px;
+}
+
+.leftDrawer .talawaText {
+    font-size: 1rem;
+    text-align: center;
+}
+
+.leftDrawer .titleHeader {
+    margin: 2rem 0 1rem 0;
+    font-weight: 600;
+}
+
+.leftDrawer .optionList button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    text-align: start;
+    margin-bottom: 0.8rem;
+    border-radius: 8px;
+}
+
+.leftDrawer .optionList button .iconWrapper {
+    width: 36px;
+}
+
+.leftDrawer .profileContainer {
+    border: none;
+    width: 100%;
+    height: 52px;
+    border-radius: 8px;
+    background-color: var(--bs-white);
+    display: flex;
+    align-items: center;
+}
+
+.leftDrawer .profileContainer:focus {
+    outline: none;
+    background-color: var(--bs-gray-100);
+}
+
+.leftDrawer .imageContainer {
+    width: 68px;
+}
+
+.leftDrawer .profileContainer img {
+    height: 52px;
+    width: 52px;
+    border-radius: 50%;
+}
+
+.leftDrawer .profileContainer .profileText {
+    flex: 1;
+    text-align: start;
+}
+
+.leftDrawer .profileContainer .profileText .primaryText {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.leftDrawer .profileContainer .profileText .secondaryText {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--bs-secondary);
+    display: block;
+    text-transform: capitalize;
+}
+
+.shine {
+    background: #f6f7f8;
+    background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+    background-repeat: no-repeat;
+    background-size: 800px 104px;
+    display: inline-block;
+    position: relative;
+    cursor: progress;
+
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeholderShimmer;
+    animation-timing-function: linear;
+
+    /* Webkit prefix for older browser compatibility */
+    -webkit-animation-duration: 1s;
+    -webkit-animation-fill-mode: forwards;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-name: placeholderShimmer;
+    -webkit-animation-timing-function: linear;
+}
+
+@keyframes placeholderShimmer {
+    0% {
+        background-position: -468px 0;
+    }
+
+    100% {
+        background-position: 468px 0;
+    }
+}
+
+/* Webkit prefix for older browser compatibility */
+@-webkit-keyframes placeholderShimmer {
+    0% {
+        background-position: -468px 0;
+    }
+
+    100% {
+        background-position: 468px 0;
+    }
+}
