@@ -25,14 +25,14 @@
   padding-top: 10px;
 }
 
-.second_box>h4 {
+.second_box > h4 {
   font-size: 10;
   font-weight: bold;
   text-decoration: none;
   color: black;
 }
 
-.second_box>h5 {
+.second_box > h5 {
   text-decoration: none;
   font-size: 10;
   font-weight: 100;
