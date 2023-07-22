@@ -1,5 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { Alert, AlertTitle } from '@mui/material';
+import { Search } from '@mui/icons-material';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import SortIcon from '@mui/icons-material/Sort';
 import { CREATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATION_CONNECTION_LIST,
@@ -13,7 +15,7 @@ import SuperDashListCard from 'components/SuperDashListCard/SuperDashListCard';
 import dayjs from 'dayjs';
 import type { ChangeEvent } from 'react';
 import React, { useState } from 'react';
-import { Form } from 'react-bootstrap';
+import { Card, Col, Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useTranslation } from 'react-i18next';
@@ -21,19 +23,18 @@ import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
 import debounce from 'utils/debounce';
 import { errorHandler } from 'utils/errorHandler';
-import type { InterfaceUserType } from 'utils/interfaces';
+import type {
+  InterfaceOrgConnectionType,
+  InterfaceUserType,
+} from 'utils/interfaces';
 import styles from './OrgList.module.css';
-import SortIcon from '@mui/icons-material/Sort';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import AddIcon from '@mui/icons-material/Add';
-import { Search } from '@mui/icons-material';
 
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
 
   document.title = t('title');
 
-  const [showAddEventModal, setShowAddEventModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [formState, setFormState] = useState({
     name: '',
     descrip: '',
@@ -48,8 +49,7 @@ function orgList(): JSX.Element {
 
   const isSuperAdmin = localStorage.getItem('UserType') !== 'SUPERADMIN';
 
-  const toggleAddEventModal = (): void =>
-    setShowAddEventModal(!showAddEventModal);
+  const toggleModal = (): void => setShowModal(!showModal);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [create, { loading: loading3 }] = useMutation(
@@ -69,23 +69,21 @@ function orgList(): JSX.Element {
   });
 
   const {
-    data,
+    data: orgsData,
     loading,
     error: errorList,
     refetch,
+  }: {
+    data: InterfaceOrgConnectionType | undefined;
+    loading: boolean;
+    error?: Error | undefined;
+    refetch: any;
   } = useQuery(ORGANIZATION_CONNECTION_LIST);
 
-  /*istanbul ignore next*/
-  interface InterfaceCurrentOrgType {
-    _id: string;
-  }
-  /*istanbul ignore next*/
-  const isAdminForCurrentOrg = (
-    currentOrg: InterfaceCurrentOrgType
-  ): boolean => {
+  const isAdminForCurrentOrg = (): boolean => {
     return (
       userData?.user?.adminFor.length === 1 &&
-      userData.user.adminFor[0]._id === currentOrg._id
+      userData.user.adminFor[0]._id === orgsData?.organizationsConnection[0]._id
     );
   };
 
@@ -129,7 +127,7 @@ function orgList(): JSX.Element {
           location: '',
           image: '',
         });
-        toggleAddEventModal();
+        toggleModal();
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -146,22 +144,6 @@ function orgList(): JSX.Element {
     window.location.assign('/');
   }
 
-  /* istanbul ignore next */
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ): void => {
-    setPage(newPage);
-  };
-
-  /* istanbul ignore next */
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ): void => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
   const handleSearchByName = (e: any): void => {
     const { value } = e.target;
     refetch({
@@ -170,14 +152,15 @@ function orgList(): JSX.Element {
   };
   let dataRevOrg;
   const debouncedHandleSearchByName = debounce(handleSearchByName);
-  if (data) {
-    dataRevOrg = data.organizationsConnection.slice().reverse();
+  if (orgsData) {
+    dataRevOrg = orgsData.organizationsConnection.slice().reverse();
   }
   return (
     <>
       <LeftDrawer data={userData} />
       <div className={styles.pageContainer} data-testid="mainpageright">
         <h2>{t('organizationList')}</h2>
+        {/* Buttons Container */}
         <div className={styles.btnsContainer}>
           <div className={`${styles.input} position-relative`}>
             <Form.Control
@@ -215,7 +198,7 @@ function orgList(): JSX.Element {
             variant="success"
             className={styles.createOrgBtn}
             disabled={isSuperAdmin}
-            onClick={toggleAddEventModal}
+            onClick={toggleModal}
             data-testid="createOrganizationBtn"
             style={{ display: isSuperAdmin ? 'none' : 'block' }}
           >
@@ -223,101 +206,43 @@ function orgList(): JSX.Element {
             {t('createOrganization')}
           </Button>
         </div>
+        {/* Organizations List */}
         <div className={styles.listBox} data-testid="organizations-list">
-          {data?.organizationsConnection.length > 0 ? (
-            (rowsPerPage > 0
-              ? dataRevOrg.slice(
-                  page * rowsPerPage,
-                  page * rowsPerPage + rowsPerPage
-                )
-              : data.organizationsConnection
-            ).map(
-              (datas: {
-                _id: string;
-                image: string;
-                name: string;
-                admins: any;
-                members: any;
-                createdAt: string;
-                location: string | null;
-              }) => {
-                if (userData && userData.user.userType == 'SUPERADMIN') {
-                  return (
-                    <SuperDashListCard
-                      id={datas._id}
-                      key={datas._id}
-                      image={datas.image}
-                      admins={datas.admins}
-                      members={datas.members.length}
-                      createdDate={dayjs(datas?.createdAt).format(
-                        'MMMM D, YYYY'
-                      )}
-                      orgName={datas.name}
-                      orgLocation={datas.location}
-                    />
-                  );
-                } else if (isAdminForCurrentOrg(datas)) {
-                  /* istanbul ignore next */
-                  return (
-                    <AdminDashListCard
-                      id={datas._id}
-                      key={datas._id}
-                      image={datas.image}
-                      admins={datas.admins}
-                      members={datas.members.length}
-                      createdDate={dayjs(datas?.createdAt).format(
-                        'MMMM D, YYYY'
-                      )}
-                      orgName={datas.name}
-                      orgLocation={datas.location}
-                    />
-                  );
-                } else {
-                  return null;
-                }
+          {orgsData?.organizationsConnection?.length &&
+          orgsData?.organizationsConnection?.length > 0 ? (
+            orgsData?.organizationsConnection.map((item) => {
+              if (userData && userData.user.userType == 'SUPERADMIN') {
+                return (
+                  <Col key={item._id} sm={12} xl={6}>
+                    <SuperDashListCard data={item} />
+                  </Col>
+                );
+              } else if (isAdminForCurrentOrg()) {
+                return (
+                  <Col key={item._id} sm={12} xl={6}>
+                    <AdminDashListCard data={item} />
+                  </Col>
+                );
+              } else {
+                return null;
               }
-            )
+            })
           ) : (
-            <div>
-              <Alert variant="filled" severity="error">
-                <AlertTitle>{t('noOrgErrorTitle')}</AlertTitle>
-                {t('noOrgErrorDescription')}
-              </Alert>
+            <div className={styles.notFound}>
+              <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
+              <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
             </div>
           )}
         </div>
-        <div>
-          <table
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <tbody>
-              {userData?.user.userType === 'SUPERADMIN' && (
-                <tr data-testid="rowsPPSelect">
-                  <PaginationList
-                    count={data ? data.organizationsConnection.length : 0}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
       </div>
 
-      {/*  */}
-      <Modal show={showAddEventModal} onHide={toggleAddEventModal}>
+      {/* Create Organization Modal */}
+      <Modal show={showModal} onHide={toggleModal}>
         <Modal.Header>
           <p className={styles.titlemodal}>{t('createOrganization')}</p>
           <Button
             variant="danger"
-            onClick={toggleAddEventModal}
+            onClick={toggleModal}
             data-testid="closeOrganizationModal"
           >
             <i

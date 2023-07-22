@@ -1,83 +1,34 @@
-.orglist {
-  margin-top: -1px;
-  padding-left: 32px;
+.orgCard {
+  background-color: var(--bs-white);
+  margin: 0.5rem;
+  height: calc(120px + 2rem);
+  padding: 1rem;
+  border-radius: 8px;
+  outline: 1px solid var(--bs-gray-200);
+  display: flex;
+  position: relative;
 }
 
-.orgImgContainer {
+.orgCard .orgImgContainer {
   display: flex;
-  height: 100px;
-  width: 100%;
-  border-radius: 7px;
   justify-content: center;
+  align-items: center;
 }
 
-.singledetails {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-.singledetails p {
-  margin-bottom: -5px;
-}
-.singledetails_data_left {
-  margin-top: 10px;
-  /* margin-left: 10px; */
-  color: #707070;
-}
-.singledetails_data_right {
-  justify-content: right;
-  margin-top: 10px;
-  text-align: right;
-  color: #707070;
-}
-.orgname {
-  font-size: 16px;
-  font-weight: bold;
-}
-.orgfont {
-  margin-top: 3px;
-}
-.orgfontcreated {
-  margin-top: 18px;
-}
-.orgfontcreatedbtn {
-  margin-top: 18px;
-  border-radius: 4px;
-  border-color: #31bb6b;
-  background-color: #31bb6b;
-  color: white;
-  padding-right: 10px;
-  padding-left: 10px;
-  box-shadow: none;
-  width: 100%;
-}
-.orgfontcreatedbtn:hover {
-  color: #fff;
-  background-color: #1e7e34;
-  border-color: #1c7430;
-}
-.orgCreateBtnDiv {
-  width: 100%;
-}
-#grid_wrapper {
-  align-items: left;
-}
-.orgimg {
-  width: 100%;
-  height: 100%;
+.orgCard .orgImgContainer img {
+  width: 125px;
+  height: 120px;
   object-fit: contain;
-  flex: 1 1 auto;
+  background-color: var(--bs-gray-200);
 }
 
-.singledetails {
-  margin-left: 25px;
-  padding-left: 0;
+.orgCard .content {
+  flex: 1;
+  margin-left: 1rem;
 }
 
-@media screen and (min-width: 40rem) {
-  .orgImgContainer {
-    display: block;
-    width: inherit;
-    width: 200px;
-  }
+.orgCard button {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
 }

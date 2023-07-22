@@ -12,3 +12,24 @@ export interface InterfaceUserType {
     }[];
   };
 }
+
+export interface InterfaceOrgConnectionInfoType {
+  _id: string;
+  image: string;
+  creator: {
+    firstName: string;
+    lastName: string;
+  };
+  name: string;
+  members: {
+    _id: string;
+  }[];
+  admins: {
+    _id: string;
+  }[];
+  createdAt: string;
+  location: string;
+}
+export interface InterfaceOrgConnectionType {
+  organizationsConnection: InterfaceOrgConnectionInfoType[];
+}

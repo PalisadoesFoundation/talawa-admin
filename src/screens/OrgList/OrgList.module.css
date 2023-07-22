@@ -1,4 +1,7 @@
 .pageContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   padding: 1rem 1.5rem 0 calc(300px + 2rem + 1.5rem);
 }
 
@@ -22,4 +25,18 @@
 }
 .pageContainer .btnsContainer .input button {
   width: 52px;
+}
+
+.pageContainer .listBox {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.pageContainer .listBox .notFound {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }

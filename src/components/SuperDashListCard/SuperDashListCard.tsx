@@ -1,42 +1,30 @@
 import React from 'react';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import styles from './SuperDashListCard.module.css';
 import { useHistory } from 'react-router-dom';
 import AboutImg from 'assets/images/defaultImg.png';
+import type { InterfaceOrgConnectionInfoType } from 'utils/interfaces';
 
 interface InterfaceSuperDashListCardProps {
-  key: string;
-  id: string;
-  orgName: string;
-  orgLocation: string | null;
-  createdDate: string;
-  image: string;
-  admins: any;
-  members: any;
+  data: InterfaceOrgConnectionInfoType;
 }
 
 function superDashListCard(
   props: InterfaceSuperDashListCardProps
 ): JSX.Element {
+  const { _id, admins, image, location, members, name } = props.data ?? [];
+  console.log(props.data);
+
   const userId = localStorage.getItem('id');
   const userType = localStorage.getItem('UserType');
   const history = useHistory();
 
   function handleClick(): void {
-    const url = '/orgdash/id=' + props.id;
-
-    /*
-    WARNING!
-     Please endeavor to NOT remove both the window.location.replace(url) and the history.push(url) as both are very important for routing correctly.
-     Removal of the window.location.replace will result to a crash on other depending routes. History.push(url) is being used to alongside window.location.replace to keep track of the browser history stack and ensure consistency with the react component life cycle.
-     */
+    const url = '/orgdash/id=' + _id;
 
     window.location.replace(url);
     history.push(url);
-    // Do not change the lines above.
   }
 
   const { t } = useTranslation('translation', {
@@ -45,50 +33,35 @@ function superDashListCard(
 
   return (
     <>
-      <Row className={styles.orglist} data-testid="singleorg">
-        {props.image ? (
-          <div className={styles.orgImgContainer}>
-            <img src={props.image} className={styles.orgimg} />
-          </div>
-        ) : (
-          <div className={styles.orgImgContainer}>
+      <div className={styles.orgCard} data-testid="singleorg">
+        <div className={styles.orgImgContainer}>
+          {image ? (
+            <img src={image} className={styles.orgimg} />
+          ) : (
             <img src={AboutImg} className={styles.orgimg} />
-          </div>
-        )}
-        <Col className={styles.singledetails}>
-          <div className={styles.singledetails_data_left}>
-            <p className={styles.orgname}>
-              {props.orgName ? <>{props.orgName}</> : <>Dogs Care</>}
-            </p>
-            <p className={styles.orgfont}>{props?.orgLocation}</p>
-            <p className={styles.orgfontcreated}>
-              {t('created')}: <span>{props.createdDate}</span>
-            </p>
-          </div>
-          <div className={styles.singledetails_data_right}>
-            <p className={styles.orgfont}>
-              {t('admins')}: <span>{props?.admins.length}</span>
-            </p>
-            <p className={styles.orgfont}>
-              {t('members')}: <span>{props?.members}</span>
-            </p>
-            <div className={styles.orgCreateBtnDiv}>
-              <Button
-                className={styles.orgfontcreatedbtn}
-                onClick={handleClick}
-                disabled={
-                  userType !== 'SUPERADMIN' &&
-                  props.admins.length > 0 &&
-                  !props.admins.some((admin: any) => admin._id === userId)
-                }
-              >
-                {t('manage')}
-              </Button>
-            </div>
-          </div>
-        </Col>
-      </Row>
-      <hr></hr>
+          )}
+        </div>
+        <div className={styles.content}>
+          <h5>{name}</h5>
+          <h6 className="text-secondary">{location}</h6>
+          <h6>
+            {t('admins')}: <span>{admins.length}</span>
+          </h6>
+          <h6>
+            {t('members')}: <span>{members.length}</span>
+          </h6>
+        </div>
+        <Button
+          onClick={handleClick}
+          disabled={
+            userType !== 'SUPERADMIN' &&
+            admins.length > 0 &&
+            !admins.some((admin: any) => admin._id === userId)
+          }
+        >
+          {t('manage')}
+        </Button>
+      </div>
     </>
   );
 }
