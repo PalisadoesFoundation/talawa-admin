@@ -12,6 +12,7 @@
 .box :hover {
   color: #ffbd59;
 }
+
 .first_box {
   display: flex;
   flex-direction: row;
@@ -24,14 +25,14 @@
   padding-top: 10px;
 }
 
-.second_box > h4 {
+.second_box>h4 {
   font-size: 10;
   font-weight: bold;
   text-decoration: none;
   color: black;
 }
 
-.second_box > h5 {
+.second_box>h5 {
   text-decoration: none;
   font-size: 10;
   font-weight: 100;
@@ -42,23 +43,4 @@
   border: 1px solid #dfdfdf;
   width: 65vw;
   height: 0px !important;
-}
-/* width */
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px #dfdfdf;
-  border-radius: 10px;
-}
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #ffbd59;
-  border-radius: 10px;
-}
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #ffbd59;
 }
