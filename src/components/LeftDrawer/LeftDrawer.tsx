@@ -12,11 +12,13 @@ import styles from './LeftDrawer.module.css';
 interface InterfaceLeftDrawerProps {
   data: InterfaceUserType | undefined;
   showDrawer: boolean;
+  setShowDrawer: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const leftDrawer = ({
   data,
   showDrawer,
+  setShowDrawer,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const { user } = data || {};
 
@@ -30,6 +32,15 @@ const leftDrawer = ({
         showDrawer ? styles.activeDrawer : styles.inactiveDrawer
       }`}
     >
+      <Button
+        variant="danger"
+        className={styles.closeModalBtn}
+        onClick={(): void => {
+          setShowDrawer(!showDrawer);
+        }}
+      >
+        <i className="fa fa-times"></i>
+      </Button>
       <TalawaLogo className={styles.talawaLogo} />
       <p className={styles.talawaText}>Talawa Admin Portal</p>
       <h5 className={styles.titleHeader}>Menu</h5>

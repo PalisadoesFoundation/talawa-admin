@@ -156,7 +156,11 @@ function orgList(): JSX.Element {
   }
   return (
     <>
-      <LeftDrawer data={userData} showDrawer={showDrawer} />
+      <LeftDrawer
+        data={userData}
+        showDrawer={showDrawer}
+        setShowDrawer={setShowDrawer}
+      />
       <div
         className={`${styles.pageContainer} ${
           showDrawer ? styles.contract : styles.expand
@@ -230,13 +234,13 @@ function orgList(): JSX.Element {
             orgsData?.organizationsConnection.map((item) => {
               if (userData && userData.user.userType == 'SUPERADMIN') {
                 return (
-                  <Col key={item._id} sm={12} xl={6}>
+                  <div key={item._id} className={styles.itemCard}>
                     <SuperDashListCard data={item} />
-                  </Col>
+                  </div>
                 );
               } else if (isAdminForCurrentOrg()) {
                 return (
-                  <Col key={item._id} sm={12} xl={6}>
+                  <Col key={item._id} sm={12} xl={6} xs={12}>
                     <AdminDashListCard data={item} />
                   </Col>
                 );
