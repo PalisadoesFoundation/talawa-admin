@@ -28,6 +28,7 @@ import type {
   InterfaceUserType,
 } from 'utils/interfaces';
 import styles from './OrgList.module.css';
+import MenuIcon from '@mui/icons-material/Menu';
 
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
@@ -44,9 +45,7 @@ function orgList(): JSX.Element {
     image: '',
   });
 
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-
+  const [showDrawer, setShowDrawer] = useState(true);
   const isSuperAdmin = localStorage.getItem('UserType') !== 'SUPERADMIN';
 
   const toggleModal = (): void => setShowModal(!showModal);
@@ -157,9 +156,23 @@ function orgList(): JSX.Element {
   }
   return (
     <>
-      <LeftDrawer data={userData} />
-      <div className={styles.pageContainer} data-testid="mainpageright">
-        <h2>{t('organizationList')}</h2>
+      <LeftDrawer data={userData} showDrawer={showDrawer} />
+      <div
+        className={`${styles.pageContainer} ${
+          showDrawer ? styles.contract : styles.expand
+        } `}
+        data-testid="mainpageright"
+      >
+        <div className="d-flex justify-content-between align-items-center">
+          <h2>{t('organizationList')}</h2>
+          <Button
+            onClick={(): void => {
+              setShowDrawer(!showDrawer);
+            }}
+          >
+            <MenuIcon fontSize="medium" />
+          </Button>
+        </div>
         {/* Buttons Container */}
         <div className={styles.btnsContainer}>
           <div className={`${styles.input} position-relative`}>
@@ -186,25 +199,29 @@ function orgList(): JSX.Element {
               <Search />
             </Button>
           </div>
-          <Button className={styles.sortBtn} variant="outline-success">
-            <SortIcon className={'me-1'} />
-            Sort
-          </Button>
-          <Button variant="outline-success" className={styles.sortBtn}>
-            <FilterListIcon className={'me-1'} />
-            Filter
-          </Button>
-          <Button
-            variant="success"
-            className={styles.createOrgBtn}
-            disabled={isSuperAdmin}
-            onClick={toggleModal}
-            data-testid="createOrganizationBtn"
-            style={{ display: isSuperAdmin ? 'none' : 'block' }}
-          >
-            <i className={'fa fa-plus me-1'} />
-            {t('createOrganization')}
-          </Button>
+          <div className={styles.btnsBlock}>
+            <div className="d-flex">
+              <Button className={styles.sortBtn} variant="outline-success">
+                <SortIcon className={'me-1'} />
+                Sort
+              </Button>
+              <Button variant="outline-success" className={styles.sortBtn}>
+                <FilterListIcon className={'me-1'} />
+                Filter
+              </Button>
+            </div>
+            <Button
+              variant="success"
+              className={styles.createOrgBtn}
+              disabled={isSuperAdmin}
+              onClick={toggleModal}
+              data-testid="createOrganizationBtn"
+              style={{ display: isSuperAdmin ? 'none' : 'block' }}
+            >
+              <i className={'fa fa-plus me-1'} />
+              {t('createOrganization')}
+            </Button>
+          </div>
         </div>
         {/* Organizations List */}
         <div className={styles.listBox} data-testid="organizations-list">

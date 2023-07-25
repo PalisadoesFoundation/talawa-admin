@@ -10,7 +10,11 @@
   margin: 2.5rem 0 2.5rem 0;
 }
 
-.pageContainer .btnsContainer button {
+.pageContainer .btnsContainer .btnsBlock {
+  display: flex;
+}
+
+.pageContainer .btnsContainer .btnsBlock button {
   margin-left: 1rem;
   display: flex;
   justify-content: center;
@@ -20,9 +24,11 @@
 .pageContainer .btnsContainer .input {
   flex: 1;
 }
+
 .pageContainer .btnsContainer input {
   outline: 1px solid var(--bs-gray-400);
 }
+
 .pageContainer .btnsContainer .input button {
   width: 52px;
 }
@@ -39,4 +45,61 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+
+@media (max-width: 1120px) {
+  .pageContainer {
+    padding: 1rem 1.5rem 0 calc(250px + 2rem + 1.5rem);
+  }
+}
+
+@media (max-width: 1020px) {
+  .pageContainer .btnsContainer {
+    flex-direction: column;
+    margin: 1.5rem 0;
+  }
+
+  .pageContainer .btnsContainer .btnsBlock {
+    margin: 1.5rem 0 0 0;
+    justify-content: space-between;
+  }
+
+  .pageContainer .btnsContainer .btnsBlock button {
+    margin: 0;
+  }
+
+  .pageContainer .btnsContainer .btnsBlock div button {
+    margin-right: 1.5rem;
+  }
+}
+
+.expand {
+  padding-left: 1.5rem;
+  animation: moveLeft 0.5s ease-in-out;
+}
+
+@keyframes moveLeft {
+  from {
+    padding-left: calc(300px + 2rem + 1.5rem);
+  }
+
+  to {
+    padding-left: 1.5rem;
+  }
+}
+
+.contract {
+  padding-left: calc(300px + 2rem + 1.5rem);
+  animation: moveRight 0.5s ease-in-out;
+}
+
+@keyframes moveRight {
+  from {
+    padding-left: 1.5rem
+  }
+
+  to {
+    padding-left: calc(300px + 2rem + 1.5rem);
+  }
 }

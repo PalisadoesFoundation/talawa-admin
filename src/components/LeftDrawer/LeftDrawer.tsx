@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import type { InterfaceUserType } from 'utils/interfaces';
 import { ReactComponent as AngleRightIcon } from '../../assets/svgs/icons/angleRight.svg';
@@ -11,13 +11,25 @@ import styles from './LeftDrawer.module.css';
 
 interface InterfaceLeftDrawerProps {
   data: InterfaceUserType | undefined;
+  showDrawer: boolean;
 }
 
-const leftDrawer = ({ data }: InterfaceLeftDrawerProps): JSX.Element => {
+const leftDrawer = ({
+  data,
+  showDrawer,
+}: InterfaceLeftDrawerProps): JSX.Element => {
   const { user } = data || {};
 
+  useEffect(() => {
+    console.log('Useffect called');
+  }, [showDrawer]);
+
   return (
-    <div className={styles.leftDrawer}>
+    <div
+      className={`${styles.leftDrawer} ${
+        showDrawer ? styles.activeDrawer : styles.inactiveDrawer
+      }`}
+    >
       <TalawaLogo className={styles.talawaLogo} />
       <p className={styles.talawaText}>Talawa Admin Portal</p>
       <h5 className={styles.titleHeader}>Menu</h5>

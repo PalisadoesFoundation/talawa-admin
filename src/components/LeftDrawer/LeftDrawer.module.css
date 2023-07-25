@@ -2,13 +2,13 @@
   width: calc(300px + 2rem);
   position: fixed;
   top: 0;
-  left: 0;
   bottom: 0;
   z-index: 100;
   display: flex;
   flex-direction: column;
   padding: 1rem 1rem 0 1rem;
   background-color: var(--bs-white);
+  transition: 0.5s;
 }
 
 .leftDrawer .talawaLogo {
@@ -84,13 +84,11 @@
 
 .shine {
   background: #f6f7f8;
-  background-image: linear-gradient(
-    to right,
-    #f6f7f8 0%,
-    #edeef1 20%,
-    #f6f7f8 40%,
-    #f6f7f8 100%
-  );
+  background-image: linear-gradient(to right,
+      #f6f7f8 0%,
+      #edeef1 20%,
+      #f6f7f8 40%,
+      #f6f7f8 100%);
   background-repeat: no-repeat;
   background-size: 800px 104px;
   display: inline-block;
@@ -131,3 +129,54 @@
     background-position: 468px 0;
   }
 }
+
+
+@media (max-width: 1120px) {
+  .leftDrawer {
+    width: calc(250px + 2rem);
+    padding: 1rem 1rem 0 1rem;
+  }
+}
+
+.activeDrawer {
+  width: calc(300px + 2rem);
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  animation: comeToRight 0.5s ease-in-out;
+}
+
+@keyframes comeToRight {
+  from {
+    opacity: 0.4;
+    left: calc(-300px - 2rem);
+  }
+
+  to {
+    opacity: 1;
+    left: 0;
+  }
+}
+
+.inactiveDrawer {
+  position: fixed;
+  top: 0;
+  left: calc(-300px - 2rem);
+  bottom: 0;
+  animation: goToLeft 0.5s ease-in-out;
+}
+
+@keyframes goToLeft {
+  from {
+    left: 0;
+  }
+
+  to {
+    opacity: 0.1;
+    left: calc(-300px - 2rem);
+  }
+} 
+
+
+/* Donne */
