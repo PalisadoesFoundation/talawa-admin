@@ -34,22 +34,25 @@ function superDashListCard(
   return (
     <>
       <div className={styles.orgCard} data-testid="singleorg">
-        <div className={styles.orgImgContainer}>
-          {image ? (
-            <img src={image} className={styles.orgimg} />
-          ) : (
-            <img src={AboutImg} className={styles.orgimg} />
-          )}
-        </div>
-        <div className={styles.content}>
-          <h5>{name}</h5>
-          <h6 className="text-secondary">{location}</h6>
-          <h6>
-            {t('admins')}: <span>{admins.length}</span>
-          </h6>
-          <h6>
-            {t('members')}: <span>{members.length}</span>
-          </h6>
+        <div className={styles.innerContainer}>
+          <div className={styles.orgImgContainer}>
+            <div className={styles.overlayTheme} />
+            {image ? (
+              <img src={image} className={styles.orgimg} />
+            ) : (
+              <img src={AboutImg} className={styles.orgimg} />
+            )}
+          </div>
+          <div className={styles.content}>
+            <h5>{name}</h5>
+            <h6 className="text-secondary">{location}</h6>
+            <h6>
+              {t('admins')}: <span>{admins.length}</span>
+            </h6>
+            <h6>
+              {t('members')}: <span>{members.length}</span>
+            </h6>
+          </div>
         </div>
         <Button
           onClick={handleClick}
