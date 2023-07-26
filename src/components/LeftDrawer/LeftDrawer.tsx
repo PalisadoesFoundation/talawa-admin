@@ -87,7 +87,7 @@ const leftDrawer = ({
       </div>
       <div style={{ marginTop: 'auto' }}>
         {data === undefined ? (
-          <div className={`${styles.profileContainer} ${styles.shine}`} />
+          <div className={`${styles.profileContainer} shimmer`} />
         ) : (
           <button
             className={styles.profileContainer}

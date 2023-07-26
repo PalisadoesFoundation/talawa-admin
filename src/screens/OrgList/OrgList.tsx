@@ -54,7 +54,7 @@ function orgList(): JSX.Element {
 
   const {
     data: userData,
-    loading: loading2,
+    loading: loadingUserOrgs,
     error: errorUser,
   }: {
     data: InterfaceUserType | undefined;
@@ -236,8 +236,29 @@ function orgList(): JSX.Element {
         </div>
         {/* Organizations List */}
         <div className={styles.listBox} data-testid="organizations-list">
-          {orgsData?.organizationsConnection?.length &&
-          orgsData?.organizationsConnection?.length > 0 ? (
+          {loading ? (
+            <>
+              {[...Array(8)].map((_, index) => (
+                <div key={index} className={styles.itemCard}>
+                  <div className={styles.loadingWrapper}>
+                    <div className={styles.innerContainer}>
+                      <div
+                        className={`${styles.orgImgContainer} shimmer`}
+                      ></div>
+                      <div className={styles.content}>
+                        <h5 className="shimmer" title="Org name"></h5>
+                        <h6 className="shimmer" title="Location"></h6>
+                        <h6 className="shimmer" title="Admins"></h6>
+                        <h6 className="shimmer" title="Members"></h6>
+                      </div>
+                    </div>
+                    <div className={`shimmer ${styles.button}`} />
+                  </div>
+                </div>
+              ))}
+            </>
+          ) : orgsData?.organizationsConnection?.length &&
+            orgsData?.organizationsConnection?.length > 0 ? (
             orgsData?.organizationsConnection.map((item) => {
               if (userData && userData.user.userType == 'SUPERADMIN') {
                 return (
