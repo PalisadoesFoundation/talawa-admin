@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Button from 'react-bootstrap/Button';
 import type { InterfaceUserType } from 'utils/interfaces';
 import { ReactComponent as AngleRightIcon } from '../../assets/svgs/icons/angleRight.svg';
@@ -8,7 +8,6 @@ import { ReactComponent as RequestsIcon } from '../../assets/svgs/icons/requests
 import { ReactComponent as RolesIcon } from '../../assets/svgs/icons/roles.svg';
 import { ReactComponent as TalawaLogo } from '../../assets/svgs/talawa.svg';
 import styles from './LeftDrawer.module.css';
-import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';

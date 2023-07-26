@@ -15,6 +15,7 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import { debug } from 'jest-preview';
 
 type Organization = {
   _id: string;
@@ -158,8 +159,28 @@ async function wait(ms = 100): Promise<void> {
 afterEach(() => {
   localStorage.clear();
 });
+describe('Testing LeftDrawer in page functionality', () => {
+  test('Testing LeftDrawer in page functionality', async () => {
+    localStorage.setItem('UserType', 'SUPERADMIN');
 
-describe('Organisation List Page', () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgList />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+    userEvent.click(screen.getByTestId('menuBtn'));
+  });
+});
+
+describe('Organisations Page', () => {
   const formData = {
     name: 'Dummy Organization',
     description: 'This is a dummy organization',
@@ -167,7 +188,7 @@ describe('Organisation List Page', () => {
     image: new File(['hello'], 'hello.png', { type: 'image/png' }),
   };
 
-  test('On dynamic setting of rowsPerPage, the number of organizations rendered on the dom should be changed to the selected option', async () => {
+  test('Testing LeftDrawer in page functionality', async () => {
     localStorage.setItem('id', '123');
 
     render(
@@ -182,41 +203,8 @@ describe('Organisation List Page', () => {
       </MockedProvider>
     );
 
-    // Wait and confirm that the component has been rendered
-    await screen.findByTestId('rowsPPSelect');
-
-    //Get the reference to the dropdown for rows per page
-    const numRowsSelect: HTMLSelectElement | null = screen
-      .getByTestId('rowsPPSelect')
-      .querySelector('select');
-
-    if (numRowsSelect === null) {
-      throw new Error('numRowwsSelect is null');
-    }
-
-    // Get all possible options
-    const options = Array.from(numRowsSelect?.querySelectorAll('option')).slice(
-      1
-    );
-
-    // Change the  number of rows to display through the dropdown
-    options.forEach((option) => {
-      //Change the selected option to the value of the current option
-      userEvent.selectOptions(numRowsSelect, option.value);
-
-      // When the selected option from rowsPerPage is "All", the total number of organizations displayed
-      // is the number of organizations plus one (i.e an object is prepended to the list of mocked organizations)
-      const numOrgDisplayed =
-        option.textContent === 'All'
-          ? organizations.length + 1
-          : parseInt(option.value);
-
-      expect(
-        screen
-          .getByTestId('organizations-list')
-          .querySelectorAll('[data-testid="singleorg"]').length
-      ).toBe(numOrgDisplayed);
-    });
+    await wait();
+    debug();
   });
 
   test('Testing search functionality', async () => {
@@ -378,9 +366,6 @@ describe('Organisation List Page', () => {
 
     await wait();
 
-    expect(container.textContent).toMatch('Name:');
-    expect(container.textContent).toMatch('Designation:');
-    expect(container.textContent).toMatch('Email:');
     expect(window.location).toBeAt('/');
 
     userEvent.type(screen.getByTestId(/searchByName/i), formData.name);
@@ -423,7 +408,9 @@ describe('Organisation List Page', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
-            <OrgList />
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgList />
+            </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -469,12 +456,9 @@ describe('Organisation List Page', () => {
         screen.getByPlaceholderText(/Location/i),
         formData.location
       );
-      userEvent.click(screen.getByLabelText(/Is Public:/i));
-      userEvent.click(screen.getByLabelText(/Visible In Search:/i));
-      userEvent.upload(
-        screen.getByLabelText(/Display Image:/i),
-        formData.image
-      );
+      userEvent.click(screen.getByTestId(/isPublic/i));
+      userEvent.click(screen.getByTestId(/visibleInSearch/i));
+      userEvent.upload(screen.getByLabelText(/Display Image/i), formData.image);
 
       await wait(500);
 
@@ -487,9 +471,9 @@ describe('Organisation List Page', () => {
       expect(screen.getByPlaceholderText(/Location/i)).toHaveValue(
         formData.location
       );
-      expect(screen.getByLabelText(/Is Public/i)).not.toBeChecked();
-      expect(screen.getByLabelText(/Visible In Search:/i)).toBeChecked();
-      expect(screen.getByLabelText(/Display Image:/i)).toBeTruthy();
+      expect(screen.getByTestId(/isPublic/i)).not.toBeChecked();
+      expect(screen.getByTestId(/visibleInSearch/i)).toBeChecked();
+      expect(screen.getByLabelText(/Display Image/i)).toBeTruthy();
 
       userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
     });

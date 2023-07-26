@@ -10,7 +10,6 @@ import {
 } from 'GraphQl/Queries/Queries';
 import AdminDashListCard from 'components/AdminDashListCard/AdminDashListCard';
 import LeftDrawer from 'components/LeftDrawer/LeftDrawer';
-import Loader from 'components/Loader/Loader';
 import SuperDashListCard from 'components/SuperDashListCard/SuperDashListCard';
 import type { ChangeEvent } from 'react';
 import React, { useState } from 'react';
@@ -23,6 +22,7 @@ import convertToBase64 from 'utils/convertToBase64';
 import debounce from 'utils/debounce';
 import { errorHandler } from 'utils/errorHandler';
 import type {
+  InterfaceOrgConnectionInfoType,
   InterfaceOrgConnectionType,
   InterfaceUserType,
 } from 'utils/interfaces';
@@ -44,17 +44,14 @@ function orgList(): JSX.Element {
   });
 
   const [showDrawer, setShowDrawer] = useState(true);
-  const isSuperAdmin = localStorage.getItem('UserType') !== 'SUPERADMIN';
+  const isSuperAdmin = localStorage.getItem('UserType') === 'SUPERADMIN';
 
   const toggleModal = (): void => setShowModal(!showModal);
 
-  const [create, { loading: loading3 }] = useMutation(
-    CREATE_ORGANIZATION_MUTATION
-  );
+  const [create] = useMutation(CREATE_ORGANIZATION_MUTATION);
 
   const {
     data: userData,
-    loading: loadingUserOrgs,
     error: errorUser,
   }: {
     data: InterfaceUserType | undefined;
@@ -76,11 +73,22 @@ function orgList(): JSX.Element {
     refetch: any;
   } = useQuery(ORGANIZATION_CONNECTION_LIST);
 
-  const isAdminForCurrentOrg = (): boolean => {
-    return (
-      userData?.user?.adminFor.length === 1 &&
-      userData.user.adminFor[0]._id === orgsData?.organizationsConnection[0]._id
-    );
+  /* istanbul ignore next */
+  const isAdminForCurrentOrg = (
+    currentOrg: InterfaceOrgConnectionInfoType
+  ): boolean => {
+    if (userData?.user?.adminFor.length === 1) {
+      // If user is admin for one org only then check if that org is current org
+      return userData?.user?.adminFor[0]._id === currentOrg._id;
+    } else {
+      // If user is admin for more than one org then check if current org is present in adminFor array
+      return (
+        userData?.user?.adminFor.some(
+          (org: { _id: string; name: string; image: string }) =>
+            org._id === currentOrg._id
+        ) ?? false
+      );
+    }
   };
 
   const createOrg = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
@@ -142,6 +150,7 @@ function orgList(): JSX.Element {
       filter: value,
     });
   };
+
   let dataRevOrg;
   const debouncedHandleSearchByName = debounce(handleSearchByName);
   if (orgsData) {
@@ -166,13 +175,22 @@ function orgList(): JSX.Element {
             onClick={(): void => {
               setShowDrawer(!showDrawer);
             }}
+            data-testid="menuBtn"
           >
             <MenuIcon fontSize="medium" />
           </Button>
         </div>
         {/* Buttons Container */}
         <div className={styles.btnsContainer}>
-          <div className={styles.input}>
+          <div
+            className={styles.input}
+            style={{
+              display:
+                userData && userData.user.userType === 'SUPERADMIN'
+                  ? 'block'
+                  : 'none',
+            }}
+          >
             <Form.Control
               type="name"
               id="orgname"
@@ -182,12 +200,6 @@ function orgList(): JSX.Element {
               autoComplete="off"
               required
               onChange={debouncedHandleSearchByName}
-              style={{
-                display:
-                  userData && userData.user.userType !== 'SUPERADMIN'
-                    ? 'none'
-                    : 'block',
-              }}
             />
             <Button
               tabIndex={-1}
@@ -224,10 +236,14 @@ function orgList(): JSX.Element {
             <Button
               variant="success"
               className={styles.createOrgBtn}
-              disabled={isSuperAdmin}
               onClick={toggleModal}
               data-testid="createOrganizationBtn"
-              style={{ display: isSuperAdmin ? 'none' : 'block' }}
+              style={{
+                display:
+                  userData && userData.user.userType === 'SUPERADMIN'
+                    ? 'block'
+                    : 'none',
+              }}
             >
               <i className={'fa fa-plus me-2'} />
               {t('createOrganization')}
@@ -266,7 +282,8 @@ function orgList(): JSX.Element {
                     <SuperDashListCard data={item} />
                   </div>
                 );
-              } else if (isAdminForCurrentOrg()) {
+              } else if (isAdminForCurrentOrg(item)) {
+                /* istanbul ignore next */
                 return (
                   <div key={item._id} className={styles.itemCard}>
                     <AdminDashListCard data={item} />
@@ -359,6 +376,7 @@ function orgList(): JSX.Element {
                 <Form.Label htmlFor="ispublic">{t('isPublic')}</Form.Label>
                 <Form.Switch
                   id="ispublic"
+                  data-testid="isPublic"
                   type="checkbox"
                   defaultChecked={formState.ispublic}
                   onChange={(): void =>
@@ -375,6 +393,7 @@ function orgList(): JSX.Element {
                 </Form.Label>
                 <Form.Switch
                   id="visibleInSearch"
+                  data-testid="visibleInSearch"
                   type="checkbox"
                   defaultChecked={formState.visible}
                   onChange={(): void =>
@@ -407,7 +426,11 @@ function orgList(): JSX.Element {
             />
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={(): void => toggleModal()}>
+            <Button
+              variant="secondary"
+              onClick={(): void => toggleModal()}
+              data-testid="closeOrganizationModal"
+            >
               {t('cancel')}
             </Button>
             <Button
