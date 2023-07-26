@@ -33,6 +33,7 @@
 
 .pageContainer .btnsContainer .input {
   flex: 1;
+  position: relative;
 }
 
 .pageContainer .btnsContainer input {
@@ -120,18 +121,20 @@
   .pageContainer .btnsContainer .btnsBlock {
     display: block;
     margin-top: 1rem;
-  }
-
-  .pageContainer .btnsContainer .btnsBlock button:nth-child(1) {
-    margin-right: 0.5rem;
-  }
-
-  .pageContainer .btnsContainer .btnsBlock button:nth-child(2) {
     margin-right: 0;
+  }
+
+  .pageContainer .btnsContainer .btnsBlock div {
+    flex: 1;
+  }
+
+  .pageContainer .btnsContainer .btnsBlock div[title="Sort organizations"] {
+    margin-right: 0.5rem;
   }
 
   .pageContainer .btnsContainer .btnsBlock button {
     margin-bottom: 1rem;
+    margin-right: 0;
     width: 100%;
   }
 }

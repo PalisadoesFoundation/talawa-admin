@@ -172,7 +172,7 @@ function orgList(): JSX.Element {
         </div>
         {/* Buttons Container */}
         <div className={styles.btnsContainer}>
-          <div className={`${styles.input} position-relative`}>
+          <div className={styles.input}>
             <Form.Control
               type="name"
               id="orgname"
