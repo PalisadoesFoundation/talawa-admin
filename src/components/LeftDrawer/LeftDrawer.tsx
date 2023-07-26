@@ -8,6 +8,9 @@ import { ReactComponent as RequestsIcon } from '../../assets/svgs/icons/requests
 import { ReactComponent as RolesIcon } from '../../assets/svgs/icons/roles.svg';
 import { ReactComponent as TalawaLogo } from '../../assets/svgs/talawa.svg';
 import styles from './LeftDrawer.module.css';
+import Cookies from 'js-cookie';
+import { toast } from 'react-toastify';
+import { useHistory } from 'react-router-dom';
 
 interface InterfaceLeftDrawerProps {
   data: InterfaceUserType | undefined;
@@ -22,9 +25,14 @@ const leftDrawer = ({
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const { user } = data || {};
 
-  useEffect(() => {
-    console.log('Useffect called');
-  }, [showDrawer]);
+  const currentLanguageCode = Cookies.get('i18next') || 'en';
+
+  const history = useHistory();
+
+  const logout = (): void => {
+    localStorage.clear();
+    window.location.replace('/');
+  };
 
   return (
     <div
@@ -51,13 +59,25 @@ const leftDrawer = ({
           </div>
           Organizations
         </Button>
-        <Button variant="light" className={'text-secondary'}>
+        <Button
+          variant="light"
+          className={'text-secondary'}
+          onClick={(): void => {
+            history.push('/requests');
+          }}
+        >
           <div className={styles.iconWrapper}>
             <RequestsIcon fill={'var(--bs-secondary)'} />
           </div>
           Requests
         </Button>
-        <Button variant="light" className={'text-secondary'}>
+        <Button
+          variant="light"
+          className={'text-secondary'}
+          onClick={(): void => {
+            history.push('/roles');
+          }}
+        >
           <div className={styles.iconWrapper}>
             <RolesIcon fill={'var(--bs-secondary)'} />
           </div>
@@ -68,7 +88,12 @@ const leftDrawer = ({
         {data === undefined ? (
           <div className={`${styles.profileContainer} ${styles.shine}`} />
         ) : (
-          <button className={styles.profileContainer}>
+          <button
+            className={styles.profileContainer}
+            onClick={(): void => {
+              toast.success('Profile page coming soon!');
+            }}
+          >
             <div className={styles.imageContainer}>
               <img
                 src={`https://api.dicebear.com/5.x/initials/svg?seed=${user?.firstName} ${user?.lastName}`}
@@ -90,6 +115,7 @@ const leftDrawer = ({
         <Button
           variant="light"
           className="mt-4 d-flex justify-content-start px-0 mb-2 w-100"
+          onClick={(): void => logout()}
         >
           <div className={styles.imageContainer}>
             <LogoutIcon fill={'var(--bs-secondary)'} />
