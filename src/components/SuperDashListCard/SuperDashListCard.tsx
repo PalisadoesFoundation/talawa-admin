@@ -5,6 +5,7 @@ import styles from './SuperDashListCard.module.css';
 import { useHistory } from 'react-router-dom';
 import AboutImg from 'assets/images/defaultImg.png';
 import type { InterfaceOrgConnectionInfoType } from 'utils/interfaces';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 interface InterfaceSuperDashListCardProps {
   data: InterfaceOrgConnectionInfoType;
@@ -45,7 +46,10 @@ function superDashListCard(
           </div>
           <div className={styles.content}>
             <h5>{name}</h5>
-            <h6 className="text-secondary">{location}</h6>
+            <h6 className="text-secondary">
+              <LocationOnIcon fontSize="inherit" className="fs-5" />
+              {location}
+            </h6>
             <h6>
               {t('admins')}: <span>{admins.length}</span>
             </h6>
@@ -68,5 +72,4 @@ function superDashListCard(
     </>
   );
 }
-export {};
 export default superDashListCard;
