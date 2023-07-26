@@ -44,7 +44,6 @@ function orgList(): JSX.Element {
   });
 
   const [showDrawer, setShowDrawer] = useState(true);
-  const isSuperAdmin = localStorage.getItem('UserType') === 'SUPERADMIN';
 
   const toggleModal = (): void => setShowModal(!showModal);
 
@@ -151,11 +150,7 @@ function orgList(): JSX.Element {
     });
   };
 
-  let dataRevOrg;
   const debouncedHandleSearchByName = debounce(handleSearchByName);
-  if (orgsData) {
-    dataRevOrg = orgsData.organizationsConnection.slice().reverse();
-  }
   return (
     <>
       <LeftDrawer
