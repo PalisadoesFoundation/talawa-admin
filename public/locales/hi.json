@@ -34,6 +34,14 @@
     "requests": "अनुरोध",
     "logout": "लॉग आउट"
   },
+  "leftDrawer": {
+    "talawaAdminPortal": "तलावा व्यवस्थापक पोर्टल",
+    "menu": "मेन्यू",
+    "organizations": "संगठन",
+    "requests": "अनुरोध",
+    "roles": "भूमिकाएँ",
+    "logout": "लॉग आउट"
+  },
   "orgList": {
     "title": "तलवा संगठन",
     "you": "आप",
@@ -41,14 +49,15 @@
     "designation": "पद",
     "email": "ईमेल",
     "searchByName": "नाम से खोजें",
-    "organizationList": "संगठनों की सूची",
+    "organizations": "संगठन",
     "createOrganization": "संगठन बनाएं",
     "description": "विवरण",
     "location": "स्थान",
     "isPublic": "सार्वजनिक है",
     "visibleInSearch": "खोज में दृश्यमान",
     "displayImage": "प्रदर्शन छवि",
-    "enterName": "नाम दर्ज करें"
+    "enterName": "नाम दर्ज करें",
+    "cancel": "रद्द करना"
   },
   "superDashListCard": {
     "created": "बनाया था",

@@ -34,6 +34,14 @@
     "requests": "Demandes",
     "logout": "Se déconnecter"
   },
+  "leftDrawer": {
+    "talawaAdminPortal": "Portail d'administration Talawa",
+    "menu": "Menu",
+    "organizations": "Organisations",
+    "requests": "Demandes",
+    "roles": "Rôles",
+    "logout": "Déconnexion"
+  },
   "orgList": {
     "title": "Organisations Talawa",
     "you": "Tu",
@@ -41,14 +49,15 @@
     "designation": "La désignation",
     "email": "E-mail",
     "searchByName": "Rechercher par nom",
-    "organizationList": "Liste des organisations",
+    "organizations": "Organisations",
     "createOrganization": "Créer une organisation",
     "description": "La description",
     "location": "Emplacement",
     "isPublic": "Est publique",
     "visibleInSearch": "Visible dans la recherche",
     "displayImage": "Afficher l'image",
-    "enterName": "Entrez le nom"
+    "enterName": "Entrez le nom",
+    "cancel": "Annuler"
   },
   "superDashListCard": {
     "created": "Établi",

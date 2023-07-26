@@ -20,3 +20,13 @@ body {
   min-height: 100vh;
   background-color: #f2f7ff;
 }
+
+input[type='checkbox'] {
+  transform: scale(1.5);
+}
+.form-switch {
+  padding-left: 3rem;
+}
+input[type='file']::file-selector-button {
+  background: var(--bs-gray-400);
+}

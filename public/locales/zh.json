@@ -34,6 +34,14 @@
     "requests": "要求",
     "logout": "登出"
   },
+  "leftDrawer": {
+    "talawaAdminPortal": "塔拉瓦管理门户",
+    "menu": "菜单",
+    "organizations": "组织",
+    "requests": "请求",
+    "roles": "角色",
+    "logout": "退出登录"
+  },
   "orgList": {
     "title": "塔拉瓦組織",
     "you": "你",
@@ -41,14 +49,15 @@
     "designation": "指定",
     "email": "電子郵件",
     "searchByName": "按名稱搜索",
-    "organizationList": "組織名單",
+    "organizations": "组织",
     "createOrganization": "創建組織",
     "description": "描述",
     "location": "地點",
     "isPublic": "是否公開",
     "visibleInSearch": "在搜索中可見",
     "displayImage": "顯示圖像",
-    "enterName": "输入名字"
+    "enterName": "输入名字",
+    "cancel": "取消"
   },
   "superDashListCard": {
     "created": "創造",
@@ -362,7 +371,6 @@
     "saveChanges": "保存更改",
     "cancel": "取消"
   },
-
   "userPasswordUpdate": {
     "previousPassword": "以前的密碼",
     "newPassword": "新密碼",
@@ -370,7 +378,6 @@
     "saveChanges": "保存更改",
     "cancel": "取消"
   },
-
   "orgDelete": {
     "deleteOrg": "刪除組織"
   },

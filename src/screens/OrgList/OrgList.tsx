@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Search } from '@mui/icons-material';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import MenuIcon from '@mui/icons-material/Menu';
 import SortIcon from '@mui/icons-material/Sort';
 import { CREATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
@@ -10,12 +11,10 @@ import {
 import AdminDashListCard from 'components/AdminDashListCard/AdminDashListCard';
 import LeftDrawer from 'components/LeftDrawer/LeftDrawer';
 import Loader from 'components/Loader/Loader';
-import PaginationList from 'components/PaginationList/PaginationList';
 import SuperDashListCard from 'components/SuperDashListCard/SuperDashListCard';
-import dayjs from 'dayjs';
 import type { ChangeEvent } from 'react';
 import React, { useState } from 'react';
-import { Card, Col, Form } from 'react-bootstrap';
+import { Col, Dropdown, Form, Row } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useTranslation } from 'react-i18next';
@@ -28,7 +27,6 @@ import type {
   InterfaceUserType,
 } from 'utils/interfaces';
 import styles from './OrgList.module.css';
-import MenuIcon from '@mui/icons-material/Menu';
 
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
@@ -50,7 +48,6 @@ function orgList(): JSX.Element {
 
   const toggleModal = (): void => setShowModal(!showModal);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [create, { loading: loading3 }] = useMutation(
     CREATE_ORGANIZATION_MUTATION
   );
@@ -134,10 +131,6 @@ function orgList(): JSX.Element {
     }
   };
 
-  if (loading || loading2 || loading3) {
-    return <Loader />;
-  }
-
   /* istanbul ignore next */
   if (errorList || errorUser) {
     window.location.assign('/');
@@ -168,7 +161,7 @@ function orgList(): JSX.Element {
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">
-          <h2>{t('organizationList')}</h2>
+          <h2>{t('organizations')}</h2>
           <Button
             onClick={(): void => {
               setShowDrawer(!showDrawer);
@@ -205,14 +198,28 @@ function orgList(): JSX.Element {
           </div>
           <div className={styles.btnsBlock}>
             <div className="d-flex">
-              <Button className={styles.sortBtn} variant="outline-success">
-                <SortIcon className={'me-1'} />
-                Sort
-              </Button>
-              <Button variant="outline-success" className={styles.sortBtn}>
-                <FilterListIcon className={'me-1'} />
-                Filter
-              </Button>
+              <Dropdown aria-expanded="false" title="Sort organizations">
+                <Dropdown.Toggle variant="outline-success">
+                  <SortIcon className={'me-1'} />
+                  Sort
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
+                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
+                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+              <Dropdown aria-expanded="false" title="Filter organizations">
+                <Dropdown.Toggle variant="outline-success">
+                  <FilterListIcon className={'me-1'} />
+                  Filter
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
+                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
+                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
             <Button
               variant="success"
@@ -222,7 +229,7 @@ function orgList(): JSX.Element {
               data-testid="createOrganizationBtn"
               style={{ display: isSuperAdmin ? 'none' : 'block' }}
             >
-              <i className={'fa fa-plus me-1'} />
+              <i className={'fa fa-plus me-2'} />
               {t('createOrganization')}
             </Button>
           </div>
@@ -240,9 +247,9 @@ function orgList(): JSX.Element {
                 );
               } else if (isAdminForCurrentOrg()) {
                 return (
-                  <Col key={item._id} sm={12} xl={6} xs={12}>
+                  <div key={item._id} className={styles.itemCard}>
                     <AdminDashListCard data={item} />
-                  </Col>
+                  </div>
                 );
               } else {
                 return null;
@@ -258,28 +265,29 @@ function orgList(): JSX.Element {
       </div>
 
       {/* Create Organization Modal */}
-      <Modal show={showModal} onHide={toggleModal}>
-        <Modal.Header>
-          <p className={styles.titlemodal}>{t('createOrganization')}</p>
-          <Button
-            variant="danger"
-            onClick={toggleModal}
-            data-testid="closeOrganizationModal"
-          >
-            <i
-              className="fa fa-times"
-              style={{
-                cursor: 'pointer',
-              }}
-            ></i>
-          </Button>
+      <Modal
+        show={showModal}
+        onHide={toggleModal}
+        backdrop="static"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header
+          className="bg-primary"
+          closeButton
+          data-testid="modalOrganizationHeader"
+        >
+          <Modal.Title className="text-white">
+            {t('createOrganization')}
+          </Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <Form onSubmitCapture={createOrg}>
-            <label htmlFor="orgname">{t('name')}</label>
+        <Form onSubmitCapture={createOrg}>
+          <Modal.Body>
+            <Form.Label htmlFor="orgname">{t('name')}</Form.Label>
             <Form.Control
               type="name"
               id="orgname"
+              className="mb-3"
               placeholder={t('enterName')}
               data-testid="modalOrganizationName"
               autoComplete="off"
@@ -292,10 +300,11 @@ function orgList(): JSX.Element {
                 });
               }}
             />
-            <label htmlFor="descrip">{t('description')}</label>
+            <Form.Label htmlFor="descrip">{t('description')}</Form.Label>
             <Form.Control
               type="descrip"
               id="descrip"
+              className="mb-3"
               placeholder={t('description')}
               autoComplete="off"
               required
@@ -307,10 +316,11 @@ function orgList(): JSX.Element {
                 });
               }}
             />
-            <label htmlFor="location">{t('location')}</label>
+            <Form.Label htmlFor="location">{t('location')}</Form.Label>
             <Form.Control
               type="text"
               id="location"
+              className="mb-3"
               placeholder={t('location')}
               autoComplete="off"
               required
@@ -323,13 +333,12 @@ function orgList(): JSX.Element {
               }}
             />
 
-            <div className={styles.checkboxdiv}>
-              <div className={styles.dispflex}>
-                <label htmlFor="ispublic">{t('isPublic')}:</label>
+            <Row className="mb-3">
+              <Col>
+                <Form.Label htmlFor="ispublic">{t('isPublic')}</Form.Label>
                 <Form.Switch
                   id="ispublic"
                   type="checkbox"
-                  className={'ms-3'}
                   defaultChecked={formState.ispublic}
                   onChange={(): void =>
                     setFormState({
@@ -338,13 +347,14 @@ function orgList(): JSX.Element {
                     })
                   }
                 />
-              </div>
-              <div className={styles.dispflex}>
-                <label htmlFor="visible">{t('visibleInSearch')}: </label>
+              </Col>
+              <Col>
+                <Form.Label htmlFor="visibleInSearch">
+                  {t('visibleInSearch')}
+                </Form.Label>
                 <Form.Switch
-                  id="visible"
+                  id="visibleInSearch"
                   type="checkbox"
-                  className={'ms-3'}
                   defaultChecked={formState.visible}
                   onChange={(): void =>
                     setFormState({
@@ -353,38 +363,41 @@ function orgList(): JSX.Element {
                     })
                   }
                 />
-              </div>
-            </div>
-            <label htmlFor="orgphoto" className={styles.orgphoto}>
-              {t('displayImage')}:
-              <Form.Control
-                accept="image/*"
-                id="orgphoto"
-                name="photo"
-                type="file"
-                multiple={false}
-                onChange={async (e: React.ChangeEvent): Promise<void> => {
-                  const target = e.target as HTMLInputElement;
-                  const file = target.files && target.files[0];
-                  if (file)
-                    setFormState({
-                      ...formState,
-                      image: await convertToBase64(file),
-                    });
-                }}
-                data-testid="organisationImage"
-              />
-            </label>
+              </Col>
+            </Row>
+            <Form.Label htmlFor="orgphoto">{t('displayImage')}</Form.Label>
+            <Form.Control
+              accept="image/*"
+              id="orgphoto"
+              className="mb-3"
+              name="photo"
+              type="file"
+              multiple={false}
+              onChange={async (e: React.ChangeEvent): Promise<void> => {
+                const target = e.target as HTMLInputElement;
+                const file = target.files && target.files[0];
+                if (file)
+                  setFormState({
+                    ...formState,
+                    image: await convertToBase64(file),
+                  });
+              }}
+              data-testid="organisationImage"
+            />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={(): void => toggleModal()}>
+              {t('cancel')}
+            </Button>
             <Button
               type="submit"
-              className={styles.greenregbtn}
               value="invite"
               data-testid="submitOrganizationForm"
             >
               {t('createOrganization')}
             </Button>
-          </Form>
-        </Modal.Body>
+          </Modal.Footer>
+        </Form>
       </Modal>
     </>
   );

@@ -34,6 +34,14 @@
     "requests": "Peticiones",
     "logout": "Cerrar sesión"
   },
+  "leftDrawer": {
+    "talawaAdminPortal": "Portal de administración de Talawa",
+    "menu": "Menú",
+    "organizations": "Organizaciones",
+    "requests": "Solicitudes",
+    "roles": "Roles",
+    "logout": "Cerrar sesión"
+  },
   "orgList": {
     "title": "Organizaciones Talawa",
     "you": "Tú",
@@ -41,14 +49,15 @@
     "designation": "Designacion",
     "email": "Correo electrónico",
     "searchByName": "Buscar por nombre",
-    "organizationList": "Lista de organizaciones",
+    "organizations": "Organizaciones",
     "createOrganization": "Crear organización",
     "description": "Descripción",
     "location": "Ubicación",
     "isPublic": "Es público",
     "visibleInSearch": "Visible en la búsqueda",
     "displayImage": "Mostrar imagen",
-    "enterName": "Ingrese su nombre"
+    "enterName": "Ingrese su nombre",
+    "cancel": "Cancelar"
   },
   "superDashListCard": {
     "created": "Creado",
@@ -362,7 +371,6 @@
     "saveChanges": "Guardar cambios",
     "cancel": "Cancelar"
   },
-
   "userPasswordUpdate": {
     "previousPassword": "Contraseña anterior",
     "newPassword": "Nueva contraseña",
@@ -370,7 +378,6 @@
     "saveChanges": "Guardar cambios",
     "cancel": "Cancelar"
   },
-
   "orgDelete": {
     "deleteOrg": "Eliminar organización"
   },

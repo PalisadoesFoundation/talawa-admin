@@ -34,6 +34,14 @@
     "requests": "Requests",
     "logout": "Logout"
   },
+  "leftDrawer": {
+    "talawaAdminPortal": "Talawa Admin Portal",
+    "menu": "Menu",
+    "organizations": "Organizations",
+    "requests": "Requests",
+    "roles": "Roles",
+    "logout": "Logout"
+  },
   "orgList": {
     "title": "Talawa Organizations",
     "you": "You",
@@ -41,7 +49,7 @@
     "designation": "Designation",
     "email": "Email",
     "searchByName": "Search By Name",
-    "organizationList": "Organizations List",
+    "organizations": "Organizations",
     "createOrganization": "Create Organization",
     "description": "Description",
     "location": "Location",
@@ -49,6 +57,7 @@
     "visibleInSearch": "Visible In Search",
     "displayImage": "Display Image",
     "enterName": "Enter Name",
+    "cancel": "Cancel",
     "noOrgErrorTitle": "Organizations Not Found",
     "noOrgErrorDescription": "Please create an organization through dashboard"
   },

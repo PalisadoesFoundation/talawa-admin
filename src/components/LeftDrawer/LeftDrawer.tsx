@@ -11,6 +11,7 @@ import styles from './LeftDrawer.module.css';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface InterfaceLeftDrawerProps {
   data: InterfaceUserType | undefined;
@@ -25,7 +26,7 @@ const leftDrawer = ({
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const { user } = data || {};
 
-  const currentLanguageCode = Cookies.get('i18next') || 'en';
+  const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
 
   const history = useHistory();
 
@@ -50,14 +51,14 @@ const leftDrawer = ({
         <i className="fa fa-times"></i>
       </Button>
       <TalawaLogo className={styles.talawaLogo} />
-      <p className={styles.talawaText}>Talawa Admin Portal</p>
-      <h5 className={styles.titleHeader}>Menu</h5>
+      <p className={styles.talawaText}>{t('talawaAdminPortal')}</p>
+      <h5 className={styles.titleHeader}>{t('menu')}</h5>
       <div className={styles.optionList}>
         <Button variant="success">
           <div className={styles.iconWrapper}>
             <OrganizationsIcon stroke={'var(--bs-white)'} />
           </div>
-          Organizations
+          {t('organizations')}
         </Button>
         <Button
           variant="light"
@@ -69,7 +70,7 @@ const leftDrawer = ({
           <div className={styles.iconWrapper}>
             <RequestsIcon fill={'var(--bs-secondary)'} />
           </div>
-          Requests
+          {t('requests')}
         </Button>
         <Button
           variant="light"
@@ -81,7 +82,7 @@ const leftDrawer = ({
           <div className={styles.iconWrapper}>
             <RolesIcon fill={'var(--bs-secondary)'} />
           </div>
-          Roles
+          {t('roles')}
         </Button>
       </div>
       <div style={{ marginTop: 'auto' }}>
@@ -120,7 +121,7 @@ const leftDrawer = ({
           <div className={styles.imageContainer}>
             <LogoutIcon fill={'var(--bs-secondary)'} />
           </div>
-          Logout
+          {t('logout')}
         </Button>
       </div>
     </div>
