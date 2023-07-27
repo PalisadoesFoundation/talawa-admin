@@ -12,118 +12,135 @@ import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-interface InterfaceLeftDrawerProps {
+export interface InterfaceLeftDrawerProps {
   data: InterfaceUserType | undefined;
   showDrawer: boolean;
   setShowDrawer: React.Dispatch<React.SetStateAction<boolean>>;
+  screenName: 'Organizations' | 'Roles' | 'Requests';
 }
 
 const leftDrawer = ({
   data,
+  screenName,
   showDrawer,
   setShowDrawer,
 }: InterfaceLeftDrawerProps): JSX.Element => {
-  const { user } = data || {};
-
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
 
   const history = useHistory();
 
   const logout = (): void => {
     localStorage.clear();
-    window.location.replace('/');
+    history.push('/');
   };
 
   return (
-    <div
-      className={`${styles.leftDrawer} ${
-        showDrawer ? styles.activeDrawer : styles.inactiveDrawer
-      }`}
-    >
-      <Button
-        variant="danger"
-        className={styles.closeModalBtn}
-        onClick={(): void => {
-          setShowDrawer(!showDrawer);
-        }}
+    <>
+      <div
+        className={`${styles.leftDrawer} ${
+          showDrawer ? styles.activeDrawer : styles.inactiveDrawer
+        }`}
+        data-testid="leftDrawerContainer"
       >
-        <i className="fa fa-times"></i>
-      </Button>
-      <TalawaLogo className={styles.talawaLogo} />
-      <p className={styles.talawaText}>{t('talawaAdminPortal')}</p>
-      <h5 className={styles.titleHeader}>{t('menu')}</h5>
-      <div className={styles.optionList}>
-        <Button variant="success">
-          <div className={styles.iconWrapper}>
-            <OrganizationsIcon stroke={'var(--bs-white)'} />
-          </div>
-          {t('organizations')}
-        </Button>
         <Button
-          variant="light"
-          className={'text-secondary'}
+          variant="danger"
+          className={styles.closeModalBtn}
           onClick={(): void => {
-            history.push('/requests');
+            setShowDrawer(!showDrawer);
           }}
+          data-testid="closeModalBtn"
         >
-          <div className={styles.iconWrapper}>
-            <RequestsIcon fill={'var(--bs-secondary)'} />
-          </div>
-          {t('requests')}
+          <i className="fa fa-times"></i>
         </Button>
-        <Button
-          variant="light"
-          className={'text-secondary'}
-          onClick={(): void => {
-            history.push('/roles');
-          }}
-        >
-          <div className={styles.iconWrapper}>
-            <RolesIcon fill={'var(--bs-secondary)'} />
-          </div>
-          {t('roles')}
-        </Button>
-      </div>
-      <div style={{ marginTop: 'auto' }}>
-        {data === undefined ? (
-          <div className={`${styles.profileContainer} shimmer`} />
-        ) : (
-          <button
-            className={styles.profileContainer}
+        <TalawaLogo className={styles.talawaLogo} />
+        <p className={styles.talawaText}>{t('talawaAdminPortal')}</p>
+        <h5 className={styles.titleHeader}>{t('menu')}</h5>
+        <div className={styles.optionList}>
+          <Button
+            variant={screenName === 'Organizations' ? 'success' : 'light'}
+            data-testid="orgsBtn"
             onClick={(): void => {
-              toast.success('Profile page coming soon!');
+              history.push('/orglist');
             }}
           >
-            <div className={styles.imageContainer}>
-              <img
-                src={`https://api.dicebear.com/5.x/initials/svg?seed=${user?.firstName} ${user?.lastName}`}
-                alt={`profile pic of ${user?.firstName} ${user?.lastName}`}
-              />
+            <div className={styles.iconWrapper}>
+              <OrganizationsIcon stroke={'var(--bs-white)'} />
             </div>
-            <div className={styles.profileText}>
-              <span className={styles.primaryText}>
-                {user?.firstName} {user?.lastName}
-              </span>
-              <span className={styles.secondaryText}>
-                {`${user?.userType}`.toLowerCase()}
-              </span>
+            {t('organizations')}
+          </Button>
+          <Button
+            variant={screenName === 'Requests' ? 'success' : 'light'}
+            className={'text-secondary'}
+            onClick={(): void => {
+              history.push('/requests');
+            }}
+            data-testid="requestsBtn"
+          >
+            <div className={styles.iconWrapper}>
+              <RequestsIcon fill={'var(--bs-secondary)'} />
             </div>
-            <AngleRightIcon fill={'var(--bs-secondary)'} />
-          </button>
-        )}
+            {t('requests')}
+          </Button>
+          <Button
+            variant={screenName === 'Roles' ? 'success' : 'light'}
+            className={'text-secondary'}
+            onClick={(): void => {
+              history.push('/roles');
+            }}
+            data-testid="rolesBtn"
+          >
+            <div className={styles.iconWrapper}>
+              <RolesIcon fill={'var(--bs-secondary)'} />
+            </div>
+            {t('roles')}
+          </Button>
+        </div>
+        <div style={{ marginTop: 'auto' }}>
+          {data === undefined ? (
+            <div
+              className={`${styles.profileContainer} shimmer`}
+              data-testid="loadingProfile"
+            />
+          ) : (
+            <button
+              className={styles.profileContainer}
+              data-testid="profileBtn"
+              onClick={(): void => {
+                toast.success('Profile page coming soon!');
+              }}
+            >
+              <div className={styles.imageContainer}>
+                <img
+                  src={`https://api.dicebear.com/5.x/initials/svg?seed=${data?.user?.firstName} ${data?.user?.lastName}`}
+                  alt={`profile pic of ${data?.user?.firstName} ${data?.user?.lastName}`}
+                />
+              </div>
+              <div className={styles.profileText}>
+                <span className={styles.primaryText}>
+                  {data?.user?.firstName} {data?.user?.lastName}
+                </span>
+                <span className={styles.secondaryText}>
+                  {`${data?.user?.userType}`.toLowerCase()}
+                </span>
+              </div>
+              <AngleRightIcon fill={'var(--bs-secondary)'} />
+            </button>
+          )}
 
-        <Button
-          variant="light"
-          className="mt-4 d-flex justify-content-start px-0 mb-2 w-100"
-          onClick={(): void => logout()}
-        >
-          <div className={styles.imageContainer}>
-            <LogoutIcon fill={'var(--bs-secondary)'} />
-          </div>
-          {t('logout')}
-        </Button>
+          <Button
+            variant="light"
+            className="mt-4 d-flex justify-content-start px-0 mb-2 w-100"
+            onClick={(): void => logout()}
+            data-testid="logoutBtn"
+          >
+            <div className={styles.imageContainer}>
+              <LogoutIcon fill={'var(--bs-secondary)'} />
+            </div>
+            {t('logout')}
+          </Button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

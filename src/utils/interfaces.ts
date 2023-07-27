@@ -2,13 +2,13 @@ export interface InterfaceUserType {
   user: {
     firstName: string;
     lastName: string;
-    image: string;
+    image: string | null;
     email: string;
     userType: string;
     adminFor: {
       _id: string;
       name: string;
-      image: string;
+      image: string | null;
     }[];
   };
 }

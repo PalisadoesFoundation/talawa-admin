@@ -83,7 +83,7 @@ function orgList(): JSX.Element {
       // If user is admin for more than one org then check if current org is present in adminFor array
       return (
         userData?.user?.adminFor.some(
-          (org: { _id: string; name: string; image: string }) =>
+          (org: { _id: string; name: string; image: string | null }) =>
             org._id === currentOrg._id
         ) ?? false
       );
@@ -155,6 +155,7 @@ function orgList(): JSX.Element {
     <>
       <LeftDrawer
         data={userData}
+        screenName="Organizations"
         showDrawer={showDrawer}
         setShowDrawer={setShowDrawer}
       />
