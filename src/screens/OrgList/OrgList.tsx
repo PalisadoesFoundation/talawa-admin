@@ -27,6 +27,7 @@ import type {
   InterfaceUserType,
 } from 'utils/interfaces';
 import styles from './OrgList.module.css';
+import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
@@ -42,8 +43,6 @@ function orgList(): JSX.Element {
     location: '',
     image: '',
   });
-
-  const [showDrawer, setShowDrawer] = useState(true);
 
   const toggleModal = (): void => setShowModal(!showModal);
 
@@ -153,29 +152,7 @@ function orgList(): JSX.Element {
   const debouncedHandleSearchByName = debounce(handleSearchByName);
   return (
     <>
-      <LeftDrawer
-        data={userData}
-        screenName="Organizations"
-        showDrawer={showDrawer}
-        setShowDrawer={setShowDrawer}
-      />
-      <div
-        className={`${styles.pageContainer} ${
-          showDrawer ? styles.contract : styles.expand
-        } `}
-        data-testid="mainpageright"
-      >
-        <div className="d-flex justify-content-between align-items-center">
-          <h2>{t('organizations')}</h2>
-          <Button
-            onClick={(): void => {
-              setShowDrawer(!showDrawer);
-            }}
-            data-testid="menuBtn"
-          >
-            <MenuIcon fontSize="medium" />
-          </Button>
-        </div>
+      <SuperAdminScreen data={userData} title="Organizations">
         {/* Buttons Container */}
         <div className={styles.btnsContainer}>
           <div
@@ -296,149 +273,148 @@ function orgList(): JSX.Element {
             </div>
           )}
         </div>
-      </div>
-
-      {/* Create Organization Modal */}
-      <Modal
-        show={showModal}
-        onHide={toggleModal}
-        backdrop="static"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header
-          className="bg-primary"
-          closeButton
-          data-testid="modalOrganizationHeader"
+        {/* Create Organization Modal */}
+        <Modal
+          show={showModal}
+          onHide={toggleModal}
+          backdrop="static"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
         >
-          <Modal.Title className="text-white">
-            {t('createOrganization')}
-          </Modal.Title>
-        </Modal.Header>
-        <Form onSubmitCapture={createOrg}>
-          <Modal.Body>
-            <Form.Label htmlFor="orgname">{t('name')}</Form.Label>
-            <Form.Control
-              type="name"
-              id="orgname"
-              className="mb-3"
-              placeholder={t('enterName')}
-              data-testid="modalOrganizationName"
-              autoComplete="off"
-              required
-              value={formState.name}
-              onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  name: e.target.value,
-                });
-              }}
-            />
-            <Form.Label htmlFor="descrip">{t('description')}</Form.Label>
-            <Form.Control
-              type="descrip"
-              id="descrip"
-              className="mb-3"
-              placeholder={t('description')}
-              autoComplete="off"
-              required
-              value={formState.descrip}
-              onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  descrip: e.target.value,
-                });
-              }}
-            />
-            <Form.Label htmlFor="location">{t('location')}</Form.Label>
-            <Form.Control
-              type="text"
-              id="location"
-              className="mb-3"
-              placeholder={t('location')}
-              autoComplete="off"
-              required
-              value={formState.location}
-              onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  location: e.target.value,
-                });
-              }}
-            />
-
-            <Row className="mb-3">
-              <Col>
-                <Form.Label htmlFor="ispublic">{t('isPublic')}</Form.Label>
-                <Form.Switch
-                  id="ispublic"
-                  data-testid="isPublic"
-                  type="checkbox"
-                  defaultChecked={formState.ispublic}
-                  onChange={(): void =>
-                    setFormState({
-                      ...formState,
-                      ispublic: !formState.ispublic,
-                    })
-                  }
-                />
-              </Col>
-              <Col>
-                <Form.Label htmlFor="visibleInSearch">
-                  {t('visibleInSearch')}
-                </Form.Label>
-                <Form.Switch
-                  id="visibleInSearch"
-                  data-testid="visibleInSearch"
-                  type="checkbox"
-                  defaultChecked={formState.visible}
-                  onChange={(): void =>
-                    setFormState({
-                      ...formState,
-                      visible: !formState.visible,
-                    })
-                  }
-                />
-              </Col>
-            </Row>
-            <Form.Label htmlFor="orgphoto">{t('displayImage')}</Form.Label>
-            <Form.Control
-              accept="image/*"
-              id="orgphoto"
-              className="mb-3"
-              name="photo"
-              type="file"
-              multiple={false}
-              onChange={async (e: React.ChangeEvent): Promise<void> => {
-                const target = e.target as HTMLInputElement;
-                const file = target.files && target.files[0];
-                if (file)
+          <Modal.Header
+            className="bg-primary"
+            closeButton
+            data-testid="modalOrganizationHeader"
+          >
+            <Modal.Title className="text-white">
+              {t('createOrganization')}
+            </Modal.Title>
+          </Modal.Header>
+          <Form onSubmitCapture={createOrg}>
+            <Modal.Body>
+              <Form.Label htmlFor="orgname">{t('name')}</Form.Label>
+              <Form.Control
+                type="name"
+                id="orgname"
+                className="mb-3"
+                placeholder={t('enterName')}
+                data-testid="modalOrganizationName"
+                autoComplete="off"
+                required
+                value={formState.name}
+                onChange={(e): void => {
                   setFormState({
                     ...formState,
-                    image: await convertToBase64(file),
+                    name: e.target.value,
                   });
-              }}
-              data-testid="organisationImage"
-            />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={(): void => toggleModal()}
-              data-testid="closeOrganizationModal"
-            >
-              {t('cancel')}
-            </Button>
-            <Button
-              type="submit"
-              value="invite"
-              data-testid="submitOrganizationForm"
-            >
-              {t('createOrganization')}
-            </Button>
-          </Modal.Footer>
-        </Form>
-      </Modal>
+                }}
+              />
+              <Form.Label htmlFor="descrip">{t('description')}</Form.Label>
+              <Form.Control
+                type="descrip"
+                id="descrip"
+                className="mb-3"
+                placeholder={t('description')}
+                autoComplete="off"
+                required
+                value={formState.descrip}
+                onChange={(e): void => {
+                  setFormState({
+                    ...formState,
+                    descrip: e.target.value,
+                  });
+                }}
+              />
+              <Form.Label htmlFor="location">{t('location')}</Form.Label>
+              <Form.Control
+                type="text"
+                id="location"
+                className="mb-3"
+                placeholder={t('location')}
+                autoComplete="off"
+                required
+                value={formState.location}
+                onChange={(e): void => {
+                  setFormState({
+                    ...formState,
+                    location: e.target.value,
+                  });
+                }}
+              />
+
+              <Row className="mb-3">
+                <Col>
+                  <Form.Label htmlFor="ispublic">{t('isPublic')}</Form.Label>
+                  <Form.Switch
+                    id="ispublic"
+                    data-testid="isPublic"
+                    type="checkbox"
+                    defaultChecked={formState.ispublic}
+                    onChange={(): void =>
+                      setFormState({
+                        ...formState,
+                        ispublic: !formState.ispublic,
+                      })
+                    }
+                  />
+                </Col>
+                <Col>
+                  <Form.Label htmlFor="visibleInSearch">
+                    {t('visibleInSearch')}
+                  </Form.Label>
+                  <Form.Switch
+                    id="visibleInSearch"
+                    data-testid="visibleInSearch"
+                    type="checkbox"
+                    defaultChecked={formState.visible}
+                    onChange={(): void =>
+                      setFormState({
+                        ...formState,
+                        visible: !formState.visible,
+                      })
+                    }
+                  />
+                </Col>
+              </Row>
+              <Form.Label htmlFor="orgphoto">{t('displayImage')}</Form.Label>
+              <Form.Control
+                accept="image/*"
+                id="orgphoto"
+                className="mb-3"
+                name="photo"
+                type="file"
+                multiple={false}
+                onChange={async (e: React.ChangeEvent): Promise<void> => {
+                  const target = e.target as HTMLInputElement;
+                  const file = target.files && target.files[0];
+                  if (file)
+                    setFormState({
+                      ...formState,
+                      image: await convertToBase64(file),
+                    });
+                }}
+                data-testid="organisationImage"
+              />
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={(): void => toggleModal()}
+                data-testid="closeOrganizationModal"
+              >
+                {t('cancel')}
+              </Button>
+              <Button
+                type="submit"
+                value="invite"
+                data-testid="submitOrganizationForm"
+              >
+                {t('createOrganization')}
+              </Button>
+            </Modal.Footer>
+          </Form>
+        </Modal>
+      </SuperAdminScreen>
     </>
   );
 }

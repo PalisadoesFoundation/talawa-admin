@@ -43,6 +43,14 @@ let propsRoles: InterfaceLeftDrawerProps = {
   showDrawer: false,
 };
 
+jest.mock('react-toastify', () => ({
+  toast: {
+    success: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+  },
+}));
+
 describe('Testing Left Drawer component', () => {
   test('Component should be rendered properly', () => {
     localStorage.setItem('UserType', 'SUPERADMIN');
@@ -81,7 +89,7 @@ describe('Testing Left Drawer component', () => {
     const userUndefinedProps = {
       ...props,
       data: undefined,
-      screenName: 'Organizations' as 'Organizations',
+      screenName: 'Organizations',
     };
     render(
       <BrowserRouter>

@@ -16,7 +16,7 @@ export interface InterfaceLeftDrawerProps {
   data: InterfaceUserType | undefined;
   showDrawer: boolean;
   setShowDrawer: React.Dispatch<React.SetStateAction<boolean>>;
-  screenName: 'Organizations' | 'Roles' | 'Requests';
+  screenName: string;
 }
 
 const leftDrawer = ({

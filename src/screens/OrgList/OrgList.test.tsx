@@ -159,26 +159,6 @@ async function wait(ms = 100): Promise<void> {
 afterEach(() => {
   localStorage.clear();
 });
-describe('Testing LeftDrawer in page functionality', () => {
-  test('Testing LeftDrawer in page functionality', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrgList />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-    userEvent.click(screen.getByTestId('menuBtn'));
-  });
-});
 
 describe('Organisations Page', () => {
   const formData = {

@@ -1,60 +1,43 @@
-.pageContainer {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  padding: 1rem 1.5rem 0 calc(300px + 2rem + 1.5rem);
-}
-
-.expand {
-  padding-left: 1.5rem;
-  animation: moveLeft 0.5s ease-in-out;
-}
-
-.contract {
-  padding-left: calc(300px + 2rem + 1.5rem);
-  animation: moveRight 0.5s ease-in-out;
-}
-
-.pageContainer .btnsContainer {
+.btnsContainer {
   display: flex;
   margin: 2.5rem 0 2.5rem 0;
 }
 
-.pageContainer .btnsContainer .btnsBlock {
+.btnsContainer .btnsBlock {
   display: flex;
 }
 
-.pageContainer .btnsContainer .btnsBlock button {
+.btnsContainer .btnsBlock button {
   margin-left: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.pageContainer .btnsContainer .input {
+.btnsContainer .input {
   flex: 1;
   position: relative;
 }
 
-.pageContainer .btnsContainer input {
+.btnsContainer input {
   outline: 1px solid var(--bs-gray-400);
 }
 
-.pageContainer .btnsContainer .input button {
+.btnsContainer .input button {
   width: 52px;
 }
 
-.pageContainer .listBox {
+.listBox {
   display: flex;
   flex-wrap: wrap;
   flex: 1;
 }
 
-.pageContainer .listBox .itemCard {
+.listBox .itemCard {
   width: 50%;
 }
 
-.pageContainer .listBox .notFound {
+.listBox .notFound {
   flex: 1;
   display: flex;
   justify-content: center;
@@ -67,95 +50,57 @@
     padding-left: calc(250px + 2rem + 1.5rem);
   }
 
-  .pageContainer .listBox .itemCard {
+  .listBox .itemCard {
     width: 100%;
   }
 }
 
 @media (max-width: 1020px) {
-  .pageContainer .btnsContainer {
+  .btnsContainer {
     flex-direction: column;
     margin: 1.5rem 0;
   }
 
-  .pageContainer .btnsContainer .btnsBlock {
+  .btnsContainer .btnsBlock {
     margin: 1.5rem 0 0 0;
     justify-content: space-between;
   }
 
-  .pageContainer .btnsContainer .btnsBlock button {
+  .btnsContainer .btnsBlock button {
     margin: 0;
   }
 
-  .pageContainer .btnsContainer .btnsBlock div button {
+  .btnsContainer .btnsBlock div button {
     margin-right: 1.5rem;
   }
 }
 
 
-/* For tablets */
-@media (max-width: 820px) {
-  .pageContainer {
-    padding-left: 1.5rem;
-  }
-
-  .contract,
-  .expand {
-    animation: none;
-  }
-}
-
-@media (max-width: 820px) {
-  .pageContainer {
-    padding: 1rem;
-  }
-}
-
 /* For mobile devices  */
 
 @media (max-width: 520px) {
-  .pageContainer .btnsContainer {
+  .btnsContainer {
     margin-bottom: 0;
   }
 
-  .pageContainer .btnsContainer .btnsBlock {
+  .btnsContainer .btnsBlock {
     display: block;
     margin-top: 1rem;
     margin-right: 0;
   }
 
-  .pageContainer .btnsContainer .btnsBlock div {
+  .btnsContainer .btnsBlock div {
     flex: 1;
   }
 
-  .pageContainer .btnsContainer .btnsBlock div[title="Sort organizations"] {
+  .btnsContainer .btnsBlock div[title="Sort organizations"] {
     margin-right: 0.5rem;
   }
 
-  .pageContainer .btnsContainer .btnsBlock button {
+  .btnsContainer .btnsBlock button {
     margin-bottom: 1rem;
     margin-right: 0;
     width: 100%;
-  }
-}
-
-@keyframes moveLeft {
-  from {
-    padding-left: calc(300px + 2rem + 1.5rem);
-  }
-
-  to {
-    padding-left: 1.5rem;
-  }
-}
-
-@keyframes moveRight {
-  from {
-    padding-left: 1.5rem;
-  }
-
-  to {
-    padding-left: calc(300px + 2rem + 1.5rem);
   }
 }
 
