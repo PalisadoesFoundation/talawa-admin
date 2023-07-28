@@ -15,14 +15,38 @@ import {
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_LIST,
+  USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { ToastContainer } from 'react-toastify';
+import { debug } from 'jest-preview';
 
 const MOCKS = [
+  {
+    request: {
+      query: USER_ORGANIZATION_LIST,
+      variables: { id: localStorage.getItem('id') },
+    },
+    result: {
+      data: {
+        user: {
+          userType: 'SUPERADMIN',
+          firstName: 'John',
+          lastName: 'Doe',
+          image: '',
+          email: 'John_Does_Palasidoes@gmail.com',
+          adminFor: {
+            _id: 1,
+            name: 'Akatsuki',
+            image: '',
+          },
+        },
+      },
+    },
+  },
   {
     request: {
       query: USER_LIST,
@@ -216,9 +240,9 @@ async function wait(ms = 100): Promise<void> {
 describe('Testing Request screen', () => {
   test('Component should be rendered properly', async () => {
     window.location.assign('/orglist');
-
+    localStorage.setItem('UserType', 'SUPERADMIN');
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={link3}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -230,9 +254,7 @@ describe('Testing Request screen', () => {
     );
 
     await wait();
-
-    expect(screen.getByText(/Requests/i)).toBeInTheDocument();
-    expect(screen.getByText(/Search By Name/i)).toBeInTheDocument();
+    expect(screen.getByTestId(/searchByName/i)).toBeInTheDocument();
     expect(window.location).toBeAt('/orglist');
   });
 
@@ -256,7 +278,7 @@ describe('Testing Request screen', () => {
 
   test('Testing seach by name functionality', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={link3}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -274,7 +296,7 @@ describe('Testing Request screen', () => {
 
   test('Testing accept user functionality', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={link3}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -286,13 +308,12 @@ describe('Testing Request screen', () => {
     );
 
     await wait();
-
     userEvent.click(screen.getByTestId(/acceptUser456/i));
   });
 
   test('Testing reject user functionality', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={link3}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -304,7 +325,6 @@ describe('Testing Request screen', () => {
     );
 
     await wait();
-
     userEvent.click(screen.getByTestId(/rejectUser456/i));
   });
 

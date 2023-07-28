@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Form, Row } from 'react-bootstrap';
+import { Col, Dropdown, Form, Row, Spinner, Table } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -10,6 +10,7 @@ import ListNavbar from 'components/ListNavbar/ListNavbar';
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_LIST,
+  USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import {
   ACCPET_ADMIN_MUTATION,
@@ -17,39 +18,64 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import PaginationList from 'components/PaginationList/PaginationList';
 import { errorHandler } from 'utils/errorHandler';
+import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
+import SortIcon from '@mui/icons-material/Sort';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import { Search } from '@mui/icons-material';
+import type {
+  InterfaceOrgConnectionType,
+  InterfaceUserType,
+} from 'utils/interfaces';
 
 const Requests = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'requests' });
 
   document.title = t('title');
 
-  const [componentLoader, setComponentLoader] = useState(true);
   const [usersData, setUsersData] = useState([]);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchByName, setSearchByName] = useState('');
 
+  const [acceptAdminFunc] = useMutation(ACCPET_ADMIN_MUTATION);
+  const [rejectAdminFunc] = useMutation(REJECT_ADMIN_MUTATION);
+  const {
+    data: currentUserData,
+    error: errorUser,
+  }: {
+    data: InterfaceUserType | undefined;
+    loading: boolean;
+    error?: Error | undefined;
+  } = useQuery(USER_ORGANIZATION_LIST, {
+    variables: { id: localStorage.getItem('id') },
+  });
+
+  const {
+    data: userData,
+    loading: loadingUsers,
+    error: errorUsersList,
+    refetch,
+  } = useQuery(USER_LIST);
+
+  const {
+    data: dataOrgs,
+    error: errorOrgs,
+  }: {
+    data: InterfaceOrgConnectionType | undefined;
+    error?: Error;
+  } = useQuery(ORGANIZATION_CONNECTION_LIST);
+
+  // If the user is not Superadmin, redirect to Organizations screen
   useEffect(() => {
     const userType = localStorage.getItem('UserType');
     if (userType != 'SUPERADMIN') {
       window.location.assign('/orglist');
     }
-
-    setComponentLoader(false);
   }, []);
 
-  const { data: userData, loading: userLoading, refetch } = useQuery(USER_LIST);
-
-  const [acceptAdminFunc] = useMutation(ACCPET_ADMIN_MUTATION);
-  const [rejectAdminFunc] = useMutation(REJECT_ADMIN_MUTATION);
-
-  const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
-
+  // Check if there are no organizations then show a warning
   useEffect(() => {
     if (!dataOrgs) {
       return;
     }
-
     if (dataOrgs.organizationsConnection.length === 0) {
       toast.warning(t('noOrgError'));
     }
@@ -65,26 +91,6 @@ const Requests = (): JSX.Element => {
       );
     }
   }, [userData]);
-
-  if (componentLoader || userLoading) {
-    return <div className="loader"></div>;
-  }
-
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ): void => {
-    /* istanbul ignore next */
-    setPage(newPage);
-  };
-
-  /* istanbul ignore next */
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ): void => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
 
   const accpetAdmin = async (userId: any): Promise<void> => {
     try {
@@ -135,118 +141,126 @@ const Requests = (): JSX.Element => {
 
   return (
     <>
-      <ListNavbar />
-      <Row>
-        <Col sm={3}>
-          <div className={styles.sidebar}>
-            <div className={styles.sidebarsticky}>
-              <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
-              <Form.Control
-                type="name"
-                id="orgname"
-                placeholder={t('enterName')}
-                data-testid="searchByName"
-                autoComplete="off"
-                required
-                onChange={handleSearchByName}
-              />
+      <SuperAdminScreen data={currentUserData} title={t('requests')}>
+        {/* Buttons Container */}
+        <div className={styles.btnsContainer}>
+          <div
+            className={styles.input}
+            style={{
+              display:
+                currentUserData &&
+                currentUserData.user.userType === 'SUPERADMIN'
+                  ? 'block'
+                  : 'none',
+            }}
+          >
+            <Form.Control
+              type="name"
+              className="bg-white"
+              placeholder={t('enterName')}
+              data-testid="searchByName"
+              autoComplete="off"
+              required
+              onChange={handleSearchByName}
+            />
+            <Button
+              tabIndex={-1}
+              className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+            >
+              <Search />
+            </Button>
+          </div>
+          <div className={styles.btnsBlock}>
+            <div className="d-flex">
+              <Dropdown aria-expanded="false" title="Sort organizations">
+                <Dropdown.Toggle variant="outline-success">
+                  <SortIcon className={'me-1'} />
+                  Sort
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
+                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
+                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+              <Dropdown aria-expanded="false" title="Filter organizations">
+                <Dropdown.Toggle variant="outline-success">
+                  <FilterListIcon className={'me-1'} />
+                  Filter
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
+                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
+                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
           </div>
-        </Col>
-        <Col sm={8}>
-          <div className={styles.mainpageright}>
-            <Row className={styles.justifysp}>
-              <p className={styles.logintitle}>{t('requests')}</p>
-            </Row>
-            <div className={styles.list_box}>
-              <div className="table-responsive">
-                <table className={`table table-hover ${styles.userListTable}`}>
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">{t('name')}</th>
-                      <th scope="col">{t('email')}</th>
-                      <th scope="col">{t('accept')}</th>
-                      <th scope="col">{t('reject')}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {(rowsPerPage > 0
-                      ? usersData.slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage
-                        )
-                      : usersData
-                    ).map(
-                      (
-                        user: {
-                          _id: string;
-                          firstName: string;
-                          lastName: string;
-                          email: string;
-                          userType: string;
-                        },
-                        index: number
-                      ) => {
-                        return (
-                          <tr key={user._id}>
-                            <th scope="row">{page * 10 + (index + 1)}</th>
-                            <td>{`${user.firstName} ${user.lastName}`}</td>
-                            <td>{user.email}</td>
-                            <td>
-                              <Button
-                                className="btn btn-success btn-sm"
-                                onClick={async (): Promise<void> => {
-                                  await accpetAdmin(user._id);
-                                }}
-                                data-testid={`acceptUser${user._id}`}
-                              >
-                                {t('accept')}
-                              </Button>
-                            </td>
-                            <td>
-                              <Button
-                                className="btn btn-danger btn-sm"
-                                onClick={async (): Promise<void> => {
-                                  await rejectAdmin(user._id);
-                                }}
-                                data-testid={`rejectUser${user._id}`}
-                              >
-                                {t('reject')}
-                              </Button>
-                            </td>
-                          </tr>
-                        );
-                      }
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div>
-              <table
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <tbody>
-                  <tr>
-                    <PaginationList
-                      count={usersData.length}
-                      rowsPerPage={rowsPerPage}
-                      page={page}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+        </div>
+        {loadingUsers ? (
+          <div className={styles.notFound}>
+            <h4>Loading requests ...</h4>
           </div>
-        </Col>
-      </Row>
+        ) : (
+          <div className={styles.listBox}>
+            <Table responsive>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>{t('name')}</th>
+                  <th>{t('email')}</th>
+                  <th>{t('accept')}</th>
+                  <th>{t('reject')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {usersData.map(
+                  (
+                    user: {
+                      _id: string;
+                      firstName: string;
+                      lastName: string;
+                      email: string;
+                      userType: string;
+                    },
+                    index: number
+                  ) => {
+                    return (
+                      <tr key={user._id}>
+                        <td>{index + 1}</td>
+                        <td>{`${user.firstName} ${user.lastName}`}</td>
+                        <td>{user.email}</td>
+                        <td>
+                          <Button
+                            className="btn btn-success btn-sm"
+                            onClick={async (): Promise<void> => {
+                              await accpetAdmin(user._id);
+                            }}
+                            data-testid={`acceptUser${user._id}`}
+                          >
+                            {t('accept')}
+                          </Button>
+                        </td>
+                        <td>
+                          <Button
+                            className="btn btn-danger btn-sm"
+                            onClick={async (): Promise<void> => {
+                              await rejectAdmin(user._id);
+                            }}
+                            data-testid={`rejectUser${user._id}`}
+                          >
+                            {t('reject')}
+                          </Button>
+                        </td>
+                      </tr>
+                    );
+                  }
+                )}
+              </tbody>
+            </Table>
+          </div>
+        )}
+      </SuperAdminScreen>
     </>
   );
 };
