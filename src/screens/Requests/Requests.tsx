@@ -144,31 +144,33 @@ const Requests = (): JSX.Element => {
       <SuperAdminScreen data={currentUserData} title={t('requests')}>
         {/* Buttons Container */}
         <div className={styles.btnsContainer}>
-          <div
-            className={styles.input}
-            style={{
-              display:
-                currentUserData &&
-                currentUserData.user.userType === 'SUPERADMIN'
-                  ? 'block'
-                  : 'none',
-            }}
-          >
-            <Form.Control
-              type="name"
-              className="bg-white"
-              placeholder={t('enterName')}
-              data-testid="searchByName"
-              autoComplete="off"
-              required
-              onChange={handleSearchByName}
-            />
-            <Button
-              tabIndex={-1}
-              className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+          <div className={styles.inputContainer}>
+            <div
+              className={styles.input}
+              style={{
+                display:
+                  currentUserData &&
+                  currentUserData.user.userType === 'SUPERADMIN'
+                    ? 'block'
+                    : 'none',
+              }}
             >
-              <Search />
-            </Button>
+              <Form.Control
+                type="name"
+                className="bg-white"
+                placeholder={t('enterName')}
+                data-testid="searchByName"
+                autoComplete="off"
+                required
+                onChange={handleSearchByName}
+              />
+              <Button
+                tabIndex={-1}
+                className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+              >
+                <Search />
+              </Button>
+            </div>
           </div>
           <div className={styles.btnsBlock}>
             <div className="d-flex">
@@ -200,6 +202,10 @@ const Requests = (): JSX.Element => {
         {loadingUsers ? (
           <div className={styles.notFound}>
             <h4>Loading requests ...</h4>
+          </div>
+        ) : usersData.length === 0 ? (
+          <div className={styles.notFound}>
+            <h4>No Pending Requests</h4>
           </div>
         ) : (
           <div className={styles.listBox}>

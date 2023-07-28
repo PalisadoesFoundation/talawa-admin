@@ -14,8 +14,12 @@
   align-items: center;
 }
 
-.btnsContainer .input {
+.btnsContainer .inputContainer {
   flex: 1;
+  position: relative;
+}
+.btnsContainer .input {
+  width: 70%;
   position: relative;
 }
 
@@ -23,7 +27,7 @@
   outline: 1px solid var(--bs-gray-400);
 }
 
-.btnsContainer .input button {
+.btnsContainer .inputContainer button {
   width: 52px;
 }
 
@@ -46,7 +50,9 @@
     flex-direction: column;
     margin: 1.5rem 0;
   }
-
+  .btnsContainer .input {
+    width: 100%;
+  }
   .btnsContainer .btnsBlock {
     margin: 1.5rem 0 0 0;
     justify-content: space-between;
