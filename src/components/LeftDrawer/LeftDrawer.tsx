@@ -58,39 +58,64 @@ const leftDrawer = ({
         <div className={styles.optionList}>
           <Button
             variant={screenName === 'Organizations' ? 'success' : 'light'}
+            className={`${
+              screenName === 'Organizations' ? 'text-white' : 'text-secondary'
+            }`}
             data-testid="orgsBtn"
             onClick={(): void => {
               history.push('/orglist');
             }}
           >
             <div className={styles.iconWrapper}>
-              <OrganizationsIcon stroke={'var(--bs-white)'} />
+              <OrganizationsIcon
+                stroke={`${
+                  screenName === 'Organizations'
+                    ? 'var(--bs-white)'
+                    : 'var(--bs-secondary)'
+                }`}
+              />
             </div>
             {t('organizations')}
           </Button>
           <Button
             variant={screenName === 'Requests' ? 'success' : 'light'}
-            className={'text-secondary'}
+            className={`${
+              screenName === 'Requests' ? 'text-white' : 'text-secondary'
+            }`}
             onClick={(): void => {
               history.push('/requests');
             }}
             data-testid="requestsBtn"
           >
             <div className={styles.iconWrapper}>
-              <RequestsIcon fill={'var(--bs-secondary)'} />
+              <RequestsIcon
+                fill={`${
+                  screenName === 'Requests'
+                    ? 'var(--bs-white)'
+                    : 'var(--bs-secondary)'
+                }`}
+              />
             </div>
             {t('requests')}
           </Button>
           <Button
             variant={screenName === 'Roles' ? 'success' : 'light'}
-            className={'text-secondary'}
+            className={`${
+              screenName === 'Roles' ? 'text-white' : 'text-secondary'
+            }`}
             onClick={(): void => {
               history.push('/roles');
             }}
             data-testid="rolesBtn"
           >
             <div className={styles.iconWrapper}>
-              <RolesIcon fill={'var(--bs-secondary)'} />
+              <RolesIcon
+                fill={`${
+                  screenName === 'Roles'
+                    ? 'var(--bs-white)'
+                    : 'var(--bs-secondary)'
+                }`}
+              />
             </div>
             {t('roles')}
           </Button>
