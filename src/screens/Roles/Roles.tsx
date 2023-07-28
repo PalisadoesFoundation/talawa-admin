@@ -1,19 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { Col, Form, Row } from 'react-bootstrap';
-import { toast } from 'react-toastify';
 import { useMutation, useQuery } from '@apollo/client';
+import React, { useEffect, useState } from 'react';
+import { Dropdown, Form, Table } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
-import styles from './Roles.module.css';
-import ListNavbar from 'components/ListNavbar/ListNavbar';
+import { Search } from '@mui/icons-material';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import SortIcon from '@mui/icons-material/Sort';
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_LIST,
+  USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
-import PaginationList from 'components/PaginationList/PaginationList';
-import NotFound from 'components/NotFound/NotFound';
+import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 import { errorHandler } from 'utils/errorHandler';
+import styles from './Roles.module.css';
+import type { InterfaceUserType } from 'utils/interfaces';
+import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
 
 const Roles = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'roles' });
@@ -21,13 +25,21 @@ const Roles = (): JSX.Element => {
   document.title = t('title');
 
   const [componentLoader, setComponentLoader] = useState(true);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchByName, setSearchByName] = useState('');
   const [count, setCount] = useState(0);
 
   const userType = localStorage.getItem('UserType');
   const userId = localStorage.getItem('id');
+  const {
+    data: currentUserData,
+    error: errorUser,
+  }: {
+    data: InterfaceUserType | undefined;
+    loading: boolean;
+    error?: Error | undefined;
+  } = useQuery(USER_ORGANIZATION_LIST, {
+    variables: { id: userId },
+  });
 
   useEffect(() => {
     if (userType != 'SUPERADMIN') {
@@ -51,7 +63,7 @@ const Roles = (): JSX.Element => {
   }, [count, searchByName]);
 
   const {
-    loading: usersLoading,
+    loading: loadingUsers,
     data: userData,
     refetch: userRefetch,
   } = useQuery(USER_LIST);
@@ -69,26 +81,6 @@ const Roles = (): JSX.Element => {
       toast.warning(t('noOrgError'));
     }
   }, [dataOrgs]);
-
-  if (componentLoader || usersLoading) {
-    return <div className="loader"></div>;
-  }
-
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ): void => {
-    /* istanbul ignore next */
-    setPage(newPage);
-  };
-
-  /* istanbul ignore next */
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ): void => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
 
   const changeRole = async (e: any): Promise<void> => {
     const { value } = e.target;
@@ -121,127 +113,132 @@ const Roles = (): JSX.Element => {
   };
 
   return (
-    <div data-testid="roles-header">
-      <ListNavbar />
-      <Row>
-        <Col sm={3}>
-          <div className={styles.sidebar}>
-            <div className={styles.sidebarsticky}>
-              <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
+    <>
+      <SuperAdminScreen data={currentUserData} title={'Roles'}>
+        {/* Buttons Container */}
+        <div className={styles.btnsContainer}>
+          <div className={styles.inputContainer}>
+            <div
+              className={styles.input}
+              style={{
+                display:
+                  currentUserData &&
+                  currentUserData.user.userType === 'SUPERADMIN'
+                    ? 'block'
+                    : 'none',
+              }}
+            >
               <Form.Control
                 type="name"
-                id="orgname"
+                className="bg-white"
                 placeholder={t('enterName')}
                 data-testid="searchByName"
                 autoComplete="off"
                 required
                 onChange={handleSearchByName}
               />
+              <Button
+                tabIndex={-1}
+                className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+              >
+                <Search />
+              </Button>
             </div>
           </div>
-        </Col>
-        <Col sm={8}>
-          <div className={styles.mainpageright}>
-            <Row className={styles.justifysp}>
-              <p className={styles.logintitle}>{t('usersList')}</p>
-            </Row>
+          <div className={styles.btnsBlock}>
+            <div className="d-flex">
+              <Dropdown aria-expanded="false" title="Sort organizations">
+                <Dropdown.Toggle variant="outline-success">
+                  <SortIcon className={'me-1'} />
+                  Sort
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
+                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
+                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+              <Dropdown aria-expanded="false" title="Filter organizations">
+                <Dropdown.Toggle variant="outline-success">
+                  <FilterListIcon className={'me-1'} />
+                  Filter
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
+                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
+                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+          </div>
+        </div>
 
-            <div className={styles.list_box}>
-              <div className="table-responsive">
-                <table className={`table table-hover ${styles.userListTable}`}>
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">{t('name')}</th>
-                      <th scope="col">{t('email')}</th>
-                      <th scope="col">{t('roles_userType')}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {userData && userData.users.length > 0 ? (
-                      (rowsPerPage > 0
-                        ? userData.users.slice(
-                            page * rowsPerPage,
-                            page * rowsPerPage + rowsPerPage
-                          )
-                        : userData.users
-                      ).map(
-                        (
-                          user: {
-                            _id: string;
-                            firstName: string;
-                            lastName: string;
-                            email: string;
-                            userType: string;
-                          },
-                          index: number
-                        ) => {
-                          return (
-                            <tr key={user._id}>
-                              <th scope="row">{page * 10 + (index + 1)}</th>
-                              <td>{`${user.firstName} ${user.lastName}`}</td>
-                              <td>{user.email}</td>
-                              <td>
-                                <select
-                                  className="form-control"
-                                  name={`role${user._id}`}
-                                  data-testid={`changeRole${user._id}`}
-                                  onChange={changeRole}
-                                  disabled={user._id === userId}
-                                  defaultValue={`${user.userType}?${user._id}`}
-                                >
-                                  <option value={`ADMIN?${user._id}`}>
-                                    {t('admin')}
-                                  </option>
-                                  <option value={`SUPERADMIN?${user._id}`}>
-                                    {t('superAdmin')}
-                                  </option>
-                                  <option value={`USER?${user._id}`}>
-                                    {t('user')}
-                                  </option>
-                                </select>
-                              </td>
-                            </tr>
-                          );
-                        }
-                      )
-                    ) : (
-                      <tr>
+        {loadingUsers ? (
+          <div className={styles.notFound}>
+            <h4>Loading requests ...</h4>
+          </div>
+        ) : userData && userData.users.length === 0 ? (
+          <div className={styles.notFound}>
+            <h4>No User Found</h4>
+          </div>
+        ) : (
+          <div className={styles.listBox}>
+            <Table responsive>
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">{t('name')}</th>
+                  <th scope="col">{t('email')}</th>
+                  <th scope="col">{t('roles_userType')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {userData.users.map(
+                  (
+                    user: {
+                      _id: string;
+                      firstName: string;
+                      lastName: string;
+                      email: string;
+                      userType: string;
+                    },
+                    index: number
+                  ) => {
+                    return (
+                      <tr key={user._id}>
+                        <th scope="row">{index + 1}</th>
+                        <td>{`${user.firstName} ${user.lastName}`}</td>
+                        <td>{user.email}</td>
                         <td>
-                          <NotFound title="user" keyPrefix="userNotFound" />
+                          <select
+                            className="form-control"
+                            name={`role${user._id}`}
+                            data-testid={`changeRole${user._id}`}
+                            onChange={changeRole}
+                            disabled={user._id === userId}
+                            defaultValue={`${user.userType}?${user._id}`}
+                          >
+                            <option value={`ADMIN?${user._id}`}>
+                              {t('admin')}
+                            </option>
+                            <option value={`SUPERADMIN?${user._id}`}>
+                              {t('superAdmin')}
+                            </option>
+                            <option value={`USER?${user._id}`}>
+                              {t('user')}
+                            </option>
+                          </select>
                         </td>
                       </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div>
-              <table
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <tbody>
-                  <tr>
-                    <PaginationList
-                      count={userData ? userData.users.length : 0}
-                      rowsPerPage={rowsPerPage}
-                      page={page}
-                      data-testid="something"
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+                    );
+                  }
+                )}
+              </tbody>
+            </Table>
           </div>
-        </Col>
-      </Row>
-    </div>
+        )}
+      </SuperAdminScreen>
+    </>
   );
 };
 

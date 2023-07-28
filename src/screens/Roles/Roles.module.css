@@ -1,109 +1,97 @@
-.mainpage {
+.btnsContainer {
   display: flex;
-  flex-direction: row;
-}
-.sidebar {
-  z-index: 0;
-  padding-top: 5px;
-  margin: 0;
-  height: 100%;
-}
-.sidebar:after {
-  content: '';
-  background-color: #f7f7f7;
-  position: absolute;
-  width: 2px;
-  height: 600px;
-  top: 10px;
-  left: 94%;
-  display: block;
-}
-.sidebarsticky {
-  padding-left: 45px;
-}
-.sidebarsticky > input {
-  text-decoration: none;
-  margin-bottom: 50px;
-  border-color: #e8e5e5;
-  width: 80%;
-  border-radius: 7px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  padding-right: 10px;
-  padding-left: 10px;
-  box-shadow: none;
+  margin: 2.5rem 0 2.5rem 0;
 }
 
-.navitem {
-  padding-left: 27%;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  cursor: pointer;
+.btnsContainer .btnsBlock {
+  display: flex;
 }
 
-.searchtitle {
-  color: #707070;
-  font-weight: 600;
-  font-size: 18px;
-  margin-bottom: 20px;
-  padding-bottom: 5px;
-  border-bottom: 3px solid #31bb6b;
-  width: 60%;
+.btnsContainer .btnsBlock button {
+  margin-left: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.logintitle {
-  color: #707070;
-  font-weight: 600;
-  font-size: 20px;
-  margin-bottom: 30px;
-  padding-bottom: 5px;
-  border-bottom: 3px solid #31bb6b;
-  width: 15%;
+.btnsContainer .inputContainer {
+  flex: 1;
+  position: relative;
+}
+.btnsContainer .input {
+  width: 70%;
+  position: relative;
 }
 
-.mainpageright > hr {
-  margin-top: 20px;
+.btnsContainer input {
+  outline: 1px solid var(--bs-gray-400);
+}
+
+.btnsContainer .inputContainer button {
+  width: 52px;
+}
+
+.listBox {
   width: 100%;
-  margin-left: -15px;
-  margin-right: -15px;
-  margin-bottom: 20px;
+  flex: 1;
 }
-.justifysp {
+
+.notFound {
+  flex: 1;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
-@media screen and (max-width: 575.5px) {
-  .justifysp {
-    padding-left: 55px;
-    display: flex;
+
+@media (max-width: 1020px) {
+  .btnsContainer {
+    flex-direction: column;
+    margin: 1.5rem 0;
+  }
+  .btnsContainer .input {
+    width: 100%;
+  }
+  .btnsContainer .btnsBlock {
+    margin: 1.5rem 0 0 0;
     justify-content: space-between;
-    width: 100%;
   }
 
-  .mainpageright {
-    width: 100%;
+  .btnsContainer .btnsBlock button {
+    margin: 0;
+  }
+
+  .btnsContainer .btnsBlock div button {
+    margin-right: 1.5rem;
   }
 }
 
-.list_box {
-  height: 70vh;
-  overflow-y: auto;
-  width: auto;
-  padding-right: 50px;
-}
 
-@media only screen and (max-width: 600px) {
-  .sidebar {
-    position: relative;
-    bottom: 18px;
+/* For mobile devices  */
+
+@media (max-width: 520px) {
+  .btnsContainer {
+    margin-bottom: 0;
   }
-  .invitebtn {
-    width: 135px;
-    position: relative;
-    right: 10px;
+
+  .btnsContainer .btnsBlock {
+    display: block;
+    margin-top: 1rem;
+    margin-right: 0;
   }
-  .userListTable {
-    margin-left: 40px;
+
+  .btnsContainer .btnsBlock div {
+    flex: 1;
+  }
+
+  .btnsContainer .btnsBlock div[title="Sort organizations"] {
+    margin-right: 0.5rem;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin-bottom: 1rem;
+    margin-right: 0;
+    width: 100%;
   }
 }
