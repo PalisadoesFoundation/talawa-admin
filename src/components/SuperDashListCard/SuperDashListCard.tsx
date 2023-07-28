@@ -14,8 +14,7 @@ interface InterfaceSuperDashListCardProps {
 function superDashListCard(
   props: InterfaceSuperDashListCardProps
 ): JSX.Element {
-  const { _id, admins, image, location, members, name } = props.data ?? [];
-  console.log(props.data);
+  const { _id, admins, image, location, members, name } = props.data ?? {};
 
   const userId = localStorage.getItem('id');
   const userType = localStorage.getItem('UserType');

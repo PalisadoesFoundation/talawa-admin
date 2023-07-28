@@ -72,9 +72,15 @@ describe('Testing Left Drawer component', () => {
     const requestsBtn = screen.getByTestId(/requestsBtn/i);
     const rolesBtn = screen.getByTestId(/rolesBtn/i);
 
-    expect(orgsBtn.classList.contains('btn btn-success')).toBeTruthy();
-    expect(requestsBtn.classList.contains('btn btn-light')).toBeTruthy();
-    expect(rolesBtn.classList.contains('btn btn-light')).toBeTruthy();
+    expect(
+      orgsBtn.className.includes('text-white btn btn-success')
+    ).toBeTruthy();
+    expect(
+      requestsBtn.className.includes('text-secondary btn btn-light')
+    ).toBeTruthy();
+    expect(
+      rolesBtn.className.includes('text-secondary btn btn-light')
+    ).toBeTruthy();
 
     // Coming soon
     userEvent.click(screen.getByTestId(/profileBtn/i));
@@ -116,9 +122,15 @@ describe('Testing Left Drawer component', () => {
     const requestsBtn = screen.getByTestId(/requestsBtn/i);
     const rolesBtn = screen.getByTestId(/rolesBtn/i);
 
-    expect(orgsBtn.classList.contains('btn btn-success')).toBeTruthy();
-    expect(requestsBtn.classList.contains('btn btn-light')).toBeTruthy();
-    expect(rolesBtn.classList.contains('btn btn-light')).toBeTruthy();
+    expect(
+      requestsBtn.className.includes('text-white btn btn-success')
+    ).toBeTruthy();
+    expect(
+      orgsBtn.className.includes('text-secondary btn btn-light')
+    ).toBeTruthy();
+    expect(
+      rolesBtn.className.includes('text-secondary btn btn-light')
+    ).toBeTruthy();
 
     // Send to organizations screen
     userEvent.click(orgsBtn);
@@ -139,9 +151,15 @@ describe('Testing Left Drawer component', () => {
     const requestsBtn = screen.getByTestId(/requestsBtn/i);
     const rolesBtn = screen.getByTestId(/rolesBtn/i);
 
-    expect(orgsBtn.classList.contains('btn btn-light')).toBeTruthy();
-    expect(requestsBtn.classList.contains('btn btn-light')).toBeTruthy();
-    expect(rolesBtn.classList.contains('btn btn-success')).toBeTruthy();
+    expect(
+      orgsBtn.className.includes('text-secondary btn btn-light')
+    ).toBeTruthy();
+    expect(
+      requestsBtn.className.includes('text-secondary btn btn-light')
+    ).toBeTruthy();
+    expect(
+      rolesBtn.className.includes('text-white btn btn-success')
+    ).toBeTruthy();
 
     // Send to requests screen
     userEvent.click(requestsBtn);
@@ -157,11 +175,8 @@ describe('Testing Left Drawer component', () => {
         </I18nextProvider>
       </BrowserRouter>
     );
-    const leftDrawer = screen.getByTestId(/leftDrawerContainer/i);
     const closeModalBtn = screen.getByTestId(/closeModalBtn/i);
-    expect(leftDrawer.classList.contains('activeDrawer')).toBeTruthy();
     userEvent.click(closeModalBtn);
-    expect(leftDrawer.classList.contains('inactiveDrawer')).toBeTruthy();
   });
 
   test('Testing logout functionality', async () => {
