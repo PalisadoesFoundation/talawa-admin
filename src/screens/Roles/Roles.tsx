@@ -38,16 +38,18 @@ const Roles = (): JSX.Element => {
     loading: boolean;
     error?: Error | undefined;
   } = useQuery(USER_ORGANIZATION_LIST, {
-    variables: { id: userId },
+    variables: { id: localStorage.getItem('id') },
   });
+  const {
+    loading: loadingUsers,
+    data: userData,
+    refetch: userRefetch,
+  } = useQuery(USER_LIST);
 
-  useEffect(() => {
-    if (userType != 'SUPERADMIN') {
-      window.location.assign('/orglist');
-    }
-    setComponentLoader(false);
-  }, []);
+  const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
+  const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
 
+  // To search by name
   useEffect(() => {
     if (searchByName !== '') {
       userRefetch({
@@ -62,16 +64,7 @@ const Roles = (): JSX.Element => {
     }
   }, [count, searchByName]);
 
-  const {
-    loading: loadingUsers,
-    data: userData,
-    refetch: userRefetch,
-  } = useQuery(USER_LIST);
-
-  const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
-
-  const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
-
+  // Warn if there is no organization
   useEffect(() => {
     if (!dataOrgs) {
       return;
@@ -81,6 +74,14 @@ const Roles = (): JSX.Element => {
       toast.warning(t('noOrgError'));
     }
   }, [dataOrgs]);
+
+  // Send to orgList page if user is not superadmin
+  useEffect(() => {
+    if (userType != 'SUPERADMIN') {
+      window.location.assign('/orglist');
+    }
+    setComponentLoader(false);
+  }, []);
 
   const changeRole = async (e: any): Promise<void> => {
     const { value } = e.target;
@@ -193,46 +194,47 @@ const Roles = (): JSX.Element => {
                 </tr>
               </thead>
               <tbody>
-                {userData.users.map(
-                  (
-                    user: {
-                      _id: string;
-                      firstName: string;
-                      lastName: string;
-                      email: string;
-                      userType: string;
-                    },
-                    index: number
-                  ) => {
-                    return (
-                      <tr key={user._id}>
-                        <th scope="row">{index + 1}</th>
-                        <td>{`${user.firstName} ${user.lastName}`}</td>
-                        <td>{user.email}</td>
-                        <td>
-                          <select
-                            className="form-control"
-                            name={`role${user._id}`}
-                            data-testid={`changeRole${user._id}`}
-                            onChange={changeRole}
-                            disabled={user._id === userId}
-                            defaultValue={`${user.userType}?${user._id}`}
-                          >
-                            <option value={`ADMIN?${user._id}`}>
-                              {t('admin')}
-                            </option>
-                            <option value={`SUPERADMIN?${user._id}`}>
-                              {t('superAdmin')}
-                            </option>
-                            <option value={`USER?${user._id}`}>
-                              {t('user')}
-                            </option>
-                          </select>
-                        </td>
-                      </tr>
-                    );
-                  }
-                )}
+                {userData &&
+                  userData?.users.map(
+                    (
+                      user: {
+                        _id: string;
+                        firstName: string;
+                        lastName: string;
+                        email: string;
+                        userType: string;
+                      },
+                      index: number
+                    ) => {
+                      return (
+                        <tr key={user._id}>
+                          <th scope="row">{index + 1}</th>
+                          <td>{`${user.firstName} ${user.lastName}`}</td>
+                          <td>{user.email}</td>
+                          <td>
+                            <select
+                              className="form-control"
+                              name={`role${user._id}`}
+                              data-testid={`changeRole${user._id}`}
+                              onChange={changeRole}
+                              disabled={user._id === userId}
+                              defaultValue={`${user.userType}?${user._id}`}
+                            >
+                              <option value={`ADMIN?${user._id}`}>
+                                {t('admin')}
+                              </option>
+                              <option value={`SUPERADMIN?${user._id}`}>
+                                {t('superAdmin')}
+                              </option>
+                              <option value={`USER?${user._id}`}>
+                                {t('user')}
+                              </option>
+                            </select>
+                          </td>
+                        </tr>
+                      );
+                    }
+                  )}
               </tbody>
             </Table>
           </div>
