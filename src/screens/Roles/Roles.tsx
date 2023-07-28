@@ -112,7 +112,11 @@ const Roles = (): JSX.Element => {
 
   return (
     <>
-      <SuperAdminScreen data={currentUserData} title={'Roles'}>
+      <SuperAdminScreen
+        data={currentUserData}
+        title={t('usersList')}
+        screenName="Roles"
+      >
         {/* Buttons Container */}
         <div className={styles.btnsContainer}>
           <div className={styles.inputContainer}>
@@ -148,7 +152,7 @@ const Roles = (): JSX.Element => {
               <Dropdown aria-expanded="false" title="Sort organizations">
                 <Dropdown.Toggle variant="outline-success">
                   <SortIcon className={'me-1'} />
-                  Sort
+                  {t('sort')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
@@ -159,7 +163,7 @@ const Roles = (): JSX.Element => {
               <Dropdown aria-expanded="false" title="Filter organizations">
                 <Dropdown.Toggle variant="outline-success">
                   <FilterListIcon className={'me-1'} />
-                  Filter
+                  {t('filter')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
@@ -173,11 +177,11 @@ const Roles = (): JSX.Element => {
 
         {loadingUsers ? (
           <div className={styles.notFound}>
-            <h4>Loading requests ...</h4>
+            <h4>{t('loadingUsers')}</h4>
           </div>
         ) : userData && userData.users.length === 0 ? (
           <div className={styles.notFound}>
-            <h4>No User Found</h4>
+            <h4>{t('noUserFound')}</h4>
           </div>
         ) : (
           <div className={styles.listBox}>

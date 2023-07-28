@@ -57,7 +57,11 @@
     "visibleInSearch": "在搜索中可見",
     "displayImage": "顯示圖像",
     "enterName": "输入名字",
-    "cancel": "取消"
+    "sort": "排序",
+    "filter": "過濾",
+    "cancel": "取消",
+    "noOrgErrorTitle": "找不到组织",
+    "noOrgErrorDescription": "请通过仪表板创建一个组织"
   },
   "superDashListCard": {
     "created": "創造",
@@ -86,6 +90,10 @@
     "superAdmin": "超級管理員",
     "user": "用戶",
     "enterName": "输入名字",
+    "loadingUsers": "正在加載用戶...",
+    "noUserFound": "找不到用戶。",
+    "sort": "排序",
+    "filter": "過濾",
     "roleUpdated": "角色已更新。",
     "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
@@ -98,6 +106,10 @@
     "accept": "接受",
     "reject": "拒絕",
     "enterName": "输入名字",
+    "loadingRequests": "正在加載請求...",
+    "noRequestFound": "找不到請求。",
+    "sort": "排序",
+    "filter": "過濾",
     "userApproved": "用戶批准",
     "userRejected": "用戶被拒絕",
     "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"

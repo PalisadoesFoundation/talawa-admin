@@ -137,7 +137,11 @@ const Requests = (): JSX.Element => {
 
   return (
     <>
-      <SuperAdminScreen data={currentUserData} title={t('requests')}>
+      <SuperAdminScreen
+        data={currentUserData}
+        title={t('requests')}
+        screenName="Requests"
+      >
         {/* Buttons Container */}
         <div className={styles.btnsContainer}>
           <div className={styles.inputContainer}>
@@ -173,7 +177,7 @@ const Requests = (): JSX.Element => {
               <Dropdown aria-expanded="false" title="Sort organizations">
                 <Dropdown.Toggle variant="outline-success">
                   <SortIcon className={'me-1'} />
-                  Sort
+                  {t('sort')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
@@ -184,7 +188,7 @@ const Requests = (): JSX.Element => {
               <Dropdown aria-expanded="false" title="Filter organizations">
                 <Dropdown.Toggle variant="outline-success">
                   <FilterListIcon className={'me-1'} />
-                  Filter
+                  {t('filter')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
@@ -197,11 +201,11 @@ const Requests = (): JSX.Element => {
         </div>
         {loadingUsers ? (
           <div className={styles.notFound}>
-            <h4>Loading requests ...</h4>
+            <h4>{t('loadingRequests')}</h4>
           </div>
         ) : usersData.length === 0 ? (
           <div className={styles.notFound}>
-            <h4>No Pending Requests</h4>
+            <h4>{t('noRequestFound')}</h4>
           </div>
         ) : (
           <div className={styles.listBox}>

@@ -6,12 +6,14 @@ import type { InterfaceUserType } from 'utils/interfaces';
 import styles from './SuperAdminScreen.module.css';
 
 export interface InterfaceSuperAdminScreenProps {
-  title: string;
+  title: string; // Multilingual Page title
+  screenName: string; // Internal Screen name for developers
   data: InterfaceUserType | undefined;
   children: React.ReactNode;
 }
 const superAdminScreen = ({
   title,
+  screenName,
   data,
   children,
 }: InterfaceSuperAdminScreenProps): JSX.Element => {
@@ -21,7 +23,7 @@ const superAdminScreen = ({
     <>
       <LeftDrawer
         data={data}
-        screenName={title}
+        screenName={screenName}
         showDrawer={showDrawer}
         setShowDrawer={setShowDrawer}
       />

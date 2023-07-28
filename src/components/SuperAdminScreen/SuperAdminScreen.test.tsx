@@ -12,10 +12,10 @@ import i18nForTest from 'utils/i18nForTest';
 import SuperAdminScreen, {
   InterfaceSuperAdminScreenProps,
 } from './SuperAdminScreen';
-import { InterfaceUserType } from 'utils/interfaces';
 
 let props: InterfaceSuperAdminScreenProps = {
   title: 'Organizations',
+  screenName: 'Organizations',
   data: {
     user: {
       firstName: 'test',

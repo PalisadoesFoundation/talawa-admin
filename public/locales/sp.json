@@ -57,7 +57,11 @@
     "visibleInSearch": "Visible en la búsqueda",
     "displayImage": "Mostrar imagen",
     "enterName": "Ingrese su nombre",
-    "cancel": "Cancelar"
+    "sort": "Ordenar",
+    "filter": "Filtrar",
+    "cancel": "Cancelar",
+    "noOrgErrorTitle": "Organizaciones no encontradas",
+    "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control"
   },
   "superDashListCard": {
     "created": "Creado",
@@ -86,6 +90,10 @@
     "superAdmin": "SUPERADMIN",
     "user": "USUARIO",
     "enterName": "Ingrese su nombre",
+    "loadingUsers": "Cargando usuarios ...",
+    "noUserFound": "No se encontró ningún usuario.",
+    "sort": "Ordenar",
+    "filter": "Filtrar",
     "roleUpdated": "Rol actualizado.",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
@@ -98,6 +106,10 @@
     "accept": "Aceptar",
     "reject": "Rechazar",
     "enterName": "Ingrese su nombre",
+    "loadingRequests": "Cargando solicitudes ...",
+    "noRequestFound": "No se encontró ninguna solicitud.",
+    "sort": "Ordenar",
+    "filter": "Filtrar",
     "userApproved": "Aprobado por el usuario",
     "userRejected": "Usuario rechazado",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."

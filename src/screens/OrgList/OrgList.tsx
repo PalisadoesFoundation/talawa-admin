@@ -152,7 +152,11 @@ function orgList(): JSX.Element {
   const debouncedHandleSearchByName = debounce(handleSearchByName);
   return (
     <>
-      <SuperAdminScreen data={userData} title="Organizations">
+      <SuperAdminScreen
+        data={userData}
+        title={t('organizations')}
+        screenName="Organizations"
+      >
         {/* Buttons Container */}
         <div className={styles.btnsContainer}>
           <div
@@ -168,7 +172,7 @@ function orgList(): JSX.Element {
               type="name"
               id="orgname"
               className="bg-white"
-              placeholder="Search Organization"
+              placeholder={t('searchByName')}
               data-testid="searchByName"
               autoComplete="off"
               required
@@ -186,7 +190,7 @@ function orgList(): JSX.Element {
               <Dropdown aria-expanded="false" title="Sort organizations">
                 <Dropdown.Toggle variant="outline-success">
                   <SortIcon className={'me-1'} />
-                  Sort
+                  {t('sort')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
@@ -197,7 +201,7 @@ function orgList(): JSX.Element {
               <Dropdown aria-expanded="false" title="Filter organizations">
                 <Dropdown.Toggle variant="outline-success">
                   <FilterListIcon className={'me-1'} />
-                  Filter
+                  {t('filter')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
