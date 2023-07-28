@@ -15,7 +15,7 @@ interface InterfaceAdminDashListCardProps {
 function adminDashListCard(
   props: InterfaceAdminDashListCardProps
 ): JSX.Element {
-  const { _id, admins, createdAt, creator, image, location, members, name } =
+  const { _id, admins, createdAt, image, location, members, name } =
     props.data ?? [];
 
   const userId = localStorage.getItem('id');

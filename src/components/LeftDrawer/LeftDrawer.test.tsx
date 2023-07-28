@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import { I18nextProvider } from 'react-i18next';
@@ -7,9 +7,10 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { toast } from 'react-toastify';
 import i18nForTest from 'utils/i18nForTest';
-import LeftDrawer, { InterfaceLeftDrawerProps } from './LeftDrawer';
+import type { InterfaceLeftDrawerProps } from './LeftDrawer';
+import LeftDrawer from './LeftDrawer';
 
-let props = {
+const props = {
   data: {
     user: {
       firstName: 'John',
@@ -29,15 +30,15 @@ let props = {
   showDrawer: true,
   setShowDrawer: jest.fn(),
 };
-let propsOrg: InterfaceLeftDrawerProps = {
+const propsOrg: InterfaceLeftDrawerProps = {
   ...props,
   screenName: 'Organizations',
 };
-let propsReq: InterfaceLeftDrawerProps = {
+const propsReq: InterfaceLeftDrawerProps = {
   ...props,
   screenName: 'Requests',
 };
-let propsRoles: InterfaceLeftDrawerProps = {
+const propsRoles: InterfaceLeftDrawerProps = {
   ...props,
   screenName: 'Roles',
   showDrawer: false,
@@ -71,9 +72,9 @@ describe('Testing Left Drawer component', () => {
     const requestsBtn = screen.getByTestId(/requestsBtn/i);
     const rolesBtn = screen.getByTestId(/rolesBtn/i);
 
-    expect(orgsBtn.classList.contains('btn btn-success'));
-    expect(requestsBtn.classList.contains('btn btn-light'));
-    expect(rolesBtn.classList.contains('btn btn-light'));
+    expect(orgsBtn.classList.contains('btn btn-success')).toBeTruthy();
+    expect(requestsBtn.classList.contains('btn btn-light')).toBeTruthy();
+    expect(rolesBtn.classList.contains('btn btn-light')).toBeTruthy();
 
     // Coming soon
     userEvent.click(screen.getByTestId(/profileBtn/i));
@@ -115,9 +116,9 @@ describe('Testing Left Drawer component', () => {
     const requestsBtn = screen.getByTestId(/requestsBtn/i);
     const rolesBtn = screen.getByTestId(/rolesBtn/i);
 
-    expect(orgsBtn.classList.contains('btn btn-success'));
-    expect(requestsBtn.classList.contains('btn btn-light'));
-    expect(rolesBtn.classList.contains('btn btn-light'));
+    expect(orgsBtn.classList.contains('btn btn-success')).toBeTruthy();
+    expect(requestsBtn.classList.contains('btn btn-light')).toBeTruthy();
+    expect(rolesBtn.classList.contains('btn btn-light')).toBeTruthy();
 
     // Send to organizations screen
     userEvent.click(orgsBtn);
@@ -138,9 +139,9 @@ describe('Testing Left Drawer component', () => {
     const requestsBtn = screen.getByTestId(/requestsBtn/i);
     const rolesBtn = screen.getByTestId(/rolesBtn/i);
 
-    expect(orgsBtn.classList.contains('btn btn-light'));
-    expect(requestsBtn.classList.contains('btn btn-light'));
-    expect(rolesBtn.classList.contains('btn btn-success'));
+    expect(orgsBtn.classList.contains('btn btn-light')).toBeTruthy();
+    expect(requestsBtn.classList.contains('btn btn-light')).toBeTruthy();
+    expect(rolesBtn.classList.contains('btn btn-success')).toBeTruthy();
 
     // Send to requests screen
     userEvent.click(requestsBtn);
@@ -158,9 +159,9 @@ describe('Testing Left Drawer component', () => {
     );
     const leftDrawer = screen.getByTestId(/leftDrawerContainer/i);
     const closeModalBtn = screen.getByTestId(/closeModalBtn/i);
-    expect(leftDrawer.classList.contains('activeDrawer'));
+    expect(leftDrawer.classList.contains('activeDrawer')).toBeTruthy();
     userEvent.click(closeModalBtn);
-    expect(leftDrawer.classList.contains('inactiveDrawer'));
+    expect(leftDrawer.classList.contains('inactiveDrawer')).toBeTruthy();
   });
 
   test('Testing logout functionality', async () => {

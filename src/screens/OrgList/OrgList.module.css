@@ -75,7 +75,6 @@
   }
 }
 
-
 /* For mobile devices  */
 
 @media (max-width: 520px) {
@@ -93,7 +92,7 @@
     flex: 1;
   }
 
-  .btnsContainer .btnsBlock div[title="Sort organizations"] {
+  .btnsContainer .btnsBlock div[title='Sort organizations'] {
     margin-right: 0.5rem;
   }
 
@@ -103,7 +102,6 @@
     width: 100%;
   }
 }
-
 
 /* Loading OrgList CSS */
 .itemCard .loadingWrapper {
@@ -139,7 +137,7 @@
   margin-bottom: 0.8rem;
 }
 
-.itemCard .loadingWrapper .innerContainer .content h6[title="Location"] {
+.itemCard .loadingWrapper .innerContainer .content h6[title='Location'] {
   display: block;
   width: 45%;
   height: 18px;
@@ -181,7 +179,6 @@
   .itemCard .loadingWrapper .innerContainer .content {
     margin-left: 0;
   }
-
 
   .itemCard .loadingWrapper .button {
     bottom: 0;

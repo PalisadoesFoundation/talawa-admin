@@ -44,7 +44,6 @@
   flex-direction: column;
 }
 
-
 @media (max-width: 1020px) {
   .btnsContainer {
     flex-direction: column;
@@ -67,7 +66,6 @@
   }
 }
 
-
 /* For mobile devices  */
 
 @media (max-width: 520px) {
@@ -85,7 +83,7 @@
     flex: 1;
   }
 
-  .btnsContainer .btnsBlock div[title="Sort organizations"] {
+  .btnsContainer .btnsBlock div[title='Sort organizations'] {
     margin-right: 0.5rem;
   }
 

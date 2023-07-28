@@ -153,7 +153,6 @@
   }
 }
 
-
 /* Webkit prefix for older browser compatibility */
 @-webkit-keyframes goToLeftBigScreen {
   from {
@@ -177,7 +176,6 @@
     left: 0;
   }
 }
-
 
 /* Webkit prefix for older browser compatibility */
 @-webkit-keyframes comeToRightBigScreen {
@@ -204,7 +202,6 @@
   }
 }
 
-
 /* Webkit prefix for older browser compatibility */
 @-webkit-keyframes closeDrawer {
   from {
@@ -229,7 +226,6 @@
     opacity: 1;
   }
 }
-
 
 /* Webkit prefix for older browser compatibility */
 @-webkit-keyframes openDrawer {

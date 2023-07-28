@@ -9,11 +9,10 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import SuperAdminScreen, {
-  InterfaceSuperAdminScreenProps,
-} from './SuperAdminScreen';
+import type { InterfaceSuperAdminScreenProps } from './SuperAdminScreen';
+import SuperAdminScreen from './SuperAdminScreen';
 
-let props: InterfaceSuperAdminScreenProps = {
+const props: InterfaceSuperAdminScreenProps = {
   title: 'Organizations',
   screenName: 'Organizations',
   data: {
