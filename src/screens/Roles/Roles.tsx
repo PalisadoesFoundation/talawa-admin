@@ -24,7 +24,6 @@ const Roles = (): JSX.Element => {
 
   document.title = t('title');
 
-  const [componentLoader, setComponentLoader] = useState(true);
   const [searchByName, setSearchByName] = useState('');
   const [count, setCount] = useState(0);
 
@@ -32,7 +31,6 @@ const Roles = (): JSX.Element => {
   const userId = localStorage.getItem('id');
   const {
     data: currentUserData,
-    error: errorUser,
   }: {
     data: InterfaceUserType | undefined;
     loading: boolean;
@@ -80,7 +78,6 @@ const Roles = (): JSX.Element => {
     if (userType != 'SUPERADMIN') {
       window.location.assign('/orglist');
     }
-    setComponentLoader(false);
   }, []);
 
   const changeRole = async (e: any): Promise<void> => {

@@ -334,7 +334,7 @@ export const UPDATE_USERTYPE_MUTATION = gql`
   }
 `;
 
-export const ACCPET_ADMIN_MUTATION = gql`
+export const ACCEPT_ADMIN_MUTATION = gql`
   mutation AcceptAdmin($id: ID!) {
     acceptAdmin(id: $id)
   }

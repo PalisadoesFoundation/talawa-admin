@@ -9,7 +9,7 @@ import 'jest-location-mock';
 
 import Requests from './Requests';
 import {
-  ACCPET_ADMIN_MUTATION,
+  ACCEPT_ADMIN_MUTATION,
   REJECT_ADMIN_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import {
@@ -126,7 +126,7 @@ const MOCKS = [
   },
   {
     request: {
-      query: ACCPET_ADMIN_MUTATION,
+      query: ACCEPT_ADMIN_MUTATION,
       variables: {
         id: '123',
         userType: 'ADMIN',
@@ -157,7 +157,7 @@ const MOCKS = [
 const EMPTY_ORG_MOCKS = [
   {
     request: {
-      query: ACCPET_ADMIN_MUTATION,
+      query: ACCEPT_ADMIN_MUTATION,
       variables: {
         id: '123',
         userType: 'ADMIN',

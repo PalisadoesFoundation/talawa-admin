@@ -1,31 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import { Col, Dropdown, Form, Row, Spinner, Table } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
-import { toast } from 'react-toastify';
-import { useTranslation } from 'react-i18next';
+import React, { useEffect, useState } from 'react';
+import { Dropdown, Form, Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
-import styles from './Requests.module.css';
-import ListNavbar from 'components/ListNavbar/ListNavbar';
+import { Search } from '@mui/icons-material';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import SortIcon from '@mui/icons-material/Sort';
+import {
+  ACCEPT_ADMIN_MUTATION,
+  REJECT_ADMIN_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_LIST,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-import {
-  ACCPET_ADMIN_MUTATION,
-  REJECT_ADMIN_MUTATION,
-} from 'GraphQl/Mutations/mutations';
-import PaginationList from 'components/PaginationList/PaginationList';
-import { errorHandler } from 'utils/errorHandler';
 import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
-import SortIcon from '@mui/icons-material/Sort';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import { Search } from '@mui/icons-material';
+import { errorHandler } from 'utils/errorHandler';
 import type {
   InterfaceOrgConnectionType,
   InterfaceUserType,
 } from 'utils/interfaces';
+import styles from './Requests.module.css';
 
 const Requests = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'requests' });
@@ -35,11 +33,10 @@ const Requests = (): JSX.Element => {
   const [usersData, setUsersData] = useState([]);
   const [searchByName, setSearchByName] = useState('');
 
-  const [acceptAdminFunc] = useMutation(ACCPET_ADMIN_MUTATION);
+  const [acceptAdminFunc] = useMutation(ACCEPT_ADMIN_MUTATION);
   const [rejectAdminFunc] = useMutation(REJECT_ADMIN_MUTATION);
   const {
     data: currentUserData,
-    error: errorUser,
   }: {
     data: InterfaceUserType | undefined;
     loading: boolean;
@@ -51,13 +48,11 @@ const Requests = (): JSX.Element => {
   const {
     data: userData,
     loading: loadingUsers,
-    error: errorUsersList,
     refetch,
   } = useQuery(USER_LIST);
 
   const {
     data: dataOrgs,
-    error: errorOrgs,
   }: {
     data: InterfaceOrgConnectionType | undefined;
     error?: Error;
@@ -81,6 +76,7 @@ const Requests = (): JSX.Element => {
     }
   }, [dataOrgs]);
 
+  // Set the usersData to the users that are not approved yet
   useEffect(() => {
     if (userData) {
       setUsersData(
