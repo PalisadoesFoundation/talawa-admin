@@ -15,7 +15,6 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { debug } from 'jest-preview';
 
 type Organization = {
   _id: string;
@@ -167,25 +166,6 @@ describe('Organisations Page', () => {
     location: 'Delhi, India',
     image: new File(['hello'], 'hello.png', { type: 'image/png' }),
   };
-
-  test('Testing LeftDrawer in page functionality', async () => {
-    localStorage.setItem('id', '123');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrgList />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-    debug();
-  });
 
   test('Testing search functionality', async () => {
     const mocks = [

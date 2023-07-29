@@ -15,8 +15,9 @@ export interface InterfaceUserType {
 
 export interface InterfaceOrgConnectionInfoType {
   _id: string;
-  image: string;
+  image: string | null;
   creator: {
+    _id: string;
     firstName: string;
     lastName: string;
   };

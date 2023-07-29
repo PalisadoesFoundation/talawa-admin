@@ -8,20 +8,19 @@ import styles from './AdminDashListCard.module.css';
 import defaultImg from 'assets/images/blank.png';
 import type { InterfaceOrgConnectionInfoType } from 'utils/interfaces';
 
-interface InterfaceAdminDashListCardProps {
+export interface InterfaceAdminDashListCardProps {
   data: InterfaceOrgConnectionInfoType;
 }
 
 function adminDashListCard(
   props: InterfaceAdminDashListCardProps
 ): JSX.Element {
-  const { _id, admins, createdAt, image, location, members, name } =
-    props.data ?? [];
+  const { _id, admins, createdAt, image, location, members, name } = props.data;
 
   const userId = localStorage.getItem('id');
+
   function click(): void {
-    const url = '/orgdash/id=' + _id;
-    window.location.replace(url);
+    window.location.replace('/orgdash/id=' + _id);
   }
 
   const { t } = useTranslation('translation', {
@@ -30,15 +29,19 @@ function adminDashListCard(
 
   return (
     <>
-      <Row className={styles.orglist} data-testid="singleorg">
+      <Row className={styles.orglist}>
         {image ? (
-          <img src={image} className={styles.orgimg} />
+          <img src={image} className={styles.orgimg} alt={`${name} image`} />
         ) : (
-          <img src={defaultImg} className={styles.orgimg} />
+          <img
+            src={defaultImg}
+            className={styles.orgimg}
+            alt={`default image`}
+          />
         )}
         <Col className={styles.singledetails}>
           <div className={styles.singledetails_data_left}>
-            <p className={styles.orgname}>{name ? <>{name}</> : <></>}</p>
+            <p className={styles.orgname}>{name}</p>
             <p className={styles.orgfont}>{location}</p>
             <p className={styles.orgfontcreated}>
               {t('created')}: <span>{createdAt}</span>
@@ -55,6 +58,7 @@ function adminDashListCard(
               <Button
                 className={styles.orgfontcreatedbtn}
                 onClick={click}
+                data-testid="viewBtn"
                 disabled={
                   admins.length > 0 &&
                   !admins.some((admin: any) => admin._id === userId)
@@ -69,5 +73,4 @@ function adminDashListCard(
     </>
   );
 }
-export {};
 export default adminDashListCard;
