@@ -63,17 +63,10 @@
     "noOrgErrorTitle": "Organizations Not Found",
     "noOrgErrorDescription": "Please create an organization through dashboard"
   },
-  "superDashListCard": {
-    "created": "Created",
+  "orgListCard": {
     "admins": "Admins",
     "members": "Members",
     "manage": "Manage"
-  },
-  "adminDashListCard": {
-    "created": "Created",
-    "admins": "Admins",
-    "members": "Members",
-    "view": "View"
   },
   "paginationList": {
     "rowsPerPage": "rows per page",

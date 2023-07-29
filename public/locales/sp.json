@@ -63,17 +63,10 @@
     "noOrgErrorTitle": "Organizaciones no encontradas",
     "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control"
   },
-  "superDashListCard": {
-    "created": "Creado",
+  "orgListCard": {
     "admins": "Administradores",
     "members": "Miembros",
     "manage": "Administrar"
-  },
-  "adminDashListCard": {
-    "view": "Ver",
-    "created": "Creado",
-    "admins": "Administradores",
-    "members": "Miembros"
   },
   "paginationList": {
     "rowsPerPage": "filas por página",

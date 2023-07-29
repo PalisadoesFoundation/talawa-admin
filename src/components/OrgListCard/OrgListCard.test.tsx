@@ -4,11 +4,12 @@ import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 
 import i18nForTest from 'utils/i18nForTest';
-import type { InterfaceAdminDashListCardProps } from './AdminDashListCard';
-import AdminDashListCard from './AdminDashListCard';
+import { InterfaceOrgListCardProps } from './OrgListCard';
+import AdminDashListCard from './OrgListCard';
 import userEvent from '@testing-library/user-event';
+import { BrowserRouter } from 'react-router-dom';
 
-const props: InterfaceAdminDashListCardProps = {
+const props: InterfaceOrgListCardProps = {
   data: {
     _id: 'xyz',
     name: 'Dogs Care',
@@ -37,33 +38,35 @@ describe('Testing the Super Dash List', () => {
     localStorage.setItem('id', '123'); // Means the user is an admin
 
     render(
-      <I18nextProvider i18n={i18nForTest}>
-        <AdminDashListCard {...props} />
-      </I18nextProvider>
+      <BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <AdminDashListCard {...props} />
+        </I18nextProvider>
+      </BrowserRouter>
     );
     expect(screen.getByAltText(/Dogs Care image/i)).toBeInTheDocument();
     expect(screen.getByText('Admins:')).toBeInTheDocument();
     expect(screen.getByText('Members:')).toBeInTheDocument();
     expect(screen.getByText('Dogs Care')).toBeInTheDocument();
     expect(screen.getByText('India')).toBeInTheDocument();
-    expect(screen.getByText('04/07/2019')).toBeInTheDocument();
-    userEvent.click(screen.getByTestId(/viewBtn/i));
+    userEvent.click(screen.getByTestId(/manageBtn/i));
   });
 
   test('Testing if the props data is not provided', () => {
     window.location.assign('/orgdash');
 
     render(
-      <I18nextProvider i18n={i18nForTest}>
-        <AdminDashListCard {...props} />
-      </I18nextProvider>
+      <BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <AdminDashListCard {...props} />
+        </I18nextProvider>
+      </BrowserRouter>
     );
 
     expect(window.location).toBeAt('/orgdash');
   });
 
   test('Testing if component is rendered properly when image is null', () => {
-    localStorage.setItem('id', '123'); // User is admin
     const imageNullProps = {
       ...props,
       ...{ data: { ...props.data, ...{ image: null } } },
@@ -77,25 +80,14 @@ describe('Testing the Super Dash List', () => {
   });
 
   test('Testing if user is redirected to orgDash screen', () => {
-    localStorage.setItem('id', '123'); // User is admin
-
     render(
-      <I18nextProvider i18n={i18nForTest}>
-        <AdminDashListCard {...props} />
-      </I18nextProvider>
+      <BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <AdminDashListCard {...props} />
+        </I18nextProvider>
+      </BrowserRouter>
     );
-    userEvent.click(screen.getByTestId('viewBtn'));
+    userEvent.click(screen.getByTestId('manageBtn'));
     expect(window.location).toBeAt('/orgdash/id=xyz');
-  });
-
-  test('Testing the view is disabled, if a user is not an admin for an org', () => {
-    localStorage.setItem('id', 'mno'); // User is not an admin for the current org
-
-    render(
-      <I18nextProvider i18n={i18nForTest}>
-        <AdminDashListCard {...props} />
-      </I18nextProvider>
-    );
-    expect(getByText(screen.getByTestId('viewBtn'), 'View')).toBeDisabled();
   });
 });

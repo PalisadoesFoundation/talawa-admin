@@ -63,17 +63,10 @@
     "noOrgErrorTitle": "Organisations non trouvées",
     "noOrgErrorDescription": "Veuillez créer une organisation via le tableau de bord"
   },
-  "superDashListCard": {
-    "created": "Établi",
+  "orgListCard": {
     "admins": "Administrateurs",
     "members": "Membres",
     "manage": "Faire en sorte"
-  },
-  "adminDashListCard": {
-    "view": "Voir",
-    "created": "Créé",
-    "admins": "Admins",
-    "members": "Membres"
   },
   "paginationList": {
     "rowsPerPage": "lignes par page",

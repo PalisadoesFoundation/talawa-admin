@@ -63,17 +63,10 @@
     "noOrgErrorTitle": "संगठन नहीं मिला",
     "noOrgErrorDescription": "कृपया डैशबोर्ड के माध्यम से एक संगठन बनाएं"
   },
-  "superDashListCard": {
-    "created": "बनाया था",
+  "orgListCard": {
     "admins": "व्यवस्थापक",
     "members": "सदस्य",
     "manage": "प्रबंधित करना"
-  },
-  "adminDashListCard": {
-    "view": "देखें",
-    "created": "बनाया गया",
-    "admins": "व्यवस्थापक",
-    "members": "सदस्य"
   },
   "paginationList": {
     "rowsPerPage": "प्रति पृष्ठ पंक्तियाँ",

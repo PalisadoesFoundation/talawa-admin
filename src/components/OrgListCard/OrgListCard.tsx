@@ -1,46 +1,51 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import styles from './SuperDashListCard.module.css';
+import styles from './OrgListCard.module.css';
 import { useHistory } from 'react-router-dom';
 import AboutImg from 'assets/images/defaultImg.png';
 import type { InterfaceOrgConnectionInfoType } from 'utils/interfaces';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 
-interface InterfaceSuperDashListCardProps {
+export interface InterfaceOrgListCardProps {
   data: InterfaceOrgConnectionInfoType;
 }
 
-function superDashListCard(
-  props: InterfaceSuperDashListCardProps
-): JSX.Element {
-  const { _id, admins, image, location, members, name } = props.data ?? {};
+function superDashListCard(props: InterfaceOrgListCardProps): JSX.Element {
+  const { _id, admins, image, location, members, name } = props.data;
 
-  const userId = localStorage.getItem('id');
-  const userType = localStorage.getItem('UserType');
   const history = useHistory();
 
   function handleClick(): void {
     const url = '/orgdash/id=' + _id;
 
+    // Dont change the below two lines
     window.location.replace(url);
     history.push(url);
   }
 
   const { t } = useTranslation('translation', {
-    keyPrefix: 'superDashListCard',
+    keyPrefix: 'orgListCard',
   });
 
   return (
     <>
-      <div className={styles.orgCard} data-testid="singleorg">
+      <div className={styles.orgCard}>
         <div className={styles.innerContainer}>
           <div className={styles.orgImgContainer}>
             <div className={styles.overlayTheme} />
             {image ? (
-              <img src={image} className={styles.orgimg} />
+              <img
+                src={image}
+                className={styles.orgimg}
+                alt={`${name} image`}
+              />
             ) : (
-              <img src={AboutImg} className={styles.orgimg} />
+              <img
+                src={AboutImg}
+                className={styles.orgimg}
+                alt={`default image`}
+              />
             )}
           </div>
           <div className={styles.content}>
@@ -57,14 +62,7 @@ function superDashListCard(
             </h6>
           </div>
         </div>
-        <Button
-          onClick={handleClick}
-          disabled={
-            userType !== 'SUPERADMIN' &&
-            admins.length > 0 &&
-            !admins.some((admin: any) => admin._id === userId)
-          }
-        >
+        <Button onClick={handleClick} data-testid="manageBtn">
           {t('manage')}
         </Button>
       </div>

@@ -7,8 +7,7 @@ import {
   ORGANIZATION_CONNECTION_LIST,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-import AdminDashListCard from 'components/AdminDashListCard/AdminDashListCard';
-import SuperDashListCard from 'components/SuperDashListCard/SuperDashListCard';
+import OrgListCard from 'components/OrgListCard/OrgListCard';
 import type { ChangeEvent } from 'react';
 import React, { useState } from 'react';
 import { Col, Dropdown, Form, Row } from 'react-bootstrap';
@@ -32,6 +31,7 @@ function orgList(): JSX.Element {
 
   document.title = t('title');
 
+  const searchRef = React.useRef<HTMLInputElement>(null);
   const [showModal, setShowModal] = useState(false);
   const [formState, setFormState] = useState({
     name: '',
@@ -157,17 +157,10 @@ function orgList(): JSX.Element {
       >
         {/* Buttons Container */}
         <div className={styles.btnsContainer}>
-          <div
-            className={styles.input}
-            style={{
-              display:
-                userData && userData.user.userType === 'SUPERADMIN'
-                  ? 'block'
-                  : 'none',
-            }}
-          >
+          <div className={styles.input}>
             <Form.Control
               type="name"
+              ref={searchRef}
               id="orgname"
               className="bg-white"
               placeholder={t('searchByName')}
@@ -248,32 +241,42 @@ function orgList(): JSX.Element {
                 </div>
               ))}
             </>
-          ) : orgsData?.organizationsConnection?.length &&
+          ) : userData && userData.user.userType == 'SUPERADMIN' ? (
+            orgsData?.organizationsConnection?.length &&
             orgsData?.organizationsConnection?.length > 0 ? (
-            orgsData?.organizationsConnection.map((item) => {
-              if (userData && userData.user.userType == 'SUPERADMIN') {
+              orgsData?.organizationsConnection.map((item) => {
                 return (
                   <div key={item._id} className={styles.itemCard}>
-                    <SuperDashListCard data={item} />
+                    <OrgListCard data={item} />
                   </div>
                 );
-              } else if (isAdminForCurrentOrg(item)) {
-                /* istanbul ignore next */
-                return (
-                  <div key={item._id} className={styles.itemCard}>
-                    <AdminDashListCard data={item} />
-                  </div>
-                );
-              } else {
-                return null;
-              }
-            })
-          ) : (
-            <div className={styles.notFound}>
-              <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
-              <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
-            </div>
-          )}
+              })
+            ) : (
+              <div className={styles.notFound}>
+                <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
+                <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
+              </div>
+            )
+          ) : userData && userData.user.userType == 'ADMIN' ? (
+            userData.user.adminFor.length > 0 &&
+            orgsData?.organizationsConnection?.length &&
+            orgsData?.organizationsConnection?.length > 0 ? (
+              orgsData?.organizationsConnection.map((item) => {
+                if (isAdminForCurrentOrg(item)) {
+                  return (
+                    <div key={item._id} className={styles.itemCard}>
+                      <OrgListCard data={item} />
+                    </div>
+                  );
+                }
+              })
+            ) : (
+              <div className={styles.notFound}>
+                <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
+                <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
+              </div>
+            )
+          ) : null}
         </div>
         {/* Create Organization Modal */}
         <Modal

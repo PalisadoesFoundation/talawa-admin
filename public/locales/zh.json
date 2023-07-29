@@ -63,17 +63,10 @@
     "noOrgErrorTitle": "找不到组织",
     "noOrgErrorDescription": "请通过仪表板创建一个组织"
   },
-  "superDashListCard": {
-    "created": "創造",
+  "orgListCard": {
     "admins": "管理員",
     "members": "成員",
     "manage": "管理"
-  },
-  "adminDashListCard": {
-    "view": "查看",
-    "created": "创建于",
-    "admins": "管理员",
-    "members": "成员"
   },
   "paginationList": {
     "rowsPerPage": "每頁行數",
