@@ -1,10 +1,10 @@
 import React from 'react';
-import { getByText, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 
 import i18nForTest from 'utils/i18nForTest';
-import { InterfaceOrgListCardProps } from './OrgListCard';
+import type { InterfaceOrgListCardProps } from './OrgListCard';
 import AdminDashListCard from './OrgListCard';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';

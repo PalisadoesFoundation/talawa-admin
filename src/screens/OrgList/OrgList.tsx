@@ -33,6 +33,7 @@ function orgList(): JSX.Element {
 
   const searchRef = React.useRef<HTMLInputElement>(null);
   const [showModal, setShowModal] = useState(false);
+
   const [formState, setFormState] = useState({
     name: '',
     descrip: '',
@@ -51,7 +52,6 @@ function orgList(): JSX.Element {
     error: errorUser,
   }: {
     data: InterfaceUserType | undefined;
-    loading: boolean;
     error?: Error | undefined;
   } = useQuery(USER_ORGANIZATION_LIST, {
     variables: { id: localStorage.getItem('id') },
@@ -201,24 +201,44 @@ function orgList(): JSX.Element {
                 </Dropdown.Menu>
               </Dropdown>
             </div>
-            <Button
-              variant="success"
-              className={styles.createOrgBtn}
-              onClick={toggleModal}
-              data-testid="createOrganizationBtn"
-              style={{
-                display:
-                  userData && userData.user.userType === 'SUPERADMIN'
-                    ? 'block'
-                    : 'none',
-              }}
-            >
-              <i className={'fa fa-plus me-2'} />
-              {t('createOrganization')}
-            </Button>
+            {userData && userData?.user?.userType === 'SUPERADMIN' && (
+              <Button
+                variant="success"
+                onClick={toggleModal}
+                data-testid="createOrganizationBtn"
+              >
+                <i className={'fa fa-plus me-2'} />
+                {t('createOrganization')}
+              </Button>
+            )}
           </div>
         </div>
         {/* Organizations List */}
+        {!loading &&
+        ((orgsData?.organizationsConnection.length === 0 &&
+          searchRef.current?.value.length == 0) ||
+          (userData &&
+            userData.user.userType === 'ADMIN' &&
+            userData.user.adminFor.length === 0)) ? (
+          // eslint-disable-next-line
+          <div className={styles.notFound}>
+            <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
+            <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
+          </div>
+        ) : !loading &&
+          orgsData?.organizationsConnection.length == 0 &&
+          /* istanbul ignore next */
+          searchRef.current?.value.length ? (
+          /* istanbul ignore next */
+          // eslint-disable-next-line
+          <div className={styles.notFound} data-testid="noResultFound">
+            <h3 className="m-0">
+              {t('noResultsFoundFor')} &quot;{searchRef.current?.value}&quot;
+            </h3>
+          </div>
+        ) : (
+          <></>
+        )}
         <div className={styles.listBox} data-testid="organizations-list">
           {loading ? (
             <>
@@ -242,40 +262,25 @@ function orgList(): JSX.Element {
               ))}
             </>
           ) : userData && userData.user.userType == 'SUPERADMIN' ? (
-            orgsData?.organizationsConnection?.length &&
-            orgsData?.organizationsConnection?.length > 0 ? (
-              orgsData?.organizationsConnection.map((item) => {
+            orgsData?.organizationsConnection.map((item) => {
+              return (
+                <div key={item._id} className={styles.itemCard}>
+                  <OrgListCard data={item} />
+                </div>
+              );
+            })
+          ) : userData &&
+            userData.user.userType == 'ADMIN' &&
+            userData.user.adminFor.length > 0 ? (
+            orgsData?.organizationsConnection.map((item) => {
+              if (isAdminForCurrentOrg(item)) {
                 return (
                   <div key={item._id} className={styles.itemCard}>
                     <OrgListCard data={item} />
                   </div>
                 );
-              })
-            ) : (
-              <div className={styles.notFound}>
-                <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
-                <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
-              </div>
-            )
-          ) : userData && userData.user.userType == 'ADMIN' ? (
-            userData.user.adminFor.length > 0 &&
-            orgsData?.organizationsConnection?.length &&
-            orgsData?.organizationsConnection?.length > 0 ? (
-              orgsData?.organizationsConnection.map((item) => {
-                if (isAdminForCurrentOrg(item)) {
-                  return (
-                    <div key={item._id} className={styles.itemCard}>
-                      <OrgListCard data={item} />
-                    </div>
-                  );
-                }
-              })
-            ) : (
-              <div className={styles.notFound}>
-                <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
-                <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
-              </div>
-            )
+              }
+            })
           ) : null}
         </div>
         {/* Create Organization Modal */}

@@ -61,7 +61,8 @@
     "filter": "Filter",
     "cancel": "Cancel",
     "noOrgErrorTitle": "Organizations Not Found",
-    "noOrgErrorDescription": "Please create an organization through dashboard"
+    "noOrgErrorDescription": "Please create an organization through dashboard",
+    "noResultsFoundFor": "No results found for "
   },
   "orgListCard": {
     "admins": "Admins",

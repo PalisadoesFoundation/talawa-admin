@@ -30,14 +30,13 @@
 .listBox {
   display: flex;
   flex-wrap: wrap;
-  flex: 1;
 }
 
 .listBox .itemCard {
   width: 50%;
 }
 
-.listBox .notFound {
+.notFound {
   flex: 1;
   display: flex;
   justify-content: center;

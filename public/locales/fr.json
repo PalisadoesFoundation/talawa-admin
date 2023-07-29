@@ -61,7 +61,8 @@
     "filter": "Filtre",
     "cancel": "Annuler",
     "noOrgErrorTitle": "Organisations non trouvées",
-    "noOrgErrorDescription": "Veuillez créer une organisation via le tableau de bord"
+    "noOrgErrorDescription": "Veuillez créer une organisation via le tableau de bord",
+    "noResultsFoundFor": "Aucun résultat trouvé pour "
   },
   "orgListCard": {
     "admins": "Administrateurs",
