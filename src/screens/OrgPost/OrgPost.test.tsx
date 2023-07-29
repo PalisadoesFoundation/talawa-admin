@@ -1,7 +1,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router-dom';
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import 'jest-location-mock';
@@ -14,6 +14,7 @@ import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { ToastContainer } from 'react-toastify';
+import { debug } from 'jest-preview';
 
 const MOCKS = [
   {
@@ -354,4 +355,108 @@ describe('Organisation Post Page', () => {
 
     expect(refetchMock).toHaveBeenCalledTimes(0);
   });
+
+  test('Create', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+    const postTitleInput = screen.getByTestId('posttitle');
+    fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
+
+    const postInfoTextarea = screen.getByTestId('info');
+    fireEvent.change(postInfoTextarea, {
+      target: { value: 'Test post information' },
+    });
+
+    const createPostBtn = screen.getByTestId('createPostBtn');
+    fireEvent.click(createPostBtn);
+  }, 15000);
+
+  test('Create post and preview', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+    const postTitleInput = screen.getByTestId('posttitle');
+    fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
+
+    const postInfoTextarea = screen.getByTestId('info');
+    fireEvent.change(postInfoTextarea, {
+      target: { value: 'Test post information' },
+    });
+    const file = new File(['image content'], 'image.png', {
+      type: 'image/png',
+    });
+    const input = screen.getByTestId('image');
+    userEvent.upload(input, file);
+
+    await screen.findByAltText('Post Image Preview');
+    expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
+
+    const createPostBtn = screen.getByTestId('createPostBtn');
+    fireEvent.click(createPostBtn);
+    debug();
+  }, 15000);
+  test('Create post and preview with close button', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+    const postTitleInput = screen.getByTestId('posttitle');
+    fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
+
+    const postInfoTextarea = screen.getByTestId('info');
+    fireEvent.change(postInfoTextarea, {
+      target: { value: 'Test post information' },
+    });
+    const file = new File(['image content'], 'image.png', {
+      type: 'image/png',
+    });
+    const input = screen.getByTestId('image');
+    userEvent.upload(input, file);
+
+    await screen.findByAltText('Post Image Preview');
+    expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
+    const closeButton = screen.getByTestId('closeimage');
+    fireEvent.click(closeButton);
+
+    expect(screen.queryByAltText('Post Image Preview')).not.toBeInTheDocument();
+  }, 15000);
 });

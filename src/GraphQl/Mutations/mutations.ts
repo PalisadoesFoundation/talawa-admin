@@ -461,3 +461,11 @@ export const UPDATE_SPAM_NOTIFICATION_MUTATION = gql`
     }
   }
 `;
+
+export const TOGGLE_PINNED_POST = gql`
+  mutation TogglePostPin($id: ID!) {
+    togglePostPin(id: $id) {
+      _id
+    }
+  }
+`;

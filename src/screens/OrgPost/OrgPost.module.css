@@ -97,7 +97,10 @@
   width: 400px;
   height: auto;
 }
-
+.action {
+  display: flex;
+  gap: 1rem;
+}
 .logintitle {
   color: #707070;
   font-weight: 600;

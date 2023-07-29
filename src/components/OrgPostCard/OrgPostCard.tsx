@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import Card from 'react-bootstrap/Card';
 import { toast } from 'react-toastify';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CloseIcon from '@mui/icons-material/Close';
@@ -141,110 +142,138 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
         <div className={styles.cards} onClick={handleCardClick}>
           {props.postPhoto ? (
             <p>
-              <span>
-                {' '}
-                <img
+              <Card className={styles.card}>
+                <Card.Img
                   className={styles.postimage}
-                  alt="image not found 1"
+                  variant="top"
                   src={props.postPhoto}
+                  alt="image"
                 />
-                <span className={styles.knowMoreText}>Know More</span>
-              </span>
+                <Card.Body>
+                  <Card.Title className={styles.title}>
+                    {props.postTitle}
+                  </Card.Title>
+                  <Card.Text className={styles.text}>
+                    {props.postInfo}
+                  </Card.Text>
+                  <Card.Link>{props.postAuthor}</Card.Link>
+                </Card.Body>
+              </Card>
             </p>
           ) : (
             <span>
-              <img
-                src={defaultImg}
-                alt="image not found"
-                className={styles.postimage}
-              />
-              <span className={styles.knowMoreText}>Know More</span>
+              <Card className={styles.card}>
+                <Card.Img
+                  variant="top"
+                  src={defaultImg}
+                  alt="image not found"
+                  className={styles.postimage}
+                />
+                <Card.Body>
+                  <Card.Title className={styles.title}>
+                    {props.postTitle}
+                  </Card.Title>
+                  <Card.Text className={styles.text}>
+                    {props.postInfo && props.postInfo.length > 20
+                      ? props.postInfo.substring(0, 20) + '...'
+                      : props.postInfo}
+                  </Card.Text>{' '}
+                  <Card.Link className={styles.author}>
+                    {props.postAuthor}
+                  </Card.Link>
+                </Card.Body>
+              </Card>
             </span>
           )}
         </div>
-      </div>
-      {modalVisible && (
-        <div className={styles.modal}>
-          <div className={styles.modalContent}>
-            <div className={styles.modalImage}>
-              <img src={props.postPhoto} alt="Post Image" />
-            </div>
-            <div className={styles.modalInfo}>
-              <p>
-                {t('author')}:<span> {props.postAuthor}</span>
-              </p>
-              <div className={styles.infodiv}>
-                {togglePost === 'Read more' ? (
-                  <p data-testid="toggleContent">
-                    {props.postInfo.length > 43
-                      ? props.postInfo.substring(0, 40) + '...'
-                      : props.postInfo}
-                  </p>
-                ) : (
-                  <p data-testid="toggleContent">{props.postInfo}</p>
-                )}
-                <button
-                  role="toggleBtn"
-                  data-testid="toggleBtn"
-                  className={`${
-                    props.postInfo.length > 43
-                      ? styles.toggleClickBtn
-                      : styles.toggleClickBtnNone
-                  }`}
-                  onClick={handletoggleClick}
-                >
-                  {togglePost}
-                </button>
+        {modalVisible && (
+          <div className={styles.modal} data-testid={'imagepreviewmodal'}>
+            <div className={styles.modalContent}>
+              <div className={styles.modalImage}>
+                <img src={props.postPhoto} alt="Post Image" />
               </div>
+              <div className={styles.modalInfo}>
+                <p>
+                  {t('author')}:<span> {props.postAuthor}</span>
+                </p>
+                <div className={styles.infodiv}>
+                  {togglePost === 'Read more' ? (
+                    <p data-testid="toggleContent">
+                      {props.postInfo.length > 43
+                        ? props.postInfo.substring(0, 40) + '...'
+                        : props.postInfo}
+                    </p>
+                  ) : (
+                    <p data-testid="toggleContent">{props.postInfo}</p>
+                  )}
+                  <button
+                    role="toggleBtn"
+                    data-testid="toggleBtn"
+                    className={`${
+                      props.postInfo.length > 43
+                        ? styles.toggleClickBtn
+                        : styles.toggleClickBtnNone
+                    }`}
+                    onClick={handletoggleClick}
+                  >
+                    {togglePost}
+                  </button>
+                </div>
+              </div>
+              <button
+                className={styles.moreOptionsButton}
+                onClick={handleMoreOptionsClick}
+                data-testid="moreiconbtn"
+              >
+                <MoreVertIcon />
+              </button>
+              <button
+                className={styles.closeButton}
+                onClick={(): void => setModalVisible(false)}
+                data-testid="closeiconbtn"
+              >
+                <CloseIcon />
+              </button>
             </div>
-            <button
-              className={styles.moreOptionsButton}
-              onClick={handleMoreOptionsClick}
-            >
-              <MoreVertIcon />
-            </button>
-            <button
-              className={styles.closeButton}
-              onClick={(): void => setModalVisible(false)}
-            >
-              <CloseIcon />
-            </button>
           </div>
-        </div>
-      )}
+        )}
 
-      {menuVisible && (
-        <div className={styles.menuModal}>
-          <div className={styles.menuContent}>
-            <ul className={styles.menuOptions}>
-              <li
-                data-toggle="modal"
-                data-target={`#editPostModal${props.id}`}
-                onClick={handleEditModal}
-                data-testid="editPostModalBtn"
-              >
-                Edit Post{' '}
-              </li>
-              <li
-                data-toggle="modal"
-                data-target={`#deletePostModal${props.id}`}
-                onClick={handleDeleteModal}
-              >
-                Delete Post{' '}
-              </li>
-              <li>Pin post</li>
-              <li>Report</li>
-              <li>Share</li>
-              <li
-                className={styles.list}
-                onClick={(): void => setMenuVisible(false)}
-              >
-                Close
-              </li>
-            </ul>
+        {menuVisible && (
+          <div className={styles.menuModal}>
+            <div className={styles.menuContent}>
+              <ul className={styles.menuOptions}>
+                <li
+                  data-toggle="modal"
+                  data-target={`#editPostModal${props.id}`}
+                  onClick={handleEditModal}
+                  data-testid="editPostModalBtn"
+                >
+                  Edit Post{' '}
+                </li>
+                <li
+                  data-toggle="modal"
+                  data-target={`#deletePostModal${props.id}`}
+                  onClick={handleDeleteModal}
+                  data-testid="deletePostModalBtn"
+                >
+                  Delete Post{' '}
+                </li>
+                <li>Pin post</li>
+                <li>Report</li>
+                <li>Share</li>
+                <li
+                  className={styles.list}
+                  onClick={(): void => setMenuVisible(false)}
+                  data-testid="closebtn"
+                >
+                  Close
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
+
       {/* Delete Modal */}
       <Modal show={showDeleteModal} onHide={toggleShowDeleteModal}>
         <Modal.Header>

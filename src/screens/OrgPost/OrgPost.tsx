@@ -235,6 +235,7 @@ function orgPost(): JSX.Element {
               id="postitle"
               placeholder={t('ptitle')}
               autoComplete="off"
+              data-testid="posttitle"
               required
               value={postformState.posttitle}
               onChange={(e): void => {
@@ -250,6 +251,7 @@ function orgPost(): JSX.Element {
               className={styles.postinfo}
               placeholder={t('postDes')}
               autoComplete="off"
+              data-testid="info"
               required
               value={postformState.postinfo}
               onChange={(e): void => {
@@ -261,7 +263,11 @@ function orgPost(): JSX.Element {
             />
             {!postformState.postVideo && (
               <>
-                <label htmlFor="postphoto" className={styles.orgphoto}>
+                <label
+                  htmlFor="postphoto"
+                  className={styles.orgphoto}
+                  data-testid={'image'}
+                >
                   {t('image')}:
                   <Form.Control
                     accept="image/*"
@@ -302,6 +308,7 @@ function orgPost(): JSX.Element {
                             fileInput.value = '';
                           }
                         }}
+                        data-testid="closeimage"
                       >
                         <i className="fa fa-times"></i>
                       </button>
@@ -310,7 +317,7 @@ function orgPost(): JSX.Element {
                 </label>
               </>
             )}
-            {!postformState.postImage && (
+            {/* {!postformState.postImage && (
               <>
                 <label htmlFor="postvideo">
                   {t('video')}:
@@ -361,10 +368,19 @@ function orgPost(): JSX.Element {
                   </div>
                 )}
               </>
-            )}
-            <Button type="submit" variant="success" data-testid="createPostBtn">
-              <i className="fa fa-plus"></i> {t('addPost')}
-            </Button>
+            )} */}
+            <div className={styles.action}>
+              <Button
+                type="submit"
+                variant="success"
+                data-testid="createPostBtn"
+              >
+                <i className="fa fa-plus"></i> {t('addPost')}
+              </Button>
+              <Button variant="success">
+                <i className="fa fa-clock"></i>
+              </Button>
+            </div>
           </Form>
         </Modal.Body>
       </Modal>
