@@ -24,6 +24,7 @@ import type {
   InterfaceUserType,
 } from 'utils/interfaces';
 import styles from './Requests.module.css';
+import debounce from 'utils/debounce';
 
 const Requests = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'requests' });
@@ -76,7 +77,7 @@ const Requests = (): JSX.Element => {
     }
   }, [dataOrgs]);
 
-  // Set the usersData to the users that are not approved yet
+  // Set the usersData to the users that are not approved yet after every api call
   useEffect(() => {
     if (userData) {
       setUsersData(
@@ -88,7 +89,7 @@ const Requests = (): JSX.Element => {
     }
   }, [userData]);
 
-  const accpetAdmin = async (userId: any): Promise<void> => {
+  const acceptAdmin = async (userId: any): Promise<void> => {
     try {
       const { data } = await acceptAdminFunc({
         variables: {
@@ -129,11 +130,14 @@ const Requests = (): JSX.Element => {
   const handleSearchByName = (e: any): any => {
     const { value } = e.target;
     setSearchByName(value);
-
     refetch({
-      filter: searchByName,
+      firstName_contains: value,
+      lastName_contains: '',
+      // Later on we can add several search and filter options
     });
   };
+
+  const debouncedHandleSearchByName = debounce(handleSearchByName);
 
   return (
     <>
@@ -162,7 +166,7 @@ const Requests = (): JSX.Element => {
                 data-testid="searchByName"
                 autoComplete="off"
                 required
-                onChange={handleSearchByName}
+                onChange={debouncedHandleSearchByName}
               />
               <Button
                 tabIndex={-1}
@@ -203,6 +207,12 @@ const Requests = (): JSX.Element => {
           <div className={styles.notFound}>
             <h4>{t('loadingRequests')}</h4>
           </div>
+        ) : usersData.length === 0 && searchByName.length > 0 ? (
+          <div className={styles.notFound}>
+            <h4>
+              {t('noResultsFoundFor')} &quot;{searchByName}&quot;
+            </h4>
+          </div>
         ) : usersData.length === 0 ? (
           <div className={styles.notFound}>
             <h4>{t('noRequestFound')}</h4>
@@ -235,12 +245,12 @@ const Requests = (): JSX.Element => {
                       <tr key={user._id}>
                         <td>{index + 1}</td>
                         <td>{`${user.firstName} ${user.lastName}`}</td>
-                        <td>{user.email}</td>
+                        <td>{user.userType}</td>
                         <td>
                           <Button
                             className="btn btn-success btn-sm"
                             onClick={async (): Promise<void> => {
-                              await accpetAdmin(user._id);
+                              await acceptAdmin(user._id);
                             }}
                             data-testid={`acceptUser${user._id}`}
                           >

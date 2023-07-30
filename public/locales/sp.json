@@ -89,6 +89,7 @@
     "sort": "Ordenar",
     "filter": "Filtrar",
     "roleUpdated": "Rol actualizado.",
+    "noResultsFoundFor": "No se encontraron resultados para ",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
   "requests": {
@@ -106,6 +107,7 @@
     "filter": "Filtrar",
     "userApproved": "Aprobado por el usuario",
     "userRejected": "Usuario rechazado",
+    "noResultsFoundFor": "No se encontraron resultados para ",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
   "adminNavbar": {

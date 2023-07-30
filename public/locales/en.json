@@ -90,6 +90,7 @@
     "filter": "Filter",
     "noOrgError": "Organizations not found, please create an organization through dashboard",
     "roleUpdated": "Role Updated.",
+    "noResultsFoundFor": "No results found for ",
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "requests": {
@@ -108,6 +109,7 @@
     "noOrgError": "Organizations not found, please create an organization through dashboard",
     "userApproved": "User Approved",
     "userRejected": "User Rejected",
+    "noResultsFoundFor": "No results found for ",
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "adminNavbar": {

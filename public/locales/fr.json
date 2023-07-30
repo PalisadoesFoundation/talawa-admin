@@ -89,6 +89,7 @@
     "sort": "Trier",
     "filter": "Filtre",
     "roleUpdated": "Rôle mis à jour.",
+    "noResultsFoundFor": "Aucun résultat trouvé pour ",
     "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "requests": {
@@ -106,6 +107,7 @@
     "filter": "Filtre",
     "userApproved": "Approuvé par l'utilisateur",
     "userRejected": "Utilisateur rejeté",
+    "noResultsFoundFor": "Aucun résultat trouvé pour ",
     "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "adminNavbar": {
