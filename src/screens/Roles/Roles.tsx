@@ -18,6 +18,7 @@ import { errorHandler } from 'utils/errorHandler';
 import styles from './Roles.module.css';
 import type { InterfaceUserType } from 'utils/interfaces';
 import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
+import debounce from 'utils/debounce';
 
 const Roles = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'roles' });
@@ -25,7 +26,6 @@ const Roles = (): JSX.Element => {
   document.title = t('title');
 
   const [searchByName, setSearchByName] = useState('');
-  const [count, setCount] = useState(0);
 
   const userType = localStorage.getItem('UserType');
   const userId = localStorage.getItem('id');
@@ -39,28 +39,15 @@ const Roles = (): JSX.Element => {
     variables: { id: localStorage.getItem('id') },
   });
   const {
+    data: dataUsers,
     loading: loadingUsers,
-    data: userData,
-    refetch: userRefetch,
-  } = useQuery(USER_LIST);
+    refetch: refetchUsers,
+  } = useQuery(USER_LIST, {
+    notifyOnNetworkStatusChange: true,
+  });
 
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
   const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
-
-  // To search by name
-  useEffect(() => {
-    if (searchByName !== '') {
-      userRefetch({
-        firstName_contains: searchByName,
-      });
-    } else {
-      if (count !== 0) {
-        userRefetch({
-          firstName_contains: searchByName,
-        });
-      }
-    }
-  }, [count, searchByName]);
 
   // Warn if there is no organization
   useEffect(() => {
@@ -96,7 +83,7 @@ const Roles = (): JSX.Element => {
       /* istanbul ignore next */
       if (data) {
         toast.success(t('roleUpdated'));
-        userRefetch();
+        refetchUsers();
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -107,8 +94,14 @@ const Roles = (): JSX.Element => {
   const handleSearchByName = (e: any): void => {
     const { value } = e.target;
     setSearchByName(value);
-    setCount((prev) => prev + 1);
+    refetchUsers({
+      firstName_contains: value,
+      lastName_contains: '',
+      // Later on we can add several search and filter options
+    });
   };
+
+  const debouncedHandleSearchByName = debounce(handleSearchByName);
 
   return (
     <>
@@ -137,7 +130,7 @@ const Roles = (): JSX.Element => {
                 data-testid="searchByName"
                 autoComplete="off"
                 required
-                onChange={handleSearchByName}
+                onChange={debouncedHandleSearchByName}
               />
               <Button
                 tabIndex={-1}
@@ -179,7 +172,13 @@ const Roles = (): JSX.Element => {
           <div className={styles.notFound}>
             <h4>{t('loadingUsers')}</h4>
           </div>
-        ) : userData && userData.users.length === 0 ? (
+        ) : dataUsers.users.length === 0 && searchByName.length > 0 ? (
+          <div className={styles.notFound}>
+            <h4>
+              {t('noResultsFoundFor')} &quot;{searchByName}&quot;
+            </h4>
+          </div>
+        ) : dataUsers && dataUsers.users.length === 0 ? (
           <div className={styles.notFound}>
             <h4>{t('noUserFound')}</h4>
           </div>
@@ -195,8 +194,8 @@ const Roles = (): JSX.Element => {
                 </tr>
               </thead>
               <tbody>
-                {userData &&
-                  userData?.users.map(
+                {dataUsers &&
+                  dataUsers?.users.map(
                     (
                       user: {
                         _id: string;

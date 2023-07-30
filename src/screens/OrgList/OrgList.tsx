@@ -31,7 +31,7 @@ function orgList(): JSX.Element {
 
   document.title = t('title');
 
-  const searchRef = React.useRef<HTMLInputElement>(null);
+  const [searchByName, setSearchByName] = useState('');
   const [showModal, setShowModal] = useState(false);
 
   const [formState, setFormState] = useState({
@@ -61,13 +61,15 @@ function orgList(): JSX.Element {
     data: orgsData,
     loading,
     error: errorList,
-    refetch,
+    refetch: refetchOrgs,
   }: {
     data: InterfaceOrgConnectionType | undefined;
     loading: boolean;
     error?: Error | undefined;
     refetch: any;
-  } = useQuery(ORGANIZATION_CONNECTION_LIST);
+  } = useQuery(ORGANIZATION_CONNECTION_LIST, {
+    notifyOnNetworkStatusChange: true,
+  });
 
   /* istanbul ignore next */
   const isAdminForCurrentOrg = (
@@ -118,7 +120,7 @@ function orgList(): JSX.Element {
       /* istanbul ignore next */
       if (data) {
         toast.success('Congratulation the Organization is created');
-        refetch();
+        refetchOrgs();
         setFormState({
           name: '',
           descrip: '',
@@ -142,7 +144,8 @@ function orgList(): JSX.Element {
 
   const handleSearchByName = (e: any): void => {
     const { value } = e.target;
-    refetch({
+    setSearchByName(value);
+    refetchOrgs({
       filter: value,
     });
   };
@@ -160,7 +163,6 @@ function orgList(): JSX.Element {
           <div className={styles.input}>
             <Form.Control
               type="name"
-              ref={searchRef}
               id="orgname"
               className="bg-white"
               placeholder={t('searchByName')}
@@ -216,7 +218,7 @@ function orgList(): JSX.Element {
         {/* Organizations List */}
         {!loading &&
         ((orgsData?.organizationsConnection.length === 0 &&
-          searchRef.current?.value.length == 0) ||
+          searchByName.length == 0) ||
           (userData &&
             userData.user.userType === 'ADMIN' &&
             userData.user.adminFor.length === 0)) ? (
@@ -228,12 +230,12 @@ function orgList(): JSX.Element {
         ) : !loading &&
           orgsData?.organizationsConnection.length == 0 &&
           /* istanbul ignore next */
-          searchRef.current?.value.length ? (
+          searchByName.length ? (
           /* istanbul ignore next */
           // eslint-disable-next-line
           <div className={styles.notFound} data-testid="noResultFound">
             <h3 className="m-0">
-              {t('noResultsFoundFor')} &quot;{searchRef.current?.value}&quot;
+              {t('noResultsFoundFor')} &quot;{searchByName}&quot;
             </h3>
           </div>
         ) : (

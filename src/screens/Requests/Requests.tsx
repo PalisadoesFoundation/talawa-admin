@@ -47,10 +47,12 @@ const Requests = (): JSX.Element => {
   });
 
   const {
-    data: userData,
+    data: dataUsers,
     loading: loadingUsers,
-    refetch,
-  } = useQuery(USER_LIST);
+    refetch: refetchUsers,
+  } = useQuery(USER_LIST, {
+    notifyOnNetworkStatusChange: true,
+  });
 
   const {
     data: dataOrgs,
@@ -79,15 +81,15 @@ const Requests = (): JSX.Element => {
 
   // Set the usersData to the users that are not approved yet after every api call
   useEffect(() => {
-    if (userData) {
+    if (dataUsers) {
       setUsersData(
-        userData.users.filter(
+        dataUsers.users.filter(
           (user: any) =>
             user.userType === 'ADMIN' && user.adminApproved === false
         )
       );
     }
-  }, [userData]);
+  }, [dataUsers]);
 
   const acceptAdmin = async (userId: any): Promise<void> => {
     try {
@@ -130,7 +132,7 @@ const Requests = (): JSX.Element => {
   const handleSearchByName = (e: any): any => {
     const { value } = e.target;
     setSearchByName(value);
-    refetch({
+    refetchUsers({
       firstName_contains: value,
       lastName_contains: '',
       // Later on we can add several search and filter options
@@ -245,7 +247,7 @@ const Requests = (): JSX.Element => {
                       <tr key={user._id}>
                         <td>{index + 1}</td>
                         <td>{`${user.firstName} ${user.lastName}`}</td>
-                        <td>{user.userType}</td>
+                        <td>{user.email}</td>
                         <td>
                           <Button
                             className="btn btn-success btn-sm"

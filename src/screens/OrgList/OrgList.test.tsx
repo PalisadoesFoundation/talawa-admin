@@ -11,12 +11,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrgList from './OrgList';
-import {
-  MOCKS,
-  MOCKS_ADMIN,
-  MOCKS_ADMIN_EMPTY,
-  MOCKS_EMPTY,
-} from './OrgListMocks';
+import { MOCKS, MOCKS_ADMIN, MOCKS_EMPTY } from './OrgListMocks';
 import { debug } from 'jest-preview';
 
 async function wait(ms = 100): Promise<void> {

@@ -143,26 +143,4 @@ const MOCKS_ADMIN = [
   },
 ];
 
-const MOCKS_ADMIN_EMPTY = [
-  {
-    request: {
-      query: ORGANIZATION_CONNECTION_LIST,
-    },
-    result: {
-      data: {
-        organizationsConnection: organizations,
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_ORGANIZATION_LIST,
-      variables: { id: '123' },
-    },
-    result: {
-      data: adminUser,
-    },
-  },
-];
-
-export { MOCKS, MOCKS_EMPTY, MOCKS_ADMIN, MOCKS_ADMIN_EMPTY };
+export { MOCKS, MOCKS_EMPTY, MOCKS_ADMIN };
