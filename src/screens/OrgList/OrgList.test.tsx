@@ -173,7 +173,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(screen.getByLabelText(/Display Image/i)).toBeTruthy();
 
     userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
-  },10000);
+  }, 10000);
 });
 
 describe('Organisations Page testing as Admin', () => {

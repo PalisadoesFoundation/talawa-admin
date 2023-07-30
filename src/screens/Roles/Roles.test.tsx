@@ -19,6 +19,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import Roles from './Roles';
+import { debug } from 'jest-preview';
 
 const MOCKS = [
   {
@@ -203,22 +204,8 @@ const EMPTY_MOCKS = [
   },
 ];
 
-const EMPTY_ORG_MOCKS = [
-  {
-    request: {
-      query: ORGANIZATION_CONNECTION_LIST,
-    },
-    result: {
-      data: {
-        organizationsConnection: [],
-      },
-    },
-  },
-];
-
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_MOCKS, true);
-const link3 = new StaticMockLink(EMPTY_ORG_MOCKS, true);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -372,7 +359,7 @@ describe('Testing Roles screen', () => {
 
   test('Should render warning alert when there are no organizations', async () => {
     const { container } = render(
-      <MockedProvider addTypename={false} link={link3}>
+      <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -385,6 +372,7 @@ describe('Testing Roles screen', () => {
     );
 
     await wait(200);
+    debug();
     expect(container.textContent).toMatch(
       'Organizations not found, please create an organization through dashboard'
     );

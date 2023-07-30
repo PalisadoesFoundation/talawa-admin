@@ -71,6 +71,7 @@ function orgList(): JSX.Element {
     notifyOnNetworkStatusChange: true,
   });
 
+  // To clear the search field and form fields on unmount
   useEffect(() => {
     return () => {
       setSearchByName('');

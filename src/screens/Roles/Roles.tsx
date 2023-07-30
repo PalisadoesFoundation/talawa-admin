@@ -49,6 +49,13 @@ const Roles = (): JSX.Element => {
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
   const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
 
+  // To clear the search when the component is unmounted
+  useEffect(() => {
+    return () => {
+      setSearchByName('');
+    };
+  }, []);
+
   // Warn if there is no organization
   useEffect(() => {
     if (!dataOrgs) {

@@ -61,6 +61,13 @@ const Requests = (): JSX.Element => {
     error?: Error;
   } = useQuery(ORGANIZATION_CONNECTION_LIST);
 
+  // To clear the search when the component is unmounted
+  useEffect(() => {
+    return () => {
+      setSearchByName('');
+    };
+  }, []);
+
   // If the user is not Superadmin, redirect to Organizations screen
   useEffect(() => {
     const userType = localStorage.getItem('UserType');
