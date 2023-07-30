@@ -249,9 +249,9 @@ function orgList(): JSX.Element {
           /* istanbul ignore next */
           // eslint-disable-next-line
           <div className={styles.notFound} data-testid="noResultFound">
-            <h3 className="m-0">
+            <h4 className="m-0">
               {t('noResultsFoundFor')} &quot;{searchByName}&quot;
-            </h3>
+            </h4>
           </div>
         ) : (
           <></>
