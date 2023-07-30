@@ -27,6 +27,8 @@ const leftDrawer = ({
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
 
+  const userType = localStorage.getItem('UserType');
+
   const history = useHistory();
 
   const logout = (): void => {
@@ -77,48 +79,52 @@ const leftDrawer = ({
             </div>
             {t('organizations')}
           </Button>
-          <Button
-            variant={screenName === 'Requests' ? 'success' : 'light'}
-            className={`${
-              screenName === 'Requests' ? 'text-white' : 'text-secondary'
-            }`}
-            onClick={(): void => {
-              history.push('/requests');
-            }}
-            data-testid="requestsBtn"
-          >
-            <div className={styles.iconWrapper}>
-              <RequestsIcon
-                fill={`${
-                  screenName === 'Requests'
-                    ? 'var(--bs-white)'
-                    : 'var(--bs-secondary)'
-                }`}
-              />
-            </div>
-            {t('requests')}
-          </Button>
-          <Button
-            variant={screenName === 'Roles' ? 'success' : 'light'}
-            className={`${
-              screenName === 'Roles' ? 'text-white' : 'text-secondary'
-            }`}
-            onClick={(): void => {
-              history.push('/roles');
-            }}
-            data-testid="rolesBtn"
-          >
-            <div className={styles.iconWrapper}>
-              <RolesIcon
-                fill={`${
-                  screenName === 'Roles'
-                    ? 'var(--bs-white)'
-                    : 'var(--bs-secondary)'
-                }`}
-              />
-            </div>
-            {t('roles')}
-          </Button>
+          {userType === 'SUPERADMIN' && (
+            <Button
+              variant={screenName === 'Requests' ? 'success' : 'light'}
+              className={`${
+                screenName === 'Requests' ? 'text-white' : 'text-secondary'
+              }`}
+              onClick={(): void => {
+                history.push('/requests');
+              }}
+              data-testid="requestsBtn"
+            >
+              <div className={styles.iconWrapper}>
+                <RequestsIcon
+                  fill={`${
+                    screenName === 'Requests'
+                      ? 'var(--bs-white)'
+                      : 'var(--bs-secondary)'
+                  }`}
+                />
+              </div>
+              {t('requests')}
+            </Button>
+          )}
+          {userType === 'SUPERADMIN' && (
+            <Button
+              variant={screenName === 'Roles' ? 'success' : 'light'}
+              className={`${
+                screenName === 'Roles' ? 'text-white' : 'text-secondary'
+              }`}
+              onClick={(): void => {
+                history.push('/roles');
+              }}
+              data-testid="rolesBtn"
+            >
+              <div className={styles.iconWrapper}>
+                <RolesIcon
+                  fill={`${
+                    screenName === 'Roles'
+                      ? 'var(--bs-white)'
+                      : 'var(--bs-secondary)'
+                  }`}
+                />
+              </div>
+              {t('roles')}
+            </Button>
+          )}
         </div>
         <div style={{ marginTop: 'auto' }}>
           {data === undefined ? (
@@ -135,10 +141,14 @@ const leftDrawer = ({
               }}
             >
               <div className={styles.imageContainer}>
-                <img
-                  src={`https://api.dicebear.com/5.x/initials/svg?seed=${data?.user?.firstName} ${data?.user?.lastName}`}
-                  alt={`profile pic of ${data?.user?.firstName} ${data?.user?.lastName}`}
-                />
+                {data && data?.user?.image ? (
+                  <img src={data?.user?.image} alt={`profile picture`} />
+                ) : (
+                  <img
+                    src={`https://api.dicebear.com/5.x/initials/svg?seed=${data?.user?.firstName} ${data?.user?.lastName}`}
+                    alt={`dummy picture`}
+                  />
+                )}
               </div>
               <div className={styles.profileText}>
                 <span className={styles.primaryText}>

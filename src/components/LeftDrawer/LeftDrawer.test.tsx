@@ -30,6 +30,29 @@ const props = {
   showDrawer: true,
   setShowDrawer: jest.fn(),
 };
+
+const propsAdmin: InterfaceLeftDrawerProps = {
+  data: {
+    user: {
+      firstName: 'John',
+      lastName: 'Doe',
+      image: `https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe`,
+      email: 'johndoe@gmail.com',
+      userType: 'ADMIN',
+      adminFor: [
+        {
+          _id: '123',
+          name: 'Palisadoes',
+          image: null,
+        },
+      ],
+    },
+  },
+  screenName: 'Organizations',
+  showDrawer: true,
+  setShowDrawer: jest.fn(),
+};
+
 const propsOrg: InterfaceLeftDrawerProps = {
   ...props,
   screenName: 'Organizations',
@@ -52,7 +75,12 @@ jest.mock('react-toastify', () => ({
   },
 }));
 
-describe('Testing Left Drawer component', () => {
+afterEach(() => {
+  jest.clearAllMocks();
+  localStorage.clear();
+});
+
+describe('Testing Left Drawer component for SUPERADMIN', () => {
   test('Component should be rendered properly', () => {
     localStorage.setItem('UserType', 'SUPERADMIN');
     render(
@@ -67,6 +95,10 @@ describe('Testing Left Drawer component', () => {
     expect(screen.getByText('Requests')).toBeInTheDocument();
     expect(screen.getByText('Roles')).toBeInTheDocument();
     expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
+
+    expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
+    expect(screen.getByText(/Superadmin/i)).toBeInTheDocument();
+    expect(screen.getByAltText(/dummy picture/i)).toBeInTheDocument();
 
     const orgsBtn = screen.getByTestId(/orgsBtn/i);
     const requestsBtn = screen.getByTestId(/requestsBtn/i);
@@ -189,5 +221,43 @@ describe('Testing Left Drawer component', () => {
     );
 
     userEvent.click(screen.getByTestId('logoutBtn'));
+  });
+});
+
+describe('Testing Left Drawer component for ADMIN', () => {
+  test('Components should be rendered properly', () => {
+    localStorage.setItem('UserType', 'ADMIN');
+    render(
+      <BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <LeftDrawer {...propsAdmin} />
+        </I18nextProvider>
+      </BrowserRouter>
+    );
+
+    expect(screen.getByText('Organizations')).toBeInTheDocument();
+    expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
+
+    expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/admin/i)).toHaveLength(2);
+    expect(screen.getByAltText(/profile picture/i)).toBeInTheDocument();
+
+    const orgsBtn = screen.getByTestId(/orgsBtn/i);
+
+    expect(
+      orgsBtn.className.includes('text-white btn btn-success')
+    ).toBeTruthy();
+
+    // These screens arent meant for admins so they should not be present
+    expect(screen.queryByTestId(/rolesBtn/i)).toBeNull();
+    expect(screen.queryByTestId(/requestsBtn/i)).toBeNull();
+
+    // Coming soon
+    userEvent.click(screen.getByTestId(/profileBtn/i));
+    expect(toast.success).toHaveBeenCalledWith('Profile page coming soon!');
+
+    // Send to roles screen
+    userEvent.click(orgsBtn);
+    expect(global.window.location.pathname).toContain('/orglist');
   });
 });
