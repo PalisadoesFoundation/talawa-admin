@@ -17,6 +17,16 @@
   object-fit: cover;
   position: relative;
 }
+.nopostimage {
+  border-radius: 0px;
+  width: 100%;
+  height: 12rem;
+  max-width: 20rem;
+  max-height: 12rem;
+  object-fit: cover;
+  position: relative;
+  background-color: black;
+}
 .cards:hover {
   filter: brightness(0.8);
 }

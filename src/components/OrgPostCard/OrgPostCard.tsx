@@ -11,6 +11,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import {
   DELETE_POST_MUTATION,
   UPDATE_POST_MUTATION,
+  TOGGLE_PINNED_POST,
 } from 'GraphQl/Mutations/mutations';
 import defaultImg from 'assets/images/blank.png';
 import { useTranslation } from 'react-i18next';
@@ -39,7 +40,22 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
-
+  const [toggle] = useMutation(TOGGLE_PINNED_POST);
+  const togglePostPin = async (id: string): Promise<void> => {
+    try {
+      const { data } = await toggle({
+        variables: {
+          id,
+        },
+      });
+      if (data) {
+        console.log(data);
+      }
+    } catch (error: any) {
+      /* istanbul ignore next */
+      errorHandler(t, error);
+    }
+  };
   const toggleShowEditModal = (): void => setShowEditModal((prev) => !prev);
   const toggleShowDeleteModal = (): void => setShowDeleteModal((prev) => !prev);
 
@@ -167,7 +183,7 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                   variant="top"
                   src={defaultImg}
                   alt="image not found"
-                  className={styles.postimage}
+                  className={styles.nopostimage}
                 />
                 <Card.Body>
                   <Card.Title className={styles.title}>
@@ -258,7 +274,9 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                 >
                   Delete Post{' '}
                 </li>
-                <li>Pin post</li>
+                <li onClick={(): Promise<void> => togglePostPin(props.id)}>
+                  Pin post
+                </li>
                 <li>Report</li>
                 <li>Share</li>
                 <li
