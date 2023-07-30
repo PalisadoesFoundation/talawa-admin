@@ -232,7 +232,7 @@ describe('Testing Roles screen', () => {
     );
 
     await wait();
-    expect(screen.getAllByText(/Roles/i)).toBeTruthy();
+    expect(screen.getAllByText(/Users List/i)).toBeTruthy();
     expect(window.location).toBeAt('/orglist');
   });
 
