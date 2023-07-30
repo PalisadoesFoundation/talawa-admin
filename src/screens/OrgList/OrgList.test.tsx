@@ -12,7 +12,6 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrgList from './OrgList';
 import { MOCKS, MOCKS_ADMIN, MOCKS_EMPTY } from './OrgListMocks';
-import { debug } from 'jest-preview';
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -56,7 +55,6 @@ describe('Organisations Page testing as SuperAdmin', () => {
     const searchBar = screen.getByTestId(/searchByName/i);
     expect(searchBar).toBeInTheDocument();
     userEvent.type(searchBar, 'Dummy');
-    debug();
   });
 
   test('Should render no organisation warning alert when there are no organization', async () => {
@@ -159,23 +157,23 @@ describe('Organisations Page testing as SuperAdmin', () => {
       userEvent.upload(screen.getByLabelText(/Display Image/i), formData.image);
 
       await wait(500);
-
-      expect(screen.getByTestId(/modalOrganizationName/i)).toHaveValue(
-        formData.name
-      );
-      expect(screen.getByPlaceholderText(/Description/i)).toHaveValue(
-        formData.description
-      );
-      expect(screen.getByPlaceholderText(/Location/i)).toHaveValue(
-        formData.location
-      );
-      expect(screen.getByTestId(/isPublic/i)).not.toBeChecked();
-      expect(screen.getByTestId(/visibleInSearch/i)).toBeChecked();
-      expect(screen.getByLabelText(/Display Image/i)).toBeTruthy();
-
-      userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
     });
-  });
+
+    expect(screen.getByTestId(/modalOrganizationName/i)).toHaveValue(
+      formData.name
+    );
+    expect(screen.getByPlaceholderText(/Description/i)).toHaveValue(
+      formData.description
+    );
+    expect(screen.getByPlaceholderText(/Location/i)).toHaveValue(
+      formData.location
+    );
+    expect(screen.getByTestId(/isPublic/i)).not.toBeChecked();
+    expect(screen.getByTestId(/visibleInSearch/i)).toBeChecked();
+    expect(screen.getByLabelText(/Display Image/i)).toBeTruthy();
+
+    userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
+  },10000);
 });
 
 describe('Organisations Page testing as Admin', () => {

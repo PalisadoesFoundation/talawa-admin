@@ -9,7 +9,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import OrgListCard from 'components/OrgListCard/OrgListCard';
 import type { ChangeEvent } from 'react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Dropdown, Form, Row } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -33,7 +33,6 @@ function orgList(): JSX.Element {
 
   const [searchByName, setSearchByName] = useState('');
   const [showModal, setShowModal] = useState(false);
-
   const [formState, setFormState] = useState({
     name: '',
     descrip: '',
@@ -52,6 +51,7 @@ function orgList(): JSX.Element {
     error: errorUser,
   }: {
     data: InterfaceUserType | undefined;
+    loading: boolean;
     error?: Error | undefined;
   } = useQuery(USER_ORGANIZATION_LIST, {
     variables: { id: localStorage.getItem('id') },
@@ -70,6 +70,20 @@ function orgList(): JSX.Element {
   } = useQuery(ORGANIZATION_CONNECTION_LIST, {
     notifyOnNetworkStatusChange: true,
   });
+
+  useEffect(() => {
+    return () => {
+      setSearchByName('');
+      setFormState({
+        name: '',
+        descrip: '',
+        ispublic: true,
+        visible: false,
+        location: '',
+        image: '',
+      });
+    };
+  }, []);
 
   /* istanbul ignore next */
   const isAdminForCurrentOrg = (
@@ -203,7 +217,7 @@ function orgList(): JSX.Element {
                 </Dropdown.Menu>
               </Dropdown>
             </div>
-            {userData && userData?.user?.userType === 'SUPERADMIN' && (
+            {userData && userData.user.userType === 'SUPERADMIN' && (
               <Button
                 variant="success"
                 onClick={toggleModal}
@@ -229,9 +243,7 @@ function orgList(): JSX.Element {
           </div>
         ) : !loading &&
           orgsData?.organizationsConnection.length == 0 &&
-          /* istanbul ignore next */
           searchByName.length ? (
-          /* istanbul ignore next */
           // eslint-disable-next-line
           <div className={styles.notFound} data-testid="noResultFound">
             <h3 className="m-0">
