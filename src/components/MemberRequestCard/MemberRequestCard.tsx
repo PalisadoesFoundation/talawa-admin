@@ -10,7 +10,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import defaultImg from 'assets/third_image.png';
+import defaultImg from 'assets/images/blank.png';
 import { errorHandler } from 'utils/errorHandler';
 
 interface InterfaceMemberRequestCardProps {

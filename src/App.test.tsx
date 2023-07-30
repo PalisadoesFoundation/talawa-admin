@@ -5,7 +5,6 @@ import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import 'jest-location-mock';
-
 import App from './App';
 import { store } from 'state/store';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';

@@ -352,7 +352,7 @@ export const REJECT_ADMIN_MUTATION = gql`
  */
 export const UPDATE_INSTALL_STATUS_PLUGIN_MUTATION = gql`
   mutation update_install_status_plugin_mutation($id: ID!, $status: Boolean!) {
-    updateTempPluginStatus(id: $id, status: $status) {
+    updatePluginStatus(id: $id, status: $status) {
       _id
       pluginName
       pluginCreatedBy
@@ -364,11 +364,11 @@ export const UPDATE_INSTALL_STATUS_PLUGIN_MUTATION = gql`
 
 /**
  * @name UPDATE_ORG_STATUS_PLUGIN_MUTATION
- * @description used  `updateTempPluginInstalledOrgs`to add or remove the current Organization the in the plugin list `installedOrgs`
+ * @description used  `updatePluginInstalledOrgs`to add or remove the current Organization the in the plugin list `installedOrgs`
  */
 export const UPDATE_ORG_STATUS_PLUGIN_MUTATION = gql`
   mutation update_install_status_plugin_mutation($id: ID!, $orgId: ID!) {
-    updateTempPluginInstalledOrgs(id: $id, orgId: $orgId) {
+    updatePluginInstalledOrgs(id: $id, orgId: $orgId) {
       _id
       pluginName
       pluginCreatedBy
@@ -448,15 +448,17 @@ export const UPDATE_EVENT_MUTATION = gql`
   }
 `;
 
-export const UPDATE_SPAM_NOTIFICATION_MUTATION = gql`
-  mutation UpdateSpamNotification(
-    $orgId: ID!
-    $spamId: ID!
-    $isReaded: Boolean
-  ) {
-    updateSpamNotification(
-      data: { orgId: $orgId, spamId: $spamId, isReaded: $isReaded }
-    ) {
+export const LIKE_POST = gql`
+  mutation likePost($postId: ID!) {
+    likePost(id: $postId) {
+      _id
+    }
+  }
+`;
+
+export const UNLIKE_POST = gql`
+  mutation unlikePost($postId: ID!) {
+    unlikePost(id: $postId) {
       _id
     }
   }

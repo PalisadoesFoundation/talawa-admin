@@ -13,8 +13,9 @@ import { MEMBERSHIP_REQUEST } from 'GraphQl/Queries/Queries';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'state/reducers';
 import { useTranslation } from 'react-i18next';
-import defaultImg from 'assets/third_image.png';
+import defaultImg from 'assets/images/blank.png';
 import Button from 'react-bootstrap/Button';
+import Loader from 'components/Loader/Loader';
 
 function orgSettings(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -54,11 +55,7 @@ function orgSettings(): JSX.Element {
   });
 
   if (loading) {
-    return (
-      <>
-        <div className={styles.loader}></div>
-      </>
-    );
+    return <Loader />;
   }
 
   /* istanbul ignore next */

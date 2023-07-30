@@ -24,7 +24,9 @@
     "fillCorrectly": "Fill all the Details Correctly.",
     "notAuthorised": "Sorry! you are not Authorised!",
     "notFound": "User not found!",
-    "successfullyRegistered": "Successfully Registered. Please wait until you will be approved."
+    "successfullyRegistered": "Successfully Registered. Please wait until you will be approved.",
+    "login_to_admin_portal": "Admin Portal Login",
+    "OR": "OR"
   },
   "listNavbar": {
     "talawa_portal": "Talawa Admin Portal",
@@ -445,6 +447,80 @@
     "membershipRequests": "Membership requests",
     "adminForEvents": "Admin for events",
     "addedAsAdmin": "User is added as admin.",
-    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Kindly check your network connection and wait for a while."
+  },
+  "userLogin": {
+    "login": "Login",
+    "forgotPassword": "Forgot Password?",
+    "loginIntoYourAccount": "Login into your account",
+    "emailAddress": "Email Address",
+    "enterEmail": "Enter your email address",
+    "password": "Password",
+    "enterPassword": "Enter your password",
+    "register": "Register",
+    "invalidDetailsMessage": "Please enter a valid email and password.",
+    "notAuthorised": "Sorry! you are not Authorised!",
+    "invalidCredentials": "Entered credentials are incorrect. Please enter valid credentials.",
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Kindly check your network connection and wait for a while."
+  },
+  "userRegister": {
+    "register": "Register",
+    "firstName": "First Name",
+    "enterFirstName": "Enter your first name",
+    "lastName": "Last Name",
+    "enterLastName": "Enter your last name",
+    "emailAddress": "Email Address",
+    "enterEmail": "Enter your email address",
+    "password": "Password",
+    "enterPassword": "Enter your password",
+    "confirmPassword": "Confirm Password",
+    "enterConfirmPassword": "Enter your password to confirm",
+    "alreadyhaveAnAccount": "Already have an account?",
+    "login": "Login",
+    "afterRegister": "Successfully registered. Please wait for admin to approve your request.",
+    "passwordNotMatch": "Password doesn't match. Confirm Password and try again.",
+    "invalidDetailsMessage": "Please enter valid details.",
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Kindly check your network connection and wait for a while."
+  },
+  "userNavbar": {
+    "talawa": "Talawa",
+    "home": "Home",
+    "people": "People",
+    "events": "Events",
+    "chat": "Chat",
+    "donate": "Donate",
+    "myTasks": "My Tasks",
+    "settings": "Settings",
+    "language": "Language",
+    "logout": "Logout",
+    "close": "Close"
+  },
+  "userOrganizations": {
+    "allOrganizations": "All Organizations",
+    "joinedOrganizations": "Joined Organizations",
+    "createdOrganizations": "Created Organizations",
+    "search": "Search",
+    "nothingToShow": "Nothing to show here."
+  },
+  "userSidebar": {
+    "yourOrganizations": "Your Organizations",
+    "noOrganizations": "You haven't joined any organization yet.",
+    "viewAll": "View all"
+  },
+  "organizationSidebar": {
+    "viewAll": "View all",
+    "events": "Events",
+    "members": "Members",
+    "noEvents": "No Events to show",
+    "noMembers": "No Members to show"
+  },
+  "postCard": {
+    "likes": "Likes",
+    "comments": "Comments"
+  },
+  "home": {
+    "feed": "Feed",
+    "pinnedPosts": "View Pinned Posts",
+    "somethingOnYourMind": "Something on your mind?"
   }
 }

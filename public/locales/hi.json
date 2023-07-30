@@ -24,7 +24,9 @@
     "fillCorrectly": "सभी विवरण सही ढंग से भरें।",
     "notAuthorised": "क्षमा करें! आप अधिकृत नहीं हैं!",
     "notFound": "उपयोगकर्ता नहीं मिला!",
-    "successfullyRegistered": "सफलतापूर्वक पंजीकृत। कृपया स्वीकृत होने तक प्रतीक्षा करें।"
+    "successfullyRegistered": "सफलतापूर्वक पंजीकृत। कृपया स्वीकृत होने तक प्रतीक्षा करें।",
+    "login_to_admin_portal": "एडमिन पोर्टल लॉगिन",
+    "OR": "या"
   },
   "listNavbar": {
     "talawa_portal": "तलावा प्रशासन पोर्टल",
@@ -439,6 +441,80 @@
     "membershipRequests": "सदस्यता अनुरोध",
     "adminForEvents": "घटनाओं के लिए व्यवस्थापक",
     "addedAsAdmin": "उपयोगकर्ता को व्यवस्थापक के रूप में जोड़ा गया है।",
-    "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।"
+    "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। कृपया अपना नेटवर्क कनेक्शन जांचें और कुछ देर प्रतीक्षा करें।"
+  },
+  "userLogin": {
+    "login": "लॉगिन",
+    "forgotPassword": "पासवर्ड भूल गए ?",
+    "loginIntoYourAccount": "अपने खाते में प्रवेश करें",
+    "emailAddress": "ईमेल एड्रेस",
+    "enterEmail": "अपना ईमेल पता दर्ज करें",
+    "password": "पासवर्ड",
+    "enterPassword": "अपना पासवर्ड डालें",
+    "register": "रजिस्टर करें",
+    "invalidDetailsMessage": "कृपया एक वैध ईमेल और पासवर्ड दर्ज करें।",
+    "notAuthorised": "क्षमा मांगना! आप अधिकृत नहीं हैं!",
+    "invalidCredentials": "दर्ज क्रेडेंशियल्स गलत हैं। कृपया मान्य क्रेडेंशियल दर्ज करें।",
+    "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। कृपया अपना नेटवर्क कनेक्शन जांचें और कुछ देर प्रतीक्षा करें।"
+  },
+  "userRegister": {
+    "register": "रजिस्टर करें",
+    "firstName": "पहला नाम",
+    "enterFirstName": "अपना पहला नाम दर्ज करें",
+    "lastName": "अंतिम नाम",
+    "enterLastName": "अपना अंतिम नाम दर्ज करें",
+    "emailAddress": "ईमेल एड्रेस",
+    "enterEmail": "अपना ईमेल पता दर्ज करें",
+    "password": "पासवर्ड",
+    "enterPassword": "अपना पासवर्ड डालें",
+    "confirmPassword": "पासवर्ड की पुष्टि कीजिये",
+    "enterConfirmPassword": "पुष्टि करने के लिए अपना पासवर्ड दर्ज करें",
+    "alreadyhaveAnAccount": "क्या आपके पास पहले से एक खाता मौजूद है?",
+    "login": "लॉगिन",
+    "afterRegister": "पंजीकरण सफलतापूर्वक हो गया है। कृपया आपके अनुरोध को स्वीकार करने के लिए व्यवस्थापक की प्रतीक्षा करें।",
+    "passwordNotMatch": "पासवर्ड मेल नहीं खाता. पासवर्ड की पुष्टि करें और पुनः प्रयास करें।",
+    "invalidDetailsMessage": "कृपया मान्य विवरण दर्ज करें।",
+    "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। कृपया अपना नेटवर्क कनेक्शन जांचें और कुछ देर प्रतीक्षा करें।"
+  },
+  "userNavbar": {
+    "talawa": "तलावा",
+    "home": "घर",
+    "people": "लोग",
+    "events": "आयोजन",
+    "chat": "बातचीत",
+    "donate": "दान देना",
+    "myTasks": "मेरा काम",
+    "settings": "समायोजन",
+    "language": "भाषा",
+    "logout": "लॉग आउट",
+    "close": "बंद करना"
+  },
+  "userOrganizations": {
+    "allOrganizations": "सभी संगठन",
+    "joinedOrganizations": "संगठन शामिल हुए",
+    "createdOrganizations": "संगठन बनाये गये",
+    "search": "खोज",
+    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है."
+  },
+  "userSidebar": {
+    "yourOrganizations": "आपके संगठन",
+    "noOrganizations": "आप अभी तक किसी संगठन में शामिल नहीं हुए हैं.",
+    "viewAll": "सभी को देखें"
+  },
+  "organizationSidebar": {
+    "viewAll": "सभी को देखें",
+    "events": "आयोजन",
+    "members": "सदस्य",
+    "noEvents": "दिखाने के लिए कोई ईवेंट नहीं",
+    "noMembers": "दिखाने के लिए कोई सदस्य नहीं"
+  },
+  "postCard": {
+    "likes": "पसंद",
+    "comments": "टिप्पणियाँ"
+  },
+  "home": {
+    "feed": "फ़ीड",
+    "pinnedPosts": "पिन किए गए पोस्ट देखें",
+    "somethingOnYourMind": "आपके मन में कुछ है?"
   }
 }

@@ -190,31 +190,10 @@
   border-bottom: 3px solid #31bb6b;
   width: 40%;
 }
-form > label {
-  font-weight: bold;
-  padding-bottom: 1px;
-  font-size: 14px;
-  color: #707070;
-}
 .postinfo {
   height: 80px;
 }
-form > input,
-textarea {
-  display: block;
-  margin-bottom: 20px;
-  border: 1px solid #e8e5e5;
-  box-shadow: 2px 1px #e8e5e5;
-  padding: 10px 20px;
-  border-radius: 5px;
-  background: none;
-  width: 100%;
-  transition: all 0.3s ease-in-out;
-  -webkit-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-in-out;
-  -ms-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
-}
+
 .postinfo {
   height: 80px;
   margin-bottom: 20px;

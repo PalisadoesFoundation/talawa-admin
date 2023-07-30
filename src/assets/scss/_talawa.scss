@@ -1,0 +1,136 @@
+/*
+    TALAWA SCSS
+    -----------
+    This file is used to import all partial scss files in the project.
+    It is used to compile the final CSS file to the CSS folder as main.css .
+
+=========  Table of Contents  =========
+1. Components
+2. Content
+3. Forms
+4. Utilities
+5. General
+6. Colors
+
+*/
+
+/*
+
+    1. COMPONENTS
+
+*/
+
+//  1.1. Accordion
+@import './components/accordion';
+
+//  1.2. Alert
+@import './components/alert';
+
+//  1.3. Badge
+@import './components/badge';
+
+//  1.4. Breadcrumb
+@import './components/breadcrumb';
+
+//  1.5. Button
+@import './components/buttons';
+
+//  1.6. Card
+@import './components/card';
+
+//  1.7. Carousel
+@import './components/carousel';
+
+//  1.8. Close
+@import './components/close';
+
+//  1.9. Dropdown
+@import './components/dropdown';
+
+//  1.10. List Group
+@import './components/list-group';
+
+//  1.11. Modal
+@import './components/modal';
+
+//  1.12. Navbar
+@import './components/navbar';
+
+//  1.13. Nav and Nav Tabs
+@import './components/nav';
+
+//  1.14 Offcanvas
+@import './components/offcanvas';
+
+//  1.15 Pagination
+@import './components/pagination';
+
+//  1.16 Placeholder
+@import './components/placeholder';
+
+//  1.17 Progress
+@import './components/progress';
+
+//  1.18 Spinners
+@import './components/spinners';
+
+/*
+
+    2. CONTENT
+
+*/
+
+//  2.1. Table
+@import './content/table';
+
+//  2.2. Typography
+@import './content/typography';
+
+/*
+
+    3. FORMS
+
+*/
+
+//  3.1. Checkbox & Radio
+@import './forms/check-radios';
+
+//  3.2. Floating Labels
+@import './forms/floating-label';
+
+//  3.3. Form Controls
+@import './forms/form-control';
+
+//  3.4. Input Group
+@import './forms/input-group';
+
+//  3.5. Range
+@import './forms/range';
+
+//  3.6. Select
+@import './forms/select';
+
+//  3.7. Validation
+@import './forms/validation';
+
+/*
+
+    4. UTILITIES
+
+*/
+
+@import './utilities';
+
+/*
+
+    5. General
+
+*/
+@import './general';
+
+/*
+
+    6. COLORS
+
+*/
+@import './colors';
