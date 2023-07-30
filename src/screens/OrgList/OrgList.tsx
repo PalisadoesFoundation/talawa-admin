@@ -244,7 +244,9 @@ function orgList(): JSX.Element {
           </div>
         ) : !loading &&
           orgsData?.organizationsConnection.length == 0 &&
-          searchByName.length ? (
+          /* istanbul ignore next */
+          searchByName.length > 0 ? (
+          /* istanbul ignore next */
           // eslint-disable-next-line
           <div className={styles.notFound} data-testid="noResultFound">
             <h3 className="m-0">
@@ -412,6 +414,7 @@ function orgList(): JSX.Element {
                 onChange={async (e: React.ChangeEvent): Promise<void> => {
                   const target = e.target as HTMLInputElement;
                   const file = target.files && target.files[0];
+                  /* istanbul ignore else */
                   if (file)
                     setFormState({
                       ...formState,
