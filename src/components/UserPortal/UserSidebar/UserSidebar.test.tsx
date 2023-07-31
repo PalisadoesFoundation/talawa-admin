@@ -133,6 +133,23 @@ const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS,
+      variables: {
+        id: '3',
+      },
+    },
+    result: {
+      data: {
+        users: [
+          {
+            joinedOrganizations: [],
+          },
+        ],
+      },
+    },
+  },
 ];
 
 const link = new StaticMockLink(MOCKS, true);
@@ -189,6 +206,30 @@ describe('Testing UserSidebar Component [User Portal]', () => {
     const beforeUserId = localStorage.getItem('userId');
 
     localStorage.setItem('userId', '2');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebar />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    if (beforeUserId) {
+      localStorage.setItem('userId', beforeUserId);
+    }
+  });
+
+  test('Component should be rendered properly when joinedOrganizations list is empty', async () => {
+    const beforeUserId = localStorage.getItem('userId');
+
+    localStorage.setItem('userId', '3');
 
     render(
       <MockedProvider addTypename={false} link={link}>

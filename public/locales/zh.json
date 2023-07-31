@@ -24,7 +24,9 @@
     "fillCorrectly": "正確填寫所有細節。",
     "notAuthorised": "抱歉！你沒有被授權！",
     "notFound": "找不到用戶！",
-    "successfullyRegistered": "註冊成功，請等待審核通過。"
+    "successfullyRegistered": "註冊成功，請等待審核通過。",
+    "login_to_admin_portal": " 管理员门户登录 ",
+    "OR": "或者"
   },
   "listNavbar": {
     "talawa_portal": "塔拉瓦管理門戶",
@@ -500,5 +502,21 @@
     "yourOrganizations": "您的組織",
     "noOrganizations": "您還沒有加入任何組織。",
     "viewAll": "查看全部"
+  },
+  "organizationSidebar": {
+    "viewAll": "查看全部",
+    "events": "事件",
+    "members": "成员",
+    "noEvents": "沒有可顯示的活動",
+    "noMembers": "沒有可顯示的會員"
+  },
+  "postCard": {
+    "likes": "喜歡",
+    "comments": "評論"
+  },
+  "home": {
+    "feed": "餵養",
+    "pinnedPosts": "查看固定帖子",
+    "somethingOnYourMind": "你有什麼心事嗎？"
   }
 }

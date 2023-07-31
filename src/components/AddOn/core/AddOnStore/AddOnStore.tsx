@@ -21,6 +21,7 @@ import AddOnRegister from '../AddOnRegister/AddOnRegister';
 import PluginHelper from 'components/AddOn/support/services/Plugin.helper';
 import { store } from './../../../../state/store';
 import { useTranslation } from 'react-i18next';
+import Loader from 'components/Loader/Loader';
 
 function addOnStore(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'addOnStore' });

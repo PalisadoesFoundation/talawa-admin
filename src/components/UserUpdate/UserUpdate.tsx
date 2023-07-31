@@ -11,6 +11,7 @@ import { languages } from 'utils/languages';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import { Form } from 'react-bootstrap';
+import Loader from 'components/Loader/Loader';
 
 interface InterfaceUserUpdateProps {
   id: string;
@@ -54,11 +55,7 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
   }, [data]);
 
   if (loading) {
-    return (
-      <>
-        <div className={styles.loader}></div>
-      </>
-    );
+    return <Loader />;
   }
 
   /* istanbul ignore next */

@@ -13,6 +13,7 @@ import { useQuery } from '@apollo/client';
 import { SearchOutlined } from '@mui/icons-material';
 import styles from './Organizations.module.css';
 import { useTranslation } from 'react-i18next';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 
 interface InterfaceOrganizationCardProps {
   id: string;
@@ -40,7 +41,11 @@ export default function organizations(): JSX.Element {
 
   const userId: string | null = localStorage.getItem('userId');
 
-  const { data, refetch } = useQuery(USER_ORGANIZATION_CONNECTION, {
+  const {
+    data,
+    refetch,
+    loading: loadingOrganizations,
+  } = useQuery(USER_ORGANIZATION_CONNECTION, {
     variables: { filter: filterName },
   });
 
@@ -161,25 +166,34 @@ export default function organizations(): JSX.Element {
             <div
               className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
             >
-              {organizations && organizations.length > 0 ? (
-                (rowsPerPage > 0
-                  ? organizations.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
-                    )
-                  : /* istanbul ignore next */
-                    organizations
-                ).map((organization: any, index) => {
-                  const cardProps: InterfaceOrganizationCardProps = {
-                    name: organization.name,
-                    image: organization.image,
-                    id: organization._id,
-                    description: organization.description,
-                  };
-                  return <OrganizationCard key={index} {...cardProps} />;
-                })
+              {loadingOrganizations ? (
+                <div className={`d-flex flex-row justify-content-center`}>
+                  <HourglassBottomIcon /> <span>Loading...</span>
+                </div>
               ) : (
-                <span>{t('nothingToShow')}</span>
+                <>
+                  {' '}
+                  {organizations && organizations.length > 0 ? (
+                    (rowsPerPage > 0
+                      ? organizations.slice(
+                          page * rowsPerPage,
+                          page * rowsPerPage + rowsPerPage
+                        )
+                      : /* istanbul ignore next */
+                        organizations
+                    ).map((organization: any, index) => {
+                      const cardProps: InterfaceOrganizationCardProps = {
+                        name: organization.name,
+                        image: organization.image,
+                        id: organization._id,
+                        description: organization.description,
+                      };
+                      return <OrganizationCard key={index} {...cardProps} />;
+                    })
+                  ) : (
+                    <span>{t('nothingToShow')}</span>
+                  )}
+                </>
               )}
             </div>
             <table>

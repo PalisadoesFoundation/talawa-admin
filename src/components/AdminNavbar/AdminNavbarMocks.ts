@@ -1,5 +1,4 @@
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
-import { UPDATE_SPAM_NOTIFICATION_MUTATION } from 'GraphQl/Mutations/mutations';
 
 // Has no placeholder image
 export const MOCKS = [
@@ -68,19 +67,6 @@ export const MOCKS = [
             ],
           },
         ],
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_SPAM_NOTIFICATION_MUTATION,
-      variables: { orgId: undefined, spamId: '6954', isReaded: true },
-    },
-    result: {
-      data: {
-        updateSpamNotification: {
-          _id: '900',
-        },
       },
     },
   },
@@ -153,19 +139,6 @@ export const MOCKS_WITH_IMAGE = [
             ],
           },
         ],
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_SPAM_NOTIFICATION_MUTATION,
-      variables: { orgId: undefined, spamId: '6954', isReaded: true },
-    },
-    result: {
-      data: {
-        updateSpamNotification: {
-          _id: '900',
-        },
       },
     },
   },

@@ -1,19 +1,19 @@
-import React from 'react';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { render, screen, fireEvent, act } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 
-import AdminNavbar from './AdminNavbar';
 import { store } from 'state/store';
-import i18nForTest from 'utils/i18nForTest';
-import { MOCKS } from './AdminNavbarMocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import i18nForTest from 'utils/i18nForTest';
+import AdminNavbar from './AdminNavbar';
+import { MOCKS } from './AdminNavbarMocks';
 const link1 = new StaticMockLink(MOCKS, true);
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -89,7 +89,6 @@ describe('Testing Admin Navbar', () => {
     expect(screen.getByTestId('dropdownIcon')).toBeTruthy();
     expect(screen.getByText('Plugin Store')).toBeInTheDocument();
     expect(screen.getByTestId('logoutDropdown')).toBeTruthy();
-    expect(screen.getByText('Notification')).toBeInTheDocument();
     expect(screen.getByText('Settings')).toBeInTheDocument();
     expect(screen.getByText('Logout')).toBeInTheDocument();
 
@@ -207,9 +206,7 @@ describe('Testing Admin Navbar', () => {
 
     expect(container.textContent).not.toBe('Loading data...');
     await wait();
-    const imageOptions = screen.getByTestId(/navbarOrgImageAbsent/i);
     const imageLogo = screen.getByTestId(/orgLogoAbsent/i);
     expect(imageLogo).toBeInTheDocument();
-    expect(imageOptions).toBeInTheDocument();
   });
 });

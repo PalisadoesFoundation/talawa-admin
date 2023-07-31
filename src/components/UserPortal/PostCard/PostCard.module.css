@@ -1,0 +1,29 @@
+.cardActions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1px;
+}
+
+.cardActionBtn {
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  color: black;
+}
+
+.cardActionBtn:hover {
+  background-color: ghostwhite;
+  border: none;
+  color: black !important;
+}
+
+.imageContainer {
+  max-width: 100%;
+}
+
+.cardHeader {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}

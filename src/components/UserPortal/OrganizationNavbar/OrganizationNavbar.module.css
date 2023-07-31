@@ -1,0 +1,27 @@
+.talawaImage {
+  width: 40px;
+  height: auto;
+  margin-top: -5px;
+  border: 2px solid white;
+  margin-right: 10px;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.colorWhite {
+  color: white;
+}
+
+.colorPrimary {
+  background: #31bb6b;
+}
+
+.offcanvasContainer {
+  background-color: #31bb6b;
+  color: white;
+}
+
+.link {
+  text-decoration: none !important;
+  color: inherit;
+}

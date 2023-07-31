@@ -22,6 +22,7 @@ import convertToBase64 from 'utils/convertToBase64';
 import NotFound from 'components/NotFound/NotFound';
 import { Form as StyleBox } from 'react-bootstrap';
 import { errorHandler } from 'utils/errorHandler';
+import Loader from 'components/Loader/Loader';
 
 function orgPost(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -108,11 +109,7 @@ function orgPost(): JSX.Element {
   };
 
   if (createPostLoading || orgPostListLoading) {
-    return (
-      <>
-        <div className={styles.loader}></div>
-      </>
-    );
+    return <Loader />;
   }
 
   /* istanbul ignore next */

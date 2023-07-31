@@ -166,7 +166,7 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    expect(screen.getByText(/Talawa Admin Portal/i)).toBeInTheDocument();
+    expect(screen.getByText(/Admin Portal/i)).toBeInTheDocument();
     expect(window.location).toBeAt('/orglist');
   });
 
@@ -193,6 +193,10 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
+    userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+
+    await wait();
+
     userEvent.type(
       screen.getByPlaceholderText(/First Name/i),
       formData.firstName
@@ -201,7 +205,7 @@ describe('Testing Login Page Screen', () => {
       screen.getByPlaceholderText(/Last name/i),
       formData.lastName
     );
-    userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
+    userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
     userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
     userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
@@ -234,6 +238,8 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
+    userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+
     userEvent.type(
       screen.getByPlaceholderText(/First Name/i),
       formData.firstName
@@ -242,7 +248,7 @@ describe('Testing Login Page Screen', () => {
       screen.getByPlaceholderText(/Last Name/i),
       formData.lastName
     );
-    userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
+    userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
     userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
     userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
@@ -275,6 +281,8 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
+    userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+
     userEvent.type(
       screen.getByPlaceholderText(/First Name/i),
       formData.firstName
@@ -283,7 +291,7 @@ describe('Testing Login Page Screen', () => {
       screen.getByPlaceholderText(/Last Name/i),
       formData.lastName
     );
-    userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
+    userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
     userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
     userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
@@ -293,7 +301,7 @@ describe('Testing Login Page Screen', () => {
     userEvent.click(screen.getByTestId('registrationBtn'));
   });
 
-  test('Testing login modal', async () => {
+  test('Testing toggle login register portion', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -308,9 +316,9 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('loginModalBtn'));
+    userEvent.click(screen.getByTestId('goToRegisterPortion'));
 
-    userEvent.click(screen.getByTestId('hideModalBtn'));
+    userEvent.click(screen.getByTestId('goToLoginPortion'));
 
     await wait();
   });
@@ -335,9 +343,7 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('loginModalBtn'));
-
-    userEvent.type(screen.getByPlaceholderText(/Enter Email/i), formData.email);
+    userEvent.type(screen.getByTestId(/loginEmail/i), formData.email);
     userEvent.type(
       screen.getByPlaceholderText(/Enter Password/i),
       formData.password
@@ -348,7 +354,7 @@ describe('Testing Login Page Screen', () => {
     await wait();
   });
 
-  test('Testing change language functionality', async () => {
+  test('Testing password preview feature for login', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -362,52 +368,39 @@ describe('Testing Login Page Screen', () => {
     );
 
     await wait();
-
-    userEvent.click(screen.getByTestId('languageDropdownBtn'));
-    userEvent.click(screen.getByTestId('changeLanguageBtn1'));
-    userEvent.click(screen.getByTestId('changeLanguageBtn2'));
-    userEvent.click(screen.getByTestId('changeLanguageBtn3'));
-    userEvent.click(screen.getByTestId('changeLanguageBtn4'));
-  });
-
-  test('Testing when language cookie is not set', async () => {
-    Object.defineProperty(window.document, 'cookie', {
-      writable: true,
-      value: 'i18next=',
-    });
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-  });
-
-  test('Testing password preview feature', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-    userEvent.click(screen.getByTestId('loginModalBtn'));
 
     const input = screen.getByTestId('password') as HTMLInputElement;
+    const toggleText = screen.getByTestId('showLoginPassword');
+    // password should be hidden
+    expect(input.type).toBe('password');
+    // click the toggle button to show password
+    userEvent.click(toggleText);
+    expect(input.type).toBe('text');
+    // click the toggle button to hide password
+    userEvent.click(toggleText);
+    expect(input.type).toBe('password');
+
+    await wait();
+  });
+
+  test('Testing password preview feature for register', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('goToRegisterPortion'));
+
+    const input = screen.getByTestId('passwordField') as HTMLInputElement;
     const toggleText = screen.getByTestId('showPassword');
     // password should be hidden
     expect(input.type).toBe('password');
@@ -436,8 +429,10 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
+    userEvent.click(screen.getByTestId('goToRegisterPortion'));
+
     const input = screen.getByTestId('cpassword') as HTMLInputElement;
-    const toggleText = screen.getByTestId('showPasswordrCon');
+    const toggleText = screen.getByTestId('showPasswordCon');
     // password should be hidden
     expect(input.type).toBe('password');
     // click the toggle button to show password
@@ -485,6 +480,8 @@ describe('Testing Login Page Screen', () => {
     );
     await wait();
 
+    userEvent.click(screen.getByTestId('goToRegisterPortion'));
+
     userEvent.type(screen.getByPlaceholderText('Password'), password.password);
 
     expect(screen.getByTestId('passwordField')).toHaveFocus();
@@ -511,6 +508,8 @@ describe('Testing Login Page Screen', () => {
       </MockedProvider>
     );
     await wait();
+
+    userEvent.click(screen.getByTestId('goToRegisterPortion'));
 
     userEvent.type(screen.getByPlaceholderText('Password'), password.password);
 
@@ -539,6 +538,8 @@ describe('Testing Login Page Screen', () => {
     );
     await wait();
 
+    userEvent.click(screen.getByTestId('goToRegisterPortion'));
+
     expect(screen.getByPlaceholderText('Password')).not.toHaveFocus();
 
     userEvent.type(screen.getByPlaceholderText('Password'), password.password);
@@ -564,6 +565,10 @@ describe('Testing Login Page Screen', () => {
         </BrowserRouter>
       </MockedProvider>
     );
+    await wait();
+
+    userEvent.click(screen.getByTestId('goToRegisterPortion'));
+
     await wait();
 
     expect(screen.getByPlaceholderText('Password')).not.toHaveFocus();
