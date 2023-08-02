@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-
+import Dropdown from 'react-bootstrap/Dropdown';
 import styles from './OrgPost.module.css';
 import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
@@ -19,8 +19,18 @@ import type { RootState } from 'state/reducers';
 import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
 import NotFound from 'components/NotFound/NotFound';
-import { Form as StyleBox } from 'react-bootstrap';
 import { errorHandler } from 'utils/errorHandler';
+
+interface InterfaceOrgPost {
+  _id: string;
+  title: string;
+  text: string;
+  imageUrl: string;
+  videoUrl: string;
+  organizationId: string;
+  creator: { firstName: string; lastName: string };
+  pinned: boolean;
+}
 
 function orgPost(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -70,6 +80,7 @@ function orgPost(): JSX.Element {
       posttitle: _posttitle,
       postinfo: _postinfo,
       postImage,
+      postVideo,
     } = postformState;
 
     const posttitle = _posttitle.trim();
@@ -85,10 +96,9 @@ function orgPost(): JSX.Element {
           title: posttitle,
           text: postinfo,
           organizationId: currentUrl,
-          file: postImage,
+          file: postImage || postVideo,
         },
       });
-      console.log(data, postImage);
       /* istanbul ignore next */
       if (data) {
         toast.success('Congratulations! You have Posted Something.');
@@ -131,13 +141,27 @@ function orgPost(): JSX.Element {
   };
 
   const debouncedHandleSearch = debounce(handleSearch);
+  const sortedPostsList: InterfaceOrgPost[] = [
+    ...orgPostListData.postsByOrganizationConnection.edges,
+  ];
 
+  sortedPostsList.sort((a: InterfaceOrgPost, b: InterfaceOrgPost) => {
+    if (a.pinned === b.pinned) {
+      return 0;
+    }
+
+    if (a.pinned) {
+      return -1;
+    }
+
+    return 1;
+  });
   return (
     <>
       <AdminNavbar targets={targets} url1={configUrl} />
       <Row className={styles.head}>
         <Col sm={3}>
-          <div className={styles.sidebar}>
+          {/* <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
               <h6 className={styles.searchtitle}>{t('searchPost')}</h6>
               <div className={styles.checkboxdiv}>
@@ -149,7 +173,6 @@ function orgPost(): JSX.Element {
                     type="radio"
                     value="searchTitle"
                     onChange={searchChange}
-                    checked={showTitle}
                     className={styles.actionradio}
                     id={`inline-radio-1`}
                   />
@@ -166,33 +189,54 @@ function orgPost(): JSX.Element {
                   />
                 </div>
               </div>
-              <Form.Control
-                type="text"
-                id="posttitle"
-                placeholder={showTitle ? t('searchTitle') : t('searchText')}
-                autoComplete="off"
-                onChange={debouncedHandleSearch}
-              />
             </div>
-          </div>
+          </div> */}
         </Col>
         <Col sm={8}>
+          <p className={styles.logintitle}>{t('posts')}</p>
+
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
-              <p className={styles.logintitle}>{t('posts')}</p>
-              <Button
-                variant="success"
-                className={styles.addbtn}
-                onClick={showInviteModal}
-                data-testid="createPostModalBtn"
-              >
-                + {t('createPost')}
-              </Button>
+              <Col sm={4}>
+                <Form.Control
+                  type="text"
+                  id="posttitle"
+                  placeholder={showTitle ? t('searchTitle') : t('searchText')}
+                  autoComplete="off"
+                  onChange={debouncedHandleSearch}
+                />
+              </Col>
+              <Col sm={4}>
+                <Dropdown>
+                  <Dropdown.Toggle variant="success" id="dropdown-basic">
+                    Search By{' '}
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu>
+                    <Dropdown.Item onClick={searchChange} value="searchTitle">
+                      Title
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={searchChange} value="searchText">
+                      Text
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </Col>
+              <Col sm={4}>
+                <Button
+                  variant="success"
+                  className={styles.addbtn}
+                  onClick={showInviteModal}
+                  data-testid="createPostModalBtn"
+                >
+                  + {t('createPost')}
+                </Button>
+              </Col>
             </Row>
+
             <div className={`row ${styles.list_box}`}>
-              {orgPostListData &&
-              orgPostListData.postsByOrganizationConnection.edges.length > 0 ? (
-                orgPostListData.postsByOrganizationConnection.edges.map(
+              {sortedPostsList && sortedPostsList.length > 0 ? (
+                sortedPostsList.map(
                   (datas: {
                     _id: string;
                     title: string;
@@ -201,6 +245,7 @@ function orgPost(): JSX.Element {
                     videoUrl: string;
                     organizationId: string;
                     creator: { firstName: string; lastName: string };
+                    pinned: boolean;
                   }) => (
                     <OrgPostCard
                       key={datas._id}
@@ -210,6 +255,7 @@ function orgPost(): JSX.Element {
                       postAuthor={`${datas.creator.firstName} ${datas.creator.lastName}`}
                       postPhoto={datas.imageUrl}
                       postVideo={datas.videoUrl}
+                      pinned={datas.pinned}
                     />
                   )
                 )
@@ -317,7 +363,7 @@ function orgPost(): JSX.Element {
                 </label>
               </>
             )}
-            {/* {!postformState.postImage && (
+            {!postformState.postImage && (
               <>
                 <label htmlFor="postvideo">
                   {t('video')}:
@@ -328,14 +374,14 @@ function orgPost(): JSX.Element {
                     type="file"
                     placeholder={t('video')}
                     multiple={false}
-                    onChange={(
-                      e: React.ChangeEvent<HTMLInputElement>
-                    ): void => {
-                      const file = e.target.files?.[0];
+                    onChange={async (e: React.ChangeEvent): Promise<void> => {
+                      const target = e.target as HTMLInputElement;
+                      const file = target.files && target.files[0];
                       if (file) {
+                        const videoBase64 = await convertToBase64(file);
                         setPostFormState({
                           ...postformState,
-                          postVideo: URL.createObjectURL(file),
+                          postVideo: videoBase64,
                         });
                       }
                     }}
@@ -368,7 +414,7 @@ function orgPost(): JSX.Element {
                   </div>
                 )}
               </>
-            )} */}
+            )}
             <div className={styles.action}>
               <Button
                 type="submit"

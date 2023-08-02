@@ -27,12 +27,15 @@ interface InterfaceOrgPostCardProps {
   postAuthor: string;
   postPhoto: string;
   postVideo: string;
+  pinned: boolean;
 }
 
 function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
   const [postformState, setPostFormState] = useState({
     posttitle: '',
     postinfo: '',
+    postphoto: '',
+    postvideo: '',
   });
 
   const [togglePost, setPostToggle] = useState('Read more');
@@ -41,7 +44,7 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
   const [modalVisible, setModalVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
   const [toggle] = useMutation(TOGGLE_PINNED_POST);
-  const togglePostPin = async (id: string): Promise<void> => {
+  const togglePostPin = async (id: string, pinned: boolean): Promise<void> => {
     try {
       const { data } = await toggle({
         variables: {
@@ -50,6 +53,12 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
       });
       if (data) {
         console.log(data);
+        setModalVisible(false);
+        setMenuVisible(false);
+        toast.success(`${pinned ? 'Post unpinned' : 'Post pinned'}`);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -91,6 +100,8 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
     setPostFormState({
       posttitle: props.postTitle,
       postinfo: props.postInfo,
+      postphoto: props.postPhoto,
+      postvideo: props.postVideo,
     });
   }, []);
 
@@ -156,6 +167,24 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
     <>
       <div className="col-xl-4 col-lg-4 col-md-6">
         <div className={styles.cards} onClick={handleCardClick}>
+          {props.postVideo && (
+            <p>
+              <Card className={styles.card}>
+                <video autoPlay loop muted className={styles.postimage}>
+                  <source src={props?.postVideo} type="video/mp4" />
+                </video>
+                <Card.Body>
+                  <Card.Title className={styles.title}>
+                    {props.postTitle}
+                  </Card.Title>
+                  <Card.Text className={styles.text}>
+                    {props.postInfo}
+                  </Card.Text>
+                  <Card.Link>{props.postAuthor}</Card.Link>
+                </Card.Body>
+              </Card>
+            </p>
+          )}
           {props.postPhoto ? (
             <p>
               <Card className={styles.card}>
@@ -176,7 +205,7 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                 </Card.Body>
               </Card>
             </p>
-          ) : (
+          ) : !props.postVideo ? (
             <span>
               <Card className={styles.card}>
                 <Card.Img
@@ -200,14 +229,25 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                 </Card.Body>
               </Card>
             </span>
+          ) : (
+            ''
           )}
         </div>
         {modalVisible && (
           <div className={styles.modal} data-testid={'imagepreviewmodal'}>
             <div className={styles.modalContent}>
-              <div className={styles.modalImage}>
-                <img src={props.postPhoto} alt="Post Image" />
-              </div>
+              {props.postPhoto && (
+                <div className={styles.modalImage}>
+                  <img src={props.postPhoto} alt="Post Image" />
+                </div>
+              )}
+              {props.postVideo && (
+                <div className={styles.modalImage}>
+                  <video autoPlay loop muted>
+                    <source src={props?.postVideo} type="video/mp4" />
+                  </video>
+                </div>
+              )}
               <div className={styles.modalInfo}>
                 <p>
                   {t('author')}:<span> {props.postAuthor}</span>
@@ -274,8 +314,12 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                 >
                   Delete Post{' '}
                 </li>
-                <li onClick={(): Promise<void> => togglePostPin(props.id)}>
-                  Pin post
+                <li
+                  onClick={(): Promise<void> =>
+                    togglePostPin(props.id, props.pinned)
+                  }
+                >
+                  {!props.pinned ? 'Pin post' : 'Unpin post'}
                 </li>
                 <li>Report</li>
                 <li>Share</li>

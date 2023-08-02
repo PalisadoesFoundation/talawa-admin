@@ -85,7 +85,8 @@
   height: 15rem;
 }
 
-.modalImage img {
+.modalImage img,
+.modalImage video {
   border-radius: 0px;
   width: 100%;
   height: 25rem;

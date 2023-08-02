@@ -59,6 +59,7 @@ describe('Testing Organization Post Card', () => {
     postAuthor: 'John Doe',
     postPhoto: 'photoLink',
     postVideo: 'videoLink',
+    pinned: false,
   };
   jest.mock('react-toastify', () => ({
     toast: {
@@ -188,6 +189,7 @@ describe('Testing Organization Post Card', () => {
       postAuthor: 'John Doe',
       postPhoto: 'photoLink',
       postVideo: 'videoLink',
+      pinned: false,
     };
     render(
       <MockedProvider addTypename={false} link={link}>
