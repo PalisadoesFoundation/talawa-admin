@@ -1,5 +1,5 @@
 import type { ChangeEvent } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useMutation } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -17,7 +17,7 @@ import defaultImg from 'assets/images/blank.png';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './OrgPostCard.module.css';
-import { Form } from 'react-bootstrap';
+import { Badge, Form } from 'react-bootstrap';
 
 interface InterfaceOrgPostCardProps {
   key: string;
@@ -36,6 +36,7 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
     postinfo: '',
     postphoto: '',
     postvideo: '',
+    pinned: false,
   });
 
   const [togglePost, setPostToggle] = useState('Read more');
@@ -43,6 +44,8 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
+  const [playing, setPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   const [toggle] = useMutation(TOGGLE_PINNED_POST);
   const togglePostPin = async (id: string, pinned: boolean): Promise<void> => {
     try {
@@ -68,6 +71,15 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
   const toggleShowEditModal = (): void => setShowEditModal((prev) => !prev);
   const toggleShowDeleteModal = (): void => setShowDeleteModal((prev) => !prev);
 
+  const handleVideoPlay = (): void => {
+    setPlaying(true);
+    videoRef.current?.play();
+  };
+
+  const handleVideoPause = (): void => {
+    setPlaying(false);
+    videoRef.current?.pause();
+  };
   const handleCardClick = (): void => {
     setModalVisible(true);
   };
@@ -102,6 +114,7 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
       postinfo: props.postInfo,
       postphoto: props.postPhoto,
       postvideo: props.postVideo,
+      pinned: props.pinned,
     });
   }, []);
 
@@ -169,8 +182,19 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
         <div className={styles.cards} onClick={handleCardClick}>
           {props.postVideo && (
             <p>
-              <Card className={styles.card}>
-                <video autoPlay loop muted className={styles.postimage}>
+              <Card
+                className={styles.card}
+                onMouseEnter={handleVideoPlay}
+                onMouseLeave={handleVideoPause}
+              >
+                <video
+                  ref={videoRef}
+                  muted
+                  className={styles.postimage}
+                  autoPlay={playing}
+                  loop={true}
+                  playsInline
+                >
                   <source src={props?.postVideo} type="video/mp4" />
                 </video>
                 <Card.Body>
@@ -195,6 +219,11 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                   alt="image"
                 />
                 <Card.Body>
+                  {props.pinned && (
+                    <Badge className={styles.pinned} pill bg="success">
+                      Pinned
+                    </Badge>
+                  )}
                   <Card.Title className={styles.title}>
                     {props.postTitle}
                   </Card.Title>
@@ -226,6 +255,11 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                   <Card.Link className={styles.author}>
                     {props.postAuthor}
                   </Card.Link>
+                  {props.pinned && (
+                    <Button variant="warning" size="sm">
+                      Pinned
+                    </Button>
+                  )}
                 </Card.Body>
               </Card>
             </span>
@@ -243,7 +277,7 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
               )}
               {props.postVideo && (
                 <div className={styles.modalImage}>
-                  <video autoPlay loop muted>
+                  <video controls autoPlay loop muted>
                     <source src={props?.postVideo} type="video/mp4" />
                   </video>
                 </div>
@@ -321,7 +355,6 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                 >
                   {!props.pinned ? 'Pin post' : 'Unpin post'}
                 </li>
-                <li>Report</li>
                 <li>Share</li>
                 <li
                   className={styles.list}
