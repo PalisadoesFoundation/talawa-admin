@@ -24,6 +24,7 @@ import convertToBase64 from 'utils/convertToBase64';
 import AdminDashListCard from 'components/AdminDashListCard/AdminDashListCard';
 import { Alert, AlertTitle } from '@mui/material';
 import { errorHandler } from 'utils/errorHandler';
+import Loader from 'components/Loader/Loader';
 
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
@@ -136,11 +137,7 @@ function orgList(): JSX.Element {
   };
 
   if (loading || loading2 || loading3) {
-    return (
-      <>
-        <div className={styles.loader}></div>
-      </>
-    );
+    return <Loader />;
   }
 
   /* istanbul ignore next */

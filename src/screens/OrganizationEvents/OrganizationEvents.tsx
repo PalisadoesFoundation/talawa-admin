@@ -24,6 +24,7 @@ import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import type { RootState } from 'state/reducers';
 import dayjs from 'dayjs';
 import { errorHandler } from 'utils/errorHandler';
+import Loader from 'components/Loader/Loader';
 
 function organizationEvents(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -125,11 +126,7 @@ function organizationEvents(): JSX.Element {
   };
 
   if (loading || loading2) {
-    return (
-      <>
-        <div className={styles.loader}></div>
-      </>
-    );
+    return <Loader />;
   }
 
   /* istanbul ignore next */

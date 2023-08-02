@@ -1,388 +1,141 @@
-html {
-  overflow-x: hidden !important;
-}
-
-/* ===== Login Modal CSS Start ===== */
-
-.show {
-  position: absolute;
-  right: 10%;
-  font-weight: normal;
-  top: 40%;
-  cursor: pointer;
-}
-.showregister {
-  position: absolute;
-  right: 16%;
-  font-weight: normal;
-  cursor: pointer;
-  margin-top: -34px;
-}
-#grid_wrapper {
-  align-items: left;
-}
 .login_background {
-  overflow-x: hidden;
-  overflow-y: visible;
-  background-color: #fcfcfc;
-  height: 100%;
-  width: 100vw;
-  margin: 0;
-  background-repeat: no-repeat !important;
-  background-position: center !important;
-  background-size: cover !important;
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-}
-.flexdir {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  border: none;
+  min-height: 100vh;
 }
 
-.form_wrapper {
-  margin-top: 27px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  position: absolute;
+.row .left_portion {
   display: flex;
-  flex-direction: column;
-  padding: 40px 30px;
-  background: #ffffff;
-  border-color: #e8e5e5;
-  border-width: 5px;
-  border-radius: 10px;
-}
-
-.form_wrapper form {
-  display: flex;
-  align-items: left;
-  justify-content: left;
-  flex-direction: column;
-}
-.logintitle {
-  color: #707070;
-  font-weight: 600;
-  font-size: 20px;
-  margin-bottom: 20px;
-  padding-bottom: 5px;
-  border-bottom: 3px solid #31bb6b;
-  width: 50%;
-}
-form > label {
-  font-weight: bold;
-  padding-bottom: 1px;
-  font-size: 14px;
-  color: #707070;
-}
-
-form > input {
-  display: block;
-  margin-bottom: 20px;
-  border: 1px solid #e8e5e5;
-  box-shadow: 2px 1px #e8e5e5;
-  padding: 10px 20px;
-  border-radius: 5px;
-  background: none;
-  width: 100%;
-  transition: all 0.3s ease-in-out;
-  -webkit-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-in-out;
-  -ms-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
-}
-
-/* Animation */
-.animated_content {
-  display: flex;
-  align-items: center;
   justify-content: center;
-  animation: up-down 2s ease-in-out infinite alternate-reverse both;
-}
-
-.animated_content img {
-  height: 70vh;
-  width: 70vh;
-}
-
-.whiteloginbtn {
-  margin: 1rem 0 0;
-  margin-top: 10px;
-  border: 1px solid #e8e5e5;
-  box-shadow: 0 2px 2px #e8e5e5;
-  padding: 10px 20px;
-  border-radius: 5px;
-  background: none;
-  width: 100%;
-  font-size: 16px;
-  color: #31bb6b;
-  outline: none;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  width: 100%;
-}
-.whiteloginbtn:hover {
-  background-color: #737373;
-  color: white;
-}
-.greenregbtn {
-  margin: 1rem 0 0;
-  margin-top: 10px;
-  border: 1px solid #e8e5e5;
-  box-shadow: 0 2px 2px #e8e5e5;
-  padding: 10px 10px;
-  border-radius: 5px;
-  background-color: #31bb6b;
-  width: 100%;
-  font-size: 16px;
-  color: white;
-  outline: none;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  width: 100%;
-}
-.greenregbtn:hover {
-  color: #fff;
-  background-color: #1e7e34;
-  border-color: #1c7430;
-}
-
-.navloginbtn {
-  background-color: #31bb6b;
-  padding: 0.5em 1em;
-  margin-right: 3rem;
-  font-size: 16px;
-  color: white;
-  outline: none;
-  font-weight: normal;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  width: 130px;
-}
-.navloginbtn:hover {
-  color: #fff;
-  background-color: #1e7e34;
-  border-color: #1c7430;
-}
-.languageBtn {
-  font-size: 20px;
-  margin-right: 16px;
-  color: #31bb6b;
-}
-.languageBtn:hover {
-  color: #31bb6b;
-}
-.languageBtn:focus {
-  color: #31bb6b;
-}
-.forgotpwd {
-  text-align: right;
-  justify-content: right;
-  color: #707070;
-  font-size: 11px;
-  margin-top: 10px;
-  text-decoration: none !important;
-}
-form > hr {
-  margin-top: 20px;
-  margin-bottom: 0px;
-  border-bottom: 0rem solid #e8e5e5;
-}
-form > br {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  border-bottom: 0.2rem solid #e8e5e5;
-}
-
-.navbarbg {
-  /* height: 60px; */
-  padding: 0 1rem;
-  background-color: white;
-  display: flex;
-  margin-bottom: 30px;
-  z-index: 1;
-  position: relative;
-  flex-direction: row;
-  justify-content: space-between !important;
-  box-shadow: 0px 0px 8px 2px #c8c8c8;
-}
-
-.navbarBrand {
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
-.logo {
-  color: #707070;
-  margin-left: 0;
-  display: flex;
   align-items: center;
-  text-decoration: none !important;
+  flex-direction: column;
+  height: 100vh;
 }
 
-.logo img {
-  margin-top: 0px;
-  margin-left: 10px;
-  height: 64px;
-  width: 70px;
+.row .left_portion .inner .palisadoes_logo {
+  width: 600px;
 }
 
-.logo > strong {
-  line-height: 1.5rem;
-  margin-left: -5px;
-  font-family: sans-serif;
-  font-size: 19px;
-  color: #707070;
-}
-
-.cancel > i {
-  margin-top: 5px;
-  transform: scale(1.2);
-  cursor: pointer;
-  color: #707070;
-}
-.modalbody {
-  width: 50px;
-}
-
-.loader,
-.loader:after {
-  border-radius: 50%;
-  width: 10em;
-  height: 10em;
-}
-.loader {
-  margin: 60px auto;
-  margin-top: 35vh !important;
-  font-size: 10px;
+.row .right_portion {
+  height: 100vh;
   position: relative;
-  text-indent: -9999em;
-  border-top: 1.1em solid rgba(255, 255, 255, 0.2);
-  border-right: 1.1em solid rgba(255, 255, 255, 0.2);
-  border-bottom: 1.1em solid rgba(255, 255, 255, 0.2);
-  border-left: 1.1em solid #febc59;
-  -webkit-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  transform: translateZ(0);
-  -webkit-animation: load8 1.1s infinite linear;
-  animation: load8 1.1s infinite linear;
+  overflow-y: scroll;
+  padding: 1rem 2.5rem;
+  background: var(--bs-white);
 }
 
-@-webkit-keyframes load8 {
+.row .right_portion .langChangeBtn {
+  margin: 0;
+  position: absolute;
+  top: 1rem;
+  left: 2rem;
+}
+
+.row .right_portion .talawa_logo {
+  height: 150px;
+  display: block;
+  margin: 1rem auto;
+}
+
+.row .orText {
+  display: block;
+  position: absolute;
+  top: calc(-0.7rem - 0.5rem);
+  left: calc(50% - 2.6rem);
+  margin: 0 auto;
+  padding: 0.5rem 2rem;
+  z-index: 100;
+  background: var(--bs-white);
+  color: var(--bs-secondary);
+}
+
+@media (max-width: 992px) {
+  .row .left_portion {
+    padding: 0 2rem;
+  }
+
+  .row .left_portion .inner .palisadoes_logo {
+    width: 100%;
+  }
+}
+
+@media (max-width: 769px) {
+  .row {
+    flex-direction: column-reverse;
+  }
+
+  .row .right_portion,
+  .row .left_portion {
+    height: unset;
+  }
+
+  .row .right_portion {
+    min-height: 100vh;
+    overflow-y: unset;
+  }
+
+  .row .left_portion .inner {
+    display: flex;
+    justify-content: center;
+  }
+
+  .row .left_portion .inner .palisadoes_logo {
+    height: 70px;
+    width: unset;
+    position: absolute;
+    top: 0.25rem;
+    right: 0;
+    z-index: 100;
+  }
+
+  .row .left_portion .inner p {
+    margin-bottom: 0;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 577px) {
+  .row .right_portion {
+    padding: 1rem 1rem 0 1rem;
+  }
+
+  .row .right_portion .langChangeBtn {
+    position: relative;
+    margin: 0;
+    left: 0;
+    top: 0;
+  }
+
+  .row .right_portion .talawa_logo {
+    height: 120px;
+    margin: 0.75rem auto;
+  }
+}
+.active_tab {
+  -webkit-animation: fadeIn 0.3s ease-in-out;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@-webkit-keyframes fadeIn {
   0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
+    opacity: 0;
+    -webkit-transform: translateY(2rem);
+    transform: translateY(2rem);
   }
   100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
   }
 }
-@keyframes load8 {
+
+@keyframes fadeIn {
   0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
+    opacity: 0;
+    -webkit-transform: translateY(2rem);
+    transform: translateY(2rem);
   }
   100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
   }
 }
-
-@media only screen and (max-width: 600px) {
-  .form_wrapper {
-    width: 90%;
-    top: 45%;
-  }
-}
-
-/* ===== Login Modal CSS End ===== */
-/* ================================================= */
-/* ===== Home Page CSS Start ===== */
-/* .homeleft {
-  width: 55%;
-} */
-.rightmainbg {
-  border-top-left-radius: 10%;
-  height: 100%;
-  background-color: white;
-}
-/* .leftmainbg{
-  background-color: #fafafa;
-  border-bottom-right-radius: 10%;
-  z-index:-1;
-} */
-
-.homeright {
-  width: 80%;
-  margin-left: 40px;
-  margin-bottom: 30px;
-}
-
-.homeright > h1 {
-  font-size: 20px;
-  padding-top: 35px;
-  width: 17%;
-  padding-bottom: 6px;
-  border-bottom: 3px solid #31bb6b;
-  margin-bottom: 20px;
-}
-
-/* .homeright>h2{
-  width:75%;
-  font-size: 16px;
-  color: #707070;
-  padding-bottom: 5px;
-  border-bottom: 3px solid #31bb6b;
-  margin-bottom:20px;
-} */
-.dispflex {
-  display: flex;
-  flex-direction: row;
-}
-.dispflex > div {
-  width: 95%;
-  margin-right: 10px;
-}
-.passwordalert > input {
-  margin-bottom: 2px;
-}
-.passwordalert > span {
-  color: rgb(240, 48, 48);
-  font-size: 9px;
-  padding-bottom: 20px;
-}
-.homeright > form input {
-  background-color: white;
-  box-shadow: 1px 3px #e8e5e5;
-}
-.passwordalert {
-  margin-bottom: 15px;
-}
-.noaccount {
-  text-align: center;
-  color: #707070;
-  font-size: 11px;
-  margin-top: 10px;
-}
-
-@media only screen and (max-width: 600px) {
-  body::before {
-    height: 118px;
-  }
-  .navbarbg {
-    height: auto;
-  }
-  .languageBtn {
-    margin-bottom: 10px;
-  }
-}
-/* ===== Home Page CSS End ===== */

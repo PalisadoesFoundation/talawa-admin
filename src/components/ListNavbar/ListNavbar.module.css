@@ -1,5 +1,5 @@
 .navbarbgOrglist {
-  /* height:60px;  */
+  position: relative !important;
   padding: 0 1rem;
   background-color: white;
   display: flex;
@@ -101,9 +101,6 @@
 }
 
 @media only screen and (max-width: 600px) {
-  body::before {
-    height: 118px;
-  }
   .navbarbgOrglist {
     height: auto;
   }
