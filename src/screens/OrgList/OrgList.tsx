@@ -25,9 +25,29 @@ import AdminDashListCard from 'components/AdminDashListCard/AdminDashListCard';
 import { Alert, AlertTitle } from '@mui/material';
 import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
+import { Link } from 'react-router-dom';
 
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
+  const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  const [modalisOpen, setmodalIsOpen] = useState(false);
+  const [dialogRedirectOrgId, setDialogRedirectOrgId] = useState('<ORG_ID>');
+  /* eslint-disable @typescript-eslint/explicit-function-return-type */
+  function openDialogModal(redirectOrgId: string) {
+    setDialogRedirectOrgId(redirectOrgId);
+    // console.log(redirectOrgId, dialogRedirectOrgId);
+    setdialogModalIsOpen(true);
+  }
+  /* eslint-disable @typescript-eslint/explicit-function-return-type */
+  function afterOpenDialogModal() {
+    // references are now sync'd and can be accessed.
+    setmodalIsOpen(false);
+  }
+  /* eslint-disable @typescript-eslint/explicit-function-return-type */
+  function closeDialogModal() {
+    setdialogModalIsOpen(false);
+  }
 
   document.title = t('title');
 
@@ -48,6 +68,14 @@ function orgList(): JSX.Element {
 
   const toggleAddEventModal = (): void =>
     setShowAddEventModal(!showAddEventModal);
+  /* eslint-disable @typescript-eslint/explicit-function-return-type */
+  const showInviteModal = () => {
+    setmodalIsOpen(true);
+  };
+  /* eslint-disable @typescript-eslint/explicit-function-return-type */
+  const hideInviteModal = () => {
+    setmodalIsOpen(false);
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [create, { loading: loading3 }] = useMutation(
@@ -119,6 +147,8 @@ function orgList(): JSX.Element {
       /* istanbul ignore next */
       if (data) {
         toast.success('Congratulation the Organization is created');
+        openDialogModal(data.createOrganization._id);
+        console.log(data.createOrganization._id, data);
         refetch();
         setFormState({
           name: '',
@@ -129,6 +159,7 @@ function orgList(): JSX.Element {
           image: '',
         });
         toggleAddEventModal();
+        // setmodalIsOpen(false);
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -330,6 +361,59 @@ function orgList(): JSX.Element {
           </div>
         </Col>
       </Row>
+      <Modal
+        isOpen={dialogModalisOpen}
+        onAfterOpen={afterOpenDialogModal}
+        onRequestClose={closeDialogModal}
+        // style={{
+        //   overlay: { backgroundColor: 'grey' },
+        // }}
+        className={styles.modalbody}
+        contentLabel="Example Modal"
+      >
+        <section id={styles.grid_wrapper}>
+          <div className={styles.form_wrapper}>
+            <div className={styles.flexdir}>
+              <p className={styles.titlemodal}>{t('manageFeatures')}</p>
+              <a
+                onClick={hideInviteModal}
+                className={styles.cancel}
+                data-testid="closeOrganizationModal"
+              >
+                <i
+                  className="fa fa-times"
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                ></i>
+              </a>
+            </div>
+            <h4 className={styles.titlemodaldialog}>
+              {t('manageFeaturesInfo')}
+            </h4>
+
+            <div className={styles.pluginStoreBtnContainer}>
+              <Link
+                className={styles.secondbtn}
+                data-testid="submitOrganizationForm"
+                to={`orgstore/id=${dialogRedirectOrgId}`}
+              >
+                {t('goToStore')}
+              </Link>
+              {/* </button> */}
+              <button
+                type="submit"
+                className={styles.greenregbtn}
+                onClick={closeDialogModal}
+                value="invite"
+                data-testid="submitOrganizationForm"
+              >
+                {t('enableEverything')}
+              </button>
+            </div>
+          </div>
+        </section>
+      </Modal>
       <Modal show={showAddEventModal} onHide={toggleAddEventModal}>
         <Modal.Header>
           <p className={styles.titlemodal}>{t('createOrganization')}</p>
