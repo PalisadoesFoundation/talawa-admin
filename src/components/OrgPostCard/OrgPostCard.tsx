@@ -7,6 +7,7 @@ import Card from 'react-bootstrap/Card';
 import { toast } from 'react-toastify';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CloseIcon from '@mui/icons-material/Close';
+import convertToBase64 from 'utils/convertToBase64';
 
 import {
   DELETE_POST_MUTATION,
@@ -162,6 +163,8 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
           id: props.id,
           title: postformState.posttitle,
           text: postformState.postinfo,
+          imageUrl: postformState.postphoto,
+          videoUrl: postformState.postvideo,
         },
       });
 
@@ -433,34 +436,58 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                 required
               />
             </div>
-            <div className="form-group">
-              <label htmlFor="postImageUrl" className="col-form-label">
-                {t('image')}:
-              </label>
-              <Form.Control
-                accept="image/*"
-                id="postImageUrl"
-                name="postphoto"
-                type="file"
-                placeholder={t('image')}
-                multiple={false}
-                onChange={handleInputEvent}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="postVideoUrl" className="col-form-label">
-                {t('video')}:
-              </label>
-              <Form.Control
-                accept="video/*"
-                id="postVideoUrl"
-                name="postvideo"
-                type="file"
-                placeholder={t('video')}
-                multiple={false}
-                onChange={handleInputEvent}
-              />
-            </div>
+            {props.postPhoto && (
+              <div className="form-group">
+                <label htmlFor="postImageUrl" className="col-form-label">
+                  {t('image')}:
+                </label>
+                <Form.Control
+                  accept="image/*"
+                  id="postImageUrl"
+                  name="postphoto"
+                  type="file"
+                  placeholder={t('image')}
+                  multiple={false}
+                  onChange={async (
+                    e: React.ChangeEvent<HTMLInputElement>
+                  ): Promise<void> => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setPostFormState({
+                        ...postformState,
+                        postphoto: await convertToBase64(file),
+                      });
+                    }
+                  }}
+                />
+              </div>
+            )}
+            {props.postVideo && (
+              <div className="form-group">
+                <label htmlFor="postVideoUrl" className="col-form-label">
+                  {t('video')}:
+                </label>
+                <Form.Control
+                  accept="video/*"
+                  id="postVideoUrl"
+                  name="postvideo"
+                  type="file"
+                  placeholder={t('video')}
+                  multiple={false}
+                  onChange={async (e: React.ChangeEvent): Promise<void> => {
+                    const target = e.target as HTMLInputElement;
+                    const file = target.files && target.files[0];
+                    if (file) {
+                      const videoBase64 = await convertToBase64(file);
+                      setPostFormState({
+                        ...postformState,
+                        postvideo: videoBase64,
+                      });
+                    }
+                  }}
+                />
+              </div>
+            )}
           </Modal.Body>
           <Modal.Footer>
             <Button variant="danger" onClick={toggleShowEditModal}>
