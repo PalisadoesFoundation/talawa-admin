@@ -1,9 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import type { InterfaceTableCheckIn } from './types';
 import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import Stack from '@mui/material/Stack';
 import { useMutation } from '@apollo/client';
 import { MARK_CHECKIN } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
@@ -17,23 +14,17 @@ export const TableRow = ({
   data: InterfaceTableCheckIn;
   refetch: () => void;
 }): JSX.Element => {
-  const [allotedSeat, setAllotedSeat] = useState('');
-  const [allotedRoom, setAllotedRoom] = useState('');
-
   const [checkInMutation] = useMutation(MARK_CHECKIN);
 
   const markCheckIn = (): void => {
-    if (allotedSeat === '')
-      toast.warning('You have not alloted any seat to the attendee!');
-    if (allotedRoom === '')
-      toast.warning('You have not alloted any room to the attendee!');
-
+    // Since the backend supports the storage of the alloted seat and the alloted room to the user, we pass the same as blank
+    // as we do not want to clutter the UI currently with the same (only provide the most basic of operations)
     checkInMutation({
       variables: {
         userId: data.userId,
         eventId: data.eventId,
-        allotedSeat,
-        allotedRoom,
+        allotedSeat: '',
+        allotedRoom: '',
       },
     })
       .then(() => {
@@ -67,42 +58,11 @@ export const TableRow = ({
           <Button variant="contained" className="m-2 p-2" onClick={generateTag}>
             Download Tag
           </Button>
-          {data.checkIn.allotedRoom} {data.checkIn.allotedSeat}{' '}
-          {data.checkIn.time}
         </div>
       ) : (
-        <Box component="form" noValidate autoComplete="off" className="m-2 p-2">
-          <Stack
-            direction="row"
-            justifyContent="center"
-            alignItems="center"
-            spacing={4}
-          >
-            <div>
-              <TextField
-                id="allotedRoom"
-                label="Alloted Room"
-                variant="outlined"
-                size="small"
-                className="py-1 my-1"
-                onChange={(e) => setAllotedRoom(e.target.value)}
-              />
-              <TextField
-                id="allotedSeat"
-                label="Alloted Seat"
-                variant="outlined"
-                size="small"
-                className="py-1 my-1"
-                onChange={(e) => setAllotedSeat(e.target.value)}
-              />
-            </div>
-            <div>
-              <Button variant="contained" color="success" onClick={markCheckIn}>
-                Check In!
-              </Button>
-            </div>
-          </Stack>
-        </Box>
+        <Button variant="contained" color="success" onClick={markCheckIn}>
+          Check In
+        </Button>
       )}
     </>
   );

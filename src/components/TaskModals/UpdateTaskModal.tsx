@@ -122,18 +122,16 @@ export const UpdateTaskModal = (props: ModalPropType): JSX.Element => {
               />
             </Form.Group>
 
-            <Form.Group controlId="formBasicDeadline">
-              <DateTimePicker
-                label="Deadline"
-                defaultValue={deadline}
-                onChange={(date: Dayjs | null) => {
-                  setDeadline(date);
-                }}
-                disablePast
-              />
-            </Form.Group>
+            <DateTimePicker
+              label="Deadline"
+              defaultValue={deadline}
+              onChange={(date: Dayjs | null) => {
+                setDeadline(date);
+              }}
+              disablePast
+            />
 
-            <Form.Group controlId="formBasicCompleted">
+            <Form.Group controlId="completed" className="m-1 p-1">
               <Form.Check
                 type="switch"
                 label="Completed"
@@ -141,6 +139,7 @@ export const UpdateTaskModal = (props: ModalPropType): JSX.Element => {
                 onChange={() => setCompleted(!completed)}
               />
             </Form.Group>
+            <br />
 
             <Form.Group controlId="formVolunteers">
               <Form.Label>Volunteers</Form.Label>
