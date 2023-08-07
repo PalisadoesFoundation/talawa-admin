@@ -234,7 +234,7 @@ describe('Testing Update Event Task Modal', () => {
   });
 
   test('Manage volunteer modal and delete task modal should open and close properly', async () => {
-    const { queryByText, queryByRole } = render(
+    const { queryByText, queryAllByRole } = render(
       <MockedProvider addTypename={false}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -251,10 +251,14 @@ describe('Testing Update Event Task Modal', () => {
 
     // Manage Volunteer Modal
     fireEvent.click(queryByText('Manage Volunteers') as Element);
-    fireEvent.click(queryByRole('button', { name: /close/i }) as HTMLElement);
+    fireEvent.click(
+      queryAllByRole('button', { name: /close/i })[0] as HTMLElement
+    );
 
     // Delete Task Modal
     fireEvent.click(queryByText('Delete Task') as Element);
-    fireEvent.click(queryByRole('button', { name: /close/i }) as HTMLElement);
+    fireEvent.click(
+      queryAllByRole('button', { name: /close/i })[0] as HTMLElement
+    );
   });
 });

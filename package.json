@@ -64,7 +64,7 @@
   "scripts": {
     "serve": "react-scripts start",
     "build": "react-scripts build",
-    "test": "cross-env NODE_ENV=test node scripts/test.js --watchAll --coverage",
+    "test": "cross-env NODE_ENV=test node scripts/test.js --env=./scripts/custom-test-env.js --watchAll --coverage",
     "eject": "react-scripts eject",
     "lint:check": "eslint \"**/*.{ts,tsx}\" --max-warnings=0",
     "lint:fix": "eslint \"**/*.{ts,tsx}\" --fix",
@@ -93,6 +93,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-brands-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.14",
