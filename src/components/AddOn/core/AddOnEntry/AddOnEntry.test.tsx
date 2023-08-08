@@ -1,21 +1,12 @@
-import React from 'react';
-import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import AddOnEntry from './AddOnEntry';
 import {
   ApolloClient,
-  ApolloProvider,
   InMemoryCache,
   ApolloLink,
   HttpLink,
 } from '@apollo/client';
 
 import type { NormalizedCacheObject } from '@apollo/client';
-import { Provider } from 'react-redux';
-import { store } from 'state/store';
 import { BACKEND_URL } from 'Constant/constant';
-import i18nForTest from 'utils/i18nForTest';
-import { I18nextProvider } from 'react-i18next';
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
