@@ -516,5 +516,20 @@
     "feed": "Alimentation",
     "pinnedPosts": "Afficher les publications épinglées",
     "somethingOnYourMind": "Quelque chose dans votre esprit?"
+  },
+  "settings": {
+    "profileSettings": "Paramètres de profil",
+    "firstName": "Prénom",
+    "lastName": "Nom de famille",
+    "emailAddress": "Adresse e-mail",
+    "updateImage": "Mettre à jour l'image",
+    "save": "Sauvegarder"
+  },
+  "donate": {
+    "donateTo": "Faire un don à",
+    "amount": "Montante",
+    "yourPreviousDonations": "Vos dons précédents",
+    "donate": "Donner",
+    "nothingToShow": "Rien à montrer ici."
   }
 }

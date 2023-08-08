@@ -26,7 +26,7 @@ interface InterfaceDonationCardProps {
 
 export default function donate(): JSX.Element {
   const { t } = useTranslation('translation', {
-    keyPrefix: 'userOrganizations',
+    keyPrefix: 'donate',
   });
 
   const organizationId = getOrganizationId(location.href);
@@ -90,13 +90,15 @@ export default function donate(): JSX.Element {
         <UserSidebar />
         <div className={`${styles.colorLight} ${styles.mainContainer}`}>
           <div className={`${styles.box}`}>
-            <h4>Donate to {organizationDetails.name}</h4>
+            <h4>
+              {t('donateTo')} {organizationDetails.name}
+            </h4>
             <div className={styles.donationInputContainer}>
               <InputGroup className={styles.maxWidth}>
                 <InputGroup.Text
                   className={`${styles.colorPrimary} ${styles.borderNone}`}
                 >
-                  Amount
+                  {t('amount')}
                 </InputGroup.Text>
                 <Form.Control
                   type="text"
@@ -132,12 +134,12 @@ export default function donate(): JSX.Element {
             </div>
             <div className={styles.donateActions}>
               <Button data-testid={'donateBtn'}>
-                Donate <SendIcon />
+                {t('donate')} <SendIcon />
               </Button>
             </div>
           </div>
           <div className={styles.donationsContainer}>
-            <h5>Your Previous Donations</h5>
+            <h5>{t('yourPreviousDonations')}</h5>
             <div
               className={`d-flex flex-column justify-content-between ${styles.content}`}
             >

@@ -82,9 +82,9 @@ export default function settings(): JSX.Element {
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
         <UserSidebar />
         <div className={`${styles.mainContainer}`}>
-          <h3>Profile Settings</h3>
+          <h3>{t('profileSettings')}</h3>
           <div className={`${styles.content}`}>
-            <Form.Label htmlFor="inputFirstName">First Name</Form.Label>
+            <Form.Label htmlFor="inputFirstName">{t('firstName')}</Form.Label>
             <Form.Control
               type="text"
               id="inputFirstName"
@@ -93,7 +93,7 @@ export default function settings(): JSX.Element {
               className={`${styles.colorLight}`}
               data-testid="inputFirstName"
             />
-            <Form.Label htmlFor="inputLastName">Last Name</Form.Label>
+            <Form.Label htmlFor="inputLastName">{t('lastName')}</Form.Label>
             <Form.Control
               type="text"
               id="inputLastName"
@@ -102,7 +102,7 @@ export default function settings(): JSX.Element {
               className={`${styles.colorLight}`}
               data-testid="inputLastName"
             />
-            <Form.Label htmlFor="inputEmail">Email Address</Form.Label>
+            <Form.Label htmlFor="inputEmail">{t('emailAddress')}</Form.Label>
             <Form.Control
               type="email"
               id="inputEmail"
@@ -110,7 +110,7 @@ export default function settings(): JSX.Element {
               className={`${styles.colorLight}`}
               disabled
             />
-            Update Image
+            {t('updateImage')}
             <Form.Control
               accept="image/*"
               id="postphoto"
@@ -134,7 +134,7 @@ export default function settings(): JSX.Element {
               onClick={handleUpdateUserDetails}
               data-testid="updateUserBtn"
             >
-              Save
+              {t('save')}
             </Button>
           </div>
         </div>
