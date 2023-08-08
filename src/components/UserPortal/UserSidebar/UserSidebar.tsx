@@ -57,6 +57,7 @@ function userSidebar(): JSX.Element {
         <>
           <img
             src={details.image ? details.image : AboutImg}
+            className={styles.personImage}
             width="100px"
             height="auto"
           />
@@ -84,6 +85,7 @@ function userSidebar(): JSX.Element {
                           src={
                             organization.image ? organization.image : AboutImg
                           }
+                          className={styles.personImage}
                           width="auto"
                           height="30px"
                         />

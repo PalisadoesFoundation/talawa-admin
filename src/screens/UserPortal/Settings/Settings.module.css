@@ -1,0 +1,26 @@
+.mainContainer {
+  width: 50%;
+  flex-grow: 3;
+  padding: 40px;
+  max-height: 100%;
+  overflow: auto;
+}
+
+.containerHeight {
+  height: calc(100vh - 66px);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+  gap: 15px;
+}
+
+.imageInput {
+  background-color: white;
+}
+
+.colorLight {
+  background-color: white;
+}

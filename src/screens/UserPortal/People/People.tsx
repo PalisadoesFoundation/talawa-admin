@@ -120,7 +120,7 @@ export default function people(): JSX.Element {
               <Form.Control
                 placeholder={t('search')}
                 type="text"
-                className={styles.borderNone}
+                className={`${styles.borderNone} ${styles.backgroundWhite}`}
                 value={filterName}
                 onChange={handleSearch}
                 data-testid="searchInput"
