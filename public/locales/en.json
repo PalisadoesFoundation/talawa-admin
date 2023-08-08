@@ -50,7 +50,11 @@
     "displayImage": "Display Image",
     "enterName": "Enter Name",
     "noOrgErrorTitle": "Organizations Not Found",
-    "noOrgErrorDescription": "Please create an organization through dashboard"
+    "noOrgErrorDescription": "Please create an organization through dashboard",
+    "manageFeatures": "Manage Features",
+    "manageFeaturesInfo": "Creation Successful ! Please select features that you want to enale for this organization from the plugin store.",
+    "goToStore": "Go to Plugin Store",
+    "enableEverything": "Enable Everything"
   },
   "superDashListCard": {
     "created": "Created",

@@ -42,12 +42,14 @@ function orgList(): JSX.Element {
   /* eslint-disable @typescript-eslint/explicit-function-return-type */
   function afterOpenDialogModal() {
     // references are now sync'd and can be accessed.
-    setmodalIsOpen(false);
+    // setmodalIsOpen(false);
   }
   /* eslint-disable @typescript-eslint/explicit-function-return-type */
   function closeDialogModal() {
     setdialogModalIsOpen(false);
   }
+  const toggleDialogModal = (): void =>
+    setdialogModalIsOpen(!dialogModalisOpen);
 
   document.title = t('title');
 
@@ -362,57 +364,76 @@ function orgList(): JSX.Element {
         </Col>
       </Row>
       <Modal
-        isOpen={dialogModalisOpen}
-        onAfterOpen={afterOpenDialogModal}
-        onRequestClose={closeDialogModal}
+        // isOpen={dialogModalisOpen}
+        // onAfterOpen={afterOpenDialogModal}
+        // onRequestClose={closeDialogModal}
+        show={dialogModalisOpen}
+        onHide={toggleDialogModal}
         // style={{
         //   overlay: { backgroundColor: 'grey' },
         // }}
-        className={styles.modalbody}
-        contentLabel="Example Modal"
+        // className={styles.modalbody}
+        // contentLabel="Example Modal"
       >
-        <section id={styles.grid_wrapper}>
-          <div className={styles.form_wrapper}>
-            <div className={styles.flexdir}>
-              <p className={styles.titlemodal}>{t('manageFeatures')}</p>
-              <a
-                onClick={hideInviteModal}
-                className={styles.cancel}
-                data-testid="closeOrganizationModal"
-              >
-                <i
-                  className="fa fa-times"
-                  style={{
-                    cursor: 'pointer',
-                  }}
-                ></i>
-              </a>
-            </div>
-            <h4 className={styles.titlemodaldialog}>
-              {t('manageFeaturesInfo')}
-            </h4>
+        {/* <Modal.Header>
+          <p className={styles.titlemodal}>{t('manageFeatures')}</p>
+          <Button
+            variant="danger"
+            onClick={toggleDialogModal}
+            data-testid="closeOrganizationModal"
+          >
+            <i
+              className="fa fa-times"
+              style={{
+                cursor: 'pointer',
+              }}
+            ></i>
+          </Button>
+        </Modal.Header> */}
+        <Modal.Body>
+          <section id={styles.grid_wrapper}>
+            <div>
+              <div className={styles.flexdir}>
+                <p className={styles.titlemodal}>{t('manageFeatures')}</p>
+                <a
+                  onClick={toggleDialogModal}
+                  className={styles.cancel}
+                  data-testid="closeOrganizationModal"
+                >
+                  <i
+                    className="fa fa-times"
+                    style={{
+                      cursor: 'pointer',
+                    }}
+                  ></i>
+                </a>
+              </div>
+              <h4 className={styles.titlemodaldialog}>
+                {t('manageFeaturesInfo')}
+              </h4>
 
-            <div className={styles.pluginStoreBtnContainer}>
-              <Link
-                className={styles.secondbtn}
-                data-testid="submitOrganizationForm"
-                to={`orgstore/id=${dialogRedirectOrgId}`}
-              >
-                {t('goToStore')}
-              </Link>
-              {/* </button> */}
-              <button
-                type="submit"
-                className={styles.greenregbtn}
-                onClick={closeDialogModal}
-                value="invite"
-                data-testid="submitOrganizationForm"
-              >
-                {t('enableEverything')}
-              </button>
+              <div className={styles.pluginStoreBtnContainer}>
+                <Link
+                  className={styles.secondbtn}
+                  data-testid="submitOrganizationForm"
+                  to={`orgstore/id=${dialogRedirectOrgId}`}
+                >
+                  {t('goToStore')}
+                </Link>
+                {/* </button> */}
+                <button
+                  type="submit"
+                  className={styles.greenregbtn}
+                  onClick={closeDialogModal}
+                  value="invite"
+                  data-testid="submitOrganizationForm"
+                >
+                  {t('enableEverything')}
+                </button>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </Modal.Body>
       </Modal>
       <Modal show={showAddEventModal} onHide={toggleAddEventModal}>
         <Modal.Header>
