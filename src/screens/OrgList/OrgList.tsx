@@ -39,11 +39,7 @@ function orgList(): JSX.Element {
     // console.log(redirectOrgId, dialogRedirectOrgId);
     setdialogModalIsOpen(true);
   }
-  /* eslint-disable @typescript-eslint/explicit-function-return-type */
-  function afterOpenDialogModal() {
-    // references are now sync'd and can be accessed.
-    // setmodalIsOpen(false);
-  }
+
   /* eslint-disable @typescript-eslint/explicit-function-return-type */
   function closeDialogModal() {
     setdialogModalIsOpen(false);
@@ -363,33 +359,7 @@ function orgList(): JSX.Element {
           </div>
         </Col>
       </Row>
-      <Modal
-        // isOpen={dialogModalisOpen}
-        // onAfterOpen={afterOpenDialogModal}
-        // onRequestClose={closeDialogModal}
-        show={dialogModalisOpen}
-        onHide={toggleDialogModal}
-        // style={{
-        //   overlay: { backgroundColor: 'grey' },
-        // }}
-        // className={styles.modalbody}
-        // contentLabel="Example Modal"
-      >
-        {/* <Modal.Header>
-          <p className={styles.titlemodal}>{t('manageFeatures')}</p>
-          <Button
-            variant="danger"
-            onClick={toggleDialogModal}
-            data-testid="closeOrganizationModal"
-          >
-            <i
-              className="fa fa-times"
-              style={{
-                cursor: 'pointer',
-              }}
-            ></i>
-          </Button>
-        </Modal.Header> */}
+      <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
         <Modal.Body>
           <section id={styles.grid_wrapper}>
             <div>
