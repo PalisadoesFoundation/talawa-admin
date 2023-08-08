@@ -428,7 +428,9 @@
   "addOnEntry": {
     "enable": "Enabled",
     "install": "Install",
-    "uninstall": "Uninstall"
+    "uninstall": "Uninstall",
+    "uninstallMsg": "This feature is now removed from your organization",
+    "installMsg": "This feature is now enabled in your organization"
   },
   "memberDetail": {
     "title": "User Details",

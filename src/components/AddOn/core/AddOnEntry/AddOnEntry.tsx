@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AddOnEntry.module.css';
-import { Button, Card, Form, Spinner } from 'react-bootstrap';
-import {
-  UPDATE_INSTALL_STATUS_PLUGIN_MUTATION,
-  UPDATE_ORG_STATUS_PLUGIN_MUTATION,
-} from 'GraphQl/Mutations/mutations';
+import { Button, Card, Spinner } from 'react-bootstrap';
+import { UPDATE_INSTALL_STATUS_PLUGIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 interface InterfaceAddOnEntryProps {
   id: string;
@@ -16,56 +14,46 @@ interface InterfaceAddOnEntryProps {
   description: string;
   createdBy: string;
   component: string;
-  installed?: boolean;
-  configurable?: boolean;
   modified: any;
-  isInstalled: boolean;
+  uninstalledOrgs: string[];
   getInstalledPlugins: () => any;
 }
 
 function addOnEntry({
   id,
-  enabled,
   title,
   description,
   createdBy,
-  installed,
-  isInstalled,
+  uninstalledOrgs,
   getInstalledPlugins,
 }: InterfaceAddOnEntryProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'addOnEntry' });
-
+  //getting orgId from URL
+  const currentOrg = window.location.href.split('/id=')[1];
   const [buttonLoading, setButtonLoading] = useState(false);
-  const [switchInProgress] = useState(false);
-  const [isInstalledLocal, setIsInstalledLocal] = useState(isInstalled);
-
-  const [updateInstallStatus] = useMutation(
+  const [isInstalledLocal, setIsInstalledLocal] = useState(
+    uninstalledOrgs.includes(currentOrg)
+  );
+  // const [addOrgAsUninstalled] = useMutation(UPDATE_ORG_STATUS_PLUGIN_MUTATION);
+  const [addOrgAsUninstalled] = useMutation(
     UPDATE_INSTALL_STATUS_PLUGIN_MUTATION
   );
-  const [updateOrgStatus] = useMutation(UPDATE_ORG_STATUS_PLUGIN_MUTATION);
 
-  const currentOrg = window.location.href.split('=')[1];
-
-  const updateOrgList = async (): Promise<void> => {
-    await updateOrgStatus({
+  const togglePluginInstall = async (): Promise<void> => {
+    setButtonLoading(true);
+    await addOrgAsUninstalled({
       variables: {
         id: id.toString(),
         orgId: currentOrg.toString(),
       },
     });
-  };
-
-  const updateInstallStatusFunc = async (): Promise<void> => {
-    setButtonLoading(true);
-    await updateInstallStatus({
-      variables: {
-        id: id.toString(),
-        status: !isInstalledLocal,
-      },
-    });
 
     setIsInstalledLocal(!isInstalledLocal);
     setButtonLoading(false);
+    const dialog: string = isInstalledLocal
+      ? t('installMsg')
+      : t('uninstallMsg');
+    toast.success(dialog);
   };
 
   // useEffect(() => {
@@ -140,7 +128,7 @@ function addOnEntry({
   return (
     <>
       <Card data-testid="AddOnEntry">
-        {installed && (
+        {/* {uninstalledOrgs.includes(currentOrg) && (
           <Form.Check
             type="switch"
             id="custom-switch"
@@ -151,7 +139,7 @@ function addOnEntry({
             disabled={switchInProgress}
             checked={enabled}
           />
-        )}
+        )} */}
         <Card.Body>
           <Card.Title>{title}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted author">
@@ -164,21 +152,21 @@ function addOnEntry({
             // disabled={buttonLoading || !configurable}
             disabled={buttonLoading}
             onClick={(): void => {
-              updateOrgList();
-              updateInstallStatusFunc();
+              togglePluginInstall();
               getInstalledPlugins();
-              // installed ? remove() : install();
             }}
           >
             {buttonLoading ? (
               <Spinner animation="grow" />
             ) : (
               <i
-                className={isInstalledLocal ? 'fa fa-trash' : 'fa fa-cubes'}
+                className={!isInstalledLocal ? 'fa fa-trash' : 'fa fa-cubes'}
               ></i>
             )}
             {/* {installed ? 'Remove' : configurable ? 'Installed' : 'Install'} */}
-            {isInstalledLocal ? t('uninstall') : t('install')}
+            {uninstalledOrgs.includes(currentOrg)
+              ? t('install')
+              : t('uninstall')}
           </Button>
         </Card.Body>
       </Card>

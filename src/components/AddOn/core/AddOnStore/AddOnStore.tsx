@@ -241,7 +241,7 @@ function addOnStore(): JSX.Element {
                           pluginName: string | undefined;
                           pluginDesc: string | undefined;
                           pluginCreatedBy: string;
-                          pluginInstallStatus: boolean | undefined;
+                          uninstalledOrgs: string[];
                           getInstalledPlugins: () => any;
                         },
                         i: React.Key | null | undefined
@@ -252,90 +252,14 @@ function addOnStore(): JSX.Element {
                           title={plug.pluginName}
                           description={plug.pluginDesc}
                           createdBy={plug.pluginCreatedBy}
-                          isInstalled={plug.pluginInstallStatus}
-                          configurable={plug.pluginInstallStatus}
+                          // isInstalled={plug.pluginInstallStatus}
+                          // configurable={plug.pluginInstallStatus}
                           component={'Special  Component'}
                           modified={(): void => {
                             console.log('Plugin is modified');
                           }}
                           getInstalledPlugins={getInstalledPlugins}
-                        />
-                      )
-                    )
-                )}
-              </Tab>
-              <Tab eventKey="installed" title={t('install')}>
-                {data.getPlugins
-                  .filter((plugin: any) => plugin.pluginInstallStatus == true)
-                  .filter(
-                    (val: {
-                      _id: string;
-                      pluginName: string | undefined;
-                      pluginDesc: string | undefined;
-                      pluginCreatedBy: string;
-                      pluginInstallStatus: boolean | undefined;
-                      getInstalledPlugins: () => any;
-                    }) => {
-                      if (searchText == '') {
-                        return val;
-                      } else if (
-                        val.pluginName
-                          ?.toLowerCase()
-                          .includes(searchText.toLowerCase())
-                      ) {
-                        return val;
-                      }
-                    }
-                  ).length === 0 ? (
-                  <h4>{t('pMessage')} </h4> // eslint-disable-line
-                ) : (
-                  data.getPlugins
-                    .filter((plugin: any) => plugin.pluginInstallStatus == true)
-                    .filter(
-                      (val: {
-                        _id: string;
-                        pluginName: string | undefined;
-                        pluginDesc: string | undefined;
-                        pluginCreatedBy: string;
-                        pluginInstallStatus: boolean | undefined;
-                        getInstalledPlugins: () => any;
-                      }) => {
-                        if (searchText == '') {
-                          return val;
-                        } else if (
-                          val.pluginName
-                            ?.toLowerCase()
-                            .includes(searchText.toLowerCase())
-                        ) {
-                          return val;
-                        }
-                      }
-                    )
-                    .map(
-                      (
-                        plug: {
-                          _id: string;
-                          pluginName: string | undefined;
-                          pluginDesc: string | undefined;
-                          pluginCreatedBy: string;
-                          pluginInstallStatus: boolean | undefined;
-                          getInstalledPlugins: () => any;
-                        },
-                        i: React.Key | null | undefined
-                      ): JSX.Element => (
-                        <AddOnEntry
-                          id={plug._id}
-                          key={i}
-                          title={plug.pluginName}
-                          description={plug.pluginDesc}
-                          createdBy={plug.pluginCreatedBy}
-                          isInstalled={plug.pluginInstallStatus}
-                          configurable={plug.pluginInstallStatus}
-                          component={'Special  Component'}
-                          modified={(): void => {
-                            console.log('Plugin is modified');
-                          }}
-                          getInstalledPlugins={getInstalledPlugins}
+                          uninstalledOrgs={plug.uninstalledOrgs}
                         />
                       )
                     )
@@ -354,53 +278,3 @@ addOnStore.defaultProps = {};
 addOnStore.propTypes = {};
 
 export default addOnStore;
-
-// {addonStore.map((plugin: any, index: number) => {
-//   return (
-//     <AddOnEntry
-//       id={plugin.id}
-//       key={index}
-//       title={plugin.name}
-//       description={plugin.description}
-//       createdBy={plugin.createdBy}
-//       component={plugin.component}
-//       configurable={!plugin.installed}
-//       modified={() => {
-//         /* istanbul ignore next */
-//         pluginModified().then((installedPlugins) => {
-//           updateLinks(
-//             new PluginHelper().generateLinks(installedPlugins)
-//           );
-//         });
-//       }}
-//     />
-//   );
-// })}
-
-// {installed
-//   .filter((plugin: any) =>
-//     showEnabled ? plugin.enabled : !plugin.enabled
-//   )
-//   .map((plugin: any, index: number) => {
-//     return (
-//       <AddOnEntry
-//         id={plugin.id}
-//         key={index}
-//         title={plugin.name}
-//         description={plugin.description}
-//         createdBy={plugin.createdBy}
-//         component={plugin.component}
-//         enabled={plugin.enabled}
-//         installed={true}
-//         configurable={true}
-//         modified={() => {
-//           /* istanbul ignore next */
-//           pluginModified().then((installedPlugins) => {
-//             updateLinks(
-//               new PluginHelper().generateLinks(installedPlugins)
-//             );
-//           });
-//         }}
-//       />
-//     );
-//   })}
