@@ -4,6 +4,7 @@ import { useMutation } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 
 import {
   DELETE_POST_MUTATION,
@@ -14,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './OrgPostCard.module.css';
 import { Form } from 'react-bootstrap';
+import type { RootState } from 'state/reducers';
 
 interface InterfaceOrgPostCardProps {
   key: string;
@@ -34,6 +36,8 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
   const [togglePost, setPostToggle] = useState('Read more');
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const refetch = useSelector((state: RootState) => state.refetch);
 
   const toggleShowEditModal = (): void => setShowEditModal(!showEditModal);
   const toggleShowDeleteModal = (): void =>
@@ -72,9 +76,10 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
       /* istanbul ignore next */
       if (data) {
         toast.success(t('postDeleted'));
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+
+        // refetching Org post list
+        refetch();
+        toggleShowDeleteModal();
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -107,9 +112,10 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
       /* istanbul ignore next */
       if (data) {
         toast.success(t('postUpdated'));
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+
+        // refetching Org post list
+        refetch();
+        toggleShowEditModal();
       }
     } catch (error: any) {
       /* istanbul ignore next */

@@ -3,6 +3,7 @@ import {
   installPlugin,
   removePlugin,
   updatePluginLinks,
+  _refetch,
 } from './index';
 describe('Testing rc/state/action-creators/index.ts', () => {
   test('updateInstalled Should call the dispatch function provided', () => {
@@ -40,6 +41,15 @@ describe('Testing rc/state/action-creators/index.ts', () => {
     const temp = updatePluginLinks('testPlug');
     expect(typeof temp).toBe('function');
     //stubbing the childfunction to check execution
+    const childFunction = jest.fn();
+    temp(childFunction);
+    expect(childFunction).toHaveBeenCalled();
+  });
+
+  test('_refetch Should call the refetch function in OrgPost', () => {
+    const temp = _refetch('test');
+    expect(typeof temp).toBe('function');
+
     const childFunction = jest.fn();
     temp(childFunction);
     expect(childFunction).toHaveBeenCalled();

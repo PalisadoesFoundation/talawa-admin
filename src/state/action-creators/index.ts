@@ -33,3 +33,12 @@ export const updatePluginLinks = (plugins: any) => {
     });
   };
 };
+
+export const _refetch = (_refetch: any) => {
+  return (dispatch: any): void => {
+    dispatch({
+      type: 'REFETCH_ORG_POST_LIST_DATA',
+      payload: _refetch,
+    });
+  };
+};

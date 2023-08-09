@@ -2,6 +2,7 @@ import React from 'react';
 import { act, render, screen, fireEvent } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
+import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 
 import OrgPostCard from './OrgPostCard';
@@ -9,6 +10,7 @@ import {
   DELETE_POST_MUTATION,
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
@@ -73,9 +75,11 @@ describe('Testing Organization Post Card', () => {
 
     render(
       <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPostCard {...props} />
+          </I18nextProvider>
+        </Provider>
       </MockedProvider>
     );
 
@@ -95,9 +99,11 @@ describe('Testing Organization Post Card', () => {
 
     render(
       <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPostCard {...props} />
+          </I18nextProvider>
+        </Provider>
       </MockedProvider>
     );
 
@@ -115,9 +121,11 @@ describe('Testing Organization Post Card', () => {
   test('Testing post update functionality', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPostCard {...props} />
+          </I18nextProvider>
+        </Provider>
       </MockedProvider>
     );
 
@@ -133,9 +141,11 @@ describe('Testing Organization Post Card', () => {
   test('Testing delete post funcationality', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPostCard {...props} />
+          </I18nextProvider>
+        </Provider>
       </MockedProvider>
     );
 
@@ -148,9 +158,11 @@ describe('Testing Organization Post Card', () => {
   test('should toggle post visibility when button is clicked', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPostCard {...props} />
+          </I18nextProvider>
+        </Provider>
       </MockedProvider>
     );
 
@@ -180,9 +192,11 @@ describe('Testing Organization Post Card', () => {
 
     render(
       <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPostCard {...props} />
+          </I18nextProvider>
+        </Provider>
       </MockedProvider>
     );
 
@@ -215,9 +229,11 @@ describe('Testing Organization Post Card', () => {
     };
     render(
       <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPostCard {...props} />
+          </I18nextProvider>
+        </Provider>
       </MockedProvider>
     );
   });

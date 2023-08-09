@@ -5,7 +5,8 @@ import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
 import { Form } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -16,6 +17,7 @@ import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
 import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import type { RootState } from 'state/reducers';
+import { actionCreators } from 'state/index';
 import PaginationList from 'components/PaginationList/PaginationList';
 import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
@@ -28,6 +30,9 @@ function orgPost(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgPost',
   });
+
+  const dispatch = useDispatch();
+  const { _refetch } = bindActionCreators(actionCreators, dispatch);
 
   document.title = t('title');
   const [postmodalisOpen, setPostModalIsOpen] = useState(false);
@@ -63,6 +68,10 @@ function orgPost(): JSX.Element {
   } = useQuery(ORGANIZATION_POST_CONNECTION_LIST, {
     variables: { id: currentUrl, title_contains: '', text_contains: '' },
   });
+
+  // Using refetch in OrgPostCard so that state can be updated from there
+  _refetch(refetch);
+
   const [create, { loading: createPostLoading }] =
     useMutation(CREATE_POST_MUTATION);
 
