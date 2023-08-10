@@ -220,7 +220,7 @@ const Roles = (): JSX.Element => {
                           <td>{user.email}</td>
                           <td>
                             <select
-                              className="form-control"
+                              className="form-select"
                               name={`role${user._id}`}
                               data-testid={`changeRole${user._id}`}
                               onChange={changeRole}
