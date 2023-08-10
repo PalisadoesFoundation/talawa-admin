@@ -387,7 +387,6 @@ export const ADD_PLUGIN_MUTATION = gql`
     $pluginName: String!
     $pluginCreatedBy: String!
     $pluginDesc: String!
-    $uninstalledOrgs: [ID!]
   ) {
     createPlugin(
       pluginName: $pluginName
