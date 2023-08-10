@@ -364,11 +364,11 @@ export const UPDATE_INSTALL_STATUS_PLUGIN_MUTATION = gql`
 
 /**
  * @name UPDATE_ORG_STATUS_PLUGIN_MUTATION
- * @description used  `updatePluginInstalledOrgs`to add or remove the current Organization the in the plugin list `installedOrgs`
+ * @description used  `updatePluginStatus`to add or remove the current Organization the in the plugin list `installedOrgs`
  */
 export const UPDATE_ORG_STATUS_PLUGIN_MUTATION = gql`
   mutation update_install_status_plugin_mutation($id: ID!, $orgId: ID!) {
-    updatePluginInstalledOrgs(id: $id, orgId: $orgId) {
+    updatePluginStatus(id: $id, orgId: $orgId) {
       _id
       pluginName
       pluginCreatedBy
@@ -403,7 +403,6 @@ export const ADD_PLUGIN_MUTATION = gql`
       pluginCreatedBy
       pluginDesc
       pluginInstallStatus
-      installedOrgs
     }
   }
 `;
