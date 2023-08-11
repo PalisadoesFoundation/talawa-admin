@@ -48,7 +48,6 @@ const leftDrawer = ({
         }`}
         data-testid="leftDrawerContainer"
       >
-        {hideDrawer === null ? 'NULL' : hideDrawer ? 'TRUE' : 'FALSE'}
         <Button
           variant="danger"
           className={styles.closeModalBtn}
