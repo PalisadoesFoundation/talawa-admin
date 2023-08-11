@@ -15,16 +15,6 @@ import SuperAdminScreen from './SuperAdminScreen';
 const props: InterfaceSuperAdminScreenProps = {
   title: 'Organizations',
   screenName: 'Organizations',
-  data: {
-    user: {
-      firstName: 'test',
-      lastName: 'test',
-      email: 'JohnDoe@gmail.com',
-      adminFor: [],
-      image: null,
-      userType: 'SUPERADMIN',
-    },
-  },
   children: <div>Testing ...</div>,
 };
 

@@ -2,19 +2,16 @@ import MenuIcon from '@mui/icons-material/Menu';
 import LeftDrawer from 'components/LeftDrawer/LeftDrawer';
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import type { InterfaceUserType } from 'utils/interfaces';
 import styles from './SuperAdminScreen.module.css';
 
 export interface InterfaceSuperAdminScreenProps {
   title: string; // Multilingual Page title
   screenName: string; // Internal Screen name for developers
-  data: InterfaceUserType | undefined;
   children: React.ReactNode;
 }
 const superAdminScreen = ({
   title,
   screenName,
-  data,
   children,
 }: InterfaceSuperAdminScreenProps): JSX.Element => {
   const [showDrawer, setShowDrawer] = useState<boolean | null>(null);
@@ -22,7 +19,6 @@ const superAdminScreen = ({
   return (
     <>
       <LeftDrawer
-        data={data}
         screenName={screenName}
         showDrawer={showDrawer}
         setShowDrawer={setShowDrawer}

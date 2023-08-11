@@ -150,11 +150,7 @@ const Requests = (): JSX.Element => {
 
   return (
     <>
-      <SuperAdminScreen
-        data={currentUserData}
-        title={t('requests')}
-        screenName="Requests"
-      >
+      <SuperAdminScreen title={t('requests')} screenName="Requests">
         {/* Buttons Container */}
         <div className={styles.btnsContainer}>
           <div className={styles.inputContainer}>

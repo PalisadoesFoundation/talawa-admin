@@ -82,6 +82,10 @@ function app(): JSX.Element {
     localStorage.setItem('email', data.checkAuth.email);
     localStorage.setItem('IsLoggedIn', 'TRUE');
     localStorage.setItem('UserType', data.checkAuth.userType);
+    localStorage.setItem('FirstName', data.checkAuth.firstName);
+    localStorage.setItem('LastName', data.checkAuth.lastName);
+    localStorage.setItem('UserImage', data.checkAuth.image);
+    localStorage.setItem('Email', data.checkAuth.email);
   } else {
     localStorage.clear();
   }

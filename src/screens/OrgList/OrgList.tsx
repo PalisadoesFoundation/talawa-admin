@@ -168,11 +168,7 @@ function orgList(): JSX.Element {
   const debouncedHandleSearchByName = debounce(handleSearchByName);
   return (
     <>
-      <SuperAdminScreen
-        data={userData}
-        title={t('organizations')}
-        screenName="Organizations"
-      >
+      <SuperAdminScreen title={t('organizations')} screenName="Organizations">
         {/* Buttons Container */}
         <div className={styles.btnsContainer}>
           <div className={styles.input}>

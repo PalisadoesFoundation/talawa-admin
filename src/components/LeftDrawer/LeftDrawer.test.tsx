@@ -11,43 +11,11 @@ import type { InterfaceLeftDrawerProps } from './LeftDrawer';
 import LeftDrawer from './LeftDrawer';
 
 const props = {
-  data: {
-    user: {
-      firstName: 'John',
-      lastName: 'Doe',
-      image: null,
-      email: 'johndoe@gmail.com',
-      userType: 'SUPERADMIN',
-      adminFor: [
-        {
-          _id: '123',
-          name: 'Palisadoes',
-          image: null,
-        },
-      ],
-    },
-  },
   showDrawer: true,
   setShowDrawer: jest.fn(),
 };
 
 const propsAdmin: InterfaceLeftDrawerProps = {
-  data: {
-    user: {
-      firstName: 'John',
-      lastName: 'Doe',
-      image: `https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe`,
-      email: 'johndoe@gmail.com',
-      userType: 'ADMIN',
-      adminFor: [
-        {
-          _id: '123',
-          name: 'Palisadoes',
-          image: null,
-        },
-      ],
-    },
-  },
   screenName: 'Organizations',
   showDrawer: true,
   setShowDrawer: jest.fn(),
@@ -74,6 +42,15 @@ jest.mock('react-toastify', () => ({
     error: jest.fn(),
   },
 }));
+
+beforeEach(() => {
+  localStorage.setItem('FirstName', 'John');
+  localStorage.setItem('LastName', 'Doe');
+  localStorage.setItem(
+    'UserImage',
+    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe'
+  );
+});
 
 afterEach(() => {
   jest.clearAllMocks();

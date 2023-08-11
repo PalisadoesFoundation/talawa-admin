@@ -112,11 +112,7 @@ const Roles = (): JSX.Element => {
 
   return (
     <>
-      <SuperAdminScreen
-        data={currentUserData}
-        title={t('usersList')}
-        screenName="Roles"
-      >
+      <SuperAdminScreen title={t('usersList')} screenName="Roles">
         {/* Buttons Container */}
         <div className={styles.btnsContainer}>
           <div className={styles.inputContainer}>
