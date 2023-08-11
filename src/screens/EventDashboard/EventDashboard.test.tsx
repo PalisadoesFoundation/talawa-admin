@@ -61,7 +61,7 @@ describe('Testing Event Dashboard Screen', () => {
   });
 
   test('The page should display event details correctly and should not show the time if it is null', async () => {
-    render(
+    const { queryByText } = render(
       <BrowserRouter>
         <MockedProvider addTypename={false} mocks={queryMockWithoutTime}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -75,6 +75,8 @@ describe('Testing Event Dashboard Screen', () => {
         </MockedProvider>
       </BrowserRouter>
     );
+
+    await waitFor(() => expect(queryByText('Event Title')).toBeInTheDocument());
   });
 
   test('The page should display event project details correctly when provided', async () => {
@@ -84,8 +86,8 @@ describe('Testing Event Dashboard Screen', () => {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
                 <EventDashboard />
+                <ToastContainer />
               </I18nextProvider>
             </Provider>
           </LocalizationProvider>
