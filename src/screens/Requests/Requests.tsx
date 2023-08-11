@@ -248,7 +248,7 @@ const Requests = (): JSX.Element => {
                   ) => {
                     return (
                       <tr key={user._id}>
-                        <td>{index + 1}</td>
+                        <th scope="row">{index + 1}</th>
                         <td>{`${user.firstName} ${user.lastName}`}</td>
                         <td>{user.email}</td>
                         <td>
