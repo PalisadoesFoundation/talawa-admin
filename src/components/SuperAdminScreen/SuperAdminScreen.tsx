@@ -1,6 +1,6 @@
 import MenuIcon from '@mui/icons-material/Menu';
 import LeftDrawer from 'components/LeftDrawer/LeftDrawer';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import type { InterfaceUserType } from 'utils/interfaces';
 import styles from './SuperAdminScreen.module.css';
