@@ -1,6 +1,6 @@
 import MenuIcon from '@mui/icons-material/Menu';
 import LeftDrawer from 'components/LeftDrawer/LeftDrawer';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import type { InterfaceUserType } from 'utils/interfaces';
 import styles from './SuperAdminScreen.module.css';
@@ -17,7 +17,7 @@ const superAdminScreen = ({
   data,
   children,
 }: InterfaceSuperAdminScreenProps): JSX.Element => {
-  const [showDrawer, setShowDrawer] = useState(true);
+  const [showDrawer, setShowDrawer] = useState<boolean | null>(null);
 
   return (
     <>
@@ -29,7 +29,11 @@ const superAdminScreen = ({
       />
       <div
         className={`${styles.pageContainer} ${
-          showDrawer ? styles.contract : styles.expand
+          showDrawer === null
+            ? ''
+            : showDrawer
+            ? styles.expand
+            : styles.contract
         } `}
         data-testid="mainpageright"
       >

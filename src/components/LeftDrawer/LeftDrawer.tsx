@@ -14,8 +14,8 @@ import { useTranslation } from 'react-i18next';
 
 export interface InterfaceLeftDrawerProps {
   data: InterfaceUserType | undefined;
-  showDrawer: boolean;
-  setShowDrawer: React.Dispatch<React.SetStateAction<boolean>>;
+  showDrawer: boolean | null;
+  setShowDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
   screenName: string;
 }
 
@@ -40,7 +40,11 @@ const leftDrawer = ({
     <>
       <div
         className={`${styles.leftDrawer} ${
-          showDrawer ? styles.activeDrawer : styles.inactiveDrawer
+          showDrawer === null
+            ? styles.hideElemByDefault
+            : showDrawer
+            ? styles.inactiveDrawer
+            : styles.activeDrawer
         }`}
         data-testid="leftDrawerContainer"
       >
@@ -48,7 +52,7 @@ const leftDrawer = ({
           variant="danger"
           className={styles.closeModalBtn}
           onClick={(): void => {
-            setShowDrawer(!showDrawer);
+            setShowDrawer(false);
           }}
           data-testid="closeModalBtn"
         >
