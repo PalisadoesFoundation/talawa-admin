@@ -16,7 +16,7 @@ import OrgSettings from 'screens/OrgSettings/OrgSettings';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import AddOnStore from 'components/AddOn/core/AddOnStore/AddOnStore';
 import ForgotPassword from 'screens/ForgotPassword/ForgotPassword';
-import Roles from 'screens/Roles/Roles';
+import Users from 'screens/Users/Users';
 import Requests from 'screens/Requests/Requests';
 import BlockUser from 'screens/BlockUser/BlockUser';
 import MemberDetail from 'screens/MemberDetail/MemberDetail';
@@ -103,7 +103,7 @@ function app(): JSX.Element {
         <SecuredRoute path="/orgpost" component={OrgPost} />
         <SecuredRoute path="/orgsetting" component={OrgSettings} />
         <SecuredRoute path="/orgstore" component={AddOnStore} />
-        <SecuredRoute path="/roles" component={Roles} />
+        <SecuredRoute path="/users" component={Users} />
         <SecuredRoute path="/requests" component={Requests} />
         <SecuredRoute path="/blockuser" component={BlockUser} />
         {extraRoutes}

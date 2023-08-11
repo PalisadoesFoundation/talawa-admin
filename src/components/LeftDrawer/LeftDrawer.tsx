@@ -108,25 +108,25 @@ const leftDrawer = ({
           )}
           {userType === 'SUPERADMIN' && (
             <Button
-              variant={screenName === 'Roles' ? 'success' : 'light'}
+              variant={screenName === 'Users' ? 'success' : 'light'}
               className={`${
-                screenName === 'Roles' ? 'text-white' : 'text-secondary'
+                screenName === 'Users' ? 'text-white' : 'text-secondary'
               }`}
               onClick={(): void => {
-                history.push('/roles');
+                history.push('/users');
               }}
               data-testid="rolesBtn"
             >
               <div className={styles.iconWrapper}>
                 <RolesIcon
                   fill={`${
-                    screenName === 'Roles'
+                    screenName === 'Users'
                       ? 'var(--bs-white)'
                       : 'var(--bs-secondary)'
                   }`}
                 />
               </div>
-              {t('roles')}
+              {t('users')}
             </Button>
           )}
         </div>

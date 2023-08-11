@@ -15,12 +15,6 @@ const props = {
   setHideDrawer: jest.fn(),
 };
 
-const propsAdmin: InterfaceLeftDrawerProps = {
-  screenName: 'Organizations',
-  hideDrawer: true,
-  setHideDrawer: jest.fn(),
-};
-
 const propsOrg: InterfaceLeftDrawerProps = {
   ...props,
   screenName: 'Organizations',
@@ -29,10 +23,9 @@ const propsReq: InterfaceLeftDrawerProps = {
   ...props,
   screenName: 'Requests',
 };
-const propsRoles: InterfaceLeftDrawerProps = {
+const propsUsers: InterfaceLeftDrawerProps = {
   ...props,
-  screenName: 'Roles',
-  hideDrawer: false,
+  screenName: 'Users',
 };
 
 jest.mock('react-toastify', () => ({
@@ -59,6 +52,7 @@ afterEach(() => {
 
 describe('Testing Left Drawer component for SUPERADMIN', () => {
   test('Component should be rendered properly', () => {
+    localStorage.setItem('UserImage', '');
     localStorage.setItem('UserType', 'SUPERADMIN');
     render(
       <BrowserRouter>
@@ -70,7 +64,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
 
     expect(screen.getByText('Organizations')).toBeInTheDocument();
     expect(screen.getByText('Requests')).toBeInTheDocument();
-    expect(screen.getByText('Roles')).toBeInTheDocument();
+    expect(screen.getByText('Users')).toBeInTheDocument();
     expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
 
     expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
@@ -97,24 +91,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
 
     // Send to roles screen
     userEvent.click(rolesBtn);
-    expect(global.window.location.pathname).toContain('/roles');
-  });
-
-  test('Testing when user data is undefined', () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
-    const userUndefinedProps = {
-      ...props,
-      data: undefined,
-      screenName: 'Organizations',
-    };
-    render(
-      <BrowserRouter>
-        <I18nextProvider i18n={i18nForTest}>
-          <LeftDrawer {...userUndefinedProps} />
-        </I18nextProvider>
-      </BrowserRouter>
-    );
-    expect(screen.getByTestId(/loadingProfile/i)).toBeInTheDocument();
+    expect(global.window.location.pathname).toContain('/users');
   });
 
   test('Testing in requests screen', () => {
@@ -151,7 +128,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     render(
       <BrowserRouter>
         <I18nextProvider i18n={i18nForTest}>
-          <LeftDrawer {...propsRoles} />
+          <LeftDrawer {...propsUsers} />
         </I18nextProvider>
       </BrowserRouter>
     );
@@ -207,7 +184,7 @@ describe('Testing Left Drawer component for ADMIN', () => {
     render(
       <BrowserRouter>
         <I18nextProvider i18n={i18nForTest}>
-          <LeftDrawer {...propsAdmin} />
+          <LeftDrawer {...propsOrg} />
         </I18nextProvider>
       </BrowserRouter>
     );

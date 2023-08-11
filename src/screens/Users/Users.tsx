@@ -15,13 +15,13 @@ import {
 } from 'GraphQl/Queries/Queries';
 import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 import { errorHandler } from 'utils/errorHandler';
-import styles from './Roles.module.css';
+import styles from './Users.module.css';
 import type { InterfaceUserType } from 'utils/interfaces';
 import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
 import debounce from 'utils/debounce';
 
-const Roles = (): JSX.Element => {
-  const { t } = useTranslation('translation', { keyPrefix: 'roles' });
+const Users = (): JSX.Element => {
+  const { t } = useTranslation('translation', { keyPrefix: 'users' });
 
   document.title = t('title');
 
@@ -112,7 +112,7 @@ const Roles = (): JSX.Element => {
 
   return (
     <>
-      <SuperAdminScreen title={t('usersList')} screenName="Roles">
+      <SuperAdminScreen title={t('users')} screenName="Users">
         {/* Buttons Container */}
         <div className={styles.btnsContainer}>
           <div className={styles.inputContainer}>
@@ -247,4 +247,4 @@ const Roles = (): JSX.Element => {
   );
 };
 
-export default Roles;
+export default Users;

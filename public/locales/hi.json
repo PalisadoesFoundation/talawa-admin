@@ -39,7 +39,7 @@
     "menu": "मेन्यू",
     "organizations": "संगठन",
     "requests": "अनुरोध",
-    "roles": "भूमिकाएँ",
+    "users": "उपयोगकर्ता",
     "logout": "लॉग आउट"
   },
   "orgList": {
@@ -73,10 +73,10 @@
     "rowsPerPage": "प्रति पृष्ठ पंक्तियाँ",
     "all": "सभी"
   },
-  "roles": {
+  "users": {
     "title": "तलावा भूमिकाएं",
     "searchByName": "नाम से खोजें",
-    "usersList": "उपयोगकर्ता सूची",
+    "users": "उपयोगकर्ता",
     "name": "नाम",
     "email": "ईमेल",
     "roles_userType": "भूमिका/उपयोगकर्ता-प्रकार",

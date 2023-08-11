@@ -39,7 +39,7 @@
     "menu": "菜单",
     "organizations": "组织",
     "requests": "请求",
-    "roles": "角色",
+    "users": "用户",
     "logout": "退出登录"
   },
   "orgList": {
@@ -73,10 +73,10 @@
     "rowsPerPage": "每頁行數",
     "all": "全部"
   },
-  "roles": {
+  "users": {
     "title": "塔拉瓦角色",
     "searchByName": "按名稱搜索",
-    "usersList": "用戶列表",
+    "users": "用户",
     "name": "姓名",
     "email": "電子郵件",
     "roles_userType": "角色/用戶類型",

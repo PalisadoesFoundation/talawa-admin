@@ -39,7 +39,7 @@
     "menu": "Menu",
     "organizations": "Organisations",
     "requests": "Demandes",
-    "roles": "Rôles",
+    "users": "Utilisateurs",
     "logout": "Déconnexion"
   },
   "orgList": {
@@ -73,10 +73,10 @@
     "rowsPerPage": "lignes par page",
     "all": "Tout"
   },
-  "roles": {
+  "users": {
     "title": "Rôles Talawa",
     "searchByName": "Recherche par nom",
-    "usersList": "Liste des utilisateurs",
+    "users": "Utilisateurs",
     "name": "Nom",
     "email": "E-mail",
     "roles_userType": "Rôle/Type d'utilisateur",

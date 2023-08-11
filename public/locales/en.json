@@ -39,7 +39,7 @@
     "menu": "Menu",
     "organizations": "Organizations",
     "requests": "Requests",
-    "roles": "Roles",
+    "users": "Users",
     "logout": "Logout"
   },
   "orgList": {
@@ -73,10 +73,10 @@
     "rowsPerPage": "rows per page",
     "all": "All"
   },
-  "roles": {
+  "users": {
     "title": "Talawa Roles",
     "searchByName": "Search By Name",
-    "usersList": "Users List",
+    "users": "Users",
     "name": "Name",
     "email": "Email",
     "roles_userType": "Role/User-Type",
