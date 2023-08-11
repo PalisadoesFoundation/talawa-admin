@@ -11,14 +11,14 @@ import type { InterfaceLeftDrawerProps } from './LeftDrawer';
 import LeftDrawer from './LeftDrawer';
 
 const props = {
-  showDrawer: true,
-  setShowDrawer: jest.fn(),
+  hideDrawer: true,
+  setHideDrawer: jest.fn(),
 };
 
 const propsAdmin: InterfaceLeftDrawerProps = {
   screenName: 'Organizations',
-  showDrawer: true,
-  setShowDrawer: jest.fn(),
+  hideDrawer: true,
+  setHideDrawer: jest.fn(),
 };
 
 const propsOrg: InterfaceLeftDrawerProps = {
@@ -32,7 +32,7 @@ const propsReq: InterfaceLeftDrawerProps = {
 const propsRoles: InterfaceLeftDrawerProps = {
   ...props,
   screenName: 'Roles',
-  showDrawer: false,
+  hideDrawer: false,
 };
 
 jest.mock('react-toastify', () => ({

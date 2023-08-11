@@ -12,15 +12,15 @@ import { ReactComponent as TalawaLogo } from '../../assets/svgs/talawa.svg';
 import styles from './LeftDrawer.module.css';
 
 export interface InterfaceLeftDrawerProps {
-  showDrawer: boolean | null;
-  setShowDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
+  hideDrawer: boolean | null;
+  setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
   screenName: string;
 }
 
 const leftDrawer = ({
   screenName,
-  showDrawer,
-  setShowDrawer,
+  hideDrawer,
+  setHideDrawer,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
 
@@ -40,19 +40,20 @@ const leftDrawer = ({
     <>
       <div
         className={`${styles.leftDrawer} ${
-          showDrawer === null
+          hideDrawer === null
             ? styles.hideElemByDefault
-            : showDrawer
+            : hideDrawer
             ? styles.inactiveDrawer
             : styles.activeDrawer
         }`}
         data-testid="leftDrawerContainer"
       >
+        {hideDrawer === null ? 'NULL' : hideDrawer ? 'TRUE' : 'FALSE'}
         <Button
           variant="danger"
           className={styles.closeModalBtn}
           onClick={(): void => {
-            setShowDrawer(false);
+            setHideDrawer(false);
           }}
           data-testid="closeModalBtn"
         >

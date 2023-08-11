@@ -14,20 +14,20 @@ const superAdminScreen = ({
   screenName,
   children,
 }: InterfaceSuperAdminScreenProps): JSX.Element => {
-  const [showDrawer, setShowDrawer] = useState<boolean | null>(null);
+  const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
 
   return (
     <>
       <LeftDrawer
         screenName={screenName}
-        showDrawer={showDrawer}
-        setShowDrawer={setShowDrawer}
+        hideDrawer={hideDrawer}
+        setHideDrawer={setHideDrawer}
       />
       <div
         className={`${styles.pageContainer} ${
-          showDrawer === null
+          hideDrawer === null
             ? ''
-            : showDrawer
+            : hideDrawer
             ? styles.expand
             : styles.contract
         } `}
@@ -40,7 +40,7 @@ const superAdminScreen = ({
           <Button
             className="ms-2"
             onClick={(): void => {
-              setShowDrawer(!showDrawer);
+              setHideDrawer(!hideDrawer);
             }}
             data-testid="menuBtn"
           >
