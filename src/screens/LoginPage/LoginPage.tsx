@@ -16,8 +16,8 @@ import {
   RECAPTCHA_MUTATION,
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import Palisadoes from 'assets/images/palisadoes_logo.png';
-import Talawa from 'assets/images/talawa-logo-200x200.png';
+import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
+import { ReactComponent as PalisadoesLogo } from 'assets/svgs/palisadoes.svg';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
 import Loader from 'components/Loader/Loader';
 import { errorHandler } from 'utils/errorHandler';
@@ -219,11 +219,7 @@ function loginPage(): JSX.Element {
         <Row className={styles.row}>
           <Col sm={0} md={6} lg={7} className={styles.left_portion}>
             <div className={styles.inner}>
-              <img
-                className={styles.palisadoes_logo}
-                src={Palisadoes}
-                alt="Palisadoes logo"
-              />
+              <PalisadoesLogo className={styles.palisadoes_logo} />
               <p className="text-center">{t('fromPalisadoes')}</p>
             </div>
           </Col>
@@ -232,11 +228,7 @@ function loginPage(): JSX.Element {
               <ChangeLanguageDropDown
                 parentContainerStyle={styles.langChangeBtn}
               />
-              <img
-                className={styles.talawa_logo}
-                src={Talawa}
-                alt="Talawa Logo"
-              />
+              <TalawaLogo className={styles.talawa_logo} />
               {/* LOGIN FORM */}
               <div
                 className={`${
