@@ -18,13 +18,14 @@ import {
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
+import debounce from 'utils/debounce';
 import { errorHandler } from 'utils/errorHandler';
 import type {
   InterfaceOrgConnectionType,
   InterfaceUserType,
 } from 'utils/interfaces';
 import styles from './Requests.module.css';
-import debounce from 'utils/debounce';
+import TableLoader from 'components/TableLoader/TableLoader';
 
 const Requests = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'requests' });
@@ -148,6 +149,14 @@ const Requests = (): JSX.Element => {
 
   const debouncedHandleSearchByName = debounce(handleSearchByName);
 
+  const headerTitles: string[] = [
+    '#',
+    t('name'),
+    t('email'),
+    t('accept'),
+    t('reject'),
+  ];
+
   return (
     <>
       <SuperAdminScreen title={t('requests')} screenName="Requests">
@@ -208,77 +217,81 @@ const Requests = (): JSX.Element => {
             </div>
           </div>
         </div>
-        {loadingUsers ? (
-          <div className={styles.notFound}>
-            <h4>{t('loadingRequests')}</h4>
-          </div>
-        ) : usersData.length === 0 && searchByName.length > 0 ? (
+        {loadingUsers == false &&
+        usersData.length === 0 &&
+        searchByName.length > 0 ? (
           <div className={styles.notFound}>
             <h4>
               {t('noResultsFoundFor')} &quot;{searchByName}&quot;
             </h4>
           </div>
-        ) : usersData.length === 0 ? (
+        ) : loadingUsers == false && usersData.length === 0 ? (
           <div className={styles.notFound}>
             <h4>{t('noRequestFound')}</h4>
           </div>
         ) : (
           <div className={styles.listBox}>
-            <Table responsive>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>{t('name')}</th>
-                  <th>{t('email')}</th>
-                  <th>{t('accept')}</th>
-                  <th>{t('reject')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {usersData.map(
-                  (
-                    user: {
-                      _id: string;
-                      firstName: string;
-                      lastName: string;
-                      email: string;
-                      userType: string;
-                    },
-                    index: number
-                  ) => {
-                    return (
-                      <tr key={user._id}>
-                        <th scope="row">{index + 1}</th>
-                        <td>{`${user.firstName} ${user.lastName}`}</td>
-                        <td>{user.email}</td>
-                        <td>
-                          <Button
-                            className="btn btn-success btn-sm"
-                            onClick={async (): Promise<void> => {
-                              await acceptAdmin(user._id);
-                            }}
-                            data-testid={`acceptUser${user._id}`}
-                          >
-                            {t('accept')}
-                          </Button>
-                        </td>
-                        <td>
-                          <Button
-                            className="btn btn-danger btn-sm"
-                            onClick={async (): Promise<void> => {
-                              await rejectAdmin(user._id);
-                            }}
-                            data-testid={`rejectUser${user._id}`}
-                          >
-                            {t('reject')}
-                          </Button>
-                        </td>
-                      </tr>
-                    );
-                  }
-                )}
-              </tbody>
-            </Table>
+            {loadingUsers ? (
+              <TableLoader headerTitles={headerTitles} noOfRows={10} />
+            ) : (
+              <Table responsive>
+                <thead>
+                  <tr>
+                    {headerTitles.map((title: string, index: number) => {
+                      return (
+                        <th key={index} scope="col">
+                          {title}
+                        </th>
+                      );
+                    })}
+                  </tr>
+                </thead>
+                <tbody>
+                  {usersData.map(
+                    (
+                      user: {
+                        _id: string;
+                        firstName: string;
+                        lastName: string;
+                        email: string;
+                        userType: string;
+                      },
+                      index: number
+                    ) => {
+                      return (
+                        <tr key={user._id}>
+                          <th scope="row">{index + 1}</th>
+                          <td>{`${user.firstName} ${user.lastName}`}</td>
+                          <td>{user.email}</td>
+                          <td>
+                            <Button
+                              className="btn btn-success btn-sm"
+                              onClick={async (): Promise<void> => {
+                                await acceptAdmin(user._id);
+                              }}
+                              data-testid={`acceptUser${user._id}`}
+                            >
+                              {t('accept')}
+                            </Button>
+                          </td>
+                          <td>
+                            <Button
+                              className="btn btn-danger btn-sm"
+                              onClick={async (): Promise<void> => {
+                                await rejectAdmin(user._id);
+                              }}
+                              data-testid={`rejectUser${user._id}`}
+                            >
+                              {t('reject')}
+                            </Button>
+                          </td>
+                        </tr>
+                      );
+                    }
+                  )}
+                </tbody>
+              </Table>
+            )}
           </div>
         )}
       </SuperAdminScreen>
