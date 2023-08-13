@@ -600,7 +600,6 @@ export const PLUGIN_GET = gql`
       pluginName
       pluginCreatedBy
       pluginDesc
-      pluginInstallStatus
     }
   }
 `;

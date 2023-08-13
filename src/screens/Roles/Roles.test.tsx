@@ -1,27 +1,49 @@
 import React from 'react';
-import { act, fireEvent, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import Button from 'react-bootstrap/Button';
-import { I18nextProvider } from 'react-i18next';
+import { act, render, screen } from '@testing-library/react';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
+import { I18nextProvider } from 'react-i18next';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
-import Roles from './Roles';
+import userEvent from '@testing-library/user-event';
 import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_LIST,
+  USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { store } from 'state/store';
-import userEvent from '@testing-library/user-event';
-import { within } from '@testing-library/react';
-import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import i18nForTest from 'utils/i18nForTest';
+import Roles from './Roles';
+import { debug } from 'jest-preview';
 
 const MOCKS = [
+  {
+    request: {
+      query: USER_ORGANIZATION_LIST,
+      variables: { id: 'SUPERADMIN' },
+    },
+    result: {
+      data: {
+        user: {
+          userType: 'SUPERADMIN',
+          firstName: 'John',
+          lastName: 'Doe',
+          image: '',
+          email: 'John_Does_Palasidoes@gmail.com',
+          adminFor: {
+            _id: 1,
+            name: 'Palisadoes',
+            image: '',
+          },
+        },
+      },
+    },
+  },
   {
     request: {
       query: USER_LIST,
@@ -150,6 +172,11 @@ const EMPTY_MOCKS = [
     request: {
       query: USER_LIST,
     },
+    result: {
+      data: {
+        users: [],
+      },
+    },
   },
   {
     request: {
@@ -177,22 +204,8 @@ const EMPTY_MOCKS = [
   },
 ];
 
-const EMPTY_ORG_MOCKS = [
-  {
-    request: {
-      query: ORGANIZATION_CONNECTION_LIST,
-    },
-    result: {
-      data: {
-        organizationsConnection: [],
-      },
-    },
-  },
-];
-
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_MOCKS, true);
-const link3 = new StaticMockLink(EMPTY_ORG_MOCKS, true);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -203,7 +216,7 @@ async function wait(ms = 100): Promise<void> {
 }
 
 describe('Testing Roles screen', () => {
-  test('Componenet should be rendered properly', async () => {
+  test('Component should be rendered properly', async () => {
     window.location.assign('/orglist');
 
     render(
@@ -219,9 +232,7 @@ describe('Testing Roles screen', () => {
     );
 
     await wait();
-
-    expect(screen.getByText(/Users List/i)).toBeInTheDocument();
-    expect(screen.getByText(/Search By Name/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Users List/i)).toBeTruthy();
     expect(window.location).toBeAt('/orglist');
   });
 
@@ -277,109 +288,6 @@ describe('Testing Roles screen', () => {
     await wait();
 
     expect(window.location.assign).not.toHaveBeenCalled();
-  });
-
-  test('Roles renders a <PaginationList /> and tests changing rowsPerPage in the select', () => {
-    render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Roles />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    const appHeader = screen.queryByTestId('roles-header');
-    const functionWhenAppHeaderIsNotNull = (app: any): void => {
-      const paginationList = within(app).getByTestId('something');
-      const tablePagination =
-        within(paginationList).getByTestId('table-pagination');
-
-      expect(tablePagination).toBeInTheDocument();
-
-      const rowsPerPageSelect = within(tablePagination).getByTestId(
-        'rows-per-page-select'
-      );
-      fireEvent.change(rowsPerPageSelect, { target: { value: '-1' } });
-      expect(rowsPerPageSelect).toHaveValue('-1');
-    };
-
-    const functionWhenAppHeaderIsNull = (): void => {
-      expect(appHeader).toBeNull();
-    };
-
-    const assertion =
-      appHeader !== null
-        ? functionWhenAppHeaderIsNotNull(appHeader)
-        : functionWhenAppHeaderIsNull();
-
-    assertion;
-  });
-  describe('handleChangePage function', () => {
-    test('should call setPage with the new page when button is clicked', () => {
-      // Arrange
-      const setPage = jest.fn();
-      const newPage = 2;
-      const { getByRole } = render(
-        <Button onClick={(): void => setPage(2)}>Change Page</Button>
-      );
-
-      // Act
-      fireEvent.click(getByRole('button'));
-
-      // Assert
-      expect(setPage).toHaveBeenCalledWith(newPage);
-    });
-  });
-
-  test('should update rowsPerPage when selected from menu', () => {
-    const { getByRole } = render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Roles />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-    const appHeader = screen.queryByTestId('roles-header');
-    const len = MOCKS.length;
-
-    const functionWhenAppHeaderIsNotNull = (app: any): void => {
-      const table = getByRole('table');
-
-      const rowsPerPageButton = getByRole('button', { name: /rows per page/i });
-
-      fireEvent.click(rowsPerPageButton);
-
-      const rowsPerPageOption = getByRole('option', { name: /10/i });
-
-      fireEvent.click(rowsPerPageOption);
-
-      const paginationList = within(app).getByTestId('something');
-      const tablePagination =
-        within(paginationList).getByTestId('table-pagination');
-
-      expect(tablePagination).toHaveAttribute('rowsPerPage', '10');
-
-      expect(table.querySelectorAll('tbody tr')).toHaveLength(len);
-    };
-
-    const functionWhenAppHeaderIsNull = (): void => {
-      expect(appHeader).toBeNull();
-    };
-
-    const assertion =
-      appHeader !== null
-        ? functionWhenAppHeaderIsNotNull(appHeader)
-        : functionWhenAppHeaderIsNull();
-
-    assertion;
   });
 
   test('Testing seach by name functionality', async () => {
@@ -446,11 +354,12 @@ describe('Testing Roles screen', () => {
     );
 
     await wait();
+    expect(screen.getByText(/No User Found/i)).toBeTruthy();
   });
 
   test('Should render warning alert when there are no organizations', async () => {
     const { container } = render(
-      <MockedProvider addTypename={false} link={link3}>
+      <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -463,6 +372,7 @@ describe('Testing Roles screen', () => {
     );
 
     await wait(200);
+    debug();
     expect(container.textContent).toMatch(
       'Organizations not found, please create an organization through dashboard'
     );

@@ -34,6 +34,14 @@
     "requests": "अनुरोध",
     "logout": "लॉग आउट"
   },
+  "leftDrawer": {
+    "talawaAdminPortal": "तलावा व्यवस्थापक पोर्टल",
+    "menu": "मेन्यू",
+    "organizations": "संगठन",
+    "requests": "अनुरोध",
+    "roles": "भूमिकाएँ",
+    "logout": "लॉग आउट"
+  },
   "orgList": {
     "title": "तलवा संगठन",
     "you": "आप",
@@ -41,26 +49,25 @@
     "designation": "पद",
     "email": "ईमेल",
     "searchByName": "नाम से खोजें",
-    "organizationList": "संगठनों की सूची",
+    "organizations": "संगठन",
     "createOrganization": "संगठन बनाएं",
     "description": "विवरण",
     "location": "स्थान",
     "isPublic": "सार्वजनिक है",
     "visibleInSearch": "खोज में दृश्यमान",
     "displayImage": "प्रदर्शन छवि",
-    "enterName": "नाम दर्ज करें"
+    "enterName": "नाम दर्ज करें",
+    "sort": "छांटें",
+    "filter": "फ़िल्टर",
+    "cancel": "रद्द करना",
+    "noOrgErrorTitle": "संगठन नहीं मिला",
+    "noOrgErrorDescription": "कृपया डैशबोर्ड के माध्यम से एक संगठन बनाएं",
+    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला "
   },
-  "superDashListCard": {
-    "created": "बनाया था",
+  "orgListCard": {
     "admins": "व्यवस्थापक",
     "members": "सदस्य",
     "manage": "प्रबंधित करना"
-  },
-  "adminDashListCard": {
-    "view": "देखें",
-    "created": "बनाया गया",
-    "admins": "व्यवस्थापक",
-    "members": "सदस्य"
   },
   "paginationList": {
     "rowsPerPage": "प्रति पृष्ठ पंक्तियाँ",
@@ -77,7 +84,12 @@
     "superAdmin": "सुपरएडमिन",
     "user": "उपयोगकर्ता",
     "enterName": "नाम दर्ज करें",
+    "loadingUsers": "उपयोगकर्ता लोड हो रहा है ...",
+    "noUserFound": "कोई उपयोगकर्ता नहीं मिला।",
+    "sort": "छांटें",
+    "filter": "फ़िल्टर",
     "roleUpdated": "भूमिका अपडेट की गई।",
+    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला ",
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।"
   },
   "requests": {
@@ -89,8 +101,13 @@
     "accept": "स्वीकार करना",
     "reject": "अस्वीकार",
     "enterName": "नाम दर्ज करें",
+    "loadingRequests": "अनुरोध लोड हो रहा है ...",
+    "noRequestFound": "कोई अनुरोध नहीं मिला।",
+    "sort": "छांटें",
+    "filter": "फ़िल्टर",
     "userApproved": "उपयोगकर्ता स्वीकृत",
     "userRejected": "उपयोगकर्ता अस्वीकृत",
+    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला ",
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।"
   },
   "adminNavbar": {
