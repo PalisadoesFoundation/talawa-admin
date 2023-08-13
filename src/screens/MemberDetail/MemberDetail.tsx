@@ -4,13 +4,11 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import UserUpdate from 'components/UserUpdate/UserUpdate';
 
 import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
-import type { RootState } from 'state/reducers';
 import styles from './MemberDetail.module.css';
 import { languages } from 'utils/languages';
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -32,9 +30,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const location = useLocation<MemberDetailProps>();
   const currentUrl = window.location.href.split('=')[1];
   document.title = t('title');
-
-  const appRoutes = useSelector((state: RootState) => state.appRoutes);
-  const { targets, configUrl } = appRoutes;
 
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
   const {

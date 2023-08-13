@@ -35,7 +35,7 @@ export interface InterfaceOrgConnectionType {
   organizationsConnection: InterfaceOrgConnectionInfoType[];
 }
 
-export interface InterfaceQuery_ORGANIZATIONS_LIST_OBJECT {
+export interface InterfaceQueryOrganizationsListObject {
   _id: string;
   image: string | null;
   creator: {

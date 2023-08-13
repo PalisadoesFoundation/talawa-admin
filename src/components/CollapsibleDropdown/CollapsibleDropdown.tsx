@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Button, Collapse } from 'react-bootstrap';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './CollapsibleDropdown.module.css';
 import IconComponent from 'components/IconComponent/IconComponent';
-import { ReactComponent as AngleRightIcon } from '../../assets/svgs/icons/angleRight.svg';
 import { useHistory } from 'react-router-dom';
 
 interface InterfaceCollapsibleDropdown {
@@ -17,7 +16,7 @@ const collapsibleDropdown = ({
 }: InterfaceCollapsibleDropdown): JSX.Element => {
   const [showDropdown, setShowDropdown] = React.useState(false);
   const [active, setActive] = React.useState(false);
-  const { name, url, subTargets } = target;
+  const { name, subTargets } = target;
   const history = useHistory();
 
   useEffect(() => {

@@ -29,7 +29,7 @@ function organizationDashboard(): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
 
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
-  const { targets, configUrl } = appRoutes;
+  const { targets } = appRoutes;
 
   const { data, loading, error } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: currentUrl },

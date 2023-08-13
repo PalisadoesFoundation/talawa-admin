@@ -13,7 +13,6 @@ import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
 import { store } from 'state/store';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
-import { debug } from 'jest-preview';
 import { act } from 'react-dom/test-utils';
 import { StaticMockLink } from 'utils/StaticMockLink';
 

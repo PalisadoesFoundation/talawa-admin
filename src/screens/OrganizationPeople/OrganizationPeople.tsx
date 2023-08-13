@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { Container, Form } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { useSelector } from 'react-redux';
 
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
@@ -18,7 +17,6 @@ import PaginationList from 'components/PaginationList/PaginationList';
 import UserListCard from 'components/UserListCard/UserListCard';
 import { useTranslation } from 'react-i18next';
 import debounce from 'utils/debounce';
-import type { RootState } from '../../state/reducers';
 import styles from './OrganizationPeople.module.css';
 
 import { toast } from 'react-toastify';
@@ -31,9 +29,6 @@ function organizationPeople(): JSX.Element {
   document.title = t('title');
 
   const currentUrl = window.location.href.split('=')[1];
-
-  const appRoutes = useSelector((state: RootState) => state.appRoutes);
-  const { targets, configUrl } = appRoutes;
 
   const [state, setState] = useState(0);
   const [page, setPage] = useState(0);

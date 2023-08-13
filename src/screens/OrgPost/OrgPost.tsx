@@ -5,7 +5,6 @@ import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
 import { Form } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
-import { useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -14,7 +13,6 @@ import styles from './OrgPost.module.css';
 import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
 import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
-import type { RootState } from 'state/reducers';
 import PaginationList from 'components/PaginationList/PaginationList';
 import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
@@ -45,8 +43,6 @@ function orgPost(): JSX.Element {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const currentUrl = window.location.href.split('=')[1];
-  const appRoutes = useSelector((state: RootState) => state.appRoutes);
-  const { targets, configUrl } = appRoutes;
 
   const showInviteModal = (): void => {
     setPostModalIsOpen(true);

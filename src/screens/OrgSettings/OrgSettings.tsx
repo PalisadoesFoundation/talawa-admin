@@ -13,8 +13,6 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import type { RootState } from 'state/reducers';
 import styles from './OrgSettings.module.css';
 
 function orgSettings(): JSX.Element {
@@ -44,9 +42,6 @@ function orgSettings(): JSX.Element {
       setScreenVariable(5);
     }
   };
-
-  const appRoutes = useSelector((state: RootState) => state.appRoutes);
-  const { targets, configUrl } = appRoutes;
 
   const currentUrl = window.location.href.split('=')[1];
 

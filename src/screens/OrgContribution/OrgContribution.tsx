@@ -2,12 +2,10 @@ import React from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 
 import ContriStats from 'components/ContriStats/ContriStats';
 import OrgContriCards from 'components/OrgContriCards/OrgContriCards';
 import { Form } from 'react-bootstrap';
-import type { RootState } from 'state/reducers';
 import styles from './OrgContribution.module.css';
 
 function orgContribution(): JSX.Element {
@@ -16,9 +14,6 @@ function orgContribution(): JSX.Element {
   });
 
   document.title = t('title');
-
-  const appRoutes = useSelector((state: RootState) => state.appRoutes);
-  const { targets, configUrl } = appRoutes;
 
   return (
     <>

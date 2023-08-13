@@ -4,7 +4,6 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { useSelector } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import { Form } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
@@ -20,7 +19,6 @@ import {
   ORGANIZATIONS_LIST,
 } from 'GraphQl/Queries/Queries';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
-import type { RootState } from 'state/reducers';
 import dayjs from 'dayjs';
 import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
@@ -52,9 +50,6 @@ function organizationEvents(): JSX.Element {
     endTime: '18:00:00',
   });
   const currentUrl = window.location.href.split('=')[1];
-
-  const appRoutes = useSelector((state: RootState) => state.appRoutes);
-  const { targets, configUrl } = appRoutes;
 
   const showInviteModal = (): void => {
     setEventModalIsOpen(true);
