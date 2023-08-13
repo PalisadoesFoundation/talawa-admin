@@ -134,28 +134,6 @@
     "noResultsFoundFor": "未找到结果 ",
     "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
-  "adminNavbar": {
-    "talawa_portal": "塔拉瓦管理門戶",
-    "Dashboard": "儀表板",
-    "People": "人們",
-    "Events": "事件",
-    "Contributions": "貢獻",
-    "Posts": "帖子",
-    "Block/Unblock": "阻止/解除阻止",
-    "Plugins": "插件",
-    "Plugin Store": "插件商店",
-    "allOrganizations": "所有组织",
-    "yourOrganization": "您的组织",
-    "notification": "通知",
-    "settings": "設置",
-    "language": "語",
-    "logout": "登出",
-    "notifications": "通知",
-    "spamsThe": "垃圾郵件",
-    "group": "團體",
-    "noNotifications": "沒有通知",
-    "close": "關"
-  },
   "dashboard": {
     "title": "儀表板",
     "location": "地點",

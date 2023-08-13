@@ -134,28 +134,6 @@
     "noResultsFoundFor": "Aucun résultat trouvé pour ",
     "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
-  "adminNavbar": {
-    "talawa_portal": "Portail D'Administrateur Talawa",
-    "Dashboard": "Tableau de bord",
-    "People": "Personnes",
-    "Events": "Événements",
-    "Contributions": "Contributions",
-    "Posts": "Des postes",
-    "Block/Unblock": "Bloquer/Débloquer",
-    "Plugins": "Plugins",
-    "Plugin Store": "Magasin de plugins",
-    "allOrganizations": "Toutes les organisations",
-    "yourOrganization": "Votre organisation",
-    "notification": "Notification",
-    "settings": "Réglages",
-    "language": "Langue",
-    "logout": "Se déconnecter",
-    "notifications": "Notifications",
-    "spamsThe": "spam le",
-    "group": "groupe",
-    "noNotifications": "Aucune notification",
-    "close": "Proche"
-  },
   "dashboard": {
     "title": "Tableau de bord",
     "location": "Emplacement",

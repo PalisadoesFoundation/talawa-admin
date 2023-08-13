@@ -1,24 +1,23 @@
+import { useMutation, useQuery } from '@apollo/client';
 import React, { useEffect, useRef, useState } from 'react';
 import { Col, Form, Row } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
-import { useMutation, useQuery } from '@apollo/client';
-import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
-import styles from './BlockUser.module.css';
-import { BLOCK_PAGE_MEMBER_LIST } from 'GraphQl/Queries/Queries';
-import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
-import type { RootState } from 'state/reducers';
+import { CircularProgress } from '@mui/material';
 import {
   BLOCK_USER_MUTATION,
   UNBLOCK_USER_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { useTranslation } from 'react-i18next';
-import PaginationList from 'components/PaginationList/PaginationList';
-import { errorHandler } from 'utils/errorHandler';
-import debounce from 'utils/debounce';
-import { CircularProgress } from '@mui/material';
+import { BLOCK_PAGE_MEMBER_LIST } from 'GraphQl/Queries/Queries';
 import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
+import PaginationList from 'components/PaginationList/PaginationList';
+import { useTranslation } from 'react-i18next';
+import type { RootState } from 'state/reducers';
+import debounce from 'utils/debounce';
+import { errorHandler } from 'utils/errorHandler';
+import styles from './BlockUser.module.css';
 
 interface InterfaceMember {
   _id: string;

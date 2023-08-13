@@ -11,7 +11,6 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
 import styles from './OrgPost.module.css';
-import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
 import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';

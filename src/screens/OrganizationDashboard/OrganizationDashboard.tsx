@@ -10,7 +10,6 @@ import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 
 import styles from './OrganizationDashboard.module.css';
-import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import AboutImg from 'assets/images/defaultImg.png';
 import {
   ORGANIZATIONS_LIST,

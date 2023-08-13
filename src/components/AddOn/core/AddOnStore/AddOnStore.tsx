@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'react';
 import styles from './AddOnStore.module.css';
-import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import AddOnEntry from '../AddOnEntry/AddOnEntry';
 import Action from '../../support/components/Action/Action';
 import SidePanel from 'components/AddOn/support/components/SidePanel/SidePanel';

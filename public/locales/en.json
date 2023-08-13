@@ -136,28 +136,6 @@
     "noResultsFoundFor": "No results found for ",
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
-  "adminNavbar": {
-    "talawa_portal": "Talawa Admin Portal",
-    "Dashboard": "Dashboard",
-    "People": "People",
-    "Events": "Events",
-    "Contributions": "Contributions",
-    "Posts": "Posts",
-    "Block/Unblock": "Block/Unblock",
-    "Plugins": "Plugins",
-    "Plugin Store": "Plugin Store",
-    "allOrganizations": "All Organizations",
-    "yourOrganization": "Your Organization",
-    "notification": "Notification",
-    "settings": "Settings",
-    "language": "Language",
-    "logout": "Logout",
-    "notifications": "Notifications",
-    "spamsThe": "spams the",
-    "group": "group",
-    "noNotifications": "No Notifications",
-    "close": "Close"
-  },
   "dashboard": {
     "title": "Dashboard",
     "location": "Location",

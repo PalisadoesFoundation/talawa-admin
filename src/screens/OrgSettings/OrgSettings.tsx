@@ -1,22 +1,21 @@
-import React from 'react';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import styles from './OrgSettings.module.css';
-import UserUpdate from 'components/UserUpdate/UserUpdate';
-import UserPasswordUpdate from 'components/UserPasswordUpdate/UserPasswordUpdate';
-import OrgUpdate from 'components/OrgUpdate/OrgUpdate';
-import OrgDelete from 'components/OrgDelete/OrgDelete';
-import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
-import MemberRequestCard from 'components/MemberRequestCard/MemberRequestCard';
 import { useQuery } from '@apollo/client';
 import { MEMBERSHIP_REQUEST } from 'GraphQl/Queries/Queries';
+import defaultImg from 'assets/images/blank.png';
+import Loader from 'components/Loader/Loader';
+import MemberRequestCard from 'components/MemberRequestCard/MemberRequestCard';
+import OrgDelete from 'components/OrgDelete/OrgDelete';
+import OrgUpdate from 'components/OrgUpdate/OrgUpdate';
+import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
+import UserPasswordUpdate from 'components/UserPasswordUpdate/UserPasswordUpdate';
+import UserUpdate from 'components/UserUpdate/UserUpdate';
+import React from 'react';
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'state/reducers';
-import { useTranslation } from 'react-i18next';
-import defaultImg from 'assets/images/blank.png';
-import Button from 'react-bootstrap/Button';
-import Loader from 'components/Loader/Loader';
-import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
+import styles from './OrgSettings.module.css';
 
 function orgSettings(): JSX.Element {
   const { t } = useTranslation('translation', {

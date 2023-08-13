@@ -1,26 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import { useLazyQuery } from '@apollo/client';
-import { useSelector } from 'react-redux';
-import { Container, Form } from 'react-bootstrap';
 import dayjs from 'dayjs';
+import React, { useEffect, useState } from 'react';
+import { Container, Form } from 'react-bootstrap';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import { useSelector } from 'react-redux';
 
-import styles from './OrganizationPeople.module.css';
-import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
-import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
-import OrgAdminListCard from 'components/OrgAdminListCard/OrgAdminListCard';
-import UserListCard from 'components/UserListCard/UserListCard';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST,
 } from 'GraphQl/Queries/Queries';
-import type { RootState } from '../../state/reducers';
+import NotFound from 'components/NotFound/NotFound';
+import OrgAdminListCard from 'components/OrgAdminListCard/OrgAdminListCard';
+import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
+import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 import PaginationList from 'components/PaginationList/PaginationList';
+import UserListCard from 'components/UserListCard/UserListCard';
 import { useTranslation } from 'react-i18next';
 import debounce from 'utils/debounce';
-import NotFound from 'components/NotFound/NotFound';
-import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
+import type { RootState } from '../../state/reducers';
+import styles from './OrganizationPeople.module.css';
 
 import { toast } from 'react-toastify';
 
