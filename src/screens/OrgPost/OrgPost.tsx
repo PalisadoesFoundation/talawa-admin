@@ -23,6 +23,7 @@ import NotFound from 'components/NotFound/NotFound';
 import { Form as StyleBox } from 'react-bootstrap';
 import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
+import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 
 function orgPost(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -144,134 +145,129 @@ function orgPost(): JSX.Element {
 
   const debouncedHandleSearch = debounce(handleSearch);
 
-  // let ReversedPostsList;
-  // //the above variable is defined to reverse the list of posts so the the most recently added posts should be displayed at the top.
-  // if (data) {
-  //   ReversedPostsList = data.postsByOrganizationConnection.edges
-  //     .slice()
-  //     .reverse();
-  // }
   return (
     <>
-      <AdminNavbar targets={targets} url1={configUrl} />
-      <Row>
-        <Col sm={3}>
-          <div className={styles.sidebar}>
-            <div className={styles.sidebarsticky}>
-              <h6 className={styles.searchtitle}>{t('searchPost')}</h6>
-              <div className={styles.checkboxdiv}>
-                <div key={`inline-radio`} className="mb-3">
-                  <StyleBox.Check
-                    inline
-                    label={t('Title')}
-                    name="radio-group"
-                    type="radio"
-                    value="searchTitle"
-                    onChange={searchChange}
-                    checked={showTitle}
-                    className={styles.actionradio}
-                    id={`inline-radio-1`}
-                  />
-                  <StyleBox.Check
-                    inline
-                    label={t('Text')}
-                    name="radio-group"
-                    type="radio"
-                    value="searchText"
-                    onChange={searchChange}
-                    checked={!showTitle}
-                    className={styles.actionradio}
-                    id={`inline-radio-2`}
-                  />
+      <OrganizationScreen screenName="Posts" title={t('title')}>
+        <Row>
+          <Col sm={3}>
+            <div className={styles.sidebar}>
+              <div className={styles.sidebarsticky}>
+                <h6 className={styles.searchtitle}>{t('searchPost')}</h6>
+                <div className={styles.checkboxdiv}>
+                  <div key={`inline-radio`} className="mb-3">
+                    <StyleBox.Check
+                      inline
+                      label={t('Title')}
+                      name="radio-group"
+                      type="radio"
+                      value="searchTitle"
+                      onChange={searchChange}
+                      checked={showTitle}
+                      className={styles.actionradio}
+                      id={`inline-radio-1`}
+                    />
+                    <StyleBox.Check
+                      inline
+                      label={t('Text')}
+                      name="radio-group"
+                      type="radio"
+                      value="searchText"
+                      onChange={searchChange}
+                      checked={!showTitle}
+                      className={styles.actionradio}
+                      id={`inline-radio-2`}
+                    />
+                  </div>
                 </div>
+                <Form.Control
+                  type="text"
+                  id="posttitle"
+                  placeholder={showTitle ? t('searchTitle') : t('searchText')}
+                  autoComplete="off"
+                  onChange={debouncedHandleSearch}
+                />
               </div>
-              <Form.Control
-                type="text"
-                id="posttitle"
-                placeholder={showTitle ? t('searchTitle') : t('searchText')}
-                autoComplete="off"
-                onChange={debouncedHandleSearch}
-              />
             </div>
-          </div>
-        </Col>
-        <Col sm={8}>
-          <div className={styles.mainpageright}>
-            <Row className={styles.justifysp}>
-              <p className={styles.logintitle}>{t('posts')}</p>
-              <Button
-                variant="success"
-                className={styles.addbtn}
-                onClick={showInviteModal}
-                data-testid="createPostModalBtn"
-              >
-                + {t('createPost')}
-              </Button>
-            </Row>
-            <div className={`row ${styles.list_box}`}>
-              {orgPostListData &&
-              orgPostListData.postsByOrganizationConnection.edges.length > 0 ? (
-                (rowsPerPage > 0
-                  ? orgPostListData.postsByOrganizationConnection.edges.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
-                    )
-                  : rowsPerPage > 0
-                  ? orgPostListData.postsByOrganizationConnection.edges.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
-                    )
-                  : orgPostListData.postsByOrganizationConnection.edges
-                ).map(
-                  (datas: {
-                    _id: string;
-                    title: string;
-                    text: string;
-                    imageUrl: string;
-                    videoUrl: string;
-                    organizationId: string;
-                    creator: { firstName: string; lastName: string };
-                  }) => {
-                    return (
-                      <OrgPostCard
-                        key={datas._id}
-                        id={datas._id}
-                        postTitle={datas.title}
-                        postInfo={datas.text}
-                        postAuthor={`${datas.creator.firstName} ${datas.creator.lastName}`}
-                        postPhoto={datas.imageUrl}
-                        postVideo={datas.videoUrl}
-                      />
-                    );
-                  }
-                )
-              ) : (
-                <NotFound title="post" keyPrefix="postNotFound" />
-              )}
-            </div>
-          </div>
-          <div>
-            <table>
-              <tbody>
-                <tr>
-                  <PaginationList
-                    count={
-                      orgPostListData
-                        ? orgPostListData.postsByOrganizationConnection.edges
-                            .length
-                        : 0
+          </Col>
+          <Col sm={8}>
+            <div className={styles.mainpageright}>
+              <Row className={styles.justifysp}>
+                <p className={styles.logintitle}>{t('posts')}</p>
+                <Button
+                  variant="success"
+                  className={styles.addbtn}
+                  onClick={showInviteModal}
+                  data-testid="createPostModalBtn"
+                >
+                  + {t('createPost')}
+                </Button>
+              </Row>
+              <div className={`row ${styles.list_box}`}>
+                {orgPostListData &&
+                orgPostListData.postsByOrganizationConnection.edges.length >
+                  0 ? (
+                  (rowsPerPage > 0
+                    ? orgPostListData.postsByOrganizationConnection.edges.slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                    : rowsPerPage > 0
+                    ? orgPostListData.postsByOrganizationConnection.edges.slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                    : orgPostListData.postsByOrganizationConnection.edges
+                  ).map(
+                    (datas: {
+                      _id: string;
+                      title: string;
+                      text: string;
+                      imageUrl: string;
+                      videoUrl: string;
+                      organizationId: string;
+                      creator: { firstName: string; lastName: string };
+                    }) => {
+                      return (
+                        <OrgPostCard
+                          key={datas._id}
+                          id={datas._id}
+                          postTitle={datas.title}
+                          postInfo={datas.text}
+                          postAuthor={`${datas.creator.firstName} ${datas.creator.lastName}`}
+                          postPhoto={datas.imageUrl}
+                          postVideo={datas.videoUrl}
+                        />
+                      );
                     }
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </Col>
-      </Row>
+                  )
+                ) : (
+                  <NotFound title="post" keyPrefix="postNotFound" />
+                )}
+              </div>
+            </div>
+            <div>
+              <table>
+                <tbody>
+                  <tr>
+                    <PaginationList
+                      count={
+                        orgPostListData
+                          ? orgPostListData.postsByOrganizationConnection.edges
+                              .length
+                          : 0
+                      }
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </Col>
+        </Row>
+      </OrganizationScreen>
       <Modal show={postmodalisOpen}>
         <Modal.Header>
           <p className={styles.titlemodal}>{t('postDetails')}</p>

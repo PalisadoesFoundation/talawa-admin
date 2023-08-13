@@ -68,7 +68,7 @@ describe('Testing Admin Navbar', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <AdminNavbar url1={''} {...props} />
+              <AdminNavbar />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -101,7 +101,7 @@ describe('Testing Admin Navbar', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <AdminNavbar url1={''} {...props} />
+              <AdminNavbar />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -119,7 +119,7 @@ describe('Testing Admin Navbar', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <AdminNavbar url1={''} {...props} />
+              <AdminNavbar />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -137,7 +137,7 @@ describe('Testing Admin Navbar', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <AdminNavbar url1={''} {...props} />
+              <AdminNavbar />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -154,7 +154,7 @@ describe('Testing Admin Navbar', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <AdminNavbar url1={''} {...props} />
+              <AdminNavbar />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -182,7 +182,7 @@ describe('Testing Admin Navbar', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <AdminNavbar url1={''} {...props} />
+              <AdminNavbar />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -197,7 +197,7 @@ describe('Testing Admin Navbar', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <AdminNavbar url1={''} {...props} />
+              <AdminNavbar />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>

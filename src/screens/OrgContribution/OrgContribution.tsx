@@ -23,7 +23,7 @@ function orgContribution(): JSX.Element {
 
   return (
     <>
-      <AdminNavbar targets={targets} url1={configUrl} />
+      <AdminNavbar />
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>

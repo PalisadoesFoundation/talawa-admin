@@ -16,7 +16,7 @@ function addOn({ children }: InterfaceAddOnProps): JSX.Element {
   const { targets, configUrl } = appRoutes;
   return (
     <>
-      <AdminNavbar targets={targets} url1={configUrl} />
+      <AdminNavbar />
       <div className="plugin-container" data-testid="pluginContainer">
         {children}
       </div>

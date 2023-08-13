@@ -42,6 +42,30 @@
     "users": "Usuarios",
     "logout": "Cerrar sesión"
   },
+  "leftDrawerOrg": {
+    "talawaAdminPortal": "Portal de administración de Talawa",
+    "menu": "Menú",
+    "talawa_portal": "Portal De Administración Talawa",
+    "Dashboard": "Tablero",
+    "People": "Gente",
+    "Events": "Eventos",
+    "Contributions": "Contribuciones",
+    "Posts": "Publicaciones",
+    "Block/Unblock": "Bloquear/Desbloquear",
+    "Plugins": "Complementos",
+    "Plugin Store": "Tienda de complementos",
+    "allOrganizations": "Todas las organizaciones",
+    "yourOrganization": "Tu organización",
+    "notification": "Notificación",
+    "settings": "Ajustes",
+    "language": "Idioma",
+    "logout": "Cerrar sesión",
+    "notifications": "Notificaciones",
+    "spamsThe": "envía correo no deseado",
+    "group": "grupo",
+    "noNotifications": "No Notificaciones",
+    "close": "Cerca"
+  },
   "orgList": {
     "title": "Organizaciones Talawa",
     "you": "Tú",
@@ -133,7 +157,7 @@
     "close": "Cerca"
   },
   "dashboard": {
-    "title": "Panel de Talawa",
+    "title": "Panel de",
     "location": "Ubicación",
     "about": "Sobre",
     "deleteThisOrganization": "Eliminar esta organización",
@@ -422,6 +446,7 @@
     "pDesc": "Este complemento habilita la interfaz de usuario para"
   },
   "addOnStore": {
+    "title": "Tienda de complementos",
     "searchName": "Ej: Donaciones",
     "enable": "Activada",
     "disable": "Desactivada",

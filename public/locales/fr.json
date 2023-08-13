@@ -42,6 +42,30 @@
     "users": "Utilisateurs",
     "logout": "Déconnexion"
   },
+  "leftDrawerOrg": {
+    "talawaAdminPortal": "Portail d'administration Talawa",
+    "menu": "Menu",
+    "talawa_portal": "Portail D'Administrateur Talawa",
+    "Dashboard": "Tableau de bord",
+    "People": "Personnes",
+    "Events": "Événements",
+    "Contributions": "Contributions",
+    "Posts": "Des postes",
+    "Block/Unblock": "Bloquer/Débloquer",
+    "Plugins": "Plugins",
+    "Plugin Store": "Magasin de plugins",
+    "allOrganizations": "Toutes les organisations",
+    "yourOrganization": "Votre organisation",
+    "notification": "Notification",
+    "settings": "Réglages",
+    "language": "Langue",
+    "logout": "Se déconnecter",
+    "notifications": "Notifications",
+    "spamsThe": "spam le",
+    "group": "groupe",
+    "noNotifications": "Aucune notification",
+    "close": "Proche"
+  },
   "orgList": {
     "title": "Organisations Talawa",
     "you": "Tu",
@@ -133,7 +157,7 @@
     "close": "Proche"
   },
   "dashboard": {
-    "title": "Tableau de bord Talawa",
+    "title": "Tableau de bord",
     "location": "Emplacement",
     "about": "À propos de",
     "deleteThisOrganization": "Supprimer cette organisation",
@@ -422,6 +446,7 @@
     "pDesc": "Ce plugin active l'interface utilisateur pour"
   },
   "addOnStore": {
+    "title": "Add-On Store",
     "searchName": "Ex:Des dons ",
     "enable": "Activé",
     "disable": "Désactivé",

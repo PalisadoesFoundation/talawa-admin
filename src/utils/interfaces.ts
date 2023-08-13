@@ -34,3 +34,42 @@ export interface InterfaceOrgConnectionInfoType {
 export interface InterfaceOrgConnectionType {
   organizationsConnection: InterfaceOrgConnectionInfoType[];
 }
+
+export interface InterfaceQuery_ORGANIZATIONS_LIST_OBJECT {
+  _id: string;
+  image: string | null;
+  creator: {
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+  name: string;
+  description: string;
+  location: string;
+  members: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  }[];
+  admins: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  }[];
+  membershipRequests: {
+    _id: string;
+    user: {
+      firstName: string;
+      lastName: string;
+      email: string;
+    };
+  }[];
+  blockedUsers: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  }[];
+}

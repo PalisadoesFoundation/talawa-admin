@@ -16,22 +16,26 @@ import {
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { languages } from 'utils/languages';
+import { useSelector } from 'react-redux';
+import type { RootState } from 'state/reducers';
 
-interface InterfaceNavbarProps {
-  targets: {
-    url?: string;
-    name: string;
-    subTargets?: {
-      url: string;
-      name: string;
-      icon?: string;
-    }[];
-  }[];
-  url1: string;
-}
-
-function adminNavbar({ targets, url1 }: InterfaceNavbarProps): JSX.Element {
+function adminNavbar(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'adminNavbar' });
+  const appRoutes: {
+    targets: {
+      url?: string;
+      name: string;
+      subTargets?: {
+        url: string;
+        name: string;
+        icon?: string;
+      }[];
+    }[];
+    configUrl: string;
+  } = useSelector((state: RootState) => state.appRoutes);
+
+  const { targets, configUrl } = appRoutes;
+
   const currentUrl = window.location.href.split('=')[1];
 
   const { data: orgData, error: orgError } = useQuery(ORGANIZATIONS_LIST, {
@@ -141,7 +145,7 @@ function adminNavbar({ targets, url1 }: InterfaceNavbarProps): JSX.Element {
                 <MenuIcon />
               </Dropdown.Toggle>
               <Dropdown.Menu className={styles.dropdownMenu}>
-                <Dropdown.Item as={Link} to={`/orgsetting/id=${url1}`}>
+                <Dropdown.Item as={Link} to={`/orgsetting/id=${configUrl}`}>
                   <i className="fa fa-cogs"></i>&ensp; {t('settings')}
                 </Dropdown.Item>
                 <Dropdown className={styles.languageDropdown}>

@@ -18,6 +18,7 @@ import PaginationList from 'components/PaginationList/PaginationList';
 import { errorHandler } from 'utils/errorHandler';
 import debounce from 'utils/debounce';
 import { CircularProgress } from '@mui/material';
+import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 
 interface InterfaceMember {
   _id: string;
@@ -159,164 +160,168 @@ const Requests = (): JSX.Element => {
 
   return (
     <>
-      <AdminNavbar targets={targets} url1={configUrl} />
-      <Row>
-        <Col sm={3}>
-          <div className={styles.sidebar}>
-            <div className={styles.sidebarsticky}>
-              <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
-              <Form.Control
-                type="name"
-                id="firstName"
-                placeholder={t('searchFirstName')}
-                name="firstName_contains"
-                data-testid="searchByFirstName"
-                autoComplete="off"
-                onChange={handleSearchDebounced}
-                ref={firstNameRef}
-              />
-
-              <Form.Control
-                type="name"
-                id="lastName"
-                placeholder={t('searchLastName')}
-                name="lastName_contains"
-                data-testid="searchByLastName"
-                autoComplete="off"
-                onChange={handleSearchDebounced}
-                ref={lastNameRef}
-              />
-
-              <div className={styles.radio_buttons} data-testid="usertypelist">
-                <Form.Check
-                  id="allusers"
-                  value="allusers"
-                  name="displaylist"
-                  type="radio"
-                  data-testid="allusers"
-                  defaultChecked={state == 0}
-                  onClick={(): void => {
-                    setState(0);
-                  }}
+      <OrganizationScreen screenName="Block/Unblock" title={t('title')}>
+        <Row>
+          <Col sm={3}>
+            <div className={styles.sidebar}>
+              <div className={styles.sidebarsticky}>
+                <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
+                <Form.Control
+                  type="name"
+                  id="firstName"
+                  placeholder={t('searchFirstName')}
+                  name="firstName_contains"
+                  data-testid="searchByFirstName"
+                  autoComplete="off"
+                  onChange={handleSearchDebounced}
+                  ref={firstNameRef}
                 />
-                <label htmlFor="allusers">{t('allMembers')}</label>
 
-                <Form.Check
-                  id="blockedusers"
-                  value="blockedusers"
-                  name="displaylist"
-                  data-testid="blockedusers"
-                  type="radio"
-                  defaultChecked={state == 1}
-                  onClick={(): void => {
-                    setState(1);
-                  }}
+                <Form.Control
+                  type="name"
+                  id="lastName"
+                  placeholder={t('searchLastName')}
+                  name="lastName_contains"
+                  data-testid="searchByLastName"
+                  autoComplete="off"
+                  onChange={handleSearchDebounced}
+                  ref={lastNameRef}
                 />
-                <label htmlFor="blockedusers">{t('blockedUsers')}</label>
-              </div>
-            </div>
-          </div>
-        </Col>
 
-        <Col sm={8}>
-          <div className={styles.mainpageright}>
-            <Row className={styles.justifysp}>
-              <p className={styles.logintitle}>{t('listOfUsers')}</p>
-            </Row>
-            {memberLoading ? (
-              <div className={styles.loader}>
-                <CircularProgress />
-              </div>
-            ) : (
-              <div className={styles.list_box}>
-                <div className="table-responsive">
-                  <table
-                    className={`table table-hover ${styles.userListTable}`}
-                  >
-                    <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">{t('name')}</th>
-                        <th scope="col">{t('email')}</th>
-                        <th scope="col" className="text-center">
-                          {t('block_unblock')}
-                        </th>
-                      </tr>
-                    </thead>
+                <div
+                  className={styles.radio_buttons}
+                  data-testid="usertypelist"
+                >
+                  <Form.Check
+                    id="allusers"
+                    value="allusers"
+                    name="displaylist"
+                    type="radio"
+                    data-testid="allusers"
+                    defaultChecked={state == 0}
+                    onClick={(): void => {
+                      setState(0);
+                    }}
+                  />
+                  <label htmlFor="allusers">{t('allMembers')}</label>
 
-                    <tbody>
-                      {
-                        /* istanbul ignore next */
-                        (rowsPerPage > 0
-                          ? membersData.slice(
-                              page * rowsPerPage,
-                              page * rowsPerPage + rowsPerPage
-                            )
-                          : membersData
-                        ).map((user, index: number) => {
-                          return (
-                            <tr key={user._id}>
-                              <th scope="row">{page * 10 + (index + 1)}</th>
-                              <td>{`${user.firstName} ${user.lastName}`}</td>
-                              <td>{user.email}</td>
-                              <td className="text-center">
-                                {user.organizationsBlockedBy.some(
-                                  (spam: any) => spam._id === currentUrl
-                                ) ? (
-                                  <Button
-                                    className="btn btn-danger"
-                                    onClick={async (): Promise<void> => {
-                                      await handleUnBlockUser(user._id);
-                                    }}
-                                    data-testid={`unBlockUser${user._id}`}
-                                  >
-                                    {t('unblock')}
-                                  </Button>
-                                ) : (
-                                  <Button
-                                    className="btn btn-success"
-                                    onClick={async (): Promise<void> => {
-                                      await handleBlockUser(user._id);
-                                    }}
-                                    data-testid={`blockUser${user._id}`}
-                                  >
-                                    {t('block')}
-                                  </Button>
-                                )}
-                              </td>
-                            </tr>
-                          );
-                        })
-                      }
-                    </tbody>
-                  </table>
+                  <Form.Check
+                    id="blockedusers"
+                    value="blockedusers"
+                    name="displaylist"
+                    data-testid="blockedusers"
+                    type="radio"
+                    defaultChecked={state == 1}
+                    onClick={(): void => {
+                      setState(1);
+                    }}
+                  />
+                  <label htmlFor="blockedusers">{t('blockedUsers')}</label>
                 </div>
               </div>
-            )}
-            <div>
-              <table
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <tbody>
-                  <tr>
-                    <PaginationList
-                      count={membersData.length}
-                      rowsPerPage={rowsPerPage}
-                      page={page}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                  </tr>
-                </tbody>
-              </table>
             </div>
-          </div>
-        </Col>
-      </Row>
+          </Col>
+
+          <Col sm={8}>
+            <div className={styles.mainpageright}>
+              <Row className={styles.justifysp}>
+                <p className={styles.logintitle}>{t('listOfUsers')}</p>
+              </Row>
+              {memberLoading ? (
+                <div className={styles.loader}>
+                  <CircularProgress />
+                </div>
+              ) : (
+                <div className={styles.list_box}>
+                  <div className="table-responsive">
+                    <table
+                      className={`table table-hover ${styles.userListTable}`}
+                    >
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">{t('name')}</th>
+                          <th scope="col">{t('email')}</th>
+                          <th scope="col" className="text-center">
+                            {t('block_unblock')}
+                          </th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        {
+                          /* istanbul ignore next */
+                          (rowsPerPage > 0
+                            ? membersData.slice(
+                                page * rowsPerPage,
+                                page * rowsPerPage + rowsPerPage
+                              )
+                            : membersData
+                          ).map((user, index: number) => {
+                            return (
+                              <tr key={user._id}>
+                                <th scope="row">{page * 10 + (index + 1)}</th>
+                                <td>{`${user.firstName} ${user.lastName}`}</td>
+                                <td>{user.email}</td>
+                                <td className="text-center">
+                                  {user.organizationsBlockedBy.some(
+                                    (spam: any) => spam._id === currentUrl
+                                  ) ? (
+                                    <Button
+                                      className="btn btn-danger"
+                                      onClick={async (): Promise<void> => {
+                                        await handleUnBlockUser(user._id);
+                                      }}
+                                      data-testid={`unBlockUser${user._id}`}
+                                    >
+                                      {t('unblock')}
+                                    </Button>
+                                  ) : (
+                                    <Button
+                                      className="btn btn-success"
+                                      onClick={async (): Promise<void> => {
+                                        await handleBlockUser(user._id);
+                                      }}
+                                      data-testid={`blockUser${user._id}`}
+                                    >
+                                      {t('block')}
+                                    </Button>
+                                  )}
+                                </td>
+                              </tr>
+                            );
+                          })
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+              <div>
+                <table
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <tbody>
+                    <tr>
+                      <PaginationList
+                        count={membersData.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                      />
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </Col>
+        </Row>
+      </OrganizationScreen>
     </>
   );
 };

@@ -41,6 +41,30 @@
     "requests": "अनुरोध",
     "users": "उपयोगकर्ता",
     "logout": "लॉग आउट"
+  },  
+  "leftDrawerOrg": {
+    "talawaAdminPortal": "तलावा व्यवस्थापक पोर्टल",
+    "menu": "मेन्यू",
+    "talawa_portal": "तलावा प्रशासन पोर्टल",
+    "Dashboard": "डैशबोर्ड",
+    "People": "लोग",
+    "Events": "आयोजन",
+    "Contributions": "योगदान",
+    "Posts": "पोस्ट",
+    "Block/Unblock": "ब्लॉक/अनब्लॉक करें",
+    "Plugins": "प्लगइन्स",
+    "Plugin Store": "प्लगइन स्टोर",
+    "allOrganizations": "सभी संगठन",
+    "yourOrganization": "आपका संगठन",
+    "notification": "अधिसूचना",
+    "settings": "समायोजन",
+    "language": "भाषा",
+    "logout": "लॉग आउट",
+    "notifications": "सूचनाएं",
+    "spamsThe": "स्पैम द",
+    "group": "समूह",
+    "noNotifications": "कोई सूचनाएं नहीं",
+    "close": "बंद करना"
   },
   "orgList": {
     "title": "तलवा संगठन",
@@ -133,7 +157,7 @@
     "close": "बंद करना"
   },
   "dashboard": {
-    "title": "तलावा डैशबोर्ड",
+    "title": "डैशबोर्ड",
     "location": "स्थान",
     "about": "के बारे में",
     "deleteThisOrganization": "इस संगठन को हटाएं",
@@ -422,6 +446,7 @@
     "pDesc": "यह प्लगइन यूआई को सक्षम बनाता है"
   },
   "addOnStore": {
+    "title": "प्लगइन स्टोर",
     "searchName": "जैसे: दान",
     "enable": "सक्रिय",
     "disable": "अक्षम",

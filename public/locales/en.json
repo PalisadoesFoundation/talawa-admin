@@ -42,6 +42,30 @@
     "users": "Users",
     "logout": "Logout"
   },
+  "leftDrawerOrg": {
+    "talawaAdminPortal": "Talawa Admin Portal",
+    "menu": "Menu",
+    "logout": "Logout",
+    "talawa_portal": "Talawa Admin Portal",
+    "Dashboard": "Dashboard",
+    "People": "People",
+    "Events": "Events",
+    "Contributions": "Contributions",
+    "Posts": "Posts",
+    "Block/Unblock": "Block/Unblock",
+    "Plugins": "Plugins",
+    "Plugin Store": "Plugin Store",
+    "allOrganizations": "All Organizations",
+    "yourOrganization": "Your Organization",
+    "notification": "Notification",
+    "settings": "Settings",
+    "language": "Language",
+    "notifications": "Notifications",
+    "spamsThe": "spams the",
+    "group": "group",
+    "noNotifications": "No Notifications",
+    "close": "Close"
+  },
   "orgList": {
     "title": "Talawa Organizations",
     "you": "You",
@@ -135,7 +159,7 @@
     "close": "Close"
   },
   "dashboard": {
-    "title": "Talawa Dashboard",
+    "title": "Dashboard",
     "location": "Location",
     "about": "About",
     "deleteThisOrganization": "Delete This Organization",
@@ -426,6 +450,7 @@
     "pDesc": "This Plugin enables UI for"
   },
   "addOnStore": {
+    "title": "Add On Store",
     "searchName": "Ex: Donations",
     "enable": "Enabled",
     "disable": "Disabled",
