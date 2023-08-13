@@ -24,7 +24,9 @@
     "fillCorrectly": "Complete todos los detalles correctamente.",
     "notAuthorised": "¡Lo siento! ¡No estás autorizado!",
     "notFound": "¡Usuario no encontrado!",
-    "successfullyRegistered": "Registrado con éxito. Espere hasta que sea aprobado"
+    "successfullyRegistered": "Registrado con éxito. Espere hasta que sea aprobado",
+    "login_to_admin_portal": "Inicio de sesión en el portal de administración",
+    "OR": "O"
   },
   "listNavbar": {
     "talawa_portal": "Portal De Administración Talawa",
@@ -500,5 +502,21 @@
     "yourOrganizations": "Tus Organizaciones",
     "noOrganizations": "Aún no te has unido a ninguna organización.",
     "viewAll": "Ver todo"
+  },
+  "organizationSidebar": {
+    "viewAll": "Ver todo",
+    "events": "Eventos",
+    "members": "Miembros",
+    "noEvents": "No hay eventos para mostrar",
+    "noMembers": "No hay miembros para mostrar"
+  },
+  "postCard": {
+    "likes": "Gustos",
+    "comments": "Comentarios"
+  },
+  "home": {
+    "feed": "Alimentar",
+    "pinnedPosts": "Ver publicaciones fijadas",
+    "somethingOnYourMind": "¿Algo en tu mente?"
   }
 }

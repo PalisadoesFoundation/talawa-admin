@@ -2,8 +2,6 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import * as installedPlugins from 'components/plugins/index';
-// import './App.css';
-import styles from './App.module.css';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
@@ -22,10 +20,13 @@ import Roles from 'screens/Roles/Roles';
 import Requests from 'screens/Requests/Requests';
 import BlockUser from 'screens/BlockUser/BlockUser';
 import MemberDetail from 'screens/MemberDetail/MemberDetail';
+import Loader from 'components/Loader/Loader';
 
 // User Portal Components
 import UserLoginPage from 'screens/UserPortal/UserLoginPage/UserLoginPage';
 import Organizations from 'screens/UserPortal/Organizations/Organizations';
+import Home from 'screens/UserPortal/Home/Home';
+import People from 'screens/UserPortal/People/People';
 
 function app(): JSX.Element {
   /*const { updatePluginLinks, updateInstalled } = bindActionCreators(
@@ -69,7 +70,7 @@ function app(): JSX.Element {
   );
 
   if (loading) {
-    return <div className={styles.loader}></div>;
+    return <Loader />;
   }
 
   if (data) {
@@ -110,6 +111,8 @@ function app(): JSX.Element {
           path="/user/organizations"
           component={Organizations}
         />
+        <SecuredRouteForUser path="/user/organization" component={Home} />
+        <SecuredRouteForUser path="/user/people" component={People} />
 
         <Route exact path="*" component={PageNotFound} />
       </Switch>

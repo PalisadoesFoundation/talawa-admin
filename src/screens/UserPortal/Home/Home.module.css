@@ -1,0 +1,65 @@
+.borderNone {
+  border: none;
+}
+
+.colorWhite {
+  color: white;
+}
+
+.maxWidth {
+  max-width: 300px;
+}
+
+.colorLight {
+  background-color: #f5f5f5;
+}
+
+.mainContainer {
+  width: 50%;
+  flex-grow: 3;
+  padding: 30px;
+  max-height: 100%;
+  overflow: auto;
+}
+
+.containerHeight {
+  height: calc(100vh - 61px);
+}
+
+.link {
+  text-decoration: none !important;
+  color: black;
+}
+
+.postInputContainer {
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.postActionContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.postActionBtn {
+  background-color: white;
+  border: none;
+  color: black;
+}
+
+.postActionBtn:hover {
+  background-color: ghostwhite;
+  border: none;
+  color: black;
+}
+
+.postInput {
+  height: 200px !important;
+  resize: none;
+  border: none;
+  box-shadow: none;
+}

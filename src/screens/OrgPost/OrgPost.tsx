@@ -20,6 +20,7 @@ import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
 import NotFound from 'components/NotFound/NotFound';
 import { errorHandler } from 'utils/errorHandler';
+import Loader from 'components/Loader/Loader';
 
 interface InterfaceOrgPost {
   _id: string;
@@ -118,11 +119,7 @@ function orgPost(): JSX.Element {
   };
 
   if (createPostLoading || orgPostListLoading) {
-    return (
-      <>
-        <div className={styles.loader}></div>
-      </>
-    );
+    return <Loader />;
   }
 
   /* istanbul ignore next */

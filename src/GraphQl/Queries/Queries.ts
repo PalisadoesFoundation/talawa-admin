@@ -192,9 +192,13 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
     $lastName_contains: String
     $admin_for: ID
     $event_title_contains: String
+    $first: Int
+    $skip: Int
   ) {
     organizationsMemberConnection(
       orgId: $orgId
+      first: $first
+      skip: $skip
       where: {
         firstName_contains: $firstName_contains
         lastName_contains: $lastName_contains
@@ -302,6 +306,8 @@ export const ORGANIZATION_EVENT_CONNECTION_LIST = gql`
     $title_contains: String
     $description_contains: String
     $location_contains: String
+    $first: Int
+    $skip: Int
   ) {
     eventsByOrganizationConnection(
       where: {
@@ -310,6 +316,8 @@ export const ORGANIZATION_EVENT_CONNECTION_LIST = gql`
         description_contains: $description_contains
         location_contains: $location_contains
       }
+      first: $first
+      skip: $skip
     ) {
       _id
       title
@@ -427,17 +435,29 @@ export const ORGANIZATION_POST_CONNECTION_LIST = gql`
           email
         }
         pinned
+        likeCount
+        commentCount
+        likedBy {
+          _id
+          firstName
+          lastName
+        }
       }
     }
   }
 `;
 
 export const USER_ORGANIZATION_CONNECTION = gql`
-  query organizationsConnection($first: Int, $skip: Int, $filter: String) {
+  query organizationsConnection(
+    $first: Int
+    $skip: Int
+    $filter: String
+    $id: ID
+  ) {
     organizationsConnection(
       first: $first
       skip: $skip
-      where: { name_contains: $filter }
+      where: { name_contains: $filter, id: $id }
       orderBy: name_ASC
     ) {
       _id
@@ -474,6 +494,21 @@ export const USER_CREATED_ORGANIZATIONS = gql`
         name
         description
         image
+      }
+    }
+  }
+`;
+
+export const ORGANIZATION_ADMINS_LIST = gql`
+  query Organizations($id: ID!) {
+    organizations(id: $id) {
+      _id
+      admins {
+        _id
+        image
+        firstName
+        lastName
+        email
       }
     }
   }
