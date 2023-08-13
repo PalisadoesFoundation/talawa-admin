@@ -3,7 +3,6 @@ import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import styles from './OrgListCard.module.css';
 import { useHistory } from 'react-router-dom';
-import AboutImg from 'assets/images/defaultImg.png';
 import type { InterfaceOrgConnectionInfoType } from 'utils/interfaces';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 

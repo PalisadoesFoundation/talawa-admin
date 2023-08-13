@@ -1,21 +1,19 @@
 import { useQuery } from '@apollo/client';
 import { WarningAmberOutlined } from '@mui/icons-material';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
-import React, { useEffect } from 'react';
+import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
+import IconComponent from 'components/IconComponent/IconComponent';
+import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import type { InterfaceQuery_ORGANIZATIONS_LIST_OBJECT } from 'utils/interfaces';
 import { ReactComponent as AngleRightIcon } from '../../assets/svgs/icons/angleRight.svg';
 import { ReactComponent as LogoutIcon } from '../../assets/svgs/icons/logout.svg';
 import { ReactComponent as TalawaLogo } from '../../assets/svgs/talawa.svg';
 import styles from './LeftDrawerOrg.module.css';
-import IconComponent from 'components/IconComponent/IconComponent';
-import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
 
 export interface InterfaceLeftDrawerProps {
   orgId: string;
@@ -146,7 +144,7 @@ const leftDrawerOrg = ({
         {/* Options List */}
         <div className={styles.optionList}>
           <h5 className={styles.titleHeader}>{t('menu')}</h5>
-          {targets.map(({ name, url, subTargets }, index) => {
+          {targets.map(({ name, url }, index) => {
             return url ? (
               <Button
                 key={name}
