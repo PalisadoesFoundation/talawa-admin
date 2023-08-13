@@ -18,41 +18,32 @@ import IconComponent from 'components/IconComponent/IconComponent';
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
 
 export interface InterfaceLeftDrawerProps {
-  hideDrawer: boolean | null;
-  orgDetails?: {
-    name: string;
-    address: string;
-  };
+  orgId: string;
   screenName: string;
+  targets: TargetsType[];
+  hideDrawer: boolean | null;
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 const leftDrawerOrg = ({
   screenName,
-  orgDetails,
+  targets,
+  orgId,
   hideDrawer,
   setHideDrawer,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawerOrg' });
 
-  const appRoutes: {
-    targets: TargetsType[];
-    configUrl: string;
-  } = useSelector((state: RootState) => state.appRoutes);
-  const { targets, configUrl } = appRoutes;
-
   const {
     data,
-    loading,
-    error,
+    loading
   }: {
     data:
       | { organizations: InterfaceQuery_ORGANIZATIONS_LIST_OBJECT[] }
       | undefined;
     loading: boolean;
-    error?: Error | undefined;
   } = useQuery(ORGANIZATIONS_LIST, {
-    variables: { id: configUrl },
+    variables: { id: orgId },
   });
 
   const userType = localStorage.getItem('UserType');
@@ -103,10 +94,10 @@ const leftDrawerOrg = ({
             <>
               <button
                 className={`${styles.profileContainer} shimmer`}
-                data-testid="OrgBtn"
+                data-testid="orgBtn"
               />
             </>
-          ) : error ? (
+          ) : data && data?.organizations.length == 0 ? (
             <>
               <button
                 className={`${styles.profileContainer} bg-danger text-start text-white`}

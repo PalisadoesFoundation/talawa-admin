@@ -33,7 +33,6 @@ function superDashListCard(props: InterfaceOrgListCardProps): JSX.Element {
       <div className={styles.orgCard}>
         <div className={styles.innerContainer}>
           <div className={styles.orgImgContainer}>
-            <div className={styles.overlayTheme} />
             {image ? (
               <img
                 src={image}
@@ -41,11 +40,7 @@ function superDashListCard(props: InterfaceOrgListCardProps): JSX.Element {
                 alt={`${name} image`}
               />
             ) : (
-              <img
-                src={AboutImg}
-                className={styles.orgimg}
-                alt={`default image`}
-              />
+              <div className={styles.emptyImg} />
             )}
           </div>
           <div className={styles.content}>

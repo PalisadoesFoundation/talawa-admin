@@ -3,6 +3,9 @@ import LeftDrawerOrg from 'components/LeftDrawerOrg/LeftDrawerOrg';
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import styles from './OrganizationScreen.module.css';
+import { useSelector } from 'react-redux';
+import type { TargetsType } from 'state/reducers/routesReducer';
+import type { RootState } from 'state/reducers';
 
 export interface InterfaceSuperAdminScreenProps {
   title: string; // Multilingual Page title
@@ -16,9 +19,17 @@ const organizationScreen = ({
 }: InterfaceSuperAdminScreenProps): JSX.Element => {
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
 
+  const appRoutes: {
+    targets: TargetsType[];
+    configUrl: string;
+  } = useSelector((state: RootState) => state.appRoutes);
+  const { targets, configUrl } = appRoutes;
+
   return (
     <>
       <LeftDrawerOrg
+        orgId={configUrl}
+        targets={targets}
         screenName={screenName}
         hideDrawer={hideDrawer}
         setHideDrawer={setHideDrawer}
