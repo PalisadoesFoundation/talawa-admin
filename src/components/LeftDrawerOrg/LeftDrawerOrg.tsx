@@ -36,7 +36,7 @@ const leftDrawerOrg = ({
 
   const {
     data,
-    loading
+    loading,
   }: {
     data:
       | { organizations: InterfaceQuery_ORGANIZATIONS_LIST_OBJECT[] }

@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import type { RootState } from 'state/reducers';
 
-export interface InterfaceSuperAdminScreenProps {
+export interface InterfaceOrganizationScreenProps {
   title: string; // Multilingual Page title
   screenName: string; // Internal Screen name for developers
   children: React.ReactNode;
@@ -16,7 +16,7 @@ const organizationScreen = ({
   title,
   screenName,
   children,
-}: InterfaceSuperAdminScreenProps): JSX.Element => {
+}: InterfaceOrganizationScreenProps): JSX.Element => {
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
 
   const appRoutes: {

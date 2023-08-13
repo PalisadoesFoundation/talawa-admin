@@ -19,7 +19,6 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import Users from './Users';
-import { debug } from 'jest-preview';
 
 const MOCKS = [
   {
@@ -372,7 +371,6 @@ describe('Testing Users screen', () => {
     );
 
     await wait(200);
-    debug();
     expect(container.textContent).toMatch(
       'Organizations not found, please create an organization through dashboard'
     );
