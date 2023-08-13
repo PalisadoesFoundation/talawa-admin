@@ -12,6 +12,7 @@
 
 .row .left_portion .inner .palisadoes_logo {
   width: 600px;
+  height: auto;
 }
 
 .row .right_portion {
@@ -31,6 +32,7 @@
 
 .row .right_portion .talawa_logo {
   height: 150px;
+  width: 150px;
   display: block;
   margin: 1rem auto;
 }
