@@ -319,7 +319,9 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
       </MockedProvider>
     );
     await wait();
-    expect(screen).toContain(/Error Occured while loading the Organization/i);
+    expect(
+      screen.getByText(/Error Occured while loading the Organization/i)
+    ).toBeInTheDocument();
   });
 
   test('Testing Drawer when hideDrawer is null', () => {

@@ -40,7 +40,7 @@ function superDashListCard(props: InterfaceOrgListCardProps): JSX.Element {
                 alt={`${name} image`}
               />
             ) : (
-              <div className={styles.emptyImg} />
+              <div className={styles.emptyImg} data-testid="emptyContainerForImage" />
             )}
           </div>
           <div className={styles.content}>
