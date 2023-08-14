@@ -20,7 +20,6 @@
   background: #f1f1f1;
 }
 
-
 .leftDrawer::-webkit-scrollbar-thumb {
   background: var(--bs-gray-500);
 }

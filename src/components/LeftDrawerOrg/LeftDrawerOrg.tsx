@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { TargetsType } from 'state/reducers/routesReducer';
-import type { InterfaceQuery_ORGANIZATIONS_LIST_OBJECT } from 'utils/interfaces';
+import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import { ReactComponent as AngleRightIcon } from '../../assets/svgs/icons/angleRight.svg';
 import { ReactComponent as LogoutIcon } from '../../assets/svgs/icons/logout.svg';
 import { ReactComponent as TalawaLogo } from '../../assets/svgs/talawa.svg';
@@ -37,7 +37,7 @@ const leftDrawerOrg = ({
     loading,
   }: {
     data:
-      | { organizations: InterfaceQuery_ORGANIZATIONS_LIST_OBJECT[] }
+      | { organizations: InterfaceQueryOrganizationsListObject[] }
       | undefined;
     loading: boolean;
   } = useQuery(ORGANIZATIONS_LIST, {
