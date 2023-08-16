@@ -9,6 +9,7 @@ import {
   DELETE_POST_MUTATION,
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import defaultImg from 'assets/images/blank.png';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
@@ -58,29 +59,27 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
     keyPrefix: 'orgPostCard',
   });
 
-  const [create] = useMutation(DELETE_POST_MUTATION);
+  const [deleteMutation] = useMutation(DELETE_POST_MUTATION);
   const [updatePost] = useMutation(UPDATE_POST_MUTATION);
 
-  const deletePost = async (): Promise<void> => {
-    try {
-      const { data } = await create({
-        variables: {
-          id: props.id,
-        },
-      });
-
+  function deletePost(): void {
+    deleteMutation({
+      variables: {
+        id: props.id,
+      },
       /* istanbul ignore next */
-      if (data) {
+      onCompleted() {
         toast.success(t('postDeleted'));
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
-      }
-    } catch (error: any) {
+        toggleShowDeleteModal();
+      },
+      refetchQueries: [ORGANIZATION_POST_CONNECTION_LIST],
+      awaitRefetchQueries: true,
       /* istanbul ignore next */
-      errorHandler(t, error);
-    }
-  };
+      onError(error) {
+        errorHandler(t, error);
+      },
+    });
+  }
 
   const handleInputEvent = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
