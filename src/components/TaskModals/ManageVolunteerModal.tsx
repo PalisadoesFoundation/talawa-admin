@@ -3,7 +3,7 @@ import { Modal } from 'react-bootstrap';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
+import { Button } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
 import { SET_TASK_VOLUNTEERS_MUTATION } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
@@ -54,13 +54,17 @@ export const ManageVolunteerModal = (props: ModalPropType): JSX.Element => {
 
   return (
     <>
-      <Modal show={props.show} onHide={props.handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Manage Volunteers</Modal.Title>
+      <Modal
+        show={props.show}
+        onHide={props.handleClose}
+        backdrop="static"
+        centered
+      >
+        <Modal.Header closeButton className="bg-primary">
+          <Modal.Title className="text-white">Manage Volunteers</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <p>
-            {' '}
             All the members of the organization of the event can be added as
             volunteers for a task.
           </p>
@@ -74,7 +78,6 @@ export const ManageVolunteerModal = (props: ModalPropType): JSX.Element => {
                 `${memberOption.firstName} ${memberOption.lastName}`
               }
               filterSelectedOptions={true}
-              // defaultValue={volunteers}
               onChange={(_, value) => {
                 setVolunteers(value);
               }}
@@ -89,10 +92,12 @@ export const ManageVolunteerModal = (props: ModalPropType): JSX.Element => {
             />
           </Stack>
           <br />
-          <Button variant="contained" color="success" onClick={handleSubmit}>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="success" color="success" onClick={handleSubmit}>
             Update Volunteers
           </Button>
-        </Modal.Body>
+        </Modal.Footer>
       </Modal>
     </>
   );

@@ -96,16 +96,24 @@ export const UpdateTaskModal = (props: ModalPropType): JSX.Element => {
 
   return (
     <>
-      <Modal show={props.show} onHide={props.handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Update the Event Task</Modal.Title>
+      <Modal
+        show={props.show}
+        onHide={props.handleClose}
+        backdrop="static"
+        centered
+      >
+        <Modal.Header closeButton className="bg-primary">
+          <Modal.Title className="text-white">
+            Update the Event Task
+          </Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit}>
+          <Modal.Body>
             <Form.Group controlId="formBasicTitle">
               <Form.Label>Title</Form.Label>
               <Form.Control
                 type="text"
+                className="mb-3"
                 placeholder="Enter title of the task."
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -116,6 +124,7 @@ export const UpdateTaskModal = (props: ModalPropType): JSX.Element => {
               <Form.Label>Description</Form.Label>
               <Form.Control
                 type="text"
+                className="mb-3"
                 placeholder="A brief desciption of what the jobs of the task are!"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -129,51 +138,53 @@ export const UpdateTaskModal = (props: ModalPropType): JSX.Element => {
                 setDeadline(date);
               }}
               disablePast
+              className="mb-1"
             />
 
-            <Form.Group controlId="completed" className="m-1 p-1">
+            <Form.Group className="m-1 p-1">
+              <Form.Label htmlFor="completedSwitch">Completed</Form.Label>
               <Form.Check
+                id="completedSwitch"
                 type="switch"
-                label="Completed"
                 checked={completed}
                 onChange={() => setCompleted(!completed)}
               />
             </Form.Group>
-            <br />
 
-            <Form.Group controlId="formVolunteers">
-              <Form.Label>Volunteers</Form.Label>
-              <br />
-              {!props.task.volunteers.length
-                ? `There are no volunteers assigned for this task.`
-                : null}
-              <Stack direction="row" spacing={1}>
-                {props.task.volunteers.map((user) => (
-                  <Chip
-                    key={user._id}
-                    avatar={
-                      <Avatar>{`${user.firstName[0].toUpperCase()}${user.lastName[0].toUpperCase()}`}</Avatar>
-                    }
-                    label={`${user.firstName} ${user.lastName}`}
-                    variant="outlined"
-                  />
-                ))}
-              </Stack>
-              <Button
-                variant="outlined"
-                endIcon={<ModeEditIcon />}
-                color="primary"
-                className="pt-2 mt-2"
-                onClick={() => {
-                  setShowManageVolunteerModal(true);
-                  props.handleClose();
-                }}
-              >
-                Manage Volunteers
-              </Button>
+            <Form.Group>
+              <Form.Label htmlFor="volunteersList">Volunteers</Form.Label>
+              <div id="VolunteersList">
+                {!props.task.volunteers.length
+                  ? `There are no volunteers assigned for this task.`
+                  : null}
+                <Stack direction="row" spacing={1}>
+                  {props.task.volunteers.map((user) => (
+                    <Chip
+                      key={user._id}
+                      avatar={
+                        <Avatar>{`${user.firstName[0].toUpperCase()}${user.lastName[0].toUpperCase()}`}</Avatar>
+                      }
+                      label={`${user.firstName} ${user.lastName}`}
+                      variant="outlined"
+                    />
+                  ))}
+                </Stack>
+                <Button
+                  variant="outlined"
+                  endIcon={<ModeEditIcon />}
+                  color="primary"
+                  className="pt-2 mt-2"
+                  onClick={() => {
+                    setShowManageVolunteerModal(true);
+                    props.handleClose();
+                  }}
+                >
+                  Manage Volunteers
+                </Button>
+              </div>
             </Form.Group>
-
-            <br />
+          </Modal.Body>
+          <Modal.Footer>
             <BootstrapButton variant="success" type="submit" className="m-2">
               Update Task
             </BootstrapButton>
@@ -186,8 +197,8 @@ export const UpdateTaskModal = (props: ModalPropType): JSX.Element => {
             >
               Delete Task
             </BootstrapButton>
-          </Form>
-        </Modal.Body>
+          </Modal.Footer>
+        </Form>
       </Modal>
       <DeleteTaskModal
         show={showDeleteTaskModal}

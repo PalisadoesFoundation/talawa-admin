@@ -67,18 +67,19 @@ export const AddTaskModal = ({
 
   return (
     <>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add an Event Task</Modal.Title>
+      <Modal show={show} onHide={handleClose} backdrop="static" centered>
+        <Modal.Header closeButton className="bg-primary">
+          <Modal.Title className="text-white">Add an Event Task</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit}>
+          <Modal.Body>
             <Form.Group controlId="formBasicTitle">
               <Form.Label>Title</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Enter title of the task."
                 value={title}
+                className="mb-3"
                 onChange={(e) => setTitle(e.target.value)}
               />
             </Form.Group>
@@ -87,13 +88,14 @@ export const AddTaskModal = ({
               <Form.Label>Description</Form.Label>
               <Form.Control
                 type="text"
+                className='"mb-3'
                 placeholder="A brief desciption of what the jobs of the task are!"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
             </Form.Group>
 
-            <Form.Group controlId="formBasicDeadline">
+            <Form.Group controlId="formBasicDeadline" className="pt-4">
               <DateTimePicker
                 label="Deadline"
                 defaultValue={today}
@@ -103,12 +105,13 @@ export const AddTaskModal = ({
                 disablePast
               />
             </Form.Group>
-            <br />
+          </Modal.Body>
+          <Modal.Footer>
             <Button variant="success" type="submit">
               Create Task
             </Button>
-          </Form>
-        </Modal.Body>
+          </Modal.Footer>
+        </Form>
       </Modal>
     </>
   );
