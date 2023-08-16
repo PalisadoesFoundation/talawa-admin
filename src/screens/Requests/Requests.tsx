@@ -1,92 +1,104 @@
-import React, { useEffect, useState } from 'react';
-import { Col, Form, Row } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
-import { toast } from 'react-toastify';
-import { useTranslation } from 'react-i18next';
+import React, { useEffect, useState } from 'react';
+import { Dropdown, Form, Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
-import styles from './Requests.module.css';
-import ListNavbar from 'components/ListNavbar/ListNavbar';
+import { Search } from '@mui/icons-material';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import SortIcon from '@mui/icons-material/Sort';
+import {
+  ACCEPT_ADMIN_MUTATION,
+  REJECT_ADMIN_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_LIST,
+  USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-import {
-  ACCPET_ADMIN_MUTATION,
-  REJECT_ADMIN_MUTATION,
-} from 'GraphQl/Mutations/mutations';
-import PaginationList from 'components/PaginationList/PaginationList';
+import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 import { errorHandler } from 'utils/errorHandler';
+import type {
+  InterfaceOrgConnectionType,
+  InterfaceUserType,
+} from 'utils/interfaces';
+import styles from './Requests.module.css';
+import debounce from 'utils/debounce';
 
 const Requests = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'requests' });
 
   document.title = t('title');
 
-  const [componentLoader, setComponentLoader] = useState(true);
   const [usersData, setUsersData] = useState([]);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchByName, setSearchByName] = useState('');
 
+  const [acceptAdminFunc] = useMutation(ACCEPT_ADMIN_MUTATION);
+  const [rejectAdminFunc] = useMutation(REJECT_ADMIN_MUTATION);
+  const {
+    data: currentUserData,
+  }: {
+    data: InterfaceUserType | undefined;
+    loading: boolean;
+    error?: Error | undefined;
+  } = useQuery(USER_ORGANIZATION_LIST, {
+    variables: { id: localStorage.getItem('id') },
+  });
+
+  const {
+    data: dataUsers,
+    loading: loadingUsers,
+    refetch: refetchUsers,
+  } = useQuery(USER_LIST, {
+    notifyOnNetworkStatusChange: true,
+  });
+
+  const {
+    data: dataOrgs,
+  }: {
+    data: InterfaceOrgConnectionType | undefined;
+    error?: Error;
+  } = useQuery(ORGANIZATION_CONNECTION_LIST);
+
+  // To clear the search when the component is unmounted
+  useEffect(() => {
+    return () => {
+      setSearchByName('');
+    };
+  }, []);
+
+  // If the user is not Superadmin, redirect to Organizations screen
   useEffect(() => {
     const userType = localStorage.getItem('UserType');
     if (userType != 'SUPERADMIN') {
       window.location.assign('/orglist');
     }
-
-    setComponentLoader(false);
   }, []);
 
-  const { data: userData, loading: userLoading, refetch } = useQuery(USER_LIST);
-
-  const [acceptAdminFunc] = useMutation(ACCPET_ADMIN_MUTATION);
-  const [rejectAdminFunc] = useMutation(REJECT_ADMIN_MUTATION);
-
-  const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
-
+  // Check if there are no organizations then show a warning
   useEffect(() => {
     if (!dataOrgs) {
       return;
     }
-
     if (dataOrgs.organizationsConnection.length === 0) {
       toast.warning(t('noOrgError'));
     }
   }, [dataOrgs]);
 
+  // Set the usersData to the users that are not approved yet after every api call
   useEffect(() => {
-    if (userData) {
+    if (dataUsers) {
       setUsersData(
-        userData.users.filter(
+        dataUsers.users.filter(
           (user: any) =>
             user.userType === 'ADMIN' && user.adminApproved === false
         )
       );
     }
-  }, [userData]);
+  }, [dataUsers]);
 
-  if (componentLoader || userLoading) {
-    return <div className="loader"></div>;
-  }
-
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ): void => {
-    /* istanbul ignore next */
-    setPage(newPage);
-  };
-
-  /* istanbul ignore next */
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ): void => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const accpetAdmin = async (userId: any): Promise<void> => {
+  const acceptAdmin = async (userId: any): Promise<void> => {
     try {
       const { data } = await acceptAdminFunc({
         variables: {
@@ -127,126 +139,153 @@ const Requests = (): JSX.Element => {
   const handleSearchByName = (e: any): any => {
     const { value } = e.target;
     setSearchByName(value);
-
-    refetch({
-      filter: searchByName,
+    refetchUsers({
+      firstName_contains: value,
+      lastName_contains: '',
+      // Later on we can add several search and filter options
     });
   };
 
+  const debouncedHandleSearchByName = debounce(handleSearchByName);
+
   return (
     <>
-      <ListNavbar />
-      <Row>
-        <Col sm={3}>
-          <div className={styles.sidebar}>
-            <div className={styles.sidebarsticky}>
-              <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
+      <SuperAdminScreen
+        data={currentUserData}
+        title={t('requests')}
+        screenName="Requests"
+      >
+        {/* Buttons Container */}
+        <div className={styles.btnsContainer}>
+          <div className={styles.inputContainer}>
+            <div
+              className={styles.input}
+              style={{
+                display:
+                  currentUserData &&
+                  currentUserData.user.userType === 'SUPERADMIN'
+                    ? 'block'
+                    : 'none',
+              }}
+            >
               <Form.Control
                 type="name"
-                id="orgname"
+                className="bg-white"
                 placeholder={t('enterName')}
                 data-testid="searchByName"
                 autoComplete="off"
                 required
-                onChange={handleSearchByName}
+                onChange={debouncedHandleSearchByName}
               />
-            </div>
-          </div>
-        </Col>
-        <Col sm={8}>
-          <div className={styles.mainpageright}>
-            <Row className={styles.justifysp}>
-              <p className={styles.logintitle}>{t('requests')}</p>
-            </Row>
-            <div className={styles.list_box}>
-              <div className="table-responsive">
-                <table className={`table table-hover ${styles.userListTable}`}>
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">{t('name')}</th>
-                      <th scope="col">{t('email')}</th>
-                      <th scope="col">{t('accept')}</th>
-                      <th scope="col">{t('reject')}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {(rowsPerPage > 0
-                      ? usersData.slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage
-                        )
-                      : usersData
-                    ).map(
-                      (
-                        user: {
-                          _id: string;
-                          firstName: string;
-                          lastName: string;
-                          email: string;
-                          userType: string;
-                        },
-                        index: number
-                      ) => {
-                        return (
-                          <tr key={user._id}>
-                            <th scope="row">{page * 10 + (index + 1)}</th>
-                            <td>{`${user.firstName} ${user.lastName}`}</td>
-                            <td>{user.email}</td>
-                            <td>
-                              <Button
-                                className="btn btn-success btn-sm"
-                                onClick={async (): Promise<void> => {
-                                  await accpetAdmin(user._id);
-                                }}
-                                data-testid={`acceptUser${user._id}`}
-                              >
-                                {t('accept')}
-                              </Button>
-                            </td>
-                            <td>
-                              <Button
-                                className="btn btn-danger btn-sm"
-                                onClick={async (): Promise<void> => {
-                                  await rejectAdmin(user._id);
-                                }}
-                                data-testid={`rejectUser${user._id}`}
-                              >
-                                {t('reject')}
-                              </Button>
-                            </td>
-                          </tr>
-                        );
-                      }
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div>
-              <table
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
+              <Button
+                tabIndex={-1}
+                className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
               >
-                <tbody>
-                  <tr>
-                    <PaginationList
-                      count={usersData.length}
-                      rowsPerPage={rowsPerPage}
-                      page={page}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                  </tr>
-                </tbody>
-              </table>
+                <Search />
+              </Button>
             </div>
           </div>
-        </Col>
-      </Row>
+          <div className={styles.btnsBlock}>
+            <div className="d-flex">
+              <Dropdown aria-expanded="false" title="Sort organizations">
+                <Dropdown.Toggle variant="outline-success">
+                  <SortIcon className={'me-1'} />
+                  {t('sort')}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
+                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
+                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+              <Dropdown aria-expanded="false" title="Filter organizations">
+                <Dropdown.Toggle variant="outline-success">
+                  <FilterListIcon className={'me-1'} />
+                  {t('filter')}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
+                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
+                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+          </div>
+        </div>
+        {loadingUsers ? (
+          <div className={styles.notFound}>
+            <h4>{t('loadingRequests')}</h4>
+          </div>
+        ) : usersData.length === 0 && searchByName.length > 0 ? (
+          <div className={styles.notFound}>
+            <h4>
+              {t('noResultsFoundFor')} &quot;{searchByName}&quot;
+            </h4>
+          </div>
+        ) : usersData.length === 0 ? (
+          <div className={styles.notFound}>
+            <h4>{t('noRequestFound')}</h4>
+          </div>
+        ) : (
+          <div className={styles.listBox}>
+            <Table responsive>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>{t('name')}</th>
+                  <th>{t('email')}</th>
+                  <th>{t('accept')}</th>
+                  <th>{t('reject')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {usersData.map(
+                  (
+                    user: {
+                      _id: string;
+                      firstName: string;
+                      lastName: string;
+                      email: string;
+                      userType: string;
+                    },
+                    index: number
+                  ) => {
+                    return (
+                      <tr key={user._id}>
+                        <td>{index + 1}</td>
+                        <td>{`${user.firstName} ${user.lastName}`}</td>
+                        <td>{user.email}</td>
+                        <td>
+                          <Button
+                            className="btn btn-success btn-sm"
+                            onClick={async (): Promise<void> => {
+                              await acceptAdmin(user._id);
+                            }}
+                            data-testid={`acceptUser${user._id}`}
+                          >
+                            {t('accept')}
+                          </Button>
+                        </td>
+                        <td>
+                          <Button
+                            className="btn btn-danger btn-sm"
+                            onClick={async (): Promise<void> => {
+                              await rejectAdmin(user._id);
+                            }}
+                            data-testid={`rejectUser${user._id}`}
+                          >
+                            {t('reject')}
+                          </Button>
+                        </td>
+                      </tr>
+                    );
+                  }
+                )}
+              </tbody>
+            </Table>
+          </div>
+        )}
+      </SuperAdminScreen>
     </>
   );
 };

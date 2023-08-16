@@ -1,37 +1,38 @@
-import type { ChangeEvent } from 'react';
-import React, { useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
-import { Form } from 'react-bootstrap';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import { useMutation, useQuery } from '@apollo/client';
-import Button from 'react-bootstrap/Button';
-import dayjs from 'dayjs';
-import { toast } from 'react-toastify';
-import { useTranslation } from 'react-i18next';
-
-import styles from './OrgList.module.css';
-import SuperDashListCard from 'components/SuperDashListCard/SuperDashListCard';
+import { Search } from '@mui/icons-material';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import SortIcon from '@mui/icons-material/Sort';
+import { CREATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-import { CREATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
-import ListNavbar from 'components/ListNavbar/ListNavbar';
-import PaginationList from 'components/PaginationList/PaginationList';
-import debounce from 'utils/debounce';
+import OrgListCard from 'components/OrgListCard/OrgListCard';
+import type { ChangeEvent } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Col, Dropdown, Form, Row } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
-import AdminDashListCard from 'components/AdminDashListCard/AdminDashListCard';
-import { Alert, AlertTitle } from '@mui/material';
+import debounce from 'utils/debounce';
 import { errorHandler } from 'utils/errorHandler';
-import Loader from 'components/Loader/Loader';
+import type {
+  InterfaceOrgConnectionInfoType,
+  InterfaceOrgConnectionType,
+  InterfaceUserType,
+} from 'utils/interfaces';
+import styles from './OrgList.module.css';
+import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
 
   document.title = t('title');
 
-  const [showAddEventModal, setShowAddEventModal] = useState(false);
+  const [searchByName, setSearchByName] = useState('');
+  const [showModal, setShowModal] = useState(false);
   const [formState, setFormState] = useState({
     name: '',
     descrip: '',
@@ -41,51 +42,66 @@ function orgList(): JSX.Element {
     image: '',
   });
 
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const toggleModal = (): void => setShowModal(!showModal);
 
-  const isSuperAdmin = localStorage.getItem('UserType') !== 'SUPERADMIN';
-
-  const toggleAddEventModal = (): void =>
-    setShowAddEventModal(!showAddEventModal);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [create, { loading: loading3 }] = useMutation(
-    CREATE_ORGANIZATION_MUTATION
-  );
+  const [create] = useMutation(CREATE_ORGANIZATION_MUTATION);
 
   const {
-    data: data2,
-    loading: loading2,
+    data: userData,
     error: errorUser,
+  }: {
+    data: InterfaceUserType | undefined;
+    loading: boolean;
+    error?: Error | undefined;
   } = useQuery(USER_ORGANIZATION_LIST, {
     variables: { id: localStorage.getItem('id') },
   });
 
   const {
-    data,
+    data: orgsData,
     loading,
     error: errorList,
-    refetch,
-  } = useQuery(ORGANIZATION_CONNECTION_LIST);
-  /*istanbul ignore next*/
-  interface InterfaceUserType {
-    adminFor: {
-      _id: string;
-    }[];
-  }
-  /*istanbul ignore next*/
-  interface InterfaceCurrentOrgType {
-    _id: string;
-  }
-  /*istanbul ignore next*/
+    refetch: refetchOrgs,
+  }: {
+    data: InterfaceOrgConnectionType | undefined;
+    loading: boolean;
+    error?: Error | undefined;
+    refetch: any;
+  } = useQuery(ORGANIZATION_CONNECTION_LIST, {
+    notifyOnNetworkStatusChange: true,
+  });
+
+  // To clear the search field and form fields on unmount
+  useEffect(() => {
+    return () => {
+      setSearchByName('');
+      setFormState({
+        name: '',
+        descrip: '',
+        ispublic: true,
+        visible: false,
+        location: '',
+        image: '',
+      });
+    };
+  }, []);
+
+  /* istanbul ignore next */
   const isAdminForCurrentOrg = (
-    user: InterfaceUserType | undefined,
-    currentOrg: InterfaceCurrentOrgType
+    currentOrg: InterfaceOrgConnectionInfoType
   ): boolean => {
-    return (
-      user?.adminFor.length === 1 && user?.adminFor[0]._id === currentOrg._id
-    );
+    if (userData?.user?.adminFor.length === 1) {
+      // If user is admin for one org only then check if that org is current org
+      return userData?.user?.adminFor[0]._id === currentOrg._id;
+    } else {
+      // If user is admin for more than one org then check if current org is present in adminFor array
+      return (
+        userData?.user?.adminFor.some(
+          (org: { _id: string; name: string; image: string | null }) =>
+            org._id === currentOrg._id
+        ) ?? false
+      );
+    }
   };
 
   const createOrg = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
@@ -119,7 +135,7 @@ function orgList(): JSX.Element {
       /* istanbul ignore next */
       if (data) {
         toast.success('Congratulation the Organization is created');
-        refetch();
+        refetchOrgs();
         setFormState({
           name: '',
           descrip: '',
@@ -128,7 +144,7 @@ function orgList(): JSX.Element {
           location: '',
           image: '',
         });
-        toggleAddEventModal();
+        toggleModal();
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -136,308 +152,269 @@ function orgList(): JSX.Element {
     }
   };
 
-  if (loading || loading2 || loading3) {
-    return <Loader />;
-  }
-
   /* istanbul ignore next */
   if (errorList || errorUser) {
     window.location.assign('/');
   }
 
-  /* istanbul ignore next */
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ): void => {
-    setPage(newPage);
-  };
-
-  /* istanbul ignore next */
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ): void => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
   const handleSearchByName = (e: any): void => {
     const { value } = e.target;
-    refetch({
+    setSearchByName(value);
+    refetchOrgs({
       filter: value,
     });
   };
-  let dataRevOrg;
+
   const debouncedHandleSearchByName = debounce(handleSearchByName);
-  if (data) {
-    dataRevOrg = data.organizationsConnection.slice().reverse();
-  }
   return (
     <>
-      <ListNavbar />
-      <Row>
-        <Col xl={3}>
-          <div className={styles.sidebar}>
-            <div className={`${styles.mainpageright} ${styles.sidebarsticky}`}>
-              <h6 className={`${styles.logintitle} ${styles.youheader}`}>
-                {t('you')}
-              </h6>
-              <p>
-                {t('name')}:
-                <span>
-                  {data2?.user.firstName} {data2?.user.lastName}
-                </span>
-              </p>
-              <p>
-                {t('designation')}:<span> {data2?.user.userType}</span>
-              </p>
-              <div className={styles.userEmail}>
-                {t('email')}:
-                <p>
-                  {(data2?.user.email || '').substring(
-                    0,
-                    (data2?.user.email || '').length / 2
-                  )}
-                  <span>
-                    {data2?.user.email.substring(
-                      data2?.user.email.length / 2,
-                      data2?.user.email.length
-                    )}
-                  </span>
-                </p>
-              </div>
-            </div>
-          </div>
-        </Col>
-        <Col xl={8} className={styles.mainpagerightContainer}>
-          <div className={styles.mainpageright} data-testid="mainpageright">
-            <div className={styles.justifysp}>
-              <p className={styles.logintitle}>{t('organizationList')}</p>
-            </div>
-            <div className={styles.search}>
-              <Button
-                variant="success"
-                className={styles.invitebtn}
-                disabled={isSuperAdmin}
-                onClick={toggleAddEventModal}
-                data-testid="createOrganizationBtn"
-                style={{ display: isSuperAdmin ? 'none' : 'block' }}
-              >
-                + {t('createOrganization')}
-              </Button>
-              <Form.Control
-                type="name"
-                id="orgname"
-                placeholder="Search Organization"
-                data-testid="searchByName"
-                autoComplete="off"
-                required
-                onChange={debouncedHandleSearchByName}
-                style={{
-                  display:
-                    data2 && data2.user.userType !== 'SUPERADMIN'
-                      ? 'none'
-                      : 'block',
-                }}
-              />
-            </div>
-            <div className={styles.list_box} data-testid="organizations-list">
-              {data?.organizationsConnection.length > 0 ? (
-                (rowsPerPage > 0
-                  ? dataRevOrg.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
-                    )
-                  : data.organizationsConnection
-                ).map(
-                  (datas: {
-                    _id: string;
-                    image: string;
-                    name: string;
-                    admins: any;
-                    members: any;
-                    createdAt: string;
-                    location: string | null;
-                  }) => {
-                    if (data2 && data2.user.userType == 'SUPERADMIN') {
-                      return (
-                        <SuperDashListCard
-                          id={datas._id}
-                          key={datas._id}
-                          image={datas.image}
-                          admins={datas.admins}
-                          members={datas.members.length}
-                          createdDate={dayjs(datas?.createdAt).format(
-                            'MMMM D, YYYY'
-                          )}
-                          orgName={datas.name}
-                          orgLocation={datas.location}
-                        />
-                      );
-                    } else if (isAdminForCurrentOrg(data2?.user, datas)) {
-                      /* istanbul ignore next */
-                      return (
-                        <AdminDashListCard
-                          id={datas._id}
-                          key={datas._id}
-                          image={datas.image}
-                          admins={datas.admins}
-                          members={datas.members.length}
-                          createdDate={dayjs(datas?.createdAt).format(
-                            'MMMM D, YYYY'
-                          )}
-                          orgName={datas.name}
-                          orgLocation={datas.location}
-                        />
-                      );
-                    } else {
-                      return null;
-                    }
-                  }
-                )
-              ) : (
-                <div>
-                  <Alert variant="filled" severity="error">
-                    <AlertTitle>{t('noOrgErrorTitle')}</AlertTitle>
-                    {t('noOrgErrorDescription')}
-                  </Alert>
-                </div>
-              )}
-            </div>
-            <div>
-              <table
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <tbody>
-                  {data2?.user.userType === 'SUPERADMIN' && (
-                    <tr data-testid="rowsPPSelect">
-                      <PaginationList
-                        count={data ? data.organizationsConnection.length : 0}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                      />
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </Col>
-      </Row>
-      <Modal show={showAddEventModal} onHide={toggleAddEventModal}>
-        <Modal.Header>
-          <p className={styles.titlemodal}>{t('createOrganization')}</p>
-          <Button
-            variant="danger"
-            onClick={toggleAddEventModal}
-            data-testid="closeOrganizationModal"
-          >
-            <i
-              className="fa fa-times"
-              style={{
-                cursor: 'pointer',
-              }}
-            ></i>
-          </Button>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmitCapture={createOrg}>
-            <label htmlFor="orgname">{t('name')}</label>
+      <SuperAdminScreen
+        data={userData}
+        title={t('organizations')}
+        screenName="Organizations"
+      >
+        {/* Buttons Container */}
+        <div className={styles.btnsContainer}>
+          <div className={styles.input}>
             <Form.Control
               type="name"
               id="orgname"
-              placeholder={t('enterName')}
-              data-testid="modalOrganizationName"
+              className="bg-white"
+              placeholder={t('searchByName')}
+              data-testid="searchByName"
               autoComplete="off"
               required
-              value={formState.name}
-              onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  name: e.target.value,
-                });
-              }}
+              onChange={debouncedHandleSearchByName}
             />
-            <label htmlFor="descrip">{t('description')}</label>
-            <Form.Control
-              type="descrip"
-              id="descrip"
-              placeholder={t('description')}
-              autoComplete="off"
-              required
-              value={formState.descrip}
-              onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  descrip: e.target.value,
-                });
-              }}
-            />
-            <label htmlFor="location">{t('location')}</label>
-            <Form.Control
-              type="text"
-              id="location"
-              placeholder={t('location')}
-              autoComplete="off"
-              required
-              value={formState.location}
-              onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  location: e.target.value,
-                });
-              }}
-            />
-
-            <div className={styles.checkboxdiv}>
-              <div className={styles.dispflex}>
-                <label htmlFor="ispublic">{t('isPublic')}:</label>
-                <Form.Switch
-                  id="ispublic"
-                  type="checkbox"
-                  className={'ms-3'}
-                  defaultChecked={formState.ispublic}
-                  onChange={(): void =>
-                    setFormState({
-                      ...formState,
-                      ispublic: !formState.ispublic,
-                    })
-                  }
-                />
-              </div>
-              <div className={styles.dispflex}>
-                <label htmlFor="visible">{t('visibleInSearch')}: </label>
-                <Form.Switch
-                  id="visible"
-                  type="checkbox"
-                  className={'ms-3'}
-                  defaultChecked={formState.visible}
-                  onChange={(): void =>
-                    setFormState({
-                      ...formState,
-                      visible: !formState.visible,
-                    })
-                  }
-                />
-              </div>
+            <Button
+              tabIndex={-1}
+              className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+            >
+              <Search />
+            </Button>
+          </div>
+          <div className={styles.btnsBlock}>
+            <div className="d-flex">
+              <Dropdown aria-expanded="false" title="Sort organizations">
+                <Dropdown.Toggle variant="outline-success">
+                  <SortIcon className={'me-1'} />
+                  {t('sort')}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
+                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
+                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+              <Dropdown aria-expanded="false" title="Filter organizations">
+                <Dropdown.Toggle variant="outline-success">
+                  <FilterListIcon className={'me-1'} />
+                  {t('filter')}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
+                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
+                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
-            <label htmlFor="orgphoto" className={styles.orgphoto}>
-              {t('displayImage')}:
+            {userData && userData.user.userType === 'SUPERADMIN' && (
+              <Button
+                variant="success"
+                onClick={toggleModal}
+                data-testid="createOrganizationBtn"
+              >
+                <i className={'fa fa-plus me-2'} />
+                {t('createOrganization')}
+              </Button>
+            )}
+          </div>
+        </div>
+        {/* Organizations List */}
+        {!loading &&
+        ((orgsData?.organizationsConnection.length === 0 &&
+          searchByName.length == 0) ||
+          (userData &&
+            userData.user.userType === 'ADMIN' &&
+            userData.user.adminFor.length === 0)) ? (
+          // eslint-disable-next-line
+          <div className={styles.notFound}>
+            <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
+            <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
+          </div>
+        ) : !loading &&
+          orgsData?.organizationsConnection.length == 0 &&
+          /* istanbul ignore next */
+          searchByName.length > 0 ? (
+          /* istanbul ignore next */
+          // eslint-disable-next-line
+          <div className={styles.notFound} data-testid="noResultFound">
+            <h4 className="m-0">
+              {t('noResultsFoundFor')} &quot;{searchByName}&quot;
+            </h4>
+          </div>
+        ) : (
+          <></>
+        )}
+        <div className={styles.listBox} data-testid="organizations-list">
+          {loading ? (
+            <>
+              {[...Array(8)].map((_, index) => (
+                <div key={index} className={styles.itemCard}>
+                  <div className={styles.loadingWrapper}>
+                    <div className={styles.innerContainer}>
+                      <div
+                        className={`${styles.orgImgContainer} shimmer`}
+                      ></div>
+                      <div className={styles.content}>
+                        <h5 className="shimmer" title="Org name"></h5>
+                        <h6 className="shimmer" title="Location"></h6>
+                        <h6 className="shimmer" title="Admins"></h6>
+                        <h6 className="shimmer" title="Members"></h6>
+                      </div>
+                    </div>
+                    <div className={`shimmer ${styles.button}`} />
+                  </div>
+                </div>
+              ))}
+            </>
+          ) : userData && userData.user.userType == 'SUPERADMIN' ? (
+            orgsData?.organizationsConnection.map((item) => {
+              return (
+                <div key={item._id} className={styles.itemCard}>
+                  <OrgListCard data={item} />
+                </div>
+              );
+            })
+          ) : userData &&
+            userData.user.userType == 'ADMIN' &&
+            userData.user.adminFor.length > 0 ? (
+            orgsData?.organizationsConnection.map((item) => {
+              if (isAdminForCurrentOrg(item)) {
+                return (
+                  <div key={item._id} className={styles.itemCard}>
+                    <OrgListCard data={item} />
+                  </div>
+                );
+              }
+            })
+          ) : null}
+        </div>
+        {/* Create Organization Modal */}
+        <Modal
+          show={showModal}
+          onHide={toggleModal}
+          backdrop="static"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header
+            className="bg-primary"
+            closeButton
+            data-testid="modalOrganizationHeader"
+          >
+            <Modal.Title className="text-white">
+              {t('createOrganization')}
+            </Modal.Title>
+          </Modal.Header>
+          <Form onSubmitCapture={createOrg}>
+            <Modal.Body>
+              <Form.Label htmlFor="orgname">{t('name')}</Form.Label>
+              <Form.Control
+                type="name"
+                id="orgname"
+                className="mb-3"
+                placeholder={t('enterName')}
+                data-testid="modalOrganizationName"
+                autoComplete="off"
+                required
+                value={formState.name}
+                onChange={(e): void => {
+                  setFormState({
+                    ...formState,
+                    name: e.target.value,
+                  });
+                }}
+              />
+              <Form.Label htmlFor="descrip">{t('description')}</Form.Label>
+              <Form.Control
+                type="descrip"
+                id="descrip"
+                className="mb-3"
+                placeholder={t('description')}
+                autoComplete="off"
+                required
+                value={formState.descrip}
+                onChange={(e): void => {
+                  setFormState({
+                    ...formState,
+                    descrip: e.target.value,
+                  });
+                }}
+              />
+              <Form.Label htmlFor="location">{t('location')}</Form.Label>
+              <Form.Control
+                type="text"
+                id="location"
+                className="mb-3"
+                placeholder={t('location')}
+                autoComplete="off"
+                required
+                value={formState.location}
+                onChange={(e): void => {
+                  setFormState({
+                    ...formState,
+                    location: e.target.value,
+                  });
+                }}
+              />
+
+              <Row className="mb-3">
+                <Col>
+                  <Form.Label htmlFor="ispublic">{t('isPublic')}</Form.Label>
+                  <Form.Switch
+                    id="ispublic"
+                    data-testid="isPublic"
+                    type="checkbox"
+                    defaultChecked={formState.ispublic}
+                    onChange={(): void =>
+                      setFormState({
+                        ...formState,
+                        ispublic: !formState.ispublic,
+                      })
+                    }
+                  />
+                </Col>
+                <Col>
+                  <Form.Label htmlFor="visibleInSearch">
+                    {t('visibleInSearch')}
+                  </Form.Label>
+                  <Form.Switch
+                    id="visibleInSearch"
+                    data-testid="visibleInSearch"
+                    type="checkbox"
+                    defaultChecked={formState.visible}
+                    onChange={(): void =>
+                      setFormState({
+                        ...formState,
+                        visible: !formState.visible,
+                      })
+                    }
+                  />
+                </Col>
+              </Row>
+              <Form.Label htmlFor="orgphoto">{t('displayImage')}</Form.Label>
               <Form.Control
                 accept="image/*"
                 id="orgphoto"
+                className="mb-3"
                 name="photo"
                 type="file"
                 multiple={false}
                 onChange={async (e: React.ChangeEvent): Promise<void> => {
                   const target = e.target as HTMLInputElement;
                   const file = target.files && target.files[0];
+                  /* istanbul ignore else */
                   if (file)
                     setFormState({
                       ...formState,
@@ -446,18 +423,26 @@ function orgList(): JSX.Element {
                 }}
                 data-testid="organisationImage"
               />
-            </label>
-            <Button
-              type="submit"
-              className={styles.greenregbtn}
-              value="invite"
-              data-testid="submitOrganizationForm"
-            >
-              {t('createOrganization')}
-            </Button>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={(): void => toggleModal()}
+                data-testid="closeOrganizationModal"
+              >
+                {t('cancel')}
+              </Button>
+              <Button
+                type="submit"
+                value="invite"
+                data-testid="submitOrganizationForm"
+              >
+                {t('createOrganization')}
+              </Button>
+            </Modal.Footer>
           </Form>
-        </Modal.Body>
-      </Modal>
+        </Modal>
+      </SuperAdminScreen>
     </>
   );
 }

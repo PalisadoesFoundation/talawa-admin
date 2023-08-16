@@ -34,6 +34,14 @@
     "requests": "Peticiones",
     "logout": "Cerrar sesión"
   },
+  "leftDrawer": {
+    "talawaAdminPortal": "Portal de administración de Talawa",
+    "menu": "Menú",
+    "organizations": "Organizaciones",
+    "requests": "Solicitudes",
+    "roles": "Roles",
+    "logout": "Cerrar sesión"
+  },
   "orgList": {
     "title": "Organizaciones Talawa",
     "you": "Tú",
@@ -41,26 +49,25 @@
     "designation": "Designacion",
     "email": "Correo electrónico",
     "searchByName": "Buscar por nombre",
-    "organizationList": "Lista de organizaciones",
+    "organizations": "Organizaciones",
     "createOrganization": "Crear organización",
     "description": "Descripción",
     "location": "Ubicación",
     "isPublic": "Es público",
     "visibleInSearch": "Visible en la búsqueda",
     "displayImage": "Mostrar imagen",
-    "enterName": "Ingrese su nombre"
+    "enterName": "Ingrese su nombre",
+    "sort": "Ordenar",
+    "filter": "Filtrar",
+    "cancel": "Cancelar",
+    "noOrgErrorTitle": "Organizaciones no encontradas",
+    "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
+    "noResultsFoundFor": "No se encontraron resultados para "
   },
-  "superDashListCard": {
-    "created": "Creado",
+  "orgListCard": {
     "admins": "Administradores",
     "members": "Miembros",
     "manage": "Administrar"
-  },
-  "adminDashListCard": {
-    "view": "Ver",
-    "created": "Creado",
-    "admins": "Administradores",
-    "members": "Miembros"
   },
   "paginationList": {
     "rowsPerPage": "filas por página",
@@ -77,7 +84,12 @@
     "superAdmin": "SUPERADMIN",
     "user": "USUARIO",
     "enterName": "Ingrese su nombre",
+    "loadingUsers": "Cargando usuarios ...",
+    "noUserFound": "No se encontró ningún usuario.",
+    "sort": "Ordenar",
+    "filter": "Filtrar",
     "roleUpdated": "Rol actualizado.",
+    "noResultsFoundFor": "No se encontraron resultados para ",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
   "requests": {
@@ -89,8 +101,13 @@
     "accept": "Aceptar",
     "reject": "Rechazar",
     "enterName": "Ingrese su nombre",
+    "loadingRequests": "Cargando solicitudes ...",
+    "noRequestFound": "No se encontró ninguna solicitud.",
+    "sort": "Ordenar",
+    "filter": "Filtrar",
     "userApproved": "Aprobado por el usuario",
     "userRejected": "Usuario rechazado",
+    "noResultsFoundFor": "No se encontraron resultados para ",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
   "adminNavbar": {
@@ -362,7 +379,6 @@
     "saveChanges": "Guardar cambios",
     "cancel": "Cancelar"
   },
-
   "userPasswordUpdate": {
     "previousPassword": "Contraseña anterior",
     "newPassword": "Nueva contraseña",
@@ -370,7 +386,6 @@
     "saveChanges": "Guardar cambios",
     "cancel": "Cancelar"
   },
-
   "orgDelete": {
     "deleteOrg": "Eliminar organización"
   },
