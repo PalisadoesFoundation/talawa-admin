@@ -97,12 +97,17 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
 
   return (
     <>
-      <Modal show={props.show} onHide={props.handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Event Registrants</Modal.Title>
+      <Modal
+        show={props.show}
+        onHide={props.handleClose}
+        backdrop="static"
+        centered
+      >
+        <Modal.Header closeButton className="bg-primary">
+          <Modal.Title className="text-white">Event Registrants</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h5> Registered Registrants</h5>
+          <h5 className="mb-2"> Registered Registrants </h5>
           {attendeesData.event.attendees.length == 0
             ? `There are no registered attendees for this event.`
             : null}
@@ -139,10 +144,12 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
             )}
           />
           <br />
+        </Modal.Body>
+        <Modal.Footer>
           <Button variant="success" onClick={addRegistrant}>
             Add Registrant
           </Button>
-        </Modal.Body>
+        </Modal.Footer>
       </Modal>
     </>
   );

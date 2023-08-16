@@ -561,7 +561,7 @@ export const REMOVE_EVENT_ATTENDEE = gql`
 `;
 
 export const MARK_CHECKIN = gql`
-  mutation markCheckIn(
+  mutation checkIn(
     $userId: ID!
     $eventId: ID!
     $allotedRoom: String

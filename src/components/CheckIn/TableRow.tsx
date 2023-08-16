@@ -32,6 +32,7 @@ export const TableRow = ({
         refetch();
       })
       .catch((err) => {
+        console.log(err);
         toast.error('There was an error in checking in!');
         toast.error(err.message);
       });
@@ -39,12 +40,12 @@ export const TableRow = ({
 
   const generateTag = (): void => {
     toast.warning('Generating pdf...');
-    const inputs = [{ greeting: 'Hi!', name: 'John Doe' }];
+    const inputs = [{ name: data.name }];
 
     generate({ template: tagTemplate, inputs }).then((pdf) => {
-      toast.success('PDF generated successfully!');
       const blob = new Blob([pdf.buffer], { type: 'application/pdf' });
       window.open(URL.createObjectURL(blob));
+      toast.success('PDF generated successfully!');
     });
   };
 
@@ -60,7 +61,12 @@ export const TableRow = ({
           </Button>
         </div>
       ) : (
-        <Button variant="contained" color="success" onClick={markCheckIn}>
+        <Button
+          variant="contained"
+          color="success"
+          onClick={markCheckIn}
+          className="m-2 p-2"
+        >
           Check In
         </Button>
       )}

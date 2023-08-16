@@ -3,20 +3,9 @@ import { Template } from '@pdfme/generator';
 export const tagTemplate: Template = {
   schemas: [
     {
-      greeting: {
-        type: 'text',
-        position: { x: 12.02, y: 2.92 },
-        width: 33.85,
-        height: 4.66,
-        fontSize: 10,
-        fontColor: '#ffffff',
-        fontName: 'Roboto',
-        lineHeight: 1,
-        alignment: 'left',
-      },
       name: {
         type: 'text',
-        position: { x: 14.91, y: 29.03 },
+        position: { x: 14.91, y: 27.03 },
         width: 58.55,
         height: 5.67,
         alignment: 'center',

@@ -30,6 +30,7 @@ export interface InterfaceModalProp {
 
 export interface InterfaceTableCheckIn {
   id: string;
+  name: string;
   userId: string;
   checkIn: null | {
     _id: string;

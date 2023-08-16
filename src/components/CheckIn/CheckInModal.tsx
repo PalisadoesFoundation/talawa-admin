@@ -39,6 +39,7 @@ export const CheckInModal = (props: InterfaceModalProp): JSX.Element => {
             id: checkIn._id,
             checkInData: {
               id: checkIn._id,
+              name: `${checkIn.user.firstName} ${checkIn.user.lastName}`,
               userId: checkIn.user._id,
               checkIn: checkIn.checkIn,
               eventId: props.eventId,
@@ -70,9 +71,17 @@ export const CheckInModal = (props: InterfaceModalProp): JSX.Element => {
   }
   return (
     <>
-      <Modal show={props.show} onHide={props.handleClose} size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>Event Check In Management</Modal.Title>
+      <Modal
+        show={props.show}
+        onHide={props.handleClose}
+        backdrop="static"
+        centered
+        size="lg"
+      >
+        <Modal.Header closeButton className="bg-primary">
+          <Modal.Title className="text-white">
+            Event Check In Management
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="p-2">
@@ -96,7 +105,7 @@ export const CheckInModal = (props: InterfaceModalProp): JSX.Element => {
               fullWidth
             />
           </div>
-          <div style={{ height: 550, width: '100%' }}>
+          <div style={{ height: 500, width: '100%' }}>
             <DataGrid
               rows={tableData}
               getRowHeight={() => 'auto'}
