@@ -60,16 +60,18 @@ export const AddEventProjectModal = ({
 
   return (
     <>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add an Event Project</Modal.Title>
+      <Modal show={show} onHide={handleClose} backdrop="static" centered>
+        <Modal.Header closeButton className="bg-primary">
+          <Modal.Title className="text-white">Add an Event Project</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit}>
+          <Modal.Body>
             <Form.Group controlId="formBasicTitle">
               <Form.Label>Title</Form.Label>
               <Form.Control
                 type="text"
+                className="mb-3"
+                required
                 placeholder="Enter title of the project"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -81,16 +83,19 @@ export const AddEventProjectModal = ({
               <Form.Control
                 type="text"
                 placeholder="A brief desciption of what the event is about!"
+                className="mb-3"
+                required
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
             </Form.Group>
-            <br />
+          </Modal.Body>
+          <Modal.Footer>
             <Button variant="success" type="submit">
               Create Project
             </Button>
-          </Form>
-        </Modal.Body>
+          </Modal.Footer>
+        </Form>
       </Modal>
     </>
   );

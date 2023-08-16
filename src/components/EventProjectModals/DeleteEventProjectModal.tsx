@@ -38,15 +38,21 @@ export const DeleteEventProjectModal = (props: ModalPropType): JSX.Element => {
 
   return (
     <>
-      <Modal show={props.show} onHide={props.handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Delete Event Project</Modal.Title>
+      <Modal
+        show={props.show}
+        onHide={props.handleClose}
+        backdrop="static"
+        centered
+      >
+        <Modal.Header closeButton className="bg-primary">
+          <Modal.Title className="text-white">Delete Event Project</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="m-1 text-lg mb-0" id="deleteEventProjectConfirm">
             Are you sure you want to delete this?
           </div>
-          <br />
+        </Modal.Body>
+        <Modal.Footer>
           <Button
             variant="outline-secondary"
             onClick={props.handleClose}
@@ -57,7 +63,7 @@ export const DeleteEventProjectModal = (props: ModalPropType): JSX.Element => {
           <Button variant="danger" onClick={deleteProject} className="m-1">
             Delete
           </Button>
-        </Modal.Body>
+        </Modal.Footer>
       </Modal>
     </>
   );

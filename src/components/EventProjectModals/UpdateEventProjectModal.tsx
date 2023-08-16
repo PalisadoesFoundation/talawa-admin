@@ -62,16 +62,22 @@ export const UpdateEventProjectModal = (props: ModalPropType): JSX.Element => {
 
   return (
     <>
-      <Modal show={props.show} onHide={props.handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Update Event Project</Modal.Title>
+      <Modal
+        show={props.show}
+        onHide={props.handleClose}
+        backdrop="static"
+        centered
+      >
+        <Modal.Header closeButton className="bg-primary">
+          <Modal.Title className="text-white">Update Event Project</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit}>
+          <Modal.Body>
             <Form.Group controlId="formBasicTitle">
               <Form.Label>Title</Form.Label>
               <Form.Control
                 type="text"
+                className="mb-3"
                 placeholder="Enter title of the project"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -82,17 +88,19 @@ export const UpdateEventProjectModal = (props: ModalPropType): JSX.Element => {
               <Form.Label>Description</Form.Label>
               <Form.Control
                 type="text"
+                className="mb-3"
                 placeholder="A brief desciption of what the event is about!"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
             </Form.Group>
-            <br />
+          </Modal.Body>
+          <Modal.Footer>
             <Button variant="success" type="submit">
               Update Details
             </Button>
-          </Form>
-        </Modal.Body>
+          </Modal.Footer>
+        </Form>
       </Modal>
     </>
   );
