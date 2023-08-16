@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import { EventAttendeeWrapper } from './EventAttendeeWrapper';
+import { EventRegistrantsWrapper } from './EventRegistrantsWrapper';
 import { EVENT_ATTENDEES, MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -54,7 +54,7 @@ const queryMock = [
   },
 ];
 
-describe('Testing Event Attendees Wrapper', () => {
+describe('Testing Event Registrants Wrapper', () => {
   const props = {
     eventId: 'event123',
     orgId: 'org123',
@@ -68,7 +68,7 @@ describe('Testing Event Attendees Wrapper', () => {
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <ToastContainer />
-                <EventAttendeeWrapper {...props} />
+                <EventRegistrantsWrapper {...props} />
               </I18nextProvider>
             </Provider>
           </LocalizationProvider>
@@ -77,16 +77,16 @@ describe('Testing Event Attendees Wrapper', () => {
     );
 
     // Open the modal
-    fireEvent.click(queryByText('Show Attendees') as Element);
+    fireEvent.click(queryByText('Show Registrants') as Element);
 
     await waitFor(() =>
-      expect(queryByText('Event Attendees')).toBeInTheDocument()
+      expect(queryByText('Event Registrants')).toBeInTheDocument()
     );
 
     // Close the modal
     fireEvent.click(queryByRole('button', { name: /close/i }) as HTMLElement);
     await waitFor(() =>
-      expect(queryByText('Event Attendees')).not.toBeInTheDocument()
+      expect(queryByText('Event Registrants')).not.toBeInTheDocument()
     );
   });
 });

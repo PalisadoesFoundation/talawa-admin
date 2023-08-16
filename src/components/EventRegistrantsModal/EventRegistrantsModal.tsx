@@ -8,7 +8,7 @@ import {
   ADD_EVENT_ATTENDEE,
   REMOVE_EVENT_ATTENDEE,
 } from 'GraphQl/Mutations/mutations';
-import styles from 'components/EventAttendeesModal/EventAttendeesModal.module.css';
+import styles from 'components/EventRegistrantsModal/EventRegistrantsModal.module.css';
 import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
@@ -28,11 +28,11 @@ interface InterfaceUser {
   lastName: string;
 }
 
-export const EventAttendeesModal = (props: ModalPropType): JSX.Element => {
+export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   const [member, setMember] = useState<InterfaceUser | null>(null);
 
-  const [addAttendeeMutation] = useMutation(ADD_EVENT_ATTENDEE);
-  const [removeAttendeeMutation] = useMutation(REMOVE_EVENT_ATTENDEE);
+  const [addRegistrantMutation] = useMutation(ADD_EVENT_ATTENDEE);
+  const [removeRegistrantMutation] = useMutation(REMOVE_EVENT_ATTENDEE);
 
   const {
     data: attendeesData,
@@ -46,13 +46,13 @@ export const EventAttendeesModal = (props: ModalPropType): JSX.Element => {
     variables: { id: props.orgId },
   });
 
-  const addAttendee = (): void => {
+  const addRegistrant = (): void => {
     if (member == null) {
       toast.warning('Please choose an user to add first!');
       return;
     }
     toast.warn('Adding the attendee...');
-    addAttendeeMutation({
+    addRegistrantMutation({
       variables: {
         userId: member._id,
         eventId: props.eventId,
@@ -68,9 +68,9 @@ export const EventAttendeesModal = (props: ModalPropType): JSX.Element => {
       });
   };
 
-  const deleteAttendee = (userId: string): void => {
+  const deleteRegistrant = (userId: string): void => {
     toast.warn('Removing the attendee...');
-    removeAttendeeMutation({
+    removeRegistrantMutation({
       variables: {
         userId,
         eventId: props.eventId,
@@ -99,10 +99,10 @@ export const EventAttendeesModal = (props: ModalPropType): JSX.Element => {
     <>
       <Modal show={props.show} onHide={props.handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Event Attendees</Modal.Title>
+          <Modal.Title>Event Registrants</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h5> Registered Attendees</h5>
+          <h5> Registered Registrants</h5>
           {attendeesData.event.attendees.length == 0
             ? `There are no registered attendees for this event.`
             : null}
@@ -115,14 +115,14 @@ export const EventAttendeesModal = (props: ModalPropType): JSX.Element => {
                 label={`${attendee.firstName} ${attendee.lastName}`}
                 variant="outlined"
                 key={attendee._id}
-                onDelete={() => deleteAttendee(attendee._id)}
+                onDelete={() => deleteRegistrant(attendee._id)}
               />
             ))}
           </Stack>
           <br />
 
           <Autocomplete
-            id="addAttendee"
+            id="addRegistrant"
             onChange={(_, newMember) => {
               setMember(newMember);
             }}
@@ -133,14 +133,14 @@ export const EventAttendeesModal = (props: ModalPropType): JSX.Element => {
             renderInput={(params) => (
               <TextField
                 {...params}
-                label="Add an Attendee"
+                label="Add an Registrant"
                 placeholder="Choose the user that you want to add"
               />
             )}
           />
           <br />
-          <Button variant="success" onClick={addAttendee}>
-            Add Attendee
+          <Button variant="success" onClick={addRegistrant}>
+            Add Registrant
           </Button>
         </Modal.Body>
       </Modal>

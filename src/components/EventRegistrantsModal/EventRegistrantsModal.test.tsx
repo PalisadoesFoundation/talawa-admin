@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import { EventAttendeesModal } from './EventAttendeesModal';
+import { EventRegistrantsModal } from './EventRegistrantsModal';
 import { EVENT_ATTENDEES, MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import {
   ADD_EVENT_ATTENDEE,
@@ -16,7 +16,7 @@ import { ToastContainer } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-const queryMockWithoutAttendee = [
+const queryMockWithoutRegistrant = [
   {
     request: {
       query: EVENT_ATTENDEES,
@@ -32,7 +32,7 @@ const queryMockWithoutAttendee = [
   },
 ];
 
-const queryMockWithAttendee = [
+const queryMockWithRegistrant = [
   {
     request: {
       query: EVENT_ATTENDEES,
@@ -77,7 +77,7 @@ const queryMockOrgMembers = [
   },
 ];
 
-const successfulAddAttendeeMock = [
+const successfulAddRegistrantMock = [
   {
     request: {
       query: ADD_EVENT_ATTENDEE,
@@ -91,7 +91,7 @@ const successfulAddAttendeeMock = [
   },
 ];
 
-const unsuccessfulAddAttendeeMock = [
+const unsuccessfulAddRegistrantMock = [
   {
     request: {
       query: ADD_EVENT_ATTENDEE,
@@ -101,7 +101,7 @@ const unsuccessfulAddAttendeeMock = [
   },
 ];
 
-const successfulRemoveAttendeeMock = [
+const successfulRemoveRegistrantMock = [
   {
     request: {
       query: REMOVE_EVENT_ATTENDEE,
@@ -115,7 +115,7 @@ const successfulRemoveAttendeeMock = [
   },
 ];
 
-const unsuccessfulRemoveAttendeeMock = [
+const unsuccessfulRemoveRegistrantMock = [
   {
     request: {
       query: REMOVE_EVENT_ATTENDEE,
@@ -125,7 +125,7 @@ const unsuccessfulRemoveAttendeeMock = [
   },
 ];
 
-describe('Testing Event Attendees Modal', () => {
+describe('Testing Event Registrants Modal', () => {
   const props = {
     show: true,
     eventId: 'event123',
@@ -138,9 +138,9 @@ describe('Testing Event Attendees Modal', () => {
       <MockedProvider
         addTypename={false}
         mocks={[
-          ...queryMockWithoutAttendee,
+          ...queryMockWithoutRegistrant,
           ...queryMockOrgMembers,
-          ...successfulAddAttendeeMock,
+          ...successfulAddRegistrantMock,
         ]}
       >
         <BrowserRouter>
@@ -148,7 +148,7 @@ describe('Testing Event Attendees Modal', () => {
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <ToastContainer />
-                <EventAttendeesModal {...props} />
+                <EventRegistrantsModal {...props} />
               </I18nextProvider>
             </Provider>
           </LocalizationProvider>
@@ -157,11 +157,11 @@ describe('Testing Event Attendees Modal', () => {
     );
 
     await waitFor(() =>
-      expect(queryByText('Event Attendees')).toBeInTheDocument()
+      expect(queryByText('Event Registrants')).toBeInTheDocument()
     );
 
     await waitFor(() =>
-      expect(queryByText('Registered Attendees')).toBeInTheDocument()
+      expect(queryByText('Registered Registrants')).toBeInTheDocument()
     );
 
     await waitFor(() =>
@@ -171,7 +171,7 @@ describe('Testing Event Attendees Modal', () => {
     );
 
     // Get warning modal on blank button click
-    fireEvent.click(queryByText('Add Attendee') as Element);
+    fireEvent.click(queryByText('Add Registrant') as Element);
 
     await waitFor(() =>
       expect(
@@ -180,14 +180,14 @@ describe('Testing Event Attendees Modal', () => {
     );
 
     // Choose a user to add as an attendee
-    const attendeeInput = queryByLabelText('Add an Attendee');
+    const attendeeInput = queryByLabelText('Add an Registrant');
     fireEvent.change(attendeeInput as Element, {
       target: { value: 'John Doe' },
     });
     fireEvent.keyDown(attendeeInput as HTMLElement, { key: 'ArrowDown' });
     fireEvent.keyDown(attendeeInput as HTMLElement, { key: 'Enter' });
 
-    fireEvent.click(queryByText('Add Attendee') as Element);
+    fireEvent.click(queryByText('Add Registrant') as Element);
 
     await waitFor(() =>
       expect(queryByText('Adding the attendee...')).toBeInTheDocument()
@@ -205,9 +205,9 @@ describe('Testing Event Attendees Modal', () => {
       <MockedProvider
         addTypename={false}
         mocks={[
-          ...queryMockWithoutAttendee,
+          ...queryMockWithoutRegistrant,
           ...queryMockOrgMembers,
-          ...unsuccessfulAddAttendeeMock,
+          ...unsuccessfulAddRegistrantMock,
         ]}
       >
         <BrowserRouter>
@@ -215,7 +215,7 @@ describe('Testing Event Attendees Modal', () => {
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <ToastContainer />
-                <EventAttendeesModal {...props} />
+                <EventRegistrantsModal {...props} />
               </I18nextProvider>
             </Provider>
           </LocalizationProvider>
@@ -230,14 +230,14 @@ describe('Testing Event Attendees Modal', () => {
     );
 
     // Choose a user to add as an attendee
-    const attendeeInput = queryByLabelText('Add an Attendee');
+    const attendeeInput = queryByLabelText('Add an Registrant');
     fireEvent.change(attendeeInput as Element, {
       target: { value: 'John Doe' },
     });
     fireEvent.keyDown(attendeeInput as HTMLElement, { key: 'ArrowDown' });
     fireEvent.keyDown(attendeeInput as HTMLElement, { key: 'Enter' });
 
-    fireEvent.click(queryByText('Add Attendee') as Element);
+    fireEvent.click(queryByText('Add Registrant') as Element);
 
     await waitFor(() =>
       expect(queryByText('Adding the attendee...')).toBeInTheDocument()
@@ -255,9 +255,9 @@ describe('Testing Event Attendees Modal', () => {
       <MockedProvider
         addTypename={false}
         mocks={[
-          ...queryMockWithAttendee,
+          ...queryMockWithRegistrant,
           ...queryMockOrgMembers,
-          ...successfulRemoveAttendeeMock,
+          ...successfulRemoveRegistrantMock,
         ]}
       >
         <BrowserRouter>
@@ -265,7 +265,7 @@ describe('Testing Event Attendees Modal', () => {
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <ToastContainer />
-                <EventAttendeesModal {...props} />
+                <EventRegistrantsModal {...props} />
               </I18nextProvider>
             </Provider>
           </LocalizationProvider>
@@ -274,7 +274,7 @@ describe('Testing Event Attendees Modal', () => {
     );
 
     await waitFor(() =>
-      expect(queryByText('Registered Attendees')).toBeInTheDocument()
+      expect(queryByText('Registered Registrants')).toBeInTheDocument()
     );
 
     await waitFor(() => expect(queryByText('John Doe')).toBeInTheDocument());
@@ -297,9 +297,9 @@ describe('Testing Event Attendees Modal', () => {
       <MockedProvider
         addTypename={false}
         mocks={[
-          ...queryMockWithAttendee,
+          ...queryMockWithRegistrant,
           ...queryMockOrgMembers,
-          ...unsuccessfulRemoveAttendeeMock,
+          ...unsuccessfulRemoveRegistrantMock,
         ]}
       >
         <BrowserRouter>
@@ -307,7 +307,7 @@ describe('Testing Event Attendees Modal', () => {
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <ToastContainer />
-                <EventAttendeesModal {...props} />
+                <EventRegistrantsModal {...props} />
               </I18nextProvider>
             </Provider>
           </LocalizationProvider>
@@ -316,7 +316,7 @@ describe('Testing Event Attendees Modal', () => {
     );
 
     await waitFor(() =>
-      expect(queryByText('Registered Attendees')).toBeInTheDocument()
+      expect(queryByText('Registered Registrants')).toBeInTheDocument()
     );
 
     await waitFor(() => expect(queryByText('John Doe')).toBeInTheDocument());

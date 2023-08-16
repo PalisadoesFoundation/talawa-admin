@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { EventAttendeesModal } from './EventAttendeesModal';
+import { EventRegistrantsModal } from './EventRegistrantsModal';
 import { Button } from 'react-bootstrap';
 
 type PropType = {
@@ -7,7 +7,7 @@ type PropType = {
   orgId: string;
 };
 
-export const EventAttendeeWrapper = (props: PropType): JSX.Element => {
+export const EventRegistrantsWrapper = (props: PropType): JSX.Element => {
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -21,10 +21,10 @@ export const EventAttendeeWrapper = (props: PropType): JSX.Element => {
           setShowModal(true);
         }}
       >
-        Show Attendees
+        Show Registrants
       </Button>
       {showModal ? (
-        <EventAttendeesModal
+        <EventRegistrantsModal
           show={showModal}
           handleClose={() => {
             setShowModal(false);

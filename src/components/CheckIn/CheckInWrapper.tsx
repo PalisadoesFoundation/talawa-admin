@@ -20,7 +20,7 @@ export const CheckInWrapper = (props: PropType): JSX.Element => {
           setShowModal(true);
         }}
       >
-        Check In Attendees
+        Check In Registrants
       </Button>
       {showModal && (
         <CheckInModal
