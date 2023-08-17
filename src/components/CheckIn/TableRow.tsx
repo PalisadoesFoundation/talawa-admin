@@ -32,7 +32,6 @@ export const TableRow = ({
         refetch();
       })
       .catch((err) => {
-        console.log(err);
         toast.error('There was an error in checking in!');
         toast.error(err.message);
       });

@@ -251,14 +251,14 @@ describe('Testing Update Event Task Modal', () => {
 
     // Manage Volunteer Modal
     fireEvent.click(queryByText('Manage Volunteers') as Element);
-    fireEvent.click(
-      queryAllByRole('button', { name: /close/i })[0] as HTMLElement
+    queryAllByRole('button', { name: /close/i }).forEach((ele) =>
+      fireEvent.click(ele as HTMLElement)
     );
 
     // Delete Task Modal
     fireEvent.click(queryByText('Delete Task') as Element);
-    fireEvent.click(
-      queryAllByRole('button', { name: /close/i })[0] as HTMLElement
+    queryAllByRole('button', { name: /close/i }).forEach((ele) =>
+      fireEvent.click(ele as HTMLElement)
     );
   });
 });
