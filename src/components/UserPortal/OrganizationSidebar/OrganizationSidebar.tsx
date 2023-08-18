@@ -21,9 +21,12 @@ export default function organizationSidebar(): JSX.Element {
   });
 
   const organizationId = getOrganizationId(window.location.href);
+
+  // Initialize members and events state
   const [members, setMembers]: any = React.useState([]);
   const [events, setEvents]: any = React.useState([]);
 
+  // Use Apollo Client to query organization members
   const { data: memberData, loading: memberLoading } = useQuery(
     ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     {
@@ -35,6 +38,7 @@ export default function organizationSidebar(): JSX.Element {
     }
   );
 
+  // Use Apollo Client to query organization events
   const { data: eventsData, loading: eventsLoading } = useQuery(
     ORGANIZATION_EVENT_CONNECTION_LIST,
     {
@@ -46,6 +50,7 @@ export default function organizationSidebar(): JSX.Element {
     }
   );
 
+  // Update members state when member data changes
   /* istanbul ignore next */
   useEffect(() => {
     if (memberData) {
@@ -53,6 +58,7 @@ export default function organizationSidebar(): JSX.Element {
     }
   }, [memberData]);
 
+  // Update events state when events data changes
   /* istanbul ignore next */
   useEffect(() => {
     if (eventsData) {

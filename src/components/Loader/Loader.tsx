@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './Loader.module.css';
 import { Spinner } from 'react-bootstrap';
 
+// Loader component that displays a spinning spinner animation
 const Loader = (): JSX.Element => {
   return (
     <>

@@ -25,17 +25,22 @@ import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
 
 function orgPost(): JSX.Element {
+  // Initialize translations
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgPost',
   });
 
   document.title = t('title');
+
+  // State for modal visibility and form data
   const [postmodalisOpen, setPostModalIsOpen] = useState(false);
   const [postformState, setPostFormState] = useState({
     posttitle: '',
     postinfo: '',
     postImage: '',
   });
+
+  // State for search filter and pagination
   const [showTitle, setShowTitle] = useState(true);
 
   const searchChange = (ev: any): void => {
@@ -44,10 +49,12 @@ function orgPost(): JSX.Element {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  // Get current URL and app routes from Redux store
   const currentUrl = window.location.href.split('=')[1];
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
 
+  // Function to show and hide modal
   const showInviteModal = (): void => {
     setPostModalIsOpen(true);
   };
@@ -55,6 +62,7 @@ function orgPost(): JSX.Element {
     setPostModalIsOpen(false);
   };
 
+  // Query to fetch organization post list
   const {
     data: orgPostListData,
     loading: orgPostListLoading,
@@ -63,12 +71,14 @@ function orgPost(): JSX.Element {
   } = useQuery(ORGANIZATION_POST_CONNECTION_LIST, {
     variables: { id: currentUrl, title_contains: '', text_contains: '' },
   });
+
+  // Mutation to create a new post
   const [create, { loading: createPostLoading }] =
     useMutation(CREATE_POST_MUTATION);
-
   const createPost = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
+    // Extract and trim form data
     const {
       posttitle: _posttitle,
       postinfo: _postinfo,
@@ -83,6 +93,7 @@ function orgPost(): JSX.Element {
         throw new Error('Text fields cannot be empty strings');
       }
 
+      // Call the create post mutation
       const { data } = await create({
         variables: {
           title: posttitle,
@@ -108,6 +119,7 @@ function orgPost(): JSX.Element {
     }
   };
 
+  // Handle loading states and errors
   if (createPostLoading || orgPostListLoading) {
     return <Loader />;
   }

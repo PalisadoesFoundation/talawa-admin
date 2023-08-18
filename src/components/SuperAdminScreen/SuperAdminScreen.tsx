@@ -5,6 +5,39 @@ import Button from 'react-bootstrap/Button';
 import type { InterfaceUserType } from 'utils/interfaces';
 import styles from './SuperAdminScreen.module.css';
 
+/**
+ * Props for the `superAdminScreen` component.
+ * @typedef {Object} InterfaceSuperAdminScreenProps
+ * @property {string} title - Multilingual page title.
+ * @property {string} screenName - Internal screen name for developers.
+ * @property {InterfaceUserType | undefined} data - User data for the screen.
+ * @property {React.ReactNode} children - React nodes representing the content of the screen.
+ */
+
+/**
+ * `superAdminScreen` is a layout component for Super Admin screens.
+ * It includes a left navigation drawer, page title, and toggle menu button.
+ * @component
+ *
+ * @param {InterfaceSuperAdminScreenProps} props - The props object containing screen data.
+ * @returns {JSX.Element} A JSX element representing the Super Admin screen layout.
+ *
+ * Example usage:
+ * ```jsx
+ * <superAdminScreen
+ *   title="Super Admin Dashboard"
+ *   screenName="SuperAdminDashboard"
+ *   data={userData}
+ * >
+ *   {//Content of the SuperAdmin Screen}
+ *   <div>
+ *     {...}
+ *   </div>
+ * </superAdminScreen>
+ * ```
+ */
+
+
 export interface InterfaceSuperAdminScreenProps {
   title: string; // Multilingual Page title
   screenName: string; // Internal Screen name for developers

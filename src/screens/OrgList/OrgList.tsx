@@ -26,11 +26,18 @@ import type {
 import styles from './OrgList.module.css';
 import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 
+/**
+ * Represents the organization list page.
+ * Displays a list of organizations based on user's role and provides options for sorting, filtering, and creating organizations.
+ * @returns {JSX.Element} The organization list page component.
+ */
+
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
 
   document.title = t('title');
 
+  // State to manage search input and modal visibility
   const [searchByName, setSearchByName] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [formState, setFormState] = useState({
@@ -42,10 +49,12 @@ function orgList(): JSX.Element {
     image: '',
   });
 
+  // Toggle the modal visibility
   const toggleModal = (): void => setShowModal(!showModal);
 
   const [create] = useMutation(CREATE_ORGANIZATION_MUTATION);
 
+  // Fetch user data and organization list from GraphQL queries
   const {
     data: userData,
     error: errorUser,

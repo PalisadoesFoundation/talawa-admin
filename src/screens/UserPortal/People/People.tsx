@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import getOrganizationId from 'utils/getOrganizationId';
 
+// Interface for the props of each organization card (representing a person)
 interface InterfaceOrganizationCardProps {
   id: string;
   name: string;
@@ -38,6 +39,7 @@ export default function people(): JSX.Element {
 
   const modes = ['All Members', 'Admins'];
 
+  // Fetch members of the organization
   const { data, loading, refetch } = useQuery(
     ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     {
@@ -48,10 +50,12 @@ export default function people(): JSX.Element {
     }
   );
 
+  // Fetch organization's admins
   const { data: data2 } = useQuery(ORGANIZATION_ADMINS_LIST, {
     variables: { id: organizationId },
   });
 
+  // Function to handle pagination - change page
   /* istanbul ignore next */
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
@@ -60,6 +64,7 @@ export default function people(): JSX.Element {
     setPage(newPage);
   };
 
+  // Function to handle pagination - change rows per page
   /* istanbul ignore next */
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -70,6 +75,7 @@ export default function people(): JSX.Element {
     setPage(0);
   };
 
+  // Function to handle search input change
   const handleSearch = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
@@ -83,6 +89,7 @@ export default function people(): JSX.Element {
     refetch(filter);
   };
 
+  // Update members state with fetched data
   /* istanbul ignore next */
   React.useEffect(() => {
     if (data) {
@@ -90,6 +97,7 @@ export default function people(): JSX.Element {
     }
   }, [data]);
 
+  // Update members state based on selected mode (All Members or Admins)
   /* istanbul ignore next */
   React.useEffect(() => {
     if (mode == 0) {

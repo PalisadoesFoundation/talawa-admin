@@ -9,6 +9,7 @@ interface InterfaceOrganizationCardProps {
   email: string;
 }
 
+// Set the image URL based on whether the image prop is provided or not
 function peopleCard(props: InterfaceOrganizationCardProps): JSX.Element {
   const imageUrl = props.image ? props.image : aboutImg;
 
