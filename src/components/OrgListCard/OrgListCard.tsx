@@ -7,6 +7,22 @@ import AboutImg from 'assets/images/defaultImg.png';
 import type { InterfaceOrgConnectionInfoType } from 'utils/interfaces';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 
+/**
+ * Props for the `OrgListCard` component.
+ * @typedef {Object} InterfaceOrgListCardProps
+ * @property {InterfaceOrgConnectionInfoType} data - Data representing organization information.
+ */
+
+/**
+ * `OrgDashListCard` is a React component that displays information about an organization in a list card format.
+ * It provides details such as the organization name, location, number of admins, number of members,
+ * and a "Manage" button to navigate to the organization dashboard.
+ * @component
+ *
+ * @param {InterfaceOrgListCardProps} props - Props for the component.
+ * @returns {JSX.Element} A JSX element representing the organization list card.
+ */
+
 export interface InterfaceOrgListCardProps {
   data: InterfaceOrgConnectionInfoType;
 }
@@ -16,18 +32,27 @@ function superDashListCard(props: InterfaceOrgListCardProps): JSX.Element {
 
   const history = useHistory();
 
+  /**
+   * Handle the click event when the "Manage" button is clicked.
+   * Redirects the user to the organization dashboard page.
+   * @private
+   * @returns {void}
+   */
   function handleClick(): void {
     const url = '/orgdash/id=' + _id;
 
-    // Dont change the below two lines
+    // Replace the current URL with the new one and navigate to it
+    // (Dont change the below two lines)
     window.location.replace(url);
     history.push(url);
   }
 
+  // Retrieve translation functions from react-i18next
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgListCard',
   });
 
+  // The main JSX structure representing the organization list card
   return (
     <>
       <div className={styles.orgCard}>

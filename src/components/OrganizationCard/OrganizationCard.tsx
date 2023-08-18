@@ -1,6 +1,36 @@
 import React from 'react';
 import styles from './OrganizationCard.module.css';
 
+/**
+ * Props for the `organizationCard` component.
+ * @typedef {Object} InterfaceOrganizationCardProps
+ * @property {any} key - Key for React's reconciliation algorithm.
+ * @property {string} image - URL of the organization's image.
+ * @property {string} id - Identifier for the organization.
+ * @property {string} name - Name of the organization.
+ * @property {string} lastName - Last name of the organization owner.
+ * @property {string} firstName - First name of the organization owner.
+ */
+
+/**
+ * `organizationCard` is a React component that represents a card displaying information of a particular organization.
+ * @component
+ *
+ * @param {InterfaceOrganizationCardProps} props - The props object containing organization data.
+ * @returns {JSX.Element} A JSX element representing the organization card.
+ *
+ * @example
+ * // Usage of the `organizationCard` component
+ * <organizationCard
+ *   key={orgData.id}
+ *   image={orgData.image}
+ *   id={orgData.id}
+ *   name={orgData.name}
+ *   firstName={orgData.owner.firstName}
+ *   lastName={orgData.owner.lastName}
+ * />
+ */
+
 interface InterfaceOrganizationCardProps {
   key: any;
   image: string;

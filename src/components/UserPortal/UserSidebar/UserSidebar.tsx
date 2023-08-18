@@ -17,11 +17,13 @@ function userSidebar(): JSX.Element {
     keyPrefix: 'userSidebar',
   });
 
+  // State to store user's organizations and details
   const [organizations, setOrganizations] = React.useState([]);
   const [details, setDetails] = React.useState({} as any);
 
   const userId: string | null = localStorage.getItem('userId');
 
+  // Fetch user's joined organizations
   const { data, loading: loadingJoinedOrganizations } = useQuery(
     USER_JOINED_ORGANIZATIONS,
     {
@@ -29,10 +31,12 @@ function userSidebar(): JSX.Element {
     }
   );
 
+  // Fetch user's details
   const { data: data2, loading: loadingUserDetails } = useQuery(USER_DETAILS, {
     variables: { id: userId },
   });
 
+  // Update organizations state with fetched data
   /* istanbul ignore next */
   React.useEffect(() => {
     if (data) {

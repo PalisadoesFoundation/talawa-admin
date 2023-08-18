@@ -25,6 +25,8 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
   const { t } = useTranslation('translation', {
     keyPrefix: 'userUpdate',
   });
+
+  /* State to manage form fields */   
   const [formState, setFormState] = React.useState({
     firstName: '',
     lastName: '',
@@ -34,8 +36,10 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
     file: '',
   });
 
+  /* Mutation for updating user */
   const [updateUser] = useMutation(UPDATE_USER_MUTATION);
 
+  /* Query user details */
   const {
     data: data,
     loading: loading,
@@ -63,11 +67,12 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
     window.location.assign(`/orgsettings/id=${currentUrl}`);
   }
 
+  /* Function to handle updating user details */
   const loginLink = async (): Promise<void> => {
     try {
       const { data } = await updateUser({
         variables: {
-          //Currently on these  fields are supported by the api
+          //Currently only these fields are supported by the API
           firstName: formState.firstName,
           lastName: formState.lastName,
           email: formState.email,
@@ -95,6 +100,7 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
     }
   };
 
+  /* Function to cancel update and reload the page. */
   /* istanbul ignore next */
   const cancelUpdate = (): void => {
     window.location.reload();

@@ -26,16 +26,26 @@ import type {
 import styles from './Requests.module.css';
 import debounce from 'utils/debounce';
 
+/**
+ * Represents the requests management page for superadmins.
+ * Displays a list of user requests to become administrators and provides options to accept or reject them.
+ * @returns {JSX.Element} The requests management page component.
+ */
+
 const Requests = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'requests' });
 
   document.title = t('title');
 
+  // State to manage user data and search input
   const [usersData, setUsersData] = useState([]);
   const [searchByName, setSearchByName] = useState('');
 
+  // GraphQL mutations for accepting and rejecting admin requests
   const [acceptAdminFunc] = useMutation(ACCEPT_ADMIN_MUTATION);
   const [rejectAdminFunc] = useMutation(REJECT_ADMIN_MUTATION);
+
+  // Fetch current user's data from GraphQL query
   const {
     data: currentUserData,
   }: {
@@ -46,6 +56,7 @@ const Requests = (): JSX.Element => {
     variables: { id: localStorage.getItem('id') },
   });
 
+  // Fetch user list data from GraphQL query
   const {
     data: dataUsers,
     loading: loadingUsers,
@@ -54,6 +65,7 @@ const Requests = (): JSX.Element => {
     notifyOnNetworkStatusChange: true,
   });
 
+  // Fetch organization list data from GraphQL query
   const {
     data: dataOrgs,
   }: {
@@ -98,6 +110,7 @@ const Requests = (): JSX.Element => {
     }
   }, [dataUsers]);
 
+  // Accepting an admin request
   const acceptAdmin = async (userId: any): Promise<void> => {
     try {
       const { data } = await acceptAdminFunc({
@@ -117,6 +130,7 @@ const Requests = (): JSX.Element => {
     }
   };
 
+  // Rejecting an admin request
   const rejectAdmin = async (userId: any): Promise<void> => {
     try {
       const { data } = await rejectAdminFunc({
@@ -136,6 +150,7 @@ const Requests = (): JSX.Element => {
     }
   };
 
+  // Handle search input for filtering users
   const handleSearchByName = (e: any): any => {
     const { value } = e.target;
     setSearchByName(value);

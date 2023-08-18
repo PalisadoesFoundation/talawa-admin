@@ -20,13 +20,21 @@ import type { InterfaceUserType } from 'utils/interfaces';
 import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
 import debounce from 'utils/debounce';
 
+/**
+ * Represents the roles management page for Superadmins.
+ * Allows superadmins to change the roles (user types) of other users.
+ * @returns {JSX.Element} The roles management page component.
+ */
+
 const Roles = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'roles' });
 
   document.title = t('title');
 
+  // State to manage search input
   const [searchByName, setSearchByName] = useState('');
 
+  // Fetch current user's data from GraphQL query
   const userType = localStorage.getItem('UserType');
   const userId = localStorage.getItem('id');
   const {
@@ -38,6 +46,8 @@ const Roles = (): JSX.Element => {
   } = useQuery(USER_ORGANIZATION_LIST, {
     variables: { id: localStorage.getItem('id') },
   });
+
+  // Fetch user list data from GraphQL query
   const {
     data: dataUsers,
     loading: loadingUsers,
@@ -46,10 +56,13 @@ const Roles = (): JSX.Element => {
     notifyOnNetworkStatusChange: true,
   });
 
+  // GraphQL mutation for updating user's userType
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
+
+  // Fetch organization list data from GraphQL query
   const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
 
-  // To clear the search when the component is unmounted
+  // Clear search input when the component is unmounted
   useEffect(() => {
     return () => {
       setSearchByName('');
@@ -74,6 +87,7 @@ const Roles = (): JSX.Element => {
     }
   }, []);
 
+  // Change the role of a user
   const changeRole = async (e: any): Promise<void> => {
     const { value } = e.target;
 
@@ -98,6 +112,7 @@ const Roles = (): JSX.Element => {
     }
   };
 
+  // Handle search input for filtering users
   const handleSearchByName = (e: any): void => {
     const { value } = e.target;
     setSearchByName(value);

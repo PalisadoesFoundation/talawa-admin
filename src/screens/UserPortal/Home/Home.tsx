@@ -43,7 +43,10 @@ interface InterfacePostCardProps {
 export default function home(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'home' });
 
+  // Get the organization ID from the current URL
   const organizationId = getOrganizationId(window.location.href);
+
+  // State to store posts, post content, and post image
   const [posts, setPosts] = React.useState([]);
   const [postContent, setPostContent] = React.useState('');
   const [postImage, setPostImage] = React.useState('');
@@ -52,6 +55,7 @@ export default function home(): JSX.Element {
     currentPage: 'home',
   };
 
+  // Fetch organization's posts
   const {
     data,
     refetch,
@@ -60,8 +64,10 @@ export default function home(): JSX.Element {
     variables: { id: organizationId },
   });
 
+  // Mutation to create a post
   const [create] = useMutation(CREATE_POST_MUTATION);
 
+  // Function to handle post creation
   const handlePost = async (): Promise<void> => {
     try {
       if (!postContent) {
@@ -91,12 +97,14 @@ export default function home(): JSX.Element {
     }
   };
 
+  // Function to handle post input change
   const handlePostInput = (e: ChangeEvent<HTMLInputElement>): void => {
     const content = e.target.value;
 
     setPostContent(content);
   };
 
+  // Update posts state with fetched data
   React.useEffect(() => {
     if (data) {
       setPosts(data.postsByOrganizationConnection.edges);

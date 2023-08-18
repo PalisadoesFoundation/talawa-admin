@@ -23,18 +23,23 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     keyPrefix: 'userNavbar',
   });
 
+  // Get navigation history
   const history = useHistory();
 
+  // Initialize organizationDetails state with empty object
   const [organizationDetails, setOrganizationDetails]: any = React.useState({});
-  // const dropDirection: DropDirection = screen.width > 767 ? 'start' : 'down';
+  
+  // Set the dropDirection based on screen width
   const dropDirection: DropDirection = 'start';
 
   const organizationId = getOrganizationId(window.location.href);
 
+  // Use Apollo Client to query organization connection
   const { data } = useQuery(USER_ORGANIZATION_CONNECTION, {
     variables: { id: organizationId },
   });
 
+  // Get current language code from cookies or set to 'en'
   const [currentLanguageCode, setCurrentLanguageCode] = React.useState(
     /* istanbul ignore next */
     cookies.get('i18next') || 'en'
@@ -42,10 +47,11 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
 
   /* istanbul ignore next */
   const handleLogout = (): void => {
-    localStorage.clear();
-    window.location.replace('/user');
+    localStorage.clear(); // Clear local storage
+    window.location.replace('/user'); // Redirect to login page
   };
 
+  // Update organizationDetails state when data changes
   const userName = localStorage.getItem('name');
   React.useEffect(() => {
     if (data) {

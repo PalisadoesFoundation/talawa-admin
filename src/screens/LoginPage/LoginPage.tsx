@@ -24,10 +24,15 @@ import { errorHandler } from 'utils/errorHandler';
 import styles from './LoginPage.module.css';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 
+/**
+ * LoginPage component for user authentication and registration.
+*/
+
 function loginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
 
   document.title = t('title');
+  // State variables for controlling form behavior
 
   const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
   const [componentLoader, setComponentLoader] = useState(true);
@@ -59,7 +64,7 @@ function loginPage(): JSX.Element {
   const togglePassword = (): void => setShowPassword(!showPassword);
   const toggleConfirmPassword = (): void =>
     setShowConfirmPassword(!showConfirmPassword);
-
+  // Apollo Client Mutations for authentication and registration
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [login, { loading: loginLoading }] = useMutation(LOGIN_MUTATION);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

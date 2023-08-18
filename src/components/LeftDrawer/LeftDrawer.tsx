@@ -18,7 +18,32 @@ export interface InterfaceLeftDrawerProps {
   setShowDrawer: React.Dispatch<React.SetStateAction<boolean>>;
   screenName: string;
 }
+/**
+ * Props for the `leftDrawer` component.
+ * @typedef {Object} InterfaceLeftDrawerProps
+ * @property {InterfaceUserType | undefined} data - User data used to display user's profile information.
+ * @property {boolean} showDrawer - Boolean flag indicating whether the drawer is currently visible.
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setShowDrawer - Function to toggle the visibility of the drawer.
+ * @property {string} screenName - Name of the current active screen.
+ */
 
+/**
+ * `leftDrawer` is a React component that represents a left navigation drawer in Talawa Admin.
+ * It displays navigation options, user profile information, and a logout button.
+ * @component
+ *
+ * @param {InterfaceLeftDrawerProps} props - The props object containing user data, drawer visibility, screen name, and setters.
+ * @returns {JSX.Element} A JSX element representing the left navigation drawer.
+ *
+ * @example
+ * // Usage of the `leftDrawer` component
+ * <leftDrawer
+ *   data={userData}
+ *   showDrawer={drawerVisible}
+ *   setShowDrawer={setDrawerVisible}
+ *   screenName="Organizations"
+ * />
+ */
 const leftDrawer = ({
   data,
   screenName,
@@ -30,7 +55,12 @@ const leftDrawer = ({
   const userType = localStorage.getItem('UserType');
 
   const history = useHistory();
-
+  /**
+   * Handle user logout.
+   * Clears local storage and navigates to the home page.
+   * @private
+   * @returns {void}
+   */
   const logout = (): void => {
     localStorage.clear();
     history.push('/');
