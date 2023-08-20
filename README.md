@@ -1,8 +1,6 @@
 # Talawa Admin
 💬 Join the community on Slack. The link can be found in the `Talawa` [README.md](https://github.com/PalisadoesFoundation/talawa) file.
 
-[![N|Solid](src/assets/images/talawa-logo-lite-200x200.png)](https://github.com/PalisadoesFoundation/talawa-admin)
-
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![GitHub stars](https://img.shields.io/github/stars/PalisadoesFoundation/talawa-admin.svg?style=social&label=Star&maxAge=2592000)](https://github.com/PalisadoesFoundation/talawa-admin)
 [![GitHub forks](https://img.shields.io/github/forks/PalisadoesFoundation/talawa-admin.svg?style=social&label=Fork&maxAge=2592000)](https://github.com/PalisadoesFoundation/talawa-admin)
@@ -32,9 +30,9 @@ Core features include:
 # Documentation
 
 - The `talawa` documentation can be found [here](https://docs.talawa.io).
-- Want to contribute? Look at [CONTRIBUTING.md](CONTRIBUTING.md) to get started.
+- Want to contribute? Look at [CONTRIBUTING.md](https://github.com/PalisadoesFoundation/talawa-admin/blob/develop/CONTRIBUTING.md) to get started.
 - Visit the [Talawa-Docs GitHub](https://github.com/PalisadoesFoundation/talawa-docs) to see the code.
 
 # Installation
 
-[Follow this guide](./INSTALLATION.md)
+[Follow this guide](https://github.com/PalisadoesFoundation/talawa-admin/blob/develop/INSTALLATION.md)
