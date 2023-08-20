@@ -5,7 +5,7 @@ import styles from './CollapsibleDropdown.module.css';
 import IconComponent from 'components/IconComponent/IconComponent';
 import { useHistory } from 'react-router-dom';
 
-interface InterfaceCollapsibleDropdown {
+export interface InterfaceCollapsibleDropdown {
   screenName: string;
   target: TargetsType;
 }
@@ -35,6 +35,7 @@ const collapsibleDropdown = ({
         className={`${active ? 'text-white' : 'text-secondary'}`}
         onClick={(): void => setShowDropdown(!showDropdown)}
         aria-expanded={showDropdown}
+        data-testid="collapsible-dropdown"
       >
         <div className={styles.iconWrapper}>
           <IconComponent
@@ -53,7 +54,7 @@ const collapsibleDropdown = ({
       <Collapse in={showDropdown}>
         <div className="ps-4">
           {subTargets &&
-            subTargets.map(({ name, icon: stringIcon, url }) => {
+            subTargets.map(({ name, icon: stringIcon, url }, index) => {
               return (
                 <Button
                   key={name}
@@ -65,6 +66,7 @@ const collapsibleDropdown = ({
                   onClick={(): void => {
                     history.push(url);
                   }}
+                  data-testid={`collapsible-dropdown-btn-${index}`}
                 >
                   <div className={styles.iconWrapperSm}>
                     <i className={`fa ${stringIcon}`} />
