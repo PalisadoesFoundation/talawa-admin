@@ -1,11 +1,9 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import 'jest-localstorage-mock';
 import { BrowserRouter } from 'react-router-dom';
 
 import CollapsibleDropdown from './CollapsibleDropdown';
 import type { InterfaceCollapsibleDropdown } from './CollapsibleDropdown';
-import { debug } from 'jest-preview';
 
 const props: InterfaceCollapsibleDropdown = {
   screenName: 'SubCategory 1',
@@ -29,11 +27,7 @@ const props: InterfaceCollapsibleDropdown = {
 
 describe('Testing CollapsibleDropdown component', () => {
   test('Component should be rendered properly', () => {
-    render(
-      <BrowserRouter>
-        <CollapsibleDropdown {...props} />
-      </BrowserRouter>
-    );
+    render(<CollapsibleDropdown {...props} />);
     expect(screen.getByText('DropDown Category')).toBeInTheDocument();
     expect(screen.getByText('SubCategory 1')).toBeInTheDocument();
     expect(screen.getByText('SubCategory 2')).toBeInTheDocument();
@@ -45,7 +39,6 @@ describe('Testing CollapsibleDropdown component', () => {
         <CollapsibleDropdown {...props} />
       </BrowserRouter>
     );
-    debug();
     const parentDropdownBtn = screen.getByTestId('collapsible-dropdown');
     const activeDropdownBtn = screen.getByText('SubCategory 1');
     const nonActiveDropdownBtn = screen.getByText('SubCategory 2');
