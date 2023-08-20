@@ -10,7 +10,7 @@ export interface InterfaceOrgListCardProps {
   data: InterfaceOrgConnectionInfoType;
 }
 
-function superDashListCard(props: InterfaceOrgListCardProps): JSX.Element {
+function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
   const { _id, admins, image, location, members, name } = props.data;
 
   const history = useHistory();
@@ -66,4 +66,4 @@ function superDashListCard(props: InterfaceOrgListCardProps): JSX.Element {
     </>
   );
 }
-export default superDashListCard;
+export default orgListCard;
