@@ -34,6 +34,9 @@ describe('Testing LeftDrawer in SuperAdminScreen', () => {
       </MockedProvider>
     );
 
+    // Expand LeftDrawer
+    userEvent.click(screen.getByTestId('menuBtn'));
+    // Contract LeftDrawer
     userEvent.click(screen.getByTestId('menuBtn'));
   });
 });
