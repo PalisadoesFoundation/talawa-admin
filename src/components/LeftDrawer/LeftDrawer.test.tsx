@@ -21,10 +21,12 @@ const propsOrg: InterfaceLeftDrawerProps = {
 };
 const propsReq: InterfaceLeftDrawerProps = {
   ...props,
+  hideDrawer: false,
   screenName: 'Requests',
 };
 const propsUsers: InterfaceLeftDrawerProps = {
   ...props,
+  hideDrawer: null,
   screenName: 'Users',
 };
 
@@ -163,6 +165,28 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     );
     const closeModalBtn = screen.getByTestId(/closeModalBtn/i);
     userEvent.click(closeModalBtn);
+  });
+
+  test('Testing Drawer when hideDrawer is null', () => {
+    localStorage.setItem('UserType', 'SUPERADMIN');
+    render(
+      <BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <LeftDrawer {...propsUsers} />
+        </I18nextProvider>
+      </BrowserRouter>
+    );
+  });
+
+  test('Testing Drawer when hideDrawer is true', () => {
+    localStorage.setItem('UserType', 'SUPERADMIN');
+    render(
+      <BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <LeftDrawer {...propsReq} />
+        </I18nextProvider>
+      </BrowserRouter>
+    );
   });
 
   test('Testing logout functionality', async () => {
