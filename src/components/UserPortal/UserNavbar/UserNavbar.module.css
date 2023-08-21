@@ -19,3 +19,8 @@
 .colorPrimary {
   background: #31bb6b;
 }
+
+.link {
+  text-decoration: none !important;
+  color: inherit;
+}

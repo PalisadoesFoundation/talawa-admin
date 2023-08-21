@@ -65,3 +65,7 @@
 .marginTop {
   margin-top: -2px;
 }
+
+.personImage {
+  border-radius: 50%;
+}

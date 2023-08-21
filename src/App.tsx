@@ -27,6 +27,8 @@ import UserLoginPage from 'screens/UserPortal/UserLoginPage/UserLoginPage';
 import Organizations from 'screens/UserPortal/Organizations/Organizations';
 import Home from 'screens/UserPortal/Home/Home';
 import People from 'screens/UserPortal/People/People';
+import Settings from 'screens/UserPortal/Settings/Settings';
+import Donate from 'screens/UserPortal/Donate/Donate';
 
 function app(): JSX.Element {
   /*const { updatePluginLinks, updateInstalled } = bindActionCreators(
@@ -113,6 +115,8 @@ function app(): JSX.Element {
         />
         <SecuredRouteForUser path="/user/organization" component={Home} />
         <SecuredRouteForUser path="/user/people" component={People} />
+        <SecuredRouteForUser path="/user/settings" component={Settings} />
+        <SecuredRouteForUser path="/user/donate" component={Donate} />
 
         <Route exact path="*" component={PageNotFound} />
       </Switch>

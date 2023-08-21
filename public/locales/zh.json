@@ -533,5 +533,20 @@
     "feed": "餵養",
     "pinnedPosts": "查看固定帖子",
     "somethingOnYourMind": "你有什麼心事嗎？"
+  },
+  "settings": {
+    "profileSettings": "配置文件設置",
+    "firstName": "名",
+    "lastName": "姓",
+    "emailAddress": "電子郵件地址",
+    "updateImage": "更新圖片",
+    "save": "節省"
+  },
+  "donate": {
+    "donateTo": "捐贈給",
+    "amount": "數量",
+    "yourPreviousDonations": "您之前的捐款",
+    "donate": "捐",
+    "nothingToShow": "這裡沒有什麼可顯示的。"
   }
 }
