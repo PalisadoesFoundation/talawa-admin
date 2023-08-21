@@ -19,6 +19,7 @@ import ForgotPassword from 'screens/ForgotPassword/ForgotPassword';
 import Roles from 'screens/Roles/Roles';
 import Requests from 'screens/Requests/Requests';
 import BlockUser from 'screens/BlockUser/BlockUser';
+import EventDashboard from 'screens/EventDashboard/EventDashboard';
 import MemberDetail from 'screens/MemberDetail/MemberDetail';
 import Loader from 'components/Loader/Loader';
 
@@ -27,6 +28,8 @@ import UserLoginPage from 'screens/UserPortal/UserLoginPage/UserLoginPage';
 import Organizations from 'screens/UserPortal/Organizations/Organizations';
 import Home from 'screens/UserPortal/Home/Home';
 import People from 'screens/UserPortal/People/People';
+import Settings from 'screens/UserPortal/Settings/Settings';
+import Donate from 'screens/UserPortal/Donate/Donate';
 
 function app(): JSX.Element {
   /*const { updatePluginLinks, updateInstalled } = bindActionCreators(
@@ -102,6 +105,7 @@ function app(): JSX.Element {
         <SecuredRoute path="/roles" component={Roles} />
         <SecuredRoute path="/requests" component={Requests} />
         <SecuredRoute path="/blockuser" component={BlockUser} />
+        <SecuredRoute path="/event/:eventId" component={EventDashboard} />
         {extraRoutes}
         <Route exact path="/forgotPassword" component={ForgotPassword} />
 
@@ -113,6 +117,8 @@ function app(): JSX.Element {
         />
         <SecuredRouteForUser path="/user/organization" component={Home} />
         <SecuredRouteForUser path="/user/people" component={People} />
+        <SecuredRouteForUser path="/user/settings" component={Settings} />
+        <SecuredRouteForUser path="/user/donate" component={Donate} />
 
         <Route exact path="*" component={PageNotFound} />
       </Switch>

@@ -17,6 +17,8 @@ import 'flag-icons/css/flag-icons.min.css';
 import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import App from './App';
 import { store } from './state/store';
@@ -45,10 +47,12 @@ ReactDOM.render(
   <Suspense fallback={fallbackLoader}>
     <ApolloProvider client={client}>
       <BrowserRouter>
-        <Provider store={store}>
-          <App />
-          <ToastContainer limit={1} />
-        </Provider>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <Provider store={store}>
+            <App />
+            <ToastContainer limit={5} />
+          </Provider>
+        </LocalizationProvider>
       </BrowserRouter>
     </ApolloProvider>
   </Suspense>,

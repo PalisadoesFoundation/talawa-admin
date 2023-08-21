@@ -83,6 +83,7 @@ export default function organizationSidebar(): JSX.Element {
                   <div className="d-flex flex-row">
                     <img
                       src={member.image ? member.image : AboutImg}
+                      className={styles.memberImage}
                       width="auto"
                       height="30px"
                     />

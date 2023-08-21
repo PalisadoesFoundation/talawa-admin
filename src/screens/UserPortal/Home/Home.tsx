@@ -129,6 +129,7 @@ export default function home(): JSX.Element {
                 id="postphoto"
                 name="photo"
                 type="file"
+                className={styles.imageInput}
                 multiple={false}
                 onChange={
                   /* istanbul ignore next */

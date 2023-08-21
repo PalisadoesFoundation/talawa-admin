@@ -12,7 +12,7 @@ import { useQuery } from '@apollo/client';
 import { USER_ORGANIZATION_CONNECTION } from 'GraphQl/Queries/Queries';
 import getOrganizationId from 'utils/getOrganizationId';
 import type { DropDirection } from 'react-bootstrap/esm/DropdownContext';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 interface InterfaceNavbarProps {
   currentPage: string | null;
@@ -57,7 +57,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   const peopleLink = `/user/people/id=${organizationId}`;
   const eventsLink = `/user/events/id=${organizationId}`;
   const chatLink = `/user/chat/id=${organizationId}`;
-  const donationLink = `/user/donation/id=${organizationId}`;
+  const donationLink = `/user/donate/id=${organizationId}`;
 
   return (
     <Navbar expand={'md'} variant="dark" className={`${styles.colorPrimary}`}>
@@ -162,7 +162,11 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                   <Dropdown.ItemText>
                     <b>{userName}</b>
                   </Dropdown.ItemText>
-                  <Dropdown.Item>{t('settings')}</Dropdown.Item>
+                  <Dropdown.Item>
+                    <Link to="/user/settings" className={styles.link}>
+                      {t('settings')}
+                    </Link>
+                  </Dropdown.Item>
                   <Dropdown.Item>{t('myTasks')}</Dropdown.Item>
                   <Dropdown.Item
                     onClick={handleLogout}

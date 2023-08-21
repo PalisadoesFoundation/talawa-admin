@@ -537,5 +537,20 @@
     "feed": "Feed",
     "pinnedPosts": "View Pinned Posts",
     "somethingOnYourMind": "Something on your mind?"
+  },
+  "settings": {
+    "profileSettings": "Profile Settings",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "emailAddress": "Email Address",
+    "updateImage": "Update Image",
+    "save": "Save"
+  },
+  "donate": {
+    "donateTo": "Donate to",
+    "amount": "Amount",
+    "yourPreviousDonations": "Your Previous Donations",
+    "donate": "Donate",
+    "nothingToShow": "Nothing to show here."
   }
 }
