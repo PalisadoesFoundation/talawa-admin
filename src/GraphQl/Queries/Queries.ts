@@ -92,8 +92,84 @@ export const USER_LIST = gql`
   }
 `;
 
-// Query to take the Organization with data
+export const EVENT_DETAILS = gql`
+  query Event($id: ID!) {
+    event(id: $id) {
+      title
+      description
+      startDate
+      endDate
+      startTime
+      endTime
+      allDay
+      location
+      organization {
+        _id
+        members {
+          _id
+          firstName
+          lastName
+        }
+      }
+      attendees {
+        _id
+      }
+      projects {
+        _id
+        title
+        description
+        tasks {
+          _id
+          title
+          description
+          deadline
+          completed
+          volunteers {
+            _id
+            firstName
+            lastName
+          }
+        }
+      }
+    }
+  }
+`;
 
+export const EVENT_ATTENDEES = gql`
+  query Event($id: ID!) {
+    event(id: $id) {
+      attendees {
+        _id
+        firstName
+        lastName
+      }
+    }
+  }
+`;
+
+export const EVENT_CHECKINS = gql`
+  query eventCheckIns($id: ID!) {
+    event(id: $id) {
+      _id
+      attendeesCheckInStatus {
+        _id
+        user {
+          _id
+          firstName
+          lastName
+        }
+        checkIn {
+          _id
+          time
+          allotedRoom
+          allotedSeat
+        }
+      }
+    }
+  }
+`;
+
+// Query to take the Organization with data
 export const ORGANIZATIONS_LIST = gql`
   query Organizations($id: ID!) {
     organizations(id: $id) {
