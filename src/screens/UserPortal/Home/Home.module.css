@@ -23,7 +23,7 @@
 }
 
 .containerHeight {
-  height: calc(100vh - 61px);
+  height: calc(100vh - 66px);
 }
 
 .link {
@@ -62,4 +62,10 @@
   resize: none;
   border: none;
   box-shadow: none;
+  background-color: white;
+  margin-bottom: 10px;
+}
+
+.imageInput {
+  background-color: white;
 }

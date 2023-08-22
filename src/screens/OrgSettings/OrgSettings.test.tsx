@@ -38,7 +38,9 @@ const MOCKS = [
     },
   },
 ];
+
 const link = new StaticMockLink(MOCKS, true);
+
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -64,6 +66,7 @@ describe('Organisation Settings Page', () => {
       },
     });
   });
+
   test('should render props and text elements test for the screen', async () => {
     window.location.assign('/orglist');
 
@@ -79,28 +82,18 @@ describe('Organisation Settings Page', () => {
       </MockedProvider>
     );
 
-    expect(container.textContent).not.toBe('Loading data...');
     await wait();
-
-    // expect(screen.getByTestId('userUpdateBtn')).toBeInTheDocument();
-    // expect(screen.getByTestId('orgUpdateBtn')).toBeInTheDocument();
-    // expect(screen.getByTestId('orgDeleteBtn')).toBeInTheDocument();
-    // expect(screen.getByTestId('orgDeleteBtn2')).toBeInTheDocument();
-    // expect(screen.getByText(/settings/i)).toBeInTheDocument();
-
-    userEvent.click(screen.getByTestId('userUpdateBtn'));
-    userEvent.click(screen.getByTestId('userPasswordUpdateBtn'));
-    userEvent.click(screen.getByTestId('orgUpdateBtn'));
-    userEvent.click(screen.getByTestId('orgDeleteBtn'));
-    userEvent.click(screen.getByTestId('orgDeleteBtn2'));
+    expect(container.textContent).not.toBe('Loading data...');
 
     expect(container.textContent).toMatch('Settings');
     expect(container.textContent).toMatch('Update Your Details');
     expect(container.textContent).toMatch('Update Organization');
     expect(container.textContent).toMatch('Delete Organization');
     expect(container.textContent).toMatch('See Request');
+
     expect(window.location).toBeAt('/orglist');
   });
+
   test('should render User update form in clicking user update button', async () => {
     window.location.assign('/orglist');
 
@@ -116,6 +109,7 @@ describe('Organisation Settings Page', () => {
       </MockedProvider>
     );
 
+    await wait();
     expect(container.textContent).not.toBe('Loading data...');
     await wait();
 

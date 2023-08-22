@@ -536,5 +536,20 @@
     "feed": "फ़ीड",
     "pinnedPosts": "पिन किए गए पोस्ट देखें",
     "somethingOnYourMind": "आपके मन में कुछ है?"
+  },
+  "settings": {
+    "profileSettings": "पार्श्वचित्र समायोजन",
+    "firstName": "पहला नाम",
+    "lastName": "उपनाम",
+    "emailAddress": "मेल पता",
+    "updateImage": "छवि अद्यतन करें",
+    "save": "बचाना"
+  },
+  "donate": {
+    "donateTo": "दान दें",
+    "amount": "मात्रा",
+    "yourPreviousDonations": "आपका पिछला दान",
+    "donate": "दान",
+    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है."
   }
 }
