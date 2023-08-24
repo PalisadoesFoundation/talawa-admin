@@ -7,7 +7,6 @@ import Card from 'react-bootstrap/Card';
 import { toast } from 'react-toastify';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CloseIcon from '@mui/icons-material/Close';
-import convertToBase64 from 'utils/convertToBase64';
 
 import {
   DELETE_POST_MUTATION,
@@ -88,7 +87,31 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
   const handleMoreOptionsClick = (): void => {
     setMenuVisible(true);
   };
+  const clearImageInput = (): void => {
+    setPostFormState({
+      ...postformState,
+      postphoto: '',
+    });
+    const fileInput = document.getElementById(
+      'postImageUrl'
+    ) as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
+  };
 
+  const clearVideoInput = (): void => {
+    setPostFormState({
+      ...postformState,
+      postvideo: '',
+    });
+    const fileInput = document.getElementById(
+      'postVideoUrl'
+    ) as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
+  };
   function handletoggleClick(): void {
     if (togglePost === 'Read more') {
       setPostToggle('hide');
@@ -397,50 +420,51 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
       </Modal>
 
       {/* Edit Modal */}
-      <Modal show={showEditModal} onHide={toggleShowEditModal}>
-        <Modal.Header>
-          <h5>{t('editPost')}</h5>
-          <Button variant="danger" onClick={toggleShowEditModal}>
-            <i className="fa fa-times"></i>
-          </Button>
+      <Modal
+        show={showEditModal}
+        onHide={toggleShowEditModal}
+        backdrop="static"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header
+          className="bg-primary"
+          data-testid="modalOrganizationHeader"
+          closeButton
+        >
+          <Modal.Title className="text-white">{t('editPost')}</Modal.Title>
         </Modal.Header>
-        <form onSubmit={updatePostHandler}>
+        <Form onSubmitCapture={updatePostHandler}>
           <Modal.Body>
-            <div className="form-group">
-              <label htmlFor="postTitle" className="col-form-label">
-                {t('postTitle')}
-              </label>
-              <Form.Control
-                type="text"
-                className="form-control"
-                id="postTitle"
-                name="posttitle"
-                value={postformState.posttitle}
-                onChange={handleInputEvent}
-                data-testid="updateTitle"
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="postText" className="col-form-label">
-                {t('information')}
-              </label>
-              <Form.Control
-                as="textarea"
-                className="form-control"
-                name="postinfo"
-                value={postformState.postinfo}
-                autoComplete="off"
-                onChange={handleInputEvent}
-                data-testid="updateText"
-                required
-              />
-            </div>
+            <Form.Label htmlFor="posttitle">{t('postTitle')}</Form.Label>
+            <Form.Control
+              type="text"
+              id="postTitle"
+              name="posttitle"
+              value={postformState.posttitle}
+              onChange={handleInputEvent}
+              data-testid="updateTitle"
+              required
+              className="mb-3"
+              placeholder={t('postTitle1')}
+              autoComplete="off"
+            />
+            <Form.Label htmlFor="postinfo">{t('information')}</Form.Label>
+            <Form.Control
+              type="descrip"
+              id="descrip"
+              className="mb-3"
+              name="postinfo"
+              value={postformState.postinfo}
+              placeholder={t('information1')}
+              autoComplete="off"
+              onChange={handleInputEvent}
+              data-testid="updateText"
+              required
+            />
             {props.postPhoto && (
-              <div className="form-group">
-                <label htmlFor="postImageUrl" className="col-form-label">
-                  {t('image')}:
-                </label>
+              <>
+                <Form.Label htmlFor="postPhoto">{t('image')}</Form.Label>
                 <Form.Control
                   accept="image/*"
                   id="postImageUrl"
@@ -448,25 +472,33 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                   type="file"
                   placeholder={t('image')}
                   multiple={false}
-                  onChange={async (
-                    e: React.ChangeEvent<HTMLInputElement>
-                  ): Promise<void> => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      setPostFormState({
-                        ...postformState,
-                        postphoto: await convertToBase64(file),
-                      });
-                    }
-                  }}
+                  onChange={handleInputEvent}
                 />
-              </div>
+                {props.postPhoto && (
+                  <>
+                    {/* ... other image input code */}
+                    {postformState.postphoto && (
+                      <div className={styles.preview}>
+                        <img
+                          src={postformState.postphoto}
+                          alt="Post Image Preview"
+                        />
+                        <button
+                          className={styles.closeButtonP}
+                          onClick={clearImageInput}
+                          data-testid="closeimage"
+                        >
+                          <i className="fa fa-times"></i>
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+              </>
             )}
             {props.postVideo && (
-              <div className="form-group">
-                <label htmlFor="postVideoUrl" className="col-form-label">
-                  {t('video')}:
-                </label>
+              <>
+                <Form.Label htmlFor="postvideo">{t('video')}</Form.Label>
                 <Form.Control
                   accept="video/*"
                   id="postVideoUrl"
@@ -474,34 +506,39 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                   type="file"
                   placeholder={t('video')}
                   multiple={false}
-                  onChange={async (e: React.ChangeEvent): Promise<void> => {
-                    const target = e.target as HTMLInputElement;
-                    const file = target.files && target.files[0];
-                    if (file) {
-                      const videoBase64 = await convertToBase64(file);
-                      setPostFormState({
-                        ...postformState,
-                        postvideo: videoBase64,
-                      });
-                    }
-                  }}
+                  onChange={handleInputEvent}
                 />
-              </div>
+                {postformState.postvideo && (
+                  <div className={styles.preview}>
+                    <video controls>
+                      <source src={postformState.postvideo} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                    <button
+                      className={styles.closeButtonP}
+                      onClick={clearVideoInput}
+                    >
+                      <i className="fa fa-times"></i>
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="danger" onClick={toggleShowEditModal}>
+            <Button
+              variant="secondary"
+              onClick={toggleShowEditModal}
+              data-testid="closeOrganizationModal"
+              type="button"
+            >
               {t('close')}
             </Button>
-            <Button
-              type="submit"
-              className="btn btn-success"
-              data-testid="updatePostBtn"
-            >
+            <Button type="submit" value="invite" data-testid="updatePostBtn">
               {t('updatePost')}
             </Button>
           </Modal.Footer>
-        </form>
+        </Form>
       </Modal>
     </>
   );

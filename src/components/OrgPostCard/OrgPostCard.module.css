@@ -12,10 +12,26 @@
   border-radius: 0px;
   width: 100%;
   height: 12rem;
-  max-width: 20rem;
+  max-width: 100%;
   max-height: 12rem;
   object-fit: cover;
   position: relative;
+  color: black;
+}
+.preview {
+  display: flex;
+  position: relative;
+  width: 100%;
+  margin-top: 10px;
+  justify-content: center;
+}
+.preview img {
+  width: 400px;
+  height: auto;
+}
+.preview video {
+  width: 400px;
+  height: auto;
 }
 .nopostimage {
   border-radius: 0px;
@@ -123,14 +139,17 @@
   border: none;
   cursor: pointer;
 }
-.closeButtons {
-  position: relative;
-  bottom: 5rem;
-  right: 10px;
-  padding: 4px;
-  background-color: red; /* Red close button color */
-  color: #fff;
+.closeButtonP {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background: transparent;
+  transform: scale(1.2);
+  cursor: pointer;
   border: none;
+  color: #707070;
+  font-weight: 600;
+  font-size: 16px;
   cursor: pointer;
 }
 .cards:hover::after {

@@ -1,87 +1,36 @@
-.navbarbg {
-  height: 60px;
-  background-color: white;
-  display: flex;
-  margin-bottom: 30px;
-  z-index: 1;
-  position: relative;
-  flex-direction: row;
-  justify-content: space-between;
-  box-shadow: 0px 0px 8px 2px #c8c8c8;
-}
-.head {
-  margin-top: 5rem;
-}
-
-.checkboxdiv {
-  position: relative;
-  display: flex;
-}
-
-.checkboxdiv label {
-  margin-right: 4px;
-}
-
-.checkboxdiv input {
-  margin-right: 10px;
-}
-
-.logo {
-  color: #707070;
-  margin-left: 0;
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-}
-
-.logo img {
-  margin-top: 0px;
-  margin-left: 10px;
-  height: 64px;
-  width: 70px;
-}
-
-.logo > strong {
-  line-height: 1.5rem;
-  margin-left: -5px;
-  font-family: sans-serif;
-  font-size: 19px;
-  color: #707070;
-}
 .mainpage {
   display: flex;
   flex-direction: row;
 }
-.sidebar {
-  z-index: 0;
-  padding-top: 5px;
-  margin: 0;
-  height: 100%;
-}
-.sidebar:after {
-  content: '';
-  background-color: #f7f7f7;
-  position: absolute;
-  width: 2px;
-  height: 600px;
-  top: 10px;
-  left: 94%;
-  display: block;
-}
-.sidebarsticky {
-  padding-left: 45px;
-  margin-top: 7px;
-}
-.sidebarsticky > p {
-  margin-top: -10px;
+.btnsContainer {
+  display: flex;
+  margin: 2.5rem 0 2.5rem 0;
 }
 
-.navitem {
-  padding-left: 27%;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  cursor: pointer;
+.btnsContainer .btnsBlock {
+  display: flex;
 }
+
+.btnsContainer .btnsBlock button {
+  margin-left: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btnsContainer .input {
+  flex: 1;
+  position: relative;
+}
+
+.btnsContainer input {
+  outline: 1px solid var(--bs-gray-400);
+}
+
+.btnsContainer .input button {
+  width: 52px;
+}
+
 .preview {
   display: flex;
   position: relative;
@@ -97,10 +46,6 @@
   width: 400px;
   height: auto;
 }
-.action {
-  display: flex;
-  gap: 1rem;
-}
 .logintitle {
   color: #707070;
   font-weight: 600;
@@ -109,16 +54,6 @@
   padding-bottom: 5px;
   border-bottom: 3px solid #31bb6b;
   width: 15%;
-}
-.searchtitle {
-  color: #707070;
-  font-weight: 600;
-  font-size: 18px;
-  margin-bottom: 20px;
-  line-height: 25px;
-  padding-bottom: 5px;
-  border-bottom: 3px solid #31bb6b;
-  width: 60%;
 }
 .logintitleadmin {
   color: #707070;
@@ -151,6 +86,64 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 3rem;
+}
+
+@media (max-width: 1120px) {
+  .contract {
+    padding-left: calc(250px + 2rem + 1.5rem);
+  }
+
+  .listBox .itemCard {
+    width: 100%;
+  }
+}
+
+@media (max-width: 1020px) {
+  .btnsContainer {
+    flex-direction: column;
+    margin: 1.5rem 0;
+  }
+
+  .btnsContainer .btnsBlock {
+    margin: 1.5rem 0 0 0;
+    justify-content: space-between;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin: 0;
+  }
+
+  .btnsContainer .btnsBlock div button {
+    margin-right: 1.5rem;
+  }
+}
+
+/* For mobile devices  */
+
+@media (max-width: 520px) {
+  .btnsContainer {
+    margin-bottom: 0;
+  }
+
+  .btnsContainer .btnsBlock {
+    display: block;
+    margin-top: 1rem;
+    margin-right: 0;
+  }
+
+  .btnsContainer .btnsBlock div {
+    flex: 1;
+  }
+
+  .btnsContainer .btnsBlock div[title='Sort organizations'] {
+    margin-right: 0.5rem;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin-bottom: 1rem;
+    margin-right: 0;
+    width: 100%;
+  }
 }
 @media screen and (max-width: 575.5px) {
   .justifysp {
@@ -238,20 +231,7 @@
 .modalbody {
   width: 50px;
 }
-/* .greenregbtn {
-  border: 1px solid #e8e5e5;
-  box-shadow: 0 2px 2px #e8e5e5;
-  border-radius: 5px;
-  background-color: #31bb6b;
-  font-size: 16px;
-  height: 10%;
-  width: 50%;
-  color: white;
-  outline: none;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-} */
+
 .closeButton {
   position: absolute;
   top: 0px;

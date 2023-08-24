@@ -248,17 +248,20 @@
     "posts": "Posts",
     "createPost": "Create Post",
     "postDetails": "Post Details",
+    "postTitle1": "Write title of the post",
     "postTitle": "Title",
     "information": "Information",
+    "information1": "Write information of the post",
     "image": "Post Image",
-    "video": "Video",
+    "video": "Post Video",
     "addPost": "Add Post",
     "searchTitle": "Search By Title",
     "searchText": "Search By Text",
     "ptitle": "Post Title",
     "postDes": "What do you to talk about?",
     "Title": "Title",
-    "Text": "Text"
+    "Text": "Text",
+    "cancel": "Cancel"
   },
   "postNotFound": {
     "post": "Post",

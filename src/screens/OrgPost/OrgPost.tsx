@@ -1,5 +1,7 @@
 import type { ChangeEvent } from 'react';
 import React, { useState } from 'react';
+import { Search } from '@mui/icons-material';
+import SortIcon from '@mui/icons-material/Sort';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
@@ -157,80 +159,64 @@ function orgPost(): JSX.Element {
     <>
       <AdminNavbar targets={targets} url1={configUrl} />
       <Row className={styles.head}>
-        <Col sm={3}>
-          {/* <div className={styles.sidebar}>
-            <div className={styles.sidebarsticky}>
-              <h6 className={styles.searchtitle}>{t('searchPost')}</h6>
-              <div className={styles.checkboxdiv}>
-                <div key={`inline-radio`} className="mb-3">
-                  <StyleBox.Check
-                    inline
-                    label={t('Title')}
-                    name="radio-group"
-                    type="radio"
-                    value="searchTitle"
-                    onChange={searchChange}
-                    className={styles.actionradio}
-                    id={`inline-radio-1`}
-                  />
-                  <StyleBox.Check
-                    inline
-                    label={t('Text')}
-                    name="radio-group"
-                    type="radio"
-                    value="searchText"
-                    onChange={searchChange}
-                    checked={!showTitle}
-                    className={styles.actionradio}
-                    id={`inline-radio-2`}
-                  />
-                </div>
-              </div>
-            </div>
-          </div> */}
-        </Col>
+        <Col sm={3}></Col>
         <Col sm={8}>
           <p className={styles.logintitle}>{t('posts')}</p>
 
           <div className={styles.mainpageright}>
-            <Row className={styles.justifysp}>
-              <Col sm={4}>
+            <div className={styles.btnsContainer}>
+              <div className={styles.input}>
                 <Form.Control
                   type="text"
                   id="posttitle"
+                  className="bg-white"
                   placeholder={showTitle ? t('searchTitle') : t('searchText')}
                   autoComplete="off"
                   onChange={debouncedHandleSearch}
+                  required
                 />
-              </Col>
-              <Col sm={4}>
-                <Dropdown>
-                  <Dropdown.Toggle variant="success" id="dropdown-basic">
-                    Search By{' '}
-                  </Dropdown.Toggle>
+                <Button
+                  tabIndex={-1}
+                  className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                >
+                  <Search />
+                </Button>
+              </div>
+              <div className={styles.btnsBlock}>
+                <div className="d-flex">
+                  <Dropdown aria-expanded="false" title="Search By">
+                    <Dropdown.Toggle variant="outline-success">
+                      <SortIcon className={'me-1'} />
+                      Search By
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      <Dropdown.Item href="#/action-1">Text</Dropdown.Item>
+                      <Dropdown.Item href="#/action-2">Title</Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                  <Dropdown aria-expanded="false" title="Sort organizations">
+                    <Dropdown.Toggle variant="outline-success">
+                      <SortIcon className={'me-1'} />
+                      Sort Post
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
+                      <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
+                      <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </div>
 
-                  <Dropdown.Menu>
-                    <Dropdown.Item onClick={searchChange} value="searchTitle">
-                      Title
-                    </Dropdown.Item>
-                    <Dropdown.Item onClick={searchChange} value="searchText">
-                      Text
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </Col>
-              <Col sm={4}>
                 <Button
                   variant="success"
-                  className={styles.addbtn}
                   onClick={showInviteModal}
                   data-testid="createPostModalBtn"
                 >
-                  + {t('createPost')}
+                  <i className={'fa fa-plus me-2'} />
+                  {t('createPost')}
                 </Button>
-              </Col>
-            </Row>
-
+              </div>
+            </div>
             <div className={`row ${styles.list_box}`}>
               {sortedPostsList && sortedPostsList.length > 0 ? (
                 sortedPostsList.map(
@@ -263,22 +249,31 @@ function orgPost(): JSX.Element {
           </div>
         </Col>
       </Row>
-      <Modal show={postmodalisOpen}>
-        <Modal.Header>
-          <p className={styles.titlemodal}>{t('postDetails')}</p>
-          <Button variant="danger" onClick={hideInviteModal}>
-            <i className="fa fa-times" data-testid="closePostModalBtn"></i>
-          </Button>
+
+      <Modal
+        show={postmodalisOpen}
+        Hide={hideInviteModal}
+        backdrop="static"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header
+          className="bg-primary"
+          data-testid="modalOrganizationHeader"
+          closeButton
+        >
+          <Modal.Title className="text-white">{t('postDetails')}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <Form onSubmitCapture={createPost}>
-            <label htmlFor="posttitle">{t('postTitle')}</label>
+        <Form onSubmitCapture={createPost}>
+          <Modal.Body>
+            <Form.Label htmlFor="posttitle">{t('postTitle')}</Form.Label>
             <Form.Control
-              type="title"
-              id="postitle"
-              placeholder={t('ptitle')}
+              type="name"
+              id="orgname"
+              className="mb-3"
+              placeholder={t('postTitle1')}
+              data-testid="modalOrganizationName"
               autoComplete="off"
-              data-testid="posttitle"
               required
               value={postformState.posttitle}
               onChange={(e): void => {
@@ -288,13 +283,13 @@ function orgPost(): JSX.Element {
                 });
               }}
             />
-            <label htmlFor="postinfo">{t('information')}</label>
-            <textarea
-              id="postinfo"
-              className={styles.postinfo}
-              placeholder={t('postDes')}
+            <Form.Label htmlFor="postinfo">{t('information')}</Form.Label>
+            <Form.Control
+              type="descrip"
+              id="descrip"
+              className="mb-3"
+              placeholder={t('information1')}
               autoComplete="off"
-              data-testid="info"
               required
               value={postformState.postinfo}
               onChange={(e): void => {
@@ -306,85 +301,79 @@ function orgPost(): JSX.Element {
             />
             {!postformState.postVideo && (
               <>
-                <label
-                  htmlFor="postphoto"
-                  className={styles.orgphoto}
-                  data-testid={'image'}
-                >
-                  {t('image')}:
-                  <Form.Control
-                    accept="image/*"
-                    id="postphoto"
-                    name="photo"
-                    type="file"
-                    multiple={false}
-                    onChange={async (
-                      e: React.ChangeEvent<HTMLInputElement>
-                    ): Promise<void> => {
-                      const file = e.target.files?.[0];
-                      if (file) {
+                <Form.Label htmlFor="postPhoto">{t('image')}</Form.Label>
+                <Form.Control
+                  accept="image/*"
+                  id="postphoto"
+                  name="photo"
+                  type="file"
+                  multiple={false}
+                  onChange={async (
+                    e: React.ChangeEvent<HTMLInputElement>
+                  ): Promise<void> => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setPostFormState({
+                        ...postformState,
+                        postImage: await convertToBase64(file),
+                      });
+                    }
+                  }}
+                  data-testid="organisationImage"
+                />
+
+                {postformState.postImage && (
+                  <div className={styles.preview}>
+                    <img
+                      src={postformState.postImage}
+                      alt="Post Image Preview"
+                    />
+                    <button
+                      className={styles.closeButton}
+                      onClick={(): void => {
                         setPostFormState({
                           ...postformState,
-                          postImage: await convertToBase64(file),
+                          postImage: '',
                         });
-                      }
-                    }}
-                    data-testid="organisationImage"
-                  />
-                  {postformState.postImage && (
-                    <div className={styles.preview}>
-                      <img
-                        src={postformState.postImage}
-                        alt="Post Image Preview"
-                      />
-                      <button
-                        className={styles.closeButton}
-                        onClick={(): void => {
-                          setPostFormState({
-                            ...postformState,
-                            postImage: '',
-                          });
-                          const fileInput = document.getElementById(
-                            'postphoto'
-                          ) as HTMLInputElement;
-                          if (fileInput) {
-                            fileInput.value = '';
-                          }
-                        }}
-                        data-testid="closeimage"
-                      >
-                        <i className="fa fa-times"></i>
-                      </button>
-                    </div>
-                  )}
-                </label>
+                        const fileInput = document.getElementById(
+                          'postphoto'
+                        ) as HTMLInputElement;
+                        if (fileInput) {
+                          fileInput.value = '';
+                        }
+                      }}
+                      data-testid="closeimage"
+                    >
+                      <i className="fa fa-times"></i>
+                    </button>
+                  </div>
+                )}
               </>
             )}
             {!postformState.postImage && (
               <>
-                <label htmlFor="postvideo">
-                  {t('video')}:
-                  <Form.Control
-                    accept="video/*"
-                    id="postvideo"
-                    name="video"
-                    type="file"
-                    placeholder={t('video')}
-                    multiple={false}
-                    onChange={async (e: React.ChangeEvent): Promise<void> => {
-                      const target = e.target as HTMLInputElement;
-                      const file = target.files && target.files[0];
-                      if (file) {
-                        const videoBase64 = await convertToBase64(file);
-                        setPostFormState({
-                          ...postformState,
-                          postVideo: videoBase64,
-                        });
-                      }
-                    }}
-                    data-testid="organisationVideo"
-                  />
-                </label>
+                <Form.Label htmlFor="postvideo">{t('video')}</Form.Label>
+                <Form.Control
+                  accept="video/*"
+                  id="postvideo"
+                  name="video"
+                  type="file"
+                  placeholder={t('video')}
+                  multiple={false}
+                  onChange={async (e: React.ChangeEvent): Promise<void> => {
+                    const target = e.target as HTMLInputElement;
+                    const file = target.files && target.files[0];
+                    if (file) {
+                      const videoBase64 = await convertToBase64(file);
+                      setPostFormState({
+                        ...postformState,
+                        postVideo: videoBase64,
+                      });
+                    }
+                  }}
+                  data-testid="organisationVideo"
+                />
+
                 {postformState.postVideo && (
                   <div className={styles.preview}>
                     <video controls>
@@ -412,20 +401,20 @@ function orgPost(): JSX.Element {
                 )}
               </>
             )}
-            <div className={styles.action}>
-              <Button
-                type="submit"
-                variant="success"
-                data-testid="createPostBtn"
-              >
-                <i className="fa fa-plus"></i> {t('addPost')}
-              </Button>
-              <Button variant="success">
-                <i className="fa fa-clock"></i>
-              </Button>
-            </div>
-          </Form>
-        </Modal.Body>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              onClick={(): void => hideInviteModal()}
+              data-testid="closeOrganizationModal"
+            >
+              {t('cancel')}
+            </Button>
+            <Button type="submit" value="invite" data-testid="createPostBtn">
+              {t('addPost')}
+            </Button>
+          </Modal.Footer>
+        </Form>
       </Modal>
     </>
   );
