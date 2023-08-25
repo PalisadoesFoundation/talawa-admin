@@ -7,17 +7,18 @@ import Card from 'react-bootstrap/Card';
 import { toast } from 'react-toastify';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CloseIcon from '@mui/icons-material/Close';
-
+import PushPinIcon from '@mui/icons-material/PushPin';
+import AboutImg from 'assets/images/defaultImg.png';
 import {
   DELETE_POST_MUTATION,
   UPDATE_POST_MUTATION,
   TOGGLE_PINNED_POST,
 } from 'GraphQl/Mutations/mutations';
-import defaultImg from 'assets/images/blank.png';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './OrgPostCard.module.css';
-import { Badge, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
+import convertToBase64 from 'utils/convertToBase64';
 
 interface InterfaceOrgPostCardProps {
   key: string;
@@ -68,7 +69,16 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
       errorHandler(t, error);
     }
   };
-  const toggleShowEditModal = (): void => setShowEditModal((prev) => !prev);
+  const toggleShowEditModal = (): void => {
+    setPostFormState({
+      posttitle: props.postTitle,
+      postinfo: props.postInfo,
+      postphoto: props.postPhoto,
+      postvideo: props.postVideo,
+      pinned: props.pinned,
+    });
+    setShowEditModal((prev) => !prev);
+  };
   const toggleShowDeleteModal = (): void => setShowDeleteModal((prev) => !prev);
 
   const handleVideoPlay = (): void => {
@@ -124,6 +134,11 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
     setModalVisible(false);
     setMenuVisible(false);
     setShowEditModal(true);
+    setPostFormState({
+      ...postformState,
+      postphoto: props.postPhoto,
+      postvideo: props.postVideo,
+    });
   }
 
   function handleDeleteModal(): void {
@@ -167,12 +182,14 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
       errorHandler(t, error);
     }
   };
-
   const handleInputEvent = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
     const { name, value } = e.target;
-    setPostFormState({ ...postformState, [name]: value });
+    setPostFormState((prevPostFormState) => ({
+      ...prevPostFormState,
+      [name]: value,
+    }));
   };
 
   const updatePostHandler = async (
@@ -181,13 +198,24 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
     e.preventDefault();
 
     try {
+      let imageUrl = null;
+      let videoUrl = null;
+
+      if (e.target?.postphoto && e.target?.postphoto.files.length > 0) {
+        imageUrl = postformState.postphoto;
+      }
+
+      if (e.target?.postvideo && e.target?.postvideo.files.length > 0) {
+        videoUrl = postformState.postvideo;
+      }
+
       const { data } = await updatePostMutation({
         variables: {
           id: props.id,
           title: postformState.posttitle,
           text: postformState.postinfo,
-          imageUrl: postformState.postphoto,
-          videoUrl: postformState.postvideo,
+          imageUrl,
+          videoUrl,
         },
       });
 
@@ -224,6 +252,13 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                   <source src={props?.postVideo} type="video/mp4" />
                 </video>
                 <Card.Body>
+                  {props.pinned && (
+                    <PushPinIcon
+                      color="success"
+                      fontSize="large"
+                      className="fs-5"
+                    />
+                  )}
                   <Card.Title className={styles.title}>
                     {props.postTitle}
                   </Card.Title>
@@ -246,9 +281,11 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                 />
                 <Card.Body>
                   {props.pinned && (
-                    <Badge className={styles.pinned} pill bg="success">
-                      Pinned
-                    </Badge>
+                    <PushPinIcon
+                      color="success"
+                      fontSize="large"
+                      className="fs-5"
+                    />
                   )}
                   <Card.Title className={styles.title}>
                     {props.postTitle}
@@ -265,11 +302,18 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
               <Card className={styles.card}>
                 <Card.Img
                   variant="top"
-                  src={defaultImg}
+                  src={AboutImg}
                   alt="image not found"
                   className={styles.nopostimage}
                 />
                 <Card.Body>
+                  {props.pinned && (
+                    <PushPinIcon
+                      color="success"
+                      fontSize="large"
+                      className="fs-5"
+                    />
+                  )}
                   <Card.Title className={styles.title}>
                     {props.postTitle}
                   </Card.Title>
@@ -281,11 +325,6 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                   <Card.Link className={styles.author}>
                     {props.postAuthor}
                   </Card.Link>
-                  {props.pinned && (
-                    <Button variant="warning" size="sm">
-                      Pinned
-                    </Button>
-                  )}
                 </Card.Body>
               </Card>
             </span>
@@ -308,6 +347,13 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                   </video>
                 </div>
               )}
+              {!props.postPhoto && !props.postVideo && (
+                <div className={styles.modalImage}>
+                  {' '}
+                  <img src={AboutImg} alt="Post Image" />
+                </div>
+              )}
+
               <div className={styles.modalInfo}>
                 <p>
                   {t('author')}:<span> {props.postAuthor}</span>
@@ -472,11 +518,25 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                   type="file"
                   placeholder={t('image')}
                   multiple={false}
-                  onChange={handleInputEvent}
+                  onChange={async (
+                    e: React.ChangeEvent<HTMLInputElement>
+                  ): Promise<void> => {
+                    setPostFormState((prevPostFormState) => ({
+                      ...prevPostFormState,
+                      postphoto: '',
+                    }));
+
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setPostFormState({
+                        ...postformState,
+                        postphoto: await convertToBase64(file),
+                      });
+                    }
+                  }}
                 />
                 {props.postPhoto && (
                   <>
-                    {/* ... other image input code */}
                     {postformState.postphoto && (
                       <div className={styles.preview}>
                         <img
@@ -506,7 +566,23 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                   type="file"
                   placeholder={t('video')}
                   multiple={false}
-                  onChange={handleInputEvent}
+                  onChange={async (
+                    e: React.ChangeEvent<HTMLInputElement>
+                  ): Promise<void> => {
+                    setPostFormState((prevPostFormState) => ({
+                      ...prevPostFormState,
+                      postvideo: '',
+                    }));
+                    const target = e.target as HTMLInputElement;
+                    const file = target.files && target.files[0];
+                    if (file) {
+                      const videoBase64 = await convertToBase64(file);
+                      setPostFormState({
+                        ...postformState,
+                        postvideo: videoBase64,
+                      });
+                    }
+                  }}
                 />
                 {postformState.postvideo && (
                   <div className={styles.preview}>

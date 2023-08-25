@@ -50,10 +50,6 @@ function orgPost(): JSX.Element {
   });
   const [showTitle, setShowTitle] = useState(true);
 
-  const searchChange = (ev: any): void => {
-    setShowTitle(ev.target.value === 'searchTitle');
-  };
-
   const currentUrl = window.location.href.split('=')[1];
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
@@ -63,6 +59,12 @@ function orgPost(): JSX.Element {
   };
   const hideInviteModal = (): void => {
     setPostModalIsOpen(false);
+    setPostFormState({
+      posttitle: '',
+      postinfo: '',
+      postImage: '',
+      postVideo: '',
+    });
   };
 
   const {
@@ -138,7 +140,7 @@ function orgPost(): JSX.Element {
     };
     refetch(filterData);
   };
-
+  console.log(orgPostListData);
   const debouncedHandleSearch = debounce(handleSearch);
   const sortedPostsList: InterfaceOrgPost[] = [
     ...orgPostListData.postsByOrganizationConnection.edges,
@@ -190,19 +192,38 @@ function orgPost(): JSX.Element {
                       Search By
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                      <Dropdown.Item href="#/action-1">Text</Dropdown.Item>
-                      <Dropdown.Item href="#/action-2">Title</Dropdown.Item>
+                      <Dropdown.Item
+                        value="searchText"
+                        onClick={(e): void => {
+                          setShowTitle(false);
+                          e.preventDefault();
+                        }}
+                      >
+                        Text
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        value="searchTitle"
+                        onClick={(e): void => {
+                          setShowTitle(true);
+                          e.preventDefault();
+                        }}
+                      >
+                        Title
+                      </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
-                  <Dropdown aria-expanded="false" title="Sort organizations">
+                  <Dropdown aria-expanded="false" title="Sort Post">
                     <Dropdown.Toggle variant="outline-success">
                       <SortIcon className={'me-1'} />
                       Sort Post
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                      <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
-                      <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
-                      <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
+                      <Dropdown.Item href="#/action-1">
+                        Latest First
+                      </Dropdown.Item>
+                      <Dropdown.Item href="#/action-2">
+                        Oldest First
+                      </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                 </div>
@@ -252,7 +273,7 @@ function orgPost(): JSX.Element {
 
       <Modal
         show={postmodalisOpen}
-        Hide={hideInviteModal}
+        onHide={hideInviteModal}
         backdrop="static"
         aria-labelledby="contained-modal-title-vcenter"
         centered
@@ -311,6 +332,10 @@ function orgPost(): JSX.Element {
                   onChange={async (
                     e: React.ChangeEvent<HTMLInputElement>
                   ): Promise<void> => {
+                    setPostFormState((prevPostFormState) => ({
+                      ...prevPostFormState,
+                      postImage: '',
+                    }));
                     const file = e.target.files?.[0];
                     if (file) {
                       setPostFormState({
@@ -361,6 +386,10 @@ function orgPost(): JSX.Element {
                   placeholder={t('video')}
                   multiple={false}
                   onChange={async (e: React.ChangeEvent): Promise<void> => {
+                    setPostFormState((prevPostFormState) => ({
+                      ...prevPostFormState,
+                      postVideo: '',
+                    }));
                     const target = e.target as HTMLInputElement;
                     const file = target.files && target.files[0];
                     if (file) {
