@@ -116,7 +116,7 @@ export const UpdateTaskModal = (props: ModalPropType): JSX.Element => {
                 className="mb-3"
                 placeholder="Enter title of the task."
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e): void => setTitle(e.target.value)}
               />
             </Form.Group>
 
@@ -127,14 +127,14 @@ export const UpdateTaskModal = (props: ModalPropType): JSX.Element => {
                 className="mb-3"
                 placeholder="A brief desciption of what the jobs of the task are!"
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(e): void => setDescription(e.target.value)}
               />
             </Form.Group>
 
             <DateTimePicker
               label="Deadline"
               defaultValue={deadline}
-              onChange={(date: Dayjs | null) => {
+              onChange={(date: Dayjs | null): void => {
                 setDeadline(date);
               }}
               disablePast
@@ -147,7 +147,7 @@ export const UpdateTaskModal = (props: ModalPropType): JSX.Element => {
                 id="completedSwitch"
                 type="switch"
                 checked={completed}
-                onChange={() => setCompleted(!completed)}
+                onChange={(): void => setCompleted(!completed)}
               />
             </Form.Group>
 
@@ -158,23 +158,25 @@ export const UpdateTaskModal = (props: ModalPropType): JSX.Element => {
                   ? `There are no volunteers assigned for this task.`
                   : null}
                 <Stack direction="row" spacing={1}>
-                  {props.task.volunteers.map((user) => (
-                    <Chip
-                      key={user._id}
-                      avatar={
-                        <Avatar>{`${user.firstName[0].toUpperCase()}${user.lastName[0].toUpperCase()}`}</Avatar>
-                      }
-                      label={`${user.firstName} ${user.lastName}`}
-                      variant="outlined"
-                    />
-                  ))}
+                  {props.task.volunteers.map(
+                    (user): React.ReactNode => (
+                      <Chip
+                        key={user._id}
+                        avatar={
+                          <Avatar>{`${user.firstName[0].toUpperCase()}${user.lastName[0].toUpperCase()}`}</Avatar>
+                        }
+                        label={`${user.firstName} ${user.lastName}`}
+                        variant="outlined"
+                      />
+                    )
+                  )}
                 </Stack>
                 <Button
                   variant="outlined"
                   endIcon={<ModeEditIcon />}
                   color="primary"
                   className="pt-2 mt-2"
-                  onClick={() => {
+                  onClick={(): void => {
                     setShowManageVolunteerModal(true);
                     props.handleClose();
                   }}
@@ -190,7 +192,7 @@ export const UpdateTaskModal = (props: ModalPropType): JSX.Element => {
             </BootstrapButton>
             <BootstrapButton
               variant="danger"
-              onClick={() => {
+              onClick={(): void => {
                 setShowDeleteTaskModal(true);
                 props.handleClose();
               }}
@@ -204,14 +206,14 @@ export const UpdateTaskModal = (props: ModalPropType): JSX.Element => {
         show={showDeleteTaskModal}
         taskId={props.task._id}
         refetchData={props.refetchData}
-        handleClose={() => {
+        handleClose={(): void => {
           setShowDeleteTaskModal(false);
         }}
       />
       <ManageVolunteerModal
         show={showManageVolunteerModal}
         refetchData={props.refetchData}
-        handleClose={() => {
+        handleClose={(): void => {
           setShowManageVolunteerModal(false);
         }}
         volunteers={props.task.volunteers}

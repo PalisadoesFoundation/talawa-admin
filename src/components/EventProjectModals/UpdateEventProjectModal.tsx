@@ -80,7 +80,7 @@ export const UpdateEventProjectModal = (props: ModalPropType): JSX.Element => {
                 className="mb-3"
                 placeholder="Enter title of the project"
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e): void => setTitle(e.target.value)}
               />
             </Form.Group>
 
@@ -91,7 +91,7 @@ export const UpdateEventProjectModal = (props: ModalPropType): JSX.Element => {
                 className="mb-3"
                 placeholder="A brief desciption of what the event is about!"
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(e): void => setDescription(e.target.value)}
               />
             </Form.Group>
           </Modal.Body>

@@ -17,7 +17,7 @@ export const EventRegistrantsWrapper = (props: PropType): JSX.Element => {
         className="mt-3"
         variant="success"
         aria-label="showAttendees"
-        onClick={() => {
+        onClick={(): void => {
           setShowModal(true);
         }}
       >
@@ -26,7 +26,7 @@ export const EventRegistrantsWrapper = (props: PropType): JSX.Element => {
       {showModal ? (
         <EventRegistrantsModal
           show={showModal}
-          handleClose={() => {
+          handleClose={(): void => {
             setShowModal(false);
           }}
           eventId={props.eventId}
