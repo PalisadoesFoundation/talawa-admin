@@ -527,3 +527,48 @@ export const PLUGIN_GET = gql`
     }
   }
 `;
+
+export const ORGANIZATION_EVENTS_CONNECTION = gql`
+  query EventsByOrganizationConnection(
+    $organization_id: ID!
+    $title_contains: String
+    $description_contains: String
+    $location_contains: String
+    $first: Int
+    $skip: Int
+  ) {
+    eventsByOrganizationConnection(
+      where: {
+        organization_id: $organization_id
+        title_contains: $title_contains
+        description_contains: $description_contains
+        location_contains: $location_contains
+      }
+      first: $first
+      skip: $skip
+    ) {
+      _id
+      title
+      description
+      startDate
+      endDate
+      location
+      startTime
+      endTime
+      allDay
+      recurring
+      isPublic
+      isRegisterable
+      creator {
+        _id
+        firstName
+        lastName
+      }
+      registrants {
+        user {
+          _id
+        }
+      }
+    }
+  }
+`;

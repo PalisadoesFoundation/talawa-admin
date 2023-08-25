@@ -456,3 +456,11 @@ export const UNLIKE_POST = gql`
     }
   }
 `;
+
+export const REGISTER_EVENT = gql`
+  mutation registerForEvent($eventId: ID!) {
+    registerForEvent(id: $eventId) {
+      _id
+    }
+  }
+`;

@@ -74,25 +74,29 @@ function userSidebar(): JSX.Element {
             <ListGroup variant="flush">
               {organizations.length ? (
                 organizations.map((organization: any, index) => {
+                  const organizationUrl = `/user/organization/id=${organization._id}`;
+
                   return (
                     <ListGroup.Item
                       key={index}
                       action
                       className={`${styles.rounded} ${styles.colorLight}`}
                     >
-                      <div className="d-flex flex-row justify-content-center">
-                        <img
-                          src={
-                            organization.image ? organization.image : AboutImg
-                          }
-                          className={styles.personImage}
-                          width="auto"
-                          height="30px"
-                        />
-                        <div className={styles.orgName}>
-                          {organization.name}
+                      <Link to={organizationUrl} className={styles.link}>
+                        <div className="d-flex flex-row justify-content-center">
+                          <img
+                            src={
+                              organization.image ? organization.image : AboutImg
+                            }
+                            className={styles.personImage}
+                            width="auto"
+                            height="30px"
+                          />
+                          <div className={styles.orgName}>
+                            {organization.name}
+                          </div>
                         </div>
-                      </div>
+                      </Link>
                     </ListGroup.Item>
                   );
                 })
