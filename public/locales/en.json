@@ -66,10 +66,8 @@
     "manageFeatures": "Manage Features",
     "manageFeaturesInfo": "Creation Successful ! Please select features that you want to enale for this organization from the plugin store.",
     "goToStore": "Go to Plugin Store",
-    "enableEverything": "Enable Everything"
-
+    "enableEverything": "Enable Everything",
     "noResultsFoundFor": "No results found for "
-
   },
   "orgListCard": {
     "admins": "Admins",

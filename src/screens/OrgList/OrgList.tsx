@@ -18,10 +18,6 @@ import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
 import debounce from 'utils/debounce';
 import { errorHandler } from 'utils/errorHandler';
-
-import Loader from 'components/Loader/Loader';
-import { Link } from 'react-router-dom';
-
 import type {
   InterfaceOrgConnectionInfoType,
   InterfaceOrgConnectionType,
@@ -29,7 +25,7 @@ import type {
 } from 'utils/interfaces';
 import styles from './OrgList.module.css';
 import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
-
+import { Link } from 'react-router-dom';
 
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
@@ -50,7 +46,6 @@ function orgList(): JSX.Element {
   }
   const toggleDialogModal = (): void =>
     setdialogModalIsOpen(!dialogModalisOpen);
-
   document.title = t('title');
 
   const [searchByName, setSearchByName] = useState('');
@@ -65,20 +60,9 @@ function orgList(): JSX.Element {
   });
 
   const toggleModal = (): void => setShowModal(!showModal);
- 
-  const toggleAddEventModal = (): void =>
-    setShowAddEventModal(!showAddEventModal);
-  /* eslint-disable @typescript-eslint/explicit-function-return-type */
-  const showInviteModal = () => {
-    setmodalIsOpen(true);
-  };
-  /* eslint-disable @typescript-eslint/explicit-function-return-type */
-  const hideInviteModal = () => {
-    setmodalIsOpen(false);
-  };
- 
+
   const [create] = useMutation(CREATE_ORGANIZATION_MUTATION);
- 
+
   const {
     data: userData,
     error: errorUser,
@@ -168,11 +152,8 @@ function orgList(): JSX.Element {
       /* istanbul ignore next */
       if (data) {
         toast.success('Congratulation the Organization is created');
-
-        openDialogModal(data.createOrganization._id);
-
         refetchOrgs();
-
+        openDialogModal(data.createOrganization._id);
         setFormState({
           name: '',
           descrip: '',
@@ -181,11 +162,7 @@ function orgList(): JSX.Element {
           location: '',
           image: '',
         });
-         toggleAddEventModal();
-        // setmodalIsOpen(false);
- 
         toggleModal();
- 
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -392,123 +369,6 @@ function orgList(): JSX.Element {
                     descrip: e.target.value,
                   });
                 }}
- 
-              >
-                <tbody>
-                  {data2?.user.userType === 'SUPERADMIN' && (
-                    <tr data-testid="rowsPPSelect">
-                      <PaginationList
-                        count={data ? data.organizationsConnection.length : 0}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                      />
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </Col>
-      </Row>
-      <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
-        <Modal.Body>
-          <section id={styles.grid_wrapper}>
-            <div>
-              <div className={styles.flexdir}>
-                <p className={styles.titlemodal}>{t('manageFeatures')}</p>
-                <a
-                  onClick={toggleDialogModal}
-                  className={styles.cancel}
-                  data-testid="closeOrganizationModal"
-                >
-                  <i
-                    className="fa fa-times"
-                    style={{
-                      cursor: 'pointer',
-                    }}
-                  ></i>
-                </a>
-              </div>
-              <h4 className={styles.titlemodaldialog}>
-                {t('manageFeaturesInfo')}
-              </h4>
-
-              <div className={styles.pluginStoreBtnContainer}>
-                <Link
-                  className={styles.secondbtn}
-                  data-testid="submitOrganizationForm"
-                  to={`orgstore/id=${dialogRedirectOrgId}`}
-                >
-                  {t('goToStore')}
-                </Link>
-                {/* </button> */}
-                <button
-                  type="submit"
-                  className={styles.greenregbtn}
-                  onClick={closeDialogModal}
-                  value="invite"
-                  data-testid="submitOrganizationForm"
-                >
-                  {t('enableEverything')}
-                </button>
-              </div>
-            </div>
-          </section>
-        </Modal.Body>
-      </Modal>
-      <Modal show={showAddEventModal} onHide={toggleAddEventModal}>
-        <Modal.Header>
-          <p className={styles.titlemodal}>{t('createOrganization')}</p>
-          <Button
-            variant="danger"
-            onClick={toggleAddEventModal}
-            data-testid="closeOrganizationModal"
-          >
-            <i
-              className="fa fa-times"
-              style={{
-                cursor: 'pointer',
-              }}
-            ></i>
-          </Button>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmitCapture={createOrg}>
-            <label htmlFor="orgname">{t('name')}</label>
-            <Form.Control
-              type="name"
-              id="orgname"
-              placeholder={t('enterName')}
-              data-testid="modalOrganizationName"
-              autoComplete="off"
-              required
-              value={formState.name}
-              onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  name: e.target.value,
-                });
-              }}
-            />
-            <label htmlFor="descrip">{t('description')}</label>
-            <Form.Control
-              type="descrip"
-              id="descrip"
-              placeholder={t('description')}
-              autoComplete="off"
-              required
-              value={formState.descrip}
-              onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  descrip: e.target.value,
-                });
-              }}
-            />
- 
- 
               />
               <Form.Label htmlFor="location">{t('location')}</Form.Label>
               <Form.Control
@@ -526,7 +386,6 @@ function orgList(): JSX.Element {
                   });
                 }}
               />
- 
 
               <Row className="mb-3">
                 <Col>
@@ -600,7 +459,54 @@ function orgList(): JSX.Element {
               </Button>
             </Modal.Footer>
           </Form>
+        </Modal>{' '}
+        <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
+          <Modal.Body>
+            <section id={styles.grid_wrapper}>
+              <div>
+                <div className={styles.flexdir}>
+                  <p className={styles.titlemodal}>{t('manageFeatures')}</p>
+                  <a
+                    onClick={toggleDialogModal}
+                    className={styles.cancel}
+                    data-testid="closeOrganizationModal"
+                  >
+                    <i
+                      className="fa fa-times"
+                      style={{
+                        cursor: 'pointer',
+                      }}
+                    ></i>
+                  </a>
+                </div>
+                <h4 className={styles.titlemodaldialog}>
+                  {t('manageFeaturesInfo')}
+                </h4>
+
+                <div className={styles.pluginStoreBtnContainer}>
+                  <Link
+                    className={styles.secondbtn}
+                    data-testid="submitOrganizationForm"
+                    to={`orgstore/id=${dialogRedirectOrgId}`}
+                  >
+                    {t('goToStore')}
+                  </Link>
+                  {/* </button> */}
+                  <button
+                    type="submit"
+                    className={styles.greenregbtn}
+                    onClick={closeDialogModal}
+                    value="invite"
+                    data-testid="submitOrganizationForm"
+                  >
+                    {t('enableEverything')}
+                  </button>
+                </div>
+              </div>
+            </section>
+          </Modal.Body>
         </Modal>
+        {/* Plugin Notification after Org is Created */}
       </SuperAdminScreen>
     </>
   );
