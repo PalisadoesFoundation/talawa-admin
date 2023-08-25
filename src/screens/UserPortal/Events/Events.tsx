@@ -5,10 +5,7 @@ import EventCard from 'components/UserPortal/EventCard/EventCard';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import PaginationList from 'components/PaginationList/PaginationList';
-import {
-  ORGANIZATION_EVENTS_CONNECTION,
-  ORGANIZATION_ADMINS_LIST,
-} from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_EVENTS_CONNECTION } from 'GraphQl/Queries/Queries';
 import { useMutation, useQuery } from '@apollo/client';
 import { SearchOutlined } from '@mui/icons-material';
 import styles from './Events.module.css';
@@ -47,7 +44,7 @@ interface InterfaceEventCardProps {
 
 export default function events(): JSX.Element {
   const { t } = useTranslation('translation', {
-    keyPrefix: 'userOrganizations',
+    keyPrefix: 'userEvents',
   });
 
   const [page, setPage] = React.useState(0);
@@ -70,7 +67,7 @@ export default function events(): JSX.Element {
 
   const organizationId = getOrganizationId(window.location.href);
 
-  const modes = ['List View', 'Calender View'];
+  const modes = [t('listView'), t('calendarView')];
 
   const { data, loading, refetch } = useQuery(ORGANIZATION_EVENTS_CONNECTION, {
     variables: {
@@ -79,7 +76,7 @@ export default function events(): JSX.Element {
     },
   });
 
-  const [create, { loading: loading2 }] = useMutation(CREATE_EVENT_MUTATION);
+  const [create] = useMutation(CREATE_EVENT_MUTATION);
 
   const createEvent = async (): Promise<void> => {
     try {
@@ -213,7 +210,9 @@ export default function events(): JSX.Element {
               </InputGroup.Text>
             </InputGroup>
             <div className={styles.eventActionsContainer}>
-              <Button onClick={toggleCreateEventModal}>Create Event</Button>
+              <Button onClick={toggleCreateEventModal}>
+                {t('createEvent')}
+              </Button>
               <Dropdown drop="down-centered">
                 <Dropdown.Toggle
                   className={`${styles.colorPrimary} ${styles.borderNone}`}
@@ -320,7 +319,7 @@ export default function events(): JSX.Element {
         <OrganizationSidebar />
         <Modal show={showCreateEventModal} onHide={toggleCreateEventModal}>
           <Modal.Header>
-            <h5>Create Event</h5>
+            <h5>{t('createEvent')}</h5>
             <Button variant="danger" onClick={toggleCreateEventModal}>
               <i className="fas fa-times"></i>
             </Button>
@@ -330,7 +329,7 @@ export default function events(): JSX.Element {
               <InputGroup.Text
                 className={`${styles.colorPrimary} ${styles.borderNone}`}
               >
-                Event Title
+                {t('eventTitle')}
               </InputGroup.Text>
               <Form.Control
                 placeholder="Enter title"
@@ -346,7 +345,7 @@ export default function events(): JSX.Element {
               <InputGroup.Text
                 className={`${styles.colorPrimary} ${styles.borderNone}`}
               >
-                Event Description
+                {t('eventDescription')}
               </InputGroup.Text>
               <Form.Control
                 placeholder="Enter description"
@@ -362,7 +361,7 @@ export default function events(): JSX.Element {
               <InputGroup.Text
                 className={`${styles.colorPrimary} ${styles.borderNone}`}
               >
-                Event Location
+                {t('eventLocation')}
               </InputGroup.Text>
               <Form.Control
                 placeholder="Enter location"
@@ -373,13 +372,13 @@ export default function events(): JSX.Element {
                 data-testid="eventTitleInput"
               />
             </InputGroup>
-            <h6>Select Start Date</h6>
+            <h6>{t('startDate')}</h6>
             <ReactDatePicker
               selected={startDate}
               onChange={handleStartDateChange}
               className={styles.datePicker}
             />
-            <h6>Select End Date</h6>
+            <h6>{t('endDate')}</h6>
             <ReactDatePicker
               selected={endDate}
               onChange={handleEndDateChange}
@@ -387,7 +386,7 @@ export default function events(): JSX.Element {
             />
             <div className={styles.switches}>
               <div className={styles.switchContainer}>
-                <label htmlFor="publicEvent">Public Event</label>
+                <label htmlFor="publicEvent">{t('publicEvent')}</label>
                 <Form.Switch
                   className="ms-2"
                   type="checkbox"
@@ -398,7 +397,7 @@ export default function events(): JSX.Element {
               </div>
 
               <div className={styles.switchContainer}>
-                <label htmlFor="publicEvent">Registerable</label>
+                <label htmlFor="publicEvent">{t('registerable')}</label>
                 <Form.Switch
                   className="ms-2"
                   type="checkbox"
@@ -408,7 +407,7 @@ export default function events(): JSX.Element {
               </div>
 
               <div className={styles.switchContainer}>
-                <label htmlFor="publicEvent">Recurring</label>
+                <label htmlFor="publicEvent">{t('recurring')}</label>
                 <Form.Switch
                   className="ms-2"
                   type="checkbox"
@@ -418,7 +417,7 @@ export default function events(): JSX.Element {
               </div>
 
               <div className={styles.switchContainer}>
-                <label htmlFor="publicEvent">All Day</label>
+                <label htmlFor="publicEvent">{t('allDay')}</label>
                 <Form.Switch
                   className="ms-2"
                   type="checkbox"
@@ -453,10 +452,10 @@ export default function events(): JSX.Element {
           </Modal.Body>
           <Modal.Footer>
             <Button variant="danger" onClick={toggleCreateEventModal}>
-              Cancel
+              {t('cancel')}
             </Button>
             <Button variant="success" onClick={createEvent}>
-              Create
+              {t('create')}
             </Button>
           </Modal.Footer>
         </Modal>

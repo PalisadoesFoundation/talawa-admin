@@ -548,5 +548,33 @@
     "yourPreviousDonations": "Vos dons précédents",
     "donate": "Donner",
     "nothingToShow": "Rien à montrer ici."
+  },
+  "userEvents": {
+    "nothingToShow": "Rien à montrer ici.",
+    "search": "Recherche",
+    "createEvent": "Créer un évènement",
+    "eventTitle": "Titre de l'événement",
+    "eventDescription": "Description de l'évenement",
+    "eventLocation": "Lieu de l'événement",
+    "startDate": "Sélectionnez la date de début",
+    "endDate": "Sélectionnez la date de fin",
+    "publicEvent": "Évennement publique",
+    "registerable": "Enregistrable",
+    "recurring": "Récurrente",
+    "startTime": "Heure de début",
+    "endTime": "Heure de fin",
+    "cancel": "Annuler",
+    "create": "Créer",
+    "listView": "Vue en liste",
+    "calendarView": "Vue du calendrier",
+    "allDay": "Toute la journée"
+  },
+  "userEventCard": {
+    "location": "Emplacement",
+    "starts": "Départs",
+    "ends": "Prend fin",
+    "creator": "Créatrice",
+    "alreadyRegistered": "Déjà enregistré",
+    "register": "Registre"
   }
 }

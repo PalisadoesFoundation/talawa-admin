@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 
 import { REGISTER_EVENT } from 'GraphQl/Mutations/mutations';
+import { useTranslation } from 'react-i18next';
 
 interface InterfaceEventCardProps {
   id: string;
@@ -33,6 +34,9 @@ interface InterfaceEventCardProps {
 }
 
 function eventCard(props: InterfaceEventCardProps): JSX.Element {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'userEventCard',
+  });
   const userId = localStorage.getItem('userId');
   const creatorName = `${props.creator.firstName} ${props.creator.lastName}`;
   const isInitiallyRegistered = props.registrants.some(
@@ -74,11 +78,11 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
       </div>
       {props.description}
       <span>
-        {'Location '}
+        {`${t('location')} `}
         <b>{props.location}</b>
       </span>
       <div className={`d-flex flex-row ${styles.eventDetails}`}>
-        {'Starts '}
+        {`${t('starts')} `}
         {props.startTime ? (
           <b>{dayjs(`2015-03-04T${props.startTime}`).format('h:mm:ss A')}</b>
         ) : (
@@ -87,7 +91,7 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
         <b> {dayjs(props.startDate).format("D MMMM 'YY")}</b>
       </div>
       <div className={`d-flex flex-row ${styles.eventDetails}`}>
-        {'Ends '}{' '}
+        {`${t('ends')} `}
         {props.endTime ? (
           <b>{dayjs(`2015-03-04T${props.endTime}`).format('h:mm:ss A')}</b>
         ) : (
@@ -96,7 +100,7 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
         <b> {dayjs(props.endDate).format("D MMMM 'YY")}</b>
       </div>
       <span>
-        {'Creator '}
+        {`${t('creator')} `}
         <b>{creatorName}</b>
       </span>
 
@@ -105,11 +109,11 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
           <HourglassBottomIcon fontSize="small" />
         ) : isRegistered ? (
           <Button size="sm" disabled>
-            Already registered
+            {t('alreadyRegistered')}
           </Button>
         ) : (
           <Button size="sm" onClick={handleRegister}>
-            Register
+            {t('register')}
           </Button>
         )}
       </div>
