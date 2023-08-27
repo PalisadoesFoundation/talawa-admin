@@ -140,7 +140,7 @@ function orgPost(): JSX.Element {
     };
     refetch(filterData);
   };
-  console.log(orgPostListData);
+
   const debouncedHandleSearch = debounce(handleSearch);
   const sortedPostsList: InterfaceOrgPost[] = [
     ...orgPostListData.postsByOrganizationConnection.edges,
@@ -173,6 +173,7 @@ function orgPost(): JSX.Element {
                   id="posttitle"
                   className="bg-white"
                   placeholder={showTitle ? t('searchTitle') : t('searchText')}
+                  data-testid="searchByName"
                   autoComplete="off"
                   onChange={debouncedHandleSearch}
                   required
@@ -186,10 +187,10 @@ function orgPost(): JSX.Element {
               </div>
               <div className={styles.btnsBlock}>
                 <div className="d-flex">
-                  <Dropdown aria-expanded="false" title="Search By">
+                  <Dropdown aria-expanded="false" title="SearchBy">
                     <Dropdown.Toggle variant="outline-success">
                       <SortIcon className={'me-1'} />
-                      Search By
+                      {t('searchBy')}
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
                       <Dropdown.Item
@@ -293,7 +294,7 @@ function orgPost(): JSX.Element {
               id="orgname"
               className="mb-3"
               placeholder={t('postTitle1')}
-              data-testid="modalOrganizationName"
+              data-testid="modalTitle"
               autoComplete="off"
               required
               value={postformState.posttitle}
@@ -310,6 +311,7 @@ function orgPost(): JSX.Element {
               id="descrip"
               className="mb-3"
               placeholder={t('information1')}
+              data-testid="modalinfo"
               autoComplete="off"
               required
               value={postformState.postinfo}
@@ -411,6 +413,7 @@ function orgPost(): JSX.Element {
                     </video>
                     <button
                       className={styles.closeButton}
+                      data-testid="videoclosebutton"
                       onClick={(): void => {
                         setPostFormState({
                           ...postformState,

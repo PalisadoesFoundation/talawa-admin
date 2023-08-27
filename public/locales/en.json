@@ -261,7 +261,8 @@
     "postDes": "What do you to talk about?",
     "Title": "Title",
     "Text": "Text",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "searchBy": "Search By"
   },
   "postNotFound": {
     "post": "Post",
