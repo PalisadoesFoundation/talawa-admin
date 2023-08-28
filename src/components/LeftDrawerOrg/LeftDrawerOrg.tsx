@@ -3,7 +3,7 @@ import { WarningAmberOutlined } from '@mui/icons-material';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
 import IconComponent from 'components/IconComponent/IconComponent';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
@@ -37,8 +37,8 @@ const leftDrawerOrg = ({
     loading,
   }: {
     data:
-      | { organizations: InterfaceQueryOrganizationsListObject[] }
-      | undefined;
+    | { organizations: InterfaceQueryOrganizationsListObject[] }
+    | undefined;
     loading: boolean;
   } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: orgId },
@@ -51,6 +51,11 @@ const leftDrawerOrg = ({
 
   const history = useHistory();
 
+  useEffect(() => {
+    return () => {}
+  }, [])
+
+  /* istanbul ignore next */
   const logout = (): void => {
     localStorage.clear();
     history.push('/');
@@ -59,13 +64,12 @@ const leftDrawerOrg = ({
   return (
     <>
       <div
-        className={`${styles.leftDrawer} ${
-          hideDrawer === null
+        className={`${styles.leftDrawer} ${hideDrawer === null
             ? styles.hideElemByDefault
             : hideDrawer
-            ? styles.inactiveDrawer
-            : styles.activeDrawer
-        }`}
+              ? styles.inactiveDrawer
+              : styles.activeDrawer
+          }`}
         data-testid="leftDrawerContainer"
       >
         {/* Close Drawer Btn for small devices */}
@@ -149,9 +153,8 @@ const leftDrawerOrg = ({
               <Button
                 key={name}
                 variant={screenName === name ? 'success' : 'light'}
-                className={`${
-                  screenName === name ? 'text-white' : 'text-secondary'
-                }`}
+                className={`${screenName === name ? 'text-white' : 'text-secondary'
+                  }`}
                 onClick={(): void => {
                   history.push(url);
                 }}

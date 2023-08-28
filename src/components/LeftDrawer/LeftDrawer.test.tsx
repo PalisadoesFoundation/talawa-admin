@@ -190,6 +190,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing logout functionality', async () => {
+    localStorage.setItem('UserType', 'SUPERADMIN');
     render(
       <BrowserRouter>
         <I18nextProvider i18n={i18nForTest}>
@@ -197,8 +198,9 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
         </I18nextProvider>
       </BrowserRouter>
     );
-
     userEvent.click(screen.getByTestId('logoutBtn'));
+    expect(localStorage.clear).toHaveBeenCalled();
+    expect(global.window.location.pathname).toBe('/');
   });
 });
 
