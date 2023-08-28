@@ -37,8 +37,8 @@ const leftDrawerOrg = ({
     loading,
   }: {
     data:
-    | { organizations: InterfaceQueryOrganizationsListObject[] }
-    | undefined;
+      | { organizations: InterfaceQueryOrganizationsListObject[] }
+      | undefined;
     loading: boolean;
   } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: orgId },
@@ -59,12 +59,13 @@ const leftDrawerOrg = ({
   return (
     <>
       <div
-        className={`${styles.leftDrawer} ${hideDrawer === null
+        className={`${styles.leftDrawer} ${
+          hideDrawer === null
             ? styles.hideElemByDefault
             : hideDrawer
-              ? styles.inactiveDrawer
-              : styles.activeDrawer
-          }`}
+            ? styles.inactiveDrawer
+            : styles.activeDrawer
+        }`}
         data-testid="leftDrawerContainer"
       >
         {/* Close Drawer Btn for small devices */}
@@ -148,8 +149,9 @@ const leftDrawerOrg = ({
               <Button
                 key={name}
                 variant={screenName === name ? 'success' : 'light'}
-                className={`${screenName === name ? 'text-white' : 'text-secondary'
-                  }`}
+                className={`${
+                  screenName === name ? 'text-white' : 'text-secondary'
+                }`}
                 onClick={(): void => {
                   history.push(url);
                 }}
