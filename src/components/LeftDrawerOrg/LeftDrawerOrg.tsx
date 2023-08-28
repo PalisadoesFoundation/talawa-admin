@@ -3,7 +3,7 @@ import { WarningAmberOutlined } from '@mui/icons-material';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
 import IconComponent from 'components/IconComponent/IconComponent';
-import React, { useEffect } from 'react';
+import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
