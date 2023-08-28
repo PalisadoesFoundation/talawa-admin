@@ -51,11 +51,6 @@ const leftDrawerOrg = ({
 
   const history = useHistory();
 
-  useEffect(() => {
-    return () => {}
-  }, [])
-
-  /* istanbul ignore next */
   const logout = (): void => {
     localStorage.clear();
     history.push('/');
