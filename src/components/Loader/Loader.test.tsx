@@ -1,6 +1,5 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import 'jest-localstorage-mock';
 import { BrowserRouter } from 'react-router-dom';
 
 import Loader from './Loader';

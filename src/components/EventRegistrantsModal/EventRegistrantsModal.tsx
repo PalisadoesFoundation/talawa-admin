@@ -120,7 +120,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
                 label={`${attendee.firstName} ${attendee.lastName}`}
                 variant="outlined"
                 key={attendee._id}
-                onDelete={() => deleteRegistrant(attendee._id)}
+                onDelete={(): void => deleteRegistrant(attendee._id)}
               />
             ))}
           </Stack>
@@ -128,14 +128,14 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
 
           <Autocomplete
             id="addRegistrant"
-            onChange={(_, newMember) => {
+            onChange={(_, newMember): void => {
               setMember(newMember);
             }}
             options={memberData.organizations[0].members}
-            getOptionLabel={(member: InterfaceUser) =>
+            getOptionLabel={(member: InterfaceUser): string =>
               `${member.firstName} ${member.lastName}`
             }
-            renderInput={(params) => (
+            renderInput={(params): React.ReactNode => (
               <TextField
                 {...params}
                 label="Add an Registrant"

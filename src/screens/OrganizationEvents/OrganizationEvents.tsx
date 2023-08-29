@@ -4,7 +4,6 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { useSelector } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import { Form } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
@@ -15,16 +14,15 @@ import Calendar from 'react-calendar';
 import './calendar.css';
 
 import styles from './OrganizationEvents.module.css';
-import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import {
   ORGANIZATION_EVENT_CONNECTION_LIST,
   ORGANIZATIONS_LIST,
 } from 'GraphQl/Queries/Queries';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
-import type { RootState } from 'state/reducers';
 import dayjs from 'dayjs';
 import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
+import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 
 function organizationEvents(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -52,9 +50,6 @@ function organizationEvents(): JSX.Element {
     endTime: '18:00:00',
   });
   const currentUrl = window.location.href.split('=')[1];
-
-  const appRoutes = useSelector((state: RootState) => state.appRoutes);
-  const { targets, configUrl } = appRoutes;
 
   const showInviteModal = (): void => {
     setEventModalIsOpen(true);
@@ -138,38 +133,40 @@ function organizationEvents(): JSX.Element {
 
   return (
     <>
-      <AdminNavbar targets={targets} url1={configUrl} />
-      <Row>
-        <Col sm={3}>
-          <div className={styles.sidebar}>
-            <div className={styles.sidebarsticky}>
-              <h6 className={styles.searchtitle}>Search Date</h6>
-              <Calendar />
+      <OrganizationScreen screenName="Events" title={t('title')}>
+        <Row>
+          <Col sm={3}>
+            <div className={styles.sidebar}>
+              <div className={styles.sidebarsticky}>
+                <h6 className={styles.searchtitle}>Search Date</h6>
+                <Calendar />
+              </div>
             </div>
-          </div>
-        </Col>
-        <Col sm={8}>
-          <div className={styles.mainpageright}>
-            <Row className={styles.justifysp}>
-              <p className={styles.logintitle}>{t('events')}</p>
-              <Button
-                variant="success"
-                className={styles.addbtn}
-                onClick={showInviteModal}
-                data-testid="createEventModalBtn"
-              >
-                <i className="fa fa-plus"></i> {t('addEvent')}
-              </Button>
-            </Row>
-          </div>
-          <EventCalendar
-            eventData={data?.eventsByOrganizationConnection}
-            orgData={orgData}
-            userRole={userRole}
-            userId={userId}
-          />
-        </Col>
-      </Row>
+          </Col>
+          <Col sm={8}>
+            <div className={styles.mainpageright}>
+              <Row className={styles.justifysp}>
+                <p className={styles.logintitle}>{t('events')}</p>
+                <Button
+                  variant="success"
+                  className={styles.addbtn}
+                  onClick={showInviteModal}
+                  data-testid="createEventModalBtn"
+                >
+                  <i className="fa fa-plus"></i> {t('addEvent')}
+                </Button>
+              </Row>
+            </div>
+            <EventCalendar
+              eventData={data?.eventsByOrganizationConnection}
+              orgData={orgData}
+              userRole={userRole}
+              userId={userId}
+            />
+          </Col>
+        </Row>
+      </OrganizationScreen>
+
       <Modal show={eventmodalisOpen} onHide={hideInviteModal}>
         <Modal.Header>
           <p className={styles.titlemodal}>{t('eventDetails')}</p>

@@ -4,7 +4,6 @@ import Col from 'react-bootstrap/Col';
 import { useQuery } from '@apollo/client';
 import { Container } from 'react-bootstrap';
 import styles from './EventDashboard.module.css';
-import ListNavbar from 'components/ListNavbar/ListNavbar';
 import { AddEventProjectModal } from 'components/EventProjectModals/AddEventProjectModal';
 import { UpdateEventProjectModal } from 'components/EventProjectModals/UpdateEventProjectModal';
 import { DeleteEventProjectModal } from 'components/EventProjectModals/DeleteEventProjectModal';
@@ -15,6 +14,7 @@ import List from '@mui/material/List';
 import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 import { TaskListItem } from 'components/TaskListItem/TaskListItem';
 import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
+import Loader from 'components/Loader/Loader';
 
 interface InterfaceEventTask {
   _id: string;
@@ -66,16 +66,11 @@ const EventDashboard = (): JSX.Element => {
 
   // Render the loading screen
   if (eventInfoLoading) {
-    return (
-      <>
-        <div className={styles.loader}></div>
-      </>
-    );
+    return <Loader />;
   }
 
   return (
     <>
-      <ListNavbar />
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
@@ -111,7 +106,7 @@ const EventDashboard = (): JSX.Element => {
                   className="mt-3"
                   variant="success"
                   aria-label="addEventProject"
-                  onClick={() => {
+                  onClick={(): void => {
                     setShowAddEventProjectModal(true);
                   }}
                 >
@@ -181,7 +176,7 @@ const EventDashboard = (): JSX.Element => {
                             variant="success"
                             className="m-2 ml-3"
                             size="sm"
-                            onClick={() => {
+                            onClick={(): void => {
                               setCurrentProject(project);
                               setShowUpdateEventProjectModal(true);
                             }}
@@ -194,7 +189,7 @@ const EventDashboard = (): JSX.Element => {
                             aria-label="deleteEventProject"
                             className="m-1"
                             size="sm"
-                            onClick={() => {
+                            onClick={(): void => {
                               setCurrentProject(project);
                               setShowDeleteEventProjectModal(true);
                             }}
@@ -207,7 +202,7 @@ const EventDashboard = (): JSX.Element => {
                             aria-label="addTask"
                             className="m-1 ml-8"
                             size="sm"
-                            onClick={() => {
+                            onClick={(): void => {
                               setCurrentProject(project);
                               setShowAddTaskModal(true);
                             }}
@@ -228,7 +223,7 @@ const EventDashboard = (): JSX.Element => {
       {/* Wrapper for Different Modals */}
       <AddEventProjectModal
         show={showAddEventProjectModal}
-        handleClose={() => {
+        handleClose={(): void => {
           setShowAddEventProjectModal(false);
         }}
         eventId={eventId}
@@ -237,7 +232,7 @@ const EventDashboard = (): JSX.Element => {
 
       <UpdateEventProjectModal
         show={showUpdateEventProjectModal}
-        handleClose={() => {
+        handleClose={(): void => {
           setShowUpdateEventProjectModal(false);
         }}
         refetchData={refetchEventData}
@@ -246,7 +241,7 @@ const EventDashboard = (): JSX.Element => {
 
       <DeleteEventProjectModal
         show={showDeleteEventProjectModal}
-        handleClose={() => {
+        handleClose={(): void => {
           setShowDeleteEventProjectModal(false);
         }}
         refetchData={refetchEventData}
@@ -255,7 +250,7 @@ const EventDashboard = (): JSX.Element => {
 
       <AddTaskModal
         show={showAddTaskModal}
-        handleClose={() => {
+        handleClose={(): void => {
           setShowAddTaskModal(false);
         }}
         refetchData={refetchEventData}

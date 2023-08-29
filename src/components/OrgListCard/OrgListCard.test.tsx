@@ -5,7 +5,7 @@ import { I18nextProvider } from 'react-i18next';
 
 import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceOrgListCardProps } from './OrgListCard';
-import AdminDashListCard from './OrgListCard';
+import OrgListCard from './OrgListCard';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -40,7 +40,7 @@ describe('Testing the Super Dash List', () => {
     render(
       <BrowserRouter>
         <I18nextProvider i18n={i18nForTest}>
-          <AdminDashListCard {...props} />
+          <OrgListCard {...props} />
         </I18nextProvider>
       </BrowserRouter>
     );
@@ -58,7 +58,7 @@ describe('Testing the Super Dash List', () => {
     render(
       <BrowserRouter>
         <I18nextProvider i18n={i18nForTest}>
-          <AdminDashListCard {...props} />
+          <OrgListCard {...props} />
         </I18nextProvider>
       </BrowserRouter>
     );
@@ -73,17 +73,17 @@ describe('Testing the Super Dash List', () => {
     };
     render(
       <I18nextProvider i18n={i18nForTest}>
-        <AdminDashListCard {...imageNullProps} />
+        <OrgListCard {...imageNullProps} />
       </I18nextProvider>
     );
-    expect(screen.getByAltText(/default image/i)).toBeInTheDocument();
+    expect(screen.getByTestId(/emptyContainerForImage/i)).toBeInTheDocument();
   });
 
   test('Testing if user is redirected to orgDash screen', () => {
     render(
       <BrowserRouter>
         <I18nextProvider i18n={i18nForTest}>
-          <AdminDashListCard {...props} />
+          <OrgListCard {...props} />
         </I18nextProvider>
       </BrowserRouter>
     );

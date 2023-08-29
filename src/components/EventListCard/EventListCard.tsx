@@ -12,6 +12,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { Form } from 'react-bootstrap';
 import { errorHandler } from 'utils/errorHandler';
+import { useHistory } from 'react-router-dom';
 
 interface InterfaceEventListCardProps {
   key: string;
@@ -37,6 +38,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   const [recurringchecked, setRecurringChecked] = useState(false);
   const [publicchecked, setPublicChecked] = useState(true);
   const [registrablechecked, setRegistrableChecked] = React.useState(false);
+  const history = useHistory();
   const [formState, setFormState] = useState({
     title: '',
     eventdescrip: '',
@@ -125,7 +127,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   };
 
   const openEventDashboard = (): void => {
-    window.location.assign(`/event/${props.id}`);
+    history.push(`/event/${props.id}`);
   };
 
   return (

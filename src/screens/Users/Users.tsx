@@ -15,13 +15,14 @@ import {
 } from 'GraphQl/Queries/Queries';
 import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 import { errorHandler } from 'utils/errorHandler';
-import styles from './Roles.module.css';
+import styles from './Users.module.css';
 import type { InterfaceUserType } from 'utils/interfaces';
 import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
 import debounce from 'utils/debounce';
+import TableLoader from 'components/TableLoader/TableLoader';
 
-const Roles = (): JSX.Element => {
-  const { t } = useTranslation('translation', { keyPrefix: 'roles' });
+const Users = (): JSX.Element => {
+  const { t } = useTranslation('translation', { keyPrefix: 'users' });
 
   document.title = t('title');
 
@@ -110,13 +111,16 @@ const Roles = (): JSX.Element => {
 
   const debouncedHandleSearchByName = debounce(handleSearchByName);
 
+  const headerTitles: string[] = [
+    '#',
+    t('name'),
+    t('email'),
+    t('roles_userType'),
+  ];
+
   return (
     <>
-      <SuperAdminScreen
-        data={currentUserData}
-        title={t('usersList')}
-        screenName="Roles"
-      >
+      <SuperAdminScreen title={t('users')} screenName="Users">
         {/* Buttons Container */}
         <div className={styles.btnsContainer}>
           <div className={styles.inputContainer}>
@@ -175,75 +179,84 @@ const Roles = (): JSX.Element => {
           </div>
         </div>
 
-        {loadingUsers ? (
-          <div className={styles.notFound}>
-            <h4>{t('loadingUsers')}</h4>
-          </div>
-        ) : dataUsers.users.length === 0 && searchByName.length > 0 ? (
+        {loadingUsers == false &&
+        dataUsers &&
+        dataUsers.users.length === 0 &&
+        searchByName.length > 0 ? (
           <div className={styles.notFound}>
             <h4>
               {t('noResultsFoundFor')} &quot;{searchByName}&quot;
             </h4>
           </div>
-        ) : dataUsers && dataUsers.users.length === 0 ? (
+        ) : loadingUsers == false &&
+          dataUsers &&
+          dataUsers.users.length === 0 ? (
+          // eslint-disable-next-line react/jsx-indent
           <div className={styles.notFound}>
             <h4>{t('noUserFound')}</h4>
           </div>
         ) : (
           <div className={styles.listBox}>
-            <Table responsive>
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">{t('name')}</th>
-                  <th scope="col">{t('email')}</th>
-                  <th scope="col">{t('roles_userType')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {dataUsers &&
-                  dataUsers?.users.map(
-                    (
-                      user: {
-                        _id: string;
-                        firstName: string;
-                        lastName: string;
-                        email: string;
-                        userType: string;
-                      },
-                      index: number
-                    ) => {
+            {loadingUsers ? (
+              <TableLoader headerTitles={headerTitles} noOfRows={10} />
+            ) : (
+              <Table responsive>
+                <thead>
+                  <tr>
+                    {headerTitles.map((title: string, index: number) => {
                       return (
-                        <tr key={user._id}>
-                          <th scope="row">{index + 1}</th>
-                          <td>{`${user.firstName} ${user.lastName}`}</td>
-                          <td>{user.email}</td>
-                          <td>
-                            <select
-                              className="form-select"
-                              name={`role${user._id}`}
-                              data-testid={`changeRole${user._id}`}
-                              onChange={changeRole}
-                              disabled={user._id === userId}
-                              defaultValue={`${user.userType}?${user._id}`}
-                            >
-                              <option value={`ADMIN?${user._id}`}>
-                                {t('admin')}
-                              </option>
-                              <option value={`SUPERADMIN?${user._id}`}>
-                                {t('superAdmin')}
-                              </option>
-                              <option value={`USER?${user._id}`}>
-                                {t('user')}
-                              </option>
-                            </select>
-                          </td>
-                        </tr>
+                        <th key={index} scope="col">
+                          {title}
+                        </th>
                       );
-                    }
-                  )}
-              </tbody>
-            </Table>
+                    })}
+                  </tr>
+                </thead>
+                <tbody>
+                  {dataUsers &&
+                    dataUsers?.users.map(
+                      (
+                        user: {
+                          _id: string;
+                          firstName: string;
+                          lastName: string;
+                          email: string;
+                          userType: string;
+                        },
+                        index: number
+                      ) => {
+                        return (
+                          <tr key={user._id}>
+                            <th scope="row">{index + 1}</th>
+                            <td>{`${user.firstName} ${user.lastName}`}</td>
+                            <td>{user.email}</td>
+                            <td>
+                              <select
+                                className="form-select"
+                                name={`role${user._id}`}
+                                data-testid={`changeRole${user._id}`}
+                                onChange={changeRole}
+                                disabled={user._id === userId}
+                                defaultValue={`${user.userType}?${user._id}`}
+                              >
+                                <option value={`ADMIN?${user._id}`}>
+                                  {t('admin')}
+                                </option>
+                                <option value={`SUPERADMIN?${user._id}`}>
+                                  {t('superAdmin')}
+                                </option>
+                                <option value={`USER?${user._id}`}>
+                                  {t('user')}
+                                </option>
+                              </select>
+                            </td>
+                          </tr>
+                        );
+                      }
+                    )}
+                </tbody>
+              </Table>
+            )}
           </div>
         )}
       </SuperAdminScreen>
@@ -251,4 +264,4 @@ const Roles = (): JSX.Element => {
   );
 };
 
-export default Roles;
+export default Users;

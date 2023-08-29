@@ -54,6 +54,7 @@
   text-align: start;
   margin-bottom: 0.8rem;
   border-radius: 8px;
+  border: 1px solid var(--bs-gray-200);
 }
 
 .leftDrawer .optionList button .iconWrapper {
@@ -112,6 +113,10 @@
 
 /* For tablets */
 @media (max-width: 820px) {
+  .hideElemByDefault {
+    display: none;
+  }
+
   .leftDrawer {
     width: 100%;
     left: 0;
