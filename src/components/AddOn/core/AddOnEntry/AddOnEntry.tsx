@@ -29,7 +29,7 @@ function addOnEntry({
 }: InterfaceAddOnEntryProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'addOnEntry' });
   //getting orgId from URL
-  const currentOrg = window.location.href.split('/id=')[1];
+  const currentOrg = window.location.href.split('/id=')[1] + '';
   const [buttonLoading, setButtonLoading] = useState(false);
   const [isInstalledLocal, setIsInstalledLocal] = useState(
     uninstalledOrgs.includes(currentOrg)
@@ -55,75 +55,6 @@ function addOnEntry({
       : t('uninstallMsg');
     toast.success(dialog);
   };
-
-  // useEffect(() => {
-  //   // updateInstallStatusFunc();
-  // }, []);
-  // TODO: Install/Remove Effect
-  // 1. Update Server to add to Org
-  // 2. Validate Permissions
-  // 3. Trigger Server Hook if Validated. (Stream to track progress)
-  // const install = () => {
-  //   setButtonLoading(true);
-  //   fetch('http://localhost:3005/installed', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-type': 'application/json; charset=UTF-8',
-  //     },
-  //     body: JSON.stringify(
-  //       Object.assign(
-  //         {},
-  //         { ...entry },
-  //         {
-  //           installedDatetime: new Date(),
-  //           installedBy: 'Admin',
-  //           enabled: true,
-  //         }
-  //       )
-  //     ),
-  //   })
-  //     .then(() => {
-  //       setButtonLoading(false);
-  //       modified();
-  //     })
-  //     .finally(() => setButtonLoading(false));
-  // };
-
-  // const remove = () => {
-  //   setButtonLoading(true);
-  //   fetch(`http://localhost:3005/installed/${id}`, {
-  //     method: 'DELETE',
-  //   })
-  //     .then(() => {
-  //       setButtonLoading(false);
-  //       modified();
-  //     })
-  //     .finally(() => setButtonLoading(false));
-  // };
-
-  // const toggleActive = () => {
-  //   setSwitchState(true);
-  //   fetch(`http://localhost:3005/installed/${id}`, {
-  //     method: 'PUT',
-  //     headers: {
-  //       'Content-type': 'application/json; charset=UTF-8',
-  //     },
-  //     body: JSON.stringify(
-  //       Object.assign(
-  //         {},
-  //         { ...entry },
-  //         {
-  //           enabled: !enabled,
-  //         }
-  //       )
-  //     ),
-  //   })
-  //     .then(() => {
-  //       modified();
-  //       setSwitchState(false);
-  //     })
-  //     .finally(() => setSwitchState(false));
-  // };
 
   return (
     <>
@@ -151,6 +82,7 @@ function addOnEntry({
             variant="primary"
             // disabled={buttonLoading || !configurable}
             disabled={buttonLoading}
+            data-testid="AddOnEntry_btn_install"
             onClick={(): void => {
               togglePluginInstall();
               getInstalledPlugins();

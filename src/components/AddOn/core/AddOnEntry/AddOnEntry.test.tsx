@@ -60,4 +60,60 @@ describe('Testing AddOnEntry', () => {
     );
     expect(getByTestId('AddOnEntry')).toBeInTheDocument();
   });
+
+  it('renders correctly', () => {
+    const props = {
+      id: '1',
+      title: 'Test Addon',
+      description: 'Test addon description',
+      createdBy: 'Test User',
+      component: 'string',
+      installed: true,
+      configurable: true,
+      modified: true,
+      isInstalled: true,
+      uninstalledOrgs: [],
+      enabled: true,
+      getInstalledPlugins: (): { sample: string } => {
+        return { sample: 'sample' };
+      },
+    };
+
+    const { getByText } = render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              {<AddOnEntry {...props} />}
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>
+    );
+
+    expect(getByText('Test Addon')).toBeInTheDocument();
+    expect(getByText('Test addon description')).toBeInTheDocument();
+    expect(getByText('Test User')).toBeInTheDocument();
+  });
+
+  // test('Should click on Install Button', async () => {
+  //   await act(async () => {
+  //     const { getByTestId, getAllByTestId } = render(
+  //       <ApolloProvider client={client}>
+  //         <Provider store={store}>
+  //           <BrowserRouter>
+  //             <I18nextProvider i18n={i18nForTest}>
+  //               {<AddOnEntry uninstalledOrgs={[]} {...props} />}
+  //             </I18nextProvider>
+  //           </BrowserRouter>
+  //         </Provider>
+  //       </ApolloProvider>
+  //     );
+  //     const buttonElement = getAllByTestId('AddOnEntry_btn_install')[0];
+  //     expect(buttonElement).toBeInTheDocument();
+  //     /* fire events that update state */
+  //     const res = fireEvent.click(buttonElement);
+  //     console.log(res);
+  //   });
+  // });
 });
