@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { fireEvent, render, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import AddOnEntry from './AddOnEntry';
 import {
@@ -96,24 +96,45 @@ describe('Testing AddOnEntry', () => {
     expect(getByText('Test User')).toBeInTheDocument();
   });
 
-  // test('Should click on Install Button', async () => {
-  //   await act(async () => {
-  //     const { getByTestId, getAllByTestId } = render(
-  //       <ApolloProvider client={client}>
-  //         <Provider store={store}>
-  //           <BrowserRouter>
-  //             <I18nextProvider i18n={i18nForTest}>
-  //               {<AddOnEntry uninstalledOrgs={[]} {...props} />}
-  //             </I18nextProvider>
-  //           </BrowserRouter>
-  //         </Provider>
-  //       </ApolloProvider>
-  //     );
-  //     const buttonElement = getAllByTestId('AddOnEntry_btn_install')[0];
-  //     expect(buttonElement).toBeInTheDocument();
-  //     /* fire events that update state */
-  //     const res = fireEvent.click(buttonElement);
-  //     console.log(res);
-  //   });
-  // });
+  it('toggles plugin install/uninstall', async () => {
+    const props = {
+      id: '1',
+      title: 'Test Addon',
+      description: 'Test addon description',
+      createdBy: 'Test User',
+      component: 'string',
+      installed: true,
+      configurable: true,
+      modified: true,
+      isInstalled: true,
+      uninstalledOrgs: [],
+      enabled: true,
+      getInstalledPlugins: (): { sample: string } => {
+        return { sample: 'sample' };
+      },
+    };
+
+    const { queryAllByText, getAllByTestId } = render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AddOnEntry {...props} />{' '}
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>
+    );
+
+    // We need to wait for the async update triggered by the button click
+    await waitFor(() => {
+      const listItems = getAllByTestId('AddOnEntry_btn_install');
+
+      fireEvent.click(listItems[0] as HTMLElement);
+    });
+
+    await waitFor(() => {
+      expect(queryAllByText('Uninstall')).toBeTruthy();
+    });
+  });
 });
