@@ -1,6 +1,8 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
-import type { InterfaceUserType } from 'utils/interfaces';
+import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { ReactComponent as AngleRightIcon } from '../../assets/svgs/icons/angleRight.svg';
 import { ReactComponent as LogoutIcon } from '../../assets/svgs/icons/logout.svg';
 import { ReactComponent as OrganizationsIcon } from '../../assets/svgs/icons/organizations.svg';
@@ -8,26 +10,24 @@ import { ReactComponent as RequestsIcon } from '../../assets/svgs/icons/requests
 import { ReactComponent as RolesIcon } from '../../assets/svgs/icons/roles.svg';
 import { ReactComponent as TalawaLogo } from '../../assets/svgs/talawa.svg';
 import styles from './LeftDrawer.module.css';
-import { toast } from 'react-toastify';
-import { useHistory } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 
 export interface InterfaceLeftDrawerProps {
-  data: InterfaceUserType | undefined;
-  showDrawer: boolean;
-  setShowDrawer: React.Dispatch<React.SetStateAction<boolean>>;
+  hideDrawer: boolean | null;
+  setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
   screenName: string;
 }
 
 const leftDrawer = ({
-  data,
   screenName,
-  showDrawer,
-  setShowDrawer,
+  hideDrawer,
+  setHideDrawer,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
 
   const userType = localStorage.getItem('UserType');
+  const firstName = localStorage.getItem('FirstName');
+  const lastName = localStorage.getItem('LastName');
+  const userImage = localStorage.getItem('UserImage');
 
   const history = useHistory();
 
@@ -40,7 +40,11 @@ const leftDrawer = ({
     <>
       <div
         className={`${styles.leftDrawer} ${
-          showDrawer ? styles.activeDrawer : styles.inactiveDrawer
+          hideDrawer === null
+            ? styles.hideElemByDefault
+            : hideDrawer
+            ? styles.inactiveDrawer
+            : styles.activeDrawer
         }`}
         data-testid="leftDrawerContainer"
       >
@@ -48,7 +52,7 @@ const leftDrawer = ({
           variant="danger"
           className={styles.closeModalBtn}
           onClick={(): void => {
-            setShowDrawer(!showDrawer);
+            setHideDrawer(false);
           }}
           data-testid="closeModalBtn"
         >
@@ -104,63 +108,56 @@ const leftDrawer = ({
           )}
           {userType === 'SUPERADMIN' && (
             <Button
-              variant={screenName === 'Roles' ? 'success' : 'light'}
+              variant={screenName === 'Users' ? 'success' : 'light'}
               className={`${
-                screenName === 'Roles' ? 'text-white' : 'text-secondary'
+                screenName === 'Users' ? 'text-white' : 'text-secondary'
               }`}
               onClick={(): void => {
-                history.push('/roles');
+                history.push('/users');
               }}
               data-testid="rolesBtn"
             >
               <div className={styles.iconWrapper}>
                 <RolesIcon
                   fill={`${
-                    screenName === 'Roles'
+                    screenName === 'Users'
                       ? 'var(--bs-white)'
                       : 'var(--bs-secondary)'
                   }`}
                 />
               </div>
-              {t('roles')}
+              {t('users')}
             </Button>
           )}
         </div>
         <div style={{ marginTop: 'auto' }}>
-          {data === undefined ? (
-            <div
-              className={`${styles.profileContainer} shimmer`}
-              data-testid="loadingProfile"
-            />
-          ) : (
-            <button
-              className={styles.profileContainer}
-              data-testid="profileBtn"
-              onClick={(): void => {
-                toast.success('Profile page coming soon!');
-              }}
-            >
-              <div className={styles.imageContainer}>
-                {data && data?.user?.image ? (
-                  <img src={data?.user?.image} alt={`profile picture`} />
-                ) : (
-                  <img
-                    src={`https://api.dicebear.com/5.x/initials/svg?seed=${data?.user?.firstName} ${data?.user?.lastName}`}
-                    alt={`dummy picture`}
-                  />
-                )}
-              </div>
-              <div className={styles.profileText}>
-                <span className={styles.primaryText}>
-                  {data?.user?.firstName} {data?.user?.lastName}
-                </span>
-                <span className={styles.secondaryText}>
-                  {`${data?.user?.userType}`.toLowerCase()}
-                </span>
-              </div>
-              <AngleRightIcon fill={'var(--bs-secondary)'} />
-            </button>
-          )}
+          <button
+            className={styles.profileContainer}
+            data-testid="profileBtn"
+            onClick={(): void => {
+              toast.success('Profile page coming soon!');
+            }}
+          >
+            <div className={styles.imageContainer}>
+              {userImage && userImage ? (
+                <img src={userImage} alt={`profile picture`} />
+              ) : (
+                <img
+                  src={`https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`}
+                  alt={`dummy picture`}
+                />
+              )}
+            </div>
+            <div className={styles.profileText}>
+              <span className={styles.primaryText}>
+                {firstName} {lastName}
+              </span>
+              <span className={styles.secondaryText}>
+                {`${userType}`.toLowerCase()}
+              </span>
+            </div>
+            <AngleRightIcon fill={'var(--bs-secondary)'} />
+          </button>
 
           <Button
             variant="light"

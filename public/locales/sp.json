@@ -39,8 +39,32 @@
     "menu": "Menú",
     "organizations": "Organizaciones",
     "requests": "Solicitudes",
-    "roles": "Roles",
+    "users": "Usuarios",
     "logout": "Cerrar sesión"
+  },
+  "leftDrawerOrg": {
+    "talawaAdminPortal": "Portal de administración de Talawa",
+    "menu": "Menú",
+    "talawa_portal": "Portal De Administración Talawa",
+    "Dashboard": "Tablero",
+    "People": "Gente",
+    "Events": "Eventos",
+    "Contributions": "Contribuciones",
+    "Posts": "Publicaciones",
+    "Block/Unblock": "Bloquear/Desbloquear",
+    "Plugins": "Complementos",
+    "Plugin Store": "Tienda de complementos",
+    "allOrganizations": "Todas las organizaciones",
+    "yourOrganization": "Tu organización",
+    "notification": "Notificación",
+    "settings": "Ajustes",
+    "language": "Idioma",
+    "logout": "Cerrar sesión",
+    "notifications": "Notificaciones",
+    "spamsThe": "envía correo no deseado",
+    "group": "grupo",
+    "noNotifications": "No Notificaciones",
+    "close": "Cerca"
   },
   "orgList": {
     "title": "Organizaciones Talawa",
@@ -73,10 +97,10 @@
     "rowsPerPage": "filas por página",
     "all": "Todos"
   },
-  "roles": {
+  "users": {
     "title": "Roles Talawa",
     "searchByName": "Buscar por nombre",
-    "usersList": "Lista de usuarios",
+    "users": "Usuarios",
     "name": "Nombre",
     "email": "Correo electrónico",
     "roles_userType": "Rol/Tipo de usuario",
@@ -110,30 +134,8 @@
     "noResultsFoundFor": "No se encontraron resultados para ",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
-  "adminNavbar": {
-    "talawa_portal": "Portal De Administración Talawa",
-    "Dashboard": "Tablero",
-    "People": "Gente",
-    "Events": "Eventos",
-    "Contributions": "Contribuciones",
-    "Posts": "Publicaciones",
-    "Block/Unblock": "Bloquear/Desbloquear",
-    "Plugins": "Complementos",
-    "Plugin Store": "Tienda de complementos",
-    "allOrganizations": "Todas las organizaciones",
-    "yourOrganization": "Tu organización",
-    "notification": "Notificación",
-    "settings": "Ajustes",
-    "language": "Idioma",
-    "logout": "Cerrar sesión",
-    "notifications": "Notificaciones",
-    "spamsThe": "envía correo no deseado",
-    "group": "grupo",
-    "noNotifications": "No Notificaciones",
-    "close": "Cerca"
-  },
   "dashboard": {
-    "title": "Panel de Talawa",
+    "title": "Panel de",
     "location": "Ubicación",
     "about": "Sobre",
     "deleteThisOrganization": "Eliminar esta organización",
@@ -422,6 +424,7 @@
     "pDesc": "Este complemento habilita la interfaz de usuario para"
   },
   "addOnStore": {
+    "title": "Tienda de complementos",
     "searchName": "Ej: Donaciones",
     "enable": "Activada",
     "disable": "Desactivada",
@@ -533,5 +536,20 @@
     "feed": "Alimentar",
     "pinnedPosts": "Ver publicaciones fijadas",
     "somethingOnYourMind": "¿Algo en tu mente?"
+  },
+  "settings": {
+    "profileSettings": "Configuración de perfil",
+    "firstName": "Nombre de pila",
+    "lastName": "Apellido",
+    "emailAddress": "dirección de correo electrónico",
+    "updateImage": "Actualizar imagen",
+    "save": "Ahorrar"
+  },
+  "donate": {
+    "donateTo": "Donar a",
+    "amount": "Cantidad",
+    "yourPreviousDonations": "Tus donaciones anteriores",
+    "donate": "Donar",
+    "nothingToShow": "Nada que mostrar aquí."
   }
 }

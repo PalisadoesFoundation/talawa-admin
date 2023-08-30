@@ -21,22 +21,16 @@
   border-radius: 4px;
 }
 
-.orgCard .innerContainer .orgImgContainer .overlayTheme {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background-color: var(--bs-primary);
-  opacity: 0.12;
-  z-index: 0;
-}
-
 .orgCard .innerContainer .orgImgContainer img {
   width: 125px;
   height: 120px;
-  z-index: 1;
   object-fit: contain;
+}
+
+.orgCard .innerContainer .orgImgContainer .emptyImg {
+  width: 125px;
+  height: 120px;
+  background-color: var(--bs-gray-200);
 }
 
 .orgCard .innerContainer .content {

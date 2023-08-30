@@ -39,8 +39,32 @@
     "menu": "菜单",
     "organizations": "组织",
     "requests": "请求",
-    "roles": "角色",
+    "users": "用户",
     "logout": "退出登录"
+  },
+  "leftDrawerOrg": {
+    "talawaAdminPortal": "塔拉瓦管理门户",
+    "menu": "菜单",
+    "talawa_portal": "塔拉瓦管理門戶",
+    "Dashboard": "儀表板",
+    "People": "人們",
+    "Events": "事件",
+    "Contributions": "貢獻",
+    "Posts": "帖子",
+    "Block/Unblock": "阻止/解除阻止",
+    "Plugins": "插件",
+    "Plugin Store": "插件商店",
+    "allOrganizations": "所有组织",
+    "yourOrganization": "您的组织",
+    "notification": "通知",
+    "settings": "設置",
+    "language": "語",
+    "logout": "登出",
+    "notifications": "通知",
+    "spamsThe": "垃圾郵件",
+    "group": "團體",
+    "noNotifications": "沒有通知",
+    "close": "關"
   },
   "orgList": {
     "title": "塔拉瓦組織",
@@ -73,10 +97,10 @@
     "rowsPerPage": "每頁行數",
     "all": "全部"
   },
-  "roles": {
+  "users": {
     "title": "塔拉瓦角色",
     "searchByName": "按名稱搜索",
-    "usersList": "用戶列表",
+    "users": "用户",
     "name": "姓名",
     "email": "電子郵件",
     "roles_userType": "角色/用戶類型",
@@ -110,30 +134,8 @@
     "noResultsFoundFor": "未找到结果 ",
     "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
-  "adminNavbar": {
-    "talawa_portal": "塔拉瓦管理門戶",
-    "Dashboard": "儀表板",
-    "People": "人們",
-    "Events": "事件",
-    "Contributions": "貢獻",
-    "Posts": "帖子",
-    "Block/Unblock": "阻止/解除阻止",
-    "Plugins": "插件",
-    "Plugin Store": "插件商店",
-    "allOrganizations": "所有组织",
-    "yourOrganization": "您的组织",
-    "notification": "通知",
-    "settings": "設置",
-    "language": "語",
-    "logout": "登出",
-    "notifications": "通知",
-    "spamsThe": "垃圾郵件",
-    "group": "團體",
-    "noNotifications": "沒有通知",
-    "close": "關"
-  },
   "dashboard": {
-    "title": "塔拉瓦儀表板",
+    "title": "儀表板",
     "location": "地點",
     "about": "關於",
     "deleteThisOrganization": "刪除此組織",
@@ -422,6 +424,7 @@
     "pDesc": "此插件启用 UI"
   },
   "addOnStore": {
+    "title": "插件商店",
     "searchName": "例如：捐赠",
     "enable": "启用",
     "disable": "残疾人",
@@ -533,5 +536,20 @@
     "feed": "餵養",
     "pinnedPosts": "查看固定帖子",
     "somethingOnYourMind": "你有什麼心事嗎？"
+  },
+  "settings": {
+    "profileSettings": "配置文件設置",
+    "firstName": "名",
+    "lastName": "姓",
+    "emailAddress": "電子郵件地址",
+    "updateImage": "更新圖片",
+    "save": "節省"
+  },
+  "donate": {
+    "donateTo": "捐贈給",
+    "amount": "數量",
+    "yourPreviousDonations": "您之前的捐款",
+    "donate": "捐",
+    "nothingToShow": "這裡沒有什麼可顯示的。"
   }
 }

@@ -39,16 +39,33 @@ const reducer = (
   }
 };
 
+export type ComponentType = {
+  name: string;
+  comp_id: string | null;
+  component: string | null;
+  subTargets?: {
+    name: string;
+    comp_id: string;
+    component: string;
+    icon?: string;
+  }[];
+};
+
+export type TargetsType = {
+  name: string;
+  url?: string;
+  subTargets?: {
+    name: any;
+    url: string;
+    icon: any;
+  }[];
+};
+
 // Note: Routes with names appear on NavBar
-const components = [
+const components: ComponentType[] = [
   { name: 'Dashboard', comp_id: 'orgdash', component: 'OrganizationDashboard' },
   { name: 'People', comp_id: 'orgpeople', component: 'OrganizationPeople' },
   { name: 'Events', comp_id: 'orgevents', component: 'OrganizationEvents' },
-  // {
-  //   name: 'Contributions',
-  //   comp_id: 'orgcontribution',
-  //   component: 'OrgContribution',
-  // },
   { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
   { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
   {
@@ -64,20 +81,20 @@ const components = [
       },
     ],
   },
-  { name: '', comp_id: 'orglist', component: 'OrgList' },
-  { name: '', comp_id: 'orgsetting', component: 'OrgSettings' },
+  { name: 'Settings', comp_id: 'orgsetting', component: 'OrgSettings' },
+  { name: 'All Organizations', comp_id: 'orglist', component: 'OrgList' },
   { name: '', comp_id: 'member', component: 'MemberDetail' },
 ];
 
-const generateRoutes = (comps: any[]): any[] => {
+const generateRoutes = (comps: ComponentType[]): TargetsType[] => {
   return comps
     .filter((comp) => comp.name && comp.name !== '')
     .map((comp) => {
-      const entry = comp.comp_id
+      const entry: TargetsType = comp.comp_id
         ? { name: comp.name, url: `/${comp.comp_id}/id=${currentOrg}` }
         : {
             name: comp.name,
-            subTargets: comp.subTargets.map((subTarget: any) => {
+            subTargets: comp.subTargets?.map((subTarget: any) => {
               return {
                 name: subTarget.name,
                 url: `/${subTarget.comp_id}/id=${currentOrg}`,
@@ -89,7 +106,7 @@ const generateRoutes = (comps: any[]): any[] => {
     });
 };
 
-const INITIAL_STATE: any = {
+const INITIAL_STATE = {
   targets: generateRoutes(components),
   configUrl: `${currentOrg}`,
   components,
