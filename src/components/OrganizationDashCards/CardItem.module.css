@@ -1,0 +1,36 @@
+.cardItem {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 0;
+}
+
+.cardItem .iconWrapper {
+    position: relative;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cardItem .iconWrapper .themeOverlay {
+    background: var(--bs-primary);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0.12;
+    border-radius: 50%;
+}
+
+.cardItem .title {
+    font-size: 1rem;
+    flex: 1;
+}
+
+.cardItem .time {
+    font-size: 0.9rem;
+    color: var(--bs-secondary);
+}

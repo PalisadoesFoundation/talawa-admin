@@ -145,7 +145,7 @@
     "posts": "पोस्ट",
     "events": "आयोजन",
     "blockedUsers": "रोके गए उपयोगकर्ता",
-    "membershipRequests": "सदस्यता अनुरोध",
+    "requests": "अनुरोध",
     "deleteOrganization": "संगठन हटाएं",
     "deleteMsg": "क्या आप इस संगठन को हटाना चाहते हैं?",
     "no": "नहीं",

@@ -10,9 +10,9 @@ import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
-import { ReactComponent as AngleRightIcon } from '../../assets/svgs/icons/angleRight.svg';
-import { ReactComponent as LogoutIcon } from '../../assets/svgs/icons/logout.svg';
-import { ReactComponent as TalawaLogo } from '../../assets/svgs/talawa.svg';
+import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
+import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
+import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import styles from './LeftDrawerOrg.module.css';
 
 export interface InterfaceLeftDrawerProps {

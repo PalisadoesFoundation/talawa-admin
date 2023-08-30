@@ -147,7 +147,7 @@
     "posts": "Posts",
     "events": "Events",
     "blockedUsers": "Blocked Users",
-    "membershipRequests": "Membership Requests",
+    "requests": "Requests",
     "deleteOrganization": "Delete Organization",
     "deleteMsg": "Do you want to delete this organization?",
     "no": "No",

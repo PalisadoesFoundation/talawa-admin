@@ -73,3 +73,31 @@ export interface InterfaceQueryOrganizationsListObject {
     email: string;
   }[];
 }
+
+export interface InterfaceQueryOrganizationPostListItem {
+  _id: string;
+  title: string;
+  text: string;
+  imageUrl: null;
+  videoUrl: null;
+  creator: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  }[];
+}
+export interface InterfaceQueryOrganizationEventListItem {
+  _id: string;
+  title: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  location: string;
+  startTime: string;
+  endTime: string;
+  allDay: boolean;
+  recurring: boolean;
+  isPublic: boolean;
+  isRegisterable: boolean;
+}
