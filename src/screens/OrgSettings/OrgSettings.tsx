@@ -1,19 +1,15 @@
-import { useQuery } from '@apollo/client';
-import { MEMBERSHIP_REQUEST } from 'GraphQl/Queries/Queries';
-import defaultImg from 'assets/images/blank.png';
-import Loader from 'components/Loader/Loader';
-import MemberRequestCard from 'components/MemberRequestCard/MemberRequestCard';
-import OrgDelete from 'components/OrgDelete/OrgDelete';
+import React, { useState } from 'react';
 import OrgUpdate from 'components/OrgUpdate/OrgUpdate';
 import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
-import UserPasswordUpdate from 'components/UserPasswordUpdate/UserPasswordUpdate';
-import UserUpdate from 'components/UserUpdate/UserUpdate';
-import React from 'react';
-import Button from 'react-bootstrap/Button';
+import { Button, Card, Form, Modal } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import styles from './OrgSettings.module.css';
+import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
+import { errorHandler } from 'utils/errorHandler';
+import { useMutation } from '@apollo/client';
+import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 
 function orgSettings(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -21,173 +17,103 @@ function orgSettings(): JSX.Element {
   });
 
   document.title = t('title');
-  const [screenVariable, setScreenVariable] = React.useState(0);
-  const [screenDisplayVariable, setDisplayScreenVariable] = React.useState('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const currentUrl = window.location.href.split('=')[1];
+  const canDelete = localStorage.getItem('UserType') === 'SUPERADMIN';
+  const toggleDeleteModal = (): void => setShowDeleteModal(!showDeleteModal);
+  const [del] = useMutation(DELETE_ORGANIZATION_MUTATION);
 
-  const handleClick = (number: any): void => {
-    if (number === 1) {
-      setDisplayScreenVariable('updateYourDetails');
-      setScreenVariable(1);
-    } else if (number === 2) {
-      setDisplayScreenVariable('updateOrganization');
-      setScreenVariable(2);
-    } else if (number === 3) {
-      setDisplayScreenVariable('deleteOrganization');
-      setScreenVariable(3);
-    } else if (number === 4) {
-      setDisplayScreenVariable('seeRequest');
-      setScreenVariable(4);
-    } else {
-      setDisplayScreenVariable('updateYourPassword');
-      setScreenVariable(5);
+  const deleteOrg = async (): Promise<void> => {
+    try {
+      const { data } = await del({
+        variables: {
+          id: currentUrl,
+        },
+      });
+
+      /* istanbul ignore next */
+      if (data) {
+        window.location.replace('/orglist');
+      }
+    } catch (error: any) {
+      /* istanbul ignore next */
+      errorHandler(t, error);
     }
   };
-
-  const currentUrl = window.location.href.split('=')[1];
-
-  const { data, loading, error } = useQuery(MEMBERSHIP_REQUEST, {
-    variables: { id: currentUrl },
-  });
-
-  if (loading) {
-    return <Loader />;
-  }
-
-  /* istanbul ignore next */
-  if (error) {
-    window.location.replace('/orglist');
-  }
 
   return (
     <>
       <OrganizationScreen screenName="Settings" title={t('title')}>
-        <Row>
-          <Col sm={3}>
-            <div className={styles.sidebar}>
-              <div className={styles.sidebarsticky}>
-                <div>
+        <Row className={styles.settingsBody}>
+          <Col lg={7}>
+            <Card border="0" className="rounded-4 mb-4">
+              <div className={styles.cardHeader}>
+                <div className={styles.cardTitle}>
+                  {t('updateOrganization')}
+                </div>
+              </div>
+              <Card.Body className={styles.cardBody}>
+                <OrgUpdate orgid={currentUrl} />
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col lg={5}>
+            {canDelete && (
+              <Card border="0" className="rounded-4 mb-4">
+                <div className={styles.cardHeader}>
+                  <div className={styles.cardTitle}>
+                    {t('deleteOrganization')}
+                  </div>
+                </div>
+                <Card.Body className={styles.cardBody}>
+                  <div className={styles.textBox}>{t('longDelOrgMsg')}</div>
                   <Button
-                    className={styles.greenregbtn}
-                    type="button"
-                    value="userupdate"
-                    data-testid="userUpdateBtn"
-                    onClick={(): void => handleClick(1)}
-                    // onClick={() => setScreenVariable(1)}
-                  >
-                    {t('updateYourDetails')}
-                  </Button>
-                  <Button
-                    className={styles.greenregbtn}
-                    type="button"
-                    value="userPasswordUpdate"
-                    data-testid="userPasswordUpdateBtn"
-                    onClick={(): void => handleClick(5)}
-                    // onClick={() => setScreenVariable(1)}
-                  >
-                    {t('updateYourPassword')}
-                  </Button>
-                  <Button
-                    className={styles.greenregbtn}
-                    type="button"
-                    value="orgupdate"
-                    data-testid="orgUpdateBtn"
-                    onClick={(): void => handleClick(2)}
-                    // onClick={() => setScreenVariable(2)}
-                  >
-                    {t('updateOrganization')}
-                  </Button>
-                  <Button
-                    className={styles.greenregbtn}
-                    type="button"
-                    value="orgdelete"
-                    data-testid="orgDeleteBtn"
-                    onClick={(): void => handleClick(3)}
-                    // onClick={() => setScreenVariable(3)}
+                    variant="danger"
+                    className={styles.deleteButton}
+                    onClick={toggleDeleteModal}
                   >
                     {t('deleteOrganization')}
                   </Button>
-                  <Button
-                    className={styles.greenregbtn}
-                    type="button"
-                    value="orgdelete"
-                    data-testid="orgDeleteBtn2"
-                    onClick={(): void => handleClick(4)}
-                    // onClick={() => setScreenVariable(4)}
-                  >
-                    {t('seeRequest')}
-                  </Button>
+                </Card.Body>
+              </Card>
+            )}
+            <Card border="0" className="rounded-4 mb-4">
+              <div className={styles.cardHeader}>
+                <div className={styles.cardTitle}>{t('otherSettings')}</div>
+              </div>
+              <Card.Body className={styles.cardBody}>
+                <div className={styles.textBox}>
+                  <Form.Label className={'text-secondary fw-bold'}>
+                    {t('changeLanguage')}
+                  </Form.Label>
+                  <ChangeLanguageDropDown />
                 </div>
-              </div>
-            </div>
-          </Col>
-          <Col sm={8}>
-            <div className={styles.mainpageright}>
-              <Row className={styles.justifysp}>
-                <div className={styles.headerDiv}>
-                  <p className={styles.logintitle}>{t('settings')}</p>
-                  {screenDisplayVariable != '' && (
-                    <p className={styles.loginSubtitle}>
-                      {t(screenDisplayVariable)}
-                    </p>
-                  )}
-                  {/* <p className={styles.loginSubtitle}>{t("abc")}</p> */}
-                </div>
-
-                {/* <p className={styles.logintitle}>{t('settings')}</p> */}
-              </Row>
-              <div>{screenVariable == 1 ? <UserUpdate id="abcd" /> : null}</div>
-              <div>
-                {screenVariable == 5 ? <UserPasswordUpdate id="abcd" /> : null}
-              </div>
-              <div>
-                {screenVariable == 2 ? (
-                  <OrgUpdate
-                    id="abcd"
-                    orgid={window.location.href.split('=')[1]}
-                  />
-                ) : null}
-              </div>
-              <div>{screenVariable == 3 ? <OrgDelete /> : null}</div>
-              <div>
-                {screenVariable == 4 ? (
-                  data?.organizations?.membershipRequests ? (
-                    /* istanbul ignore next */
-                    data.organizations.map(
-                      /* istanbul ignore next */
-                      (datas: {
-                        _id: string;
-                        membershipRequests: {
-                          _id: string;
-                          user: {
-                            _id: string;
-                            firstName: string;
-                            lastName: string;
-                            email: string;
-                          };
-                        };
-                      }) => {
-                        /* istanbul ignore next */
-                        return (
-                          <MemberRequestCard
-                            key={datas.membershipRequests._id}
-                            id={datas.membershipRequests._id}
-                            memberName={datas.membershipRequests.user.firstName}
-                            memberLocation="India"
-                            joinDate="12/12/2012"
-                            memberImage={defaultImg}
-                            email={datas.membershipRequests.user.email}
-                          />
-                        );
-                      }
-                    )
-                  ) : (
-                    <div>{t('noData')}</div>
-                  )
-                ) : null}
-              </div>
-            </div>
+              </Card.Body>
+            </Card>
           </Col>
         </Row>
+
+        {/* Delete Organization Modal */}
+        {canDelete && (
+          <Modal show={showDeleteModal} onHide={toggleDeleteModal}>
+            <Modal.Header className="bg-danger" closeButton>
+              <h5 className="text-white fw-bold">{t('deleteOrganization')}</h5>
+            </Modal.Header>
+            <Modal.Body>{t('deleteMsg')}</Modal.Body>
+            <Modal.Footer>
+              <Button variant="danger" onClick={toggleDeleteModal}>
+                {t('no')}
+              </Button>
+              <Button
+                variant="success"
+                onClick={deleteOrg}
+                data-testid="deleteOrganizationBtn"
+              >
+                {t('yes')}
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        )}
       </OrganizationScreen>
     </>
   );

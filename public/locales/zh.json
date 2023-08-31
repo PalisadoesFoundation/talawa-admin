@@ -146,10 +146,6 @@
     "events": "事件",
     "blockedUsers": "被阻止的用戶",
     "requests": "请求",
-    "deleteOrganization": "刪除組織",
-    "deleteMsg": "您要刪除此組織嗎？",
-    "no": "不",
-    "yes": "是的",
     "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "organizationPeople": {
@@ -366,10 +362,16 @@
     "updateYourDetails": "更新您的詳細信息",
     "updateYourPassword": "更新您的密碼",
     "updateOrganization": "更新組織",
-    "deleteOrganization": "刪除組織",
     "seeRequest": "查看請求",
     "settings": "設置",
-    "noData": "沒有數據"
+    "noData": "沒有數據",
+    "deleteOrganization": "刪除組織",
+    "deleteMsg": "您要刪除此組織嗎？",
+    "no": "不",
+    "yes": "是的",
+    "longDelOrgMsg": "点击“删除组织”按钮，您将永久删除该组织以及其活动、标签和所有相关数据。",
+    "otherSettings": "其他设置",
+    "changeLanguage": "更改语言"
   },
   "userUpdate": {
     "firstName": "名",
@@ -406,8 +408,8 @@
     "description": "描述",
     "location": "地點",
     "displayImage": "顯示圖像",
-    "isPublic": "是公開的",
-    "isRegistrable": "可註冊",
+    "isPublic": "公开",
+    "isVisibleInSearch": "在搜索中可见",
     "saveChanges": "保存更改",
     "cancel": "取消",
     "enterNameOrganization": "輸入組織名稱",

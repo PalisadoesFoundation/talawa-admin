@@ -9,14 +9,14 @@ import styles from './OrgUpdate.module.css';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
-import { Form } from 'react-bootstrap';
+import { Col, Form, Row } from 'react-bootstrap';
+import Loader from 'components/Loader/Loader';
+import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 
 interface InterfaceOrgUpdateProps {
-  id: string;
   orgid: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
 
@@ -32,7 +32,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     orgImage: null,
   });
 
-  const [publicchecked, setPublicChecked] = React.useState(true);
+  const [publicchecked, setPublicChecked] = React.useState(false);
   const [visiblechecked, setVisibleChecked] = React.useState(false);
 
   const [login] = useMutation(UPDATE_ORGANIZATION_MUTATION);
@@ -41,7 +41,15 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     keyPrefix: 'orgUpdate',
   });
 
-  const { data, loading: loadingdata } = useQuery(ORGANIZATIONS_LIST, {
+  const {
+    data,
+    loading,
+  }: {
+    data?: {
+      organizations: InterfaceQueryOrganizationsListObject[];
+    };
+    loading: boolean;
+  } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: currentUrl },
   });
 
@@ -53,11 +61,13 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
         orgDescrip: data.organizations[0].description,
         location: data.organizations[0].location,
       });
+      setPublicChecked(data.organizations[0].isPublic);
+      setVisibleChecked(data.organizations[0].visibleInSearch);
     }
   }, [data]);
 
-  if (loadingdata) {
-    return <div className="loader"></div>;
+  if (loading) {
+    return <Loader styles={styles.loader} size="lg" />;
   }
 
   const onSaveChangesClicked = async (): Promise<void> => {
@@ -73,143 +83,108 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           file: formState.orgImage,
         },
       });
-      /* istanbul ignore next */
       if (data) {
-        window.location.assign(`/orgdash/id=${props.orgid}`);
-
+        window.location.assign(`/orgsetting/id=${props.orgid}`);
         toast.success(t('successfulUpdated'));
       }
     } catch (error: any) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
-  };
-
-  /* istanbul ignore next */
-  const cancelUpdate = (): void => {
-    window.location.reload();
   };
 
   return (
     <>
       <div id="orgupdate" className={styles.userupdatediv}>
         <form>
-          {/* <h3 className={styles.settingstitle}>Update Your Details</h3> */}
-          <div className={styles.dispflex}>
-            <div>
-              <label>{t('name')}</label>
-              <Form.Control
-                type="input"
-                id="orgname"
-                placeholder={t('enterNameOrganization')}
-                autoComplete="off"
-                required
-                value={formState.orgName}
-                onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    orgName: e.target.value,
-                  });
-                }}
+          <Form.Label>{t('name')}</Form.Label>
+          <Form.Control
+            className="mb-3"
+            placeholder={t('enterNameOrganization')}
+            autoComplete="off"
+            required
+            value={formState.orgName}
+            onChange={(e): void => {
+              setFormState({
+                ...formState,
+                orgName: e.target.value,
+              });
+            }}
+          />
+          <Form.Label>{t('description')}</Form.Label>
+          <Form.Control
+            className="mb-3"
+            placeholder={t('description')}
+            autoComplete="off"
+            required
+            value={formState.orgDescrip}
+            onChange={(e): void => {
+              setFormState({
+                ...formState,
+                orgDescrip: e.target.value,
+              });
+            }}
+          />
+          <Form.Label>{t('location')}</Form.Label>
+          <Form.Control
+            className="mb-4"
+            placeholder={t('location')}
+            autoComplete="off"
+            required
+            value={formState.location}
+            onChange={(e): void => {
+              setFormState({
+                ...formState,
+                location: e.target.value,
+              });
+            }}
+          />
+          <Row>
+            <Col sm={6} className="d-flex mb-3">
+              <Form.Label htmlFor="ispublic" className="me-3">
+                {t('isPublic')}:
+              </Form.Label>
+              <Form.Switch
+                id="ispublic"
+                checked={publicchecked}
+                onClick={(): void => setPublicChecked(!publicchecked)}
               />
-            </div>
-            <div>
-              <label>{t('description')}</label>
-              <Form.Control
-                type="input"
-                id="orgdescrip"
-                placeholder={t('description')}
-                autoComplete="off"
-                required
-                value={formState.orgDescrip}
-                onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    orgDescrip: e.target.value,
-                  });
-                }}
+            </Col>
+            <Col sm={6} className="d-flex mb-3">
+              <Form.Label htmlFor="registrable" className="me-3">
+                {t('isVisibleInSearch')}:
+              </Form.Label>
+              <Form.Switch
+                checked={visiblechecked}
+                onClick={(): void => setVisibleChecked(!visiblechecked)}
               />
-            </div>
-          </div>
-          <div className={styles.dispflex}>
-            <div>
-              <label>{t('location')}</label>
-              <Form.Control
-                type="location"
-                id="location"
-                placeholder={t('location')}
-                autoComplete="off"
-                required
-                value={formState.location}
-                onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    location: e.target.value,
-                  });
-                }}
-              />
-            </div>
-          </div>
-          <div className={styles.dispflex}>
-            <div>
-              <label htmlFor="orgphoto" className={styles.orgphoto}>
-                {t('displayImage')}:
-                <Form.Control
-                  accept="image/*"
-                  id="orgphoto"
-                  name="photo"
-                  type="file"
-                  multiple={false}
-                  onChange={async (e: React.ChangeEvent): Promise<void> => {
-                    const target = e.target as HTMLInputElement;
-                    const file = target.files && target.files[0];
-                    if (file)
-                      setFormState({
-                        ...formState,
-                        orgImage: await convertToBase64(file),
-                      });
-                  }}
-                  data-testid="organisationImage"
-                />
-              </label>
-            </div>
-            <div className={styles.checkboxdiv}>
-              <div>
-                <label htmlFor="ispublic">{t('isPublic')}:</label>
-                <Form.Control
-                  id="ispublic"
-                  type="checkbox"
-                  defaultChecked={publicchecked}
-                  onChange={(): void => setPublicChecked(!publicchecked)}
-                />
-              </div>
-              <div>
-                <label htmlFor="registrable">{t('isRegistrable')}:</label>
-                <Form.Control
-                  id="registrable"
-                  type="checkbox"
-                  defaultChecked={visiblechecked}
-                  onChange={(): void => setVisibleChecked(!visiblechecked)}
-                />
-              </div>
-            </div>
-          </div>
-          <div className={styles.dispbtnflex}>
+            </Col>
+          </Row>
+          <Form.Label htmlFor="orgphoto">{t('displayImage')}:</Form.Label>
+          <Form.Control
+            className="mb-4"
+            accept="image/*"
+            id="orgphoto"
+            name="photo"
+            type="file"
+            multiple={false}
+            onChange={async (e: React.ChangeEvent): Promise<void> => {
+              const target = e.target as HTMLInputElement;
+              const file = target.files && target.files[0];
+              if (file)
+                setFormState({
+                  ...formState,
+                  orgImage: await convertToBase64(file),
+                });
+            }}
+            data-testid="organisationImage"
+          />
+          <div className="d-flex justify-content-end">
             <Button
-              type="button"
-              className={styles.greenregbtn}
+              variant="success"
               value="savechanges"
               onClick={onSaveChangesClicked}
             >
               {t('saveChanges')}
-            </Button>
-            <Button
-              type="button"
-              className={styles.whitebtn}
-              value="cancelchanges"
-              onClick={cancelUpdate}
-            >
-              {t('cancel')}
             </Button>
           </div>
         </form>

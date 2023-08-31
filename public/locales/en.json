@@ -148,10 +148,6 @@
     "events": "Events",
     "blockedUsers": "Blocked Users",
     "requests": "Requests",
-    "deleteOrganization": "Delete Organization",
-    "deleteMsg": "Do you want to delete this organization?",
-    "no": "No",
-    "yes": "Yes",
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "organizationPeople": {
@@ -365,13 +361,17 @@
   },
   "orgSettings": {
     "title": "Talawa Setting",
-    "updateYourDetails": "Update Your Details",
-    "updateYourPassword": "Update Your Password",
     "updateOrganization": "Update Organization",
     "deleteOrganization": "Delete Organization",
     "seeRequest": "See Request",
     "settings": "Settings",
-    "noData": "No data"
+    "noData": "No data",
+    "deleteMsg": "Do you want to delete this organization?",
+    "no": "No",
+    "yes": "Yes",
+    "longDelOrgMsg": "By clicking on Delete organization button you will the organization will be permanently deleted along with its events, tags and all related data.",
+    "otherSettings": "Other Settings",
+    "changeLanguage": "Change Language"
   },
   "userUpdate": {
     "firstName": "First Name",
@@ -386,7 +386,6 @@
     "saveChanges": "Save Changes",
     "cancel": "Cancel"
   },
-
   "userPasswordUpdate": {
     "previousPassword": "Previous Password",
     "newPassword": "New Password",
@@ -394,7 +393,6 @@
     "saveChanges": "Save Changes",
     "cancel": "Cancel"
   },
-
   "orgDelete": {
     "deleteOrg": "Delete Org"
   },
@@ -410,10 +408,9 @@
     "description": "Description",
     "location": "Location",
     "displayImage": "Display Image",
-    "isPublic": "Is Public",
-    "isRegistrable": "Is Registrable",
+    "isPublic": "Public",
+    "isVisibleInSearch": "Visible in Search",
     "saveChanges": "Save Changes",
-    "cancel": "Cancel",
     "enterNameOrganization": "Enter Organization Name",
     "successfulUpdated": "Organization updated successfully",
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."

@@ -146,10 +146,6 @@
     "events": "आयोजन",
     "blockedUsers": "रोके गए उपयोगकर्ता",
     "requests": "अनुरोध",
-    "deleteOrganization": "संगठन हटाएं",
-    "deleteMsg": "क्या आप इस संगठन को हटाना चाहते हैं?",
-    "no": "नहीं",
-    "yes": "हाँ",
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।"
   },
   "organizationPeople": {
@@ -366,10 +362,16 @@
     "updateYourDetails": "अपना विवरण अपडेट करें",
     "updateYourPassword": "अपना पासवर्ड अपडेट करें",
     "updateOrganization": "अद्यतन संगठन",
-    "deleteOrganization": "संगठन हटाएं",
     "seeRequest": "अनुरोध देखें",
     "settings": "समायोजन",
-    "noData": "कोई डेटा नहीं"
+    "noData": "कोई डेटा नहीं",
+    "deleteOrganization": "संगठन हटाएं",
+    "deleteMsg": "क्या आप इस संगठन को हटाना चाहते हैं?",
+    "no": "नहीं",
+    "yes": "हाँ",
+    "longDelOrgMsg": "आगे बढ़कर संगठन को हटाने के बटन पर क्लिक करके संगठन को स्थायी रूप से हटा दिया जाएगा, साथ ही उसके आयोजन, टैग और सभी संबंधित डेटा के साथ।",
+    "otherSettings": "अन्य सेटिंग्स",
+    "changeLanguage": "भाषा बदलें"
   },
   "userUpdate": {
     "firstName": "पहला नाम",
@@ -406,8 +408,8 @@
     "description": "विवरण",
     "location": "जगह",
     "displayImage": "प्रदर्शन छवि",
-    "isPublic": "सार्वजनिक है",
-    "isRegistrable": "पंजीकरण योग्य है",
+    "isPublic": "सार्वजनिक",
+    "isVisibleInSearch": "खोज में दिखाए जा सकते हैं",
     "saveChanges": "परिवर्तनों को सुरक्षित करें",
     "cancel": "रद्द करना",
     "enterNameOrganization": "संगठन का नाम दर्ज करें",

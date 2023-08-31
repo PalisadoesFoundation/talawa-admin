@@ -146,10 +146,6 @@
     "events": "Événements",
     "blockedUsers": "Utilisateurs bloqués",
     "requests": "Demandes",
-    "deleteOrganization": "Supprimer l'organisation",
-    "deleteMsg": "Voulez-vous supprimer cette organisation ?",
-    "no": "Non",
-    "yes": "Oui",
     "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "organizationPeople": {
@@ -366,10 +362,16 @@
     "updateYourDetails": "Mettre à jour vos informations",
     "updateYourPassword": "Mettez à jour votre mot de passe",
     "updateOrganization": "Mettre à jour l'organisation",
-    "deleteOrganization": "Supprimer l'organisation",
     "seeRequest": "Voir demande",
     "settings": "Réglages",
-    "noData": "Pas de données"
+    "noData": "Pas de données",
+    "deleteOrganization": "Supprimer l'organisation",
+    "deleteMsg": "Voulez-vous supprimer cette organisation ?",
+    "no": "Non",
+    "yes": "Oui",
+    "longDelOrgMsg": "En cliquant sur le bouton Supprimer l'organisation, celle-ci sera définitivement supprimée avec ses événements, ses étiquettes et toutes les données associées.",
+    "otherSettings": "Autres paramètres",
+    "changeLanguage": "Changer la langue"
   },
   "userUpdate": {
     "firstName": "Prénom",
@@ -406,10 +408,9 @@
     "description": "La description",
     "location": "emplacement",
     "displayImage": "Afficher l'image",
-    "isPublic": "Est publique",
-    "isRegistrable": "Est enregistrable",
+    "isPublic": "Public",
+    "isVisibleInSearch": "Visible dans la recherche",
     "saveChanges": "Sauvegarder les modifications",
-    "cancel": "Annuler",
     "enterNameOrganization": "Entrez le nom de l'organisation",
     "successfulUpdated": "Mise à jour réussie",
     "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
