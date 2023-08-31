@@ -101,3 +101,13 @@ export interface InterfaceQueryOrganizationEventListItem {
   isPublic: boolean;
   isRegisterable: boolean;
 }
+
+export interface InterfaceQueryBlockPageMemberListItem {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  organizationsBlockedBy: {
+    _id: string;
+  }[];
+}

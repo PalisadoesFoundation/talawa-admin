@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 
 import {
+  BLOCK_PAGE_MEMBER_LIST,
   ORGANIZATIONS_LIST,
   ORGANIZATION_EVENT_LIST,
   ORGANIZATION_POST_LIST,
@@ -24,17 +25,31 @@ import type { ApolloError } from '@apollo/client';
 import type {
   InterfaceQueryOrganizationEventListItem,
   InterfaceQueryOrganizationPostListItem,
+  InterfaceQueryOrganizationsListObject,
 } from 'utils/interfaces';
+import { toast } from 'react-toastify';
+import { useHistory } from 'react-router-dom';
 
 function organizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
   document.title = t('title');
   const currentUrl = window.location.href.split('=')[1];
+  const history = useHistory();
   const [upcomingEvents, setUpcomingEvents] = useState<
     InterfaceQueryOrganizationEventListItem[]
   >([]);
 
-  const { data, loading, error } = useQuery(ORGANIZATIONS_LIST, {
+  const {
+    data,
+    loading,
+    error,
+  }: {
+    data?: {
+      organizations: InterfaceQueryOrganizationsListObject[];
+    };
+    loading: boolean;
+    error?: ApolloError;
+  } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: currentUrl },
   });
 
@@ -94,6 +109,10 @@ function organizationDashboard(): JSX.Element {
     window.location.replace('/orglist');
   }
 
+  function goTo(path: 'events' | 'post'): void {
+    history.push(`/org${path}/id=${currentUrl}`);
+  }
+
   return (
     <>
       <OrganizationScreen screenName="Dashboard" title={t('title')}>
@@ -102,14 +121,14 @@ function organizationDashboard(): JSX.Element {
             <Row style={{ display: 'flex' }}>
               <Col xs={6} sm={4} className="mb-4">
                 <DashBoardCard
-                  count={data?.organizations[0].members.length}
+                  count={data?.organizations[0].members?.length ?? 0}
                   title={t('members')}
                   icon={<UsersIcon fill="var(--bs-primary)" />}
                 />
               </Col>
               <Col xs={6} sm={4} className="mb-4">
                 <DashBoardCard
-                  count={data?.organizations[0].admins.length}
+                  count={data?.organizations[0].admins?.length ?? 0}
                   title={t('admins')}
                   icon={<AdminsIcon fill="var(--bs-primary)" />}
                 />
@@ -130,14 +149,14 @@ function organizationDashboard(): JSX.Element {
               </Col>
               <Col xs={6} sm={4} className="mb-4">
                 <DashBoardCard
-                  count={data?.organizations[0].blockedUsers.length}
+                  count={data?.organizations[0].blockedUsers?.length ?? 0}
                   title={t('blockedUsers')}
                   icon={<BlockedUsersIcon fill="var(--bs-primary)" />}
                 />
               </Col>
               <Col xs={6} sm={4} className="mb-4">
                 <DashBoardCard
-                  count={data?.organizations[0].membershipRequests.length}
+                  count={data?.organizations[0].membershipRequests?.length ?? 0}
                   title={t('requests')}
                   icon={<UsersIcon fill="var(--bs-primary)" />}
                 />
@@ -148,7 +167,11 @@ function organizationDashboard(): JSX.Element {
                 <Card border="0" className="rounded-4">
                   <div className={styles.cardHeader}>
                     <div className={styles.cardTitle}>Upcoming events</div>
-                    <Button size="sm" variant="light">
+                    <Button
+                      size="sm"
+                      variant="light"
+                      onClick={(): void => goTo('events')}
+                    >
                       See all
                     </Button>
                   </div>
@@ -176,7 +199,11 @@ function organizationDashboard(): JSX.Element {
                 <Card border="0" className="rounded-4">
                   <div className={styles.cardHeader}>
                     <div className={styles.cardTitle}>Latest posts</div>
-                    <Button size="sm" variant="light">
+                    <Button
+                      size="sm"
+                      variant="light"
+                      onClick={(): void => goTo('post')}
+                    >
                       See all
                     </Button>
                   </div>
@@ -186,18 +213,15 @@ function organizationDashboard(): JSX.Element {
                         <h6>No posts present</h6>
                       </div>
                     ) : (
-                      postData?.postsByOrganization
-                        .slice(0, 5)
-                        .map((event: any) => {
-                          return (
-                            <CardItem
-                              type="Post"
-                              key={event._id}
-                              time={event.startDate}
-                              title={event.title}
-                            />
-                          );
-                        })
+                      postData?.postsByOrganization.slice(0, 5).map((post) => {
+                        return (
+                          <CardItem
+                            type="Post"
+                            key={post._id}
+                            title={post.title}
+                          />
+                        );
+                      })
                     )}
                   </Card.Body>
                 </Card>
@@ -207,9 +231,36 @@ function organizationDashboard(): JSX.Element {
           <Col xl={4}>
             <Card border="0" className="rounded-4">
               <div className={styles.cardHeader}>
-                <div className={styles.cardTitle}>Notifications</div>
+                <div className={styles.cardTitle}>Membership requests</div>
+                <Button
+                  size="sm"
+                  variant="light"
+                  onClick={(): void => {
+                    toast.success('Coming soon!');
+                  }}
+                >
+                  See all
+                </Button>
               </div>
-              <Card.Body className={styles.cardBody}></Card.Body>
+              <Card.Body className={styles.cardBody}>
+                {data?.organizations[0].membershipRequests.length == 0 ? (
+                  <div className={styles.emptyContainer}>
+                    <h6>No membership requests present</h6>
+                  </div>
+                ) : (
+                  data?.organizations[0].membershipRequests
+                    .slice(0, 8)
+                    .map((request) => {
+                      return (
+                        <CardItem
+                          type="MembershipRequest"
+                          key={request._id}
+                          title={`${request.user.firstName} ${request.user.lastName}`}
+                        />
+                      );
+                    })
+                )}
+              </Card.Body>
             </Card>
           </Col>
         </Row>

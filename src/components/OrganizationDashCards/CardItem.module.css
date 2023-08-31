@@ -25,6 +25,17 @@
     border-radius: 50%;
 }
 
+.cardItem .iconWrapper .dangerOverlay {
+    background: var(--bs-danger);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0.12;
+    border-radius: 50%;
+}
+
 .cardItem .title {
     font-size: 1rem;
     flex: 1;
