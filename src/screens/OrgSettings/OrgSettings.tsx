@@ -43,7 +43,7 @@ function orgSettings(): JSX.Element {
 
   return (
     <>
-      <OrganizationScreen screenName="Settings" title={t('title')}>
+      <OrganizationScreen screenName="Settings" title={t('pageName')}>
         <Row className={styles.settingsBody}>
           <Col lg={7}>
             <Card border="0" className="rounded-4 mb-4">

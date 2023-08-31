@@ -359,6 +359,7 @@
   },
   "orgSettings": {
     "title": "Paramètre Talawa",
+    "pageName": "Paramètres",
     "updateYourDetails": "Mettre à jour vos informations",
     "updateYourPassword": "Mettez à jour votre mot de passe",
     "updateOrganization": "Mettre à jour l'organisation",

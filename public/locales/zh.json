@@ -359,6 +359,7 @@
   },
   "orgSettings": {
     "title": "塔拉瓦設置",
+    "pageName": "设置",
     "updateYourDetails": "更新您的詳細信息",
     "updateYourPassword": "更新您的密碼",
     "updateOrganization": "更新組織",

@@ -361,6 +361,7 @@
   },
   "orgSettings": {
     "title": "Talawa Setting",
+    "pageName": "Settings",
     "updateOrganization": "Update Organization",
     "deleteOrganization": "Delete Organization",
     "seeRequest": "See Request",

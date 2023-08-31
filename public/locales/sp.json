@@ -359,6 +359,7 @@
   },
   "orgSettings": {
     "title": "Configuración Talawa",
+    "pageName": "Configuración",
     "updateYourDetails": "Actualiza tus datos",
     "updateYourPassword": "Actualice su contraseña",
     "updateOrganization": "Actualizar Organización",
