@@ -6,7 +6,6 @@ import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 
 import {
-  BLOCK_PAGE_MEMBER_LIST,
   ORGANIZATIONS_LIST,
   ORGANIZATION_EVENT_LIST,
   ORGANIZATION_POST_LIST,

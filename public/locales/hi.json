@@ -297,6 +297,7 @@
   },
   "blockUnblockUser": {
     "title": "तलावा ब्लॉक/अनब्लॉक यूजर",
+    "pageName": "ब्लॉक/अनब्लॉक",
     "searchByName": "नाम से खोजें",
     "listOfUsers": "स्पैम करने वाले उपयोगकर्ताओं की सूची",
     "name": "नाम",
@@ -310,8 +311,10 @@
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।",
     "allMembers": "सभी सदस्य",
     "blockedUsers": "रोके गए उपयोगकर्ता",
-    "searchFirstName": "प्रथम नाम दर्ज करें",
-    "searchLastName": "अंतिम नाम दर्ज करो"
+    "searchByFirstName": "पहले नाम से खोजें",
+    "searchByLastName": "उपनाम से खोजें",
+    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला ",
+    "noSpammerFound": "कोई स्पैमर नहीं मिला"
   },
   "forgotPassword": {
     "title": "तलवा पासवर्ड भूल गए",

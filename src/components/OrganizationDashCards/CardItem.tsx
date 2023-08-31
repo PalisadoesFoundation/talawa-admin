@@ -1,13 +1,9 @@
 import React from 'react';
 import { ReactComponent as EventsIcon } from 'assets/svgs/events.svg';
 import { ReactComponent as PostsIcon } from 'assets/svgs/post.svg';
-import { ReactComponent as BlockedUser } from 'assets/svgs/blockedUser.svg';
 import dayjs from 'dayjs';
 import styles from './CardItem.module.css';
-import {
-  NotificationsOutlined,
-  PersonAddAlt1Rounded,
-} from '@mui/icons-material';
+import { PersonAddAlt1Rounded } from '@mui/icons-material';
 
 interface InterfaceCardItem {
   type: 'Event' | 'Post' | 'MembershipRequest';

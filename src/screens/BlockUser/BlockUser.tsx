@@ -1,17 +1,18 @@
 import { useMutation, useQuery } from '@apollo/client';
-import React, { useEffect, useRef, useState } from 'react';
-import { Col, Form, Row } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Dropdown, Form, Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 
-import { CircularProgress } from '@mui/material';
+import { Search } from '@mui/icons-material';
+import SortIcon from '@mui/icons-material/Sort';
 import {
   BLOCK_USER_MUTATION,
   UNBLOCK_USER_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { BLOCK_PAGE_MEMBER_LIST } from 'GraphQl/Queries/Queries';
 import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
-import PaginationList from 'components/PaginationList/PaginationList';
+import TableLoader from 'components/TableLoader/TableLoader';
 import { useTranslation } from 'react-i18next';
 import debounce from 'utils/debounce';
 import { errorHandler } from 'utils/errorHandler';
@@ -35,21 +36,14 @@ const Requests = (): JSX.Element => {
   });
 
   document.title = t('title');
-
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
   const currentUrl = window.location.href.split('=')[1];
-
   const [membersData, setMembersData] = useState<InterfaceMember[]>([]);
-  const [state, setState] = useState(0);
-
-  const firstNameRef = useRef<HTMLInputElement>(null);
-  const lastNameRef = useRef<HTMLInputElement>(null);
+  const [searchByFirstName, setSearchByFirstName] = useState<boolean>(true);
+  const [searchByName, setSearchByName] = useState<string>('');
 
   const {
     data: memberData,
-    loading: memberLoading,
+    loading: loadingMembers,
     error: memberError,
     refetch: memberRefetch,
   } = useQuery(BLOCK_PAGE_MEMBER_LIST, {
@@ -69,33 +63,13 @@ const Requests = (): JSX.Element => {
       return;
     }
 
-    if (state === 0) {
-      setMembersData(memberData?.organizationsMemberConnection.edges);
-    } else {
-      const blockUsers = memberData?.organizationsMemberConnection.edges.filter(
-        (user: InterfaceMember) =>
-          user.organizationsBlockedBy.some((org) => org._id === currentUrl)
-      );
+    const blockUsers = memberData?.organizationsMemberConnection.edges.filter(
+      (user: InterfaceMember) =>
+        user.organizationsBlockedBy.some((org) => org._id === currentUrl)
+    );
 
-      setMembersData(blockUsers);
-    }
-  }, [state, memberData]);
-
-  /* istanbul ignore next */
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ): void => {
-    setPage(newPage);
-  };
-
-  /* istanbul ignore next */
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ): void => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+    setMembersData(blockUsers);
+  }, [memberData]);
 
   const handleBlockUser = async (userId: string): Promise<void> => {
     try {
@@ -140,181 +114,151 @@ const Requests = (): JSX.Element => {
     toast.error(memberError.message);
   }
 
-  const handleSearch = (): void => {
-    const filterData = {
+  const handleSearch = (e: any): void => {
+    const { value } = e.target;
+    setSearchByName(value);
+    memberRefetch({
       orgId: currentUrl,
-      firstName_contains: firstNameRef.current?.value ?? '',
-      lastName_contains: lastNameRef.current?.value ?? '',
-    };
-
-    memberRefetch(filterData);
+      firstName_contains: searchByFirstName ? value : '',
+      lastName_contains: searchByFirstName ? '' : value,
+    });
   };
 
   const handleSearchDebounced = debounce(handleSearch);
+  const headerTitles: string[] = [
+    '#',
+    t('name'),
+    t('email'),
+    t('block_unblock'),
+  ];
 
   return (
     <>
-      <OrganizationScreen screenName="Block/Unblock" title={t('title')}>
-        <Row>
-          <Col sm={3}>
-            <div className={styles.sidebar}>
-              <div className={styles.sidebarsticky}>
-                <h6 className={styles.searchtitle}>{t('searchByName')}</h6>
-                <Form.Control
-                  type="name"
-                  id="firstName"
-                  placeholder={t('searchFirstName')}
-                  name="firstName_contains"
-                  data-testid="searchByFirstName"
-                  autoComplete="off"
-                  onChange={handleSearchDebounced}
-                  ref={firstNameRef}
-                />
-
-                <Form.Control
-                  type="name"
-                  id="lastName"
-                  placeholder={t('searchLastName')}
-                  name="lastName_contains"
-                  data-testid="searchByLastName"
-                  autoComplete="off"
-                  onChange={handleSearchDebounced}
-                  ref={lastNameRef}
-                />
-
-                <div
-                  className={styles.radio_buttons}
-                  data-testid="usertypelist"
-                >
-                  <Form.Check
-                    id="allusers"
-                    value="allusers"
-                    name="displaylist"
-                    type="radio"
-                    data-testid="allusers"
-                    defaultChecked={state == 0}
-                    onClick={(): void => {
-                      setState(0);
-                    }}
-                  />
-                  <label htmlFor="allusers">{t('allMembers')}</label>
-
-                  <Form.Check
-                    id="blockedusers"
-                    value="blockedusers"
-                    name="displaylist"
-                    data-testid="blockedusers"
-                    type="radio"
-                    defaultChecked={state == 1}
-                    onClick={(): void => {
-                      setState(1);
-                    }}
-                  />
-                  <label htmlFor="blockedusers">{t('blockedUsers')}</label>
-                </div>
-              </div>
+      <OrganizationScreen screenName="Block/Unblock" title={t('listOfUsers')}>
+        {/* Buttons Container */}
+        <div className={styles.btnsContainer}>
+          <div className={styles.inputContainer}>
+            <div className={styles.input}>
+              <Form.Control
+                type="name"
+                className="bg-white"
+                placeholder={
+                  searchByFirstName
+                    ? t('searchByFirstName')
+                    : t('searchByLastName')
+                }
+                data-testid="searchByName"
+                autoComplete="off"
+                required
+                onChange={handleSearchDebounced}
+              />
+              <Button
+                tabIndex={-1}
+                className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+              >
+                <Search />
+              </Button>
             </div>
-          </Col>
-
-          <Col sm={8}>
-            <div className={styles.mainpageright}>
-              <Row className={styles.justifysp}>
-                <p className={styles.logintitle}>{t('listOfUsers')}</p>
-              </Row>
-              {memberLoading ? (
-                <div className={styles.loader}>
-                  <CircularProgress />
-                </div>
-              ) : (
-                <div className={styles.list_box}>
-                  <div className="table-responsive">
-                    <table
-                      className={`table table-hover ${styles.userListTable}`}
-                    >
-                      <thead>
-                        <tr>
-                          <th scope="col">#</th>
-                          <th scope="col">{t('name')}</th>
-                          <th scope="col">{t('email')}</th>
-                          <th scope="col" className="text-center">
-                            {t('block_unblock')}
-                          </th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        {
-                          /* istanbul ignore next */
-                          (rowsPerPage > 0
-                            ? membersData.slice(
-                                page * rowsPerPage,
-                                page * rowsPerPage + rowsPerPage
-                              )
-                            : membersData
-                          ).map((user, index: number) => {
-                            return (
-                              <tr key={user._id}>
-                                <th scope="row">{page * 10 + (index + 1)}</th>
-                                <td>{`${user.firstName} ${user.lastName}`}</td>
-                                <td>{user.email}</td>
-                                <td className="text-center">
-                                  {user.organizationsBlockedBy.some(
-                                    (spam: any) => spam._id === currentUrl
-                                  ) ? (
-                                    <Button
-                                      className="btn btn-danger"
-                                      onClick={async (): Promise<void> => {
-                                        await handleUnBlockUser(user._id);
-                                      }}
-                                      data-testid={`unBlockUser${user._id}`}
-                                    >
-                                      {t('unblock')}
-                                    </Button>
-                                  ) : (
-                                    <Button
-                                      className="btn btn-success"
-                                      onClick={async (): Promise<void> => {
-                                        await handleBlockUser(user._id);
-                                      }}
-                                      data-testid={`blockUser${user._id}`}
-                                    >
-                                      {t('block')}
-                                    </Button>
-                                  )}
-                                </td>
-                              </tr>
-                            );
-                          })
-                        }
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
-              <div>
-                <table
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <tbody>
-                    <tr>
-                      <PaginationList
-                        count={membersData.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                      />
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+          </div>
+          <div className={styles.btnsBlock}>
+            <div className="d-flex">
+              <Dropdown aria-expanded="false">
+                <Dropdown.Toggle variant="success">
+                  <SortIcon className={'me-1'} />
+                  {searchByFirstName
+                    ? t('searchByFirstName')
+                    : t('searchByLastName')}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    active={searchByFirstName}
+                    onClick={(): void => setSearchByFirstName(true)}
+                  >
+                    {t('searchByFirstName')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    active={!searchByFirstName}
+                    onClick={(): void => setSearchByFirstName(false)}
+                  >
+                    {t('searchByLastName')}
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
-          </Col>
-        </Row>
+          </div>
+        </div>
+        {/* Table */}
+        {loadingMembers == false &&
+        membersData.length === 0 &&
+        searchByName.length > 0 ? (
+          <div className={styles.notFound}>
+            <h4>
+              {t('noResultsFoundFor')} &quot;{searchByName}&quot;
+            </h4>
+          </div>
+        ) : loadingMembers == false && membersData.length === 0 ? (
+          <div className={styles.notFound}>
+            <h4>{t('noSpammerFound')}</h4>
+          </div>
+        ) : (
+          <div className={styles.listBox}>
+            {loadingMembers ? (
+              <TableLoader headerTitles={headerTitles} noOfRows={10} />
+            ) : (
+              <Table responsive>
+                <thead>
+                  <tr>
+                    {headerTitles.map((title: string, index: number) => {
+                      return (
+                        <th key={index} scope="col">
+                          {title}
+                        </th>
+                      );
+                    })}
+                  </tr>
+                </thead>
+                <tbody>
+                  {membersData.map((user, index: number) => {
+                    return (
+                      <tr key={user._id}>
+                        <th scope="row">{index + 1}</th>
+                        <td>{`${user.firstName} ${user.lastName}`}</td>
+                        <td>{user.email}</td>
+                        <td>
+                          {user.organizationsBlockedBy.some(
+                            (spam: any) => spam._id === currentUrl
+                          ) ? (
+                            <Button
+                              variant="danger"
+                              size="sm"
+                              onClick={async (): Promise<void> => {
+                                await handleUnBlockUser(user._id);
+                              }}
+                              data-testid={`unBlockUser${user._id}`}
+                            >
+                              {t('unblock')}
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="success"
+                              size="sm"
+                              onClick={async (): Promise<void> => {
+                                await handleBlockUser(user._id);
+                              }}
+                              data-testid={`blockUser${user._id}`}
+                            >
+                              {t('block')}
+                            </Button>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            )}
+          </div>
+        )}
       </OrganizationScreen>
     </>
   );

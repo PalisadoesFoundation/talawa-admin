@@ -299,6 +299,7 @@
   },
   "blockUnblockUser": {
     "title": "Talawa Block/Unblock User",
+    "pageName": "Block/Unblock",
     "searchByName": "Search By Name",
     "listOfUsers": "List of Users who spammed",
     "name": "Name",
@@ -312,8 +313,10 @@
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
     "allMembers": "All Members",
     "blockedUsers": "Blocked Users",
-    "searchFirstName": "Enter First Name",
-    "searchLastName": "Enter Last Name"
+    "searchByFirstName": "Search By First Name",
+    "searchByLastName": "Search By Last Name",
+    "noResultsFoundFor": "No results found for",
+    "noSpammerFound": "No spammer found"
   },
   "forgotPassword": {
     "title": "Talawa Forgot Password",

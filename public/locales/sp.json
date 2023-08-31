@@ -297,6 +297,7 @@
   },
   "blockUnblockUser": {
     "title": "Usuario de bloqueo/desbloqueo de Talawa",
+    "pageName": "Bloqueo/desbloqueo",
     "searchByName": "Buscar por nombre",
     "listOfUsers": "Lista de Usuarios que enviaron spam",
     "name": "Nombre",
@@ -310,8 +311,10 @@
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
     "allMembers": "Todos los miembros",
     "blockedUsers": "Usuarios bloqueados",
-    "searchFirstName": "Ingrese el nombre",
-    "searchLastName": "Introduzca el apellido"
+    "searchByFirstName": "Buscar por nombre de pila",
+    "searchByLastName": "Buscar por apellido",
+    "noResultsFoundFor": "No se encontraron resultados para ",
+    "noSpammerFound": "No se encontró ningún spammer"
   },
   "forgotPassword": {
     "title": "Talawa olvidó su contraseña",
