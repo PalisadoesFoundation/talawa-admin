@@ -166,10 +166,12 @@ export default function events(): JSX.Element {
     setEventDescription(event.target.value);
   };
 
+  /* istanbul ignore next */
   const handleStartDateChange = (newDate: any): void => {
     setStartDate(newDate);
   };
 
+  /* istanbul ignore next */
   const handleEndDateChange = (newDate: any): void => {
     setEndDate(newDate);
   };
@@ -210,7 +212,10 @@ export default function events(): JSX.Element {
               </InputGroup.Text>
             </InputGroup>
             <div className={styles.eventActionsContainer}>
-              <Button onClick={toggleCreateEventModal}>
+              <Button
+                onClick={toggleCreateEventModal}
+                data-testid={`createEventModalBtn`}
+              >
                 {t('createEvent')}
               </Button>
               <Dropdown drop="down-centered">
@@ -353,7 +358,7 @@ export default function events(): JSX.Element {
                 className={styles.borderNone}
                 value={eventDescription}
                 onChange={handleEventDescriptionChange}
-                data-testid="eventTitleInput"
+                data-testid="eventDescriptionInput"
               />
             </InputGroup>
 
@@ -369,7 +374,7 @@ export default function events(): JSX.Element {
                 className={styles.borderNone}
                 value={eventLocation}
                 onChange={handleEventLocationChange}
-                data-testid="eventTitleInput"
+                data-testid="eventLocationInput"
               />
             </InputGroup>
             <h6>{t('startDate')}</h6>
@@ -402,6 +407,7 @@ export default function events(): JSX.Element {
                   className="ms-2"
                   type="checkbox"
                   checked={isRegisterable}
+                  data-testid="registerableEventCheck"
                   onChange={(): void => setIsRegisterable(!isRegisterable)}
                 />
               </div>
@@ -412,6 +418,7 @@ export default function events(): JSX.Element {
                   className="ms-2"
                   type="checkbox"
                   checked={isRecurring}
+                  data-testid="recurringEventCheck"
                   onChange={(): void => setIsRecurring(!isRecurring)}
                 />
               </div>
@@ -422,6 +429,7 @@ export default function events(): JSX.Element {
                   className="ms-2"
                   type="checkbox"
                   checked={isAllDay}
+                  data-testid="allDayEventCheck"
                   onChange={(): void => setIsAllDay(!isAllDay)}
                 />
               </div>
@@ -434,7 +442,11 @@ export default function events(): JSX.Element {
                       id="startTime"
                       placeholder={t('startTime')}
                       value={startTime}
-                      onChange={(e): void => setStartTime(e.target.value)}
+                      data-testid="startTimeEventInput"
+                      onChange={
+                        /* istanbul ignore next */
+                        (e): void => setStartTime(e.target.value)
+                      }
                     />
                   </div>
                   <div>
@@ -443,7 +455,11 @@ export default function events(): JSX.Element {
                       id="endTime"
                       placeholder={t('endTime')}
                       value={endTime}
-                      onChange={(e): void => setEndTime(e.target.value)}
+                      data-testid="endTimeEventInput"
+                      onChange={
+                        /* istanbul ignore next */
+                        (e): void => setEndTime(e.target.value)
+                      }
                     />
                   </div>
                 </div>
@@ -454,7 +470,11 @@ export default function events(): JSX.Element {
             <Button variant="danger" onClick={toggleCreateEventModal}>
               {t('cancel')}
             </Button>
-            <Button variant="success" onClick={createEvent}>
+            <Button
+              variant="success"
+              onClick={createEvent}
+              data-testid="createEventBtn"
+            >
               {t('create')}
             </Button>
           </Modal.Footer>

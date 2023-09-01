@@ -512,6 +512,20 @@ export const ORGANIZATION_POST_CONNECTION_LIST = gql`
         }
         likeCount
         commentCount
+        comments {
+          _id
+          creator {
+            _id
+            firstName
+            lastName
+            email
+          }
+          likeCount
+          likedBy {
+            _id
+          }
+          text
+        }
         likedBy {
           _id
           firstName

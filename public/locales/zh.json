@@ -567,7 +567,8 @@
     "create": "創造",
     "listView": "列表顯示",
     "calendarView": "日曆視圖",
-    "allDay": "整天"
+    "allDay": "整天",
+    "eventCreated": "活動已成功創建並發布。"
   },
   "userEventCard": {
     "location": "地點",

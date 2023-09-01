@@ -567,7 +567,8 @@
     "create": "बनाएं",
     "listView": "लिस्ट व्यू",
     "calendarView": "कैलेंडर दृश्य",
-    "allDay": "पूरे दिन"
+    "allDay": "पूरे दिन",
+    "eventCreated": "ईवेंट सफलतापूर्वक बनाया और पोस्ट किया गया."
   },
   "userEventCard": {
     "location": "जगह",

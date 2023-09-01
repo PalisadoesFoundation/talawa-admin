@@ -567,7 +567,8 @@
     "create": "Crear",
     "listView": "Vista de la lista",
     "calendarView": "Vista de calendario",
-    "allDay": "Todo el dia"
+    "allDay": "Todo el dia",
+    "eventCreated": "Evento creado y publicado exitosamente."
   },
   "userEventCard": {
     "location": "Ubicación",

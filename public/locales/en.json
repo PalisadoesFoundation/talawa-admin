@@ -571,7 +571,8 @@
     "create": "Create",
     "listView": "List View",
     "calendarView": "Calendar View",
-    "allDay": "All Day"
+    "allDay": "All Day",
+    "eventCreated": "Event created and posted successfully."
   },
   "userEventCard": {
     "location": "Location",
