@@ -1,5 +1,5 @@
 import React from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { ApolloQueryResult, useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
@@ -44,13 +44,16 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   const {
     data,
     loading,
+    refetch,
   }: {
     data?: {
       organizations: InterfaceQueryOrganizationsListObject[];
     };
     loading: boolean;
+    refetch: (variables: { id: string }) => void;
   } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: currentUrl },
+    notifyOnNetworkStatusChange: true,
   });
 
   React.useEffect(() => {
@@ -84,7 +87,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
         },
       });
       if (data) {
-        window.location.assign(`/orgsetting/id=${props.orgid}`);
+        refetch({ id: currentUrl });
         toast.success(t('successfulUpdated'));
       }
     } catch (error: any) {
