@@ -74,15 +74,15 @@ export const ManageVolunteerModal = (props: ModalPropType): JSX.Element => {
               multiple
               id="volunteers-assigned-outlined"
               options={props.organization.members}
-              getOptionLabel={(memberOption) =>
+              getOptionLabel={(memberOption): string =>
                 `${memberOption.firstName} ${memberOption.lastName}`
               }
               filterSelectedOptions={true}
-              onChange={(_, value) => {
+              onChange={(_, value): void => {
                 setVolunteers(value);
               }}
               autoHighlight={true}
-              renderInput={(params) => (
+              renderInput={(params): React.ReactNode => (
                 <TextField
                   {...params}
                   label="Assign Volunteers"

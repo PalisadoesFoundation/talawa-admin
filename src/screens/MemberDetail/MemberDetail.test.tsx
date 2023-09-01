@@ -168,7 +168,7 @@ describe('MemberDetail', () => {
     expect(screen.getAllByText(/Admin for events/i)).toBeTruthy();
 
     expect(screen.getAllByText(/Created On/i)).toHaveLength(2);
-    expect(screen.getAllByText(/User Details/i)).toHaveLength(2);
+    expect(screen.getAllByText(/User Details/i)).toHaveLength(3);
     expect(screen.getAllByText(/Role/i)).toHaveLength(2);
     expect(screen.getAllByText(/Created/i)).toHaveLength(4);
     expect(screen.getAllByText(/Joined/i)).toHaveLength(2);

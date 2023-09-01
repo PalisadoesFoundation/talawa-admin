@@ -18,8 +18,7 @@ import {
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
-import Roles from './Roles';
-import { debug } from 'jest-preview';
+import Users from './Users';
 
 const MOCKS = [
   {
@@ -215,7 +214,7 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-describe('Testing Roles screen', () => {
+describe('Testing Users screen', () => {
   test('Component should be rendered properly', async () => {
     window.location.assign('/orglist');
 
@@ -224,7 +223,7 @@ describe('Testing Roles screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <Roles />
+              <Users />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -232,7 +231,7 @@ describe('Testing Roles screen', () => {
     );
 
     await wait();
-    expect(screen.getAllByText(/Users List/i)).toBeTruthy();
+    expect(screen.getAllByText(/Users/i)).toBeTruthy();
     expect(window.location).toBeAt('/orglist');
   });
 
@@ -251,7 +250,7 @@ describe('Testing Roles screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <Roles />
+              <Users />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -278,7 +277,7 @@ describe('Testing Roles screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <Roles />
+              <Users />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -296,7 +295,7 @@ describe('Testing Roles screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <Roles />
+              <Users />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -328,7 +327,7 @@ describe('Testing Roles screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <Roles />
+              <Users />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -346,7 +345,7 @@ describe('Testing Roles screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <Roles />
+              <Users />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -364,7 +363,7 @@ describe('Testing Roles screen', () => {
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <ToastContainer />
-              <Roles />
+              <Users />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -372,7 +371,6 @@ describe('Testing Roles screen', () => {
     );
 
     await wait(200);
-    debug();
     expect(container.textContent).toMatch(
       'Organizations not found, please create an organization through dashboard'
     );
@@ -385,7 +383,7 @@ describe('Testing Roles screen', () => {
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <ToastContainer />
-              <Roles />
+              <Users />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -419,7 +417,7 @@ describe('Testing Roles screen', () => {
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <ToastContainer />
-              <Roles />
+              <Users />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -454,7 +452,7 @@ describe('Testing Roles screen', () => {
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <ToastContainer />
-              <Roles />
+              <Users />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
