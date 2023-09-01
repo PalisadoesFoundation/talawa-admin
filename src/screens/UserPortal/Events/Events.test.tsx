@@ -299,10 +299,14 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await wait();
 
-    const mockEventTitle =
-      MOCKS[0].result?.data.eventsByOrganizationConnection![0].title;
+    let mockEventTitle = '';
+    if (MOCKS[0].result?.data.eventsByOrganizationConnection) {
+      mockEventTitle =
+        MOCKS[0].result?.data.eventsByOrganizationConnection[0].title;
+    }
+
     expect(getOrganizationIdSpy).toHaveBeenCalled();
-    expect(screen.queryByText(mockEventTitle!)).toBeInTheDocument();
+    expect(screen.queryByText(mockEventTitle)).toBeInTheDocument();
   });
 
   test('Search works as expected when user types in search input', async () => {
@@ -333,13 +337,20 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await wait();
 
-    const mockEventTitle =
-      MOCKS[0].result?.data.eventsByOrganizationConnection![0].title;
+    let mockEventTitle = '';
+    if (MOCKS[0].result?.data.eventsByOrganizationConnection) {
+      mockEventTitle =
+        MOCKS[0].result?.data.eventsByOrganizationConnection[0].title;
+    }
 
-    const mockEventTitleAbsent =
-      MOCKS[0].result?.data.eventsByOrganizationConnection![1].title;
-    expect(screen.queryByText(mockEventTitle!)).toBeInTheDocument();
-    expect(screen.queryByText(mockEventTitleAbsent!)).not.toBeInTheDocument();
+    let mockEventTitleAbsent = '';
+    if (MOCKS[0].result?.data.eventsByOrganizationConnection) {
+      mockEventTitleAbsent =
+        MOCKS[0].result?.data.eventsByOrganizationConnection[1].title;
+    }
+
+    expect(screen.queryByText(mockEventTitle)).toBeInTheDocument();
+    expect(screen.queryByText(mockEventTitleAbsent)).not.toBeInTheDocument();
   });
 
   test('Create event works as expected when event is not an all day event.', async () => {
@@ -477,6 +488,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await wait();
     const calenderView = 'Calendar View';
-    expect(screen.queryAllByText(calenderView!)).not.toBeNull();
+
+    expect(screen.queryAllByText(calenderView)).not.toBeNull();
   });
 });

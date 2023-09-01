@@ -6,7 +6,6 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import cookies from 'js-cookie';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
 import CommentCard from './CommentCard';
