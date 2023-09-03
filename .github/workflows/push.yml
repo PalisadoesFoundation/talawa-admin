@@ -97,7 +97,7 @@ jobs:
 
   Copy-docs-to-talawa-docs:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/automated-docs'
+    if: github.ref == 'refs/heads/develop'
     needs: Generate-Documentation
     steps:
     - uses: actions/checkout@v3
