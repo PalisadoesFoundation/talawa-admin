@@ -53,7 +53,7 @@ function orgSettings(): JSX.Element {
                 </div>
               </div>
               <Card.Body className={styles.cardBody}>
-                <OrgUpdate orgid={currentUrl} />
+                <OrgUpdate orgId={currentUrl} />
               </Card.Body>
             </Card>
           </Col>

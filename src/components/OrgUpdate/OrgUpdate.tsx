@@ -1,24 +1,28 @@
 import React from 'react';
-import { ApolloQueryResult, useMutation, useQuery } from '@apollo/client';
-import { useTranslation } from 'react-i18next';
+import { useMutation, useQuery } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
+import type { ApolloError } from '@apollo/client';
+import {
+  WarningAmberRounded
+} from '@mui/icons-material';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
-import styles from './OrgUpdate.module.css';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import Loader from 'components/Loader/Loader';
+import { Col, Form, Row } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
-import { Col, Form, Row } from 'react-bootstrap';
-import Loader from 'components/Loader/Loader';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
+import styles from './OrgUpdate.module.css';
 
 interface InterfaceOrgUpdateProps {
-  orgid: string;
+  orgId: string;
 }
 
 function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
-  const currentUrl = window.location.href.split('=')[1];
+  const { orgId } = props;
 
   const [formState, setFormState] = React.useState<{
     orgName: string;
@@ -45,14 +49,16 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     data,
     loading,
     refetch,
+    error,
   }: {
     data?: {
       organizations: InterfaceQueryOrganizationsListObject[];
     };
     loading: boolean;
     refetch: (variables: { id: string }) => void;
+    error?: ApolloError;
   } = useQuery(ORGANIZATIONS_LIST, {
-    variables: { id: currentUrl },
+    variables: { id: orgId },
     notifyOnNetworkStatusChange: true,
   });
 
@@ -69,15 +75,11 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     }
   }, [data]);
 
-  if (loading) {
-    return <Loader styles={styles.loader} size="lg" />;
-  }
-
   const onSaveChangesClicked = async (): Promise<void> => {
     try {
       const { data } = await login({
         variables: {
-          id: currentUrl,
+          id: orgId,
           name: formState.orgName,
           description: formState.orgDescrip,
           location: formState.location,
@@ -86,14 +88,32 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           file: formState.orgImage,
         },
       });
+      // istanbul ignore next
       if (data) {
-        refetch({ id: currentUrl });
+        refetch({ id: orgId });
         toast.success(t('successfulUpdated'));
       }
     } catch (error: any) {
       errorHandler(t, error);
     }
   };
+
+  if (loading) {
+    return <Loader styles={styles.message} size="lg" />;
+  }
+
+  if (error) {
+    return (
+      <div className={styles.message}>
+        <WarningAmberRounded className={styles.icon} fontSize="large" />
+        <h6 className="fw-bold text-danger text-center">
+          Error occured while loading Organization Data
+          <br />
+          {`${error.message}`}
+        </h6>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -143,22 +163,21 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           />
           <Row>
             <Col sm={6} className="d-flex mb-3">
-              <Form.Label htmlFor="ispublic" className="me-3">
-                {t('isPublic')}:
-              </Form.Label>
+              <Form.Label className="me-3">{t('isPublic')}:</Form.Label>
               <Form.Switch
-                id="ispublic"
+                placeholder={t('isPublic')}
                 checked={publicchecked}
-                onClick={(): void => setPublicChecked(!publicchecked)}
+                onChange={(): void => setPublicChecked(!publicchecked)}
               />
             </Col>
             <Col sm={6} className="d-flex mb-3">
-              <Form.Label htmlFor="registrable" className="me-3">
+              <Form.Label className="me-3">
                 {t('isVisibleInSearch')}:
               </Form.Label>
               <Form.Switch
+                placeholder={t('isVisibleInSearch')}
                 checked={visiblechecked}
-                onClick={(): void => setVisibleChecked(!visiblechecked)}
+                onChange={(): void => setVisibleChecked(!visiblechecked)}
               />
             </Col>
           </Row>
@@ -166,7 +185,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           <Form.Control
             className="mb-4"
             accept="image/*"
-            id="orgphoto"
+            placeholder={t('displayImage')}
             name="photo"
             type="file"
             multiple={false}
