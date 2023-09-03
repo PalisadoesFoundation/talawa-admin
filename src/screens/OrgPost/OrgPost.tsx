@@ -187,8 +187,15 @@ function orgPost(): JSX.Element {
               </div>
               <div className={styles.btnsBlock}>
                 <div className="d-flex">
-                  <Dropdown aria-expanded="false" title="SearchBy">
-                    <Dropdown.Toggle variant="outline-success">
+                  <Dropdown
+                    aria-expanded="false"
+                    title="SearchBy"
+                    data-tesid="sea"
+                  >
+                    <Dropdown.Toggle
+                      data-testid="searchBy"
+                      variant="outline-success"
+                    >
                       <SortIcon className={'me-1'} />
                       {t('searchBy')}
                     </Dropdown.Toggle>
@@ -199,6 +206,7 @@ function orgPost(): JSX.Element {
                           setShowTitle(false);
                           e.preventDefault();
                         }}
+                        data-testid="Text"
                       >
                         Text
                       </Dropdown.Item>
@@ -208,22 +216,27 @@ function orgPost(): JSX.Element {
                           setShowTitle(true);
                           e.preventDefault();
                         }}
+                        data-testid="searchTitle"
                       >
                         Title
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
-                  <Dropdown aria-expanded="false" title="Sort Post">
+                  <Dropdown
+                    aria-expanded="false"
+                    title="Sort Post"
+                    data-testid="sort"
+                  >
                     <Dropdown.Toggle variant="outline-success">
                       <SortIcon className={'me-1'} />
                       Sort Post
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
                       <Dropdown.Item href="#/action-1">
-                        Latest First
+                        {t('Latest')}
                       </Dropdown.Item>
                       <Dropdown.Item href="#/action-2">
-                        Oldest First
+                        {t('Oldest')}
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
@@ -354,6 +367,7 @@ function orgPost(): JSX.Element {
                     <img
                       src={postformState.postImage}
                       alt="Post Image Preview"
+                      data-testid="org"
                     />
                     <button
                       className={styles.closeButton}
@@ -406,9 +420,13 @@ function orgPost(): JSX.Element {
                 />
 
                 {postformState.postVideo && (
-                  <div className={styles.preview}>
+                  <div className={styles.preview} data-testid="videoPreview">
                     <video controls>
-                      <source src={postformState.postVideo} type="video/mp4" />
+                      <source
+                        src={postformState.postVideo}
+                        type="video/mp4"
+                        data-testid="videoPreview"
+                      />
                       Your browser does not support the video tag.
                     </video>
                     <button

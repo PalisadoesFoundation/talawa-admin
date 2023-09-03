@@ -437,6 +437,7 @@ export const ORGANIZATION_POST_CONNECTION_LIST = gql`
         pinned
         likeCount
         commentCount
+        createdAt
         likedBy {
           _id
           firstName

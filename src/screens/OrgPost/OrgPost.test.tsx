@@ -36,6 +36,7 @@ const MOCKS = [
               text: 'THis is the frist post',
               imageUrl: null,
               videoUrl: null,
+              createdAt: '2023-08-24T09:26:56.524+00:00',
               creator: {
                 _id: '640d98d9eb6a743d75341067',
                 firstName: 'Aditya',
@@ -53,6 +54,7 @@ const MOCKS = [
               text: 'THis is the post two',
               imageUrl: null,
               videoUrl: null,
+              createdAt: '2023-08-24T09:26:56.524+00:00',
               creator: {
                 _id: '640d98d9eb6a743d75341067',
                 firstName: 'Aditya',
@@ -105,7 +107,6 @@ const MOCKS = [
   },
 ];
 const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink([], true);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -123,13 +124,6 @@ describe('Organisation Post Page', () => {
     postVideo: new File(['hello'], 'hello.mp4', { type: 'video/mp4' }),
   };
 
-  const formDataEmpty = {
-    posttitle: '   ',
-    postinfo: '   ',
-    postImage: new File(['hello'], 'hello.png', { type: 'image/png' }),
-    postVideo: new File(['hello'], 'hello.mp4', { type: 'video/mp4' }),
-  };
-
   test('correct mock data should be queried', async () => {
     const dataQuery1 =
       MOCKS[0]?.result?.data?.postsByOrganizationConnection.edges[0];
@@ -140,6 +134,7 @@ describe('Organisation Post Page', () => {
       text: 'THis is the frist post',
       imageUrl: null,
       videoUrl: null,
+      createdAt: '2023-08-24T09:26:56.524+00:00',
       creator: {
         _id: '640d98d9eb6a743d75341067',
         firstName: 'Aditya',
@@ -189,173 +184,89 @@ describe('Organisation Post Page', () => {
     userEvent.click(screen.getByTestId('closeOrganizationModal'));
   }, 15000);
 
-  // test('Create Post should throw error when empty strings have been entered', async () => {
-  //   const { container } = render(
-  //     <MockedProvider addTypename={false} link={link}>
-  //       <BrowserRouter>
-  //         <Provider store={store}>
-  //           <I18nextProvider i18n={i18nForTest}>
-  //             <ToastContainer />
-  //             <OrgPost />
-  //           </I18nextProvider>
-  //         </Provider>
-  //       </BrowserRouter>
-  //     </MockedProvider>
-  //   );
+  test('Testing search functionality', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    async function debounceWait(ms = 200): Promise<void> {
+      await act(() => {
+        return new Promise((resolve) => {
+          setTimeout(resolve, ms);
+        });
+      });
+    }
+    await debounceWait();
+    userEvent.type(screen.getByPlaceholderText(/Search By/i), 'postone');
+    await debounceWait();
+    const sortDropdown = screen.getByTestId('sort');
+    userEvent.click(sortDropdown);
+  });
 
-  //   await wait();
+  test('After creating a post, the data should be refetched', async () => {
+    const refetchMock = jest.fn();
 
-  //   userEvent.click(screen.getByTestId('createPostModalBtn'));
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
 
-  //   userEvent.type(
-  //     screen.getByPlaceholderText(/Post Title/i),
-  //     formDataEmpty.posttitle
-  //   );
+    await wait();
 
-  //   userEvent.type(
-  //     screen.getByPlaceholderText(/What do you to talk about?/i),
-  //     formDataEmpty.postinfo
-  //   );
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
 
-  //   userEvent.upload(
-  //     screen.getByLabelText(/Post Image:/i),
-  //     formDataEmpty.postImage
-  //   );
+    // Fill in post form fields...
 
-  //   userEvent.click(screen.getByTestId('createPostBtn'));
+    userEvent.click(screen.getByTestId('createPostBtn'));
 
-  //   await wait();
+    await wait();
 
-  //   expect(container.textContent).toMatch(
-  //     'Text fields cannot be empty strings'
-  //   );
-  // }, 15000);
+    expect(refetchMock).toHaveBeenCalledTimes(0);
+  });
 
-  // test('Testing search functionality', async () => {
-  //   render(
-  //     <MockedProvider addTypename={false} link={link}>
-  //       <BrowserRouter>
-  //         <Provider store={store}>
-  //           <I18nextProvider i18n={i18nForTest}>
-  //             <OrgPost />
-  //           </I18nextProvider>
-  //         </Provider>
-  //       </BrowserRouter>
-  //     </MockedProvider>
-  //   );
-  //   async function debounceWait(ms = 200): Promise<void> {
-  //     await act(() => {
-  //       return new Promise((resolve) => {
-  //         setTimeout(resolve, ms);
-  //       });
-  //     });
-  //   }
-  //   await debounceWait();
-  //   userEvent.type(screen.getByPlaceholderText(/Search By/i), 'postone');
-  //   await debounceWait();
-  // });
+  test('Create post without media', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
 
-  // test('Testing when post data is not present', async () => {
-  //   window.location.assign('/orglist');
+    await wait();
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
 
-  //   render(
-  //     <MockedProvider addTypename={false} link={link2}>
-  //       <BrowserRouter>
-  //         <Provider store={store}>
-  //           <I18nextProvider i18n={i18nForTest}>
-  //             <OrgPost />
-  //           </I18nextProvider>
-  //         </Provider>
-  //       </BrowserRouter>
-  //     </MockedProvider>
-  //   );
+    const postTitleInput = screen.getByTestId('modalTitle');
+    fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
 
-  //   await wait();
-  //   expect(window.location).toBeAt('/orglist');
-  // });
-  // test('Clicking the close button in the post modal should close the modal', async () => {
-  //   render(
-  //     <MockedProvider addTypename={false} mocks={MOCKS} link={link}>
-  //       <BrowserRouter>
-  //         <Provider store={store}>
-  //           <I18nextProvider i18n={i18nForTest}>
-  //             <ToastContainer />
-  //             <OrgPost />
-  //           </I18nextProvider>
-  //         </Provider>
-  //       </BrowserRouter>
-  //     </MockedProvider>
-  //   );
+    const postInfoTextarea = screen.getByTestId('modalinfo');
+    fireEvent.change(postInfoTextarea, {
+      target: { value: 'Test post information' },
+    });
 
-  //   await wait();
-
-  //   userEvent.click(screen.getByTestId('createPostModalBtn'));
-
-  //   // Fill in post form fields...
-
-  //   userEvent.click(screen.getByTestId('closePostModalBtn'));
-
-  //   await wait();
-
-  //   expect(screen.queryByTestId('createPostModalBtn')).toBeInTheDocument();
-  // });
-  // test('After creating a post, the data should be refetched', async () => {
-  //   const refetchMock = jest.fn();
-
-  //   render(
-  //     <MockedProvider addTypename={false} mocks={MOCKS} link={link}>
-  //       <BrowserRouter>
-  //         <Provider store={store}>
-  //           <I18nextProvider i18n={i18nForTest}>
-  //             <ToastContainer />
-  //             <OrgPost />
-  //           </I18nextProvider>
-  //         </Provider>
-  //       </BrowserRouter>
-  //     </MockedProvider>
-  //   );
-
-  //   await wait();
-
-  //   userEvent.click(screen.getByTestId('createPostModalBtn'));
-
-  //   // Fill in post form fields...
-
-  //   userEvent.click(screen.getByTestId('createPostBtn'));
-
-  //   await wait();
-
-  //   expect(refetchMock).toHaveBeenCalledTimes(0);
-  // });
-
-  // test('Create', async () => {
-  //   render(
-  //     <MockedProvider addTypename={false} link={link}>
-  //       <BrowserRouter>
-  //         <Provider store={store}>
-  //           <I18nextProvider i18n={i18nForTest}>
-  //             <ToastContainer />
-  //             <OrgPost />
-  //           </I18nextProvider>
-  //         </Provider>
-  //       </BrowserRouter>
-  //     </MockedProvider>
-  //   );
-
-  //   await wait();
-  //   userEvent.click(screen.getByTestId('createPostModalBtn'));
-
-  //   const postTitleInput = screen.getByTestId('posttitle');
-  //   fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
-
-  //   const postInfoTextarea = screen.getByTestId('info');
-  //   fireEvent.change(postInfoTextarea, {
-  //     target: { value: 'Test post information' },
-  //   });
-
-  //   const createPostBtn = screen.getByTestId('createPostBtn');
-  //   fireEvent.click(createPostBtn);
-  // }, 15000);
+    const createPostBtn = screen.getByTestId('createPostBtn');
+    fireEvent.click(createPostBtn);
+  }, 15000);
 
   test('Create post and preview', async () => {
     render(
@@ -394,4 +305,67 @@ describe('Organisation Post Page', () => {
     fireEvent.click(createPostBtn);
     debug();
   }, 15000);
+  test('Dropdown changes showTitle state', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    const dropdownToggle = screen.getByTestId('sea');
+    userEvent.click(dropdownToggle);
+
+    const searchTextItem = screen.getByText('Text');
+    userEvent.click(searchTextItem);
+
+    expect(screen.getByText('searchText')).toBeInTheDocument();
+    expect(screen.queryByText('searchTitle')).not.toBeInTheDocument();
+
+    const dropdownToggleAgain = screen.getByText('searchBy');
+    userEvent.click(dropdownToggleAgain);
+
+    const searchTitleItem = screen.getByText('Title');
+    userEvent.click(searchTitleItem);
+
+    expect(screen.queryByText('searchText')).not.toBeInTheDocument();
+    expect(screen.getByText('searchTitle')).toBeInTheDocument();
+  });
+  test('Modal opens and closes', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    const createPostModalBtn = screen.getByTestId('createPostModalBtn');
+
+    userEvent.click(createPostModalBtn);
+
+    const modalTitle = screen.getByTestId('modalOrganizationHeader');
+    expect(modalTitle).toBeInTheDocument();
+
+    const closeButton = screen.getByTestId('closeOrganizationModal');
+    userEvent.click(closeButton);
+
+    await wait();
+
+    const closedModalTitle = screen.queryByText(/postDetail/i);
+    expect(closedModalTitle).not.toBeInTheDocument();
+  });
 });

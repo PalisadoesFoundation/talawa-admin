@@ -262,7 +262,9 @@
     "Title": "Title",
     "Text": "Text",
     "cancel": "Cancel",
-    "searchBy": "Search By"
+    "searchBy": "Search By",
+    "Oldest": "Oldest First",
+    "Latest": "Latest First"
   },
   "postNotFound": {
     "post": "Post",
