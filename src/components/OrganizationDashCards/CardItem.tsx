@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import styles from './CardItem.module.css';
 import { PersonAddAlt1Rounded } from '@mui/icons-material';
 
-interface InterfaceCardItem {
+export interface InterfaceCardItem {
   type: 'Event' | 'Post' | 'MembershipRequest';
   title: string;
   time?: string;
@@ -23,11 +23,13 @@ const cardItem = (props: InterfaceCardItem): JSX.Element => {
           ) : type == 'Post' ? (
             <PostsIcon fill="var(--bs-primary)" width={20} height={20} />
           ) : (
-            <PersonAddAlt1Rounded
-              style={{ color: 'var(--bs-primary)' }}
-              width={16}
-              height={16}
-            />
+            type == 'MembershipRequest' && (
+              <PersonAddAlt1Rounded
+                style={{ color: 'var(--bs-primary)' }}
+                width={16}
+                height={16}
+              />
+            )
           )}
         </div>
         <span className={styles.title}>{`${title}`}</span>
