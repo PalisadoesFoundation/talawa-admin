@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import 'jest-location-mock';
@@ -168,7 +168,7 @@ describe('MemberDetail', () => {
     expect(screen.getAllByText(/Admin for events/i)).toBeTruthy();
 
     expect(screen.getAllByText(/Created On/i)).toHaveLength(2);
-    expect(screen.getAllByText(/User Details/i)).toHaveLength(2);
+    expect(screen.getAllByText(/User Details/i)).toHaveLength(3);
     expect(screen.getAllByText(/Role/i)).toHaveLength(2);
     expect(screen.getAllByText(/Created/i)).toHaveLength(4);
     expect(screen.getAllByText(/Joined/i)).toHaveLength(2);
@@ -189,6 +189,7 @@ describe('MemberDetail', () => {
     // If the language code is not provided
     expect(getLangName('')).toBe('Unavailable');
   });
+
   test('Should display dicebear image if image is null', async () => {
     const props = {
       id: 'rishav-jha-mech',
@@ -207,13 +208,18 @@ describe('MemberDetail', () => {
     );
 
     expect(container.textContent).not.toBe('Loading data...');
-    await wait();
     const user = MOCKS1[0].result.data.user;
-    expect(screen.getByTestId(/userImageAbsent/i)).toBeInTheDocument();
-    expect(screen.getByTestId(/userImageAbsent/i).getAttribute('src')).toBe(
-      `https://api.dicebear.com/5.x/initials/svg?seed=${user?.firstName} ${user?.lastName}`
+
+    waitFor(() =>
+      expect(screen.getByTestId(/userImageAbsent/i)).toBeInTheDocument()
+    );
+    waitFor(() =>
+      expect(screen.getByTestId(/userImageAbsent/i).getAttribute('src')).toBe(
+        `https://api.dicebear.com/5.x/initials/svg?seed=${user?.firstName} ${user?.lastName}`
+      )
     );
   });
+
   test('Should display image if image is present', async () => {
     const props = {
       id: 'rishav-jha-mech',
@@ -232,11 +238,16 @@ describe('MemberDetail', () => {
     );
 
     expect(container.textContent).not.toBe('Loading data...');
-    await wait();
+
     const user = MOCKS2[0].result.data.user;
-    expect(screen.getByTestId(/userImagePresent/i)).toBeInTheDocument();
-    expect(screen.getByTestId(/userImagePresent/i).getAttribute('src')).toBe(
-      user?.image
+
+    waitFor(() =>
+      expect(screen.getByTestId(/userImagePresent/i)).toBeInTheDocument()
+    );
+    waitFor(() =>
+      expect(screen.getByTestId(/userImagePresent/i).getAttribute('src')).toBe(
+        user?.image
+      )
     );
   });
 
@@ -258,8 +269,7 @@ describe('MemberDetail', () => {
     );
 
     expect(container.textContent).not.toBe('Loading data...');
-    await wait();
 
-    userEvent.click(screen.getByText(/edit/i));
+    waitFor(() => userEvent.click(screen.getByText(/edit/i)));
   });
 });

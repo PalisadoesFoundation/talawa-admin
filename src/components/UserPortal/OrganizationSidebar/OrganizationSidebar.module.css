@@ -40,6 +40,7 @@
   font-size: 16px;
   font-weight: 600;
   margin-top: 4px;
+  margin-left: 5px;
 }
 
 .alignRight {
@@ -68,4 +69,8 @@
 .eventDetails {
   font-size: small;
   gap: 5px;
+}
+
+.memberImage {
+  border-radius: 50%;
 }

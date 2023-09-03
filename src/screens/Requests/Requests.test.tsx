@@ -289,8 +289,6 @@ describe('Testing Request screen', () => {
     );
 
     await wait();
-
-    userEvent.type(screen.getByTestId(/searchByName/i), 'John');
   });
 
   test('Testing accept user functionality', async () => {

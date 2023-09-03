@@ -7,22 +7,22 @@ import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
 import { Form } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
-import { useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import Dropdown from 'react-bootstrap/Dropdown';
 import styles from './OrgPost.module.css';
-import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
 import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
 import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import type { RootState } from 'state/reducers';
+import PaginationList from 'components/PaginationList/PaginationList';
 import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
 import NotFound from 'components/NotFound/NotFound';
 import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
+import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 
 interface InterfaceOrgPost {
   _id: string;
@@ -51,8 +51,6 @@ function orgPost(): JSX.Element {
   const [showTitle, setShowTitle] = useState(true);
 
   const currentUrl = window.location.href.split('=')[1];
-  const appRoutes = useSelector((state: RootState) => state.appRoutes);
-  const { targets, configUrl } = appRoutes;
 
   const showInviteModal = (): void => {
     setPostModalIsOpen(true);
@@ -159,7 +157,6 @@ function orgPost(): JSX.Element {
   });
   return (
     <>
-      <AdminNavbar targets={targets} url1={configUrl} />
       <Row className={styles.head}>
         <Col sm={3}></Col>
         <Col sm={8}>

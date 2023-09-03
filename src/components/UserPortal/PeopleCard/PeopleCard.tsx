@@ -14,7 +14,12 @@ function peopleCard(props: InterfaceOrganizationCardProps): JSX.Element {
 
   return (
     <div className={styles.mainContainer}>
-      <img src={imageUrl} width="100px" height="auto" />
+      <img
+        src={imageUrl}
+        width="80px"
+        height="auto"
+        className={styles.personImage}
+      />
       <div className={styles.personDetails}>
         <b>{props.name}</b>
         <span>{props.email}</span>

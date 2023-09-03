@@ -8,6 +8,7 @@ import cookies from 'js-cookie';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 function userNavbar(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -92,7 +93,11 @@ function userNavbar(): JSX.Element {
               <Dropdown.ItemText>
                 <b>{userName}</b>
               </Dropdown.ItemText>
-              <Dropdown.Item>{t('settings')}</Dropdown.Item>
+              <Dropdown.Item>
+                <Link to="/user/settings" className={styles.link}>
+                  {t('settings')}
+                </Link>
+              </Dropdown.Item>
               <Dropdown.Item>{t('myTasks')}</Dropdown.Item>
               <Dropdown.Item onClick={handleLogout} data-testid={`logoutBtn`}>
                 {t('logout')}

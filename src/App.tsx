@@ -16,9 +16,10 @@ import OrgSettings from 'screens/OrgSettings/OrgSettings';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import AddOnStore from 'components/AddOn/core/AddOnStore/AddOnStore';
 import ForgotPassword from 'screens/ForgotPassword/ForgotPassword';
-import Roles from 'screens/Roles/Roles';
+import Users from 'screens/Users/Users';
 import Requests from 'screens/Requests/Requests';
 import BlockUser from 'screens/BlockUser/BlockUser';
+import EventDashboard from 'screens/EventDashboard/EventDashboard';
 import MemberDetail from 'screens/MemberDetail/MemberDetail';
 import Loader from 'components/Loader/Loader';
 
@@ -27,6 +28,8 @@ import UserLoginPage from 'screens/UserPortal/UserLoginPage/UserLoginPage';
 import Organizations from 'screens/UserPortal/Organizations/Organizations';
 import Home from 'screens/UserPortal/Home/Home';
 import People from 'screens/UserPortal/People/People';
+import Settings from 'screens/UserPortal/Settings/Settings';
+import Donate from 'screens/UserPortal/Donate/Donate';
 
 function app(): JSX.Element {
   /*const { updatePluginLinks, updateInstalled } = bindActionCreators(
@@ -82,6 +85,10 @@ function app(): JSX.Element {
     localStorage.setItem('email', data.checkAuth.email);
     localStorage.setItem('IsLoggedIn', 'TRUE');
     localStorage.setItem('UserType', data.checkAuth.userType);
+    localStorage.setItem('FirstName', data.checkAuth.firstName);
+    localStorage.setItem('LastName', data.checkAuth.lastName);
+    localStorage.setItem('UserImage', data.checkAuth.image);
+    localStorage.setItem('Email', data.checkAuth.email);
   } else {
     localStorage.clear();
   }
@@ -99,9 +106,10 @@ function app(): JSX.Element {
         <SecuredRoute path="/orgpost" component={OrgPost} />
         <SecuredRoute path="/orgsetting" component={OrgSettings} />
         <SecuredRoute path="/orgstore" component={AddOnStore} />
-        <SecuredRoute path="/roles" component={Roles} />
+        <SecuredRoute path="/users" component={Users} />
         <SecuredRoute path="/requests" component={Requests} />
         <SecuredRoute path="/blockuser" component={BlockUser} />
+        <SecuredRoute path="/event/:eventId" component={EventDashboard} />
         {extraRoutes}
         <Route exact path="/forgotPassword" component={ForgotPassword} />
 
@@ -113,6 +121,8 @@ function app(): JSX.Element {
         />
         <SecuredRouteForUser path="/user/organization" component={Home} />
         <SecuredRouteForUser path="/user/people" component={People} />
+        <SecuredRouteForUser path="/user/settings" component={Settings} />
+        <SecuredRouteForUser path="/user/donate" component={Donate} />
 
         <Route exact path="*" component={PageNotFound} />
       </Switch>

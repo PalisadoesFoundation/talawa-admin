@@ -2,34 +2,34 @@ import MenuIcon from '@mui/icons-material/Menu';
 import LeftDrawer from 'components/LeftDrawer/LeftDrawer';
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import type { InterfaceUserType } from 'utils/interfaces';
 import styles from './SuperAdminScreen.module.css';
 
 export interface InterfaceSuperAdminScreenProps {
   title: string; // Multilingual Page title
   screenName: string; // Internal Screen name for developers
-  data: InterfaceUserType | undefined;
   children: React.ReactNode;
 }
 const superAdminScreen = ({
   title,
   screenName,
-  data,
   children,
 }: InterfaceSuperAdminScreenProps): JSX.Element => {
-  const [showDrawer, setShowDrawer] = useState(true);
+  const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
 
   return (
     <>
       <LeftDrawer
-        data={data}
         screenName={screenName}
-        showDrawer={showDrawer}
-        setShowDrawer={setShowDrawer}
+        hideDrawer={hideDrawer}
+        setHideDrawer={setHideDrawer}
       />
       <div
         className={`${styles.pageContainer} ${
-          showDrawer ? styles.contract : styles.expand
+          hideDrawer === null
+            ? ''
+            : hideDrawer
+            ? styles.expand
+            : styles.contract
         } `}
         data-testid="mainpageright"
       >
@@ -40,7 +40,7 @@ const superAdminScreen = ({
           <Button
             className="ms-2"
             onClick={(): void => {
-              setShowDrawer(!showDrawer);
+              setHideDrawer(!hideDrawer);
             }}
             data-testid="menuBtn"
           >

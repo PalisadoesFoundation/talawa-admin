@@ -39,8 +39,32 @@
     "menu": "Menu",
     "organizations": "Organizations",
     "requests": "Requests",
-    "roles": "Roles",
+    "users": "Users",
     "logout": "Logout"
+  },
+  "leftDrawerOrg": {
+    "talawaAdminPortal": "Talawa Admin Portal",
+    "menu": "Menu",
+    "logout": "Logout",
+    "talawa_portal": "Talawa Admin Portal",
+    "Dashboard": "Dashboard",
+    "People": "People",
+    "Events": "Events",
+    "Contributions": "Contributions",
+    "Posts": "Posts",
+    "Block/Unblock": "Block/Unblock",
+    "Plugins": "Plugins",
+    "Plugin Store": "Plugin Store",
+    "allOrganizations": "All Organizations",
+    "yourOrganization": "Your Organization",
+    "notification": "Notification",
+    "settings": "Settings",
+    "language": "Language",
+    "notifications": "Notifications",
+    "spamsThe": "spams the",
+    "group": "group",
+    "noNotifications": "No Notifications",
+    "close": "Close"
   },
   "orgList": {
     "title": "Talawa Organizations",
@@ -73,10 +97,10 @@
     "rowsPerPage": "rows per page",
     "all": "All"
   },
-  "roles": {
+  "users": {
     "title": "Talawa Roles",
     "searchByName": "Search By Name",
-    "usersList": "Users List",
+    "users": "Users",
     "name": "Name",
     "email": "Email",
     "roles_userType": "Role/User-Type",
@@ -112,30 +136,8 @@
     "noResultsFoundFor": "No results found for ",
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
-  "adminNavbar": {
-    "talawa_portal": "Talawa Admin Portal",
-    "Dashboard": "Dashboard",
-    "People": "People",
-    "Events": "Events",
-    "Contributions": "Contributions",
-    "Posts": "Posts",
-    "Block/Unblock": "Block/Unblock",
-    "Plugins": "Plugins",
-    "Plugin Store": "Plugin Store",
-    "allOrganizations": "All Organizations",
-    "yourOrganization": "Your Organization",
-    "notification": "Notification",
-    "settings": "Settings",
-    "language": "Language",
-    "logout": "Logout",
-    "notifications": "Notifications",
-    "spamsThe": "spams the",
-    "group": "group",
-    "noNotifications": "No Notifications",
-    "close": "Close"
-  },
   "dashboard": {
-    "title": "Talawa Dashboard",
+    "title": "Dashboard",
     "location": "Location",
     "about": "About",
     "deleteThisOrganization": "Delete This Organization",
@@ -432,6 +434,7 @@
     "pDesc": "This Plugin enables UI for"
   },
   "addOnStore": {
+    "title": "Add On Store",
     "searchName": "Ex: Donations",
     "enable": "Enabled",
     "disable": "Disabled",
@@ -543,5 +546,20 @@
     "feed": "Feed",
     "pinnedPosts": "View Pinned Posts",
     "somethingOnYourMind": "Something on your mind?"
+  },
+  "settings": {
+    "profileSettings": "Profile Settings",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "emailAddress": "Email Address",
+    "updateImage": "Update Image",
+    "save": "Save"
+  },
+  "donate": {
+    "donateTo": "Donate to",
+    "amount": "Amount",
+    "yourPreviousDonations": "Your Previous Donations",
+    "donate": "Donate",
+    "nothingToShow": "Nothing to show here."
   }
 }

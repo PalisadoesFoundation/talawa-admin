@@ -471,10 +471,132 @@ export const UNLIKE_POST = gql`
   }
 `;
 
+export const ADD_EVENT_PROJECT_MUTATION = gql`
+  mutation AddEventProject(
+    $title: String!
+    $description: String!
+    $eventId: ID!
+  ) {
+    createEventProject(
+      data: { title: $title, description: $description, eventId: $eventId }
+    ) {
+      _id
+    }
+  }
+`;
+
+export const UPDATE_EVENT_PROJECT_MUTATION = gql`
+  mutation UpdateEventProject($title: String, $description: String, $id: ID!) {
+    updateEventProject(
+      id: $id
+      data: { title: $title, description: $description }
+    ) {
+      _id
+    }
+  }
+`;
+
+export const DELETE_EVENT_PROJECT_MUTATION = gql`
+  mutation DeleteEventProject($id: ID!) {
+    removeEventProject(id: $id) {
+      _id
+    }
+  }
+`;
+
+export const ADD_EVENT_PROJECT_TASK_MUTATION = gql`
+  mutation AddEventTask(
+    $title: String!
+    $description: String!
+    $projectId: ID!
+    $deadline: DateTime!
+  ) {
+    createTask(
+      eventProjectId: $projectId
+      data: { title: $title, description: $description, deadline: $deadline }
+    ) {
+      _id
+    }
+  }
+`;
+
+export const UPDATE_EVENT_PROJECT_TASK_MUTATION = gql`
+  mutation UpdateEventTask(
+    $title: String!
+    $description: String!
+    $taskId: ID!
+    $deadline: DateTime!
+    $completed: Boolean!
+  ) {
+    updateTask(
+      id: $taskId
+      data: {
+        title: $title
+        description: $description
+        deadline: $deadline
+        completed: $completed
+      }
+    ) {
+      _id
+    }
+  }
+`;
+
+export const DELETE_EVENT_TASK_MUTATION = gql`
+  mutation DeleteTask($id: ID!) {
+    removeTask(id: $id) {
+      _id
+    }
+  }
+`;
+
+export const SET_TASK_VOLUNTEERS_MUTATION = gql`
+  mutation SetTaskVolunteers($id: ID!, $volunteers: [ID]!) {
+    setTaskVolunteers(id: $id, volunteers: $volunteers) {
+      _id
+    }
+  }
+`;
+
+export const ADD_EVENT_ATTENDEE = gql`
+  mutation addEventAttendee($userId: ID!, $eventId: ID!) {
+    addEventAttendee(data: { userId: $userId, eventId: $eventId }) {
+      _id
+    }
+  }
+`;
+
+export const REMOVE_EVENT_ATTENDEE = gql`
+  mutation removeEventAttendee($userId: ID!, $eventId: ID!) {
+    removeEventAttendee(data: { userId: $userId, eventId: $eventId }) {
+      _id
+    }
+  }
+`;
+
+export const MARK_CHECKIN = gql`
+  mutation checkIn(
+    $userId: ID!
+    $eventId: ID!
+    $allotedRoom: String
+    $allotedSeat: String
+  ) {
+    checkIn(
+      data: {
+        userId: $userId
+        eventId: $eventId
+        allotedRoom: $allotedRoom
+        allotedSeat: $allotedSeat
+      }
+    ) {
+      _id
+    }
+  }
+`;
 export const TOGGLE_PINNED_POST = gql`
   mutation TogglePostPin($id: ID!) {
     togglePostPin(id: $id) {
-      _id
+      id
     }
   }
 `;

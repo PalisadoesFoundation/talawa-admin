@@ -1,8 +1,6 @@
 import React from 'react';
 import { act, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import 'jest-localstorage-mock';
-import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 import i18nForTest from 'utils/i18nForTest';

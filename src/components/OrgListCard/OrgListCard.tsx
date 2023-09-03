@@ -3,7 +3,6 @@ import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import styles from './OrgListCard.module.css';
 import { useHistory } from 'react-router-dom';
-import AboutImg from 'assets/images/defaultImg.png';
 import type { InterfaceOrgConnectionInfoType } from 'utils/interfaces';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 
@@ -11,7 +10,7 @@ export interface InterfaceOrgListCardProps {
   data: InterfaceOrgConnectionInfoType;
 }
 
-function superDashListCard(props: InterfaceOrgListCardProps): JSX.Element {
+function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
   const { _id, admins, image, location, members, name } = props.data;
 
   const history = useHistory();
@@ -33,7 +32,6 @@ function superDashListCard(props: InterfaceOrgListCardProps): JSX.Element {
       <div className={styles.orgCard}>
         <div className={styles.innerContainer}>
           <div className={styles.orgImgContainer}>
-            <div className={styles.overlayTheme} />
             {image ? (
               <img
                 src={image}
@@ -41,10 +39,9 @@ function superDashListCard(props: InterfaceOrgListCardProps): JSX.Element {
                 alt={`${name} image`}
               />
             ) : (
-              <img
-                src={AboutImg}
-                className={styles.orgimg}
-                alt={`default image`}
+              <div
+                className={styles.emptyImg}
+                data-testid="emptyContainerForImage"
               />
             )}
           </div>
@@ -69,4 +66,4 @@ function superDashListCard(props: InterfaceOrgListCardProps): JSX.Element {
     </>
   );
 }
-export default superDashListCard;
+export default orgListCard;

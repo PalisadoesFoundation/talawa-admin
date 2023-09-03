@@ -1,11 +1,10 @@
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
-import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import Modal from 'react-bootstrap/Modal';
-
+import Button from 'react-bootstrap/Button';
 import styles from './EventListCard.module.css';
 import {
   DELETE_EVENT_MUTATION,
@@ -13,6 +12,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { Form } from 'react-bootstrap';
 import { errorHandler } from 'utils/errorHandler';
+import { useHistory } from 'react-router-dom';
 
 interface InterfaceEventListCardProps {
   key: string;
@@ -38,6 +38,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   const [recurringchecked, setRecurringChecked] = useState(false);
   const [publicchecked, setPublicChecked] = useState(true);
   const [registrablechecked, setRegistrableChecked] = React.useState(false);
+  const history = useHistory();
   const [formState, setFormState] = useState({
     title: '',
     eventdescrip: '',
@@ -125,6 +126,10 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
     }
   };
 
+  const openEventDashboard = (): void => {
+    history.push(`/event/${props.id}`);
+  };
+
   return (
     <>
       <div className="">
@@ -181,6 +186,14 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                 {t('end')}:{' '}
                 <span className={styles.view}>{props.regEndDate}</span>
               </p>
+              <Button
+                className={styles.customButton}
+                variant="success"
+                onClick={openEventDashboard}
+              >
+                {' '}
+                Show Event Dashboard{' '}
+              </Button>
             </div>
             <div className={styles.iconContainer}>
               <a

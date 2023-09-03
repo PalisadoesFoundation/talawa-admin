@@ -1,25 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import { useLazyQuery } from '@apollo/client';
-import { useSelector } from 'react-redux';
-import { Container, Form } from 'react-bootstrap';
 import dayjs from 'dayjs';
+import React, { useEffect, useState } from 'react';
+import { Container, Form } from 'react-bootstrap';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 
-import styles from './OrganizationPeople.module.css';
-import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
-import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
-import OrgAdminListCard from 'components/OrgAdminListCard/OrgAdminListCard';
-import UserListCard from 'components/UserListCard/UserListCard';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST,
 } from 'GraphQl/Queries/Queries';
-import type { RootState } from '../../state/reducers';
+import NotFound from 'components/NotFound/NotFound';
+import OrgAdminListCard from 'components/OrgAdminListCard/OrgAdminListCard';
+import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
+import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 import PaginationList from 'components/PaginationList/PaginationList';
+import UserListCard from 'components/UserListCard/UserListCard';
 import { useTranslation } from 'react-i18next';
 import debounce from 'utils/debounce';
-import NotFound from 'components/NotFound/NotFound';
+import styles from './OrganizationPeople.module.css';
 
 import { toast } from 'react-toastify';
 
@@ -31,9 +29,6 @@ function organizationPeople(): JSX.Element {
   document.title = t('title');
 
   const currentUrl = window.location.href.split('=')[1];
-
-  const appRoutes = useSelector((state: RootState) => state.appRoutes);
-  const { targets, configUrl } = appRoutes;
 
   const [state, setState] = useState(0);
   const [page, setPage] = useState(0);
@@ -151,270 +146,272 @@ function organizationPeople(): JSX.Element {
 
   return (
     <>
-      <div>
-        <AdminNavbar targets={targets} url1={configUrl} />
-      </div>
-      <Row>
-        <Col sm={3}>
-          <div className={styles.sidebar}>
-            <div className={styles.sidebarsticky}>
-              <h6 className={styles.searchtitle}>{t('filterByName')}</h6>
-              <Form.Control
-                type="name"
-                id="searchname"
-                placeholder={t('searchFirstName')}
-                autoComplete="off"
-                required
-                value={filterData.firstName_contains}
-                onChange={(e): void => {
-                  const { value } = e.target;
+      <OrganizationScreen screenName="People" title={t('title')}>
+        <Row>
+          <Col sm={3}>
+            <div className={styles.sidebar}>
+              <div className={styles.sidebarsticky}>
+                <h6 className={styles.searchtitle}>{t('filterByName')}</h6>
+                <Form.Control
+                  type="name"
+                  id="searchname"
+                  placeholder={t('searchFirstName')}
+                  autoComplete="off"
+                  required
+                  value={filterData.firstName_contains}
+                  onChange={(e): void => {
+                    const { value } = e.target;
 
-                  const newFilterData = {
-                    ...filterData,
-                    firstName_contains: value?.trim(),
-                  };
+                    const newFilterData = {
+                      ...filterData,
+                      firstName_contains: value?.trim(),
+                    };
 
-                  setFilterData(newFilterData);
-                  debouncedHandleFirstNameSearchChange(newFilterData);
-                }}
-              />
-              <Form.Control
-                type="name"
-                id="searchLastName"
-                placeholder={t('searchLastName')}
-                autoComplete="off"
-                required
-                value={filterData.lastName_contains}
-                onChange={(e): void => {
-                  const { value } = e.target;
-
-                  const newFilterData = {
-                    ...filterData,
-                    lastName_contains: value?.trim(),
-                  };
-
-                  setFilterData(newFilterData);
-                  debouncedHandleFirstNameSearchChange(newFilterData);
-                }}
-              />
-              <div className={styles.radio_buttons} data-testid="usertypelist">
-                <Form.Check
-                  type="radio"
-                  inline
-                  id="userslist"
-                  value="userslist"
-                  name="displaylist"
-                  data-testid="users"
-                  defaultChecked={state == 2 ? true : false}
-                  onClick={(): void => {
-                    setState(2);
+                    setFilterData(newFilterData);
+                    debouncedHandleFirstNameSearchChange(newFilterData);
                   }}
                 />
-                <label htmlFor="userslist">{t('users')}</label>
-                <Form.Check
-                  type="radio"
-                  inline
-                  id="memberslist"
-                  value="memberslist"
-                  name="displaylist"
-                  data-testid="members"
-                  defaultChecked={state == 0 ? true : false}
-                  onClick={(): void => {
-                    setState(0);
+                <Form.Control
+                  type="name"
+                  id="searchLastName"
+                  placeholder={t('searchLastName')}
+                  autoComplete="off"
+                  required
+                  value={filterData.lastName_contains}
+                  onChange={(e): void => {
+                    const { value } = e.target;
+
+                    const newFilterData = {
+                      ...filterData,
+                      lastName_contains: value?.trim(),
+                    };
+
+                    setFilterData(newFilterData);
+                    debouncedHandleFirstNameSearchChange(newFilterData);
                   }}
                 />
-                <label htmlFor="memberslist">{t('members')}</label>
-                <Form.Check
-                  type="radio"
-                  inline
-                  id="adminslist"
-                  value="adminslist"
-                  name="displaylist"
-                  data-testid="admins"
-                  defaultChecked={state == 1 ? true : false}
-                  onClick={(): void => {
-                    setState(1);
-                  }}
-                />
-                <label htmlFor="adminslist">{t('admins')}</label>
+                <div
+                  className={styles.radio_buttons}
+                  data-testid="usertypelist"
+                >
+                  <Form.Check
+                    type="radio"
+                    inline
+                    id="userslist"
+                    value="userslist"
+                    name="displaylist"
+                    data-testid="users"
+                    defaultChecked={state == 2 ? true : false}
+                    onClick={(): void => {
+                      setState(2);
+                    }}
+                  />
+                  <label htmlFor="userslist">{t('users')}</label>
+                  <Form.Check
+                    type="radio"
+                    inline
+                    id="memberslist"
+                    value="memberslist"
+                    name="displaylist"
+                    data-testid="members"
+                    defaultChecked={state == 0 ? true : false}
+                    onClick={(): void => {
+                      setState(0);
+                    }}
+                  />
+                  <label htmlFor="memberslist">{t('members')}</label>
+                  <Form.Check
+                    type="radio"
+                    inline
+                    id="adminslist"
+                    value="adminslist"
+                    name="displaylist"
+                    data-testid="admins"
+                    defaultChecked={state == 1 ? true : false}
+                    onClick={(): void => {
+                      setState(1);
+                    }}
+                  />
+                  <label htmlFor="adminslist">{t('admins')}</label>
+                </div>
               </div>
             </div>
-          </div>
-        </Col>
-        <Col sm={9} className="mt-sm-0 mt-5 ml-4 ml-sm-0">
-          <Container>
-            <div className={styles.mainpageright}>
-              <Row className={styles.justifysp}>
-                <p className={styles.logintitle}>
-                  {state == 0
-                    ? t('members')
-                    : state == 1
-                    ? t('admins')
-                    : t('users')}
-                </p>
-              </Row>
-              {memberLoading || usersLoading || adminLoading ? (
-                <>
-                  <div className={styles.loader}></div>
-                </>
-              ) : (
-                <div className={styles.list_box} data-testid="orgpeoplelist">
-                  {
-                    /* istanbul ignore next */
-                    state == 0 ? (
-                      memberData &&
-                      memberData.organizationsMemberConnection.edges.length >
-                        0 ? (
-                        (rowsPerPage > 0
-                          ? memberData.organizationsMemberConnection.edges.slice(
-                              page * rowsPerPage,
-                              page * rowsPerPage + rowsPerPage
-                            )
-                          : memberData.organizationsMemberConnection.edges
-                        ).map(
-                          (datas: {
-                            _id: string;
-                            lastName: string;
-                            firstName: string;
-                            image: string;
-                            email: string;
-                            createdAt: string;
-                          }) => {
-                            return (
-                              <OrgPeopleListCard
-                                key={datas._id}
-                                id={datas._id}
-                                memberImage={datas.image}
-                                joinDate={dayjs(datas.createdAt).format(
-                                  'DD/MM/YYYY'
-                                )}
-                                memberName={
-                                  datas.firstName + ' ' + datas.lastName
-                                }
-                                memberEmail={datas.email}
-                              />
-                            );
-                          }
+          </Col>
+          <Col sm={9} className="mt-sm-0 mt-5 ml-4 ml-sm-0">
+            <Container>
+              <div className={styles.mainpageright}>
+                <Row className={styles.justifysp}>
+                  <p className={styles.logintitle}>
+                    {state == 0
+                      ? t('members')
+                      : state == 1
+                      ? t('admins')
+                      : t('users')}
+                  </p>
+                </Row>
+                {memberLoading || usersLoading || adminLoading ? (
+                  <>
+                    <div className={styles.loader}></div>
+                  </>
+                ) : (
+                  <div className={styles.list_box} data-testid="orgpeoplelist">
+                    {
+                      /* istanbul ignore next */
+                      state == 0 ? (
+                        memberData &&
+                        memberData.organizationsMemberConnection.edges.length >
+                          0 ? (
+                          (rowsPerPage > 0
+                            ? memberData.organizationsMemberConnection.edges.slice(
+                                page * rowsPerPage,
+                                page * rowsPerPage + rowsPerPage
+                              )
+                            : memberData.organizationsMemberConnection.edges
+                          ).map(
+                            (datas: {
+                              _id: string;
+                              lastName: string;
+                              firstName: string;
+                              image: string;
+                              email: string;
+                              createdAt: string;
+                            }) => {
+                              return (
+                                <OrgPeopleListCard
+                                  key={datas._id}
+                                  id={datas._id}
+                                  memberImage={datas.image}
+                                  joinDate={dayjs(datas.createdAt).format(
+                                    'DD/MM/YYYY'
+                                  )}
+                                  memberName={
+                                    datas.firstName + ' ' + datas.lastName
+                                  }
+                                  memberEmail={datas.email}
+                                />
+                              );
+                            }
+                          )
+                        ) : (
+                          <NotFound title="member" keyPrefix="userNotFound" />
+                        )
+                      ) : state == 1 ? (
+                        adminData &&
+                        adminData.organizationsMemberConnection.edges.length >
+                          0 ? (
+                          (rowsPerPage > 0
+                            ? adminData.organizationsMemberConnection.edges.slice(
+                                page * rowsPerPage,
+                                page * rowsPerPage + rowsPerPage
+                              )
+                            : adminData.organizationsMemberConnection.edges
+                          ).map(
+                            (datas: {
+                              _id: string;
+                              lastName: string;
+                              firstName: string;
+                              image: string;
+                              email: string;
+                              createdAt: string;
+                            }) => {
+                              return (
+                                <OrgAdminListCard
+                                  key={datas._id}
+                                  id={datas._id}
+                                  memberImage={datas.image}
+                                  joinDate={dayjs(datas.createdAt).format(
+                                    'DD/MM/YYYY'
+                                  )}
+                                  memberName={
+                                    datas.firstName + ' ' + datas.lastName
+                                  }
+                                  memberEmail={datas.email}
+                                />
+                              );
+                            }
+                          )
+                        ) : (
+                          <NotFound title="admin" keyPrefix="userNotFound" />
+                        )
+                      ) : state == 2 ? (
+                        usersData && usersData.users.length > 0 ? (
+                          (rowsPerPage > 0
+                            ? usersData.users.slice(
+                                page * rowsPerPage,
+                                page * rowsPerPage + rowsPerPage
+                              )
+                            : usersData.users
+                          ).map(
+                            (datas: {
+                              _id: string;
+                              lastName: string;
+                              firstName: string;
+                              image: string;
+                              email: string;
+                              createdAt: string;
+                            }) => {
+                              return (
+                                <UserListCard
+                                  key={datas._id}
+                                  id={datas._id}
+                                  memberImage={datas.image}
+                                  joinDate={dayjs(datas.createdAt).format(
+                                    'DD/MM/YYYY'
+                                  )}
+                                  memberName={
+                                    datas.firstName + ' ' + datas.lastName
+                                  }
+                                  memberEmail={datas.email}
+                                />
+                              );
+                            }
+                          )
+                        ) : (
+                          <NotFound title="user" keyPrefix="userNotFound" />
                         )
                       ) : (
-                        <NotFound title="member" keyPrefix="userNotFound" />
-                      )
-                    ) : state == 1 ? (
-                      adminData &&
-                      adminData.organizationsMemberConnection.edges.length >
-                        0 ? (
-                        (rowsPerPage > 0
-                          ? adminData.organizationsMemberConnection.edges.slice(
-                              page * rowsPerPage,
-                              page * rowsPerPage + rowsPerPage
-                            )
-                          : adminData.organizationsMemberConnection.edges
-                        ).map(
-                          (datas: {
-                            _id: string;
-                            lastName: string;
-                            firstName: string;
-                            image: string;
-                            email: string;
-                            createdAt: string;
-                          }) => {
-                            return (
-                              <OrgAdminListCard
-                                key={datas._id}
-                                id={datas._id}
-                                memberImage={datas.image}
-                                joinDate={dayjs(datas.createdAt).format(
-                                  'DD/MM/YYYY'
-                                )}
-                                memberName={
-                                  datas.firstName + ' ' + datas.lastName
-                                }
-                                memberEmail={datas.email}
-                              />
-                            );
-                          }
-                        )
-                      ) : (
-                        <NotFound title="admin" keyPrefix="userNotFound" />
-                      )
-                    ) : state == 2 ? (
-                      usersData && usersData.users.length > 0 ? (
-                        (rowsPerPage > 0
-                          ? usersData.users.slice(
-                              page * rowsPerPage,
-                              page * rowsPerPage + rowsPerPage
-                            )
-                          : usersData.users
-                        ).map(
-                          (datas: {
-                            _id: string;
-                            lastName: string;
-                            firstName: string;
-                            image: string;
-                            email: string;
-                            createdAt: string;
-                          }) => {
-                            return (
-                              <UserListCard
-                                key={datas._id}
-                                id={datas._id}
-                                memberImage={datas.image}
-                                joinDate={dayjs(datas.createdAt).format(
-                                  'DD/MM/YYYY'
-                                )}
-                                memberName={
-                                  datas.firstName + ' ' + datas.lastName
-                                }
-                                memberEmail={datas.email}
-                              />
-                            );
-                          }
-                        )
-                      ) : (
+                        /* istanbul ignore next */
                         <NotFound title="user" keyPrefix="userNotFound" />
                       )
-                    ) : (
-                      /* istanbul ignore next */
-                      <NotFound title="user" keyPrefix="userNotFound" />
-                    )
-                  }
-                </div>
-              )}
-            </div>
-            <div>
-              <table
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <tbody>
-                  <tr data-testid="rowsPPSelect">
-                    <>
-                      <PaginationList
-                        count={
-                          state === 0
-                            ? memberData?.organizationsMemberConnection.edges
-                                .length ?? 0
-                            : state === 1
-                            ? adminData?.organizationsMemberConnection.edges
-                                .length ?? 0
-                            : usersData?.users.length ?? 0
-                        }
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                      />
-                    </>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </Container>
-        </Col>
-      </Row>
+                    }
+                  </div>
+                )}
+              </div>
+              <div>
+                <table
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <tbody>
+                    <tr data-testid="rowsPPSelect">
+                      <>
+                        <PaginationList
+                          count={
+                            state === 0
+                              ? memberData?.organizationsMemberConnection.edges
+                                  .length ?? 0
+                              : state === 1
+                              ? adminData?.organizationsMemberConnection.edges
+                                  .length ?? 0
+                              : usersData?.users.length ?? 0
+                          }
+                          rowsPerPage={rowsPerPage}
+                          page={page}
+                          onPageChange={handleChangePage}
+                          onRowsPerPageChange={handleChangeRowsPerPage}
+                        />
+                      </>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </Container>
+          </Col>
+        </Row>
+      </OrganizationScreen>
     </>
   );
 }
