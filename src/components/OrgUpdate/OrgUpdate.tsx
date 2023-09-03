@@ -5,9 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
 import type { ApolloError } from '@apollo/client';
-import {
-  WarningAmberRounded
-} from '@mui/icons-material';
+import { WarningAmberRounded } from '@mui/icons-material';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
@@ -192,6 +190,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             onChange={async (e: React.ChangeEvent): Promise<void> => {
               const target = e.target as HTMLInputElement;
               const file = target.files && target.files[0];
+              /* istanbul ignore else */
               if (file)
                 setFormState({
                   ...formState,
