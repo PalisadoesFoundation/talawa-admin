@@ -1,37 +1,26 @@
-import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen } from '@testing-library/react';
-import { MEMBERSHIP_REQUEST } from 'GraphQl/Queries/Queries';
+import { render, screen } from '@testing-library/react';
+import 'jest-location-mock';
+import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import userEvent from '@testing-library/user-event';
-import { I18nextProvider } from 'react-i18next';
-import 'jest-location-mock';
 
+import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
-import OrgSettings from './OrgSettings';
-import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import i18nForTest from 'utils/i18nForTest';
+import OrgSettings from './OrgSettings';
 
 const MOCKS = [
   {
     request: {
-      query: MEMBERSHIP_REQUEST,
+      query: DELETE_ORGANIZATION_MUTATION,
     },
     result: {
       data: {
-        organizations: [
+        removeOrganization: [
           {
             _id: 1,
-            membershipRequests: {
-              _id: 1,
-              user: {
-                _id: 1,
-                firstName: 'John',
-                lastName: 'Doe',
-                email: 'johndoe@gmail.com',
-              },
-            },
           },
         ],
       },
@@ -41,36 +30,23 @@ const MOCKS = [
 
 const link = new StaticMockLink(MOCKS, true);
 
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
+afterEach(() => {
+  localStorage.clear();
+});
 
 describe('Organisation Settings Page', () => {
   test('correct mock data should be queried', async () => {
-    const dataQuery1 = MOCKS[0]?.result?.data?.organizations[0];
-
-    expect(dataQuery1).toEqual({
-      _id: 1,
-      membershipRequests: {
-        _id: 1,
-        user: {
-          _id: 1,
-          email: 'johndoe@gmail.com',
-          firstName: 'John',
-          lastName: 'Doe',
-        },
+    const dataQuery1 = MOCKS[0]?.result?.data?.removeOrganization;
+    expect(dataQuery1).toEqual([
+      {
+        _id: 123,
       },
-    });
+    ]);
   });
 
   test('should render props and text elements test for the screen', async () => {
-    window.location.assign('/orglist');
-
-    const { container } = render(
+    localStorage.setItem('UserType', 'SUPERADMIN');
+    render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
@@ -81,23 +57,19 @@ describe('Organisation Settings Page', () => {
         </BrowserRouter>
       </MockedProvider>
     );
-
-    await wait();
-    expect(container.textContent).not.toBe('Loading data...');
-
-    expect(container.textContent).toMatch('Settings');
-    expect(container.textContent).toMatch('Update Your Details');
-    expect(container.textContent).toMatch('Update Organization');
-    expect(container.textContent).toMatch('Delete Organization');
-    expect(container.textContent).toMatch('See Request');
-
-    expect(window.location).toBeAt('/orglist');
+    expect(screen.getAllByText(/Delete Organization/i)).toHaveLength(3);
+    expect(
+      screen.getByText(
+        /By clicking on Delete organization button you will the organization will be permanently deleted along with its events, tags and all related data/i
+      )
+    );
+    expect(screen.getByText(/Other Settings/i));
+    expect(screen.getByText(/Change Language/i));
   });
 
-  test('should render User update form in clicking user update button', async () => {
-    window.location.assign('/orglist');
-
-    const { container } = render(
+  test('should be able to Toggle Delete Organization Modal', async () => {
+    localStorage.setItem('UserType', 'SUPERADMIN');
+    render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
@@ -108,35 +80,12 @@ describe('Organisation Settings Page', () => {
         </BrowserRouter>
       </MockedProvider>
     );
-
-    await wait();
-    expect(container.textContent).not.toBe('Loading data...');
-    await wait();
-
-    userEvent.click(screen.getByTestId('userUpdateBtn'));
-
-    await wait();
-    const firstNameInput = screen.getByText(/first name/i);
-    const lastNameInput = screen.getByText(/last name/i);
-    const emailInput = screen.getByText(/email/i);
-    const imageInput = screen.getByText(/display image:/i);
-    const saveBtn = screen.getByRole('button', { name: /save changes/i });
-    const cancelBtn = screen.getByRole('button', { name: /cancel/i });
-
-    await wait();
-
-    expect(firstNameInput).toBeInTheDocument();
-    expect(lastNameInput).toBeInTheDocument();
-    expect(emailInput).toBeInTheDocument();
-    expect(imageInput).toBeInTheDocument();
-    expect(saveBtn).toBeInTheDocument();
-    expect(cancelBtn).toBeInTheDocument();
+    screen.getByTestId(/openDeleteModalBtn/i).click();
+    screen.getByTestId(/closeDelOrgModalBtn/i).click();
   });
-
-  test('should render password update form in clicking update your password button', async () => {
-    window.location.assign('/orglist');
-
-    const { container } = render(
+  test('Delete organization functionality should work properly', async () => {
+    localStorage.setItem('UserType', 'SUPERADMIN');
+    render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
@@ -147,65 +96,7 @@ describe('Organisation Settings Page', () => {
         </BrowserRouter>
       </MockedProvider>
     );
-
-    expect(container.textContent).not.toBe('Loading data...');
-    await wait();
-
-    userEvent.click(screen.getByTestId('userPasswordUpdateBtn'));
-
-    await wait();
-    const previousPasswordInput = screen.getByText(/previous password/i);
-    const confirmPasswordInput = screen.getByText(/confirm new password/i);
-    const saveBtn = screen.getByRole('button', { name: /save changes/i });
-    const cancelBtn = screen.getByRole('button', { name: /cancel/i });
-
-    await wait();
-
-    expect(previousPasswordInput).toBeInTheDocument();
-    expect(confirmPasswordInput).toBeInTheDocument();
-    expect(saveBtn).toBeInTheDocument();
-    expect(cancelBtn).toBeInTheDocument();
-  });
-
-  test('should render update orgnization form in clicking update orgnization button', async () => {
-    window.location.assign('/orglist');
-
-    const { container } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrgSettings />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    expect(container.textContent).not.toBe('Loading data...');
-    await wait();
-
-    userEvent.click(screen.getByTestId('orgUpdateBtn'));
-
-    await wait();
-    const nameInput = screen.getByText(/name/i);
-    const descriptionInput = screen.getByText(/description/i);
-    const locationInput = screen.getByText(/location/i);
-    const displayImageInput = screen.getByText(/display image:/i);
-    const isPublicInput = screen.getByText(/is public:/i);
-    const isRegistrableInput = screen.getByText(/is registrable:/i);
-    const saveBtn = screen.getByRole('button', { name: /save changes/i });
-    const cancelBtn = screen.getByRole('button', { name: /cancel/i });
-
-    await wait();
-
-    expect(nameInput).toBeInTheDocument();
-    expect(descriptionInput).toBeInTheDocument();
-    expect(locationInput).toBeInTheDocument();
-    expect(displayImageInput).toBeInTheDocument();
-    expect(isPublicInput).toBeInTheDocument();
-    expect(isRegistrableInput).toBeInTheDocument();
-    expect(saveBtn).toBeInTheDocument();
-    expect(cancelBtn).toBeInTheDocument();
+    screen.getByTestId(/openDeleteModalBtn/i).click();
+    screen.getByTestId(/deleteOrganizationBtn/i).click();
   });
 });

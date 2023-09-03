@@ -17,7 +17,6 @@ import {
 } from './OrgUpdateMocks';
 
 const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(MOCKS_ERROR_UPDATE_ORGLIST, true);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -26,8 +25,6 @@ async function wait(ms = 500): Promise<void> {
     });
   });
 }
-// Create a spy for a function
-const mockErrorHandler = jest.fn();
 
 describe('Testing Organization Update', () => {
   const props = {
@@ -143,7 +140,7 @@ describe('Testing Organization Update', () => {
   test('Should show error occured toast when Organization could not be updated', async () => {
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} link={link2}>
+        <MockedProvider addTypename={false} mocks={MOCKS_ERROR_UPDATE_ORGLIST}>
           <I18nextProvider i18n={i18nForTest}>
             <OrgUpdate {...props} />
           </I18nextProvider>

@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
 import OrgUpdate from 'components/OrgUpdate/OrgUpdate';
 import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
+import React, { useState } from 'react';
 import { Button, Card, Form, Modal } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
-import styles from './OrgSettings.module.css';
-import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
 import { errorHandler } from 'utils/errorHandler';
-import { useMutation } from '@apollo/client';
-import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import styles from './OrgSettings.module.css';
 
 function orgSettings(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -30,7 +30,6 @@ function orgSettings(): JSX.Element {
           id: currentUrl,
         },
       });
-
       /* istanbul ignore next */
       if (data) {
         window.location.replace('/orglist');
@@ -71,6 +70,7 @@ function orgSettings(): JSX.Element {
                     variant="danger"
                     className={styles.deleteButton}
                     onClick={toggleDeleteModal}
+                    data-testid="openDeleteModalBtn"
                   >
                     {t('deleteOrganization')}
                   </Button>
@@ -101,7 +101,11 @@ function orgSettings(): JSX.Element {
             </Modal.Header>
             <Modal.Body>{t('deleteMsg')}</Modal.Body>
             <Modal.Footer>
-              <Button variant="danger" onClick={toggleDeleteModal}>
+              <Button
+                variant="danger"
+                onClick={toggleDeleteModal}
+                data-testid="closeDelOrgModalBtn"
+              >
                 {t('no')}
               </Button>
               <Button
