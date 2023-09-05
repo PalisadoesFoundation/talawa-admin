@@ -18,6 +18,7 @@
   flex: 1;
   position: relative;
 }
+
 .btnsContainer .input {
   width: 70%;
   position: relative;
@@ -31,6 +32,10 @@
   width: 52px;
 }
 
+.largeBtnsWrapper {
+  display: flex;
+}
+
 .listBox {
   width: 100%;
   flex: 1;
@@ -42,7 +47,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  
+
 }
 
 @media (max-width: 1020px) {
@@ -50,9 +55,11 @@
     flex-direction: column;
     margin: 1.5rem 0;
   }
+
   .btnsContainer .input {
     width: 100%;
   }
+
   .btnsContainer .btnsBlock {
     margin: 1.5rem 0 0 0;
     justify-content: space-between;
@@ -78,6 +85,10 @@
     display: block;
     margin-top: 1rem;
     margin-right: 0;
+  }
+
+  .largeBtnsWrapper {
+    flex-direction: column;
   }
 
   .btnsContainer .btnsBlock div {

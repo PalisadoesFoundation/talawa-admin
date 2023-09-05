@@ -1,10 +1,5 @@
 import { MockedProvider } from '@apollo/react-testing';
-import {
-  act,
-  fireEvent,
-  render,
-  screen
-} from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -13,11 +8,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import OrganizationDashboard from './OrganizationDashboard';
-import {
-  EMPTY_MOCKS,
-  ERROR_MOCKS,
-  MOCKS
-} from './OrganizationDashboardMocks';
+import { EMPTY_MOCKS, ERROR_MOCKS, MOCKS } from './OrganizationDashboardMocks';
 import i18nForTest from 'utils/i18nForTest';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
@@ -57,10 +48,8 @@ afterEach(() => {
   localStorage.clear();
 });
 
-
 describe('Organisation Dashboard Page', () => {
   test('Should render props and text elements test for the screen', async () => {
-
     await act(async () => {
       render(
         <MockedProvider addTypename={false} link={link1}>
@@ -72,7 +61,7 @@ describe('Organisation Dashboard Page', () => {
             </Provider>
           </BrowserRouter>
         </MockedProvider>
-      )
+      );
     });
 
     await wait();
@@ -87,14 +76,18 @@ describe('Organisation Dashboard Page', () => {
     expect(screen.getByText('Membership requests')).toBeInTheDocument();
     expect(screen.getAllByText('View all')).toHaveLength(3);
 
-    // Checking if events are rendered 
+    // Checking if events are rendered
     expect(screen.getByText('Event 1')).toBeInTheDocument();
-    expect(screen.getByText(`${dayjs(new Date()).add(1, 'day').format('DD-MM-YYYY')}`)).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        `${dayjs(new Date()).add(1, 'day').format('DD-MM-YYYY')}`
+      )
+    ).toBeInTheDocument();
 
-    // Checking if posts are rendered 
+    // Checking if posts are rendered
     expect(screen.getByText('Post 1')).toBeInTheDocument();
 
-    // Checking if membership requests are rendered 
+    // Checking if membership requests are rendered
     expect(screen.getByText('Jane Doe')).toBeInTheDocument();
   });
 
@@ -110,7 +103,7 @@ describe('Organisation Dashboard Page', () => {
             </Provider>
           </BrowserRouter>
         </MockedProvider>
-      )
+      );
     });
 
     await wait();
@@ -123,10 +116,11 @@ describe('Organisation Dashboard Page', () => {
     fireEvent.click(viewMSBtn);
     expect(toast.success).toBeCalledWith('Coming soon!');
 
-    expect(screen.getByText('No membership requests present')).toBeInTheDocument();
+    expect(
+      screen.getByText('No membership requests present')
+    ).toBeInTheDocument();
     expect(screen.getByText('No upcoming events')).toBeInTheDocument();
     expect(screen.getByText('No posts present')).toBeInTheDocument();
-
   });
 
   test('Testing buttons and checking empty events, posts and membership requests', async () => {
@@ -141,11 +135,10 @@ describe('Organisation Dashboard Page', () => {
             </Provider>
           </BrowserRouter>
         </MockedProvider>
-      )
+      );
     });
 
     await wait();
     expect(window.location).toBeAt('/orglist');
   });
-
 });

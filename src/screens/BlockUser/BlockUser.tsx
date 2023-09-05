@@ -40,6 +40,7 @@ const Requests = (): JSX.Element => {
   const [membersData, setMembersData] = useState<InterfaceMember[]>([]);
   const [searchByFirstName, setSearchByFirstName] = useState<boolean>(true);
   const [searchByName, setSearchByName] = useState<string>('');
+  const [showBlockedMembers, setShowBlockedMembers] = useState<boolean>(false);
 
   const {
     data: memberData,
@@ -63,13 +64,16 @@ const Requests = (): JSX.Element => {
       return;
     }
 
-    const blockUsers = memberData?.organizationsMemberConnection.edges.filter(
-      (user: InterfaceMember) =>
-        user.organizationsBlockedBy.some((org) => org._id === currentUrl)
-    );
-
-    setMembersData(blockUsers);
-  }, [memberData]);
+    if (showBlockedMembers == false) {
+      setMembersData(memberData?.organizationsMemberConnection.edges);
+    } else {
+      const blockUsers = memberData?.organizationsMemberConnection.edges.filter(
+        (user: InterfaceMember) =>
+          user.organizationsBlockedBy.some((org) => org._id === currentUrl)
+      );
+      setMembersData(blockUsers);
+    }
+  }, [memberData, showBlockedMembers]);
 
   const handleBlockUser = async (userId: string): Promise<void> => {
     try {
@@ -161,9 +165,31 @@ const Requests = (): JSX.Element => {
             </div>
           </div>
           <div className={styles.btnsBlock}>
-            <div className="d-flex">
+            <div className={styles.largeBtnsWrapper}>
+              <Dropdown aria-expanded="false" title="Sort organizations">
+                <Dropdown.Toggle variant="success" data-testid="userFilter">
+                  <SortIcon className={'me-1'} />
+                  {showBlockedMembers ? t('blockedUsers') : t('allMembers')}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    active={!showBlockedMembers}
+                    data-testid="showMembers"
+                    onClick={(): void => setShowBlockedMembers(false)}
+                  >
+                    {t('allMembers')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    active={showBlockedMembers}
+                    data-testid="showBlockedMembers"
+                    onClick={(): void => setShowBlockedMembers(true)}
+                  >
+                    {t('blockedUsers')}
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
               <Dropdown aria-expanded="false">
-                <Dropdown.Toggle variant="success">
+                <Dropdown.Toggle variant="success" data-testid="nameFilter">
                   <SortIcon className={'me-1'} />
                   {searchByFirstName
                     ? t('searchByFirstName')
@@ -172,12 +198,14 @@ const Requests = (): JSX.Element => {
                 <Dropdown.Menu>
                   <Dropdown.Item
                     active={searchByFirstName}
+                    data-testid="searchByFirstName"
                     onClick={(): void => setSearchByFirstName(true)}
                   >
                     {t('searchByFirstName')}
                   </Dropdown.Item>
                   <Dropdown.Item
                     active={!searchByFirstName}
+                    data-testid="searchByLastName"
                     onClick={(): void => setSearchByFirstName(false)}
                   >
                     {t('searchByLastName')}
@@ -205,7 +233,7 @@ const Requests = (): JSX.Element => {
             {loadingMembers ? (
               <TableLoader headerTitles={headerTitles} noOfRows={10} />
             ) : (
-              <Table responsive>
+              <Table responsive data-testid="userList">
                 <thead>
                   <tr>
                     {headerTitles.map((title: string, index: number) => {

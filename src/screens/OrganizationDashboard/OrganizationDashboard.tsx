@@ -59,10 +59,10 @@ function organizationDashboard(): JSX.Element {
     error: errorPost,
   }: {
     data:
-    | {
-      postsByOrganization: InterfaceQueryOrganizationPostListItem[];
-    }
-    | undefined;
+      | {
+          postsByOrganization: InterfaceQueryOrganizationPostListItem[];
+        }
+      | undefined;
     loading: boolean;
     error?: ApolloError;
   } = useQuery(ORGANIZATION_POST_LIST, {
@@ -75,10 +75,10 @@ function organizationDashboard(): JSX.Element {
     error: errorEvent,
   }: {
     data:
-    | {
-      eventsByOrganization: InterfaceQueryOrganizationEventListItem[];
-    }
-    | undefined;
+      | {
+          eventsByOrganization: InterfaceQueryOrganizationEventListItem[];
+        }
+      | undefined;
     loading: boolean;
     error?: ApolloError;
   } = useQuery(ORGANIZATION_EVENT_LIST, {
@@ -157,9 +157,7 @@ function organizationDashboard(): JSX.Element {
                 </Col>
                 <Col xs={6} sm={4} className="mb-4">
                   <DashBoardCard
-                    count={
-                      data?.organizations[0].membershipRequests?.length
-                    }
+                    count={data?.organizations[0].membershipRequests?.length}
                     title={t('requests')}
                     icon={<UsersIcon fill="var(--bs-primary)" />}
                   />
@@ -175,7 +173,9 @@ function organizationDashboard(): JSX.Element {
                       size="sm"
                       variant="light"
                       data-testid="viewAllEvents"
-                      onClick={(): void => history.push(`/orgevents/id=${currentUrl}`)}
+                      onClick={(): void =>
+                        history.push(`/orgevents/id=${currentUrl}`)
+                      }
                     >
                       View all
                     </Button>
@@ -185,23 +185,22 @@ function organizationDashboard(): JSX.Element {
                       [...Array(4)].map((_, index) => {
                         return <CardItemLoading key={index} />;
                       })
-                    )
-                      : upcomingEvents.length == 0 ? (
-                        <div className={styles.emptyContainer}>
-                          <h6>No upcoming events</h6>
-                        </div>
-                      ) : (
-                        upcomingEvents.slice(0, 5).map((event) => {
-                          return (
-                            <CardItem
-                              type="Event"
-                              key={event._id}
-                              time={event.startDate}
-                              title={event.title}
-                            />
-                          );
-                        })
-                      )}
+                    ) : upcomingEvents.length == 0 ? (
+                      <div className={styles.emptyContainer}>
+                        <h6>No upcoming events</h6>
+                      </div>
+                    ) : (
+                      upcomingEvents.slice(0, 5).map((event) => {
+                        return (
+                          <CardItem
+                            type="Event"
+                            key={event._id}
+                            time={event.startDate}
+                            title={event.title}
+                          />
+                        );
+                      })
+                    )}
                   </Card.Body>
                 </Card>
               </Col>
@@ -213,7 +212,9 @@ function organizationDashboard(): JSX.Element {
                       size="sm"
                       variant="light"
                       data-testid="viewAllPosts"
-                      onClick={(): void => history.push(`/orgpost/id=${currentUrl}`)}
+                      onClick={(): void =>
+                        history.push(`/orgpost/id=${currentUrl}`)
+                      }
                     >
                       View all
                     </Button>
@@ -263,24 +264,23 @@ function organizationDashboard(): JSX.Element {
                   [...Array(4)].map((_, index) => {
                     return <CardItemLoading key={index} />;
                   })
-                )
-                  : data?.organizations[0].membershipRequests.length == 0 ? (
-                    <div className={styles.emptyContainer}>
-                      <h6>No membership requests present</h6>
-                    </div>
-                  ) : (
-                    data?.organizations[0]?.membershipRequests
-                      .slice(0, 8)
-                      .map((request) => {
-                        return (
-                          <CardItem
-                            type="MembershipRequest"
-                            key={request._id}
-                            title={`${request.user.firstName} ${request.user.lastName}`}
-                          />
-                        );
-                      })
-                  )}
+                ) : data?.organizations[0].membershipRequests.length == 0 ? (
+                  <div className={styles.emptyContainer}>
+                    <h6>No membership requests present</h6>
+                  </div>
+                ) : (
+                  data?.organizations[0]?.membershipRequests
+                    .slice(0, 8)
+                    .map((request) => {
+                      return (
+                        <CardItem
+                          type="MembershipRequest"
+                          key={request._id}
+                          title={`${request.user.firstName} ${request.user.lastName}`}
+                        />
+                      );
+                    })
+                )}
               </Card.Body>
             </Card>
           </Col>
