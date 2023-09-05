@@ -130,7 +130,6 @@ const leftDrawerOrg = ({
                   {data?.organizations[0].location}
                 </span>
               </div>
-              <AngleRightIcon className="me-2" fill={'var(--bs-secondary)'} />
             </button>
           )}
         </div>
