@@ -3,12 +3,7 @@ import { Card, Row } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import styles from './Dashboardcard.module.css';
 
-const dashBoardCard = (props: {
-  icon: React.ReactNode;
-  title: string;
-  count?: number;
-}): JSX.Element => {
-  const { icon, count, title } = props;
+const dashBoardCardLoading = (): JSX.Element => {
   return (
     <Card className="rounded-4" border="0">
       <Card.Body className={styles.cardBody}>
@@ -16,12 +11,21 @@ const dashBoardCard = (props: {
           <Col sm={4}>
             <div className={styles.iconWrapper}>
               <div className={styles.themeOverlay} />
-              {icon}
             </div>
           </Col>
           <Col sm={8} className={styles.textWrapper}>
-            <span className={styles.primaryText}>{count ?? 0}</span>
-            <span className={styles.secondaryText}>{title}</span>
+            <span
+              className={`${styles.primaryText} shimmer rounded w-75 mb-2`}
+              style={{
+                height: '1.75rem',
+              }}
+            />
+            <span
+              className={`${styles.secondaryText} shimmer rounded`}
+              style={{
+                height: '1.25rem',
+              }}
+            />
           </Col>
         </Row>
       </Card.Body>
@@ -29,4 +33,4 @@ const dashBoardCard = (props: {
   );
 };
 
-export default dashBoardCard;
+export default dashBoardCardLoading;
