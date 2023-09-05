@@ -25,7 +25,7 @@ describe('Testing the Organization Card', () => {
     };
 
     render(<CardItem {...props} />);
-    
+
     expect(screen.getByText(/Post Title/i)).toBeInTheDocument();
     expect(screen.getByText(/03-09-2023/i)).toBeInTheDocument();
   });

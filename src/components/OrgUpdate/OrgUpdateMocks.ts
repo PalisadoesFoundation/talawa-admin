@@ -152,6 +152,6 @@ export const MOCKS_ERROR_UPDATE_ORGLIST = [
         visibleInSearch: false,
       },
     },
-    erorr: new Error('Mock Graphql Updating Organization Error')
+    erorr: new Error('Mock Graphql Updating Organization Error'),
   },
 ];

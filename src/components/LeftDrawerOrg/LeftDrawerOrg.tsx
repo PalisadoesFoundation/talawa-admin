@@ -108,13 +108,7 @@ const leftDrawerOrg = ({
               </button>
             </>
           ) : (
-            <button
-              className={styles.profileContainer}
-              data-testid="OrgBtn"
-              onClick={(): void => {
-                toast.success('Organization detail modal coming soon!');
-              }}
-            >
+            <button className={styles.profileContainer} data-testid="OrgBtn">
               <div className={styles.imageContainer}>
                 {data && data?.organizations[0].image ? (
                   <img

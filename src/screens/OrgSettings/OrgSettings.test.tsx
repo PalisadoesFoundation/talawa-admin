@@ -1,3 +1,4 @@
+import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { render, screen } from '@testing-library/react';
 import 'jest-location-mock';
@@ -10,6 +11,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrgSettings from './OrgSettings';
+import { act } from 'react-dom/test-utils';
 
 const MOCKS = [
   {
@@ -20,7 +22,7 @@ const MOCKS = [
       data: {
         removeOrganization: [
           {
-            _id: 1,
+            _id: 123,
           },
         ],
       },
@@ -45,6 +47,7 @@ describe('Organisation Settings Page', () => {
   });
 
   test('should render props and text elements test for the screen', async () => {
+    window.location.assign('/orgsetting/id=123');
     localStorage.setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -62,12 +65,13 @@ describe('Organisation Settings Page', () => {
       screen.getByText(
         /By clicking on Delete organization button you will the organization will be permanently deleted along with its events, tags and all related data/i
       )
-    );
-    expect(screen.getByText(/Other Settings/i));
-    expect(screen.getByText(/Change Language/i));
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Other Settings/i)).toBeInTheDocument();
+    expect(screen.getByText(/Change Language/i)).toBeInTheDocument();
+    expect(window.location).toBeAt('/orgsetting/id=123');
   });
-
   test('should be able to Toggle Delete Organization Modal', async () => {
+    window.location.assign('/orgsetting/id=123');
     localStorage.setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -81,9 +85,16 @@ describe('Organisation Settings Page', () => {
       </MockedProvider>
     );
     screen.getByTestId(/openDeleteModalBtn/i).click();
+    expect(screen.getByTestId(/orgDeleteModal/i)).toBeInTheDocument();
     screen.getByTestId(/closeDelOrgModalBtn/i).click();
+    await act(async () => {
+      expect(screen.queryByTestId(/orgDeleteModal/i)).not.toHaveFocus();
+    });
+    expect(window.location).toBeAt('/orgsetting/id=123');
   });
+
   test('Delete organization functionality should work properly', async () => {
+    window.location.assign('/orgsetting/id=123');
     localStorage.setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>

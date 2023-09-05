@@ -1,10 +1,6 @@
+import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import {
-  act,
-  fireEvent,
-  render,
-  screen
-} from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -134,7 +130,7 @@ describe('Testing Organization Update', () => {
       );
     });
     await wait();
-    expect(screen.getByText(/Mock Graphql Error/i));
+    expect(screen.getByText(/Mock Graphql Error/i)).toBeInTheDocument();
   });
 
   test('Should show error occured toast when Organization could not be updated', async () => {

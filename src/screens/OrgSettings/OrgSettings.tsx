@@ -95,7 +95,11 @@ function orgSettings(): JSX.Element {
 
         {/* Delete Organization Modal */}
         {canDelete && (
-          <Modal show={showDeleteModal} onHide={toggleDeleteModal}>
+          <Modal
+            show={showDeleteModal}
+            onHide={toggleDeleteModal}
+            data-testid="orgDeleteModal"
+          >
             <Modal.Header className="bg-danger" closeButton>
               <h5 className="text-white fw-bold">{t('deleteOrganization')}</h5>
             </Modal.Header>

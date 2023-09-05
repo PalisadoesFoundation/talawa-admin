@@ -1,3 +1,4 @@
+import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import 'jest-location-mock';
@@ -123,7 +124,7 @@ describe('Organisation Dashboard Page', () => {
     expect(screen.getByText('No posts present')).toBeInTheDocument();
   });
 
-  test('Testing buttons and checking empty events, posts and membership requests', async () => {
+  test('Testing error scenario', async () => {
     await act(async () => {
       render(
         <MockedProvider addTypename={false} link={link3}>

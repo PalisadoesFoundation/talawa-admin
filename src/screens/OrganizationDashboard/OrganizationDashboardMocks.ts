@@ -1,4 +1,3 @@
-import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATIONS_LIST,
   ORGANIZATION_EVENT_LIST,
