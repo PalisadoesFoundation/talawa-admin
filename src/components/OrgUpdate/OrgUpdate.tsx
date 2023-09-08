@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
@@ -22,7 +22,7 @@ interface InterfaceOrgUpdateProps {
 function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   const { orgId } = props;
 
-  const [formState, setFormState] = React.useState<{
+  const [formState, setFormState] = useState<{
     orgName: string;
     orgDescrip: string;
     location: string;
@@ -60,8 +60,9 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     notifyOnNetworkStatusChange: true,
   });
 
-  React.useEffect(() => {
-    if (data) {
+  useEffect(() => {
+    let isMounted = true;
+    if (data && isMounted) {
       setFormState({
         ...formState,
         orgName: data.organizations[0].name,
@@ -71,6 +72,9 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
       setPublicChecked(data.organizations[0].isPublic);
       setVisibleChecked(data.organizations[0].visibleInSearch);
     }
+    return () => {
+      isMounted = false;
+    };
   }, [data]);
 
   const onSaveChangesClicked = async (): Promise<void> => {
