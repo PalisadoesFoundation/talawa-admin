@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -12,8 +12,58 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrgSettings from './OrgSettings';
 import { act } from 'react-dom/test-utils';
+import { debug } from 'jest-preview'
+import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 
 const MOCKS = [
+  {
+    request: {
+      query: ORGANIZATIONS_LIST
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: '123',
+            image: null,
+            name: 'Palisadoes',
+            description: 'Equitable Access to STEM Education Jobs',
+            location: 'Jamaica',
+            isPublic: true,
+            visibleInSearch: false,
+            creator: {
+              firstName: 'John',
+              lastName: 'Doe',
+              email: 'johndoe@example.com',
+            },
+            members: {
+              _id: '123',
+              firstName: 'John',
+              lastName: 'Doe',
+              email: 'johndoe@gmail.com',
+            },
+            admins: [
+              {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                email: 'johndoe@gmail.com',
+              },
+            ],
+            membershipRequests: {
+              _id: '456',
+              user: {
+                firstName: 'Sam',
+                lastName: 'Smith',
+                email: 'samsmith@gmail.com',
+              },
+            },
+            blockedUsers: [],
+          },
+        ],
+      },
+    },
+  },
   {
     request: {
       query: DELETE_ORGANIZATION_MUTATION,
@@ -27,10 +77,18 @@ const MOCKS = [
         ],
       },
     },
-  },
+  }
 ];
 
 const link = new StaticMockLink(MOCKS, true);
+
+async function wait(ms = 100): Promise<void> {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+}
 
 afterEach(() => {
   localStorage.clear();
@@ -38,7 +96,7 @@ afterEach(() => {
 
 describe('Organisation Settings Page', () => {
   test('correct mock data should be queried', async () => {
-    const dataQuery1 = MOCKS[0]?.result?.data?.removeOrganization;
+    const dataQuery1 = MOCKS[1]?.result?.data?.removeOrganization;
     expect(dataQuery1).toEqual([
       {
         _id: 123,
@@ -69,45 +127,5 @@ describe('Organisation Settings Page', () => {
     expect(screen.getByText(/Other Settings/i)).toBeInTheDocument();
     expect(screen.getByText(/Change Language/i)).toBeInTheDocument();
     expect(window.location).toBeAt('/orgsetting/id=123');
-  });
-  test('should be able to Toggle Delete Organization Modal', async () => {
-    window.location.assign('/orgsetting/id=123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrgSettings />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-    screen.getByTestId(/openDeleteModalBtn/i).click();
-    expect(screen.getByTestId(/orgDeleteModal/i)).toBeInTheDocument();
-    screen.getByTestId(/closeDelOrgModalBtn/i).click();
-    await act(async () => {
-      expect(screen.queryByTestId(/orgDeleteModal/i)).not.toHaveFocus();
-    });
-    expect(window.location).toBeAt('/orgsetting/id=123');
-  });
-
-  test('Delete organization functionality should work properly', async () => {
-    window.location.assign('/orgsetting/id=123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrgSettings />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-    screen.getByTestId(/openDeleteModalBtn/i).click();
-    screen.getByTestId(/deleteOrganizationBtn/i).click();
   });
 });

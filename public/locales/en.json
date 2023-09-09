@@ -363,16 +363,18 @@
     "title": "Talawa Setting",
     "pageName": "Settings",
     "updateOrganization": "Update Organization",
-    "deleteOrganization": "Delete Organization",
     "seeRequest": "See Request",
     "settings": "Settings",
     "noData": "No data",
+    "otherSettings": "Other Settings",
+    "changeLanguage": "Change Language"
+  },
+  "deleteOrg": {
+    "deleteOrganization": "Delete Organization",    
     "deleteMsg": "Do you want to delete this organization?",
     "no": "No",
     "yes": "Yes",
-    "longDelOrgMsg": "By clicking on Delete organization button you will the organization will be permanently deleted along with its events, tags and all related data.",
-    "otherSettings": "Other Settings",
-    "changeLanguage": "Change Language"
+    "longDelOrgMsg": "By clicking on Delete organization button you will the organization will be permanently deleted along with its events, tags and all related data."
   },
   "userUpdate": {
     "firstName": "First Name",

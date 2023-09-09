@@ -366,13 +366,15 @@
     "seeRequest": "Ver Solicitud",
     "settings": "Ajustes",
     "noData": "Sin datos",
-    "deleteOrganization": "Eliminar Organización",
+    "otherSettings": "Otras Configuraciones",
+    "changeLanguage": "Cambiar Idioma"
+  },
+  "deleteOrg": {
+    "deleteOrganization": "Eliminar organización",
     "deleteMsg": "¿Desea eliminar esta organización?",
     "no": "No",
     "yes": "Sí",
-    "longDelOrgMsg": "Al hacer clic en el botón Eliminar organización, la organización se eliminará permanentemente junto con sus eventos, etiquetas y todos los datos relacionados.",
-    "otherSettings": "Otras Configuraciones",
-    "changeLanguage": "Cambiar Idioma"
+    "longDelOrgMsg": "Al hacer clic en el botón de Eliminar organización, se eliminará permanentemente la organización junto con sus eventos, etiquetas y todos los datos relacionados."
   },
   "userUpdate": {
     "firstName": "Primer nombre",

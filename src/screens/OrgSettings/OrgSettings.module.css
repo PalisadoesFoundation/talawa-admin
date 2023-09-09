@@ -23,9 +23,3 @@
   margin: 0 0 3rem 0;
   color: var(--bs-secondary);
 }
-
-.cardBody .deleteButton {
-  width: 100%;
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-}

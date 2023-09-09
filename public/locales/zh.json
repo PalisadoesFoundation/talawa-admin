@@ -366,13 +366,15 @@
     "seeRequest": "查看請求",
     "settings": "設置",
     "noData": "沒有數據",
-    "deleteOrganization": "刪除組織",
-    "deleteMsg": "您要刪除此組織嗎？",
-    "no": "不",
-    "yes": "是的",
-    "longDelOrgMsg": "点击“删除组织”按钮，您将永久删除该组织以及其活动、标签和所有相关数据。",
     "otherSettings": "其他设置",
     "changeLanguage": "更改语言"
+  },
+  "deleteOrg": {
+    "deleteOrganization": "删除组织",
+    "deleteMsg": "您是否要删除此组织？",
+    "no": "否",
+    "yes": "是",
+    "longDelOrgMsg": "点击删除组织按钮后，将永久删除该组织以及其活动、标签和所有相关数据。"
   },
   "userUpdate": {
     "firstName": "名",

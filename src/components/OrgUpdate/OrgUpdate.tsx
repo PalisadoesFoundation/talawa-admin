@@ -75,7 +75,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     return () => {
       isMounted = false;
     };
-  }, [data]);
+  }, [data, orgId]);
 
   const onSaveChangesClicked = async (): Promise<void> => {
     try {

@@ -1,14 +1,12 @@
-import { useMutation } from '@apollo/client';
-import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import React from 'react';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
+import DeleteOrg from 'components/DeleteOrg/DeleteOrg';
 import OrgUpdate from 'components/OrgUpdate/OrgUpdate';
 import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
-import React, { useState } from 'react';
-import { Button, Card, Form, Modal } from 'react-bootstrap';
+import { Card, Form } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
-import { errorHandler } from 'utils/errorHandler';
 import styles from './OrgSettings.module.css';
 
 function orgSettings(): JSX.Element {
@@ -17,28 +15,7 @@ function orgSettings(): JSX.Element {
   });
 
   document.title = t('title');
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const currentUrl = window.location.href.split('=')[1];
-  const canDelete = localStorage.getItem('UserType') === 'SUPERADMIN';
-  const toggleDeleteModal = (): void => setShowDeleteModal(!showDeleteModal);
-  const [del] = useMutation(DELETE_ORGANIZATION_MUTATION);
-
-  const deleteOrg = async (): Promise<void> => {
-    try {
-      const { data } = await del({
-        variables: {
-          id: currentUrl,
-        },
-      });
-      /* istanbul ignore next */
-      if (data) {
-        window.location.replace('/orglist');
-      }
-    } catch (error: any) {
-      /* istanbul ignore next */
-      errorHandler(t, error);
-    }
-  };
 
   return (
     <>
@@ -52,31 +29,12 @@ function orgSettings(): JSX.Element {
                 </div>
               </div>
               <Card.Body className={styles.cardBody}>
-                <OrgUpdate orgId={currentUrl} />
+                {currentUrl && <OrgUpdate orgId={currentUrl} />}
               </Card.Body>
             </Card>
           </Col>
           <Col lg={5}>
-            {canDelete && (
-              <Card border="0" className="rounded-4 mb-4">
-                <div className={styles.cardHeader}>
-                  <div className={styles.cardTitle}>
-                    {t('deleteOrganization')}
-                  </div>
-                </div>
-                <Card.Body className={styles.cardBody}>
-                  <div className={styles.textBox}>{t('longDelOrgMsg')}</div>
-                  <Button
-                    variant="danger"
-                    className={styles.deleteButton}
-                    onClick={toggleDeleteModal}
-                    data-testid="openDeleteModalBtn"
-                  >
-                    {t('deleteOrganization')}
-                  </Button>
-                </Card.Body>
-              </Card>
-            )}
+            <DeleteOrg />
             <Card border="0" className="rounded-4 mb-4">
               <div className={styles.cardHeader}>
                 <div className={styles.cardTitle}>{t('otherSettings')}</div>
@@ -92,36 +50,6 @@ function orgSettings(): JSX.Element {
             </Card>
           </Col>
         </Row>
-
-        {/* Delete Organization Modal */}
-        {canDelete && (
-          <Modal
-            show={showDeleteModal}
-            onHide={toggleDeleteModal}
-            data-testid="orgDeleteModal"
-          >
-            <Modal.Header className="bg-danger" closeButton>
-              <h5 className="text-white fw-bold">{t('deleteOrganization')}</h5>
-            </Modal.Header>
-            <Modal.Body>{t('deleteMsg')}</Modal.Body>
-            <Modal.Footer>
-              <Button
-                variant="danger"
-                onClick={toggleDeleteModal}
-                data-testid="closeDelOrgModalBtn"
-              >
-                {t('no')}
-              </Button>
-              <Button
-                variant="success"
-                onClick={deleteOrg}
-                data-testid="deleteOrganizationBtn"
-              >
-                {t('yes')}
-              </Button>
-            </Modal.Footer>
-          </Modal>
-        )}
       </OrganizationScreen>
     </>
   );

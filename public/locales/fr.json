@@ -366,13 +366,15 @@
     "seeRequest": "Voir demande",
     "settings": "Réglages",
     "noData": "Pas de données",
-    "deleteOrganization": "Supprimer l'organisation",
-    "deleteMsg": "Voulez-vous supprimer cette organisation ?",
-    "no": "Non",
-    "yes": "Oui",
-    "longDelOrgMsg": "En cliquant sur le bouton Supprimer l'organisation, celle-ci sera définitivement supprimée avec ses événements, ses étiquettes et toutes les données associées.",
     "otherSettings": "Autres paramètres",
     "changeLanguage": "Changer la langue"
+  },
+  "deleteOrg": {
+    "deleteOrganization": "Supprimer l'organisation",
+    "deleteMsg": "Voulez-vous supprimer cette organisation ?",
+    "no": "Non",
+    "yes": "Oui",
+    "longDelOrgMsg": "En cliquant sur le bouton Supprimer l'organisation, l'organisation sera définitivement supprimée, ainsi que ses événements, étiquettes et toutes les données associées."
   },
   "userUpdate": {
     "firstName": "Prénom",
