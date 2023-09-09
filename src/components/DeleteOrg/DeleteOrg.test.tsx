@@ -1,19 +1,17 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
 import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import { act } from 'react-dom/test-utils';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import DeleteOrg from './DeleteOrg';
-import { act } from 'react-dom/test-utils';
-import { debug } from 'jest-preview';
-import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 
 const MOCKS = [
   {
@@ -36,14 +34,6 @@ const MOCKS = [
 ];
 
 const link = new StaticMockLink(MOCKS, true);
-
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
 
 afterEach(() => {
   localStorage.clear();
