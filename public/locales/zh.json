@@ -145,11 +145,7 @@
     "posts": "帖子",
     "events": "事件",
     "blockedUsers": "被阻止的用戶",
-    "membershipRequests": "會員申請",
-    "deleteOrganization": "刪除組織",
-    "deleteMsg": "您要刪除此組織嗎？",
-    "no": "不",
-    "yes": "是的",
+    "requests": "请求",
     "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "organizationPeople": {
@@ -297,6 +293,7 @@
   },
   "blockUnblockUser": {
     "title": "塔拉瓦封鎖/解除封鎖用戶",
+    "pageName": "封锁/解封",
     "searchByName": "按名稱搜索",
     "listOfUsers": "發送垃圾郵件的用戶列表",
     "name": "姓名",
@@ -310,8 +307,10 @@
     "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。",
     "allMembers": "所有成员",
     "blockedUsers": "被阻止的用户",
-    "searchFirstName": "输入名字",
-    "searchLastName": "输入姓氏"
+    "searchByFirstName": "按名字搜索",
+    "searchByLastName": "按姓氏搜索",
+    "noResultsFoundFor": "未找到结果 ",
+    "noSpammerFound": "未发现垃圾邮件发送者"
   },
   "forgotPassword": {
     "title": "塔拉瓦忘記密碼",
@@ -360,13 +359,22 @@
   },
   "orgSettings": {
     "title": "塔拉瓦設置",
+    "pageName": "设置",
     "updateYourDetails": "更新您的詳細信息",
     "updateYourPassword": "更新您的密碼",
     "updateOrganization": "更新組織",
-    "deleteOrganization": "刪除組織",
     "seeRequest": "查看請求",
     "settings": "設置",
-    "noData": "沒有數據"
+    "noData": "沒有數據",
+    "otherSettings": "其他设置",
+    "changeLanguage": "更改语言"
+  },
+  "deleteOrg": {
+    "deleteOrganization": "删除组织",
+    "deleteMsg": "您是否要删除此组织？",
+    "no": "否",
+    "yes": "是",
+    "longDelOrgMsg": "点击删除组织按钮后，将永久删除该组织以及其活动、标签和所有相关数据。"
   },
   "userUpdate": {
     "firstName": "名",
@@ -403,8 +411,8 @@
     "description": "描述",
     "location": "地點",
     "displayImage": "顯示圖像",
-    "isPublic": "是公開的",
-    "isRegistrable": "可註冊",
+    "isPublic": "公开",
+    "isVisibleInSearch": "在搜索中可见",
     "saveChanges": "保存更改",
     "cancel": "取消",
     "enterNameOrganization": "輸入組織名稱",

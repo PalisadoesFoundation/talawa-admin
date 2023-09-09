@@ -1,7 +1,6 @@
 import React from 'react';
 import { Dropdown } from 'react-bootstrap';
 import i18next from 'i18next';
-import styles from './ChangeLanguageDropdown.module.css';
 import { languages } from 'utils/languages';
 import cookies from 'js-cookie';
 
@@ -23,9 +22,7 @@ const ChangeLanguageDropDown = (
   return (
     <Dropdown
       title="Change Langauge"
-      className={`${styles.parentContainer} ${
-        props?.parentContainerStyle ?? ''
-      }`}
+      className={`${props?.parentContainerStyle ?? ''}`}
       data-testid="language-dropdown-container"
     >
       <Dropdown.Toggle
@@ -51,7 +48,7 @@ const ChangeLanguageDropDown = (
         {languages.map((language, index: number) => (
           <Dropdown.Item
             key={`dropdown-item-${index}`}
-            className={`dropdown-item ${styles.dropdownItem}`}
+            className={`dropdown-item`}
             onClick={async (): Promise<void> => changeLanguage(language.code)}
             disabled={currentLanguageCode === language.code}
             data-testid={`change-language-btn-${language.code}`}

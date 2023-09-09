@@ -183,6 +183,8 @@ export const ORGANIZATIONS_LIST = gql`
       name
       description
       location
+      isPublic
+      visibleInSearch
       members {
         _id
         firstName

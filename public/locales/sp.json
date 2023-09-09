@@ -145,11 +145,7 @@
     "posts": "Publicaciones",
     "events": "Eventos",
     "blockedUsers": "Usuarios bloqueados",
-    "membershipRequests": "Solicitudes de membresía",
-    "deleteOrganization": "Eliminar Organización",
-    "deleteMsg": "¿Desea eliminar esta organización?",
-    "no": "No",
-    "yes": "Sí",
+    "requests": "Solicitudes",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
   "organizationPeople": {
@@ -297,6 +293,7 @@
   },
   "blockUnblockUser": {
     "title": "Usuario de bloqueo/desbloqueo de Talawa",
+    "pageName": "Bloqueo/desbloqueo",
     "searchByName": "Buscar por nombre",
     "listOfUsers": "Lista de Usuarios que enviaron spam",
     "name": "Nombre",
@@ -310,8 +307,10 @@
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
     "allMembers": "Todos los miembros",
     "blockedUsers": "Usuarios bloqueados",
-    "searchFirstName": "Ingrese el nombre",
-    "searchLastName": "Introduzca el apellido"
+    "searchByFirstName": "Buscar por nombre de pila",
+    "searchByLastName": "Buscar por apellido",
+    "noResultsFoundFor": "No se encontraron resultados para ",
+    "noSpammerFound": "No se encontró ningún spammer"
   },
   "forgotPassword": {
     "title": "Talawa olvidó su contraseña",
@@ -360,13 +359,22 @@
   },
   "orgSettings": {
     "title": "Configuración Talawa",
+    "pageName": "Configuración",
     "updateYourDetails": "Actualiza tus datos",
     "updateYourPassword": "Actualice su contraseña",
     "updateOrganization": "Actualizar Organización",
-    "deleteOrganization": "Eliminar Organización",
     "seeRequest": "Ver Solicitud",
     "settings": "Ajustes",
-    "noData": "Sin datos"
+    "noData": "Sin datos",
+    "otherSettings": "Otras Configuraciones",
+    "changeLanguage": "Cambiar Idioma"
+  },
+  "deleteOrg": {
+    "deleteOrganization": "Eliminar organización",
+    "deleteMsg": "¿Desea eliminar esta organización?",
+    "no": "No",
+    "yes": "Sí",
+    "longDelOrgMsg": "Al hacer clic en el botón de Eliminar organización, se eliminará permanentemente la organización junto con sus eventos, etiquetas y todos los datos relacionados."
   },
   "userUpdate": {
     "firstName": "Primer nombre",
@@ -403,8 +411,8 @@
     "description": "Descripción",
     "location": "ubicación",
     "displayImage": "Mostrar imagen",
-    "isPublic": "Es público",
-    "isRegistrable": "Es registrable",
+    "isPublic": "Público",
+    "isVisibleInSearch": "Visible en la búsqueda",
     "saveChanges": "Guardar cambios",
     "cancel": "Cancelar",
     "enterNameOrganization": "Ingrese el nombre de la organización",
