@@ -1,13 +1,13 @@
 import React from 'react';
 import { QuestionMarkOutlined } from '@mui/icons-material';
-import { ReactComponent as BlockUserIcon } from '../../assets/svgs/icons/blockUser.svg';
-import { ReactComponent as DashboardIcon } from '../../assets/svgs/icons/dashboard.svg';
-import { ReactComponent as EventsIcon } from '../../assets/svgs/icons/events.svg';
-import { ReactComponent as OrganizationsIcon } from '../../assets/svgs/icons/organizations.svg';
-import { ReactComponent as PeopleIcon } from '../../assets/svgs/icons/people.svg';
-import { ReactComponent as PluginsIcon } from '../../assets/svgs/icons/plugins.svg';
-import { ReactComponent as PostsIcon } from '../../assets/svgs/icons/posts.svg';
-import { ReactComponent as SettingsIcon } from '../../assets/svgs/icons/settings.svg';
+import { ReactComponent as BlockUserIcon } from 'assets/svgs/blockUser.svg';
+import { ReactComponent as DashboardIcon } from 'assets/svgs/dashboard.svg';
+import { ReactComponent as EventsIcon } from 'assets/svgs/events.svg';
+import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
+import { ReactComponent as PeopleIcon } from 'assets/svgs/people.svg';
+import { ReactComponent as PluginsIcon } from 'assets/svgs/plugins.svg';
+import { ReactComponent as PostsIcon } from 'assets/svgs/posts.svg';
+import { ReactComponent as SettingsIcon } from 'assets/svgs/settings.svg';
 
 export interface InterfaceIconComponent {
   name: string;

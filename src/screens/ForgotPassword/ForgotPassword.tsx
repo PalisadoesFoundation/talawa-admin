@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import Button from 'react-bootstrap/Button';
 import { Form } from 'react-bootstrap';
+import Loader from 'components/Loader/Loader';
 
 const ForgotPassword = (): JSX.Element => {
   const { t } = useTranslation('translation', {
@@ -113,7 +114,7 @@ const ForgotPassword = (): JSX.Element => {
   };
 
   if (componentLoader || otpLoading || forgotPasswordLoading) {
-    return <div className="loader"></div>;
+    return <Loader />;
   }
 
   return (
