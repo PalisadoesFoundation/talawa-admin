@@ -74,7 +74,7 @@ export const AddEventProjectModal = ({
                 required
                 placeholder="Enter title of the project"
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e): void => setTitle(e.target.value)}
               />
             </Form.Group>
 
@@ -86,7 +86,7 @@ export const AddEventProjectModal = ({
                 className="mb-3"
                 required
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(e): void => setDescription(e.target.value)}
               />
             </Form.Group>
           </Modal.Body>

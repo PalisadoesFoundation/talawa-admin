@@ -9,7 +9,7 @@ import type {
   InterfaceModalProp,
   InterfaceTableData,
 } from './types';
-import type { GridColDef } from '@mui/x-data-grid';
+import type { GridColDef, GridRowHeightReturnValue } from '@mui/x-data-grid';
 import { DataGrid } from '@mui/x-data-grid';
 import TextField from '@mui/material/TextField';
 
@@ -90,7 +90,7 @@ export const CheckInModal = (props: InterfaceModalProp): JSX.Element => {
               label="Search Attendees"
               variant="outlined"
               value={userFilterQuery}
-              onChange={(e) => {
+              onChange={(e): void => {
                 setUserFilterQuery(e.target.value);
                 setFilterQueryModel({
                   items: [
@@ -108,7 +108,7 @@ export const CheckInModal = (props: InterfaceModalProp): JSX.Element => {
           <div style={{ height: 500, width: '100%' }}>
             <DataGrid
               rows={tableData}
-              getRowHeight={() => 'auto'}
+              getRowHeight={(): GridRowHeightReturnValue => 'auto'}
               columns={columns}
               filterModel={filterQueryModel}
             />

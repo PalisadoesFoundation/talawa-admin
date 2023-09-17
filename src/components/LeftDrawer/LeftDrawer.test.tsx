@@ -11,46 +11,8 @@ import type { InterfaceLeftDrawerProps } from './LeftDrawer';
 import LeftDrawer from './LeftDrawer';
 
 const props = {
-  data: {
-    user: {
-      firstName: 'John',
-      lastName: 'Doe',
-      image: null,
-      email: 'johndoe@gmail.com',
-      userType: 'SUPERADMIN',
-      adminFor: [
-        {
-          _id: '123',
-          name: 'Palisadoes',
-          image: null,
-        },
-      ],
-    },
-  },
-  showDrawer: true,
-  setShowDrawer: jest.fn(),
-};
-
-const propsAdmin: InterfaceLeftDrawerProps = {
-  data: {
-    user: {
-      firstName: 'John',
-      lastName: 'Doe',
-      image: `https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe`,
-      email: 'johndoe@gmail.com',
-      userType: 'ADMIN',
-      adminFor: [
-        {
-          _id: '123',
-          name: 'Palisadoes',
-          image: null,
-        },
-      ],
-    },
-  },
-  screenName: 'Organizations',
-  showDrawer: true,
-  setShowDrawer: jest.fn(),
+  hideDrawer: true,
+  setHideDrawer: jest.fn(),
 };
 
 const propsOrg: InterfaceLeftDrawerProps = {
@@ -59,12 +21,13 @@ const propsOrg: InterfaceLeftDrawerProps = {
 };
 const propsReq: InterfaceLeftDrawerProps = {
   ...props,
+  hideDrawer: false,
   screenName: 'Requests',
 };
-const propsRoles: InterfaceLeftDrawerProps = {
+const propsUsers: InterfaceLeftDrawerProps = {
   ...props,
-  screenName: 'Roles',
-  showDrawer: false,
+  hideDrawer: null,
+  screenName: 'Users',
 };
 
 jest.mock('react-toastify', () => ({
@@ -75,6 +38,15 @@ jest.mock('react-toastify', () => ({
   },
 }));
 
+beforeEach(() => {
+  localStorage.setItem('FirstName', 'John');
+  localStorage.setItem('LastName', 'Doe');
+  localStorage.setItem(
+    'UserImage',
+    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe'
+  );
+});
+
 afterEach(() => {
   jest.clearAllMocks();
   localStorage.clear();
@@ -82,6 +54,7 @@ afterEach(() => {
 
 describe('Testing Left Drawer component for SUPERADMIN', () => {
   test('Component should be rendered properly', () => {
+    localStorage.setItem('UserImage', '');
     localStorage.setItem('UserType', 'SUPERADMIN');
     render(
       <BrowserRouter>
@@ -93,7 +66,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
 
     expect(screen.getByText('Organizations')).toBeInTheDocument();
     expect(screen.getByText('Requests')).toBeInTheDocument();
-    expect(screen.getByText('Roles')).toBeInTheDocument();
+    expect(screen.getByText('Users')).toBeInTheDocument();
     expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
 
     expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
@@ -120,24 +93,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
 
     // Send to roles screen
     userEvent.click(rolesBtn);
-    expect(global.window.location.pathname).toContain('/roles');
-  });
-
-  test('Testing when user data is undefined', () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
-    const userUndefinedProps = {
-      ...props,
-      data: undefined,
-      screenName: 'Organizations',
-    };
-    render(
-      <BrowserRouter>
-        <I18nextProvider i18n={i18nForTest}>
-          <LeftDrawer {...userUndefinedProps} />
-        </I18nextProvider>
-      </BrowserRouter>
-    );
-    expect(screen.getByTestId(/loadingProfile/i)).toBeInTheDocument();
+    expect(global.window.location.pathname).toContain('/users');
   });
 
   test('Testing in requests screen', () => {
@@ -174,7 +130,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     render(
       <BrowserRouter>
         <I18nextProvider i18n={i18nForTest}>
-          <LeftDrawer {...propsRoles} />
+          <LeftDrawer {...propsUsers} />
         </I18nextProvider>
       </BrowserRouter>
     );
@@ -211,7 +167,30 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     userEvent.click(closeModalBtn);
   });
 
+  test('Testing Drawer when hideDrawer is null', () => {
+    localStorage.setItem('UserType', 'SUPERADMIN');
+    render(
+      <BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <LeftDrawer {...propsUsers} />
+        </I18nextProvider>
+      </BrowserRouter>
+    );
+  });
+
+  test('Testing Drawer when hideDrawer is true', () => {
+    localStorage.setItem('UserType', 'SUPERADMIN');
+    render(
+      <BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <LeftDrawer {...propsReq} />
+        </I18nextProvider>
+      </BrowserRouter>
+    );
+  });
+
   test('Testing logout functionality', async () => {
+    localStorage.setItem('UserType', 'SUPERADMIN');
     render(
       <BrowserRouter>
         <I18nextProvider i18n={i18nForTest}>
@@ -219,8 +198,9 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
         </I18nextProvider>
       </BrowserRouter>
     );
-
     userEvent.click(screen.getByTestId('logoutBtn'));
+    expect(localStorage.clear).toHaveBeenCalled();
+    expect(global.window.location.pathname).toBe('/');
   });
 });
 
@@ -230,7 +210,7 @@ describe('Testing Left Drawer component for ADMIN', () => {
     render(
       <BrowserRouter>
         <I18nextProvider i18n={i18nForTest}>
-          <LeftDrawer {...propsAdmin} />
+          <LeftDrawer {...propsOrg} />
         </I18nextProvider>
       </BrowserRouter>
     );

@@ -80,7 +80,7 @@ export const AddTaskModal = ({
                 placeholder="Enter title of the task."
                 value={title}
                 className="mb-3"
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e): void => setTitle(e.target.value)}
               />
             </Form.Group>
 
@@ -91,7 +91,7 @@ export const AddTaskModal = ({
                 className='"mb-3'
                 placeholder="A brief desciption of what the jobs of the task are!"
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(e): void => setDescription(e.target.value)}
               />
             </Form.Group>
 
@@ -99,7 +99,7 @@ export const AddTaskModal = ({
               <DateTimePicker
                 label="Deadline"
                 defaultValue={today}
-                onChange={(date: Dayjs | null) => {
+                onChange={(date: Dayjs | null): void => {
                   setDeadline(date);
                 }}
                 disablePast

@@ -82,7 +82,7 @@ export const TaskListItem = ({
             icon={<EditOutlinedIcon fontSize="small" />}
             label="View"
             variant="outlined"
-            onClick={() => {
+            onClick={(): void => {
               setShowUpdateTaskModal(true);
             }}
           />
@@ -92,7 +92,7 @@ export const TaskListItem = ({
           {/* Wrapper Div for all the relevant modals */}
           <UpdateTaskModal
             show={showUpdateTaskModal}
-            handleClose={() => {
+            handleClose={(): void => {
               setShowUpdateTaskModal(false);
             }}
             task={task}

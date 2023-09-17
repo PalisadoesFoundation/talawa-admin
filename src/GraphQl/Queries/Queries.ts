@@ -183,6 +183,8 @@ export const ORGANIZATIONS_LIST = gql`
       name
       description
       location
+      isPublic
+      visibleInSearch
       members {
         _id
         firstName
@@ -600,6 +602,7 @@ export const PLUGIN_GET = gql`
       pluginName
       pluginCreatedBy
       pluginDesc
+      uninstalledOrgs
     }
   }
 `;

@@ -1,15 +1,12 @@
 import React from 'react';
-import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { useSelector } from 'react-redux';
+import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 
-import styles from './OrgContribution.module.css';
-import AdminNavbar from 'components/AdminNavbar/AdminNavbar';
-import OrgContriCards from 'components/OrgContriCards/OrgContriCards';
 import ContriStats from 'components/ContriStats/ContriStats';
-import type { RootState } from 'state/reducers';
+import OrgContriCards from 'components/OrgContriCards/OrgContriCards';
 import { Form } from 'react-bootstrap';
+import styles from './OrgContribution.module.css';
 
 function orgContribution(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -18,12 +15,8 @@ function orgContribution(): JSX.Element {
 
   document.title = t('title');
 
-  const appRoutes = useSelector((state: RootState) => state.appRoutes);
-  const { targets, configUrl } = appRoutes;
-
   return (
     <>
-      <AdminNavbar targets={targets} url1={configUrl} />
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
