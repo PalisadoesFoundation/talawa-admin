@@ -266,7 +266,9 @@
     "cancel": "Cancel",
     "searchBy": "Search By",
     "Oldest": "Oldest First",
-    "Latest": "Latest First"
+    "Latest": "Latest First",
+    "sortPost": "Sort Post",
+    "tag": " Your browser does not support the video tag"
   },
   "postNotFound": {
     "post": "Post",
@@ -288,6 +290,7 @@
     "author": "Author",
     "imageURL": "Image URL",
     "videoURL": "Video URL",
+    "edit": "Edit Post",
     "deletePost": "Delete Post",
     "deletePostMsg": "Do you want to remove this post?",
     "no": "No",
@@ -301,6 +304,8 @@
     "updatePost": "Update Post",
     "postDeleted": "Post deleted successfully.",
     "postUpdated": "Post Updated successfully.",
+    "tag": " Your browser does not support the video tag",
+    "pin": "Pin Post",
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "blockUnblockUser": {

@@ -1,9 +1,8 @@
 import type { ChangeEvent } from 'react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search } from '@mui/icons-material';
 import SortIcon from '@mui/icons-material/Sort';
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
 import { Form } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
@@ -15,8 +14,6 @@ import styles from './OrgPost.module.css';
 import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
 import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
-import type { RootState } from 'state/reducers';
-import PaginationList from 'components/PaginationList/PaginationList';
 import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
 import NotFound from 'components/NotFound/NotFound';
@@ -33,6 +30,7 @@ interface InterfaceOrgPost {
   organizationId: string;
   creator: { firstName: string; lastName: string };
   pinned: boolean;
+  createdAt: string;
 }
 
 function orgPost(): JSX.Element {
@@ -48,6 +46,7 @@ function orgPost(): JSX.Element {
     postImage: '',
     postVideo: '',
   });
+  const [sortingOption, setSortingOption] = useState('latest');
   const [showTitle, setShowTitle] = useState(true);
 
   const currentUrl = window.location.href.split('=')[1];
@@ -75,7 +74,19 @@ function orgPost(): JSX.Element {
   });
   const [create, { loading: createPostLoading }] =
     useMutation(CREATE_POST_MUTATION);
+  const [displayedPosts, setDisplayedPosts] = useState(
+    orgPostListData?.postsByOrganizationConnection.edges || []
+  );
 
+  useEffect(() => {
+    if (orgPostListData && orgPostListData.postsByOrganizationConnection) {
+      const newDisplayedPosts = sortPosts(
+        orgPostListData.postsByOrganizationConnection.edges,
+        sortingOption
+      );
+      setDisplayedPosts(newDisplayedPosts);
+    }
+  }, [orgPostListData, sortingOption]);
   const createPost = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
@@ -140,10 +151,33 @@ function orgPost(): JSX.Element {
   };
 
   const debouncedHandleSearch = debounce(handleSearch);
-  const sortedPostsList: InterfaceOrgPost[] = [
-    ...orgPostListData.postsByOrganizationConnection.edges,
-  ];
 
+  const handleSorting = (option: string): void => {
+    setSortingOption(option);
+  };
+
+  const sortPosts = (
+    posts: InterfaceOrgPost[],
+    sortingOption: string
+  ): InterfaceOrgPost[] => {
+    const sortedPosts = [...posts];
+
+    if (sortingOption === 'latest') {
+      sortedPosts.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+    } else if (sortingOption === 'oldest') {
+      sortedPosts.sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
+    }
+
+    return sortedPosts;
+  };
+
+  const sortedPostsList: InterfaceOrgPost[] = [...displayedPosts];
   sortedPostsList.sort((a: InterfaceOrgPost, b: InterfaceOrgPost) => {
     if (a.pinned === b.pinned) {
       return 0;
@@ -157,11 +191,8 @@ function orgPost(): JSX.Element {
   });
   return (
     <>
-      <Row className={styles.head}>
-        <Col sm={3}></Col>
-        <Col sm={8}>
-          <p className={styles.logintitle}>{t('posts')}</p>
-
+      <OrganizationScreen screenName="Posts" title={t('title')}>
+        <Row className={styles.head}>
           <div className={styles.mainpageright}>
             <div className={styles.btnsContainer}>
               <div className={styles.input}>
@@ -205,7 +236,7 @@ function orgPost(): JSX.Element {
                         }}
                         data-testid="Text"
                       >
-                        Text
+                        {t('Text')}
                       </Dropdown.Item>
                       <Dropdown.Item
                         value="searchTitle"
@@ -215,7 +246,7 @@ function orgPost(): JSX.Element {
                         }}
                         data-testid="searchTitle"
                       >
-                        Title
+                        {t('Title')}
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
@@ -224,15 +255,24 @@ function orgPost(): JSX.Element {
                     title="Sort Post"
                     data-testid="sort"
                   >
-                    <Dropdown.Toggle variant="outline-success">
+                    <Dropdown.Toggle
+                      variant="outline-success"
+                      data-testid="sortpost"
+                    >
                       <SortIcon className={'me-1'} />
-                      Sort Post
+                      {t('sortPost')}
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                      <Dropdown.Item href="#/action-1">
+                      <Dropdown.Item
+                        onClick={(): void => handleSorting('latest')}
+                        data-testid="latest"
+                      >
                         {t('Latest')}
                       </Dropdown.Item>
-                      <Dropdown.Item href="#/action-2">
+                      <Dropdown.Item
+                        onClick={(): void => handleSorting('oldest')}
+                        data-testid="oldest"
+                      >
                         {t('Oldest')}
                       </Dropdown.Item>
                     </Dropdown.Menu>
@@ -279,9 +319,8 @@ function orgPost(): JSX.Element {
               )}
             </div>
           </div>
-        </Col>
-      </Row>
-
+        </Row>
+      </OrganizationScreen>
       <Modal
         show={postmodalisOpen}
         onHide={hideInviteModal}
@@ -340,6 +379,7 @@ function orgPost(): JSX.Element {
                   id="postphoto"
                   name="photo"
                   type="file"
+                  data-testid="organisationImage"
                   multiple={false}
                   onChange={async (
                     e: React.ChangeEvent<HTMLInputElement>
@@ -356,15 +396,13 @@ function orgPost(): JSX.Element {
                       });
                     }
                   }}
-                  data-testid="organisationImage"
                 />
 
                 {postformState.postImage && (
-                  <div className={styles.preview}>
+                  <div className={styles.preview} data-testid="org">
                     <img
                       src={postformState.postImage}
                       alt="Post Image Preview"
-                      data-testid="org"
                     />
                     <button
                       className={styles.closeButton}
@@ -380,7 +418,7 @@ function orgPost(): JSX.Element {
                           fileInput.value = '';
                         }
                       }}
-                      data-testid="closeimage"
+                      data-testid="closePreview"
                     >
                       <i className="fa fa-times"></i>
                     </button>
@@ -419,12 +457,8 @@ function orgPost(): JSX.Element {
                 {postformState.postVideo && (
                   <div className={styles.preview} data-testid="videoPreview">
                     <video controls>
-                      <source
-                        src={postformState.postVideo}
-                        type="video/mp4"
-                        data-testid="videoPreview"
-                      />
-                      Your browser does not support the video tag.
+                      <source src={postformState.postVideo} type="video/mp4" />
+                      (t{'tag'})
                     </video>
                     <button
                       className={styles.closeButton}

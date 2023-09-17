@@ -596,7 +596,7 @@ export const MARK_CHECKIN = gql`
 export const TOGGLE_PINNED_POST = gql`
   mutation TogglePostPin($id: ID!) {
     togglePostPin(id: $id) {
-      id
+      _id
     }
   }
 `;

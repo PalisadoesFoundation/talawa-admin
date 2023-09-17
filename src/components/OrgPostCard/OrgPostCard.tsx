@@ -65,6 +65,7 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
         }, 2000);
       }
     } catch (error: any) {
+      console.log(error);
       /* istanbul ignore next */
       errorHandler(t, error);
     }
@@ -233,70 +234,66 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
   return (
     <>
       <div className="col-xl-4 col-lg-4 col-md-6">
-        <div className={styles.cards} onClick={handleCardClick}>
+        <div
+          className={styles.cards}
+          onClick={handleCardClick}
+          data-testid="cardStructure"
+        >
           {props.postVideo && (
-            <p>
-              <Card
-                className={styles.card}
-                onMouseEnter={handleVideoPlay}
-                onMouseLeave={handleVideoPause}
+            <Card
+              className={styles.card}
+              onMouseEnter={handleVideoPlay}
+              onMouseLeave={handleVideoPause}
+            >
+              <video
+                ref={videoRef}
+                muted
+                className={styles.postimage}
+                autoPlay={playing}
+                loop={true}
+                playsInline
               >
-                <video
-                  ref={videoRef}
-                  muted
-                  className={styles.postimage}
-                  autoPlay={playing}
-                  loop={true}
-                  playsInline
-                >
-                  <source src={props?.postVideo} type="video/mp4" />
-                </video>
-                <Card.Body>
-                  {props.pinned && (
-                    <PushPinIcon
-                      color="success"
-                      fontSize="large"
-                      className="fs-5"
-                    />
-                  )}
-                  <Card.Title className={styles.title}>
-                    {props.postTitle}
-                  </Card.Title>
-                  <Card.Text className={styles.text}>
-                    {props.postInfo}
-                  </Card.Text>
-                  <Card.Link>{props.postAuthor}</Card.Link>
-                </Card.Body>
-              </Card>
-            </p>
+                <source src={props?.postVideo} type="video/mp4" />
+              </video>
+              <Card.Body>
+                {props.pinned && (
+                  <PushPinIcon
+                    color="success"
+                    fontSize="large"
+                    className="fs-5"
+                  />
+                )}
+                <Card.Title className={styles.title}>
+                  {props.postTitle}
+                </Card.Title>
+                <Card.Text className={styles.text}>{props.postInfo}</Card.Text>
+                <Card.Link>{props.postAuthor}</Card.Link>
+              </Card.Body>
+            </Card>
           )}
           {props.postPhoto ? (
-            <p>
-              <Card className={styles.card}>
-                <Card.Img
-                  className={styles.postimage}
-                  variant="top"
-                  src={props.postPhoto}
-                  alt="image"
-                />
-                <Card.Body>
-                  {props.pinned && (
-                    <PushPinIcon
-                      color="success"
-                      fontSize="large"
-                      className="fs-5"
-                    />
-                  )}
-                  <Card.Title className={styles.title}>
-                    {props.postTitle}
-                  </Card.Title>
-                  <Card.Text className={styles.text}>
-                    {props.postInfo}
-                  </Card.Text>
-                  <Card.Link>{props.postAuthor}</Card.Link>
-                </Card.Body>
-              </Card>
-            </p>
+            <Card className={styles.card}>
+              <Card.Img
+                className={styles.postimage}
+                variant="top"
+                src={props.postPhoto}
+                alt="image"
+              />
+              <Card.Body>
+                {props.pinned && (
+                  <PushPinIcon
+                    color="success"
+                    fontSize="large"
+                    className="fs-5"
+                  />
+                )}
+                <Card.Title className={styles.title}>
+                  {props.postTitle}
+                </Card.Title>
+                <Card.Text className={styles.text}>{props.postInfo}</Card.Text>
+                <Card.Link>{props.postAuthor}</Card.Link>
+              </Card.Body>
+            </Card>
           ) : !props.postVideo ? (
             <span>
               <Card className={styles.card}>
@@ -410,7 +407,7 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                   onClick={handleEditModal}
                   data-testid="editPostModalBtn"
                 >
-                  Edit Post{' '}
+                  {t('edit')}
                 </li>
                 <li
                   data-toggle="modal"
@@ -418,7 +415,7 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                   onClick={handleDeleteModal}
                   data-testid="deletePostModalBtn"
                 >
-                  Delete Post{' '}
+                  {t('deletePost')}
                 </li>
                 <li
                   onClick={(): Promise<void> =>
@@ -427,13 +424,12 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                 >
                   {!props.pinned ? 'Pin post' : 'Unpin post'}
                 </li>
-                <li>Share</li>
                 <li
                   className={styles.list}
                   onClick={(): void => setMenuVisible(false)}
                   data-testid="closebtn"
                 >
-                  Close
+                  {t('close')}
                 </li>
               </ul>
             </div>
@@ -588,7 +584,7 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                   <div className={styles.preview}>
                     <video controls>
                       <source src={postformState.postvideo} type="video/mp4" />
-                      Your browser does not support the video tag.
+                      {t('tag')}
                     </video>
                     <button
                       className={styles.closeButtonP}

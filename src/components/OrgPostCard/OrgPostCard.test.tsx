@@ -71,16 +71,54 @@ describe('Testing Organization Post Card', () => {
 
   global.alert = jest.fn();
 
-  test('renders post info', () => {
-    render(
-      <MockedProvider>
-        <OrgPostCard {...props} />
+  it('renders with default props', () => {
+    const { getByText, getByAltText } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...props} />
+        </I18nextProvider>
       </MockedProvider>
     );
-    userEvent.click(screen.getByAltText('image'));
 
-    const postAuthor = screen.getByText('John Doe');
-    expect(postAuthor).toBeInTheDocument();
+    expect(getByText('Test Title')).toBeInTheDocument();
+    expect(getByText('Test Info')).toBeInTheDocument();
+    expect(getByText('Test Author')).toBeInTheDocument();
+    expect(getByAltText('image')).toBeInTheDocument();
+  });
+
+  it('toggles "Read more" button', () => {
+    const { getByTestId } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...props} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+    const toggleButton = getByTestId('toggleBtn');
+
+    fireEvent.click(toggleButton);
+    expect(toggleButton).toHaveTextContent('hide');
+
+    fireEvent.click(toggleButton);
+    expect(toggleButton).toHaveTextContent('Read more');
+  });
+
+  it('opens and closes edit modal', () => {
+    const { getByTestId, queryByTestId } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...props} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    fireEvent.click(getByTestId('moreiconbtn'));
+    fireEvent.click(getByTestId('editPostModalBtn'));
+
+    expect(queryByTestId('modalOrganizationHeader')).toBeInTheDocument();
+
+    fireEvent.click(getByTestId('closeOrganizationModal'));
+    expect(queryByTestId('modalOrganizationHeader')).toBeNull();
   });
 
   test('Should render text elements when props value is not passed', async () => {

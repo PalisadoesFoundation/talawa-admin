@@ -209,7 +209,74 @@ describe('Organisation Post Page', () => {
     const sortDropdown = screen.getByTestId('sort');
     userEvent.click(sortDropdown);
   });
+  test('Testing search text and title toggle', async () => {
+    await act(async () => {
+      // Wrap the test code in act
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrgPost />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
 
+      await wait();
+
+      const searchInput = screen.getByTestId('searchByName');
+      expect(searchInput).toHaveAttribute('placeholder', 'Search By Title');
+
+      const inputText = screen.getByTestId('searchBy');
+
+      fireEvent.click(inputText);
+      const toggleText = screen.getByTestId('Text');
+
+      fireEvent.click(toggleText);
+
+      expect(searchInput).toHaveAttribute('placeholder', 'Search By Text');
+      fireEvent.click(inputText);
+      const toggleTite = screen.getByTestId('searchTitle');
+      fireEvent.click(toggleTite);
+      expect(searchInput).toHaveAttribute('placeholder', 'Search By Title');
+    });
+  });
+  test('Testing search latest and oldest toggle', async () => {
+    await act(async () => {
+      // Wrap the test code in act
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrgPost />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+
+      await wait();
+
+      const searchInput = screen.getByTestId('sort');
+      expect(searchInput).toBeInTheDocument();
+
+      const inputText = screen.getByTestId('sortpost');
+
+      fireEvent.click(inputText);
+      const toggleText = screen.getByTestId('latest');
+
+      fireEvent.click(toggleText);
+
+      expect(searchInput).toBeInTheDocument();
+      fireEvent.click(inputText);
+      const toggleTite = screen.getByTestId('oldest');
+      fireEvent.click(toggleTite);
+      expect(searchInput).toBeInTheDocument();
+    });
+  });
   test('After creating a post, the data should be refetched', async () => {
     const refetchMock = jest.fn();
 
@@ -305,39 +372,7 @@ describe('Organisation Post Page', () => {
     fireEvent.click(createPostBtn);
     debug();
   }, 15000);
-  test('Dropdown changes showTitle state', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrgPost />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
 
-    await wait();
-
-    const dropdownToggle = screen.getByTestId('sea');
-    userEvent.click(dropdownToggle);
-
-    const searchTextItem = screen.getByText('Text');
-    userEvent.click(searchTextItem);
-
-    expect(screen.getByText('searchText')).toBeInTheDocument();
-    expect(screen.queryByText('searchTitle')).not.toBeInTheDocument();
-
-    const dropdownToggleAgain = screen.getByText('searchBy');
-    userEvent.click(dropdownToggleAgain);
-
-    const searchTitleItem = screen.getByText('Title');
-    userEvent.click(searchTitleItem);
-
-    expect(screen.queryByText('searchText')).not.toBeInTheDocument();
-    expect(screen.getByText('searchTitle')).toBeInTheDocument();
-  });
   test('Modal opens and closes', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -367,5 +402,144 @@ describe('Organisation Post Page', () => {
 
     const closedModalTitle = screen.queryByText(/postDetail/i);
     expect(closedModalTitle).not.toBeInTheDocument();
+  });
+  it('renders the form with input fields and buttons', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+    // Check if input fields and buttons are present
+    expect(screen.getByTestId('modalTitle')).toBeInTheDocument();
+    expect(screen.getByTestId('modalinfo')).toBeInTheDocument();
+    expect(screen.getByTestId('organisationImage')).toBeInTheDocument();
+    expect(screen.getByTestId('organisationVideo')).toBeInTheDocument();
+    expect(screen.getByTestId('createPostBtn')).toBeInTheDocument();
+  });
+
+  it('allows users to input data into the form fields', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+    // Simulate user input
+    fireEvent.change(screen.getByTestId('modalTitle'), {
+      target: { value: 'Test Title' },
+    });
+    fireEvent.change(screen.getByTestId('modalinfo'), {
+      target: { value: 'Test Info' },
+    });
+
+    // Check if input values are set correctly
+    expect(screen.getByTestId('modalTitle')).toHaveValue('Test Title');
+    expect(screen.getByTestId('modalinfo')).toHaveValue('Test Info');
+  });
+
+  test('allows users to upload an image', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+    const postTitleInput = screen.getByTestId('modalTitle');
+    fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
+
+    const postInfoTextarea = screen.getByTestId('modalinfo');
+    fireEvent.change(postInfoTextarea, {
+      target: { value: 'Test post information' },
+    });
+    const file = new File(['image content'], 'image.png', {
+      type: 'image/png',
+    });
+    const input = screen.getByTestId('organisationImage');
+    userEvent.upload(input, file);
+
+    await screen.findByAltText('Post Image Preview');
+    expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
+
+    const closeButton = screen.getByTestId('closePreview');
+    fireEvent.click(closeButton);
+  }, 15000);
+  test('Create post, preview image, and close preview', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <OrgPost />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+
+      await wait();
+
+      userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+      const postTitleInput = screen.getByTestId('modalTitle');
+      fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
+
+      const postInfoTextarea = screen.getByTestId('modalinfo');
+      fireEvent.change(postInfoTextarea, {
+        target: { value: 'Test post information' },
+      });
+
+      const videoFile = new File(['video content'], 'video.mp4', {
+        type: 'video/mp4',
+      });
+
+      const videoInput = screen.getByTestId('organisationVideo');
+      fireEvent.change(videoInput, {
+        target: {
+          files: [videoFile],
+        },
+      });
+
+      // Check if the video is displayed
+      const videoPreview = await screen.findByTestId('videoPreview');
+      expect(videoPreview).toBeInTheDocument();
+
+      // Check if the close button for the video works
+      const closeVideoPreviewButton = screen.getByTestId('videoclosebutton');
+      fireEvent.click(closeVideoPreviewButton);
+      expect(videoPreview).not.toBeInTheDocument();
+    });
   });
 });
