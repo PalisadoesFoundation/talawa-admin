@@ -42,6 +42,7 @@ function organizationDashboard(): JSX.Element {
     data: postData,
     loading: loadingPost,
     error: errorPost,
+    refetch: postRefetch,
   } = useQuery(ORGANIZATION_POST_LIST, {
     variables: { id: currentUrl },
   });
@@ -50,6 +51,7 @@ function organizationDashboard(): JSX.Element {
     data: eventData,
     loading: loadingEvent,
     error: errorEvent,
+    refetch: eventRefetch,
   } = useQuery(ORGANIZATION_EVENT_LIST, {
     variables: { id: currentUrl },
   });
@@ -320,9 +322,11 @@ function organizationDashboard(): JSX.Element {
         <div className={styles.latestContainer}>
           <LatestPostsCard
             posts={postData?.postsByOrganization.slice(-5).reverse()}
+            refetch={postRefetch}
           />
           <UpcomingEventsCard
             events={eventData?.eventsByOrganization.slice(-5).reverse()}
+            refetch={eventRefetch}
           />
         </div>
       </OrganizationScreen>
