@@ -1,0 +1,65 @@
+.latestPostsContainer {
+  margin-top: 20px;
+  width: 40em;
+  height: 30vh;
+  background-color: #fff;
+
+  border-radius: 4px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.latestPostsHeader {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  width: 100%;
+  align-items: center;
+  padding: 5px;
+  border-radius: 2px;
+  margin-bottom: 30px;
+  background-color: #f9f5f5;
+}
+
+.latestPostsTitle {
+  font-size: 16px;
+  color: #707070;
+  margin: 10px;
+}
+
+.seeAllLink {
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.postItem {
+  background-color: #fff;
+  margin: 10px;
+}
+
+.postMeta {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-column-gap: 10px;
+}
+
+.postTitle {
+  font-size: 16px;
+  font-weight: bolder;
+  color: rgb(18, 87, 148);
+}
+
+.postTime {
+  font-size: 14px;
+  color: #666;
+}
+
+.postAuthor {
+  font-size: 14px;
+  color: #333;
+}
+
+.noEvents {
+  font-size: 30px;
+  color: grey;
+}

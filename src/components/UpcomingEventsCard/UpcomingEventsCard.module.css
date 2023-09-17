@@ -1,0 +1,62 @@
+.eventCardContainer {
+  margin-top: 20px;
+  min-width: 40em;
+  height: 30vh;
+  background-color: #fff;
+  border-radius: 4px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.eventDetails {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+.eventTitle {
+  font-size: 16px;
+}
+
+.eventCardHeader {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  width: 100%;
+  align-items: center;
+  padding: 5px;
+  border-radius: 2px;
+  margin-bottom: 30px;
+  background-color: #f9f5f5;
+}
+
+.eventCardTitle {
+  font-size: 16px;
+  color: #707070;
+  margin: 10px;
+}
+
+.eventCardSeeAll {
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.eventCardBody {
+  display: grid;
+  gap: 10px;
+  padding-left: 10px;
+}
+
+.eventDuration {
+  color: #707070;
+}
+
+.noEvents {
+  font-size: 30px;
+  color: grey;
+}
+
+.eventLocation {
+  color: #707070;
+}

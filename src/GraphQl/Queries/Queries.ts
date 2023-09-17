@@ -483,6 +483,7 @@ export const ORGANIZATION_POST_LIST = gql`
         lastName
         email
       }
+      createdAt
     }
   }
 `;

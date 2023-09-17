@@ -7,8 +7,11 @@ import type { RootState } from 'state/reducers';
 import { Container, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
+import { ReactComponent as Marker } from '../../assets/svgs/icons/location.svg';
+import { ReactComponent as Trash } from '../../assets/svgs/icons/trash.svg';
 import { Link } from 'react-router-dom';
-
+import LatestPostsCard from 'components/LatestPostsCard/LatestPostsCard';
+import UpcomingEventsCard from 'components/UpcomingEventsCard/UpcomingEventsCard';
 import styles from './OrganizationDashboard.module.css';
 import AboutImg from 'assets/images/defaultImg.png';
 import {
@@ -98,7 +101,8 @@ function organizationDashboard(): JSX.Element {
                   {data?.organizations[0].description}
                 </p>
                 <p className={styles.toporgloc}>
-                  {t('location')} : {data?.organizations[0].location}
+                  <Marker width={20} fill="#31bb6b" />
+                  {data?.organizations[0].location}
                 </p>
                 <img
                   src={data?.organizations[0].image ?? AboutImg}
@@ -113,10 +117,11 @@ function organizationDashboard(): JSX.Element {
                   {canDelete && (
                     <Button
                       variant="danger"
-                      className="mt-3"
+                      className={`mt-3 ${styles.deleteBtn}`}
                       data-testid="deleteClick"
                       onClick={toggleDeleteModal}
                     >
+                      <Trash width={20} fill="white" />
                       {t('deleteOrganization')}
                     </Button>
                   )}
@@ -124,8 +129,8 @@ function organizationDashboard(): JSX.Element {
               </div>
             </div>
           </Col>
-          <Col sm={8} className="mt-sm-0 mt-5 ml-4 ml-sm-0">
-            <Container>
+          <Col sm={9} className="mt-sm-0 mt-5">
+            <Container className={styles.statsContainer}>
               <div className={styles.mainpageright}>
                 <Row className={styles.justifysp}>
                   <p className={styles.titlename}>{t('statistics')}</p>
@@ -133,7 +138,6 @@ function organizationDashboard(): JSX.Element {
                 <Row>
                   <Col sm={4} className="mb-5">
                     <Link
-                      className={`card ${styles.cardContainer}`}
                       to={`${targets
                         .filter((target: any) => {
                           const { name } = target;
@@ -160,7 +164,6 @@ function organizationDashboard(): JSX.Element {
                   </Col>
                   <Col sm={4} className="mb-5">
                     <Link
-                      className={`card ${styles.cardContainer}`}
                       to={`${targets
                         .filter((target: any) => {
                           const { name } = target;
@@ -170,7 +173,7 @@ function organizationDashboard(): JSX.Element {
                           return target.url;
                         })}`}
                     >
-                      <div className={`card ${styles.cardContainer}`}>
+                      <div>
                         <div className="card-body">
                           <div className="text-center mb-3">
                             <i
@@ -189,7 +192,6 @@ function organizationDashboard(): JSX.Element {
                   </Col>
                   <Col sm={4} className="mb-5">
                     <Link
-                      className={`card ${styles.cardContainer}`}
                       to={`${targets
                         .filter((target: any) => {
                           const { name } = target;
@@ -216,7 +218,6 @@ function organizationDashboard(): JSX.Element {
                   </Col>
                   <Col sm={4} className="mb-5">
                     <Link
-                      className={`card ${styles.cardContainer}`}
                       to={`${targets
                         .filter((target: any) => {
                           const { name } = target;
@@ -243,7 +244,6 @@ function organizationDashboard(): JSX.Element {
                   </Col>
                   <Col sm={4} className="mb-5">
                     <Link
-                      className={`card ${styles.cardContainer}`}
                       to={`${targets
                         .filter((target: any) => {
                           const { name } = target;
@@ -271,7 +271,7 @@ function organizationDashboard(): JSX.Element {
                     </Link>
                   </Col>
                   <Col sm={4} className="mb-5">
-                    <div className={`card ${styles.cardContainer}`}>
+                    <div>
                       <div className="card-body">
                         <div className="text-center mb-3">
                           <i
@@ -294,6 +294,7 @@ function organizationDashboard(): JSX.Element {
             </Container>
           </Col>
         </Row>
+
         <Modal show={showDeleteModal} onHide={toggleDeleteModal}>
           <Modal.Header>
             <h5 id="deleteOrganizationModalLabel">{t('deleteOrganization')}</h5>
@@ -315,6 +316,15 @@ function organizationDashboard(): JSX.Element {
             </Button>
           </Modal.Footer>
         </Modal>
+
+        <div className={styles.latestContainer}>
+          <LatestPostsCard
+            posts={postData?.postsByOrganization.slice(-5).reverse()}
+          />
+          <UpcomingEventsCard
+            events={eventData?.eventsByOrganization.slice(-5).reverse()}
+          />
+        </div>
       </OrganizationScreen>
     </>
   );

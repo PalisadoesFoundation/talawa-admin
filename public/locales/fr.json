@@ -28,6 +28,11 @@
     "login_to_admin_portal": "Connexion à l'administration du portail",
     "OR": "OU"
   },
+  "latestEvents": {
+    "eventCardTitle": "Événements à venir",
+    "eventCardSeeAll": "Voir Tout",
+    "noEvents": "Aucun événement à venir"
+  },
   "listNavbar": {
     "talawa_portal": "Portail D'Administrateur Talawa",
     "roles": "Les rôles",

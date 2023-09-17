@@ -4,15 +4,20 @@
 }
 
 .toporgloc {
-  padding-top: 8px;
   font-size: 16px;
+  color: #555;
+  display: flex;
+  gap: 10px;
+  flex-direction: flex-end;
 }
+
 .sidebar {
   z-index: 0;
   padding-top: 5px;
   margin: 0;
   height: 100%;
 }
+
 .sidebar:after {
   content: '';
   background-color: #f7f7f7;
@@ -23,16 +28,22 @@
   left: 94%;
   display: block;
 }
+
 .sidebarsticky {
   padding-left: 30px;
 }
+.latestContainer {
+  display: flex;
+  gap: 10px;
+}
+
 .sidebarsticky > p {
   margin-top: -10px;
   width: 90%;
 }
 
 .description {
-  word-wrap: break-word;
+  margin: 50px 0px;
 }
 
 .titlename {
@@ -43,6 +54,7 @@
   padding-bottom: 5px;
   width: 26%;
 }
+
 .tagdetailsGreen > button {
   background-color: #31bb6b;
   color: white;
@@ -59,6 +71,7 @@
   padding-top: 5px;
   padding-bottom: 5px;
 }
+
 .mainpageright > hr {
   margin-top: 20px;
   width: 100%;
@@ -66,10 +79,12 @@
   margin-right: -15px;
   margin-bottom: 20px;
 }
+
 .justifysp {
   display: flex;
   justify-content: space-between;
 }
+
 .org_about_img {
   margin-top: 0px;
   margin-bottom: 30px;
@@ -78,6 +93,7 @@
   height: auto;
   width: 90%;
 }
+
 .invitebtn {
   border: 1px solid #e8e5e5;
   box-shadow: 0 2px 2px #e8e5e5;
@@ -92,6 +108,7 @@
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 }
+
 .flexdir {
   display: flex;
   flex-direction: row;
@@ -140,6 +157,7 @@
   width: 10em;
   height: 10em;
 }
+
 .loader {
   margin: 60px auto;
   margin-top: 35vh !important;
@@ -156,42 +174,69 @@
   -webkit-animation: load8 1.1s infinite linear;
   animation: load8 1.1s infinite linear;
 }
+
 @-webkit-keyframes load8 {
   0% {
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
 }
+
 @keyframes load8 {
   0% {
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
 }
 
-.cardContainer {
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-}
-
 .dashboardIcon {
-  font-size: 50px;
+  font-size: 35px;
   color: #31bb6b;
 }
 
 .counterNumber {
-  font-size: 24px;
-  margin-bottom: 0rem !important;
+  font-size: 30px;
+  font-weight: bold;
+  color: #31bb6b;
 }
 
 .counterHead {
   color: #99abb4;
-  margin-bottom: 0rem !important;
+}
+
+.deleteBtn {
+  display: flex;
+  gap: 10px;
+  justify-content: space-around;
+}
+
+.statsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  padding: 20px;
+}
+
+.card-body {
+  text-align: center;
+  padding: 20px;
+  background-color: #313131;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
 }

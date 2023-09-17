@@ -28,6 +28,16 @@
     "login_to_admin_portal": "Admin Portal Login",
     "OR": "OR"
   },
+  "latestEvents": {
+    "eventCardTitle": "Upcoming Events",
+    "eventCardSeeAll": "See All",
+    "noEvents": "No Upcoming Events"
+  },
+  "latestPosts": {
+    "latestPostsTitle": "Latest Posts",
+    "seeAllLink": "See All",
+    "noPostsCreated": "No Posts Created"
+  },
   "listNavbar": {
     "talawa_portal": "Talawa Admin Portal",
     "roles": "Roles",
