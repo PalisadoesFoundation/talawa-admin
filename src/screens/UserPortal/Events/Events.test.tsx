@@ -55,20 +55,14 @@ const MOCKS = [
               lastName: 'Mittal',
               __typename: 'User',
             },
-            registrants: [
+            attendees: [
               {
-                user: {
-                  _id: '63d649417ffe6e4d5174ea32',
-                  __typename: 'User',
-                },
-                __typename: 'UserAttende',
+                _id: '63d649417ffe6e4d5174ea32',
+                __typename: 'User',
               },
               {
-                user: {
-                  _id: '63d6064458fce20ee25c3bf7',
-                  __typename: 'User',
-                },
-                __typename: 'UserAttende',
+                _id: '63d6064458fce20ee25c3bf7',
+                __typename: 'User',
               },
             ],
             __typename: 'Event',
@@ -92,27 +86,18 @@ const MOCKS = [
               lastName: 'Mittal',
               __typename: 'User',
             },
-            registrants: [
+            attendees: [
               {
-                user: {
-                  _id: '63d649417ffe6e4d5174ea32',
-                  __typename: 'User',
-                },
-                __typename: 'UserAttende',
+                _id: '63d649417ffe6e4d5174ea32',
+                __typename: 'User',
               },
               {
-                user: {
-                  _id: '63dd52bbe69f63814b0a5dd4',
-                  __typename: 'User',
-                },
-                __typename: 'UserAttende',
+                _id: '63dd52bbe69f63814b0a5dd4',
+                __typename: 'User',
               },
               {
-                user: {
-                  _id: '63d6064458fce20ee25c3bf7',
-                  __typename: 'User',
-                },
-                __typename: 'UserAttende',
+                _id: '63d6064458fce20ee25c3bf7',
+                __typename: 'User',
               },
             ],
             __typename: 'Event',
@@ -151,20 +136,14 @@ const MOCKS = [
               lastName: 'Mittal',
               __typename: 'User',
             },
-            registrants: [
+            attendees: [
               {
-                user: {
-                  _id: '63d649417ffe6e4d5174ea32',
-                  __typename: 'User',
-                },
-                __typename: 'UserAttende',
+                _id: '63d649417ffe6e4d5174ea32',
+                __typename: 'User',
               },
               {
-                user: {
-                  _id: '63d6064458fce20ee25c3bf7',
-                  __typename: 'User',
-                },
-                __typename: 'UserAttende',
+                _id: '63d6064458fce20ee25c3bf7',
+                __typename: 'User',
               },
             ],
             __typename: 'Event',

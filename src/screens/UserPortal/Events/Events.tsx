@@ -263,14 +263,14 @@ export default function events(): JSX.Element {
                         )
                       : /* istanbul ignore next */
                         events
-                    ).map((event: any, index) => {
-                      const registrants: any = [];
-                      event.registrants.forEach((registrant: any) => {
+                    ).map((event: any) => {
+                      const attendees: any = [];
+                      event.attendees.forEach((attendee: any) => {
                         const r = {
-                          id: registrant.user._id,
+                          id: attendee._id,
                         };
 
-                        registrants.push(r);
+                        attendees.push(r);
                       });
 
                       const creator: any = {};
@@ -291,11 +291,11 @@ export default function events(): JSX.Element {
                         startTime: event.startTime,
                         recurring: event.recurring,
                         allDay: event.allDay,
-                        registrants,
+                        registrants: attendees,
                         creator,
                       };
 
-                      return <EventCard key={index} {...cardProps} />;
+                      return <EventCard key={event._id} {...cardProps} />;
                     })
                   ) : (
                     <span>{t('nothingToShow')}</span>

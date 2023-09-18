@@ -657,10 +657,8 @@ export const ORGANIZATION_EVENTS_CONNECTION = gql`
         firstName
         lastName
       }
-      registrants {
-        user {
-          _id
-        }
+      attendees {
+        _id
       }
     }
   }
