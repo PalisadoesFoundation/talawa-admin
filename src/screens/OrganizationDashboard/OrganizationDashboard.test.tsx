@@ -1,27 +1,19 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import type { RenderResult } from '@testing-library/react';
-import {
-  act,
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-} from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 
-import OrganizationDashboard from './OrganizationDashboard';
-import {
-  MOCKS_WITHOUT_IMAGE,
-  MOCKS_WITH_IMAGE,
-} from './OrganizationDashboardMocks';
 import { store } from 'state/store';
-import i18nForTest from 'utils/i18nForTest';
-import { USER_ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import OrganizationDashboard from './OrganizationDashboard';
+import { EMPTY_MOCKS, ERROR_MOCKS, MOCKS } from './OrganizationDashboardMocks';
+import i18nForTest from 'utils/i18nForTest';
+import dayjs from 'dayjs';
+import { toast } from 'react-toastify';
+import userEvent from '@testing-library/user-event';
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -30,125 +22,124 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
-const link2 = new StaticMockLink(MOCKS_WITH_IMAGE, true);
-const link3 = new StaticMockLink(MOCKS_WITHOUT_IMAGE, true);
-const customRender = (userType: any): RenderResult => {
-  const mockedUser = {
-    request: {
-      query: USER_ORGANIZATION_LIST,
-      variables: { id: localStorage.getItem('id') },
-    },
-    result: {
-      data: {
-        user: {
-          userType,
-          firstName: 'John',
-          lastName: 'Doe',
-          image: '',
-          email: 'John_Does_Palasidoes@gmail.com',
-          adminFor: {
-            _id: 1,
-            name: 'Akatsuki',
-            image: '',
-          },
-        },
-      },
-    },
-  };
+const link1 = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(EMPTY_MOCKS, true);
+const link3 = new StaticMockLink(ERROR_MOCKS, true);
 
-  const mocks = [mockedUser, ...MOCKS_WITHOUT_IMAGE];
+jest.mock('react-toastify', () => ({
+  toast: {
+    success: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+  },
+}));
 
-  const link1 = new StaticMockLink(mocks, true);
-
-  return render(
-    <MockedProvider addTypename={false} link={link1}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrganizationDashboard />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>
+beforeEach(() => {
+  localStorage.setItem('FirstName', 'John');
+  localStorage.setItem('LastName', 'Doe');
+  localStorage.setItem('UserType', 'SUPERADMIN');
+  localStorage.setItem(
+    'UserImage',
+    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe'
   );
-};
+});
+
+afterEach(() => {
+  jest.clearAllMocks();
+  localStorage.clear();
+});
 
 describe('Organisation Dashboard Page', () => {
-  test('should render props and text elements test for the screen', async () => {
-    window.location.replace('/orglist');
+  test('Should render props and text elements test for the screen', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link1}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrganizationDashboard />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+    });
 
-    const { container } = render(
-      <MockedProvider addTypename={false} link={link3}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationDashboard />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    expect(container.textContent).not.toBe('Loading data...');
     await wait();
-    expect(container.textContent).toMatch('Location');
-    expect(container.textContent).toMatch('About');
-    expect(container.textContent).toMatch('Statistics');
+    expect(screen.getByText('Members')).toBeInTheDocument();
+    expect(screen.getByText('Admins')).toBeInTheDocument();
+    expect(screen.getAllByText('Posts')).toHaveLength(2);
+    expect(screen.getAllByText('Events')).toHaveLength(2);
+    expect(screen.getByText('Blocked Users')).toBeInTheDocument();
+    expect(screen.getByText('Requests')).toBeInTheDocument();
+    expect(screen.getByText('Upcoming events')).toBeInTheDocument();
+    expect(screen.getByText('Latest posts')).toBeInTheDocument();
+    expect(screen.getByText('Membership requests')).toBeInTheDocument();
+    expect(screen.getAllByText('View all')).toHaveLength(3);
+
+    // Checking if events are rendered
+    expect(screen.getByText('Event 1')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        `${dayjs(new Date()).add(1, 'day').format('DD-MM-YYYY')}`
+      )
+    ).toBeInTheDocument();
+
+    // Checking if posts are rendered
+    expect(screen.getByText('Post 1')).toBeInTheDocument();
+
+    // Checking if membership requests are rendered
+    expect(screen.getByText('Jane Doe')).toBeInTheDocument();
+  });
+
+  test('Testing buttons and checking empty events, posts and membership requests', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link2}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrganizationDashboard />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+    });
+
+    await wait();
+    const viewEventsBtn = screen.getByTestId('viewAllEvents');
+    const viewPostsBtn = screen.getByTestId('viewAllPosts');
+    const viewMSBtn = screen.getByTestId('viewAllMembershipRequests');
+
+    userEvent.click(viewEventsBtn);
+    userEvent.click(viewPostsBtn);
+    fireEvent.click(viewMSBtn);
+    expect(toast.success).toBeCalledWith('Coming soon!');
+
+    expect(
+      screen.getByText('No membership requests present')
+    ).toBeInTheDocument();
+    expect(screen.getByText('No upcoming events')).toBeInTheDocument();
+    expect(screen.getByText('No posts present')).toBeInTheDocument();
+  });
+
+  test('Testing error scenario', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link3}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrganizationDashboard />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+    });
+
+    await wait();
     expect(window.location).toBeAt('/orglist');
-  });
-
-  test('should display delete button for SUPERADMIN', async () => {
-    const { getByTestId, queryByTestId } = customRender('SUPERADMIN');
-    await waitFor(() =>
-      expect(queryByTestId('deleteClick')).toBeInTheDocument()
-    );
-
-    fireEvent.click(getByTestId('deleteClick'));
-    fireEvent.click(getByTestId(/deleteOrganizationBtn/i));
-    expect(window.location).not.toBeNull();
-  });
-
-  test('should not display delete button for non-SUPERADMIN', async () => {
-    const { queryByTestId } = customRender('ADMIN');
-    await waitFor(() =>
-      expect(queryByTestId('deleteClick')).not.toBeInTheDocument()
-    );
-  });
-
-  test('Should check if organisation image is present', async () => {
-    const { container } = render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationDashboard />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    expect(container.textContent).not.toBe('Loading data...');
-    await wait();
-    const image = screen.getByTestId(/orgDashImgPresent/i);
-    expect(image).toBeInTheDocument();
-  });
-  test('Should check if organisation image is not present', async () => {
-    const { container } = render(
-      <MockedProvider addTypename={false} link={link3}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationDashboard />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    expect(container.textContent).not.toBe('Loading data...');
-    await wait();
-    const image = screen.getByTestId(/orgDashImgAbsent/i);
-    expect(image).toBeInTheDocument();
   });
 });

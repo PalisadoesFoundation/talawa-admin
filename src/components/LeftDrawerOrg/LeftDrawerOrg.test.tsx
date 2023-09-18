@@ -83,6 +83,8 @@ const MOCKS = [
             name: 'Test Organization',
             description: 'Testing this organization',
             location: 'Gotham, DC',
+            isPublic: true,
+            visibleInSearch: true,
             members: [
               {
                 _id: 'john123',
@@ -135,6 +137,8 @@ const MOCKS_WITH_IMAGE = [
             name: 'Test Organization',
             description: 'Testing this organization',
             location: 'Gotham, DC',
+            isPublic: true,
+            visibleInSearch: true,
             members: [
               {
                 _id: 'john123',
@@ -261,11 +265,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
       </MockedProvider>
     );
     await wait();
-    // Coming soon
-    userEvent.click(screen.getByTestId(/orgBtn/i));
-    expect(toast.success).toHaveBeenCalledWith(
-      'Organization detail modal coming soon!'
-    );
+    expect(screen.getByTestId(/orgBtn/i)).toBeInTheDocument();
     userEvent.click(screen.getByTestId(/profileBtn/i));
     expect(toast.success).toHaveBeenCalledWith('Profile page coming soon!');
   });

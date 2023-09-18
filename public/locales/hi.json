@@ -145,11 +145,7 @@
     "posts": "पोस्ट",
     "events": "आयोजन",
     "blockedUsers": "रोके गए उपयोगकर्ता",
-    "membershipRequests": "सदस्यता अनुरोध",
-    "deleteOrganization": "संगठन हटाएं",
-    "deleteMsg": "क्या आप इस संगठन को हटाना चाहते हैं?",
-    "no": "नहीं",
-    "yes": "हाँ",
+    "requests": "अनुरोध",
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।"
   },
   "organizationPeople": {
@@ -297,6 +293,7 @@
   },
   "blockUnblockUser": {
     "title": "तलावा ब्लॉक/अनब्लॉक यूजर",
+    "pageName": "ब्लॉक/अनब्लॉक",
     "searchByName": "नाम से खोजें",
     "listOfUsers": "स्पैम करने वाले उपयोगकर्ताओं की सूची",
     "name": "नाम",
@@ -310,8 +307,10 @@
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।",
     "allMembers": "सभी सदस्य",
     "blockedUsers": "रोके गए उपयोगकर्ता",
-    "searchFirstName": "प्रथम नाम दर्ज करें",
-    "searchLastName": "अंतिम नाम दर्ज करो"
+    "searchByFirstName": "पहले नाम से खोजें",
+    "searchByLastName": "उपनाम से खोजें",
+    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला ",
+    "noSpammerFound": "कोई स्पैमर नहीं मिला"
   },
   "forgotPassword": {
     "title": "तलवा पासवर्ड भूल गए",
@@ -360,13 +359,22 @@
   },
   "orgSettings": {
     "title": "तलावा सेटिंग",
+    "pageName": "सेटिंग्स",
     "updateYourDetails": "अपना विवरण अपडेट करें",
     "updateYourPassword": "अपना पासवर्ड अपडेट करें",
     "updateOrganization": "अद्यतन संगठन",
-    "deleteOrganization": "संगठन हटाएं",
     "seeRequest": "अनुरोध देखें",
     "settings": "समायोजन",
-    "noData": "कोई डेटा नहीं"
+    "noData": "कोई डेटा नहीं",
+    "otherSettings": "अन्य सेटिंग्स",
+    "changeLanguage": "भाषा बदलें"
+  },
+  "deleteOrg": {
+    "deleteOrganization": "संगठन हटाएं",
+    "deleteMsg": "क्या आप इस संगठन को हटाना चाहते हैं?",
+    "no": "नहीं",
+    "yes": "हां",
+    "longDelOrgMsg": "संगठन हटाने के बटन पर क्लिक करके, संगठन को स्थायित रूप से हटा दिया जाएगा, साथ ही उसके आयोजन, टैग और सभी संबंधित डेटा भी हटा दिया जाएगा।"
   },
   "userUpdate": {
     "firstName": "पहला नाम",
@@ -403,8 +411,8 @@
     "description": "विवरण",
     "location": "जगह",
     "displayImage": "प्रदर्शन छवि",
-    "isPublic": "सार्वजनिक है",
-    "isRegistrable": "पंजीकरण योग्य है",
+    "isPublic": "सार्वजनिक",
+    "isVisibleInSearch": "खोज में दिखाए जा सकते हैं",
     "saveChanges": "परिवर्तनों को सुरक्षित करें",
     "cancel": "रद्द करना",
     "enterNameOrganization": "संगठन का नाम दर्ज करें",
