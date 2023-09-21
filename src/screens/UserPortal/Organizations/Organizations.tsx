@@ -9,19 +9,34 @@ import {
   USER_JOINED_ORGANIZATIONS,
   USER_ORGANIZATION_CONNECTION,
 } from 'GraphQl/Queries/Queries';
-import { useQuery } from '@apollo/client';
+import { useQuery, useSubscription } from '@apollo/client';
 import { SearchOutlined } from '@mui/icons-material';
 import styles from './Organizations.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-
+import { PLUGIN_SUBSCRIPTION } from 'GraphQl/Mutations/mutations';
 interface InterfaceOrganizationCardProps {
   id: string;
   name: string;
   image: string;
   description: string;
 }
-
+/**
+ * 
+ * Sample response
+ * 
+// Response received at 23:00:31
+{
+  "data": {
+    "onPluginUpdate": {
+      "pluginName": "test11",
+      "_id": "650c7db726ea4830a02b3081",
+      "pluginDesc": "Testing plugin creation",
+      "uninstalledOrgs": []
+    }
+  }
+}
+ */
 export default function organizations(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userOrganizations',
@@ -87,7 +102,10 @@ export default function organizations(): JSX.Element {
 
     refetch(filter);
   };
-
+  const { data: datSub, loading: loadingSub } = useSubscription(
+    PLUGIN_SUBSCRIPTION
+    // { variables: {  } }
+  );
   /* istanbul ignore next */
   React.useEffect(() => {
     if (data) {
@@ -160,9 +178,14 @@ export default function organizations(): JSX.Element {
               </Dropdown.Menu>
             </Dropdown>
           </div>
+
           <div
             className={`d-flex flex-column justify-content-between ${styles.content}`}
           >
+            <h4>
+              New comment: {!loadingSub && datSub.onPluginUpdate.pluginName}
+            </h4>
+            ;
             <div
               className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
             >
