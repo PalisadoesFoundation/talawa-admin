@@ -565,5 +565,34 @@
     "yourPreviousDonations": "Your Previous Donations",
     "donate": "Donate",
     "nothingToShow": "Nothing to show here."
+  },
+  "userEvents": {
+    "nothingToShow": "Nothing to show here.",
+    "search": "Search",
+    "createEvent": "Create Event",
+    "eventTitle": "Event Title",
+    "eventDescription": "Event Description",
+    "eventLocation": "Event Location",
+    "startDate": "Select Start Date",
+    "endDate": "Select End Date",
+    "publicEvent": "Public Event",
+    "registerable": "Registerable",
+    "recurring": "Recurring",
+    "startTime": "Start Time",
+    "endTime": "End Time",
+    "cancel": "Cancel",
+    "create": "Create",
+    "listView": "List View",
+    "calendarView": "Calendar View",
+    "allDay": "All Day",
+    "eventCreated": "Event created and posted successfully."
+  },
+  "userEventCard": {
+    "location": "Location",
+    "starts": "Starts",
+    "ends": "Ends",
+    "creator": "Creator",
+    "alreadyRegistered": "Already registered",
+    "register": "Register"
   }
 }

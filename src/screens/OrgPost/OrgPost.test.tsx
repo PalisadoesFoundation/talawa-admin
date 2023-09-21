@@ -43,6 +43,7 @@ const MOCKS = [
               },
               likeCount: 0,
               commentCount: 0,
+              comments: [],
               likedBy: [],
             },
             {
@@ -60,6 +61,7 @@ const MOCKS = [
               likeCount: 0,
               commentCount: 0,
               likedBy: [],
+              comments: [],
             },
           ],
         },
@@ -143,6 +145,7 @@ describe('Organisation Post Page', () => {
       },
       likeCount: 0,
       commentCount: 0,
+      comments: [],
       likedBy: [],
     });
   });

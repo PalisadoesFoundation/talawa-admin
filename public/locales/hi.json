@@ -559,5 +559,34 @@
     "yourPreviousDonations": "आपका पिछला दान",
     "donate": "दान",
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है."
+  },
+  "userEvents": {
+    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
+    "search": "खोज",
+    "createEvent": "कार्यक्रम बनाएँ",
+    "eventTitle": "कार्यक्रम का शीर्षक",
+    "eventDescription": "घटना विवरण",
+    "eventLocation": "घटना स्थान",
+    "startDate": "आरंभ तिथि चुनें",
+    "endDate": "अंतिम तिथि चुनें",
+    "publicEvent": "सार्वजनिक समारोह",
+    "registerable": "पंजीकरण योग्य",
+    "recurring": "पुनरावर्ती",
+    "startTime": "समय शुरू",
+    "endTime": "अंत समय",
+    "cancel": "रद्द करना",
+    "create": "बनाएं",
+    "listView": "लिस्ट व्यू",
+    "calendarView": "कैलेंडर दृश्य",
+    "allDay": "पूरे दिन",
+    "eventCreated": "ईवेंट सफलतापूर्वक बनाया और पोस्ट किया गया."
+  },
+  "userEventCard": {
+    "location": "जगह",
+    "starts": "प्रारंभ होगा",
+    "ends": "समाप्त होगा",
+    "creator": "निर्माता",
+    "alreadyRegistered": "पहले से ही पंजीकृत",
+    "register": "पंजीकरण करवाना"
   }
 }
