@@ -23,6 +23,8 @@ export default function organizationSidebar(): JSX.Element {
   const organizationId = getOrganizationId(window.location.href);
   const [members, setMembers]: any = React.useState([]);
   const [events, setEvents]: any = React.useState([]);
+  const eventsLink = `/user/events/id=${organizationId}`;
+  const peopleLink = `/user/people/id=${organizationId}`;
 
   const { data: memberData, loading: memberLoading } = useQuery(
     ORGANIZATIONS_MEMBER_CONNECTION_LIST,
@@ -99,7 +101,7 @@ export default function organizationSidebar(): JSX.Element {
       )}
 
       <div className={styles.alignRight}>
-        <Link to="/user/organizations" className={styles.link}>
+        <Link to={peopleLink} className={styles.link}>
           {t('viewAll')}
           <ChevronRightIcon fontSize="small" className={styles.marginTop} />
         </Link>
@@ -145,7 +147,7 @@ export default function organizationSidebar(): JSX.Element {
         </ListGroup>
       )}
       <div className={styles.alignRight}>
-        <Link to="/user/organizations" className={styles.link}>
+        <Link to={eventsLink} className={styles.link}>
           {t('viewAll')}
           <ChevronRightIcon fontSize="small" className={styles.marginTop} />
         </Link>

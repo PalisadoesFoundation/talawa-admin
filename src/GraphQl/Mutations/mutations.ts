@@ -457,6 +457,14 @@ export const UNLIKE_POST = gql`
   }
 `;
 
+export const REGISTER_EVENT = gql`
+  mutation registerForEvent($eventId: ID!) {
+    registerForEvent(id: $eventId) {
+      _id
+    }
+  }
+`;
+
 export const ADD_EVENT_PROJECT_MUTATION = gql`
   mutation AddEventProject(
     $title: String!
@@ -575,6 +583,41 @@ export const MARK_CHECKIN = gql`
         allotedSeat: $allotedSeat
       }
     ) {
+      _id
+    }
+  }
+`;
+
+export const CREATE_COMMENT_POST = gql`
+  mutation createComment($comment: String!, $postId: ID!) {
+    createComment(data: { text: $comment }, postId: $postId) {
+      _id
+      creator {
+        _id
+        firstName
+        lastName
+        email
+      }
+      likeCount
+      likedBy {
+        _id
+      }
+      text
+    }
+  }
+`;
+
+export const LIKE_COMMENT = gql`
+  mutation likeComment($commentId: ID!) {
+    likeComment(id: $commentId) {
+      _id
+    }
+  }
+`;
+
+export const UNLIKE_COMMENT = gql`
+  mutation unlikeComment($commentId: ID!) {
+    unlikeComment(id: $commentId) {
       _id
     }
   }
