@@ -166,10 +166,6 @@ export default function organizations(): JSX.Element {
           <div
             className={`d-flex flex-column justify-content-between ${styles.content}`}
           >
-            <h4>
-              New comment: {!loadingSub && datSub.onPluginUpdate.pluginName}
-            </h4>
-            ;
             <div
               className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
             >
