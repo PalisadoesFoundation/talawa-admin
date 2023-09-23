@@ -9,12 +9,12 @@ import {
   USER_JOINED_ORGANIZATIONS,
   USER_ORGANIZATION_CONNECTION,
 } from 'GraphQl/Queries/Queries';
-import { useQuery, useSubscription } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { SearchOutlined } from '@mui/icons-material';
 import styles from './Organizations.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import { PLUGIN_SUBSCRIPTION } from 'GraphQl/Mutations/mutations';
+
 interface InterfaceOrganizationCardProps {
   id: string;
   name: string;
@@ -86,10 +86,7 @@ export default function organizations(): JSX.Element {
 
     refetch(filter);
   };
-  const { data: datSub, loading: loadingSub } = useSubscription(
-    PLUGIN_SUBSCRIPTION
-    // { variables: {  } }
-  );
+
   /* istanbul ignore next */
   React.useEffect(() => {
     if (data) {
