@@ -21,22 +21,6 @@ interface InterfaceOrganizationCardProps {
   image: string;
   description: string;
 }
-/**
- * 
- * Sample response
- * 
-// Response received at 23:00:31
-{
-  "data": {
-    "onPluginUpdate": {
-      "pluginName": "test11",
-      "_id": "650c7db726ea4830a02b3081",
-      "pluginDesc": "Testing plugin creation",
-      "uninstalledOrgs": []
-    }
-  }
-}
- */
 export default function organizations(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userOrganizations',
