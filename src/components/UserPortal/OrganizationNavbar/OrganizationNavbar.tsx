@@ -111,9 +111,6 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   }
 
   if (updatedPluginData != undefined) {
-    console.log('Update received');
-    console.log(updatedPluginData.onPluginUpdate.pluginName);
-
     const pluginName = updatedPluginData.onPluginUpdate.pluginName;
     const uninstalledOrgs = updatedPluginData.onPluginUpdate.uninstalledOrgs;
     const pluginIndexToRemove = getPluginIndex(pluginName, plugins);
