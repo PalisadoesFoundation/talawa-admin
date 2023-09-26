@@ -30,6 +30,7 @@
 .listBox {
   display: flex;
   flex-wrap: wrap;
+  overflow: unset !important;
 }
 
 .listBox .itemCard {
@@ -129,12 +130,14 @@
   flex-direction: column;
   margin-left: 1rem;
 }
+
 .titlemodaldialog {
   color: #707070;
   font-size: 20px;
   margin-bottom: 20px;
   padding-bottom: 5px;
 }
+
 form label {
   font-weight: bold;
   padding-bottom: 1px;
@@ -170,13 +173,16 @@ form > input {
   cursor: pointer;
   color: #707070;
 }
+
 .modalbody {
   width: 50px;
 }
+
 .pluginStoreBtnContainer {
   display: flex;
   gap: 1rem;
 }
+
 .greenregbtn {
   margin: 1rem 0 0;
   margin-top: 10px;
@@ -200,6 +206,7 @@ form > input {
   width: 45%;
   height: 18px;
 }
+
 .secondbtn {
   display: flex;
   align-items: center;

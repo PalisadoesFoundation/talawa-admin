@@ -84,6 +84,7 @@
     "sort": "排序",
     "filter": "過濾",
     "cancel": "取消",
+    "endOfResults": "結果結束",
     "noOrgErrorTitle": "找不到组织",
     "noOrgErrorDescription": "请通过仪表板创建一个组织",
     "noResultsFoundFor": "未找到结果 "

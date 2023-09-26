@@ -9,7 +9,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import OrgListCard from 'components/OrgListCard/OrgListCard';
 import type { ChangeEvent } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Col, Dropdown, Form, Row } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -26,6 +26,7 @@ import type {
 import styles from './OrgList.module.css';
 import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 import { Link } from 'react-router-dom';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
@@ -48,6 +49,10 @@ function orgList(): JSX.Element {
     setdialogModalIsOpen(!dialogModalisOpen);
   document.title = t('title');
 
+  const perPage = 8;
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasMore, sethasMore] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [formState, setFormState] = useState({
@@ -79,12 +84,19 @@ function orgList(): JSX.Element {
     loading,
     error: errorList,
     refetch: refetchOrgs,
+    fetchMore,
   }: {
     data: InterfaceOrgConnectionType | undefined;
     loading: boolean;
     error?: Error | undefined;
     refetch: any;
+    fetchMore: any;
   } = useQuery(ORGANIZATION_CONNECTION_LIST, {
+    variables: {
+      first: perPage,
+      skip: 0,
+      filter: searchByName,
+    },
     notifyOnNetworkStatusChange: true,
   });
 
@@ -102,6 +114,16 @@ function orgList(): JSX.Element {
       });
     };
   }, []);
+
+  useEffect(() => {
+    // Initial loading
+    // When loading more
+    if (loading && isLoadingMore == false) {
+      setIsLoading(true);
+    } else {
+      setIsLoading(false);
+    }
+  }, [loading]);
 
   /* istanbul ignore next */
   const isAdminForCurrentOrg = (
@@ -172,14 +194,62 @@ function orgList(): JSX.Element {
 
   /* istanbul ignore next */
   if (errorList || errorUser) {
-    window.location.assign('/');
+    // window.location.assign('/');
   }
+
+  const resetAllParams = (): void => {
+    refetchOrgs({
+      filter: '',
+      first: perPage,
+      skip: 0,
+    });
+    sethasMore(true);
+  };
 
   const handleSearchByName = (e: any): void => {
     const { value } = e.target;
     setSearchByName(value);
+    if (value == '') {
+      resetAllParams();
+    }
     refetchOrgs({
       filter: value,
+    });
+  };
+
+  const loadMoreOrganizations = (): void => {
+    console.log('loadMoreOrganizations');
+    setIsLoadingMore(true);
+    fetchMore({
+      variables: {
+        skip: orgsData?.organizationsConnection.length || 0,
+      },
+      updateQuery: (
+        prev:
+          | { organizationsConnection: InterfaceOrgConnectionType[] }
+          | undefined,
+        {
+          fetchMoreResult,
+        }: {
+          fetchMoreResult:
+            | { organizationsConnection: InterfaceOrgConnectionType[] }
+            | undefined;
+        }
+      ):
+        | { organizationsConnection: InterfaceOrgConnectionType[] }
+        | undefined => {
+        setIsLoadingMore(false);
+        if (!fetchMoreResult) return prev;
+        if (fetchMoreResult.organizationsConnection.length == 0) {
+          sethasMore(false);
+        }
+        return {
+          organizationsConnection: [
+            ...(prev?.organizationsConnection || []),
+            ...(fetchMoreResult.organizationsConnection || []),
+          ],
+        };
+      },
     });
   };
 
@@ -244,8 +314,8 @@ function orgList(): JSX.Element {
             )}
           </div>
         </div>
-        {/* Organizations List */}
-        {!loading &&
+        {/* Text Infos for list */}
+        {!isLoading &&
         ((orgsData?.organizationsConnection.length === 0 &&
           searchByName.length == 0) ||
           (userData &&
@@ -256,7 +326,7 @@ function orgList(): JSX.Element {
             <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
             <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
           </div>
-        ) : !loading &&
+        ) : !isLoading &&
           orgsData?.organizationsConnection.length == 0 &&
           /* istanbul ignore next */
           searchByName.length > 0 ? (
@@ -268,52 +338,88 @@ function orgList(): JSX.Element {
             </h4>
           </div>
         ) : (
-          <></>
-        )}
-        <div className={styles.listBox} data-testid="organizations-list">
-          {loading ? (
-            <>
-              {[...Array(8)].map((_, index) => (
-                <div key={index} className={styles.itemCard}>
-                  <div className={styles.loadingWrapper}>
-                    <div className={styles.innerContainer}>
-                      <div
-                        className={`${styles.orgImgContainer} shimmer`}
-                      ></div>
-                      <div className={styles.content}>
-                        <h5 className="shimmer" title="Org name"></h5>
-                        <h6 className="shimmer" title="Location"></h6>
-                        <h6 className="shimmer" title="Admins"></h6>
-                        <h6 className="shimmer" title="Members"></h6>
+          <>
+            <InfiniteScroll
+              dataLength={orgsData?.organizationsConnection?.length ?? 0}
+              next={loadMoreOrganizations}
+              loader={
+                <>
+                  {[...Array(4)].map((_, index) => (
+                    <div key={index} className={styles.itemCard}>
+                      <div className={styles.loadingWrapper}>
+                        <div className={styles.innerContainer}>
+                          <div
+                            className={`${styles.orgImgContainer} shimmer`}
+                          ></div>
+                          <div className={styles.content}>
+                            <>IsLoadingMore</>
+                            <h5 className="shimmer" title="Org name"></h5>
+                            <h6 className="shimmer" title="Location"></h6>
+                            <h6 className="shimmer" title="Admins"></h6>
+                            <h6 className="shimmer" title="Members"></h6>
+                          </div>
+                        </div>
+                        <div className={`shimmer ${styles.button}`} />
                       </div>
                     </div>
-                    <div className={`shimmer ${styles.button}`} />
-                  </div>
-                </div>
-              ))}
-            </>
-          ) : userData && userData.user.userType == 'SUPERADMIN' ? (
-            orgsData?.organizationsConnection.map((item) => {
-              return (
-                <div key={item._id} className={styles.itemCard}>
-                  <OrgListCard data={item} />
-                </div>
-              );
-            })
-          ) : userData &&
-            userData.user.userType == 'ADMIN' &&
-            userData.user.adminFor.length > 0 ? (
-            orgsData?.organizationsConnection.map((item) => {
-              if (isAdminForCurrentOrg(item)) {
-                return (
-                  <div key={item._id} className={styles.itemCard}>
-                    <OrgListCard data={item} />
-                  </div>
-                );
+                  ))}
+                </>
               }
-            })
-          ) : null}
-        </div>
+              hasMore={hasMore}
+              className={styles.listBox}
+              data-testid="organizations-list"
+              endMessage={
+                <div className={'w-100 text-center my-4'}>
+                  <h5 className="m-0 ">{t('endOfResults')}</h5>
+                </div>
+              }
+            >
+              {isLoading ? (
+                <>
+                  {[...Array(8)].map((_, index) => (
+                    <div key={index} className={styles.itemCard}>
+                      <div className={styles.loadingWrapper}>
+                        <div className={styles.innerContainer}>
+                          <div
+                            className={`${styles.orgImgContainer} shimmer`}
+                          ></div>
+                          <div className={styles.content}>
+                            <>IsLoading</>
+                            <h5 className="shimmer" title="Org name"></h5>
+                            <h6 className="shimmer" title="Location"></h6>
+                            <h6 className="shimmer" title="Admins"></h6>
+                            <h6 className="shimmer" title="Members"></h6>
+                          </div>
+                        </div>
+                        <div className={`shimmer ${styles.button}`} />
+                      </div>
+                    </div>
+                  ))}
+                </>
+              ) : userData && userData.user.userType == 'SUPERADMIN' ? (
+                orgsData?.organizationsConnection.map((item, index) => {
+                  return (
+                    <div key={item._id} className={styles.itemCard}>
+                      <OrgListCard data={item} />
+                    </div>
+                  );
+                })
+              ) : userData &&
+                userData.user.userType == 'ADMIN' &&
+                userData.user.adminFor.length > 0 ? (
+                orgsData?.organizationsConnection.map((item) => {
+                  if (isAdminForCurrentOrg(item)) {
+                    return (
+                      <div key={item._id} className={styles.itemCard}>
+                        <OrgListCard data={item} />
+                      </div>
+                    );
+                  }
+                })
+              ) : null}
+            </InfiniteScroll>
+          </>
+        )}
         {/* Create Organization Modal */}
         <Modal
           show={showModal}
@@ -456,6 +562,7 @@ function orgList(): JSX.Element {
             </Modal.Footer>
           </Form>
         </Modal>{' '}
+        {/* Plugin Notification Modal after Org is Created */}
         <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
           <Modal.Body>
             <section id={styles.grid_wrapper}>
@@ -502,10 +609,31 @@ function orgList(): JSX.Element {
             </section>
           </Modal.Body>
         </Modal>
-        {/* Plugin Notification after Org is Created */}
       </SuperAdminScreen>
     </>
   );
 }
 
+const shimmerCards = (number: number): JSX.Element => {
+  return (
+    <>
+      {[...Array(number)].map((_, index) => (
+        <div key={index} className={styles.itemCard}>
+          <div className={styles.loadingWrapper}>
+            <div className={styles.innerContainer}>
+              <div className={`${styles.orgImgContainer} shimmer`}></div>
+              <div className={styles.content}>
+                <h5 className="shimmer" title="Org name"></h5>
+                <h6 className="shimmer" title="Location"></h6>
+                <h6 className="shimmer" title="Admins"></h6>
+                <h6 className="shimmer" title="Members"></h6>
+              </div>
+            </div>
+            <div className={`shimmer ${styles.button}`} />
+          </div>
+        </div>
+      ))}
+    </>
+  );
+};
 export default orgList;

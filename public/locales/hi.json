@@ -84,6 +84,7 @@
     "sort": "छांटें",
     "filter": "फ़िल्टर",
     "cancel": "रद्द करना",
+    "endOfResults": "परिणामों का अंत",
     "noOrgErrorTitle": "संगठन नहीं मिला",
     "noOrgErrorDescription": "कृपया डैशबोर्ड के माध्यम से एक संगठन बनाएं",
     "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला "
