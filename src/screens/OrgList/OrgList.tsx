@@ -8,12 +8,15 @@ import {
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import OrgListCard from 'components/OrgListCard/OrgListCard';
+import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 import type { ChangeEvent } from 'react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Dropdown, Form, Row } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useTranslation } from 'react-i18next';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
 import debounce from 'utils/debounce';
@@ -24,9 +27,6 @@ import type {
   InterfaceUserType,
 } from 'utils/interfaces';
 import styles from './OrgList.module.css';
-import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
-import { Link } from 'react-router-dom';
-import InfiniteScroll from 'react-infinite-scroll-component';
 
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
