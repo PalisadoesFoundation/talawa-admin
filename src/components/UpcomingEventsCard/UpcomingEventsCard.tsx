@@ -1,14 +1,19 @@
 import React from 'react';
+import { useEffect } from 'react';
 import styles from './UpcomingEventsCard.module.css';
 import { ReactComponent as Marker } from '../../assets/svgs/icons/location.svg';
 import { useTranslation } from 'react-i18next';
 
-const UpcomingEventsCard = ({ events }: any): JSX.Element => {
+const UpcomingEventsCard = ({ events, refetch }: any): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'latestEvents',
   });
 
   const currentUrl = window.location.href.split('=')[1];
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   return (
     <div className={styles.eventCardContainer}>

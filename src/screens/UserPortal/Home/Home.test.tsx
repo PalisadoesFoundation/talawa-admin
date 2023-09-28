@@ -49,6 +49,7 @@ const MOCKS = [
               },
               likeCount: 0,
               commentCount: 0,
+              comments: [],
               likedBy: [],
             },
             {
@@ -64,7 +65,41 @@ const MOCKS = [
                 email: 'adidacreator1@gmail.com',
               },
               likeCount: 0,
-              commentCount: 0,
+              commentCount: 2,
+              comments: [
+                {
+                  _id: '64eb13beca85de60ebe0ed0e',
+                  creator: {
+                    _id: '63d6064458fce20ee25c3bf7',
+                    firstName: 'Noble',
+                    lastName: 'Mittal',
+                    email: 'test@gmail.com',
+                    __typename: 'User',
+                  },
+                  likeCount: 1,
+                  likedBy: [
+                    {
+                      _id: 1,
+                    },
+                  ],
+                  text: 'First comment from Talawa user portal.',
+                  __typename: 'Comment',
+                },
+                {
+                  _id: '64eb483aca85de60ebe0ef99',
+                  creator: {
+                    _id: '63d6064458fce20ee25c3bf7',
+                    firstName: 'Noble',
+                    lastName: 'Mittal',
+                    email: 'test@gmail.com',
+                    __typename: 'User',
+                  },
+                  likeCount: 0,
+                  likedBy: [],
+                  text: 'Great View',
+                  __typename: 'Comment',
+                },
+              ],
               likedBy: [
                 {
                   _id: '63d6064458fce20ee25c3bf7',

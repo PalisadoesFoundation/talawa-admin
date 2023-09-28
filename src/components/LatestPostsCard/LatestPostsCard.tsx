@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './LatestPostsCard.module.css';
 import { useTranslation } from 'react-i18next';
 import timeAgo from 'utils/convertToTimeAgo';
 
-const LatestPostsCard = ({ posts }: any): JSX.Element => {
+const LatestPostsCard = ({ posts, refetch }: any): JSX.Element => {
   const currentUrl = window.location.href.split('=')[1];
   const { t } = useTranslation('translation', {
     keyPrefix: 'latestPosts',
   });
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   return (
     <div className={styles.latestPostsContainer}>

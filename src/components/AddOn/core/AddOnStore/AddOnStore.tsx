@@ -240,7 +240,7 @@ function addOnStore(): JSX.Element {
                             pluginName: string | undefined;
                             pluginDesc: string | undefined;
                             pluginCreatedBy: string;
-                            pluginInstallStatus: boolean | undefined;
+                            uninstalledOrgs: string[];
                             getInstalledPlugins: () => any;
                           },
                           i: React.Key | null | undefined
@@ -251,13 +251,14 @@ function addOnStore(): JSX.Element {
                             title={plug.pluginName}
                             description={plug.pluginDesc}
                             createdBy={plug.pluginCreatedBy}
-                            isInstalled={plug.pluginInstallStatus}
-                            configurable={plug.pluginInstallStatus}
+                            // isInstalled={plug.pluginInstallStatus}
+                            // configurable={plug.pluginInstallStatus}
                             component={'Special  Component'}
                             modified={(): void => {
                               console.log('Plugin is modified');
                             }}
                             getInstalledPlugins={getInstalledPlugins}
+                            uninstalledOrgs={plug.uninstalledOrgs}
                           />
                         )
                       )
@@ -319,7 +320,7 @@ function addOnStore(): JSX.Element {
                             pluginName: string | undefined;
                             pluginDesc: string | undefined;
                             pluginCreatedBy: string;
-                            pluginInstallStatus: boolean | undefined;
+                            uninstalledOrgs: string[];
                             getInstalledPlugins: () => any;
                           },
                           i: React.Key | null | undefined
@@ -330,13 +331,14 @@ function addOnStore(): JSX.Element {
                             title={plug.pluginName}
                             description={plug.pluginDesc}
                             createdBy={plug.pluginCreatedBy}
-                            isInstalled={plug.pluginInstallStatus}
-                            configurable={plug.pluginInstallStatus}
+                            // isInstalled={plug.pluginInstallStatus}
+                            // configurable={plug.pluginInstallStatus}
                             component={'Special  Component'}
                             modified={(): void => {
                               console.log('Plugin is modified');
                             }}
                             getInstalledPlugins={getInstalledPlugins}
+                            uninstalledOrgs={plug.uninstalledOrgs}
                           />
                         )
                       )
@@ -356,53 +358,3 @@ addOnStore.defaultProps = {};
 addOnStore.propTypes = {};
 
 export default addOnStore;
-
-// {addonStore.map((plugin: any, index: number) => {
-//   return (
-//     <AddOnEntry
-//       id={plugin.id}
-//       key={index}
-//       title={plugin.name}
-//       description={plugin.description}
-//       createdBy={plugin.createdBy}
-//       component={plugin.component}
-//       configurable={!plugin.installed}
-//       modified={() => {
-//         /* istanbul ignore next */
-//         pluginModified().then((installedPlugins) => {
-//           updateLinks(
-//             new PluginHelper().generateLinks(installedPlugins)
-//           );
-//         });
-//       }}
-//     />
-//   );
-// })}
-
-// {installed
-//   .filter((plugin: any) =>
-//     showEnabled ? plugin.enabled : !plugin.enabled
-//   )
-//   .map((plugin: any, index: number) => {
-//     return (
-//       <AddOnEntry
-//         id={plugin.id}
-//         key={index}
-//         title={plugin.name}
-//         description={plugin.description}
-//         createdBy={plugin.createdBy}
-//         component={plugin.component}
-//         enabled={plugin.enabled}
-//         installed={true}
-//         configurable={true}
-//         modified={() => {
-//           /* istanbul ignore next */
-//           pluginModified().then((installedPlugins) => {
-//             updateLinks(
-//               new PluginHelper().generateLinks(installedPlugins)
-//             );
-//           });
-//         }}
-//       />
-//     );
-//   })}
