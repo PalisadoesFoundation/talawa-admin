@@ -2,12 +2,28 @@ import React from 'react';
 import styles from './Loader.module.css';
 import { Spinner } from 'react-bootstrap';
 
-const Loader = (): JSX.Element => {
+interface InterfaceLoaderProps {
+  styles?: StyleSheet | string;
+  size?: 'sm' | 'lg' | 'xl';
+}
+
+const Loader = (props: InterfaceLoaderProps): JSX.Element => {
   return (
     <>
-      <div className={styles.spinner_wrapper} data-testid="spinner-wrapper">
+      <div
+        className={`${props?.styles ?? styles.spinner_wrapper}`}
+        data-testid="spinner-wrapper"
+      >
         <Spinner
-          className={styles.spinner}
+          className={`
+           ${
+             props?.size == 'sm'
+               ? styles.spinnerSm
+               : props?.size == 'lg'
+               ? styles.spinnerLg
+               : styles.spinnerXl
+           }
+          `}
           animation="border"
           variant="primary"
           data-testid="spinner"

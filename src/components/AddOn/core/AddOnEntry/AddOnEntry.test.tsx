@@ -23,7 +23,7 @@ const httpLink = new HttpLink({
     authorization: 'Bearer ' + localStorage.getItem('token') || '',
   },
 });
-
+console.error = jest.fn();
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
   link: ApolloLink.from([httpLink]),
@@ -52,12 +52,47 @@ describe('Testing AddOnEntry', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              {<AddOnEntry {...props} />}
+              {<AddOnEntry uninstalledOrgs={[]} {...props} />}
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
       </ApolloProvider>
     );
     expect(getByTestId('AddOnEntry')).toBeInTheDocument();
+  });
+
+  it('renders correctly', () => {
+    const props = {
+      id: '1',
+      title: 'Test Addon',
+      description: 'Test addon description',
+      createdBy: 'Test User',
+      component: 'string',
+      installed: true,
+      configurable: true,
+      modified: true,
+      isInstalled: true,
+      uninstalledOrgs: [],
+      enabled: true,
+      getInstalledPlugins: (): { sample: string } => {
+        return { sample: 'sample' };
+      },
+    };
+
+    const { getByText } = render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              {<AddOnEntry {...props} />}
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>
+    );
+
+    expect(getByText('Test Addon')).toBeInTheDocument();
+    expect(getByText('Test addon description')).toBeInTheDocument();
+    expect(getByText('Test User')).toBeInTheDocument();
   });
 });

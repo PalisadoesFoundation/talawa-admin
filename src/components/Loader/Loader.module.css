@@ -6,8 +6,20 @@
   align-items: center;
 }
 
-.spinner {
+.spinnerXl {
   width: 6rem;
   height: 6rem;
   border-width: 0.5rem;
+}
+
+.spinnerLg {
+  height: 4rem;
+  width: 4rem;
+  border-width: 0.3rem;
+}
+
+.spinnerSm {
+  height: 2rem;
+  width: 2rem;
+  border-width: 0.2rem;
 }

@@ -27,3 +27,29 @@
   gap: 10px;
   align-items: center;
 }
+
+.creatorNameModal {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.modalActions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1px;
+  margin: 5px 0px;
+}
+
+.textModal {
+  margin-top: 10px;
+}
+
+.colorPrimary {
+  background: #31bb6b;
+  color: white;
+  cursor: pointer;
+}

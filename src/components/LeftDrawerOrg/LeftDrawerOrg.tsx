@@ -3,16 +3,16 @@ import { WarningAmberOutlined } from '@mui/icons-material';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
 import IconComponent from 'components/IconComponent/IconComponent';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
-import { ReactComponent as AngleRightIcon } from '../../assets/svgs/icons/angleRight.svg';
-import { ReactComponent as LogoutIcon } from '../../assets/svgs/icons/logout.svg';
-import { ReactComponent as TalawaLogo } from '../../assets/svgs/talawa.svg';
+import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
+import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
+import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import styles from './LeftDrawerOrg.module.css';
 
 export interface InterfaceLeftDrawerProps {
@@ -31,7 +31,8 @@ const leftDrawerOrg = ({
   setHideDrawer,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawerOrg' });
-
+  const [organization, setOrganization] =
+    useState<InterfaceQueryOrganizationsListObject>();
   const {
     data,
     loading,
@@ -50,6 +51,17 @@ const leftDrawerOrg = ({
   const userImage = localStorage.getItem('UserImage');
 
   const history = useHistory();
+
+  // Set organization data
+  useEffect(() => {
+    let isMounted = true;
+    if (data && isMounted) {
+      setOrganization(data?.organizations[0]);
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [data]);
 
   const logout = (): void => {
     localStorage.clear();
@@ -95,7 +107,7 @@ const leftDrawerOrg = ({
                 data-testid="orgBtn"
               />
             </>
-          ) : data && data?.organizations.length == 0 ? (
+          ) : organization == undefined ? (
             <>
               <button
                 className={`${styles.profileContainer} bg-danger text-start text-white`}
@@ -108,35 +120,23 @@ const leftDrawerOrg = ({
               </button>
             </>
           ) : (
-            <button
-              className={styles.profileContainer}
-              data-testid="OrgBtn"
-              onClick={(): void => {
-                toast.success('Organization detail modal coming soon!');
-              }}
-            >
+            <button className={styles.profileContainer} data-testid="OrgBtn">
               <div className={styles.imageContainer}>
-                {data && data?.organizations[0].image ? (
-                  <img
-                    src={data?.organizations[0].image}
-                    alt={`profile picture`}
-                  />
+                {organization.image ? (
+                  <img src={organization.image} alt={`profile picture`} />
                 ) : (
                   <img
-                    src={`https://api.dicebear.com/5.x/initials/svg?seed=${data?.organizations[0].name}`}
+                    src={`https://api.dicebear.com/5.x/initials/svg?seed=${organization.name}`}
                     alt={`Dummy Organization Picture`}
                   />
                 )}
               </div>
               <div className={styles.profileText}>
-                <span className={styles.primaryText}>
-                  {data?.organizations[0].name}
-                </span>
+                <span className={styles.primaryText}>{organization.name}</span>
                 <span className={styles.secondaryText}>
-                  {data?.organizations[0].location}
+                  {organization.location}
                 </span>
               </div>
-              <AngleRightIcon className="me-2" fill={'var(--bs-secondary)'} />
             </button>
           )}
         </div>

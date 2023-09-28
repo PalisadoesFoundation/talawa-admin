@@ -150,11 +150,7 @@
     "posts": "Des postes",
     "events": "Événements",
     "blockedUsers": "Utilisateurs bloqués",
-    "membershipRequests": "Demandes d'adhésion",
-    "deleteOrganization": "Supprimer l'organisation",
-    "deleteMsg": "Voulez-vous supprimer cette organisation ?",
-    "no": "Non",
-    "yes": "Oui",
+    "requests": "Demandes",
     "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "organizationPeople": {
@@ -302,6 +298,7 @@
   },
   "blockUnblockUser": {
     "title": "Talawa Bloquer/Débloquer l'utilisateur",
+    "pageName": "Bloquer/Débloquer'",
     "searchByName": "Recherche par nom",
     "listOfUsers": "Liste des utilisateurs qui ont spammé",
     "name": "Nom",
@@ -315,8 +312,10 @@
     "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau.",
     "allMembers": "Tous les membres",
     "blockedUsers": "Utilisateurs bloqués",
-    "searchFirstName": "Entrez votre prénom",
-    "searchLastName": "Entrer le nom de famille"
+    "searchByFirstName": "Rechercher par prénom",
+    "searchByLastName": "Rechercher par nom de famille",
+    "noResultsFoundFor": "Aucun résultat trouvé pour ",
+    "noSpammerFound": "Aucun spammeur trouvé"
   },
   "forgotPassword": {
     "title": "Mot de passe oublié Talawa",
@@ -365,13 +364,22 @@
   },
   "orgSettings": {
     "title": "Paramètre Talawa",
+    "pageName": "Paramètres",
     "updateYourDetails": "Mettre à jour vos informations",
     "updateYourPassword": "Mettez à jour votre mot de passe",
     "updateOrganization": "Mettre à jour l'organisation",
-    "deleteOrganization": "Supprimer l'organisation",
     "seeRequest": "Voir demande",
     "settings": "Réglages",
-    "noData": "Pas de données"
+    "noData": "Pas de données",
+    "otherSettings": "Autres paramètres",
+    "changeLanguage": "Changer la langue"
+  },
+  "deleteOrg": {
+    "deleteOrganization": "Supprimer l'organisation",
+    "deleteMsg": "Voulez-vous supprimer cette organisation ?",
+    "no": "Non",
+    "yes": "Oui",
+    "longDelOrgMsg": "En cliquant sur le bouton Supprimer l'organisation, l'organisation sera définitivement supprimée, ainsi que ses événements, étiquettes et toutes les données associées."
   },
   "userUpdate": {
     "firstName": "Prénom",
@@ -408,10 +416,9 @@
     "description": "La description",
     "location": "emplacement",
     "displayImage": "Afficher l'image",
-    "isPublic": "Est publique",
-    "isRegistrable": "Est enregistrable",
+    "isPublic": "Public",
+    "isVisibleInSearch": "Visible dans la recherche",
     "saveChanges": "Sauvegarder les modifications",
-    "cancel": "Annuler",
     "enterNameOrganization": "Entrez le nom de l'organisation",
     "successfulUpdated": "Mise à jour réussie",
     "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
@@ -556,5 +563,34 @@
     "yourPreviousDonations": "Vos dons précédents",
     "donate": "Donner",
     "nothingToShow": "Rien à montrer ici."
+  },
+  "userEvents": {
+    "nothingToShow": "Rien à montrer ici.",
+    "search": "Recherche",
+    "createEvent": "Créer un évènement",
+    "eventTitle": "Titre de l'événement",
+    "eventDescription": "Description de l'évenement",
+    "eventLocation": "Lieu de l'événement",
+    "startDate": "Sélectionnez la date de début",
+    "endDate": "Sélectionnez la date de fin",
+    "publicEvent": "Évennement publique",
+    "registerable": "Enregistrable",
+    "recurring": "Récurrente",
+    "startTime": "Heure de début",
+    "endTime": "Heure de fin",
+    "cancel": "Annuler",
+    "create": "Créer",
+    "listView": "Vue en liste",
+    "calendarView": "Vue du calendrier",
+    "allDay": "Toute la journée",
+    "eventCreated": "Événement créé et publié avec succès."
+  },
+  "userEventCard": {
+    "location": "Emplacement",
+    "starts": "Départs",
+    "ends": "Prend fin",
+    "creator": "Créatrice",
+    "alreadyRegistered": "Déjà enregistré",
+    "register": "Registre"
   }
 }

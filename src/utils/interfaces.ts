@@ -46,6 +46,8 @@ export interface InterfaceQueryOrganizationsListObject {
   name: string;
   description: string;
   location: string;
+  isPublic: boolean;
+  visibleInSearch: boolean;
   members: {
     _id: string;
     firstName: string;
@@ -71,5 +73,43 @@ export interface InterfaceQueryOrganizationsListObject {
     firstName: string;
     lastName: string;
     email: string;
+  }[];
+}
+
+export interface InterfaceQueryOrganizationPostListItem {
+  _id: string;
+  title: string;
+  text: string;
+  imageUrl: null;
+  videoUrl: null;
+  creator: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  }[];
+}
+export interface InterfaceQueryOrganizationEventListItem {
+  _id: string;
+  title: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  location: string;
+  startTime: string;
+  endTime: string;
+  allDay: boolean;
+  recurring: boolean;
+  isPublic: boolean;
+  isRegisterable: boolean;
+}
+
+export interface InterfaceQueryBlockPageMemberListItem {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  organizationsBlockedBy: {
+    _id: string;
   }[];
 }
