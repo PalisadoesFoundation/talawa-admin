@@ -105,6 +105,8 @@
     "name": "姓名",
     "email": "電子郵件",
     "roles_userType": "角色/用戶類型",
+    "joined_organizations": "加入的組織",
+    "view": "視圖",
     "admin": "行政",
     "superAdmin": "超級管理員",
     "user": "用戶",

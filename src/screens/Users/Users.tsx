@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
-import { Dropdown, Form, Table } from 'react-bootstrap';
+import { Dropdown, Form, Modal, Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -20,6 +20,7 @@ import debounce from 'utils/debounce';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import styles from './Users.module.css';
+import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
 
 const Users = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
@@ -63,7 +64,6 @@ const Users = (): JSX.Element => {
     }
   }, [usersData]);
 
-  const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
   const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
 
   // To clear the search when the component is unmounted
@@ -99,30 +99,6 @@ const Users = (): JSX.Element => {
       setIsLoading(false);
     }
   }, [loading]);
-
-  const changeRole = async (e: any): Promise<void> => {
-    const { value } = e.target;
-
-    const inputData = value.split('?');
-
-    try {
-      const { data } = await updateUserType({
-        variables: {
-          id: inputData[1],
-          userType: inputData[0],
-        },
-      });
-
-      /* istanbul ignore next */
-      if (data) {
-        toast.success(t('roleUpdated'));
-        resetAndRefetch();
-      }
-    } catch (error: any) {
-      /* istanbul ignore next */
-      errorHandler(t, error);
-    }
-  };
 
   const handleSearchByName = (e: any): void => {
     const { value } = e.target;
@@ -179,6 +155,8 @@ const Users = (): JSX.Element => {
     t('name'),
     t('email'),
     t('roles_userType'),
+    t('joined_organizations'),
+    'Blocked Organizations',
   ];
 
   return (
@@ -237,7 +215,6 @@ const Users = (): JSX.Element => {
             </div>
           </div>
         </div>
-
         {isLoading == false &&
         usersData &&
         usersData.users.length === 0 &&
@@ -263,7 +240,12 @@ const Users = (): JSX.Element => {
               <InfiniteScroll
                 dataLength={usersData?.users.length ?? 0}
                 next={loadMoreUsers}
-                loader={<TableLoader noOfCols={4} noOfRows={perPageResult} />}
+                loader={
+                  <TableLoader
+                    noOfCols={headerTitles.length}
+                    noOfRows={perPageResult}
+                  />
+                }
                 hasMore={hasMore}
                 className={styles.listBox}
                 data-testid="organizations-list"
@@ -289,31 +271,13 @@ const Users = (): JSX.Element => {
                     {usersData &&
                       usersData?.users.map((user, index) => {
                         return (
-                          <tr key={user._id}>
-                            <th scope="row">{index + 1}</th>
-                            <td>{`${user.firstName} ${user.lastName}`}</td>
-                            <td>{user.email}</td>
-                            <td>
-                              <select
-                                className="form-select form-select-md"
-                                name={`role${user._id}`}
-                                data-testid={`changeRole${user._id}`}
-                                onChange={changeRole}
-                                disabled={user._id === userId}
-                                defaultValue={`${user.userType}?${user._id}`}
-                              >
-                                <option value={`ADMIN?${user._id}`}>
-                                  {t('admin')}
-                                </option>
-                                <option value={`SUPERADMIN?${user._id}`}>
-                                  {t('superAdmin')}
-                                </option>
-                                <option value={`USER?${user._id}`}>
-                                  {t('user')}
-                                </option>
-                              </select>
-                            </td>
-                          </tr>
+                          <UsersTableItem
+                            key={user._id}
+                            index={index}
+                            resetAndRefetch={resetAndRefetch}
+                            user={user}
+                            userId={userId ? userId : ''}
+                          />
                         );
                       })}
                   </tbody>

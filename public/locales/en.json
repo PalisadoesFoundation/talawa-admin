@@ -109,6 +109,8 @@
     "name": "Name",
     "email": "Email",
     "roles_userType": "Role/User-Type",
+    "joined_organizations": "Joined Organizations",
+    "view": "View",
     "admin": "ADMIN",
     "superAdmin": "SUPERADMIN",
     "user": "USER",

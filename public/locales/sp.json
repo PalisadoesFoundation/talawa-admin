@@ -105,6 +105,8 @@
     "name": "Nombre",
     "email": "Correo electrónico",
     "roles_userType": "Rol/Tipo de usuario",
+    "joined_organizations": "Organizaciones unidas",
+    "view": "Ver",
     "admin": "ADMINISTRACIÓN",
     "superAdmin": "SUPERADMIN",
     "user": "USUARIO",

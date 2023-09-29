@@ -90,16 +90,37 @@ export const USER_LIST = gql`
       email
       userType
       adminApproved
+      createdAt
       organizationsBlockedBy {
         _id
         name
+        image
+        location
+        createdAt
+        creator {
+          _id
+          firstName
+          lastName
+          image
+          email
+          createdAt
+        }
       }
       joinedOrganizations {
         _id
         name
         image
+        location
+        createdAt
+        creator {
+          _id
+          firstName
+          lastName
+          image
+          email
+          createdAt
+        }
       }
-      createdAt
     }
   }
 `;
@@ -130,13 +151,6 @@ export const USER_LIST_REQUEST = gql`
       email
       userType
       adminApproved
-      organizationsBlockedBy {
-        _id
-        name
-      }
-      joinedOrganizations {
-        _id
-      }
       createdAt
     }
   }

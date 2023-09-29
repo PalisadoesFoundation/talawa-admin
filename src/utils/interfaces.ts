@@ -125,9 +125,41 @@ export interface InterfaceQueryUserListItem {
   organizationsBlockedBy: {
     _id: string;
     name: string;
+    location: string;
+    image: string | null;
+    createdAt: string;
+    creator: {
+      _id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+      image: string | null;
+    };
   }[];
   joinedOrganizations: {
     _id: string;
+    name: string;
+    location: string;
+    image: string | null;
+    createdAt: string;
+    creator: {
+      _id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+      image: string | null;
+    };
   }[];
+  createdAt: string;
+}
+
+export interface InterfaceQueryRequestListItem {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  image: string;
+  email: string;
+  userType: string;
+  adminApproved: boolean;
   createdAt: string;
 }

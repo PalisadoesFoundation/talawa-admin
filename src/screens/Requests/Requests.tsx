@@ -25,7 +25,7 @@ import debounce from 'utils/debounce';
 import { errorHandler } from 'utils/errorHandler';
 import type {
   InterfaceOrgConnectionType,
-  InterfaceQueryUserListItem,
+  InterfaceQueryRequestListItem,
   InterfaceUserType,
 } from 'utils/interfaces';
 import styles from './Requests.module.css';
@@ -57,7 +57,7 @@ const Requests = (): JSX.Element => {
     fetchMore,
     refetch: refetchUsers,
   }: {
-    data: { users: InterfaceQueryUserListItem[] } | undefined;
+    data: { users: InterfaceQueryRequestListItem[] } | undefined;
     loading: boolean;
     fetchMore: any;
     refetch: any;
@@ -142,13 +142,15 @@ const Requests = (): JSX.Element => {
         filter: searchByName,
       },
       updateQuery: (
-        prev: { users: InterfaceQueryUserListItem[] } | undefined,
+        prev: { users: InterfaceQueryRequestListItem[] } | undefined,
         {
           fetchMoreResult,
         }: {
-          fetchMoreResult: { users: InterfaceQueryUserListItem[] } | undefined;
+          fetchMoreResult:
+            | { users: InterfaceQueryRequestListItem[] }
+            | undefined;
         }
-      ): { users: InterfaceQueryUserListItem[] } | undefined => {
+      ): { users: InterfaceQueryRequestListItem[] } | undefined => {
         setIsLoadingMore(false);
         if (!fetchMoreResult) return prev;
         if (fetchMoreResult.users.length < perPageResult) {
