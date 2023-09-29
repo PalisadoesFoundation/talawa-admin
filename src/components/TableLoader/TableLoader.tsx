@@ -21,7 +21,7 @@ const tableLoader = (props: InterfaceTableLoader): JSX.Element => {
 
   return (
     <>
-      <Table className="mb-0" responsive>
+      <Table className="mb-4" responsive>
         <thead>
           <tr>
             {headerTitles

@@ -8,44 +8,60 @@ import { toast } from 'react-toastify';
 import { Search } from '@mui/icons-material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import SortIcon from '@mui/icons-material/Sort';
+import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_LIST,
-  USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
-import { errorHandler } from 'utils/errorHandler';
-import styles from './Users.module.css';
-import type { InterfaceUserType } from 'utils/interfaces';
-import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
-import debounce from 'utils/debounce';
 import TableLoader from 'components/TableLoader/TableLoader';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import debounce from 'utils/debounce';
+import { errorHandler } from 'utils/errorHandler';
+import type { InterfaceQueryUserListItem } from 'utils/interfaces';
+import styles from './Users.module.css';
 
 const Users = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
 
   document.title = t('title');
 
+  const perPageResult = 12;
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
 
   const userType = localStorage.getItem('UserType');
   const userId = localStorage.getItem('id');
+
   const {
-    data: currentUserData,
-  }: {
-    data: InterfaceUserType | undefined;
-    loading: boolean;
-    error?: Error | undefined;
-  } = useQuery(USER_ORGANIZATION_LIST, {
-    variables: { id: localStorage.getItem('id') },
-  });
-  const {
-    data: dataUsers,
-    loading: loadingUsers,
+    data: usersData,
+    loading: loading,
+    fetchMore,
     refetch: refetchUsers,
+  }: {
+    data: { users: InterfaceQueryUserListItem[] } | undefined;
+    loading: boolean;
+    fetchMore: any;
+    refetch: any;
   } = useQuery(USER_LIST, {
+    variables: {
+      first: perPageResult,
+      skip: 0,
+      filter: searchByName,
+    },
     notifyOnNetworkStatusChange: true,
   });
+
+  useEffect(() => {
+    if (!usersData) {
+      return;
+    }
+    if (usersData.users.length < perPageResult) {
+      setHasMore(false);
+    }
+  }, [usersData]);
 
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
   const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
@@ -74,6 +90,15 @@ const Users = (): JSX.Element => {
       window.location.assign('/orglist');
     }
   }, []);
+
+  // Manage the loading state
+  useEffect(() => {
+    if (loading && isLoadingMore == false) {
+      setIsLoading(true);
+    } else {
+      setIsLoading(false);
+    }
+  }, [loading]);
 
   const changeRole = async (e: any): Promise<void> => {
     const { value } = e.target;
@@ -108,7 +133,42 @@ const Users = (): JSX.Element => {
       // Later on we can add several search and filter options
     });
   };
-
+  const resetAndRefetch = (): void => {
+    refetchUsers({
+      first: perPageResult,
+      skip: 0,
+      userType: 'ADMIN',
+      filter: '',
+    });
+    setHasMore(true);
+  };
+  const loadMoreUsers = (): void => {
+    setIsLoadingMore(true);
+    fetchMore({
+      variables: {
+        skip: usersData?.users.length || 0,
+        userType: 'ADMIN',
+        filter: searchByName,
+      },
+      updateQuery: (
+        prev: { users: InterfaceQueryUserListItem[] } | undefined,
+        {
+          fetchMoreResult,
+        }: {
+          fetchMoreResult: { users: InterfaceQueryUserListItem[] } | undefined;
+        }
+      ): { users: InterfaceQueryUserListItem[] } | undefined => {
+        setIsLoadingMore(false);
+        if (!fetchMoreResult) return prev;
+        if (fetchMoreResult.users.length < perPageResult) {
+          setHasMore(false);
+        }
+        return {
+          users: [...(prev?.users || []), ...(fetchMoreResult.users || [])],
+        };
+      },
+    });
+  };
   const debouncedHandleSearchByName = debounce(handleSearchByName);
 
   const headerTitles: string[] = [
@@ -127,11 +187,7 @@ const Users = (): JSX.Element => {
             <div
               className={styles.input}
               style={{
-                display:
-                  currentUserData &&
-                  currentUserData.user.userType === 'SUPERADMIN'
-                    ? 'block'
-                    : 'none',
+                display: userType === 'SUPERADMIN' ? 'block' : 'none',
               }}
             >
               <Form.Control
@@ -179,52 +235,56 @@ const Users = (): JSX.Element => {
           </div>
         </div>
 
-        {loadingUsers == false &&
-        dataUsers &&
-        dataUsers.users.length === 0 &&
+        {isLoading == false &&
+        usersData &&
+        usersData.users.length === 0 &&
         searchByName.length > 0 ? (
           <div className={styles.notFound}>
             <h4>
               {t('noResultsFoundFor')} &quot;{searchByName}&quot;
             </h4>
           </div>
-        ) : loadingUsers == false &&
-          dataUsers &&
-          dataUsers.users.length === 0 ? (
+        ) : isLoading == false && usersData && usersData.users.length === 0 ? (
           // eslint-disable-next-line react/jsx-indent
           <div className={styles.notFound}>
             <h4>{t('noUserFound')}</h4>
           </div>
         ) : (
           <div className={styles.listBox}>
-            {loadingUsers ? (
-              <TableLoader headerTitles={headerTitles} noOfRows={10} />
+            {isLoading ? (
+              <TableLoader
+                headerTitles={headerTitles}
+                noOfRows={perPageResult}
+              />
             ) : (
-              <Table responsive>
-                <thead>
-                  <tr>
-                    {headerTitles.map((title: string, index: number) => {
-                      return (
-                        <th key={index} scope="col">
-                          {title}
-                        </th>
-                      );
-                    })}
-                  </tr>
-                </thead>
-                <tbody>
-                  {dataUsers &&
-                    dataUsers?.users.map(
-                      (
-                        user: {
-                          _id: string;
-                          firstName: string;
-                          lastName: string;
-                          email: string;
-                          userType: string;
-                        },
-                        index: number
-                      ) => {
+              <InfiniteScroll
+                dataLength={usersData?.users.length ?? 0}
+                next={loadMoreUsers}
+                loader={<TableLoader noOfCols={4} noOfRows={perPageResult} />}
+                hasMore={hasMore}
+                className={styles.listBox}
+                data-testid="organizations-list"
+                endMessage={
+                  <div className={'w-100 text-center my-4'}>
+                    <h5 className="m-0 ">{t('endOfResults')}</h5>
+                  </div>
+                }
+              >
+                <Table className="mb-0" responsive>
+                  <thead>
+                    <tr>
+                      {headerTitles.map((title: string, index: number) => {
+                        return (
+                          <th key={index} scope="col">
+                            {title}
+                          </th>
+                        );
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {usersData &&
+                      usersData?.users.map((user, index) => {
                         return (
                           <tr key={user._id}>
                             <th scope="row">{index + 1}</th>
@@ -232,7 +292,7 @@ const Users = (): JSX.Element => {
                             <td>{user.email}</td>
                             <td>
                               <select
-                                className="form-select"
+                                className="form-select form-select-md"
                                 name={`role${user._id}`}
                                 data-testid={`changeRole${user._id}`}
                                 onChange={changeRole}
@@ -252,10 +312,10 @@ const Users = (): JSX.Element => {
                             </td>
                           </tr>
                         );
-                      }
-                    )}
-                </tbody>
-              </Table>
+                      })}
+                  </tbody>
+                </Table>
+              </InfiniteScroll>
             )}
           </div>
         )}

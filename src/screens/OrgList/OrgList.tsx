@@ -49,7 +49,7 @@ function orgList(): JSX.Element {
     setdialogModalIsOpen(!dialogModalisOpen);
   document.title = t('title');
 
-  const perPage = 8;
+  const perPageResult = 8;
   const [isLoading, setIsLoading] = useState(true);
   const [hasMore, sethasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -93,7 +93,7 @@ function orgList(): JSX.Element {
     fetchMore: any;
   } = useQuery(ORGANIZATION_CONNECTION_LIST, {
     variables: {
-      first: perPage,
+      first: perPageResult,
       skip: 0,
       filter: searchByName,
     },
@@ -198,7 +198,7 @@ function orgList(): JSX.Element {
   const resetAllParams = (): void => {
     refetchOrgs({
       filter: '',
-      first: perPage,
+      first: perPageResult,
       skip: 0,
     });
     sethasMore(true);
@@ -239,7 +239,7 @@ function orgList(): JSX.Element {
         | undefined => {
         setIsLoadingMore(false);
         if (!fetchMoreResult) return prev;
-        if (fetchMoreResult.organizationsConnection.length < perPage) {
+        if (fetchMoreResult.organizationsConnection.length < perPageResult) {
           sethasMore(false);
         }
         return {
@@ -343,7 +343,7 @@ function orgList(): JSX.Element {
               next={loadMoreOrganizations}
               loader={
                 <>
-                  {[...Array(4)].map((_, index) => (
+                  {[...Array(perPageResult)].map((_, index) => (
                     <div key={index} className={styles.itemCard}>
                       <div className={styles.loadingWrapper}>
                         <div className={styles.innerContainer}>
@@ -375,7 +375,7 @@ function orgList(): JSX.Element {
             >
               {isLoading ? (
                 <>
-                  {[...Array(8)].map((_, index) => (
+                  {[...Array(perPageResult)].map((_, index) => (
                     <div key={index} className={styles.itemCard}>
                       <div className={styles.loadingWrapper}>
                         <div className={styles.innerContainer}>
@@ -612,27 +612,4 @@ function orgList(): JSX.Element {
     </>
   );
 }
-
-const shimmerCards = (number: number): JSX.Element => {
-  return (
-    <>
-      {[...Array(number)].map((_, index) => (
-        <div key={index} className={styles.itemCard}>
-          <div className={styles.loadingWrapper}>
-            <div className={styles.innerContainer}>
-              <div className={`${styles.orgImgContainer} shimmer`}></div>
-              <div className={styles.content}>
-                <h5 className="shimmer" title="Org name"></h5>
-                <h6 className="shimmer" title="Location"></h6>
-                <h6 className="shimmer" title="Admins"></h6>
-                <h6 className="shimmer" title="Members"></h6>
-              </div>
-            </div>
-            <div className={`shimmer ${styles.button}`} />
-          </div>
-        </div>
-      ))}
-    </>
-  );
-};
 export default orgList;

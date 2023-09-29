@@ -1,3 +1,4 @@
+import React from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { Dropdown, Form, Table } from 'react-bootstrap';
@@ -14,7 +15,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATION_CONNECTION_LIST,
-  USER_LIST,
+  USER_LIST_REQUEST,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
@@ -34,7 +35,7 @@ const Requests = (): JSX.Element => {
 
   document.title = t('title');
 
-  const perPage = 12;
+  const perPageResult = 12;
   const [isLoading, setIsLoading] = useState(true);
   const [hasMore, sethasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -60,11 +61,12 @@ const Requests = (): JSX.Element => {
     loading: boolean;
     fetchMore: any;
     refetch: any;
-  } = useQuery(USER_LIST, {
+  } = useQuery(USER_LIST_REQUEST, {
     variables: {
-      first: perPage,
+      first: perPageResult,
       skip: 0,
       userType: 'ADMIN',
+      adminApproved: false,
       filter: searchByName,
     },
     notifyOnNetworkStatusChange: true,
@@ -82,6 +84,15 @@ const Requests = (): JSX.Element => {
       setSearchByName('');
     };
   }, []);
+
+  useEffect(() => {
+    if (!usersData) {
+      return;
+    }
+    if (usersData.users.length < perPageResult) {
+      sethasMore(false);
+    }
+  }, [usersData]);
 
   // If the user is not Superadmin, redirect to Organizations screen
   useEffect(() => {
@@ -112,9 +123,10 @@ const Requests = (): JSX.Element => {
 
   const resetAndRefetch = (): void => {
     refetchUsers({
-      first: perPage,
+      first: perPageResult,
       skip: 0,
       userType: 'ADMIN',
+      adminApproved: false,
       filter: '',
     });
     sethasMore(true);
@@ -126,6 +138,7 @@ const Requests = (): JSX.Element => {
       variables: {
         skip: usersData?.users.length || 0,
         userType: 'ADMIN',
+        adminApproved: false,
         filter: searchByName,
       },
       updateQuery: (
@@ -138,7 +151,7 @@ const Requests = (): JSX.Element => {
       ): { users: InterfaceQueryUserListItem[] } | undefined => {
         setIsLoadingMore(false);
         if (!fetchMoreResult) return prev;
-        if (fetchMoreResult.users.length < perPage) {
+        if (fetchMoreResult.users.length < perPageResult) {
           sethasMore(false);
         }
         return {
@@ -186,15 +199,14 @@ const Requests = (): JSX.Element => {
     }
   };
 
-  const handleSearchByName = (e: any): any => {
+  const handleSearchByName = async (e: any): Promise<void> => {
     const { value } = e.target;
-    sethasMore(false);
     setSearchByName(value);
     if (value === '') {
       resetAndRefetch();
       return;
     }
-    refetchUsers({
+    await refetchUsers({
       firstName_contains: value,
       lastName_contains: '',
       // Later on we can add several search and filter options
@@ -284,12 +296,12 @@ const Requests = (): JSX.Element => {
             <h4>{t('noRequestFound')}</h4>
           </div>
         ) : isLoading ? (
-          <TableLoader headerTitles={headerTitles} noOfRows={10} />
+          <TableLoader headerTitles={headerTitles} noOfRows={perPageResult} />
         ) : (
           <InfiniteScroll
             dataLength={usersData?.users.length ?? 0}
             next={loadMoreRequests}
-            loader={<TableLoader noOfCols={5} noOfRows={5} />}
+            loader={<TableLoader noOfCols={5} noOfRows={perPageResult} />}
             hasMore={hasMore}
             className={styles.listBox}
             data-testid="organizations-list"

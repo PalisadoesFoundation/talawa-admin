@@ -72,7 +72,6 @@ export const USER_LIST = gql`
   query Users(
     $firstName_contains: String
     $lastName_contains: String
-    $userType: String
     $skip: Int
     $first: Int
   ) {
@@ -83,7 +82,46 @@ export const USER_LIST = gql`
       }
       skip: $skip
       first: $first
+    ) {
+      firstName
+      lastName
+      image
+      _id
+      email
+      userType
+      adminApproved
+      organizationsBlockedBy {
+        _id
+        name
+      }
+      joinedOrganizations {
+        _id
+        name
+        image
+      }
+      createdAt
+    }
+  }
+`;
+
+export const USER_LIST_REQUEST = gql`
+  query Users(
+    $firstName_contains: String
+    $lastName_contains: String
+    $first: Int
+    $skip: Int
+    $userType: String
+    $adminApproved: Boolean
+  ) {
+    users(
+      where: {
+        firstName_contains: $firstName_contains
+        lastName_contains: $lastName_contains
+      }
+      skip: $skip
+      first: $first
       userType: $userType
+      adminApproved: $adminApproved
     ) {
       firstName
       lastName
