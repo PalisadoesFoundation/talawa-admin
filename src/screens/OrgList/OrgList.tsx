@@ -351,7 +351,6 @@ function orgList(): JSX.Element {
                             className={`${styles.orgImgContainer} shimmer`}
                           ></div>
                           <div className={styles.content}>
-                            <>IsLoadingMore</>
                             <h5 className="shimmer" title="Org name"></h5>
                             <h6 className="shimmer" title="Location"></h6>
                             <h6 className="shimmer" title="Admins"></h6>
@@ -383,7 +382,6 @@ function orgList(): JSX.Element {
                             className={`${styles.orgImgContainer} shimmer`}
                           ></div>
                           <div className={styles.content}>
-                            <>IsLoading</>
                             <h5 className="shimmer" title="Org name"></h5>
                             <h6 className="shimmer" title="Location"></h6>
                             <h6 className="shimmer" title="Admins"></h6>
