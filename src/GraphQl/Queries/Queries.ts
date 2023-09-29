@@ -68,14 +68,22 @@ export const ORGANIZATION_CONNECTION_LIST = gql`
 `;
 
 // Query to take the User list
-
 export const USER_LIST = gql`
-  query Users($firstName_contains: String, $lastName_contains: String) {
+  query Users(
+    $firstName_contains: String
+    $lastName_contains: String
+    $userType: String
+    $skip: Int
+    $first: Int
+  ) {
     users(
       where: {
         firstName_contains: $firstName_contains
         lastName_contains: $lastName_contains
       }
+      skip: $skip
+      first: $first
+      userType: $userType
     ) {
       firstName
       lastName

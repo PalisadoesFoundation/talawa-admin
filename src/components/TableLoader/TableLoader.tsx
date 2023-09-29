@@ -1,25 +1,40 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './TableLoader.module.css';
 import { Table } from 'react-bootstrap';
 
 interface InterfaceTableLoader {
   noOfRows: number;
-  headerTitles: string[];
+  headerTitles?: string[];
+  noOfCols?: number;
 }
 
 const tableLoader = (props: InterfaceTableLoader): JSX.Element => {
-  const { noOfRows, headerTitles } = props;
+  const { noOfRows, headerTitles, noOfCols } = props;
+
+  useEffect(() => {
+    if (headerTitles == undefined && noOfCols == undefined) {
+      throw new Error(
+        'TableLoader error Either headerTitles or noOfCols is required !'
+      );
+    }
+  }, []);
 
   return (
     <>
-      <Table responsive>
+      <Table className="mb-0" responsive>
         <thead>
           <tr>
-            {headerTitles.map((title, index) => {
-              return <th key={index}>{title}</th>;
-            })}
+            {headerTitles
+              ? headerTitles.map((title, index) => {
+                  return <th key={index}>{title}</th>;
+                })
+              : noOfCols &&
+                [...Array(noOfCols)].map((_, index) => {
+                  return <th key={index} />;
+                })}
           </tr>
         </thead>
+
         <tbody>
           {[...Array(noOfRows)].map((_, rowIndex) => {
             return (
@@ -28,16 +43,18 @@ const tableLoader = (props: InterfaceTableLoader): JSX.Element => {
                 className="mb-4"
                 data-testid={`row-${rowIndex}-tableLoading`}
               >
-                {[...Array(headerTitles?.length)].map((_, colIndex) => {
-                  return (
-                    <td
-                      key={colIndex}
-                      data-testid={`row-${rowIndex}-col-${colIndex}-tableLoading`}
-                    >
-                      <div className={`${styles.loadingItem} shimmer`} />
-                    </td>
-                  );
-                })}
+                {[...Array(headerTitles ? headerTitles?.length : noOfCols)].map(
+                  (_, colIndex) => {
+                    return (
+                      <td
+                        key={colIndex}
+                        data-testid={`row-${rowIndex}-col-${colIndex}-tableLoading`}
+                      >
+                        <div className={`${styles.loadingItem} shimmer`} />
+                      </td>
+                    );
+                  }
+                )}
               </tr>
             );
           })}

@@ -113,3 +113,21 @@ export interface InterfaceQueryBlockPageMemberListItem {
     _id: string;
   }[];
 }
+
+export interface InterfaceQueryUserListItem {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  image: string;
+  email: string;
+  userType: string;
+  adminApproved: boolean;
+  organizationsBlockedBy: {
+    _id: string;
+    name: string;
+  }[];
+  joinedOrganizations: {
+    _id: string;
+  }[];
+  createdAt: string;
+}

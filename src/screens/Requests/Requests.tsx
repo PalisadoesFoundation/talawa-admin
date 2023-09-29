@@ -21,18 +21,26 @@ import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 import debounce from 'utils/debounce';
 import { errorHandler } from 'utils/errorHandler';
 import type {
+  InterfaceQueryUserListItem,
   InterfaceOrgConnectionType,
   InterfaceUserType,
 } from 'utils/interfaces';
 import styles from './Requests.module.css';
 import TableLoader from 'components/TableLoader/TableLoader';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const Requests = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'requests' });
 
   document.title = t('title');
 
-  const [usersData, setUsersData] = useState([]);
+  const perPage = 12;
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasMore, sethasMore] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [requestList, setRequestList] = useState<InterfaceQueryUserListItem[]>(
+    []
+  );
   const [searchByName, setSearchByName] = useState('');
 
   const [acceptAdminFunc] = useMutation(ACCEPT_ADMIN_MUTATION);
@@ -41,17 +49,27 @@ const Requests = (): JSX.Element => {
     data: currentUserData,
   }: {
     data: InterfaceUserType | undefined;
-    loading: boolean;
-    error?: Error | undefined;
   } = useQuery(USER_ORGANIZATION_LIST, {
     variables: { id: localStorage.getItem('id') },
   });
 
   const {
-    data: dataUsers,
-    loading: loadingUsers,
+    data: usersData,
+    loading: loading,
+    fetchMore,
     refetch: refetchUsers,
+  }: {
+    data: { users: InterfaceQueryUserListItem[] } | undefined;
+    loading: boolean;
+    fetchMore: any;
+    refetch: any;
   } = useQuery(USER_LIST, {
+    variables: {
+      first: perPage,
+      skip: 0,
+      userType: 'ADMIN',
+      filter: searchByName,
+    },
     notifyOnNetworkStatusChange: true,
   });
 
@@ -59,7 +77,6 @@ const Requests = (): JSX.Element => {
     data: dataOrgs,
   }: {
     data: InterfaceOrgConnectionType | undefined;
-    error?: Error;
   } = useQuery(ORGANIZATION_CONNECTION_LIST);
 
   // To clear the search when the component is unmounted
@@ -87,17 +104,64 @@ const Requests = (): JSX.Element => {
     }
   }, [dataOrgs]);
 
-  // Set the usersData to the users that are not approved yet after every api call
+  // Set and check if there are any more users to load
   useEffect(() => {
-    if (dataUsers) {
-      setUsersData(
-        dataUsers.users.filter(
-          (user: any) =>
-            user.userType === 'ADMIN' && user.adminApproved === false
-        )
-      );
+    if (!usersData) {
+      return;
     }
-  }, [dataUsers]);
+    // This block is necessary for when the user searches for a name
+    if (usersData.users.length < perPage) {
+      sethasMore(false);
+    }
+    setRequestList(usersData.users);
+  }, [usersData]);
+
+  // Manage the loading state
+  useEffect(() => {
+    if (loading && isLoadingMore == false) {
+      setIsLoading(true);
+    } else {
+      setIsLoading(false);
+    }
+  }, [loading]);
+
+  const resetAndRefetch = (): void => {
+    refetchUsers({
+      first: perPage,
+      skip: 0,
+      userType: 'ADMIN',
+      filter: '',
+    });
+    sethasMore(true);
+  };
+
+  const loadMoreRequests = (): void => {
+    setIsLoadingMore(true);
+    fetchMore({
+      variables: {
+        skip: usersData?.users.length || 0,
+        userType: 'ADMIN',
+        filter: searchByName,
+      },
+      updateQuery: (
+        prev: { users: InterfaceQueryUserListItem[] } | undefined,
+        {
+          fetchMoreResult,
+        }: {
+          fetchMoreResult: { users: InterfaceQueryUserListItem[] } | undefined;
+        }
+      ): { users: InterfaceQueryUserListItem[] } | undefined => {
+        setIsLoadingMore(false);
+        if (!fetchMoreResult) return prev;
+        if (fetchMoreResult.users.length < perPage) {
+          sethasMore(false);
+        }
+        return {
+          users: [...(prev?.users || []), ...(fetchMoreResult.users || [])],
+        };
+      },
+    });
+  };
 
   const acceptAdmin = async (userId: any): Promise<void> => {
     try {
@@ -110,7 +174,7 @@ const Requests = (): JSX.Element => {
       /* istanbul ignore next */
       if (data) {
         toast.success(t('userApproved'));
-        setUsersData(usersData.filter((user: any) => user._id !== userId));
+        resetAndRefetch();
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -129,7 +193,7 @@ const Requests = (): JSX.Element => {
       /* istanbul ignore next */
       if (data) {
         toast.success(t('userRejected'));
-        setUsersData(usersData.filter((user: any) => user._id !== userId));
+        resetAndRefetch();
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -140,6 +204,10 @@ const Requests = (): JSX.Element => {
   const handleSearchByName = (e: any): any => {
     const { value } = e.target;
     setSearchByName(value);
+    if (value === '') {
+      resetAndRefetch();
+      return;
+    }
     refetchUsers({
       firstName_contains: value,
       lastName_contains: '',
@@ -217,82 +285,82 @@ const Requests = (): JSX.Element => {
             </div>
           </div>
         </div>
-        {loadingUsers == false &&
-        usersData.length === 0 &&
+        {isLoading == false &&
+        usersData?.users.length === 0 &&
         searchByName.length > 0 ? (
           <div className={styles.notFound}>
             <h4>
               {t('noResultsFoundFor')} &quot;{searchByName}&quot;
             </h4>
           </div>
-        ) : loadingUsers == false && usersData.length === 0 ? (
+        ) : isLoading == false && usersData?.users.length === 0 ? (
           <div className={styles.notFound}>
             <h4>{t('noRequestFound')}</h4>
           </div>
+        ) : isLoading ? (
+          <TableLoader headerTitles={headerTitles} noOfRows={10} />
         ) : (
-          <div className={styles.listBox}>
-            {loadingUsers ? (
-              <TableLoader headerTitles={headerTitles} noOfRows={10} />
-            ) : (
-              <Table responsive>
-                <thead>
-                  <tr>
-                    {headerTitles.map((title: string, index: number) => {
-                      return (
-                        <th key={index} scope="col">
-                          {title}
-                        </th>
-                      );
-                    })}
-                  </tr>
-                </thead>
-                <tbody>
-                  {usersData.map(
-                    (
-                      user: {
-                        _id: string;
-                        firstName: string;
-                        lastName: string;
-                        email: string;
-                        userType: string;
-                      },
-                      index: number
-                    ) => {
-                      return (
-                        <tr key={user._id}>
-                          <th scope="row">{index + 1}</th>
-                          <td>{`${user.firstName} ${user.lastName}`}</td>
-                          <td>{user.email}</td>
-                          <td>
-                            <Button
-                              className="btn btn-success btn-sm"
-                              onClick={async (): Promise<void> => {
-                                await acceptAdmin(user._id);
-                              }}
-                              data-testid={`acceptUser${user._id}`}
-                            >
-                              {t('accept')}
-                            </Button>
-                          </td>
-                          <td>
-                            <Button
-                              className="btn btn-danger btn-sm"
-                              onClick={async (): Promise<void> => {
-                                await rejectAdmin(user._id);
-                              }}
-                              data-testid={`rejectUser${user._id}`}
-                            >
-                              {t('reject')}
-                            </Button>
-                          </td>
-                        </tr>
-                      );
-                    }
-                  )}
-                </tbody>
-              </Table>
-            )}
-          </div>
+          <InfiniteScroll
+            dataLength={usersData?.users.length ?? 0}
+            next={loadMoreRequests}
+            loader={<TableLoader noOfCols={5} noOfRows={5} />}
+            hasMore={hasMore}
+            className={styles.listBox}
+            data-testid="organizations-list"
+            endMessage={
+              <div className={'w-100 text-center my-4'}>
+                <h5 className="m-0 ">{t('endOfResults')}</h5>
+              </div>
+            }
+          >
+            <Table className="mb-0" responsive>
+              <thead>
+                <tr>
+                  {headerTitles.map((title: string, index: number) => {
+                    return (
+                      <th key={index} scope="col">
+                        {title}
+                      </th>
+                    );
+                  })}
+                </tr>
+              </thead>
+              <tbody>
+                {requestList &&
+                  requestList.map((user, index) => {
+                    return (
+                      <tr key={user._id}>
+                        <th scope="row">{index + 1}</th>
+                        <td>{`${user.firstName} ${user.lastName}`}</td>
+                        <td>{user.email}</td>
+                        <td>
+                          <Button
+                            className="btn btn-success btn-sm"
+                            onClick={async (): Promise<void> => {
+                              await acceptAdmin(user._id);
+                            }}
+                            data-testid={`acceptUser${user._id}`}
+                          >
+                            {t('accept')}
+                          </Button>
+                        </td>
+                        <td>
+                          <Button
+                            className="btn btn-danger btn-sm"
+                            onClick={async (): Promise<void> => {
+                              await rejectAdmin(user._id);
+                            }}
+                            data-testid={`rejectUser${user._id}`}
+                          >
+                            {t('reject')}
+                          </Button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </Table>
+          </InfiniteScroll>
         )}
       </SuperAdminScreen>
     </>

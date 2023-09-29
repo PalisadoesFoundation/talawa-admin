@@ -116,8 +116,6 @@ function orgList(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    // Initial loading
-    // When loading more
     if (loading && isLoadingMore == false) {
       setIsLoading(true);
     } else {
@@ -194,7 +192,7 @@ function orgList(): JSX.Element {
 
   /* istanbul ignore next */
   if (errorList || errorUser) {
-    // window.location.assign('/');
+    window.location.assign('/');
   }
 
   const resetAllParams = (): void => {
@@ -211,6 +209,7 @@ function orgList(): JSX.Element {
     setSearchByName(value);
     if (value == '') {
       resetAllParams();
+      return;
     }
     refetchOrgs({
       filter: value,
@@ -240,7 +239,7 @@ function orgList(): JSX.Element {
         | undefined => {
         setIsLoadingMore(false);
         if (!fetchMoreResult) return prev;
-        if (fetchMoreResult.organizationsConnection.length == 0) {
+        if (fetchMoreResult.organizationsConnection.length < perPage) {
           sethasMore(false);
         }
         return {
