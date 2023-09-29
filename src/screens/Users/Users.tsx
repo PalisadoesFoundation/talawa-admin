@@ -116,7 +116,7 @@ const Users = (): JSX.Element => {
       /* istanbul ignore next */
       if (data) {
         toast.success(t('roleUpdated'));
-        refetchUsers();
+        resetAndRefetch();
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -127,6 +127,10 @@ const Users = (): JSX.Element => {
   const handleSearchByName = (e: any): void => {
     const { value } = e.target;
     setSearchByName(value);
+    if (value.length === 0) {
+      resetAndRefetch();
+      return;
+    }
     refetchUsers({
       firstName_contains: value,
       lastName_contains: '',
@@ -137,7 +141,6 @@ const Users = (): JSX.Element => {
     refetchUsers({
       first: perPageResult,
       skip: 0,
-      userType: 'ADMIN',
       filter: '',
     });
     setHasMore(true);
