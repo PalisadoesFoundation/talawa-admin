@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dropdown, Form, Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
@@ -18,16 +18,16 @@ import {
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
+import TableLoader from 'components/TableLoader/TableLoader';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import debounce from 'utils/debounce';
 import { errorHandler } from 'utils/errorHandler';
 import type {
-  InterfaceQueryUserListItem,
   InterfaceOrgConnectionType,
+  InterfaceQueryUserListItem,
   InterfaceUserType,
 } from 'utils/interfaces';
 import styles from './Requests.module.css';
-import TableLoader from 'components/TableLoader/TableLoader';
-import InfiniteScroll from 'react-infinite-scroll-component';
 
 const Requests = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'requests' });
@@ -38,9 +38,6 @@ const Requests = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasMore, sethasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [requestList, setRequestList] = useState<InterfaceQueryUserListItem[]>(
-    []
-  );
   const [searchByName, setSearchByName] = useState('');
 
   const [acceptAdminFunc] = useMutation(ACCEPT_ADMIN_MUTATION);
@@ -103,18 +100,6 @@ const Requests = (): JSX.Element => {
       toast.warning(t('noOrgError'));
     }
   }, [dataOrgs]);
-
-  // Set and check if there are any more users to load
-  useEffect(() => {
-    if (!usersData) {
-      return;
-    }
-    // This block is necessary for when the user searches for a name
-    if (usersData.users.length < perPage) {
-      sethasMore(false);
-    }
-    setRequestList(usersData.users);
-  }, [usersData]);
 
   // Manage the loading state
   useEffect(() => {
@@ -203,6 +188,7 @@ const Requests = (): JSX.Element => {
 
   const handleSearchByName = (e: any): any => {
     const { value } = e.target;
+    sethasMore(false);
     setSearchByName(value);
     if (value === '') {
       resetAndRefetch();
@@ -326,8 +312,8 @@ const Requests = (): JSX.Element => {
                 </tr>
               </thead>
               <tbody>
-                {requestList &&
-                  requestList.map((user, index) => {
+                {usersData?.users &&
+                  usersData.users.map((user, index) => {
                     return (
                       <tr key={user._id}>
                         <th scope="row">{index + 1}</th>
