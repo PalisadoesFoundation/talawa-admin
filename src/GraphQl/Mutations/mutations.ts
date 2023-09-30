@@ -622,3 +622,15 @@ export const UNLIKE_COMMENT = gql`
     }
   }
 `;
+
+// Removes user from an organization
+export const REMOVE_USER_FROM_ORGANIZATION = gql`
+  mutation removeUserFromOrganization($organizationId: ID!, $userId: ID!) {
+    removeUserFromOrganization(
+      organizationId: $organizationId
+      userId: $userId
+    ) {
+      _id
+    }
+  }
+`;

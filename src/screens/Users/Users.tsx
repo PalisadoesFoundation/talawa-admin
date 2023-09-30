@@ -34,7 +34,7 @@ const Users = (): JSX.Element => {
   const [searchByName, setSearchByName] = useState('');
 
   const userType = localStorage.getItem('UserType');
-  const userId = localStorage.getItem('id');
+  const loggedInUserId = localStorage.getItem('id');
 
   const {
     data: usersData,
@@ -276,7 +276,9 @@ const Users = (): JSX.Element => {
                             index={index}
                             resetAndRefetch={resetAndRefetch}
                             user={user}
-                            userId={userId ? userId : ''}
+                            loggedInUserId={
+                              loggedInUserId ? loggedInUserId : ''
+                            }
                           />
                         );
                       })}

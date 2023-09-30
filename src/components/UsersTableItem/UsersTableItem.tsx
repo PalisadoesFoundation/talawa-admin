@@ -1,5 +1,8 @@
 import { useMutation } from '@apollo/client';
-import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  REMOVE_USER_FROM_ORGANIZATION,
+  UPDATE_USERTYPE_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import React, { useState } from 'react';
 import { Button, Card, Col, Form, Modal, Row, Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -15,17 +18,27 @@ import { Search } from '@mui/icons-material';
 type Props = {
   user: InterfaceQueryUserListItem;
   index: number;
-  userId: string;
+  loggedInUserId: string;
   resetAndRefetch: () => void;
 };
 
 const UsersTableItem = (props: Props): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
-  const { user, index, userId, resetAndRefetch } = props;
+  const { user, index, loggedInUserId, resetAndRefetch } = props;
 
   const [showJoinedOrganizations, setShowJoinedOrganizations] = useState(false);
   const [showBlockedOrganizations, setShowBlockedOrganizations] =
     useState(false);
+  const [showRemoveUserModal, setShowRemoveUserModal] = useState(false);
+  const [removeUserProps, setremoveUserProps] = useState<{
+    orgName: string;
+    orgId: string;
+    setShowOnCancel: 'JOINED' | 'BLOCKED' | '';
+  }>({
+    orgName: '',
+    orgId: '',
+    setShowOnCancel: '',
+  });
   const [joinedOrgs, setJoinedOrgs] = useState(user.joinedOrganizations);
   const [orgsBlockedBy, setOrgsBlockedBy] = useState(
     user.organizationsBlockedBy
@@ -34,6 +47,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const [searchByNameOrgsBlockedBy, setSearchByNameOrgsBlockedBy] =
     useState('');
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
+  const [removeUser] = useMutation(REMOVE_USER_FROM_ORGANIZATION);
   const history = useHistory();
 
   const changeRole = async (e: any): Promise<void> => {
@@ -94,9 +108,38 @@ const UsersTableItem = (props: Props): JSX.Element => {
       setOrgsBlockedBy(filteredOrgs);
     }
   }
+  function onHideRemoveUserModal(): void {
+    setShowRemoveUserModal(false);
+    if (removeUserProps.setShowOnCancel == 'JOINED') {
+      setShowJoinedOrganizations(true);
+    } else if (removeUserProps.setShowOnCancel == 'BLOCKED') {
+      setShowBlockedOrganizations(true);
+    }
+  }
+  const confirmRemoveUser = async (): Promise<void> => {
+    try {
+      const { data } = await removeUser({
+        variables: {
+          organizationId: removeUserProps.orgId,
+          userId: user._id,
+        },
+      });
+
+      /* istanbul ignore next */
+      if (data) {
+        toast.success('Removed User from Organization successfully');
+        resetAndRefetch();
+      }
+    } catch (error: any) {
+      /* istanbul ignore next */
+      errorHandler(t, error);
+    }
+  };
+
   return (
     <>
-      <tr key={user._id}>
+      {/* Table Item */}
+      <tr>
         <th scope="row">{index + 1}</th>
         <td>{`${user.firstName} ${user.lastName}`}</td>
         <td>{user.email}</td>
@@ -105,7 +148,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             name={`role${user._id}`}
             data-testid={`changeRole${user._id}`}
             onChange={changeRole}
-            disabled={user._id === userId}
+            disabled={user._id === loggedInUserId}
             defaultValue={`${user.userType}?${user._id}`}
           >
             <option value={`ADMIN?${user._id}`}>{t('admin')}</option>
@@ -131,7 +174,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
       {/* Organizations joined modal */}
       <Modal
         show={showJoinedOrganizations}
-        key={`modal-org-${index}`}
+        key={`modal-joined-org-${index}`}
         size="xl"
         onHide={() => setShowJoinedOrganizations(false)}
       >
@@ -195,7 +238,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                 <tbody>
                   {joinedOrgs.map((org) => (
                     <>
-                      <tr>
+                      <tr key={`org-joined-${org._id}`}>
                         <td>
                           <img
                             src={
@@ -261,7 +304,15 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             className={styles.button}
                             variant="danger"
                             size="sm"
-                            onClick={() => handleClick(org._id)}
+                            onClick={() => {
+                              setremoveUserProps({
+                                orgId: org._id,
+                                orgName: org.name,
+                                setShowOnCancel: 'JOINED',
+                              });
+                              setShowJoinedOrganizations(false);
+                              setShowRemoveUserModal(true);
+                            }}
                           >
                             Remove User
                           </Button>
@@ -295,7 +346,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
       {/* Organizations blocked by modal */}
       <Modal
         show={showBlockedOrganizations}
-        key={`modal-org-${index}`}
+        key={`modal-blocked-org-${index}`}
         size="xl"
         onHide={() => setShowBlockedOrganizations(false)}
       >
@@ -360,7 +411,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                 <tbody>
                   {orgsBlockedBy.map((org) => (
                     <>
-                      <tr>
+                      <tr key={`org-blocked-${org._id}`}>
                         <td>
                           <img
                             src={
@@ -426,7 +477,15 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             className={styles.button}
                             variant="danger"
                             size="sm"
-                            onClick={() => handleClick(org._id)}
+                            onClick={() => {
+                              setremoveUserProps({
+                                orgId: org._id,
+                                orgName: org.name,
+                                setShowOnCancel: 'BLOCKED',
+                              });
+                              setShowJoinedOrganizations(false);
+                              setShowRemoveUserModal(true);
+                            }}
                           >
                             Remove User
                           </Button>
@@ -454,6 +513,40 @@ const UsersTableItem = (props: Props): JSX.Element => {
             onClick={() => setShowBlockedOrganizations(false)}
           >
             Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      {/* Remove user from Organization modal */}
+      <Modal
+        show={showRemoveUserModal}
+        key={`modal-remove-org-${index}`}
+        onHide={() => onHideRemoveUserModal()}
+      >
+        <Modal.Header className="bg-danger" closeButton>
+          <Modal.Title className="text-white">
+            Remove User from {removeUserProps.orgName}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+            Are you sure you want to remove{' '}
+            <strong>
+              &ldquo;{user.firstName} {user.lastName}&rdquo;
+            </strong>{' '}
+            from organization{' '}
+            <strong>
+              &ldquo;
+              {removeUserProps.orgName}&rdquo;
+            </strong>{' '}
+            ?
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => onHideRemoveUserModal()}>
+            Close
+          </Button>
+          <Button variant="danger" onClick={() => confirmRemoveUser()}>
+            Remove
           </Button>
         </Modal.Footer>
       </Modal>
