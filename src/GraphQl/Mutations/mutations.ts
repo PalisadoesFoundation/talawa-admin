@@ -634,3 +634,20 @@ export const REMOVE_USER_FROM_ORGANIZATION = gql`
     }
   }
 `;
+
+// Changes the role of a user in an organization
+export const CHANGE_USER_ROLE_IN_ORG = gql`
+  mutation changeUserRoleInOrganization(
+    $organizationId: ID!
+    $userId: ID!
+    $role: String!
+  ) {
+    changeUserRoleInOrganization(
+      organizationId: $organizationId
+      userId: $userId
+      role: $role
+    ) {
+      _id
+    }
+  }
+`;
