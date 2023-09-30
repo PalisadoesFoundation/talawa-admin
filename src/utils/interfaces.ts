@@ -121,6 +121,7 @@ export interface InterfaceQueryUserListItem {
   image: string;
   email: string;
   userType: string;
+  adminFor: { _id: string }[];
   adminApproved: boolean;
   organizationsBlockedBy: {
     _id: string;

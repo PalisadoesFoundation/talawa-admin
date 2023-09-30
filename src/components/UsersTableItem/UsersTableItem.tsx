@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
 import React, { useState } from 'react';
-import { Button, Card, Col, Form, Modal, Row } from 'react-bootstrap';
+import { Button, Card, Col, Form, Modal, Row, Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
@@ -132,7 +132,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
       <Modal
         show={showJoinedOrganizations}
         key={`modal-org-${index}`}
-        size="lg"
+        size="xl"
         onHide={() => setShowJoinedOrganizations(false)}
       >
         <Modal.Header className="bg-primary" closeButton>
@@ -179,67 +179,107 @@ const UsersTableItem = (props: Props): JSX.Element => {
                 </div>
               </>
             ) : (
-              joinedOrgs.map((org) => (
-                <>
-                  <Col sm={12} md={6}>
-                    <Card className="mb-3">
-                      <Card.Body>
-                        <div className={styles.cardItemBody}>
-                          {org.image ? (
-                            <img src={org.image} alt="logo" />
-                          ) : (
+              <Table className={styles.modalTable} responsive>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Created on</th>
+                    <th>Created By</th>
+                    <th>Users Role</th>
+                    <th>Change Role</th>
+                    <th>Action</th>
+                    <th>Manage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {joinedOrgs.map((org) => (
+                    <>
+                      <tr>
+                        <td>
+                          <img
+                            src={
+                              org.image
+                                ? org.image
+                                : `https://api.dicebear.com/5.x/initials/svg?seed=${org.name}`
+                            }
+                            alt="orgImage"
+                          />
+                          {org.name}
+                        </td>
+                        <td>{org.location}</td>
+                        <td>{dayjs(org.createdAt).format('DD-MM-YYYY')}</td>
+                        <td>
+                          <Button
+                            variant="link"
+                            className="p-0"
+                            onClick={() => handleCreator()}
+                          >
                             <img
-                              src={`https://api.dicebear.com/5.x/initials/svg?seed=${org.name}`}
-                              className={styles.emptyImage}
-                              alt="logo_empty"
+                              src={
+                                org.creator.image
+                                  ? org.creator.image
+                                  : `https://api.dicebear.com/5.x/initials/svg?seed=${org.creator.firstName} ${org.creator.lastName}`
+                              }
+                              alt="creator"
                             />
-                          )}
-                          <div className={styles.info}>
-                            <h5>{org.name}</h5>
-                            <span className="text-secondary">
-                              Location: <strong>{org.location}</strong>
-                            </span>
-                            <span className="text-secondary">
-                              Created on:{' '}
-                              <strong>
-                                {dayjs(org.createdAt).format('DD-MM-YYYY')}
-                              </strong>
-                            </span>
-                          </div>
-                        </div>
-                        <div className={styles.creator}>
-                          <span className="text-dark">
-                            Creator:{' '}
-                            <Button
-                              variant="link"
-                              className="p-0"
-                              onClick={() => handleCreator()}
-                            >
-                              {org.creator.image ? (
-                                <img src={org.creator.image} alt="creator" />
-                              ) : (
-                                <img
-                                  src={`https://api.dicebear.com/5.x/initials/svg?seed=${org.creator.firstName}%20${org.creator.lastName}`}
-                                  className={styles.emptyImage}
-                                  alt="creator_empty"
-                                />
-                              )}
-                              {org.creator.firstName} {org.creator.lastName}
-                            </Button>
-                          </span>
+                            {org.creator.firstName} {org.creator.lastName}
+                          </Button>
+                        </td>
+                        <td>
+                          {user.adminFor.length === 0
+                            ? 'USER'
+                            : user.adminFor.map((item) => {
+                                if (item._id == org._id) {
+                                  return 'ADMIN';
+                                }
+                              })}
+                        </td>
+                        <td>
+                          <Form.Select size="sm">
+                            {user.adminFor.length === 0 ? (
+                              <>
+                                <option value="1">USER</option>
+                                <option value="2">ADMIN</option>
+                              </>
+                            ) : (
+                              user.adminFor.map((item) => {
+                                if (item._id == org._id) {
+                                  return (
+                                    <>
+                                      <option value="2">ADMIN</option>
+                                      <option value="1">USER</option>
+                                    </>
+                                  );
+                                }
+                              })
+                            )}
+                          </Form.Select>
+                        </td>
+                        <td colSpan={1.5}>
                           <Button
                             className={styles.button}
-                            size={'sm'}
+                            variant="danger"
+                            size="sm"
                             onClick={() => handleClick(org._id)}
                           >
-                            {t('view')}
+                            Remove User
                           </Button>
-                        </div>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                </>
-              ))
+                        </td>
+                        <td>
+                          <Button
+                            className={styles.button}
+                            size="sm"
+                            onClick={() => handleClick(org._id)}
+                          >
+                            Manage
+                          </Button>
+                        </td>
+                      </tr>
+                    </>
+                  ))}
+                </tbody>
+              </Table>
             )}
           </Row>
         </Modal.Body>
@@ -256,7 +296,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
       <Modal
         show={showBlockedOrganizations}
         key={`modal-org-${index}`}
-        size="lg"
+        size="xl"
         onHide={() => setShowBlockedOrganizations(false)}
       >
         <Modal.Header className="bg-danger" closeButton>
@@ -280,6 +320,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
               />
               <Button
                 tabIndex={-1}
+                variant="danger"
                 className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
               >
                 <Search />
@@ -303,67 +344,107 @@ const UsersTableItem = (props: Props): JSX.Element => {
                 </div>
               </>
             ) : (
-              orgsBlockedBy.map((org) => (
-                <>
-                  <Col sm={12} md={6}>
-                    <Card className="mb-3">
-                      <Card.Body>
-                        <div className={styles.cardItemBody}>
-                          {org.image ? (
-                            <img src={org.image} alt="logo" />
-                          ) : (
+              <Table className={styles.modalTable} responsive>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Created on</th>
+                    <th>Created By</th>
+                    <th>Users Role</th>
+                    <th>Change Role</th>
+                    <th>Action</th>
+                    <th>Manage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {orgsBlockedBy.map((org) => (
+                    <>
+                      <tr>
+                        <td>
+                          <img
+                            src={
+                              org.image
+                                ? org.image
+                                : `https://api.dicebear.com/5.x/initials/svg?seed=${org.name}`
+                            }
+                            alt="orgImage"
+                          />
+                          {org.name}
+                        </td>
+                        <td>{org.location}</td>
+                        <td>{dayjs(org.createdAt).format('DD-MM-YYYY')}</td>
+                        <td>
+                          <Button
+                            variant="link"
+                            className="p-0"
+                            onClick={() => handleCreator()}
+                          >
                             <img
-                              src={`https://api.dicebear.com/5.x/initials/svg?seed=${org.name}`}
-                              className={styles.emptyImage}
-                              alt="logo_empty"
+                              src={
+                                org.creator.image
+                                  ? org.creator.image
+                                  : `https://api.dicebear.com/5.x/initials/svg?seed=${org.creator.firstName} ${org.creator.lastName}`
+                              }
+                              alt="creator"
                             />
-                          )}
-                          <div className={styles.info}>
-                            <h5>{org.name}</h5>
-                            <span className="text-secondary">
-                              Location: <strong>{org.location}</strong>
-                            </span>
-                            <span className="text-secondary">
-                              Created on:{' '}
-                              <strong>
-                                {dayjs(org.createdAt).format('DD-MM-YYYY')}
-                              </strong>
-                            </span>
-                          </div>
-                        </div>
-                        <div className={styles.creator}>
-                          <span className="text-dark">
-                            Creator:{' '}
-                            <Button
-                              variant="link"
-                              className="p-0"
-                              onClick={() => handleCreator()}
-                            >
-                              {org.creator.image ? (
-                                <img src={org.creator.image} alt="creator" />
-                              ) : (
-                                <img
-                                  src={`https://api.dicebear.com/5.x/initials/svg?seed=${org.creator.firstName}%20${org.creator.lastName}`}
-                                  className={styles.emptyImage}
-                                  alt="creator_empty"
-                                />
-                              )}
-                              {org.creator.firstName} {org.creator.lastName}
-                            </Button>
-                          </span>
+                            {org.creator.firstName} {org.creator.lastName}
+                          </Button>
+                        </td>
+                        <td>
+                          {user.adminFor.length === 0
+                            ? 'USER'
+                            : user.adminFor.map((item) => {
+                                if (item._id == org._id) {
+                                  return 'ADMIN';
+                                }
+                              })}
+                        </td>
+                        <td>
+                          <Form.Select size="sm">
+                            {user.adminFor.length === 0 ? (
+                              <>
+                                <option value="1">USER</option>
+                                <option value="2">ADMIN</option>
+                              </>
+                            ) : (
+                              user.adminFor.map((item) => {
+                                if (item._id == org._id) {
+                                  return (
+                                    <>
+                                      <option value="2">ADMIN</option>
+                                      <option value="1">USER</option>
+                                    </>
+                                  );
+                                }
+                              })
+                            )}
+                          </Form.Select>
+                        </td>
+                        <td colSpan={1.5}>
                           <Button
                             className={styles.button}
-                            size={'sm'}
+                            variant="danger"
+                            size="sm"
                             onClick={() => handleClick(org._id)}
                           >
-                            {t('view')}
+                            Remove User
                           </Button>
-                        </div>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                </>
-              ))
+                        </td>
+                        <td>
+                          <Button
+                            className={styles.button}
+                            size="sm"
+                            onClick={() => handleClick(org._id)}
+                          >
+                            Manage
+                          </Button>
+                        </td>
+                      </tr>
+                    </>
+                  ))}
+                </tbody>
+              </Table>
             )}
           </Row>
         </Modal.Body>

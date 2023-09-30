@@ -1,6 +1,7 @@
 .input {
     position: relative;
 }
+
 .notJoined {
     height: 300px;
     display: flex;
@@ -8,22 +9,7 @@
     align-items: center;
 }
 
-.cardItemBody {
-    display: flex;
-}
-
-.cardItemBody img[alt="logo_empty"],
-.cardItemBody img[alt="logo"] {
-    height: 100px;
-    width: 100px;
-    object-fit: contain;
-    border-radius: 8px;
-    margin-right: 1rem;
-}
-
-
-img[alt="creator_empty"],
-img[alt="creator"] {
+.modalTable img[alt="creator"] {
     height: 24px;
     width: 24px;
     object-fit: contain;
@@ -31,22 +17,10 @@ img[alt="creator"] {
     margin-right: 0.4rem;
 }
 
-.creator {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 0.5rem;
-}
-
-.info span,
-.creator span {
-    font-size: 0.9rem;
-    display: block;
-    flex: 1;
-}
-
-.button {
-    margin-left: auto;
-    width: 80px;
-    height: 40px;
+.modalTable img[alt="orgImage"] {
+    height: 28px;
+    width:  28px;
+    object-fit: contain;
+    border-radius: 4px;
+    margin-right: 0.4rem;
 }

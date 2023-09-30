@@ -90,6 +90,9 @@ export const USER_LIST = gql`
       email
       userType
       adminApproved
+      adminFor {
+        _id
+      }
       createdAt
       organizationsBlockedBy {
         _id
