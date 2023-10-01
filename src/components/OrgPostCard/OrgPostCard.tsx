@@ -261,13 +261,18 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                     color="success"
                     fontSize="large"
                     className="fs-5"
+                    data-testid="pin-icon"
                   />
                 )}
-                <Card.Title className={styles.title}>
+                <Card.Title className={styles.title} data-testid="card-title">
                   {props.postTitle}
                 </Card.Title>
-                <Card.Text className={styles.text}>{props.postInfo}</Card.Text>
-                <Card.Link>{props.postAuthor}</Card.Link>
+                <Card.Text className={styles.text} data-testid="card-text">
+                  {props.postInfo}
+                </Card.Text>
+                <Card.Link data-testid="card-authour">
+                  {props.postAuthor}
+                </Card.Link>
               </Card.Body>
             </Card>
           )}
@@ -418,6 +423,7 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                   {t('deletePost')}
                 </li>
                 <li
+                  data-testid="pinpostBtn"
                   onClick={(): Promise<void> =>
                     togglePostPin(props.id, props.pinned)
                   }
@@ -510,6 +516,7 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                 <Form.Control
                   accept="image/*"
                   id="postImageUrl"
+                  data-testid="postImageUrl"
                   name="postphoto"
                   type="file"
                   placeholder={t('image')}
@@ -558,6 +565,7 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                 <Form.Control
                   accept="video/*"
                   id="postVideoUrl"
+                  data-testid="postVideoUrl"
                   name="postvideo"
                   type="file"
                   placeholder={t('video')}
@@ -588,6 +596,7 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
                     </video>
                     <button
                       className={styles.closeButtonP}
+                      data-testid="closePreview"
                       onClick={clearVideoInput}
                     >
                       <i className="fa fa-times"></i>
