@@ -521,7 +521,8 @@
     "joinedOrganizations": "Organisations jointes",
     "createdOrganizations": "Organisations créées",
     "search": "Recherche",
-    "nothingToShow": "Rien à montrer ici."
+    "nothingToShow": "Rien à montrer ici.",
+    "selectOrganization": "Sélectionnez une organisation"
   },
   "userSidebar": {
     "yourOrganizations": "Vos organisations",
@@ -587,5 +588,21 @@
     "creator": "Créatrice",
     "alreadyRegistered": "Déjà enregistré",
     "register": "Registre"
+  },
+  "userTasks": {
+    "yourAssignedTasks": "Vos tâches assignées",
+    "nothingToShow": "Rien à montrer ici."
+  },
+  "userTaskCard": {
+    "description": "Description",
+    "deadline": "Date limite",
+    "created": "Créé",
+    "assignees": "Destinataires",
+    "completed": "Complété",
+    "incomplete": "Incomplète",
+    "taskCompleted": "La tâche est terminée",
+    "taskNotCompleted": "La tâche n'est pas encore terminée",
+    "event": "Événement",
+    "organization": "Organisation"
   }
 }

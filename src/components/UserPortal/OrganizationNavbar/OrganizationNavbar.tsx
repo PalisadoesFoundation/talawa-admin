@@ -81,34 +81,49 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
             <Offcanvas.Title>Talawa</Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
-            <Nav className="me-auto flex-grow-1 pe-3" variant="dark">
+            <Nav className="me-auto flex-grow-1 pe-3 pt-1" variant="dark">
               <Nav.Link
                 active={props.currentPage === 'home'}
-                onClick={(): void => history.push(homeLink)}
+                onClick={
+                  /* istanbul ignore next */
+                  (): void => history.push(homeLink)
+                }
               >
                 {t('home')}
               </Nav.Link>
               <Nav.Link
                 active={props.currentPage === 'events'}
-                onClick={(): void => history.push(eventsLink)}
+                onClick={
+                  /* istanbul ignore next */
+                  (): void => history.push(eventsLink)
+                }
               >
                 {t('events')}
               </Nav.Link>
               <Nav.Link
                 active={props.currentPage === 'people'}
-                onClick={(): void => history.push(peopleLink)}
+                onClick={
+                  /* istanbul ignore next */
+                  (): void => history.push(peopleLink)
+                }
               >
                 {t('people')}
               </Nav.Link>
               <Nav.Link
                 active={props.currentPage === 'chat'}
-                onClick={(): void => history.push(chatLink)}
+                onClick={
+                  /* istanbul ignore next */
+                  (): void => history.push(chatLink)
+                }
               >
                 {t('chat')}
               </Nav.Link>
               <Nav.Link
                 active={props.currentPage === 'donate'}
-                onClick={(): void => history.push(donationLink)}
+                onClick={
+                  /* istanbul ignore next */
+                  (): void => history.push(donationLink)
+                }
               >
                 {t('donate')}
               </Nav.Link>
@@ -167,7 +182,11 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                       {t('settings')}
                     </Link>
                   </Dropdown.Item>
-                  <Dropdown.Item>{t('myTasks')}</Dropdown.Item>
+                  <Dropdown.Item>
+                    <Link to="/user/tasks" className={styles.link}>
+                      {t('myTasks')}
+                    </Link>
+                  </Dropdown.Item>
                   <Dropdown.Item
                     onClick={handleLogout}
                     data-testid={`logoutBtn`}
