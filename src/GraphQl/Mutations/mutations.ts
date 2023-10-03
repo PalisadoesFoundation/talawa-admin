@@ -351,8 +351,8 @@ export const REJECT_ADMIN_MUTATION = gql`
  * @description used to toggle `installStatus` (boolean value) of a Plugin
  */
 export const UPDATE_INSTALL_STATUS_PLUGIN_MUTATION = gql`
-  mutation update_install_status_plugin_mutation($id: ID!, $orgId: ID!) {
-    updatePluginStatus(orgId: $orgId, id: $id) {
+  mutation ($id: ID!, $orgId: ID!) {
+    updatePluginStatus(id: $id, orgId: $orgId) {
       _id
       pluginName
       pluginCreatedBy
@@ -466,6 +466,14 @@ export const LIKE_POST = gql`
 export const UNLIKE_POST = gql`
   mutation unlikePost($postId: ID!) {
     unlikePost(id: $postId) {
+      _id
+    }
+  }
+`;
+
+export const REGISTER_EVENT = gql`
+  mutation registerForEvent($eventId: ID!) {
+    registerForEvent(id: $eventId) {
       _id
     }
   }
@@ -589,6 +597,41 @@ export const MARK_CHECKIN = gql`
         allotedSeat: $allotedSeat
       }
     ) {
+      _id
+    }
+  }
+`;
+
+export const CREATE_COMMENT_POST = gql`
+  mutation createComment($comment: String!, $postId: ID!) {
+    createComment(data: { text: $comment }, postId: $postId) {
+      _id
+      creator {
+        _id
+        firstName
+        lastName
+        email
+      }
+      likeCount
+      likedBy {
+        _id
+      }
+      text
+    }
+  }
+`;
+
+export const LIKE_COMMENT = gql`
+  mutation likeComment($commentId: ID!) {
+    likeComment(id: $commentId) {
+      _id
+    }
+  }
+`;
+
+export const UNLIKE_COMMENT = gql`
+  mutation unlikeComment($commentId: ID!) {
+    unlikeComment(id: $commentId) {
       _id
     }
   }

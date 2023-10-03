@@ -1,24 +1,24 @@
 import React from 'react';
-import { act, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { I18nextProvider } from 'react-i18next';
-import BlockUser from './BlockUser';
-import {
-  BLOCK_PAGE_MEMBER_LIST,
-  ORGANIZATIONS_LIST,
-} from 'GraphQl/Queries/Queries';
+import { act, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import {
   BLOCK_USER_MUTATION,
   UNBLOCK_USER_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { store } from 'state/store';
-import userEvent from '@testing-library/user-event';
-import i18nForTest from 'utils/i18nForTest';
-import { StaticMockLink } from 'utils/StaticMockLink';
+import {
+  BLOCK_PAGE_MEMBER_LIST,
+  ORGANIZATIONS_LIST,
+} from 'GraphQl/Queries/Queries';
 import 'jest-location-mock';
+import { I18nextProvider } from 'react-i18next';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import { store } from 'state/store';
+import { StaticMockLink } from 'utils/StaticMockLink';
+import i18nForTest from 'utils/i18nForTest';
+import BlockUser from './BlockUser';
 
 let userQueryCalled = false;
 
@@ -226,15 +226,87 @@ const MOCKS = [
     request: {
       query: BLOCK_PAGE_MEMBER_LIST,
       variables: {
-        firstName_contains: 'sam',
-        lastName_contains: 'smith',
+        firstName_contains: 'Peter',
+        lastName_contains: '',
         orgId: 'orgid',
       },
     },
     result: {
       data: {
         organizationsMemberConnection: {
-          edges: [USER_UNBLOCKED],
+          edges: [],
+        },
+      },
+    },
+  },
+];
+const MOCKS_EMPTY = [
+  {
+    request: {
+      query: ORGANIZATIONS_LIST,
+      variables: {
+        id: 'orgid',
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: 'orgid',
+            image: '',
+            creator: {
+              firstName: 'firstName',
+              lastName: 'lastName',
+              email: 'email',
+            },
+            name: 'name',
+            description: 'description',
+            location: 'location',
+            members: {
+              _id: 'id',
+              firstName: 'firstName',
+              lastName: 'lastName',
+              email: 'email',
+            },
+            admins: {
+              _id: 'id',
+              firstName: 'firstName',
+              lastName: 'lastName',
+              email: 'email',
+            },
+            membershipRequests: {
+              _id: 'id',
+              user: {
+                firstName: 'firstName',
+                lastName: 'lastName',
+                email: 'email',
+              },
+            },
+            blockedUsers: {
+              _id: 'id',
+              firstName: 'firstName',
+              lastName: 'lastName',
+              email: 'email',
+            },
+          },
+        ],
+      },
+    },
+  },
+
+  {
+    request: {
+      query: BLOCK_PAGE_MEMBER_LIST,
+      variables: {
+        firstName_contains: 'Peter',
+        lastName_contains: '',
+        orgId: 'orgid',
+      },
+    },
+    result: {
+      data: {
+        organizationsMemberConnection: {
+          edges: [],
         },
       },
     },
@@ -242,6 +314,7 @@ const MOCKS = [
 ];
 
 const link = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(MOCKS_EMPTY, true);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -273,7 +346,7 @@ describe('Testing Block/Unblock user screen', () => {
 
     await wait();
 
-    expect(screen.getByText('Search By Name')).toBeInTheDocument();
+    expect(screen.getByText('Search By First Name')).toBeInTheDocument();
     expect(screen.getByText('List of Users who spammed')).toBeInTheDocument();
 
     expect(window.location).toBeAt('/blockuser/id=orgid');
@@ -357,13 +430,14 @@ describe('Testing Block/Unblock user screen', () => {
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('Sam Smith')).toBeInTheDocument();
 
-    const firstNameInput = screen.getByPlaceholderText(/Enter First Name/i);
-    const lastNameInput = screen.getByPlaceholderText(/Enter Last Name/i);
-
+    const firstNameInput = screen.getByPlaceholderText(/Search by First Name/i);
+    // Open Dropdown
+    await act(async () => {
+      userEvent.click(screen.getByTestId('nameFilter'));
+    });
+    // Select option and enter first name
+    userEvent.click(screen.getByTestId('searchByFirstName'));
     userEvent.type(firstNameInput, 'john');
-
-    expect(firstNameInput).toHaveValue('john');
-    expect(lastNameInput).toHaveValue('');
 
     await wait(700);
 
@@ -393,32 +467,31 @@ describe('Testing Block/Unblock user screen', () => {
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('Sam Smith')).toBeInTheDocument();
 
-    const firstNameInput = screen.getByPlaceholderText(/Enter First Name/i);
-    const lastNameInput = screen.getByPlaceholderText(/Enter Last Name/i);
-
+    // Open Dropdown
+    await act(async () => {
+      userEvent.click(screen.getByTestId('nameFilter'));
+    });
+    // Select option and enter last name
+    userEvent.click(screen.getByTestId('searchByLastName'));
+    const lastNameInput = screen.getByPlaceholderText(/Search by Last Name/i);
     userEvent.type(lastNameInput, 'doe');
 
     await wait(700);
 
-    expect(firstNameInput).toHaveValue('');
     expect(lastNameInput).toHaveValue('doe');
-
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.queryByText('Sam Smith')).not.toBeInTheDocument();
-
     expect(window.location).toBeAt('/blockuser/id=orgid');
   });
 
-  test('Testing Full Name Filter', async () => {
+  test('Testing No Spammers Present', async () => {
     window.location.assign('/blockuser/id=orgid');
-
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <BlockUser />
-              <ToastContainer />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -426,24 +499,7 @@ describe('Testing Block/Unblock user screen', () => {
     );
 
     await wait();
-
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.getByText('Sam Smith')).toBeInTheDocument();
-
-    const firstNameInput = screen.getByPlaceholderText(/Enter First Name/i);
-    const lastNameInput = screen.getByPlaceholderText(/Enter Last Name/i);
-
-    userEvent.type(firstNameInput, 'sam');
-    userEvent.type(lastNameInput, 'smith');
-
-    expect(firstNameInput).toHaveValue('sam');
-    expect(lastNameInput).toHaveValue('smith');
-
-    await wait(700);
-
-    expect(screen.getByText('Sam Smith')).toBeInTheDocument();
-    expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
-
+    expect(screen.getByText(/No spammer found/i)).toBeInTheDocument();
     expect(window.location).toBeAt('/blockuser/id=orgid');
   });
 
@@ -462,15 +518,15 @@ describe('Testing Block/Unblock user screen', () => {
         </BrowserRouter>
       </MockedProvider>
     );
-
     await wait();
+    await act(async () => {
+      userEvent.click(screen.getByTestId('userFilter'));
+    });
+    userEvent.click(screen.getByTestId('showMembers'));
 
-    userEvent.click(screen.getByLabelText(/All Members/i));
-    await wait();
+    await wait(700);
 
-    expect(screen.getByLabelText(/All Members/i)).toBeChecked();
-    await wait();
-
+    expect(screen.getByTestId(/userFilter/i)).toHaveTextContent('All Members');
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('Sam Smith')).toBeInTheDocument();
 
@@ -493,12 +549,11 @@ describe('Testing Block/Unblock user screen', () => {
       </MockedProvider>
     );
 
-    await wait();
+    await act(async () => {
+      userEvent.click(screen.getByTestId('userFilter'));
+    });
 
-    userEvent.click(screen.getByLabelText(/Blocked Users/i));
-    await wait();
-
-    expect(screen.getByLabelText(/Blocked Users/i)).toBeChecked();
+    userEvent.click(screen.getByTestId('showBlockedMembers'));
     await wait();
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -524,9 +579,34 @@ describe('Testing Block/Unblock user screen', () => {
 
     await wait();
 
-    expect(screen.getByTestId(/blockedusers/)).toBeInTheDocument();
-    expect(screen.getByTestId(/allusers/)).toBeInTheDocument();
+    expect(screen.getByTestId(/userList/)).toBeInTheDocument();
+    expect(screen.getAllByText('Block/Unblock')).toHaveLength(2);
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('Sam Smith')).toBeInTheDocument();
+  });
+
+  test('Testing No Results Found', async () => {
+    window.location.assign('/blockuser/id=orgid');
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <BlockUser />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    const input = screen.getByPlaceholderText('Search By First Name');
+    await act(async () => {
+      userEvent.type(input, 'Peter');
+    });
+    await wait(700);
+    expect(
+      screen.getByText(`No results found for "Peter"`)
+    ).toBeInTheDocument();
+    expect(window.location).toBeAt('/blockuser/id=orgid');
   });
 });

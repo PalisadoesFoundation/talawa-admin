@@ -3,12 +3,12 @@ import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { ReactComponent as AngleRightIcon } from '../../assets/svgs/icons/angleRight.svg';
-import { ReactComponent as LogoutIcon } from '../../assets/svgs/icons/logout.svg';
-import { ReactComponent as OrganizationsIcon } from '../../assets/svgs/icons/organizations.svg';
-import { ReactComponent as RequestsIcon } from '../../assets/svgs/icons/requests.svg';
-import { ReactComponent as RolesIcon } from '../../assets/svgs/icons/roles.svg';
-import { ReactComponent as TalawaLogo } from '../../assets/svgs/talawa.svg';
+import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
+import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
+import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
+import { ReactComponent as RequestsIcon } from 'assets/svgs/requests.svg';
+import { ReactComponent as RolesIcon } from 'assets/svgs/roles.svg';
+import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import styles from './LeftDrawer.module.css';
 
 export interface InterfaceLeftDrawerProps {

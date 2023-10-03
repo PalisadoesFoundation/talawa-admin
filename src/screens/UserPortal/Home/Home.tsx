@@ -33,6 +33,19 @@ interface InterfacePostCardProps {
   title: string;
   likeCount: number;
   commentCount: number;
+  comments: {
+    creator: {
+      _id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+    };
+    likeCount: number;
+    likedBy: {
+      id: string;
+    }[];
+    text: string;
+  }[];
   likedBy: {
     firstName: string;
     lastName: string;
@@ -188,6 +201,33 @@ export default function home(): JSX.Element {
                   allLikes.push(singleLike);
                 });
 
+                const postComments: any = [];
+                post.comments.forEach((value: any) => {
+                  const commentLikes: any = [];
+
+                  value.likedBy.forEach((commentLike: any) => {
+                    const singleLike = {
+                      id: commentLike._id,
+                    };
+                    commentLikes.push(singleLike);
+                  });
+
+                  const singleCommnet: any = {
+                    id: value._id,
+                    creator: {
+                      firstName: value.creator.firstName,
+                      lastName: value.creator.lastName,
+                      id: value.creator._id,
+                      email: value.creator.email,
+                    },
+                    likeCount: value.likeCount,
+                    likedBy: commentLikes,
+                    text: value.text,
+                  };
+
+                  postComments.push(singleCommnet);
+                });
+
                 const cardProps: InterfacePostCardProps = {
                   id: post._id,
                   creator: {
@@ -202,6 +242,7 @@ export default function home(): JSX.Element {
                   text: post.text,
                   likeCount: post.likeCount,
                   commentCount: post.commentCount,
+                  comments: postComments,
                   likedBy: allLikes,
                 };
 

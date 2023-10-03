@@ -183,6 +183,8 @@ export const ORGANIZATIONS_LIST = gql`
       name
       description
       location
+      isPublic
+      visibleInSearch
       members {
         _id
         firstName
@@ -513,6 +515,20 @@ export const ORGANIZATION_POST_CONNECTION_LIST = gql`
         pinned
         likeCount
         commentCount
+        comments {
+          _id
+          creator {
+            _id
+            firstName
+            lastName
+            email
+          }
+          likeCount
+          likedBy {
+            _id
+          }
+          text
+        }
         createdAt
         likedBy {
           _id
@@ -602,6 +618,50 @@ export const PLUGIN_GET = gql`
       pluginName
       pluginCreatedBy
       pluginDesc
+      uninstalledOrgs
+    }
+  }
+`;
+
+export const ORGANIZATION_EVENTS_CONNECTION = gql`
+  query EventsByOrganizationConnection(
+    $organization_id: ID!
+    $title_contains: String
+    $description_contains: String
+    $location_contains: String
+    $first: Int
+    $skip: Int
+  ) {
+    eventsByOrganizationConnection(
+      where: {
+        organization_id: $organization_id
+        title_contains: $title_contains
+        description_contains: $description_contains
+        location_contains: $location_contains
+      }
+      first: $first
+      skip: $skip
+    ) {
+      _id
+      title
+      description
+      startDate
+      endDate
+      location
+      startTime
+      endTime
+      allDay
+      recurring
+      isPublic
+      isRegisterable
+      creator {
+        _id
+        firstName
+        lastName
+      }
+      attendees {
+        _id
+      }
     }
   }
 `;

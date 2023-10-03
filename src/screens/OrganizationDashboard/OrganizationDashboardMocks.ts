@@ -1,11 +1,11 @@
-import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATIONS_LIST,
   ORGANIZATION_EVENT_LIST,
   ORGANIZATION_POST_LIST,
 } from 'GraphQl/Queries/Queries';
+import dayjs from 'dayjs';
 
-export const MOCKS_WITHOUT_IMAGE = [
+export const MOCKS = [
   {
     request: {
       query: ORGANIZATIONS_LIST,
@@ -14,56 +14,51 @@ export const MOCKS_WITHOUT_IMAGE = [
       data: {
         organizations: [
           {
-            _id: 1,
+            _id: 123,
             image: '',
             name: 'Dummy Organization',
             description: 'This is a Dummy Organization',
+            location: 'New Delhi',
+            isPublic: true,
+            visibleInSearch: false,
             creator: {
               firstName: '',
               lastName: '',
               email: '',
             },
-            location: 'New Delhi',
-            members: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
-              email: 'johndoe@gmail.com',
-            },
-            admins: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
-              email: 'johndoe@gmail.com',
-            },
-            membershipRequests: {
-              _id: '456',
-              user: {
-                firstName: 'Sam',
-                lastName: 'Smith',
-                email: 'samsmith@gmail.com',
-              },
-            },
-            blockedUsers: {
-              _id: '789',
-              firstName: 'Steve',
-              lastName: 'Smith',
-              email: 'stevesmith@gmail.com',
-            },
-            spamCount: [
+
+            members: [
               {
-                _id: '6954',
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                email: 'johndoe@gmail.com',
+              },
+            ],
+            admins: [
+              {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                email: 'johndoe@gmail.com',
+              },
+            ],
+            membershipRequests: [
+              {
+                _id: '456',
                 user: {
-                  _id: '878',
-                  firstName: 'Joe',
-                  lastName: 'Root',
-                  email: 'joeroot@gmail.com',
+                  firstName: 'Jane',
+                  lastName: 'Doe',
+                  email: 'janedoe@gmail.com',
                 },
-                isReaded: false,
-                groupchat: {
-                  _id: '321',
-                  title: 'Dummy',
-                },
+              },
+            ],
+            blockedUsers: [
+              {
+                _id: '789',
+                firstName: 'Steve',
+                lastName: 'Smith',
+                email: 'stevesmith@gmail.com',
               },
             ],
           },
@@ -80,8 +75,8 @@ export const MOCKS_WITHOUT_IMAGE = [
         postsByOrganization: [
           {
             _id: 1,
-            title: 'Akatsuki',
-            text: 'Capture Jinchuriki',
+            title: 'Post 1',
+            text: 'Test Post',
             imageUrl: '',
             videoUrl: '',
             creator: {
@@ -97,20 +92,6 @@ export const MOCKS_WITHOUT_IMAGE = [
   },
   {
     request: {
-      query: DELETE_ORGANIZATION_MUTATION,
-    },
-    result: {
-      data: {
-        removeOrganization: [
-          {
-            _id: 1,
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
       query: ORGANIZATION_EVENT_LIST,
     },
     result: {
@@ -118,14 +99,28 @@ export const MOCKS_WITHOUT_IMAGE = [
         eventsByOrganization: [
           {
             _id: 1,
-            title: 'Event',
+            title: 'Event 1',
             description: 'Event Test',
-            startDate: '',
-            endDate: '',
+            startDate: dayjs(new Date()).add(1, 'day'),
+            endDate: dayjs(new Date()).add(3, 'day'),
             location: 'New Delhi',
-            startTime: '02:00',
-            endTime: '06:00',
-            allDay: false,
+            startTime: '',
+            endTime: '',
+            allDay: true,
+            recurring: false,
+            isPublic: true,
+            isRegisterable: true,
+          },
+          {
+            _id: 2,
+            title: 'Event 2',
+            description: 'Event Test',
+            startDate: dayjs(new Date()),
+            endDate: dayjs(new Date()).add(1, 'day'),
+            location: 'Jamaica',
+            startTime: '',
+            endTime: '',
+            allDay: true,
             recurring: false,
             isPublic: true,
             isRegisterable: true,
@@ -136,7 +131,7 @@ export const MOCKS_WITHOUT_IMAGE = [
   },
 ];
 
-export const MOCKS_NO_TAGS = [
+export const EMPTY_MOCKS = [
   {
     request: {
       query: ORGANIZATIONS_LIST,
@@ -145,56 +140,41 @@ export const MOCKS_NO_TAGS = [
       data: {
         organizations: [
           {
-            _id: 1,
+            _id: 123,
             image: '',
             name: 'Dummy Organization',
             description: 'This is a Dummy Organization',
-            creator: {
-              firstName: '',
-              lastName: '',
-              email: '',
-            },
             location: 'New Delhi',
-            members: {
-              _id: '123',
+            isPublic: true,
+            visibleInSearch: false,
+            creator: {
               firstName: 'John',
               lastName: 'Doe',
               email: 'johndoe@gmail.com',
             },
-            admins: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
-              email: 'johndoe@gmail.com',
-            },
-            membershipRequests: {
-              _id: '456',
-              user: {
-                firstName: 'Sam',
-                lastName: 'Smith',
-                email: 'samsmith@gmail.com',
-              },
-            },
-            blockedUsers: {
-              _id: '789',
-              firstName: 'Steve',
-              lastName: 'Smith',
-              email: 'stevesmith@gmail.com',
-            },
-            spamCount: [
+            members: [
               {
-                _id: '6954',
-                user: {
-                  _id: '878',
-                  firstName: 'Joe',
-                  lastName: 'Root',
-                  email: 'joeroot@gmail.com',
-                },
-                isReaded: false,
-                groupchat: {
-                  _id: '321',
-                  title: 'Dummy',
-                },
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                email: 'johndoe@gmail.com',
+              },
+            ],
+            admins: [
+              {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                email: 'johndoe@gmail.com',
+              },
+            ],
+            membershipRequests: [],
+            blockedUsers: [
+              {
+                _id: '789',
+                firstName: 'Steve',
+                lastName: 'Smith',
+                email: 'stevesmith@gmail.com',
               },
             ],
           },
@@ -208,21 +188,7 @@ export const MOCKS_NO_TAGS = [
     },
     result: {
       data: {
-        postsByOrganization: [
-          {
-            _id: 1,
-            title: 'Akatsuki',
-            text: 'Capture Jinchuriki',
-            imageUrl: '',
-            videoUrl: '',
-            creator: {
-              _id: '583',
-              firstName: 'John',
-              lastName: 'Doe',
-              email: 'johndoe@gmail.com',
-            },
-          },
-        ],
+        postsByOrganization: [],
       },
     },
   },
@@ -232,140 +198,29 @@ export const MOCKS_NO_TAGS = [
     },
     result: {
       data: {
-        eventsByOrganization: [
-          {
-            _id: 1,
-            title: 'Event',
-            description: 'Event Test',
-            startDate: '',
-            endDate: '',
-            location: 'New Delhi',
-            startTime: '02:00',
-            endTime: '06:00',
-            allDay: false,
-            recurring: false,
-            isPublic: true,
-            isRegisterable: true,
-          },
-        ],
+        eventsByOrganization: [],
       },
     },
   },
 ];
 
-export const MOCKS_WITH_IMAGE = [
+export const ERROR_MOCKS = [
   {
     request: {
       query: ORGANIZATIONS_LIST,
     },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: 1,
-            image: 'https://via.placeholder.com/200x200',
-            name: 'Dummy Organization',
-            description: 'This is a Dummy Organization',
-            creator: {
-              firstName: '',
-              lastName: '',
-              email: '',
-            },
-            location: 'New Delhi',
-            members: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
-              email: 'johndoe@gmail.com',
-            },
-            admins: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
-              email: 'johndoe@gmail.com',
-            },
-            membershipRequests: {
-              _id: '456',
-              user: {
-                firstName: 'Sam',
-                lastName: 'Smith',
-                email: 'samsmith@gmail.com',
-              },
-            },
-            blockedUsers: {
-              _id: '789',
-              firstName: 'Steve',
-              lastName: 'Smith',
-              email: 'stevesmith@gmail.com',
-            },
-            spamCount: [
-              {
-                _id: '6954',
-                user: {
-                  _id: '878',
-                  firstName: 'Joe',
-                  lastName: 'Root',
-                  email: 'joeroot@gmail.com',
-                },
-                isReaded: false,
-                groupchat: {
-                  _id: '321',
-                  title: 'Dummy',
-                },
-              },
-            ],
-          },
-        ],
-      },
-    },
+    error: new Error('Mock Graphql ORGANIZATIONS_LIST Error'),
   },
   {
     request: {
       query: ORGANIZATION_POST_LIST,
     },
-    result: {
-      data: {
-        postsByOrganization: [
-          {
-            _id: 1,
-            title: 'Akatsuki',
-            text: 'Capture Jinchuriki',
-            imageUrl: '',
-            videoUrl: '',
-            creator: {
-              _id: '583',
-              firstName: 'John',
-              lastName: 'Doe',
-              email: 'johndoe@gmail.com',
-            },
-          },
-        ],
-      },
-    },
+    error: new Error('Mock Graphql ORGANIZATION_POST_LIST Error'),
   },
   {
     request: {
       query: ORGANIZATION_EVENT_LIST,
     },
-    result: {
-      data: {
-        eventsByOrganization: [
-          {
-            _id: 1,
-            title: 'Event',
-            description: 'Event Test',
-            startDate: '',
-            endDate: '',
-            location: 'New Delhi',
-            startTime: '02:00',
-            endTime: '06:00',
-            allDay: false,
-            recurring: false,
-            isPublic: true,
-            isRegisterable: true,
-          },
-        ],
-      },
-    },
+    error: new Error('Mock Graphql ORGANIZATION_EVENT_LIST Error'),
   },
 ];

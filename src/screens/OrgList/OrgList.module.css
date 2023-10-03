@@ -129,6 +129,34 @@
   flex-direction: column;
   margin-left: 1rem;
 }
+.titlemodaldialog {
+  color: #707070;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+}
+form label {
+  font-weight: bold;
+  padding-bottom: 1px;
+  font-size: 14px;
+  color: #707070;
+}
+
+form > input {
+  display: block;
+  margin-bottom: 20px;
+  border: 1px solid #e8e5e5;
+  box-shadow: 2px 1px #e8e5e5;
+  padding: 10px 20px;
+  border-radius: 5px;
+  background: none;
+  width: 100%;
+  transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+}
 
 .itemCard .loadingWrapper .innerContainer .content h5 {
   height: 24px;
@@ -136,10 +164,61 @@
   margin-bottom: 0.8rem;
 }
 
+.cancel > i {
+  margin-top: 5px;
+  transform: scale(1.2);
+  cursor: pointer;
+  color: #707070;
+}
+.modalbody {
+  width: 50px;
+}
+.pluginStoreBtnContainer {
+  display: flex;
+  gap: 1rem;
+}
+.greenregbtn {
+  margin: 1rem 0 0;
+  margin-top: 10px;
+  border: 1px solid #e8e5e5;
+  box-shadow: 0 2px 2px #e8e5e5;
+  padding: 10px 10px;
+  border-radius: 5px;
+  background-color: #31bb6b;
+  width: 100%;
+  font-size: 16px;
+  color: white;
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+
 .itemCard .loadingWrapper .innerContainer .content h6[title='Location'] {
   display: block;
   width: 45%;
   height: 18px;
+}
+.secondbtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem 0 0;
+  margin-top: 10px;
+  border: 1px solid #d0cfcf;
+  box-shadow: 0 2px 2px #d0cfcf;
+  padding: 10px 10px;
+  border-radius: 5px;
+  background-color: white;
+  width: 100%;
+  font-size: 16px;
+  color: #31bb6b;
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  width: 100%;
 }
 
 .itemCard .loadingWrapper .innerContainer .content h6 {
