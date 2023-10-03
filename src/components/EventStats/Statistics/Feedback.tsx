@@ -92,41 +92,44 @@ export const FeedbackStats = (props: ModalPropType): JSX.Element => {
           <Card.Title>
             <h3>Feedback Analysis</h3>
           </Card.Title>
-
-          <Card.Text>
+          <h5>
             {feedbackData.event.feedback.length} people have filled feedback for
             this event.
-          </Card.Text>
-          <PieChart
-            colors={ratingColors}
-            series={[
-              {
-                data: chartData,
-                arcLabel: (item) => `${item.id} (${item.value})`,
-                innerRadius: 30,
-                outerRadius: 120,
-                paddingAngle: 2,
-                cornerRadius: 5,
-                startAngle: 0,
-                highlightScope: { faded: 'global', highlighted: 'item' },
-                faded: { innerRadius: 30, additionalRadius: -30 },
-              },
-            ]}
-            sx={{
-              [`& .${pieArcClasses.faded}`]: {
-                fill: 'gray',
-              },
-              [`& .${pieArcLabelClasses.root}`]: {
-                fill: 'black',
-                fontSize: '15px',
-              },
-              [`& .${pieArcLabelClasses.faded}`]: {
-                display: 'none',
-              },
-            }}
-            width={380}
-            height={380}
-          />
+          </h5>
+          {feedbackData.event.feedback.length ? (
+            <PieChart
+              colors={ratingColors}
+              series={[
+                {
+                  data: chartData,
+                  arcLabel: (item) => `${item.id} (${item.value})`,
+                  innerRadius: 30,
+                  outerRadius: 120,
+                  paddingAngle: 2,
+                  cornerRadius: 5,
+                  startAngle: 0,
+                  highlightScope: { faded: 'global', highlighted: 'item' },
+                  faded: { innerRadius: 30, additionalRadius: -30 },
+                },
+              ]}
+              sx={{
+                [`& .${pieArcClasses.faded}`]: {
+                  fill: 'gray',
+                },
+                [`& .${pieArcLabelClasses.root}`]: {
+                  fill: 'black',
+                  fontSize: '15px',
+                },
+                [`& .${pieArcLabelClasses.faded}`]: {
+                  display: 'none',
+                },
+              }}
+              width={380}
+              height={380}
+            />
+          ) : (
+            <>Please ask attendees to submit feedback for insights!</>
+          )}
         </Card.Body>
       </Card>
     </>

@@ -17,7 +17,7 @@ jest.mock('@mui/x-charts/PieChart', () => ({
   pieArcClasses: jest.fn(),
 }));
 
-const successfulMock = [
+const nonEmptyMock = [
   {
     request: {
       query: EVENT_FEEDBACKS,
@@ -52,14 +52,33 @@ const successfulMock = [
   },
 ];
 
+const emptyMock = [
+  {
+    request: {
+      query: EVENT_FEEDBACKS,
+      variables: {
+        id: '123',
+      },
+    },
+    result: {
+      data: {
+        event: {
+          _id: '123',
+          feedback: [],
+        },
+      },
+    },
+  },
+];
+
 describe('Testing Feedback Statistics Modal', () => {
   const props = {
     eventId: '123',
   };
 
-  test('The component should be rendered and the feedback should be shown', async () => {
+  test('The component should be rendered and the feedback should be shown if present', async () => {
     const { queryByText } = render(
-      <MockedProvider addTypename={false} mocks={successfulMock}>
+      <MockedProvider addTypename={false} mocks={nonEmptyMock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -78,6 +97,31 @@ describe('Testing Feedback Statistics Modal', () => {
     await waitFor(() =>
       expect(
         queryByText('3 people have filled feedback for this event.')
+      ).toBeInTheDocument()
+    );
+  });
+
+  test('The component should be rendered and message should be shown if no feedback is present', async () => {
+    const { queryByText } = render(
+      <MockedProvider addTypename={false} mocks={emptyMock}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <FeedbackStats {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await waitFor(() =>
+      expect(queryByText('Feedback Analysis')).toBeInTheDocument()
+    );
+
+    await waitFor(() =>
+      expect(
+        queryByText('Please ask attendees to submit feedback for insights!')
       ).toBeInTheDocument()
     );
   });
