@@ -56,7 +56,6 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
         },
       });
       if (data) {
-        console.log(data);
         setModalVisible(false);
         setMenuVisible(false);
         toast.success(`${pinned ? 'Post unpinned' : 'Post pinned'}`);
@@ -177,7 +176,7 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
         toast.success(t('postDeleted'));
         setTimeout(() => {
           window.location.reload();
-        }, 2000);
+        });
       }
     } catch (error: any) {
       errorHandler(t, error);
