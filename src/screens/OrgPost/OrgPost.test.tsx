@@ -147,6 +147,7 @@ describe('Organisation Post Page', () => {
       commentCount: 0,
       pinned: false,
       likedBy: [],
+      comments: [],
     });
   });
 
