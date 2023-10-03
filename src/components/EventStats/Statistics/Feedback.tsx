@@ -14,6 +14,7 @@ type ModalPropType = {
 };
 
 type DataEntryType = {
+  id: number;
   value: number;
   label: string;
   color: string;
@@ -41,15 +42,13 @@ export const FeedbackStats = (props: ModalPropType): JSX.Element => {
   ];
 
   const [chartData, setChartData] = useState<DataEntryType[]>([]);
-  const [, setReviews] = useState<string[]>([]);
 
-  const {
-    data: feedbackData,
-    loading: feedbackLoading,
-    error: feedbackError,
-  } = useQuery(EVENT_FEEDBACKS, {
-    variables: { id: props.eventId },
-  });
+  const { data: feedbackData, loading: feedbackLoading } = useQuery(
+    EVENT_FEEDBACKS,
+    {
+      variables: { id: props.eventId },
+    }
+  );
 
   useEffect(() => {
     if (feedbackLoading) {
@@ -57,28 +56,24 @@ export const FeedbackStats = (props: ModalPropType): JSX.Element => {
       return;
     }
 
-    console.log(feedbackData);
     const count: Record<number, number> = {};
-    const reviews: string[] = [];
 
     feedbackData.event.feedback.forEach((feedback: FeedbackType) => {
       if (feedback.rating in count) count[feedback.rating]++;
       else count[feedback.rating] = 1;
-      if (feedback.review) reviews.push(feedback.review);
     });
 
     const chartData = [];
     for (let rating = 0; rating <= 10; rating++) {
       if (rating in count)
         chartData.push({
+          id: rating,
           value: count[rating],
-          label: rating.toString(),
+          label: `${rating} (${count[rating]})`,
           color: ratingColors[10 - rating],
         });
     }
-    console.log(chartData);
     setChartData(chartData);
-    setReviews(reviews);
   }, [feedbackData, props.eventId, feedbackLoading]);
 
   // Render the loading screen
@@ -90,16 +85,6 @@ export const FeedbackStats = (props: ModalPropType): JSX.Element => {
     );
   }
 
-  // Render the error screen
-  if (feedbackError) {
-    return (
-      <>
-        <h1>Oops! An error occured!</h1>
-        <div className="text text-lg">{feedbackError.message}</div>
-      </>
-    );
-  }
-
   return (
     <>
       <Card>
@@ -107,6 +92,7 @@ export const FeedbackStats = (props: ModalPropType): JSX.Element => {
           <Card.Title>
             <h3>Feedback Analysis</h3>
           </Card.Title>
+
           <Card.Text>
             {feedbackData.event.feedback.length} people have filled feedback for
             this event.
@@ -116,7 +102,7 @@ export const FeedbackStats = (props: ModalPropType): JSX.Element => {
             series={[
               {
                 data: chartData,
-                arcLabel: (item) => `${item.label} (${item.value})`,
+                arcLabel: (item) => `${item.id} (${item.value})`,
                 innerRadius: 30,
                 outerRadius: 120,
                 paddingAngle: 2,
@@ -138,8 +124,8 @@ export const FeedbackStats = (props: ModalPropType): JSX.Element => {
                 display: 'none',
               },
             }}
-            width={400}
-            height={300}
+            width={380}
+            height={380}
           />
         </Card.Body>
       </Card>
