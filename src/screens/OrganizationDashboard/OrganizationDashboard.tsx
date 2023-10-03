@@ -32,7 +32,7 @@ import DashboardCardLoading from 'components/OrganizationDashCards/DashboardCard
 
 import {
   sortAndSlicePostsByCreatedAt,
-  sortandSliceEventsByStartDate,
+  sortAndSliceEventsByStartDate,
 } from 'utils/handleLatestFeed';
 
 function organizationDashboard(): JSX.Element {
@@ -195,7 +195,7 @@ function organizationDashboard(): JSX.Element {
                         <h6>No upcoming events</h6>
                       </div>
                     ) : (
-                      sortandSliceEventsByStartDate(upcomingEvents).map(
+                      sortAndSliceEventsByStartDate(upcomingEvents).map(
                         (event: InterfaceQueryOrganizationEventListItem) => {
                           return (
                             <CardItem

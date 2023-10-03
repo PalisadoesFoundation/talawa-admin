@@ -37,4 +37,4 @@ function sortAndSlicePostsByCreatedAt(
     .slice(0, 5);
 }
 
-export { sortandSliceEventsByStartDate, sortAndSlicePostsByCreatedAt };
+export { sortAndSliceEventsByStartDate, sortAndSlicePostsByCreatedAt };
