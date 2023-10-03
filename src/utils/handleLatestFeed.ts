@@ -1,7 +1,7 @@
 import type { InterfaceQueryOrganizationPostListItem } from './interfaces';
 import type { InterfaceQueryOrganizationEventListItem } from './interfaces';
 
-function sortandSliceEventsByStartDate(
+function sortAndSliceEventsByStartDate(
   events: InterfaceQueryOrganizationEventListItem[]
 ): InterfaceQueryOrganizationEventListItem[] {
   return events
