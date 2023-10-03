@@ -28,11 +28,6 @@
     "login_to_admin_portal": " 管理员门户登录 ",
     "OR": "或者"
   },
-  "latestEvents": {
-    "eventCardTitle": "即将举行的活动",
-    "eventCardSeeAll": "查看全部",
-    "noEvents": "暂无即将举行的活动"
-  },
   "listNavbar": {
     "talawa_portal": "塔拉瓦管理門戶",
     "roles": "角色",

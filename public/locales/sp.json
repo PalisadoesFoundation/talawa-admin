@@ -28,11 +28,6 @@
     "login_to_admin_portal": "Inicio de sesión en el portal de administración",
     "OR": "O"
   },
-  "latestEvents": {
-    "eventCardTitle": "Próximos Eventos",
-    "eventCardSeeAll": "Ver Todos",
-    "noEvents": "No Hay Eventos Próximos"
-  },
   "listNavbar": {
     "talawa_portal": "Portal De Administración Talawa",
     "roles": "Roles",

@@ -28,11 +28,6 @@
     "login_to_admin_portal": "एडमिन पोर्टल लॉगिन",
     "OR": "या"
   },
-  "latestEvents": {
-    "eventCardTitle": "आगामी घटनाएँ",
-    "eventCardSeeAll": "सभी देखें",
-    "noEvents": "कोई आगामी घटनाएँ नहीं"
-  },
   "listNavbar": {
     "talawa_portal": "तलावा प्रशासन पोर्टल",
     "roles": "भूमिकाएँ",

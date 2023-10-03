@@ -30,6 +30,11 @@ import { useHistory } from 'react-router-dom';
 import CardItemLoading from 'components/OrganizationDashCards/CardItemLoading';
 import DashboardCardLoading from 'components/OrganizationDashCards/DashboardCardLoading';
 
+import {
+  sortAndSlicePostsByCreatedAt,
+  sortandSliceEventsByStartDate,
+} from 'utils/handleLatestFeed';
+
 function organizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
   document.title = t('title');
@@ -190,16 +195,19 @@ function organizationDashboard(): JSX.Element {
                         <h6>No upcoming events</h6>
                       </div>
                     ) : (
-                      upcomingEvents.slice(0, 5).map((event) => {
-                        return (
-                          <CardItem
-                            type="Event"
-                            key={event._id}
-                            time={event.startDate}
-                            title={event.title}
-                          />
-                        );
-                      })
+                      sortandSliceEventsByStartDate(upcomingEvents).map(
+                        (event: InterfaceQueryOrganizationEventListItem) => {
+                          return (
+                            <CardItem
+                              type="Event"
+                              key={event._id}
+                              time={event.startDate}
+                              title={event.title}
+                              location={event.location}
+                            />
+                          );
+                        }
+                      )
                     )}
                   </Card.Body>
                 </Card>
@@ -229,12 +237,17 @@ function organizationDashboard(): JSX.Element {
                         <h6>No posts present</h6>
                       </div>
                     ) : (
-                      postData?.postsByOrganization.slice(0, 5).map((post) => {
+                      sortAndSlicePostsByCreatedAt(
+                        // eslint-disable-next-line
+                        Array.from(postData!.postsByOrganization)
+                      ).map((post) => {
                         return (
                           <CardItem
                             type="Post"
                             key={post._id}
                             title={post.title}
+                            time={post.createdAt}
+                            creator={post.creator}
                           />
                         );
                       })
