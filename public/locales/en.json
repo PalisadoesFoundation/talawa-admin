@@ -528,7 +528,8 @@
     "joinedOrganizations": "Joined Organizations",
     "createdOrganizations": "Created Organizations",
     "search": "Search",
-    "nothingToShow": "Nothing to show here."
+    "nothingToShow": "Nothing to show here.",
+    "selectOrganization": "Select Organization"
   },
   "userSidebar": {
     "yourOrganizations": "Your Organizations",
@@ -594,5 +595,21 @@
     "creator": "Creator",
     "alreadyRegistered": "Already registered",
     "register": "Register"
+  },
+  "userTasks": {
+    "yourAssignedTasks": "Your assigned tasks",
+    "nothingToShow": "Nothing to show here."
+  },
+  "userTaskCard": {
+    "description": "Description",
+    "deadline": "Deadline",
+    "created": "Created",
+    "assignees": "Assignees",
+    "completed": "Completed",
+    "incomplete": "Incomplete",
+    "taskCompleted": "The task has been completed",
+    "taskNotCompleted": "The task has not been completed yet",
+    "event": "Event",
+    "organization": "Organization"
   }
 }
