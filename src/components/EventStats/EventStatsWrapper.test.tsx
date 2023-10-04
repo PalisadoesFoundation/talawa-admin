@@ -17,13 +17,13 @@ const mockData = [
     request: {
       query: EVENT_FEEDBACKS,
       variables: {
-        id: '1234',
+        id: 'eventStatsWrapper123',
       },
     },
     result: {
       data: {
         event: {
-          _id: '1234',
+          _id: 'eventStatsWrapper123',
           feedback: [
             {
               _id: 'feedback1',
@@ -39,13 +39,13 @@ const mockData = [
     request: {
       query: EVENT_FEEDBACK_SCORE,
       variables: {
-        id: '1234',
+        id: 'eventStatsWrapper123',
       },
     },
     result: {
       data: {
         event: {
-          _id: '1234',
+          _id: 'eventStatsWrapper123',
           averageFeedbackScore: 5,
         },
       },
@@ -63,7 +63,7 @@ jest.mock('@mui/x-charts/PieChart', () => ({
 
 describe('Testing Event Stats Wrapper', () => {
   const props = {
-    eventId: '1234',
+    eventId: 'eventStatsWrapper123',
   };
 
   test('The button to open and close the modal should work properly', async () => {
