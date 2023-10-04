@@ -8,6 +8,7 @@ import { ReactComponent as PeopleIcon } from 'assets/svgs/people.svg';
 import { ReactComponent as PluginsIcon } from 'assets/svgs/plugins.svg';
 import { ReactComponent as PostsIcon } from 'assets/svgs/posts.svg';
 import { ReactComponent as SettingsIcon } from 'assets/svgs/settings.svg';
+import { ReactComponent as AddEventProjectIcon } from 'assets/svgs/addEventProject.svg';
 
 export interface InterfaceIconComponent {
   name: string;
@@ -55,6 +56,10 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
           stroke={props.fill}
           data-testid="Icon-Component-AllOrganizationsIcon"
         />
+      );
+    case 'Add Event Project':
+      return (
+        <AddEventProjectIcon data-testid="Icon-Component-Add-Event-Project" />
       );
     default:
       return (

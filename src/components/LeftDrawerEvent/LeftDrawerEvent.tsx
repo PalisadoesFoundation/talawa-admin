@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
 import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
-import styles from './LeftDrawerOrg.module.css';
+import styles from './LeftDrawerEvent.module.css';
 import IconComponent from 'components/IconComponent/IconComponent';
 
 export interface InterfaceLeftDrawerProps {
@@ -14,14 +14,16 @@ export interface InterfaceLeftDrawerProps {
     title: string;
     description: string;
   };
-  hideDrawer: boolean;
+  hideDrawer: boolean | null;
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
+  setShowAddEventProjectModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const leftDrawerEvent = ({
   event,
   hideDrawer,
   setHideDrawer,
+  setShowAddEventProjectModal,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const userType = localStorage.getItem('UserType');
   const firstName = localStorage.getItem('FirstName');
@@ -83,41 +85,25 @@ const leftDrawerEvent = ({
         </div>
 
         {/* Options List */}
-        {/* <div className={styles.optionList}>
-          <h5 className={styles.titleHeader}>{t('menu')}</h5>
-          {targets.map(({ name, url }, index) => {
-            return url ? (
-              <Button
-                key={name}
-                variant={screenName === name ? 'success' : 'light'}
-                className={`${
-                  screenName === name ? 'text-white' : 'text-secondary'
-                }`}
-                onClick={(): void => {
-                  history.push(url);
-                }}
-              >
-                <div className={styles.iconWrapper}>
-                  <IconComponent
-                    name={name}
-                    fill={
-                      screenName === name
-                        ? 'var(--bs-white)'
-                        : 'var(--bs-secondary)'
-                    }
-                  />
-                </div>
-                {name}
-              </Button>
-            ) : (
-              <CollapsibleDropdown
-                key={name}
-                screenName={screenName}
-                target={targets[index]}
+        <div className={styles.optionList}>
+          <h5 className={styles.titleHeader}>Event Options</h5>
+          <Button
+            variant="light"
+            className="text-secondary"
+            aria-label="addEventProject"
+            onClick={(): void => {
+              setShowAddEventProjectModal(true);
+            }}
+          >
+            <div className={styles.iconWrapper}>
+              <IconComponent
+                name="Add Event Project"
+                fill="var(--bs-secondary)"
               />
-            );
-          })}
-        </div> */}
+            </div>
+            Add an Event Project
+          </Button>
+        </div>
 
         {/* Profile Section & Logout Btn */}
         <div style={{ marginTop: 'auto' }}>

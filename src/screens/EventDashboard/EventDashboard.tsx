@@ -15,6 +15,7 @@ import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventR
 import { TaskListItem } from 'components/TaskListItem/TaskListItem';
 import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
 import Loader from 'components/Loader/Loader';
+import { LeftDrawerEventWrapper } from 'components/LeftDrawerEvent/LeftDrawerEventWrapper';
 
 interface InterfaceEventTask {
   _id: string;
@@ -70,7 +71,10 @@ const EventDashboard = (): JSX.Element => {
   }
 
   return (
-    <>
+    <LeftDrawerEventWrapper
+      event={eventData.event}
+      setShowAddEventProjectModal={setShowAddEventProjectModal}
+    >
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
@@ -256,7 +260,7 @@ const EventDashboard = (): JSX.Element => {
         refetchData={refetchEventData}
         projectId={currentProject._id}
       />
-    </>
+    </LeftDrawerEventWrapper>
   );
 };
 
