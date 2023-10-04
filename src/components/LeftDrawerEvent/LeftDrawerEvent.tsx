@@ -7,12 +7,17 @@ import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import styles from './LeftDrawerEvent.module.css';
 import IconComponent from 'components/IconComponent/IconComponent';
+import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
+import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
 
 export interface InterfaceLeftDrawerProps {
   event: {
     _id: string;
     title: string;
     description: string;
+    organization: {
+      _id: string;
+    };
   };
   hideDrawer: boolean | null;
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -74,7 +79,7 @@ const leftDrawerEvent = ({
                 src={`https://api.dicebear.com/5.x/initials/svg?seed=${event.title
                   .split(' ')
                   .join('%20')}`}
-                alt={`Dummy Event Picture`}
+                alt="Dummy Event Picture"
               />
             </div>
             <div className={styles.profileText}>
@@ -103,6 +108,11 @@ const leftDrawerEvent = ({
             </div>
             Add an Event Project
           </Button>
+          <EventRegistrantsWrapper
+            eventId={event._id}
+            orgId={event.organization._id}
+          />
+          <CheckInWrapper eventId={event._id} />
         </div>
 
         {/* Profile Section & Logout Btn */}

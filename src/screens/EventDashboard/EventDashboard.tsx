@@ -11,9 +11,7 @@ import { AddTaskModal } from 'components/TaskModals/AddTaskModal';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import Button from 'react-bootstrap/Button';
 import List from '@mui/material/List';
-import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 import { TaskListItem } from 'components/TaskListItem/TaskListItem';
-import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
 import Loader from 'components/Loader/Loader';
 import { LeftDrawerEventWrapper } from 'components/LeftDrawerEvent/LeftDrawerEventWrapper';
 
@@ -100,28 +98,9 @@ const EventDashboard = (): JSX.Element => {
                   : ``}
               </p>
               <p className={styles.toporgloc}>
-                <b>Registrantss:</b> {eventData.event.attendees.length}
+                <b>Registrants:</b> {eventData.event.attendees.length}
               </p>
               <br />
-              {/* Buttons to trigger different modals */}
-              <p className={styles.tagdetailsGreen}>
-                <Button
-                  type="button"
-                  className="mt-3"
-                  variant="success"
-                  aria-label="addEventProject"
-                  onClick={(): void => {
-                    setShowAddEventProjectModal(true);
-                  }}
-                >
-                  Add an Event Project
-                </Button>
-                <EventRegistrantsWrapper
-                  eventId={eventId}
-                  orgId={eventData.event.organization._id}
-                />
-                <CheckInWrapper eventId={eventId} />
-              </p>
             </div>
           </div>
         </Col>
