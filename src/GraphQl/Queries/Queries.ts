@@ -178,14 +178,6 @@ export const EVENT_FEEDBACKS = gql`
         rating
         review
       }
-    }
-  }
-`;
-
-export const EVENT_FEEDBACK_SCORE = gql`
-  query eventFeedback($id: ID!) {
-    event(id: $id) {
-      _id
       averageFeedbackScore
     }
   }

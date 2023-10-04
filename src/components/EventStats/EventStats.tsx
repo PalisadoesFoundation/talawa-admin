@@ -4,6 +4,9 @@ import { FeedbackStats } from './Statistics/Feedback';
 import { ReviewStats } from './Statistics/Review';
 import { AverageRating } from './Statistics/AverageRating';
 import Stack from '@mui/material/Stack';
+import styles from './Loader.module.css';
+import { useQuery } from '@apollo/client';
+import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
 
 type ModalPropType = {
   show: boolean;
@@ -16,6 +19,19 @@ export const EventStats = ({
   handleClose,
   eventId,
 }: ModalPropType): JSX.Element => {
+  const { data, loading } = useQuery(EVENT_FEEDBACKS, {
+    variables: { id: eventId },
+  });
+
+  // Render the loading screen
+  if (loading) {
+    return (
+      <>
+        <div className={styles.loader}></div>
+      </>
+    );
+  }
+
   return (
     <>
       <Modal
@@ -30,10 +46,10 @@ export const EventStats = ({
         </Modal.Header>
         <Modal.Body>
           <Stack direction="row" spacing={2}>
-            <FeedbackStats eventId={eventId} />
+            <FeedbackStats data={data} />
             <div>
-              <ReviewStats eventId={eventId} />
-              <AverageRating eventId={eventId} />
+              <ReviewStats data={data} />
+              <AverageRating data={data} />
             </div>
           </Stack>
         </Modal.Body>

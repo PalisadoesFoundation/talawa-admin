@@ -1,7 +1,4 @@
 import React from 'react';
-import styles from './Loader.module.css';
-import { useQuery } from '@apollo/client';
-import { EVENT_FEEDBACK_SCORE } from 'GraphQl/Queries/Queries';
 import Card from 'react-bootstrap/Card';
 import Rating from '@mui/material/Rating';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -10,7 +7,19 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 
 type ModalPropType = {
-  eventId: string;
+  data: {
+    event: {
+      _id: string;
+      averageFeedbackScore: number | null;
+      feedback: FeedbackType[];
+    };
+  };
+};
+
+type FeedbackType = {
+  _id: string;
+  rating: number;
+  review: string | null;
 };
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -23,20 +32,7 @@ const StyledRating = styled(Rating)({
   },
 });
 
-export const AverageRating = (props: ModalPropType): JSX.Element => {
-  const { data, loading } = useQuery(EVENT_FEEDBACK_SCORE, {
-    variables: { id: props.eventId },
-  });
-
-  // Render the loading screen
-  if (loading) {
-    return (
-      <>
-        <div className={styles.loader}></div>
-      </>
-    );
-  }
-
+export const AverageRating = ({ data }: ModalPropType): JSX.Element => {
   return (
     <>
       <Card style={{ width: '300px' }}>
@@ -45,7 +41,7 @@ export const AverageRating = (props: ModalPropType): JSX.Element => {
             <h4>Average Review Score</h4>
           </Card.Title>
           <Typography component="legend">
-            Rated {(data.event.averageFeedbackScore | 0).toFixed(2)} / 10
+            Rated {(data.event.averageFeedbackScore || 0).toFixed(2)} / 10
           </Typography>
           <StyledRating
             name="customized-color"

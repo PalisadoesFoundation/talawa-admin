@@ -3,7 +3,7 @@ import { render, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { EventStats } from './EventStats';
 import { BrowserRouter } from 'react-router-dom';
-import { EVENT_FEEDBACKS, EVENT_FEEDBACK_SCORE } from 'GraphQl/Queries/Queries';
+import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
 
 // Mock the modules for PieChart rendering as they require a trasformer being used (which is not done by Jest)
 // These modules are used by the Feedback component
@@ -32,21 +32,6 @@ const mockData = [
               rating: 5,
             },
           ],
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: EVENT_FEEDBACK_SCORE,
-      variables: {
-        id: 'eventStats123',
-      },
-    },
-    result: {
-      data: {
-        event: {
-          _id: 'eventStats123',
           averageFeedbackScore: 5,
         },
       },

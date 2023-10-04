@@ -3,7 +3,7 @@ import { fireEvent, render, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { EventStatsWrapper } from './EventStatsWrapper';
 import { BrowserRouter } from 'react-router-dom';
-import { EVENT_FEEDBACKS, EVENT_FEEDBACK_SCORE } from 'GraphQl/Queries/Queries';
+import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
 
 // Mock the modules for PieChart rendering as they require a trasformer being used (which is not done by Jest)
 jest.mock('@mui/x-charts/PieChart', () => ({
@@ -17,13 +17,13 @@ const mockData = [
     request: {
       query: EVENT_FEEDBACKS,
       variables: {
-        id: 'eventStatsWrapper123',
+        id: 'eventStats123',
       },
     },
     result: {
       data: {
         event: {
-          _id: 'eventStatsWrapper123',
+          _id: 'eventStats123',
           feedback: [
             {
               _id: 'feedback1',
@@ -31,21 +31,6 @@ const mockData = [
               rating: 5,
             },
           ],
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: EVENT_FEEDBACK_SCORE,
-      variables: {
-        id: 'eventStatsWrapper123',
-      },
-    },
-    result: {
-      data: {
-        event: {
-          _id: 'eventStatsWrapper123',
           averageFeedbackScore: 5,
         },
       },
@@ -63,7 +48,7 @@ jest.mock('@mui/x-charts/PieChart', () => ({
 
 describe('Testing Event Stats Wrapper', () => {
   const props = {
-    eventId: 'eventStatsWrapper123',
+    eventId: 'eventStats123',
   };
 
   test('The button to open and close the modal should work properly', async () => {

@@ -1,32 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   PieChart,
   pieArcClasses,
   pieArcLabelClasses,
 } from '@mui/x-charts/PieChart';
-import styles from './Loader.module.css';
-import { useQuery } from '@apollo/client';
-import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
 import Card from 'react-bootstrap/Card';
 
 type ModalPropType = {
-  eventId: string;
-};
-
-type DataEntryType = {
-  id: number;
-  value: number;
-  label: string;
-  color: string;
+  data: {
+    event: {
+      _id: string;
+      averageFeedbackScore: number | null;
+      feedback: FeedbackType[];
+    };
+  };
 };
 
 type FeedbackType = {
   _id: string;
   rating: number;
-  review?: string;
+  review: string | null;
 };
 
-export const FeedbackStats = (props: ModalPropType): JSX.Element => {
+export const FeedbackStats = ({ data }: ModalPropType): JSX.Element => {
   const ratingColors = [
     '#57bb8a', // Green
     '#73b87e',
@@ -41,48 +37,22 @@ export const FeedbackStats = (props: ModalPropType): JSX.Element => {
     '#dd776e', // Red
   ];
 
-  const [chartData, setChartData] = useState<DataEntryType[]>([]);
+  const count: Record<number, number> = {};
 
-  const { data: feedbackData, loading: feedbackLoading } = useQuery(
-    EVENT_FEEDBACKS,
-    {
-      variables: { id: props.eventId },
-    }
-  );
+  data.event.feedback.forEach((feedback: FeedbackType) => {
+    if (feedback.rating in count) count[feedback.rating]++;
+    else count[feedback.rating] = 1;
+  });
 
-  useEffect(() => {
-    if (feedbackLoading) {
-      setChartData([]);
-      return;
-    }
-
-    const count: Record<number, number> = {};
-
-    feedbackData.event.feedback.forEach((feedback: FeedbackType) => {
-      if (feedback.rating in count) count[feedback.rating]++;
-      else count[feedback.rating] = 1;
-    });
-
-    const chartData = [];
-    for (let rating = 0; rating <= 10; rating++) {
-      if (rating in count)
-        chartData.push({
-          id: rating,
-          value: count[rating],
-          label: `${rating} (${count[rating]})`,
-          color: ratingColors[10 - rating],
-        });
-    }
-    setChartData(chartData);
-  }, [feedbackData, props.eventId, feedbackLoading]);
-
-  // Render the loading screen
-  if (feedbackLoading) {
-    return (
-      <>
-        <div className={styles.loader}></div>
-      </>
-    );
+  const chartData = [];
+  for (let rating = 0; rating <= 10; rating++) {
+    if (rating in count)
+      chartData.push({
+        id: rating,
+        value: count[rating],
+        label: `${rating} (${count[rating]})`,
+        color: ratingColors[10 - rating],
+      });
   }
 
   return (
@@ -93,10 +63,10 @@ export const FeedbackStats = (props: ModalPropType): JSX.Element => {
             <h3>Feedback Analysis</h3>
           </Card.Title>
           <h5>
-            {feedbackData.event.feedback.length} people have filled feedback for
-            this event.
+            {data.event.feedback.length} people have filled feedback for this
+            event.
           </h5>
-          {feedbackData.event.feedback.length ? (
+          {data.event.feedback.length ? (
             <PieChart
               colors={ratingColors}
               series={[

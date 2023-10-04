@@ -1,51 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import styles from './Loader.module.css';
-import { useQuery } from '@apollo/client';
-import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
+import React from 'react';
 import Card from 'react-bootstrap/Card';
 import Rating from '@mui/material/Rating';
 
 type ModalPropType = {
-  eventId: string;
+  data: {
+    event: {
+      _id: string;
+      averageFeedbackScore: number | null;
+      feedback: FeedbackType[];
+    };
+  };
 };
 
 type FeedbackType = {
   _id: string;
   rating: number;
-  review?: string;
+  review: string | null;
 };
 
-export const ReviewStats = (props: ModalPropType): JSX.Element => {
-  const [reviews, setReviews] = useState<FeedbackType[]>([]);
-
-  const { data: feedbackData, loading: feedbackLoading } = useQuery(
-    EVENT_FEEDBACKS,
-    {
-      variables: { id: props.eventId },
-    }
+export const ReviewStats = ({ data }: ModalPropType): JSX.Element => {
+  const reviews = data.event.feedback.filter(
+    (feedback: FeedbackType) => feedback.review != null
   );
-
-  useEffect(() => {
-    if (feedbackLoading) {
-      setReviews([]);
-      return;
-    }
-
-    setReviews(
-      feedbackData.event.feedback.filter(
-        (feedback: FeedbackType) => feedback.review != null
-      )
-    );
-  }, [feedbackLoading, feedbackData, props.eventId]);
-
-  // Render the loading screen
-  if (feedbackLoading) {
-    return (
-      <>
-        <div className={styles.loader}></div>
-      </>
-    );
-  }
 
   return (
     <>
