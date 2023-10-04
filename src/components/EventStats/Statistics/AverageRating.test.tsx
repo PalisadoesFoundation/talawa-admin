@@ -22,7 +22,7 @@ const mockData = [
       data: {
         event: {
           _id: '123',
-          averageFeedbackScore: 5.623,
+          averageFeedbackScore: 5,
         },
       },
     },
@@ -53,7 +53,7 @@ describe('Testing Average Rating Card', () => {
     );
 
     await waitFor(() =>
-      expect(queryByText('Rated 5.62 / 10')).toBeInTheDocument()
+      expect(queryByText('Rated 5.00 / 10')).toBeInTheDocument()
     );
   });
 });

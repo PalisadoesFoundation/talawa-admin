@@ -37,7 +37,13 @@ const httpLink = new HttpLink({
 });
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      event: {
+        keyFields: ['_id'],
+      },
+    },
+  }),
   link: ApolloLink.from([httpLink]),
 });
 
