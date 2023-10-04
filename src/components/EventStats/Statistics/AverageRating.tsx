@@ -53,9 +53,6 @@ export const AverageRating = (props: ModalPropType): JSX.Element => {
             max={10}
             readOnly
             value={data.event.averageFeedbackScore}
-            getLabelText={(value: number) =>
-              `${value} Heart${value !== 1 ? 's' : ''}`
-            }
             icon={<FavoriteIcon fontSize="inherit" />}
             size="medium"
             emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
