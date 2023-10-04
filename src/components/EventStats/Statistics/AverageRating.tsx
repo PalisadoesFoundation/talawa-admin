@@ -45,7 +45,7 @@ export const AverageRating = (props: ModalPropType): JSX.Element => {
             <h4>Average Review Score</h4>
           </Card.Title>
           <Typography component="legend">
-            Rated {data.event.averageFeedbackScore.toFixed(2)} / 10
+            Rated {(data.event.averageFeedbackScore | 0).toFixed(2)} / 10
           </Typography>
           <StyledRating
             name="customized-color"
