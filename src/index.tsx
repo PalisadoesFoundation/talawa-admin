@@ -39,11 +39,8 @@ const httpLink = new HttpLink({
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache({
     typePolicies: {
-      Event: {
-        keyFields: ['_id'],
-      },
-      Feedback: {
-        keyFields: ['_id'],
+      'Query.event': {
+        merge: true,
       },
     },
   }),
