@@ -169,6 +169,20 @@ export const EVENT_CHECKINS = gql`
   }
 `;
 
+export const EVENT_FEEDBACKS = gql`
+  query eventFeedback($id: ID!) {
+    event(id: $id) {
+      _id
+      feedback {
+        _id
+        rating
+        review
+      }
+      averageFeedbackScore
+    }
+  }
+`;
+
 // Query to take the Organization with data
 export const ORGANIZATIONS_LIST = gql`
   query Organizations($id: ID!) {
