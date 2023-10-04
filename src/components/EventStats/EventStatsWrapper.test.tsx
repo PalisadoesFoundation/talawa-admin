@@ -4,15 +4,6 @@ import { MockedProvider } from '@apollo/react-testing';
 import { EventStatsWrapper } from './EventStatsWrapper';
 import { BrowserRouter } from 'react-router-dom';
 import { EVENT_FEEDBACKS, EVENT_FEEDBACK_SCORE } from 'GraphQl/Queries/Queries';
-import { InMemoryCache } from '@apollo/client';
-
-const cache = new InMemoryCache({
-  typePolicies: {
-    'Query.event': {
-      merge: true,
-    },
-  },
-});
 
 // Mock the modules for PieChart rendering as they require a trasformer being used (which is not done by Jest)
 jest.mock('@mui/x-charts/PieChart', () => ({
@@ -77,7 +68,7 @@ describe('Testing Event Stats Wrapper', () => {
 
   test('The button to open and close the modal should work properly', async () => {
     const { queryByText, queryByRole } = render(
-      <MockedProvider mocks={mockData} cache={cache}>
+      <MockedProvider mocks={mockData} addTypename={false}>
         <BrowserRouter>
           <EventStatsWrapper {...props} />
         </BrowserRouter>

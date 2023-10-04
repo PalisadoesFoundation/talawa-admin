@@ -4,15 +4,6 @@ import { MockedProvider } from '@apollo/react-testing';
 import { EventStats } from './EventStats';
 import { BrowserRouter } from 'react-router-dom';
 import { EVENT_FEEDBACKS, EVENT_FEEDBACK_SCORE } from 'GraphQl/Queries/Queries';
-import { InMemoryCache } from '@apollo/client';
-
-const cache = new InMemoryCache({
-  typePolicies: {
-    'Query.event': {
-      merge: true,
-    },
-  },
-});
 
 // Mock the modules for PieChart rendering as they require a trasformer being used (which is not done by Jest)
 // These modules are used by the Feedback component
@@ -72,7 +63,7 @@ describe('Testing Event Stats', () => {
 
   test('The stats should be rendered properly', async () => {
     const { queryByText } = render(
-      <MockedProvider mocks={mockData} cache={cache}>
+      <MockedProvider mocks={mockData} addTypename={false}>
         <BrowserRouter>
           <EventStats {...props} />
         </BrowserRouter>
