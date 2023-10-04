@@ -522,7 +522,8 @@
     "joinedOrganizations": "संगठन शामिल हुए",
     "createdOrganizations": "संगठन बनाये गये",
     "search": "खोज",
-    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है."
+    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
+    "selectOrganization": "संगठन का चयन करें"
   },
   "userSidebar": {
     "yourOrganizations": "आपके संगठन",
@@ -588,5 +589,21 @@
     "creator": "निर्माता",
     "alreadyRegistered": "पहले से ही पंजीकृत",
     "register": "पंजीकरण करवाना"
+  },
+  "userTasks": {
+    "yourAssignedTasks": "आपके असाइन किए गए कार्य",
+    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है."
+  },
+  "userTaskCard": {
+    "description": "विवरण",
+    "deadline": "अंतिम तारीख",
+    "created": "बनाया",
+    "assignees": "असाइनी",
+    "completed": "पुरा",
+    "incomplete": "अधूरा",
+    "taskCompleted": "काम पूरा हो गया",
+    "taskNotCompleted": "कार्य अभी तक पूरा नहीं हुआ है",
+    "event": "आयोजन",
+    "organization": "संगठन"
   }
 }

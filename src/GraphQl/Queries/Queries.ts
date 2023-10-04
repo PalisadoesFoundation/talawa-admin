@@ -663,3 +663,39 @@ export const ORGANIZATION_EVENTS_CONNECTION = gql`
     }
   }
 `;
+
+export const USER_TASKS_LIST = gql`
+  query User($id: ID!) {
+    user(id: $id) {
+      _id
+      assignedTasks {
+        _id
+        title
+        description
+        deadline
+        volunteers {
+          _id
+          firstName
+          lastName
+          email
+        }
+        createdAt
+        completed
+        event {
+          _id
+          title
+          organization {
+            _id
+            name
+            image
+          }
+        }
+        creator {
+          _id
+          firstName
+          lastName
+        }
+      }
+    }
+  }
+`;
