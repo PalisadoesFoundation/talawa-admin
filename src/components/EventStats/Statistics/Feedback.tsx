@@ -4,7 +4,7 @@ import {
   pieArcClasses,
   pieArcLabelClasses,
 } from '@mui/x-charts/PieChart';
-import styles from './Feedback.module.css';
+import styles from './Loader.module.css';
 import { useQuery } from '@apollo/client';
 import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
 import Card from 'react-bootstrap/Card';
