@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useQuery } from '@apollo/client';
@@ -37,7 +37,13 @@ interface InterfaceEventProject {
 const EventDashboard = (): JSX.Element => {
   // Get the Event ID from the URL
   document.title = 'Event Dashboard';
-  const eventId = window.location.href.split('/')[4];
+
+  const [eventId, setEventId] = useState('');
+
+  useEffect(() => {
+    console.log(window.location.href);
+    setEventId(window.location.href.split('/')[4]);
+  }, [window.location.href]);
 
   // Data fetching
   const {

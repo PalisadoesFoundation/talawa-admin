@@ -91,6 +91,7 @@
 
 .leftDrawer button .iconWrapper {
   width: 36px;
+  transform: translateY(3px) translateY(-2px);
 }
 
 .leftDrawer .optionList .collapseBtn {

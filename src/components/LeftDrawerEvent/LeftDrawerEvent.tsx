@@ -9,6 +9,7 @@ import styles from './LeftDrawerEvent.module.css';
 import IconComponent from 'components/IconComponent/IconComponent';
 import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
+import { EventStatsWrapper } from 'components/EventStats/EventStatsWrapper';
 
 export interface InterfaceLeftDrawerProps {
   event: {
@@ -113,6 +114,7 @@ const leftDrawerEvent = ({
             orgId={event.organization._id}
           />
           <CheckInWrapper eventId={event._id} />
+          <EventStatsWrapper eventId={event._id} />
         </div>
 
         {/* Profile Section & Logout Btn */}
