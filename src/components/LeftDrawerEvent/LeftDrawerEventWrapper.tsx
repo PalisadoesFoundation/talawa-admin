@@ -25,10 +25,12 @@ export const LeftDrawerEventWrapper = (
   return (
     <>
       <LeftDrawerEvent
+        key={`${props.event?._id || 'loading'}EventWrapper`}
         hideDrawer={hideDrawer}
         setHideDrawer={setHideDrawer}
         {...props}
       />
+
       <div
         className={`${styles.pageContainer} ${
           hideDrawer === null
@@ -41,14 +43,14 @@ export const LeftDrawerEventWrapper = (
       >
         <div className="d-flex justify-content-between align-items-center">
           <div style={{ flex: 1 }}>
-            <h2>Event Dashboard</h2>
+            <h2>Event Management</h2>
           </div>
           <Button
             className="ms-2"
             onClick={(): void => {
               setHideDrawer(!hideDrawer);
             }}
-            data-testid="menuBtn"
+            data-testid="closeLeftDrawerBtn"
           >
             <MenuIcon fontSize="medium" />
           </Button>

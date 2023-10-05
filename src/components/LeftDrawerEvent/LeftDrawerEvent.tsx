@@ -110,11 +110,18 @@ const leftDrawerEvent = ({
             Add an Event Project
           </Button>
           <EventRegistrantsWrapper
+            key={`${event?._id || 'loading'}Registrants`}
             eventId={event._id}
             orgId={event.organization._id}
           />
-          <CheckInWrapper eventId={event._id} />
-          <EventStatsWrapper eventId={event._id} />
+          <CheckInWrapper
+            eventId={event._id}
+            key={`${event?._id || 'loading'}CheckIn`}
+          />
+          <EventStatsWrapper
+            eventId={event._id}
+            key={`${event?._id || 'loading'}Stats`}
+          />
         </div>
 
         {/* Profile Section & Logout Btn */}
@@ -123,7 +130,7 @@ const leftDrawerEvent = ({
             className={styles.profileContainer}
             data-testid="profileBtn"
             onClick={(): void => {
-              toast.success('Profile Page coming soon!');
+              toast.success('Profile page coming soon!');
             }}
           >
             <div className={styles.imageContainer}>

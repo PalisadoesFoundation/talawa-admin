@@ -41,7 +41,6 @@ const EventDashboard = (): JSX.Element => {
   const [eventId, setEventId] = useState('');
 
   useEffect(() => {
-    console.log(window.location.href);
     setEventId(window.location.href.split('/')[4]);
   }, [window.location.href]);
 
@@ -77,6 +76,7 @@ const EventDashboard = (): JSX.Element => {
   return (
     <LeftDrawerEventWrapper
       event={eventData.event}
+      key={`${eventData?.event._id || 'loading'}EventDashboard`}
       setShowAddEventProjectModal={setShowAddEventProjectModal}
     >
       <Row>
