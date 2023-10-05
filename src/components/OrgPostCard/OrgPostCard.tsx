@@ -31,7 +31,10 @@ interface InterfaceOrgPostCardProps {
   pinned: boolean;
 }
 
-function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export default function OrgPostCard(
+  props: InterfaceOrgPostCardProps
+): JSX.Element {
   const [postformState, setPostFormState] = useState({
     posttitle: '',
     postinfo: '',
@@ -241,6 +244,7 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
           {props.postVideo && (
             <Card
               className={styles.card}
+              data-testid="cardVid"
               onMouseEnter={handleVideoPlay}
               onMouseLeave={handleVideoPause}
             >
@@ -623,5 +627,3 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
     </>
   );
 }
-
-export default orgPostCard;

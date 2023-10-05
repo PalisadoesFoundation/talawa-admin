@@ -186,7 +186,6 @@ function orgPost(): JSX.Element {
     if (a.pinned) {
       return -1;
     }
-
     return 1;
   });
   return (
