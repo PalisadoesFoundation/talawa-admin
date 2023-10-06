@@ -11,6 +11,14 @@ import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 import i18nForTest from './utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
+// Mock the modules for PieChart rendering as they require a trasformer being used (which is not done by Jest)
+// These modules are used by the Feedback components
+jest.mock('@mui/x-charts/PieChart', () => ({
+  pieArcLabelClasses: jest.fn(),
+  PieChart: jest.fn().mockImplementation(() => <>Test</>),
+  pieArcClasses: jest.fn(),
+}));
+
 const MOCKS = [
   {
     request: {

@@ -17,6 +17,14 @@ import {
   queryMockWithProjectAndTask,
 } from './EventDashboard.mocks';
 
+// Mock the modules for PieChart rendering as they require a trasformer being used (which is not done by Jest)
+// These modules are used by the Feedback components
+jest.mock('@mui/x-charts/PieChart', () => ({
+  pieArcLabelClasses: jest.fn(),
+  PieChart: jest.fn().mockImplementation(() => <>Test</>),
+  pieArcClasses: jest.fn(),
+}));
+
 describe('Testing Event Dashboard Screen', () => {
   beforeEach(() => {
     global.window = Object.create(window);

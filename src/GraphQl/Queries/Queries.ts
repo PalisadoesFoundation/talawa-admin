@@ -169,6 +169,20 @@ export const EVENT_CHECKINS = gql`
   }
 `;
 
+export const EVENT_FEEDBACKS = gql`
+  query eventFeedback($id: ID!) {
+    event(id: $id) {
+      _id
+      feedback {
+        _id
+        rating
+        review
+      }
+      averageFeedbackScore
+    }
+  }
+`;
+
 // Query to take the Organization with data
 export const ORGANIZATIONS_LIST = gql`
   query Organizations($id: ID!) {
@@ -660,6 +674,42 @@ export const ORGANIZATION_EVENTS_CONNECTION = gql`
       }
       attendees {
         _id
+      }
+    }
+  }
+`;
+
+export const USER_TASKS_LIST = gql`
+  query User($id: ID!) {
+    user(id: $id) {
+      _id
+      assignedTasks {
+        _id
+        title
+        description
+        deadline
+        volunteers {
+          _id
+          firstName
+          lastName
+          email
+        }
+        createdAt
+        completed
+        event {
+          _id
+          title
+          organization {
+            _id
+            name
+            image
+          }
+        }
+        creator {
+          _id
+          firstName
+          lastName
+        }
       }
     }
   }
