@@ -80,6 +80,7 @@
     "searchByName": "नाम से खोजें",
     "organizations": "संगठन",
     "createOrganization": "संगठन बनाएं",
+    "createSampleOrganization": " सैंपल संगठन बनाएं",
     "description": "विवरण",
     "location": "स्थान",
     "isPublic": "सार्वजनिक है",
@@ -96,7 +97,8 @@
   "orgListCard": {
     "admins": "व्यवस्थापक",
     "members": "सदस्य",
-    "manage": "प्रबंधित करना"
+    "manage": "प्रबंधित करना",
+    "sampleOrganization": "सैंपल संगठन"
   },
   "paginationList": {
     "rowsPerPage": "प्रति पृष्ठ पंक्तियाँ",
@@ -376,6 +378,7 @@
   },
   "deleteOrg": {
     "deleteOrganization": "संगठन हटाएं",
+    "deleteSampleOrganization": "सैंपल संगठन को हटाएं",
     "deleteMsg": "क्या आप इस संगठन को हटाना चाहते हैं?",
     "no": "नहीं",
     "yes": "हां",

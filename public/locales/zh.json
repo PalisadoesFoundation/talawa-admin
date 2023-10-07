@@ -80,6 +80,7 @@
     "searchByName": "按名稱搜索",
     "organizations": "组织",
     "createOrganization": "創建組織",
+    "createSampleOrganization": "创建示范组织",
     "description": "描述",
     "location": "地點",
     "isPublic": "是否公開",
@@ -96,7 +97,8 @@
   "orgListCard": {
     "admins": "管理員",
     "members": "成員",
-    "manage": "管理"
+    "manage": "管理",
+    "sampleOrganization": "示例组织"
   },
   "paginationList": {
     "rowsPerPage": "每頁行數",
@@ -376,6 +378,7 @@
   },
   "deleteOrg": {
     "deleteOrganization": "删除组织",
+    "deleteSampleOrganization": "删除示范组织",
     "deleteMsg": "您是否要删除此组织？",
     "no": "否",
     "yes": "是",

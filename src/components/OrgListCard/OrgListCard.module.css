@@ -77,3 +77,16 @@
     display: block;
   }
 }
+
+.flaskIcon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px 20px 0px 0px;
+}
+
+.manageBtn {
+  display: flex;
+  justify-content: space-around;
+  width: 150px;
+}

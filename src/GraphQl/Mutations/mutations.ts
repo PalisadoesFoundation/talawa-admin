@@ -622,3 +622,15 @@ export const UNLIKE_COMMENT = gql`
     }
   }
 `;
+
+export const CREATE_SAMPLE_ORGANIZATION_MUTATION = gql`
+  mutation {
+    createSampleOrganization
+  }
+`;
+
+export const REMOVE_SAMPLE_ORGANIZATION_MUTATION = gql`
+  mutation {
+    removeSampleOrganization
+  }
+`;

@@ -80,6 +80,7 @@
     "searchByName": "Rechercher par nom",
     "organizations": "Organisations",
     "createOrganization": "Créer une organisation",
+    "createSampleOrganization": "Créer une organisation d'exemple",
     "description": "La description",
     "location": "Emplacement",
     "isPublic": "Est publique",
@@ -96,8 +97,10 @@
   "orgListCard": {
     "admins": "Administrateurs",
     "members": "Membres",
-    "manage": "Faire en sorte"
+    "manage": "Faire en sorte",
+    "sampleOrganization": "Organisation d'exemple"
   },
+
   "paginationList": {
     "rowsPerPage": "lignes par page",
     "all": "Tout"
@@ -376,6 +379,7 @@
   },
   "deleteOrg": {
     "deleteOrganization": "Supprimer l'organisation",
+    "deleteSampleOrganization": "Supprimer l'organisation d'exemple",
     "deleteMsg": "Voulez-vous supprimer cette organisation ?",
     "no": "Non",
     "yes": "Oui",

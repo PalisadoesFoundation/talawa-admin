@@ -714,3 +714,9 @@ export const USER_TASKS_LIST = gql`
     }
   }
 `;
+
+export const IS_SAMPLE_ORGANIZATION_QUERY = gql`
+  query ($isSampleOrganizationId: ID!) {
+    isSampleOrganization(id: $isSampleOrganizationId)
+  }
+`;

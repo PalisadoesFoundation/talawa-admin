@@ -7,6 +7,12 @@ import {
   ORGANIZATION_CONNECTION_LIST,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
+
+import {
+  CREATE_SAMPLE_ORGANIZATION_MUTATION,
+  REMOVE_SAMPLE_ORGANIZATION_MUTATION,
+} from 'GraphQl/Mutations/mutations';
+
 import OrgListCard from 'components/OrgListCard/OrgListCard';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
@@ -62,6 +68,10 @@ function orgList(): JSX.Element {
   const toggleModal = (): void => setShowModal(!showModal);
 
   const [create] = useMutation(CREATE_ORGANIZATION_MUTATION);
+
+  const [createSampleOrganization] = useMutation(
+    CREATE_SAMPLE_ORGANIZATION_MUTATION
+  );
 
   const {
     data: userData,
@@ -119,6 +129,18 @@ function orgList(): JSX.Element {
         ) ?? false
       );
     }
+  };
+
+  const triggerCreateSampleOrg = () => {
+    createSampleOrganization()
+      .then(() => {
+        toast.success(t('successMessage'));
+        window.location.reload();
+      })
+      .catch((error: any) => {
+        console.log(error.message);
+        toast.error(t('errorMessage'));
+      });
   };
 
   const createOrg = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
@@ -438,7 +460,7 @@ function orgList(): JSX.Element {
                 data-testid="organisationImage"
               />
             </Modal.Body>
-            <Modal.Footer>
+            <Modal.Footer className={styles.flex}>
               <Button
                 variant="secondary"
                 onClick={(): void => toggleModal()}
@@ -453,6 +475,21 @@ function orgList(): JSX.Element {
               >
                 {t('createOrganization')}
               </Button>
+              {userData &&
+                ((userData.user.userType === 'ADMIN' &&
+                  userData.user.adminFor.length > 0) ||
+                  userData.user.userType === 'SUPERADMIN') && (
+                  <div className={styles.sampleOrgSection}>
+                    <h4 className={styles.btnDivider}>OR</h4>
+                    <Button
+                      onClick={() => triggerCreateSampleOrg()}
+                      data-testid="createSampleOrganizationBtn"
+                    >
+                      {t('createSampleOrganization')}
+                      {/* <i className="bi bi-plus-circle-fill"></i> */}
+                    </Button>
+                  </div>
+                )}
             </Modal.Footer>
           </Form>
         </Modal>{' '}
