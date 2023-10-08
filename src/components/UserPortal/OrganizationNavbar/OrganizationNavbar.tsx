@@ -173,7 +173,6 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                     </Nav.Link>
                   )
               )}
-
             </Nav>
             <Navbar.Collapse className="justify-content-end">
               <Dropdown data-testid="languageDropdown" drop={dropDirection}>
