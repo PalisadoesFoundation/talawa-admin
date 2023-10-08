@@ -95,6 +95,7 @@ export const USER_LIST = gql`
 export const EVENT_DETAILS = gql`
   query Event($id: ID!) {
     event(id: $id) {
+      _id
       title
       description
       startDate
