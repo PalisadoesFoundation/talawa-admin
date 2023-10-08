@@ -38,6 +38,7 @@
     "flag-icons": "^6.6.6",
     "graphql": "^15.5.1",
     "graphql-tag": "^2.12.6",
+    "graphql-ws": "^5.14.0",
     "i18next": "^21.8.14",
     "i18next-browser-languagedetector": "^6.1.4",
     "i18next-http-backend": "^1.4.1",

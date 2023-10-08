@@ -21,7 +21,6 @@ interface InterfaceOrganizationCardProps {
   image: string;
   description: string;
 }
-
 export default function organizations(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userOrganizations',
@@ -161,6 +160,7 @@ export default function organizations(): JSX.Element {
               </Dropdown.Menu>
             </Dropdown>
           </div>
+
           <div
             className={`d-flex flex-column justify-content-between ${styles.content}`}
           >
