@@ -1,6 +1,8 @@
 # Talawa Admin
 💬 Join the community on Slack. The link can be found in the `Talawa` [README.md](https://github.com/PalisadoesFoundation/talawa) file.
 
+![talawa-logo-lite-200x200](https://github.com/PalisadoesFoundation/talawa-admin/assets/16875803/26291ec5-d3c1-4135-8bc7-80885dff613d)
+
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![GitHub stars](https://img.shields.io/github/stars/PalisadoesFoundation/talawa-admin.svg?style=social&label=Star&maxAge=2592000)](https://github.com/PalisadoesFoundation/talawa-admin)
 [![GitHub forks](https://img.shields.io/github/forks/PalisadoesFoundation/talawa-admin.svg?style=social&label=Fork&maxAge=2592000)](https://github.com/PalisadoesFoundation/talawa-admin)

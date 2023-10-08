@@ -117,14 +117,15 @@ export default function organizations(): JSX.Element {
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
         <UserSidebar />
         <div className={`${styles.colorLight} ${styles.mainContainer}`}>
+          <h3>{t('selectOrganization')}</h3>
           <div
-            className={`d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}
+            className={`d-flex flex-row justify-content-between pt-3 flex-wrap ${styles.gap}`}
           >
             <InputGroup className={styles.maxWidth}>
               <Form.Control
                 placeholder={t('search')}
                 type="text"
-                className={styles.borderNone}
+                className={`${styles.borderNone} ${styles.backgroundWhite}`}
                 value={filterName}
                 onChange={handleSearch}
                 data-testid="searchInput"

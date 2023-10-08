@@ -151,14 +151,16 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
             <Offcanvas.Title>Talawa</Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
-            <Nav className="me-auto flex-grow-1 pe-3" variant="dark">
+            <Nav className="me-auto flex-grow-1 pe-3 pt-1" variant="dark">
               <Nav.Link
                 active={props.currentPage === 'home'}
-                onClick={(): void => history.push(homeLink)}
+                onClick={
+                  /* istanbul ignore next */
+                  (): void => history.push(homeLink)
+                }
               >
                 {t('home')}
               </Nav.Link>
-
               {plugins.map(
                 (plugin, idx) =>
                   plugin.view && (
@@ -171,6 +173,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                     </Nav.Link>
                   )
               )}
+
             </Nav>
             <Navbar.Collapse className="justify-content-end">
               <Dropdown data-testid="languageDropdown" drop={dropDirection}>
@@ -226,7 +229,11 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                       {t('settings')}
                     </Link>
                   </Dropdown.Item>
-                  <Dropdown.Item>{t('myTasks')}</Dropdown.Item>
+                  <Dropdown.Item>
+                    <Link to="/user/tasks" className={styles.link}>
+                      {t('myTasks')}
+                    </Link>
+                  </Dropdown.Item>
                   <Dropdown.Item
                     onClick={handleLogout}
                     data-testid={`logoutBtn`}

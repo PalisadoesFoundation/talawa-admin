@@ -29,10 +29,7 @@ function userNavbar(): JSX.Element {
   const userName = localStorage.getItem('name');
 
   return (
-    <Navbar
-      variant="dark"
-      className={`${styles.boxShadow} ${styles.colorPrimary}`}
-    >
+    <Navbar variant="dark" className={`${styles.colorPrimary}`}>
       <Container fluid>
         <Navbar.Brand href="#">
           <img
@@ -98,7 +95,11 @@ function userNavbar(): JSX.Element {
                   {t('settings')}
                 </Link>
               </Dropdown.Item>
-              <Dropdown.Item>{t('myTasks')}</Dropdown.Item>
+              <Dropdown.Item>
+                <Link to="/user/tasks" className={styles.link}>
+                  {t('myTasks')}
+                </Link>
+              </Dropdown.Item>
               <Dropdown.Item onClick={handleLogout} data-testid={`logoutBtn`}>
                 {t('logout')}
               </Dropdown.Item>

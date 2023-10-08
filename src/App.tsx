@@ -31,6 +31,7 @@ import People from 'screens/UserPortal/People/People';
 import Settings from 'screens/UserPortal/Settings/Settings';
 import Donate from 'screens/UserPortal/Donate/Donate';
 import Events from 'screens/UserPortal/Events/Events';
+import Tasks from 'screens/UserPortal/Tasks/Tasks';
 
 function app(): JSX.Element {
   /*const { updatePluginLinks, updateInstalled } = bindActionCreators(
@@ -125,6 +126,7 @@ function app(): JSX.Element {
         <SecuredRouteForUser path="/user/settings" component={Settings} />
         <SecuredRouteForUser path="/user/donate" component={Donate} />
         <SecuredRouteForUser path="/user/events" component={Events} />
+        <SecuredRouteForUser path="/user/tasks" component={Tasks} />
 
         <Route exact path="*" component={PageNotFound} />
       </Switch>
