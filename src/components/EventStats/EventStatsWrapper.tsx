@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { CheckInModal } from './CheckInModal';
+import { EventStats } from './EventStats';
 import { Button } from 'react-bootstrap';
 import IconComponent from 'components/IconComponent/IconComponent';
-import styles from './CheckInWrapper.module.css';
+import styles from './EventStatsWrapper.module.css';
 
 type PropType = {
   eventId: string;
 };
 
-export const CheckInWrapper = (props: PropType): JSX.Element => {
+export const EventStatsWrapper = (props: PropType): JSX.Element => {
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -22,20 +22,16 @@ export const CheckInWrapper = (props: PropType): JSX.Element => {
         }}
       >
         <div className={styles.iconWrapper}>
-          <IconComponent
-            name="Check In Registrants"
-            fill="var(--bs-secondary)"
-          />
+          <IconComponent name="Event Stats" fill="var(--bs-secondary)" />
         </div>
-        Check In Registrants
+        View Event Statistics
       </Button>
-      {showModal && (
-        <CheckInModal
-          show={showModal}
-          handleClose={(): void => setShowModal(false)}
-          eventId={props.eventId}
-        />
-      )}
+      <EventStats
+        show={showModal}
+        handleClose={(): void => setShowModal(false)}
+        key={props.eventId || 'eventStatsDetails'}
+        eventId={props.eventId}
+      />
     </>
   );
 };

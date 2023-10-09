@@ -95,6 +95,7 @@ export const USER_LIST = gql`
 export const EVENT_DETAILS = gql`
   query Event($id: ID!) {
     event(id: $id) {
+      _id
       title
       description
       startDate
@@ -165,6 +166,20 @@ export const EVENT_CHECKINS = gql`
           allotedSeat
         }
       }
+    }
+  }
+`;
+
+export const EVENT_FEEDBACKS = gql`
+  query eventFeedback($id: ID!) {
+    event(id: $id) {
+      _id
+      feedback {
+        _id
+        rating
+        review
+      }
+      averageFeedbackScore
     }
   }
 `;
