@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { EventRegistrantsModal } from './EventRegistrantsModal';
 import { Button } from 'react-bootstrap';
+import IconComponent from 'components/IconComponent/IconComponent';
+import styles from './EventRegistrantsWrapper.module.css';
 
 type PropType = {
   eventId: string;
@@ -13,17 +15,23 @@ export const EventRegistrantsWrapper = (props: PropType): JSX.Element => {
   return (
     <>
       <Button
-        type="button"
-        className="mt-3"
-        variant="success"
+        variant="light"
+        className="text-secondary"
         aria-label="showAttendees"
         onClick={(): void => {
           setShowModal(true);
         }}
       >
+        <div className={styles.iconWrapper}>
+          <IconComponent
+            name="List Event Registrants"
+            fill="var(--bs-secondary)"
+          />
+        </div>
         Show Registrants
       </Button>
-      {showModal ? (
+
+      {showModal && (
         <EventRegistrantsModal
           show={showModal}
           handleClose={(): void => {
@@ -32,7 +40,7 @@ export const EventRegistrantsWrapper = (props: PropType): JSX.Element => {
           eventId={props.eventId}
           orgId={props.orgId}
         />
-      ) : null}
+      )}
     </>
   );
 };
