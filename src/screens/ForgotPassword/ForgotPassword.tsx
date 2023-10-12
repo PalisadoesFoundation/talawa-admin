@@ -167,7 +167,7 @@ const ForgotPassword = (): JSX.Element => {
                 <div className="col-sm-10">
                   <Form.Control
                     type="number"
-                    className="form-control"
+                    className={`form-control ${styles.inputFiels}`}
                     id="userOtp"
                     placeholder={t('userOtp')}
                     name="userOtp"
@@ -192,7 +192,7 @@ const ForgotPassword = (): JSX.Element => {
                 <div className="col-sm-10">
                   <Form.Control
                     type="password"
-                    className="form-control"
+                    className={`form-control ${styles.inputFiels}`}
                     id="newPassword"
                     placeholder={t('password')}
                     data-testid="newPassword"
@@ -218,7 +218,7 @@ const ForgotPassword = (): JSX.Element => {
                 <div className="col-sm-10">
                   <Form.Control
                     type="password"
-                    className="form-control"
+                    className={`form-control ${styles.inputFiels}`}
                     id="confirmNewPassword"
                     placeholder={t('cofirmNewPassword')}
                     data-testid="confirmNewPassword"
