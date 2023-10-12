@@ -38,6 +38,7 @@ function contactCard(props: InterfaceContactCardProps): JSX.Element {
           isSelected ? styles.bgGrey : styles.bgWhite
         }`}
         onClick={handleSelectedContactChange}
+        data-testid="contactContainer"
       >
         <img src={imageUrl} alt={contactName} className={styles.contactImage} />
         <div className={styles.contactNameContainer}>

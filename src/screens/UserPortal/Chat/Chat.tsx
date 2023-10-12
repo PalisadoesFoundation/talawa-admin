@@ -76,10 +76,6 @@ export default function chat(): JSX.Element {
     }
   }, [contactData]);
 
-  React.useEffect(() => {
-    console.log(selectedContact);
-  }, [selectedContact]);
-
   return (
     <>
       <OrganizationNavbar {...navbarProps} />
