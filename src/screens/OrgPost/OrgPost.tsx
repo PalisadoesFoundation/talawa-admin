@@ -266,7 +266,11 @@ function orgPost(): JSX.Element {
       <Modal show={postmodalisOpen}>
         <Modal.Header>
           <p className={styles.titlemodal}>{t('postDetails')}</p>
-          <Button variant="danger" onClick={hideInviteModal}>
+          <Button
+            variant="danger"
+            onClick={hideInviteModal}
+            className={styles.closeBtn}
+          >
             <i className="fa fa-times" data-testid="closePostModalBtn"></i>
           </Button>
         </Modal.Header>
@@ -332,7 +336,12 @@ function orgPost(): JSX.Element {
               multiple={false}
               //onChange=""
             />
-            <Button type="submit" variant="success" data-testid="createPostBtn">
+            <Button
+              type="submit"
+              variant="success"
+              data-testid="createPostBtn"
+              className={styles.createPostBtn}
+            >
               <i className="fa fa-plus"></i> {t('addPost')}
             </Button>
           </Form>
