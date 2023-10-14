@@ -10,7 +10,7 @@ type ModalPropType = {
   data: {
     event: {
       _id: string;
-      averageFeedbackScore: number | null;
+      averageFeedbackScore: number;
       feedback: FeedbackType[];
     };
   };
@@ -41,12 +41,12 @@ export const AverageRating = ({ data }: ModalPropType): JSX.Element => {
             <h4>Average Review Score</h4>
           </Card.Title>
           <Typography component="legend">
-            Rated {(data.event.averageFeedbackScore || 0).toFixed(2)} / 10
+            Rated {data.event.averageFeedbackScore.toFixed(2)} / 5
           </Typography>
           <StyledRating
             name="customized-color"
             precision={0.5}
-            max={10}
+            max={5}
             readOnly
             value={data.event.averageFeedbackScore}
             icon={<FavoriteIcon fontSize="inherit" />}
