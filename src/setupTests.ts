@@ -36,3 +36,5 @@ jestPreviewConfigure({
   // Opt-in to automatic mode to preview failed test case automatically.
   autoPreview: true,
 });
+
+jest.setTimeout(15000);

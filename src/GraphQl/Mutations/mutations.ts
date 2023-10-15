@@ -643,3 +643,14 @@ export const TOGGLE_PINNED_POST = gql`
     }
   }
 `;
+//Plugin WebSocket listner
+export const PLUGIN_SUBSCRIPTION = gql`
+  subscription onPluginUpdate {
+    onPluginUpdate {
+      pluginName
+      _id
+      pluginDesc
+      uninstalledOrgs
+    }
+  }
+`;
