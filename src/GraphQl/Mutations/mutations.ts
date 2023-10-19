@@ -636,13 +636,22 @@ export const UNLIKE_COMMENT = gql`
     }
   }
 `;
+
 export const TOGGLE_PINNED_POST = gql`
   mutation TogglePostPin($id: ID!) {
     togglePostPin(id: $id) {
-      _id
+    _id
     }
   }
 `;
+
+
+export const CREATE_DIRECT_CHAT = gql`
+  mutation createDirectChat($userIds: [ID!]!, $organizationId: ID!) {
+    createDirectChat(
+      data: { userIds: $userIds, organizationId: $organizationId }
+    ) {
+
 //Plugin WebSocket listner
 export const PLUGIN_SUBSCRIPTION = gql`
   subscription onPluginUpdate {

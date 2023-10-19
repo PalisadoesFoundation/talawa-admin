@@ -716,3 +716,45 @@ export const USER_TASKS_LIST = gql`
     }
   }
 `;
+
+export const DIRECT_CHATS_LIST = gql`
+  query DirectChatsByUserID($id: ID!) {
+    directChatsByUserID(id: $id) {
+      _id
+      creator {
+        _id
+        firstName
+        lastName
+        email
+      }
+      messages {
+        _id
+        createdAt
+        messageContent
+        receiver {
+          _id
+          firstName
+          lastName
+          email
+        }
+        sender {
+          _id
+          firstName
+          lastName
+          email
+        }
+      }
+      organization {
+        _id
+        name
+      }
+      users {
+        _id
+        firstName
+        lastName
+        email
+        image
+      }
+    }
+  }
+`;
