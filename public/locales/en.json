@@ -55,6 +55,7 @@
     "Block/Unblock": "Block/Unblock",
     "Plugins": "Plugins",
     "Plugin Store": "Plugin Store",
+    "Advertisement": "Advertisements",
     "allOrganizations": "All Organizations",
     "yourOrganization": "Your Organization",
     "notification": "Notification",
@@ -611,5 +612,24 @@
     "taskNotCompleted": "The task has not been completed yet",
     "event": "Event",
     "organization": "Organization"
+  },
+  "advertisement": {
+    "title": "Advertisements",
+    "pHeading": "Manage Ads",
+    "activeAds": "Active Campaigns",
+    "archievedAds": "Completed Campaigns",
+    "pMessage": "Ads not present for this campaign.",
+    "delete": "Delete",
+    "Rname": "Enter name of Advertisement",
+    "Rtype": "Select type of Advertisement",
+    "Rlink": "Provide a link for content to be displayed",
+    "RstartDate": "Select Start Date",
+    "RendDate": "Select End Date",
+    "RClose": "Close the window",
+    "addNew": "Create new advertisement",
+    "EXname": "Ex. Cookie Shop",
+    "EXlink": "Ex. http://yourwebsite.com/photo",
+    "register": "Create Advertisement",
+    "close": "Close "
   }
 }

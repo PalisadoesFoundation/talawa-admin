@@ -132,7 +132,9 @@ const leftDrawerOrg = ({
                 )}
               </div>
               <div className={styles.profileText}>
-                <span className={styles.primaryText}>{organization.name}</span>
+                <span className={styles.primaryText}>
+                  Good {organization.name}
+                </span>
                 <span className={styles.secondaryText}>
                   {organization.location}
                 </span>

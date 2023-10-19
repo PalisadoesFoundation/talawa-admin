@@ -605,5 +605,13 @@
     "taskNotCompleted": "कार्य अभी तक पूरा नहीं हुआ है",
     "event": "आयोजन",
     "organization": "संगठन"
+  },
+  "advertisement": {
+    "title": "विज्ञापन",
+    "pHeading": "विज्ञापन प्रबंधन",
+    "activeAds": "सक्रिय अभियान",
+    "archievedAds": "संपन्न अभियान",
+    "pMessage": "इस अभियान के लिए कोई विज्ञापन नहीं हैं।",
+    "delete": "हटाएँ"
   }
 }

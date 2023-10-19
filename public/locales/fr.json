@@ -604,5 +604,13 @@
     "taskNotCompleted": "La tâche n'est pas encore terminée",
     "event": "Événement",
     "organization": "Organisation"
+  },
+  "advertisement": {
+    "title": "Publicités",
+    "pHeading": "Gérer les publicités",
+    "activeAds": "Campagnes actives",
+    "archievedAds": "Campagnes terminées",
+    "pMessage": "Aucune publicité n'est présente pour cette campagne.",
+    "delete": "Supprimer"
   }
 }

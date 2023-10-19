@@ -605,5 +605,13 @@
     "taskNotCompleted": "任務還沒完成",
     "event": "事件",
     "organization": "組織"
+  },
+  "advertisement": {
+    "title": "广告",
+    "pHeading": "管理广告",
+    "activeAds": "活动广告",
+    "archievedAds": "已完成的广告活动",
+    "pMessage": "此广告活动没有相关广告。",
+    "delete": "删除"
   }
 }
