@@ -616,5 +616,14 @@
     "taskNotCompleted": "La tarea aún no se ha completado",
     "event": "Evento",
     "organization": "Organización"
+  },
+  "userChat": {
+    "chat": "Charlar",
+    "search": "Buscar",
+    "contacts": "Contactos"
+  },
+  "userChatRoom": {
+    "selectContact": "Seleccione un contacto para iniciar una conversación",
+    "sendMessage": "Enviar mensaje"
   }
 }

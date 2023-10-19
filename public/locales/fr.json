@@ -615,5 +615,14 @@
     "taskNotCompleted": "La tâche n'est pas encore terminée",
     "event": "Événement",
     "organization": "Organisation"
+  },
+  "userChat": {
+    "chat": "Chat",
+    "search": "Recherche",
+    "contacts": "Contacts"
+  },
+  "userChatRoom": {
+    "selectContact": "Sélectionnez un contact pour démarrer la conversation",
+    "sendMessage": "Envoyer le message"
   }
 }

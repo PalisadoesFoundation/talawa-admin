@@ -616,5 +616,14 @@
     "taskNotCompleted": "任務還沒完成",
     "event": "事件",
     "organization": "組織"
+  },
+  "userChat": {
+    "chat": "聊天",
+    "search": "搜尋",
+    "contacts": "聯絡方式"
+  },
+  "userChatRoom": {
+    "selectContact": "選擇聯絡人開始對話",
+    "sendMessage": "傳訊息"
   }
 }
