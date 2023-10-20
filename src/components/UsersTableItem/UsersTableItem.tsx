@@ -1,20 +1,19 @@
 import { useMutation } from '@apollo/client';
+import { Search } from '@mui/icons-material';
 import {
-  CHANGE_USER_ROLE_IN_ORG,
   REMOVE_USER_FROM_ORGANIZATION,
   UPDATE_USERTYPE_MUTATION,
+  UPDATE_USER_ROLE_IN_ORG,
 } from 'GraphQl/Mutations/mutations';
+import dayjs from 'dayjs';
 import React, { useState } from 'react';
-import { Button, Card, Col, Form, Modal, Row, Table } from 'react-bootstrap';
+import { Button, Form, Modal, Row, Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
-import styles from './UsersTableItem.module.css';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import { useHistory } from 'react-router-dom';
-import dayjs from 'dayjs';
-import { Search } from '@mui/icons-material';
+import styles from './UsersTableItem.module.css';
 
 type Props = {
   user: InterfaceQueryUserListItem;
@@ -49,7 +48,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
     useState('');
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
   const [removeUser] = useMutation(REMOVE_USER_FROM_ORGANIZATION);
-  const [changeUserInOrgType] = useMutation(CHANGE_USER_ROLE_IN_ORG);
+  const [updateUserInOrgType] = useMutation(UPDATE_USER_ROLE_IN_ORG);
   const history = useHistory();
 
   const changeRole = async (e: any): Promise<void> => {
@@ -102,7 +101,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
     const inputData = value.split('?');
 
     try {
-      const { data } = await changeUserInOrgType({
+      const { data } = await updateUserInOrgType({
         variables: {
           userId: user._id,
           role: inputData[0],

@@ -118,13 +118,10 @@ const ForgotPassword = (): JSX.Element => {
   }
 
   return (
-    <section className={styles.forgotPassword}>
-      <div className="container">
-        <div className={`border rounded p-4 mb-4 ${styles.border}`}>
-          <div className={`heading text-center ${styles.heading}`}>
-            <h1>{t('forgotPassword')}</h1>
-          </div>
-
+    <>
+      <section className={styles.containerWrapper}>
+        <div className={styles.resetForm}>
+          <h1>{t('forgotPassword')}</h1>
           <div className="otpForm my-5">
             <form onSubmit={getOTP}>
               <div className="form-group row">
@@ -157,7 +154,6 @@ const ForgotPassword = (): JSX.Element => {
               </div>
             </form>
           </div>
-
           <div className="changePasswordForm">
             <form onSubmit={submitForgotPassword}>
               <div className="form-group row">
@@ -250,8 +246,8 @@ const ForgotPassword = (): JSX.Element => {
             </form>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 

@@ -636,13 +636,13 @@ export const REMOVE_USER_FROM_ORGANIZATION = gql`
 `;
 
 // Changes the role of a user in an organization
-export const CHANGE_USER_ROLE_IN_ORG = gql`
-  mutation changeUserRoleInOrganization(
+export const UPDATE_USER_ROLE_IN_ORG = gql`
+  mutation updateUserRoleInOrganization(
     $organizationId: ID!
     $userId: ID!
     $role: String!
   ) {
-    changeUserRoleInOrganization(
+    updateUserRoleInOrganization(
       organizationId: $organizationId
       userId: $userId
       role: $role
