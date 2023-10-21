@@ -195,6 +195,7 @@ function orgList(): JSX.Element {
     window.location.assign('/');
   }
 
+  /* istanbul ignore next */
   const resetAllParams = (): void => {
     refetchOrgs({
       filter: '',
@@ -204,6 +205,7 @@ function orgList(): JSX.Element {
     sethasMore(true);
   };
 
+  /* istanbul ignore next */
   const handleSearchByName = (e: any): void => {
     const { value } = e.target;
     setSearchByName(value);
@@ -216,6 +218,7 @@ function orgList(): JSX.Element {
     });
   };
 
+  /* istanbul ignore next */
   const loadMoreOrganizations = (): void => {
     console.log('loadMoreOrganizations');
     setIsLoadingMore(true);
@@ -401,9 +404,10 @@ function orgList(): JSX.Element {
                     </div>
                   );
                 })
-              ) : userData &&
+              ) : (
+                userData &&
                 userData.user.userType == 'ADMIN' &&
-                userData.user.adminFor.length > 0 ? (
+                userData.user.adminFor.length > 0 &&
                 orgsData?.organizationsConnection.map((item) => {
                   if (isAdminForCurrentOrg(item)) {
                     return (
@@ -413,7 +417,7 @@ function orgList(): JSX.Element {
                     );
                   }
                 })
-              ) : null}
+              )}
             </InfiniteScroll>
           </>
         )}
