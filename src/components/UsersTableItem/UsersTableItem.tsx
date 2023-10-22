@@ -271,91 +271,85 @@ const UsersTableItem = (props: Props): JSX.Element => {
                       }
                     });
                     return (
-                      <>
-                        <tr key={`org-joined-${org._id}`}>
-                          <td>
+                      <tr key={`org-joined-${org._id}`}>
+                        <td>
+                          <img
+                            src={
+                              org.image
+                                ? org.image
+                                : `https://api.dicebear.com/5.x/initials/svg?seed=${org.name}`
+                            }
+                            alt="orgImage"
+                          />
+                          {org.name}
+                        </td>
+                        <td>{org.location}</td>
+                        <td>{dayjs(org.createdAt).format('DD-MM-YYYY')}</td>
+                        <td>
+                          <Button
+                            variant="link"
+                            className="p-0"
+                            onClick={() => handleCreator()}
+                          >
                             <img
                               src={
-                                org.image
-                                  ? org.image
-                                  : `https://api.dicebear.com/5.x/initials/svg?seed=${org.name}`
+                                org.creator.image
+                                  ? org.creator.image
+                                  : `https://api.dicebear.com/5.x/initials/svg?seed=${org.creator.firstName} ${org.creator.lastName}`
                               }
-                              alt="orgImage"
+                              alt="creator"
                             />
-                            {org.name}
-                          </td>
-                          <td>{org.location}</td>
-                          <td>{dayjs(org.createdAt).format('DD-MM-YYYY')}</td>
-                          <td>
-                            <Button
-                              variant="link"
-                              className="p-0"
-                              onClick={() => handleCreator()}
-                            >
-                              <img
-                                src={
-                                  org.creator.image
-                                    ? org.creator.image
-                                    : `https://api.dicebear.com/5.x/initials/svg?seed=${org.creator.firstName} ${org.creator.lastName}`
-                                }
-                                alt="creator"
-                              />
-                              {org.creator.firstName} {org.creator.lastName}
-                            </Button>
-                          </td>
-                          <td>{isAdmin ? 'ADMIN' : 'USER'}</td>
-                          <td>
-                            <Form.Select size="sm" onChange={changeRoleInOrg}>
-                              {isAdmin ? (
-                                <>
-                                  <option value={`ADMIN?${org._id}`}>
-                                    ADMIN
-                                  </option>
-                                  <option value={`USER?${org._id}`}>
-                                    USER
-                                  </option>
-                                </>
-                              ) : (
-                                <>
-                                  <option value={`USER?${org._id}`}>
-                                    USER
-                                  </option>
-                                  <option value={`ADMIN?${org._id}`}>
-                                    ADMIN
-                                  </option>
-                                </>
-                              )}
-                            </Form.Select>
-                          </td>
-                          <td colSpan={1.5}>
-                            <Button
-                              className={styles.button}
-                              variant="danger"
-                              size="sm"
-                              onClick={() => {
-                                setremoveUserProps({
-                                  orgId: org._id,
-                                  orgName: org.name,
-                                  setShowOnCancel: 'JOINED',
-                                });
-                                setShowJoinedOrganizations(false);
-                                setShowRemoveUserModal(true);
-                              }}
-                            >
-                              Remove User
-                            </Button>
-                          </td>
-                          <td>
-                            <Button
-                              className={styles.button}
-                              size="sm"
-                              onClick={() => handleClick(org._id)}
-                            >
-                              Manage
-                            </Button>
-                          </td>
-                        </tr>
-                      </>
+                            {org.creator.firstName} {org.creator.lastName}
+                          </Button>
+                        </td>
+                        <td>{isAdmin ? 'ADMIN' : 'USER'}</td>
+                        <td>
+                          <Form.Select size="sm" onChange={changeRoleInOrg}>
+                            {isAdmin ? (
+                              <>
+                                <option value={`ADMIN?${org._id}`}>
+                                  ADMIN
+                                </option>
+                                <option value={`USER?${org._id}`}>USER</option>
+                              </>
+                            ) : (
+                              <>
+                                <option value={`USER?${org._id}`}>USER</option>
+                                <option value={`ADMIN?${org._id}`}>
+                                  ADMIN
+                                </option>
+                              </>
+                            )}
+                          </Form.Select>
+                        </td>
+                        <td colSpan={1.5}>
+                          <Button
+                            className={styles.button}
+                            variant="danger"
+                            size="sm"
+                            onClick={() => {
+                              setremoveUserProps({
+                                orgId: org._id,
+                                orgName: org.name,
+                                setShowOnCancel: 'JOINED',
+                              });
+                              setShowJoinedOrganizations(false);
+                              setShowRemoveUserModal(true);
+                            }}
+                          >
+                            Remove User
+                          </Button>
+                        </td>
+                        <td>
+                          <Button
+                            className={styles.button}
+                            size="sm"
+                            onClick={() => handleClick(org._id)}
+                          >
+                            Manage
+                          </Button>
+                        </td>
+                      </tr>
                     );
                   })}
                 </tbody>
@@ -448,91 +442,85 @@ const UsersTableItem = (props: Props): JSX.Element => {
                       }
                     });
                     return (
-                      <>
-                        <tr key={`org-joined-${org._id}`}>
-                          <td>
+                      <tr key={`org-joined-${org._id}`}>
+                        <td>
+                          <img
+                            src={
+                              org.image
+                                ? org.image
+                                : `https://api.dicebear.com/5.x/initials/svg?seed=${org.name}`
+                            }
+                            alt="orgImage"
+                          />
+                          {org.name}
+                        </td>
+                        <td>{org.location}</td>
+                        <td>{dayjs(org.createdAt).format('DD-MM-YYYY')}</td>
+                        <td>
+                          <Button
+                            variant="link"
+                            className="p-0"
+                            onClick={() => handleCreator()}
+                          >
                             <img
                               src={
-                                org.image
-                                  ? org.image
-                                  : `https://api.dicebear.com/5.x/initials/svg?seed=${org.name}`
+                                org.creator.image
+                                  ? org.creator.image
+                                  : `https://api.dicebear.com/5.x/initials/svg?seed=${org.creator.firstName} ${org.creator.lastName}`
                               }
-                              alt="orgImage"
+                              alt="creator"
                             />
-                            {org.name}
-                          </td>
-                          <td>{org.location}</td>
-                          <td>{dayjs(org.createdAt).format('DD-MM-YYYY')}</td>
-                          <td>
-                            <Button
-                              variant="link"
-                              className="p-0"
-                              onClick={() => handleCreator()}
-                            >
-                              <img
-                                src={
-                                  org.creator.image
-                                    ? org.creator.image
-                                    : `https://api.dicebear.com/5.x/initials/svg?seed=${org.creator.firstName} ${org.creator.lastName}`
-                                }
-                                alt="creator"
-                              />
-                              {org.creator.firstName} {org.creator.lastName}
-                            </Button>
-                          </td>
-                          <td>{isAdmin ? 'ADMIN' : 'USER'}</td>
-                          <td>
-                            <Form.Select size="sm" onChange={changeRoleInOrg}>
-                              {isAdmin ? (
-                                <>
-                                  <option value={`ADMIN?${org._id}`}>
-                                    ADMIN
-                                  </option>
-                                  <option value={`USER?${org._id}`}>
-                                    USER
-                                  </option>
-                                </>
-                              ) : (
-                                <>
-                                  <option value={`USER?${org._id}`}>
-                                    USER
-                                  </option>
-                                  <option value={`ADMIN?${org._id}`}>
-                                    ADMIN
-                                  </option>
-                                </>
-                              )}
-                            </Form.Select>
-                          </td>
-                          <td colSpan={1.5}>
-                            <Button
-                              className={styles.button}
-                              variant="danger"
-                              size="sm"
-                              onClick={() => {
-                                setremoveUserProps({
-                                  orgId: org._id,
-                                  orgName: org.name,
-                                  setShowOnCancel: 'JOINED',
-                                });
-                                setShowBlockedOrganizations(false);
-                                setShowRemoveUserModal(true);
-                              }}
-                            >
-                              Remove User
-                            </Button>
-                          </td>
-                          <td>
-                            <Button
-                              className={styles.button}
-                              size="sm"
-                              onClick={() => handleClick(org._id)}
-                            >
-                              Manage
-                            </Button>
-                          </td>
-                        </tr>
-                      </>
+                            {org.creator.firstName} {org.creator.lastName}
+                          </Button>
+                        </td>
+                        <td>{isAdmin ? 'ADMIN' : 'USER'}</td>
+                        <td>
+                          <Form.Select size="sm" onChange={changeRoleInOrg}>
+                            {isAdmin ? (
+                              <>
+                                <option value={`ADMIN?${org._id}`}>
+                                  ADMIN
+                                </option>
+                                <option value={`USER?${org._id}`}>USER</option>
+                              </>
+                            ) : (
+                              <>
+                                <option value={`USER?${org._id}`}>USER</option>
+                                <option value={`ADMIN?${org._id}`}>
+                                  ADMIN
+                                </option>
+                              </>
+                            )}
+                          </Form.Select>
+                        </td>
+                        <td colSpan={1.5}>
+                          <Button
+                            className={styles.button}
+                            variant="danger"
+                            size="sm"
+                            onClick={() => {
+                              setremoveUserProps({
+                                orgId: org._id,
+                                orgName: org.name,
+                                setShowOnCancel: 'JOINED',
+                              });
+                              setShowBlockedOrganizations(false);
+                              setShowRemoveUserModal(true);
+                            }}
+                          >
+                            Remove User
+                          </Button>
+                        </td>
+                        <td>
+                          <Button
+                            className={styles.button}
+                            size="sm"
+                            onClick={() => handleClick(org._id)}
+                          >
+                            Manage
+                          </Button>
+                        </td>
+                      </tr>
                     );
                   })}
                 </tbody>

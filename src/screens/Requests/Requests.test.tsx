@@ -13,7 +13,6 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import Requests from './Requests';
 import { EMPTY_ORG_MOCKS, MOCKS, ORG_LIST_MOCK } from './RequestsMocks';
-import { debug } from 'jest-preview';
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_ORG_MOCKS, true);
@@ -106,7 +105,6 @@ describe('Testing Request screen', () => {
 
     await wait();
     userEvent.click(screen.getByTestId(/acceptUser456/i));
-    debug();
   });
 
   test('Testing reject user functionality', async () => {

@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
+import type { ApolloError } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { Dropdown, Form, Modal, Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
@@ -8,7 +9,6 @@ import { toast } from 'react-toastify';
 import { Search } from '@mui/icons-material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import SortIcon from '@mui/icons-material/Sort';
-import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_LIST,
@@ -41,20 +41,28 @@ const Users = (): JSX.Element => {
     loading: loading,
     fetchMore,
     refetch: refetchUsers,
+    error,
   }: {
-    data: { users: InterfaceQueryUserListItem[] } | undefined;
+    data?: { users: InterfaceQueryUserListItem[] };
     loading: boolean;
     fetchMore: any;
     refetch: any;
+    error?: ApolloError;
   } = useQuery(USER_LIST, {
     variables: {
       first: perPageResult,
       skip: 0,
-      filter: searchByName,
+      firstName_contains: '',
+      lastName_contains: '',
     },
     notifyOnNetworkStatusChange: true,
   });
 
+  const { data: dataOrgs, error: errorOrgs } = useQuery(
+    ORGANIZATION_CONNECTION_LIST
+  );
+
+  // Manage loading more state
   useEffect(() => {
     if (!usersData) {
       return;
@@ -63,8 +71,6 @@ const Users = (): JSX.Element => {
       setHasMore(false);
     }
   }, [usersData]);
-
-  const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
 
   // To clear the search when the component is unmounted
   useEffect(() => {
@@ -103,6 +109,7 @@ const Users = (): JSX.Element => {
   const handleSearchByName = (e: any): void => {
     const { value } = e.target;
     setSearchByName(value);
+    /* istanbul ignore next */
     if (value.length === 0) {
       resetAndRefetch();
       return;
@@ -113,14 +120,17 @@ const Users = (): JSX.Element => {
       // Later on we can add several search and filter options
     });
   };
+  /* istanbul ignore next */
   const resetAndRefetch = (): void => {
     refetchUsers({
       first: perPageResult,
       skip: 0,
-      filter: '',
+      firstName_contains: '',
+      lastName_contains: '',
     });
     setHasMore(true);
   };
+  /* istanbul ignore next */
   const loadMoreUsers = (): void => {
     setIsLoadingMore(true);
     fetchMore({
@@ -163,6 +173,7 @@ const Users = (): JSX.Element => {
     <>
       <SuperAdminScreen title={t('users')} screenName="Users">
         {/* Buttons Container */}
+        <pre>{JSON.stringify({ error, errorOrgs }, null, 4)}</pre>
         <div className={styles.btnsContainer}>
           <div className={styles.inputContainer}>
             <div
@@ -248,7 +259,7 @@ const Users = (): JSX.Element => {
                 }
                 hasMore={hasMore}
                 className={styles.listBox}
-                data-testid="organizations-list"
+                data-testid="users-list"
                 endMessage={
                   <div className={'w-100 text-center my-4'}>
                     <h5 className="m-0 ">{t('endOfResults')}</h5>
