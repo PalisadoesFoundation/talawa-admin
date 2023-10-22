@@ -58,7 +58,9 @@ function advertisementEntry({
             <Card>
               <Card.Img
                 variant="top"
-                src={'https://avatars.githubusercontent.com/u/65951872?v=4'}
+                src={
+                  'https://i.pinimg.com/736x/f0/68/da/f068daf5f23f74ada84537bcb70c7e4b.jpg'
+                }
               />
               <Card.Body>
                 <Card.Title>{name}</Card.Title>

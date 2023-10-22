@@ -11,13 +11,17 @@ import getOrganizationId from 'utils/getOrganizationId';
 import SendIcon from '@mui/icons-material/Send';
 import PostCard from 'components/UserPortal/PostCard/PostCard';
 import { useMutation, useQuery } from '@apollo/client';
-import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
+import {
+  ADVERTISEMENTS_GET,
+  ORGANIZATION_POST_CONNECTION_LIST,
+} from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
 import { useTranslation } from 'react-i18next';
 import convertToBase64 from 'utils/convertToBase64';
 import { toast } from 'react-toastify';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
 
 interface InterfacePostCardProps {
   id: string;
@@ -60,11 +64,25 @@ export default function home(): JSX.Element {
   const [posts, setPosts] = React.useState([]);
   const [postContent, setPostContent] = React.useState('');
   const [postImage, setPostImage] = React.useState('');
+  const currentOrgId = window.location.href.split('/id=')[1] + '';
+  const [adContent, setAdContent] = React.useState([]);
 
   const navbarProps = {
     currentPage: 'home',
   };
-
+  const {
+    data: promotedPostsData,
+    refetch: promotedPostsRefetch,
+    loading: promotedPostsLoading,
+  } = useQuery(ADVERTISEMENTS_GET);
+  console.log(
+    currentOrgId,
+    promotedPostsData,
+    adContent.filter((ad: any) => ad.orgId == currentOrgId),
+    adContent
+      .filter((ad: any) => ad.orgId == currentOrgId)
+      .filter((ad: any) => new Date(ad.endDate) > new Date())
+  );
   const {
     data,
     refetch,
@@ -113,6 +131,12 @@ export default function home(): JSX.Element {
   React.useEffect(() => {
     if (data) {
       setPosts(data.postsByOrganizationConnection.edges);
+    }
+  }, [data]);
+
+  React.useEffect(() => {
+    if (promotedPostsData) {
+      setAdContent(promotedPostsData.getAdvertisements);
     }
   }, [data]);
 
@@ -184,6 +208,21 @@ export default function home(): JSX.Element {
               </Link>
             </div>
           </div>
+          {adContent
+            .filter((ad: any) => ad.orgId == currentOrgId)
+            .filter((ad: any) => new Date(ad.endDate) > new Date()).length == 0
+            ? ''
+            : adContent
+                .filter((ad: any) => ad.orgId == currentOrgId)
+                .filter((ad: any) => new Date(ad.endDate) > new Date())
+                .map((post: any) => (
+                  <PromotedPost
+                    key={post.id}
+                    id={post.id}
+                    image={post.link}
+                    title={post.name}
+                  />
+                ))}
           {loadingPosts ? (
             <div className={`d-flex flex-row justify-content-center`}>
               <HourglassBottomIcon /> <span>Loading...</span>
