@@ -21,7 +21,7 @@ export default function advertisements(): JSX.Element {
     loading: loading2,
     error: error2,
   } = useQuery(ADVERTISEMENTS_GET);
-
+  const currentOrgId = window.location.href.split('/id=')[1] + '';
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   document.title = t('title');
 
@@ -106,12 +106,14 @@ export default function advertisements(): JSX.Element {
                 onSelect={updateSelectedTab}
               >
                 <Tab eventKey="avaactiveAdsilable" title={t('activeAds')}>
-                  {data2?.getAdvertisements.filter(
-                    (ad: any) => new Date(ad.endDate) > new Date()
-                  ).length == 0 ? (
+                  {data2?.getAdvertisements
+                    .filter((ad: any) => ad.orgId == currentOrgId)
+                    .filter((ad: any) => new Date(ad.endDate) > new Date())
+                    .length == 0 ? (
                     <h4>{t('pMessage')} </h4> // eslint-disable-line
                   ) : (
                     data2?.getAdvertisements
+                      .filter((ad: any) => ad.orgId == currentOrgId)
                       .filter((ad: any) => new Date(ad.endDate) > new Date())
                       .map(
                         (
@@ -141,12 +143,14 @@ export default function advertisements(): JSX.Element {
                   )}
                 </Tab>
                 <Tab eventKey="archievedAds" title={t('archievedAds')}>
-                  {data2?.getAdvertisements.filter(
-                    (ad: any) => new Date(ad.endDate) < new Date()
-                  ).length == 0 ? (
+                  {data2?.getAdvertisements
+                    .filter((ad: any) => ad.orgId == currentOrgId)
+                    .filter((ad: any) => new Date(ad.endDate) < new Date())
+                    .length == 0 ? (
                     <h4>{t('pMessage')} </h4> // eslint-disable-line
                   ) : (
                     data2?.getAdvertisements
+                      .filter((ad: any) => ad.orgId == currentOrgId)
                       .filter((ad: any) => new Date(ad.endDate) < new Date())
                       .map(
                         (

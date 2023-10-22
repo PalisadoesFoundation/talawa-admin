@@ -50,7 +50,7 @@ function advertisementRegister({
       console.log('At handle register', formState);
       const { data } = await create({
         variables: {
-          orgId: currentOrg as string,
+          orgId: currentOrg,
           name: formState.name as string,
           link: formState.link as string,
           type: formState.type as string,
