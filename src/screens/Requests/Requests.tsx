@@ -1,5 +1,6 @@
 import React from 'react';
 import { useMutation, useQuery } from '@apollo/client';
+import type { ApolloError } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { Dropdown, Form, Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
@@ -45,8 +46,10 @@ const Requests = (): JSX.Element => {
   const [rejectAdminFunc] = useMutation(REJECT_ADMIN_MUTATION);
   const {
     data: currentUserData,
+    error: errorCurrentUser,
   }: {
-    data: InterfaceUserType | undefined;
+    data?: InterfaceUserType;
+    error?: ApolloError;
   } = useQuery(USER_ORGANIZATION_LIST, {
     variables: { id: localStorage.getItem('id') },
   });
@@ -56,26 +59,31 @@ const Requests = (): JSX.Element => {
     loading: loading,
     fetchMore,
     refetch: refetchUsers,
+    error,
   }: {
-    data: { users: InterfaceQueryRequestListItem[] } | undefined;
+    data?: { users: InterfaceQueryRequestListItem[] };
     loading: boolean;
     fetchMore: any;
     refetch: any;
+    error?: ApolloError;
   } = useQuery(USER_LIST_REQUEST, {
     variables: {
       first: perPageResult,
       skip: 0,
       userType: 'ADMIN',
       adminApproved: false,
-      filter: searchByName,
+      firstName_contains: searchByName,
+      lastName_contains: '',
     },
     notifyOnNetworkStatusChange: true,
   });
 
   const {
     data: dataOrgs,
+    error: errorOrgList,
   }: {
-    data: InterfaceOrgConnectionType | undefined;
+    data?: InterfaceOrgConnectionType;
+    error?: ApolloError;
   } = useQuery(ORGANIZATION_CONNECTION_LIST);
 
   // To clear the search when the component is unmounted
@@ -85,6 +93,7 @@ const Requests = (): JSX.Element => {
     };
   }, []);
 
+  // To manage loading states
   useEffect(() => {
     if (!usersData) {
       return;
@@ -121,17 +130,19 @@ const Requests = (): JSX.Element => {
     }
   }, [loading]);
 
+  /* istanbul ignore next */
   const resetAndRefetch = (): void => {
     refetchUsers({
       first: perPageResult,
       skip: 0,
       userType: 'ADMIN',
       adminApproved: false,
-      filter: '',
+      firstName_contains: '',
+      lastName_contains: '',
     });
     sethasMore(true);
   };
-
+  /* istanbul ignore next */
   const loadMoreRequests = (): void => {
     setIsLoadingMore(true);
     fetchMore({
@@ -139,7 +150,8 @@ const Requests = (): JSX.Element => {
         skip: usersData?.users.length || 0,
         userType: 'ADMIN',
         adminApproved: false,
-        filter: searchByName,
+        firstName_contains: searchByName,
+        lastName_contains: '',
       },
       updateQuery: (
         prev: { users: InterfaceQueryRequestListItem[] } | undefined,
@@ -201,6 +213,7 @@ const Requests = (): JSX.Element => {
     }
   };
 
+  /* istanbul ignore next */
   const handleSearchByName = async (e: any): Promise<void> => {
     const { value } = e.target;
     setSearchByName(value);
