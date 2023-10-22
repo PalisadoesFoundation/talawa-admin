@@ -73,7 +73,7 @@ export default function advertisements(): JSX.Element {
   };
 
   const updateSelectedTab = (tab: any): void => {
-    setIsStore(tab === 'available');
+    setIsStore(tab === 'activeAds');
     isStore ? getStorePlugins() : getInstalledPlugins();
   };
 
@@ -89,7 +89,7 @@ export default function advertisements(): JSX.Element {
       </>
     );
   }
-  console.log(data2?.getAdvertisements);
+  console.log('Advertisement data is ', data2);
   return (
     <>
       <OrganizationScreen screenName="Advertisement Store" title={t('title')}>
@@ -100,39 +100,15 @@ export default function advertisements(): JSX.Element {
 
               <AdvertisementRegister />
               <Tabs
-                defaultActiveKey="available"
+                defaultActiveKey="archievedAds"
                 id="uncontrolled-tab-example"
                 className="mb-3"
                 onSelect={updateSelectedTab}
               >
-                <Tab eventKey="available" title={t('activeAds')}>
-                  {data2?.getAdvertisements
-                    .filter((ad: any) => new Date(ad.endDate) > new Date())
-                    .map(
-                      (
-                        ad: {
-                          _id: string;
-                          name: string | undefined;
-                          type: string | undefined;
-                          orgId: string;
-                          link: string;
-                          endDate: Date;
-                          startDate: Date;
-                        },
-                        i: React.Key | null | undefined
-                      ): JSX.Element => (
-                        <AdvertisementEntry
-                          id={ad._id}
-                          key={i}
-                          name={ad.name}
-                          type={ad.type}
-                          orgId={ad.orgId}
-                          startDate={ad.startDate}
-                          endDate={ad.endDate}
-                          // getInstalledPlugins={getInstalledPlugins}
-                        />
-                      )
-                    ).length == 0 ? (
+                <Tab eventKey="avaactiveAdsilable" title={t('activeAds')}>
+                  {data2?.getAdvertisements.filter(
+                    (ad: any) => new Date(ad.endDate) > new Date()
+                  ).length == 0 ? (
                     <h4>{t('pMessage')} </h4> // eslint-disable-line
                   ) : (
                     data2?.getAdvertisements
@@ -164,34 +140,10 @@ export default function advertisements(): JSX.Element {
                       )
                   )}
                 </Tab>
-                <Tab eventKey="installed" title={t('archievedAds')}>
-                  {data2?.getAdvertisements
-                    .filter((ad: any) => new Date(ad.endDate) < new Date())
-                    .map(
-                      (
-                        ad: {
-                          _id: string;
-                          name: string | undefined;
-                          type: string | undefined;
-                          orgId: string;
-                          link: string;
-                          endDate: Date;
-                          startDate: Date;
-                        },
-                        i: React.Key | null | undefined
-                      ): JSX.Element => (
-                        <AdvertisementEntry
-                          id={ad._id}
-                          key={i}
-                          name={ad.name}
-                          type={ad.type}
-                          orgId={ad.orgId}
-                          startDate={ad.startDate}
-                          endDate={ad.endDate}
-                          // getInstalledPlugins={getInstalledPlugins}
-                        />
-                      )
-                    ).length == 0 ? (
+                <Tab eventKey="archievedAds" title={t('archievedAds')}>
+                  {data2?.getAdvertisements.filter(
+                    (ad: any) => new Date(ad.endDate) < new Date()
+                  ).length == 0 ? (
                     <h4>{t('pMessage')} </h4> // eslint-disable-line
                   ) : (
                     data2?.getAdvertisements
@@ -222,82 +174,6 @@ export default function advertisements(): JSX.Element {
                         )
                       )
                   )}
-                  {/*{data.getPlugins
-                    .filter((plugin: any) => plugin.pluginInstallStatus == true)
-                    .filter(
-                      (val: {
-                        _id: string;
-                        pluginName: string | undefined;
-                        pluginDesc: string | undefined;
-                        pluginCreatedBy: string;
-                        pluginInstallStatus: boolean | undefined;
-                        getInstalledPlugins: () => any;
-                      }) => {
-                        if (searchText == '') {
-                          return val;
-                        } else if (
-                          val.pluginName
-                            ?.toLowerCase()
-                            .includes(searchText.toLowerCase())
-                        ) {
-                          return val;
-                        }
-                      }
-                    ).length === 0 ? (
-                    <h4>{t('pMessage')} </h4> // eslint-disable-line
-                  ) : (
-                    data.getPlugins
-                      .filter(
-                        (plugin: any) => plugin.pluginInstallStatus == true
-                      )
-                      .filter(
-                        (val: {
-                          _id: string;
-                          pluginName: string | undefined;
-                          pluginDesc: string | undefined;
-                          pluginCreatedBy: string;
-                          pluginInstallStatus: boolean | undefined;
-                          getInstalledPlugins: () => any;
-                        }) => {
-                          if (searchText == '') {
-                            return val;
-                          } else if (
-                            val.pluginName
-                              ?.toLowerCase()
-                              .includes(searchText.toLowerCase())
-                          ) {
-                            return val;
-                          }
-                        }
-                      )
-                      .map(
-                        (
-                          plug: {
-                            _id: string;
-                            pluginName: string | undefined;
-                            pluginDesc: string | undefined;
-                            pluginCreatedBy: string;
-                            uninstalledOrgs: string[];
-                            getInstalledPlugins: () => any;
-                          },
-                          i: React.Key | null | undefined
-                        ): JSX.Element => (
-                          <AddOnEntry
-                            id={plug._id}
-                            key={i}
-                            title={plug.pluginName}
-                            description={plug.pluginDesc}
-                            createdBy={plug.pluginCreatedBy}
-                            component={'Special  Component'}
-                            modified={(): void => {
-                              console.log('Plugin is modified');
-                            }}
-                            getInstalledPlugins={getInstalledPlugins}
-                            uninstalledOrgs={plug.uninstalledOrgs}
-                          />
-                        )
-                      )
-                  )}*/}
                 </Tab>
               </Tabs>
             </div>

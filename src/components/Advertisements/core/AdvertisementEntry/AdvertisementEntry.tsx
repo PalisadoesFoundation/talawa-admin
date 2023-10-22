@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AdvertisementEntry.module.css';
 import { Button, Card, Col, Row, Spinner } from 'react-bootstrap';
-import { UPDATE_INSTALL_STATUS_PLUGIN_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  DELETE_ADVERTISEMENT_BY_ID,
+  UPDATE_INSTALL_STATUS_PLUGIN_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -34,13 +37,13 @@ function advertisementEntry({
   const [addOrgAsUninstalled] = useMutation(
     UPDATE_INSTALL_STATUS_PLUGIN_MUTATION
   );
+  const [deleteAdById] = useMutation(DELETE_ADVERTISEMENT_BY_ID);
 
-  const togglePluginInstall = async (): Promise<void> => {
+  const onDelete = async (): Promise<void> => {
     setButtonLoading(true);
-    await addOrgAsUninstalled({
+    await deleteAdById({
       variables: {
         id: id.toString(),
-        orgId: currentOrg.toString(),
       },
     });
     setButtonLoading(false);
@@ -70,7 +73,7 @@ function advertisementEntry({
                   disabled={buttonLoading}
                   data-testid="AddOnEntry_btn_install"
                   onClick={(): void => {
-                    togglePluginInstall();
+                    onDelete();
                     //   getInstalledPlugins();
                   }}
                 >

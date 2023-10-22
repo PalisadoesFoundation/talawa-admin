@@ -421,7 +421,13 @@ export const ADD_ADVERTISEMENT_MUTATION = gql`
     }
   }
 `;
-
+export const DELETE_ADVERTISEMENT_BY_ID = gql`
+  mutation ($id: ID!) {
+    deleteAdvertisementById(id: $id) {
+      success
+    }
+  }
+`;
 export const UPDATE_POST_MUTATION = gql`
   mutation UpdatePost($id: ID!, $title: String, $text: String) {
     updatePost(id: $id, data: { title: $title, text: $text }) {

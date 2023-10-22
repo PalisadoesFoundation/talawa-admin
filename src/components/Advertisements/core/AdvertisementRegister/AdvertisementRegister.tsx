@@ -6,6 +6,7 @@ import { useMutation } from '@apollo/client';
 import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import dayjs from 'dayjs';
 
 interface InterfaceAddOnRegisterProps {
   id?: string; // OrgId
@@ -15,8 +16,8 @@ interface InterfaceFormStateTypes {
   name: string;
   link: string;
   type: string;
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
   orgId: string;
 }
 
@@ -40,8 +41,8 @@ function advertisementRegister({
     name: '',
     link: '',
     type: 'BANNER',
-    startDate: '',
-    endDate: '',
+    startDate: new Date(),
+    endDate: new Date(),
     orgId: currentOrg,
   });
   const handleRegister = async (): Promise<void> => {
@@ -53,8 +54,8 @@ function advertisementRegister({
           name: formState.name as string,
           link: formState.link as string,
           type: formState.type as string,
-          startDate: formState.startDate,
-          endDate: formState.endDate,
+          startDate: dayjs(formState.startDate).format('YYYY-MM-DD'),
+          endDate: dayjs(formState.endDate).format('YYYY-MM-DD'),
         },
       });
 
@@ -127,6 +128,7 @@ function advertisementRegister({
                     ...formState,
                     type: e.target.value,
                   });
+                  console.log(e.target, e.target.value, typeof e.target.value);
                 }}
               >
                 <option value="POPUP">Popup Ad</option>
@@ -143,7 +145,7 @@ function advertisementRegister({
                 onChange={(e): void => {
                   setFormState({
                     ...formState,
-                    startDate: e.target.value.toString(),
+                    startDate: new Date(e.target.value),
                   });
                 }}
               />
@@ -158,7 +160,7 @@ function advertisementRegister({
                 onChange={(e): void => {
                   setFormState({
                     ...formState,
-                    endDate: e.target.value.toString(),
+                    endDate: new Date(e.target.value),
                   });
                 }}
               />
@@ -190,8 +192,8 @@ advertisementRegister.defaultProps = {
   name: '',
   link: '',
   type: 'BANNER',
-  startDate: new Date().toString(),
-  endDate: new Date().toString(),
+  startDate: new Date(),
+  endDate: new Date(),
   orgId: '',
 };
 
@@ -199,8 +201,8 @@ advertisementRegister.propTypes = {
   name: PropTypes.string,
   link: PropTypes.string,
   type: PropTypes.string,
-  startDate: PropTypes.string,
-  endDate: PropTypes.string,
+  startDate: PropTypes.instanceOf(Date),
+  endDate: PropTypes.instanceOf(Date),
   orgId: PropTypes.string,
 };
 
