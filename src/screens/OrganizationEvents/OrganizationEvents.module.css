@@ -44,7 +44,7 @@
 }
 .sidebar:after {
   content: '';
-  background-color: #f7f7f7;
+
   position: absolute;
   width: 2px;
   height: 600px;
@@ -52,9 +52,7 @@
   left: 94%;
   display: block;
 }
-.sidebarsticky {
-  padding-left: 45px;
-}
+
 .sidebarsticky > p {
   margin-top: -10px;
 }
@@ -114,18 +112,7 @@
   display: flex;
   justify-content: space-between;
 }
-@media screen and (max-width: 575.5px) {
-  .justifysp {
-    padding-left: 55px;
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-  }
 
-  .mainpageright {
-    width: 90%;
-  }
-}
 .addbtn {
   border: 1px solid #e8e5e5;
   box-shadow: 0 2px 2px #e8e5e5;
@@ -135,9 +122,12 @@
   color: white;
   outline: none;
   font-weight: 600;
+  display: auto;
+
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 }
+
 .flexdir {
   display: flex;
   flex-direction: row;
@@ -195,23 +185,7 @@
 .modalbody {
   width: 50px;
 }
-.greenregbtn {
-  margin: 1rem 0 0;
-  margin-top: 15px;
-  border: 1px solid #e8e5e5;
-  box-shadow: 0 2px 2px #e8e5e5;
-  padding: 10px 10px;
-  border-radius: 5px;
-  background-color: #31bb6b;
-  width: 100%;
-  font-size: 16px;
-  color: white;
-  outline: none;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  width: 100%;
-}
+
 .sidebarsticky > input {
   text-decoration: none;
   margin-bottom: 50px;
@@ -308,5 +282,49 @@
   .form_wrapper {
     width: 90%;
     top: 45%;
+  }
+}
+
+@media (max-width: 1400px) {
+  .calendar_container {
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+  }
+  .searchtitle {
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    border-bottom: none;
+  }
+  .underline {
+    border-bottom: 3px solid #31bb6b;
+
+    padding-bottom: 2px;
+    display: inline;
+  }
+  .calendar_container_lg {
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+  }
+  .logintitle {
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+    border-bottom: none;
+  }
+  .mainpageright {
+    width: auto;
+    margin-bottom: 10px;
+    margin-right: 100px;
+    margin-left: 100px;
   }
 }

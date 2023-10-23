@@ -135,18 +135,22 @@ function organizationEvents(): JSX.Element {
     <>
       <OrganizationScreen screenName="Events" title={t('title')}>
         <Row>
-          <Col sm={3}>
+          <Col sm={12} md={3} lg={3} className={styles.calendar_container}>
             <div className={styles.sidebar}>
               <div className={styles.sidebarsticky}>
-                <h6 className={styles.searchtitle}>Search Date</h6>
+                <h6 className={styles.searchtitle}>
+                  <span className={styles.underline}>Search Date</span>
+                </h6>
                 <Calendar />
               </div>
             </div>
           </Col>
-          <Col sm={8}>
+          <Col sm={10} md={8} lg={8} className={styles.calendar_container_lg}>
             <div className={styles.mainpageright}>
               <Row className={styles.justifysp}>
-                <p className={styles.logintitle}>{t('events')}</p>
+                <p className={styles.logintitle}>
+                  <span className={styles.underline}>{t('events')}</span>
+                </p>
                 <Button
                   variant="success"
                   className={styles.addbtn}

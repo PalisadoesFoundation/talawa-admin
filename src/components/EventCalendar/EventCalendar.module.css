@@ -7,6 +7,7 @@
 .calendar__header {
   display: flex;
   margin-bottom: 2rem;
+  margin-top: 20px;
 }
 .calendar__header_month {
   margin: 0.5rem;
@@ -79,4 +80,10 @@
 .btn__today:hover {
   background: #006000;
   text-decoration: none;
+}
+@media (max-width: 1400px) {
+  .calendar__header {
+    justify-content: center;
+    margin-top: 20px;
+  }
 }
