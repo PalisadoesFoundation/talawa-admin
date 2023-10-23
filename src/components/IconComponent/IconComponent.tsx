@@ -8,6 +8,10 @@ import { ReactComponent as PeopleIcon } from 'assets/svgs/people.svg';
 import { ReactComponent as PluginsIcon } from 'assets/svgs/plugins.svg';
 import { ReactComponent as PostsIcon } from 'assets/svgs/posts.svg';
 import { ReactComponent as SettingsIcon } from 'assets/svgs/settings.svg';
+import { ReactComponent as AddEventProjectIcon } from 'assets/svgs/addEventProject.svg';
+import { ReactComponent as ListEventRegistrantsIcon } from 'assets/svgs/listEventRegistrants.svg';
+import { ReactComponent as CheckInRegistrantsIcon } from 'assets/svgs/checkInRegistrants.svg';
+import { ReactComponent as EventStatsIcon } from 'assets/svgs/eventStats.svg';
 
 export interface InterfaceIconComponent {
   name: string;
@@ -54,6 +58,34 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
         <OrganizationsIcon
           stroke={props.fill}
           data-testid="Icon-Component-AllOrganizationsIcon"
+        />
+      );
+    case 'Add Event Project':
+      return (
+        <AddEventProjectIcon
+          data-testid="Icon-Component-Add-Event-Project"
+          stroke={props.fill}
+        />
+      );
+    case 'List Event Registrants':
+      return (
+        <ListEventRegistrantsIcon
+          data-testid="Icon-Component-List-Event-Registrants"
+          stroke={props.fill}
+        />
+      );
+    case 'Check In Registrants':
+      return (
+        <CheckInRegistrantsIcon
+          data-testid="Icon-Component-Check-In-Registrants"
+          stroke={props.fill}
+        />
+      );
+    case 'Event Stats':
+      return (
+        <EventStatsIcon
+          data-testid="Icon-Component-Event-Stats"
+          stroke={props.fill}
         />
       );
     default:

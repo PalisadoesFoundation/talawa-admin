@@ -100,6 +100,12 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     expect(getOrganizationIdSpy).toHaveBeenCalled();
     expect(screen.queryByText('anyOrganization1')).toBeInTheDocument();
+    // Check if navigation links are rendered
+    expect(screen.getByText('Home')).toBeInTheDocument();
+    expect(screen.getByText('People')).toBeInTheDocument();
+    expect(screen.getByText('Events')).toBeInTheDocument();
+    expect(screen.getByText('Donate')).toBeInTheDocument();
+    expect(screen.getByText('Chat')).toBeInTheDocument();
   });
 
   test('The language is switched to English', async () => {
@@ -124,6 +130,12 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     await wait();
 
     expect(cookies.get('i18next')).toBe('en');
+    // Check if navigation links are rendered
+    expect(screen.getByText('Home')).toBeInTheDocument();
+    expect(screen.getByText('People')).toBeInTheDocument();
+    expect(screen.getByText('Events')).toBeInTheDocument();
+    expect(screen.getByText('Donate')).toBeInTheDocument();
+    expect(screen.getByText('Chat')).toBeInTheDocument();
   });
 
   test('The language is switched to fr', async () => {

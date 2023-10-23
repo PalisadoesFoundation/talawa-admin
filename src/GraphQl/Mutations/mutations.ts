@@ -622,3 +622,25 @@ export const UNLIKE_COMMENT = gql`
     }
   }
 `;
+
+export const CREATE_DIRECT_CHAT = gql`
+  mutation createDirectChat($userIds: [ID!]!, $organizationId: ID!) {
+    createDirectChat(
+      data: { userIds: $userIds, organizationId: $organizationId }
+    ) {
+      _id
+    }
+  }
+`;
+
+//Plugin WebSocket listner
+export const PLUGIN_SUBSCRIPTION = gql`
+  subscription onPluginUpdate {
+    onPluginUpdate {
+      pluginName
+      _id
+      pluginDesc
+      uninstalledOrgs
+    }
+  }
+`;

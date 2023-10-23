@@ -95,6 +95,7 @@ export const USER_LIST = gql`
 export const EVENT_DETAILS = gql`
   query Event($id: ID!) {
     event(id: $id) {
+      _id
       title
       description
       startDate
@@ -165,6 +166,20 @@ export const EVENT_CHECKINS = gql`
           allotedSeat
         }
       }
+    }
+  }
+`;
+
+export const EVENT_FEEDBACKS = gql`
+  query eventFeedback($id: ID!) {
+    event(id: $id) {
+      _id
+      feedback {
+        _id
+        rating
+        review
+      }
+      averageFeedbackScore
     }
   }
 `;
@@ -660,6 +675,84 @@ export const ORGANIZATION_EVENTS_CONNECTION = gql`
       }
       attendees {
         _id
+      }
+    }
+  }
+`;
+
+export const USER_TASKS_LIST = gql`
+  query User($id: ID!) {
+    user(id: $id) {
+      _id
+      assignedTasks {
+        _id
+        title
+        description
+        deadline
+        volunteers {
+          _id
+          firstName
+          lastName
+          email
+        }
+        createdAt
+        completed
+        event {
+          _id
+          title
+          organization {
+            _id
+            name
+            image
+          }
+        }
+        creator {
+          _id
+          firstName
+          lastName
+        }
+      }
+    }
+  }
+`;
+
+export const DIRECT_CHATS_LIST = gql`
+  query DirectChatsByUserID($id: ID!) {
+    directChatsByUserID(id: $id) {
+      _id
+      creator {
+        _id
+        firstName
+        lastName
+        email
+      }
+      messages {
+        _id
+        createdAt
+        messageContent
+        receiver {
+          _id
+          firstName
+          lastName
+          email
+        }
+        sender {
+          _id
+          firstName
+          lastName
+          email
+        }
+      }
+      organization {
+        _id
+        name
+      }
+      users {
+        _id
+        firstName
+        lastName
+        email
+        image
       }
     }
   }

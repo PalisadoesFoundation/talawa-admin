@@ -192,7 +192,7 @@ const leftDrawerOrg = ({
                 <img src={userImage} alt={`profile picture`} />
               ) : (
                 <img
-                  src={`https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`}
+                  src={`https://api.dicebear.com/5.x/initials/svg?seed=${firstName}%20${lastName}`}
                   alt={`dummy picture`}
                 />
               )}
