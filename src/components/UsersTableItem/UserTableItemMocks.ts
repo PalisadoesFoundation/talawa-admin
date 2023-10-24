@@ -51,8 +51,8 @@ export const MOCKS = [
     result: {
       data: {
         updateUserRoleInOrganization: {
-          _id: '123'
-        }
+          _id: '123',
+        },
       },
     },
   },

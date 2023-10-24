@@ -166,14 +166,13 @@ const Users = (): JSX.Element => {
     t('email'),
     t('roles_userType'),
     t('joined_organizations'),
-    'Blocked Organizations',
+    t('blocked_organizations'),
   ];
 
   return (
     <>
       <SuperAdminScreen title={t('users')} screenName="Users">
         {/* Buttons Container */}
-        <pre>{JSON.stringify({ error, errorOrgs }, null, 4)}</pre>
         <div className={styles.btnsContainer}>
           <div className={styles.inputContainer}>
             <div

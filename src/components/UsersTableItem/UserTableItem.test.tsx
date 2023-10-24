@@ -5,11 +5,11 @@ import { I18nextProvider } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
-import { InterfaceQueryUserListItem } from 'utils/interfaces';
+import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import { MOCKS } from './UserTableItemMocks';
 import UsersTableItem from './UsersTableItem';
 
-let link = new StaticMockLink(MOCKS, true);
+const link = new StaticMockLink(MOCKS, true);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -54,10 +54,7 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-
-
 describe('Testing User Table Item', () => {
-
   console.error = jest.fn((message) => {
     if (message.includes('validateDOMNesting')) {
       return;

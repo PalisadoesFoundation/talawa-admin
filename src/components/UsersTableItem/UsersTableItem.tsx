@@ -210,7 +210,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
       >
         <Modal.Header className="bg-primary" closeButton>
           <Modal.Title className="text-white">
-            Organizations Joined by {`${user.firstName}`} {`${user.lastName}`} (
+            {t('orgJoinedBy')} {`${user.firstName}`} {`${user.lastName}`} (
             {user.joinedOrganizations.length})
           </Modal.Title>
         </Modal.Header>
@@ -222,7 +222,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                 id="orgname"
                 className="bg-white"
                 defaultValue={searchByNameJoinedOrgs}
-                placeholder={t('searchByNameJoinedOrgs')}
+                placeholder={t('searchByOrgName')}
                 data-testid="searchByNameJoinedOrgs"
                 autoComplete="off"
                 onChange={handleSearchJoinedOrgs}
@@ -239,15 +239,15 @@ const UsersTableItem = (props: Props): JSX.Element => {
             {user.joinedOrganizations.length == 0 ? (
               <div className={styles.notJoined}>
                 <h4>
-                  {user.firstName} {user.lastName} has not joined any
-                  organization yet
+                  {user.firstName} {user.lastName} {t('hasNotJoinedAnyOrg')}
                 </h4>
               </div>
             ) : joinedOrgs.length == 0 ? (
               <>
                 <div className={styles.notJoined}>
                   <h4>
-                    No results found for &quot;{searchByNameJoinedOrgs}&quot;
+                    {t('noResultsFoundFor')} &quot;{searchByNameJoinedOrgs}
+                    &quot;
                   </h4>
                 </div>
               </>
@@ -383,8 +383,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
       >
         <Modal.Header className="bg-danger" closeButton>
           <Modal.Title className="text-white">
-            Organizations that Blocked {`${user.firstName}`}{' '}
-            {`${user.lastName}`} ({user.organizationsBlockedBy.length})
+            {t('orgThatBlocked')} {`${user.firstName}`} {`${user.lastName}`} (
+            {user.organizationsBlockedBy.length})
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -395,7 +395,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                 id="orgname"
                 className="bg-white"
                 defaultValue={searchByNameOrgsBlockedBy}
-                placeholder={t('searchByNameOrgsBlockedBy')}
+                placeholder={t('searchByOrgName')}
                 data-testid="searchByNameOrgsBlockedBy"
                 autoComplete="off"
                 onChange={handleSearcgByOrgsBlockedBy}
@@ -413,15 +413,15 @@ const UsersTableItem = (props: Props): JSX.Element => {
             {user.organizationsBlockedBy.length == 0 ? (
               <div className={styles.notJoined}>
                 <h4>
-                  {user.firstName} {user.lastName} is not blocked by any
-                  organization
+                  {user.firstName} {user.lastName} {t('isNotBlockedByAnyOrg')}
                 </h4>
               </div>
             ) : orgsBlockedBy.length == 0 ? (
               <>
                 <div className={styles.notJoined}>
                   <h4>
-                    No results found for &quot;{searchByNameOrgsBlockedBy}&quot;
+                    {t('noResultsFoundFor')} &quot;{searchByNameOrgsBlockedBy}
+                    &quot;
                   </h4>
                 </div>
               </>
