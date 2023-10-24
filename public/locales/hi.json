@@ -605,5 +605,14 @@
     "taskNotCompleted": "कार्य अभी तक पूरा नहीं हुआ है",
     "event": "आयोजन",
     "organization": "संगठन"
+  },
+  "userChat": {
+    "chat": "बात",
+    "search": "खोज",
+    "contacts": "संपर्क"
+  },
+  "userChatRoom": {
+    "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
+    "sendMessage": "मेसेज भेजें"
   }
 }

@@ -25,15 +25,10 @@ type FeedbackType = {
 export const FeedbackStats = ({ data }: ModalPropType): JSX.Element => {
   const ratingColors = [
     '#57bb8a', // Green
-    '#73b87e',
     '#94bd77',
-    '#b0be6e',
     '#d4c86a',
-    '#f5ce62',
     '#e9b861',
-    '#ecac67',
     '#e79a69',
-    '#e2886c',
     '#dd776e', // Red
   ];
 
@@ -45,13 +40,13 @@ export const FeedbackStats = ({ data }: ModalPropType): JSX.Element => {
   });
 
   const chartData = [];
-  for (let rating = 0; rating <= 10; rating++) {
+  for (let rating = 0; rating <= 5; rating++) {
     if (rating in count)
       chartData.push({
         id: rating,
         value: count[rating],
         label: `${rating} (${count[rating]})`,
-        color: ratingColors[10 - rating],
+        color: ratingColors[5 - rating],
       });
   }
 
