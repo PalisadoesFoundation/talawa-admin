@@ -135,6 +135,7 @@
     "accept": "Accepter",
     "reject": "Rejeter",
     "enterName": "Entrez le nom",
+    "endOfResults": "Fin des résultats",
     "loadingRequests": "Chargement des demandes...",
     "noRequestFound": "Aucune demande trouvée",
     "sort": "Trier",

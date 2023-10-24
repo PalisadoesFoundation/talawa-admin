@@ -140,6 +140,7 @@
     "accept": "Accept",
     "reject": "Reject",
     "enterName": "Enter Name",
+    "endOfResults": "End of results",
     "loadingRequests": "Loading Requests...",
     "noRequestFound": "No Request Found",
     "sort": "Sort",
