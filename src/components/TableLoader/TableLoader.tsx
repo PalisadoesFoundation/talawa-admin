@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styles from './TableLoader.module.css';
 import { Table } from 'react-bootstrap';
 
-interface InterfaceTableLoader {
+export interface InterfaceTableLoader {
   noOfRows: number;
   headerTitles?: string[];
   noOfCols?: number;
