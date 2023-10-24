@@ -540,7 +540,8 @@
     "joinedOrganizations": "Organizaciones unidas",
     "createdOrganizations": "Organizaciones creadas",
     "search": "Buscar",
-    "nothingToShow": "Nada que mostrar aquí."
+    "nothingToShow": "Nada que mostrar aquí.",
+    "selectOrganization": "Seleccionar organización"
   },
   "userSidebar": {
     "yourOrganizations": "Tus Organizaciones",
@@ -606,5 +607,30 @@
     "creator": "Creadora",
     "alreadyRegistered": "Ya registrado",
     "register": "Registro"
+  },
+  "userTasks": {
+    "yourAssignedTasks": "Tus tareas asignadas",
+    "nothingToShow": "No hay nada que mostrar aquí."
+  },
+  "userTaskCard": {
+    "description": "Descripción",
+    "deadline": "Fecha límite",
+    "created": "Creado",
+    "assignees": "Cesionarias",
+    "completed": "Terminada",
+    "incomplete": "Incompleta",
+    "taskCompleted": "La tarea ha sido completada",
+    "taskNotCompleted": "La tarea aún no se ha completado",
+    "event": "Evento",
+    "organization": "Organización"
+  },
+  "userChat": {
+    "chat": "Charlar",
+    "search": "Buscar",
+    "contacts": "Contactos"
+  },
+  "userChatRoom": {
+    "selectContact": "Seleccione un contacto para iniciar una conversación",
+    "sendMessage": "Enviar mensaje"
   }
 }

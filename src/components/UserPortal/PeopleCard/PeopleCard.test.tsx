@@ -27,7 +27,7 @@ let props = {
   email: 'first@last.com',
 };
 
-describe('Testing Organization Card Component [User Portal]', () => {
+describe('Testing PeopleCard Component [User Portal]', () => {
   test('Component should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>

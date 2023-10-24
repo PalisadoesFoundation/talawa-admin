@@ -8,16 +8,24 @@ import cookies from 'js-cookie';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from '@apollo/client';
+import { useQuery, useSubscription } from '@apollo/client';
 import { USER_ORGANIZATION_CONNECTION } from 'GraphQl/Queries/Queries';
 import getOrganizationId from 'utils/getOrganizationId';
 import type { DropDirection } from 'react-bootstrap/esm/DropdownContext';
 import { Link, useHistory } from 'react-router-dom';
-
+import { PLUGIN_SUBSCRIPTION } from 'GraphQl/Mutations/mutations';
 interface InterfaceNavbarProps {
   currentPage: string | null;
 }
 
+type Plugin = {
+  pluginName: string;
+
+  alias: string;
+  link: string;
+  translated: string;
+  view: boolean;
+};
 function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userNavbar',
@@ -54,11 +62,73 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   }, [data]);
 
   const homeLink = `/user/organization/id=${organizationId}`;
-  const peopleLink = `/user/people/id=${organizationId}`;
-  const eventsLink = `/user/events/id=${organizationId}`;
-  const chatLink = `/user/chat/id=${organizationId}`;
-  const donationLink = `/user/donate/id=${organizationId}`;
+  let plugins: Plugin[] = [
+    {
+      pluginName: 'People',
+      alias: 'people',
+      link: `/user/people/id=${organizationId}`,
+      translated: t('people'),
+      view: true,
+    },
+    {
+      pluginName: 'Events',
+      alias: 'events',
+      link: `/user/events/id=${organizationId}`,
+      translated: t('events'),
+      view: true,
+    },
+    {
+      pluginName: 'Donation',
+      alias: 'donate',
+      link: `/user/donate/id=${organizationId}`,
+      translated: t('donate'),
+      view: true,
+    },
+    {
+      pluginName: 'Chats',
+      alias: 'chat',
+      link: `/user/chat/id=${organizationId}`,
+      translated: t('chat'),
+      view: true,
+    },
+  ];
+  if (localStorage.getItem('talawaPlugins')) {
+    const talawaPlugins: string = localStorage.getItem('talawaPlugins') || '{}';
+    plugins = JSON.parse(talawaPlugins);
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { data: updatedPluginData, loading: _loadingSub } = useSubscription(
+    PLUGIN_SUBSCRIPTION
+    // { variables: {  } }
+  );
+  function getPluginIndex(pluginName: string, pluginsArray: Plugin[]): number {
+    for (let i = 0; i < pluginsArray.length; i++) {
+      if (pluginsArray[i].pluginName === pluginName) {
+        return i; // Return the index of the matching object
+      }
+    }
+    return -1; // Return -1 if not found
+  }
 
+  if (updatedPluginData != undefined) {
+    const pluginName = updatedPluginData.onPluginUpdate.pluginName;
+    const uninstalledOrgs = updatedPluginData.onPluginUpdate.uninstalledOrgs;
+    const pluginIndexToRemove = getPluginIndex(pluginName, plugins);
+    if (uninstalledOrgs.includes(organizationId)) {
+      if (pluginIndexToRemove != -1) {
+        plugins[pluginIndexToRemove].view = false;
+        localStorage.setItem('talawaPlugins', JSON.stringify(plugins));
+        console.log(`Plugin ${pluginName} has been removed.`);
+      } else {
+        console.log(`Plugin ${pluginName} is not present.`);
+      }
+    } else {
+      if (pluginIndexToRemove != -1) {
+        plugins[pluginIndexToRemove].view = true;
+        localStorage.setItem('talawaPlugins', JSON.stringify(plugins));
+      }
+    }
+  }
   return (
     <Navbar expand={'md'} variant="dark" className={`${styles.colorPrimary}`}>
       <Container fluid>
@@ -81,37 +151,28 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
             <Offcanvas.Title>Talawa</Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
-            <Nav className="me-auto flex-grow-1 pe-3" variant="dark">
+            <Nav className="me-auto flex-grow-1 pe-3 pt-1" variant="dark">
               <Nav.Link
                 active={props.currentPage === 'home'}
-                onClick={(): void => history.push(homeLink)}
+                onClick={
+                  /* istanbul ignore next */
+                  (): void => history.push(homeLink)
+                }
               >
                 {t('home')}
               </Nav.Link>
-              <Nav.Link
-                active={props.currentPage === 'events'}
-                onClick={(): void => history.push(eventsLink)}
-              >
-                {t('events')}
-              </Nav.Link>
-              <Nav.Link
-                active={props.currentPage === 'people'}
-                onClick={(): void => history.push(peopleLink)}
-              >
-                {t('people')}
-              </Nav.Link>
-              <Nav.Link
-                active={props.currentPage === 'chat'}
-                onClick={(): void => history.push(chatLink)}
-              >
-                {t('chat')}
-              </Nav.Link>
-              <Nav.Link
-                active={props.currentPage === 'donate'}
-                onClick={(): void => history.push(donationLink)}
-              >
-                {t('donate')}
-              </Nav.Link>
+              {plugins.map(
+                (plugin, idx) =>
+                  plugin.view && (
+                    <Nav.Link
+                      active={props.currentPage == plugin.alias}
+                      onClick={(): void => history.push(plugin.link)}
+                      key={idx}
+                    >
+                      {plugin.translated}
+                    </Nav.Link>
+                  )
+              )}
             </Nav>
             <Navbar.Collapse className="justify-content-end">
               <Dropdown data-testid="languageDropdown" drop={dropDirection}>
@@ -167,7 +228,11 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                       {t('settings')}
                     </Link>
                   </Dropdown.Item>
-                  <Dropdown.Item>{t('myTasks')}</Dropdown.Item>
+                  <Dropdown.Item>
+                    <Link to="/user/tasks" className={styles.link}>
+                      {t('myTasks')}
+                    </Link>
+                  </Dropdown.Item>
                   <Dropdown.Item
                     onClick={handleLogout}
                     data-testid={`logoutBtn`}
