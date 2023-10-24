@@ -1,7 +1,7 @@
-import { useMutation, useQuery } from '@apollo/client';
 import type { ApolloError } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
-import { Dropdown, Form, Modal, Table } from 'react-bootstrap';
+import { Dropdown, Form, Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -15,12 +15,11 @@ import {
 } from 'GraphQl/Queries/Queries';
 import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 import TableLoader from 'components/TableLoader/TableLoader';
+import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import debounce from 'utils/debounce';
-import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import styles from './Users.module.css';
-import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
 
 const Users = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
@@ -41,7 +40,6 @@ const Users = (): JSX.Element => {
     loading: loading,
     fetchMore,
     refetch: refetchUsers,
-    error,
   }: {
     data?: { users: InterfaceQueryUserListItem[] };
     loading: boolean;
@@ -58,9 +56,7 @@ const Users = (): JSX.Element => {
     notifyOnNetworkStatusChange: true,
   });
 
-  const { data: dataOrgs, error: errorOrgs } = useQuery(
-    ORGANIZATION_CONNECTION_LIST
-  );
+  const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
 
   // Manage loading more state
   useEffect(() => {

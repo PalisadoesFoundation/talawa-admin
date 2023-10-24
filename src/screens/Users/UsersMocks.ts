@@ -1,4 +1,3 @@
-import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_LIST,

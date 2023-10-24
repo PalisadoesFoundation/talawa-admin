@@ -46,7 +46,6 @@ const Requests = (): JSX.Element => {
   const [rejectAdminFunc] = useMutation(REJECT_ADMIN_MUTATION);
   const {
     data: currentUserData,
-    error: errorCurrentUser,
   }: {
     data?: InterfaceUserType;
     error?: ApolloError;
@@ -59,7 +58,6 @@ const Requests = (): JSX.Element => {
     loading: loading,
     fetchMore,
     refetch: refetchUsers,
-    error,
   }: {
     data?: { users: InterfaceQueryRequestListItem[] };
     loading: boolean;
@@ -80,7 +78,6 @@ const Requests = (): JSX.Element => {
 
   const {
     data: dataOrgs,
-    error: errorOrgList,
   }: {
     data?: InterfaceOrgConnectionType;
     error?: ApolloError;
