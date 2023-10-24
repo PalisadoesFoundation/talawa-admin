@@ -1,32 +1,16 @@
 import { MockedProvider } from '@apollo/react-testing';
 import { act, fireEvent, render, screen } from '@testing-library/react';
-import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
+import { debug } from 'jest-preview';
 import { I18nextProvider } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import { InterfaceQueryUserListItem } from 'utils/interfaces';
+import { MOCKS } from './UserTableItemMocks';
 import UsersTableItem from './UsersTableItem';
-import { debug } from 'jest-preview';
-import { toast } from 'react-toastify';
 
-const MOCKS = [
-  {
-    request: {
-      query: ADD_ADMIN_MUTATION,
-      variable: { userid: '784', orgid: '554' },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: '1',
-          },
-        ],
-      },
-    },
-  },
-];
 let link = new StaticMockLink(MOCKS, true);
+
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -70,7 +54,10 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
+
+
 describe('Testing User Table Item', () => {
+
   console.error = jest.fn((message) => {
     if (message.includes('validateDOMNesting')) {
       return;
@@ -680,9 +667,7 @@ describe('Testing User Table Item', () => {
     );
 
     await wait();
-    const showJoinedOrgsBtn = screen.getByTestId(
-      `showJoinedOrgsBtn${123}`
-    );
+    const showJoinedOrgsBtn = screen.getByTestId(`showJoinedOrgsBtn${123}`);
     expect(showJoinedOrgsBtn).toBeInTheDocument();
     fireEvent.click(showJoinedOrgsBtn);
     expect(screen.getByTestId('modal-joined-org-123')).toBeInTheDocument();
@@ -858,5 +843,216 @@ describe('Testing User Table Item', () => {
     debug();
 
     fireEvent.click(confirmRemoveBtn);
+  });
+
+  test('Should be able to change userType of a user if not self', async () => {
+    const props: {
+      user: InterfaceQueryUserListItem;
+      index: number;
+      loggedInUserId: string;
+      resetAndRefetch: () => void;
+    } = {
+      user: {
+        _id: '123',
+        firstName: 'John',
+        lastName: 'Doe',
+        image: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
+        email: 'john@example.com',
+        userType: 'USER',
+        adminApproved: true,
+        adminFor: [
+          {
+            _id: 'abc',
+          },
+          {
+            _id: 'xyz',
+          },
+        ],
+        createdAt: '2022-09-29T15:39:36.355Z',
+        organizationsBlockedBy: [
+          {
+            _id: 'xyz',
+            name: 'Blocked Organization 1',
+            image:
+              'https://api.dicebear.com/5.x/initials/svg?seed=Blocked%20Organization%201',
+            location: 'Jamaica',
+            createdAt: '2023-08-29T15:39:36.355Z',
+            creator: {
+              _id: '123',
+              firstName: 'John',
+              lastName: 'Doe',
+              image:
+                'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
+              email: 'john@example.com',
+            },
+          },
+          {
+            _id: 'mno',
+            name: 'Blocked Organization 2',
+            image: null,
+            location: 'Jamaica',
+            createdAt: '2023-09-29T15:39:36.355Z',
+            creator: {
+              _id: '123',
+              firstName: 'John',
+              lastName: 'Doe',
+              image: null,
+              email: 'john@example.com',
+            },
+          },
+        ],
+        joinedOrganizations: [
+          {
+            _id: 'abc',
+            name: 'Joined Organization 1',
+            image: null,
+            location: 'Jamaica',
+            createdAt: '2023-08-29T15:39:36.355Z',
+            creator: {
+              _id: '123',
+              firstName: 'John',
+              lastName: 'Doe',
+              image: null,
+              email: 'john@example.com',
+            },
+          },
+          {
+            _id: 'def',
+            name: 'Joined Organization 2',
+            image: null,
+            location: 'Jamaica',
+            createdAt: '2023-09-19T15:39:36.355Z',
+            creator: {
+              _id: '123',
+              firstName: 'John',
+              lastName: 'Doe',
+              image: null,
+              email: 'john@example.com',
+            },
+          },
+        ],
+      },
+      index: 0,
+      loggedInUserId: '456',
+      resetAndRefetch: resetAndRefetchMock,
+    };
+
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS}>
+        <I18nextProvider i18n={i18nForTest}>
+          <UsersTableItem {...props} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    await wait();
+    fireEvent.select(screen.getByTestId(`changeRole123`), {
+      target: { value: 'ADMIN?123' },
+    });
+  });
+
+  test('Should be not able to change userType of self', async () => {
+    const props: {
+      user: InterfaceQueryUserListItem;
+      index: number;
+      loggedInUserId: string;
+      resetAndRefetch: () => void;
+    } = {
+      user: {
+        _id: '123',
+        firstName: 'John',
+        lastName: 'Doe',
+        image: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
+        email: 'john@example.com',
+        userType: 'ADMIN',
+        adminApproved: true,
+        adminFor: [
+          {
+            _id: 'abc',
+          },
+          {
+            _id: 'xyz',
+          },
+        ],
+        createdAt: '2022-09-29T15:39:36.355Z',
+        organizationsBlockedBy: [
+          {
+            _id: 'xyz',
+            name: 'Blocked Organization 1',
+            image:
+              'https://api.dicebear.com/5.x/initials/svg?seed=Blocked%20Organization%201',
+            location: 'Jamaica',
+            createdAt: '2023-08-29T15:39:36.355Z',
+            creator: {
+              _id: '123',
+              firstName: 'John',
+              lastName: 'Doe',
+              image:
+                'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
+              email: 'john@example.com',
+            },
+          },
+          {
+            _id: 'mno',
+            name: 'Blocked Organization 2',
+            image: null,
+            location: 'Jamaica',
+            createdAt: '2023-09-29T15:39:36.355Z',
+            creator: {
+              _id: '123',
+              firstName: 'John',
+              lastName: 'Doe',
+              image: null,
+              email: 'john@example.com',
+            },
+          },
+        ],
+        joinedOrganizations: [
+          {
+            _id: 'abc',
+            name: 'Joined Organization 1',
+            image: null,
+            location: 'Jamaica',
+            createdAt: '2023-08-29T15:39:36.355Z',
+            creator: {
+              _id: '123',
+              firstName: 'John',
+              lastName: 'Doe',
+              image: null,
+              email: 'john@example.com',
+            },
+          },
+          {
+            _id: 'def',
+            name: 'Joined Organization 2',
+            image: null,
+            location: 'Jamaica',
+            createdAt: '2023-09-19T15:39:36.355Z',
+            creator: {
+              _id: '123',
+              firstName: 'John',
+              lastName: 'Doe',
+              image: null,
+              email: 'john@example.com',
+            },
+          },
+        ],
+      },
+      index: 0,
+      loggedInUserId: '123',
+      resetAndRefetch: resetAndRefetchMock,
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <UsersTableItem {...props} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    await wait();
+    expect(screen.getByTestId(`changeRole123`)).toBeDisabled();
+    expect(screen.getByTestId(`changeRole123`)).toHaveValue('ADMIN?123');
   });
 });

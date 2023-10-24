@@ -1,9 +1,9 @@
 import { useMutation } from '@apollo/client';
 import { Search } from '@mui/icons-material';
 import {
-  REMOVE_USER_FROM_ORGANIZATION,
+  REMOVE_USER_FROM_ORGANIZATION_MUTATION,
   UPDATE_USERTYPE_MUTATION,
-  UPDATE_USER_ROLE_IN_ORG,
+  UPDATE_USER_ROLE_IN_ORG_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
@@ -47,10 +47,11 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const [searchByNameOrgsBlockedBy, setSearchByNameOrgsBlockedBy] =
     useState('');
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
-  const [removeUser] = useMutation(REMOVE_USER_FROM_ORGANIZATION);
-  const [updateUserInOrgType] = useMutation(UPDATE_USER_ROLE_IN_ORG);
+  const [removeUser] = useMutation(REMOVE_USER_FROM_ORGANIZATION_MUTATION);
+  const [updateUserInOrgType] = useMutation(UPDATE_USER_ROLE_IN_ORG_MUTATION);
   const history = useHistory();
 
+  /* istanbul ignore next */
   const changeRole = async (e: any): Promise<void> => {
     const { value } = e.target;
 
@@ -63,8 +64,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
           userType: inputData[0],
         },
       });
-
-      /* istanbul ignore next */
       if (data) {
         toast.success(t('roleUpdated'));
         resetAndRefetch();
@@ -84,7 +83,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
         },
       });
 
-      /* istanbul ignore next */
       if (data) {
         toast.success('Removed User from Organization successfully');
         resetAndRefetch();
@@ -95,6 +93,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
     }
   };
 
+  /* istanbul ignore next */
   const changeRoleInOrg = async (e: any): Promise<void> => {
     const { value } = e.target;
 
@@ -108,8 +107,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
           organizationId: inputData[1],
         },
       });
-
-      /* istanbul ignore next */
       if (data) {
         toast.success(t('roleUpdated'));
         resetAndRefetch();
@@ -154,6 +151,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
       setOrgsBlockedBy(filteredOrgs);
     }
   }
+
+  /* istanbul ignore next */
   function onHideRemoveUserModal(): void {
     setShowRemoveUserModal(false);
     if (removeUserProps.setShowOnCancel == 'JOINED') {

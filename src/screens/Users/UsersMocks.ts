@@ -148,20 +148,6 @@ export const MOCKS = [
   },
   {
     request: {
-      query: UPDATE_USERTYPE_MUTATION,
-      variables: {
-        id: '123',
-        userType: 'ADMIN',
-      },
-    },
-    result: {
-      data: {
-        updateUserType: true,
-      },
-    },
-  },
-  {
-    request: {
       query: ORGANIZATION_CONNECTION_LIST,
     },
     result: {
@@ -215,20 +201,6 @@ export const EMPTY_MOCKS = [
     result: {
       data: {
         users: [],
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_USERTYPE_MUTATION,
-      variables: {
-        id: '123',
-        userType: 'ADMIN',
-      },
-    },
-    result: {
-      data: {
-        updateUserType: false,
       },
     },
   },
