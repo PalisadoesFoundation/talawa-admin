@@ -64,6 +64,7 @@ describe('Testing Organization Post Card', () => {
     postAuthor: 'John Doe',
     postPhoto: 'photoLink',
     postVideo: 'videoLink',
+    refetch: jest.fn(),
   };
 
   global.alert = jest.fn();
@@ -176,6 +177,7 @@ describe('Testing Organization Post Card', () => {
       postAuthor: 'John Doe',
       postPhoto: 'photoLink',
       postVideo: 'videoLink',
+      refetch: jest.fn(),
     };
 
     render(
@@ -212,6 +214,7 @@ describe('Testing Organization Post Card', () => {
       postAuthor: 'John Doe',
       postPhoto: 'photoLink',
       postVideo: 'videoLink',
+      refetch: jest.fn(),
     };
     render(
       <MockedProvider addTypename={false} link={link}>

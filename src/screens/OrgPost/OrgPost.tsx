@@ -231,6 +231,7 @@ function orgPost(): JSX.Element {
                           postAuthor={`${datas.creator.firstName} ${datas.creator.lastName}`}
                           postPhoto={datas.imageUrl}
                           postVideo={datas.videoUrl}
+                          refetch={refetch}
                         />
                       );
                     }

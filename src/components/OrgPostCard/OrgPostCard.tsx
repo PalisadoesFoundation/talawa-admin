@@ -23,6 +23,7 @@ interface InterfaceOrgPostCardProps {
   postAuthor: string;
   postPhoto: string;
   postVideo: string;
+  refetch: () => void;
 }
 
 function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
@@ -72,9 +73,8 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
       /* istanbul ignore next */
       if (data) {
         toast.success(t('postDeleted'));
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        setShowDeleteModal(false);
+        props.refetch();
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -107,9 +107,8 @@ function orgPostCard(props: InterfaceOrgPostCardProps): JSX.Element {
       /* istanbul ignore next */
       if (data) {
         toast.success(t('postUpdated'));
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        setShowEditModal(false);
+        props.refetch();
       }
     } catch (error: any) {
       /* istanbul ignore next */
