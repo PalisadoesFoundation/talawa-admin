@@ -163,6 +163,13 @@
     "events": "Events",
     "blockedUsers": "Blocked Users",
     "requests": "Requests",
+    "viewAll": "View All",
+    "upcomingEvents": "Upcoming Events",
+    "noUpcomingEvents": "No Upcoming Events",
+    "upcomingPosts": "Upcoming Posts",
+    "noPostsPresent": "No Posts Present",
+    "membershipRequests": "Membership requests",
+    "noMembershipRequests": "No Membership requests present",
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "organizationPeople": {

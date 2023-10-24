@@ -157,6 +157,13 @@
     "events": "事件",
     "blockedUsers": "被阻止的用戶",
     "requests": "请求",
+    "viewAll": "查看全部",
+    "upcomingEvents": "即将举办的活动",
+    "noUpcomingEvents": "没有即将举办的活动",
+    "upcomingPosts": "即将发布的帖子",
+    "noPostsPresent": "没有帖子",
+    "membershipRequests": "会员申请",
+    "noMembershipRequests": "没有会员申请",
     "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "organizationPeople": {

@@ -157,6 +157,13 @@
     "events": "Eventos",
     "blockedUsers": "Usuarios bloqueados",
     "requests": "Solicitudes",
+    "viewAll": "Ver Todo",
+    "upcomingEvents": "Próximos Eventos",
+    "noUpcomingEvents": "No Hay Próximos Eventos",
+    "upcomingPosts": "Próximas Publicaciones",
+    "noPostsPresent": "No Hay Publicaciones Presentes",
+    "membershipRequests": "Solicitudes de Membresía",
+    "noMembershipRequests": "No Hay Solicitudes de Membresía",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
   "organizationPeople": {

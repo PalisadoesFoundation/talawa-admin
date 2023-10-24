@@ -157,6 +157,13 @@
     "events": "आयोजन",
     "blockedUsers": "रोके गए उपयोगकर्ता",
     "requests": "अनुरोध",
+    "viewAll": "सभी देखें",
+    "upcomingEvents": "आगामी घटनाएँ",
+    "noUpcomingEvents": "कोई आगामी घटनाएँ नहीं",
+    "upcomingPosts": "आगामी पोस्ट",
+    "noPostsPresent": "कोई पोस्ट नहीं है",
+    "membershipRequests": "सदस्यता अनुरोध",
+    "noMembershipRequests": "कोई सदस्यता अनुरोध नहीं",
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।"
   },
   "organizationPeople": {
