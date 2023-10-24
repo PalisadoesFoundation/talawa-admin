@@ -120,7 +120,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
     }
   };
 
-  function handleClick(_id: string): void {
+  function goToOrg(_id: string): void {
     const url = '/orgdash/id=' + _id;
 
     // Dont change the below two lines
@@ -183,7 +183,10 @@ const UsersTableItem = (props: Props): JSX.Element => {
           </Form.Select>
         </td>
         <td>
-          <Button onClick={() => setShowJoinedOrganizations(true)}>
+          <Button
+            onClick={() => setShowJoinedOrganizations(true)}
+            data-testid={`showJoinedOrgsBtn${user._id}`}
+          >
             {t('view')} ({user.joinedOrganizations.length})
           </Button>
         </td>
@@ -191,6 +194,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         <td>
           <Button
             variant="danger"
+            data-testid={`showBlockedByOrgsBtn${user._id}`}
             onClick={() => setShowBlockedOrganizations(true)}
           >
             {t('view')} ({user.organizationsBlockedBy.length})
@@ -202,6 +206,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         show={showJoinedOrganizations}
         key={`modal-joined-org-${index}`}
         size="xl"
+        data-testid={`modal-joined-org-${user._id}`}
         onHide={() => setShowJoinedOrganizations(false)}
       >
         <Modal.Header className="bg-primary" closeButton>
@@ -258,7 +263,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
                     <th>Users Role</th>
                     <th>Change Role</th>
                     <th>Action</th>
-                    <th>Manage</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -273,15 +277,21 @@ const UsersTableItem = (props: Props): JSX.Element => {
                     return (
                       <tr key={`org-joined-${org._id}`}>
                         <td>
-                          <img
-                            src={
-                              org.image
-                                ? org.image
-                                : `https://api.dicebear.com/5.x/initials/svg?seed=${org.name}`
-                            }
-                            alt="orgImage"
-                          />
-                          {org.name}
+                          <Button
+                            variant="link"
+                            className="p-0"
+                            onClick={() => goToOrg(org._id)}
+                          >
+                            <img
+                              src={
+                                org.image
+                                  ? org.image
+                                  : `https://api.dicebear.com/5.x/initials/svg?seed=${org.name}`
+                              }
+                              alt="orgImage"
+                            />
+                            {org.name}
+                          </Button>
                         </td>
                         <td>{org.location}</td>
                         <td>{dayjs(org.createdAt).format('DD-MM-YYYY')}</td>
@@ -290,6 +300,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             variant="link"
                             className="p-0"
                             onClick={() => handleCreator()}
+                            data-testid={`creator${org._id}`}
                           >
                             <img
                               src={
@@ -304,7 +315,11 @@ const UsersTableItem = (props: Props): JSX.Element => {
                         </td>
                         <td>{isAdmin ? 'ADMIN' : 'USER'}</td>
                         <td>
-                          <Form.Select size="sm" onChange={changeRoleInOrg}>
+                          <Form.Select
+                            size="sm"
+                            onChange={changeRoleInOrg}
+                            data-testid={`changeRoleInOrg${org._id}`}
+                          >
                             {isAdmin ? (
                               <>
                                 <option value={`ADMIN?${org._id}`}>
@@ -327,6 +342,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             className={styles.button}
                             variant="danger"
                             size="sm"
+                            data-testid={`removeUserFromOrgBtn${org._id}`}
                             onClick={() => {
                               setremoveUserProps({
                                 orgId: org._id,
@@ -338,15 +354,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             }}
                           >
                             Remove User
-                          </Button>
-                        </td>
-                        <td>
-                          <Button
-                            className={styles.button}
-                            size="sm"
-                            onClick={() => handleClick(org._id)}
-                          >
-                            Manage
                           </Button>
                         </td>
                       </tr>
@@ -361,6 +368,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
           <Button
             variant="secondary"
             onClick={() => setShowJoinedOrganizations(false)}
+            data-testid={`closeJoinedOrgsBtn${user._id}`}
           >
             Close
           </Button>
@@ -372,6 +380,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         key={`modal-blocked-org-${index}`}
         size="xl"
         onHide={() => setShowBlockedOrganizations(false)}
+        data-testid={`modal-blocked-org-${user._id}`}
       >
         <Modal.Header className="bg-danger" closeButton>
           <Modal.Title className="text-white">
@@ -428,12 +437,11 @@ const UsersTableItem = (props: Props): JSX.Element => {
                     <th>Users Role</th>
                     <th>Change Role</th>
                     <th>Action</th>
-                    <th>Manage</th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  {joinedOrgs.map((org) => {
+                  {orgsBlockedBy.map((org) => {
                     // Check user is admin for this organization or not
                     let isAdmin = false;
                     user.adminFor.map((item) => {
@@ -442,17 +450,23 @@ const UsersTableItem = (props: Props): JSX.Element => {
                       }
                     });
                     return (
-                      <tr key={`org-joined-${org._id}`}>
+                      <tr key={`org-blocked-${org._id}`}>
                         <td>
-                          <img
-                            src={
-                              org.image
-                                ? org.image
-                                : `https://api.dicebear.com/5.x/initials/svg?seed=${org.name}`
-                            }
-                            alt="orgImage"
-                          />
-                          {org.name}
+                          <Button
+                            variant="link"
+                            className="p-0"
+                            onClick={() => goToOrg(org._id)}
+                          >
+                            <img
+                              src={
+                                org.image
+                                  ? org.image
+                                  : `https://api.dicebear.com/5.x/initials/svg?seed=${org.name}`
+                              }
+                              alt="orgImage"
+                            />
+                            {org.name}
+                          </Button>
                         </td>
                         <td>{org.location}</td>
                         <td>{dayjs(org.createdAt).format('DD-MM-YYYY')}</td>
@@ -461,6 +475,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             variant="link"
                             className="p-0"
                             onClick={() => handleCreator()}
+                            data-testid={`creator${org._id}`}
                           >
                             <img
                               src={
@@ -475,7 +490,11 @@ const UsersTableItem = (props: Props): JSX.Element => {
                         </td>
                         <td>{isAdmin ? 'ADMIN' : 'USER'}</td>
                         <td>
-                          <Form.Select size="sm" onChange={changeRoleInOrg}>
+                          <Form.Select
+                            size="sm"
+                            onChange={changeRoleInOrg}
+                            data-testid={`changeRoleInOrg${org._id}`}
+                          >
                             {isAdmin ? (
                               <>
                                 <option value={`ADMIN?${org._id}`}>
@@ -498,6 +517,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             className={styles.button}
                             variant="danger"
                             size="sm"
+                            data-testid={`removeUserFromOrgBtn${org._id}`}
                             onClick={() => {
                               setremoveUserProps({
                                 orgId: org._id,
@@ -509,15 +529,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             }}
                           >
                             Remove User
-                          </Button>
-                        </td>
-                        <td>
-                          <Button
-                            className={styles.button}
-                            size="sm"
-                            onClick={() => handleClick(org._id)}
-                          >
-                            Manage
                           </Button>
                         </td>
                       </tr>
@@ -532,6 +543,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
           <Button
             variant="secondary"
             onClick={() => setShowBlockedOrganizations(false)}
+            data-testid={`closeBlockedByOrgsBtn${user._id}`}
           >
             Close
           </Button>
@@ -541,6 +553,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
       <Modal
         show={showRemoveUserModal}
         key={`modal-remove-org-${index}`}
+        data-testid={`modal-remove-user-${user._id}`}
         onHide={() => onHideRemoveUserModal()}
       >
         <Modal.Header className="bg-danger" closeButton>
@@ -563,10 +576,18 @@ const UsersTableItem = (props: Props): JSX.Element => {
           </p>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => onHideRemoveUserModal()}>
+          <Button
+            variant="secondary"
+            onClick={() => onHideRemoveUserModal()}
+            data-testid={`closeRemoveUserModal${user._id}`}
+          >
             Close
           </Button>
-          <Button variant="danger" onClick={() => confirmRemoveUser()}>
+          <Button
+            variant="danger"
+            onClick={() => confirmRemoveUser()}
+            data-testid={`confirmRemoveUser${user._id}`}
+          >
             Remove
           </Button>
         </Modal.Footer>

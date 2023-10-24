@@ -118,7 +118,7 @@ export interface InterfaceQueryUserListItem {
   _id: string;
   firstName: string;
   lastName: string;
-  image: string;
+  image: string | null;
   email: string;
   userType: string;
   adminFor: { _id: string }[];
