@@ -29,11 +29,13 @@ import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 import CardItemLoading from 'components/OrganizationDashCards/CardItemLoading';
 import DashboardCardLoading from 'components/OrganizationDashCards/DashboardCardLoading';
+import getOrganizationId from 'utils/getOrganizationId';
 
 function organizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
   document.title = t('title');
   const currentUrl = window.location.href.split('=')[1];
+  const organizationId = getOrganizationId(window.location.href);
   const history = useHistory();
   const [upcomingEvents, setUpcomingEvents] = useState<
     InterfaceQueryOrganizationEventListItem[]
@@ -120,42 +122,90 @@ function organizationDashboard(): JSX.Element {
               </Row>
             ) : (
               <Row style={{ display: 'flex' }}>
-                <Col xs={6} sm={4} className="mb-4">
+                <Col
+                  xs={6}
+                  sm={4}
+                  role="button"
+                  className="mb-4"
+                  onClick={(): void => {
+                    history.push(`/orgpeople/id=${organizationId}`);
+                  }}
+                >
                   <DashBoardCard
                     count={data?.organizations[0].members?.length}
                     title={t('members')}
                     icon={<UsersIcon fill="var(--bs-primary)" />}
                   />
                 </Col>
-                <Col xs={6} sm={4} className="mb-4">
+                <Col
+                  xs={6}
+                  sm={4}
+                  role="button"
+                  className="mb-4"
+                  onClick={(): void => {
+                    history.push(`/orgpeople/id=${organizationId}`);
+                  }}
+                >
                   <DashBoardCard
                     count={data?.organizations[0].admins?.length}
                     title={t('admins')}
                     icon={<AdminsIcon fill="var(--bs-primary)" />}
                   />
                 </Col>
-                <Col xs={6} sm={4} className="mb-4">
+                <Col
+                  xs={6}
+                  sm={4}
+                  role="button"
+                  className="mb-4"
+                  onClick={(): void => {
+                    history.push(`/orgpost/id=${organizationId}`);
+                  }}
+                >
                   <DashBoardCard
                     count={postData?.postsByOrganization?.length}
                     title={t('posts')}
                     icon={<PostsIcon fill="var(--bs-primary)" />}
                   />
                 </Col>
-                <Col xs={6} sm={4} className="mb-4">
+                <Col
+                  xs={6}
+                  sm={4}
+                  role="button"
+                  className="mb-4"
+                  onClick={(): void => {
+                    history.push(`/orgevents/id=${organizationId}`);
+                  }}
+                >
                   <DashBoardCard
                     count={eventData?.eventsByOrganization?.length}
                     title={t('events')}
                     icon={<EventsIcon fill="var(--bs-primary)" />}
                   />
                 </Col>
-                <Col xs={6} sm={4} className="mb-4">
+                <Col
+                  xs={6}
+                  sm={4}
+                  role="button"
+                  className="mb-4"
+                  onClick={(): void => {
+                    history.push(`/blockuser/id=${organizationId}`);
+                  }}
+                >
                   <DashBoardCard
                     count={data?.organizations[0].blockedUsers?.length}
                     title={t('blockedUsers')}
                     icon={<BlockedUsersIcon fill="var(--bs-primary)" />}
                   />
                 </Col>
-                <Col xs={6} sm={4} className="mb-4">
+                <Col
+                  xs={6}
+                  sm={4}
+                  role="button"
+                  className="mb-4"
+                  onClick={(): void => {
+                    history.push('/requests');
+                  }}
+                >
                   <DashBoardCard
                     count={data?.organizations[0].membershipRequests?.length}
                     title={t('requests')}
