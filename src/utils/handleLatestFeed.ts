@@ -20,10 +20,10 @@ function sortAndSliceEventsByStartDate(
 }
 
 function sortAndSlicePostsByCreatedAt(
-  posts: InterfaceQueryOrganizationPostListItem[]
-): InterfaceQueryOrganizationPostListItem[] {
+  posts: InterfaceQueryOrganizationPostListItem[] | undefined
+): InterfaceQueryOrganizationPostListItem[] | undefined {
   return posts
-    .sort(
+    ?.sort(
       (
         postA: InterfaceQueryOrganizationPostListItem,
         postB: InterfaceQueryOrganizationPostListItem

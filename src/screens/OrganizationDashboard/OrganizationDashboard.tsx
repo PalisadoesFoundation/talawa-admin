@@ -239,8 +239,8 @@ function organizationDashboard(): JSX.Element {
                     ) : (
                       sortAndSlicePostsByCreatedAt(
                         // eslint-disable-next-line
-                        Array.from(postData!.postsByOrganization)
-                      ).map((post) => {
+                        postData?.postsByOrganization
+                      )?.map((post) => {
                         return (
                           <CardItem
                             type="Post"

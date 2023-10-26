@@ -26,7 +26,6 @@ export const MOCKS = [
               lastName: '',
               email: '',
             },
-
             members: [
               {
                 _id: '123',
@@ -85,6 +84,7 @@ export const MOCKS = [
               lastName: 'Doe',
               email: 'johndoe@gmail.com',
             },
+            createdAt: '01-31-2023',
           },
         ],
       },
@@ -101,7 +101,7 @@ export const MOCKS = [
             _id: 1,
             title: 'Event 1',
             description: 'Event Test',
-            startDate: dayjs(new Date()).add(1, 'day'),
+            startDate: dayjs(new Date()).add(1, 'day').toString(),
             endDate: dayjs(new Date()).add(3, 'day'),
             location: 'New Delhi',
             startTime: '',
