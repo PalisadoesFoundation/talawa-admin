@@ -80,7 +80,9 @@ describe('Organisation Dashboard Page', () => {
     // Checking if events are rendered
     expect(screen.getByText('Event 1')).toBeInTheDocument();
     expect(
-      screen.getByText(`${dayjs(new Date()).add(1, 'day').toString()}`)
+      screen.getByText(
+        `${dayjs(dayjs(new Date()).add(1, 'day')).format('MMM D, YYYY')}`
+      )
     ).toBeInTheDocument();
 
     // Checking if posts are rendered

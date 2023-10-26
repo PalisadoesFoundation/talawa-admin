@@ -101,7 +101,7 @@ export const MOCKS = [
             _id: 1,
             title: 'Event 1',
             description: 'Event Test',
-            startDate: dayjs(new Date()).add(1, 'day').toString(),
+            startDate: dayjs(new Date()).add(1, 'day'),
             endDate: dayjs(new Date()).add(3, 'day'),
             location: 'New Delhi',
             startTime: '',
