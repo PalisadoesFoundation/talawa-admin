@@ -52,7 +52,7 @@ describe('Testing Average Rating Card', () => {
     );
 
     await waitFor(() =>
-      expect(queryByText('Rated 5.00 / 10')).toBeInTheDocument()
+      expect(queryByText('Rated 5.00 / 5')).toBeInTheDocument()
     );
   });
 });

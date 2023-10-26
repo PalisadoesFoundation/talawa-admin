@@ -613,5 +613,14 @@
     "archievedAds": "संपन्न अभियान",
     "pMessage": "इस अभियान के लिए कोई विज्ञापन नहीं हैं।",
     "delete": "हटाएँ"
+},
+  "userChat": {
+    "chat": "बात",
+    "search": "खोज",
+    "contacts": "संपर्क"
+  },
+  "userChatRoom": {
+    "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
+    "sendMessage": "मेसेज भेजें"
   }
 }

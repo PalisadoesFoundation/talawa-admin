@@ -631,5 +631,14 @@
     "EXlink": "Ex. http://yourwebsite.com/photo",
     "register": "Create Advertisement",
     "close": "Close "
+},
+  "userChat": {
+    "chat": "Chat",
+    "search": "Search",
+    "contacts": "Contacts"
+  },
+  "userChatRoom": {
+    "selectContact": "Select a contact to start conversation",
+    "sendMessage": "Send Message"
   }
 }
