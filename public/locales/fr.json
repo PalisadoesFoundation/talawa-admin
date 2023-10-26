@@ -612,7 +612,7 @@
     "archievedAds": "Campagnes terminées",
     "pMessage": "Aucune publicité n'est présente pour cette campagne.",
     "delete": "Supprimer"
-},
+  },
   "userChat": {
     "chat": "Chat",
     "search": "Recherche",
