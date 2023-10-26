@@ -72,17 +72,11 @@ export default function home(): JSX.Element {
   };
   const {
     data: promotedPostsData,
-    refetch: promotedPostsRefetch,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    refetch: _promotedPostsRefetch,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     loading: promotedPostsLoading,
   } = useQuery(ADVERTISEMENTS_GET);
-  console.log(
-    currentOrgId,
-    promotedPostsData,
-    adContent.filter((ad: any) => ad.orgId == currentOrgId),
-    adContent
-      .filter((ad: any) => ad.orgId == currentOrgId)
-      .filter((ad: any) => new Date(ad.endDate) > new Date())
-  );
   const {
     data,
     refetch,

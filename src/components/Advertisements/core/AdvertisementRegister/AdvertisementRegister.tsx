@@ -20,11 +20,9 @@ interface InterfaceFormStateTypes {
   endDate: Date;
   orgId: string;
 }
-
-const currentUrl = window.location.href.split('=')[1];
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function advertisementRegister({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   createdBy,
 }: InterfaceAddOnRegisterProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });

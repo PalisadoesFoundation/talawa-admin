@@ -2,14 +2,9 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AdvertisementEntry.module.css';
 import { Button, Card, Col, Row, Spinner } from 'react-bootstrap';
-import {
-  DELETE_ADVERTISEMENT_BY_ID,
-  UPDATE_INSTALL_STATUS_PLUGIN_MUTATION,
-} from 'GraphQl/Mutations/mutations';
+import { DELETE_ADVERTISEMENT_BY_ID } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
-
 interface InterfaceAddOnEntryProps {
   id: string;
   name: string;
@@ -18,25 +13,20 @@ interface InterfaceAddOnEntryProps {
   orgId: string;
   startDate: Date;
   endDate: Date;
-  //   getInstalledPlugins: () => any;
 }
 function advertisementEntry({
   id,
   name,
   type,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   orgId,
   link,
   endDate,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   startDate,
 }: InterfaceAddOnEntryProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
-  //getting orgId from URL
-  const currentOrg = window.location.href.split('/id=')[1] + '';
   const [buttonLoading, setButtonLoading] = useState(false);
-  // const [addOrgAsUninstalled] = useMutation(UPDATE_ORG_STATUS_PLUGIN_MUTATION);
-  const [addOrgAsUninstalled] = useMutation(
-    UPDATE_INSTALL_STATUS_PLUGIN_MUTATION
-  );
   const [deleteAdById] = useMutation(DELETE_ADVERTISEMENT_BY_ID);
 
   const onDelete = async (): Promise<void> => {
@@ -76,7 +66,6 @@ function advertisementEntry({
                   data-testid="AddOnEntry_btn_install"
                   onClick={(): void => {
                     onDelete();
-                    //   getInstalledPlugins();
                   }}
                 >
                   {buttonLoading ? (
