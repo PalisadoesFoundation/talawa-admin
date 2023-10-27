@@ -14,7 +14,6 @@ import i18nForTest from 'utils/i18nForTest';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 import userEvent from '@testing-library/user-event';
-import { debug } from 'jest-preview';
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {

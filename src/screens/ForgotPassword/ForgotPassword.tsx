@@ -8,17 +8,15 @@ import {
   FORGOT_PASSWORD_MUTATION,
   GENERATE_OTP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import { ReactComponent as KeyLogo } from 'assets/svgs/key.svg';
 
+import ArrowRightAlt from '@mui/icons-material/ArrowRightAlt';
 import Loader from 'components/Loader/Loader';
 import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './ForgotPassword.module.css';
-import { style } from '@mui/system';
-import ArrowRightAlt from '@mui/icons-material/ArrowRightAlt';
 
 const ForgotPassword = (): JSX.Element => {
   const { t } = useTranslation('translation', {
@@ -37,9 +35,7 @@ const ForgotPassword = (): JSX.Element => {
     confirmNewPassword: '',
   });
 
-  const [otp, { loading: otpLoading, error }] = useMutation(
-    GENERATE_OTP_MUTATION
-  );
+  const [otp, { loading: otpLoading }] = useMutation(GENERATE_OTP_MUTATION);
   const [forgotPassword, { loading: forgotPasswordLoading }] = useMutation(
     FORGOT_PASSWORD_MUTATION
   );
