@@ -396,7 +396,7 @@
     "deleteMsg": "Do you want to delete this organization?",
     "cancel": "Cancel",
     "confirmDelete": "Confirm Delete",
-    "longDelOrgMsg": "By clicking on Delete organization button you will the organization will be permanently deleted along with its events, tags and all related data."
+    "longDelOrgMsg": "By clicking on Delete Organization button the organization will be permanently deleted along with its events, tags and all related data."
   },
   "userUpdate": {
     "firstName": "First Name",

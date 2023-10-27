@@ -392,7 +392,7 @@
     "deleteMsg": "¿Desea eliminar esta organización?",
     "cancel": "Cancelar",
     "confirmDelete": "Confirmar eliminación",
-    "longDelOrgMsg": "Al hacer clic en el botón de Eliminar organización, se eliminará permanentemente la organización junto con sus eventos, etiquetas y todos los datos relacionados."
+    "longDelOrgMsg": "Al hacer clic en el botón Eliminar organización, la organización se eliminará permanentemente junto con sus eventos, etiquetas y todos los datos relacionados."
   },
   "userUpdate": {
     "firstName": "Primer nombre",
