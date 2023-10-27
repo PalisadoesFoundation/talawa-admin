@@ -1,7 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { act, fireEvent, render, screen } from '@testing-library/react';
-import { debug } from 'jest-preview';
 import { I18nextProvider } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -220,7 +219,7 @@ describe('Testing User Table Item', () => {
       screen.queryByTestId(`searchByNameJoinedOrgs`)
     ).not.toBeInTheDocument();
     expect(
-      screen.getByText(/John Doe has not joined any organization yet/i)
+      screen.getByText(/John Doe has not joined any organization/i)
     ).toBeInTheDocument();
     fireEvent.click(screen.getByTestId(`closeJoinedOrgsBtn${123}`));
 
@@ -838,7 +837,6 @@ describe('Testing User Table Item', () => {
     fireEvent.click(screen.getByTestId(`removeUserFromOrgBtn${'xyz'}`));
     const confirmRemoveBtn = screen.getByTestId(`confirmRemoveUser123`);
     expect(confirmRemoveBtn).toBeInTheDocument();
-    debug();
 
     fireEvent.click(confirmRemoveBtn);
   });

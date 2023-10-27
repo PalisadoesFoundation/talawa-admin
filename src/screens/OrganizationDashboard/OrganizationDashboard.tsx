@@ -209,7 +209,7 @@ function organizationDashboard(): JSX.Element {
               <Col lg={6} className="mb-4">
                 <Card border="0" className="rounded-4">
                   <div className={styles.cardHeader}>
-                    <div className={styles.cardTitle}>{t('upcomingPosts')}</div>
+                    <div className={styles.cardTitle}>{t('latestPosts')}</div>
                     <Button
                       size="sm"
                       variant="light"
