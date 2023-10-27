@@ -8,10 +8,7 @@ import {
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 
-import {
-  CREATE_SAMPLE_ORGANIZATION_MUTATION,
-  REMOVE_SAMPLE_ORGANIZATION_MUTATION,
-} from 'GraphQl/Mutations/mutations';
+import { CREATE_SAMPLE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 
 import OrgListCard from 'components/OrgListCard/OrgListCard';
 import type { ChangeEvent } from 'react';
