@@ -29,7 +29,6 @@ const ForgotPassword = (): JSX.Element => {
 
   const [showEnterEmail, setShowEnterEmail] = useState(true);
 
-  const [componentLoader, setComponentLoader] = useState(true);
   const [registeredEmail, setregisteredEmail] = useState('');
 
   const [forgotPassFormData, setForgotPassFormData] = useState({
@@ -38,22 +37,24 @@ const ForgotPassword = (): JSX.Element => {
     confirmNewPassword: '',
   });
 
-  const [otp, { loading: otpLoading }] = useMutation(GENERATE_OTP_MUTATION);
+  const [otp, { loading: otpLoading, error }] = useMutation(
+    GENERATE_OTP_MUTATION
+  );
   const [forgotPassword, { loading: forgotPasswordLoading }] = useMutation(
     FORGOT_PASSWORD_MUTATION
   );
-
+  const isLoggedIn = localStorage.getItem('IsLoggedIn');
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem('IsLoggedIn');
     if (isLoggedIn == 'TRUE') {
       window.location.replace('/orglist');
     }
-    setComponentLoader(false);
+    return () => {
+      localStorage.removeItem('otpToken');
+    };
   }, []);
 
   const getOTP = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    setShowEnterEmail(false);
 
     try {
       const { data } = await otp({
@@ -62,14 +63,12 @@ const ForgotPassword = (): JSX.Element => {
         },
       });
 
-      /* istanbul ignore next */
       if (data) {
         localStorage.setItem('otpToken', data.otp.otpToken);
         toast.success(t('OTPsent'));
         setShowEnterEmail(false);
       }
     } catch (error: any) {
-      /* istanbul ignore next */
       if (error.message === 'User not found') {
         toast.warn(t('emailNotRegistered'));
       } else if (error.message === 'Failed to fetch') {
@@ -117,16 +116,15 @@ const ForgotPassword = (): JSX.Element => {
         });
       }
     } catch (error: any) {
-      /* istanbul ignore next */
       setShowEnterEmail(true);
+      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
 
-  if (componentLoader || otpLoading || forgotPasswordLoading) {
+  if (otpLoading || forgotPasswordLoading) {
     return <Loader />;
   }
-
   return (
     <>
       <div className={styles.pageWrapper}>
@@ -158,7 +156,11 @@ const ForgotPassword = (): JSX.Element => {
                         }
                       />
                     </div>
-                    <Button type="submit" className="mt-4 w-100">
+                    <Button
+                      type="submit"
+                      className="mt-4 w-100"
+                      data-testid="getOtpBtn"
+                    >
                       {t('getOtp')}
                     </Button>
                   </Form>
