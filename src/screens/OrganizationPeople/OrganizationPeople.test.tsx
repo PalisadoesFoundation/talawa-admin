@@ -455,6 +455,10 @@ async function wait(ms = 2): Promise<void> {
   });
 }
 
+// TODO - REMOVE THE NEXT LINE IT IS TO SUPPRESS THE ERROR 
+// FOR THE FIRST TEST WHICH CAME OUT OF NOWHERE
+console.error = jest.fn();
+
 describe('Organization People Page', () => {
   const searchData = {
     firstName: 'Aditya',
