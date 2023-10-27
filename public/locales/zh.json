@@ -390,8 +390,8 @@
   "deleteOrg": {
     "deleteOrganization": "删除组织",
     "deleteMsg": "您是否要删除此组织？",
-    "no": "否",
-    "yes": "是",
+    "cancel": "取消",
+    "confirmDelete": "确认删除",
     "longDelOrgMsg": "点击删除组织按钮后，将永久删除该组织以及其活动、标签和所有相关数据。"
   },
   "userUpdate": {

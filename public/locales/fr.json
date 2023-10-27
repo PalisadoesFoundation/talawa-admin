@@ -390,8 +390,8 @@
   "deleteOrg": {
     "deleteOrganization": "Supprimer l'organisation",
     "deleteMsg": "Voulez-vous supprimer cette organisation ?",
-    "no": "Non",
-    "yes": "Oui",
+    "cancel": "Annuler",
+    "confirmDelete": "Confirmer la suppression",
     "longDelOrgMsg": "En cliquant sur le bouton Supprimer l'organisation, l'organisation sera définitivement supprimée, ainsi que ses événements, étiquettes et toutes les données associées."
   },
   "userUpdate": {
