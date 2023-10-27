@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { Search } from '@mui/icons-material';
 import {
-  REMOVE_USER_FROM_ORGANIZATION_MUTATION,
+  REMOVE_MEMBER_MUTATION,
   UPDATE_USERTYPE_MUTATION,
   UPDATE_USER_ROLE_IN_ORG_MUTATION,
 } from 'GraphQl/Mutations/mutations';
@@ -47,7 +47,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const [searchByNameOrgsBlockedBy, setSearchByNameOrgsBlockedBy] =
     useState('');
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
-  const [removeUser] = useMutation(REMOVE_USER_FROM_ORGANIZATION_MUTATION);
+  const [removeUser] = useMutation(REMOVE_MEMBER_MUTATION);
   const [updateUserInOrgType] = useMutation(UPDATE_USER_ROLE_IN_ORG_MUTATION);
   const history = useHistory();
 
@@ -78,8 +78,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
     try {
       const { data } = await removeUser({
         variables: {
-          organizationId: removeUserProps.orgId,
-          userId: user._id,
+          userid: user._id,
+          orgid: removeUserProps.orgId,
         },
       });
 

@@ -1,5 +1,5 @@
 import {
-  REMOVE_USER_FROM_ORGANIZATION_MUTATION,
+  REMOVE_MEMBER_MUTATION,
   UPDATE_USERTYPE_MUTATION,
   UPDATE_USER_ROLE_IN_ORG_MUTATION,
 } from 'GraphQl/Mutations/mutations';
@@ -25,10 +25,10 @@ export const MOCKS = [
   },
   {
     request: {
-      query: REMOVE_USER_FROM_ORGANIZATION_MUTATION,
+      query: REMOVE_MEMBER_MUTATION,
       variables: {
-        userId: '123',
-        organizationId: 'abc',
+        userid: '123',
+        orgid: 'abc',
       },
     },
     result: {

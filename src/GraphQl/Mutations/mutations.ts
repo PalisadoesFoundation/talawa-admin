@@ -623,18 +623,6 @@ export const UNLIKE_COMMENT = gql`
   }
 `;
 
-// Removes user from an organization
-export const REMOVE_USER_FROM_ORGANIZATION_MUTATION = gql`
-  mutation removeUserFromOrganization($organizationId: ID!, $userId: ID!) {
-    removeUserFromOrganization(
-      organizationId: $organizationId
-      userId: $userId
-    ) {
-      _id
-    }
-  }
-`;
-
 // Changes the role of a user in an organization
 export const UPDATE_USER_ROLE_IN_ORG_MUTATION = gql`
   mutation updateUserRoleInOrganization(
