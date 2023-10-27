@@ -1,6 +1,6 @@
+import { useMutation } from '@apollo/client';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { useMutation } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -8,13 +8,17 @@ import {
   FORGOT_PASSWORD_MUTATION,
   GENERATE_OTP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
+import { ReactComponent as KeyLogo } from 'assets/svgs/key.svg';
 
-import styles from './ForgotPassword.module.css';
+import Loader from 'components/Loader/Loader';
+import { Form } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
-import Button from 'react-bootstrap/Button';
-import { Form } from 'react-bootstrap';
-import Loader from 'components/Loader/Loader';
+import styles from './ForgotPassword.module.css';
+import { style } from '@mui/system';
+import ArrowRightAlt from '@mui/icons-material/ArrowRightAlt';
 
 const ForgotPassword = (): JSX.Element => {
   const { t } = useTranslation('translation', {
@@ -23,8 +27,11 @@ const ForgotPassword = (): JSX.Element => {
 
   document.title = t('title');
 
+  const [showEnterEmail, setShowEnterEmail] = useState(true);
+
   const [componentLoader, setComponentLoader] = useState(true);
   const [registeredEmail, setregisteredEmail] = useState('');
+
   const [forgotPassFormData, setForgotPassFormData] = useState({
     userOtp: '',
     newPassword: '',
@@ -46,6 +53,7 @@ const ForgotPassword = (): JSX.Element => {
 
   const getOTP = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+    setShowEnterEmail(false);
 
     try {
       const { data } = await otp({
@@ -58,6 +66,7 @@ const ForgotPassword = (): JSX.Element => {
       if (data) {
         localStorage.setItem('otpToken', data.otp.otpToken);
         toast.success(t('OTPsent'));
+        setShowEnterEmail(false);
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -100,7 +109,7 @@ const ForgotPassword = (): JSX.Element => {
       /* istanbul ignore next */
       if (data) {
         toast.success(t('passwordChanges'));
-
+        setShowEnterEmail(true);
         setForgotPassFormData({
           userOtp: '',
           newPassword: '',
@@ -109,6 +118,7 @@ const ForgotPassword = (): JSX.Element => {
       }
     } catch (error: any) {
       /* istanbul ignore next */
+      setShowEnterEmail(true);
       errorHandler(t, error);
     }
   };
@@ -119,134 +129,119 @@ const ForgotPassword = (): JSX.Element => {
 
   return (
     <>
-      <section className={styles.containerWrapper}>
-        <div className={styles.resetForm}>
-          <h1>{t('forgotPassword')}</h1>
-          <div className="otpForm my-5">
-            <form onSubmit={getOTP}>
-              <div className="form-group row">
-                <label
-                  htmlFor="registeredEmail"
-                  className="col-sm-2 col-form-label"
+      <div className={styles.pageWrapper}>
+        <div className="row container-fluid d-flex justify-content-center items-center">
+          <div className="col-12 col-lg-4 px-0">
+            <div className={styles.cardBody}>
+              <div className={styles.keyWrapper}>
+                <div className={styles.themeOverlay} />
+                <KeyLogo className={styles.keyLogo} fill="var(--bs-primary)" />
+              </div>
+              <h3 className="text-center fw-bold">{t('forgotPassword')}</h3>
+              {showEnterEmail ? (
+                <div className="mt-4">
+                  <Form onSubmit={getOTP}>
+                    <Form.Label htmlFor="registeredEmail">
+                      {t('registeredEmail')}:
+                    </Form.Label>
+                    <div className="position-relative">
+                      <Form.Control
+                        type="email"
+                        className="form-control"
+                        id="registeredEmail"
+                        placeholder={t('registeredEmail')}
+                        value={registeredEmail}
+                        name="registeredEmail"
+                        required
+                        onChange={(e): void =>
+                          setregisteredEmail(e.target.value)
+                        }
+                      />
+                    </div>
+                    <Button type="submit" className="mt-4 w-100">
+                      {t('getOtp')}
+                    </Button>
+                  </Form>
+                </div>
+              ) : (
+                <div className="mt-4">
+                  <Form onSubmit={submitForgotPassword}>
+                    <Form.Label htmlFor="userOtp">{t('enterOtp')}:</Form.Label>
+                    <Form.Control
+                      type="number"
+                      className="form-control"
+                      id="userOtp"
+                      placeholder={t('userOtp')}
+                      name="userOtp"
+                      value={forgotPassFormData.userOtp}
+                      required
+                      onChange={(e): void =>
+                        setForgotPassFormData({
+                          ...forgotPassFormData,
+                          userOtp: e.target.value,
+                        })
+                      }
+                    />
+                    <Form.Label htmlFor="newPassword">
+                      {t('enterNewPassword')}:
+                    </Form.Label>
+                    <Form.Control
+                      type="password"
+                      className="form-control"
+                      id="newPassword"
+                      placeholder={t('password')}
+                      data-testid="newPassword"
+                      name="newPassword"
+                      value={forgotPassFormData.newPassword}
+                      required
+                      onChange={(e): void =>
+                        setForgotPassFormData({
+                          ...forgotPassFormData,
+                          newPassword: e.target.value,
+                        })
+                      }
+                    />
+                    <Form.Label htmlFor="confirmNewPassword">
+                      {t('cofirmNewPassword')}:
+                    </Form.Label>
+                    <Form.Control
+                      type="password"
+                      className="form-control"
+                      id="confirmNewPassword"
+                      placeholder={t('cofirmNewPassword')}
+                      data-testid="confirmNewPassword"
+                      name="confirmNewPassword"
+                      value={forgotPassFormData.confirmNewPassword}
+                      required
+                      onChange={(e): void =>
+                        setForgotPassFormData({
+                          ...forgotPassFormData,
+                          confirmNewPassword: e.target.value,
+                        })
+                      }
+                    />
+                    <Button type="submit" className="mt-2 w-100">
+                      {t('changePassword')}
+                    </Button>
+                  </Form>
+                </div>
+              )}
+              <div className="d-flex justify-content-between items-center mt-4">
+                <Link
+                  to={'/'}
+                  className="mx-auto d-flex items-center text-secondary"
                 >
-                  {t('registeredEmail')}:
-                </label>
-                <div className="col-sm-7">
-                  <Form.Control
-                    type="email"
-                    className="form-control"
-                    id="registeredEmail"
-                    placeholder={t('registeredEmail')}
-                    value={registeredEmail}
-                    name="registeredEmail"
-                    required
-                    onChange={(e): void => setregisteredEmail(e.target.value)}
+                  <ArrowRightAlt
+                    fontSize="medium"
+                    style={{ transform: 'rotate(180deg)' }}
                   />
-                </div>
-                <div className="col-sm-3">
-                  <Button
-                    type="submit"
-                    className={`btn btn-success btn-block ${styles.talawaBackgroundColor}`}
-                  >
-                    <i className="fa fa-key"></i> {t('getOtp')}
-                  </Button>
-                </div>
-              </div>
-            </form>
-          </div>
-          <div className="changePasswordForm">
-            <form onSubmit={submitForgotPassword}>
-              <div className="form-group row">
-                <label htmlFor="userOtp" className="col-sm-2 col-form-label">
-                  {t('enterOtp')}:
-                </label>
-                <div className="col-sm-10">
-                  <Form.Control
-                    type="number"
-                    className="form-control"
-                    id="userOtp"
-                    placeholder={t('userOtp')}
-                    name="userOtp"
-                    value={forgotPassFormData.userOtp}
-                    required
-                    onChange={(e): void =>
-                      setForgotPassFormData({
-                        ...forgotPassFormData,
-                        userOtp: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-              </div>
-              <div className="form-group row">
-                <label
-                  htmlFor="newPassword"
-                  className="col-sm-2 col-form-label"
-                >
-                  {t('enterNewPassword')}:
-                </label>
-                <div className="col-sm-10">
-                  <Form.Control
-                    type="password"
-                    className="form-control"
-                    id="newPassword"
-                    placeholder={t('password')}
-                    data-testid="newPassword"
-                    name="newPassword"
-                    value={forgotPassFormData.newPassword}
-                    required
-                    onChange={(e): void =>
-                      setForgotPassFormData({
-                        ...forgotPassFormData,
-                        newPassword: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-              </div>
-              <div className="form-group row">
-                <label
-                  htmlFor="confirmNewPassword"
-                  className="col-sm-2 col-form-label"
-                >
-                  {t('cofirmNewPassword')}:
-                </label>
-                <div className="col-sm-10">
-                  <Form.Control
-                    type="password"
-                    className="form-control"
-                    id="confirmNewPassword"
-                    placeholder={t('cofirmNewPassword')}
-                    data-testid="confirmNewPassword"
-                    name="confirmNewPassword"
-                    value={forgotPassFormData.confirmNewPassword}
-                    required
-                    onChange={(e): void =>
-                      setForgotPassFormData({
-                        ...forgotPassFormData,
-                        confirmNewPassword: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-              </div>
-              <div className="submitBtn">
-                <Button
-                  type="submit"
-                  className={`btn btn-success btn-block ${styles.talawaBackgroundColor}`}
-                >
-                  {t('changePassword')}
-                </Button>
-              </div>
-              <div className={`homeBtn mt-3 ${styles.talawaBackgroundColor}`}>
-                <Link to="/" className="btn btn-info btn-block">
-                  <i className="fas fa-home"></i> {t('backToHome')}
+                  {t('backToLogin')}
                 </Link>
               </div>
-            </form>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
     </>
   );
 };

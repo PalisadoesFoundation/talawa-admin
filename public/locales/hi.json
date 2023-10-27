@@ -339,7 +339,7 @@
     "enterNewPassword": "नया पासवर्ड दर्ज करें",
     "cofirmNewPassword": "नए पासवर्ड की पुष्टि करें",
     "changePassword": "पासवर्ड बदलें",
-    "backToHome": "घर वापिस जा रहा हूँ",
+    "backToLogin": "लॉगिन पर वापस जाएं",
     "userOtp": "उदाहरण के लिए 12345",
     "password": "पासवर्ड",
     "emailNotRegistered": "ईमेल पंजीकृत नहीं है।",

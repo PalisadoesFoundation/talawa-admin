@@ -345,7 +345,7 @@
     "enterNewPassword": "Enter New Password",
     "cofirmNewPassword": "Confirm New Password",
     "changePassword": "Change Password",
-    "backToHome": "Back to Home",
+    "backToLogin": "Back to Login",
     "userOtp": "e.g. 12345",
     "password": "Password",
     "emailNotRegistered": "Email is not registered.",

@@ -339,7 +339,7 @@
     "enterNewPassword": "輸入新密碼",
     "cofirmNewPassword": "確認新密碼",
     "changePassword": "更改密碼",
-    "backToHome": "回到家",
+    "backToLogin": "回到登錄",
     "userOtp": "舉個例子。 12345",
     "password": "密碼",
     "emailNotRegistered": "電子郵件未註冊。",

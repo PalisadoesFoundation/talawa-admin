@@ -339,7 +339,7 @@
     "enterNewPassword": "Entrez un nouveau mot de passe",
     "cofirmNewPassword": "Confirmer le nouveau mot de passe",
     "changePassword": "Changer le mot de passe",
-    "backToHome": "De retour à la maison",
+    "backToLogin": "Retour à la connexion",
     "userOtp": "par exemple. 12345",
     "password": "Mot de passe",
     "emailNotRegistered": "L'e-mail n'est pas enregistré.",
