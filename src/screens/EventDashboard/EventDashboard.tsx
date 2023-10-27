@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useQuery } from '@apollo/client';
@@ -8,14 +8,12 @@ import { AddEventProjectModal } from 'components/EventProjectModals/AddEventProj
 import { UpdateEventProjectModal } from 'components/EventProjectModals/UpdateEventProjectModal';
 import { DeleteEventProjectModal } from 'components/EventProjectModals/DeleteEventProjectModal';
 import { AddTaskModal } from 'components/TaskModals/AddTaskModal';
-import { EventStatsWrapper } from 'components/EventStats/EventStatsWrapper';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import Button from 'react-bootstrap/Button';
 import List from '@mui/material/List';
-import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 import { TaskListItem } from 'components/TaskListItem/TaskListItem';
-import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
 import Loader from 'components/Loader/Loader';
+import { LeftDrawerEventWrapper } from 'components/LeftDrawerEvent/LeftDrawerEventWrapper';
 
 interface InterfaceEventTask {
   _id: string;
@@ -39,7 +37,12 @@ interface InterfaceEventProject {
 const EventDashboard = (): JSX.Element => {
   // Get the Event ID from the URL
   document.title = 'Event Dashboard';
-  const eventId = window.location.href.split('/')[4];
+
+  const [eventId, setEventId] = useState('');
+
+  useEffect(() => {
+    setEventId(window.location.href.split('/')[4]);
+  }, [window.location.href]);
 
   // Data fetching
   const {
@@ -71,7 +74,11 @@ const EventDashboard = (): JSX.Element => {
   }
 
   return (
-    <>
+    <LeftDrawerEventWrapper
+      event={eventData.event}
+      key={`${eventData?.event._id || 'loading'}EventDashboard`}
+      setShowAddEventProjectModal={setShowAddEventProjectModal}
+    >
       <Row>
         <Col sm={3}>
           <div className={styles.sidebar}>
@@ -100,26 +107,6 @@ const EventDashboard = (): JSX.Element => {
                 <b>Registrants:</b> {eventData.event.attendees.length}
               </p>
               <br />
-              {/* Buttons to trigger different modals */}
-              <p className={styles.tagdetailsGreen}>
-                <Button
-                  type="button"
-                  className="mt-3"
-                  variant="success"
-                  aria-label="addEventProject"
-                  onClick={(): void => {
-                    setShowAddEventProjectModal(true);
-                  }}
-                >
-                  Add an Event Project
-                </Button>
-                <EventRegistrantsWrapper
-                  eventId={eventId}
-                  orgId={eventData.event.organization._id}
-                />
-                <CheckInWrapper eventId={eventId} />
-                <EventStatsWrapper eventId={eventId} />
-              </p>
             </div>
           </div>
         </Col>
@@ -258,7 +245,7 @@ const EventDashboard = (): JSX.Element => {
         refetchData={refetchEventData}
         projectId={currentProject._id}
       />
-    </>
+    </LeftDrawerEventWrapper>
   );
 };
 

@@ -91,6 +91,7 @@
     "filter": "फ़िल्टर",
     "cancel": "रद्द करना",
     "noOrgErrorTitle": "संगठन नहीं मिला",
+    "sampleOrgDuplicate": "केवल एक नमूना संगठन को अनुमति दी गई",
     "noOrgErrorDescription": "कृपया डैशबोर्ड के माध्यम से एक संगठन बनाएं",
     "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला "
   },
@@ -613,5 +614,14 @@
     "taskNotCompleted": "कार्य अभी तक पूरा नहीं हुआ है",
     "event": "आयोजन",
     "organization": "संगठन"
+  },
+  "userChat": {
+    "chat": "बात",
+    "search": "खोज",
+    "contacts": "संपर्क"
+  },
+  "userChatRoom": {
+    "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
+    "sendMessage": "मेसेज भेजें"
   }
 }

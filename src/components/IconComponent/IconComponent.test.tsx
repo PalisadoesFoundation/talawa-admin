@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import IconComponent from './IconComponent';
 
-const screenTestIdMap = {
+const screenTestIdMap: Record<string, Record<string, string>> = {
   Dashboard: {
     name: 'Dashboard',
     testId: 'Icon-Component-DashboardIcon',
@@ -35,65 +35,35 @@ const screenTestIdMap = {
     name: 'All Organizations',
     testId: 'Icon-Component-AllOrganizationsIcon',
   },
+  EventProject: {
+    name: 'Add Event Project',
+    testId: 'Icon-Component-Add-Event-Project',
+  },
+  ListEventRegistrant: {
+    name: 'List Event Registrants',
+    testId: 'Icon-Component-List-Event-Registrants',
+  },
+  CheckInRegistrants: {
+    name: 'Check In Registrants',
+    testId: 'Icon-Component-Check-In-Registrants',
+  },
+  EventStats: {
+    name: 'Event Stats',
+    testId: 'Icon-Component-Event-Stats',
+  },
   default: {
     name: 'default',
     testId: 'Icon-Component-DefaultIcon',
   },
 };
 
-describe('Testing CollapsibleDropdown component', () => {
-  it('renders the Dashboard icon', () => {
-    render(<IconComponent name="Dashboard" />);
-    expect(
-      screen.getByTestId(`${screenTestIdMap.Dashboard.testId}`)
-    ).toBeInTheDocument();
-  });
-  it('renders the People icon', () => {
-    render(<IconComponent name="People" />);
-    expect(
-      screen.getByTestId(`${screenTestIdMap.People.testId}`)
-    ).toBeInTheDocument();
-  });
-  it('renders the Events icon', () => {
-    render(<IconComponent name="Events" />);
-    expect(
-      screen.getByTestId(`${screenTestIdMap.Events.testId}`)
-    ).toBeInTheDocument();
-  });
-  it('renders the Posts icon', () => {
-    render(<IconComponent name="Posts" />);
-    expect(
-      screen.getByTestId(`${screenTestIdMap.Posts.testId}`)
-    ).toBeInTheDocument();
-  });
-  it('renders the Block/Unblock icon', () => {
-    render(<IconComponent name="Block/Unblock" />);
-    expect(
-      screen.getByTestId(`${screenTestIdMap.BlockUnblock.testId}`)
-    ).toBeInTheDocument();
-  });
-  it('renders the Plugins icon', () => {
-    render(<IconComponent name="Plugins" />);
-    expect(
-      screen.getByTestId(`${screenTestIdMap.Plugins.testId}`)
-    ).toBeInTheDocument();
-  });
-  it('renders the Settings icon', () => {
-    render(<IconComponent name="Settings" />);
-    expect(
-      screen.getByTestId(`${screenTestIdMap.Settings.testId}`)
-    ).toBeInTheDocument();
-  });
-  it('renders the All Organizations icon', () => {
-    render(<IconComponent name="All Organizations" />);
-    expect(
-      screen.getByTestId(`${screenTestIdMap.AllOrganizations.testId}`)
-    ).toBeInTheDocument();
-  });
-  it('renders the default icon', () => {
-    render(<IconComponent name="default" />);
-    expect(
-      screen.getByTestId(`${screenTestIdMap.default.testId}`)
-    ).toBeInTheDocument();
+describe('Testing Collapsible Dropdown component', () => {
+  it('Renders the correct icon according to the component', () => {
+    for (const component in screenTestIdMap) {
+      render(<IconComponent name={screenTestIdMap[component].name} />);
+      expect(
+        screen.getByTestId(screenTestIdMap[component].testId)
+      ).toBeInTheDocument();
+    }
   });
 });

@@ -91,6 +91,7 @@
     "filter": "Filtrar",
     "cancel": "Cancelar",
     "noOrgErrorTitle": "Organizaciones no encontradas",
+    "sampleOrgDuplicate": "Solo se permite una organización de muestra",
     "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
     "noResultsFoundFor": "No se encontraron resultados para "
   },
@@ -613,5 +614,14 @@
     "taskNotCompleted": "La tarea aún no se ha completado",
     "event": "Evento",
     "organization": "Organización"
+  },
+  "userChat": {
+    "chat": "Charlar",
+    "search": "Buscar",
+    "contacts": "Contactos"
+  },
+  "userChatRoom": {
+    "selectContact": "Seleccione un contacto para iniciar una conversación",
+    "sendMessage": "Enviar mensaje"
   }
 }

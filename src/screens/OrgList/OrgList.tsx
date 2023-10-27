@@ -135,8 +135,7 @@ function orgList(): JSX.Element {
         window.location.reload();
       })
       .catch((error: any) => {
-        console.log(error.message);
-        toast.error(t('errorMessage'));
+        toast.error(t('sampleOrgDuplicate'));
       });
   };
 

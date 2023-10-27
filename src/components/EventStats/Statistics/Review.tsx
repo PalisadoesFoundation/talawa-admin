@@ -42,7 +42,7 @@ export const ReviewStats = ({ data }: ModalPropType): JSX.Element => {
             reviews.map((review) => (
               <div className="card user-review m-1" key={review._id}>
                 <div className="card-body">
-                  <Rating name="read-only" value={review.rating / 2} readOnly />
+                  <Rating name="read-only" value={review.rating} readOnly />
                   <p className="card-text">{review.review}</p>
                 </div>
               </div>

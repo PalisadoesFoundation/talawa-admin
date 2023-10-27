@@ -91,6 +91,7 @@
     "filter": "過濾",
     "cancel": "取消",
     "noOrgErrorTitle": "找不到组织",
+    "sampleOrgDuplicate": "只允许一个样本组织",
     "noOrgErrorDescription": "请通过仪表板创建一个组织",
     "noResultsFoundFor": "未找到结果 "
   },
@@ -613,5 +614,14 @@
     "taskNotCompleted": "任務還沒完成",
     "event": "事件",
     "organization": "組織"
+  },
+  "userChat": {
+    "chat": "聊天",
+    "search": "搜尋",
+    "contacts": "聯絡方式"
+  },
+  "userChatRoom": {
+    "selectContact": "選擇聯絡人開始對話",
+    "sendMessage": "傳訊息"
   }
 }

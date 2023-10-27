@@ -96,13 +96,13 @@
     "filter": "Filter",
     "cancel": "Cancel",
     "noOrgErrorTitle": "Organizations Not Found",
+    "sampleOrgDuplicate": "Only one sample organization allowed",
     "noOrgErrorDescription": "Please create an organization through dashboard",
-
     "manageFeatures": "Manage Features",
     "manageFeaturesInfo": "Creation Successful ! Please select features that you want to enale for this organization from the plugin store.",
     "goToStore": "Go to Plugin Store",
     "enableEverything": "Enable Everything",
-    "noResultsFoundFor": "No results found for "
+    "noResultsFoundFor": "No results found for"
   },
   "orgListCard": {
     "admins": "Admins",
@@ -624,5 +624,14 @@
     "taskNotCompleted": "The task has not been completed yet",
     "event": "Event",
     "organization": "Organization"
+  },
+  "userChat": {
+    "chat": "Chat",
+    "search": "Search",
+    "contacts": "Contacts"
+  },
+  "userChatRoom": {
+    "selectContact": "Select a contact to start conversation",
+    "sendMessage": "Send Message"
   }
 }
