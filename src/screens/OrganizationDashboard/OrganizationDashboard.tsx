@@ -36,11 +36,11 @@ function organizationDashboard(): JSX.Element {
   document.title = t('title');
   const currentUrl = window.location.href.split('=')[1];
   const organizationId = getOrganizationId(window.location.href);
-  const peopleLink: string = `/orgpeople/id=${organizationId}`;
-  const postsLink: string = `/orgpost/id=${organizationId}`;
-  const eventsLink: string = `/orgevents/id=${organizationId}`;
-  const blockUserLink: string = `/blockuser/id=${organizationId}`;
-  const requestLink: string = '/requests';
+  const peopleLink = `/orgpeople/id=${organizationId}`;
+  const postsLink = `/orgpost/id=${organizationId}`;
+  const eventsLink = `/orgevents/id=${organizationId}`;
+  const blockUserLink = `/blockuser/id=${organizationId}`;
+  const requestLink = '/requests';
 
   const history = useHistory();
   const [upcomingEvents, setUpcomingEvents] = useState<
