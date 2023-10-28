@@ -134,7 +134,7 @@ function organizationDashboard(): JSX.Element {
                   role="button"
                   className="mb-4"
                   onClick={(): void => {
-                    history.push(`${peopleLink}`);
+                    history.push(peopleLink);
                   }}
                 >
                   <DashBoardCard
@@ -149,7 +149,7 @@ function organizationDashboard(): JSX.Element {
                   role="button"
                   className="mb-4"
                   onClick={(): void => {
-                    history.push(`${peopleLink}`);
+                    history.push(peopleLink);
                   }}
                 >
                   <DashBoardCard
@@ -164,7 +164,7 @@ function organizationDashboard(): JSX.Element {
                   role="button"
                   className="mb-4"
                   onClick={(): void => {
-                    history.push(`${postsLink}`);
+                    history.push(postsLink);
                   }}
                 >
                   <DashBoardCard
@@ -179,7 +179,7 @@ function organizationDashboard(): JSX.Element {
                   role="button"
                   className="mb-4"
                   onClick={(): void => {
-                    history.push(`${eventsLink}`);
+                    history.push(eventsLink);
                   }}
                 >
                   <DashBoardCard
@@ -194,7 +194,7 @@ function organizationDashboard(): JSX.Element {
                   role="button"
                   className="mb-4"
                   onClick={(): void => {
-                    history.push(`${blockUserLink}`);
+                    history.push(blockUserLink);
                   }}
                 >
                   <DashBoardCard
@@ -209,7 +209,7 @@ function organizationDashboard(): JSX.Element {
                   role="button"
                   className="mb-4"
                   onClick={(): void => {
-                    history.push(`${requestLink}`);
+                    history.push(requestLink);
                   }}
                 >
                   <DashBoardCard
