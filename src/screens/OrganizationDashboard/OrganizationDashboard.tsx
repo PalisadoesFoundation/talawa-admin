@@ -36,6 +36,12 @@ function organizationDashboard(): JSX.Element {
   document.title = t('title');
   const currentUrl = window.location.href.split('=')[1];
   const organizationId = getOrganizationId(window.location.href);
+  const peopleLink = `/orgpeople/id=${organizationId}`;
+  const postsLink = `/orgpost/id=${organizationId}`;
+  const eventsLink = `/orgevents/id=${organizationId}`;
+  const blockUserLink = `/blockuser/id=${organizationId}`;
+  const requestLink = '/requests';
+
   const history = useHistory();
   const [upcomingEvents, setUpcomingEvents] = useState<
     InterfaceQueryOrganizationEventListItem[]
@@ -128,7 +134,7 @@ function organizationDashboard(): JSX.Element {
                   role="button"
                   className="mb-4"
                   onClick={(): void => {
-                    history.push(`/orgpeople/id=${organizationId}`);
+                    history.push(`${peopleLink}`);
                   }}
                 >
                   <DashBoardCard
@@ -143,7 +149,7 @@ function organizationDashboard(): JSX.Element {
                   role="button"
                   className="mb-4"
                   onClick={(): void => {
-                    history.push(`/orgpeople/id=${organizationId}`);
+                    history.push(`${peopleLink}`);
                   }}
                 >
                   <DashBoardCard
@@ -158,7 +164,7 @@ function organizationDashboard(): JSX.Element {
                   role="button"
                   className="mb-4"
                   onClick={(): void => {
-                    history.push(`/orgpost/id=${organizationId}`);
+                    history.push(`${postsLink}`);
                   }}
                 >
                   <DashBoardCard
@@ -173,7 +179,7 @@ function organizationDashboard(): JSX.Element {
                   role="button"
                   className="mb-4"
                   onClick={(): void => {
-                    history.push(`/orgevents/id=${organizationId}`);
+                    history.push(`${eventsLink}`);
                   }}
                 >
                   <DashBoardCard
@@ -188,7 +194,7 @@ function organizationDashboard(): JSX.Element {
                   role="button"
                   className="mb-4"
                   onClick={(): void => {
-                    history.push(`/blockuser/id=${organizationId}`);
+                    history.push(`${blockUserLink}`);
                   }}
                 >
                   <DashBoardCard
@@ -203,7 +209,7 @@ function organizationDashboard(): JSX.Element {
                   role="button"
                   className="mb-4"
                   onClick={(): void => {
-                    history.push('/requests');
+                    history.push(`${requestLink}`);
                   }}
                 >
                   <DashBoardCard
