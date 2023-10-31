@@ -528,6 +528,7 @@ export const ORGANIZATION_POST_CONNECTION_LIST = gql`
           lastName
           email
         }
+        createdAt
         likeCount
         commentCount
         comments {

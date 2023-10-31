@@ -14,6 +14,7 @@ import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { ToastContainer } from 'react-toastify';
+import dayjs from 'dayjs';
 
 const MOCKS = [
   {
@@ -41,6 +42,9 @@ const MOCKS = [
                 lastName: 'Shelke',
                 email: 'adidacreator1@gmail.com',
               },
+              createdAt: dayjs(new Date())
+                .add(1, 'day')
+                .format('ddd, DD MMM YYYY'),
               likeCount: 0,
               commentCount: 0,
               comments: [],
@@ -58,6 +62,9 @@ const MOCKS = [
                 lastName: 'Shelke',
                 email: 'adidacreator1@gmail.com',
               },
+              createdAt: dayjs(new Date())
+                .add(1, 'day')
+                .format('ddd, DD MMM YYYY'),
               likeCount: 0,
               commentCount: 0,
               likedBy: [],
@@ -134,7 +141,7 @@ describe('Organisation Post Page', () => {
     expect(dataQuery1).toEqual({
       _id: '6411e53835d7ba2344a78e21',
       title: 'postone',
-      text: 'THis is the frist post',
+      text: 'This is the first post',
       imageUrl: null,
       videoUrl: null,
       creator: {
@@ -143,6 +150,9 @@ describe('Organisation Post Page', () => {
         lastName: 'Shelke',
         email: 'adidacreator1@gmail.com',
       },
+      createdAt: dayjs(
+        dayjs(new Date()).add(1, 'day').format('ddd, DD MMM YYYY')
+      ).format('ddd, DD MMM YYYY'),
       likeCount: 0,
       commentCount: 0,
       comments: [],

@@ -14,6 +14,7 @@ import userEvent from '@testing-library/user-event';
 import * as getOrganizationId from 'utils/getOrganizationId';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
+import dayjs from 'dayjs';
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -47,6 +48,7 @@ const MOCKS = [
                 lastName: 'Shelke',
                 email: 'adidacreator1@gmail.com',
               },
+              createdAt: dayjs(new Date()).add(1, 'day'),
               likeCount: 0,
               commentCount: 0,
               comments: [],
@@ -64,6 +66,7 @@ const MOCKS = [
                 lastName: 'Shelke',
                 email: 'adidacreator1@gmail.com',
               },
+              createdAt: dayjs(new Date()).add(1, 'day'),
               likeCount: 0,
               commentCount: 2,
               comments: [
