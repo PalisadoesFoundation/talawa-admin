@@ -623,6 +623,23 @@ export const UNLIKE_COMMENT = gql`
   }
 `;
 
+// Changes the role of a user in an organization
+export const UPDATE_USER_ROLE_IN_ORG_MUTATION = gql`
+  mutation updateUserRoleInOrganization(
+    $organizationId: ID!
+    $userId: ID!
+    $role: String!
+  ) {
+    updateUserRoleInOrganization(
+      organizationId: $organizationId
+      userId: $userId
+      role: $role
+    ) {
+      _id
+    }
+  }
+`;
+
 export const CREATE_DIRECT_CHAT = gql`
   mutation createDirectChat($userIds: [ID!]!, $organizationId: ID!) {
     createDirectChat(

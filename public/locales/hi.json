@@ -84,6 +84,7 @@
     "sort": "छांटें",
     "filter": "फ़िल्टर",
     "cancel": "रद्द करना",
+    "endOfResults": "परिणामों का अंत",
     "noOrgErrorTitle": "संगठन नहीं मिला",
     "noOrgErrorDescription": "कृपया डैशबोर्ड के माध्यम से एक संगठन बनाएं",
     "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला "
@@ -104,6 +105,15 @@
     "name": "नाम",
     "email": "ईमेल",
     "roles_userType": "भूमिका/उपयोगकर्ता-प्रकार",
+    "joined_organizations": "संगठनों में शामिल हुए",
+    "blocked_organizations": "अवरोधित संगठन",
+    "endOfResults": "परिणामों का अंत",
+    "orgJoinedBy": "द्वारा शामिल हुए संगठन",
+    "orgThatBlocked": "जिन संगठनों ने अवरोधित किया",
+    "hasNotJoinedAnyOrg": "किसी भी संगठन में शामिल नहीं है",
+    "isNotBlockedByAnyOrg": "किसी भी संगठन द्वारा अवरोधित नहीं है",
+    "searchByOrgName": "संगठन के नाम से खोजें",
+    "view": "देखें",
     "admin": "व्यवस्थापक",
     "superAdmin": "सुपरएडमिन",
     "user": "उपयोगकर्ता",
@@ -125,6 +135,7 @@
     "accept": "स्वीकार करना",
     "reject": "अस्वीकार",
     "enterName": "नाम दर्ज करें",
+    "endOfResults": "परिणामों का अंत",
     "loadingRequests": "अनुरोध लोड हो रहा है ...",
     "noRequestFound": "कोई अनुरोध नहीं मिला।",
     "sort": "छांटें",
@@ -146,6 +157,13 @@
     "events": "आयोजन",
     "blockedUsers": "रोके गए उपयोगकर्ता",
     "requests": "अनुरोध",
+    "viewAll": "सभी देखें",
+    "upcomingEvents": "आगामी घटनाएँ",
+    "noUpcomingEvents": "कोई आगामी घटनाएँ नहीं",
+    "latestPosts": "नवीनतम पोस्ट",
+    "noPostsPresent": "कोई पोस्ट नहीं है",
+    "membershipRequests": "सदस्यता अनुरोध",
+    "noMembershipRequests": "कोई सदस्यता अनुरोध नहीं",
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।"
   },
   "organizationPeople": {
@@ -321,7 +339,7 @@
     "enterNewPassword": "नया पासवर्ड दर्ज करें",
     "cofirmNewPassword": "नए पासवर्ड की पुष्टि करें",
     "changePassword": "पासवर्ड बदलें",
-    "backToHome": "घर वापिस जा रहा हूँ",
+    "backToLogin": "लॉगिन पर वापस जाएं",
     "userOtp": "उदाहरण के लिए 12345",
     "password": "पासवर्ड",
     "emailNotRegistered": "ईमेल पंजीकृत नहीं है।",
@@ -372,9 +390,9 @@
   "deleteOrg": {
     "deleteOrganization": "संगठन हटाएं",
     "deleteMsg": "क्या आप इस संगठन को हटाना चाहते हैं?",
-    "no": "नहीं",
-    "yes": "हां",
-    "longDelOrgMsg": "संगठन हटाने के बटन पर क्लिक करके, संगठन को स्थायित रूप से हटा दिया जाएगा, साथ ही उसके आयोजन, टैग और सभी संबंधित डेटा भी हटा दिया जाएगा।"
+    "cancel": "रद्द करना",
+    "confirmDelete": "हटाने की पुष्टि करें",
+    "longDelOrgMsg": "संगठन को हमेशा के लिए हटा देने के लिए संगठन हटाने के बटन पर क्लिक करके, उसके इवेंट्स, टैग्स और सभी संबंधित डेटा सहित सभी जानकारी हटा दी जाएगी।"
   },
   "userUpdate": {
     "firstName": "पहला नाम",

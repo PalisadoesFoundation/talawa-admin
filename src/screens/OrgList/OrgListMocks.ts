@@ -34,7 +34,7 @@ const organizations: InterfaceOrgConnectionInfoType[] = [
     _id: '1',
     creator: { _id: 'xyz', firstName: 'John', lastName: 'Doe' },
     image: '',
-    name: 'Akatsuki',
+    name: 'Palisadoes Foundation',
     createdAt: '02/02/2022',
     admins: [
       {
@@ -46,7 +46,7 @@ const organizations: InterfaceOrgConnectionInfoType[] = [
         _id: '234',
       },
     ],
-    location: 'Washington DC',
+    location: 'Jamaica',
   },
 ];
 
@@ -80,6 +80,12 @@ const MOCKS = [
   {
     request: {
       query: ORGANIZATION_CONNECTION_LIST,
+      variables: {
+        first: 8,
+        skip: 0,
+        filter: '',
+      },
+      notifyOnNetworkStatusChange: true,
     },
     result: {
       data: {
@@ -101,6 +107,12 @@ const MOCKS_EMPTY = [
   {
     request: {
       query: ORGANIZATION_CONNECTION_LIST,
+      variables: {
+        first: 8,
+        skip: 0,
+        filter: '',
+      },
+      notifyOnNetworkStatusChange: true,
     },
     result: {
       data: {
@@ -124,6 +136,12 @@ const MOCKS_ADMIN = [
   {
     request: {
       query: ORGANIZATION_CONNECTION_LIST,
+      variables: {
+        first: 8,
+        skip: 0,
+        filter: '',
+      },
+      notifyOnNetworkStatusChange: true,
     },
     result: {
       data: {
@@ -142,4 +160,4 @@ const MOCKS_ADMIN = [
   },
 ];
 
-export { MOCKS, MOCKS_EMPTY, MOCKS_ADMIN };
+export { MOCKS, MOCKS_ADMIN, MOCKS_EMPTY };
