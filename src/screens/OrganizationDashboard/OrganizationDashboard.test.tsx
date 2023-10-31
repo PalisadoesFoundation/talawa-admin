@@ -72,11 +72,10 @@ describe('Organisation Dashboard Page', () => {
     expect(screen.getAllByText('Events')).toHaveLength(2);
     expect(screen.getByText('Blocked Users')).toBeInTheDocument();
     expect(screen.getByText('Requests')).toBeInTheDocument();
-    expect(screen.getByText('Upcoming events')).toBeInTheDocument();
-    expect(screen.getByText('Latest posts')).toBeInTheDocument();
+    expect(screen.getByText('Upcoming Events')).toBeInTheDocument();
+    expect(screen.getByText('Latest Posts')).toBeInTheDocument();
     expect(screen.getByText('Membership requests')).toBeInTheDocument();
-    expect(screen.getAllByText('View all')).toHaveLength(3);
-
+    expect(screen.getAllByText('View All')).toHaveLength(3);
     // Checking if events are rendered
     expect(screen.getByText('Event 1')).toBeInTheDocument();
     expect(
@@ -118,10 +117,10 @@ describe('Organisation Dashboard Page', () => {
     expect(toast.success).toBeCalledWith('Coming soon!');
 
     expect(
-      screen.getByText('No membership requests present')
+      screen.getByText(/No membership requests present/i)
     ).toBeInTheDocument();
-    expect(screen.getByText('No upcoming events')).toBeInTheDocument();
-    expect(screen.getByText('No posts present')).toBeInTheDocument();
+    expect(screen.getByText(/No upcoming events/i)).toBeInTheDocument();
+    expect(screen.getByText(/No posts present/i)).toBeInTheDocument();
   });
 
   test('Testing error scenario', async () => {

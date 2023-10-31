@@ -1,4 +1,5 @@
-import { useMutation, useQuery } from '@apollo/client';
+import type { ApolloError } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { Dropdown, Form, Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
@@ -11,44 +12,61 @@ import SortIcon from '@mui/icons-material/Sort';
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_LIST,
-  USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
-import { errorHandler } from 'utils/errorHandler';
-import styles from './Users.module.css';
-import type { InterfaceUserType } from 'utils/interfaces';
-import { UPDATE_USERTYPE_MUTATION } from 'GraphQl/Mutations/mutations';
-import debounce from 'utils/debounce';
 import TableLoader from 'components/TableLoader/TableLoader';
+import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import debounce from 'utils/debounce';
+import type { InterfaceQueryUserListItem } from 'utils/interfaces';
+import styles from './Users.module.css';
 
 const Users = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
 
   document.title = t('title');
 
+  const perPageResult = 12;
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
 
   const userType = localStorage.getItem('UserType');
-  const userId = localStorage.getItem('id');
+  const loggedInUserId = localStorage.getItem('id');
+
   const {
-    data: currentUserData,
-  }: {
-    data: InterfaceUserType | undefined;
-    loading: boolean;
-    error?: Error | undefined;
-  } = useQuery(USER_ORGANIZATION_LIST, {
-    variables: { id: localStorage.getItem('id') },
-  });
-  const {
-    data: dataUsers,
-    loading: loadingUsers,
+    data: usersData,
+    loading: loading,
+    fetchMore,
     refetch: refetchUsers,
+  }: {
+    data?: { users: InterfaceQueryUserListItem[] };
+    loading: boolean;
+    fetchMore: any;
+    refetch: any;
+    error?: ApolloError;
   } = useQuery(USER_LIST, {
+    variables: {
+      first: perPageResult,
+      skip: 0,
+      firstName_contains: '',
+      lastName_contains: '',
+    },
     notifyOnNetworkStatusChange: true,
   });
 
-  const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
   const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
+
+  // Manage loading more state
+  useEffect(() => {
+    if (!usersData) {
+      return;
+    }
+    if (usersData.users.length < perPageResult) {
+      setHasMore(false);
+    }
+  }, [usersData]);
 
   // To clear the search when the component is unmounted
   useEffect(() => {
@@ -75,40 +93,67 @@ const Users = (): JSX.Element => {
     }
   }, []);
 
-  const changeRole = async (e: any): Promise<void> => {
-    const { value } = e.target;
-
-    const inputData = value.split('?');
-
-    try {
-      const { data } = await updateUserType({
-        variables: {
-          id: inputData[1],
-          userType: inputData[0],
-        },
-      });
-
-      /* istanbul ignore next */
-      if (data) {
-        toast.success(t('roleUpdated'));
-        refetchUsers();
-      }
-    } catch (error: any) {
-      /* istanbul ignore next */
-      errorHandler(t, error);
+  // Manage the loading state
+  useEffect(() => {
+    if (loading && isLoadingMore == false) {
+      setIsLoading(true);
+    } else {
+      setIsLoading(false);
     }
-  };
+  }, [loading]);
 
   const handleSearchByName = (e: any): void => {
     const { value } = e.target;
     setSearchByName(value);
+    /* istanbul ignore next */
+    if (value.length === 0) {
+      resetAndRefetch();
+      return;
+    }
     refetchUsers({
       firstName_contains: value,
       lastName_contains: '',
       // Later on we can add several search and filter options
     });
   };
-
+  /* istanbul ignore next */
+  const resetAndRefetch = (): void => {
+    refetchUsers({
+      first: perPageResult,
+      skip: 0,
+      firstName_contains: '',
+      lastName_contains: '',
+    });
+    setHasMore(true);
+  };
+  /* istanbul ignore next */
+  const loadMoreUsers = (): void => {
+    setIsLoadingMore(true);
+    fetchMore({
+      variables: {
+        skip: usersData?.users.length || 0,
+        userType: 'ADMIN',
+        filter: searchByName,
+      },
+      updateQuery: (
+        prev: { users: InterfaceQueryUserListItem[] } | undefined,
+        {
+          fetchMoreResult,
+        }: {
+          fetchMoreResult: { users: InterfaceQueryUserListItem[] } | undefined;
+        }
+      ): { users: InterfaceQueryUserListItem[] } | undefined => {
+        setIsLoadingMore(false);
+        if (!fetchMoreResult) return prev;
+        if (fetchMoreResult.users.length < perPageResult) {
+          setHasMore(false);
+        }
+        return {
+          users: [...(prev?.users || []), ...(fetchMoreResult.users || [])],
+        };
+      },
+    });
+  };
   const debouncedHandleSearchByName = debounce(handleSearchByName);
 
   const headerTitles: string[] = [
@@ -116,6 +161,8 @@ const Users = (): JSX.Element => {
     t('name'),
     t('email'),
     t('roles_userType'),
+    t('joined_organizations'),
+    t('blocked_organizations'),
   ];
 
   return (
@@ -127,11 +174,7 @@ const Users = (): JSX.Element => {
             <div
               className={styles.input}
               style={{
-                display:
-                  currentUserData &&
-                  currentUserData.user.userType === 'SUPERADMIN'
-                    ? 'block'
-                    : 'none',
+                display: userType === 'SUPERADMIN' ? 'block' : 'none',
               }}
             >
               <Form.Control
@@ -178,84 +221,76 @@ const Users = (): JSX.Element => {
             </div>
           </div>
         </div>
-
-        {loadingUsers == false &&
-        dataUsers &&
-        dataUsers.users.length === 0 &&
+        {isLoading == false &&
+        usersData &&
+        usersData.users.length === 0 &&
         searchByName.length > 0 ? (
           <div className={styles.notFound}>
             <h4>
               {t('noResultsFoundFor')} &quot;{searchByName}&quot;
             </h4>
           </div>
-        ) : loadingUsers == false &&
-          dataUsers &&
-          dataUsers.users.length === 0 ? (
+        ) : isLoading == false && usersData && usersData.users.length === 0 ? (
           // eslint-disable-next-line react/jsx-indent
           <div className={styles.notFound}>
             <h4>{t('noUserFound')}</h4>
           </div>
         ) : (
           <div className={styles.listBox}>
-            {loadingUsers ? (
-              <TableLoader headerTitles={headerTitles} noOfRows={10} />
+            {isLoading ? (
+              <TableLoader
+                headerTitles={headerTitles}
+                noOfRows={perPageResult}
+              />
             ) : (
-              <Table responsive>
-                <thead>
-                  <tr>
-                    {headerTitles.map((title: string, index: number) => {
-                      return (
-                        <th key={index} scope="col">
-                          {title}
-                        </th>
-                      );
-                    })}
-                  </tr>
-                </thead>
-                <tbody>
-                  {dataUsers &&
-                    dataUsers?.users.map(
-                      (
-                        user: {
-                          _id: string;
-                          firstName: string;
-                          lastName: string;
-                          email: string;
-                          userType: string;
-                        },
-                        index: number
-                      ) => {
+              <InfiniteScroll
+                dataLength={usersData?.users.length ?? 0}
+                next={loadMoreUsers}
+                loader={
+                  <TableLoader
+                    noOfCols={headerTitles.length}
+                    noOfRows={perPageResult}
+                  />
+                }
+                hasMore={hasMore}
+                className={styles.listBox}
+                data-testid="users-list"
+                endMessage={
+                  <div className={'w-100 text-center my-4'}>
+                    <h5 className="m-0 ">{t('endOfResults')}</h5>
+                  </div>
+                }
+              >
+                <Table className="mb-0" responsive>
+                  <thead>
+                    <tr>
+                      {headerTitles.map((title: string, index: number) => {
                         return (
-                          <tr key={user._id}>
-                            <th scope="row">{index + 1}</th>
-                            <td>{`${user.firstName} ${user.lastName}`}</td>
-                            <td>{user.email}</td>
-                            <td>
-                              <select
-                                className="form-select"
-                                name={`role${user._id}`}
-                                data-testid={`changeRole${user._id}`}
-                                onChange={changeRole}
-                                disabled={user._id === userId}
-                                defaultValue={`${user.userType}?${user._id}`}
-                              >
-                                <option value={`ADMIN?${user._id}`}>
-                                  {t('admin')}
-                                </option>
-                                <option value={`SUPERADMIN?${user._id}`}>
-                                  {t('superAdmin')}
-                                </option>
-                                <option value={`USER?${user._id}`}>
-                                  {t('user')}
-                                </option>
-                              </select>
-                            </td>
-                          </tr>
+                          <th key={index} scope="col">
+                            {title}
+                          </th>
                         );
-                      }
-                    )}
-                </tbody>
-              </Table>
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {usersData &&
+                      usersData?.users.map((user, index) => {
+                        return (
+                          <UsersTableItem
+                            key={user._id}
+                            index={index}
+                            resetAndRefetch={resetAndRefetch}
+                            user={user}
+                            loggedInUserId={
+                              loggedInUserId ? loggedInUserId : ''
+                            }
+                          />
+                        );
+                      })}
+                  </tbody>
+                </Table>
+              </InfiniteScroll>
             )}
           </div>
         )}
