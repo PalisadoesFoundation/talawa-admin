@@ -116,7 +116,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   useEffect(() => {
     const data = filterData(eventData, orgData, userRole, userId);
     setEvents(data);
-  }, []);
+  }, [eventData, orgData, userRole, userId]);
 
   const handlePrevMonth = (): void => {
     if (currentMonth === 0) {
