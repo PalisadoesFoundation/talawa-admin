@@ -1,5 +1,7 @@
+import React from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import React, { useEffect, useState } from 'react';
+import type { ApolloError } from '@apollo/client';
+import { useEffect, useState } from 'react';
 import { Dropdown, Form, Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
@@ -14,25 +16,30 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATION_CONNECTION_LIST,
-  USER_LIST,
+  USER_LIST_REQUEST,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
+import TableLoader from 'components/TableLoader/TableLoader';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import debounce from 'utils/debounce';
 import { errorHandler } from 'utils/errorHandler';
 import type {
   InterfaceOrgConnectionType,
+  InterfaceQueryRequestListItem,
   InterfaceUserType,
 } from 'utils/interfaces';
 import styles from './Requests.module.css';
-import TableLoader from 'components/TableLoader/TableLoader';
 
 const Requests = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'requests' });
 
   document.title = t('title');
 
-  const [usersData, setUsersData] = useState([]);
+  const perPageResult = 12;
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasMore, sethasMore] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
 
   const [acceptAdminFunc] = useMutation(ACCEPT_ADMIN_MUTATION);
@@ -40,26 +47,40 @@ const Requests = (): JSX.Element => {
   const {
     data: currentUserData,
   }: {
-    data: InterfaceUserType | undefined;
-    loading: boolean;
-    error?: Error | undefined;
+    data?: InterfaceUserType;
+    error?: ApolloError;
   } = useQuery(USER_ORGANIZATION_LIST, {
     variables: { id: localStorage.getItem('id') },
   });
 
   const {
-    data: dataUsers,
-    loading: loadingUsers,
+    data: usersData,
+    loading: loading,
+    fetchMore,
     refetch: refetchUsers,
-  } = useQuery(USER_LIST, {
+  }: {
+    data?: { users: InterfaceQueryRequestListItem[] };
+    loading: boolean;
+    fetchMore: any;
+    refetch: any;
+    error?: ApolloError;
+  } = useQuery(USER_LIST_REQUEST, {
+    variables: {
+      first: perPageResult,
+      skip: 0,
+      userType: 'ADMIN',
+      adminApproved: false,
+      firstName_contains: searchByName,
+      lastName_contains: '',
+    },
     notifyOnNetworkStatusChange: true,
   });
 
   const {
     data: dataOrgs,
   }: {
-    data: InterfaceOrgConnectionType | undefined;
-    error?: Error;
+    data?: InterfaceOrgConnectionType;
+    error?: ApolloError;
   } = useQuery(ORGANIZATION_CONNECTION_LIST);
 
   // To clear the search when the component is unmounted
@@ -68,6 +89,16 @@ const Requests = (): JSX.Element => {
       setSearchByName('');
     };
   }, []);
+
+  // To manage loading states
+  useEffect(() => {
+    if (!usersData) {
+      return;
+    }
+    if (usersData.users.length < perPageResult) {
+      sethasMore(false);
+    }
+  }, [usersData]);
 
   // If the user is not Superadmin, redirect to Organizations screen
   useEffect(() => {
@@ -87,17 +118,59 @@ const Requests = (): JSX.Element => {
     }
   }, [dataOrgs]);
 
-  // Set the usersData to the users that are not approved yet after every api call
+  // Manage the loading state
   useEffect(() => {
-    if (dataUsers) {
-      setUsersData(
-        dataUsers.users.filter(
-          (user: any) =>
-            user.userType === 'ADMIN' && user.adminApproved === false
-        )
-      );
+    if (loading && isLoadingMore == false) {
+      setIsLoading(true);
+    } else {
+      setIsLoading(false);
     }
-  }, [dataUsers]);
+  }, [loading]);
+
+  /* istanbul ignore next */
+  const resetAndRefetch = (): void => {
+    refetchUsers({
+      first: perPageResult,
+      skip: 0,
+      userType: 'ADMIN',
+      adminApproved: false,
+      firstName_contains: '',
+      lastName_contains: '',
+    });
+    sethasMore(true);
+  };
+  /* istanbul ignore next */
+  const loadMoreRequests = (): void => {
+    setIsLoadingMore(true);
+    fetchMore({
+      variables: {
+        skip: usersData?.users.length || 0,
+        userType: 'ADMIN',
+        adminApproved: false,
+        firstName_contains: searchByName,
+        lastName_contains: '',
+      },
+      updateQuery: (
+        prev: { users: InterfaceQueryRequestListItem[] } | undefined,
+        {
+          fetchMoreResult,
+        }: {
+          fetchMoreResult:
+            | { users: InterfaceQueryRequestListItem[] }
+            | undefined;
+        }
+      ): { users: InterfaceQueryRequestListItem[] } | undefined => {
+        setIsLoadingMore(false);
+        if (!fetchMoreResult) return prev;
+        if (fetchMoreResult.users.length < perPageResult) {
+          sethasMore(false);
+        }
+        return {
+          users: [...(prev?.users || []), ...(fetchMoreResult.users || [])],
+        };
+      },
+    });
+  };
 
   const acceptAdmin = async (userId: any): Promise<void> => {
     try {
@@ -110,7 +183,7 @@ const Requests = (): JSX.Element => {
       /* istanbul ignore next */
       if (data) {
         toast.success(t('userApproved'));
-        setUsersData(usersData.filter((user: any) => user._id !== userId));
+        resetAndRefetch();
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -129,7 +202,7 @@ const Requests = (): JSX.Element => {
       /* istanbul ignore next */
       if (data) {
         toast.success(t('userRejected'));
-        setUsersData(usersData.filter((user: any) => user._id !== userId));
+        resetAndRefetch();
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -137,10 +210,15 @@ const Requests = (): JSX.Element => {
     }
   };
 
-  const handleSearchByName = (e: any): any => {
+  /* istanbul ignore next */
+  const handleSearchByName = async (e: any): Promise<void> => {
     const { value } = e.target;
     setSearchByName(value);
-    refetchUsers({
+    if (value === '') {
+      resetAndRefetch();
+      return;
+    }
+    await refetchUsers({
       firstName_contains: value,
       lastName_contains: '',
       // Later on we can add several search and filter options
@@ -217,82 +295,82 @@ const Requests = (): JSX.Element => {
             </div>
           </div>
         </div>
-        {loadingUsers == false &&
-        usersData.length === 0 &&
+        {isLoading == false &&
+        usersData?.users.length === 0 &&
         searchByName.length > 0 ? (
           <div className={styles.notFound}>
             <h4>
               {t('noResultsFoundFor')} &quot;{searchByName}&quot;
             </h4>
           </div>
-        ) : loadingUsers == false && usersData.length === 0 ? (
+        ) : isLoading == false && usersData?.users.length === 0 ? (
           <div className={styles.notFound}>
             <h4>{t('noRequestFound')}</h4>
           </div>
+        ) : isLoading ? (
+          <TableLoader headerTitles={headerTitles} noOfRows={perPageResult} />
         ) : (
-          <div className={styles.listBox}>
-            {loadingUsers ? (
-              <TableLoader headerTitles={headerTitles} noOfRows={10} />
-            ) : (
-              <Table responsive>
-                <thead>
-                  <tr>
-                    {headerTitles.map((title: string, index: number) => {
-                      return (
-                        <th key={index} scope="col">
-                          {title}
-                        </th>
-                      );
-                    })}
-                  </tr>
-                </thead>
-                <tbody>
-                  {usersData.map(
-                    (
-                      user: {
-                        _id: string;
-                        firstName: string;
-                        lastName: string;
-                        email: string;
-                        userType: string;
-                      },
-                      index: number
-                    ) => {
-                      return (
-                        <tr key={user._id}>
-                          <th scope="row">{index + 1}</th>
-                          <td>{`${user.firstName} ${user.lastName}`}</td>
-                          <td>{user.email}</td>
-                          <td>
-                            <Button
-                              className="btn btn-success btn-sm"
-                              onClick={async (): Promise<void> => {
-                                await acceptAdmin(user._id);
-                              }}
-                              data-testid={`acceptUser${user._id}`}
-                            >
-                              {t('accept')}
-                            </Button>
-                          </td>
-                          <td>
-                            <Button
-                              className="btn btn-danger btn-sm"
-                              onClick={async (): Promise<void> => {
-                                await rejectAdmin(user._id);
-                              }}
-                              data-testid={`rejectUser${user._id}`}
-                            >
-                              {t('reject')}
-                            </Button>
-                          </td>
-                        </tr>
-                      );
-                    }
-                  )}
-                </tbody>
-              </Table>
-            )}
-          </div>
+          <InfiniteScroll
+            dataLength={usersData?.users.length ?? 0}
+            next={loadMoreRequests}
+            loader={<TableLoader noOfCols={5} noOfRows={perPageResult} />}
+            hasMore={hasMore}
+            className={styles.listBox}
+            data-testid="organizations-list"
+            endMessage={
+              <div className={'w-100 text-center my-4'}>
+                <h5 className="m-0 ">{t('endOfResults')}</h5>
+              </div>
+            }
+          >
+            <Table className="mb-0" responsive>
+              <thead>
+                <tr>
+                  {headerTitles.map((title: string, index: number) => {
+                    return (
+                      <th key={index} scope="col">
+                        {title}
+                      </th>
+                    );
+                  })}
+                </tr>
+              </thead>
+              <tbody>
+                {usersData?.users &&
+                  usersData.users.map((user, index) => {
+                    return (
+                      <tr key={user._id}>
+                        <th scope="row">{index + 1}</th>
+                        <td>{`${user.firstName} ${user.lastName}`}</td>
+                        <td>{user.email}</td>
+                        <td>
+                          <Button
+                            className="btn btn-success btn-sm"
+                            onClick={async (): Promise<void> => {
+                              await acceptAdmin(user._id);
+                            }}
+                            data-testid={`acceptUser${user._id}`}
+                          >
+                            {t('accept')}
+                          </Button>
+                        </td>
+                        <td>
+                          <Button
+                            className="btn btn-danger btn-sm"
+                            onClick={async (): Promise<void> => {
+                              await rejectAdmin(user._id);
+                            }}
+                            data-testid={`rejectUser${user._id}`}
+                          >
+                            {t('reject')}
+                          </Button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </Table>
+          </InfiniteScroll>
         )}
       </SuperAdminScreen>
     </>

@@ -42,8 +42,12 @@ export const ORGANIZATION_LIST = gql`
 
 // Query to take the Organization list with filter option
 export const ORGANIZATION_CONNECTION_LIST = gql`
-  query OrganizationsConnection($filter: String) {
-    organizationsConnection(where: { name_contains: $filter }) {
+  query OrganizationsConnection($filter: String, $first: Int, $skip: Int) {
+    organizationsConnection(
+      where: { name_contains: $filter }
+      first: $first
+      skip: $skip
+    ) {
       _id
       image
       creator {
@@ -64,14 +68,20 @@ export const ORGANIZATION_CONNECTION_LIST = gql`
 `;
 
 // Query to take the User list
-
 export const USER_LIST = gql`
-  query Users($firstName_contains: String, $lastName_contains: String) {
+  query Users(
+    $firstName_contains: String
+    $lastName_contains: String
+    $skip: Int
+    $first: Int
+  ) {
     users(
       where: {
         firstName_contains: $firstName_contains
         lastName_contains: $lastName_contains
       }
+      skip: $skip
+      first: $first
     ) {
       firstName
       lastName
@@ -80,13 +90,70 @@ export const USER_LIST = gql`
       email
       userType
       adminApproved
+      adminFor {
+        _id
+      }
+      createdAt
       organizationsBlockedBy {
         _id
         name
+        image
+        location
+        createdAt
+        creator {
+          _id
+          firstName
+          lastName
+          image
+          email
+          createdAt
+        }
       }
       joinedOrganizations {
         _id
+        name
+        image
+        location
+        createdAt
+        creator {
+          _id
+          firstName
+          lastName
+          image
+          email
+          createdAt
+        }
       }
+    }
+  }
+`;
+
+export const USER_LIST_REQUEST = gql`
+  query Users(
+    $firstName_contains: String
+    $lastName_contains: String
+    $first: Int
+    $skip: Int
+    $userType: String
+    $adminApproved: Boolean
+  ) {
+    users(
+      where: {
+        firstName_contains: $firstName_contains
+        lastName_contains: $lastName_contains
+      }
+      skip: $skip
+      first: $first
+      userType: $userType
+      adminApproved: $adminApproved
+    ) {
+      firstName
+      lastName
+      image
+      _id
+      email
+      userType
+      adminApproved
       createdAt
     }
   }

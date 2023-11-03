@@ -1,228 +1,19 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { act, render, screen } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-import { I18nextProvider } from 'react-i18next';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
+import { I18nextProvider } from 'react-i18next';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 
-import Requests from './Requests';
-import {
-  ACCEPT_ADMIN_MUTATION,
-  REJECT_ADMIN_MUTATION,
-} from 'GraphQl/Mutations/mutations';
-import {
-  ORGANIZATION_CONNECTION_LIST,
-  USER_LIST,
-  USER_ORGANIZATION_LIST,
-} from 'GraphQl/Queries/Queries';
-import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
-import i18nForTest from 'utils/i18nForTest';
-import { StaticMockLink } from 'utils/StaticMockLink';
 import { ToastContainer } from 'react-toastify';
-
-const MOCKS = [
-  {
-    request: {
-      query: USER_ORGANIZATION_LIST,
-      variables: { id: localStorage.getItem('id') },
-    },
-    result: {
-      data: {
-        user: {
-          userType: 'SUPERADMIN',
-          firstName: 'John',
-          lastName: 'Doe',
-          image: '',
-          email: 'John_Does_Palasidoes@gmail.com',
-          adminFor: {
-            _id: 1,
-            name: 'Akatsuki',
-            image: '',
-          },
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_LIST,
-    },
-    result: {
-      data: {
-        users: [
-          {
-            _id: '123',
-            firstName: 'John',
-            lastName: 'Doe',
-            image: 'dummyImage',
-            email: 'johndoe@gmail.com',
-            userType: 'SUPERADMIN',
-            adminApproved: true,
-            createdAt: '20/06/2022',
-            organizationsBlockedBy: [
-              {
-                _id: '256',
-                name: 'ABC',
-              },
-            ],
-            joinedOrganizations: [
-              {
-                __typename: 'Organization',
-                _id: '6401ff65ce8e8406b8f07af1',
-              },
-            ],
-          },
-          {
-            _id: '456',
-            firstName: 'Sam',
-            lastName: 'Smith',
-            image: 'dummyImage',
-            email: 'samsmith@gmail.com',
-            userType: 'ADMIN',
-            adminApproved: false,
-            createdAt: '20/06/2022',
-            organizationsBlockedBy: [
-              {
-                _id: '256',
-                name: 'ABC',
-              },
-            ],
-            joinedOrganizations: [
-              {
-                __typename: 'Organization',
-                _id: '6401ff65ce8e8406b8f07af2',
-              },
-            ],
-          },
-          {
-            _id: '789',
-            firstName: 'Peter',
-            lastName: 'Parker',
-            image: 'dummyImage',
-            email: 'peterparker@gmail.com',
-            userType: 'USER',
-            adminApproved: true,
-            createdAt: '20/06/2022',
-            organizationsBlockedBy: [
-              {
-                _id: '256',
-                name: 'ABC',
-              },
-            ],
-            joinedOrganizations: [
-              {
-                __typename: 'Organization',
-                _id: '6401ff65ce8e8406b8f07af3',
-              },
-            ],
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: ACCEPT_ADMIN_MUTATION,
-      variables: {
-        id: '123',
-        userType: 'ADMIN',
-      },
-    },
-    result: {
-      data: {
-        acceptAdmin: true,
-      },
-    },
-  },
-  {
-    request: {
-      query: REJECT_ADMIN_MUTATION,
-      variables: {
-        id: '123',
-        userType: 'ADMIN',
-      },
-    },
-    result: {
-      data: {
-        rejectAdmin: true,
-      },
-    },
-  },
-];
-
-const EMPTY_ORG_MOCKS = [
-  {
-    request: {
-      query: ACCEPT_ADMIN_MUTATION,
-      variables: {
-        id: '123',
-        userType: 'ADMIN',
-      },
-    },
-    result: {
-      data: undefined,
-    },
-  },
-  {
-    request: {
-      query: REJECT_ADMIN_MUTATION,
-      variables: {
-        id: '123',
-        userType: 'ADMIN',
-      },
-    },
-    result: {
-      data: undefined,
-    },
-  },
-  {
-    request: {
-      query: ORGANIZATION_CONNECTION_LIST,
-    },
-    result: {
-      data: {
-        organizationsConnection: [],
-      },
-    },
-  },
-];
-
-const ORG_LIST_MOCK = [
-  ...MOCKS,
-  {
-    request: {
-      query: ORGANIZATION_CONNECTION_LIST,
-    },
-    result: {
-      data: {
-        organizationsConnection: [
-          {
-            _id: 1,
-            image: '',
-            name: 'Akatsuki',
-            creator: {
-              firstName: 'John',
-              lastName: 'Doe',
-            },
-            admins: [
-              {
-                _id: '123',
-              },
-            ],
-            members: {
-              _id: '234',
-            },
-            createdAt: '02/02/2022',
-            location: 'Washington DC',
-          },
-        ],
-      },
-    },
-  },
-];
+import { store } from 'state/store';
+import { StaticMockLink } from 'utils/StaticMockLink';
+import i18nForTest from 'utils/i18nForTest';
+import Requests from './Requests';
+import { EMPTY_ORG_MOCKS, MOCKS, ORG_LIST_MOCK } from './RequestsMocks';
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_ORG_MOCKS, true);
@@ -236,10 +27,19 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+beforeEach(() => {
+  localStorage.setItem('UserType', 'SUPERADMIN');
+  localStorage.setItem('FirstName', 'John');
+  localStorage.setItem('LastName', 'Doe');
+});
+
+afterEach(() => {
+  localStorage.clear();
+});
+
 describe('Testing Request screen', () => {
   test('Component should be rendered properly', async () => {
     window.location.assign('/orglist');
-    localStorage.setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link3}>
         <BrowserRouter>

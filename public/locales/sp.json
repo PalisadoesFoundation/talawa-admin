@@ -84,6 +84,7 @@
     "sort": "Ordenar",
     "filter": "Filtrar",
     "cancel": "Cancelar",
+    "endOfResults": "Fin de los resultados",
     "noOrgErrorTitle": "Organizaciones no encontradas",
     "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
     "noResultsFoundFor": "No se encontraron resultados para "
@@ -104,6 +105,15 @@
     "name": "Nombre",
     "email": "Correo electrónico",
     "roles_userType": "Rol/Tipo de usuario",
+    "joined_organizations": "Organizaciones unidas",
+    "blocked_organizations": "Organizaciones bloqueadas",
+    "endOfResults": "Fin de los resultados",
+    "orgJoinedBy": "Organizaciones unidas por",
+    "orgThatBlocked": "Organizaciones bloqueadas por",
+    "hasNotJoinedAnyOrg": "No se ha unido a ninguna organización.",
+    "isNotBlockedByAnyOrg": "No está bloqueado por ninguna organización.",
+    "searchByOrgName": "Buscar por nombre de organización",
+    "view": "Ver",
     "admin": "ADMINISTRACIÓN",
     "superAdmin": "SUPERADMIN",
     "user": "USUARIO",
@@ -125,6 +135,7 @@
     "accept": "Aceptar",
     "reject": "Rechazar",
     "enterName": "Ingrese su nombre",
+    "endOfResults": "Fin de los resultados",
     "loadingRequests": "Cargando solicitudes ...",
     "noRequestFound": "No se encontró ninguna solicitud.",
     "sort": "Ordenar",
@@ -146,6 +157,13 @@
     "events": "Eventos",
     "blockedUsers": "Usuarios bloqueados",
     "requests": "Solicitudes",
+    "viewAll": "Ver Todo",
+    "upcomingEvents": "Próximos Eventos",
+    "noUpcomingEvents": "No Hay Próximos Eventos",
+    "latestPosts": "Últimas Publicaciones",
+    "noPostsPresent": "No Hay Publicaciones Presentes",
+    "membershipRequests": "Solicitudes de Membresía",
+    "noMembershipRequests": "No Hay Solicitudes de Membresía",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
   "organizationPeople": {
@@ -332,7 +350,7 @@
     "enterNewPassword": "Ingrese nueva clave",
     "cofirmNewPassword": "Confirmar nueva contraseña",
     "changePassword": "Cambia la contraseña",
-    "backToHome": "De vuelta a casa",
+    "backToLogin": "Volver al inicio de sesión",
     "userOtp": "por ejemplo 12345",
     "password": "Contraseña",
     "emailNotRegistered": "El correo electrónico no está registrado.",
@@ -383,9 +401,9 @@
   "deleteOrg": {
     "deleteOrganization": "Eliminar organización",
     "deleteMsg": "¿Desea eliminar esta organización?",
-    "no": "No",
-    "yes": "Sí",
-    "longDelOrgMsg": "Al hacer clic en el botón de Eliminar organización, se eliminará permanentemente la organización junto con sus eventos, etiquetas y todos los datos relacionados."
+    "cancel": "Cancelar",
+    "confirmDelete": "Confirmar eliminación",
+    "longDelOrgMsg": "Al hacer clic en el botón Eliminar organización, la organización se eliminará permanentemente junto con sus eventos, etiquetas y todos los datos relacionados."
   },
   "userUpdate": {
     "firstName": "Primer nombre",

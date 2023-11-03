@@ -86,7 +86,7 @@
     "cancel": "Cancel",
     "noOrgErrorTitle": "Organizations Not Found",
     "noOrgErrorDescription": "Please create an organization through dashboard",
-
+    "endOfResults": "End of results",
     "manageFeatures": "Manage Features",
     "manageFeaturesInfo": "Creation Successful ! Please select features that you want to enale for this organization from the plugin store.",
     "goToStore": "Go to Plugin Store",
@@ -109,6 +109,15 @@
     "name": "Name",
     "email": "Email",
     "roles_userType": "Role/User-Type",
+    "joined_organizations": "Joined Organizations",
+    "blocked_organizations": "Blocked Organizations",
+    "orgJoinedBy": "Organizations Joined By",
+    "orgThatBlocked": "Organizations That Blocked",
+    "endOfResults": "End of results",
+    "hasNotJoinedAnyOrg": "has not joined any organization",
+    "isNotBlockedByAnyOrg": "is not blocked by any organization",
+    "searchByOrgName": "Search By Organization Name",
+    "view": "View",
     "admin": "ADMIN",
     "superAdmin": "SUPERADMIN",
     "user": "USER",
@@ -131,6 +140,7 @@
     "accept": "Accept",
     "reject": "Reject",
     "enterName": "Enter Name",
+    "endOfResults": "End of results",
     "loadingRequests": "Loading Requests...",
     "noRequestFound": "No Request Found",
     "sort": "Sort",
@@ -153,6 +163,13 @@
     "events": "Events",
     "blockedUsers": "Blocked Users",
     "requests": "Requests",
+    "viewAll": "View All",
+    "upcomingEvents": "Upcoming Events",
+    "noUpcomingEvents": "No Upcoming Events",
+    "latestPosts": "Latest Posts",
+    "noPostsPresent": "No Posts Present",
+    "membershipRequests": "Membership requests",
+    "noMembershipRequests": "No Membership requests present",
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "organizationPeople": {
@@ -339,7 +356,7 @@
     "enterNewPassword": "Enter New Password",
     "cofirmNewPassword": "Confirm New Password",
     "changePassword": "Change Password",
-    "backToHome": "Back to Home",
+    "backToLogin": "Back to Login",
     "userOtp": "e.g. 12345",
     "password": "Password",
     "emailNotRegistered": "Email is not registered.",
@@ -388,9 +405,9 @@
   "deleteOrg": {
     "deleteOrganization": "Delete Organization",
     "deleteMsg": "Do you want to delete this organization?",
-    "no": "No",
-    "yes": "Yes",
-    "longDelOrgMsg": "By clicking on Delete organization button you will the organization will be permanently deleted along with its events, tags and all related data."
+    "cancel": "Cancel",
+    "confirmDelete": "Confirm Delete",
+    "longDelOrgMsg": "By clicking on Delete Organization button the organization will be permanently deleted along with its events, tags and all related data."
   },
   "userUpdate": {
     "firstName": "First Name",
