@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 // jest-dom adds custom jest matchers for asserting on DOM nodes.
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
@@ -15,6 +16,9 @@ global.console.error = function (...args): void {
 global.console.warn = function (...args): void {
   throw new Error(format(...args));
 };
+Object.defineProperty(HTMLMediaElement.prototype, 'muted', {
+  set: () => {},
+});
 
 import { jestPreviewConfigure } from 'jest-preview';
 import { configure } from 'enzyme';

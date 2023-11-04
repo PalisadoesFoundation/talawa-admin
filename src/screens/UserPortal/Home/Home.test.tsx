@@ -51,6 +51,8 @@ const MOCKS = [
               commentCount: 0,
               comments: [],
               likedBy: [],
+              pinned: false,
+              createdAt: '2023-02-18T09:22:27.969Z',
             },
             {
               _id: '6411e54835d7ba2344a78e29',
@@ -66,6 +68,7 @@ const MOCKS = [
               },
               likeCount: 0,
               commentCount: 2,
+              createdAt: '2023-02-18T09:22:27.969Z',
               comments: [
                 {
                   _id: '64eb13beca85de60ebe0ed0e',
@@ -92,6 +95,8 @@ const MOCKS = [
                     firstName: 'Noble',
                     lastName: 'Mittal',
                     email: 'test@gmail.com',
+                    createdAt: '2023-02-18T09:22:27.969Z',
+
                     __typename: 'User',
                   },
                   likeCount: 0,
@@ -107,6 +112,7 @@ const MOCKS = [
                   lastName: 'abc',
                 },
               ],
+              pinned: false,
             },
           ],
         },

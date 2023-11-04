@@ -594,6 +594,7 @@ export const ORGANIZATION_POST_CONNECTION_LIST = gql`
           lastName
           email
         }
+        pinned
         likeCount
         commentCount
         comments {
@@ -610,6 +611,7 @@ export const ORGANIZATION_POST_CONNECTION_LIST = gql`
           }
           text
         }
+        createdAt
         likedBy {
           _id
           firstName
