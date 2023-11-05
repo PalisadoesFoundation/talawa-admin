@@ -59,7 +59,7 @@ jobs:
         uses: VeryGoodOpenSource/very_good_coverage@v2
         with:
           path: "./coverage/lcov.info"
-          min_coverage: 91.0
+          min_coverage: 95.0
   Graphql-Inspector:
     name: Runs Introspection on the github talawa-api repo on the schema.graphql file
     runs-on: ubuntu-latest
