@@ -29,17 +29,15 @@ import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 import CardItemLoading from 'components/OrganizationDashCards/CardItemLoading';
 import DashboardCardLoading from 'components/OrganizationDashCards/DashboardCardLoading';
-import getOrganizationId from 'utils/getOrganizationId';
 
 function organizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
   document.title = t('title');
   const currentUrl = window.location.href.split('=')[1];
-  const organizationId = getOrganizationId(window.location.href);
-  const peopleLink = `/orgpeople/id=${organizationId}`;
-  const postsLink = `/orgpost/id=${organizationId}`;
-  const eventsLink = `/orgevents/id=${organizationId}`;
-  const blockUserLink = `/blockuser/id=${organizationId}`;
+  const peopleLink = `/orgpeople/id=${currentUrl}`;
+  const postsLink = `/orgpost/id=${currentUrl}`;
+  const eventsLink = `/orgevents/id=${currentUrl}`;
+  const blockUserLink = `/blockuser/id=${currentUrl}`;
   const requestLink = '/requests';
 
   const history = useHistory();
@@ -231,9 +229,7 @@ function organizationDashboard(): JSX.Element {
                       size="sm"
                       variant="light"
                       data-testid="viewAllEvents"
-                      onClick={(): void =>
-                        history.push(`/orgevents/id=${currentUrl}`)
-                      }
+                      onClick={(): void => history.push(eventsLink)}
                     >
                       {t('viewAll')}
                     </Button>
@@ -270,9 +266,7 @@ function organizationDashboard(): JSX.Element {
                       size="sm"
                       variant="light"
                       data-testid="viewAllPosts"
-                      onClick={(): void =>
-                        history.push(`/orgpost/id=${currentUrl}`)
-                      }
+                      onClick={(): void => history.push(postsLink)}
                     >
                       {t('viewAll')}
                     </Button>
