@@ -111,7 +111,7 @@ describe('Organisation Settings Page', () => {
     expect(screen.getAllByText(/Delete Organization/i)).toHaveLength(3);
     expect(
       screen.getByText(
-        /By clicking on Delete organization button you will the organization will be permanently deleted along with its events, tags and all related data/i
+        /By clicking on Delete Organization button the organization will be permanently deleted along with its events, tags and all related data/i
       )
     ).toBeInTheDocument();
     expect(screen.getByText(/Other Settings/i)).toBeInTheDocument();

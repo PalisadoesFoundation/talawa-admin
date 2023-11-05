@@ -228,7 +228,11 @@ function loginPage(): JSX.Element {
               <ChangeLanguageDropDown
                 parentContainerStyle={styles.langChangeBtn}
               />
-              <TalawaLogo className={styles.talawa_logo} />
+              <TalawaLogo
+                className={`${styles.talawa_logo}  ${
+                  showTab === 'REGISTER' && styles.marginTopForReg
+                }`}
+              />
               {/* LOGIN FORM */}
               <div
                 className={`${
