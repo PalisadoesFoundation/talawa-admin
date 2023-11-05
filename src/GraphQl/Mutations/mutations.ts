@@ -402,8 +402,22 @@ export const ADD_PLUGIN_MUTATION = gql`
 `;
 
 export const UPDATE_POST_MUTATION = gql`
-  mutation UpdatePost($id: ID!, $title: String, $text: String) {
-    updatePost(id: $id, data: { title: $title, text: $text }) {
+  mutation UpdatePost(
+    $id: ID!
+    $title: String
+    $text: String
+    $imageUrl: String
+    $videoUrl: String
+  ) {
+    updatePost(
+      id: $id
+      data: {
+        title: $title
+        text: $text
+        imageUrl: $imageUrl
+        videoUrl: $videoUrl
+      }
+    ) {
       _id
     }
   }
@@ -623,6 +637,23 @@ export const UNLIKE_COMMENT = gql`
   }
 `;
 
+// Changes the role of a user in an organization
+export const UPDATE_USER_ROLE_IN_ORG_MUTATION = gql`
+  mutation updateUserRoleInOrganization(
+    $organizationId: ID!
+    $userId: ID!
+    $role: String!
+  ) {
+    updateUserRoleInOrganization(
+      organizationId: $organizationId
+      userId: $userId
+      role: $role
+    ) {
+      _id
+    }
+  }
+`;
+
 export const CREATE_DIRECT_CHAT = gql`
   mutation createDirectChat($userIds: [ID!]!, $organizationId: ID!) {
     createDirectChat(
@@ -641,6 +672,13 @@ export const PLUGIN_SUBSCRIPTION = gql`
       _id
       pluginDesc
       uninstalledOrgs
+    }
+  }
+`;
+export const TOGGLE_PINNED_POST = gql`
+  mutation TogglePostPin($id: ID!) {
+    togglePostPin(id: $id) {
+      _id
     }
   }
 `;

@@ -105,6 +105,7 @@ function organizationEvents(): JSX.Element {
       if (createEventData) {
         toast.success(t('eventCreated'));
         refetch();
+        hideInviteModal();
         setFormState({
           title: '',
           eventdescrip: '',

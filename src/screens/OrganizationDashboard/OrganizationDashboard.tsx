@@ -132,7 +132,7 @@ function organizationDashboard(): JSX.Element {
                   role="button"
                   className="mb-4"
                   onClick={(): void => {
-                    history.push(`${peopleLink}`);
+                    history.push(peopleLink);
                   }}
                 >
                   <DashBoardCard
@@ -147,7 +147,7 @@ function organizationDashboard(): JSX.Element {
                   role="button"
                   className="mb-4"
                   onClick={(): void => {
-                    history.push(`${peopleLink}`);
+                    history.push(peopleLink);
                   }}
                 >
                   <DashBoardCard
@@ -162,7 +162,7 @@ function organizationDashboard(): JSX.Element {
                   role="button"
                   className="mb-4"
                   onClick={(): void => {
-                    history.push(`${postsLink}`);
+                    history.push(postsLink);
                   }}
                 >
                   <DashBoardCard
@@ -177,7 +177,7 @@ function organizationDashboard(): JSX.Element {
                   role="button"
                   className="mb-4"
                   onClick={(): void => {
-                    history.push(`${eventsLink}`);
+                    history.push(eventsLink);
                   }}
                 >
                   <DashBoardCard
@@ -192,7 +192,7 @@ function organizationDashboard(): JSX.Element {
                   role="button"
                   className="mb-4"
                   onClick={(): void => {
-                    history.push(`${blockUserLink}`);
+                    history.push(blockUserLink);
                   }}
                 >
                   <DashBoardCard
@@ -207,7 +207,7 @@ function organizationDashboard(): JSX.Element {
                   role="button"
                   className="mb-4"
                   onClick={(): void => {
-                    history.push(`${requestLink}`);
+                    history.push(requestLink);
                   }}
                 >
                   <DashBoardCard
@@ -222,14 +222,16 @@ function organizationDashboard(): JSX.Element {
               <Col lg={6} className="mb-4">
                 <Card border="0" className="rounded-4">
                   <div className={styles.cardHeader}>
-                    <div className={styles.cardTitle}>Upcoming events</div>
+                    <div className={styles.cardTitle}>
+                      {t('upcomingEvents')}
+                    </div>
                     <Button
                       size="sm"
                       variant="light"
                       data-testid="viewAllEvents"
                       onClick={(): void => history.push(eventsLink)}
                     >
-                      View all
+                      {t('viewAll')}
                     </Button>
                   </div>
                   <Card.Body className={styles.cardBody}>
@@ -239,7 +241,7 @@ function organizationDashboard(): JSX.Element {
                       })
                     ) : upcomingEvents.length == 0 ? (
                       <div className={styles.emptyContainer}>
-                        <h6>No upcoming events</h6>
+                        <h6>{t('noUpcomingEvents')}</h6>
                       </div>
                     ) : (
                       upcomingEvents.slice(0, 5).map((event) => {
@@ -259,14 +261,14 @@ function organizationDashboard(): JSX.Element {
               <Col lg={6} className="mb-4">
                 <Card border="0" className="rounded-4">
                   <div className={styles.cardHeader}>
-                    <div className={styles.cardTitle}>Latest posts</div>
+                    <div className={styles.cardTitle}>{t('latestPosts')}</div>
                     <Button
                       size="sm"
                       variant="light"
                       data-testid="viewAllPosts"
                       onClick={(): void => history.push(postsLink)}
                     >
-                      View all
+                      {t('viewAll')}
                     </Button>
                   </div>
                   <Card.Body className={styles.cardBody}>
@@ -276,7 +278,7 @@ function organizationDashboard(): JSX.Element {
                       })
                     ) : postData?.postsByOrganization?.length == 0 ? (
                       <div className={styles.emptyContainer}>
-                        <h6>No posts present</h6>
+                        <h6>{t('noPostsPresent')}</h6>
                       </div>
                     ) : (
                       postData?.postsByOrganization.slice(0, 5).map((post) => {
@@ -297,7 +299,9 @@ function organizationDashboard(): JSX.Element {
           <Col xl={4}>
             <Card border="0" className="rounded-4">
               <div className={styles.cardHeader}>
-                <div className={styles.cardTitle}>Membership requests</div>
+                <div className={styles.cardTitle}>
+                  {t('membershipRequests')}
+                </div>
                 <Button
                   size="sm"
                   variant="light"
@@ -306,7 +310,7 @@ function organizationDashboard(): JSX.Element {
                     toast.success('Coming soon!');
                   }}
                 >
-                  View all
+                  {t('viewAll')}
                 </Button>
               </div>
               <Card.Body className={styles.cardBody}>
@@ -316,7 +320,7 @@ function organizationDashboard(): JSX.Element {
                   })
                 ) : data?.organizations[0].membershipRequests.length == 0 ? (
                   <div className={styles.emptyContainer}>
-                    <h6>No membership requests present</h6>
+                    <h6>{t('noMembershipRequests')}</h6>
                   </div>
                 ) : (
                   data?.organizations[0]?.membershipRequests
