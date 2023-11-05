@@ -83,41 +83,53 @@ function organizationEvents(): JSX.Element {
     e: ChangeEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
-    try {
-      const { data: createEventData } = await create({
-        variables: {
-          title: formState.title,
-          description: formState.eventdescrip,
-          isPublic: publicchecked,
-          recurring: recurringchecked,
-          isRegisterable: registrablechecked,
-          organizationId: currentUrl,
-          startDate: dayjs(startDate).format('YYYY-MM-DD'),
-          endDate: dayjs(endDate).format('YYYY-MM-DD'),
-          allDay: alldaychecked,
-          location: formState.location,
-          startTime: !alldaychecked ? formState.startTime + 'Z' : null,
-          endTime: !alldaychecked ? formState.endTime + 'Z' : null,
-        },
-      });
-
-      /* istanbul ignore next */
-      if (createEventData) {
-        toast.success(t('eventCreated'));
-        refetch();
-        hideInviteModal();
-        setFormState({
-          title: '',
-          eventdescrip: '',
-          date: '',
-          location: '',
-          startTime: '08:00:00',
-          endTime: '18:00:00',
+    if (
+      formState.title.trim().length > 0 &&
+      formState.eventdescrip.trim().length > 0 &&
+      formState.location.trim().length > 0
+    ) {
+      try {
+        const { data: createEventData } = await create({
+          variables: {
+            title: formState.title,
+            description: formState.eventdescrip,
+            isPublic: publicchecked,
+            recurring: recurringchecked,
+            isRegisterable: registrablechecked,
+            organizationId: currentUrl,
+            startDate: dayjs(startDate).format('YYYY-MM-DD'),
+            endDate: dayjs(endDate).format('YYYY-MM-DD'),
+            allDay: alldaychecked,
+            location: formState.location,
+            startTime: !alldaychecked ? formState.startTime + 'Z' : null,
+            endTime: !alldaychecked ? formState.endTime + 'Z' : null,
+          },
         });
+
+        /* istanbul ignore next */
+        if (createEventData) {
+          toast.success(t('eventCreated'));
+          refetch();
+          hideInviteModal();
+          setFormState({
+            title: '',
+            eventdescrip: '',
+            date: '',
+            location: '',
+            startTime: '08:00:00',
+            endTime: '18:00:00',
+          });
+        }
+      } catch (error: any) {
+        /* istanbul ignore next */
+        errorHandler(t, error);
       }
-    } catch (error: any) {
-      /* istanbul ignore next */
-      errorHandler(t, error);
+    } else if (formState.title.trim().length === 0) {
+      toast.warning('Please enter a valid title!');
+    } else if (formState.eventdescrip.trim().length === 0) {
+      toast.warning('Please enter a valid description!');
+    } else if (formState.location.trim().length === 0) {
+      toast.warning('Please enter a valid location!');
     }
   };
 
