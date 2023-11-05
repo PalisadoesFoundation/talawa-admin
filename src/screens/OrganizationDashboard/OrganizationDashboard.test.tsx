@@ -92,14 +92,14 @@ describe('Organisation Dashboard Page', () => {
 
     const peopleBtn = screen.getByText('Members');
     const adminBtn = screen.getByText('Admins');
-    const postBtn = screen.getByText('Posts');
-    const eventBtn = screen.getByText('Events');
+    const postBtn = screen.getAllByText('Posts');
+    const eventBtn = screen.getAllByText('Events');
     const blockUserBtn = screen.getByText('Blocked Users');
     const requestBtn = screen.getByText('Requests');
     userEvent.click(peopleBtn);
     userEvent.click(adminBtn);
-    userEvent.click(postBtn);
-    userEvent.click(eventBtn);
+    userEvent.click(postBtn[0]);
+    userEvent.click(eventBtn[0]);
     userEvent.click(blockUserBtn);
     userEvent.click(requestBtn);
   });
