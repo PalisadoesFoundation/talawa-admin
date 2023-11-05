@@ -100,6 +100,8 @@ describe('Organisation Dashboard Page', () => {
     userEvent.click(adminBtn);
     userEvent.click(postBtn[0]);
     userEvent.click(eventBtn[0]);
+    userEvent.click(postBtn[1]);
+    userEvent.click(eventBtn[1]);
     userEvent.click(blockUserBtn);
     userEvent.click(requestBtn);
   });
