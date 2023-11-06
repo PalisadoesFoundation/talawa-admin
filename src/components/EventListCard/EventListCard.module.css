@@ -17,9 +17,24 @@
 .cards a:hover {
   color: black;
 }
+.cards {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
 .dispflex {
   display: flex;
-  justify-content: space-between;
+  height: 50px;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+.cards:hover {
+  transform: scale(2.5);
+  z-index: 5;
+}
+.cards:hover h2 {
+  font-size: 0.4vmax;
+  margin-bottom: 0;
 }
 .iconContainer {
   display: flex;

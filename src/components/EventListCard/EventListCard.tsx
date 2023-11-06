@@ -140,7 +140,17 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
         >
           <div className={styles.dispflex}>
             <h2>
-              {props.eventName ? <>{props.eventName}</> : <>Dogs Care</>}{' '}
+              {props.eventName ? (
+                <>
+                  {props.eventName.length > 150 ? (
+                    <>{props.eventName.substring(0, 150)}...</>
+                  ) : (
+                    <>{props.eventName}</>
+                  )}
+                </>
+              ) : (
+                <>Dogs Care</>
+              )}
             </h2>
           </div>
         </div>
@@ -162,7 +172,17 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
               <p className={styles.preview}>
                 {t('eventTitle')}:{' '}
                 <span className={styles.view}>
-                  {props.eventName ? <>{props.eventName}</> : <>Dogs Care</>}{' '}
+                  {props.eventName ? (
+                    <>
+                      {props.eventName.length > 100 ? (
+                        <>{props.eventName.substring(0, 100)}...</>
+                      ) : (
+                        <>{props.eventName}</>
+                      )}
+                    </>
+                  ) : (
+                    <>Dogs Care</>
+                  )}
                 </span>
               </p>
               <p className={styles.preview}>
@@ -177,7 +197,11 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
               </p>
               <p className={styles.preview}>
                 {t('description')}:{' '}
-                <span className={styles.view}>{props.eventDescription}</span>
+                <span className={styles.view}>
+                  {props.eventDescription && props.eventDescription.length > 256
+                    ? props.eventDescription.substring(0, 256) + '...'
+                    : props.eventDescription}
+                </span>
               </p>
               <p className={styles.preview}>
                 {t('on')}: <span className={styles.view}>{props.regDate}</span>
