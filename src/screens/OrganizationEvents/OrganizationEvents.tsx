@@ -124,12 +124,15 @@ function organizationEvents(): JSX.Element {
         /* istanbul ignore next */
         errorHandler(t, error);
       }
-    } else if (formState.title.trim().length === 0) {
-      toast.warning('Please enter a valid title!');
-    } else if (formState.eventdescrip.trim().length === 0) {
-      toast.warning('Please enter a valid description!');
-    } else if (formState.location.trim().length === 0) {
-      toast.warning('Please enter a valid location!');
+    }
+    if (formState.title.trim().length === 0) {
+      toast.warning('Title can not be blank!');
+    }
+    if (formState.eventdescrip.trim().length === 0) {
+      toast.warning('Description can not be blank!');
+    }
+    if (formState.location.trim().length === 0) {
+      toast.warning('Location can not be blank!');
     }
   };
 
