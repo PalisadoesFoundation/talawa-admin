@@ -184,16 +184,8 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
     expect(localStorage.clear).toHaveBeenCalled();
     expect(global.window.location.pathname).toBe('/');
   });
-
-  test('Should render truncated event details at the sidebar', async () => {
-    const longEventName =
-      'A very long event name that exceeds 20 characters and needs to be truncated';
-    const longDescription =
-      'A very long description that exceeds 30 characters and needs to be truncated';
-    const longEventNameLength = longEventName.length;
-    const longDescriptionLength = longDescription.length;
-    const truncatedEventName = longEventName.substring(0, 20) + '...';
-    const truncatedDescriptionName = longDescription.substring(0, 30) + '...';
+  test('Testing substring functionality in event title and description', async () => {
+    localStorage.setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider mocks={mocks}>
         <BrowserRouter>
@@ -203,11 +195,12 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
         </BrowserRouter>
       </MockedProvider>
     );
-    await waitFor(() => {
-      expect(longEventNameLength).toBeGreaterThan(20);
-      expect(longDescriptionLength).toBeGreaterThan(30);
-      expect(truncatedEventName).toContain('...');
-      expect(truncatedDescriptionName).toContain('...');
-    });
+    const eventTitle = 'This is a long event title that will be truncated';
+    const truncatedEventTitle = eventTitle.substring(0, 20) + '...';
+    expect(truncatedEventTitle).toContain('...');
+    const eventDescription =
+      'This is a long event description that will be truncated';
+    const truncatedEventDescription = eventDescription.substring(0, 30) + '...';
+    expect(truncatedEventDescription).toContain('...');
   });
 });
