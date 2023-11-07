@@ -184,4 +184,28 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
     expect(localStorage.clear).toHaveBeenCalled();
     expect(global.window.location.pathname).toBe('/');
   });
+
+  test('Should render truncated event details at the sidebar', async () => {
+    const longEventName =
+      'A very long event name that exceeds 20 characters and needs to be truncated';
+    const longDescription =
+      'A very long description that exceeds 30 characters and needs to be truncated';
+    const longEventNameLength = longEventName.length;
+    const longDescriptionLength = longDescription.length;
+    const truncatedEventName = longEventName.substring(0, 20) + '...';
+    const truncatedDescriptionName = longDescription.substring(0, 30) + '...';
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <LeftDrawerEvent {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    expect(longEventNameLength).toBeGreaterThan(20);
+    expect(longDescriptionLength).toBeGreaterThan(30);
+    expect(truncatedEventName).toContain('...');
+    expect(truncatedDescriptionName).toContain('...');
+  });
 });
