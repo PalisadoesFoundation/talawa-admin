@@ -26,9 +26,7 @@
   justify-content: flex-end;
 }
 .icon {
-  transform: scale(1);
-  cursor: pointer;
-  color: #31bb6b;
+  margin: 1px;
 }
 
 .cards {
