@@ -23,25 +23,39 @@ describe('Testing Loader component', () => {
       </BrowserRouter>
     );
 
+    const spinner = screen.getByTestId('spinner');
     expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
-    expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    expect(screen.getByTestId('spinner')).toHaveClass(
+    expect(spinner).toBeInTheDocument();
+    expect(spinner).toHaveClass(
       '_spinnerSm_1vy2z_21 spinner-border text-primary'
     );
   });
 
   test('Component should render with large size', () => {
-    render(<Loader size="lg" />);
+    render(
+      <BrowserRouter>
+        <Loader size="lg" />
+      </BrowserRouter>
+    );
+
     const spinner = screen.getByTestId('spinner');
+    expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
+    expect(spinner).toBeInTheDocument();
     expect(spinner).toHaveClass(
       '_spinnerLg_1vy2z_15 spinner-border text-primary'
     );
   });
 
   test('renders with extra-large size', () => {
-    render(<Loader size="xl" />);
-    const spinner = screen.getByTestId('spinner');
+    render(
+      <BrowserRouter>
+        <Loader size="xl" />
+      </BrowserRouter>
+    );
 
+    const spinner = screen.getByTestId('spinner');
+    expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
+    expect(spinner).toBeInTheDocument();
     expect(spinner).toHaveClass(
       '_spinnerXl_1vy2z_9 spinner-border text-primary'
     );
