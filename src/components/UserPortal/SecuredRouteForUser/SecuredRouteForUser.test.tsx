@@ -1,5 +1,5 @@
 import React from 'react';
-import { MemoryRouter, Redirect, Route } from 'react-router-dom';
+import { MemoryRouter, Route } from 'react-router-dom';
 import { render, screen, waitFor } from '@testing-library/react';
 import SecuredRouteForUser from './SecuredRouteForUser';
 
@@ -8,7 +8,7 @@ describe('SecuredRouteForUser', () => {
     // Set the 'IsLoggedIn' value to 'TRUE' in localStorage to simulate a logged-in user
     localStorage.setItem('IsLoggedIn', 'TRUE');
 
-    const { container } = render(
+    render(
       <MemoryRouter initialEntries={['/user/organizations']}>
         <SecuredRouteForUser
           path="/user/organizations"
@@ -28,7 +28,7 @@ describe('SecuredRouteForUser', () => {
     // Set the user as not logged in in local storage
     localStorage.setItem('IsLoggedIn', 'FALSE');
 
-    const { container } = render(
+    render(
       <MemoryRouter initialEntries={['/secured']}>
         <Route
           path="/secured"
