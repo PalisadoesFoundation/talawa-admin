@@ -203,9 +203,11 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
         </BrowserRouter>
       </MockedProvider>
     );
-    expect(longEventNameLength).toBeGreaterThan(20);
-    expect(longDescriptionLength).toBeGreaterThan(30);
-    expect(truncatedEventName).toContain('...');
-    expect(truncatedDescriptionName).toContain('...');
+    await waitFor(() => {
+      expect(longEventNameLength).toBeGreaterThan(20);
+      expect(longDescriptionLength).toBeGreaterThan(30);
+      expect(truncatedEventName).toContain('...');
+      expect(truncatedDescriptionName).toContain('...');
+    });
   });
 });
