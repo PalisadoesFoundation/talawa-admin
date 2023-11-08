@@ -38,8 +38,8 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   const [recurringchecked, setRecurringChecked] = useState(false);
   const [publicchecked, setPublicChecked] = useState(true);
   const [registrablechecked, setRegistrableChecked] = React.useState(false);
-  const [eventDeleteisOpen, setEventDeleteModalIsOpen] = useState(false);
-  const [eventUpdateisOpen, setEventUpdateModalIsOpen] = useState(false);
+  const [eventDeleteModalIsOpen, setEventDeleteModalIsOpen] = useState(false);
+  const [eventUpdateModalIsOpen, setEventUpdateModalIsOpen] = useState(false);
   const history = useHistory();
   const [formState, setFormState] = useState({
     title: '',
@@ -55,18 +55,12 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
     setEventModalIsOpen(false);
   };
 
-  const showDeleteModal = (): void => {
-    setEventDeleteModalIsOpen(true);
-  };
-  const hideDeleteModal = (): void => {
-    setEventDeleteModalIsOpen(false);
+  const toggleDeleteModal = (): void => {
+    setEventDeleteModalIsOpen(!eventDeleteModalIsOpen);
   };
 
-  const showUpdateModel = (): void => {
-    setEventUpdateModalIsOpen(true);
-  };
-  const hideUpdateModal = (): void => {
-    setEventUpdateModalIsOpen(false);
+  const toggleUpdateModel = (): void => {
+    setEventUpdateModalIsOpen(!eventUpdateModalIsOpen);
   };
 
   useEffect(() => {
@@ -216,7 +210,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                 size="sm"
                 data-testid="editEventModalBtn"
                 className={styles.icon}
-                onClick={showUpdateModel}
+                onClick={toggleUpdateModel}
               >
                 {' '}
                 <i className="fas fa-edit"></i>
@@ -225,7 +219,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                 size="sm"
                 data-testid="deleteEventModalBtn"
                 className={styles.icon}
-                onClick={showDeleteModal}
+                onClick={toggleDeleteModal}
               >
                 {' '}
                 <i className="fa fa-trash"></i>
@@ -239,13 +233,16 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
       <Modal
         size="sm"
         id={`deleteEventModal${props.id}`}
-        show={eventDeleteisOpen}
-        onHide={hideDeleteModal}
+        show={eventDeleteModalIsOpen}
+        onHide={toggleDeleteModal}
         backdrop="static"
         keyboard={false}
       >
-        <Modal.Header closeButton>
-          <Modal.Title id={`deleteEventModalLabel${props.id}`}>
+        <Modal.Header closeButton className="bg-primary">
+          <Modal.Title
+            className="text-white"
+            id={`deleteEventModalLabel${props.id}`}
+          >
             {t('deleteEvent')}
           </Modal.Title>
         </Modal.Header>
@@ -255,7 +252,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
             type="button"
             className="btn btn-danger"
             data-dismiss="modal"
-            onClick={hideDeleteModal}
+            onClick={toggleDeleteModal}
             data-testid="EventDeleteModalCloseBtn"
           >
             {t('no')}
@@ -274,13 +271,16 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
       {/* Edit Modal */}
       <Modal
         id={`editEventModal${props.id}`}
-        show={eventUpdateisOpen}
-        onHide={hideUpdateModal}
+        show={eventUpdateModalIsOpen}
+        onHide={toggleUpdateModel}
         backdrop="static"
         keyboard={false}
       >
-        <Modal.Header closeButton>
-          <Modal.Title id={`editEventModal${props.id}Label`}>
+        <Modal.Header closeButton className="bg-primary">
+          <Modal.Title
+            id={`editEventModal${props.id}Label`}
+            className="text-white"
+          >
             {' '}
             {t('editEvent')}
           </Modal.Title>
@@ -291,6 +291,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
             <Form.Control
               type="title"
               id="eventitle"
+              className="mb-3"
               autoComplete="off"
               data-testid="updateTitle"
               required
@@ -306,6 +307,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
             <Form.Control
               type="eventdescrip"
               id="eventdescrip"
+              className="mb-3"
               autoComplete="off"
               data-testid="updateDescription"
               required
@@ -321,6 +323,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
             <Form.Control
               type="text"
               id="eventLocation"
+              className="mb-3"
               autoComplete="off"
               data-testid="updateLocation"
               required
@@ -334,7 +337,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
             />
             {!alldaychecked && (
               <div className={styles.datediv}>
-                <div className="mr-3">
+                <div className="me-1">
                   <label htmlFor="startTime">{t('startTime')}</label>
                   <Form.Control
                     id="startTime"
@@ -348,7 +351,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                     }
                   />
                 </div>
-                <div>
+                <div className="ms-1">
                   <label htmlFor="endTime">{t('endTime')}</label>
                   <Form.Control
                     id="endTime"
@@ -414,10 +417,10 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
           <Modal.Footer>
             <Button
               type="button"
-              className="btn btn-danger"
+              className="btn btn-secondary"
               data-dismiss="modal"
               data-testid="EventUpdateModalCloseBtn"
-              onClick={hideUpdateModal}
+              onClick={toggleUpdateModel}
             >
               {t('close')}
             </Button>

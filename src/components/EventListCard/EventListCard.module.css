@@ -84,6 +84,8 @@
 }
 .dispflex {
   display: flex;
+  margin-bottom: 5px;
+  margin-right: 5px;
 }
 .dispflex > input {
   width: 20%;
