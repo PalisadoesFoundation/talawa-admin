@@ -45,45 +45,43 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   const { data: memberData, loading: memberLoading } = useQuery(MEMBERS_LIST, {
     variables: { id: props.orgId },
   });
-
-  const addRegistrant = (): void => {
+  const notifyAddRegistrant = async (): Promise<void> => {
+    toast.promise(addRegistrant, {
+      pending: 'Adding the attendee...',
+      success: 'Added the attendee successfully!',
+      error: 'There was an error in adding the attendee!',
+    });
+  };
+  const addRegistrant = async (): Promise<void> => {
     if (member == null) {
       toast.warning('Please choose an user to add first!');
-      return;
+      return Promise.reject();
     }
-    toast.warn('Adding the attendee...');
-    addRegistrantMutation({
+
+    await addRegistrantMutation({
       variables: {
         userId: member._id,
         eventId: props.eventId,
       },
-    })
-      .then(() => {
-        toast.success('Added the attendee successfully!');
-        attendeesRefetch();
-      })
-      .catch((err) => {
-        toast.error('There was an error in adding the attendee!');
-        toast.error(err.message);
-      });
+    });
+    attendeesRefetch();
   };
 
-  const deleteRegistrant = (userId: string): void => {
-    toast.warn('Removing the attendee...');
-    removeRegistrantMutation({
+  const notifyDeleteRegistrant = (userId: string): Promise<void> => {
+    return toast.promise(() => deleteRegistrant(userId), {
+      pending: 'Removing the attendee...',
+      success: 'Removed the attendee successfully!',
+      error: 'There was an error in removing the attendee!',
+    });
+  };
+  const deleteRegistrant = async (userId: string): Promise<void> => {
+    await removeRegistrantMutation({
       variables: {
         userId,
         eventId: props.eventId,
       },
-    })
-      .then(() => {
-        toast.success('Removed the attendee successfully!');
-        attendeesRefetch();
-      })
-      .catch((err) => {
-        toast.error('There was an error in removing the attendee!');
-        toast.error(err.message);
-      });
+    });
+    attendeesRefetch();
   };
 
   // Render the loading screen
@@ -120,7 +118,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
                 label={`${attendee.firstName} ${attendee.lastName}`}
                 variant="outlined"
                 key={attendee._id}
-                onDelete={(): void => deleteRegistrant(attendee._id)}
+                onDelete={() => notifyDeleteRegistrant(attendee._id)}
               />
             ))}
           </Stack>
@@ -146,7 +144,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
           <br />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="success" onClick={addRegistrant}>
+          <Button variant="success" onClick={notifyAddRegistrant}>
             Add Registrant
           </Button>
         </Modal.Footer>
