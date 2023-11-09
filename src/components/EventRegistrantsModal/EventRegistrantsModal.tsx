@@ -45,8 +45,8 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   const { data: memberData, loading: memberLoading } = useQuery(MEMBERS_LIST, {
     variables: { id: props.orgId },
   });
-  const notifyAddRegistrant = async (): Promise<void> => {
-    toast.promise(addRegistrant, {
+  const notifyAddRegistrant = (): Promise<void> => {
+    return toast.promise(addRegistrant, {
       pending: 'Adding the attendee...',
       success: 'Added the attendee successfully!',
       error: 'There was an error in adding the attendee!',
