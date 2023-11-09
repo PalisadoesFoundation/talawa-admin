@@ -22,10 +22,17 @@ export const AddEventProjectModal = ({
 
   const [addMutation] = useMutation(ADD_EVENT_PROJECT_MUTATION);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const notify = (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    let toSubmit = true;
+    return toast.promise(handleSubmit, {
+      pending: 'Adding the project...',
+      success: 'Added the project successfully!',
+      error: 'There was an error in adding the project!',
+    });
+  };
 
+  const handleSubmit = async (): Promise<void> => {
+    let toSubmit = true;
     if (title.trim().length == 0) {
       toast.error('Title cannot be empty!');
       toSubmit = false;
@@ -34,28 +41,18 @@ export const AddEventProjectModal = ({
       toast.error('Description cannot be empty!');
       toSubmit = false;
     }
-
-    if (toSubmit) {
-      toast.warn('Adding the project...');
-      addMutation({
-        variables: {
-          title,
-          description,
-          eventId,
-        },
-      })
-        .then(() => {
-          toast.success('Added the project successfully!');
-          refetchData();
-          setTitle('');
-          setDescription('');
-          handleClose();
-        })
-        .catch((err) => {
-          toast.error('There was an error in adding the project!');
-          toast.error(err.message);
-        });
-    }
+    if (!toSubmit) return Promise.reject();
+    await addMutation({
+      variables: {
+        title,
+        description,
+        eventId,
+      },
+    });
+    refetchData();
+    setTitle('');
+    setDescription('');
+    handleClose();
   };
 
   return (
@@ -64,7 +61,7 @@ export const AddEventProjectModal = ({
         <Modal.Header closeButton className="bg-primary">
           <Modal.Title className="text-white">Add an Event Project</Modal.Title>
         </Modal.Header>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={notify}>
           <Modal.Body>
             <Form.Group controlId="formBasicTitle">
               <Form.Label>Title</Form.Label>
