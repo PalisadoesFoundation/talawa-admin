@@ -96,6 +96,5 @@ describe('Testing Delete Event Project Modal', () => {
         queryByText('There was an error in deleting the task!')
       ).toBeInTheDocument()
     );
-    await waitFor(() => expect(queryByText('Oops')).toBeInTheDocument());
   });
 });

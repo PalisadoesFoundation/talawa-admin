@@ -57,9 +57,15 @@ export const UpdateTaskModal = (props: ModalPropType): JSX.Element => {
   }, [props.task]);
 
   const [updateMutation] = useMutation(UPDATE_EVENT_PROJECT_TASK_MUTATION);
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const notify = (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+    return toast.promise(handleSubmit, {
+      pending: 'Updating the task...',
+      success: 'Updated the task successfully!',
+      error: 'There was an error in updating the task!',
+    });
+  };
+  const handleSubmit = async (): Promise<void> => {
     let toSubmit = true;
 
     if (title.trim().length == 0) {
@@ -70,28 +76,19 @@ export const UpdateTaskModal = (props: ModalPropType): JSX.Element => {
       toast.error('Description cannot be empty!');
       toSubmit = false;
     }
+    if (!toSubmit) return Promise.reject();
 
-    if (toSubmit) {
-      toast.warn('Updating the task...');
-      updateMutation({
-        variables: {
-          taskId: props.task._id,
-          title,
-          description,
-          deadline,
-          completed,
-        },
-      })
-        .then(() => {
-          toast.success('Updated the task successfully!');
-          props.refetchData();
-          props.handleClose();
-        })
-        .catch((err) => {
-          toast.error('There was an error in updating the task!');
-          toast.error(err.message);
-        });
-    }
+    await updateMutation({
+      variables: {
+        taskId: props.task._id,
+        title,
+        description,
+        deadline,
+        completed,
+      },
+    });
+    props.refetchData();
+    props.handleClose();
   };
 
   return (
@@ -107,7 +104,7 @@ export const UpdateTaskModal = (props: ModalPropType): JSX.Element => {
             Update the Event Task
           </Modal.Title>
         </Modal.Header>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={notify}>
           <Modal.Body>
             <Form.Group controlId="formBasicTitle">
               <Form.Label>Title</Form.Label>
