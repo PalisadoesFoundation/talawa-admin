@@ -57,14 +57,12 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
       toast.warning('Please choose an user to add first!');
       return Promise.reject();
     }
-
     await addRegistrantMutation({
       variables: {
         userId: member._id,
         eventId: props.eventId,
       },
     });
-    attendeesRefetch();
   };
 
   const notifyDeleteRegistrant = (userId: string): Promise<void> => {
@@ -81,7 +79,6 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
         eventId: props.eventId,
       },
     });
-    attendeesRefetch();
   };
 
   // Render the loading screen
