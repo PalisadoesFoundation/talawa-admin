@@ -66,18 +66,18 @@ function deleteOrg(): JSX.Element {
           <Modal.Body>{t('deleteMsg')}</Modal.Body>
           <Modal.Footer>
             <Button
-              variant="danger"
+              variant="secondary"
               onClick={toggleDeleteModal}
               data-testid="closeDelOrgModalBtn"
             >
-              {t('no')}
+              {t('cancel')}
             </Button>
             <Button
-              variant="success"
+              variant="danger"
               onClick={deleteOrg}
               data-testid="deleteOrganizationBtn"
             >
-              {t('yes')}
+              {t('confirmDelete')}
             </Button>
           </Modal.Footer>
         </Modal>

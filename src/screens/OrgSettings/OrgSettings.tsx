@@ -15,7 +15,7 @@ function orgSettings(): JSX.Element {
   });
 
   document.title = t('title');
-  const currentUrl = window.location.href.split('=')[1];
+  const orgId = window.location.href.split('=')[1];
 
   return (
     <>
@@ -29,7 +29,7 @@ function orgSettings(): JSX.Element {
                 </div>
               </div>
               <Card.Body className={styles.cardBody}>
-                {currentUrl && <OrgUpdate orgId={currentUrl} />}
+                {orgId && <OrgUpdate orgId={orgId} />}
               </Card.Body>
             </Card>
           </Col>
