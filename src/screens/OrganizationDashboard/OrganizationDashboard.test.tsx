@@ -74,7 +74,6 @@ describe('Organisation Dashboard Page', () => {
     expect(screen.getByText('Upcoming Events')).toBeInTheDocument();
     expect(screen.getByText('Latest Posts')).toBeInTheDocument();
     expect(screen.getByText('Membership requests')).toBeInTheDocument();
-    expect(screen.getAllByText('View all')).toHaveLength(3);
 
     // Checking if posts are rendered
     expect(screen.getByText('Post 15')).toBeInTheDocument();

@@ -53,6 +53,7 @@ const MOCKS = [
               commentCount: 0,
               comments: [],
               likedBy: [],
+              pinned: false,
             },
             {
               _id: '6411e54835d7ba2344a78e29',
@@ -95,6 +96,8 @@ const MOCKS = [
                     firstName: 'Noble',
                     lastName: 'Mittal',
                     email: 'test@gmail.com',
+                    createdAt: '2023-02-18T09:22:27.969Z',
+
                     __typename: 'User',
                   },
                   likeCount: 0,
@@ -110,6 +113,7 @@ const MOCKS = [
                   lastName: 'abc',
                 },
               ],
+              pinned: false,
             },
           ],
         },

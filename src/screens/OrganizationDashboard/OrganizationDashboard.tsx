@@ -56,10 +56,6 @@ function organizationDashboard(): JSX.Element {
     data: postData,
     loading: loadingPost,
     error: errorPost,
-  }: {
-    data: any;
-    loading: boolean;
-    error?: ApolloError;
   } = useQuery(ORGANIZATION_POST_CONNECTION_LIST, {
     variables: { id: currentUrl },
   });
@@ -96,6 +92,7 @@ function organizationDashboard(): JSX.Element {
   if (errorOrg || errorPost || errorEvent) {
     window.location.replace('/orglist');
   }
+
   return (
     <>
       <OrganizationScreen screenName="Dashboard" title={t('title')}>

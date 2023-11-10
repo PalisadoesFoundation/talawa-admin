@@ -90,6 +90,7 @@ export const MOCKS = [
               commentCount: 0,
               comments: [],
               likedBy: [],
+              pinned: false,
             },
             {
               _id: '6411e54835d7ba2344a78e29',
@@ -103,6 +104,7 @@ export const MOCKS = [
                 lastName: 'Shelke',
                 email: 'adidacreator1@gmail.com',
               },
+              pinned: false,
               createdAt: dayjs(new Date()).add(1, 'day'),
               likeCount: 0,
               commentCount: 2,
