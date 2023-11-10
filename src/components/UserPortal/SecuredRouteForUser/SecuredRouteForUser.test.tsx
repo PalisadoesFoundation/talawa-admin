@@ -1,4 +1,3 @@
-import React from 'react';
 import { MemoryRouter, Route } from 'react-router-dom';
 import { render, screen, waitFor } from '@testing-library/react';
 import SecuredRouteForUser from './SecuredRouteForUser';
@@ -10,12 +9,17 @@ describe('SecuredRouteForUser', () => {
 
     render(
       <MemoryRouter initialEntries={['/user/organizations']}>
-        <SecuredRouteForUser
+        <Route
           path="/user/organizations"
-          component={() => (
-            <div data-testid="organizations-content">
-              Organizations Component
-            </div>
+          render={() => (
+            <SecuredRouteForUser
+              path="/user/organizations"
+              component={() => (
+                <div data-testid="organizations-content">
+                  Organizations Component
+                </div>
+              )}
+            />
           )}
         />
       </MemoryRouter>
@@ -42,12 +46,8 @@ describe('SecuredRouteForUser', () => {
       </MemoryRouter>
     );
 
-    // Ensure that the redirect to / occurred
-    // waitFor(() => {
-    //   expect(window.location.pathname).toBe('/user');
-    // }
-    await waitFor(() => {
-      expect(window.location.pathname).toBe('/');
-    });
+      await waitFor(() => {
+        expect(window.location.pathname).toBe('/');
+      });
   });
 });
