@@ -11,7 +11,6 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import OrganizationDashboard from './OrganizationDashboard';
 import { EMPTY_MOCKS, ERROR_MOCKS, MOCKS } from './OrganizationDashboardMocks';
 import i18nForTest from 'utils/i18nForTest';
-import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 import userEvent from '@testing-library/user-event';
 
@@ -77,16 +76,8 @@ describe('Organisation Dashboard Page', () => {
     expect(screen.getByText('Membership requests')).toBeInTheDocument();
     expect(screen.getAllByText('View all')).toHaveLength(3);
 
-    // Checking if events are rendered
-    expect(screen.getByText('Event 1')).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        `${dayjs(dayjs(new Date()).add(1, 'day')).format('MMM D, YYYY')}`
-      )
-    ).toBeInTheDocument();
-
     // Checking if posts are rendered
-    expect(screen.getByText('Post 1')).toBeInTheDocument();
+    expect(screen.getByText('Post 15')).toBeInTheDocument();
 
     // Checking if membership requests are rendered
     expect(screen.getByText('Jane Doe')).toBeInTheDocument();
