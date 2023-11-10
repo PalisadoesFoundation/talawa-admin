@@ -15,7 +15,6 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { ToastContainer } from 'react-toastify';
 import { debug } from 'jest-preview';
-import dayjs from 'dayjs';
 
 const MOCKS = [
   {
