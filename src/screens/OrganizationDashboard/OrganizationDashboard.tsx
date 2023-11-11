@@ -33,6 +33,12 @@ function organizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
   document.title = t('title');
   const currentUrl = window.location.href.split('=')[1];
+  const peopleLink = `/orgpeople/id=${currentUrl}`;
+  const postsLink = `/orgpost/id=${currentUrl}`;
+  const eventsLink = `/orgevents/id=${currentUrl}`;
+  const blockUserLink = `/blockuser/id=${currentUrl}`;
+  const requestLink = '/requests';
+
   const history = useHistory();
   const [upcomingEvents, setUpcomingEvents] = useState<
     InterfaceQueryOrganizationEventListItem[]
@@ -110,21 +116,45 @@ function organizationDashboard(): JSX.Element {
               </Row>
             ) : (
               <Row style={{ display: 'flex' }}>
-                <Col xs={6} sm={4} className="mb-4">
+                <Col
+                  xs={6}
+                  sm={4}
+                  role="button"
+                  className="mb-4"
+                  onClick={(): void => {
+                    history.push(peopleLink);
+                  }}
+                >
                   <DashBoardCard
                     count={data?.organizations[0].members?.length}
                     title={t('members')}
                     icon={<UsersIcon fill="var(--bs-primary)" />}
                   />
                 </Col>
-                <Col xs={6} sm={4} className="mb-4">
+                <Col
+                  xs={6}
+                  sm={4}
+                  role="button"
+                  className="mb-4"
+                  onClick={(): void => {
+                    history.push(peopleLink);
+                  }}
+                >
                   <DashBoardCard
                     count={data?.organizations[0].admins?.length}
                     title={t('admins')}
                     icon={<AdminsIcon fill="var(--bs-primary)" />}
                   />
                 </Col>
-                <Col xs={6} sm={4} className="mb-4">
+                <Col
+                  xs={6}
+                  sm={4}
+                  role="button"
+                  className="mb-4"
+                  onClick={(): void => {
+                    history.push(postsLink);
+                  }}
+                >
                   <DashBoardCard
                     count={
                       postData?.postsByOrganizationConnection?.edges.length
@@ -133,21 +163,45 @@ function organizationDashboard(): JSX.Element {
                     icon={<PostsIcon fill="var(--bs-primary)" />}
                   />
                 </Col>
-                <Col xs={6} sm={4} className="mb-4">
+                <Col
+                  xs={6}
+                  sm={4}
+                  role="button"
+                  className="mb-4"
+                  onClick={(): void => {
+                    history.push(eventsLink);
+                  }}
+                >
                   <DashBoardCard
                     count={eventData?.eventsByOrganizationConnection.length}
                     title={t('events')}
                     icon={<EventsIcon fill="var(--bs-primary)" />}
                   />
                 </Col>
-                <Col xs={6} sm={4} className="mb-4">
+                <Col
+                  xs={6}
+                  sm={4}
+                  role="button"
+                  className="mb-4"
+                  onClick={(): void => {
+                    history.push(blockUserLink);
+                  }}
+                >
                   <DashBoardCard
                     count={data?.organizations[0].blockedUsers?.length}
                     title={t('blockedUsers')}
                     icon={<BlockedUsersIcon fill="var(--bs-primary)" />}
                   />
                 </Col>
-                <Col xs={6} sm={4} className="mb-4">
+                <Col
+                  xs={6}
+                  sm={4}
+                  role="button"
+                  className="mb-4"
+                  onClick={(): void => {
+                    history.push(requestLink);
+                  }}
+                >
                   <DashBoardCard
                     count={data?.organizations[0].membershipRequests?.length}
                     title={t('requests')}
@@ -167,9 +221,7 @@ function organizationDashboard(): JSX.Element {
                       size="sm"
                       variant="light"
                       data-testid="viewAllEvents"
-                      onClick={(): void =>
-                        history.push(`/orgevents/id=${currentUrl}`)
-                      }
+                      onClick={(): void => history.push(eventsLink)}
                     >
                       {t('viewAll')}
                     </Button>
@@ -209,9 +261,7 @@ function organizationDashboard(): JSX.Element {
                       size="sm"
                       variant="light"
                       data-testid="viewAllPosts"
-                      onClick={(): void =>
-                        history.push(`/orgpost/id=${currentUrl}`)
-                      }
+                      onClick={(): void => history.push(postsLink)}
                     >
                       {t('viewAll')}
                     </Button>
