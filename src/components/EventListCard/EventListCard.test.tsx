@@ -149,6 +149,30 @@ describe('Testing Event List Card', () => {
     expect(screen.queryByText(props.eventName)).not.toBeInTheDocument();
   });
 
+  test('Testing for update modal', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventListCard {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('card'));
+    userEvent.click(screen.getByTestId('editEventModalBtn'));
+
+    userEvent.click(screen.getByTestId('EventUpdateModalCloseBtn'));
+    userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
+
+    await wait();
+  });
+
   test('Testing event update functionality', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -159,7 +183,8 @@ describe('Testing Event List Card', () => {
     );
 
     await wait();
-
+    userEvent.click(screen.getByTestId('card'));
+    userEvent.click(screen.getByTestId('editEventModalBtn'));
     userEvent.type(screen.getByTestId('updateTitle'), props.eventName);
     userEvent.type(
       screen.getByTestId('updateDescription'),
@@ -199,7 +224,8 @@ describe('Testing Event List Card', () => {
     );
 
     await wait();
-
+    userEvent.click(screen.getByTestId('card'));
+    userEvent.click(screen.getByTestId('editEventModalBtn'));
     userEvent.type(screen.getByTestId('updateTitle'), props.eventName);
     userEvent.type(
       screen.getByTestId('updateDescription'),
@@ -232,6 +258,11 @@ describe('Testing Event List Card', () => {
           <EventListCard {...props} />
         </MockedProvider>
       );
+      userEvent.click(screen.getByTestId('card'));
+      userEvent.click(screen.getByTestId('deleteEventModalBtn'));
+
+      userEvent.click(screen.getByTestId('EventDeleteModalCloseBtn'));
+      userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
     });
 
     it('should call the delete event mutation when the "Yes" button is clicked', async () => {
@@ -240,7 +271,8 @@ describe('Testing Event List Card', () => {
           <EventListCard {...props} />
         </MockedProvider>
       );
-
+      userEvent.click(screen.getByTestId('card'));
+      userEvent.click(screen.getByTestId('deleteEventModalBtn'));
       const deleteBtn = screen.getByTestId('deleteEventBtn');
       fireEvent.click(deleteBtn);
     });
@@ -263,7 +295,8 @@ describe('Testing Event List Card', () => {
           <EventListCard {...props} />
         </MockedProvider>
       );
-
+      userEvent.click(screen.getByTestId('card'));
+      userEvent.click(screen.getByTestId('deleteEventModalBtn'));
       const deleteBtn = screen.getByTestId('deleteEventBtn');
       fireEvent.click(deleteBtn);
     });
