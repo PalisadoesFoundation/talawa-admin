@@ -8,6 +8,7 @@ import {
   InMemoryCache,
   HttpLink,
   split,
+  ApolloLink,
 } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
@@ -30,10 +31,50 @@ import {
   BACKEND_URL,
   REACT_APP_BACKEND_WEBSOCKET_URL,
 } from 'Constant/constant';
+import { refreshToken } from 'utils/getRefreshToken';
 
-onError(({ graphQLErrors }) => {
-  if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message));
+const errorLink = onError(({ graphQLErrors, operation, forward }) => {
+  if (graphQLErrors) {
+    graphQLErrors.map(({ message }) => {
+      if (message === 'User is not authenticated') {
+        refreshToken().then((success) => {
+          if (success === false) {
+            alert('index');
+            // localStorage.clear();
+          } else {
+            forward(operation);
+          }
+        });
+      }
+    });
+  }
 });
+
+// const authLink = new ApolloLink((operation, forward) => {
+//   const token = localStorage.getItem('token');
+
+//   // If the token is expired or about to expire, refresh it
+//   if (token) {
+//     const decodedToken: any = jwtDecode(token);
+//     const currentTime = Date.now().valueOf() / 1000;
+
+//     if (decodedToken.exp < currentTime) {
+//       refreshToken().then((success) => {
+//         if (success) {
+//           operation.setContext({
+//             headers: {
+//               authorization: 'Bearer ' + localStorage.getItem('token') || '',
+//             },
+//           });
+//         } else {
+//           localStorage.clear();
+//         }
+//       });
+//     }
+//   }
+
+//   return forward(operation);
+// });
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
@@ -66,7 +107,7 @@ const splitLink = split(
 );
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
-  link: splitLink,
+  link: errorLink.concat(splitLink),
 });
 const fallbackLoader = <div className="loader"></div>;
 

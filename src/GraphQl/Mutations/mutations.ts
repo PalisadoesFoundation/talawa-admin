@@ -150,6 +150,25 @@ export const LOGIN_MUTATION = gql`
   }
 `;
 
+// to get the refresh token
+
+export const REFRESH_TOKEN_MUTATION = gql`
+  mutation RefreshToken($refreshToken: String!) {
+    refreshToken(refreshToken: $refreshToken) {
+      newRefreshToken
+      accessToken
+    }
+  }
+`;
+
+// to revoke a refresh token
+
+export const REVOKE_REFRESH_TOKEN = gql`
+  mutation RevokeRefreshTokenForUser($userId: String!) {
+    revokeRefreshTokenForUser(userId: $userId)
+  }
+`;
+
 // To verify the google recaptcha
 
 export const RECAPTCHA_MUTATION = gql`
