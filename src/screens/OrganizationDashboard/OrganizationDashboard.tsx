@@ -7,8 +7,8 @@ import { useTranslation } from 'react-i18next';
 
 import {
   ORGANIZATIONS_LIST,
-  ORGANIZATION_EVENT_LIST,
-  ORGANIZATION_POST_LIST,
+  ORGANIZATION_POST_CONNECTION_LIST,
+  ORGANIZATION_EVENT_CONNECTION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { ReactComponent as AdminsIcon } from 'assets/svgs/admin.svg';
 import { ReactComponent as BlockedUsersIcon } from 'assets/svgs/blockedUser.svg';
@@ -22,7 +22,6 @@ import CardItem from 'components/OrganizationDashCards/CardItem';
 import type { ApolloError } from '@apollo/client';
 import type {
   InterfaceQueryOrganizationEventListItem,
-  InterfaceQueryOrganizationPostListItem,
   InterfaceQueryOrganizationsListObject,
 } from 'utils/interfaces';
 import { toast } from 'react-toastify';
@@ -57,15 +56,7 @@ function organizationDashboard(): JSX.Element {
     data: postData,
     loading: loadingPost,
     error: errorPost,
-  }: {
-    data:
-      | {
-          postsByOrganization: InterfaceQueryOrganizationPostListItem[];
-        }
-      | undefined;
-    loading: boolean;
-    error?: ApolloError;
-  } = useQuery(ORGANIZATION_POST_LIST, {
+  } = useQuery(ORGANIZATION_POST_CONNECTION_LIST, {
     variables: { id: currentUrl },
   });
 
@@ -74,22 +65,20 @@ function organizationDashboard(): JSX.Element {
     loading: loadingEvent,
     error: errorEvent,
   }: {
-    data:
-      | {
-          eventsByOrganization: InterfaceQueryOrganizationEventListItem[];
-        }
-      | undefined;
+    data: any;
     loading: boolean;
     error?: ApolloError;
-  } = useQuery(ORGANIZATION_EVENT_LIST, {
-    variables: { id: currentUrl },
+  } = useQuery(ORGANIZATION_EVENT_CONNECTION_LIST, {
+    variables: {
+      organization_id: currentUrl,
+    },
   });
 
   // UseEffect to update upcomingEvents array
   useEffect(() => {
-    if (eventData && eventData?.eventsByOrganization.length > 0) {
+    if (eventData && eventData?.eventsByOrganizationConnection.length > 0) {
       const tempUpcomingEvents: InterfaceQueryOrganizationEventListItem[] = [];
-      eventData?.eventsByOrganization.map((event) => {
+      eventData?.eventsByOrganizationConnection.map((event: any) => {
         const startDate = new Date(event.startDate);
         const now = new Date();
         if (startDate > now) {
@@ -98,11 +87,12 @@ function organizationDashboard(): JSX.Element {
       });
       setUpcomingEvents(tempUpcomingEvents);
     }
-  }, [eventData?.eventsByOrganization]);
+  }, [eventData?.eventsByOrganizationConnection]);
 
   if (errorOrg || errorPost || errorEvent) {
     window.location.replace('/orglist');
   }
+
   return (
     <>
       <OrganizationScreen screenName="Dashboard" title={t('title')}>
@@ -136,14 +126,16 @@ function organizationDashboard(): JSX.Element {
                 </Col>
                 <Col xs={6} sm={4} className="mb-4">
                   <DashBoardCard
-                    count={postData?.postsByOrganization?.length}
+                    count={
+                      postData?.postsByOrganizationConnection?.edges.length
+                    }
                     title={t('posts')}
                     icon={<PostsIcon fill="var(--bs-primary)" />}
                   />
                 </Col>
                 <Col xs={6} sm={4} className="mb-4">
                   <DashBoardCard
-                    count={eventData?.eventsByOrganization?.length}
+                    count={eventData?.eventsByOrganizationConnection.length}
                     title={t('events')}
                     icon={<EventsIcon fill="var(--bs-primary)" />}
                   />
@@ -192,16 +184,19 @@ function organizationDashboard(): JSX.Element {
                         <h6>{t('noUpcomingEvents')}</h6>
                       </div>
                     ) : (
-                      upcomingEvents.slice(0, 5).map((event) => {
-                        return (
-                          <CardItem
-                            type="Event"
-                            key={event._id}
-                            time={event.startDate}
-                            title={event.title}
-                          />
-                        );
-                      })
+                      upcomingEvents.map(
+                        (event: InterfaceQueryOrganizationEventListItem) => {
+                          return (
+                            <CardItem
+                              type="Event"
+                              key={event._id}
+                              time={event.startDate}
+                              title={event.title}
+                              location={event.location}
+                            />
+                          );
+                        }
+                      )
                     )}
                   </Card.Body>
                 </Card>
@@ -226,20 +221,27 @@ function organizationDashboard(): JSX.Element {
                       [...Array(4)].map((_, index) => {
                         return <CardItemLoading key={index} />;
                       })
-                    ) : postData?.postsByOrganization?.length == 0 ? (
+                    ) : postData?.postsByOrganizationConnection.edges.length ==
+                      0 ? (
+                      /* eslint-disable */
                       <div className={styles.emptyContainer}>
                         <h6>{t('noPostsPresent')}</h6>
                       </div>
                     ) : (
-                      postData?.postsByOrganization.slice(0, 5).map((post) => {
-                        return (
-                          <CardItem
-                            type="Post"
-                            key={post._id}
-                            title={post.title}
-                          />
-                        );
-                      })
+                      /* eslint-enable */
+                      postData?.postsByOrganizationConnection.edges
+                        .slice(0, 5)
+                        .map((post: any) => {
+                          return (
+                            <CardItem
+                              type="Post"
+                              key={post._id}
+                              title={post.title}
+                              time={post.createdAt}
+                              creator={post.creator}
+                            />
+                          );
+                        })
                     )}
                   </Card.Body>
                 </Card>
