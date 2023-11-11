@@ -421,8 +421,22 @@ export const ADD_PLUGIN_MUTATION = gql`
 `;
 
 export const UPDATE_POST_MUTATION = gql`
-  mutation UpdatePost($id: ID!, $title: String, $text: String) {
-    updatePost(id: $id, data: { title: $title, text: $text }) {
+  mutation UpdatePost(
+    $id: ID!
+    $title: String
+    $text: String
+    $imageUrl: String
+    $videoUrl: String
+  ) {
+    updatePost(
+      id: $id
+      data: {
+        title: $title
+        text: $text
+        imageUrl: $imageUrl
+        videoUrl: $videoUrl
+      }
+    ) {
       _id
     }
   }
@@ -677,6 +691,13 @@ export const PLUGIN_SUBSCRIPTION = gql`
       _id
       pluginDesc
       uninstalledOrgs
+    }
+  }
+`;
+export const TOGGLE_PINNED_POST = gql`
+  mutation TogglePostPin($id: ID!) {
+    togglePostPin(id: $id) {
+      _id
     }
   }
 `;

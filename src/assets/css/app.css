@@ -5560,7 +5560,7 @@ fieldset:disabled .btn {
   box-shadow: var(--bs-toast-box-shadow);
   border-radius: var(--bs-toast-border-radius);
 }
-.toast.showing {
+.showing {
   opacity: 0;
 }
 .toast:not(.show) {
