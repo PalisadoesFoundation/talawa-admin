@@ -25,6 +25,20 @@ const props: InterfaceLeftDrawerProps = {
   setHideDrawer: jest.fn(),
   setShowAddEventProjectModal: jest.fn(),
 };
+const props2: InterfaceLeftDrawerProps = {
+  event: {
+    _id: 'testEvent',
+    title: 'This is a very long event title that exceeds 20 characters',
+    description:
+      'This is a very long event description that exceeds 30 characters. It contains more details about the event.',
+    organization: {
+      _id: 'Test Organization',
+    },
+  },
+  hideDrawer: false,
+  setHideDrawer: jest.fn(),
+  setShowAddEventProjectModal: jest.fn(),
+};
 
 const mocks = [
   {
@@ -183,5 +197,25 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
     userEvent.click(screen.getByTestId('logoutBtn'));
     expect(localStorage.clear).toHaveBeenCalled();
     expect(global.window.location.pathname).toBe('/');
+  });
+  test('Testing substring functionality in event title and description', async () => {
+    localStorage.setItem('UserType', 'SUPERADMIN');
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <LeftDrawerEvent {...props2} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    const eventTitle = props2.event.title;
+    expect(eventTitle.length).toBeGreaterThan(20);
+    const eventDescription = props2.event.description;
+    expect(eventDescription.length).toBeGreaterThan(30);
+    const truncatedEventTitle = eventTitle.substring(0, 20) + '...';
+    const truncatedEventDescription = eventDescription.substring(0, 30) + '...';
+    expect(truncatedEventTitle).toContain('...');
+    expect(truncatedEventDescription).toContain('...');
   });
 });

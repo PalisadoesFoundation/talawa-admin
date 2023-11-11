@@ -84,8 +84,16 @@ const leftDrawerEvent = ({
               />
             </div>
             <div className={styles.profileText}>
-              <span className={styles.primaryText}>{event.title}</span>
-              <span className={styles.secondaryText}>{event.description}</span>
+              <span className={styles.primaryText}>
+                {event.title && event.title.length > 20
+                  ? event.title.substring(0, 20) + '...'
+                  : event.title}
+              </span>
+              <span className={styles.secondaryText}>
+                {event.description && event.description.length > 30
+                  ? event.description.substring(0, 30) + '...'
+                  : event.description}
+              </span>
             </div>
           </button>
         </div>
