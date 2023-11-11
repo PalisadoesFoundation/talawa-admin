@@ -16,12 +16,14 @@ describe('SecuredRouteForUser', () => {
             <SecuredRouteForUser
               path="/user/organizations"
               component={() => (
-                <div data-testid="organizations-content">Organizations Component</div>
+                <div data-testid="organizations-content">
+                  Organizations Component
+                </div>
               )}
             />
           )}
         />
-      </MemoryRouter>,
+      </MemoryRouter>
     );
 
     expect(screen.getByTestId('organizations-content')).toBeInTheDocument();
@@ -42,7 +44,7 @@ describe('SecuredRouteForUser', () => {
             </SecuredRouteForUser>
           )}
         />
-      </MemoryRouter>,
+      </MemoryRouter>
     );
 
     await waitFor(() => {
