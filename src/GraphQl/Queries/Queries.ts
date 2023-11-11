@@ -567,6 +567,7 @@ export const ORGANIZATION_POST_LIST = gql`
         lastName
         email
       }
+      createdAt
     }
   }
 `;
@@ -594,7 +595,7 @@ export const ORGANIZATION_POST_CONNECTION_LIST = gql`
           lastName
           email
         }
-        pinned
+        createdAt
         likeCount
         commentCount
         comments {
@@ -611,7 +612,6 @@ export const ORGANIZATION_POST_CONNECTION_LIST = gql`
           }
           text
         }
-        createdAt
         likedBy {
           _id
           firstName

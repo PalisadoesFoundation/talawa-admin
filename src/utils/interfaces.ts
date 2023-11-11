@@ -82,6 +82,7 @@ export interface InterfaceQueryOrganizationPostListItem {
   text: string;
   imageUrl: null;
   videoUrl: null;
+  createdAt: string;
   creator: {
     _id: string;
     firstName: string;

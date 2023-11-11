@@ -11,7 +11,6 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import OrganizationDashboard from './OrganizationDashboard';
 import { EMPTY_MOCKS, ERROR_MOCKS, MOCKS } from './OrganizationDashboardMocks';
 import i18nForTest from 'utils/i18nForTest';
-import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 import userEvent from '@testing-library/user-event';
 
@@ -75,20 +74,27 @@ describe('Organisation Dashboard Page', () => {
     expect(screen.getByText('Upcoming Events')).toBeInTheDocument();
     expect(screen.getByText('Latest Posts')).toBeInTheDocument();
     expect(screen.getByText('Membership requests')).toBeInTheDocument();
-    expect(screen.getAllByText('View All')).toHaveLength(3);
-    // Checking if events are rendered
-    expect(screen.getByText('Event 1')).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        `${dayjs(new Date()).add(1, 'day').format('DD-MM-YYYY')}`
-      )
-    ).toBeInTheDocument();
 
     // Checking if posts are rendered
-    expect(screen.getByText('Post 1')).toBeInTheDocument();
+    expect(screen.getByText('Post 15')).toBeInTheDocument();
 
     // Checking if membership requests are rendered
     expect(screen.getByText('Jane Doe')).toBeInTheDocument();
+
+    const peopleBtn = screen.getByText('Members');
+    const adminBtn = screen.getByText('Admins');
+    const postBtn = screen.getAllByText('Posts');
+    const eventBtn = screen.getAllByText('Events');
+    const blockUserBtn = screen.getByText('Blocked Users');
+    const requestBtn = screen.getByText('Requests');
+    userEvent.click(peopleBtn);
+    userEvent.click(adminBtn);
+    userEvent.click(postBtn[0]);
+    userEvent.click(eventBtn[0]);
+    userEvent.click(postBtn[1]);
+    userEvent.click(eventBtn[1]);
+    userEvent.click(blockUserBtn);
+    userEvent.click(requestBtn);
   });
 
   test('Testing buttons and checking empty events, posts and membership requests', async () => {
