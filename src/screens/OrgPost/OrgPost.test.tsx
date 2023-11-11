@@ -33,7 +33,7 @@ const MOCKS = [
             {
               _id: '6411e53835d7ba2344a78e21',
               title: 'postone',
-              text: 'THis is the frist post',
+              text: 'This is the first post',
               imageUrl: null,
               videoUrl: null,
               createdAt: '2023-08-24T09:26:56.524+00:00',
@@ -52,7 +52,7 @@ const MOCKS = [
             {
               _id: '6411e54835d7ba2344a78e29',
               title: 'posttwo',
-              text: 'THis is the post two',
+              text: 'Tis is the post two',
               imageUrl: null,
               videoUrl: null,
               createdAt: '2023-08-24T09:26:56.524+00:00',
@@ -133,7 +133,7 @@ describe('Organisation Post Page', () => {
     expect(dataQuery1).toEqual({
       _id: '6411e53835d7ba2344a78e21',
       title: 'postone',
-      text: 'THis is the frist post',
+      text: 'This is the first post',
       imageUrl: null,
       videoUrl: null,
       createdAt: '2023-08-24T09:26:56.524+00:00',
