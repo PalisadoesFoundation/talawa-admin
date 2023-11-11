@@ -80,6 +80,21 @@ describe('Organisation Dashboard Page', () => {
 
     // Checking if membership requests are rendered
     expect(screen.getByText('Jane Doe')).toBeInTheDocument();
+
+    const peopleBtn = screen.getByText('Members');
+    const adminBtn = screen.getByText('Admins');
+    const postBtn = screen.getAllByText('Posts');
+    const eventBtn = screen.getAllByText('Events');
+    const blockUserBtn = screen.getByText('Blocked Users');
+    const requestBtn = screen.getByText('Requests');
+    userEvent.click(peopleBtn);
+    userEvent.click(adminBtn);
+    userEvent.click(postBtn[0]);
+    userEvent.click(eventBtn[0]);
+    userEvent.click(postBtn[1]);
+    userEvent.click(eventBtn[1]);
+    userEvent.click(blockUserBtn);
+    userEvent.click(requestBtn);
   });
 
   test('Testing buttons and checking empty events, posts and membership requests', async () => {
