@@ -38,6 +38,8 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   const [recurringchecked, setRecurringChecked] = useState(false);
   const [publicchecked, setPublicChecked] = useState(true);
   const [registrablechecked, setRegistrableChecked] = React.useState(false);
+  const [eventDeleteModalIsOpen, setEventDeleteModalIsOpen] = useState(false);
+  const [eventUpdateModalIsOpen, setEventUpdateModalIsOpen] = useState(false);
   const history = useHistory();
   const [formState, setFormState] = useState({
     title: '',
@@ -51,6 +53,14 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   };
   const hideViewModal = (): void => {
     setEventModalIsOpen(false);
+  };
+
+  const toggleDeleteModal = (): void => {
+    setEventDeleteModalIsOpen(!eventDeleteModalIsOpen);
+  };
+
+  const toggleUpdateModel = (): void => {
+    setEventUpdateModalIsOpen(!eventUpdateModalIsOpen);
   };
 
   useEffect(() => {
@@ -196,247 +206,234 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
               </Button>
             </div>
             <div className={styles.iconContainer}>
-              <a
+              <Button
+                size="sm"
                 data-testid="editEventModalBtn"
-                className={`${styles.icon} mr-2`}
-                data-toggle="modal"
-                data-target={`#editEventModal${props.id}`}
+                className={styles.icon}
+                onClick={toggleUpdateModel}
               >
+                {' '}
                 <i className="fas fa-edit"></i>
-              </a>
-              <a
+              </Button>
+              <Button
+                size="sm"
                 data-testid="deleteEventModalBtn"
                 className={styles.icon}
-                data-toggle="modal"
-                data-target={`#deleteEventModal${props.id}`}
+                onClick={toggleDeleteModal}
               >
+                {' '}
                 <i className="fa fa-trash"></i>
-              </a>
+              </Button>
             </div>
           </Form>
         </Modal.Body>
       </Modal>
 
       {/* delete modal */}
-      <div
-        className="modal fade"
+      <Modal
+        size="sm"
         id={`deleteEventModal${props.id}`}
-        tabIndex={-1}
-        role="dialog"
-        aria-labelledby={`deleteEventModalLabel${props.id}`}
-        aria-hidden="true"
+        show={eventDeleteModalIsOpen}
+        onHide={toggleDeleteModal}
+        backdrop="static"
+        keyboard={false}
       >
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5
-                className="modal-title"
-                id={`deleteEventModalLabel${props.id}`}
-              >
-                {t('deleteEvent')}
-              </h5>
-              <Button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </Button>
-            </div>
-            <div className="modal-body">{t('deleteEventMsg')}</div>
-            <div className="modal-footer">
-              <Button
-                type="button"
-                className="btn btn-danger"
-                data-dismiss="modal"
-              >
-                {t('no')}
-              </Button>
-              <Button
-                type="button"
-                className="btn btn-success"
-                onClick={deleteEvent}
-                data-testid="deleteEventBtn"
-              >
-                {t('yes')}
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
+        <Modal.Header closeButton className="bg-primary">
+          <Modal.Title
+            className="text-white"
+            id={`deleteEventModalLabel${props.id}`}
+          >
+            {t('deleteEvent')}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{t('deleteEventMsg')}</Modal.Body>
+        <Modal.Footer>
+          <Button
+            type="button"
+            className="btn btn-danger"
+            data-dismiss="modal"
+            onClick={toggleDeleteModal}
+            data-testid="EventDeleteModalCloseBtn"
+          >
+            {t('no')}
+          </Button>
+          <Button
+            type="button"
+            className="btn btn-success"
+            onClick={deleteEvent}
+            data-testid="deleteEventBtn"
+          >
+            {t('yes')}
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       {/* Edit Modal */}
-      <div
-        className="modal fade"
+      <Modal
         id={`editEventModal${props.id}`}
-        tabIndex={-1}
-        aria-labelledby={`editEventModal${props.id}Label`}
-        aria-hidden="true"
+        show={eventUpdateModalIsOpen}
+        onHide={toggleUpdateModel}
+        backdrop="static"
+        keyboard={false}
       >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id={`editEventModal${props.id}Label`}>
-                {t('editEvent')}
-              </h5>
-              <Button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </Button>
+        <Modal.Header closeButton className="bg-primary">
+          <Modal.Title
+            id={`editEventModal${props.id}Label`}
+            className="text-white"
+          >
+            {' '}
+            {t('editEvent')}
+          </Modal.Title>
+        </Modal.Header>
+        <form onSubmit={updateEventHandler}>
+          <Modal.Body>
+            <label htmlFor="eventtitle">{t('eventTitle')}</label>
+            <Form.Control
+              type="title"
+              id="eventitle"
+              className="mb-3"
+              autoComplete="off"
+              data-testid="updateTitle"
+              required
+              value={formState.title}
+              onChange={(e): void => {
+                setFormState({
+                  ...formState,
+                  title: e.target.value,
+                });
+              }}
+            />
+            <label htmlFor="eventdescrip">{t('description')}</label>
+            <Form.Control
+              type="eventdescrip"
+              id="eventdescrip"
+              className="mb-3"
+              autoComplete="off"
+              data-testid="updateDescription"
+              required
+              value={formState.eventdescrip}
+              onChange={(e): void => {
+                setFormState({
+                  ...formState,
+                  eventdescrip: e.target.value,
+                });
+              }}
+            />
+            <label htmlFor="eventLocation">{t('location')}</label>
+            <Form.Control
+              type="text"
+              id="eventLocation"
+              className="mb-3"
+              autoComplete="off"
+              data-testid="updateLocation"
+              required
+              value={formState.location}
+              onChange={(e): void => {
+                setFormState({
+                  ...formState,
+                  location: e.target.value,
+                });
+              }}
+            />
+            {!alldaychecked && (
+              <div className={styles.datediv}>
+                <div className="me-1">
+                  <label htmlFor="startTime">{t('startTime')}</label>
+                  <Form.Control
+                    id="startTime"
+                    value={formState.startTime}
+                    data-testid="updateStartTime"
+                    onChange={(e): void =>
+                      setFormState({
+                        ...formState,
+                        startTime: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="ms-1">
+                  <label htmlFor="endTime">{t('endTime')}</label>
+                  <Form.Control
+                    id="endTime"
+                    value={formState.endTime}
+                    data-testid="updateEndTime"
+                    onChange={(e): void =>
+                      setFormState({
+                        ...formState,
+                        endTime: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+            )}
+            <div className={styles.checkboxdiv}>
+              <div className={styles.dispflex}>
+                <label htmlFor="allday">{t('allDay')}?</label>
+                <Form.Switch
+                  id="allday"
+                  type="checkbox"
+                  data-testid="updateAllDay"
+                  checked={alldaychecked}
+                  onChange={(): void => setAllDayChecked(!alldaychecked)}
+                />
+              </div>
+              <div className={styles.dispflex}>
+                <label htmlFor="recurring">{t('recurringEvent')}:</label>
+                <Form.Switch
+                  id="recurring"
+                  type="checkbox"
+                  data-testid="updateRecurring"
+                  checked={recurringchecked}
+                  onChange={(): void => setRecurringChecked(!recurringchecked)}
+                />
+              </div>
             </div>
-            <form onSubmit={updateEventHandler}>
-              <div className="modal-body">
-                <label htmlFor="eventtitle">{t('eventTitle')}</label>
-                <Form.Control
-                  type="title"
-                  id="eventitle"
-                  autoComplete="off"
-                  data-testid="updateTitle"
-                  required
-                  value={formState.title}
-                  onChange={(e): void => {
-                    setFormState({
-                      ...formState,
-                      title: e.target.value,
-                    });
-                  }}
+            <div className={styles.checkboxdiv}>
+              <div className={styles.dispflex}>
+                <label htmlFor="ispublic">{t('isPublic')}?</label>
+                <Form.Switch
+                  id="ispublic"
+                  type="checkbox"
+                  data-testid="updateIsPublic"
+                  checked={publicchecked}
+                  onChange={(): void => setPublicChecked(!publicchecked)}
                 />
-                <label htmlFor="eventdescrip">{t('description')}</label>
-                <Form.Control
-                  type="eventdescrip"
-                  id="eventdescrip"
-                  autoComplete="off"
-                  data-testid="updateDescription"
-                  required
-                  value={formState.eventdescrip}
-                  onChange={(e): void => {
-                    setFormState({
-                      ...formState,
-                      eventdescrip: e.target.value,
-                    });
-                  }}
-                />
-                <label htmlFor="eventLocation">{t('location')}</label>
-                <Form.Control
-                  type="text"
-                  id="eventLocation"
-                  autoComplete="off"
-                  data-testid="updateLocation"
-                  required
-                  value={formState.location}
-                  onChange={(e): void => {
-                    setFormState({
-                      ...formState,
-                      location: e.target.value,
-                    });
-                  }}
-                />
-                {!alldaychecked && (
-                  <div className={styles.datediv}>
-                    <div className="mr-3">
-                      <label htmlFor="startTime">{t('startTime')}</label>
-                      <Form.Control
-                        id="startTime"
-                        value={formState.startTime}
-                        data-testid="updateStartTime"
-                        onChange={(e): void =>
-                          setFormState({
-                            ...formState,
-                            startTime: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="endTime">{t('endTime')}</label>
-                      <Form.Control
-                        id="endTime"
-                        value={formState.endTime}
-                        data-testid="updateEndTime"
-                        onChange={(e): void =>
-                          setFormState({
-                            ...formState,
-                            endTime: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
-                )}
-                <div className={styles.checkboxdiv}>
-                  <div className={styles.dispflex}>
-                    <label htmlFor="allday">{t('allDay')}?</label>
-                    <Form.Control
-                      id="allday"
-                      type="checkbox"
-                      data-testid="updateAllDay"
-                      checked={alldaychecked}
-                      onChange={(): void => setAllDayChecked(!alldaychecked)}
-                    />
-                  </div>
-                  <div className={styles.dispflex}>
-                    <label htmlFor="recurring">{t('recurringEvent')}:</label>
-                    <Form.Control
-                      id="recurring"
-                      type="checkbox"
-                      data-testid="updateRecurring"
-                      checked={recurringchecked}
-                      onChange={(): void =>
-                        setRecurringChecked(!recurringchecked)
-                      }
-                    />
-                  </div>
-                </div>
-                <div className={styles.checkboxdiv}>
-                  <div className={styles.dispflex}>
-                    <label htmlFor="ispublic">{t('isPublic')}?</label>
-                    <Form.Control
-                      id="ispublic"
-                      type="checkbox"
-                      data-testid="updateIsPublic"
-                      checked={publicchecked}
-                      onChange={(): void => setPublicChecked(!publicchecked)}
-                    />
-                  </div>
-                  <div className={styles.dispflex}>
-                    <label htmlFor="registrable">{t('isRegistrable')}?</label>
-                    <Form.Control
-                      id="registrable"
-                      type="checkbox"
-                      data-testid="updateRegistrable"
-                      checked={registrablechecked}
-                      onChange={(): void =>
-                        setRegistrableChecked(!registrablechecked)
-                      }
-                    />
-                  </div>
-                </div>
               </div>
-              <div className="modal-footer">
-                <Button
-                  type="button"
-                  className="btn btn-danger"
-                  data-dismiss="modal"
-                >
-                  {t('close')}
-                </Button>
-                <Button
-                  type="submit"
-                  className="btn btn-success"
-                  data-testid="updatePostBtn"
-                >
-                  {t('updatePost')}
-                </Button>
+              <div className={styles.dispflex}>
+                <label htmlFor="registrable">{t('isRegistrable')}?</label>
+                <Form.Switch
+                  id="registrable"
+                  type="checkbox"
+                  data-testid="updateRegistrable"
+                  checked={registrablechecked}
+                  onChange={(): void =>
+                    setRegistrableChecked(!registrablechecked)
+                  }
+                />
               </div>
-            </form>
-          </div>
-        </div>
-      </div>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              type="button"
+              className="btn btn-secondary"
+              data-dismiss="modal"
+              data-testid="EventUpdateModalCloseBtn"
+              onClick={toggleUpdateModel}
+            >
+              {t('close')}
+            </Button>
+            <Button
+              type="submit"
+              className="btn btn-success"
+              data-testid="updatePostBtn"
+            >
+              {t('updatePost')}
+            </Button>
+          </Modal.Footer>
+        </form>
+      </Modal>
     </>
   );
 }
