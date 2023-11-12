@@ -95,9 +95,9 @@ describe('Testing Table Row for CheckIn Table', () => {
     await waitFor(() =>
       expect(queryByText('Generating pdf...')).toBeInTheDocument()
     );
-    await waitFor(() =>
-      expect(queryByText('PDF generated successfully!')).toBeInTheDocument()
-    );
+    await waitFor(() => {
+      expect(queryByText('PDF generated successfully!')).toBeInTheDocument();
+    });
   });
 
   test('Upon failing of check in mutation, the appropiate error message should be shown', async () => {
