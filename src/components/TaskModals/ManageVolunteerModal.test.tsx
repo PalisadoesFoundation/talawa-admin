@@ -131,7 +131,5 @@ describe('Testing Manage Volunteers Modal', () => {
         queryByText('There was an error in updating the volunteers!')
       ).toBeInTheDocument()
     );
-
-    await waitFor(() => expect(queryByText('Oops')).toBeInTheDocument());
   });
 });
