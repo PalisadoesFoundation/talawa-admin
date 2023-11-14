@@ -95,7 +95,8 @@
     "sampleOrgDuplicate": "Seule une organisation d'exemple est autorisée.",
     "noOrgErrorDescription": "Veuillez créer une organisation via le tableau de bord",
     "noResultsFoundFor": "Aucun résultat trouvé pour ",
-    "OR": "OU"
+    "OR": "OU",
+    "sampleOrgSuccess": "Organisation d'exemple créée avec succès"
   },
   "orgListCard": {
     "admins": "Administrateurs",

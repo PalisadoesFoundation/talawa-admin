@@ -95,7 +95,8 @@
     "sampleOrgDuplicate": "केवल एक नमूना संगठन को अनुमति दी गई",
     "noOrgErrorDescription": "कृपया डैशबोर्ड के माध्यम से एक संगठन बनाएं",
     "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला ",
-    "OR": "या"
+    "OR": "या",
+    "sampleOrgSuccess": "सैंपल संगठन सफलतापूर्वक बनाया गया"
   },
   "orgListCard": {
     "admins": "व्यवस्थापक",

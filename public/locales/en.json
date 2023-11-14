@@ -104,7 +104,8 @@
     "goToStore": "Go to Plugin Store",
     "enableEverything": "Enable Everything",
     "noResultsFoundFor": "No results found for",
-    "OR": "OR"
+    "OR": "OR",
+    "sampleOrgSuccess": "Sample Organization Successfully Created"
   },
   "orgListCard": {
     "admins": "Admins",

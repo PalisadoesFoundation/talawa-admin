@@ -145,7 +145,7 @@ function orgList(): JSX.Element {
   const triggerCreateSampleOrg = () => {
     createSampleOrganization()
       .then(() => {
-        toast.success(t('successMessage'));
+        toast.success(t('sampleOrgSuccess'));
         window.location.reload();
       })
       .catch(() => {
