@@ -11,6 +11,7 @@ import LeftDrawerEvent, {
 } from './LeftDrawerEvent';
 import { MockedProvider } from '@apollo/react-testing';
 import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
+import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 
 const props: InterfaceLeftDrawerProps = {
   event: {
@@ -27,6 +28,12 @@ const props: InterfaceLeftDrawerProps = {
 };
 
 const mocks = [
+  {
+    request: {
+      query: REVOKE_REFRESH_TOKEN,
+    },
+    result: {},
+  },
   {
     request: {
       query: EVENT_FEEDBACKS,

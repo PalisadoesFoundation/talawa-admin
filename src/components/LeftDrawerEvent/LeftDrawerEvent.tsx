@@ -10,6 +10,8 @@ import IconComponent from 'components/IconComponent/IconComponent';
 import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
 import { EventStatsWrapper } from 'components/EventStats/EventStatsWrapper';
+import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import { useMutation } from '@apollo/client';
 
 export interface InterfaceLeftDrawerProps {
   event: {
@@ -31,6 +33,7 @@ const leftDrawerEvent = ({
   setHideDrawer,
   setShowAddEventProjectModal,
 }: InterfaceLeftDrawerProps): JSX.Element => {
+  const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const userType = localStorage.getItem('UserType');
   const firstName = localStorage.getItem('FirstName');
   const lastName = localStorage.getItem('LastName');
@@ -38,6 +41,7 @@ const leftDrawerEvent = ({
 
   const history = useHistory();
   const logout = (): void => {
+    revokeRefreshToken();
     localStorage.clear();
     history.push('/');
   };

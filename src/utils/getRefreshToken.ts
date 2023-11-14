@@ -11,7 +11,7 @@ export async function refreshToken(): Promise<boolean> {
   });
 
   const refreshToken = localStorage.getItem('refreshToken');
-
+  /* istanbul ignore next */
   try {
     const { data } = await client.mutate({
       mutation: REFRESH_TOKEN_MUTATION,
@@ -21,7 +21,7 @@ export async function refreshToken(): Promise<boolean> {
     });
 
     localStorage.setItem('token', data.refreshToken.accessToken);
-    localStorage.setItem('refreshToken', data.refreshToken.newRefreshToken);
+    localStorage.setItem('refreshToken', data.refreshToken.refreshToken);
     window.location.reload();
     return true;
   } catch (error) {

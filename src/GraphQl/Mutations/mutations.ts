@@ -155,7 +155,7 @@ export const LOGIN_MUTATION = gql`
 export const REFRESH_TOKEN_MUTATION = gql`
   mutation RefreshToken($refreshToken: String!) {
     refreshToken(refreshToken: $refreshToken) {
-      newRefreshToken
+      refreshToken
       accessToken
     }
   }
@@ -164,8 +164,8 @@ export const REFRESH_TOKEN_MUTATION = gql`
 // to revoke a refresh token
 
 export const REVOKE_REFRESH_TOKEN = gql`
-  mutation RevokeRefreshTokenForUser($userId: String!) {
-    revokeRefreshTokenForUser(userId: $userId)
+  mutation RevokeRefreshTokenForUser {
+    revokeRefreshTokenForUser
   }
 `;
 

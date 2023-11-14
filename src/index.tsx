@@ -33,48 +33,32 @@ import {
 } from 'Constant/constant';
 import { refreshToken } from 'utils/getRefreshToken';
 
-const errorLink = onError(({ graphQLErrors, operation, forward }) => {
-  if (graphQLErrors) {
-    graphQLErrors.map(({ message }) => {
-      if (message === 'User is not authenticated') {
-        refreshToken().then((success) => {
-          if (success === false) {
-            alert('index');
-            // localStorage.clear();
-          } else {
-            forward(operation);
-          }
-        });
-      }
-    });
+const errorLink = onError(
+  ({ graphQLErrors, networkError, operation, forward }) => {
+    if (graphQLErrors) {
+      graphQLErrors.map(({ message }) => {
+        if (message === 'User is not authenticated') {
+          refreshToken().then((success) => {
+            if (success) {
+              const oldHeaders = operation.getContext().headers;
+              operation.setContext({
+                headers: {
+                  ...oldHeaders,
+                  authorization: 'Bearer ' + localStorage.getItem('token'),
+                },
+              });
+              return forward(operation);
+            } else {
+              localStorage.clear();
+            }
+          });
+        }
+      });
+    } else if (networkError) {
+      console.log(`[Network error]: ${networkError}`);
+    }
   }
-});
-
-// const authLink = new ApolloLink((operation, forward) => {
-//   const token = localStorage.getItem('token');
-
-//   // If the token is expired or about to expire, refresh it
-//   if (token) {
-//     const decodedToken: any = jwtDecode(token);
-//     const currentTime = Date.now().valueOf() / 1000;
-
-//     if (decodedToken.exp < currentTime) {
-//       refreshToken().then((success) => {
-//         if (success) {
-//           operation.setContext({
-//             headers: {
-//               authorization: 'Bearer ' + localStorage.getItem('token') || '',
-//             },
-//           });
-//         } else {
-//           localStorage.clear();
-//         }
-//       });
-//     }
-//   }
-
-//   return forward(operation);
-// });
+);
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,

@@ -15,6 +15,7 @@ import { store } from 'state/store';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { act } from 'react-dom/test-utils';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 
 const props: InterfaceLeftDrawerProps = {
   screenName: 'Dashboard',
@@ -64,6 +65,12 @@ const props: InterfaceLeftDrawerProps = {
 };
 
 const MOCKS = [
+  {
+    request: {
+      query: REVOKE_REFRESH_TOKEN,
+    },
+    result: {},
+  },
   {
     request: {
       query: ORGANIZATIONS_LIST,
