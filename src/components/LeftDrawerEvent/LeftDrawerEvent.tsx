@@ -130,6 +130,20 @@ const leftDrawerEvent = ({
             eventId={event._id}
             key={`${event?._id || 'loading'}Stats`}
           />
+          <Button
+            variant="light"
+            data-testid="allEventsBtn"
+            className="text-secondary"
+            aria-label="allEvents"
+            onClick={(): void => {
+              history.push(`/orgevents/id=${event.organization._id}`);
+            }}
+          >
+            <div className={styles.iconWrapper}>
+              <IconComponent name="Events" fill="var(--bs-secondary)" />
+            </div>
+            All Events
+          </Button>
         </div>
 
         {/* Profile Section & Logout Btn */}
