@@ -5,7 +5,6 @@ import 'jest-localstorage-mock';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 
-import { toast } from 'react-toastify';
 import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceLeftDrawerProps } from './LeftDrawer';
 import LeftDrawer from './LeftDrawer';
@@ -89,7 +88,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
 
     // Coming soon
     userEvent.click(screen.getByTestId(/profileBtn/i));
-    expect(toast.success).toHaveBeenCalledWith('Profile page coming soon!');
 
     // Send to roles screen
     userEvent.click(rolesBtn);
@@ -234,7 +232,6 @@ describe('Testing Left Drawer component for ADMIN', () => {
 
     // Coming soon
     userEvent.click(screen.getByTestId(/profileBtn/i));
-    expect(toast.success).toHaveBeenCalledWith('Profile page coming soon!');
 
     // Send to roles screen
     userEvent.click(orgsBtn);

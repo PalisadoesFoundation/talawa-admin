@@ -270,6 +270,6 @@ describe('MemberDetail', () => {
 
     expect(container.textContent).not.toBe('Loading data...');
 
-    waitFor(() => userEvent.click(screen.getByText(/edit/i)));
+    waitFor(() => userEvent.click(screen.getByText(/Edit Profile/i)));
   });
 });
