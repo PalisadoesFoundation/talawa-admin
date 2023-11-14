@@ -63,7 +63,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     window.location.assign('/');
     localStorage.setItem('id', '123');
 
-    const { container } = render(
+    render(
       <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
