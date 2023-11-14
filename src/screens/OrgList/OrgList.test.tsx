@@ -26,6 +26,8 @@ afterEach(() => {
 });
 
 describe('Organisations Page testing as SuperAdmin', () => {
+  localStorage.setItem('id', '123');
+
   const link = new StaticMockLink(MOCKS, true);
   const link2 = new StaticMockLink(MOCKS_EMPTY, true);
 
@@ -74,10 +76,10 @@ describe('Organisations Page testing as SuperAdmin', () => {
     );
 
     await wait();
-    expect(container.textContent).toMatch('Organizations Not Found');
-    expect(container.textContent).toMatch(
-      'Please create an organization through dashboard'
-    );
+    expect(screen.queryByText('Organizations Not Found')).toBeInTheDocument();
+    expect(
+      screen.queryByText('Please create an organization through dashboard')
+    ).toBeInTheDocument();
     expect(window.location).toBeAt('/');
   });
 
@@ -114,7 +116,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     const createOrgBtn = screen.getByTestId(/createOrganizationBtn/i);
     expect(createOrgBtn).toBeInTheDocument();
     userEvent.click(createOrgBtn);
-    userEvent.click(screen.getByTestId(/closeOrganizationModal/i));
+    userEvent.click(screen.getByTestId(/closeModalBtn/i));
   });
 
   test('Create organization model should work properly', async () => {

@@ -121,11 +121,7 @@ function orgList(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    if (loading && isLoadingMore == false) {
-      setIsLoading(true);
-    } else {
-      setIsLoading(false);
-    }
+    setIsLoading(loading && isLoadingMore);
   }, [loading]);
 
   /* istanbul ignore next */
@@ -571,7 +567,7 @@ function orgList(): JSX.Element {
 
                 <div className="position-relative">
                   <hr />
-                  <span className={styles.orText}>OR</span>
+                  <span className={styles.orText}>{t('OR')}</span>
                 </div>
                 {userData &&
                   ((userData.user.userType === 'ADMIN' &&

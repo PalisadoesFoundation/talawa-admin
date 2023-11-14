@@ -94,7 +94,8 @@
     "noOrgErrorTitle": "找不到组织",
     "sampleOrgDuplicate": "只允许一个样本组织",
     "noOrgErrorDescription": "请通过仪表板创建一个组织",
-    "noResultsFoundFor": "未找到结果 "
+    "noResultsFoundFor": "未找到结果 ",
+    "OR": "或者"
   },
   "orgListCard": {
     "admins": "管理員",

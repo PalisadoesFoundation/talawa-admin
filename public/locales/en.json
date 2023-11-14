@@ -103,7 +103,8 @@
     "manageFeaturesInfo": "Creation Successful ! Please select features that you want to enale for this organization from the plugin store.",
     "goToStore": "Go to Plugin Store",
     "enableEverything": "Enable Everything",
-    "noResultsFoundFor": "No results found for"
+    "noResultsFoundFor": "No results found for",
+    "OR": "OR"
   },
   "orgListCard": {
     "admins": "Admins",

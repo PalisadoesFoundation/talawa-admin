@@ -94,7 +94,8 @@
     "noOrgErrorTitle": "Organizaciones no encontradas",
     "sampleOrgDuplicate": "Solo se permite una organización de muestra",
     "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
-    "noResultsFoundFor": "No se encontraron resultados para "
+    "noResultsFoundFor": "No se encontraron resultados para ",
+    "OR": "O"
   },
   "orgListCard": {
     "admins": "Administradores",
