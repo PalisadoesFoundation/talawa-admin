@@ -1,4 +1,4 @@
-import { ApolloClient, InMemoryCache, HttpLink, gql } from '@apollo/client';
+import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
 import { BACKEND_URL } from 'Constant/constant';
 import { REFRESH_TOKEN_MUTATION } from 'GraphQl/Mutations/mutations';
 
