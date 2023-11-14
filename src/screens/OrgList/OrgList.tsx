@@ -33,8 +33,6 @@ import { Link } from 'react-router-dom';
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
   const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
-  /* eslint-disable @typescript-eslint/no-unused-vars */
-  const [modalisOpen, setmodalIsOpen] = useState(false);
   const [dialogRedirectOrgId, setDialogRedirectOrgId] = useState('<ORG_ID>');
   /* eslint-disable @typescript-eslint/explicit-function-return-type */
   function openDialogModal(redirectOrgId: string) {
@@ -336,7 +334,6 @@ function orgList(): JSX.Element {
         <Modal
           show={showModal}
           onHide={toggleModal}
-          backdrop="static"
           aria-labelledby="contained-modal-title-vcenter"
           centered
         >
@@ -455,38 +452,36 @@ function orgList(): JSX.Element {
                 }}
                 data-testid="organisationImage"
               />
+              <Col className={styles.sampleOrgSection}>
+                <Button
+                  className={styles.orgCreationBtn}
+                  type="submit"
+                  value="invite"
+                  data-testid="submitOrganizationForm"
+                >
+                  {t('createOrganization')}
+                </Button>
+
+                <div className="position-relative">
+                  <hr />
+                  <span className={styles.orText}>OR</span>
+                </div>
+                {userData &&
+                  ((userData.user.userType === 'ADMIN' &&
+                    userData.user.adminFor.length > 0) ||
+                    userData.user.userType === 'SUPERADMIN') && (
+                    <div className={styles.sampleOrgSection}>
+                      <Button
+                        className={styles.sampleOrgCreationBtn}
+                        onClick={() => triggerCreateSampleOrg()}
+                        data-testid="createSampleOrganizationBtn"
+                      >
+                        {t('createSampleOrganization')}
+                      </Button>
+                    </div>
+                  )}
+              </Col>
             </Modal.Body>
-            <Modal.Footer className={styles.flex}>
-              <Button
-                variant="secondary"
-                onClick={(): void => toggleModal()}
-                data-testid="closeOrganizationModal"
-              >
-                {t('cancel')}
-              </Button>
-              <Button
-                type="submit"
-                value="invite"
-                data-testid="submitOrganizationForm"
-              >
-                {t('createOrganization')}
-              </Button>
-              {userData &&
-                ((userData.user.userType === 'ADMIN' &&
-                  userData.user.adminFor.length > 0) ||
-                  userData.user.userType === 'SUPERADMIN') && (
-                  <div className={styles.sampleOrgSection}>
-                    <h4 className={styles.btnDivider}>OR</h4>
-                    <Button
-                      onClick={() => triggerCreateSampleOrg()}
-                      data-testid="createSampleOrganizationBtn"
-                    >
-                      {t('createSampleOrganization')}
-                      {/* <i className="bi bi-plus-circle-fill"></i> */}
-                    </Button>
-                  </div>
-                )}
-            </Modal.Footer>
           </Form>
         </Modal>{' '}
         <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
