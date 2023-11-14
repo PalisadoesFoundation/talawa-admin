@@ -37,15 +37,17 @@ export const TableRow = ({
       });
   };
 
-  const generateTag = (): void => {
-    toast.warning('Generating pdf...');
-    const inputs = [{ name: data.name }];
-
-    generate({ template: tagTemplate, inputs }).then((pdf) => {
-      const blob = new Blob([pdf.buffer], { type: 'application/pdf' });
-      window.open(URL.createObjectURL(blob));
-      toast.success('PDF generated successfully!');
+  const notify = (): Promise<void> =>
+    toast.promise(generateTag, {
+      pending: 'Generating pdf...',
+      success: 'PDF generated successfully!',
+      error: 'Error generating pdf!',
     });
+  const generateTag = async (): Promise<void> => {
+    const inputs = [{ name: data.name }];
+    const pdf = await generate({ template: tagTemplate, inputs });
+    const blob = new Blob([pdf.buffer], { type: 'application/pdf' });
+    window.open(URL.createObjectURL(blob));
   };
 
   return (
@@ -55,7 +57,7 @@ export const TableRow = ({
           <Button variant="contained" disabled className="m-2 p-2">
             Checked In
           </Button>
-          <Button variant="contained" className="m-2 p-2" onClick={generateTag}>
+          <Button variant="contained" className="m-2 p-2" onClick={notify}>
             Download Tag
           </Button>
         </div>

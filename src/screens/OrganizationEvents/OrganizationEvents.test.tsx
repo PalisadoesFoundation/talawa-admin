@@ -13,6 +13,7 @@ import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import { toast } from 'react-toastify';
 
 const MOCKS = [
   {
@@ -111,6 +112,14 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
+
+jest.mock('react-toastify', () => ({
+  toast: {
+    success: jest.fn(),
+    warning: jest.fn(),
+    error: jest.fn(),
+  },
+}));
 
 describe('Organisation Events Page', () => {
   const formData = {
@@ -295,6 +304,91 @@ describe('Organisation Events Page', () => {
     expect(screen.getByTestId('registrableCheck')).toBeChecked();
 
     userEvent.click(screen.getByTestId('createEventBtn'));
+  }, 15000);
+
+  test('Testing Create event with invalid inputs', async () => {
+    const formData = {
+      title: ' ',
+      description: ' ',
+      location: ' ',
+      startDate: '03/28/2022',
+      endDate: '04/15/2023',
+      startTime: '02:00',
+      endTime: '06:00',
+      allDay: false,
+      recurring: false,
+      isPublic: true,
+      isRegisterable: true,
+    };
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationEvents />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    userEvent.type(screen.getByPlaceholderText(/Enter Title/i), formData.title);
+    userEvent.type(
+      screen.getByPlaceholderText(/Enter Description/i),
+      formData.description
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Enter Location/i),
+      formData.location
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Enter Location/i),
+      formData.location
+    );
+
+    const endDateDatePicker = screen.getByPlaceholderText(/End Date/i);
+    const startDateDatePicker = screen.getByPlaceholderText(/Start Date/i);
+
+    fireEvent.click(endDateDatePicker);
+    fireEvent.click(startDateDatePicker);
+
+    await act(async () => {
+      fireEvent.change(endDateDatePicker, {
+        target: {
+          value: formData.endDate,
+        },
+      });
+      fireEvent.change(startDateDatePicker, {
+        target: {
+          value: formData.startDate,
+        },
+      });
+    });
+    userEvent.click(screen.getByTestId('alldayCheck'));
+    userEvent.click(screen.getByTestId('recurringCheck'));
+    userEvent.click(screen.getByTestId('ispublicCheck'));
+    userEvent.click(screen.getByTestId('registrableCheck'));
+
+    await wait();
+
+    expect(screen.getByPlaceholderText(/Enter Title/i)).toHaveValue(' ');
+    expect(screen.getByPlaceholderText(/Enter Description/i)).toHaveValue(' ');
+
+    expect(endDateDatePicker).toHaveValue(formData.endDate);
+    expect(startDateDatePicker).toHaveValue(formData.startDate);
+    expect(screen.getByTestId('alldayCheck')).not.toBeChecked();
+    expect(screen.getByTestId('recurringCheck')).toBeChecked();
+    expect(screen.getByTestId('ispublicCheck')).not.toBeChecked();
+    expect(screen.getByTestId('registrableCheck')).toBeChecked();
+
+    userEvent.click(screen.getByTestId('createEventBtn'));
+    expect(toast.warning).toBeCalledWith('Title can not be blank!');
+    expect(toast.warning).toBeCalledWith('Description can not be blank!');
+    expect(toast.warning).toBeCalledWith('Location can not be blank!');
   }, 15000);
 
   test('Testing if the event is not for all day', async () => {
