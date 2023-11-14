@@ -45,3 +45,16 @@
   font-size: 0.9rem;
   color: var(--bs-secondary);
 }
+
+.cardItem .creator {
+  font-size: 1rem;
+  color: rgb(33, 208, 21);
+}
+
+.rightCard {
+  display: flex;
+  gap: 5px;
+  min-width: 170px;
+  justify-content: center;
+  flex-direction: column;
+}

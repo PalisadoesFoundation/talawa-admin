@@ -18,22 +18,22 @@ type ModalPropType = {
 export const DeleteEventProjectModal = (props: ModalPropType): JSX.Element => {
   const [deleteMutation] = useMutation(DELETE_EVENT_PROJECT_MUTATION);
 
-  const deleteProject = (): void => {
-    toast.warn('Deleting the project...');
-    deleteMutation({
+  const notify = (): Promise<void> => {
+    return toast.promise(deleteProject, {
+      pending: 'Deleting the project...',
+      success: 'Deleted the project successfully!',
+      error: 'There was an error in deleting the project details!',
+    });
+  };
+  const deleteProject = async (): Promise<void> => {
+    await deleteMutation({
       variables: {
         id: props.project._id,
       },
-    })
-      .then(() => {
-        toast.success('Deleted the project successfully!');
-        props.refetchData();
-        props.handleClose();
-      })
-      .catch((err) => {
-        toast.error('There was an error in deleting the project details!');
-        toast.error(err.message);
-      });
+    });
+
+    props.refetchData();
+    props.handleClose();
   };
 
   return (
@@ -60,7 +60,7 @@ export const DeleteEventProjectModal = (props: ModalPropType): JSX.Element => {
           >
             Cancel
           </Button>
-          <Button variant="danger" onClick={deleteProject} className="m-1">
+          <Button variant="danger" onClick={notify} className="m-1">
             Delete
           </Button>
         </Modal.Footer>

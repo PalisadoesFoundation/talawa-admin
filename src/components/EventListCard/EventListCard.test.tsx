@@ -149,6 +149,30 @@ describe('Testing Event List Card', () => {
     expect(screen.queryByText(props.eventName)).not.toBeInTheDocument();
   });
 
+  test('Testing for update modal', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventListCard {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('card'));
+    userEvent.click(screen.getByTestId('editEventModalBtn'));
+
+    userEvent.click(screen.getByTestId('EventUpdateModalCloseBtn'));
+    userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
+
+    await wait();
+  });
+
   test('Testing event update functionality', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -159,7 +183,8 @@ describe('Testing Event List Card', () => {
     );
 
     await wait();
-
+    userEvent.click(screen.getByTestId('card'));
+    userEvent.click(screen.getByTestId('editEventModalBtn'));
     userEvent.type(screen.getByTestId('updateTitle'), props.eventName);
     userEvent.type(
       screen.getByTestId('updateDescription'),
@@ -199,7 +224,8 @@ describe('Testing Event List Card', () => {
     );
 
     await wait();
-
+    userEvent.click(screen.getByTestId('card'));
+    userEvent.click(screen.getByTestId('editEventModalBtn'));
     userEvent.type(screen.getByTestId('updateTitle'), props.eventName);
     userEvent.type(
       screen.getByTestId('updateDescription'),
@@ -232,6 +258,11 @@ describe('Testing Event List Card', () => {
           <EventListCard {...props} />
         </MockedProvider>
       );
+      userEvent.click(screen.getByTestId('card'));
+      userEvent.click(screen.getByTestId('deleteEventModalBtn'));
+
+      userEvent.click(screen.getByTestId('EventDeleteModalCloseBtn'));
+      userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
     });
 
     it('should call the delete event mutation when the "Yes" button is clicked', async () => {
@@ -240,7 +271,8 @@ describe('Testing Event List Card', () => {
           <EventListCard {...props} />
         </MockedProvider>
       );
-
+      userEvent.click(screen.getByTestId('card'));
+      userEvent.click(screen.getByTestId('deleteEventModalBtn'));
       const deleteBtn = screen.getByTestId('deleteEventBtn');
       fireEvent.click(deleteBtn);
     });
@@ -263,9 +295,50 @@ describe('Testing Event List Card', () => {
           <EventListCard {...props} />
         </MockedProvider>
       );
-
+      userEvent.click(screen.getByTestId('card'));
+      userEvent.click(screen.getByTestId('deleteEventModalBtn'));
       const deleteBtn = screen.getByTestId('deleteEventBtn');
       fireEvent.click(deleteBtn);
     });
+  });
+
+  test('Should render truncated event details', async () => {
+    const longEventName =
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. A very long event name that exceeds 150 characters and needs to be truncated';
+    const longDescription =
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. A very long description that exceeds 150 characters and needs to be truncated';
+    const longEventNameLength = longEventName.length;
+    const longDescriptionLength = longDescription.length;
+    const truncatedEventName = longEventName.substring(0, 150) + '...';
+    const truncatedDescriptionName = longDescription.substring(0, 150) + '...';
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <EventListCard
+            key="123"
+            id="1"
+            eventName={longEventName}
+            eventLocation="location"
+            eventDescription={longDescription}
+            regDate="19/03/2022"
+            regEndDate="26/03/2022"
+            startTime="02:00"
+            endTime="06:00"
+            allDay={true}
+            recurring={false}
+            isPublic={true}
+            isRegisterable={false}
+          />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(longEventNameLength).toBeGreaterThan(100);
+    expect(longDescriptionLength).toBeGreaterThan(256);
+    expect(truncatedEventName).toContain('...');
+    expect(truncatedDescriptionName).toContain('...');
+    await wait();
   });
 });

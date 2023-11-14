@@ -82,6 +82,7 @@ export interface InterfaceQueryOrganizationPostListItem {
   text: string;
   imageUrl: null;
   videoUrl: null;
+  createdAt: string;
   creator: {
     _id: string;
     firstName: string;
@@ -112,4 +113,55 @@ export interface InterfaceQueryBlockPageMemberListItem {
   organizationsBlockedBy: {
     _id: string;
   }[];
+}
+
+export interface InterfaceQueryUserListItem {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  image: string | null;
+  email: string;
+  userType: string;
+  adminFor: { _id: string }[];
+  adminApproved: boolean;
+  organizationsBlockedBy: {
+    _id: string;
+    name: string;
+    location: string;
+    image: string | null;
+    createdAt: string;
+    creator: {
+      _id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+      image: string | null;
+    };
+  }[];
+  joinedOrganizations: {
+    _id: string;
+    name: string;
+    location: string;
+    image: string | null;
+    createdAt: string;
+    creator: {
+      _id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+      image: string | null;
+    };
+  }[];
+  createdAt: string;
+}
+
+export interface InterfaceQueryRequestListItem {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  image: string;
+  email: string;
+  userType: string;
+  adminApproved: boolean;
+  createdAt: string;
 }

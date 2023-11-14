@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import CardItem from './CardItem';
 import type { InterfaceCardItem } from './CardItem';
+import dayjs from 'dayjs';
 
 describe('Testing the Organization Card', () => {
   test('should render props and text elements For event card', () => {
@@ -14,7 +15,9 @@ describe('Testing the Organization Card', () => {
     render(<CardItem {...props} />);
 
     expect(screen.getByText(/Event Title/i)).toBeInTheDocument();
-    expect(screen.getByText(/03-09-2023/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(dayjs(props.time).format('MMM D, YYYY'))
+    ).toBeInTheDocument();
   });
 
   test('Should render props and text elements for Post card', () => {
@@ -27,7 +30,9 @@ describe('Testing the Organization Card', () => {
     render(<CardItem {...props} />);
 
     expect(screen.getByText(/Post Title/i)).toBeInTheDocument();
-    expect(screen.getByText(/03-09-2023/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(dayjs(props.time).format('MMM D, YYYY'))
+    ).toBeInTheDocument();
   });
 
   test('Should render props and text elements for Membership Request card', () => {
