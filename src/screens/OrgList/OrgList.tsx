@@ -152,7 +152,7 @@ function orgList(): JSX.Element {
         toast.success(t('successMessage'));
         window.location.reload();
       })
-      .catch((error: any) => {
+      .catch(() => {
         toast.error(t('sampleOrgDuplicate'));
       });
   };
@@ -413,7 +413,7 @@ function orgList(): JSX.Element {
                   ))}
                 </>
               ) : userData && userData.user.userType == 'SUPERADMIN' ? (
-                orgsData?.organizationsConnection.map((item, index) => {
+                orgsData?.organizationsConnection.map((item) => {
                   return (
                     <div key={item._id} className={styles.itemCard}>
                       <OrgListCard data={item} />
@@ -610,6 +610,13 @@ function orgList(): JSX.Element {
                       }}
                     ></i>
                   </a>
+                  <Button
+                    variant="secondary"
+                    onClick={(): void => toggleModal()}
+                    data-testid="closeOrganizationModal"
+                  >
+                    {t('cancel')}
+                  </Button>
                 </div>
                 <h4 className={styles.titlemodaldialog}>
                   {t('manageFeaturesInfo')}
