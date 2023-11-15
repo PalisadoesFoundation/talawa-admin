@@ -17,7 +17,7 @@ const props: InterfaceLeftDrawerProps = {
     title: 'Test Event',
     description: 'Test Description',
     organization: {
-      _id: 'Test Organization',
+      _id: 'TestOrganization',
     },
   },
   hideDrawer: false,
@@ -215,5 +215,22 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
     const truncatedEventDescription = eventDescription.substring(0, 30) + '...';
     expect(truncatedEventTitle).toContain('...');
     expect(truncatedEventDescription).toContain('...');
+  });
+  test('Testing all events button', async () => {
+    localStorage.setItem('UserType', 'SUPERADMIN');
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <LeftDrawerEvent {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    userEvent.click(screen.getByTestId('allEventsBtn'));
+    expect(global.window.location.pathname).toBe(
+      `/orgevents/id=${props.event.organization._id}`
+    );
   });
 });
