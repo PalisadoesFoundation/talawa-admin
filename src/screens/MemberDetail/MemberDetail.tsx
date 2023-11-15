@@ -106,6 +106,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     <Button
                       className={styles.memberfontcreatedbtn}
                       role="stateBtn"
+                      data-testid="stateBtn"
                       onClick={(): void => {
                         setState(2);
                       }}

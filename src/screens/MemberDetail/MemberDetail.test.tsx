@@ -172,6 +172,8 @@ describe('MemberDetail', () => {
     expect(screen.getAllByText(/Role/i)).toHaveLength(2);
     expect(screen.getAllByText(/Created/i)).toHaveLength(4);
     expect(screen.getAllByText(/Joined/i)).toHaveLength(2);
+    expect(screen.getByTestId('stateBtn')).toBeInTheDocument();
+    userEvent.click(screen.getByTestId('stateBtn'));
   });
   test('prettyDate function should work properly', () => {
     // If the date is provided
@@ -250,12 +252,10 @@ describe('MemberDetail', () => {
       )
     );
   });
-
   test('should call setState with 2 when button is clicked', async () => {
     const props = {
       id: 'rishav-jha-mech',
     };
-
     const { container } = render(
       <MockedProvider addTypename={false} link={link1}>
         <BrowserRouter>
