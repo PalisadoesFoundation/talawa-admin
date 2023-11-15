@@ -654,6 +654,18 @@ export const UPDATE_USER_ROLE_IN_ORG_MUTATION = gql`
   }
 `;
 
+export const CREATE_SAMPLE_ORGANIZATION_MUTATION = gql`
+  mutation {
+    createSampleOrganization
+  }
+`;
+
+export const REMOVE_SAMPLE_ORGANIZATION_MUTATION = gql`
+  mutation {
+    removeSampleOrganization
+  }
+`;
+
 export const CREATE_DIRECT_CHAT = gql`
   mutation createDirectChat($userIds: [ID!]!, $organizationId: ID!) {
     createDirectChat(

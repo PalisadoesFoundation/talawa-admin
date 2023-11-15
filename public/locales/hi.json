@@ -28,6 +28,11 @@
     "login_to_admin_portal": "एडमिन पोर्टल लॉगिन",
     "OR": "या"
   },
+  "latestEvents": {
+    "eventCardTitle": "आगामी घटनाएँ",
+    "eventCardSeeAll": "सभी देखें",
+    "noEvents": "कोई आगामी घटनाएँ नहीं"
+  },
   "listNavbar": {
     "talawa_portal": "तलावा प्रशासन पोर्टल",
     "roles": "भूमिकाएँ",
@@ -75,6 +80,7 @@
     "searchByName": "नाम से खोजें",
     "organizations": "संगठन",
     "createOrganization": "संगठन बनाएं",
+    "createSampleOrganization": " सैंपल संगठन बनाएं",
     "description": "विवरण",
     "location": "स्थान",
     "isPublic": "सार्वजनिक है",
@@ -86,13 +92,17 @@
     "cancel": "रद्द करना",
     "endOfResults": "परिणामों का अंत",
     "noOrgErrorTitle": "संगठन नहीं मिला",
+    "sampleOrgDuplicate": "केवल एक नमूना संगठन को अनुमति दी गई",
     "noOrgErrorDescription": "कृपया डैशबोर्ड के माध्यम से एक संगठन बनाएं",
-    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला "
+    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला ",
+    "OR": "या",
+    "sampleOrgSuccess": "सैंपल संगठन सफलतापूर्वक बनाया गया"
   },
   "orgListCard": {
     "admins": "व्यवस्थापक",
     "members": "सदस्य",
-    "manage": "प्रबंधित करना"
+    "manage": "प्रबंधित करना",
+    "sampleOrganization": "सैंपल संगठन"
   },
   "paginationList": {
     "rowsPerPage": "प्रति पृष्ठ पंक्तियाँ",
@@ -400,6 +410,7 @@
   },
   "deleteOrg": {
     "deleteOrganization": "संगठन हटाएं",
+    "deleteSampleOrganization": "सैंपल संगठन को हटाएं",
     "deleteMsg": "क्या आप इस संगठन को हटाना चाहते हैं?",
     "cancel": "रद्द करना",
     "confirmDelete": "हटाने की पुष्टि करें",
