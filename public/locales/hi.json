@@ -463,7 +463,7 @@
   "addOnStore": {
     "title": "प्लगइन स्टोर",
     "searchName": "जैसे: दान",
-    "enable": "सक्रिय",
+    "all": "सभी",
     "disable": "अक्षम",
     "pHeading": "प्लग-इन",
     "install": "स्थापित",

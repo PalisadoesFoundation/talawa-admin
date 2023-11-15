@@ -14,9 +14,7 @@ interface InterfaceAddOnEntryProps {
   description: string;
   createdBy: string;
   component: string;
-  modified: any;
   uninstalledOrgs: string[];
-  getInstalledPlugins: () => any;
 }
 
 function addOnEntry({
@@ -25,7 +23,6 @@ function addOnEntry({
   description,
   createdBy,
   uninstalledOrgs,
-  getInstalledPlugins,
 }: InterfaceAddOnEntryProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'addOnEntry' });
   //getting orgId from URL
@@ -85,7 +82,6 @@ function addOnEntry({
             data-testid="AddOnEntry_btn_install"
             onClick={(): void => {
               togglePluginInstall();
-              getInstalledPlugins();
             }}
           >
             {buttonLoading ? (

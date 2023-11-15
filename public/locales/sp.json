@@ -463,7 +463,7 @@
   "addOnStore": {
     "title": "Tienda de complementos",
     "searchName": "Ej: Donaciones",
-    "enable": "Activada",
+    "all": "Todo",
     "disable": "Desactivada",
     "pHeading": "Complementos",
     "install": "Instalada",

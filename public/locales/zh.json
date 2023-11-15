@@ -463,7 +463,7 @@
   "addOnStore": {
     "title": "插件商店",
     "searchName": "例如：捐赠",
-    "enable": "启用",
+    "all": "全部",
     "disable": "残疾人",
     "pHeading": "插件",
     "install": "已安装",

@@ -462,7 +462,7 @@
   "addOnStore": {
     "title": "Add-On Store",
     "searchName": "Ex:Des dons ",
-    "enable": "Activé",
+    "all": "Tous",
     "disable": "Désactivé",
     "pHeading": "Plugins",
     "install": "Installée",
