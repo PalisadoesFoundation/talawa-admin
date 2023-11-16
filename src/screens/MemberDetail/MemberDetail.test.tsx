@@ -159,8 +159,8 @@ describe('MemberDetail', () => {
     expect(screen.getAllByText(/Last name/i)).toBeTruthy();
     expect(screen.getAllByText(/Member of Organization/i)).toBeTruthy();
     expect(screen.getAllByText(/Language/i)).toBeTruthy();
-    expect(screen.getAllByText(/Admin approved/i)).toBeTruthy();
-    expect(screen.getAllByText(/Plugin creation allowed/i)).toBeTruthy();
+    expect(screen.getByText(/Admin approved/i)).toBeInTheDocument();
+    expect(screen.getByText(/Plugin creation allowed/i)).toBeInTheDocument();
     expect(screen.getAllByText(/Created on/i)).toBeTruthy();
     expect(screen.getAllByText(/Admin for organizations/i)).toBeTruthy();
     expect(screen.getAllByText(/Membership requests/i)).toBeTruthy();
@@ -271,5 +271,39 @@ describe('MemberDetail', () => {
     expect(container.textContent).not.toBe('Loading data...');
 
     waitFor(() => userEvent.click(screen.getByText(/Edit Profile/i)));
+  });
+  test('should show Yes if plugin creation is allowed and admin approved', async () => {
+    const props = {
+      id: 'rishav-jha-mech',
+    };
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <MemberDetail {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    waitFor(() => expect(screen.getByText('Yes')).toHaveLength(2));
+  });
+  test('should show No if plugin creation is not allowed and not admin approved', async () => {
+    const props = {
+      id: 'rishav-jha-mech',
+    };
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <MemberDetail {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    waitFor(() => expect(screen.getAllByText('No')).toHaveLength(2));
   });
 });
