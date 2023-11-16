@@ -28,6 +28,11 @@
     "login_to_admin_portal": "Inicio de sesión en el portal de administración",
     "OR": "O"
   },
+  "latestEvents": {
+    "eventCardTitle": "Próximos Eventos",
+    "eventCardSeeAll": "Ver Todos",
+    "noEvents": "No Hay Eventos Próximos"
+  },
   "listNavbar": {
     "talawa_portal": "Portal De Administración Talawa",
     "roles": "Roles",
@@ -75,6 +80,7 @@
     "searchByName": "Buscar por nombre",
     "organizations": "Organizaciones",
     "createOrganization": "Crear organización",
+    "createSampleOrganization": "Crear organización de muestra",
     "description": "Descripción",
     "location": "Ubicación",
     "isPublic": "Es público",
@@ -86,13 +92,17 @@
     "cancel": "Cancelar",
     "endOfResults": "Fin de los resultados",
     "noOrgErrorTitle": "Organizaciones no encontradas",
+    "sampleOrgDuplicate": "Solo se permite una organización de muestra",
     "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
-    "noResultsFoundFor": "No se encontraron resultados para "
+    "noResultsFoundFor": "No se encontraron resultados para ",
+    "OR": "O",
+    "sampleOrgSuccess": "Organización de ejemplo creada exitosamente"
   },
   "orgListCard": {
     "admins": "Administradores",
     "members": "Miembros",
-    "manage": "Administrar"
+    "manage": "Administrar",
+    "sampleOrganization": "Organización de muestra"
   },
   "paginationList": {
     "rowsPerPage": "filas por página",
@@ -400,6 +410,7 @@
   },
   "deleteOrg": {
     "deleteOrganization": "Eliminar organización",
+    "deleteSampleOrganization": "Eliminar organización de muestra",
     "deleteMsg": "¿Desea eliminar esta organización?",
     "cancel": "Cancelar",
     "confirmDelete": "Confirmar eliminación",

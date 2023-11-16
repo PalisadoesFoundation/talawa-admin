@@ -825,3 +825,9 @@ export const DIRECT_CHATS_LIST = gql`
     }
   }
 `;
+
+export const IS_SAMPLE_ORGANIZATION_QUERY = gql`
+  query ($isSampleOrganizationId: ID!) {
+    isSampleOrganization(id: $isSampleOrganizationId)
+  }
+`;
