@@ -1,5 +1,5 @@
 import React from 'react';
-import { getByTestId, getByText, render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import {
   ApolloClient,
