@@ -55,10 +55,10 @@ describe('Testing User Password Update', () => {
   };
 
   const formData = {
-    previousPassword: 'anshgoyal',
-    newPassword: 'anshgoyalansh',
-    wrongPassword: 'akhil',
-    confirmNewPassword: 'anshgoyalansh',
+    previousPassword: 'Palisadoes',
+    newPassword: 'ThePalisadoesFoundation',
+    wrongPassword: 'This is wrong passoword',
+    confirmNewPassword: 'ThePalisadoesFoundation',
   };
 
   global.alert = jest.fn();
