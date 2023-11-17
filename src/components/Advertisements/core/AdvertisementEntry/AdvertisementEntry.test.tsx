@@ -31,7 +31,7 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 });
 describe('Testing Advertisement Entry Component', () => {
   test('Temporary test for Advertisement Entry', () => {
-    const { getByTestId, getByText, getAllByText } = render(
+    const { getByTestId, getAllByText } = render(
       <ApolloProvider client={client}>
         <Provider store={store}>
           <BrowserRouter>
