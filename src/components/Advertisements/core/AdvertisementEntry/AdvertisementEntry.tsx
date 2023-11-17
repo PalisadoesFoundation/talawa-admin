@@ -38,11 +38,9 @@ function advertisementEntry({
     });
     setButtonLoading(false);
   };
-  const s = new Date(endDate);
-  console.log(s > new Date());
   return (
     <>
-      <Row xs={1} md={2} className="g-4">
+      <Row data-testid="AdEntry" xs={1} md={2} className="g-4">
         {Array.from({ length: 4 }).map((_, idx) => (
           <Col key={idx}>
             <Card>
@@ -54,7 +52,7 @@ function advertisementEntry({
               />
               <Card.Body>
                 <Card.Title>{name}</Card.Title>
-                <Card.Text>Ends on {endDate}</Card.Text>
+                <Card.Text>Ends on {endDate?.toDateString()}</Card.Text>
                 <Card.Subtitle className="mb-2 text-muted author">
                   {type}
                 </Card.Subtitle>

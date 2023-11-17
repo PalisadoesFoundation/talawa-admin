@@ -85,14 +85,18 @@ export default function advertisements(): JSX.Element {
   if (loading) {
     return (
       <>
-        <div data-testid="AddOnEntryStore" className={styles.loader}></div>
+        <div data-testid="AdEntryStore" className={styles.loader}></div>
       </>
     );
   }
-  console.log('Advertisement data is ', data2);
+
   return (
     <>
-      <OrganizationScreen screenName="Advertisement Store" title={t('title')}>
+      <OrganizationScreen
+        data-testid="AdEntryStore"
+        screenName="Advertisement Store"
+        title={t('title')}
+      >
         <Row>
           <Col col={8}>
             <div className={styles.justifysp}>
