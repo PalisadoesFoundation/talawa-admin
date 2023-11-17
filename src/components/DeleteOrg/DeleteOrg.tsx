@@ -1,9 +1,12 @@
-import { useMutation } from '@apollo/client';
-import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import React, { useState } from 'react';
 import { Button, Card, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { useMutation, useQuery } from '@apollo/client';
 import { errorHandler } from 'utils/errorHandler';
+import { toast } from 'react-toastify';
+import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import { REMOVE_SAMPLE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 import styles from './DeleteOrg.module.css';
 
 function deleteOrg(): JSX.Element {
@@ -14,22 +17,39 @@ function deleteOrg(): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
   const canDelete = localStorage.getItem('UserType') === 'SUPERADMIN';
   const toggleDeleteModal = (): void => setShowDeleteModal(!showDeleteModal);
+
   const [del] = useMutation(DELETE_ORGANIZATION_MUTATION);
+  const [removeSampleOrganization] = useMutation(
+    REMOVE_SAMPLE_ORGANIZATION_MUTATION
+  );
+
+  const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
+    variables: {
+      isSampleOrganizationId: currentUrl,
+    },
+  });
 
   const deleteOrg = async (): Promise<void> => {
-    try {
-      const { data } = await del({
-        variables: {
-          id: currentUrl,
-        },
-      });
-      /* istanbul ignore next */
-      if (data) {
+    if (data && data.isSampleOrganization) {
+      removeSampleOrganization()
+        .then(() => {
+          toast.success('Successfully deleted sample Organization');
+        })
+        .catch((error) => {
+          toast.error(error.message);
+        });
+      window.location.replace('/orglist');
+    } else {
+      try {
+        await del({
+          variables: {
+            id: currentUrl,
+          },
+        });
         window.location.replace('/orglist');
+      } catch (error: any) {
+        errorHandler(t, error);
       }
-    } catch (error: any) {
-      /* istanbul ignore next */
-      errorHandler(t, error);
     }
   };
 
@@ -48,7 +68,9 @@ function deleteOrg(): JSX.Element {
               onClick={toggleDeleteModal}
               data-testid="openDeleteModalBtn"
             >
-              {t('deleteOrganization')}
+              {data && data.isSampleOrganization
+                ? t('deleteSampleOrganization')
+                : t('deleteOrganization')}
             </Button>
           </Card.Body>
         </Card>
@@ -66,18 +88,18 @@ function deleteOrg(): JSX.Element {
           <Modal.Body>{t('deleteMsg')}</Modal.Body>
           <Modal.Footer>
             <Button
-              variant="danger"
+              variant="secondary"
               onClick={toggleDeleteModal}
               data-testid="closeDelOrgModalBtn"
             >
-              {t('no')}
+              {t('cancel')}
             </Button>
             <Button
-              variant="success"
+              variant="danger"
               onClick={deleteOrg}
               data-testid="deleteOrganizationBtn"
             >
-              {t('yes')}
+              {t('confirmDelete')}
             </Button>
           </Modal.Footer>
         </Modal>

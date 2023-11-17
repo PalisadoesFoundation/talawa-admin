@@ -28,6 +28,11 @@
     "login_to_admin_portal": "Connexion à l'administration du portail",
     "OR": "OU"
   },
+  "latestEvents": {
+    "eventCardTitle": "Événements à venir",
+    "eventCardSeeAll": "Voir Tout",
+    "noEvents": "Aucun événement à venir"
+  },
   "listNavbar": {
     "talawa_portal": "Portail D'Administrateur Talawa",
     "roles": "Les rôles",
@@ -75,6 +80,7 @@
     "searchByName": "Rechercher par nom",
     "organizations": "Organisations",
     "createOrganization": "Créer une organisation",
+    "createSampleOrganization": "Créer une organisation d'exemple",
     "description": "La description",
     "location": "Emplacement",
     "isPublic": "Est publique",
@@ -84,15 +90,21 @@
     "sort": "Trier",
     "filter": "Filtre",
     "cancel": "Annuler",
+    "endOfResults": "Fin des résultats",
     "noOrgErrorTitle": "Organisations non trouvées",
+    "sampleOrgDuplicate": "Seule une organisation d'exemple est autorisée.",
     "noOrgErrorDescription": "Veuillez créer une organisation via le tableau de bord",
-    "noResultsFoundFor": "Aucun résultat trouvé pour "
+    "noResultsFoundFor": "Aucun résultat trouvé pour ",
+    "OR": "OU",
+    "sampleOrgSuccess": "Organisation d'exemple créée avec succès"
   },
   "orgListCard": {
     "admins": "Administrateurs",
     "members": "Membres",
-    "manage": "Faire en sorte"
+    "manage": "Faire en sorte",
+    "sampleOrganization": "Organisation d'exemple"
   },
+
   "paginationList": {
     "rowsPerPage": "lignes par page",
     "all": "Tout"
@@ -104,6 +116,15 @@
     "name": "Nom",
     "email": "E-mail",
     "roles_userType": "Rôle/Type d'utilisateur",
+    "joined_organizations": "Organisations rejointes",
+    "blocked_organizations": "Organisations bloquées",
+    "endOfResults": "Fin des résultats",
+    "orgJoinedBy": "Organisation rejointe par",
+    "orgThatBlocked": "Organisation bloquée par",
+    "hasNotJoinedAnyOrg": "n'a rejoint aucune organisation",
+    "isNotBlockedByAnyOrg": "n'est bloqué par aucune organisation",
+    "searchByOrgName": "Rechercher par nom d'organisation",
+    "view": "Vue",
     "admin": "ADMIN",
     "superAdmin": "SUPERADMIN",
     "user": "UTILISATEUR",
@@ -125,6 +146,7 @@
     "accept": "Accepter",
     "reject": "Rejeter",
     "enterName": "Entrez le nom",
+    "endOfResults": "Fin des résultats",
     "loadingRequests": "Chargement des demandes...",
     "noRequestFound": "Aucune demande trouvée",
     "sort": "Trier",
@@ -146,6 +168,13 @@
     "events": "Événements",
     "blockedUsers": "Utilisateurs bloqués",
     "requests": "Demandes",
+    "viewAll": "Voir tout",
+    "upcomingEvents": "Événements à venir",
+    "noUpcomingEvents": "Aucun événement à venir",
+    "latestPosts": "Derniers messages",
+    "noPostsPresent": "Aucune publication présente",
+    "membershipRequests": "Demandes d'adhésion",
+    "noMembershipRequests": "Aucune demande d'adhésion",
     "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "organizationPeople": {
@@ -239,22 +268,30 @@
     "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "orgPost": {
-    "title": "Postes de Talawa",
-    "searchPost": "Rechercher un article",
-    "posts": "Des postes",
-    "createPostnot found": "Créer un article",
+    "title": "Talawa Publications",
+    "searchPost": "Rechercher une publication",
+    "posts": "Publications",
+    "createPost": "Créer une publication",
     "postDetails": "Détails de la publication",
+    "postTitle1": "Écrire le titre de la publication",
     "postTitle": "Titre",
     "information": "Informations",
-    "image": "Image",
-    "video": "Vidéo",
-    "addPost": "Ajouter un article",
+    "information1": "Écrire les informations de la publication",
+    "image": "Image de la publication",
+    "video": "Vidéo de la publication",
+    "addPost": "Ajouter une publication",
     "searchTitle": "Rechercher par titre",
     "searchText": "Rechercher par texte",
-    "ptitle": "Titre de l'article",
-    "postDes": "De quoi parlez-vous ?",
+    "ptitle": "Titre de la publication",
+    "postDes": "De quoi voulez-vous parler?",
     "Title": "Titre",
-    "Text": "Texte"
+    "Text": "Texte",
+    "cancel": "Annuler",
+    "searchBy": "Rechercher par",
+    "Oldest": "Les plus anciennes d'abord",
+    "Latest": "Les plus récentes d'abord",
+    "sortPost": "Trier les publications",
+    "tag": "Votre navigateur ne prend pas en charge la balise vidéo"
   },
   "postNotFound": {
     "post": "Poste",
@@ -276,19 +313,22 @@
     "author": "Auteur",
     "imageURL": "URL de l'image",
     "videoURL": "URL de la vidéo",
-    "deletePost": "Supprimer le message",
-    "deletePostMsg": "Voulez-vous supprimer ce message ?",
+    "edit": "Modifier la publication",
+    "deletePost": "Supprimer la publication",
+    "deletePostMsg": "Voulez-vous supprimer cette publication ?",
     "no": "Non",
     "yes": "Oui",
-    "editPost": "Modifier le message",
+    "editPost": "Modifier la publication",
     "postTitle": "Titre",
     "information": "Informations",
     "image": "Image",
     "video": "Vidéo",
-    "close": "Proche",
-    "updatePost": "Mettre à jour le message",
-    "postDeleted": "Message supprimé avec succès.",
-    "postUpdated": "Message mis à jour avec succès.",
+    "close": "Fermer",
+    "pin": "Épingler la publication",
+    "updatePost": "Mettre à jour la publication",
+    "postDeleted": "Publication supprimée avec succès.",
+    "postUpdated": "Publication mise à jour avec succès.",
+    "tag": "Votre navigateur ne prend pas en charge la balise vidéo",
     "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "blockUnblockUser": {
@@ -321,7 +361,7 @@
     "enterNewPassword": "Entrez un nouveau mot de passe",
     "cofirmNewPassword": "Confirmer le nouveau mot de passe",
     "changePassword": "Changer le mot de passe",
-    "backToHome": "De retour à la maison",
+    "backToLogin": "Retour à la connexion",
     "userOtp": "par exemple. 12345",
     "password": "Mot de passe",
     "emailNotRegistered": "L'e-mail n'est pas enregistré.",
@@ -371,10 +411,11 @@
   },
   "deleteOrg": {
     "deleteOrganization": "Supprimer l'organisation",
+    "deleteSampleOrganization": "Supprimer l'organisation d'exemple",
     "deleteMsg": "Voulez-vous supprimer cette organisation ?",
-    "no": "Non",
-    "yes": "Oui",
-    "longDelOrgMsg": "En cliquant sur le bouton Supprimer l'organisation, l'organisation sera définitivement supprimée, ainsi que ses événements, étiquettes et toutes les données associées."
+    "cancel": "Annuler",
+    "confirmDelete": "Confirmer la suppression",
+    "longDelOrgMsg": "En cliquant sur le bouton Supprimer l'organisation, l'organisation sera définitivement supprimée ainsi que ses événements, balises et toutes les données associées."
   },
   "userUpdate": {
     "firstName": "Prénom",

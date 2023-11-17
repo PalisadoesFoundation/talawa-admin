@@ -28,7 +28,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const [state, setState] = useState(1);
 
   const location = useLocation<MemberDetailProps>();
-  const currentUrl = window.location.href.split('=')[1];
+  const currentUrl = location.state?.id || localStorage.getItem('id') || id;
   document.title = t('title');
 
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
@@ -37,7 +37,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     loading: loading,
     error: error,
   } = useQuery(USER_DETAILS, {
-    variables: { id: location.state?.id ?? id }, // For testing we are sending the id as a prop
+    variables: { id: currentUrl }, // For testing we are sending the id as a prop
   });
 
   if (loading) {
@@ -94,23 +94,26 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           <Col sm={8}>
             {state == 1 ? (
               <div className={styles.mainpageright}>
-                <Row className={styles.justifysp}>
+                <Row className={styles.flexclm}>
                   <p className={styles.logintitle}>{t('title')}</p>
-                  <Button
-                    className={styles.memberfontcreatedbtn}
-                    onClick={addAdmin}
-                  >
-                    {t('addAdmin')}
-                  </Button>
-                  <Button
-                    className={styles.memberfontcreatedbtn}
-                    role="stateBtn"
-                    onClick={(): void => {
-                      setState(2);
-                    }}
-                  >
-                    edit
-                  </Button>
+                  <div className={styles.btngroup}>
+                    <Button
+                      className={styles.memberfontcreatedbtn}
+                      onClick={addAdmin}
+                    >
+                      {t('addAdmin')}
+                    </Button>
+                    <Button
+                      className={styles.memberfontcreatedbtn}
+                      role="stateBtn"
+                      data-testid="stateBtn"
+                      onClick={(): void => {
+                        setState(2);
+                      }}
+                    >
+                      Edit Profile
+                    </Button>
+                  </div>
                 </Row>
                 <Row className={styles.justifysp}>
                   <Col sm={6} lg={4}>
@@ -283,7 +286,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 </section>
               </div>
             ) : (
-              <UserUpdate id="abcd" />
+              <UserUpdate id={currentUrl} />
             )}
           </Col>
         </Row>

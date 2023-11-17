@@ -5,7 +5,6 @@ import 'jest-localstorage-mock';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 
-import { toast } from 'react-toastify';
 import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceLeftDrawerProps } from './LeftDrawerOrg';
 import LeftDrawerOrg from './LeftDrawerOrg';
@@ -267,7 +266,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     await wait();
     expect(screen.getByTestId(/orgBtn/i)).toBeInTheDocument();
     userEvent.click(screen.getByTestId(/profileBtn/i));
-    expect(toast.success).toHaveBeenCalledWith('Profile page coming soon!');
   });
 
   test('Testing Menu Buttons', async () => {

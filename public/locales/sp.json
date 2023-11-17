@@ -28,6 +28,11 @@
     "login_to_admin_portal": "Inicio de sesión en el portal de administración",
     "OR": "O"
   },
+  "latestEvents": {
+    "eventCardTitle": "Próximos Eventos",
+    "eventCardSeeAll": "Ver Todos",
+    "noEvents": "No Hay Eventos Próximos"
+  },
   "listNavbar": {
     "talawa_portal": "Portal De Administración Talawa",
     "roles": "Roles",
@@ -75,6 +80,7 @@
     "searchByName": "Buscar por nombre",
     "organizations": "Organizaciones",
     "createOrganization": "Crear organización",
+    "createSampleOrganization": "Crear organización de muestra",
     "description": "Descripción",
     "location": "Ubicación",
     "isPublic": "Es público",
@@ -84,14 +90,19 @@
     "sort": "Ordenar",
     "filter": "Filtrar",
     "cancel": "Cancelar",
+    "endOfResults": "Fin de los resultados",
     "noOrgErrorTitle": "Organizaciones no encontradas",
+    "sampleOrgDuplicate": "Solo se permite una organización de muestra",
     "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
-    "noResultsFoundFor": "No se encontraron resultados para "
+    "noResultsFoundFor": "No se encontraron resultados para ",
+    "OR": "O",
+    "sampleOrgSuccess": "Organización de ejemplo creada exitosamente"
   },
   "orgListCard": {
     "admins": "Administradores",
     "members": "Miembros",
-    "manage": "Administrar"
+    "manage": "Administrar",
+    "sampleOrganization": "Organización de muestra"
   },
   "paginationList": {
     "rowsPerPage": "filas por página",
@@ -104,6 +115,15 @@
     "name": "Nombre",
     "email": "Correo electrónico",
     "roles_userType": "Rol/Tipo de usuario",
+    "joined_organizations": "Organizaciones unidas",
+    "blocked_organizations": "Organizaciones bloqueadas",
+    "endOfResults": "Fin de los resultados",
+    "orgJoinedBy": "Organizaciones unidas por",
+    "orgThatBlocked": "Organizaciones bloqueadas por",
+    "hasNotJoinedAnyOrg": "No se ha unido a ninguna organización.",
+    "isNotBlockedByAnyOrg": "No está bloqueado por ninguna organización.",
+    "searchByOrgName": "Buscar por nombre de organización",
+    "view": "Ver",
     "admin": "ADMINISTRACIÓN",
     "superAdmin": "SUPERADMIN",
     "user": "USUARIO",
@@ -125,6 +145,7 @@
     "accept": "Aceptar",
     "reject": "Rechazar",
     "enterName": "Ingrese su nombre",
+    "endOfResults": "Fin de los resultados",
     "loadingRequests": "Cargando solicitudes ...",
     "noRequestFound": "No se encontró ninguna solicitud.",
     "sort": "Ordenar",
@@ -146,6 +167,13 @@
     "events": "Eventos",
     "blockedUsers": "Usuarios bloqueados",
     "requests": "Solicitudes",
+    "viewAll": "Ver Todo",
+    "upcomingEvents": "Próximos Eventos",
+    "noUpcomingEvents": "No Hay Próximos Eventos",
+    "latestPosts": "Últimas Publicaciones",
+    "noPostsPresent": "No Hay Publicaciones Presentes",
+    "membershipRequests": "Solicitudes de Membresía",
+    "noMembershipRequests": "No Hay Solicitudes de Membresía",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
   "organizationPeople": {
@@ -239,22 +267,30 @@
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
   "orgPost": {
-    "title": "Puestos Talawa",
-    "searchPost": "Buscar publicación",
+    "title": "Publicaciones de Talawa",
+    "searchPost": "Buscar Publicación",
     "posts": "Publicaciones",
-    "createPost": "Crear publicación",
-    "postDetails": "Detalles de la publicación",
+    "createPost": "Crear Publicación",
+    "postDetails": "Detalles de la Publicación",
+    "postTitle1": "Escribir título de la publicación",
     "postTitle": "Título",
     "information": "Información",
-    "image": "Imagen",
-    "video": "Video",
-    "addPost": "Añadir publicación",
-    "searchTitle": "Buscar por título",
-    "searchText": "Buscar por texto",
-    "ptitle": "Título de la entrada",
-    "postDes": "¿De qué hablar?",
+    "information1": "Escribir información de la publicación",
+    "image": "Imagen de la Publicación",
+    "video": "Video de la Publicación",
+    "addPost": "Agregar Publicación",
+    "searchTitle": "Buscar por Título",
+    "searchText": "Buscar por Texto",
+    "ptitle": "Título de la Publicación",
+    "postDes": "¿De qué quieres hablar?",
     "Title": "Título",
-    "Text": "Texto"
+    "Text": "Texto",
+    "cancel": "Cancelar",
+    "searchBy": "Buscar por",
+    "Oldest": "Más Antiguas Primero",
+    "Latest": "Más Recientes Primero",
+    "sortPost": "Ordenar Publicaciones",
+    "tag": "Su navegador no admite la etiqueta de video"
   },
   "postNotFound": {
     "post": "Publicaciones",
@@ -272,24 +308,27 @@
     "admin not found!": "Administrador no encontrado!",
     "roles not found!": "roles no encontrados!"
   },
+
   "orgPostCard": {
     "author": "Autor",
-    "imageURL": "URL de la imagen",
-    "videoURL": "URL del vídeo",
-    "deletePost": "Eliminar mensaje",
-    "deletePostMsg": "¿Quieres eliminar esta publicación?",
+    "imageURL": "URL de la Imagen",
+    "videoURL": "URL del Video",
+    "edit": "Editar Publicación",
+    "deletePost": "Eliminar Publicación",
+    "deletePostMsg": "¿Desea eliminar esta publicación?",
     "no": "No",
     "yes": "Sí",
-    "editPost": "Editar post",
+    "editPost": "Editar Publicación",
     "postTitle": "Título",
     "information": "Información",
     "image": "Imagen",
     "video": "Video",
-    "close": "Cerca",
-    "updatePost": "Actualizar publicación",
-    "postDeleted": "Publicación eliminada con éxito.",
-    "postUpdated": "Publicación actualizada con éxito.",
-    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
+    "close": "Cerrar",
+    "updatePost": "Actualizar Publicación",
+    "postDeleted": "Publicación eliminada exitosamente.",
+    "postUpdated": "Publicación actualizada exitosamente.",
+    "tag": "Su navegador no admite la etiqueta de video",
+    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está en funcionamiento? Compruebe también su conectividad de red."
   },
   "blockUnblockUser": {
     "title": "Usuario de bloqueo/desbloqueo de Talawa",
@@ -321,7 +360,7 @@
     "enterNewPassword": "Ingrese nueva clave",
     "cofirmNewPassword": "Confirmar nueva contraseña",
     "changePassword": "Cambia la contraseña",
-    "backToHome": "De vuelta a casa",
+    "backToLogin": "Volver al inicio de sesión",
     "userOtp": "por ejemplo 12345",
     "password": "Contraseña",
     "emailNotRegistered": "El correo electrónico no está registrado.",
@@ -371,10 +410,11 @@
   },
   "deleteOrg": {
     "deleteOrganization": "Eliminar organización",
+    "deleteSampleOrganization": "Eliminar organización de muestra",
     "deleteMsg": "¿Desea eliminar esta organización?",
-    "no": "No",
-    "yes": "Sí",
-    "longDelOrgMsg": "Al hacer clic en el botón de Eliminar organización, se eliminará permanentemente la organización junto con sus eventos, etiquetas y todos los datos relacionados."
+    "cancel": "Cancelar",
+    "confirmDelete": "Confirmar eliminación",
+    "longDelOrgMsg": "Al hacer clic en el botón Eliminar organización, la organización se eliminará permanentemente junto con sus eventos, etiquetas y todos los datos relacionados."
   },
   "userUpdate": {
     "firstName": "Primer nombre",

@@ -27,9 +27,15 @@ export const AddTaskModal = ({
   const [deadline, setDeadline] = useState<null | Dayjs>(today);
 
   const [addMutation] = useMutation(ADD_EVENT_PROJECT_TASK_MUTATION);
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const notify = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+    toast.promise(handleSubmit, {
+      pending: 'Adding the task...',
+      success: 'Added the task successfully!',
+      error: 'There was an error in adding the task!',
+    });
+  };
+  const handleSubmit = async (): Promise<void> => {
     let toSubmit = true;
 
     if (title.trim().length == 0) {
@@ -40,29 +46,19 @@ export const AddTaskModal = ({
       toast.error('Description cannot be empty!');
       toSubmit = false;
     }
-
-    if (toSubmit) {
-      toast.warn('Adding the task...');
-      addMutation({
-        variables: {
-          title,
-          description,
-          projectId,
-          deadline,
-        },
-      })
-        .then(() => {
-          toast.success('Added the task successfully!');
-          refetchData();
-          setTitle('');
-          setDescription('');
-          handleClose();
-        })
-        .catch((err) => {
-          toast.error('There was an error in adding the task!');
-          toast.error(err.message);
-        });
-    }
+    if (!toSubmit) return Promise.reject();
+    await addMutation({
+      variables: {
+        title,
+        description,
+        projectId,
+        deadline,
+      },
+    });
+    refetchData();
+    setTitle('');
+    setDescription('');
+    handleClose();
   };
 
   return (
@@ -71,7 +67,7 @@ export const AddTaskModal = ({
         <Modal.Header closeButton className="bg-primary">
           <Modal.Title className="text-white">Add an Event Task</Modal.Title>
         </Modal.Header>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={notify}>
           <Modal.Body>
             <Form.Group controlId="formBasicTitle">
               <Form.Label>Title</Form.Label>
