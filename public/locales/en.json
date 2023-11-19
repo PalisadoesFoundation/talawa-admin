@@ -94,6 +94,8 @@
     "displayImage": "Display Image",
     "enterName": "Enter Name",
     "sort": "Sort",
+    "Latest": "Latest First",
+    "Oldest": "Oldest First",
     "filter": "Filter",
     "cancel": "Cancel",
     "noOrgErrorTitle": "Organizations Not Found",

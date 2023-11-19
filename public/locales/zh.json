@@ -88,6 +88,8 @@
     "displayImage": "顯示圖像",
     "enterName": "输入名字",
     "sort": "排序",
+    "Oldest": "最旧的优先",
+    "Latest": "最新的优先",
     "filter": "過濾",
     "cancel": "取消",
     "endOfResults": "結果結束",

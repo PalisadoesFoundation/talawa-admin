@@ -31,6 +31,17 @@ import type {
 } from 'utils/interfaces';
 import styles from './OrgList.module.css';
 
+interface InterfaceOrgList {
+  _id: string;
+  name: string;
+  image: string | null;
+  location: string;
+  admins: { _id: string }[];
+  members: { _id: string }[];
+  creator: { _id: string; firstName: string; lastName: string };
+  createdAt: string;
+}
+
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
   const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
@@ -52,6 +63,7 @@ function orgList(): JSX.Element {
 
   const perPageResult = 8;
   const [isLoading, setIsLoading] = useState(true);
+  const [sortingOption, setSortingOption] = useState('latest');
   const [hasMore, sethasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
@@ -104,6 +116,20 @@ function orgList(): JSX.Element {
     },
     notifyOnNetworkStatusChange: true,
   });
+
+  const [displayedOrgs, setDisplayedOrgs] = useState(
+    orgsData?.organizationsConnection || []
+  );
+
+  useEffect(() => {
+    if (orgsData && orgsData.organizationsConnection) {
+      const newDisplayedOrgs = sortOrgs(
+        orgsData.organizationsConnection,
+        sortingOption
+      );
+      setDisplayedOrgs(newDisplayedOrgs);
+    }
+  }, [orgsData, sortingOption]);
 
   // To clear the search field and form fields on unmount
   useEffect(() => {
@@ -229,14 +255,14 @@ function orgList(): JSX.Element {
       filter: value,
     });
   };
-
+  // console.log(orgsData);
   /* istanbul ignore next */
   const loadMoreOrganizations = (): void => {
     console.log('loadMoreOrganizations');
     setIsLoadingMore(true);
     fetchMore({
       variables: {
-        skip: orgsData?.organizationsConnection.length || 0,
+        skip: displayedOrgs.length || 0,
       },
       updateQuery: (
         prev:
@@ -268,6 +294,31 @@ function orgList(): JSX.Element {
   };
 
   const debouncedHandleSearchByName = debounce(handleSearchByName);
+  const handleSorting = (option: string): void => {
+    setSortingOption(option);
+  };
+
+  const sortOrgs = (
+    orgs: InterfaceOrgList[],
+    sortingOption: string
+  ): InterfaceOrgList[] => {
+    const sortedOrgs = [...orgs];
+
+    if (sortingOption === 'latest') {
+      sortedOrgs.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+    } else if (sortingOption === 'oldest') {
+      sortedOrgs.sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
+    }
+
+    return sortedOrgs;
+  };
+
   return (
     <>
       <SuperAdminScreen title={t('organizations')} screenName="Organizations">
@@ -293,15 +344,31 @@ function orgList(): JSX.Element {
           </div>
           <div className={styles.btnsBlock}>
             <div className="d-flex">
-              <Dropdown aria-expanded="false" title="Sort organizations">
-                <Dropdown.Toggle variant="outline-success">
+              <Dropdown
+                aria-expanded="false"
+                title="Sort organizations"
+                data-testid="sort"
+              >
+                <Dropdown.Toggle
+                  variant="outline-success"
+                  data-testid="sortOrgs"
+                >
                   <SortIcon className={'me-1'} />
                   {t('sort')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={(): void => handleSorting('latest')}
+                    data-testid="latest"
+                  >
+                    {t('Latest')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={(): void => handleSorting('oldest')}
+                    data-testid="oldest"
+                  >
+                    {t('Oldest')}
+                  </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
               <Dropdown aria-expanded="false" title="Filter organizations">
@@ -330,8 +397,7 @@ function orgList(): JSX.Element {
         </div>
         {/* Text Infos for list */}
         {!isLoading &&
-        ((orgsData?.organizationsConnection.length === 0 &&
-          searchByName.length == 0) ||
+        ((displayedOrgs.length === 0 && searchByName.length == 0) ||
           (userData &&
             userData.user.userType === 'ADMIN' &&
             userData.user.adminFor.length === 0)) ? (
@@ -341,7 +407,7 @@ function orgList(): JSX.Element {
             <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
           </div>
         ) : !isLoading &&
-          orgsData?.organizationsConnection.length == 0 &&
+          displayedOrgs.length == 0 &&
           /* istanbul ignore next */
           searchByName.length > 0 ? (
           /* istanbul ignore next */
@@ -354,7 +420,7 @@ function orgList(): JSX.Element {
         ) : (
           <>
             <InfiniteScroll
-              dataLength={orgsData?.organizationsConnection?.length ?? 0}
+              dataLength={displayedOrgs?.length ?? 0}
               next={loadMoreOrganizations}
               loader={
                 <>
@@ -409,7 +475,7 @@ function orgList(): JSX.Element {
                   ))}
                 </>
               ) : userData && userData.user.userType == 'SUPERADMIN' ? (
-                orgsData?.organizationsConnection.map((item) => {
+                displayedOrgs.map((item) => {
                   return (
                     <div key={item._id} className={styles.itemCard}>
                       <OrgListCard data={item} />
@@ -420,7 +486,7 @@ function orgList(): JSX.Element {
                 userData &&
                 userData.user.userType == 'ADMIN' &&
                 userData.user.adminFor.length > 0 &&
-                orgsData?.organizationsConnection.map((item) => {
+                displayedOrgs.map((item) => {
                   if (isAdminForCurrentOrg(item)) {
                     return (
                       <div key={item._id} className={styles.itemCard}>
