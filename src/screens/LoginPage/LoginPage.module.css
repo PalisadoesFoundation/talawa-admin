@@ -57,7 +57,14 @@
   background: var(--bs-white);
   color: var(--bs-secondary);
 }
-
+.btngroup {
+  display: flex;
+  justify-content: space-between;
+  gap: 2vmax;
+}
+.btngroup button {
+  width: 45%;
+}
 @media (max-width: 992px) {
   .row .left_portion {
     padding: 0 2rem;

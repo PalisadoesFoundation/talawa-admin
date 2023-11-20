@@ -29,6 +29,7 @@
     "@types/react-dom": "^17.0.9",
     "@types/react-google-recaptcha": "^2.1.5",
     "@types/react-modal": "^3.12.1",
+    "axios": "^1.6.2",
     "bootstrap": "^5.3.0",
     "dayjs": "^1.10.7",
     "detect-newline": "^4.0.0",

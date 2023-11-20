@@ -9,7 +9,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
+import { LdapLoginService, LdapRegisterService } from './LdapAuthService';
 import { REACT_APP_USE_RECAPTCHA, RECAPTCHA_SITE_KEY } from 'Constant/constant';
 import {
   LOGIN_MUTATION,
@@ -102,7 +102,60 @@ function loginPage(): JSX.Element {
       toast.error(t('captchaError'));
     }
   };
+  const handleLdapRegister = async (): Promise<void> => {
+    const { signfirstName, signlastName, signEmail, signPassword, cPassword } =
+      signformState;
 
+    const recaptchaToken = recaptchaRef.current?.getValue();
+    recaptchaRef.current?.reset();
+
+    const isVerified = await verifyRecaptcha(recaptchaToken);
+    /* istanbul ignore next */
+    if (!isVerified) {
+      toast.error(t('Please_check_the_captcha'));
+      return;
+    }
+    if (
+      signfirstName.length > 1 &&
+      signlastName.length > 1 &&
+      signEmail.length >= 8 &&
+      signPassword.length > 1
+    ) {
+      if (cPassword == signPassword) {
+        try {
+          const { data: signUpData } =
+            await LdapRegisterService.registerWithLDAP(
+              signfirstName,
+              signlastName,
+              signEmail,
+              signPassword
+            );
+
+          /* istanbul ignore next */
+          if (signUpData) {
+            toast.success(
+              'Successfully Registered. Please wait until you will be approved.'
+            );
+
+            setSignFormState({
+              signfirstName: '',
+              signlastName: '',
+              signEmail: '',
+              signPassword: '',
+              cPassword: '',
+            });
+          }
+        } catch (error: any) {
+          /* istanbul ignore next */
+          errorHandler(t, error);
+        }
+      } else {
+        toast.warn(t('passwordMismatches'));
+      }
+    } else {
+      toast.warn(t('fillCorrectly'));
+    }
+  };
   const signupLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
@@ -118,7 +171,6 @@ function loginPage(): JSX.Element {
       toast.error(t('Please_check_the_captcha'));
       return;
     }
-
     if (
       signfirstName.length > 1 &&
       signlastName.length > 1 &&
@@ -161,7 +213,47 @@ function loginPage(): JSX.Element {
       toast.warn(t('fillCorrectly'));
     }
   };
+  const handleLdapLogin = async (): Promise<void> => {
+    const recaptchaToken = recaptchaRef.current?.getValue();
+    recaptchaRef.current?.reset();
 
+    const isVerified = await verifyRecaptcha(recaptchaToken);
+    /* istanbul ignore next */
+    if (!isVerified) {
+      toast.error(t('Please_check_the_captcha'));
+      return;
+    }
+    try {
+      const { data: loginData } = await LdapLoginService.loginWithLDAP(
+        formState.email,
+        formState.password
+      );
+
+      /* istanbul ignore next */
+      if (loginData) {
+        if (
+          loginData.login.user.userType === 'SUPERADMIN' ||
+          (loginData.login.user.userType === 'ADMIN' &&
+            loginData.login.user.adminApproved === true)
+        ) {
+          localStorage.setItem('token', loginData.login.accessToken);
+          localStorage.setItem('id', loginData.login.user._id);
+          localStorage.setItem('IsLoggedIn', 'TRUE');
+          localStorage.setItem('UserType', loginData.login.user.userType);
+          if (localStorage.getItem('IsLoggedIn') == 'TRUE') {
+            window.location.replace('/orglist');
+          }
+        } else {
+          toast.warn(t('notAuthorised'));
+        }
+      } else {
+        toast.warn(t('notFound'));
+      }
+    } catch (error: any) {
+      /* istanbul ignore next */
+      errorHandler(t, error);
+    }
+  };
   const loginLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
@@ -174,7 +266,6 @@ function loginPage(): JSX.Element {
       toast.error(t('Please_check_the_captcha'));
       return;
     }
-
     try {
       const { data: loginData } = await login({
         variables: {
@@ -320,14 +411,24 @@ function loginPage(): JSX.Element {
                     /* istanbul ignore next */
                     <></>
                   )}
-                  <Button
-                    type="submit"
-                    className="mt-3 mb-3 w-100"
-                    value="Login"
-                    data-testid="loginBtn"
-                  >
-                    {t('login')}
-                  </Button>
+                  <div className={styles.btngroup}>
+                    <Button
+                      type="submit"
+                      className="mt-3 mb-3"
+                      value="Login"
+                      data-testid="loginBtn"
+                    >
+                      {t('login')}
+                    </Button>
+                    <Button
+                      className="mt-3 mb-3"
+                      value="Login"
+                      data-testid="LdaploginBtn"
+                      onClick={handleLdapLogin}
+                    >
+                      Login With LDAP
+                    </Button>
+                  </div>
                   <div className="position-relative">
                     <hr />
                     <span className={styles.orText}>{t('OR')}</span>
@@ -526,14 +627,24 @@ function loginPage(): JSX.Element {
                     /* istanbul ignore next */
                     <></>
                   )}
-                  <Button
-                    type="submit"
-                    className="mt-4 w-100 mb-3"
-                    value="Register"
-                    data-testid="registrationBtn"
-                  >
-                    {t('register')}
-                  </Button>
+                  <div className={styles.btngroup}>
+                    <Button
+                      type="submit"
+                      className="mt-4 mb-3"
+                      value="Register"
+                      data-testid="registrationBtn"
+                    >
+                      {t('register')}
+                    </Button>
+                    <Button
+                      className="mt-4 mb-3"
+                      value="Register"
+                      data-testid="LdapRegistrationBtn"
+                      onClick={handleLdapRegister}
+                    >
+                      Register with LDAP
+                    </Button>
+                  </div>
                   <div className="position-relative">
                     <hr />
                     <span className={styles.orText}>{t('OR')}</span>
