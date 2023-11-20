@@ -84,13 +84,13 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
       translated: t('donate'),
       view: true,
     },
-    {
-      pluginName: 'Chats',
-      alias: 'chat',
-      link: `/user/chat/id=${organizationId}`,
-      translated: t('chat'),
-      view: true,
-    },
+    // {
+    //   pluginName: 'Chats',
+    //   alias: 'chat',
+    //   link: `/user/chat/id=${organizationId}`,
+    //   translated: t('chat'),
+    //   view: true,
+    // },
   ];
   if (localStorage.getItem('talawaPlugins')) {
     const talawaPlugins: string = localStorage.getItem('talawaPlugins') || '{}';
