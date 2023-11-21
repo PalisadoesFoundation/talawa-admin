@@ -140,6 +140,8 @@
     "noRequestFound": "找不到請求。",
     "sort": "排序",
     "filter": "過濾",
+    "Oldest": "最旧的优先",
+    "Latest": "最新的优先",
     "userApproved": "用戶批准",
     "userRejected": "用戶被拒絕",
     "noResultsFoundFor": "未找到结果 ",

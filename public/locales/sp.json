@@ -140,6 +140,8 @@
     "noRequestFound": "No se encontró ninguna solicitud.",
     "sort": "Ordenar",
     "filter": "Filtrar",
+    "Oldest": "Más Antiguas Primero",
+    "Latest": "Más Recientes Primero",
     "userApproved": "Aprobado por el usuario",
     "userRejected": "Usuario rechazado",
     "noResultsFoundFor": "No se encontraron resultados para ",

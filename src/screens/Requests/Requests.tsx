@@ -41,6 +41,10 @@ const Requests = (): JSX.Element => {
   const [hasMore, sethasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
+  const [sortingOption, setSortingOption] = useState('latest');
+  const [displayedUsers, setDisplayedUsers] = useState<
+    InterfaceQueryRequestListItem[]
+  >([]);
 
   const [acceptAdminFunc] = useMutation(ACCEPT_ADMIN_MUTATION);
   const [rejectAdminFunc] = useMutation(REJECT_ADMIN_MUTATION);
@@ -93,10 +97,14 @@ const Requests = (): JSX.Element => {
   // To manage loading states
   useEffect(() => {
     if (!usersData) {
+      setDisplayedUsers([]);
       return;
     }
     if (usersData.users.length < perPageResult) {
       sethasMore(false);
+    } else {
+      /* istanbul ignore next */
+      setDisplayedUsers(usersData?.users);
     }
   }, [usersData]);
 
@@ -126,6 +134,13 @@ const Requests = (): JSX.Element => {
       setIsLoading(false);
     }
   }, [loading]);
+
+  useEffect(() => {
+    if (usersData && usersData?.users.length > 0) {
+      const newDisplayedUsers = sortRequests(usersData?.users, sortingOption);
+      setDisplayedUsers(newDisplayedUsers);
+    }
+  }, [usersData, sortingOption]);
 
   /* istanbul ignore next */
   const resetAndRefetch = (): void => {
@@ -235,6 +250,31 @@ const Requests = (): JSX.Element => {
     t('reject'),
   ];
 
+  const handleSorting = (option: string): void => {
+    setSortingOption(option);
+  };
+
+  const sortRequests = (
+    users: InterfaceQueryRequestListItem[],
+    sortingOption: string
+  ): InterfaceQueryRequestListItem[] => {
+    const sortedRequest = [...users];
+
+    if (sortingOption === 'latest') {
+      sortedRequest.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+    } else if (sortingOption === 'oldest') {
+      sortedRequest.sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
+    }
+
+    return sortedRequest;
+  };
+
   return (
     <>
       <SuperAdminScreen title={t('requests')} screenName="Requests">
@@ -270,15 +310,31 @@ const Requests = (): JSX.Element => {
           </div>
           <div className={styles.btnsBlock}>
             <div className="d-flex">
-              <Dropdown aria-expanded="false" title="Sort organizations">
-                <Dropdown.Toggle variant="outline-success">
+              <Dropdown
+                aria-expanded="false"
+                title="Sort organizations"
+                data-testid="sort"
+              >
+                <Dropdown.Toggle
+                  variant="outline-success"
+                  data-testid="sortuser"
+                >
                   <SortIcon className={'me-1'} />
                   {t('sort')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={(): void => handleSorting('latest')}
+                    data-testid="latest"
+                  >
+                    {t('Latest')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={(): void => handleSorting('oldest')}
+                    data-testid="oldest"
+                  >
+                    {t('Oldest')}
+                  </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
               <Dropdown aria-expanded="false" title="Filter organizations">
@@ -336,10 +392,11 @@ const Requests = (): JSX.Element => {
                 </tr>
               </thead>
               <tbody>
-                {usersData?.users &&
-                  usersData.users.map((user, index) => {
+                {displayedUsers &&
+                  displayedUsers.length > 0 &&
+                  displayedUsers.map((user, index) => {
                     return (
-                      <tr key={user._id}>
+                      <tr key={user._id} data-testid="displayedUsers">
                         <th scope="row">{index + 1}</th>
                         <td>{`${user.firstName} ${user.lastName}`}</td>
                         <td>{user.email}</td>

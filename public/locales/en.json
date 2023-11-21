@@ -145,6 +145,8 @@
     "noRequestFound": "No Request Found",
     "sort": "Sort",
     "filter": "Filter",
+    "Oldest": "Oldest First",
+    "Latest": "Latest First",
     "noOrgError": "Organizations not found, please create an organization through dashboard",
     "userApproved": "User Approved",
     "userRejected": "User Rejected",

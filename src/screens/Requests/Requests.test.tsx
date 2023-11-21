@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, fireEvent } from '@testing-library/react';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
@@ -165,5 +165,39 @@ describe('Testing Request screen', () => {
     expect(container.textContent).not.toMatch(
       'Organizations not found, please create an organization through dashboard'
     );
+  });
+
+  test('Testing search latest and oldest toggle', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Requests />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+
+      await wait();
+
+      const searchInput = screen.getByTestId('sort');
+      expect(searchInput).toBeInTheDocument();
+
+      const inputText = screen.getByTestId('sortuser');
+
+      fireEvent.click(inputText);
+      const toggleText = screen.getByTestId('latest');
+
+      fireEvent.click(toggleText);
+
+      expect(searchInput).toBeInTheDocument();
+      fireEvent.click(inputText);
+      const toggleTite = screen.getByTestId('oldest');
+      fireEvent.click(toggleTite);
+      expect(searchInput).toBeInTheDocument();
+    });
   });
 });
