@@ -31,6 +31,7 @@ const Users = (): JSX.Element => {
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
+  const [sortingOption, setSortingOption] = useState('latest');
 
   const userType = localStorage.getItem('UserType');
   const loggedInUserId = localStorage.getItem('id');
@@ -57,6 +58,7 @@ const Users = (): JSX.Element => {
   });
 
   const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
+  const [displayedUsers, setDisplayedUsers] = useState(usersData?.users || []);
 
   // Manage loading more state
   useEffect(() => {
@@ -66,7 +68,11 @@ const Users = (): JSX.Element => {
     if (usersData.users.length < perPageResult) {
       setHasMore(false);
     }
-  }, [usersData]);
+    if (usersData && usersData.users) {
+      const newDisplayedUsers = sortUsers(usersData.users, sortingOption);
+      setDisplayedUsers(newDisplayedUsers);
+    }
+  }, [usersData, sortingOption]);
 
   // To clear the search when the component is unmounted
   useEffect(() => {
@@ -155,6 +161,32 @@ const Users = (): JSX.Element => {
     });
   };
   const debouncedHandleSearchByName = debounce(handleSearchByName);
+  // console.log(usersData);
+
+  const handleSorting = (option: string): void => {
+    setSortingOption(option);
+  };
+
+  const sortUsers = (
+    allUsers: InterfaceQueryUserListItem[],
+    sortingOption: string
+  ): InterfaceQueryUserListItem[] => {
+    const sortedUsers = [...allUsers];
+
+    if (sortingOption === 'latest') {
+      sortedUsers.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+    } else if (sortingOption === 'oldest') {
+      sortedUsers.sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
+    }
+
+    return sortedUsers;
+  };
 
   const headerTitles: string[] = [
     '#',
@@ -196,15 +228,31 @@ const Users = (): JSX.Element => {
           </div>
           <div className={styles.btnsBlock}>
             <div className="d-flex">
-              <Dropdown aria-expanded="false" title="Sort organizations">
-                <Dropdown.Toggle variant="outline-success">
+              <Dropdown
+                aria-expanded="false"
+                title="Sort Users"
+                data-testid="sort"
+              >
+                <Dropdown.Toggle
+                  variant="outline-success"
+                  data-testid="sortUsers"
+                >
                   <SortIcon className={'me-1'} />
                   {t('sort')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={(): void => handleSorting('latest')}
+                    data-testid="latest"
+                  >
+                    {t('Latest')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={(): void => handleSorting('oldest')}
+                    data-testid="oldest"
+                  >
+                    {t('Oldest')}
+                  </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
               <Dropdown aria-expanded="false" title="Filter organizations">
@@ -223,14 +271,14 @@ const Users = (): JSX.Element => {
         </div>
         {isLoading == false &&
         usersData &&
-        usersData.users.length === 0 &&
+        displayedUsers.length === 0 &&
         searchByName.length > 0 ? (
           <div className={styles.notFound}>
             <h4>
               {t('noResultsFoundFor')} &quot;{searchByName}&quot;
             </h4>
           </div>
-        ) : isLoading == false && usersData && usersData.users.length === 0 ? (
+        ) : isLoading == false && usersData && displayedUsers.length === 0 ? (
           // eslint-disable-next-line react/jsx-indent
           <div className={styles.notFound}>
             <h4>{t('noUserFound')}</h4>
@@ -244,7 +292,7 @@ const Users = (): JSX.Element => {
               />
             ) : (
               <InfiniteScroll
-                dataLength={usersData?.users.length ?? 0}
+                dataLength={displayedUsers.length ?? 0}
                 next={loadMoreUsers}
                 loader={
                   <TableLoader
@@ -275,7 +323,7 @@ const Users = (): JSX.Element => {
                   </thead>
                   <tbody>
                     {usersData &&
-                      usersData?.users.map((user, index) => {
+                      displayedUsers.map((user, index) => {
                         return (
                           <UsersTableItem
                             key={user._id}

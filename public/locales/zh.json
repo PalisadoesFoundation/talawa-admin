@@ -131,6 +131,8 @@
     "loadingUsers": "正在加載用戶...",
     "noUserFound": "找不到用戶。",
     "sort": "排序",
+    "Oldest": "最旧的优先",
+    "Latest": "最新的优先",
     "filter": "過濾",
     "roleUpdated": "角色已更新。",
     "noResultsFoundFor": "未找到结果 ",
