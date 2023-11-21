@@ -694,3 +694,29 @@ export const TOGGLE_PINNED_POST = gql`
     }
   }
 `;
+
+// Handles custom organization fields
+export const ADD_CUSTOM_FIELD = gql`
+  mutation ($organizationId: ID!, $type: String!, $name: String!) {
+    addOrganizationCustomField(
+      organizationId: $organizationId
+      type: $type
+      name: $name
+    ) {
+      name
+      type
+    }
+  }
+`;
+
+export const REMOVE_CUSTOM_FIELD = gql`
+  mutation ($organizationId: ID!, $customFieldId: ID!) {
+    removeOrganizationCustomField(
+      organizationId: $organizationId
+      customFieldId: $customFieldId
+    ) {
+      type
+      name
+    }
+  }
+`;

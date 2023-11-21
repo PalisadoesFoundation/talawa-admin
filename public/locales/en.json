@@ -415,7 +415,8 @@
     "settings": "Settings",
     "noData": "No data",
     "otherSettings": "Other Settings",
-    "changeLanguage": "Change Language"
+    "changeLanguage": "Change Language",
+    "manageCustomFields": "Manage Custom Fields"
   },
   "deleteOrg": {
     "deleteOrganization": "Delete Organization",
@@ -664,5 +665,16 @@
   "userChatRoom": {
     "selectContact": "Select a contact to start conversation",
     "sendMessage": "Send Message"
+  },
+  "orgProfileField": {
+    "loading": "Loading...",
+    "noCustomField": "No custom fields available",
+    "customFieldName": "Field Name",
+    "enterCustomFieldName": "Enter Field name",
+    "customFieldType": "Field Type",
+    "saveChanges": "Save Changes",
+    "Remove Custom Field": "Remove Custom Field",
+    "fieldSuccessMessage": "Field added successfully",
+    "fieldRemovalSuccess": "Field removed successfully"
   }
 }

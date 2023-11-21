@@ -406,7 +406,8 @@
     "settings": "समायोजन",
     "noData": "कोई डेटा नहीं",
     "otherSettings": "अन्य सेटिंग्स",
-    "changeLanguage": "भाषा बदलें"
+    "changeLanguage": "भाषा बदलें",
+    "manageCustomFields": "कस्टम फ़ील्ड प्रबंधन करें"
   },
   "deleteOrg": {
     "deleteOrganization": "संगठन हटाएं",
@@ -654,5 +655,16 @@
   "userChatRoom": {
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
     "sendMessage": "मेसेज भेजें"
+  },
+  "ऑर्गप्रोफ़ाइलफ़ील्ड": {
+    "लोड हो रहा है": "लोड हो रहा है...",
+    "noCustomField": "कोई कस्टम फ़ील्ड उपलब्ध नहीं",
+    "customFieldName": "फ़ील्ड नाम",
+    "enterCustomFieldName": "फ़ील्ड नाम दर्ज करें",
+    "customFieldType": "फ़ील्ड प्रकार",
+    "saveChanges": "परिवर्तन सहेजें",
+    "कस्टम फ़ील्ड हटाएँ": "कस्टम फ़ील्ड हटाएँ",
+    "fieldSuccessMessage": "फ़ील्ड सफलतापूर्वक जोड़ा गया",
+    "fieldRemovalSuccess": "फ़ील्ड सफलतापूर्वक हटा दिया गया"
   }
 }
