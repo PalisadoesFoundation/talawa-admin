@@ -646,6 +646,14 @@
     "event": "Evento",
     "organization": "Organización"
   },
+  "advertisement": {
+    "title": "Anuncios",
+    "pHeading": "Gestionar anuncios",
+    "activeAds": "Campañas activas",
+    "archievedAds": "Campañas completadas",
+    "pMessage": "No hay anuncios disponibles para esta campaña.",
+    "delete": "Eliminar"
+  },
   "userChat": {
     "chat": "Charlar",
     "search": "Buscar",

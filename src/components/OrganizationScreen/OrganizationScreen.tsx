@@ -24,7 +24,6 @@ const organizationScreen = ({
     configUrl: string;
   } = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
-
   return (
     <>
       <LeftDrawerOrg
