@@ -140,7 +140,7 @@
     "loadingUsers": "Loading Users...",
     "noUserFound": "No User Found",
     "sort": "Sort",
-    "Latest": "Latest First",
+    "Newest": "Newest First",
     "Oldest": "Oldest First",
     "filter": "Filter",
     "noOrgError": "Organizations not found, please create an organization through dashboard",

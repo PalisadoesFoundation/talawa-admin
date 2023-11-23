@@ -31,7 +31,7 @@ const Users = (): JSX.Element => {
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
-  const [sortingOption, setSortingOption] = useState('latest');
+  const [sortingOption, setSortingOption] = useState('newest');
 
   const userType = localStorage.getItem('UserType');
   const loggedInUserId = localStorage.getItem('id');
@@ -173,7 +173,7 @@ const Users = (): JSX.Element => {
   ): InterfaceQueryUserListItem[] => {
     const sortedUsers = [...allUsers];
 
-    if (sortingOption === 'latest') {
+    if (sortingOption === 'newest') {
       sortedUsers.sort(
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -242,10 +242,10 @@ const Users = (): JSX.Element => {
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item
-                    onClick={(): void => handleSorting('latest')}
-                    data-testid="latest"
+                    onClick={(): void => handleSorting('newest')}
+                    data-testid="newest"
                   >
-                    {t('Latest')}
+                    {t('Newest')}
                   </Dropdown.Item>
                   <Dropdown.Item
                     onClick={(): void => handleSorting('oldest')}

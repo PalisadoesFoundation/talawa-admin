@@ -179,7 +179,7 @@ describe('Testing Users screen', () => {
     );
   });
 
-  test('Testing sort latest and oldest toggle', async () => {
+  test('Testing sort Newest and oldest toggle', async () => {
     await act(async () => {
       render(
         <MockedProvider addTypename={false} link={link}>
@@ -202,7 +202,7 @@ describe('Testing Users screen', () => {
       const inputText = screen.getByTestId('sortUsers');
 
       fireEvent.click(inputText);
-      const toggleText = screen.getByTestId('latest');
+      const toggleText = screen.getByTestId('newest');
 
       fireEvent.click(toggleText);
 
