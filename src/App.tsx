@@ -33,7 +33,8 @@ import Donate from 'screens/UserPortal/Donate/Donate';
 import Events from 'screens/UserPortal/Events/Events';
 import Tasks from 'screens/UserPortal/Tasks/Tasks';
 // import Chat from 'screens/UserPortal/Chat/Chat';
-
+import Advertisements from 'components/Advertisements/Advertisements';
+        
 function app(): JSX.Element {
   /*const { updatePluginLinks, updateInstalled } = bindActionCreators(
     actionCreators,
@@ -109,6 +110,7 @@ function app(): JSX.Element {
         <SecuredRoute path="/orgpost" component={OrgPost} />
         <SecuredRoute path="/orgsetting" component={OrgSettings} />
         <SecuredRoute path="/orgstore" component={AddOnStore} />
+        <SecuredRoute path="/orgads" component={Advertisements} />
         <SecuredRoute path="/users" component={Users} />
         <SecuredRoute path="/requests" component={Requests} />
         <SecuredRoute path="/blockuser" component={BlockUser} />
