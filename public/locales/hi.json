@@ -131,6 +131,8 @@
     "loadingUsers": "उपयोगकर्ता लोड हो रहा है ...",
     "noUserFound": "कोई उपयोगकर्ता नहीं मिला।",
     "sort": "छांटें",
+    "Oldest": "सबसे पुराना पहले",
+    "Newest": "सबसे नवीनतम पहले",
     "filter": "फ़िल्टर",
     "roleUpdated": "भूमिका अपडेट की गई।",
     "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला ",
@@ -646,6 +648,14 @@
     "taskNotCompleted": "कार्य अभी तक पूरा नहीं हुआ है",
     "event": "आयोजन",
     "organization": "संगठन"
+  },
+  "advertisement": {
+    "title": "विज्ञापन",
+    "pHeading": "विज्ञापन प्रबंधन",
+    "activeAds": "सक्रिय अभियान",
+    "archievedAds": "संपन्न अभियान",
+    "pMessage": "इस अभियान के लिए कोई विज्ञापन नहीं हैं।",
+    "delete": "हटाएँ"
   },
   "userChat": {
     "chat": "बात",

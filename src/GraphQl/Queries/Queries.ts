@@ -704,7 +704,19 @@ export const PLUGIN_GET = gql`
     }
   }
 `;
-
+export const ADVERTISEMENTS_GET = gql`
+  query getAdvertisement {
+    getAdvertisements {
+      _id
+      name
+      type
+      orgId
+      link
+      endDate
+      startDate
+    }
+  }
+`;
 export const ORGANIZATION_EVENTS_CONNECTION = gql`
   query EventsByOrganizationConnection(
     $organization_id: ID!
