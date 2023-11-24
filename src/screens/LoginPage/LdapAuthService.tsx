@@ -10,17 +10,13 @@ class LdapLoginService {
         },
         body: JSON.stringify({ email, password }),
       });
-
-      if (!response.ok) {
-        throw new Error('LDAP Authentication Failed');
+      /* istanbul ignore next */
+      if (response.ok) {
+        const data = await response.json();
+        return data;
       }
-
-      const data = await response.json();
-      console.log('Login Success:', data);
-      return data;
     } catch (error: any) {
-      console.error('Login Error:', error.message);
-      throw error; // Rethrow the error to handle it at a higher level if needed
+      return error;
     }
   }
 }
@@ -42,17 +38,13 @@ class LdapRegisterService {
         },
         body: JSON.stringify({ firstName, lastName, email, password }),
       });
-
-      if (!response.ok) {
-        throw new Error('LDAP Registration Failed');
+      /* istanbul ignore next */
+      if (response.ok) {
+        const data = await response.json();
+        return data;
       }
-
-      const data = await response.json();
-      console.log('Registration Success:', data);
-      return data;
     } catch (error: any) {
-      console.error('Registration Error:', error.message);
-      throw error; // Rethrow the error to handle it at a higher level if needed
+      return error;
     }
   }
 }

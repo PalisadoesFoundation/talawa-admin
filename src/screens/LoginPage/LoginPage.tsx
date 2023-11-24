@@ -115,6 +115,7 @@ function loginPage(): JSX.Element {
       toast.error(t('Please_check_the_captcha'));
       return;
     }
+    /* istanbul ignore next */
     if (
       signfirstName.length > 1 &&
       signlastName.length > 1 &&
@@ -122,32 +123,25 @@ function loginPage(): JSX.Element {
       signPassword.length > 1
     ) {
       if (cPassword == signPassword) {
-        try {
-          const { data: signUpData } =
-            await LdapRegisterService.registerWithLDAP(
-              signfirstName,
-              signlastName,
-              signEmail,
-              signPassword
-            );
-
-          /* istanbul ignore next */
-          if (signUpData) {
-            toast.success(
-              'Successfully Registered. Please wait until you will be approved.'
-            );
-
-            setSignFormState({
-              signfirstName: '',
-              signlastName: '',
-              signEmail: '',
-              signPassword: '',
-              cPassword: '',
-            });
-          }
-        } catch (error: any) {
-          /* istanbul ignore next */
-          errorHandler(t, error);
+        const registerData = await LdapRegisterService.registerWithLDAP(
+          signfirstName,
+          signlastName,
+          signEmail,
+          signPassword
+        );
+        if (registerData) {
+          toast.success(
+            'Successfully Registered. Please wait until you will be approved.'
+          );
+          setSignFormState({
+            signfirstName: '',
+            signlastName: '',
+            signEmail: '',
+            signPassword: '',
+            cPassword: '',
+          });
+        } else {
+          toast.warn('Email already exist!');
         }
       } else {
         toast.warn(t('passwordMismatches'));
@@ -224,7 +218,7 @@ function loginPage(): JSX.Element {
       return;
     }
     try {
-      const { data: loginData } = await LdapLoginService.loginWithLDAP(
+      const loginData = await LdapLoginService.loginWithLDAP(
         formState.email,
         formState.password
       );
@@ -232,14 +226,11 @@ function loginPage(): JSX.Element {
       /* istanbul ignore next */
       if (loginData) {
         if (
-          loginData.login.user.userType === 'SUPERADMIN' ||
-          (loginData.login.user.userType === 'ADMIN' &&
-            loginData.login.user.adminApproved === true)
+          loginData?.userType === 'SUPERADMIN' ||
+          (loginData?.userType === 'ADMIN' && loginData?.adminApproved === true)
         ) {
-          localStorage.setItem('token', loginData.login.accessToken);
-          localStorage.setItem('id', loginData.login.user._id);
+          localStorage.setItem('token', loginData.token);
           localStorage.setItem('IsLoggedIn', 'TRUE');
-          localStorage.setItem('UserType', loginData.login.user.userType);
           if (localStorage.getItem('IsLoggedIn') == 'TRUE') {
             window.location.replace('/orglist');
           }

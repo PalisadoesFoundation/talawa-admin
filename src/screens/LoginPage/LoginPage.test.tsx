@@ -215,6 +215,32 @@ describe('Testing Login Page Screen', () => {
     userEvent.click(screen.getByTestId('registrationBtn'));
   });
 
+  test('Testing registration functionality for ldap', async () => {
+    const formData = {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'johndoe@gmail.com',
+      password: 'johndoe',
+      confirmPassword: 'johndoe',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('LdapRegistrationBtn'));
+  });
+
   test('Testing registration functionality, when password and confirm password is not same', async () => {
     const formData = {
       firstName: 'John',
@@ -352,6 +378,28 @@ describe('Testing Login Page Screen', () => {
     userEvent.click(screen.getByTestId('loginBtn'));
 
     await wait();
+  });
+  test('Testing login functionality for ldap', async () => {
+    const formData = {
+      email: 'johndoe@gmail.com',
+      password: 'johndoe',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('LdaploginBtn'));
   });
 
   test('Testing password preview feature for login', async () => {
