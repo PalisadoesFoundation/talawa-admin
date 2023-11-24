@@ -18,6 +18,7 @@ describe('Testing Routes reducer', () => {
           name: 'Block/Unblock',
           url: '/blockuser/id=undefined',
         },
+        { name: 'Advertisement', url: '/orgads/id=undefined' },
         {
           name: 'Plugins',
           subTargets: [
@@ -50,6 +51,11 @@ describe('Testing Routes reducer', () => {
         },
         { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
         { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
+        {
+          name: 'Advertisement',
+          comp_id: 'orgads',
+          component: 'Advertisements',
+        },
         {
           name: 'Plugins',
           comp_id: null,
@@ -83,6 +89,7 @@ describe('Testing Routes reducer', () => {
         { name: 'Events', url: '/orgevents/id=undefined' },
         { name: 'Posts', url: '/orgpost/id=undefined' },
         { name: 'Block/Unblock', url: '/blockuser/id=undefined' },
+        { name: 'Advertisement', url: '/orgads/id=undefined' },
         {
           name: 'Plugins',
           subTargets: [
@@ -116,6 +123,11 @@ describe('Testing Routes reducer', () => {
         },
         { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
         { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
+        {
+          name: 'Advertisement',
+          comp_id: 'orgads',
+          component: 'Advertisements',
+        },
         {
           name: 'Plugins',
           comp_id: null,
@@ -152,6 +164,7 @@ describe('Testing Routes reducer', () => {
           name: 'Block/Unblock',
           url: '/blockuser/id=undefined',
         },
+        { name: 'Advertisement', url: '/orgads/id=undefined' },
         { name: 'Settings', url: '/orgsetting/id=undefined' },
         { name: 'All Organizations', url: '/orglist/id=undefined' },
         {
@@ -185,8 +198,14 @@ describe('Testing Routes reducer', () => {
           comp_id: 'orgevents',
           component: 'OrganizationEvents',
         },
+
         { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
         { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
+        {
+          name: 'Advertisement',
+          comp_id: 'orgads',
+          component: 'Advertisements',
+        },
         {
           name: 'Plugins',
           comp_id: null,

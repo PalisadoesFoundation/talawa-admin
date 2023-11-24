@@ -131,6 +131,8 @@
     "loadingUsers": "正在加載用戶...",
     "noUserFound": "找不到用戶。",
     "sort": "排序",
+    "Oldest": "最旧的优先",
+    "Newest": "最新的优先",
     "filter": "過濾",
     "roleUpdated": "角色已更新。",
     "noResultsFoundFor": "未找到结果 ",
@@ -645,6 +647,14 @@
     "taskNotCompleted": "任務還沒完成",
     "event": "事件",
     "organization": "組織"
+  },
+  "advertisement": {
+    "title": "广告",
+    "pHeading": "管理广告",
+    "activeAds": "活动广告",
+    "archievedAds": "已完成的广告活动",
+    "pMessage": "此广告活动没有相关广告。",
+    "delete": "删除"
   },
   "userChat": {
     "chat": "聊天",
