@@ -216,14 +216,6 @@ describe('Testing Login Page Screen', () => {
   });
 
   test('Testing registration functionality for ldap', async () => {
-    const formData = {
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'johndoe@gmail.com',
-      password: 'johndoe',
-      confirmPassword: 'johndoe',
-    };
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -380,11 +372,6 @@ describe('Testing Login Page Screen', () => {
     await wait();
   });
   test('Testing login functionality for ldap', async () => {
-    const formData = {
-      email: 'johndoe@gmail.com',
-      password: 'johndoe',
-    };
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
