@@ -55,11 +55,11 @@ Make sure you are following [issue report guidelines](ISSUE_GUIDELINES.md) avail
 
 #### Branching Strategy
 
-For Talawa Admin, we had employed the following branching strategy to simplify the development process and to ensure that only stable code is pushed to the `master` branch:
+For Talawa Admin, we had employed the following branching strategy to simplify the development process and to ensure that only stable code is pushed to the `main` branch:
 
 - `develop`: For unstable code and bug fixing
 - `alpha-x.x.x`: for stability teesting
-- `master`: Where the stable production ready code lies
+- `main`: Where the stable production ready code lies
 
 #### Conflict Resolution
 
