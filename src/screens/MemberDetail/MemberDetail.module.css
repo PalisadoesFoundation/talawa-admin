@@ -109,7 +109,10 @@
 
 .justifysp {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
+  align-items: flex-start;
+  /* gap : 2px; */
 }
 
 .flexclm {
@@ -126,8 +129,7 @@
   .justifysp {
     padding-left: 55px;
     display: flex;
-    justify-content: space-between;
-    width: 100%;
+    justify-content: space-evenly;
   }
 
   .mainpageright {
@@ -355,10 +357,17 @@
 }
 
 .userImage {
-  width: 200px;
-  height: 200px;
+  width: 180px;
+  height: 180px;
   object-fit: cover;
   border-radius: 8px;
+}
+
+@media only screen and (max-width: 1200px) {
+  .userImage {
+    width: 100px;
+    height: 100px;
+  }
 }
 
 .activeBtn {
