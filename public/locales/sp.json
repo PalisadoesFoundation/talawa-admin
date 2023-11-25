@@ -131,6 +131,8 @@
     "loadingUsers": "Cargando usuarios ...",
     "noUserFound": "No se encontró ningún usuario.",
     "sort": "Ordenar",
+    "Oldest": "Más Antiguas Primero",
+    "Newest": "Más Recientes Primero",
     "filter": "Filtrar",
     "roleUpdated": "Rol actualizado.",
     "noResultsFoundFor": "No se encontraron resultados para ",
