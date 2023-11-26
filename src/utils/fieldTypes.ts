@@ -1,3 +1,3 @@
-const availableFieldTypes = ['String', 'Boolean', 'Date'];
+const availableFieldTypes = ['String', 'Boolean', 'Date', 'Number'];
 
 export default availableFieldTypes;

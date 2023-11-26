@@ -61,7 +61,7 @@ const OrgProfileFieldSettings = (): any => {
 
   const handleRemove = async (customFieldId: string): Promise<void> => {
     try {
-      const { data } = await removeCustomField({
+      await removeCustomField({
         variables: {
           organizationId: currentOrgId,
           customFieldId: customFieldId,
@@ -104,6 +104,7 @@ const OrgProfileFieldSettings = (): any => {
                       size={'sm'}
                       onClick={() => handleRemove(field._id)}
                       title={t('Remove Custom Field')}
+                      data-testid="removeCustomFieldBtn"
                     >
                       <FaTrash />
                     </Button>
@@ -152,6 +153,7 @@ const OrgProfileFieldSettings = (): any => {
                 value="savechanges"
                 onClick={handleSave}
                 className={styles.saveButton}
+                data-testid="saveChangesBtn"
               >
                 {t('saveChanges')}
               </Button>

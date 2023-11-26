@@ -36,11 +36,13 @@ const MOCKS = [
     },
     result: {
       data: {
-        customFieldsByOrganization: {
-          _id: 'adsdasdsa334343yiu423434',
-          type: 'fieldType',
-          name: 'fieldName',
-        },
+        customFieldsByOrganization: [
+          {
+            _id: 'adsdasdsa334343yiu423434',
+            type: 'fieldType',
+            name: 'fieldName',
+          },
+        ],
       },
     },
   },
@@ -55,7 +57,7 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-describe('Testing Organization Profile fIeld Settings', () => {
+describe('Testing Save Button', () => {
   test('Organization Custom Field', async () => {
     render(
       <MockedProvider mocks={MOCKS} addTypename={false} link={link}>
@@ -66,6 +68,18 @@ describe('Testing Organization Profile fIeld Settings', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByTestId('addFieldBtn'));
+    userEvent.click(screen.getByTestId('saveChangesBtn'));
+  });
+  test('Testing Remove Custom Field Button', async () => {
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgProfileFieldSettings />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    await wait();
+    userEvent.click(screen.getByTestId('removeCustomFieldBtn'));
   });
 });
