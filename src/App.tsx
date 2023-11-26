@@ -34,7 +34,7 @@ import Events from 'screens/UserPortal/Events/Events';
 import Tasks from 'screens/UserPortal/Tasks/Tasks';
 // import Chat from 'screens/UserPortal/Chat/Chat';
 import Advertisements from 'components/Advertisements/Advertisements';
-        
+
 function app(): JSX.Element {
   /*const { updatePluginLinks, updateInstalled } = bindActionCreators(
     actionCreators,
