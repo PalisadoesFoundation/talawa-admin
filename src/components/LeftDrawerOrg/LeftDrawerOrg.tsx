@@ -7,7 +7,6 @@ import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
@@ -52,7 +51,7 @@ const leftDrawerOrg = ({
   const firstName = localStorage.getItem('FirstName');
   const lastName = localStorage.getItem('LastName');
   const userImage = localStorage.getItem('UserImage');
-
+  const userId = localStorage.getItem('id');
   const history = useHistory();
 
   // Set organization data
@@ -188,7 +187,7 @@ const leftDrawerOrg = ({
             className={styles.profileContainer}
             data-testid="profileBtn"
             onClick={(): void => {
-              toast.success('Profile page coming soon!');
+              history.push(`/member/id=${userId}`);
             }}
           >
             <div className={styles.imageContainer}>

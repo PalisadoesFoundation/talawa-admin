@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import i18nForTest from 'utils/i18nForTest';
 import LeftDrawerEvent, {
   type InterfaceLeftDrawerProps,
@@ -145,7 +144,6 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
     expect(props.setShowAddEventProjectModal).toHaveBeenCalled();
 
     fireEvent.click(queryByTestId(/profileBtn/i) as HTMLElement);
-    expect(toast.success).toHaveBeenCalledWith('Profile page coming soon!');
   });
 
   test('Testing Drawer when hideDrawer is null', () => {

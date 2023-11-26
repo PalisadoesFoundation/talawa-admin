@@ -1,13 +1,12 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-
 import userEvent from '@testing-library/user-event';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -178,5 +177,40 @@ describe('Testing Users screen', () => {
     expect(container.textContent).not.toMatch(
       'Organizations not found, please create an organization through dashboard'
     );
+  });
+
+  test('Testing sort Newest and oldest toggle', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <Users />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+
+      await wait();
+
+      const searchInput = screen.getByTestId('sort');
+      expect(searchInput).toBeInTheDocument();
+
+      const inputText = screen.getByTestId('sortUsers');
+
+      fireEvent.click(inputText);
+      const toggleText = screen.getByTestId('newest');
+
+      fireEvent.click(toggleText);
+
+      expect(searchInput).toBeInTheDocument();
+      fireEvent.click(inputText);
+      const toggleTite = screen.getByTestId('oldest');
+      fireEvent.click(toggleTite);
+      expect(searchInput).toBeInTheDocument();
+    });
   });
 });
