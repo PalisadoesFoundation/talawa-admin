@@ -136,7 +136,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   <Col sm={6} lg={8}>
                     {/* User section */}
                     <div>
-                      <h2 className="mt-3 mb-4">
+                      <h2>
                         <strong>
                           {userData?.user?.firstName} {userData?.user?.lastName}
                         </strong>
