@@ -229,8 +229,6 @@ describe('Testing Update Event Task Modal', () => {
         queryByText('There was an error in updating the task!')
       ).toBeInTheDocument()
     );
-
-    await waitFor(() => expect(queryByText('Oops')).toBeInTheDocument());
   });
 
   test('Manage volunteer modal and delete task modal should open and close properly', async () => {

@@ -1,7 +1,6 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useHistory } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
 import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
@@ -38,6 +37,7 @@ const leftDrawerEvent = ({
   const firstName = localStorage.getItem('FirstName');
   const lastName = localStorage.getItem('LastName');
   const userImage = localStorage.getItem('UserImage');
+  const userId = localStorage.getItem('id');
 
   const history = useHistory();
   const logout = (): void => {
@@ -88,8 +88,16 @@ const leftDrawerEvent = ({
               />
             </div>
             <div className={styles.profileText}>
-              <span className={styles.primaryText}>{event.title}</span>
-              <span className={styles.secondaryText}>{event.description}</span>
+              <span className={styles.primaryText}>
+                {event.title && event.title.length > 20
+                  ? event.title.substring(0, 20) + '...'
+                  : event.title}
+              </span>
+              <span className={styles.secondaryText}>
+                {event.description && event.description.length > 30
+                  ? event.description.substring(0, 30) + '...'
+                  : event.description}
+              </span>
             </div>
           </button>
         </div>
@@ -126,6 +134,20 @@ const leftDrawerEvent = ({
             eventId={event._id}
             key={`${event?._id || 'loading'}Stats`}
           />
+          <Button
+            variant="light"
+            data-testid="allEventsBtn"
+            className="text-secondary"
+            aria-label="allEvents"
+            onClick={(): void => {
+              history.push(`/orgevents/id=${event.organization._id}`);
+            }}
+          >
+            <div className={styles.iconWrapper}>
+              <IconComponent name="Events" fill="var(--bs-secondary)" />
+            </div>
+            All Events
+          </Button>
         </div>
 
         {/* Profile Section & Logout Btn */}
@@ -134,7 +156,7 @@ const leftDrawerEvent = ({
             className={styles.profileContainer}
             data-testid="profileBtn"
             onClick={(): void => {
-              toast.success('Profile page coming soon!');
+              history.push(`/member/id=${userId}`);
             }}
           >
             <div className={styles.imageContainer}>

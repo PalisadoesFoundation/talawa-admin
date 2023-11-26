@@ -419,7 +419,34 @@ export const ADD_PLUGIN_MUTATION = gql`
     }
   }
 `;
-
+export const ADD_ADVERTISEMENT_MUTATION = gql`
+  mutation (
+    $orgId: ID!
+    $name: String!
+    $link: String!
+    $type: String!
+    $startDate: Date!
+    $endDate: Date!
+  ) {
+    createAdvertisement(
+      orgId: $orgId
+      name: $name
+      link: $link
+      type: $type
+      startDate: $startDate
+      endDate: $endDate
+    ) {
+      _id
+    }
+  }
+`;
+export const DELETE_ADVERTISEMENT_BY_ID = gql`
+  mutation ($id: ID!) {
+    deleteAdvertisementById(id: $id) {
+      success
+    }
+  }
+`;
 export const UPDATE_POST_MUTATION = gql`
   mutation UpdatePost(
     $id: ID!
@@ -670,6 +697,18 @@ export const UPDATE_USER_ROLE_IN_ORG_MUTATION = gql`
     ) {
       _id
     }
+  }
+`;
+
+export const CREATE_SAMPLE_ORGANIZATION_MUTATION = gql`
+  mutation {
+    createSampleOrganization
+  }
+`;
+
+export const REMOVE_SAMPLE_ORGANIZATION_MUTATION = gql`
+  mutation {
+    removeSampleOrganization
   }
 `;
 

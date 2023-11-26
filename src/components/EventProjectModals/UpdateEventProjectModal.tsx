@@ -25,9 +25,15 @@ export const UpdateEventProjectModal = (props: ModalPropType): JSX.Element => {
   }, [props.project]);
 
   const [updateMutation] = useMutation(UPDATE_EVENT_PROJECT_MUTATION);
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const notify = (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+    return toast.promise(handleSubmit, {
+      pending: 'Updating the project...',
+      success: 'Updated the project successfully!',
+      error: 'There was an error in updating the project details!',
+    });
+  };
+  const handleSubmit = async (): Promise<void> => {
     let toSubmit = true;
 
     if (title.trim().length == 0) {
@@ -38,26 +44,16 @@ export const UpdateEventProjectModal = (props: ModalPropType): JSX.Element => {
       toast.error('Description cannot be empty!');
       toSubmit = false;
     }
-
-    if (toSubmit) {
-      toast.warn('Updating the project...');
-      updateMutation({
-        variables: {
-          id: props.project._id,
-          title,
-          description,
-        },
-      })
-        .then(() => {
-          toast.success('Updated the project successfully!');
-          props.refetchData();
-          props.handleClose();
-        })
-        .catch((err) => {
-          toast.error('There was an error in updating the project details!');
-          toast.error(err.message);
-        });
-    }
+    if (!toSubmit) return Promise.reject();
+    await updateMutation({
+      variables: {
+        id: props.project._id,
+        title,
+        description,
+      },
+    });
+    props.refetchData();
+    props.handleClose();
   };
 
   return (
@@ -71,7 +67,7 @@ export const UpdateEventProjectModal = (props: ModalPropType): JSX.Element => {
         <Modal.Header closeButton className="bg-primary">
           <Modal.Title className="text-white">Update Event Project</Modal.Title>
         </Modal.Header>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={notify}>
           <Modal.Body>
             <Form.Group controlId="formBasicTitle">
               <Form.Label>Title</Form.Label>

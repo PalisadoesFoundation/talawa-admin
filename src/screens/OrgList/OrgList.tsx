@@ -7,6 +7,9 @@ import {
   ORGANIZATION_CONNECTION_LIST,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
+
+import { CREATE_SAMPLE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+
 import OrgListCard from 'components/OrgListCard/OrgListCard';
 import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 import type { ChangeEvent } from 'react';
@@ -31,8 +34,6 @@ import styles from './OrgList.module.css';
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
   const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
-  /* eslint-disable @typescript-eslint/no-unused-vars */
-  const [modalisOpen, setmodalIsOpen] = useState(false);
   const [dialogRedirectOrgId, setDialogRedirectOrgId] = useState('<ORG_ID>');
   /* eslint-disable @typescript-eslint/explicit-function-return-type */
   function openDialogModal(redirectOrgId: string) {
@@ -67,6 +68,10 @@ function orgList(): JSX.Element {
   const toggleModal = (): void => setShowModal(!showModal);
 
   const [create] = useMutation(CREATE_ORGANIZATION_MUTATION);
+
+  const [createSampleOrganization] = useMutation(
+    CREATE_SAMPLE_ORGANIZATION_MUTATION
+  );
 
   const {
     data: userData,
@@ -116,11 +121,7 @@ function orgList(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    if (loading && isLoadingMore == false) {
-      setIsLoading(true);
-    } else {
-      setIsLoading(false);
-    }
+    setIsLoading(loading && isLoadingMore);
   }, [loading]);
 
   /* istanbul ignore next */
@@ -139,6 +140,17 @@ function orgList(): JSX.Element {
         ) ?? false
       );
     }
+  };
+
+  const triggerCreateSampleOrg = () => {
+    createSampleOrganization()
+      .then(() => {
+        toast.success(t('sampleOrgSuccess'));
+        window.location.reload();
+      })
+      .catch(() => {
+        toast.error(t('sampleOrgDuplicate'));
+      });
   };
 
   const createOrg = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
@@ -397,7 +409,7 @@ function orgList(): JSX.Element {
                   ))}
                 </>
               ) : userData && userData.user.userType == 'SUPERADMIN' ? (
-                orgsData?.organizationsConnection.map((item, index) => {
+                orgsData?.organizationsConnection.map((item) => {
                   return (
                     <div key={item._id} className={styles.itemCard}>
                       <OrgListCard data={item} />
@@ -425,7 +437,6 @@ function orgList(): JSX.Element {
         <Modal
           show={showModal}
           onHide={toggleModal}
-          backdrop="static"
           aria-labelledby="contained-modal-title-vcenter"
           centered
         >
@@ -544,23 +555,36 @@ function orgList(): JSX.Element {
                 }}
                 data-testid="organisationImage"
               />
+              <Col className={styles.sampleOrgSection}>
+                <Button
+                  className={styles.orgCreationBtn}
+                  type="submit"
+                  value="invite"
+                  data-testid="submitOrganizationForm"
+                >
+                  {t('createOrganization')}
+                </Button>
+
+                <div className="position-relative">
+                  <hr />
+                  <span className={styles.orText}>{t('OR')}</span>
+                </div>
+                {userData &&
+                  ((userData.user.userType === 'ADMIN' &&
+                    userData.user.adminFor.length > 0) ||
+                    userData.user.userType === 'SUPERADMIN') && (
+                    <div className={styles.sampleOrgSection}>
+                      <Button
+                        className={styles.sampleOrgCreationBtn}
+                        onClick={() => triggerCreateSampleOrg()}
+                        data-testid="createSampleOrganizationBtn"
+                      >
+                        {t('createSampleOrganization')}
+                      </Button>
+                    </div>
+                  )}
+              </Col>
             </Modal.Body>
-            <Modal.Footer>
-              <Button
-                variant="secondary"
-                onClick={(): void => toggleModal()}
-                data-testid="closeOrganizationModal"
-              >
-                {t('cancel')}
-              </Button>
-              <Button
-                type="submit"
-                value="invite"
-                data-testid="submitOrganizationForm"
-              >
-                {t('createOrganization')}
-              </Button>
-            </Modal.Footer>
           </Form>
         </Modal>{' '}
         {/* Plugin Notification Modal after Org is Created */}
@@ -582,6 +606,13 @@ function orgList(): JSX.Element {
                       }}
                     ></i>
                   </a>
+                  <Button
+                    variant="secondary"
+                    onClick={(): void => toggleModal()}
+                    data-testid="closeOrganizationModal"
+                  >
+                    {t('cancel')}
+                  </Button>
                 </div>
                 <h4 className={styles.titlemodaldialog}>
                   {t('manageFeaturesInfo')}

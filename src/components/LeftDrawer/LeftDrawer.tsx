@@ -2,7 +2,6 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
 import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
 import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
@@ -30,7 +29,7 @@ const leftDrawer = ({
   const firstName = localStorage.getItem('FirstName');
   const lastName = localStorage.getItem('LastName');
   const userImage = localStorage.getItem('UserImage');
-
+  const userId = localStorage.getItem('id');
   const history = useHistory();
 
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
@@ -140,7 +139,7 @@ const leftDrawer = ({
             className={styles.profileContainer}
             data-testid="profileBtn"
             onClick={(): void => {
-              toast.success('Profile page coming soon!');
+              history.push(`/member/id=${userId}`);
             }}
           >
             <div className={styles.imageContainer}>

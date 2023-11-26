@@ -11,6 +11,9 @@ import { ToastContainer } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { checkInQueryMock } from './mocks';
+import { StaticMockLink } from 'utils/StaticMockLink';
+
+const link = new StaticMockLink(checkInQueryMock, true);
 
 describe('Testing CheckIn Wrapper', () => {
   const props = {
@@ -19,7 +22,7 @@ describe('Testing CheckIn Wrapper', () => {
 
   test('The button to open and close the modal should work properly', async () => {
     const { queryByText } = render(
-      <MockedProvider addTypename={false} mocks={checkInQueryMock}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>

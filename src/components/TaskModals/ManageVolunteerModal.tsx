@@ -32,24 +32,22 @@ export const ManageVolunteerModal = (props: ModalPropType): JSX.Element => {
   useEffect(() => setVolunteers(props.volunteers), [props.volunteers]);
 
   const [setMutation] = useMutation(SET_TASK_VOLUNTEERS_MUTATION);
-
-  const handleSubmit = (): void => {
-    toast.warn('Updating the volunteers...');
-    setMutation({
+  const notify = (): Promise<void> => {
+    return toast.promise(handleSubmit, {
+      pending: 'Updating the volunteers...',
+      success: 'Successfully updated the volunteers!',
+      error: 'There was an error in updating the volunteers!',
+    });
+  };
+  const handleSubmit = async (): Promise<void> => {
+    await setMutation({
       variables: {
         id: props.taskId,
         volunteers: volunteers.map((volunteer) => volunteer._id),
       },
-    })
-      .then(() => {
-        toast.success('Successfully updated the volunteers!');
-        props.refetchData();
-        props.handleClose();
-      })
-      .catch((err) => {
-        toast.error('There was an error in updating the volunteers!');
-        toast.error(err.message);
-      });
+    });
+    props.refetchData();
+    props.handleClose();
   };
 
   return (
@@ -94,7 +92,7 @@ export const ManageVolunteerModal = (props: ModalPropType): JSX.Element => {
           <br />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="success" color="success" onClick={handleSubmit}>
+          <Button variant="success" color="success" onClick={notify}>
             Update Volunteers
           </Button>
         </Modal.Footer>
