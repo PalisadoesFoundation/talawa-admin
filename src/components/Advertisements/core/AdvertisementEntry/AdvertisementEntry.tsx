@@ -41,7 +41,7 @@ function advertisementEntry({
   return (
     <>
       <Row data-testid="AdEntry" xs={1} md={2} className="g-4">
-        {Array.from({ length: 4 }).map((_, idx) => (
+        {Array.from({ length: 1 }).map((_, idx) => (
           <Col key={idx}>
             <Card>
               <Card.Img
