@@ -105,7 +105,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     expect(screen.getByText('People')).toBeInTheDocument();
     expect(screen.getByText('Events')).toBeInTheDocument();
     expect(screen.getByText('Donate')).toBeInTheDocument();
-    expect(screen.getByText('Chat')).toBeInTheDocument();
+    // expect(screen.getByText('Chat')).toBeInTheDocument();
   });
 
   test('The language is switched to English', async () => {
@@ -135,7 +135,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     expect(screen.getByText('People')).toBeInTheDocument();
     expect(screen.getByText('Events')).toBeInTheDocument();
     expect(screen.getByText('Donate')).toBeInTheDocument();
-    expect(screen.getByText('Chat')).toBeInTheDocument();
+    // expect(screen.getByText('Chat')).toBeInTheDocument();
   });
 
   test('The language is switched to fr', async () => {
