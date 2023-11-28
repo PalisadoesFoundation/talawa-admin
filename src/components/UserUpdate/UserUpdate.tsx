@@ -16,11 +16,13 @@ import Loader from 'components/Loader/Loader';
 
 interface InterfaceUserUpdateProps {
   id: string;
+  toggleStateValue: () => void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
   id,
+  toggleStateValue,
 }): JSX.Element => {
   const location = useLocation<InterfaceUserUpdateProps>();
   const currentUrl = location.state?.id || localStorage.getItem('id') || id;
@@ -104,10 +106,13 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
           applangcode: '',
           file: '',
         });
+        localStorage.setItem('FirstName', firstName);
+        localStorage.setItem('LastName', lastName);
+        localStorage.setItem('Email', email);
+        localStorage.setItem('UserImage', file);
         toast.success('Successful updated');
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
+
+        toggleStateValue();
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -117,7 +122,7 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
 
   /* istanbul ignore next */
   const cancelUpdate = (): void => {
-    window.location.reload();
+    toggleStateValue();
   };
 
   return (
