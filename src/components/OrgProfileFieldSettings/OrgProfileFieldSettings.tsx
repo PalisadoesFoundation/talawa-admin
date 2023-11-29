@@ -68,7 +68,6 @@ const OrgProfileFieldSettings = (): any => {
       });
 
       toast.success(t('fieldRemovalSuccess'));
-
       refetch();
     } catch (error) {
       toast.error((error as Error).message);
@@ -126,6 +125,7 @@ const OrgProfileFieldSettings = (): any => {
                   placeholder={t('enterCustomFieldName')}
                   autoComplete="off"
                   required
+                  data-testid="customFieldInput"
                   value={customFieldData.name}
                   onChange={(event) => {
                     setCustomFieldData({

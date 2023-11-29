@@ -6,7 +6,10 @@ import { I18nextProvider } from 'react-i18next';
 import OrgProfileFieldSettings from './OrgProfileFieldSettings';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { ADD_CUSTOM_FIELD } from 'GraphQl/Mutations/mutations';
+import {
+  ADD_CUSTOM_FIELD,
+  REMOVE_CUSTOM_FIELD,
+} from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_CUSTOM_FIELDS } from 'GraphQl/Queries/Queries';
 
 const MOCKS = [
@@ -14,9 +17,8 @@ const MOCKS = [
     request: {
       query: ADD_CUSTOM_FIELD,
       variables: {
-        organizationId: '2dhfgjg32424323434343443',
-        type: 'fieldType',
-        name: 'fieldName',
+        type: '',
+        name: '',
       },
     },
     result: {
@@ -24,6 +26,24 @@ const MOCKS = [
         addOrganizationCustomField: {
           name: 'Custom Field Name',
           type: 'string',
+        },
+      },
+    },
+  },
+
+  {
+    request: {
+      query: REMOVE_CUSTOM_FIELD,
+      variables: {
+        organizationId: '',
+        customFieldId: '',
+      },
+    },
+    result: {
+      data: {
+        removeOrganizationCustomField: {
+          type: '',
+          name: '',
         },
       },
     },
@@ -53,7 +73,6 @@ const NO_C_FIELD_MOCK = [
     request: {
       query: ADD_CUSTOM_FIELD,
       variables: {
-        organizationId: '2dhfgjg32424323434343443',
         type: 'fieldType',
         name: 'fieldName',
       },
@@ -106,6 +125,20 @@ describe('Testing Save Button', () => {
     userEvent.click(screen.getByTestId('saveChangesBtn'));
   });
 
+  test('Testing Typing Organization Custom Field Name', async () => {
+    const { getByTestId } = render(
+      <MockedProvider mocks={MOCKS} addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgProfileFieldSettings />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    const fieldNameInput = getByTestId('customFieldInput');
+    userEvent.type(fieldNameInput, 'Age');
+  });
   test('When No Custom Data is Presenet', async () => {
     const { getByText } = render(
       <MockedProvider mocks={NO_C_FIELD_MOCK} addTypename={false} link={link2}>
