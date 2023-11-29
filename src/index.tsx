@@ -30,10 +30,34 @@ import {
   BACKEND_URL,
   REACT_APP_BACKEND_WEBSOCKET_URL,
 } from 'Constant/constant';
+import { refreshToken } from 'utils/getRefreshToken';
 
-onError(({ graphQLErrors }) => {
-  if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message));
-});
+const errorLink = onError(
+  ({ graphQLErrors, networkError, operation, forward }) => {
+    if (graphQLErrors) {
+      graphQLErrors.map(({ message }) => {
+        if (message === 'User is not authenticated') {
+          refreshToken().then((success) => {
+            if (success) {
+              const oldHeaders = operation.getContext().headers;
+              operation.setContext({
+                headers: {
+                  ...oldHeaders,
+                  authorization: 'Bearer ' + localStorage.getItem('token'),
+                },
+              });
+              return forward(operation);
+            } else {
+              localStorage.clear();
+            }
+          });
+        }
+      });
+    } else if (networkError) {
+      console.log(`[Network error]: ${networkError}`);
+    }
+  }
+);
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
@@ -66,7 +90,7 @@ const splitLink = split(
 );
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
-  link: splitLink,
+  link: errorLink.concat(splitLink),
 });
 const fallbackLoader = <div className="loader"></div>;
 

@@ -191,6 +191,7 @@ function loginPage(): JSX.Element {
             loginData.login.user.adminApproved === true)
         ) {
           localStorage.setItem('token', loginData.login.accessToken);
+          localStorage.setItem('refreshToken', loginData.login.refreshToken);
           localStorage.setItem('id', loginData.login.user._id);
           localStorage.setItem('IsLoggedIn', 'TRUE');
           localStorage.setItem('UserType', loginData.login.user.userType);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import * as installedPlugins from 'components/plugins/index';
@@ -63,6 +63,23 @@ function app(): JSX.Element {
 
   const { data, loading } = useQuery(CHECK_AUTH);
 
+  useEffect(() => {
+    if (data) {
+      localStorage.setItem(
+        'name',
+        `${data.checkAuth.firstName} ${data.checkAuth.lastName}`
+      );
+      localStorage.setItem('id', data.checkAuth._id);
+      localStorage.setItem('email', data.checkAuth.email);
+      localStorage.setItem('IsLoggedIn', 'TRUE');
+      localStorage.setItem('UserType', data.checkAuth.userType);
+      localStorage.setItem('FirstName', data.checkAuth.firstName);
+      localStorage.setItem('LastName', data.checkAuth.lastName);
+      localStorage.setItem('UserImage', data.checkAuth.image);
+      localStorage.setItem('Email', data.checkAuth.email);
+    }
+  }, [data, loading]);
+
   const extraRoutes = Object.entries(installedPlugins).map(
     (plugin: any, index) => {
       const extraComponent = plugin[1];
@@ -79,24 +96,6 @@ function app(): JSX.Element {
   if (loading) {
     return <Loader />;
   }
-
-  if (data) {
-    localStorage.setItem(
-      'name',
-      `${data.checkAuth.firstName} ${data.checkAuth.lastName}`
-    );
-    localStorage.setItem('id', data.checkAuth._id);
-    localStorage.setItem('email', data.checkAuth.email);
-    localStorage.setItem('IsLoggedIn', 'TRUE');
-    localStorage.setItem('UserType', data.checkAuth.userType);
-    localStorage.setItem('FirstName', data.checkAuth.firstName);
-    localStorage.setItem('LastName', data.checkAuth.lastName);
-    localStorage.setItem('UserImage', data.checkAuth.image);
-    localStorage.setItem('Email', data.checkAuth.email);
-  } else {
-    localStorage.clear();
-  }
-
   return (
     <>
       <Switch>
