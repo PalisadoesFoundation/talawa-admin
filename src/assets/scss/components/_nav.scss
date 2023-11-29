@@ -1,0 +1,28 @@
+$nav-link-padding-y: 0.5rem;
+$nav-link-padding-x: 1rem;
+$nav-link-font-size: null;
+$nav-link-font-weight: null;
+$nav-link-color: var(--#{$prefix}link-color);
+$nav-link-hover-color: var(--#{$prefix}link-hover-color);
+$nav-link-transition: color 0.15s ease-in-out,
+  background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+$nav-link-disabled-color: var(--#{$prefix}secondary-color);
+$nav-link-focus-box-shadow: $focus-ring-box-shadow;
+
+$nav-tabs-border-color: var(--#{$prefix}border-color);
+$nav-tabs-border-width: var(--#{$prefix}border-width);
+$nav-tabs-border-radius: var(--#{$prefix}border-radius);
+$nav-tabs-link-hover-border-color: var(--#{$prefix}secondary-bg)
+  var(--#{$prefix}secondary-bg) $nav-tabs-border-color;
+$nav-tabs-link-active-color: var(--#{$prefix}emphasis-color);
+$nav-tabs-link-active-bg: var(--#{$prefix}body-bg);
+$nav-tabs-link-active-border-color: var(--#{$prefix}border-color)
+  var(--#{$prefix}border-color) $nav-tabs-link-active-bg;
+
+$nav-pills-border-radius: var(--#{$prefix}border-radius);
+$nav-pills-link-active-color: $component-active-color;
+$nav-pills-link-active-bg: $component-active-bg;
+
+$nav-underline-gap: 1rem;
+$nav-underline-border-width: 0.125rem;
+$nav-underline-link-active-color: var(--#{$prefix}emphasis-color);

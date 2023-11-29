@@ -1,0 +1,114 @@
+##############################################################################
+##############################################################################
+#
+# NOTE!
+#
+# Please read the README.md file in this directory that defines what should 
+# be placed in this file
+#
+##############################################################################
+##############################################################################
+
+name: push workflow
+
+on:
+  push:
+    branches:
+      - '**'   
+      
+env:
+    CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
+  
+jobs:      
+  Code-Coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install --legacy-peer-deps
+      - run: npm run test -- --watchAll=false --coverage
+      - name: Present and upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
+        uses: codecov/codecov-action@v3
+        with:
+          verbose: true
+          fail_ci_if_error: false
+          name: '${{env.CODECOV_UNIQUE_NAME}}'
+
+  Generate-Documentation:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/automated-docs'
+    steps:
+      - name: Checkout the Repository
+        uses: actions/checkout@v3
+        
+      - name: Install Dependencies
+        run: yarn install --legacy-peer-deps
+
+      - name: Install TypeScript Globally and add GraphQL tag
+        run: yarn global add typescript
+      - run: yarn add graphql-tag
+
+      - name: Update Dependencies
+        run: yarn upgrade
+
+      - name: Generate Documentation of Markdown pages
+        run: |
+          yarn global add typedoc
+          yarn add typedoc-plugin-markdown
+          yarn typedoc --entryPoints src/components src/screens --out talawa-admin-docs --plugin typedoc-plugin-markdown --theme markdown --entryPointStrategy expand --exclude "**/*.test.ts" --exclude "**/*.css"
+          
+      - name: Checking doc updated
+        id: DocUpdated
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "updateDoc=true" >> $GITHUB_OUTPUT
+            echo -e "Documentation has been updated!!"
+          else
+            Green='0;32'
+            NoColor='\033[0m'
+            echo -e "${Green}No documentation updated${NoColor}"
+          fi
+          
+      - name: Set env variables
+        if: steps.DocUpdated.outputs.updateDoc
+        run: |
+          echo "commit_id=$(echo $(git rev-parse HEAD))" >> $GITHUB_ENV
+          echo "email=$(echo $(git log --pretty=format:"%ae" $commit_id))" >> $GITHUB_ENV
+        
+      - name: Update Doc
+        if: steps.DocUpdated.outputs.updateDoc
+        run: |
+          Green='0;32'
+          NoColor='\033[0m' 
+          git config --global user.name "${{github.actor}}"
+          git config --global user.email "${{env.email}}"
+          git add .
+          git commit -m "Update documentation"
+          git push
+          echo -e "🚀${Green} Hurrah! doc updated${NoColor}"
+      
+      - name: Create Documentation Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: documentation-admin
+          path: talawa-admin-docs
+
+  Copy-docs-to-talawa-docs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: dmnemec/copy_file_to_another_repo_action@v1.1.1
+      env:
+        API_TOKEN_GITHUB: ${{ secrets.TALAWA_DOCS_SYNC_NEW }}    
+      with:
+        source_file: 'talawa-admin-docs/'
+        destination_repo: 'PalisadoesFoundation/talawa-docs'
+        destination_branch: 'develop'
+        destination_folder: 'docs/'
+        user_email: '${{env.email}}'
+        user_name: '${{github.actor}}'
+        commit_message: 'Talawa Admin docs updated'
+      
+       

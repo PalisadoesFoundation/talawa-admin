@@ -1,0 +1,25 @@
+.spinner_wrapper {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinnerXl {
+  width: 6rem;
+  height: 6rem;
+  border-width: 0.5rem;
+}
+
+.spinnerLg {
+  height: 4rem;
+  width: 4rem;
+  border-width: 0.3rem;
+}
+
+.spinnerSm {
+  height: 2rem;
+  width: 2rem;
+  border-width: 0.2rem;
+}

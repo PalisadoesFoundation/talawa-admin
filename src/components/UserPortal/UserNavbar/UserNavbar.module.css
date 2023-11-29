@@ -1,0 +1,26 @@
+.talawaImage {
+  width: 40px;
+  height: auto;
+  margin-top: -5px;
+  border: 2px solid white;
+  margin-right: 10px;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.boxShadow {
+  box-shadow: 4px 4px 8px 4px #c8c8c8;
+}
+
+.colorWhite {
+  color: white;
+}
+
+.colorPrimary {
+  background: #31bb6b;
+}
+
+.link {
+  text-decoration: none !important;
+  color: inherit;
+}
