@@ -310,12 +310,6 @@ describe('Testing Forgot Password screen', () => {
   });
 
   test('Testing forgot password functionality, when there is an error except unregistered email and api failure', async () => {
-    const formData = {
-      userOtp: '12345',
-      newPassword: 'johnDoe',
-      confirmNewPassword: 'johnDoe',
-      email: 'johndoe@gmail.com',
-    };
     render(
       <MockedProvider addTypename={false} link={notWorkingLink}>
         <BrowserRouter>
