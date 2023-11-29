@@ -36,9 +36,17 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     data: userData,
     loading: loading,
     error: error,
+    refetch: refetch,
   } = useQuery(USER_DETAILS, {
     variables: { id: currentUrl }, // For testing we are sending the id as a prop
   });
+
+  /* istanbul ignore next */
+  const toggleStateValue = (): void => {
+    if (state === 1) setState(2);
+    else setState(1);
+    refetch();
+  };
 
   if (loading) {
     return <Loader />;
@@ -286,7 +294,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 </section>
               </div>
             ) : (
-              <UserUpdate id={currentUrl} />
+              <UserUpdate id={currentUrl} toggleStateValue={toggleStateValue} />
             )}
           </Col>
         </Row>

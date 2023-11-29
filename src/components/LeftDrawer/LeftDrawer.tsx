@@ -9,6 +9,8 @@ import { ReactComponent as RequestsIcon } from 'assets/svgs/requests.svg';
 import { ReactComponent as RolesIcon } from 'assets/svgs/roles.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import styles from './LeftDrawer.module.css';
+import { useMutation } from '@apollo/client';
+import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 
 export interface InterfaceLeftDrawerProps {
   hideDrawer: boolean | null;
@@ -30,7 +32,10 @@ const leftDrawer = ({
   const userId = localStorage.getItem('id');
   const history = useHistory();
 
+  const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
+
   const logout = (): void => {
+    revokeRefreshToken();
     localStorage.clear();
     history.push('/');
   };
