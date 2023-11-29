@@ -352,13 +352,7 @@ const Requests = (): JSX.Element => {
             </div>
           </div>
         </div>
-        {!isLoading &&
-        usersData?.users.length === 0 &&
-        searchByName.length > 0 ? (
-          <div className={styles.notFound}>
-            <h4>{t('noRequestFound')}</h4>
-          </div>
-        ) : isLoading ? (
+        {isLoading ? (
           <TableLoader headerTitles={headerTitles} noOfRows={perPageResult} />
         ) : (
           <InfiniteScroll
@@ -423,6 +417,11 @@ const Requests = (): JSX.Element => {
               </tbody>
             </Table>
           </InfiniteScroll>
+        )}
+        {!isLoading && displayedUsers.length === 0 && (
+          <div className="w-100 text-center my-4">
+            <h5 className="m-0 ">{t('noRequestFound')}</h5>
+          </div>
         )}
       </SuperAdminScreen>
     </>
