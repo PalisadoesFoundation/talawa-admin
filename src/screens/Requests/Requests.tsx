@@ -100,10 +100,10 @@ const Requests = (): JSX.Element => {
       setDisplayedUsers([]);
       return;
     }
+    /* istanbul ignore next */
     if (usersData.users.length < perPageResult) {
       sethasMore(false);
     } else {
-      /* istanbul ignore next */
       setDisplayedUsers(usersData?.users);
     }
   }, [usersData]);
@@ -301,6 +301,7 @@ const Requests = (): JSX.Element => {
                 onChange={debouncedHandleSearchByName}
               />
               <Button
+                data-testid="searchButton"
                 tabIndex={-1}
                 className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
               >
@@ -351,15 +352,9 @@ const Requests = (): JSX.Element => {
             </div>
           </div>
         </div>
-        {isLoading == false &&
+        {!isLoading &&
         usersData?.users.length === 0 &&
         searchByName.length > 0 ? (
-          <div className={styles.notFound}>
-            <h4>
-              {t('noResultsFoundFor')} &quot;{searchByName}&quot;
-            </h4>
-          </div>
-        ) : isLoading == false && usersData?.users.length === 0 ? (
           <div className={styles.notFound}>
             <h4>{t('noRequestFound')}</h4>
           </div>

@@ -1,6 +1,12 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen, fireEvent } from '@testing-library/react';
+import {
+  act,
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+} from '@testing-library/react';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
@@ -62,22 +68,6 @@ describe('Testing Request screen', () => {
 
     render(
       <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-  });
-
-  test('Testing seach by name functionality', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link3}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -199,5 +189,84 @@ describe('Testing Request screen', () => {
       fireEvent.click(toggleTite);
       expect(searchInput).toBeInTheDocument();
     });
+  });
+  test('Testing seach by name functionality', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    const search1 = 'John{backspace}{backspace}{backspace}{backspace}';
+    userEvent.type(screen.getByTestId(/searchByName/i), search1);
+
+    const search2 = 'Pete{backspace}{backspace}{backspace}{backspace}';
+    userEvent.type(screen.getByTestId(/searchByName/i), search2);
+
+    const search3 =
+      'John{backspace}{backspace}{backspace}{backspace}Sam{backspace}{backspace}{backspace}';
+    userEvent.type(screen.getByTestId(/searchByName/i), search3);
+
+    const search4 = 'Sam{backspace}{backspace}P{backspace}';
+    userEvent.type(screen.getByTestId(/searchByName/i), search4);
+
+    const search5 = 'Xe';
+    userEvent.type(screen.getByTestId(/searchByName/i), search5);
+    userEvent.type(screen.getByTestId(/searchByName/i), '');
+  });
+
+  // test('Testing User data is not present', async () => {
+  //   render(
+  //     <MockedProvider addTypename={false} link={link}>
+  //       <BrowserRouter>
+  //         <Provider store={store}>
+  //           <I18nextProvider i18n={i18nForTest}>
+  //             <Requests />
+  //           </I18nextProvider>
+  //         </Provider>
+  //       </BrowserRouter>
+  //     </MockedProvider>
+  //   );
+
+  //   await wait();
+
+  //   const inputBox = screen.getByTestId(`searchByName`);
+  //   expect(inputBox).toBeInTheDocument();
+
+  //   fireEvent.change(inputBox, { target: { value: 'Nonexistent User' } });
+  //   expect(screen.getByText(/No results found for/i)).toBeTruthy();
+  // });
+
+  test('Does not display loading state when isLoading is false and usersData is present', async () => {
+    // Mock the scenario where isLoading is false and there is some data in usersData
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    // Wait for the component to finish rendering
+    await wait();
+
+    // Check if the loading state is NOT displayed
+    const loadingState = screen.queryByText(/Loading/i);
+    expect(loadingState).toBeNull();
+
+    // Add any additional assertions based on your test case
   });
 });
