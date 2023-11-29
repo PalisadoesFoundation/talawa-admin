@@ -24,6 +24,7 @@ const EditOrgCustomFieldDropDown = (
       <Dropdown.Toggle
         variant="outline-success"
         className={`${props?.btnStyle ?? ''}`}
+        data-testid="toggleBtn"
       >
         {props.customFieldData.type || 'None'}
       </Dropdown.Toggle>
@@ -32,6 +33,7 @@ const EditOrgCustomFieldDropDown = (
           <Dropdown.Item
             key={`dropdown-item-${index}`}
             className={`dropdown-item`}
+            data-testid={`dropdown-btn-${index}`}
             onClick={(): void => {
               props.setCustomFieldData({
                 ...props.customFieldData,

@@ -50,7 +50,6 @@ const OrgProfileFieldSettings = (): any => {
           ...customFieldData,
         },
       });
-
       toast.success(t('fieldSuccessMessage'));
       setCustomFieldData({ type: '', name: '' });
       refetch();
@@ -129,7 +128,6 @@ const OrgProfileFieldSettings = (): any => {
                   required
                   value={customFieldData.name}
                   onChange={(event) => {
-                    console.log(customFieldData);
                     setCustomFieldData({
                       ...customFieldData,
                       name: event.target.value,

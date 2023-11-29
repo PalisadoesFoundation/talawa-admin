@@ -48,7 +48,42 @@ const MOCKS = [
   },
 ];
 
+const NO_C_FIELD_MOCK = [
+  {
+    request: {
+      query: ADD_CUSTOM_FIELD,
+      variables: {
+        organizationId: '2dhfgjg32424323434343443',
+        type: 'fieldType',
+        name: 'fieldName',
+      },
+    },
+    result: {
+      data: {
+        addOrganizationCustomField: {
+          name: 'Custom Field Name',
+          type: 'string',
+        },
+      },
+    },
+  },
+
+  {
+    request: {
+      query: ORGANIZATION_CUSTOM_FIELDS,
+      variables: {},
+    },
+    result: {
+      data: {
+        customFieldsByOrganization: [],
+      },
+    },
+  },
+];
+
 const link = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(NO_C_FIELD_MOCK, true);
+
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -58,7 +93,7 @@ async function wait(ms = 100): Promise<void> {
 }
 
 describe('Testing Save Button', () => {
-  test('Organization Custom Field', async () => {
+  test('Saving Organization Custom Field', async () => {
     render(
       <MockedProvider mocks={MOCKS} addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -69,6 +104,19 @@ describe('Testing Save Button', () => {
 
     await wait();
     userEvent.click(screen.getByTestId('saveChangesBtn'));
+  });
+
+  test('When No Custom Data is Presenet', async () => {
+    const { getByText } = render(
+      <MockedProvider mocks={NO_C_FIELD_MOCK} addTypename={false} link={link2}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgProfileFieldSettings />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    await wait();
+    expect(getByText('No custom fields available')).toBeInTheDocument();
   });
   test('Testing Remove Custom Field Button', async () => {
     render(
