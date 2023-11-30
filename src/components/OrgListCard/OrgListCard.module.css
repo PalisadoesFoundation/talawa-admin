@@ -1,0 +1,92 @@
+.orgCard {
+  background-color: var(--bs-white);
+  margin: 0.5rem;
+  height: calc(120px + 2rem);
+  padding: 1rem;
+  border-radius: 8px;
+  outline: 1px solid var(--bs-gray-200);
+  position: relative;
+}
+
+.orgCard .innerContainer {
+  display: flex;
+}
+
+.orgCard .innerContainer .orgImgContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.orgCard .innerContainer .orgImgContainer img {
+  width: 125px;
+  height: 120px;
+  object-fit: contain;
+}
+
+.orgCard .innerContainer .orgImgContainer .emptyImg {
+  width: 125px;
+  height: 120px;
+  background-color: var(--bs-gray-200);
+}
+
+.orgCard .innerContainer .content {
+  flex: 1;
+  margin-left: 1rem;
+}
+
+.orgCard button {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 1;
+}
+
+@media (max-width: 450px) {
+  .orgCard {
+    height: unset;
+    margin: 0.5rem 0;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .orgCard .innerContainer {
+    flex-direction: column;
+  }
+
+  .orgCard .innerContainer .orgImgContainer {
+    margin-bottom: 0.8rem;
+  }
+
+  .orgCard .innerContainer .orgImgContainer img {
+    height: auto;
+    width: 100%;
+  }
+
+  .orgCard .innerContainer .content {
+    margin-left: 0;
+  }
+
+  .orgCard button {
+    bottom: 0;
+    right: 0;
+    position: relative;
+    margin-left: auto;
+    display: block;
+  }
+}
+
+.flaskIcon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px 20px 0px 0px;
+}
+
+.manageBtn {
+  display: flex;
+  justify-content: space-around;
+  width: 150px;
+}
