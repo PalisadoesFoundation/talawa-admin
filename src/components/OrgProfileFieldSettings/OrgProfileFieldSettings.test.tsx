@@ -34,10 +34,7 @@ const MOCKS = [
   {
     request: {
       query: REMOVE_CUSTOM_FIELD,
-      variables: {
-        organizationId: '',
-        customFieldId: '',
-      },
+      variables: {},
     },
     result: {
       data: {
@@ -49,6 +46,53 @@ const MOCKS = [
     },
   },
 
+  {
+    request: {
+      query: ORGANIZATION_CUSTOM_FIELDS,
+      variables: {},
+    },
+    result: {
+      data: {
+        customFieldsByOrganization: [
+          {
+            _id: 'adsdasdsa334343yiu423434',
+            type: 'fieldType',
+            name: 'fieldName',
+          },
+        ],
+      },
+    },
+  },
+];
+
+const ERROR_MOCKS = [
+  {
+    request: {
+      query: ADD_CUSTOM_FIELD,
+      variables: {
+        type: '',
+        name: '',
+      },
+    },
+    result: {
+      data: {
+        addOrganizationCustomField: {
+          name: 'Custom Field Name',
+          type: 'string',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: REMOVE_CUSTOM_FIELD,
+      variables: {
+        organizationId: '',
+        customFieldId: '',
+      },
+    },
+    error: new Error('Failed to remove custom field'),
+  },
   {
     request: {
       query: ORGANIZATION_CUSTOM_FIELDS,
@@ -102,6 +146,7 @@ const NO_C_FIELD_MOCK = [
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(NO_C_FIELD_MOCK, true);
+const link3 = new StaticMockLink(ERROR_MOCKS, true);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -139,7 +184,7 @@ describe('Testing Save Button', () => {
     const fieldNameInput = getByTestId('customFieldInput');
     userEvent.type(fieldNameInput, 'Age');
   });
-  test('When No Custom Data is Presenet', async () => {
+  test('When No Custom Data is Present', async () => {
     const { getByText } = render(
       <MockedProvider mocks={NO_C_FIELD_MOCK} addTypename={false} link={link2}>
         <I18nextProvider i18n={i18nForTest}>
@@ -153,7 +198,7 @@ describe('Testing Save Button', () => {
   });
   test('Testing Remove Custom Field Button', async () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false} link={link}>
+      <MockedProvider mocks={MOCKS} addTypename={false} link={link3}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgProfileFieldSettings />
         </I18nextProvider>
@@ -162,5 +207,17 @@ describe('Testing Save Button', () => {
 
     await wait();
     userEvent.click(screen.getByTestId('removeCustomFieldBtn'));
+  });
+
+  test('Testing Failure Case for Removing Custom Field', async () => {
+    const { getByText } = render(
+      <MockedProvider mocks={ERROR_MOCKS} addTypename={false} link={link2}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgProfileFieldSettings />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+    await wait();
+    expect(getByText('Field Type')).toBeInTheDocument();
   });
 });
