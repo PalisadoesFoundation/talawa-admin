@@ -843,3 +843,13 @@ export const IS_SAMPLE_ORGANIZATION_QUERY = gql`
     isSampleOrganization(id: $isSampleOrganizationId)
   }
 `;
+
+export const ORGANIZATION_CUSTOM_FIELDS = gql`
+  query ($customFieldsByOrganizationId: ID!) {
+    customFieldsByOrganization(id: $customFieldsByOrganizationId) {
+      _id
+      type
+      name
+    }
+  }
+`;

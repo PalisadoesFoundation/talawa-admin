@@ -409,7 +409,8 @@
     "settings": "Réglages",
     "noData": "Pas de données",
     "otherSettings": "Autres paramètres",
-    "changeLanguage": "Changer la langue"
+    "changeLanguage": "Changer la langue",
+    "manageCustomFields": "Gérer les Champs Personnalisés"
   },
   "deleteOrg": {
     "deleteOrganization": "Supprimer l'organisation",
@@ -664,5 +665,16 @@
   "userChatRoom": {
     "selectContact": "Sélectionnez un contact pour démarrer la conversation",
     "sendMessage": "Envoyer le message"
+  },
+  "orgProfileField": {
+    "loading": "Chargement...",
+    "noCustomField": "Aucun champ personnalisé disponible",
+    "customFieldName": "Nom du champ",
+    "enterCustomFieldName": "Entrez le nom du champ",
+    "customFieldType": "Type de champ",
+    "saveChanges": "Enregistrer les modifications",
+    "Supprimer le champ personnalisé": "Supprimer le champ personnalisé",
+    "fieldSuccessMessage": "Champ ajouté avec succès",
+    "fieldRemovalSuccess": "Champ supprimé avec succès"
   }
 }

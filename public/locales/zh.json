@@ -408,7 +408,8 @@
     "settings": "設置",
     "noData": "沒有數據",
     "otherSettings": "其他设置",
-    "changeLanguage": "更改语言"
+    "changeLanguage": "更改语言",
+    "manageCustomFields": "管理自定义字段"
   },
   "deleteOrg": {
     "deleteOrganization": "删除组织",
@@ -664,5 +665,16 @@
   "userChatRoom": {
     "selectContact": "選擇聯絡人開始對話",
     "sendMessage": "傳訊息"
+  },
+  "orgProfileField": {
+    "loading": "正在加载...",
+    "noCustomField": "没有可用的自定义字段",
+    "customFieldName": "字段名称",
+    "enterCustomFieldName": "输入字段名称",
+    "customFieldType": "字段类型",
+    "saveChanges": "保存更改",
+    "删除自定义字段": "删除自定义字段",
+    "fieldSuccessMessage": "字段添加成功",
+    "fieldRemovalSuccess": "字段删除成功"
   }
 }
