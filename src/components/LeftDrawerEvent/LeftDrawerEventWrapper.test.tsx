@@ -76,7 +76,7 @@ afterEach(() => {
 
 describe('Testing Left Drawer Wrapper component for the Event Dashboard', () => {
   test('Component should be rendered properly and the close menu button should function', async () => {
-    const { queryByText, queryByTestId } = render(
+    const { queryByText, getByTestId } = render(
       <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
@@ -86,9 +86,15 @@ describe('Testing Left Drawer Wrapper component for the Event Dashboard', () => 
       </MockedProvider>
     );
 
+    const pageContainer = getByTestId('mainpageright');
+    expect(pageContainer.className).toMatch(/pageContainer/i);
+    fireEvent.click(getByTestId('closeLeftDrawerBtn') as HTMLElement);
+    expect(pageContainer.className).toMatch(/expand/i);
+    fireEvent.click(getByTestId('closeLeftDrawerBtn') as HTMLElement);
+    expect(pageContainer.className).toMatch(/contract/i);
+
     await waitFor(() =>
       expect(queryByText('Event Management')).toBeInTheDocument()
     );
-    fireEvent.click(queryByTestId('closeLeftDrawerBtn') as HTMLElement);
   });
 });
