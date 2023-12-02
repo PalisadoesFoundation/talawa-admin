@@ -136,10 +136,17 @@ The process of proposing a change to Talawa Admin can be summarized as:
       3. _Creating your code coverage account_
           1. You can also see your code coverage online for your fork of the repo. This is provided by `codecov.io`
               1. Go to this link: `https://app.codecov.io/gh/XXXX/YYYY` where XXXX is your GitHub account username and YYYY is the name of the repository
-              2. Login to `codecov.io` using your GitHub account, and add your **repo** and **branches** to the `codecov.io` dashboard. 
+                        
+              2. Login to `codecov.io` using your GitHub account, and add your **repo** and **branches** to the `codecov.io` dashboard.
+                  ![Debugging Test Demo](https://i.postimg.cc/HL5kQJt4/authorise-codecov-github.jpg)
               3. Remember to add the `Repository Upload Token` for your forked repo. This can be found under `Settings` of your `codecov.io` account. 
-              4. Use the value of this token to create a secret named CODE_COV for your forked repo. 
-              5. You will see your code coverage reports with every push to your repo after following these steps
+              ![Debugging Test Demo](https://i.postimg.cc/Kv6Xt0pw/homescrenn.jpg)
+              4. Click on Setup Repo option
+              [![Code-cov-token.jpg](https://i.postimg.cc/zv3mF6rZ/Code-cov-token.jpg)](https://postimg.cc/Cny6Fv5m)
+              
+              5. Use the value of this token to create a secret named CODE_COV for your forked repo.
+                  [![addd-your-key.jpg](https://i.postimg.cc/Kz0SLFCD/addd-your-key.jpg)](https://postimg.cc/gXLTb9zx)
+              6. You will see your code coverage reports with every push to your repo after following these steps
 2. After making changes you can add them to git locally using `git add <file_name>`(to add changes only in a particular file) or `git add .` (to add all changes).
 3. After adding the changes you need to commit them using `git commit -m '<commit message>'`(look at the commit guidelines below for commit messages).
 4. Once you have successfully commited your changes, you need to push the changes to the forked repo on github using: `git push origin <branch_name>`.(Here branch name must be name of the branch you want to push the changes to.)
