@@ -217,8 +217,8 @@ export default function OrgPostCard(
           id: props.id,
           title: postformState.posttitle,
           text: postformState.postinfo,
-          imageUrl,
-          videoUrl,
+          ...(imageUrl !== null && { imageUrl }),
+          ...(videoUrl !== null && { videoUrl }),
         },
       });
 
