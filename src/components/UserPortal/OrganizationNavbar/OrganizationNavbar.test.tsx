@@ -1,5 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
+import 'jest-localstorage-mock';
 import { act, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -232,5 +233,71 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     await wait();
 
     expect(cookies.get('i18next')).toBe('zh');
+  });
+
+  test('Component should be rendered properly if plugins with view are present in localStorage', async () => {
+    const testPlugins = [
+      {
+        pluginName: 'TestPlugin1',
+        alias: 'testPlugin1',
+        link: '/testPlugin1',
+        translated: 'Test Plugin 1',
+        view: true,
+      },
+    ];
+    localStorage.setItem('talawaPlugins', JSON.stringify(testPlugins));
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationNavbar {...navbarProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    testPlugins.forEach((plugin) => {
+      expect(screen.getByText(plugin.translated)).toBeInTheDocument();
+    });
+
+    localStorage.removeItem('talawaPlugins');
+  });
+
+  test('Component should be rendered properly if plugins without view are present in localStorage', async () => {
+    const testPlugins = [
+      {
+        pluginName: 'TestPlugin1',
+        alias: 'testPlugin1',
+        link: '/testPlugin1',
+        translated: 'Test Plugin 1',
+        view: false,
+      },
+    ];
+    localStorage.setItem('talawaPlugins', JSON.stringify(testPlugins));
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationNavbar {...navbarProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    testPlugins.forEach((plugin) => {
+      expect(screen.getByText(plugin.translated)).not.toBeInTheDocument();
+    });
+
+    localStorage.removeItem('talawaPlugins');
   });
 });
