@@ -102,12 +102,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     // { variables: {  } }
   );
   function getPluginIndex(pluginName: string, pluginsArray: Plugin[]): number {
-    for (let i = 0; i < pluginsArray.length; i++) {
-      if (pluginsArray[i].pluginName === pluginName) {
-        return i; // Return the index of the matching object
-      }
-    }
-    return -1; // Return -1 if not found
+    return pluginsArray.findIndex((plugin) => plugin.pluginName === pluginName);
   }
 
   if (updatedPluginData != undefined) {
