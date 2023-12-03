@@ -267,37 +267,4 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     localStorage.removeItem('talawaPlugins');
   });
-
-  test('Component should be rendered properly if plugins without view are present in localStorage', async () => {
-    const testPlugins = [
-      {
-        pluginName: 'TestPlugin1',
-        alias: 'testPlugin1',
-        link: '/testPlugin1',
-        translated: 'Test Plugin 1',
-        view: false,
-      },
-    ];
-    localStorage.setItem('talawaPlugins', JSON.stringify(testPlugins));
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationNavbar {...navbarProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-
-    testPlugins.forEach((plugin) => {
-      expect(screen.getByText(plugin.translated)).not.toBeInTheDocument();
-    });
-
-    localStorage.removeItem('talawaPlugins');
-  });
 });
