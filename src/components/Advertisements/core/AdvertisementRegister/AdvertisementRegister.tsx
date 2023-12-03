@@ -6,6 +6,7 @@ import { useMutation } from '@apollo/client';
 import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
 import dayjs from 'dayjs';
 
 interface InterfaceAddOnRegisterProps {
@@ -31,7 +32,9 @@ function advertisementRegister({
 
   const handleClose = (): void => setShow(false);
   const handleShow = (): void => setShow(true);
-  const [create] = useMutation(ADD_ADVERTISEMENT_MUTATION);
+  const [create] = useMutation(ADD_ADVERTISEMENT_MUTATION, {
+    refetchQueries: [ADVERTISEMENTS_GET],
+  });
 
   //getting orgId from URL
   const currentOrg = window.location.href.split('/id=')[1] + '';
@@ -59,9 +62,15 @@ function advertisementRegister({
 
       if (data) {
         toast.success('Advertisement created successfully');
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        setFormState({
+          name: '',
+          link: '',
+          type: 'BANNER',
+          startDate: new Date(),
+          endDate: new Date(),
+          orgId: currentOrg,
+        });
+        handleClose();
       }
     } catch (error) {
       console.log('error occured', error);
