@@ -140,12 +140,14 @@ The process of proposing a change to Talawa Admin can be summarized as:
               2. Login to `codecov.io` using your GitHub account, and add your **repo** and **branches** to the `codecov.io` dashboard.
                   ![Debugging Test Demo](/public/images/codecov/authorise-codecov-github.jpg)
               3. Remember to add the `Repository Upload Token` for your forked repo. This can be found under `Settings` of your `codecov.io` account. 
-              ![Debugging Test Demo](/public/images/codecov/homescrenn%20(1).jpg)
+
               4. Click on Setup Repo option
-              [![Code-cov-token.jpg](/public/images/codecov/Code-cov-token.jpg)]()
+                  ![Debugging Test Demo](/public/images/codecov/homescrenn%20(1).jpg)
               5. Use the value of this token to create a secret named CODE_COV for your forked repo.
+              [![Code-cov-token.jpg](/public/images/codecov/Code-cov-token.jpg)]()
                   [![addd-your-key.jpg](/public/images/codecov/addd-your-key.jpg)]()
               6. You will see your code coverage reports with every push to your repo after following these steps
+               [![results.jpg](/public/images/codecov/results.jpg)]()
 2. After making changes you can add them to git locally using `git add <file_name>`(to add changes only in a particular file) or `git add .` (to add all changes).
 3. After adding the changes you need to commit them using `git commit -m '<commit message>'`(look at the commit guidelines below for commit messages).
 4. Once you have successfully commited your changes, you need to push the changes to the forked repo on github using: `git push origin <branch_name>`.(Here branch name must be name of the branch you want to push the changes to.)
