@@ -201,24 +201,26 @@ export default function OrgPostCard(
     e.preventDefault();
 
     try {
-      let imageUrl = null;
-      let videoUrl = null;
-
-      if (e.target?.postphoto && e.target?.postphoto.files.length > 0) {
-        imageUrl = postformState.postphoto;
-      }
-
-      if (e.target?.postvideo && e.target?.postvideo.files.length > 0) {
-        videoUrl = postformState.postvideo;
-      }
+      const imageInput = document.getElementById(
+        'postImageUrl'
+      ) as HTMLInputElement;
+      const videoInput = document.getElementById(
+        'postVideoUrl'
+      ) as HTMLInputElement;
 
       const { data } = await updatePostMutation({
         variables: {
           id: props.id,
           title: postformState.posttitle,
           text: postformState.postinfo,
-          ...(imageUrl !== null && { imageUrl }),
-          ...(videoUrl !== null && { videoUrl }),
+          ...((postformState.postphoto !== null ||
+            (imageInput && imageInput.value === '')) && {
+            imageUrl: postformState.postphoto,
+          }),
+          ...((postformState.postvideo !== null ||
+            (videoInput && videoInput.value === '')) && {
+            videoUrl: postformState.postvideo,
+          }),
         },
       });
 
