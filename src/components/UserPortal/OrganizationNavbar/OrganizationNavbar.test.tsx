@@ -1,9 +1,10 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
+import 'jest-localstorage-mock';
 import { act, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Router } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import cookies from 'js-cookie';
@@ -13,30 +14,105 @@ import * as getOrganizationId from 'utils/getOrganizationId';
 import OrganizationNavbar from './OrganizationNavbar';
 import userEvent from '@testing-library/user-event';
 import { USER_ORGANIZATION_CONNECTION } from 'GraphQl/Queries/Queries';
+import { PLUGIN_SUBSCRIPTION } from 'GraphQl/Mutations/mutations';
 
-const MOCKS = [
+import { createMemoryHistory } from 'history';
+
+const organizationId = 'org1234';
+
+const MOCK_ORGANIZATION_CONNECTION = {
+  request: {
+    query: USER_ORGANIZATION_CONNECTION,
+    variables: {
+      id: organizationId,
+    },
+  },
+  result: {
+    data: {
+      organizationsConnection: [
+        {
+          __typename: 'Organization',
+          _id: '6401ff65ce8e8406b8f07af2',
+          image: '',
+          name: 'anyOrganization1',
+          description: 'desc',
+          isPublic: true,
+          creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
+        },
+      ],
+    },
+  },
+};
+
+const MOCKS = [MOCK_ORGANIZATION_CONNECTION];
+
+const PLUGIN_SUBSCRIPTION_1 = [
+  MOCK_ORGANIZATION_CONNECTION,
   {
     request: {
-      query: USER_ORGANIZATION_CONNECTION,
-      variables: {
-        id: '',
-      },
+      query: PLUGIN_SUBSCRIPTION,
     },
     result: {
       data: {
-        organizationsConnection: [
-          {
-            __typename: 'Organization',
-            _id: '6401ff65ce8e8406b8f07af2',
-            image: '',
-            name: 'anyOrganization1',
-            description: 'desc',
-            isPublic: true,
-            creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
-          },
-        ],
+        onPluginUpdate: {
+          pluginName: 'TestPlugin1',
+          _id: '123',
+          pluginDesc: 'desc',
+          uninstalledOrgs: [organizationId],
+        },
       },
+      _loadingSub: false,
     },
+  },
+];
+
+const PLUGIN_SUBSCRIPTION_2 = [
+  MOCK_ORGANIZATION_CONNECTION,
+  {
+    request: {
+      query: PLUGIN_SUBSCRIPTION,
+    },
+    result: {
+      data: {
+        onPluginUpdate: {
+          pluginName: 'TestPlugin1',
+          _id: '123',
+          pluginDesc: 'desc',
+          uninstalledOrgs: [],
+        },
+      },
+      _loadingSub: false,
+    },
+  },
+];
+
+const PLUGIN_SUBSCRIPTION_3 = [
+  MOCK_ORGANIZATION_CONNECTION,
+  {
+    request: {
+      query: PLUGIN_SUBSCRIPTION,
+    },
+    result: {
+      data: {
+        onPluginUpdate: {
+          pluginName: 'TestPlugin100',
+          _id: '123',
+          pluginDesc: 'desc',
+          uninstalledOrgs: [organizationId],
+        },
+      },
+      _loadingSub: false,
+    },
+  },
+];
+
+const testPlugins = [
+  {
+    pluginName: 'TestPlugin1',
+    alias: 'testPlugin1',
+    link: '/testPlugin1',
+    translated: 'Test Plugin 1',
+    view: true,
   },
 ];
 
@@ -49,6 +125,9 @@ async function wait(ms = 100): Promise<void> {
 }
 
 const link = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(PLUGIN_SUBSCRIPTION_1, true);
+const link3 = new StaticMockLink(PLUGIN_SUBSCRIPTION_2, true);
+const link4 = new StaticMockLink(PLUGIN_SUBSCRIPTION_3, true);
 
 const navbarProps = {
   currentPage: 'home',
@@ -74,7 +153,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
   const getOrganizationIdSpy = jest
     .spyOn(getOrganizationId, 'default')
     .mockImplementation(() => {
-      return '';
+      return organizationId;
     });
 
   afterEach(async () => {
@@ -106,6 +185,31 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     expect(screen.getByText('Events')).toBeInTheDocument();
     expect(screen.getByText('Donate')).toBeInTheDocument();
     // expect(screen.getByText('Chat')).toBeInTheDocument();
+  });
+
+  test('should navigate correctly on clicking a plugin', async () => {
+    const history = createMemoryHistory();
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Router history={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrganizationNavbar {...navbarProps} />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    const peoplePlugin = screen.getByText('People');
+    expect(peoplePlugin).toBeInTheDocument();
+
+    userEvent.click(peoplePlugin);
+
+    await wait();
+    expect(history.location.pathname).toBe(`/user/people/id=${organizationId}`);
   });
 
   test('The language is switched to English', async () => {
@@ -232,5 +336,89 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     await wait();
 
     expect(cookies.get('i18next')).toBe('zh');
+  });
+
+  test('Component should be rendered properly if plugins are present in localStorage', async () => {
+    localStorage.setItem('talawaPlugins', JSON.stringify(testPlugins));
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationNavbar {...navbarProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    testPlugins.forEach((plugin) => {
+      expect(screen.queryByText(plugin.translated)).toBeInTheDocument();
+    });
+
+    localStorage.removeItem('talawaPlugins');
+  });
+
+  test('should remove plugin if uninstalledOrgs contains organizationId', async () => {
+    localStorage.setItem('talawaPlugins', JSON.stringify(testPlugins));
+
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationNavbar {...navbarProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    testPlugins.forEach((plugin) => {
+      expect(screen.queryByText(plugin.translated)).not.toBeInTheDocument();
+    });
+  });
+
+  test('should render plugin if uninstalledOrgs does not contain organizationId', async () => {
+    localStorage.setItem('talawaPlugins', JSON.stringify(testPlugins));
+
+    render(
+      <MockedProvider addTypename={false} link={link3}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationNavbar {...navbarProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    testPlugins.forEach((plugin) => {
+      expect(screen.queryByText(plugin.translated)).toBeInTheDocument();
+    });
+  });
+
+  test('should do nothing if pluginName is not found in the rendered plugins', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link4}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationNavbar {...navbarProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
   });
 });
