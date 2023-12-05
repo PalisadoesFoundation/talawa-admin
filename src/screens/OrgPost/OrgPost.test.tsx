@@ -1,7 +1,13 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router-dom';
-import { act, render, screen, fireEvent } from '@testing-library/react';
+import {
+  act,
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import 'jest-location-mock';
@@ -10,7 +16,10 @@ import { I18nextProvider } from 'react-i18next';
 import OrgPost from './OrgPost';
 import { store } from 'state/store';
 import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
-import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  CREATE_POST_MUTATION,
+  TOGGLE_PINNED_POST,
+} from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { ToastContainer } from 'react-toastify';
@@ -102,6 +111,21 @@ const MOCKS = [
         data: {
           createPost: {
             _id: '453',
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: TOGGLE_PINNED_POST,
+      variables: {
+        id: '32',
+      },
+      result: {
+        data: {
+          togglePostPin: {
+            _id: '32',
           },
         },
       },
@@ -337,6 +361,57 @@ describe('Organisation Post Page', () => {
     const createPostBtn = screen.getByTestId('createPostBtn');
     fireEvent.click(createPostBtn);
   }, 15000);
+
+  test('setPostFormState updates the pinned state correctly', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <OrgPost />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+
+      await wait(500);
+      userEvent.click(screen.getByTestId('createPostModalBtn'));
+      userEvent.click(screen.getByTestId(/ispinnedpost/i));
+      await wait(500);
+    });
+    expect(screen.getByTestId(/ispinnedpost/i)).toBeChecked();
+  });
+
+  test('should toggle pin when post is created', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <OrgPost />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+
+      await wait(500);
+      userEvent.click(screen.getByTestId('createPostModalBtn'));
+      userEvent.click(screen.getByTestId(/ispinnedpost/i));
+      await wait(500);
+    });
+    fireEvent.click(screen.getByTestId(/createPostBtn/i));
+    await waitFor(() => {
+      expect(MOCKS[3].request.variables).toEqual({
+        id: '32',
+      });
+    });
+  });
 
   test('Create post and preview', async () => {
     render(

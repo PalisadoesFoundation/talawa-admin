@@ -54,18 +54,11 @@ function orgPost(): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
   const [toggle] = useMutation(TOGGLE_PINNED_POST);
   const togglePostPin = async (_id: string): Promise<void> => {
-    try {
-      const { data } = await toggle({
-        variables: {
-          id: _id,
-        },
-      });
-      return data;
-    } catch (error: any) {
-      console.log(error);
-      /* istanbul ignore next */
-      errorHandler(t, error);
-    }
+    await toggle({
+      variables: {
+        id: _id,
+      },
+    });
   };
 
   const showInviteModal = (): void => {
