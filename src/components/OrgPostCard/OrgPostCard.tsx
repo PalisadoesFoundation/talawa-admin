@@ -42,7 +42,8 @@ export default function OrgPostCard(
     postvideo: '',
     pinned: false,
   });
-
+  const [postPhotoUpdated, setPostPhotoUpdated] = useState(false);
+  const [postVideoUpdated, setPostVideoUpdated] = useState(false);
   const [togglePost, setPostToggle] = useState('Read more');
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -80,6 +81,8 @@ export default function OrgPostCard(
       postvideo: props.postVideo,
       pinned: props.pinned,
     });
+    setPostPhotoUpdated(false);
+    setPostVideoUpdated(false);
     setShowEditModal((prev) => !prev);
   };
   const toggleShowDeleteModal = (): void => setShowDeleteModal((prev) => !prev);
@@ -105,6 +108,7 @@ export default function OrgPostCard(
       ...postformState,
       postphoto: '',
     });
+    setPostPhotoUpdated(true);
     const fileInput = document.getElementById(
       'postImageUrl'
     ) as HTMLInputElement;
@@ -118,6 +122,7 @@ export default function OrgPostCard(
       ...postformState,
       postvideo: '',
     });
+    setPostVideoUpdated(true);
     const fileInput = document.getElementById(
       'postVideoUrl'
     ) as HTMLInputElement;
@@ -201,24 +206,15 @@ export default function OrgPostCard(
     e.preventDefault();
 
     try {
-      const imageInput = document.getElementById(
-        'postImageUrl'
-      ) as HTMLInputElement;
-      const videoInput = document.getElementById(
-        'postVideoUrl'
-      ) as HTMLInputElement;
-
       const { data } = await updatePostMutation({
         variables: {
           id: props.id,
           title: postformState.posttitle,
           text: postformState.postinfo,
-          ...((postformState.postphoto !== null ||
-            (imageInput && imageInput.value === '')) && {
+          ...(postPhotoUpdated && {
             imageUrl: postformState.postphoto,
           }),
-          ...((postformState.postvideo !== null ||
-            (videoInput && videoInput.value === '')) && {
+          ...(postVideoUpdated && {
             videoUrl: postformState.postvideo,
           }),
         },
@@ -533,7 +529,7 @@ export default function OrgPostCard(
                       ...prevPostFormState,
                       postphoto: '',
                     }));
-
+                    setPostPhotoUpdated(true);
                     const file = e.target.files?.[0];
                     if (file) {
                       setPostFormState({
@@ -582,6 +578,7 @@ export default function OrgPostCard(
                       ...prevPostFormState,
                       postvideo: '',
                     }));
+                    setPostVideoUpdated(true);
                     const target = e.target as HTMLInputElement;
                     const file = target.files && target.files[0];
                     if (file) {
