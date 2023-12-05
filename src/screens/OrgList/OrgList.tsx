@@ -31,17 +31,6 @@ import type {
 } from 'utils/interfaces';
 import styles from './OrgList.module.css';
 
-interface InterfaceOrgList {
-  _id: string;
-  name: string;
-  image: string | null;
-  location: string;
-  admins: { _id: string }[];
-  members: { _id: string }[];
-  creator: { _id: string; firstName: string; lastName: string };
-  createdAt: string;
-}
-
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
   const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
@@ -299,9 +288,9 @@ function orgList(): JSX.Element {
   };
 
   const sortOrgs = (
-    orgs: InterfaceOrgList[],
+    orgs: InterfaceOrgConnectionInfoType[],
     sortingOption: string
-  ): InterfaceOrgList[] => {
+  ): InterfaceOrgConnectionInfoType[] => {
     const sortedOrgs = [...orgs];
 
     if (sortingOption === 'latest') {

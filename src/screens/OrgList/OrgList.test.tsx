@@ -1,6 +1,12 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen, fireEvent } from '@testing-library/react';
+import {
+  act,
+  render,
+  screen,
+  fireEvent,
+  cleanup,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
@@ -11,6 +17,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrgList from './OrgList';
+
 import { MOCKS, MOCKS_ADMIN, MOCKS_EMPTY } from './OrgListMocks';
 
 async function wait(ms = 100): Promise<void> {
@@ -23,6 +30,7 @@ async function wait(ms = 100): Promise<void> {
 
 afterEach(() => {
   localStorage.clear();
+  cleanup();
 });
 
 describe('Organisations Page testing as SuperAdmin', () => {
