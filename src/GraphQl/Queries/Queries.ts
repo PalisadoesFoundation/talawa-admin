@@ -1,7 +1,6 @@
 import gql from 'graphql-tag';
 
-//Query List
-
+// Query List
 // Check Auth
 
 export const CHECK_AUTH = gql`
