@@ -617,6 +617,7 @@ export const ORGANIZATION_POST_CONNECTION_LIST = gql`
           firstName
           lastName
         }
+        pinned
       }
     }
   }
