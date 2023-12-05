@@ -4,7 +4,7 @@ import { Search } from '@mui/icons-material';
 import SortIcon from '@mui/icons-material/Sort';
 import Row from 'react-bootstrap/Row';
 import Modal from 'react-bootstrap/Modal';
-import { Form } from 'react-bootstrap';
+import { Col, Form } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
@@ -20,6 +20,7 @@ import NotFound from 'components/NotFound/NotFound';
 import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
 import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
+import { TOGGLE_PINNED_POST } from 'GraphQl/Mutations/mutations';
 
 interface InterfaceOrgPost {
   _id: string;
@@ -45,11 +46,27 @@ function orgPost(): JSX.Element {
     postinfo: '',
     postImage: '',
     postVideo: '',
+    pinned: false,
   });
   const [sortingOption, setSortingOption] = useState('latest');
   const [showTitle, setShowTitle] = useState(true);
 
   const currentUrl = window.location.href.split('=')[1];
+  const [toggle] = useMutation(TOGGLE_PINNED_POST);
+  const togglePostPin = async (_id: string): Promise<void> => {
+    try {
+      const { data } = await toggle({
+        variables: {
+          id: _id,
+        },
+      });
+      return data;
+    } catch (error: any) {
+      console.log(error);
+      /* istanbul ignore next */
+      errorHandler(t, error);
+    }
+  };
 
   const showInviteModal = (): void => {
     setPostModalIsOpen(true);
@@ -61,6 +78,7 @@ function orgPost(): JSX.Element {
       postinfo: '',
       postImage: '',
       postVideo: '',
+      pinned: false,
     });
   };
 
@@ -95,6 +113,7 @@ function orgPost(): JSX.Element {
       postinfo: _postinfo,
       postImage,
       postVideo,
+      pinned,
     } = postformState;
 
     const posttitle = _posttitle.trim();
@@ -111,10 +130,16 @@ function orgPost(): JSX.Element {
           text: postinfo,
           organizationId: currentUrl,
           file: postImage || postVideo,
+          pinned: pinned,
         },
       });
       /* istanbul ignore next */
       if (data) {
+        if (pinned) {
+          // Call togglePostPin to update the pinning information in the backend
+          await togglePostPin(data.createPost._id);
+          toast.success('Post Pinned Successfully');
+        }
         toast.success('Congratulations! You have Posted Something.');
         refetch();
         setPostFormState({
@@ -122,6 +147,7 @@ function orgPost(): JSX.Element {
           postinfo: '',
           postImage: '',
           postVideo: '',
+          pinned: false,
         });
         setPostModalIsOpen(false); // close the modal
       }
@@ -481,6 +507,23 @@ function orgPost(): JSX.Element {
                 )}
               </>
             )}
+            <Row className="mb-3">
+              <Col>
+                <Form.Label htmlFor="ispinnedpost">Pinned Post</Form.Label>
+                <Form.Switch
+                  id="ispinnedpost"
+                  data-testid="ispinnedpost"
+                  type="checkbox"
+                  defaultChecked={postformState.pinned}
+                  onChange={(e): void => {
+                    setPostFormState({
+                      ...postformState,
+                      pinned: e.target.checked,
+                    });
+                  }}
+                />
+              </Col>
+            </Row>
           </Modal.Body>
           <Modal.Footer>
             <Button
