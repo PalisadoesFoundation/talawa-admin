@@ -8,6 +8,7 @@ import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { REMOVE_SAMPLE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 import styles from './DeleteOrg.module.css';
+import { useHistory } from 'react-router-dom';
 
 function deleteOrg(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -29,16 +30,17 @@ function deleteOrg(): JSX.Element {
     },
   });
 
+  const history = useHistory();
+
   const deleteOrg = async (): Promise<void> => {
     if (data && data.isSampleOrganization) {
-      removeSampleOrganization()
-        .then(() => {
-          toast.success('Successfully deleted sample Organization');
-        })
-        .catch((error) => {
-          toast.error(error.message);
-        });
-      window.location.replace('/orglist');
+      try {
+        await removeSampleOrganization();
+        toast.success('Successfully deleted sample Organization');
+        history.push('/orglist');
+      } catch (error: any) {
+        errorHandler(t, error);
+      }
     } else {
       try {
         await del({
@@ -46,7 +48,8 @@ function deleteOrg(): JSX.Element {
             id: currentUrl,
           },
         });
-        window.location.replace('/orglist');
+        toast.success('Successfully deleted Organization');
+        history.push('/orglist');
       } catch (error: any) {
         errorHandler(t, error);
       }
