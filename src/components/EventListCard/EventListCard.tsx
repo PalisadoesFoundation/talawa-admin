@@ -224,6 +224,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                 className={styles.customButton}
                 variant="success"
                 onClick={openEventDashboard}
+                data-testid="showEventDashboardBtn"
               >
                 {' '}
                 Show Event Dashboard{' '}
