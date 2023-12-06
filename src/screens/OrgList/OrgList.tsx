@@ -52,9 +52,10 @@ function orgList(): JSX.Element {
 
   const perPageResult = 8;
   const [isLoading, setIsLoading] = useState(true);
-  const [sortingOption, setSortingOption] = useState('');
-  const [selectedSortOption, setSelectedSortOption] = useState(t('sort'));
-  const [isSortOptionSelected, setIsSortOptionSelected] = useState(false);
+  const [sortingState, setSortingState] = useState({
+    option: '',
+    selectedOption: t('sort'),
+  });
   const [hasMore, sethasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
@@ -116,11 +117,11 @@ function orgList(): JSX.Element {
     if (orgsData && orgsData.organizationsConnection) {
       const newDisplayedOrgs = sortOrgs(
         orgsData.organizationsConnection,
-        sortingOption
+        sortingState.option
       );
       setDisplayedOrgs(newDisplayedOrgs);
     }
-  }, [orgsData, sortingOption]);
+  }, [orgsData, sortingState.option]);
 
   // To clear the search field and form fields on unmount
   useEffect(() => {
@@ -286,9 +287,10 @@ function orgList(): JSX.Element {
 
   const debouncedHandleSearchByName = debounce(handleSearchByName);
   const handleSorting = (option: string): void => {
-    setSortingOption(option);
-    setSelectedSortOption(t(option));
-    setIsSortOptionSelected(true);
+    setSortingState({
+      option,
+      selectedOption: t(option),
+    });
   };
 
   const sortOrgs = (
@@ -343,11 +345,13 @@ function orgList(): JSX.Element {
                 data-testid="sort"
               >
                 <Dropdown.Toggle
-                  variant={isSortOptionSelected ? 'success' : 'outline-success'}
+                  variant={
+                    sortingState.option === '' ? 'outline-success' : 'success'
+                  }
                   data-testid="sortOrgs"
                 >
                   <SortIcon className={'me-1'} />
-                  {selectedSortOption}
+                  {sortingState.selectedOption}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item
