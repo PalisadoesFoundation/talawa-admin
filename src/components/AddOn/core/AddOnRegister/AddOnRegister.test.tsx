@@ -3,7 +3,6 @@ import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { ADD_PLUGIN_MUTATION } from 'GraphQl/Mutations/mutations';
-import { StaticMockLink } from 'utils/StaticMockLink';
 import AddOnRegister from './AddOnRegister';
 import {
   ApolloClient,
@@ -83,6 +82,21 @@ describe('Testing AddOnRegister', () => {
     id: '6234d8bf6ud937ddk70ecc5c9',
   };
 
+  const original = window.location;
+  beforeAll(() => {
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: { reload: jest.fn() },
+    });
+  });
+
+  afterAll(() => {
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: original,
+    });
+  });
+
   test('should render modal and take info to add plugin for registered organization', async () => {
     await act(async () => {
       render(
@@ -139,8 +153,38 @@ describe('Testing AddOnRegister', () => {
       userEvent.click(screen.getByTestId('addonregisterBtn'));
 
       await wait(100);
-
       expect(toast.success).toBeCalledWith('Plugin Added Successfully');
+    });
+  });
+
+  test('Expect the window to reload after successful plugin addition', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} mocks={mocks}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <AddOnRegister {...props} />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+      await waitFor(() => new Promise((resolve) => setTimeout(resolve, 0)));
+
+      userEvent.click(screen.getByRole('button', { name: /Add New/i }));
+      await wait(100);
+      expect(screen.getByTestId('addonregisterBtn')).toBeInTheDocument();
+      userEvent.type(screen.getByTestId('pluginName'), pluginData.pluginName);
+      userEvent.type(
+        screen.getByTestId('pluginCreatedBy'),
+        pluginData.pluginCreatedBy
+      );
+      userEvent.type(screen.getByTestId('pluginDesc'), pluginData.pluginDesc);
+      userEvent.click(screen.getByTestId('addonregisterBtn'));
+
+      await wait(3000); // Waiting for 3 seconds to reload the page as timeout is set to 2 seconds in the component
+      expect(window.location.reload).toHaveBeenCalled();
     });
   });
 });
