@@ -5,11 +5,12 @@ import type { InterfaceCardItem } from './CardItem';
 import dayjs from 'dayjs';
 
 describe('Testing the Organization Card', () => {
-  test('should render props and text elements For event card', () => {
+  test('Should render props and text elements For event card', () => {
     const props: InterfaceCardItem = {
       type: 'Event',
       title: 'Event Title',
       time: '2023-09-03',
+      location: 'Event Location',
     };
 
     render(<CardItem {...props} />);
@@ -18,6 +19,7 @@ describe('Testing the Organization Card', () => {
     expect(
       screen.getByText(dayjs(props.time).format('MMM D, YYYY'))
     ).toBeInTheDocument();
+    expect(screen.getByText(/Event Location/i)).toBeInTheDocument();
   });
 
   test('Should render props and text elements for Post card', () => {
@@ -25,6 +27,13 @@ describe('Testing the Organization Card', () => {
       type: 'Post',
       title: 'Post Title',
       time: '2023-09-03',
+      creator: {
+        email: 'johndoe@example.com',
+        firstName: 'John',
+        lastName: 'Doe',
+        __typename: 'User',
+        _id: '1',
+      },
     };
 
     render(<CardItem {...props} />);
@@ -33,6 +42,7 @@ describe('Testing the Organization Card', () => {
     expect(
       screen.getByText(dayjs(props.time).format('MMM D, YYYY'))
     ).toBeInTheDocument();
+    expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
   });
 
   test('Should render props and text elements for Membership Request card', () => {
