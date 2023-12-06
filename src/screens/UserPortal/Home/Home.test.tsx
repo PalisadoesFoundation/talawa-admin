@@ -151,40 +151,31 @@ async function wait(ms = 100): Promise<void> {
 }
 
 describe('Testing Home Screen [User Portal]', () => {
-  jest.mock('utils/getOrganizationId');
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.spyOn(getOrganizationId, 'default').mockReturnValue('');
 
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: jest.fn().mockImplementation((query) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addListener: jest.fn(), // Deprecated
-      removeListener: jest.fn(), // Deprecated
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-      dispatchEvent: jest.fn(),
-    })),
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: jest.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      })),
+    });
   });
 
   test('Screen should be rendered properly', async () => {
     const getOrganizationIdSpy = jest
       .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
+      .mockReturnValue('');
 
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Home />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
+    renderComponent();
 
     await wait();
 
@@ -194,21 +185,9 @@ describe('Testing Home Screen [User Portal]', () => {
   test('Screen should be rendered properly when user types on the Post Input', async () => {
     const getOrganizationIdSpy = jest
       .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
+      .mockReturnValue('');
 
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Home />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
+    renderComponent();
 
     await wait();
 
@@ -217,27 +196,15 @@ describe('Testing Home Screen [User Portal]', () => {
     const randomPostInput = 'This is a test';
     userEvent.type(screen.getByTestId('postInput'), randomPostInput);
 
-    expect(screen.queryByText(randomPostInput)).toBeInTheDocument();
+    expect(screen.getByText(randomPostInput)).toBeInTheDocument();
   });
 
   test('Error toast should be visible when user tries to create a post with an empty body', async () => {
     const getOrganizationIdSpy = jest
       .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
+      .mockReturnValue('');
 
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Home />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
+    renderComponent();
 
     await wait();
 
@@ -245,7 +212,7 @@ describe('Testing Home Screen [User Portal]', () => {
 
     userEvent.click(screen.getByTestId('postAction'));
 
-    expect(toast.error).toBeCalledWith(
+    expect(toast.error).toHaveBeenCalledWith(
       "Can't create a post with an empty body."
     );
   });
@@ -253,10 +220,28 @@ describe('Testing Home Screen [User Portal]', () => {
   test('Info toast should be visible when user tries to create a post with a valid body', async () => {
     const getOrganizationIdSpy = jest
       .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
+      .mockReturnValue('');
 
+    renderComponent();
+
+    await wait();
+
+    expect(getOrganizationIdSpy).toHaveBeenCalled();
+
+    const randomPostInput = 'This is a test';
+    userEvent.type(screen.getByTestId('postInput'), randomPostInput);
+
+    expect(screen.getByText(randomPostInput)).toBeInTheDocument();
+
+    userEvent.click(screen.getByTestId('postAction'));
+
+    expect(toast.error).not.toHaveBeenCalled();
+    expect(toast.info).toHaveBeenCalledWith(
+      'Processing your post. Please wait.'
+    );
+  });
+
+  function renderComponent(): void {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -268,18 +253,5 @@ describe('Testing Home Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>
     );
-
-    await wait();
-
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
-
-    const randomPostInput = 'This is a test';
-    userEvent.type(screen.getByTestId('postInput'), randomPostInput);
-    expect(screen.queryByText(randomPostInput)).toBeInTheDocument();
-
-    userEvent.click(screen.getByTestId('postAction'));
-
-    expect(toast.error).not.toBeCalledWith();
-    expect(toast.info).toBeCalledWith('Processing your post. Please wait.');
-  });
+  }
 });
