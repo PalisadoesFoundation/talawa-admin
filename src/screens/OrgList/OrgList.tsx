@@ -52,7 +52,9 @@ function orgList(): JSX.Element {
 
   const perPageResult = 8;
   const [isLoading, setIsLoading] = useState(true);
-  const [sortingOption, setSortingOption] = useState('latest');
+  const [sortingOption, setSortingOption] = useState('');
+  const [selectedSortOption, setSelectedSortOption] = useState(t('sort'));
+  const [isSortOptionSelected, setIsSortOptionSelected] = useState(false);
   const [hasMore, sethasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
@@ -285,6 +287,8 @@ function orgList(): JSX.Element {
   const debouncedHandleSearchByName = debounce(handleSearchByName);
   const handleSorting = (option: string): void => {
     setSortingOption(option);
+    setSelectedSortOption(t(option));
+    setIsSortOptionSelected(true);
   };
 
   const sortOrgs = (
@@ -293,12 +297,12 @@ function orgList(): JSX.Element {
   ): InterfaceOrgConnectionInfoType[] => {
     const sortedOrgs = [...orgs];
 
-    if (sortingOption === 'latest') {
+    if (sortingOption === 'Latest') {
       sortedOrgs.sort(
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
-    } else if (sortingOption === 'oldest') {
+    } else if (sortingOption === 'Oldest') {
       sortedOrgs.sort(
         (a, b) =>
           new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
@@ -339,21 +343,21 @@ function orgList(): JSX.Element {
                 data-testid="sort"
               >
                 <Dropdown.Toggle
-                  variant="outline-success"
+                  variant={isSortOptionSelected ? 'success' : 'outline-success'}
                   data-testid="sortOrgs"
                 >
                   <SortIcon className={'me-1'} />
-                  {t('sort')}
+                  {selectedSortOption}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item
-                    onClick={(): void => handleSorting('latest')}
+                    onClick={(): void => handleSorting('Latest')}
                     data-testid="latest"
                   >
                     {t('Latest')}
                   </Dropdown.Item>
                   <Dropdown.Item
-                    onClick={(): void => handleSorting('oldest')}
+                    onClick={(): void => handleSorting('Oldest')}
                     data-testid="oldest"
                   >
                     {t('Oldest')}
