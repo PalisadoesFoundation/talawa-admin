@@ -150,136 +150,70 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+const setupComponent = async (): Promise<void> => {
+  jest.spyOn(getOrganizationId, 'default').mockReturnValue('');
+  render(
+    <MockedProvider addTypename={false} link={link}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Home />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>
+  );
+
+  await wait();
+};
+
+const typeInPostInput = (text: string): void => {
+  userEvent.type(screen.getByTestId('postInput'), text);
+};
+
+const expectErrorToast = (message: string): void => {
+  expect(toast.error).toHaveBeenCalledWith(message);
+};
+
 describe('Testing Home Screen [User Portal]', () => {
-  jest.mock('utils/getOrganizationId');
-
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: jest.fn().mockImplementation((query) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addListener: jest.fn(), // Deprecated
-      removeListener: jest.fn(), // Deprecated
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-      dispatchEvent: jest.fn(),
-    })),
+  test('should render the screen properly', async () => {
+    await setupComponent();
+    expect(getOrganizationId.default).toHaveBeenCalled();
   });
 
-  test('Screen should be rendered properly', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Home />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
-  });
-
-  test('Screen should be rendered properly when user types on the Post Input', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Home />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
+  test('should render the screen properly when user types on the Post Input', async () => {
+    await setupComponent();
+    expect(getOrganizationId.default).toHaveBeenCalled();
 
     const randomPostInput = 'This is a test';
-    userEvent.type(screen.getByTestId('postInput'), randomPostInput);
+    typeInPostInput(randomPostInput);
 
     expect(screen.queryByText(randomPostInput)).toBeInTheDocument();
   });
 
-  test('Error toast should be visible when user tries to create a post with an empty body', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Home />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
+  test('should show an error toast when user tries to create a post with an empty body', async () => {
+    await setupComponent();
+    expect(getOrganizationId.default).toHaveBeenCalled();
 
     userEvent.click(screen.getByTestId('postAction'));
 
-    expect(toast.error).toBeCalledWith(
-      "Can't create a post with an empty body."
-    );
+    expectErrorToast("Can't create a post with an empty body.");
   });
 
-  test('Info toast should be visible when user tries to create a post with a valid body', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Home />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
+  test('should show an info toast when user tries to create a post with a valid body', async () => {
+    await setupComponent();
+    expect(getOrganizationId.default).toHaveBeenCalled();
 
     const randomPostInput = 'This is a test';
-    userEvent.type(screen.getByTestId('postInput'), randomPostInput);
+    typeInPostInput(randomPostInput);
+
     expect(screen.queryByText(randomPostInput)).toBeInTheDocument();
 
     userEvent.click(screen.getByTestId('postAction'));
 
-    expect(toast.error).not.toBeCalledWith();
-    expect(toast.info).toBeCalledWith('Processing your post. Please wait.');
+    expect(toast.error).not.toHaveBeenCalled();
+    expect(toast.info).toHaveBeenCalledWith(
+      'Processing your post. Please wait.'
+    );
   });
 });
