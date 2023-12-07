@@ -55,7 +55,6 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
             )}
           </div>
           <div className={styles.content}>
-            <h4>{name} </h4>
             <h6 className="text-secondary">
               <LocationOnIcon fontSize="inherit" className="fs-5" />
               {location}
@@ -66,6 +65,7 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
             <h6>
               {t('members')}: <span>{members.length}</span>
             </h6>
+            <h6>{name} </h6>
           </div>
         </div>
         <Button
