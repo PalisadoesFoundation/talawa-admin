@@ -137,7 +137,7 @@ function organizationDashboard(): JSX.Element {
                   role="button"
                   className="mb-4"
                   onClick={(): void => {
-                    history.push(peopleLink);
+                    history.push(peopleLink, { role: 1 });
                   }}
                 >
                   <DashBoardCard

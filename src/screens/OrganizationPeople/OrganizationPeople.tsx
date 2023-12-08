@@ -1,6 +1,7 @@
 import { useLazyQuery } from '@apollo/client';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Container, Form } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -28,9 +29,12 @@ function organizationPeople(): JSX.Element {
 
   document.title = t('title');
 
+  const location = useLocation();
+  const role = location?.state as any;
+
   const currentUrl = window.location.href.split('=')[1];
 
-  const [state, setState] = useState(0);
+  const [state, setState] = useState(role?.role || 0);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
