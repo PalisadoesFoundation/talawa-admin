@@ -13,11 +13,18 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import Requests from './Requests';
-import { EMPTY_ORG_MOCKS, MOCKS, ORG_LIST_MOCK } from './RequestsMocks';
+import {
+  EMPTY_ORG_MOCKS,
+  EMPTY_REQUEST_MOCKS,
+  MOCKS,
+  ORG_LIST_MOCK,
+} from './RequestsMocks';
+import { userInfo } from 'os';
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_ORG_MOCKS, true);
 const link3 = new StaticMockLink(ORG_LIST_MOCK, true);
+const link4 = new StaticMockLink(EMPTY_REQUEST_MOCKS, true);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -87,6 +94,29 @@ describe('Testing Request screen', () => {
         </BrowserRouter>
       </MockedProvider>
     );
+
+    await wait();
+  });
+
+  test('Testing empty user requests', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link4}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    const searchInput = screen.getByTestId('searchByName');
+    userEvent.type(searchInput, 'l');
+
+    const notFoundDiv = await screen.findByTestId('searchAndNotFound');
+
+    expect(notFoundDiv).toBeInTheDocument();
 
     await wait();
   });
