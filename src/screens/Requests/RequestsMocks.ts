@@ -148,6 +148,98 @@ export const MOCKS = [
   },
 ];
 
+export const EMPTY_REQUEST_MOCKS = [
+  {
+    request: {
+      query: USER_ORGANIZATION_LIST,
+      variables: { id: localStorage.getItem('id') },
+    },
+    result: {
+      data: {
+        user: {
+          _id: '123',
+          userType: 'SUPERADMIN',
+          firstName: 'John',
+          lastName: 'Doe',
+          image: '',
+          email: 'John_Does_Palasidoes@gmail.com',
+          adminFor: {
+            _id: 1,
+            name: 'Akatsuki',
+            image: '',
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_LIST_REQUEST,
+      variables: {
+        adminApproved: false,
+        first: 12,
+        firstName_contains: '',
+        lastName_contains: '',
+        skip: 0,
+        userType: 'ADMIN',
+      },
+      notifyOnNetworkStatusChange: true,
+    },
+    result: {
+      data: {
+        users: [],
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_LIST_REQUEST,
+      variables: {
+        adminApproved: false,
+        first: 12,
+        firstName_contains: 'l',
+        lastName_contains: '',
+        skip: 0,
+        userType: 'ADMIN',
+      },
+      notifyOnNetworkStatusChange: true,
+    },
+    result: {
+      data: {
+        users: [],
+      },
+    },
+  },
+  {
+    request: {
+      query: ACCEPT_ADMIN_MUTATION,
+      variables: {
+        id: '123',
+        userType: 'ADMIN',
+      },
+    },
+    result: {
+      data: {
+        acceptAdmin: true,
+      },
+    },
+  },
+  {
+    request: {
+      query: REJECT_ADMIN_MUTATION,
+      variables: {
+        id: '123',
+        userType: 'ADMIN',
+      },
+    },
+    result: {
+      data: {
+        rejectAdmin: true,
+      },
+    },
+  },
+];
+
 export const EMPTY_ORG_MOCKS = [
   {
     request: {
