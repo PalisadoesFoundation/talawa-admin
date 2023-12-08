@@ -36,6 +36,7 @@
 .orgCard .innerContainer .content {
   flex: 1;
   margin-left: 1rem;
+  width: 70%;
 }
 
 .orgCard button {
@@ -76,4 +77,23 @@
     margin-left: auto;
     display: block;
   }
+}
+
+.flaskIcon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px 20px 0px 0px;
+}
+
+.manageBtn {
+  display: flex;
+  justify-content: space-around;
+  width: 150px;
+}
+
+.orgName {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }

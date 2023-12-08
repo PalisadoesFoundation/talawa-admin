@@ -3,12 +3,13 @@ import { act, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-
+import { BrowserRouter as Router } from 'react-router-dom';
 import UserUpdate from './UserUpdate';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import { toast } from 'react-toastify';
 
 const MOCKS = [
   {
@@ -80,6 +81,7 @@ describe('Testing User Update', () => {
   const props = {
     key: '123',
     id: '1',
+    toggleStateValue: jest.fn(),
   };
 
   const formData = {
@@ -95,7 +97,9 @@ describe('Testing User Update', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <UserUpdate {...props} />
+          <Router>
+            <UserUpdate {...props} />
+          </Router>
         </I18nextProvider>
       </MockedProvider>
     );
@@ -130,5 +134,26 @@ describe('Testing User Update', () => {
     expect(screen.getByPlaceholderText(/Last Name/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Email/i)).toBeInTheDocument();
     expect(screen.getByText(/Display Image/i)).toBeInTheDocument();
+  });
+  test('should display warnings for blank form submission', async () => {
+    jest.spyOn(toast, 'warning');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Router>
+            <UserUpdate {...props} />
+          </Router>
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByText(/Save Changes/i));
+
+    expect(toast.warning).toHaveBeenCalledWith('First Name cannot be blank!');
+    expect(toast.warning).toHaveBeenCalledWith('Last Name cannot be blank!');
+    expect(toast.warning).toHaveBeenCalledWith('Email cannot be blank!');
   });
 });

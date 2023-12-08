@@ -150,6 +150,25 @@ export const LOGIN_MUTATION = gql`
   }
 `;
 
+// to get the refresh token
+
+export const REFRESH_TOKEN_MUTATION = gql`
+  mutation RefreshToken($refreshToken: String!) {
+    refreshToken(refreshToken: $refreshToken) {
+      refreshToken
+      accessToken
+    }
+  }
+`;
+
+// to revoke a refresh token
+
+export const REVOKE_REFRESH_TOKEN = gql`
+  mutation RevokeRefreshTokenForUser {
+    revokeRefreshTokenForUser
+  }
+`;
+
 // To verify the google recaptcha
 
 export const RECAPTCHA_MUTATION = gql`
@@ -400,7 +419,34 @@ export const ADD_PLUGIN_MUTATION = gql`
     }
   }
 `;
-
+export const ADD_ADVERTISEMENT_MUTATION = gql`
+  mutation (
+    $orgId: ID!
+    $name: String!
+    $link: String!
+    $type: String!
+    $startDate: Date!
+    $endDate: Date!
+  ) {
+    createAdvertisement(
+      orgId: $orgId
+      name: $name
+      link: $link
+      type: $type
+      startDate: $startDate
+      endDate: $endDate
+    ) {
+      _id
+    }
+  }
+`;
+export const DELETE_ADVERTISEMENT_BY_ID = gql`
+  mutation ($id: ID!) {
+    deleteAdvertisementById(id: $id) {
+      success
+    }
+  }
+`;
 export const UPDATE_POST_MUTATION = gql`
   mutation UpdatePost(
     $id: ID!
@@ -654,6 +700,18 @@ export const UPDATE_USER_ROLE_IN_ORG_MUTATION = gql`
   }
 `;
 
+export const CREATE_SAMPLE_ORGANIZATION_MUTATION = gql`
+  mutation {
+    createSampleOrganization
+  }
+`;
+
+export const REMOVE_SAMPLE_ORGANIZATION_MUTATION = gql`
+  mutation {
+    removeSampleOrganization
+  }
+`;
+
 export const CREATE_DIRECT_CHAT = gql`
   mutation createDirectChat($userIds: [ID!]!, $organizationId: ID!) {
     createDirectChat(
@@ -679,6 +737,32 @@ export const TOGGLE_PINNED_POST = gql`
   mutation TogglePostPin($id: ID!) {
     togglePostPin(id: $id) {
       _id
+    }
+  }
+`;
+
+// Handles custom organization fields
+export const ADD_CUSTOM_FIELD = gql`
+  mutation ($organizationId: ID!, $type: String!, $name: String!) {
+    addOrganizationCustomField(
+      organizationId: $organizationId
+      type: $type
+      name: $name
+    ) {
+      name
+      type
+    }
+  }
+`;
+
+export const REMOVE_CUSTOM_FIELD = gql`
+  mutation ($organizationId: ID!, $customFieldId: ID!) {
+    removeOrganizationCustomField(
+      organizationId: $organizationId
+      customFieldId: $customFieldId
+    ) {
+      type
+      name
     }
   }
 `;

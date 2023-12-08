@@ -28,6 +28,11 @@
     "login_to_admin_portal": "Connexion à l'administration du portail",
     "OR": "OU"
   },
+  "latestEvents": {
+    "eventCardTitle": "Événements à venir",
+    "eventCardSeeAll": "Voir Tout",
+    "noEvents": "Aucun événement à venir"
+  },
   "listNavbar": {
     "talawa_portal": "Portail D'Administrateur Talawa",
     "roles": "Les rôles",
@@ -75,6 +80,7 @@
     "searchByName": "Rechercher par nom",
     "organizations": "Organisations",
     "createOrganization": "Créer une organisation",
+    "createSampleOrganization": "Créer une organisation d'exemple",
     "description": "La description",
     "location": "Emplacement",
     "isPublic": "Est publique",
@@ -86,14 +92,19 @@
     "cancel": "Annuler",
     "endOfResults": "Fin des résultats",
     "noOrgErrorTitle": "Organisations non trouvées",
+    "sampleOrgDuplicate": "Seule une organisation d'exemple est autorisée.",
     "noOrgErrorDescription": "Veuillez créer une organisation via le tableau de bord",
-    "noResultsFoundFor": "Aucun résultat trouvé pour "
+    "noResultsFoundFor": "Aucun résultat trouvé pour ",
+    "OR": "OU",
+    "sampleOrgSuccess": "Organisation d'exemple créée avec succès"
   },
   "orgListCard": {
     "admins": "Administrateurs",
     "members": "Membres",
-    "manage": "Faire en sorte"
+    "manage": "Faire en sorte",
+    "sampleOrganization": "Organisation d'exemple"
   },
+
   "paginationList": {
     "rowsPerPage": "lignes par page",
     "all": "Tout"
@@ -121,6 +132,8 @@
     "loadingUsers": "Chargement des utilisateurs...",
     "noUserFound": "Aucun utilisateur trouvé",
     "sort": "Trier",
+    "Oldest": "Les plus anciennes d'abord",
+    "Newest": "Les plus récentes d'abord",
     "filter": "Filtre",
     "roleUpdated": "Rôle mis à jour.",
     "noResultsFoundFor": "Aucun résultat trouvé pour ",
@@ -398,10 +411,12 @@
     "settings": "Réglages",
     "noData": "Pas de données",
     "otherSettings": "Autres paramètres",
-    "changeLanguage": "Changer la langue"
+    "changeLanguage": "Changer la langue",
+    "manageCustomFields": "Gérer les Champs Personnalisés"
   },
   "deleteOrg": {
     "deleteOrganization": "Supprimer l'organisation",
+    "deleteSampleOrganization": "Supprimer l'organisation d'exemple",
     "deleteMsg": "Voulez-vous supprimer cette organisation ?",
     "cancel": "Annuler",
     "confirmDelete": "Confirmer la suppression",
@@ -636,6 +651,14 @@
     "event": "Événement",
     "organization": "Organisation"
   },
+  "advertisement": {
+    "title": "Publicités",
+    "pHeading": "Gérer les publicités",
+    "activeAds": "Campagnes actives",
+    "archievedAds": "Campagnes terminées",
+    "pMessage": "Aucune publicité n'est présente pour cette campagne.",
+    "delete": "Supprimer"
+  },
   "userChat": {
     "chat": "Chat",
     "search": "Recherche",
@@ -644,5 +667,16 @@
   "userChatRoom": {
     "selectContact": "Sélectionnez un contact pour démarrer la conversation",
     "sendMessage": "Envoyer le message"
+  },
+  "orgProfileField": {
+    "loading": "Chargement...",
+    "noCustomField": "Aucun champ personnalisé disponible",
+    "customFieldName": "Nom du champ",
+    "enterCustomFieldName": "Entrez le nom du champ",
+    "customFieldType": "Type de champ",
+    "saveChanges": "Enregistrer les modifications",
+    "Supprimer le champ personnalisé": "Supprimer le champ personnalisé",
+    "fieldSuccessMessage": "Champ ajouté avec succès",
+    "fieldRemovalSuccess": "Champ supprimé avec succès"
   }
 }

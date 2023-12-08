@@ -109,15 +109,27 @@
 
 .justifysp {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
+  align-items: flex-start;
+  /* gap : 2px; */
 }
 
+.flexclm {
+  display: flex;
+  flex-direction: column;
+}
+
+.btngroup {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
 @media screen and (max-width: 1200px) {
   .justifysp {
     padding-left: 55px;
     display: flex;
-    justify-content: space-between;
-    width: 100%;
+    justify-content: space-evenly;
   }
 
   .mainpageright {
@@ -336,20 +348,26 @@
   border-color: #31bb6b;
   background-color: #31bb6b;
   color: white;
-  padding-right: 10px;
-  padding-left: 10px;
-  justify-content: flex-end;
-  float: right;
-  text-align: right;
   box-shadow: none;
   height: 2.5rem;
+  width: max-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .userImage {
-  width: 200px;
-  height: 200px;
+  width: 180px;
+  height: 180px;
   object-fit: cover;
   border-radius: 8px;
+}
+
+@media only screen and (max-width: 1200px) {
+  .userImage {
+    width: 100px;
+    height: 100px;
+  }
 }
 
 .activeBtn {

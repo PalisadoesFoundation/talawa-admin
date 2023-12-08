@@ -28,6 +28,11 @@
     "login_to_admin_portal": " 管理员门户登录 ",
     "OR": "或者"
   },
+  "latestEvents": {
+    "eventCardTitle": "即将举行的活动",
+    "eventCardSeeAll": "查看全部",
+    "noEvents": "暂无即将举行的活动"
+  },
   "listNavbar": {
     "talawa_portal": "塔拉瓦管理門戶",
     "roles": "角色",
@@ -75,6 +80,7 @@
     "searchByName": "按名稱搜索",
     "organizations": "组织",
     "createOrganization": "創建組織",
+    "createSampleOrganization": "创建示范组织",
     "description": "描述",
     "location": "地點",
     "isPublic": "是否公開",
@@ -86,13 +92,17 @@
     "cancel": "取消",
     "endOfResults": "結果結束",
     "noOrgErrorTitle": "找不到组织",
+    "sampleOrgDuplicate": "只允许一个样本组织",
     "noOrgErrorDescription": "请通过仪表板创建一个组织",
-    "noResultsFoundFor": "未找到结果 "
+    "noResultsFoundFor": "未找到结果 ",
+    "OR": "或者",
+    "sampleOrgSuccess": "示例组织成功创建"
   },
   "orgListCard": {
     "admins": "管理員",
     "members": "成員",
-    "manage": "管理"
+    "manage": "管理",
+    "sampleOrganization": "示例组织"
   },
   "paginationList": {
     "rowsPerPage": "每頁行數",
@@ -121,6 +131,8 @@
     "loadingUsers": "正在加載用戶...",
     "noUserFound": "找不到用戶。",
     "sort": "排序",
+    "Oldest": "最旧的优先",
+    "Newest": "最新的优先",
     "filter": "過濾",
     "roleUpdated": "角色已更新。",
     "noResultsFoundFor": "未找到结果 ",
@@ -398,10 +410,12 @@
     "settings": "設置",
     "noData": "沒有數據",
     "otherSettings": "其他设置",
-    "changeLanguage": "更改语言"
+    "changeLanguage": "更改语言",
+    "manageCustomFields": "管理自定义字段"
   },
   "deleteOrg": {
     "deleteOrganization": "删除组织",
+    "deleteSampleOrganization": "删除示范组织",
     "deleteMsg": "您是否要删除此组织？",
     "cancel": "取消",
     "confirmDelete": "确认删除",
@@ -637,6 +651,14 @@
     "event": "事件",
     "organization": "組織"
   },
+  "advertisement": {
+    "title": "广告",
+    "pHeading": "管理广告",
+    "activeAds": "活动广告",
+    "archievedAds": "已完成的广告活动",
+    "pMessage": "此广告活动没有相关广告。",
+    "delete": "删除"
+  },
   "userChat": {
     "chat": "聊天",
     "search": "搜尋",
@@ -645,5 +667,16 @@
   "userChatRoom": {
     "selectContact": "選擇聯絡人開始對話",
     "sendMessage": "傳訊息"
+  },
+  "orgProfileField": {
+    "loading": "正在加载...",
+    "noCustomField": "没有可用的自定义字段",
+    "customFieldName": "字段名称",
+    "enterCustomFieldName": "输入字段名称",
+    "customFieldType": "字段类型",
+    "saveChanges": "保存更改",
+    "删除自定义字段": "删除自定义字段",
+    "fieldSuccessMessage": "字段添加成功",
+    "fieldRemovalSuccess": "字段删除成功"
   }
 }

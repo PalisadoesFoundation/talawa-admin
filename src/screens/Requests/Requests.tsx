@@ -352,7 +352,19 @@ const Requests = (): JSX.Element => {
             </div>
           </div>
         </div>
-        {isLoading ? (
+        {isLoading == false &&
+        usersData?.users.length === 0 &&
+        searchByName.length > 0 ? (
+          <div className={styles.notFound} data-testid="searchAndNotFound">
+            <h4>
+              {t('noResultsFoundFor')} &quot;{searchByName}&quot;
+            </h4>
+          </div>
+        ) : isLoading == false && usersData?.users.length === 0 ? (
+          <div className={styles.notFound}>
+            <h4>{t('noRequestFound')}</h4>
+          </div>
+        ) : isLoading ? (
           <TableLoader headerTitles={headerTitles} noOfRows={perPageResult} />
         ) : (
           <InfiniteScroll

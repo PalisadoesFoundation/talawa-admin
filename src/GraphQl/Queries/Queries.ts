@@ -617,6 +617,7 @@ export const ORGANIZATION_POST_CONNECTION_LIST = gql`
           firstName
           lastName
         }
+        pinned
       }
     }
   }
@@ -704,7 +705,19 @@ export const PLUGIN_GET = gql`
     }
   }
 `;
-
+export const ADVERTISEMENTS_GET = gql`
+  query getAdvertisement {
+    getAdvertisements {
+      _id
+      name
+      type
+      orgId
+      link
+      endDate
+      startDate
+    }
+  }
+`;
 export const ORGANIZATION_EVENTS_CONNECTION = gql`
   query EventsByOrganizationConnection(
     $organization_id: ID!
@@ -822,6 +835,22 @@ export const DIRECT_CHATS_LIST = gql`
         email
         image
       }
+    }
+  }
+`;
+
+export const IS_SAMPLE_ORGANIZATION_QUERY = gql`
+  query ($isSampleOrganizationId: ID!) {
+    isSampleOrganization(id: $isSampleOrganizationId)
+  }
+`;
+
+export const ORGANIZATION_CUSTOM_FIELDS = gql`
+  query ($customFieldsByOrganizationId: ID!) {
+    customFieldsByOrganization(id: $customFieldsByOrganizationId) {
+      _id
+      type
+      name
     }
   }
 `;

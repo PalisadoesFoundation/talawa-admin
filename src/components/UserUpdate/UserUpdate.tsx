@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import styles from './UserUpdate.module.css';
 import convertToBase64 from 'utils/convertToBase64';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
+import { useLocation } from 'react-router-dom';
 
 import { languages } from 'utils/languages';
 import { toast } from 'react-toastify';
@@ -15,13 +16,16 @@ import Loader from 'components/Loader/Loader';
 
 interface InterfaceUserUpdateProps {
   id: string;
+  toggleStateValue: () => void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
   id,
+  toggleStateValue,
 }): JSX.Element => {
-  const currentUrl = localStorage.getItem('id');
+  const location = useLocation<InterfaceUserUpdateProps>();
+  const currentUrl = location.state?.id || localStorage.getItem('id') || id;
   const { t } = useTranslation('translation', {
     keyPrefix: 'userUpdate',
   });
@@ -41,7 +45,7 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
     loading: loading,
     error: error,
   } = useQuery(USER_DETAILS, {
-    variables: { id: localStorage.getItem('id') ?? id }, // For testing we are sending the id as a prop
+    variables: { id: currentUrl }, // For testing we are sending the id as a prop
   });
   React.useEffect(() => {
     if (data) {
@@ -65,13 +69,31 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
 
   const loginLink = async (): Promise<void> => {
     try {
+      const firstName = formState.firstName;
+      const lastName = formState.lastName;
+      const email = formState.email;
+      const file = formState.file;
+      let toSubmit = true;
+      if (firstName.trim().length == 0 || !firstName) {
+        toast.warning('First Name cannot be blank!');
+        toSubmit = false;
+      }
+      if (lastName.trim().length == 0 || !lastName) {
+        toast.warning('Last Name cannot be blank!');
+        toSubmit = false;
+      }
+      if (email.trim().length == 0 || !email) {
+        toast.warning('Email cannot be blank!');
+        toSubmit = false;
+      }
+      if (!toSubmit) return;
       const { data } = await updateUser({
         variables: {
           //Currently on these  fields are supported by the api
-          firstName: formState.firstName,
-          lastName: formState.lastName,
-          email: formState.email,
-          file: formState.file,
+          firstName,
+          lastName,
+          email,
+          file,
         },
       });
       /* istanbul ignore next */
@@ -84,10 +106,13 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
           applangcode: '',
           file: '',
         });
+        localStorage.setItem('FirstName', firstName);
+        localStorage.setItem('LastName', lastName);
+        localStorage.setItem('Email', email);
+        localStorage.setItem('UserImage', file);
         toast.success('Successful updated');
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
+
+        toggleStateValue();
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -97,7 +122,7 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
 
   /* istanbul ignore next */
   const cancelUpdate = (): void => {
-    window.location.reload();
+    toggleStateValue();
   };
 
   return (

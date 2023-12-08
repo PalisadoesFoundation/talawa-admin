@@ -30,6 +30,7 @@ export const CheckInModal = (props: InterfaceModalProp): JSX.Element => {
   });
 
   useEffect(() => {
+    checkInRefetch();
     if (checkInLoading) setTableData([]);
     else
       setTableData(

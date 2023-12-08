@@ -114,6 +114,8 @@ describe('Testing Event List Card', () => {
 
     userEvent.click(screen.getByTestId('card'));
 
+    userEvent.click(screen.getByTestId('showEventDashboardBtn'));
+
     userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
 
     await wait();
@@ -300,5 +302,45 @@ describe('Testing Event List Card', () => {
       const deleteBtn = screen.getByTestId('deleteEventBtn');
       fireEvent.click(deleteBtn);
     });
+  });
+
+  test('Should render truncated event details', async () => {
+    const longEventName =
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. A very long event name that exceeds 150 characters and needs to be truncated';
+    const longDescription =
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. A very long description that exceeds 150 characters and needs to be truncated';
+    const longEventNameLength = longEventName.length;
+    const longDescriptionLength = longDescription.length;
+    const truncatedEventName = longEventName.substring(0, 150) + '...';
+    const truncatedDescriptionName = longDescription.substring(0, 150) + '...';
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <EventListCard
+            key="123"
+            id="1"
+            eventName={longEventName}
+            eventLocation="location"
+            eventDescription={longDescription}
+            regDate="19/03/2022"
+            regEndDate="26/03/2022"
+            startTime="02:00"
+            endTime="06:00"
+            allDay={true}
+            recurring={false}
+            isPublic={true}
+            isRegisterable={false}
+          />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(longEventNameLength).toBeGreaterThan(100);
+    expect(longDescriptionLength).toBeGreaterThan(256);
+    expect(truncatedEventName).toContain('...');
+    expect(truncatedDescriptionName).toContain('...');
+    await wait();
   });
 });

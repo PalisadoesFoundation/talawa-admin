@@ -11,6 +11,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 
 import UserNavbar from './UserNavbar';
 import userEvent from '@testing-library/user-event';
+import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -20,7 +21,16 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-const link = new StaticMockLink([], true);
+const MOCKS = [
+  {
+    request: {
+      query: REVOKE_REFRESH_TOKEN,
+    },
+    result: {},
+  },
+];
+
+const link = new StaticMockLink(MOCKS, true);
 
 describe('Testing UserNavbar Component [User Portal]', () => {
   afterEach(async () => {

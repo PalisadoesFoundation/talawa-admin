@@ -80,7 +80,7 @@ const EventDashboard = (): JSX.Element => {
       setShowAddEventProjectModal={setShowAddEventProjectModal}
     >
       <Row>
-        <Col sm={3}>
+        <Col sm={4}>
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
               {/* Side Bar - Static Information about the Event */}
@@ -110,7 +110,7 @@ const EventDashboard = (): JSX.Element => {
             </div>
           </div>
         </Col>
-        <Col sm={8} className="mt-sm-0 mt-5 ml-4 ml-sm-0">
+        <Col sm={6} className="mt-sm-0 mt-5 ml-4 ml-sm-0">
           {/* Main Screen Container */}
           <Container>
             <div className={styles.mainpageright}>
@@ -123,7 +123,7 @@ const EventDashboard = (): JSX.Element => {
                   : null}
                 {eventData.event.projects.map(
                   (project: InterfaceEventProject) => (
-                    <Col sm={4} className="mb-5" key={project._id}>
+                    <Col sm={14} className="mb-5" key={project._id}>
                       <div className={`card ${styles.cardContainer}`}>
                         <div className="card-body">
                           <div className="text-center">

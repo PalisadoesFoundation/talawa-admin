@@ -5,7 +5,6 @@ import 'jest-localstorage-mock';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 
-import { toast } from 'react-toastify';
 import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceLeftDrawerProps } from './LeftDrawerOrg';
 import LeftDrawerOrg from './LeftDrawerOrg';
@@ -15,6 +14,7 @@ import { store } from 'state/store';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { act } from 'react-dom/test-utils';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 
 const props: InterfaceLeftDrawerProps = {
   screenName: 'Dashboard',
@@ -64,6 +64,12 @@ const props: InterfaceLeftDrawerProps = {
 };
 
 const MOCKS = [
+  {
+    request: {
+      query: REVOKE_REFRESH_TOKEN,
+    },
+    result: {},
+  },
   {
     request: {
       query: ORGANIZATIONS_LIST,
@@ -267,7 +273,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     await wait();
     expect(screen.getByTestId(/orgBtn/i)).toBeInTheDocument();
     userEvent.click(screen.getByTestId(/profileBtn/i));
-    expect(toast.success).toHaveBeenCalledWith('Profile page coming soon!');
   });
 
   test('Testing Menu Buttons', async () => {

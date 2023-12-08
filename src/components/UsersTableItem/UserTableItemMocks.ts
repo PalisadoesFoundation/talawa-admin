@@ -33,7 +33,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        removeUserFromOrganization: {
+        removeMember: {
           _id: '123',
         },
       },

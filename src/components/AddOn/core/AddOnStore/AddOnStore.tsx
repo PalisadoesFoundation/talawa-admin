@@ -160,7 +160,7 @@ function addOnStore(): JSX.Element {
                   Search results for <b>{searchText}</b>
                 </p>
               ) : null}
-              <AddOnRegister />
+
               <Tabs
                 defaultActiveKey="available"
                 id="uncontrolled-tab-example"

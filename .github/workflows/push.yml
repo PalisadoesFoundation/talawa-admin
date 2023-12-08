@@ -19,7 +19,7 @@ on:
 env:
     CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
   
-jobs:      
+jobs:
   Code-Coverage:
     runs-on: ubuntu-latest
     steps:
@@ -27,7 +27,25 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm install --legacy-peer-deps
+
+      - name: Cache node modules
+        id: cache-npm
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: |
+            ~/.npm
+            node_modules
+          key: ${{ runner.os }}-code-coverage-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-code-coverage-${{ env.cache-name }}-
+            ${{ runner.os }}-code-coverage-
+            ${{ runner.os }}-
+      
+      - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
+        name: List the state of node modules
+        run: npm install --legacy-peer-deps
       - run: npm run test -- --watchAll=false --coverage
       - name: Present and upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
         uses: codecov/codecov-action@v3
@@ -42,9 +60,24 @@ jobs:
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v3
-        
-      - name: Install Dependencies
-        run: yarn install --legacy-peer-deps
+
+      - name: Restore node_modules from cache
+        id: cache-npm
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: |
+            ~/.npm
+            node_modules
+          key: ${{ runner.os }}-generate-docs-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-generate-docs-${{ env.cache-name }}-
+            ${{ runner.os }}-generate-docs-
+            ${{ runner.os }}-
+
+        name: Install dependencies
+        run: npm install --legacy-peer-deps
 
       - name: Install TypeScript Globally and add GraphQL tag
         run: yarn global add typescript

@@ -8,6 +8,27 @@ import type { InterfaceOrgListCardProps } from './OrgListCard';
 import OrgListCard from './OrgListCard';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
+import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
+import { StaticMockLink } from 'utils/StaticMockLink';
+import { MockedProvider } from '@apollo/react-testing';
+
+const MOCKS = [
+  {
+    request: {
+      query: IS_SAMPLE_ORGANIZATION_QUERY,
+      variables: {
+        isSampleOrganizationId: 'xyz',
+      },
+    },
+    result: {
+      data: {
+        isSampleOrganization: true,
+      },
+    },
+  },
+];
+
+const link = new StaticMockLink(MOCKS, true);
 
 const props: InterfaceOrgListCardProps = {
   data: {
@@ -38,11 +59,13 @@ describe('Testing the Super Dash List', () => {
     localStorage.setItem('id', '123'); // Means the user is an admin
 
     render(
-      <BrowserRouter>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgListCard {...props} />
-        </I18nextProvider>
-      </BrowserRouter>
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgListCard {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>
     );
     expect(screen.getByAltText(/Dogs Care image/i)).toBeInTheDocument();
     expect(screen.getByText('Admins:')).toBeInTheDocument();
@@ -56,11 +79,13 @@ describe('Testing the Super Dash List', () => {
     window.location.assign('/orgdash');
 
     render(
-      <BrowserRouter>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgListCard {...props} />
-        </I18nextProvider>
-      </BrowserRouter>
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgListCard {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>
     );
 
     expect(window.location).toBeAt('/orgdash');
@@ -72,20 +97,24 @@ describe('Testing the Super Dash List', () => {
       ...{ data: { ...props.data, ...{ image: null } } },
     };
     render(
-      <I18nextProvider i18n={i18nForTest}>
-        <OrgListCard {...imageNullProps} />
-      </I18nextProvider>
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgListCard {...imageNullProps} />
+        </I18nextProvider>
+      </MockedProvider>
     );
     expect(screen.getByTestId(/emptyContainerForImage/i)).toBeInTheDocument();
   });
 
   test('Testing if user is redirected to orgDash screen', () => {
     render(
-      <BrowserRouter>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgListCard {...props} />
-        </I18nextProvider>
-      </BrowserRouter>
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgListCard {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>
     );
     userEvent.click(screen.getByTestId('manageBtn'));
     expect(window.location).toBeAt('/orgdash/id=xyz');

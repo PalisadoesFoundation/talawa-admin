@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberOutlined } from '@mui/icons-material';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
@@ -7,13 +7,13 @@ import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
 import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import styles from './LeftDrawerOrg.module.css';
+import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 
 export interface InterfaceLeftDrawerProps {
   orgId: string;
@@ -45,11 +45,13 @@ const leftDrawerOrg = ({
     variables: { id: orgId },
   });
 
+  const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
+
   const userType = localStorage.getItem('UserType');
   const firstName = localStorage.getItem('FirstName');
   const lastName = localStorage.getItem('LastName');
   const userImage = localStorage.getItem('UserImage');
-
+  const userId = localStorage.getItem('id');
   const history = useHistory();
 
   // Set organization data
@@ -64,6 +66,7 @@ const leftDrawerOrg = ({
   }, [data]);
 
   const logout = (): void => {
+    revokeRefreshToken();
     localStorage.clear();
     history.push('/');
   };
@@ -184,7 +187,7 @@ const leftDrawerOrg = ({
             className={styles.profileContainer}
             data-testid="profileBtn"
             onClick={(): void => {
-              toast.success('Profile page coming soon!');
+              history.push(`/member/id=${userId}`);
             }}
           >
             <div className={styles.imageContainer}>

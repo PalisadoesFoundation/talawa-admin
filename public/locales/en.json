@@ -28,6 +28,16 @@
     "login_to_admin_portal": "Admin Portal Login",
     "OR": "OR"
   },
+  "latestEvents": {
+    "eventCardTitle": "Upcoming Events",
+    "eventCardSeeAll": "See All",
+    "noEvents": "No Upcoming Events"
+  },
+  "latestPosts": {
+    "latestPostsTitle": "Latest Posts",
+    "seeAllLink": "See All",
+    "noPostsCreated": "No Posts Created"
+  },
   "listNavbar": {
     "talawa_portal": "Talawa Admin Portal",
     "roles": "Roles",
@@ -55,6 +65,7 @@
     "Block/Unblock": "Block/Unblock",
     "Plugins": "Plugins",
     "Plugin Store": "Plugin Store",
+    "Advertisement": "Advertisements",
     "allOrganizations": "All Organizations",
     "yourOrganization": "Your Organization",
     "notification": "Notification",
@@ -75,6 +86,7 @@
     "searchByName": "Search By Name",
     "organizations": "Organizations",
     "createOrganization": "Create Organization",
+    "createSampleOrganization": "Create Sample Organization",
     "description": "Description",
     "location": "Location",
     "isPublic": "Is Public",
@@ -85,18 +97,22 @@
     "filter": "Filter",
     "cancel": "Cancel",
     "noOrgErrorTitle": "Organizations Not Found",
+    "sampleOrgDuplicate": "Only one sample organization allowed",
     "noOrgErrorDescription": "Please create an organization through dashboard",
     "endOfResults": "End of results",
     "manageFeatures": "Manage Features",
     "manageFeaturesInfo": "Creation Successful ! Please select features that you want to enale for this organization from the plugin store.",
     "goToStore": "Go to Plugin Store",
     "enableEverything": "Enable Everything",
-    "noResultsFoundFor": "No results found for "
+    "noResultsFoundFor": "No results found for",
+    "OR": "OR",
+    "sampleOrgSuccess": "Sample Organization Successfully Created"
   },
   "orgListCard": {
     "admins": "Admins",
     "members": "Members",
-    "manage": "Manage"
+    "manage": "Manage",
+    "sampleOrganization": "Sample Organization"
   },
   "paginationList": {
     "rowsPerPage": "rows per page",
@@ -125,6 +141,8 @@
     "loadingUsers": "Loading Users...",
     "noUserFound": "No User Found",
     "sort": "Sort",
+    "Newest": "Newest First",
+    "Oldest": "Oldest First",
     "filter": "Filter",
     "noOrgError": "Organizations not found, please create an organization through dashboard",
     "roleUpdated": "Role Updated.",
@@ -402,10 +420,12 @@
     "settings": "Settings",
     "noData": "No data",
     "otherSettings": "Other Settings",
-    "changeLanguage": "Change Language"
+    "changeLanguage": "Change Language",
+    "manageCustomFields": "Manage Custom Fields"
   },
   "deleteOrg": {
     "deleteOrganization": "Delete Organization",
+    "deleteSampleOrganization": "Delete Sample Organization",
     "deleteMsg": "Do you want to delete this organization?",
     "cancel": "Cancel",
     "confirmDelete": "Confirm Delete",
@@ -642,6 +662,25 @@
     "event": "Event",
     "organization": "Organization"
   },
+  "advertisement": {
+    "title": "Advertisements",
+    "pHeading": "Manage Ads",
+    "activeAds": "Active Campaigns",
+    "archievedAds": "Completed Campaigns",
+    "pMessage": "Ads not present for this campaign.",
+    "delete": "Delete",
+    "Rname": "Enter name of Advertisement",
+    "Rtype": "Select type of Advertisement",
+    "Rlink": "Provide a link for content to be displayed",
+    "RstartDate": "Select Start Date",
+    "RendDate": "Select End Date",
+    "RClose": "Close the window",
+    "addNew": "Create new advertisement",
+    "EXname": "Ex. Cookie Shop",
+    "EXlink": "Ex. http://yourwebsite.com/photo",
+    "register": "Create Advertisement",
+    "close": "Close "
+  },
   "userChat": {
     "chat": "Chat",
     "search": "Search",
@@ -650,5 +689,16 @@
   "userChatRoom": {
     "selectContact": "Select a contact to start conversation",
     "sendMessage": "Send Message"
+  },
+  "orgProfileField": {
+    "loading": "Loading...",
+    "noCustomField": "No custom fields available",
+    "customFieldName": "Field Name",
+    "enterCustomFieldName": "Enter Field name",
+    "customFieldType": "Field Type",
+    "saveChanges": "Save Changes",
+    "Remove Custom Field": "Remove Custom Field",
+    "fieldSuccessMessage": "Field added successfully",
+    "fieldRemovalSuccess": "Field removed successfully"
   }
 }
