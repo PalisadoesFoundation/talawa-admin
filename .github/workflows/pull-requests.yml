@@ -28,7 +28,7 @@ jobs:
       - name: Checkout the Repository
         uses: actions/checkout@v3
 
-      - name: Install Dependencies
+      - name: Restore node_modules from cache
         id: cache-npm
         uses: actions/cache@v3
         env:
@@ -43,10 +43,10 @@ jobs:
             ${{ runner.os }}-generate-docs-
             ${{ runner.os }}-
 
-      - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
-        name: List the state of node modules
+      - name: Install dependencies
         continue-on-error: true
         run: npm install --legacy-peer-deps
+        run: npm ci
 
       - name: Run linting check
         run: npm run lint:check
@@ -90,23 +90,6 @@ jobs:
           node-version: '16.14.1'
 
       - name: Resolve dependency
-        id: cache-npm
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: |
-            ~/.npm
-            node_modules
-          key: ${{ runner.os }}-generate-docs-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-generate-docs-${{ env.cache-name }}-
-            ${{ runner.os }}-generate-docs-
-            ${{ runner.os }}-
-
-      - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
-        name: List the state of node modules
-        continue-on-error: true
         run: npm install -g @graphql-inspector/cli
 
       - name: Clone API repository

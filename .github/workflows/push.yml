@@ -62,7 +62,7 @@ jobs:
       - name: Checkout the Repository
         uses: actions/checkout@v3
 
-      - name: Cache node modules
+      - name: Restore node_modules from cache
         id: cache-npm
         uses: actions/cache@v3
         env:
@@ -77,11 +77,9 @@ jobs:
             ${{ runner.os }}-generate-docs-
             ${{ runner.os }}-
 
-      - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
-        name: List the state of node modules
+        name: Install dependencies
         continue-on-error: true
-        run: npm list
-        run: yarn install --legacy-peer-deps
+        run: npm install --legacy-peer-deps
 
       - name: Install TypeScript Globally and add GraphQL tag
         run: yarn global add typescript
