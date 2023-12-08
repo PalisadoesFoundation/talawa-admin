@@ -19,7 +19,6 @@ import {
   MOCKS,
   ORG_LIST_MOCK,
 } from './RequestsMocks';
-import { userInfo } from 'os';
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_ORG_MOCKS, true);
