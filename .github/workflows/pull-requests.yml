@@ -45,7 +45,7 @@ jobs:
 
       - name: Install dependencies
         continue-on-error: true
-        run: npm ci
+        run: npm install --legacy-peer-deps
 
       - name: Run linting check
         run: npm run lint:check
