@@ -29,6 +29,10 @@ import type {
   InterfaceQueryRequestListItem,
   InterfaceUserType,
 } from 'utils/interfaces';
+
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
 import styles from './Requests.module.css';
 
 const Requests = (): JSX.Element => {
@@ -41,11 +45,10 @@ const Requests = (): JSX.Element => {
   const [hasMore, sethasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
-  const [sortingOption, setSortingOption] = useState('latest');
+  const [sortingOption, setSortingOption] = useState('');
   const [displayedUsers, setDisplayedUsers] = useState<
     InterfaceQueryRequestListItem[]
   >([]);
-
   const [acceptAdminFunc] = useMutation(ACCEPT_ADMIN_MUTATION);
   const [rejectAdminFunc] = useMutation(REJECT_ADMIN_MUTATION);
   const {
@@ -95,17 +98,29 @@ const Requests = (): JSX.Element => {
   }, []);
 
   // To manage loading states
+  const updateDisplayedUsers = (data: any): InterfaceQueryRequestListItem[] => {
+    if (!data) {
+      return [];
+    }
+
+    const newDisplayedUsers = sortRequests(data.users, sortingOption);
+    return newDisplayedUsers;
+  };
+
+  const setHasMoreBasedOnUsers = (data: any): boolean => {
+    if (!data) {
+      return false;
+    }
+
+    return data.users.length >= perPageResult;
+  };
+
   useEffect(() => {
-    if (!usersData) {
-      setDisplayedUsers([]);
-      return;
-    }
-    /* istanbul ignore next */
-    if (usersData.users.length < perPageResult) {
-      sethasMore(false);
-    } else {
-      setDisplayedUsers(usersData?.users);
-    }
+    const newDisplayedUsers = updateDisplayedUsers(usersData);
+    setDisplayedUsers(newDisplayedUsers);
+
+    const hasMoreValue = setHasMoreBasedOnUsers(usersData);
+    sethasMore(hasMoreValue);
   }, [usersData]);
 
   // If the user is not Superadmin, redirect to Organizations screen
@@ -248,6 +263,7 @@ const Requests = (): JSX.Element => {
     t('email'),
     t('accept'),
     t('reject'),
+    '',
   ];
 
   const handleSorting = (option: string): void => {
@@ -301,7 +317,6 @@ const Requests = (): JSX.Element => {
                 onChange={debouncedHandleSearchByName}
               />
               <Button
-                data-testid="searchButton"
                 tabIndex={-1}
                 className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
               >
@@ -317,11 +332,15 @@ const Requests = (): JSX.Element => {
                 data-testid="sort"
               >
                 <Dropdown.Toggle
-                  variant="outline-success"
-                  data-testid="sortuser"
+                  variant={sortingOption === '' ? 'outline-success' : 'success'}
+                  data-testid="sortDropdown"
                 >
                   <SortIcon className={'me-1'} />
-                  {t('sort')}
+                  {sortingOption === ''
+                    ? t('sort')
+                    : sortingOption === 'latest'
+                    ? t('Latest')
+                    : t('Oldest')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item
@@ -370,7 +389,12 @@ const Requests = (): JSX.Element => {
           <InfiniteScroll
             dataLength={usersData?.users.length ?? 0}
             next={loadMoreRequests}
-            loader={<TableLoader noOfCols={5} noOfRows={perPageResult} />}
+            loader={
+              <TableLoader
+                noOfCols={headerTitles.length}
+                noOfRows={perPageResult}
+              />
+            }
             hasMore={hasMore}
             className={styles.listBox}
             data-testid="organizations-list"
@@ -397,7 +421,7 @@ const Requests = (): JSX.Element => {
                   displayedUsers.length > 0 &&
                   displayedUsers.map((user, index) => {
                     return (
-                      <tr key={user._id} data-testid="displayedUsers">
+                      <tr key={user._id}>
                         <th scope="row">{index + 1}</th>
                         <td>{`${user.firstName} ${user.lastName}`}</td>
                         <td>{user.email}</td>
@@ -423,17 +447,13 @@ const Requests = (): JSX.Element => {
                             {t('reject')}
                           </Button>
                         </td>
+                        <td>{dayjs(user.createdAt).fromNow()}</td>
                       </tr>
                     );
                   })}
               </tbody>
             </Table>
           </InfiniteScroll>
-        )}
-        {!isLoading && displayedUsers.length === 0 && (
-          <div className="w-100 text-center my-4">
-            <h5 className="m-0 ">{t('noRequestFound')}</h5>
-          </div>
         )}
       </SuperAdminScreen>
     </>
