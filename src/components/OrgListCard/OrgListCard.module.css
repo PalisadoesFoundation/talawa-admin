@@ -36,6 +36,7 @@
 .orgCard .innerContainer .content {
   flex: 1;
   margin-left: 1rem;
+  width: 70%;
 }
 
 .orgCard button {
@@ -89,4 +90,10 @@
   display: flex;
   justify-content: space-around;
   width: 150px;
+}
+
+.orgName {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
