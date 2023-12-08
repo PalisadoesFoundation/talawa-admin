@@ -12,7 +12,6 @@ export interface InterfaceOrganizationScreenProps {
   screenName: string; // Internal Screen name for developers
   children: React.ReactNode;
 }
-
 const organizationScreen = ({
   title,
   screenName,
