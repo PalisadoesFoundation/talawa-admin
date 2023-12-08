@@ -45,7 +45,6 @@ jobs:
       
       - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
         name: List the state of node modules
-        continue-on-error: true
         run: npm install --legacy-peer-deps
       - run: npm run test -- --watchAll=false --coverage
       - name: Present and upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
@@ -78,7 +77,6 @@ jobs:
             ${{ runner.os }}-
 
         name: Install dependencies
-        continue-on-error: true
         run: npm install --legacy-peer-deps
 
       - name: Install TypeScript Globally and add GraphQL tag

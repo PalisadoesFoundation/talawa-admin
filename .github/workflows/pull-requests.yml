@@ -44,7 +44,6 @@ jobs:
             ${{ runner.os }}-
 
       - name: Install dependencies
-        continue-on-error: true
         run: npm install --legacy-peer-deps
 
       - name: Run linting check
