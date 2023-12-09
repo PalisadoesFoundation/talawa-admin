@@ -152,7 +152,7 @@ function advertisementRegister({
       )}
 
       <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton className={styles.editHeader}>
           {formStatus === 'register' ? (
             <Modal.Title> {t('RClose')}</Modal.Title>
           ) : (

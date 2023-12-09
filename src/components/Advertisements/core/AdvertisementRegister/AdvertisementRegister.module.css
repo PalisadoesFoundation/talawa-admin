@@ -12,3 +12,8 @@
 .button {
   min-width: 102px;
 }
+
+.editHeader {
+  background-color: #31bb6b;
+  color: white;
+}
