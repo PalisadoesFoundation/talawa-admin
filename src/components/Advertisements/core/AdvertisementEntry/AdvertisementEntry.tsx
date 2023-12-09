@@ -4,9 +4,10 @@ import styles from './AdvertisementEntry.module.css';
 import { Button, Card, Col, Row, Spinner } from 'react-bootstrap';
 import { DELETE_ADVERTISEMENT_BY_ID } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
 import AdvertisementRegister from '../AdvertisementRegister/AdvertisementRegister';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 interface InterfaceAddOnEntryProps {
   id: string;
   name: string;
@@ -27,8 +28,9 @@ function advertisementEntry({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   startDate,
 }: InterfaceAddOnEntryProps): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
+  // const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const [buttonLoading, setButtonLoading] = useState(false);
+  const [dropdown, setDropdown] = useState(false);
   const [deleteAdById] = useMutation(DELETE_ADVERTISEMENT_BY_ID, {
     refetchQueries: [ADVERTISEMENTS_GET],
   });
@@ -42,12 +44,41 @@ function advertisementEntry({
     });
     setButtonLoading(false);
   };
+  const handleOptionsClick = (): void => {
+    setDropdown(!dropdown);
+  };
   return (
     <>
       <Row data-testid="AdEntry" xs={1} md={2} className="g-4">
         {Array.from({ length: 1 }).map((_, idx) => (
           <Col key={idx}>
             <Card>
+              <div className={styles.dropdownContainer}>
+                <button
+                  className={styles.dropdownButton}
+                  onClick={handleOptionsClick}
+                  data-testid="moreiconbtn"
+                >
+                  <MoreVertIcon />
+                </button>
+                {dropdown && (
+                  <ul className={styles.dropdownmenu}>
+                    <li>
+                      <AdvertisementRegister
+                        formStatus="edit"
+                        idEdit={id}
+                        nameEdit={name}
+                        typeEdit={type}
+                        orgIdEdit={orgId}
+                        linkEdit={link}
+                        endDateEdit={endDate}
+                        startDateEdit={startDate}
+                      />
+                    </li>
+                    <li onClick={onDelete}>Delete</li>
+                  </ul>
+                )}
+              </div>
               <Card.Img
                 variant="top"
                 src={
@@ -67,27 +98,14 @@ function advertisementEntry({
                     variant="primary"
                     disabled={buttonLoading}
                     data-testid="AddOnEntry_btn_install"
-                    onClick={(): void => {
-                      onDelete();
-                    }}
                   >
                     {buttonLoading ? (
                       <Spinner animation="grow" />
                     ) : (
-                      <i className={'fa fa-trash'}></i>
+                      <i className={'fa fa-eye'}></i>
                     )}
-                    {t('delete')}
+                    View
                   </Button>
-                  <AdvertisementRegister
-                    formStatus="edit"
-                    idEdit={id}
-                    nameEdit={name}
-                    typeEdit={type}
-                    orgIdEdit={orgId}
-                    linkEdit={link}
-                    endDateEdit={endDate}
-                    startDateEdit={startDate}
-                  />
                 </div>
               </Card.Body>
             </Card>

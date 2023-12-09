@@ -19,5 +19,51 @@
 
 .buttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
+}
+
+.dropdownButton {
+  background-color: transparent;
+  color: #000;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  width: 100%;
+  justify-content: end;
+  padding: 8px 10px;
+}
+
+.dropdownContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdownmenu {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  background-color: white;
+  width: 120px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  padding: 5px 0;
+  margin: 0;
+  list-style-type: none;
+  right: 0;
+  top: 100%;
+}
+
+.dropdownmenu li {
+  cursor: pointer;
+  padding: 8px 16px;
+  text-decoration: none;
+  display: block;
+  color: #333;
+}
+
+.dropdownmenu li:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdownContainer:hover .dropdownmenu {
+  display: block;
 }

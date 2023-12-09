@@ -148,14 +148,7 @@ function advertisementRegister({
           {t('addNew')}
         </Button>
       ) : (
-        <Button
-          className={styles.button}
-          variant="primary"
-          onClick={handleShow}
-        >
-          <i className="fa fa-pen"></i>
-          Edit
-        </Button>
+        <div onClick={handleShow}>Edit</div>
       )}
 
       <Modal show={show} onHide={handleClose}>
