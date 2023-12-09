@@ -160,7 +160,11 @@ function advertisementRegister({
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title> {t('RClose')}</Modal.Title>
+          {formStatus === 'register' ? (
+            <Modal.Title> {t('RClose')}</Modal.Title>
+          ) : (
+            <Modal.Title>Edit Advertisement</Modal.Title>
+          )}
         </Modal.Header>
         <Modal.Body>
           <Form>
