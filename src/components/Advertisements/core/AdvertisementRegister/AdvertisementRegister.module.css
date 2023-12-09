@@ -4,6 +4,11 @@
   align-items: center;
 }
 
-.modalbtn i {
+.modalbtn i,
+.button i {
   margin-right: 8px;
+}
+
+.button {
+  min-width: 102px;
 }
