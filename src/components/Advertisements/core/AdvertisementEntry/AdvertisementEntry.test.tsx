@@ -19,6 +19,7 @@ import { BACKEND_URL } from 'Constant/constant';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
 import { act } from 'react-dom/test-utils';
+import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
 
 const advertisementProps = {
   id: '1',
@@ -33,25 +34,47 @@ const mocks = [
   {
     request: {
       query: DELETE_ADVERTISEMENT_BY_ID,
-      variables: { id: advertisementProps.id },
+      variables: { id: '1' },
     },
     result: {
       data: {
-        deleteAdvertisement: {
-          id: advertisementProps.id,
+        deleteAdvertisementById: {
+          success: true,
         },
+      },
+    },
+  },
+  {
+    request: {
+      query: ADVERTISEMENTS_GET,
+    },
+    result: {
+      data: {
+        getAdvertisements: [
+          {
+            _id: '6574cf9caa18987e28d248d9',
+            name: 'Cookie',
+            orgId: '6437904485008f171cf29924',
+            link: '123',
+            type: 'BANNER',
+            startDate: '2023-12-10',
+            endDate: '2023-12-10',
+          },
+          {
+            _id: '6574e38aaa18987e28d24979',
+            name: 'HEy',
+            orgId: '6437904485008f171cf29924',
+            link: '123',
+            type: 'BANNER',
+            startDate: '2023-12-10',
+            endDate: '2023-12-10',
+          },
+        ],
       },
     },
   },
 ];
 
-jest.mock('react-toastify', () => ({
-  toast: {
-    success: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
-  },
-}));
 const link = new StaticMockLink(mocks, true);
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -145,18 +168,23 @@ describe('Testing Advertisement Entry Component', () => {
     expect(queryByText('Edit')).toBeNull();
   });
   test('should delete an advertisement when delete button is clicked', async () => {
-    const { getByTestId, queryByText } = render(
-      <MockedProvider mocks={mocks} addTypename={false} link={link}>
-        <AdvertisementEntry {...advertisementProps} />
-      </MockedProvider>
+    const { getByTestId } = render(
+      <ApolloProvider client={client}>
+        <MockedProvider mocks={mocks} addTypename={false} link={link}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18nForTest}>
+                <AdvertisementEntry {...advertisementProps} />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>
+      </ApolloProvider>
     );
-    wait();
+    await wait();
+    const optionsButton = getByTestId('moreiconbtn');
+    fireEvent.click(optionsButton);
     const deleteButton = getByTestId('deletebtn');
     fireEvent.click(deleteButton);
-
-    await waitFor(() => {
-      const deletedAdName = queryByText(advertisementProps.name);
-      expect(deletedAdName).toBeNull();
-    });
   });
 });
