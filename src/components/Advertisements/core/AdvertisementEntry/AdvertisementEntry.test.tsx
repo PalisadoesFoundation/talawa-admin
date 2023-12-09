@@ -1,6 +1,7 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
-
+import { render, fireEvent, waitFor } from '@testing-library/react';
+import { DELETE_ADVERTISEMENT_BY_ID } from 'GraphQl/Mutations/mutations';
+import { MockedProvider } from '@apollo/client/testing';
 import {
   ApolloClient,
   ApolloProvider,
@@ -8,7 +9,7 @@ import {
   ApolloLink,
   HttpLink,
 } from '@apollo/client';
-
+import { StaticMockLink } from 'utils/StaticMockLink';
 import type { NormalizedCacheObject } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
 import AdvertisementEntry from './AdvertisementEntry';
@@ -17,7 +18,48 @@ import { store } from 'state/store';
 import { BACKEND_URL } from 'Constant/constant';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
+import { act } from 'react-dom/test-utils';
 
+const advertisementProps = {
+  id: '1',
+  name: 'Sample Advertisement',
+  type: 'Sample Type',
+  orgId: 'org_id',
+  link: 'samplelink.com',
+  endDate: new Date(),
+  startDate: new Date(),
+};
+const mocks = [
+  {
+    request: {
+      query: DELETE_ADVERTISEMENT_BY_ID,
+      variables: { id: advertisementProps.id },
+    },
+    result: {
+      data: {
+        deleteAdvertisement: {
+          id: advertisementProps.id,
+        },
+      },
+    },
+  },
+];
+
+jest.mock('react-toastify', () => ({
+  toast: {
+    success: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+  },
+}));
+const link = new StaticMockLink(mocks, true);
+async function wait(ms = 100): Promise<void> {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+}
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
   headers: {
@@ -101,5 +143,20 @@ describe('Testing Advertisement Entry Component', () => {
 
     // After the second click, the dropdown should be hidden again
     expect(queryByText('Edit')).toBeNull();
+  });
+  test('should delete an advertisement when delete button is clicked', async () => {
+    const { getByTestId, queryByText } = render(
+      <MockedProvider mocks={mocks} addTypename={false} link={link}>
+        <AdvertisementEntry {...advertisementProps} />
+      </MockedProvider>
+    );
+    wait();
+    const deleteButton = getByTestId('deletebtn');
+    fireEvent.click(deleteButton);
+
+    await waitFor(() => {
+      const deletedAdName = queryByText(advertisementProps.name);
+      expect(deletedAdName).toBeNull();
+    });
   });
 });

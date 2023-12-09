@@ -75,7 +75,9 @@ function advertisementEntry({
                         startDateEdit={startDate}
                       />
                     </li>
-                    <li onClick={onDelete}>Delete</li>
+                    <li onClick={onDelete} data-testid="deletebtn">
+                      Delete
+                    </li>
                   </ul>
                 )}
               </div>
