@@ -44,11 +44,11 @@ function addOnRegister({
   const handleRegister = async (): Promise<void> => {
     const { data } = await create({
       variables: {
-        $pluginName: formState.pluginName,
-        $pluginCreatedBy: formState.pluginCreatedBy,
-        $pluginDesc: formState.pluginDesc,
-        $pluginInstallStatus: formState.pluginInstallStatus,
-        $installedOrgs: formState.installedOrgs,
+        pluginName: formState.pluginName,
+        pluginCreatedBy: formState.pluginCreatedBy,
+        pluginDesc: formState.pluginDesc,
+        pluginInstallStatus: formState.pluginInstallStatus,
+        installedOrgs: formState.installedOrgs,
       },
     });
 
@@ -81,6 +81,7 @@ function addOnRegister({
               <Form.Control
                 type="text"
                 placeholder={t('pName')}
+                data-testid="pluginName"
                 autoComplete="off"
                 required
                 value={formState.pluginName}
@@ -97,6 +98,7 @@ function addOnRegister({
               <Form.Control
                 type="text"
                 placeholder={t('cName')}
+                data-testid="pluginCreatedBy"
                 autoComplete="off"
                 required
                 value={formState.pluginCreatedBy}
@@ -115,6 +117,7 @@ function addOnRegister({
                 rows={3}
                 as="textarea"
                 placeholder={t('pDesc')}
+                data-testid="pluginDesc"
                 required
                 value={formState.pluginDesc}
                 onChange={(e): void => {
@@ -138,7 +141,7 @@ function addOnRegister({
           <Button
             variant="primary"
             onClick={handleRegister}
-            data-testid="addonregister"
+            data-testid="addonregisterBtn"
           >
             {t('register')}
           </Button>

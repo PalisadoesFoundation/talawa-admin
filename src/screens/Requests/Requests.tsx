@@ -298,7 +298,7 @@ const Requests = (): JSX.Element => {
         {isLoading == false &&
         usersData?.users.length === 0 &&
         searchByName.length > 0 ? (
-          <div className={styles.notFound}>
+          <div className={styles.notFound} data-testid="searchAndNotFound">
             <h4>
               {t('noResultsFoundFor')} &quot;{searchByName}&quot;
             </h4>

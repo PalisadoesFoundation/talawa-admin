@@ -5,6 +5,7 @@ import { Button, Card, Col, Row, Spinner } from 'react-bootstrap';
 import { DELETE_ADVERTISEMENT_BY_ID } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
 interface InterfaceAddOnEntryProps {
   id: string;
   name: string;
@@ -27,7 +28,9 @@ function advertisementEntry({
 }: InterfaceAddOnEntryProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const [buttonLoading, setButtonLoading] = useState(false);
-  const [deleteAdById] = useMutation(DELETE_ADVERTISEMENT_BY_ID);
+  const [deleteAdById] = useMutation(DELETE_ADVERTISEMENT_BY_ID, {
+    refetchQueries: [ADVERTISEMENTS_GET],
+  });
 
   const onDelete = async (): Promise<void> => {
     setButtonLoading(true);
