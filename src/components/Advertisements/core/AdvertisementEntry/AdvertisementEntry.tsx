@@ -6,6 +6,7 @@ import { DELETE_ADVERTISEMENT_BY_ID } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
+import { toast } from 'react-toastify';
 interface InterfaceAddOnEntryProps {
   id: string;
   name: string;
@@ -34,12 +35,18 @@ function advertisementEntry({
 
   const onDelete = async (): Promise<void> => {
     setButtonLoading(true);
-    await deleteAdById({
-      variables: {
-        id: id.toString(),
-      },
-    });
-    setButtonLoading(false);
+    try {
+      await deleteAdById({
+        variables: {
+          id: id.toString(),
+        },
+      });
+      toast.success('Advertisement Deleted');
+      setButtonLoading(false);
+    } catch (error: any) {
+      toast.error(error.message);
+      setButtonLoading(false);
+    }
   };
   return (
     <>
