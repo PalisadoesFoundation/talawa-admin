@@ -22,6 +22,10 @@ import styles from './OrganizationPeople.module.css';
 
 import { toast } from 'react-toastify';
 
+interface InterfaceLocationState {
+  role: number;
+}
+
 function organizationPeople(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
@@ -29,8 +33,8 @@ function organizationPeople(): JSX.Element {
 
   document.title = t('title');
 
-  const location = useLocation();
-  const role = location?.state as any;
+  const location = useLocation<InterfaceLocationState>();
+  const role = location?.state;
 
   const currentUrl = window.location.href.split('=')[1];
 
