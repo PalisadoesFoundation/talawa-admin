@@ -6,6 +6,7 @@ import { DELETE_ADVERTISEMENT_BY_ID } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
+import AdvertisementRegister from '../AdvertisementRegister/AdvertisementRegister';
 interface InterfaceAddOnEntryProps {
   id: string;
   name: string;
@@ -60,22 +61,34 @@ function advertisementEntry({
                   {type}
                 </Card.Subtitle>
                 <Card.Text>{link} </Card.Text>
-                <Button
-                  className={styles.entryaction}
-                  variant="primary"
-                  disabled={buttonLoading}
-                  data-testid="AddOnEntry_btn_install"
-                  onClick={(): void => {
-                    onDelete();
-                  }}
-                >
-                  {buttonLoading ? (
-                    <Spinner animation="grow" />
-                  ) : (
-                    <i className={'fa fa-trash'}></i>
-                  )}
-                  {t('delete')}
-                </Button>
+                <div className={styles.buttons}>
+                  <Button
+                    className={styles.entryaction}
+                    variant="primary"
+                    disabled={buttonLoading}
+                    data-testid="AddOnEntry_btn_install"
+                    onClick={(): void => {
+                      onDelete();
+                    }}
+                  >
+                    {buttonLoading ? (
+                      <Spinner animation="grow" />
+                    ) : (
+                      <i className={'fa fa-trash'}></i>
+                    )}
+                    {t('delete')}
+                  </Button>
+                  <AdvertisementRegister
+                    formStatus="edit"
+                    idEdit={id}
+                    nameEdit={name}
+                    typeEdit={type}
+                    orgIdEdit={orgId}
+                    linkEdit={link}
+                    endDateEdit={endDate}
+                    startDateEdit={startDate}
+                  />
+                </div>
               </Card.Body>
             </Card>
           </Col>
