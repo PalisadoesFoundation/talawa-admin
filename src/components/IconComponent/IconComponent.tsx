@@ -53,7 +53,7 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
           data-testid="Icon-Component-SettingsIcon"
         />
       );
-    case 'All Organizations':
+    case 'My Organizations':
       return (
         <OrganizationsIcon
           stroke={props.fill}

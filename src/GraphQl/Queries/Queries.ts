@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-//Query List
+// Query List
 
 // Check Auth
 
