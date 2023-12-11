@@ -64,6 +64,7 @@ function advertisementRegister({
         }, 2000);
       }
     } catch (error) {
+      toast.error('An error occured, could not create new advertisement');
       console.log('error occured', error);
     }
   };

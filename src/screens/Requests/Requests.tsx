@@ -29,6 +29,10 @@ import type {
   InterfaceQueryRequestListItem,
   InterfaceUserType,
 } from 'utils/interfaces';
+
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
 import styles from './Requests.module.css';
 
 const Requests = (): JSX.Element => {
@@ -41,7 +45,10 @@ const Requests = (): JSX.Element => {
   const [hasMore, sethasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
-
+  const [sortingOption, setSortingOption] = useState('');
+  const [displayedUsers, setDisplayedUsers] = useState<
+    InterfaceQueryRequestListItem[]
+  >([]);
   const [acceptAdminFunc] = useMutation(ACCEPT_ADMIN_MUTATION);
   const [rejectAdminFunc] = useMutation(REJECT_ADMIN_MUTATION);
   const {
@@ -91,13 +98,29 @@ const Requests = (): JSX.Element => {
   }, []);
 
   // To manage loading states
+  const updateDisplayedUsers = (data: any): InterfaceQueryRequestListItem[] => {
+    if (!data) {
+      return [];
+    }
+
+    const newDisplayedUsers = sortRequests(data.users, sortingOption);
+    return newDisplayedUsers;
+  };
+
+  const setHasMoreBasedOnUsers = (data: any): boolean => {
+    if (!data) {
+      return false;
+    }
+
+    return data.users.length >= perPageResult;
+  };
+
   useEffect(() => {
-    if (!usersData) {
-      return;
-    }
-    if (usersData.users.length < perPageResult) {
-      sethasMore(false);
-    }
+    const newDisplayedUsers = updateDisplayedUsers(usersData);
+    setDisplayedUsers(newDisplayedUsers);
+
+    const hasMoreValue = setHasMoreBasedOnUsers(usersData);
+    sethasMore(hasMoreValue);
   }, [usersData]);
 
   // If the user is not Superadmin, redirect to Organizations screen
@@ -126,6 +149,13 @@ const Requests = (): JSX.Element => {
       setIsLoading(false);
     }
   }, [loading]);
+
+  useEffect(() => {
+    if (usersData && usersData?.users.length > 0) {
+      const newDisplayedUsers = sortRequests(usersData?.users, sortingOption);
+      setDisplayedUsers(newDisplayedUsers);
+    }
+  }, [usersData, sortingOption]);
 
   /* istanbul ignore next */
   const resetAndRefetch = (): void => {
@@ -233,7 +263,33 @@ const Requests = (): JSX.Element => {
     t('email'),
     t('accept'),
     t('reject'),
+    '',
   ];
+
+  const handleSorting = (option: string): void => {
+    setSortingOption(option);
+  };
+
+  const sortRequests = (
+    users: InterfaceQueryRequestListItem[],
+    sortingOption: string
+  ): InterfaceQueryRequestListItem[] => {
+    const sortedRequest = [...users];
+
+    if (sortingOption === 'latest') {
+      sortedRequest.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+    } else if (sortingOption === 'oldest') {
+      sortedRequest.sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
+    }
+
+    return sortedRequest;
+  };
 
   return (
     <>
@@ -270,15 +326,35 @@ const Requests = (): JSX.Element => {
           </div>
           <div className={styles.btnsBlock}>
             <div className="d-flex">
-              <Dropdown aria-expanded="false" title="Sort organizations">
-                <Dropdown.Toggle variant="outline-success">
+              <Dropdown
+                aria-expanded="false"
+                title="Sort organizations"
+                data-testid="sort"
+              >
+                <Dropdown.Toggle
+                  variant={sortingOption === '' ? 'outline-success' : 'success'}
+                  data-testid="sortDropdown"
+                >
                   <SortIcon className={'me-1'} />
-                  {t('sort')}
+                  {sortingOption === ''
+                    ? t('sort')
+                    : sortingOption === 'latest'
+                    ? t('Latest')
+                    : t('Oldest')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={(): void => handleSorting('latest')}
+                    data-testid="latest"
+                  >
+                    {t('Latest')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={(): void => handleSorting('oldest')}
+                    data-testid="oldest"
+                  >
+                    {t('Oldest')}
+                  </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
               <Dropdown aria-expanded="false" title="Filter organizations">
@@ -298,7 +374,7 @@ const Requests = (): JSX.Element => {
         {isLoading == false &&
         usersData?.users.length === 0 &&
         searchByName.length > 0 ? (
-          <div className={styles.notFound}>
+          <div className={styles.notFound} data-testid="searchAndNotFound">
             <h4>
               {t('noResultsFoundFor')} &quot;{searchByName}&quot;
             </h4>
@@ -313,7 +389,12 @@ const Requests = (): JSX.Element => {
           <InfiniteScroll
             dataLength={usersData?.users.length ?? 0}
             next={loadMoreRequests}
-            loader={<TableLoader noOfCols={5} noOfRows={perPageResult} />}
+            loader={
+              <TableLoader
+                noOfCols={headerTitles.length}
+                noOfRows={perPageResult}
+              />
+            }
             hasMore={hasMore}
             className={styles.listBox}
             data-testid="organizations-list"
@@ -336,8 +417,9 @@ const Requests = (): JSX.Element => {
                 </tr>
               </thead>
               <tbody>
-                {usersData?.users &&
-                  usersData.users.map((user, index) => {
+                {displayedUsers &&
+                  displayedUsers.length > 0 &&
+                  displayedUsers.map((user, index) => {
                     return (
                       <tr key={user._id}>
                         <th scope="row">{index + 1}</th>
@@ -365,6 +447,7 @@ const Requests = (): JSX.Element => {
                             {t('reject')}
                           </Button>
                         </td>
+                        <td>{dayjs(user.createdAt).fromNow()}</td>
                       </tr>
                     );
                   })}
