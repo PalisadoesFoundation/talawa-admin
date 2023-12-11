@@ -36,12 +36,7 @@
   display: flex;
   flex-direction: row;
 }
-.sidebar {
-  z-index: 0;
-  padding-top: 5px;
-  margin: 0;
-  height: 100%;
-}
+
 .sidebar:after {
   content: '';
   background-color: #f7f7f7;
@@ -51,12 +46,6 @@
   top: 10px;
   left: 94%;
   display: block;
-}
-.sidebarsticky {
-  padding-left: 45px;
-}
-.sidebarsticky > p {
-  margin-top: -10px;
 }
 
 .navitem {
@@ -75,15 +64,7 @@
   border-bottom: 3px solid #31bb6b;
   width: 15%;
 }
-.searchtitle {
-  color: #707070;
-  font-weight: 600;
-  font-size: 18px;
-  margin-bottom: 20px;
-  padding-bottom: 5px;
-  border-bottom: 3px solid #31bb6b;
-  width: 60%;
-}
+
 .logintitleadmin {
   color: #707070;
   font-weight: 600;
@@ -113,6 +94,7 @@
 .justifysp {
   display: flex;
   justify-content: space-between;
+  margin-top: 20px;
 }
 @media screen and (max-width: 575.5px) {
   .justifysp {
@@ -212,18 +194,7 @@
   transition: transform 0.2s, box-shadow 0.2s;
   width: 100%;
 }
-.sidebarsticky > input {
-  text-decoration: none;
-  margin-bottom: 50px;
-  border-color: #e8e5e5;
-  width: 80%;
-  border-radius: 7px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  padding-right: 10px;
-  padding-left: 10px;
-  box-shadow: none;
-}
+
 .datediv {
   display: flex;
   flex-direction: row;

@@ -135,10 +135,10 @@ describe('Calendar', () => {
         </I18nextProvider>
       </MockedProvider>
     );
-    const prevButton = screen.getByText('<');
+    const prevButton = screen.getByTestId('prevmonth');
     fireEvent.click(prevButton);
     //testing next month button
-    const nextButton = screen.getByText('>');
+    const nextButton = screen.getByTestId('nextmonth');
     fireEvent.click(nextButton);
     //Testing year change
     for (let index = 0; index < 13; index++) {
@@ -203,11 +203,11 @@ describe('Calendar', () => {
       </MockedProvider>
     );
     //Changing the month
-    const prevButton = screen.getByText('<');
+    const prevButton = screen.getByTestId('prevmonth');
     fireEvent.click(prevButton);
 
     // Clicking today button
-    const todayButton = screen.getByText('Today');
+    const todayButton = screen.getByTestId('nextmonth');
     fireEvent.click(todayButton);
     // const todayCell = screen.getByText(new Date().getDate().toString());
     // expect(todayCell).toHaveClass(styles.day__today);

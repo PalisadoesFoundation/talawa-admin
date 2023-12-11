@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import Button from 'react-bootstrap/Button';
 import React, { useState, useEffect } from 'react';
 import styles from './EventCalendar.module.css';
+import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 
 interface InterfaceEvent {
   _id: string;
@@ -208,8 +209,12 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   return (
     <div className={styles.calendar}>
       <div className={styles.calendar__header}>
-        <Button className={styles.button} onClick={handlePrevMonth}>
-          {'<'}
+        <Button
+          className={styles.button}
+          onClick={handlePrevMonth}
+          data-testid="prevmonth"
+        >
+          <ChevronLeft />
         </Button>
         <div
           className={styles.calendar__header_month}
@@ -218,10 +223,14 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           {months[currentMonth]} {currentYear}
         </div>
         <Button className={styles.button} onClick={handleNextMonth}>
-          {'>'}
+          <ChevronRight />
         </Button>
         <div>
-          <Button className={styles.btn__today} onClick={handleTodayButton}>
+          <Button
+            className={styles.btn__today}
+            onClick={handleTodayButton}
+            data-testid="nextmonth"
+          >
             Today
           </Button>
         </div>
