@@ -17,7 +17,6 @@ import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen
 import PaginationList from 'components/PaginationList/PaginationList';
 import UserListCard from 'components/UserListCard/UserListCard';
 import { useTranslation } from 'react-i18next';
-import debounce from 'utils/debounce';
 import styles from './OrganizationPeople.module.css';
 
 import { toast } from 'react-toastify';
@@ -112,23 +111,25 @@ function organizationPeople(): JSX.Element {
   }
 
   /* istanbul ignore next */
-  const handleFirstNameSearchChange = (filterData: any): void => {
-    /* istanbul ignore next */
-    if (state === 0) {
-      memberRefetch({
-        ...filterData,
-        orgId: currentUrl,
-      });
-    } else if (state === 1) {
-      adminRefetch({
-        ...filterData,
-        orgId: currentUrl,
-        admin_for: currentUrl,
-      });
-    } else {
-      usersRefetch({
-        ...filterData,
-      });
+  const handleFirstNameSearchChange = (e: any): void => {
+    if (e.key === 'Enter') {
+      /* istanbul ignore next */
+      if (state === 0) {
+        memberRefetch({
+          ...filterData,
+          orgId: currentUrl,
+        });
+      } else if (state === 1) {
+        adminRefetch({
+          ...filterData,
+          orgId: currentUrl,
+          admin_for: currentUrl,
+        });
+      } else {
+        usersRefetch({
+          ...filterData,
+        });
+      }
     }
   };
 
@@ -147,10 +148,6 @@ function organizationPeople(): JSX.Element {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
-  const debouncedHandleFirstNameSearchChange = debounce(
-    handleFirstNameSearchChange
-  );
 
   return (
     <>
@@ -176,8 +173,8 @@ function organizationPeople(): JSX.Element {
                     };
 
                     setFilterData(newFilterData);
-                    debouncedHandleFirstNameSearchChange(newFilterData);
                   }}
+                  onKeyUp={handleFirstNameSearchChange}
                 />
                 <Form.Control
                   type="name"
@@ -195,8 +192,8 @@ function organizationPeople(): JSX.Element {
                     };
 
                     setFilterData(newFilterData);
-                    debouncedHandleFirstNameSearchChange(newFilterData);
                   }}
+                  onKeyUp={handleFirstNameSearchChange}
                 />
                 <div
                   className={styles.radio_buttons}

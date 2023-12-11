@@ -14,7 +14,6 @@ import styles from './OrgPost.module.css';
 import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
 import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
-import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
 import NotFound from 'components/NotFound/NotFound';
 import { errorHandler } from 'utils/errorHandler';
@@ -141,16 +140,16 @@ function orgPost(): JSX.Element {
   }
 
   const handleSearch = (e: any): void => {
-    const { value } = e.target;
-    const filterData = {
-      id: currentUrl,
-      title_contains: showTitle ? value : null,
-      text_contains: !showTitle ? value : null,
-    };
-    refetch(filterData);
+    if (e.key === 'Enter') {
+      const { value } = e.target;
+      const filterData = {
+        id: currentUrl,
+        title_contains: showTitle ? value : null,
+        text_contains: !showTitle ? value : null,
+      };
+      refetch(filterData);
+    }
   };
-
-  const debouncedHandleSearch = debounce(handleSearch);
 
   const handleSorting = (option: string): void => {
     setSortingOption(option);
@@ -202,7 +201,7 @@ function orgPost(): JSX.Element {
                   placeholder={showTitle ? t('searchTitle') : t('searchText')}
                   data-testid="searchByName"
                   autoComplete="off"
-                  onChange={debouncedHandleSearch}
+                  onKeyUp={handleSearch}
                   required
                 />
                 <Button

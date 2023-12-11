@@ -17,7 +17,6 @@ import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 import TableLoader from 'components/TableLoader/TableLoader';
 import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import debounce from 'utils/debounce';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import styles from './Users.module.css';
 
@@ -109,18 +108,20 @@ const Users = (): JSX.Element => {
   }, [loading]);
 
   const handleSearchByName = (e: any): void => {
-    const { value } = e.target;
-    setSearchByName(value);
-    /* istanbul ignore next */
-    if (value.length === 0) {
-      resetAndRefetch();
-      return;
+    if (e.key === 'Enter') {
+      const { value } = e.target;
+      setSearchByName(value);
+      /* istanbul ignore next */
+      if (value.length === 0) {
+        resetAndRefetch();
+        return;
+      }
+      refetchUsers({
+        firstName_contains: value,
+        lastName_contains: '',
+        // Later on we can add several search and filter options
+      });
     }
-    refetchUsers({
-      firstName_contains: value,
-      lastName_contains: '',
-      // Later on we can add several search and filter options
-    });
   };
   /* istanbul ignore next */
   const resetAndRefetch = (): void => {
@@ -160,7 +161,7 @@ const Users = (): JSX.Element => {
       },
     });
   };
-  const debouncedHandleSearchByName = debounce(handleSearchByName);
+
   // console.log(usersData);
 
   const handleSorting = (option: string): void => {
@@ -216,7 +217,7 @@ const Users = (): JSX.Element => {
                 data-testid="searchByName"
                 autoComplete="off"
                 required
-                onChange={debouncedHandleSearchByName}
+                onKeyUp={handleSearchByName}
               />
               <Button
                 tabIndex={-1}
