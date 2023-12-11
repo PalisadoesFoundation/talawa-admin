@@ -111,7 +111,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
           {attendeesData.event.attendees.length == 0
             ? `There are no registered attendees for this event.`
             : null}
-          <Stack direction="row" spacing={1}>
+          <Stack direction="row" className="flex-wrap gap-2">
             {attendeesData.event.attendees.map((attendee: InterfaceUser) => (
               <Chip
                 avatar={

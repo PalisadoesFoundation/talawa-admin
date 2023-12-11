@@ -153,6 +153,8 @@
     "noRequestFound": "Aucune demande trouvée",
     "sort": "Trier",
     "filter": "Filtre",
+    "Oldest": "Les plus anciennes d'abord",
+    "Latest": "Les plus récentes d'abord",
     "userApproved": "Approuvé par l'utilisateur",
     "userRejected": "Utilisateur rejeté",
     "noResultsFoundFor": "Aucun résultat trouvé pour ",

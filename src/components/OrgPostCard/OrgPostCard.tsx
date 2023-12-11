@@ -182,6 +182,7 @@ export default function OrgPostCard(
 
       if (data) {
         toast.success(t('postDeleted'));
+        toggleShowDeleteModal();
         setTimeout(() => {
           window.location.reload();
         });

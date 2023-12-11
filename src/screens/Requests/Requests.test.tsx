@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
@@ -13,11 +13,17 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import Requests from './Requests';
-import { EMPTY_ORG_MOCKS, MOCKS, ORG_LIST_MOCK } from './RequestsMocks';
+import {
+  EMPTY_ORG_MOCKS,
+  EMPTY_REQUEST_MOCKS,
+  MOCKS,
+  ORG_LIST_MOCK,
+} from './RequestsMocks';
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_ORG_MOCKS, true);
 const link3 = new StaticMockLink(ORG_LIST_MOCK, true);
+const link4 = new StaticMockLink(EMPTY_REQUEST_MOCKS, true);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -89,6 +95,61 @@ describe('Testing Request screen', () => {
     );
 
     await wait();
+  });
+
+  test('Testing empty user requests', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link4}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    const searchInput = screen.getByTestId('searchByName');
+    userEvent.type(searchInput, 'l');
+
+    await screen.findByTestId('searchAndNotFound');
+  });
+
+  test('Testing search latest and oldest toggle', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Requests />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+
+      await wait();
+
+      const searchInput = screen.getByTestId('sort');
+      expect(searchInput).toBeInTheDocument();
+
+      const inputText = screen.getByTestId('sortDropdown');
+
+      fireEvent.click(inputText);
+      const toggleText = screen.getByTestId('latest');
+
+      fireEvent.click(toggleText);
+
+      expect(searchInput).toBeInTheDocument();
+      fireEvent.click(inputText);
+      const toggleTite = screen.getByTestId('oldest');
+      fireEvent.click(toggleTite);
+      expect(searchInput).toBeInTheDocument();
+    });
   });
 
   test('Testing accept user functionality', async () => {
