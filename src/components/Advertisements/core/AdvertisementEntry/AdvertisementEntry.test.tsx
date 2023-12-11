@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react';
+import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 
 import {
   ApolloClient,
@@ -73,16 +73,15 @@ describe('Testing Advertisement Entry Component', () => {
     fireEvent.click(getByTestId('AddOnEntry_btn_install'));
 
     await waitFor(() => {
-      expect(deleteAdByIdMock).toHaveBeenCalledWith({
-        variables: {
-          id: '1',
-        },
-      });
+      expect(screen.getByTestId('delete_title')).toBeInTheDocument();
+      expect(screen.getByTestId('delete_body')).toBeInTheDocument();
     });
 
-    deleteAdByIdMock.mockRejectedValueOnce(new Error('Deletion Failed'));
+    fireEvent.click(getByTestId('AddOnEntry_btn_install'));
 
     fireEvent.click(getByTestId('AddOnEntry_btn_install'));
+
+    fireEvent.click(getByTestId('delete_yes'));
 
     await waitFor(() => {
       expect(deleteAdByIdMock).toHaveBeenCalledWith({
@@ -90,6 +89,29 @@ describe('Testing Advertisement Entry Component', () => {
           id: '1',
         },
       });
+      const deletedMessage = screen.queryByText('Advertisement Deleted');
+      expect(deletedMessage).toBeNull();
+    });
+
+    deleteAdByIdMock.mockRejectedValueOnce(new Error('Deletion Failed'));
+
+    fireEvent.click(getByTestId('AddOnEntry_btn_install'));
+
+    fireEvent.click(getByTestId('delete_yes'));
+
+    await waitFor(() => {
+      expect(deleteAdByIdMock).toHaveBeenCalledWith({
+        variables: {
+          id: '1',
+        },
+      });
+      const deletionFailedText = screen.queryByText((content, element) => {
+        return (
+          element?.textContent === 'Deletion Failed' &&
+          element.tagName.toLowerCase() === 'div'
+        );
+      });
+      expect(deletionFailedText).toBeNull();
     });
   });
 });

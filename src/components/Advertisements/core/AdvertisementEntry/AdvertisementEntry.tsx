@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AdvertisementEntry.module.css';
-import { Button, Card, Col, Row, Spinner } from 'react-bootstrap';
+import { Button, Card, Col, Row, Spinner, Modal } from 'react-bootstrap';
 import { DELETE_ADVERTISEMENT_BY_ID } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
@@ -29,10 +29,13 @@ function advertisementEntry({
 }: InterfaceAddOnEntryProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const [buttonLoading, setButtonLoading] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   const [deleteAdById] = useMutation(DELETE_ADVERTISEMENT_BY_ID, {
     refetchQueries: [ADVERTISEMENTS_GET],
   });
 
+  const toggleShowDeleteModal = (): void => setShowDeleteModal((prev) => !prev);
   const onDelete = async (): Promise<void> => {
     setButtonLoading(true);
     try {
@@ -41,7 +44,7 @@ function advertisementEntry({
           id: id.toString(),
         },
       });
-      toast.success('Advertisement Deleted');
+      toast.error('Advertisement Deleted');
       setButtonLoading(false);
     } catch (error: any) {
       toast.error(error.message);
@@ -66,15 +69,13 @@ function advertisementEntry({
                 <Card.Subtitle className="mb-2 text-muted author">
                   {type}
                 </Card.Subtitle>
-                <Card.Text>{link} </Card.Text>
+                <Card.Text>{link}</Card.Text>
                 <Button
                   className={styles.entryaction}
-                  variant="primary"
+                  variant="danger"
                   disabled={buttonLoading}
                   data-testid="AddOnEntry_btn_install"
-                  onClick={(): void => {
-                    onDelete();
-                  }}
+                  onClick={toggleShowDeleteModal}
                 >
                   {buttonLoading ? (
                     <Spinner animation="grow" />
@@ -83,6 +84,34 @@ function advertisementEntry({
                   )}
                   {t('delete')}
                 </Button>
+                <Modal show={showDeleteModal} onHide={toggleShowDeleteModal}>
+                  <Modal.Header>
+                    <h5 data-testid="delete_title">
+                      {t('deleteAdvertisement')}
+                    </h5>
+                    <Button variant="danger" onClick={toggleShowDeleteModal}>
+                      <i className="fa fa-times"></i>
+                    </Button>
+                  </Modal.Header>
+                  <Modal.Body data-testid="delete_body">
+                    {t('deleteAdvertisementMsg')}
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="danger" onClick={toggleShowDeleteModal}>
+                      {t('no')}
+                    </Button>
+                    <Button
+                      type="button"
+                      className="btn btn-success"
+                      onClick={(): void => {
+                        onDelete();
+                      }}
+                      data-testid="delete_yes"
+                    >
+                      {t('yes')}
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
               </Card.Body>
             </Card>
           </Col>
