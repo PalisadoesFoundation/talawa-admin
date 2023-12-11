@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
 
 import {
   ApolloClient,
@@ -17,6 +17,7 @@ import { store } from 'state/store';
 import { BACKEND_URL } from 'Constant/constant';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
+// import { use } from 'i18next';
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
@@ -29,8 +30,20 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
   link: ApolloLink.from([httpLink]),
 });
+
+const mockUseMutation = jest.fn();
+jest.mock('@apollo/client', () => {
+  const originalModule = jest.requireActual('@apollo/client');
+  return {
+    ...originalModule,
+    useMutation: () => mockUseMutation(),
+  };
+});
+
 describe('Testing Advertisement Entry Component', () => {
-  test('Temporary test for Advertisement Entry', () => {
+  test('Temporary test for Advertisement Entry', async () => {
+    const deleteAdByIdMock = jest.fn();
+    mockUseMutation.mockReturnValue([deleteAdByIdMock]);
     const { getByTestId, getAllByText } = render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -56,5 +69,27 @@ describe('Testing Advertisement Entry Component', () => {
     expect(getByTestId('AdEntry')).toBeInTheDocument();
     expect(getAllByText('POPUP')[0]).toBeInTheDocument();
     expect(getAllByText('Advert1')[0]).toBeInTheDocument();
+
+    fireEvent.click(getByTestId('AddOnEntry_btn_install'));
+
+    await waitFor(() => {
+      expect(deleteAdByIdMock).toHaveBeenCalledWith({
+        variables: {
+          id: '1',
+        },
+      });
+    });
+
+    deleteAdByIdMock.mockRejectedValueOnce(new Error('Deletion Failed'));
+
+    fireEvent.click(getByTestId('AddOnEntry_btn_install'));
+
+    await waitFor(() => {
+      expect(deleteAdByIdMock).toHaveBeenCalledWith({
+        variables: {
+          id: '1',
+        },
+      });
+    });
   });
 });
