@@ -29,8 +29,8 @@ async function wait(ms = 100): Promise<void> {
 }
 
 afterEach(() => {
-  localStorage.clear();
   cleanup();
+  localStorage.clear();
 });
 
 describe('Organisations Page testing as SuperAdmin', () => {
