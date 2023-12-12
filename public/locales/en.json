@@ -200,7 +200,7 @@
     "users": "Users",
     "searchName": "Enter Name",
     "searchevent": "Enter Event",
-    "searchLastName": "Enter Last Name"
+    "searchFullName": "Enter Full Name"
   },
   "userListCard": {
     "joined": "Joined",
