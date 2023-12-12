@@ -128,28 +128,11 @@ const MOCKS = [
         text: 'This is dummy text',
         organizationId: '123',
       },
-      result: {
-        data: {
-          createPost: {
-            _id: '453',
-          },
-        },
-      },
     },
-  },
-  {
-    request: {
-      query: CREATE_POST_MUTATION,
-      variables: {
-        title: 'Dummy Post',
-        text: 'This is dummy text',
-        organizationId: '123',
-      },
-      result: {
-        data: {
-          createPost: {
-            _id: '453',
-          },
+    result: {
+      data: {
+        createPost: {
+          _id: '6411e53835d7ba2344a78e21',
         },
       },
     },
@@ -158,13 +141,13 @@ const MOCKS = [
     request: {
       query: TOGGLE_PINNED_POST,
       variables: {
-        id: '32',
+        id: '6411e53835d7ba2344a78e21',
       },
-      result: {
-        data: {
-          togglePostPin: {
-            _id: '32',
-          },
+    },
+    result: {
+      data: {
+        togglePostPin: {
+          _id: '6411e53835d7ba2344a78e21',
         },
       },
     },
@@ -190,7 +173,7 @@ describe('Organisation Post Page', () => {
 
   test('correct mock data should be queried', async () => {
     const dataQuery1 =
-      MOCKS[0]?.result?.data?.postsByOrganizationConnection.edges[0];
+      MOCKS[0]?.result?.data?.postsByOrganizationConnection?.edges[0];
 
     expect(dataQuery1).toEqual({
       _id: '6411e53835d7ba2344a78e21',
@@ -400,7 +383,7 @@ describe('Organisation Post Page', () => {
     fireEvent.click(createPostBtn);
   }, 15000);
 
-  test('setPostFormState updates the pinned state correctly', async () => {
+  test('setPostFormState updates the pinned state correctly and toggles the pin when post is created', async () => {
     await act(async () => {
       render(
         <MockedProvider addTypename={false} link={link}>
@@ -417,36 +400,15 @@ describe('Organisation Post Page', () => {
 
       await wait(500);
       userEvent.click(screen.getByTestId('createPostModalBtn'));
-      userEvent.click(screen.getByTestId(/ispinnedpost/i));
+      userEvent.click(screen.getByTestId('ispinnedpost'));
       await wait(500);
     });
     expect(screen.getByTestId(/ispinnedpost/i)).toBeChecked();
-  });
-
-  test('should toggle pin when post is created', async () => {
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
-                <OrgPost />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>
-      );
-
-      await wait(500);
-      userEvent.click(screen.getByTestId('createPostModalBtn'));
-      userEvent.click(screen.getByTestId(/ispinnedpost/i));
-      await wait(500);
-    });
-    fireEvent.click(screen.getByTestId(/createPostBtn/i));
+    userEvent.click(screen.getByTestId('createPostBtn'));
+    await wait(500);
     await waitFor(() => {
-      expect(MOCKS[3].request.variables).toEqual({
-        id: '32',
+      expect(MOCKS[2]?.result?.data?.togglePostPin).toEqual({
+        _id: '6411e53835d7ba2344a78e21',
       });
     });
   });
