@@ -3,10 +3,6 @@ import { render, screen } from '@testing-library/react';
 import IconComponent from './IconComponent';
 
 const screenTestIdMap: Record<string, Record<string, string>> = {
-  AllOrganizations: {
-    name: 'My Organizations',
-    testId: 'Icon-Component-AllOrganizationsIcon',
-  },
   Dashboard: {
     name: 'Dashboard',
     testId: 'Icon-Component-DashboardIcon',
@@ -34,6 +30,10 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
   Settings: {
     name: 'Settings',
     testId: 'Icon-Component-SettingsIcon',
+  },
+  AllOrganizations: {
+    name: 'All Organizations',
+    testId: 'Icon-Component-AllOrganizationsIcon',
   },
   EventProject: {
     name: 'Add Event Project',

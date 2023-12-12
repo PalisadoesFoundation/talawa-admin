@@ -63,7 +63,6 @@ export type TargetsType = {
 
 // Note: Routes with names appear on NavBar
 const components: ComponentType[] = [
-  { name: 'My Organizations', comp_id: 'orglist', component: 'OrgList' },
   { name: 'Dashboard', comp_id: 'orgdash', component: 'OrganizationDashboard' },
   { name: 'People', comp_id: 'orgpeople', component: 'OrganizationPeople' },
   { name: 'Events', comp_id: 'orgevents', component: 'OrganizationEvents' },
@@ -85,6 +84,7 @@ const components: ComponentType[] = [
   },
 
   { name: 'Settings', comp_id: 'orgsetting', component: 'OrgSettings' },
+  { name: 'All Organizations', comp_id: 'orglist', component: 'OrgList' },
   { name: '', comp_id: 'member', component: 'MemberDetail' },
 ];
 
