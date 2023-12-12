@@ -211,43 +211,45 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
               </label>
             </div>
           </div>
-          <label htmlFor="orgphoto" className={styles.orgphoto}>
-            {t('displayImage')}:
-            <Form.Control
-              accept="image/*"
-              id="orgphoto"
-              name="photo"
-              type="file"
-              multiple={false}
-              onChange={async (e: React.ChangeEvent): Promise<void> => {
-                const target = e.target as HTMLInputElement;
-                const file = target.files && target.files[0];
-                if (file)
-                  setFormState({
-                    ...formState,
-                    file: await convertToBase64(file),
-                  });
-              }}
-              data-testid="organisationImage"
-            />
-          </label>
-          <div className={styles.dispbtnflex}>
-            <Button
-              type="button"
-              className={styles.greenregbtn}
-              value="savechanges"
-              onClick={loginLink}
-            >
-              {t('saveChanges')}
-            </Button>
-            <Button
-              type="button"
-              className={styles.whitebtn}
-              value="cancelchanges"
-              onClick={cancelUpdate}
-            >
-              {t('cancel')}
-            </Button>
+          <div className={styles.dispflex}>
+            <label htmlFor="orgphoto" className={styles.orgphoto}>
+              {t('displayImage')}:
+              <Form.Control
+                accept="image/*"
+                id="orgphoto"
+                name="photo"
+                type="file"
+                multiple={false}
+                onChange={async (e: React.ChangeEvent): Promise<void> => {
+                  const target = e.target as HTMLInputElement;
+                  const file = target.files && target.files[0];
+                  if (file)
+                    setFormState({
+                      ...formState,
+                      file: await convertToBase64(file),
+                    });
+                }}
+                data-testid="organisationImage"
+              />
+            </label>
+            <div className={styles.dispbtnflex}>
+              <Button
+                type="button"
+                className={styles.greenregbtn}
+                value="savechanges"
+                onClick={loginLink}
+              >
+                {t('saveChanges')}
+              </Button>
+              <Button
+                type="button"
+                className={styles.whitebtn}
+                value="cancelchanges"
+                onClick={cancelUpdate}
+              >
+                {t('cancel')}
+              </Button>
+            </div>
           </div>
         </form>
       </div>
