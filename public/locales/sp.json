@@ -657,7 +657,12 @@
     "activeAds": "Campañas activas",
     "archievedAds": "Campañas completadas",
     "pMessage": "No hay anuncios disponibles para esta campaña.",
-    "delete": "Eliminar"
+    "delete": "Eliminar",
+    "close": "Cerrar",
+    "deleteAdvertisement": "Eliminar anuncio",
+    "deleteAdvertisementMsg": "¿Desea eliminar este anuncio?",
+    "no": "No",
+    "yes": "Sí"
   },
   "userChat": {
     "chat": "Charlar",
