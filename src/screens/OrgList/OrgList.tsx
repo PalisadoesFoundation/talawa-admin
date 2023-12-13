@@ -105,23 +105,11 @@ function orgList(): JSX.Element {
       first: perPageResult,
       skip: 0,
       filter: searchByName,
+      orderBy:
+        sortingState.option === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC',
     },
     notifyOnNetworkStatusChange: true,
   });
-
-  const [displayedOrgs, setDisplayedOrgs] = useState(
-    orgsData?.organizationsConnection || []
-  );
-
-  useEffect(() => {
-    if (orgsData && orgsData.organizationsConnection) {
-      const newDisplayedOrgs = sortOrgs(
-        orgsData.organizationsConnection,
-        sortingState.option
-      );
-      setDisplayedOrgs(newDisplayedOrgs);
-    }
-  }, [orgsData, sortingState.option]);
 
   // To clear the search field and form fields on unmount
   useEffect(() => {
@@ -231,6 +219,8 @@ function orgList(): JSX.Element {
       filter: '',
       first: perPageResult,
       skip: 0,
+      orderBy:
+        sortingState.option === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC',
     });
     sethasMore(true);
   };
@@ -247,14 +237,13 @@ function orgList(): JSX.Element {
       filter: value,
     });
   };
-  // console.log(orgsData);
   /* istanbul ignore next */
   const loadMoreOrganizations = (): void => {
     console.log('loadMoreOrganizations');
     setIsLoadingMore(true);
     fetchMore({
       variables: {
-        skip: displayedOrgs.length || 0,
+        skip: orgsData?.organizationsConnection.length || 0,
       },
       updateQuery: (
         prev:
@@ -291,27 +280,15 @@ function orgList(): JSX.Element {
       option,
       selectedOption: t(option),
     });
-  };
 
-  const sortOrgs = (
-    orgs: InterfaceOrgConnectionInfoType[],
-    sortingOption: string
-  ): InterfaceOrgConnectionInfoType[] => {
-    const sortedOrgs = [...orgs];
+    const orderBy = option === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC';
 
-    if (sortingOption === 'Latest') {
-      sortedOrgs.sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      );
-    } else if (sortingOption === 'Oldest') {
-      sortedOrgs.sort(
-        (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-      );
-    }
-
-    return sortedOrgs;
+    refetchOrgs({
+      first: perPageResult,
+      skip: 0,
+      filter: searchByName,
+      orderBy,
+    });
   };
 
   return (
@@ -394,7 +371,8 @@ function orgList(): JSX.Element {
         </div>
         {/* Text Infos for list */}
         {!isLoading &&
-        ((displayedOrgs.length === 0 && searchByName.length == 0) ||
+        ((orgsData?.organizationsConnection.length === 0 &&
+          searchByName.length == 0) ||
           (userData &&
             userData.user.userType === 'ADMIN' &&
             userData.user.adminFor.length === 0)) ? (
@@ -404,7 +382,7 @@ function orgList(): JSX.Element {
             <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
           </div>
         ) : !isLoading &&
-          displayedOrgs.length == 0 &&
+          orgsData?.organizationsConnection.length == 0 &&
           /* istanbul ignore next */
           searchByName.length > 0 ? (
           /* istanbul ignore next */
@@ -417,7 +395,7 @@ function orgList(): JSX.Element {
         ) : (
           <>
             <InfiniteScroll
-              dataLength={displayedOrgs?.length ?? 0}
+              dataLength={orgsData?.organizationsConnection?.length ?? 0}
               next={loadMoreOrganizations}
               loader={
                 <>
@@ -472,7 +450,7 @@ function orgList(): JSX.Element {
                   ))}
                 </>
               ) : userData && userData.user.userType == 'SUPERADMIN' ? (
-                displayedOrgs.map((item) => {
+                orgsData?.organizationsConnection.map((item) => {
                   return (
                     <div key={item._id} className={styles.itemCard}>
                       <OrgListCard data={item} />
@@ -483,7 +461,7 @@ function orgList(): JSX.Element {
                 userData &&
                 userData.user.userType == 'ADMIN' &&
                 userData.user.adminFor.length > 0 &&
-                displayedOrgs.map((item) => {
+                orgsData?.organizationsConnection.map((item) => {
                   if (isAdminForCurrentOrg(item)) {
                     return (
                       <div key={item._id} className={styles.itemCard}>
