@@ -14,17 +14,13 @@
 }
 .dispflex {
   display: flex;
+  flex-direction: column;
   justify-content: flex-start;
-  margin: 0 auto;
+  margin: 0 8rem;
 }
-.dispbtnflex {
-  width: 90%;
-  margin-top: 20px;
-  display: flex;
-  margin: 0 30%;
-}
+
 .dispflex > div {
-  width: 50%;
+  width: 100%;
   margin-right: 50px;
 }
 
@@ -38,6 +34,12 @@
   width: 50%;
 }
 
+.dispbtnflex {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
 .whitebtn {
   margin: 1rem 0 0;
   margin-top: 10px;
@@ -46,7 +48,6 @@
   padding: 10px 20px;
   border-radius: 5px;
   background: none;
-  width: 20%;
   font-size: 16px;
   color: #31bb6b;
   outline: none;
@@ -64,7 +65,6 @@
   padding: 10px 10px;
   border-radius: 5px;
   background-color: #31bb6b;
-  width: 20%;
   font-size: 16px;
   color: white;
   outline: none;
