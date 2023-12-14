@@ -202,45 +202,51 @@ function organizationPeople(): JSX.Element {
                   className={styles.radio_buttons}
                   data-testid="usertypelist"
                 >
-                  <Form.Check
-                    type="radio"
-                    inline
-                    id="userslist"
-                    value="userslist"
-                    name="displaylist"
-                    data-testid="users"
-                    defaultChecked={state == 2 ? true : false}
-                    onClick={(): void => {
-                      setState(2);
-                    }}
-                  />
-                  <label htmlFor="userslist">{t('users')}</label>
-                  <Form.Check
-                    type="radio"
-                    inline
-                    id="memberslist"
-                    value="memberslist"
-                    name="displaylist"
-                    data-testid="members"
-                    defaultChecked={state == 0 ? true : false}
-                    onClick={(): void => {
-                      setState(0);
-                    }}
-                  />
-                  <label htmlFor="memberslist">{t('members')}</label>
-                  <Form.Check
-                    type="radio"
-                    inline
-                    id="adminslist"
-                    value="adminslist"
-                    name="displaylist"
-                    data-testid="admins"
-                    defaultChecked={state == 1 ? true : false}
-                    onClick={(): void => {
-                      setState(1);
-                    }}
-                  />
-                  <label htmlFor="adminslist">{t('admins')}</label>
+                  <div>
+                    <Form.Check
+                      type="radio"
+                      inline
+                      id="userslist"
+                      value="userslist"
+                      name="displaylist"
+                      data-testid="users"
+                      defaultChecked={state == 2 ? true : false}
+                      onClick={(): void => {
+                        setState(2);
+                      }}
+                    />
+                    <label htmlFor="userslist">{t('users')}</label>
+                  </div>
+                  <div>
+                    <Form.Check
+                      type="radio"
+                      inline
+                      id="memberslist"
+                      value="memberslist"
+                      name="displaylist"
+                      data-testid="members"
+                      defaultChecked={state == 0 ? true : false}
+                      onClick={(): void => {
+                        setState(0);
+                      }}
+                    />
+                    <label htmlFor="memberslist">{t('members')}</label>
+                  </div>
+                  <div>
+                    <Form.Check
+                      type="radio"
+                      inline
+                      id="adminslist"
+                      value="adminslist"
+                      name="displaylist"
+                      data-testid="admins"
+                      defaultChecked={state == 1 ? true : false}
+                      onClick={(): void => {
+                        setState(1);
+                      }}
+                    />
+                    <label htmlFor="adminslist">{t('admins')}</label>
+                  </div>
                 </div>
               </div>
             </div>
