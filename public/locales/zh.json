@@ -657,7 +657,12 @@
     "activeAds": "活动广告",
     "archievedAds": "已完成的广告活动",
     "pMessage": "此广告活动没有相关广告。",
-    "delete": "删除"
+    "delete": "删除",
+    "close": "关闭",
+    "deleteAdvertisement": "删除广告",
+    "deleteAdvertisementMsg": "您是否要删除此广告？",
+    "no": "不",
+    "yes": "是"
   },
   "userChat": {
     "chat": "聊天",

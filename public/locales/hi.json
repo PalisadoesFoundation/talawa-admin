@@ -657,7 +657,12 @@
     "activeAds": "सक्रिय अभियान",
     "archievedAds": "संपन्न अभियान",
     "pMessage": "इस अभियान के लिए कोई विज्ञापन नहीं हैं।",
-    "delete": "हटाएँ"
+    "delete": "हटाएँ",
+    "close": "बंद करें",
+    "deleteAdvertisement": "विज्ञापन हटाएं",
+    "deleteAdvertisementMsg": "क्या आप इस विज्ञापन को हटाना चाहते हैं?",
+    "no": "नहीं",
+    "yes": "हाँ"
   },
   "userChat": {
     "chat": "बात",
