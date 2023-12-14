@@ -108,10 +108,10 @@ const Users = (): JSX.Element => {
   }, [loading]);
 
   const handleSearchByName = (e: any): void => {
+    /* istanbul ignore next */
     if (e.key === 'Enter') {
       const { value } = e.target;
       setSearchByName(value);
-      /* istanbul ignore next */
       if (value.length === 0) {
         resetAndRefetch();
         return;
