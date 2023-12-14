@@ -52,7 +52,7 @@ const leftDrawer = ({
         }`}
         data-testid="leftDrawerContainer"
       >
-        {/* <Button
+        <Button
           variant="danger"
           className={styles.closeModalBtn}
           onClick={(): void => {
@@ -61,7 +61,7 @@ const leftDrawer = ({
           data-testid="closeModalBtn"
         >
           <i className="fa fa-times"></i>
-        </Button> */}
+        </Button>
         <TalawaLogo className={styles.talawaLogo} />
         <p className={styles.talawaText}>{t('talawaAdminPortal')}</p>
         <h5 className={styles.titleHeader}>{t('menu')}</h5>
