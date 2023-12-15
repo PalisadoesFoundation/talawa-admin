@@ -8,7 +8,6 @@ import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import EventCalendar from 'components/EventCalendar/EventCalendar';
-import './calendar.css';
 
 import styles from './OrganizationEvents.module.css';
 import {
