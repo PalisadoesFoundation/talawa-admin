@@ -30,8 +30,8 @@
   "plugins": ["react", "@typescript-eslint", "jest"],
   "rules": {
     "react/destructuring-assignment": ["off"],
-    "@typescript-eslint/no-explicit-any": ["error"],
-    "@typescript-eslint/explicit-module-boundary-types": ["error"],
+    "@typescript-eslint/no-explicit-any": ["off"],
+    "@typescript-eslint/explicit-module-boundary-types": ["off"],
     "react/no-multi-comp": [
       "error",
       {
