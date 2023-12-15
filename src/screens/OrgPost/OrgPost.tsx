@@ -412,7 +412,7 @@ function orgPost(): JSX.Element {
                 {file.type.startsWith('image') ? (
                   <img src={postformState.addMedia} alt="Post Image Preview" />
                 ) : (
-                  <video controls data-testid="videoPreview" >
+                  <video controls data-testid="videoPreview">
                     <source src={postformState.addMedia} type={file.type} />(
                     {t('tag')})
                   </video>
