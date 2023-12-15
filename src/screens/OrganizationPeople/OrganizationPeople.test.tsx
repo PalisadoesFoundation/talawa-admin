@@ -461,10 +461,9 @@ console.error = jest.fn();
 
 describe('Organization People Page', () => {
   const searchData = {
-    firstName: 'Aditya',
-    lastNameMember: 'Memberguy',
-    lastNameAdmin: 'Adminguy',
-    lastNameUser: 'Userguytwo',
+    fullNameMember: 'Aditya Memberguy',
+    fullNameAdmin: 'Aditya Adminguy',
+    fullNameUser: 'Aditya Userguytwo',
     location: 'Delhi, India',
     event: 'Event',
   };
@@ -716,12 +715,12 @@ describe('Organization People Page', () => {
     expect(findtext).toBeInTheDocument();
 
     userEvent.type(
-      screen.getByPlaceholderText(/Enter First Name/i),
-      searchData.firstName
+      screen.getByPlaceholderText(/Enter Full Name/i),
+      searchData.fullNameMember
     );
     await wait();
-    expect(screen.getByPlaceholderText(/Enter First Name/i)).toHaveValue(
-      searchData.firstName
+    expect(screen.getByPlaceholderText(/Enter Full Name/i)).toHaveValue(
+      searchData.fullNameMember
     );
 
     await wait();
@@ -755,28 +754,15 @@ describe('Organization People Page', () => {
     expect(screen.getByLabelText(/Members/i)).toBeChecked();
     await wait();
 
-    const firstNameInput = screen.getByPlaceholderText(/Enter First Name/i);
-    const lastNameInput = screen.getByPlaceholderText(/Enter Last Name/i);
+    const fullNameInput = screen.getByPlaceholderText(/Enter Full Name/i);
 
     // Only First Name
-    userEvent.type(firstNameInput, searchData.firstName);
+    userEvent.type(fullNameInput, searchData.fullNameMember);
     await wait();
 
     let findtext = screen.getByText(/Aditya Memberguy/i);
     await wait();
     expect(findtext).toBeInTheDocument();
-
-    // First & Last Name
-    userEvent.type(lastNameInput, searchData.lastNameMember);
-    await wait();
-
-    findtext = screen.getByText(/Aditya Memberguy/i);
-    await wait();
-    expect(findtext).toBeInTheDocument();
-
-    // Only Last Name
-    userEvent.type(firstNameInput, '');
-    await wait();
 
     findtext = screen.getByText(/Aditya Memberguy/i);
     await wait();
@@ -819,12 +805,12 @@ describe('Organization People Page', () => {
     expect(findtext).toBeInTheDocument();
 
     userEvent.type(
-      screen.getByPlaceholderText(/Enter First Name/i),
-      searchData.firstName
+      screen.getByPlaceholderText(/Enter Full Name/i),
+      searchData.fullNameAdmin
     );
     await wait();
-    expect(screen.getByPlaceholderText(/Enter First Name/i)).toHaveValue(
-      searchData.firstName
+    expect(screen.getByPlaceholderText(/Enter Full Name/i)).toHaveValue(
+      searchData.fullNameAdmin
     );
     await wait();
 
@@ -860,33 +846,19 @@ describe('Organization People Page', () => {
     expect(screen.getByLabelText(/Admins/i)).toBeChecked();
     await wait();
 
-    const firstNameInput = screen.getByPlaceholderText(/Enter First Name/i);
-    const lastNameInput = screen.getByPlaceholderText(/Enter Last Name/i);
+    const fullNameInput = screen.getByPlaceholderText(/Enter Full Name/i);
 
     // Only First Name
-    userEvent.type(firstNameInput, searchData.firstName);
+    userEvent.type(fullNameInput, searchData.fullNameAdmin);
     await wait();
 
     let findtext = screen.getByText(/Aditya Adminguy/i);
     await wait();
     expect(findtext).toBeInTheDocument();
 
-    // First & Last Name
-    userEvent.type(lastNameInput, searchData.lastNameAdmin);
-    await wait();
-
     findtext = screen.getByText(/Aditya Adminguy/i);
     await wait();
     expect(findtext).toBeInTheDocument();
-
-    // Only Last Name
-    userEvent.type(firstNameInput, '');
-    await wait();
-
-    findtext = screen.getByText(/Aditya Adminguy/i);
-    await wait();
-    expect(findtext).toBeInTheDocument();
-
     await wait();
     expect(window.location).toBeAt('/orgpeople/id=orgid');
   });
@@ -972,10 +944,10 @@ describe('Organization People Page', () => {
     expect(screen.getByLabelText(/Users/i)).toBeChecked();
     await wait();
 
-    const firstNameInput = screen.getByPlaceholderText(/Enter First Name/i);
+    const fullNameInput = screen.getByPlaceholderText(/Enter Full Name/i);
 
-    // Only First Name
-    userEvent.type(firstNameInput, searchData.firstName);
+    // Only Full Name
+    userEvent.type(fullNameInput, searchData.fullNameUser);
     await wait();
 
     const orgUsers = dataQueryForUsers?.filter(
