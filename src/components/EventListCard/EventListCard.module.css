@@ -21,20 +21,17 @@
   position: relative;
   overflow: hidden;
   transition: all 0.3s;
+  margin-bottom: 5px;
 }
 .dispflex {
   display: flex;
-  height: 50px;
-  transition: transform 0.3s ease;
   cursor: pointer;
 }
-.cards:hover {
-  transform: scale(2.5);
-  z-index: 5;
-}
-.cards:hover h2 {
-  font-size: 0.4vmax;
-  margin-bottom: 0;
+.eventtitle {
+  margin-bottom: 0px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 .iconContainer {
   display: flex;
@@ -97,11 +94,7 @@
 .checkboxdiv > label > input {
   margin-left: 10px;
 }
-.dispflex {
-  display: flex;
-  margin-bottom: 5px;
-  margin-right: 5px;
-}
+
 .dispflex > input {
   width: 20%;
   border: none;
