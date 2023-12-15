@@ -47,6 +47,8 @@ function organizationPeople(): JSX.Element {
     lastName_contains: '',
   });
 
+  const [fullName, setFullName] = useState('');
+
   const {
     data: memberData,
     loading: memberLoading,
@@ -112,22 +114,31 @@ function organizationPeople(): JSX.Element {
   }
 
   /* istanbul ignore next */
-  const handleFirstNameSearchChange = (filterData: any): void => {
+  const handleFullNameSearchChange = (fullName: string): void => {
     /* istanbul ignore next */
+    const [firstName, lastName] = fullName.split(' ');
+
+    const newFilterData = {
+      firstName_contains: firstName ?? '',
+      lastName_contains: lastName ?? '',
+    };
+
+    setFilterData(newFilterData);
+
     if (state === 0) {
       memberRefetch({
-        ...filterData,
+        ...newFilterData,
         orgId: currentUrl,
       });
     } else if (state === 1) {
       adminRefetch({
-        ...filterData,
+        ...newFilterData,
         orgId: currentUrl,
         admin_for: currentUrl,
       });
     } else {
       usersRefetch({
-        ...filterData,
+        ...newFilterData,
       });
     }
   };
@@ -148,8 +159,8 @@ function organizationPeople(): JSX.Element {
     setPage(0);
   };
 
-  const debouncedHandleFirstNameSearchChange = debounce(
-    handleFirstNameSearchChange
+  const debouncedHandleFullNameSearchChange = debounce(
+    handleFullNameSearchChange
   );
 
   return (
@@ -162,40 +173,15 @@ function organizationPeople(): JSX.Element {
                 <h6 className={styles.searchtitle}>{t('filterByName')}</h6>
                 <Form.Control
                   type="name"
-                  id="searchname"
-                  placeholder={t('searchFirstName')}
-                  autoComplete="off"
-                  required
-                  value={filterData.firstName_contains}
-                  onChange={(e): void => {
-                    const { value } = e.target;
-
-                    const newFilterData = {
-                      ...filterData,
-                      firstName_contains: value?.trim(),
-                    };
-
-                    setFilterData(newFilterData);
-                    debouncedHandleFirstNameSearchChange(newFilterData);
-                  }}
-                />
-                <Form.Control
-                  type="name"
                   id="searchLastName"
-                  placeholder={t('searchLastName')}
+                  placeholder={t('searchFullName')}
                   autoComplete="off"
                   required
-                  value={filterData.lastName_contains}
+                  value={fullName}
                   onChange={(e): void => {
                     const { value } = e.target;
-
-                    const newFilterData = {
-                      ...filterData,
-                      lastName_contains: value?.trim(),
-                    };
-
-                    setFilterData(newFilterData);
-                    debouncedHandleFirstNameSearchChange(newFilterData);
+                    setFullName(value);
+                    debouncedHandleFullNameSearchChange(value);
                   }}
                 />
                 <div
