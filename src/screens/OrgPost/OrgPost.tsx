@@ -413,9 +413,8 @@ function orgPost(): JSX.Element {
                   <img src={postformState.addMedia} alt="Post Image Preview" />
                 ) : (
                   <video controls data-testid="videoPreview">
-                    
-                    <source src={postformState.addMedia} type={file.type} />
-                    ({t('tag')})
+                    <source src={postformState.addMedia} type={file.type} />(
+                    {t('tag')})
                   </video>
                 )}
                 <button
