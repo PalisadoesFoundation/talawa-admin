@@ -14,7 +14,6 @@ import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { ToastContainer } from 'react-toastify';
-import { debug } from 'jest-preview';
 
 const MOCKS = [
   {
@@ -498,7 +497,7 @@ describe('Organisation Post Page', () => {
     const closeButton = screen.getByTestId('mediaCloseButton');
     fireEvent.click(closeButton);
   }, 15000);
-  test('Create post, preview image, and close preview', async () => {
+  test('Create post, preview video, and close preview', async () => {
     await act(async () => {
       render(
         <MockedProvider addTypename={false} link={link}>
