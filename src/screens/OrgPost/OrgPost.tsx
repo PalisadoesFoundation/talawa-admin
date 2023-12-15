@@ -1,5 +1,6 @@
 import type { ChangeEvent } from 'react';
 import React, { useState, useEffect } from 'react';
+import SortIcon from '@mui/icons-material/Sort';
 import { Search } from '@mui/icons-material';
 import Row from 'react-bootstrap/Row';
 import Modal from 'react-bootstrap/Modal';
@@ -98,7 +99,6 @@ function orgPost(): JSX.Element {
       postinfo: _postinfo,
       postImage,
       postVideo,
-      addMedia,
     } = postformState;
 
     const posttitle = _posttitle.trim();
@@ -241,14 +241,62 @@ function orgPost(): JSX.Element {
                     title="SearchBy"
                     data-tesid="sea"
                   >
-                    {/* ... Dropdown code ... */}
+                    <Dropdown.Toggle
+                      data-testid="searchBy"
+                      variant="outline-success"
+                    >
+                      <SortIcon className={'me-1'} />
+                      {t('searchBy')}
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      <Dropdown.Item
+                        value="searchText"
+                        onClick={(e): void => {
+                          setShowTitle(false);
+                          e.preventDefault();
+                        }}
+                        data-testid="Text"
+                      >
+                        {t('Text')}
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        value="searchTitle"
+                        onClick={(e): void => {
+                          setShowTitle(true);
+                          e.preventDefault();
+                        }}
+                        data-testid="searchTitle"
+                      >
+                        {t('Title')}
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
                   </Dropdown>
                   <Dropdown
                     aria-expanded="false"
                     title="Sort Post"
                     data-testid="sort"
                   >
-                    {/* ... Dropdown code ... */}
+                    <Dropdown.Toggle
+                      variant="outline-success"
+                      data-testid="sortpost"
+                    >
+                      <SortIcon className={'me-1'} />
+                      {t('sortPost')}
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      <Dropdown.Item
+                        onClick={(): void => handleSorting('latest')}
+                        data-testid="latest"
+                      >
+                        {t('Latest')}
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        onClick={(): void => handleSorting('oldest')}
+                        data-testid="oldest"
+                      >
+                        {t('Oldest')}
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
                   </Dropdown>
                 </div>
 
