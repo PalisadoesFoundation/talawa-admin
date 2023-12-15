@@ -14,23 +14,6 @@ import MemberDetail, { getLanguageName, prettyDate } from './MemberDetail';
 
 const MOCKS1 = [
   {
-
-    
-          
-            
-    
-
-          
-          Expand Down
-          
-            
-    
-
-          
-          Expand Up
-    
-    @@ -114,14 +113,12 @@ const MOCKS2 = [
-  
     request: {
       query: USER_DETAILS,
       variables: {
@@ -79,6 +62,7 @@ const MOCKS1 = [
     },
   },
 ];
+
 const MOCKS2 = [
   {
     request: {
@@ -139,18 +123,9 @@ async function wait(ms = 2): Promise<void> {
 
 jest.mock('react-toastify');
 
-    
-        
-          
-    
-
-        
-        Expand All
-    
-    @@ -134,7 +131,7 @@ describe('MemberDetail', () => {
-  
 describe('MemberDetail', () => {
   global.alert = jest.fn();
+
   test('should render the elements', async () => {
     const props = {
       id: 'rishav-jha-mech',
@@ -160,17 +135,6 @@ describe('MemberDetail', () => {
       <MockedProvider addTypename={false} link={link1}>
         <BrowserRouter>
           <Provider store={store}>
-
-    
-        
-          
-    
-
-        
-        Expand All
-    
-    @@ -146,13 +143,15 @@ describe('MemberDetail', () => {
-  
             <I18nextProvider i18n={i18nForTest}>
               <MemberDetail {...props} />
             </I18nextProvider>
@@ -191,17 +155,6 @@ describe('MemberDetail', () => {
     expect(screen.getAllByText(/Email/i)).toBeTruthy();
     expect(screen.getAllByText(/Main/i)).toBeTruthy();
     expect(screen.getAllByText(/First name/i)).toBeTruthy();
-
-    
-        
-          
-    
-
-        
-        Expand All
-    
-    @@ -175,6 +174,7 @@ describe('MemberDetail', () => {
-  
     expect(screen.getAllByText(/Last name/i)).toBeTruthy();
     expect(screen.getAllByText(/Member of Organization/i)).toBeTruthy();
     expect(screen.getAllByText(/Language/i)).toBeTruthy();
@@ -212,6 +165,7 @@ describe('MemberDetail', () => {
     expect(screen.getAllByText(/Membership requests/i)).toBeTruthy();
     expect(screen.getAllByText(/Events/i)).toBeTruthy();
     expect(screen.getAllByText(/Admin for events/i)).toBeTruthy();
+
     expect(screen.getAllByText(/Created On/i)).toHaveLength(2);
     expect(screen.getAllByText(/User Details/i)).toHaveLength(3);
     expect(screen.getAllByText(/Role/i)).toHaveLength(2);
@@ -224,17 +178,6 @@ describe('MemberDetail', () => {
   test('prettyDate function should work properly', () => {
     // If the date is provided
     const datePretty = jest.fn(prettyDate);
-
-    
-        
-          
-    
-
-        
-        Expand All
-    
-    @@ -184,6 +184,7 @@ describe('MemberDetail', () => {
-  
     expect(datePretty('2023-02-18T09:22:27.969Z')).toBe(
       prettyDate('2023-02-18T09:22:27.969Z')
     );
@@ -245,21 +188,11 @@ describe('MemberDetail', () => {
   test('getLanguageName function should work properly', () => {
     const getLangName = jest.fn(getLanguageName);
     // If the language code is provided
-
-    
-        
-          
-    
-
-        
-        Expand All
-    
-    @@ -197,7 +198,7 @@ describe('MemberDetail', () => {
-  
     expect(getLangName('en')).toBe('English');
     // If the language code is not provided
     expect(getLangName('')).toBe('Unavailable');
   });
+
   test('Should display dicebear image if image is null', async () => {
     const props = {
       id: 'rishav-jha-mech',
@@ -269,17 +202,6 @@ describe('MemberDetail', () => {
       <MockedProvider addTypename={false} link={link1}>
         <BrowserRouter>
           <Provider store={store}>
-
-    
-        
-          
-    
-
-        
-        Expand All
-    
-    @@ -209,14 +210,15 @@ describe('MemberDetail', () => {
-  
             <I18nextProvider i18n={i18nForTest}>
               <MemberDetail {...props} />
             </I18nextProvider>
@@ -300,18 +222,8 @@ describe('MemberDetail', () => {
         `https://api.dicebear.com/5.x/initials/svg?seed=${user?.firstName} ${user?.lastName}`
       )
     );
-
-    
-        
-          
-    
-
-        
-        Expand All
-    
-    @@ -227,7 +229,7 @@ describe('MemberDetail', () => {
-  
   });
+
   test('Should display image if image is present', async () => {
     const props = {
       id: 'rishav-jha-mech',
@@ -321,17 +233,6 @@ describe('MemberDetail', () => {
       <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
-
-    
-        
-          
-    
-
-        
-        Expand All
-    
-    @@ -239,24 +241,25 @@ describe('MemberDetail', () => {
-  
             <I18nextProvider i18n={i18nForTest}>
               <MemberDetail {...props} />
             </I18nextProvider>
@@ -362,17 +263,6 @@ describe('MemberDetail', () => {
       <MockedProvider addTypename={false} link={link1}>
         <BrowserRouter>
           <Provider store={store}>
-
-    
-        
-          
-    
-
-        
-        Expand All
-    
-    @@ -268,10 +271,11 @@ describe('MemberDetail', () => {
-  
             <I18nextProvider i18n={i18nForTest}>
               <MemberDetail {...props} />
             </I18nextProvider>
@@ -389,17 +279,6 @@ describe('MemberDetail', () => {
   test('should show Yes if plugin creation is allowed and admin approved', async () => {
     const props = {
       id: 'rishav-jha-mech',
-
-    
-        
-          
-    
-
-        
-        Expand All
-    
-    @@ -287,8 +291,11 @@ describe('MemberDetail', () => {
-  
     };
     render(
       <MockedProvider addTypename={false} link={link1}>
@@ -420,17 +299,6 @@ describe('MemberDetail', () => {
   test('should show No if plugin creation is not allowed and not admin approved', async () => {
     const props = {
       id: 'rishav-jha-mech',
-
-    
-        
-          
-    
-
-        
-        Expand All
-    
-    @@ -304,6 +311,9 @@ describe('MemberDetail', () => {
-  
     };
     render(
       <MockedProvider addTypename={false} link={link2}>
