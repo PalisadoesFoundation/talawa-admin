@@ -17,7 +17,6 @@ import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen
 import PaginationList from 'components/PaginationList/PaginationList';
 import UserListCard from 'components/UserListCard/UserListCard';
 import { useTranslation } from 'react-i18next';
-import debounce from 'utils/debounce';
 import styles from './OrganizationPeople.module.css';
 
 import { toast } from 'react-toastify';
@@ -113,33 +112,34 @@ function organizationPeople(): JSX.Element {
     toast.error(error?.message);
   }
 
-  /* istanbul ignore next */
-  const handleFullNameSearchChange = (fullName: string): void => {
+  const handleFullNameSearchChange = (e: any): void => {
     /* istanbul ignore next */
-    const [firstName, lastName] = fullName.split(' ');
+    if (e.key === 'Enter') {
+      const [firstName, lastName] = fullName.split(' ');
 
-    const newFilterData = {
-      firstName_contains: firstName ?? '',
-      lastName_contains: lastName ?? '',
-    };
+      const newFilterData = {
+        firstName_contains: firstName ?? '',
+        lastName_contains: lastName ?? '',
+      };
 
-    setFilterData(newFilterData);
+      setFilterData(newFilterData);
 
-    if (state === 0) {
-      memberRefetch({
-        ...newFilterData,
-        orgId: currentUrl,
-      });
-    } else if (state === 1) {
-      adminRefetch({
-        ...newFilterData,
-        orgId: currentUrl,
-        admin_for: currentUrl,
-      });
-    } else {
-      usersRefetch({
-        ...newFilterData,
-      });
+      if (state === 0) {
+        memberRefetch({
+          ...newFilterData,
+          orgId: currentUrl,
+        });
+      } else if (state === 1) {
+        adminRefetch({
+          ...newFilterData,
+          orgId: currentUrl,
+          admin_for: currentUrl,
+        });
+      } else {
+        usersRefetch({
+          ...newFilterData,
+        });
+      }
     }
   };
 
@@ -159,10 +159,6 @@ function organizationPeople(): JSX.Element {
     setPage(0);
   };
 
-  const debouncedHandleFullNameSearchChange = debounce(
-    handleFullNameSearchChange
-  );
-
   return (
     <>
       <OrganizationScreen screenName="People" title={t('title')}>
@@ -181,8 +177,9 @@ function organizationPeople(): JSX.Element {
                   onChange={(e): void => {
                     const { value } = e.target;
                     setFullName(value);
-                    debouncedHandleFullNameSearchChange(value);
+                    // handleFullNameSearchChange(value);
                   }}
+                  onKeyUp={handleFullNameSearchChange}
                 />
                 <div
                   className={styles.radio_buttons}

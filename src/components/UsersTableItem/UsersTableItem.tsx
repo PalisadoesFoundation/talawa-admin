@@ -128,27 +128,31 @@ const UsersTableItem = (props: Props): JSX.Element => {
     toast.success('Profile Page Coming Soon !');
   }
   function handleSearchJoinedOrgs(e: any): void {
-    const { value } = e.target;
-    setSearchByNameJoinedOrgs(value);
-    if (value == '') {
-      setJoinedOrgs(user.joinedOrganizations);
-    } else {
-      const filteredOrgs = user.joinedOrganizations.filter((org) =>
-        org.name.toLowerCase().includes(value.toLowerCase())
-      );
-      setJoinedOrgs(filteredOrgs);
+    if (e.key === 'Enter') {
+      const { value } = e.target;
+      setSearchByNameJoinedOrgs(value);
+      if (value == '') {
+        setJoinedOrgs(user.joinedOrganizations);
+      } else {
+        const filteredOrgs = user.joinedOrganizations.filter((org) =>
+          org.name.toLowerCase().includes(value.toLowerCase())
+        );
+        setJoinedOrgs(filteredOrgs);
+      }
     }
   }
   function handleSearcgByOrgsBlockedBy(e: any): void {
-    const { value } = e.target;
-    setSearchByNameOrgsBlockedBy(value);
-    if (value == '') {
-      setOrgsBlockedBy(user.organizationsBlockedBy);
-    } else {
-      const filteredOrgs = user.organizationsBlockedBy.filter((org) =>
-        org.name.toLowerCase().includes(value.toLowerCase())
-      );
-      setOrgsBlockedBy(filteredOrgs);
+    if (e.key === 'Enter') {
+      const { value } = e.target;
+      setSearchByNameOrgsBlockedBy(value);
+      if (value == '') {
+        setOrgsBlockedBy(user.organizationsBlockedBy);
+      } else {
+        const filteredOrgs = user.organizationsBlockedBy.filter((org) =>
+          org.name.toLowerCase().includes(value.toLowerCase())
+        );
+        setOrgsBlockedBy(filteredOrgs);
+      }
     }
   }
 
@@ -225,7 +229,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                 placeholder={t('searchByOrgName')}
                 data-testid="searchByNameJoinedOrgs"
                 autoComplete="off"
-                onChange={handleSearchJoinedOrgs}
+                onKeyUp={handleSearchJoinedOrgs}
               />
               <Button
                 tabIndex={-1}
@@ -398,7 +402,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                 placeholder={t('searchByOrgName')}
                 data-testid="searchByNameOrgsBlockedBy"
                 autoComplete="off"
-                onChange={handleSearcgByOrgsBlockedBy}
+                onKeyUp={handleSearcgByOrgsBlockedBy}
               />
               <Button
                 tabIndex={-1}
