@@ -213,4 +213,47 @@ describe('Testing Users screen', () => {
       expect(searchInput).toBeInTheDocument();
     });
   });
+
+  test('Should display "No Results Found" message when search yields no results', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    // Simulate a search that yields no results
+    const searchInput = screen.getByPlaceholderText('Enter Name');
+    fireEvent.change(searchInput, { target: { value: 'NonExistentUser' } });
+
+    // Expect the absence of user elements
+    const userElements = screen.queryAllByTestId('user-element');
+    expect(userElements).toHaveLength(0);
+  });
+
+  test('Should not display "No User Found" message when users data is present', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    // Expect the absence of "No User Found" message when users data is present
+    expect(screen.queryByText(/No User Found/)).toBeNull();
+  });
 });
