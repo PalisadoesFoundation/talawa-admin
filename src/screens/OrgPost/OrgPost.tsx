@@ -47,14 +47,14 @@ function orgPost(): JSX.Element {
     addMedia: '',
   });
   const [sortingOption, setSortingOption] = useState('latest');
-  const [showTitle, setShowTitle] = useState(true);
-  const [fileType, setFileType] = useState<string>(''); // Added state for file type
   const [file, setFile] = useState<File | null>(null);
   const currentUrl = window.location.href.split('=')[1];
+  const [showTitle, setShowTitle] = useState(true);
 
   const showInviteModal = (): void => {
     setPostModalIsOpen(true);
   };
+
   const hideInviteModal = (): void => {
     setPostModalIsOpen(false);
     setPostFormState({
