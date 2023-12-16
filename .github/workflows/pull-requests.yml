@@ -10,6 +10,7 @@
 ##############################################################################
 
 name: PR Workflow
+
 on:
   pull_request:
     branches:
@@ -19,8 +20,10 @@ env:
   CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
 
 jobs:
+
   Continuous-Integration:
-    name: Performs linting, formatting, type-checking and testing on the application
+
+    name: Performs linting, formatting, type-checking, and testing on the application
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the Repository
@@ -28,9 +31,6 @@ jobs:
 
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
-
-      - name: Install TypeScript
-        run: npm install -g typescript
 
       - name: Run linting check
         run: npm run lint:check
@@ -44,10 +44,22 @@ jobs:
         run: npm run format:check
 
       - name: Check for type errors
-        run: tsc --skipLibCheck
+        run: npm run typecheck
 
       - name: Run tests
         run: npm run test -- --watchAll=false --coverage
+
+      - name: Get changed TypeScript files
+        id: changed-files
+        uses: actions/changed-files@v1
+
+      - name: TypeScript compilation for changed files
+        run: |
+          for file in ${{ steps.changed-files.outputs.all_files }}; do
+            if [[ "$file" == *.ts || "$file" == *.tsx ]]; then
+              npx tsc --noEmit "$file"
+            fi
+          done
 
       - name: Present and Upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
         uses: codecov/codecov-action@v3
@@ -63,7 +75,7 @@ jobs:
           min_coverage: 95.0
 
   Graphql-Inspector:
-    name: Runs Introspection on the github talawa-api repo on the schema.graphql file
+    name: Runs Introspection on the GitHub talawa-api repo on the schema.graphql file
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the Repository
@@ -74,7 +86,7 @@ jobs:
         with:
           node-version: '16.14.1'
 
-      - name: Resolve dependency
+      - name: resolve dependency
         run: npm install -g @graphql-inspector/cli
 
       - name: Clone API repository
