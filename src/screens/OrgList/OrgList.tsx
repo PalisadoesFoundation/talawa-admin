@@ -22,7 +22,6 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
-import debounce from 'utils/debounce';
 import { errorHandler } from 'utils/errorHandler';
 import type {
   InterfaceOrgConnectionInfoType,
@@ -219,15 +218,17 @@ function orgList(): JSX.Element {
 
   /* istanbul ignore next */
   const handleSearchByName = (e: any): void => {
-    const { value } = e.target;
-    setSearchByName(value);
-    if (value == '') {
-      resetAllParams();
-      return;
+    if (e.key === 'Enter') {
+      const { value } = e.target;
+      setSearchByName(value);
+      if (value == '') {
+        resetAllParams();
+        return;
+      }
+      refetchOrgs({
+        filter: value,
+      });
     }
-    refetchOrgs({
-      filter: value,
-    });
   };
 
   /* istanbul ignore next */
@@ -267,7 +268,6 @@ function orgList(): JSX.Element {
     });
   };
 
-  const debouncedHandleSearchByName = debounce(handleSearchByName);
   return (
     <>
       <SuperAdminScreen title={t('organizations')} screenName="Organizations">
@@ -282,7 +282,7 @@ function orgList(): JSX.Element {
               data-testid="searchByName"
               autoComplete="off"
               required
-              onChange={debouncedHandleSearchByName}
+              onKeyUp={handleSearchByName}
             />
             <Button
               tabIndex={-1}

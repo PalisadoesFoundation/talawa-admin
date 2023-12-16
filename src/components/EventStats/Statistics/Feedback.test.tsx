@@ -73,6 +73,10 @@ describe('Testing Feedback Statistics Card', () => {
         queryByText('3 people have filled feedback for this event.')
       ).toBeInTheDocument()
     );
+
+    await waitFor(() => {
+      expect(queryByText('Test')).toBeInTheDocument();
+    });
   });
 
   test('The component should be rendered and message should be shown if no feedback is present', async () => {

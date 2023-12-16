@@ -14,7 +14,6 @@ import { BLOCK_PAGE_MEMBER_LIST } from 'GraphQl/Queries/Queries';
 import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 import TableLoader from 'components/TableLoader/TableLoader';
 import { useTranslation } from 'react-i18next';
-import debounce from 'utils/debounce';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './BlockUser.module.css';
 
@@ -119,16 +118,17 @@ const Requests = (): JSX.Element => {
   }
 
   const handleSearch = (e: any): void => {
-    const { value } = e.target;
-    setSearchByName(value);
-    memberRefetch({
-      orgId: currentUrl,
-      firstName_contains: searchByFirstName ? value : '',
-      lastName_contains: searchByFirstName ? '' : value,
-    });
+    if (e.key === 'Enter') {
+      const { value } = e.target;
+      setSearchByName(value);
+      memberRefetch({
+        orgId: currentUrl,
+        firstName_contains: searchByFirstName ? value : '',
+        lastName_contains: searchByFirstName ? '' : value,
+      });
+    }
   };
 
-  const handleSearchDebounced = debounce(handleSearch);
   const headerTitles: string[] = [
     '#',
     t('name'),
@@ -154,7 +154,7 @@ const Requests = (): JSX.Element => {
                 data-testid="searchByName"
                 autoComplete="off"
                 required
-                onChange={handleSearchDebounced}
+                onKeyUp={handleSearch}
               />
               <Button
                 tabIndex={-1}

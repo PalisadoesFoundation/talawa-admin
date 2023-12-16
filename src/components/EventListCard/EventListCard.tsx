@@ -142,27 +142,11 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
 
   return (
     <>
-      <div className="">
-        <div
-          className={styles.cards}
-          onClick={showViewModal}
-          data-testid="card"
-        >
-          <div className={styles.dispflex}>
-            <h2>
-              {props.eventName ? (
-                <>
-                  {props.eventName.length > 150 ? (
-                    <>{props.eventName.substring(0, 150)}...</>
-                  ) : (
-                    <>{props.eventName}</>
-                  )}
-                </>
-              ) : (
-                <>Dogs Care</>
-              )}
-            </h2>
-          </div>
+      <div className={styles.cards} onClick={showViewModal} data-testid="card">
+        <div className={styles.dispflex}>
+          <h2 className={styles.eventtitle}>
+            {props.eventName ? <>{props.eventName}</> : <>Dogs Care</>}
+          </h2>
         </div>
       </div>
       {/* preview modal */}
