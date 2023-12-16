@@ -1,460 +1,546 @@
-import type { ChangeEvent } from 'react';
-import React, { useState, useEffect } from 'react';
-import SortIcon from '@mui/icons-material/Sort';
-import { Search } from '@mui/icons-material';
-import Row from 'react-bootstrap/Row';
-import Modal from 'react-bootstrap/Modal';
-import { Form } from 'react-bootstrap';
-import { useMutation, useQuery } from '@apollo/client';
-import Button from 'react-bootstrap/Button';
-import { toast } from 'react-toastify';
-import { useTranslation } from 'react-i18next';
-import Dropdown from 'react-bootstrap/Dropdown';
-import styles from './OrgPost.module.css';
-import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
+import React from 'react';
+import { MockedProvider } from '@apollo/react-testing';
+import { BrowserRouter } from 'react-router-dom';
+import { act, render, screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { Provider } from 'react-redux';
+import 'jest-location-mock';
+import { I18nextProvider } from 'react-i18next';
+
+import OrgPost from './OrgPost';
+import { store } from 'state/store';
 import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
-import debounce from 'utils/debounce';
-import convertToBase64 from 'utils/convertToBase64';
-import NotFound from 'components/NotFound/NotFound';
-import { errorHandler } from 'utils/errorHandler';
-import Loader from 'components/Loader/Loader';
-import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
+import i18nForTest from 'utils/i18nForTest';
+import { StaticMockLink } from 'utils/StaticMockLink';
+import { ToastContainer } from 'react-toastify';
 
-interface InterfaceOrgPost {
-  _id: string;
-  title: string;
-  text: string;
-  imageUrl: string;
-  videoUrl: string;
-  organizationId: string;
-  creator: { firstName: string; lastName: string };
-  pinned: boolean;
-  createdAt: string;
-}
-
-function orgPost(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'orgPost',
-  });
-
-  document.title = t('title');
-  const [postmodalisOpen, setPostModalIsOpen] = useState(false);
-  const [postformState, setPostFormState] = useState({
-    posttitle: '',
-    postinfo: '',
-    postImage: '',
-    postVideo: '',
-    addMedia: '',
-  });
-  const [sortingOption, setSortingOption] = useState('latest');
-  const [file, setFile] = useState<File | null>(null);
-  const currentUrl = window.location.href.split('=')[1];
-  const [showTitle, setShowTitle] = useState(true);
-
-  const showInviteModal = (): void => {
-    setPostModalIsOpen(true);
-  };
-
-  const hideInviteModal = (): void => {
-    setPostModalIsOpen(false);
-    setPostFormState({
-      posttitle: '',
-      postinfo: '',
-      postImage: '',
-      postVideo: '',
-      addMedia: '',
-    });
-  };
-
-  const {
-    data: orgPostListData,
-    loading: orgPostListLoading,
-    error: orgPostListError,
-    refetch,
-  } = useQuery(ORGANIZATION_POST_CONNECTION_LIST, {
-    variables: { id: currentUrl, title_contains: '', text_contains: '' },
-  });
-  const [create, { loading: createPostLoading }] =
-    useMutation(CREATE_POST_MUTATION);
-  const [displayedPosts, setDisplayedPosts] = useState(
-    orgPostListData?.postsByOrganizationConnection.edges || []
-  );
-
-  useEffect(() => {
-    if (orgPostListData && orgPostListData.postsByOrganizationConnection) {
-      const newDisplayedPosts = sortPosts(
-        orgPostListData.postsByOrganizationConnection.edges,
-        sortingOption
-      );
-      setDisplayedPosts(newDisplayedPosts);
-    }
-  }, [orgPostListData, sortingOption]);
-
-  const createPost = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
-    e.preventDefault();
-
-    const {
-      posttitle: _posttitle,
-      postinfo: _postinfo,
-      postImage,
-      postVideo,
-    } = postformState;
-
-    const posttitle = _posttitle.trim();
-    const postinfo = _postinfo.trim();
-
-    try {
-      if (!posttitle || !postinfo) {
-        throw new Error('Text fields cannot be empty strings');
-      }
-
-      const { data } = await create({
-        variables: {
-          title: posttitle,
-          text: postinfo,
-          organizationId: currentUrl,
-          file: postImage || postVideo || postformState.addMedia,
+const MOCKS = [
+  {
+    request: {
+      query: ORGANIZATION_POST_CONNECTION_LIST,
+      variables: {
+        id: undefined,
+        title_contains: '',
+        text_contains: '',
+      },
+    },
+    result: {
+      data: {
+        postsByOrganizationConnection: {
+          edges: [
+            {
+              _id: '6411e53835d7ba2344a78e21',
+              title: 'postone',
+              text: 'This is the first post',
+              imageUrl: null,
+              videoUrl: null,
+              createdAt: '2023-08-24T09:26:56.524+00:00',
+              creator: {
+                _id: '640d98d9eb6a743d75341067',
+                firstName: 'Aditya',
+                lastName: 'Shelke',
+                email: 'adidacreator1@gmail.com',
+              },
+              likeCount: 0,
+              commentCount: 0,
+              comments: [],
+              pinned: false,
+              likedBy: [],
+            },
+            {
+              _id: '6411e54835d7ba2344a78e29',
+              title: 'posttwo',
+              text: 'Tis is the post two',
+              imageUrl: null,
+              videoUrl: null,
+              createdAt: '2023-08-24T09:26:56.524+00:00',
+              creator: {
+                _id: '640d98d9eb6a743d75341067',
+                firstName: 'Aditya',
+                lastName: 'Shelke',
+                email: 'adidacreator1@gmail.com',
+              },
+              likeCount: 0,
+              commentCount: 0,
+              pinned: false,
+              likedBy: [],
+              comments: [],
+            },
+          ],
         },
-      });
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_POST_MUTATION,
+      variables: {
+        title: 'Dummy Post',
+        text: 'This is dummy text',
+        organizationId: '123',
+      },
+      result: {
+        data: {
+          createPost: {
+            _id: '453',
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_POST_MUTATION,
+      variables: {
+        title: 'Dummy Post',
+        text: 'This is dummy text',
+        organizationId: '123',
+      },
+      result: {
+        data: {
+          createPost: {
+            _id: '453',
+          },
+        },
+      },
+    },
+  },
+];
+const link = new StaticMockLink(MOCKS, true);
 
-      if (data) {
-        toast.success('Congratulations! You have Posted Something.');
-        refetch();
-        setPostFormState({
-          posttitle: '',
-          postinfo: '',
-          postImage: '',
-          postVideo: '',
-          addMedia: '',
-        });
-        setPostModalIsOpen(false);
-      }
-    } catch (error: any) {
-      errorHandler(t, error);
-    }
-  };
-
-  if (createPostLoading || orgPostListLoading) {
-    return <Loader />;
-  }
-
-  if (orgPostListError) {
-    window.location.assign('/orglist');
-  }
-  const handleAddMediaChange = async (
-    e: React.ChangeEvent<HTMLInputElement>
-  ): Promise<void> => {
-    setPostFormState((prevPostFormState) => ({
-      ...prevPostFormState,
-      addMedia: '',
-    }));
-
-    const selectedFile = e.target.files?.[0];
-
-    if (selectedFile) {
-      setFile(selectedFile);
-      setPostFormState({
-        ...postformState,
-        addMedia: await convertToBase64(selectedFile),
-      });
-    }
-  };
-
-  const handleSearch = (e: any): void => {
-    const { value } = e.target;
-    const filterData = {
-      id: currentUrl,
-      title_contains: showTitle ? value : null,
-      text_contains: !showTitle ? value : null,
-    };
-    refetch(filterData);
-  };
-
-  const debouncedHandleSearch = debounce(handleSearch);
-
-  const handleSorting = (option: string): void => {
-    setSortingOption(option);
-  };
-
-  const sortPosts = (
-    posts: InterfaceOrgPost[],
-    sortingOption: string
-  ): InterfaceOrgPost[] => {
-    const sortedPosts = [...posts];
-
-    if (sortingOption === 'latest') {
-      sortedPosts.sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      );
-    } else if (sortingOption === 'oldest') {
-      sortedPosts.sort(
-        (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-      );
-    }
-
-    return sortedPosts;
-  };
-
-  const sortedPostsList: InterfaceOrgPost[] = [...displayedPosts];
-  sortedPostsList.sort((a: InterfaceOrgPost, b: InterfaceOrgPost) => {
-    if (a.pinned === b.pinned) {
-      return 0;
-    }
-
-    if (a.pinned) {
-      return -1;
-    }
-    return 1;
+async function wait(ms = 500): Promise<void> {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
   });
-
-  return (
-    <>
-      <OrganizationScreen screenName="Posts" title={t('title')}>
-        <Row className={styles.head}>
-          <div className={styles.mainpageright}>
-            <div className={styles.btnsContainer}>
-              <div className={styles.input}>
-                <Form.Control
-                  type="text"
-                  id="posttitle"
-                  className="bg-white"
-                  placeholder={showTitle ? t('searchTitle') : t('searchText')}
-                  data-testid="searchByName"
-                  autoComplete="off"
-                  onChange={debouncedHandleSearch}
-                  required
-                />
-                <Button
-                  tabIndex={-1}
-                  className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
-                >
-                  <Search />
-                </Button>
-              </div>
-              <div className={styles.btnsBlock}>
-                <div className="d-flex">
-                  <Dropdown
-                    aria-expanded="false"
-                    title="SearchBy"
-                    data-tesid="sea"
-                  >
-                    <Dropdown.Toggle
-                      data-testid="searchBy"
-                      variant="outline-success"
-                    >
-                      <SortIcon className={'me-1'} />
-                      {t('searchBy')}
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      <Dropdown.Item
-                        value="searchText"
-                        onClick={(e): void => {
-                          setShowTitle(false);
-                          e.preventDefault();
-                        }}
-                        data-testid="Text"
-                      >
-                        {t('Text')}
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        value="searchTitle"
-                        onClick={(e): void => {
-                          setShowTitle(true);
-                          e.preventDefault();
-                        }}
-                        data-testid="searchTitle"
-                      >
-                        {t('Title')}
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                  <Dropdown
-                    aria-expanded="false"
-                    title="Sort Post"
-                    data-testid="sort"
-                  >
-                    <Dropdown.Toggle
-                      variant="outline-success"
-                      data-testid="sortpost"
-                    >
-                      <SortIcon className={'me-1'} />
-                      {t('sortPost')}
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      <Dropdown.Item
-                        onClick={(): void => handleSorting('latest')}
-                        data-testid="latest"
-                      >
-                        {t('Latest')}
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        onClick={(): void => handleSorting('oldest')}
-                        data-testid="oldest"
-                      >
-                        {t('Oldest')}
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-
-                <Button
-                  variant="success"
-                  onClick={showInviteModal}
-                  data-testid="createPostModalBtn"
-                >
-                  <i className={'fa fa-plus me-2'} />
-                  {t('createPost')}
-                </Button>
-              </div>
-            </div>
-            <div className={`row ${styles.list_box}`}>
-              {sortedPostsList && sortedPostsList.length > 0 ? (
-                sortedPostsList.map(
-                  (datas: {
-                    _id: string;
-                    title: string;
-                    text: string;
-                    imageUrl: string;
-                    videoUrl: string;
-                    organizationId: string;
-                    creator: { firstName: string; lastName: string };
-                    pinned: boolean;
-                  }) => (
-                    <OrgPostCard
-                      key={datas._id}
-                      id={datas._id}
-                      postTitle={datas.title}
-                      postInfo={datas.text}
-                      postAuthor={`${datas.creator.firstName} ${datas.creator.lastName}`}
-                      postPhoto={datas.imageUrl}
-                      postVideo={datas.videoUrl}
-                      pinned={datas.pinned}
-                    />
-                  )
-                )
-              ) : (
-                <NotFound title="post" keyPrefix="postNotFound" />
-              )}
-            </div>
-          </div>
-        </Row>
-      </OrganizationScreen>
-      <Modal
-        show={postmodalisOpen}
-        onHide={hideInviteModal}
-        backdrop="static"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header
-          className="bg-primary"
-          data-testid="modalOrganizationHeader"
-          closeButton
-        >
-          <Modal.Title className="text-white">{t('postDetails')}</Modal.Title>
-        </Modal.Header>
-        <Form onSubmitCapture={createPost}>
-          <Modal.Body>
-            <Form.Label htmlFor="posttitle">{t('postTitle')}</Form.Label>
-            <Form.Control
-              type="name"
-              id="orgname"
-              className="mb-3"
-              placeholder={t('postTitle1')}
-              data-testid="modalTitle"
-              autoComplete="off"
-              required
-              value={postformState.posttitle}
-              onChange={(e): void => {
-                setPostFormState({
-                  ...postformState,
-                  posttitle: e.target.value,
-                });
-              }}
-            />
-            <Form.Label htmlFor="postinfo">{t('information')}</Form.Label>
-            <Form.Control
-              type="descrip"
-              id="descrip"
-              className="mb-3"
-              placeholder={t('information1')}
-              data-testid="modalinfo"
-              autoComplete="off"
-              required
-              value={postformState.postinfo}
-              onChange={(e): void => {
-                setPostFormState({
-                  ...postformState,
-                  postinfo: e.target.value,
-                });
-              }}
-            />
-          </Modal.Body>
-          <Modal.Body>
-            <Form.Label htmlFor="addMedia">{t('addMedia')}</Form.Label>
-            <Form.Control
-              id="addMedia"
-              name="addMedia"
-              type="file"
-              accept="image/*,video/*"
-              placeholder={t('addMedia')}
-              multiple={false}
-              onChange={handleAddMediaChange}
-              data-testid="addMediaField"
-            />
-
-            {postformState.addMedia && file && (
-              <div className={styles.preview} data-testid="mediaPreview">
-                {/* Display preview for both image and video */}
-                {file.type.startsWith('image') ? (
-                  <img src={postformState.addMedia} alt="Post Image Preview" />
-                ) : (
-                  <video controls data-testid="videoPreview">
-                    <source src={postformState.addMedia} type={file.type}/>(
-                    {t('tag')})
-                  </video>
-                )}
-                <button
-                  className={styles.closeButton}
-                  onClick={(): void => {
-                    setPostFormState({
-                      ...postformState,
-                      addMedia: '',
-                    });
-                    const fileInput = document.getElementById(
-                      'addMedia'
-                    ) as HTMLInputElement;
-                    if (fileInput) {
-                      fileInput.value = '';
-                    }
-                  }}
-                  data-testid="mediaCloseButton"
-                >
-                  <i className="fa fa-times"></i>
-                </button>
-              </div>
-            )}
-          </Modal.Body>
-
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={(): void => hideInviteModal()}
-              data-testid="closeOrganizationModal"
-            >
-              {t('cancel')}
-            </Button>
-            <Button type="submit" value="invite" data-testid="createPostBtn">
-              {t('addPost')}
-            </Button>
-          </Modal.Footer>
-        </Form>
-      </Modal>
-    </>
-  );
 }
 
-export default orgPost;
+describe('Organisation Post Page', () => {
+  const formData = {
+    posttitle: 'dummy post',
+    postinfo: 'This is a dummy post',
+    postImage: new File(['hello'], 'hello.png', { type: 'image/png' }),
+    postVideo: new File(['hello'], 'hello.mp4', { type: 'video/mp4' }),
+  };
+
+  test('correct mock data should be queried', async () => {
+    const dataQuery1 =
+      MOCKS[0]?.result?.data?.postsByOrganizationConnection.edges[0];
+
+    expect(dataQuery1).toEqual({
+      _id: '6411e53835d7ba2344a78e21',
+      title: 'postone',
+      text: 'This is the first post',
+      imageUrl: null,
+      videoUrl: null,
+      createdAt: '2023-08-24T09:26:56.524+00:00',
+      creator: {
+        _id: '640d98d9eb6a743d75341067',
+        firstName: 'Aditya',
+        lastName: 'Shelke',
+        email: 'adidacreator1@gmail.com',
+      },
+      likeCount: 0,
+      commentCount: 0,
+      pinned: false,
+      likedBy: [],
+      comments: [],
+    });
+  });
+
+  test('Testing create post functionality', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+    userEvent.type(screen.getByTestId('modalTitle'), formData.posttitle);
+
+    userEvent.type(screen.getByTestId('modalinfo'), formData.postinfo);
+    userEvent.upload(screen.getByTestId('addMediaField'), formData.postImage);
+    userEvent.upload(screen.getByTestId('addMediaField'), formData.postVideo);
+
+    userEvent.click(screen.getByTestId('createPostBtn'));
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('closeOrganizationModal'));
+  }, 15000);
+
+  test('Testing search functionality', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    async function debounceWait(ms = 200): Promise<void> {
+      await act(() => {
+        return new Promise((resolve) => {
+          setTimeout(resolve, ms);
+        });
+      });
+    }
+    await debounceWait();
+    userEvent.type(screen.getByPlaceholderText(/Search By/i), 'postone');
+    await debounceWait();
+    const sortDropdown = screen.getByTestId('sort');
+    userEvent.click(sortDropdown);
+  });
+  test('Testing search text and title toggle', async () => {
+    await act(async () => {
+      // Wrap the test code in act
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrgPost />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+
+      await wait();
+
+      const searchInput = screen.getByTestId('searchByName');
+      expect(searchInput).toHaveAttribute('placeholder', 'Search By Title');
+
+      const inputText = screen.getByTestId('searchBy');
+
+      fireEvent.click(inputText);
+      const toggleText = screen.getByTestId('Text');
+
+      fireEvent.click(toggleText);
+
+      expect(searchInput).toHaveAttribute('placeholder', 'Search By Text');
+      fireEvent.click(inputText);
+      const toggleTite = screen.getByTestId('searchTitle');
+      fireEvent.click(toggleTite);
+      expect(searchInput).toHaveAttribute('placeholder', 'Search By Title');
+    });
+  });
+  test('Testing search latest and oldest toggle', async () => {
+    await act(async () => {
+      // Wrap the test code in act
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrgPost />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+
+      await wait();
+
+      const searchInput = screen.getByTestId('sort');
+      expect(searchInput).toBeInTheDocument();
+
+      const inputText = screen.getByTestId('sortpost');
+
+      fireEvent.click(inputText);
+      const toggleText = screen.getByTestId('latest');
+
+      fireEvent.click(toggleText);
+
+      expect(searchInput).toBeInTheDocument();
+      fireEvent.click(inputText);
+      const toggleTite = screen.getByTestId('oldest');
+      fireEvent.click(toggleTite);
+      expect(searchInput).toBeInTheDocument();
+    });
+  });
+  test('After creating a post, the data should be refetched', async () => {
+    const refetchMock = jest.fn();
+
+    render(
+      <MockedProvider addTypename={false} mocks={MOCKS} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+    // Fill in post form fields...
+
+    userEvent.click(screen.getByTestId('createPostBtn'));
+
+    await wait();
+
+    expect(refetchMock).toHaveBeenCalledTimes(0);
+  });
+
+  test('Create post without media', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+    const postTitleInput = screen.getByTestId('modalTitle');
+    fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
+
+    const postInfoTextarea = screen.getByTestId('modalinfo');
+    fireEvent.change(postInfoTextarea, {
+      target: { value: 'Test post information' },
+    });
+
+    const createPostBtn = screen.getByTestId('createPostBtn');
+    fireEvent.click(createPostBtn);
+  }, 15000);
+
+  test('Create post, preview image, and close preview', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+    const postTitleInput = screen.getByTestId('modalTitle');
+    fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
+
+    const postInfoTextarea = screen.getByTestId('modalinfo');
+    fireEvent.change(postInfoTextarea, {
+      target: { value: 'Test post information' },
+    });
+
+    // Simulate uploading an image
+    const imageFile = new File(['image content'], 'image.png', {
+      type: 'image/png',
+    });
+    const imageInput = screen.getByTestId('addMediaField');
+    userEvent.upload(imageInput, imageFile);
+
+    // Check if the image is displayed
+    const imagePreview = await screen.findByAltText('Post Image Preview');
+    expect(imagePreview).toBeInTheDocument();
+
+    // Check if the close button for the image works
+    const closeButton = screen.getByTestId('mediaCloseButton');
+    fireEvent.click(closeButton);
+
+    // Check if the image is removed from the preview
+    expect(imagePreview).not.toBeInTheDocument();
+  }, 15000);
+
+  test('Modal opens and closes', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    const createPostModalBtn = screen.getByTestId('createPostModalBtn');
+
+    userEvent.click(createPostModalBtn);
+
+    const modalTitle = screen.getByTestId('modalOrganizationHeader');
+    expect(modalTitle).toBeInTheDocument();
+
+    const closeButton = screen.getByTestId('closeOrganizationModal');
+    userEvent.click(closeButton);
+
+    await wait();
+
+    const closedModalTitle = screen.queryByText(/postDetail/i);
+    expect(closedModalTitle).not.toBeInTheDocument();
+  });
+  it('renders the form with input fields and buttons', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+    // Check if input fields and buttons are present
+    expect(screen.getByTestId('modalTitle')).toBeInTheDocument();
+    expect(screen.getByTestId('modalinfo')).toBeInTheDocument();
+    expect(screen.getByTestId('addMediaField')).toBeInTheDocument();
+    // expect(screen.getByTestId('organisationVideo')).toBeInTheDocument();
+    expect(screen.getByTestId('createPostBtn')).toBeInTheDocument();
+  });
+
+  it('allows users to input data into the form fields', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+    // Simulate user input
+    fireEvent.change(screen.getByTestId('modalTitle'), {
+      target: { value: 'Test Title' },
+    });
+    fireEvent.change(screen.getByTestId('modalinfo'), {
+      target: { value: 'Test Info' },
+    });
+
+    // Check if input values are set correctly
+    expect(screen.getByTestId('modalTitle')).toHaveValue('Test Title');
+    expect(screen.getByTestId('modalinfo')).toHaveValue('Test Info');
+  });
+
+  test('allows users to upload an image', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+    const postTitleInput = screen.getByTestId('modalTitle');
+    fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
+
+    const postInfoTextarea = screen.getByTestId('modalinfo');
+    fireEvent.change(postInfoTextarea, {
+      target: { value: 'Test post information' },
+    });
+    const file = new File(['image content'], 'image.png', {
+      type: 'image/png',
+    });
+    const input = screen.getByTestId('addMediaField');
+    userEvent.upload(input, file);
+
+    await screen.findByAltText('Post Image Preview');
+    expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
+
+    const closeButton = screen.getByTestId('mediaCloseButton');
+    fireEvent.click(closeButton);
+  }, 15000);
+  test('Create post, preview video, and close preview', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <OrgPost />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+
+      await wait();
+
+      userEvent.click(screen.getByTestId('createPostModalBtn'));
+
+      const postTitleInput = screen.getByTestId('modalTitle');
+      fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
+
+      const postInfoTextarea = screen.getByTestId('modalinfo');
+      fireEvent.change(postInfoTextarea, {
+        target: { value: 'Test post information' },
+      });
+
+      const videoFile = new File(['video content'], 'video.mp4', {
+        type: 'video/mp4',
+      });
+
+      userEvent.upload(screen.getByTestId('addMediaField'), videoFile);
+
+      // Check if the video is displayed
+      const videoPreview = await screen.findByTestId('mediaPreview');
+      expect(videoPreview).toBeInTheDocument();
+
+      // Check if the close button for the video works
+      const closeVideoPreviewButton = screen.getByTestId('mediaCloseButton');
+      fireEvent.click(closeVideoPreviewButton);
+
+      // Check if the video is not present after closing
+      const videoPreviewAfterClose = screen.queryByTestId('mediaPreview');
+      expect(videoPreviewAfterClose).toBeNull();
+    });
+  });
+});
