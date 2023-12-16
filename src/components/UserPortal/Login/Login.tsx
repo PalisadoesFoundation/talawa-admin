@@ -44,16 +44,12 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
           },
         });
 
-        if (data) {
-          localStorage.setItem('token', data.login.accessToken);
-          localStorage.setItem('userId', data.login.user._id);
+        localStorage.setItem('token', data.login.accessToken);
+        localStorage.setItem('userId', data.login.user._id);
 
-          navigator.clipboard.writeText('');
-          /* istanbul ignore next */
-          window.location.assign('/user/organizations');
-        } else {
-          toast.warn(t('notAuthorised'));
-        }
+        navigator.clipboard.writeText('');
+        /* istanbul ignore next */
+        window.location.assign('/user/organizations');
       } catch (error: any) {
         /* istanbul ignore next */
         errorHandler(t, error);
