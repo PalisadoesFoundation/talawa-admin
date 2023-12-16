@@ -38,7 +38,6 @@
 }
 
 .sidebar:after {
-  content: '';
   background-color: #f7f7f7;
   position: absolute;
   width: 2px;

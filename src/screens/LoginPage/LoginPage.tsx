@@ -248,7 +248,6 @@ function loginPage(): JSX.Element {
                   <div className="position-relative">
                     <Form.Control
                       type="email"
-                      className="mb-3"
                       placeholder={t('enterEmail')}
                       required
                       value={formState.email}
@@ -268,7 +267,7 @@ function loginPage(): JSX.Element {
                       <EmailOutlinedIcon />
                     </Button>
                   </div>
-                  <Form.Label>{t('password')}</Form.Label>
+                  <Form.Label className="mt-3">{t('password')}</Form.Label>
                   <div className="position-relative">
                     <Form.Control
                       type={showPassword ? 'text' : 'password'}
