@@ -51,7 +51,7 @@ jobs:
 
       - name: Get changed TypeScript files
         id: changed-files
-        uses: actions/changed-files@v1
+        uses: tj-actions/changed-files@v40
 
       - name: TypeScript compilation for changed files
         run: |
