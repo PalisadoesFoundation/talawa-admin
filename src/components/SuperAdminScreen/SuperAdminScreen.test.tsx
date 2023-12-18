@@ -18,7 +18,22 @@ const props: InterfaceSuperAdminScreenProps = {
   children: <div>Testing ...</div>,
 };
 
+type SetScreenSize = () => void;
+
 describe('Testing LeftDrawer in SuperAdminScreen', () => {
+  const setTabletScreenSize: SetScreenSize = () => {
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 768, // Example: setting tablet width
+    });
+    Object.defineProperty(window, 'innerHeight', {
+      writable: true,
+      configurable: true,
+      value: 1024, // Example: setting tablet height
+    });
+    window.dispatchEvent(new Event('resize'));
+  };
   test('Testing LeftDrawer in page functionality', async () => {
     localStorage.setItem('UserType', 'SUPERADMIN');
 
@@ -37,6 +52,30 @@ describe('Testing LeftDrawer in SuperAdminScreen', () => {
     // Expand LeftDrawer
     userEvent.click(screen.getByTestId('menuBtn'));
     // Contract LeftDrawer
-    userEvent.click(screen.getByTestId('menuBtn'));
+    userEvent.click(screen.getByTestId('openMenu'));
+  });
+  test('Testing expanding and closing on a tablet-sized screen', async () => {
+    localStorage.setItem('UserType', 'SUPERADMIN');
+
+    // Render the component with tablet-sized screen
+    render(
+      <MockedProvider addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <SuperAdminScreen {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    // Set the screen size to simulate a tablet
+    setTabletScreenSize();
+
+    // sets hideDrawer to true
+    userEvent.click(screen.getByTestId('menuBtnmobile'));
+    // sets hideDrawer to false
+    userEvent.click(screen.getByTestId('closeModalBtn'));
   });
 });
