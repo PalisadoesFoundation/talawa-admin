@@ -77,7 +77,7 @@ const organizationScreen = ({
             onClick={(): void => {
               setHideDrawer(!hideDrawer);
             }}
-            data-testid="menuBtn"
+            data-testid="menuBtnmobile"
           >
             <MenuIcon fontSize="medium" />
           </Button>
