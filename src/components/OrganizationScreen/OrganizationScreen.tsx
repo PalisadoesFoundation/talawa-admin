@@ -24,15 +24,40 @@ const organizationScreen = ({
     configUrl: string;
   } = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
+
+  const toggleDrawerVisibility = (): void => {
+    setHideDrawer(!hideDrawer);
+  };
   return (
     <>
-      <LeftDrawerOrg
-        orgId={configUrl}
-        targets={targets}
-        screenName={screenName}
-        hideDrawer={hideDrawer}
-        setHideDrawer={setHideDrawer}
-      />
+      {hideDrawer ? (
+        <Button
+          className={styles.opendrawer}
+          onClick={toggleDrawerVisibility}
+          data-testid="openMenu"
+        >
+          <i className="fa fa-angle-double-right" aria-hidden="true"></i>
+        </Button>
+      ) : (
+        <Button
+          className={styles.collapseSidebarButton}
+          onClick={(): void => {
+            setHideDrawer(!hideDrawer);
+          }}
+          data-testid="menuBtn"
+        >
+          <i className="fa fa-angle-double-left" aria-hidden="true"></i>
+        </Button>
+      )}
+      <div className={styles.drawer}>
+        <LeftDrawerOrg
+          orgId={configUrl}
+          targets={targets}
+          screenName={screenName}
+          hideDrawer={hideDrawer}
+          setHideDrawer={setHideDrawer}
+        />
+      </div>
       <div
         className={`${styles.pageContainer} ${
           hideDrawer === null
@@ -48,7 +73,7 @@ const organizationScreen = ({
             <h2>{title}</h2>
           </div>
           <Button
-            className="ms-2"
+            className={styles.mobileopenBtn}
             onClick={(): void => {
               setHideDrawer(!hideDrawer);
             }}
