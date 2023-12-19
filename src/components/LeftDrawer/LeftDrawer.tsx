@@ -165,12 +165,12 @@ const leftDrawer = ({
 
           <Button
             variant="light"
-            className="mt-4 d-flex justify-content-start px-0 mb-2 w-100"
+            className="mt-4 d-flex justify-content-start px-0 mb-2 w-100 bg-danger text-white"
             onClick={(): void => logout()}
             data-testid="logoutBtn"
           >
             <div className={styles.imageContainer}>
-              <LogoutIcon fill={'var(--bs-secondary)'} />
+              <LogoutIcon fill={'white'} />
             </div>
             {t('logout')}
           </Button>
