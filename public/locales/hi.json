@@ -589,7 +589,12 @@
   "home": {
     "feed": "फ़ीड",
     "pinnedPosts": "पिन किए गए पोस्ट देखें",
-    "somethingOnYourMind": "आपके मन में कुछ है?"
+    "somethingOnYourMind": "आपके मन में कुछ है?",
+    "addPost": "पोस्ट जोड़ें",
+    "startPost": "एक पोस्ट शुरू करें",
+    "media": "मीडिया",
+    "event": "घटना",
+    "article": "लेख"
   },
   "settings": {
     "profileSettings": "पार्श्वचित्र समायोजन",

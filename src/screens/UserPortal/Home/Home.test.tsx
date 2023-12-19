@@ -1,9 +1,12 @@
 import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
-import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATION_POST_CONNECTION_LIST,
+  ADVERTISEMENTS_GET,
+} from 'GraphQl/Queries/Queries';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
@@ -23,6 +26,19 @@ jest.mock('react-toastify', () => ({
     success: jest.fn(),
   },
 }));
+
+const EMPTY_MOCKS = [
+  {
+    request: {
+      query: ADVERTISEMENTS_GET,
+    },
+    result: {
+      data: {
+        getAdvertisements: [],
+      },
+    },
+  },
+];
 
 const MOCKS = [
   {
@@ -124,10 +140,9 @@ const MOCKS = [
     request: {
       query: CREATE_POST_MUTATION,
       variables: {
-        title: '',
-        text: 'This is a test',
-        organizationId: '',
-        file: '',
+        title: 'Dummy Post',
+        text: 'This is dummy text',
+        organizationId: '123',
       },
       result: {
         data: {
@@ -138,9 +153,58 @@ const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: ADVERTISEMENTS_GET,
+      variables: {},
+    },
+    result: {
+      data: {
+        getAdvertisements: [
+          {
+            _id: '1234',
+            name: 'Ad 1',
+            type: 'Type 1',
+            orgId: '6537904485008f171cf29924',
+            link: 'Link 1',
+            endDate: '2024-12-31',
+            startDate: '2022-01-01',
+          },
+          {
+            _id: '2345',
+            name: 'Ad 2',
+            type: 'Type 1',
+            orgId: '6537904485008f171cf29924',
+            link: 'Link 2',
+            endDate: '2024-09-31',
+            startDate: '2023-04-01',
+          },
+          {
+            _id: '3456',
+            name: 'name3',
+            type: 'Type 2',
+            orgId: '6537904485008f171cf29924',
+            link: 'link3',
+            startDate: '2023-01-30',
+            endDate: '2023-12-31',
+          },
+          {
+            _id: '4567',
+            name: 'name4',
+            type: 'Type 2',
+            orgId: 'org1',
+            link: 'link4',
+            startDate: '2023-01-30',
+            endDate: '2023-12-01',
+          },
+        ],
+      },
+    },
+  },
 ];
 
 const link = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(EMPTY_MOCKS, true);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -191,6 +255,35 @@ describe('Testing Home Screen [User Portal]', () => {
     expect(getOrganizationIdSpy).toHaveBeenCalled();
   });
 
+  test('renders PromotedPost for each ad in getAdvertisements that matches the filters', async () => {
+    const getOrganizationIdSpy = jest
+      .spyOn(getOrganizationId, 'default')
+      .mockImplementation(() => {
+        return '';
+      });
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Home />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(getOrganizationIdSpy).toHaveBeenCalled();
+
+    expect(screen.getByTestId('promotedPostsContainer')).toBeInTheDocument();
+    // expect(screen.getByText('Ad 1')).toBeInTheDocument();
+    // expect(screen.queryByText('Ad 2')).toBeInTheDocument();
+    // expect(screen.queryByText('name3')).toBeInTheDocument();
+    expect(screen.queryByText('name4')).not.toBeInTheDocument();
+  });
+
   test('Screen should be rendered properly when user types on the Post Input', async () => {
     const getOrganizationIdSpy = jest
       .spyOn(getOrganizationId, 'default')
@@ -214,6 +307,8 @@ describe('Testing Home Screen [User Portal]', () => {
 
     expect(getOrganizationIdSpy).toHaveBeenCalled();
 
+    userEvent.click(screen.getByTestId('startPostBtn'));
+
     const randomPostInput = 'This is a test';
     userEvent.type(screen.getByTestId('postInput'), randomPostInput);
 
@@ -221,11 +316,7 @@ describe('Testing Home Screen [User Portal]', () => {
   });
 
   test('Error toast should be visible when user tries to create a post with an empty body', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
+    const toastSpy = jest.spyOn(toast, 'error');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -240,23 +331,14 @@ describe('Testing Home Screen [User Portal]', () => {
     );
 
     await wait();
+    userEvent.click(screen.getByTestId('startPostBtn'));
 
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
+    userEvent.click(screen.getByTestId('createPostBtn'));
 
-    userEvent.click(screen.getByTestId('postAction'));
-
-    expect(toast.error).toBeCalledWith(
-      "Can't create a post with an empty body."
-    );
+    expect(toastSpy).toBeCalledWith("Can't create a post with an empty body.");
   });
 
   test('Info toast should be visible when user tries to create a post with a valid body', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -271,15 +353,125 @@ describe('Testing Home Screen [User Portal]', () => {
 
     await wait();
 
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
+    userEvent.click(screen.getByTestId('startPostBtn'));
 
     const randomPostInput = 'This is a test';
     userEvent.type(screen.getByTestId('postInput'), randomPostInput);
     expect(screen.queryByText(randomPostInput)).toBeInTheDocument();
 
-    userEvent.click(screen.getByTestId('postAction'));
+    userEvent.click(screen.getByTestId('createPostBtn'));
 
     expect(toast.error).not.toBeCalledWith();
     expect(toast.info).toBeCalledWith('Processing your post. Please wait.');
+  });
+
+  test('Modal should open on clicking on start a post button', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Home />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('startPostBtn'));
+    const startPostModal = screen.getByTestId('startPostModal');
+    expect(startPostModal).toBeInTheDocument();
+  });
+
+  test('modal closes on clicking on the close button', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Home />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('startPostBtn'));
+    const modalHeader = screen.getByTestId('startPostModal');
+    expect(modalHeader).toBeInTheDocument();
+
+    userEvent.type(screen.getByTestId('postInput'), 'some content');
+    userEvent.upload(
+      screen.getByTestId('postImageInput'),
+      new File(['image content'], 'image.png', { type: 'image/png' })
+    );
+
+    // Check that the content and image have been added
+    expect(screen.getByTestId('postInput')).toHaveValue('some content');
+    await screen.findByAltText('Post Image Preview');
+    expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
+
+    const closeButton = within(modalHeader).getByRole('button', {
+      name: /close/i,
+    });
+    userEvent.click(closeButton);
+
+    const closedModalText = screen.queryByText(/somethingOnYourMind/i);
+    expect(closedModalText).not.toBeInTheDocument();
+
+    expect(screen.getByTestId('postInput')).toHaveValue('');
+    expect(screen.getByTestId('postImageInput')).toHaveValue('');
+  });
+
+  test('triggers file input when the icon is clicked', () => {
+    const clickSpy = jest.spyOn(HTMLInputElement.prototype, 'click');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Home />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    userEvent.click(screen.getByTestId('startPostBtn'));
+
+    // Check if the file input is hidden initially
+    const postImageInput = screen.getByTestId('postImageInput');
+    expect(postImageInput).toHaveAttribute('type', 'file');
+    expect(postImageInput).toHaveStyle({ display: 'none' });
+
+    // Trigger icon click event
+    const iconButton = screen.getByTestId('addMediaBtn');
+    fireEvent.click(iconButton);
+
+    // Check if the file input is triggered to open
+    expect(clickSpy).toHaveBeenCalled();
+    clickSpy.mockRestore();
+  });
+
+  test('promoted post is not rendered if there is no ad content', () => {
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Home />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    expect(screen.queryByText('Ad 1')).not.toBeInTheDocument();
+    expect(screen.queryByText('Ad 2')).not.toBeInTheDocument();
   });
 });

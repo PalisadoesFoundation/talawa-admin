@@ -589,7 +589,12 @@
   "home": {
     "feed": "Alimentar",
     "pinnedPosts": "Ver publicaciones fijadas",
-    "somethingOnYourMind": "¿Algo en tu mente?"
+    "somethingOnYourMind": "¿Algo en tu mente?",
+    "addPost": "Agregar publicación",
+    "startPost": "Comenzar una publicación",
+    "media": "Medios",
+    "event": "Evento",
+    "article": "Artículo"
   },
   "settings": {
     "profileSettings": "Configuración de perfil",

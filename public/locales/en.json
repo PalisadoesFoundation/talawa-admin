@@ -599,7 +599,12 @@
   "home": {
     "feed": "Feed",
     "pinnedPosts": "View Pinned Posts",
-    "somethingOnYourMind": "Something on your mind?"
+    "somethingOnYourMind": "Something on your mind?",
+    "addPost": "Add Post",
+    "startPost": "Start a post",
+    "media": "Media",
+    "event": "Event",
+    "article": "Article"
   },
   "settings": {
     "profileSettings": "Profile Settings",
