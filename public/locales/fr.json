@@ -659,7 +659,12 @@
     "activeAds": "Campagnes actives",
     "archievedAds": "Campagnes terminées",
     "pMessage": "Aucune publicité n'est présente pour cette campagne.",
-    "delete": "Supprimer"
+    "delete": "Supprimer",
+    "close": "Fermer",
+    "deleteAdvertisement": "Supprimer l'annonce",
+    "deleteAdvertisementMsg": "Voulez-vous supprimer cette annonce ?",
+    "no": "Non",
+    "yes": "Oui"
   },
   "userChat": {
     "chat": "Chat",
