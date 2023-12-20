@@ -594,9 +594,9 @@ function orgList(): JSX.Element {
               <div>
                 <div className={styles.flexdir}>
                   <p className={styles.titlemodal}>{t('manageFeatures')}</p>
-                  <a
-                    onClick={toggleDialogModal}
-                    className={styles.cancel}
+                  <Button
+                    variant="secondary"
+                    onClick={(): void => toggleDialogModal()}
                     data-testid="closeOrganizationModal"
                   >
                     <i
@@ -605,12 +605,7 @@ function orgList(): JSX.Element {
                         cursor: 'pointer',
                       }}
                     ></i>
-                  </a>
-                  <Button
-                    variant="secondary"
-                    onClick={(): void => toggleModal()}
-                    data-testid="closeOrganizationModal"
-                  >
+                    &nbsp;
                     {t('cancel')}
                   </Button>
                 </div>
