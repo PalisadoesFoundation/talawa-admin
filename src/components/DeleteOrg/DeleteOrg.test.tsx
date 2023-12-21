@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -81,44 +81,6 @@ describe('Delete Organization Component', () => {
     screen.getByTestId(/deleteOrganizationBtn/i).click();
     expect(window.location).not.toBeNull();
   });
-  test('should handle deletion of non-sample organization', async () => {
-    window.location.assign('/orgsetting/id=123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <DeleteOrg />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-    fireEvent.click(screen.getByTestId('openDeleteModalBtn'));
-    fireEvent.click(screen.getByTestId('deleteOrganizationBtn'));
-    await expect(screen.queryByTestId('orgDeleteModal')).toBeInTheDocument();
-    expect(window.location).not.toBeNull();
-  });
-  test('should handle deletion of sample organization', async () => {
-    window.location.assign('/orgsetting/id=123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <DeleteOrg />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-    fireEvent.click(screen.getByTestId('openDeleteModalBtn'));
-    fireEvent.click(screen.getByTestId('deleteOrganizationBtn'));
-    await expect(screen.queryByTestId('orgDeleteModal')).toBeInTheDocument();
-    expect(window.location).not.toBeNull();
-  });
   test('should handle deletion failure gracefully', async () => {
     window.location.assign('/orgsetting/id=456'); // Using an ID that triggers a failure
     localStorage.setItem('UserType', 'SUPERADMIN');
@@ -137,5 +99,63 @@ describe('Delete Organization Component', () => {
     fireEvent.click(screen.getByTestId('openDeleteModalBtn'));
     fireEvent.click(screen.getByTestId('deleteOrganizationBtn'));
     expect(screen.queryByText(/Deletion failed!/i)).toBeNull();
+  });
+  test('should close the Delete Organization Modal when "Cancel" button is clicked', async () => {
+    window.location.assign('/orgsetting/id=123');
+    localStorage.setItem('UserType', 'SUPERADMIN');
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <DeleteOrg />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    fireEvent.click(screen.getByTestId('openDeleteModalBtn'));
+    expect(screen.getByTestId('orgDeleteModal')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('closeDelOrgModalBtn'));
+    await waitFor(() => {
+      expect(screen.queryByTestId('orgDeleteModal')).toBeNull();
+    });
+    expect(window.location).toBeAt('/orgsetting/id=123');
+  });
+  test('should open the Delete Organization Modal when "Delete" button is clicked', async () => {
+    window.location.assign('/orgsetting/id=123');
+    localStorage.setItem('UserType', 'SUPERADMIN');
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <DeleteOrg />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    fireEvent.click(screen.getByTestId('openDeleteModalBtn'));
+    expect(screen.getByTestId('orgDeleteModal')).toBeInTheDocument();
+    expect(window.location).toBeAt('/orgsetting/id=123');
+  });
+  test('render Delete Organization Modal when "Delete" button is clicked', async () => {
+    window.location.assign('/orgsetting/id=123');
+    localStorage.setItem('UserType', 'SUPERADMIN');
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <DeleteOrg />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    fireEvent.click(screen.getByTestId('openDeleteModalBtn'));
+    expect(screen.getByTestId('orgDeleteModal')).toBeInTheDocument();
+    expect(window.location).toBeAt('/orgsetting/id=123');
   });
 });
