@@ -19,7 +19,7 @@ const props = {
 
 const propsOrg: InterfaceLeftDrawerProps = {
   ...props,
-  screenName: 'Organizations',
+  screenName: 'My Organizations',
 };
 const propsReq: InterfaceLeftDrawerProps = {
   ...props,
@@ -66,7 +66,7 @@ afterEach(() => {
 });
 
 describe('Testing Left Drawer component for SUPERADMIN', () => {
-  test('Component should be rendered properly', () => {
+  test('Component should be rendered properly', async () => {
     localStorage.setItem('UserImage', '');
     localStorage.setItem('UserType', 'SUPERADMIN');
     render(
@@ -79,7 +79,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
       </MockedProvider>
     );
 
-    expect(screen.getByText('Organizations')).toBeInTheDocument();
+    expect(screen.getByText('My Organizations')).toBeInTheDocument();
     expect(screen.getByText('Requests')).toBeInTheDocument();
     expect(screen.getByText('Users')).toBeInTheDocument();
     expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
@@ -231,7 +231,7 @@ describe('Testing Left Drawer component for ADMIN', () => {
       </MockedProvider>
     );
 
-    expect(screen.getByText('Organizations')).toBeInTheDocument();
+    expect(screen.getByText('My Organizations')).toBeInTheDocument();
     expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
 
     expect(screen.getByText(/John Doe/i)).toBeInTheDocument();

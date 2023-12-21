@@ -42,7 +42,7 @@
   "leftDrawer": {
     "talawaAdminPortal": "तलावा व्यवस्थापक पोर्टल",
     "menu": "मेन्यू",
-    "organizations": "संगठन",
+    "my organizations": "मेरे संगठन",
     "requests": "अनुरोध",
     "users": "उपयोगकर्ता",
     "logout": "लॉग आउट"
@@ -78,7 +78,7 @@
     "designation": "पद",
     "email": "ईमेल",
     "searchByName": "नाम से खोजें",
-    "organizations": "संगठन",
+    "my organizations": "मेरे संगठन",
     "createOrganization": "संगठन बनाएं",
     "createSampleOrganization": " सैंपल संगठन बनाएं",
     "description": "विवरण",
