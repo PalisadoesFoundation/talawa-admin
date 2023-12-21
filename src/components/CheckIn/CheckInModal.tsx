@@ -81,7 +81,7 @@ export const CheckInModal = (props: InterfaceModalProp): JSX.Element => {
       >
         <Modal.Header closeButton className="bg-primary">
           <Modal.Title className="text-white">
-             Event Check In Management
+            Event Check In Management
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
