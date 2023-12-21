@@ -26,6 +26,7 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
 
   function handleClick(): void {
     const url = '/orgdash/id=' + _id;
+
     // Dont change the below two lines
     window.location.replace(url);
     history.push(url);
