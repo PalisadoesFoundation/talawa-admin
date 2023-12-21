@@ -66,7 +66,7 @@ afterEach(() => {
 });
 
 describe('Testing Left Drawer component for SUPERADMIN', () => {
-  test('Component should be rendered properly', async () => {
+  test('Component should be rendered properly', () => {
     localStorage.setItem('UserImage', '');
     localStorage.setItem('UserType', 'SUPERADMIN');
     render(

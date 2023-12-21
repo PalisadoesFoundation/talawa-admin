@@ -81,7 +81,7 @@ const leftDrawer = ({
             <div className={styles.iconWrapper}>
               <OrganizationsIcon
                 stroke={`${
-                  screenName === 'Organizations'
+                  screenName === 'My Organizations'
                     ? 'var(--bs-white)'
                     : 'var(--bs-secondary)'
                 }`}
