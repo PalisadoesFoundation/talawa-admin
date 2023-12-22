@@ -34,11 +34,13 @@ function deleteOrg(): JSX.Element {
       removeSampleOrganization()
         .then(() => {
           toast.success('Successfully deleted sample Organization');
+          setTimeout(() => {
+            window.location.replace('/orglist');
+          }, 1000);
         })
         .catch((error) => {
           toast.error(error.message);
         });
-      window.location.replace('/orglist');
     } else {
       try {
         await del({
