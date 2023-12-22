@@ -297,7 +297,7 @@ describe('Testing Advertisement Component', () => {
       },
     ];
 
-    const { container } = render(
+    render(
       <ApolloProvider client={client}>
         <Provider store={store}>
           <BrowserRouter>
@@ -371,7 +371,7 @@ describe('Testing Advertisement Component', () => {
       },
     ];
 
-    const component = render(
+    render(
       <ApolloProvider client={client}>
         <Provider store={store}>
           <BrowserRouter>
