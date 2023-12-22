@@ -7,6 +7,7 @@ import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
+import convertToBase64 from 'utils/convertToBase64';
 
 interface InterfaceAddOnRegisterProps {
   id?: string; // OrgId
@@ -101,21 +102,61 @@ function advertisementRegister({
                 }}
               />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="registerForm.Rlink">
-              <Form.Label>{t('Rlink')}</Form.Label>
+            <Form.Group className="mb-3">
+              <Form.Label htmlFor="advertisementMedia">
+                {t('Rmedia')}
+              </Form.Label>
               <Form.Control
-                type="text"
-                placeholder={t('EXlink')}
-                autoComplete="off"
-                required
-                value={formState.link}
-                onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    link: e.target.value,
-                  });
+                accept="image/*, video/*"
+                data-testid="advertisementMedia"
+                name="advertisementMedia"
+                type="file"
+                id="advertisementMedia"
+                multiple={false}
+                onChange={async (
+                  e: React.ChangeEvent<HTMLInputElement>
+                ): Promise<void> => {
+                  const target = e.target as HTMLInputElement;
+                  const file = target.files && target.files[0];
+                  if (file) {
+                    const mediaBase64 = await convertToBase64(file);
+                    setFormState({
+                      ...formState,
+                      link: mediaBase64,
+                    });
+                  }
                 }}
               />
+              {formState.link && (
+                <div className={styles.preview} data-testid="mediaPreview">
+                  {formState.link.includes('data:video') ? (
+                    <video muted autoPlay={true} loop={true} playsInline>
+                      <source src={formState.link} type="video/mp4" />
+                    </video>
+                  ) : (
+                    <img src={formState.link} />
+                  )}
+
+                  <button
+                    className={styles.closeButton}
+                    onClick={(): void => {
+                      setFormState({
+                        ...formState,
+                        link: '',
+                      });
+                      const fileInput = document.getElementById(
+                        'advertisementMedia'
+                      ) as HTMLInputElement;
+                      if (fileInput) {
+                        fileInput.value = '';
+                      }
+                    }}
+                    data-testid="closePreview"
+                  >
+                    <i className="fa fa-times"></i>
+                  </button>
+                </div>
+              )}
             </Form.Group>
             <Form.Group className="mb-3" controlId="registerForm.Rtype">
               <Form.Label>{t('Rtype')}</Form.Label>

@@ -64,7 +64,7 @@ describe('Testing Advertisement   Component', () => {
                 name: 'Advertisement',
                 type: 'POPUP',
                 orgId: 'org1',
-                link: 'http://example.com',
+                link: 'test.png',
                 endDate: new Date(),
                 startDate: new Date(),
               },

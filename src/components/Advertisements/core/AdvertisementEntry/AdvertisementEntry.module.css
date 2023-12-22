@@ -18,3 +18,8 @@
   width: 1rem;
   margin-right: 8px;
 }
+
+.adimage {
+  object-fit: cover;
+  height: 20rem;
+}

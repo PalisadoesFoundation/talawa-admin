@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react';
+import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 
 import {
   ApolloClient,
@@ -38,7 +38,7 @@ const MOCKS = [
       variables: {
         orgId: '1',
         name: 'Test Advertisement',
-        link: 'http://example.com',
+        link: 'test.png',
         type: 'BANNER',
         startDate: dayjs(new Date('2023-01-01')).format('YYYY-MM-DD'),
         endDate: dayjs(new Date('2023-02-01')).format('YYYY-MM-DD'),
@@ -131,7 +131,7 @@ describe('Testing Advertisement Register Component', () => {
                   type="BANNER"
                   name="Advert1"
                   orgId="1"
-                  link="google.com"
+                  link="test.png"
                 />
               }
             </I18nextProvider>
@@ -162,7 +162,7 @@ describe('Testing Advertisement Register Component', () => {
                   type="BANNER"
                   name="Advert1"
                   orgId="1"
-                  link="google.com"
+                  link="test.png"
                 />
               }
             </I18nextProvider>
@@ -171,7 +171,7 @@ describe('Testing Advertisement Register Component', () => {
       </MockedProvider>
     );
 
-    await waitFor(() => {
+    await waitFor(async () => {
       fireEvent.click(getByText(translations.addNew));
       expect(queryByText(translations.RClose)).toBeInTheDocument();
 
@@ -182,12 +182,20 @@ describe('Testing Advertisement Register Component', () => {
         'Test Advertisement'
       );
 
-      fireEvent.change(getByLabelText(translations.Rlink), {
-        target: { value: 'http://example.com' },
+      const mediaFile = new File(['media content'], 'test.png', {
+        type: 'image/png',
       });
-      expect(getByLabelText(translations.Rlink)).toHaveValue(
-        'http://example.com'
-      );
+
+      const mediaInput = screen.getByTestId('advertisementMedia');
+      fireEvent.change(mediaInput, {
+        target: {
+          files: [mediaFile],
+        },
+      });
+
+      // Check if the video is displayed
+      const mediaPreview = await screen.findByTestId('mediaPreview');
+      expect(mediaPreview).toBeInTheDocument();
 
       fireEvent.change(getByLabelText(translations.Rtype), {
         target: { value: 'BANNER' },

@@ -57,19 +57,26 @@ function advertisementEntry({
         {Array.from({ length: 1 }).map((_, idx) => (
           <Col key={idx}>
             <Card>
-              <Card.Img
-                variant="top"
-                src={
-                  'https://i.pinimg.com/736x/f0/68/da/f068daf5f23f74ada84537bcb70c7e4b.jpg'
-                }
-              />
+              {link.includes('data:video') ? (
+                <video
+                  muted
+                  className={styles.adimage}
+                  autoPlay={true}
+                  loop={true}
+                  playsInline
+                >
+                  <source src={link} type="video/mp4" />
+                </video>
+              ) : (
+                <Card.Img className={styles.adimage} variant="top" src={link} />
+              )}
+
               <Card.Body>
                 <Card.Title>{name}</Card.Title>
                 <Card.Text>Ends on {endDate?.toDateString()}</Card.Text>
                 <Card.Subtitle className="mb-2 text-muted author">
                   {type}
                 </Card.Subtitle>
-                <Card.Text>{link}</Card.Text>
                 <Button
                   className={styles.entryaction}
                   variant="danger"
