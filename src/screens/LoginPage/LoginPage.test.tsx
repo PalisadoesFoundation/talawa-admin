@@ -301,6 +301,49 @@ describe('Testing Login Page Screen', () => {
     userEvent.click(screen.getByTestId('registrationBtn'));
   });
 
+  test('Testing registration functionality, when input is not validated correctly', async () => {
+    const formData = {
+      firstName: '1234',
+      lastName: '1234',
+      email: 'j@g.com',
+      password: 'joe',
+      confirmPassword: 'joe',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+
+    userEvent.type(
+      screen.getByPlaceholderText(/First Name/i),
+      formData.firstName
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Last Name/i),
+      formData.lastName
+    );
+    userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
+    userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
+    userEvent.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      formData.confirmPassword
+    );
+
+    userEvent.click(screen.getByTestId('registrationBtn'));
+  });
+
   test('Testing toggle login register portion', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
