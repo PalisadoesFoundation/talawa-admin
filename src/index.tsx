@@ -31,6 +31,7 @@ import {
   REACT_APP_BACKEND_WEBSOCKET_URL,
 } from 'Constant/constant';
 import { refreshToken } from 'utils/getRefreshToken';
+import { toast } from 'react-toastify';
 
 const errorLink = onError(
   ({ graphQLErrors, networkError, operation, forward }) => {
@@ -55,6 +56,13 @@ const errorLink = onError(
       });
     } else if (networkError) {
       console.log(`[Network error]: ${networkError}`);
+      toast.clearWaitingQueue();
+      toast.error(
+        'API Server Unavailable at the moment. Please try again later',
+        {
+          toastId: 'apiServerErr',
+        }
+      );
     }
   }
 );
