@@ -39,7 +39,7 @@ const Requests = (): JSX.Element => {
   const [membersData, setMembersData] = useState<InterfaceMember[]>([]);
   const [searchByFirstName, setSearchByFirstName] = useState<boolean>(true);
   const [searchByName, setSearchByName] = useState<string>('');
-  const [showBlockedMembers, setShowBlockedMembers] = useState<boolean>(false);
+  const [showBlockedMembers, setShowBlockedMembers] = useState<boolean>(true);
 
   const {
     data: memberData,
