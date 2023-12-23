@@ -338,10 +338,10 @@ function orgList(): JSX.Element {
                     {t('Latest')}
                   </Dropdown.Item>
                   <Dropdown.Item
-                    onClick={(): void => handleSorting('Oldest')}
+                    onClick={(): void => handleSorting('Earliest')}
                     data-testid="oldest"
                   >
-                    {t('Oldest')}
+                    {t('Earliest')}
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
