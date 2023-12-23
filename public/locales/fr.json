@@ -662,7 +662,11 @@
     "deleteAdvertisement": "Supprimer l'annonce",
     "deleteAdvertisementMsg": "Voulez-vous supprimer cette annonce ?",
     "no": "Non",
-    "yes": "Oui"
+    "yes": "Oui",
+    "view": "Voir",
+    "edit": "Éditer",
+    "editAdvertisement": "Éditer l'annonce",
+    "saveChanges": "Enregistrer les modifications"
   },
   "userChat": {
     "chat": "Chat",
