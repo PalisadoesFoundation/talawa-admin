@@ -157,7 +157,7 @@ function advertisementRegister({
           {t('addNew')}
         </Button>
       ) : (
-        <div onClick={handleShow}>Edit</div>
+        <div onClick={handleShow}>{t('edit')}</div>
       )}
 
       <Modal show={show} onHide={handleClose}>
@@ -165,7 +165,7 @@ function advertisementRegister({
           {formStatus === 'register' ? (
             <Modal.Title> {t('RClose')}</Modal.Title>
           ) : (
-            <Modal.Title>Edit Advertisement</Modal.Title>
+            <Modal.Title>{t('editAdvertisement')}</Modal.Title>
           )}
         </Modal.Header>
         <Modal.Body>
@@ -273,7 +273,7 @@ function advertisementRegister({
               onClick={handleUpdate}
               data-testid="addonupdate"
             >
-              Save Changes
+              {t('saveChanges')}
             </Button>
           )}
         </Modal.Footer>

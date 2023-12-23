@@ -85,7 +85,7 @@ function advertisementEntry({
                       />
                     </li>
                     <li onClick={toggleShowDeleteModal} data-testid="deletebtn">
-                      Delete
+                      {t('delete')}
                     </li>
                   </ul>
                 )}
@@ -115,7 +115,7 @@ function advertisementEntry({
                     ) : (
                       <i className={'fa fa-eye'}></i>
                     )}
-                    View
+                    {t('view')}
                   </Button>
                 </div>
                 <Card.Text>{link}</Card.Text>
