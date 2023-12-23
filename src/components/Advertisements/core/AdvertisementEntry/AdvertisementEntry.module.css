@@ -20,7 +20,7 @@
 
 .buttons {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 .dropdownButton {
@@ -30,7 +30,7 @@
   cursor: pointer;
   display: flex;
   width: 100%;
-  justify-content: end;
+  justify-content: flex-end;
   padding: 8px 10px;
 }
 
