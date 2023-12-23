@@ -684,7 +684,11 @@
     "deleteAdvertisement": "Delete Advertisement",
     "deleteAdvertisementMsg": "Do you want to remove this advertisement?",
     "no": "No",
-    "yes": "Yes"
+    "yes": "Yes",
+    "view": "View",
+    "edit": "Edit",
+    "editAdvertisement": "Edit Advertisement",
+    "saveChanges": "Save Changes"
   },
   "userChat": {
     "chat": "Chat",

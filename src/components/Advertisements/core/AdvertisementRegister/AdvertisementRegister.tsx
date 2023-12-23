@@ -1,16 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AdvertisementRegister.module.css';
 import { Button, Form, Modal } from 'react-bootstrap';
-import { useMutation } from '@apollo/client';
-import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  ADD_ADVERTISEMENT_MUTATION,
+  UPDATE_ADVERTISEMENT_MUTATION,
+} from 'GraphQl/Mutations/mutations';
+import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
+import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
 
 interface InterfaceAddOnRegisterProps {
   id?: string; // OrgId
   createdBy?: string; // User
+  formStatus?: string;
+  idEdit?: string;
+  nameEdit?: string;
+  typeEdit?: string;
+  orgIdEdit?: string;
+  linkEdit?: string;
+  endDateEdit?: Date;
+  startDateEdit?: Date;
 }
 interface InterfaceFormStateTypes {
   name: string;
@@ -24,6 +36,16 @@ interface InterfaceFormStateTypes {
 function advertisementRegister({
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   createdBy,
+  formStatus,
+  idEdit,
+  nameEdit,
+  typeEdit,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  orgIdEdit,
+  linkEdit,
+  endDateEdit,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  startDateEdit,
 }: InterfaceAddOnRegisterProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
 
@@ -32,6 +54,8 @@ function advertisementRegister({
   const handleClose = (): void => setShow(false);
   const handleShow = (): void => setShow(true);
   const [create] = useMutation(ADD_ADVERTISEMENT_MUTATION);
+  const [updateAdvertisement] = useMutation(UPDATE_ADVERTISEMENT_MUTATION);
+  const { refetch } = useQuery(ADVERTISEMENTS_GET);
 
   //getting orgId from URL
   const currentOrg = window.location.href.split('/id=')[1] + '';
@@ -43,6 +67,30 @@ function advertisementRegister({
     endDate: new Date(),
     orgId: currentOrg,
   });
+
+  //if set to edit set the formState by edit variables
+  useEffect(() => {
+    if (formStatus === 'edit') {
+      setFormState((prevState) => ({
+        ...prevState,
+        name: nameEdit || '',
+        link: linkEdit || '',
+        type: typeEdit || 'BANNER',
+        startDate: startDateEdit || new Date(),
+        endDate: endDateEdit || new Date(),
+        orgId: currentOrg,
+      }));
+    }
+  }, [
+    formStatus,
+    nameEdit,
+    linkEdit,
+    typeEdit,
+    startDateEdit,
+    endDateEdit,
+    currentOrg,
+  ]);
+
   const handleRegister = async (): Promise<void> => {
     try {
       console.log('At handle register', formState);
@@ -59,29 +107,66 @@ function advertisementRegister({
 
       if (data) {
         toast.success('Advertisement created successfully');
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        refetch();
+        setFormState({
+          name: '',
+          link: '',
+          type: 'BANNER',
+          startDate: new Date(),
+          endDate: new Date(),
+          orgId: currentOrg,
+        });
+        handleClose();
       }
     } catch (error) {
       toast.error('An error occured, could not create new advertisement');
       console.log('error occured', error);
     }
   };
+  const handleUpdate = async (): Promise<void> => {
+    try {
+      console.log('At handle update', formState);
+      const { data } = await updateAdvertisement({
+        variables: {
+          id: idEdit,
+          // orgId: currentOrg,
+          name: formState.name,
+          link: formState.link,
+          type: formState.type,
+          startDate: dayjs(formState.startDate).format('YYYY-MM-DD'),
+          endDate: dayjs(formState.endDate).format('YYYY-MM-DD'),
+        },
+      });
+
+      if (data) {
+        toast.success('Advertisement updated successfully');
+      }
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
   return (
     <>
-      <Button
-        className={styles.modalbtn}
-        variant="primary"
-        onClick={handleShow}
-      >
-        <i className="fa fa-plus"></i>
-        {t('addNew')}
-      </Button>
+      {formStatus === 'register' ? ( //If register show register button else show edit button
+        <Button
+          className={styles.modalbtn}
+          variant="primary"
+          onClick={handleShow}
+        >
+          <i className="fa fa-plus"></i>
+          {t('addNew')}
+        </Button>
+      ) : (
+        <div onClick={handleShow}>{t('edit')}</div>
+      )}
 
       <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title> {t('RClose')}</Modal.Title>
+        <Modal.Header closeButton className={styles.editHeader}>
+          {formStatus === 'register' ? (
+            <Modal.Title> {t('RClose')}</Modal.Title>
+          ) : (
+            <Modal.Title>{t('editAdvertisement')}</Modal.Title>
+          )}
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -140,7 +225,7 @@ function advertisementRegister({
               <Form.Control
                 type="date"
                 required
-                // value={formState.startDate}
+                value={formState.startDate.toISOString().slice(0, 10)}
                 onChange={(e): void => {
                   setFormState({
                     ...formState,
@@ -155,7 +240,7 @@ function advertisementRegister({
               <Form.Control
                 type="date"
                 required
-                // value={new Date(formState.endDate)}
+                value={formState.endDate.toISOString().slice(0, 10)}
                 onChange={(e): void => {
                   setFormState({
                     ...formState,
@@ -174,13 +259,23 @@ function advertisementRegister({
           >
             {t('close')}
           </Button>
-          <Button
-            variant="primary"
-            onClick={handleRegister}
-            data-testid="addonregister"
-          >
-            {t('register')}
-          </Button>
+          {formStatus === 'register' ? (
+            <Button
+              variant="primary"
+              onClick={handleRegister}
+              data-testid="addonregister"
+            >
+              {t('register')}
+            </Button>
+          ) : (
+            <Button
+              variant="primary"
+              onClick={handleUpdate}
+              data-testid="addonupdate"
+            >
+              {t('saveChanges')}
+            </Button>
+          )}
         </Modal.Footer>
       </Modal>
     </>
@@ -194,6 +289,7 @@ advertisementRegister.defaultProps = {
   startDate: new Date(),
   endDate: new Date(),
   orgId: '',
+  formStatus: 'register',
 };
 
 advertisementRegister.propTypes = {
@@ -203,6 +299,7 @@ advertisementRegister.propTypes = {
   startDate: PropTypes.instanceOf(Date),
   endDate: PropTypes.instanceOf(Date),
   orgId: PropTypes.string,
+  formStatus: PropTypes.string,
 };
 
 export default advertisementRegister;
