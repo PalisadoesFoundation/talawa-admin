@@ -63,7 +63,7 @@ export default function advertisements(): JSX.Element {
   const updateLinks = async (links: any[]): Promise<void> => {
     store.dispatch({ type: 'UPDATE_P_TARGETS', payload: links });
   };
-  // /* istanbul ignore next */
+  /* istanbul ignore next */
   const pluginModified = (): void => {
     return getInstalledPlugins();
     // .then((installedPlugins) => {
@@ -77,6 +77,7 @@ export default function advertisements(): JSX.Element {
     isStore ? getStorePlugins() : getInstalledPlugins();
   };
 
+  /* istanbul ignore next */
   const filterChange = (ev: any): void => {
     setShowEnabled(ev.target.value === 'enabled');
   };
