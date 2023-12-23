@@ -42,7 +42,7 @@
   "leftDrawer": {
     "talawaAdminPortal": "Portail d'administration Talawa",
     "menu": "Menu",
-    "organizations": "Organisations",
+    "my organizations": "Mes Organisations",
     "requests": "Demandes",
     "users": "Utilisateurs",
     "logout": "Déconnexion"
@@ -78,7 +78,7 @@
     "designation": "La désignation",
     "email": "E-mail",
     "searchByName": "Rechercher par nom",
-    "organizations": "Organisations",
+    "my organizations": "Mes Organisations",
     "createOrganization": "Créer une organisation",
     "createSampleOrganization": "Créer une organisation d'exemple",
     "description": "La description",
