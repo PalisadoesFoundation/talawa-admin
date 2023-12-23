@@ -430,14 +430,14 @@ describe('Testing Block/Unblock user screen', () => {
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('Sam Smith')).toBeInTheDocument();
 
-    const firstNameInput = screen.getByPlaceholderText(/Search by First Name/i);
     // Open Dropdown
     await act(async () => {
       userEvent.click(screen.getByTestId('nameFilter'));
     });
     // Select option and enter first name
     userEvent.click(screen.getByTestId('searchByFirstName'));
-    userEvent.type(firstNameInput, 'john');
+    const firstNameInput = screen.getByPlaceholderText(/Search by First Name/i);
+    userEvent.type(firstNameInput, 'john{enter}');
 
     await wait(700);
 
@@ -474,7 +474,7 @@ describe('Testing Block/Unblock user screen', () => {
     // Select option and enter last name
     userEvent.click(screen.getByTestId('searchByLastName'));
     const lastNameInput = screen.getByPlaceholderText(/Search by Last Name/i);
-    userEvent.type(lastNameInput, 'doe');
+    userEvent.type(lastNameInput, 'doe{enter}');
 
     await wait(700);
 
@@ -601,7 +601,7 @@ describe('Testing Block/Unblock user screen', () => {
 
     const input = screen.getByPlaceholderText('Search By First Name');
     await act(async () => {
-      userEvent.type(input, 'Peter');
+      userEvent.type(input, 'Peter{enter}');
     });
     await wait(700);
     expect(

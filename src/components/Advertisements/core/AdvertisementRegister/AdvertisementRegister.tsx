@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AdvertisementRegister.module.css';
 import { Button, Form, Modal } from 'react-bootstrap';
-import { useMutation } from '@apollo/client';
 import {
   ADD_ADVERTISEMENT_MUTATION,
   UPDATE_ADVERTISEMENT_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
+import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
 
 interface InterfaceAddOnRegisterProps {
   id?: string; // OrgId
@@ -54,6 +55,7 @@ function advertisementRegister({
   const handleShow = (): void => setShow(true);
   const [create] = useMutation(ADD_ADVERTISEMENT_MUTATION);
   const [updateAdvertisement] = useMutation(UPDATE_ADVERTISEMENT_MUTATION);
+  const { refetch } = useQuery(ADVERTISEMENTS_GET);
 
   //getting orgId from URL
   const currentOrg = window.location.href.split('/id=')[1] + '';
@@ -105,9 +107,16 @@ function advertisementRegister({
 
       if (data) {
         toast.success('Advertisement created successfully');
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        refetch();
+        setFormState({
+          name: '',
+          link: '',
+          type: 'BANNER',
+          startDate: new Date(),
+          endDate: new Date(),
+          orgId: currentOrg,
+        });
+        handleClose();
       }
     } catch (error) {
       toast.error('An error occured, could not create new advertisement');

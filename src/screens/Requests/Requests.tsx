@@ -6,7 +6,6 @@ import { Dropdown, Form, Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-
 import { Search } from '@mui/icons-material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import SortIcon from '@mui/icons-material/Sort';
@@ -22,7 +21,6 @@ import {
 import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 import TableLoader from 'components/TableLoader/TableLoader';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import debounce from 'utils/debounce';
 import { errorHandler } from 'utils/errorHandler';
 import type {
   InterfaceOrgConnectionType,
@@ -242,20 +240,20 @@ const Requests = (): JSX.Element => {
 
   /* istanbul ignore next */
   const handleSearchByName = async (e: any): Promise<void> => {
-    const { value } = e.target;
-    setSearchByName(value);
-    if (value === '') {
-      resetAndRefetch();
-      return;
+    if (e.key === 'Enter') {
+      const { value } = e.target;
+      setSearchByName(value);
+      if (value === '') {
+        resetAndRefetch();
+        return;
+      }
+      await refetchUsers({
+        firstName_contains: value,
+        lastName_contains: '',
+        // Later on we can add several search and filter options
+      });
     }
-    await refetchUsers({
-      firstName_contains: value,
-      lastName_contains: '',
-      // Later on we can add several search and filter options
-    });
   };
-
-  const debouncedHandleSearchByName = debounce(handleSearchByName);
 
   const headerTitles: string[] = [
     '#',
@@ -314,7 +312,7 @@ const Requests = (): JSX.Element => {
                 data-testid="searchByName"
                 autoComplete="off"
                 required
-                onChange={debouncedHandleSearchByName}
+                onKeyUp={handleSearchByName}
               />
               <Button
                 tabIndex={-1}

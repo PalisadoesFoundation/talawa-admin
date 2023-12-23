@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AdvertisementEntry.module.css';
-import { Button, Card, Col, Row, Spinner } from 'react-bootstrap';
+import { Button, Card, Col, Row, Spinner, Modal } from 'react-bootstrap';
 import { DELETE_ADVERTISEMENT_BY_ID } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
-// import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
 import AdvertisementRegister from '../AdvertisementRegister/AdvertisementRegister';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { toast } from 'react-toastify';
 interface InterfaceAddOnEntryProps {
   id: string;
   name: string;
@@ -28,21 +29,29 @@ function advertisementEntry({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   startDate,
 }: InterfaceAddOnEntryProps): JSX.Element {
-  // const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
+  const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const [buttonLoading, setButtonLoading] = useState(false);
   const [dropdown, setDropdown] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteAdById] = useMutation(DELETE_ADVERTISEMENT_BY_ID, {
     refetchQueries: [ADVERTISEMENTS_GET],
   });
 
+  const toggleShowDeleteModal = (): void => setShowDeleteModal((prev) => !prev);
   const onDelete = async (): Promise<void> => {
     setButtonLoading(true);
-    await deleteAdById({
-      variables: {
-        id: id.toString(),
-      },
-    });
-    setButtonLoading(false);
+    try {
+      await deleteAdById({
+        variables: {
+          id: id.toString(),
+        },
+      });
+      toast.error('Advertisement Deleted');
+      setButtonLoading(false);
+    } catch (error: any) {
+      toast.error(error.message);
+      setButtonLoading(false);
+    }
   };
   const handleOptionsClick = (): void => {
     setDropdown(!dropdown);
@@ -75,7 +84,7 @@ function advertisementEntry({
                         startDateEdit={startDate}
                       />
                     </li>
-                    <li onClick={onDelete} data-testid="deletebtn">
+                    <li onClick={toggleShowDeleteModal} data-testid="deletebtn">
                       Delete
                     </li>
                   </ul>
@@ -109,6 +118,35 @@ function advertisementEntry({
                     View
                   </Button>
                 </div>
+                <Card.Text>{link}</Card.Text>
+                <Modal show={showDeleteModal} onHide={toggleShowDeleteModal}>
+                  <Modal.Header>
+                    <h5 data-testid="delete_title">
+                      {t('deleteAdvertisement')}
+                    </h5>
+                    <Button variant="danger" onClick={toggleShowDeleteModal}>
+                      <i className="fa fa-times"></i>
+                    </Button>
+                  </Modal.Header>
+                  <Modal.Body data-testid="delete_body">
+                    {t('deleteAdvertisementMsg')}
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="danger" onClick={toggleShowDeleteModal}>
+                      {t('no')}
+                    </Button>
+                    <Button
+                      type="button"
+                      className="btn btn-success"
+                      onClick={(): void => {
+                        onDelete();
+                      }}
+                      data-testid="delete_yes"
+                    >
+                      {t('yes')}
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
               </Card.Body>
             </Card>
           </Col>

@@ -202,8 +202,7 @@
     "users": "Users",
     "searchName": "Enter Name",
     "searchevent": "Enter Event",
-    "searchFirstName": "Enter First Name",
-    "searchLastName": "Enter Last Name"
+    "searchFullName": "Enter Full Name"
   },
   "userListCard": {
     "joined": "Joined",
@@ -679,7 +678,11 @@
     "EXname": "Ex. Cookie Shop",
     "EXlink": "Ex. http://yourwebsite.com/photo",
     "register": "Create Advertisement",
-    "close": "Close "
+    "close": "Close ",
+    "deleteAdvertisement": "Delete Advertisement",
+    "deleteAdvertisementMsg": "Do you want to remove this advertisement?",
+    "no": "No",
+    "yes": "Yes"
   },
   "userChat": {
     "chat": "Chat",

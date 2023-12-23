@@ -43,7 +43,6 @@
   height: 100%;
 }
 .sidebar:after {
-  content: '';
   background-color: #f7f7f7;
   position: absolute;
   width: 2px;
@@ -241,6 +240,9 @@
   animation: load8 1.1s infinite linear;
 }
 .radio_buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   color: #707070;
   font-weight: 600;
   font-size: 14px;

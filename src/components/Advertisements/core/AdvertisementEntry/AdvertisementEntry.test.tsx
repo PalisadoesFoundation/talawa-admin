@@ -1,7 +1,7 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
 import { DELETE_ADVERTISEMENT_BY_ID } from 'GraphQl/Mutations/mutations';
 import { MockedProvider } from '@apollo/client/testing';
+import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import {
   ApolloClient,
   ApolloProvider,
@@ -94,8 +94,20 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
   link: ApolloLink.from([httpLink]),
 });
+
+const mockUseMutation = jest.fn();
+jest.mock('@apollo/client', () => {
+  const originalModule = jest.requireActual('@apollo/client');
+  return {
+    ...originalModule,
+    useMutation: () => mockUseMutation(),
+  };
+});
+
 describe('Testing Advertisement Entry Component', () => {
-  test('Temporary test for Advertisement Entry', () => {
+  test('Temporary test for Advertisement Entry', async () => {
+    const deleteAdByIdMock = jest.fn();
+    mockUseMutation.mockReturnValue([deleteAdByIdMock]);
     const { getByTestId, getAllByText } = render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -121,6 +133,50 @@ describe('Testing Advertisement Entry Component', () => {
     expect(getByTestId('AdEntry')).toBeInTheDocument();
     expect(getAllByText('POPUP')[0]).toBeInTheDocument();
     expect(getAllByText('Advert1')[0]).toBeInTheDocument();
+
+    fireEvent.click(getByTestId('AddOnEntry_btn_install'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('delete_title')).toBeInTheDocument();
+      expect(screen.getByTestId('delete_body')).toBeInTheDocument();
+    });
+
+    fireEvent.click(getByTestId('AddOnEntry_btn_install'));
+
+    fireEvent.click(getByTestId('AddOnEntry_btn_install'));
+
+    fireEvent.click(getByTestId('delete_yes'));
+
+    await waitFor(() => {
+      expect(deleteAdByIdMock).toHaveBeenCalledWith({
+        variables: {
+          id: '1',
+        },
+      });
+      const deletedMessage = screen.queryByText('Advertisement Deleted');
+      expect(deletedMessage).toBeNull();
+    });
+
+    deleteAdByIdMock.mockRejectedValueOnce(new Error('Deletion Failed'));
+
+    fireEvent.click(getByTestId('AddOnEntry_btn_install'));
+
+    fireEvent.click(getByTestId('delete_yes'));
+
+    await waitFor(() => {
+      expect(deleteAdByIdMock).toHaveBeenCalledWith({
+        variables: {
+          id: '1',
+        },
+      });
+      const deletionFailedText = screen.queryByText((content, element) => {
+        return (
+          element?.textContent === 'Deletion Failed' &&
+          element.tagName.toLowerCase() === 'div'
+        );
+      });
+      expect(deletionFailedText).toBeNull();
+    });
   });
   it('should open and close the dropdown when options button is clicked', () => {
     const { getByTestId, queryByText, getAllByText } = render(
