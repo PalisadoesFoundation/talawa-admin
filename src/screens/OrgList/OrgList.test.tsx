@@ -176,6 +176,35 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
   }, 10000);
+
+  test('Plugin Notification Modal after Org is Created is working', async () => {
+    localStorage.setItem('id', '123');
+    localStorage.setItem('UserType', 'SUPERADMIN');
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <OrgList />
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+
+      await wait(500);
+
+      expect(localStorage.setItem).toHaveBeenLastCalledWith(
+        'UserType',
+        'SUPERADMIN'
+      );
+
+      userEvent.click(screen.getByTestId(/closeModalBtn/i));
+      await wait(500);
+    });
+
+    expect(screen.getByTestId(/closeModalBtn/i)).toBeInTheDocument();
+    userEvent.click(screen.getByTestId(/closeModalBtn/i));
+  }, 10000);
 });
 
 describe('Organisations Page testing as Admin', () => {
