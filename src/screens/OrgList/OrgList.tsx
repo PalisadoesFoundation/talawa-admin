@@ -596,8 +596,8 @@ function orgList(): JSX.Element {
                   <p className={styles.titlemodal}>{t('manageFeatures')}</p>
                   <Button
                     variant="secondary"
-                    onClick={closeDialogModal}
-                    data-testid="closeModalBtn"
+                    onClick={(): void => toggleDialogModal()}
+                    data-testid="closeOrganizationModal"
                   >
                     <i
                       className="fa fa-times"

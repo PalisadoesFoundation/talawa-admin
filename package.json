@@ -114,7 +114,7 @@
     "cross-env": "^7.0.3",
     "husky": "^8.0.3",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^27.5.1",
+    "jest": "^27.4.5",
     "jest-enzyme": "^7.1.2",
     "jest-localstorage-mock": "^2.4.19",
     "jest-location-mock": "^1.0.9",
