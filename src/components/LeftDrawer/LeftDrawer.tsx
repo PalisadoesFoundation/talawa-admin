@@ -67,9 +67,11 @@ const leftDrawer = ({
         <h5 className={styles.titleHeader}>{t('menu')}</h5>
         <div className={styles.optionList}>
           <Button
-            variant={screenName === 'Organizations' ? 'success' : 'light'}
+            variant={screenName === 'My Organizations' ? 'success' : 'light'}
             className={`${
-              screenName === 'Organizations' ? 'text-white' : 'text-secondary'
+              screenName === 'My Organizations'
+                ? 'text-white'
+                : 'text-secondary'
             }`}
             data-testid="orgsBtn"
             onClick={(): void => {
@@ -79,13 +81,13 @@ const leftDrawer = ({
             <div className={styles.iconWrapper}>
               <OrganizationsIcon
                 stroke={`${
-                  screenName === 'Organizations'
+                  screenName === 'My Organizations'
                     ? 'var(--bs-white)'
                     : 'var(--bs-secondary)'
                 }`}
               />
             </div>
-            {t('organizations')}
+            {t('my organizations')}
           </Button>
           {userType === 'SUPERADMIN' && (
             <Button
@@ -165,7 +167,7 @@ const leftDrawer = ({
 
           <Button
             variant="light"
-            className="mt-4 d-flex justify-content-start px-0 mb-2 w-100"
+            className={`mt-4 d-flex justify-content-start px-0 w-100 ${styles.logout}`}
             onClick={(): void => logout()}
             data-testid="logoutBtn"
           >

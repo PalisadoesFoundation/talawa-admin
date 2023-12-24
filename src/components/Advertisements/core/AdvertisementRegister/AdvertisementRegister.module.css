@@ -4,7 +4,8 @@
   align-items: center;
 }
 
-.modalbtn i {
+.modalbtn i,
+.button i {
   margin-right: 8px;
 }
 
@@ -36,4 +37,13 @@
   font-weight: 600;
   font-size: 16px;
   cursor: pointer;
+}
+
+.button {
+  min-width: 102px;
+}
+
+.editHeader {
+  background-color: #31bb6b;
+  color: white;
 }
