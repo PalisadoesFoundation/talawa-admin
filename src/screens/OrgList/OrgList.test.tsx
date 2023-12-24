@@ -177,7 +177,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
   }, 10000);
 
-  test('Plugin Notification Modal after Org is Created is working', async () => {
+  test('Testing Plugin Notification Modal after Org is Created is working', async () => {
     localStorage.setItem('id', '123');
     localStorage.setItem('UserType', 'SUPERADMIN');
     await act(async () => {
