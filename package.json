@@ -81,7 +81,7 @@
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "prepare": "husky install",
     "jest-preview": "jest-preview",
-    "update-toc": "npx markdown-toc -i INSTALLATION.md --bullets \"-\""
+    "update-toc": "node update-toc.js"
   },
   "eslintConfig": {
     "extends": [
