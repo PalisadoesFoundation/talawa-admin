@@ -293,7 +293,10 @@ function orgList(): JSX.Element {
 
   return (
     <>
-      <SuperAdminScreen title={t('organizations')} screenName="Organizations">
+      <SuperAdminScreen
+        title={t('my organizations')}
+        screenName="My Organizations"
+      >
         {/* Buttons Container */}
         <div className={styles.btnsContainer}>
           <div className={styles.input}>

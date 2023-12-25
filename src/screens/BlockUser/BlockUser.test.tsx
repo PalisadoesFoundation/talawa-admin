@@ -367,6 +367,10 @@ describe('Testing Block/Unblock user screen', () => {
       </MockedProvider>
     );
 
+    await act(async () => {
+      userEvent.click(screen.getByTestId('userFilter'));
+    });
+    userEvent.click(screen.getByTestId('showMembers'));
     await wait();
 
     expect(screen.getByTestId('unBlockUser123')).toBeInTheDocument();
@@ -395,6 +399,10 @@ describe('Testing Block/Unblock user screen', () => {
         </BrowserRouter>
       </MockedProvider>
     );
+    await act(async () => {
+      userEvent.click(screen.getByTestId('userFilter'));
+    });
+    userEvent.click(screen.getByTestId('showMembers'));
 
     await wait();
 
@@ -424,6 +432,10 @@ describe('Testing Block/Unblock user screen', () => {
         </BrowserRouter>
       </MockedProvider>
     );
+    await act(async () => {
+      userEvent.click(screen.getByTestId('userFilter'));
+    });
+    userEvent.click(screen.getByTestId('showMembers'));
 
     await wait();
 
@@ -461,6 +473,11 @@ describe('Testing Block/Unblock user screen', () => {
         </BrowserRouter>
       </MockedProvider>
     );
+
+    await act(async () => {
+      userEvent.click(screen.getByTestId('userFilter'));
+    });
+    userEvent.click(screen.getByTestId('showMembers'));
 
     await wait();
 
@@ -576,6 +593,10 @@ describe('Testing Block/Unblock user screen', () => {
         </BrowserRouter>
       </MockedProvider>
     );
+    await act(async () => {
+      userEvent.click(screen.getByTestId('userFilter'));
+    });
+    userEvent.click(screen.getByTestId('showMembers'));
 
     await wait();
 
