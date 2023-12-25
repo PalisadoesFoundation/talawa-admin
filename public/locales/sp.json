@@ -663,11 +663,7 @@
     "deleteAdvertisement": "Eliminar anuncio",
     "deleteAdvertisementMsg": "¿Desea eliminar este anuncio?",
     "no": "No",
-    "yes": "Sí",
-    "view": "Ver",
-    "edit": "Editar",
-    "editAdvertisement": "Editar Anuncio",
-    "saveChanges": "Guardar Cambios"
+    "yes": "Sí"
   },
   "userChat": {
     "chat": "Charlar",
