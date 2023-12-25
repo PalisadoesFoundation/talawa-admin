@@ -31,6 +31,7 @@ const Users = (): JSX.Element => {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
   const [sortingOption, setSortingOption] = useState('newest');
+  const [filteringOption, setFilteringOption] = useState('cancel');
 
   const userType = localStorage.getItem('UserType');
   const loggedInUserId = localStorage.getItem('id');
@@ -68,10 +69,11 @@ const Users = (): JSX.Element => {
       setHasMore(false);
     }
     if (usersData && usersData.users) {
-      const newDisplayedUsers = sortUsers(usersData.users, sortingOption);
+      let newDisplayedUsers = sortUsers(usersData.users, sortingOption);
+      newDisplayedUsers = filterUsers(newDisplayedUsers, filteringOption);
       setDisplayedUsers(newDisplayedUsers);
     }
-  }, [usersData, sortingOption]);
+  }, [usersData, sortingOption, filteringOption]);
 
   // To clear the search when the component is unmounted
   useEffect(() => {
@@ -189,6 +191,36 @@ const Users = (): JSX.Element => {
     return sortedUsers;
   };
 
+  const handleFiltering = (option: string): void => {
+    setFilteringOption(option);
+  };
+
+  const filterUsers = (
+    allUsers: InterfaceQueryUserListItem[],
+    filteringOption: string
+  ): InterfaceQueryUserListItem[] => {
+    const filteredUsers = [...allUsers];
+
+    if (filteringOption === 'cancel') {
+      return filteredUsers;
+    } else if (filteringOption === 'user') {
+      const output = filteredUsers.filter((user) => {
+        return user.userType === 'USER';
+      });
+      return output;
+    } else if (filteringOption === 'admin') {
+      const output = filteredUsers.filter((user) => {
+        return user.userType == 'ADMIN';
+      });
+      return output;
+    } else {
+      const output = filteredUsers.filter((user) => {
+        return user.userType == 'SUPERADMIN';
+      });
+      return output;
+    }
+  };
+
   const headerTitles: string[] = [
     '#',
     t('name'),
@@ -262,9 +294,31 @@ const Users = (): JSX.Element => {
                   {t('filter')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
+                  <Dropdown.Item
+                    data-testid="admin"
+                    onClick={(): void => handleFiltering('admin')}
+                  >
+                    {t('admin')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    data-testid="superAdmin"
+                    onClick={(): void => handleFiltering('superAdmin')}
+                  >
+                    {t('superAdmin')}
+                  </Dropdown.Item>
+
+                  <Dropdown.Item
+                    data-testid="user"
+                    onClick={(): void => handleFiltering('user')}
+                  >
+                    {t('user')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    data-testid="cancel"
+                    onClick={(): void => handleFiltering('cancel')}
+                  >
+                    {t('cancel')}
+                  </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </div>

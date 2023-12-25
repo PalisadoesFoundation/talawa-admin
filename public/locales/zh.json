@@ -136,7 +136,8 @@
     "filter": "過濾",
     "roleUpdated": "角色已更新。",
     "noResultsFoundFor": "未找到结果 ",
-    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
+    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。",
+    "cancel": "取消"
   },
   "requests": {
     "title": "塔拉瓦請求",
