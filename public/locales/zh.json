@@ -42,7 +42,7 @@
   "leftDrawer": {
     "talawaAdminPortal": "塔拉瓦管理门户",
     "menu": "菜单",
-    "organizations": "组织",
+    "my organizations": "我的组织",
     "requests": "请求",
     "users": "用户",
     "logout": "退出登录"
@@ -78,7 +78,7 @@
     "designation": "指定",
     "email": "電子郵件",
     "searchByName": "按名稱搜索",
-    "organizations": "组织",
+    "my organizations": "我的组织",
     "createOrganization": "創建組織",
     "createSampleOrganization": "创建示范组织",
     "description": "描述",
@@ -662,7 +662,11 @@
     "deleteAdvertisement": "删除广告",
     "deleteAdvertisementMsg": "您是否要删除此广告？",
     "no": "不",
-    "yes": "是"
+    "yes": "是",
+    "view": "查看",
+    "edit": "编辑",
+    "editAdvertisement": "编辑广告",
+    "saveChanges": "保存更改"
   },
   "userChat": {
     "chat": "聊天",
