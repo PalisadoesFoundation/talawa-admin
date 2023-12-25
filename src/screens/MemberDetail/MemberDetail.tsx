@@ -83,22 +83,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     <>
       <OrganizationScreen screenName="User" title={t('title')}>
         <Row>
-          <Col sm={3}>
-            <div className={styles.sidebar}>
-              <div className={styles.sidebarsticky}>
-                <br />
-                <Button
-                  className={styles.activeBtn}
-                  data-testid="dashboardTitleBtn"
-                >
-                  <div className={styles.bgFill}>
-                    <i className="fa fa-user" />
-                  </div>
-                  {t('title')}
-                </Button>
-              </div>
-            </div>
-          </Col>
           <Col sm={8}>
             {state == 1 ? (
               <div className={styles.mainpageright}>
