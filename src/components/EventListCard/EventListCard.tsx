@@ -40,6 +40,8 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   const [registrablechecked, setRegistrableChecked] = React.useState(false);
   const [eventDeleteModalIsOpen, setEventDeleteModalIsOpen] = useState(false);
   const [eventUpdateModalIsOpen, setEventUpdateModalIsOpen] = useState(false);
+  const [startTime, setStartTime] = React.useState('08:00:00');
+  const [endTime, setEndTime] = React.useState('18:00:00');
   const history = useHistory();
   const [formState, setFormState] = useState({
     title: '',
@@ -48,6 +50,20 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
     startTime: '08:00:00',
     endTime: '18:00:00',
   });
+
+  const generateTimeOptions = (): string[] => {
+    const options: string[] = [];
+    for (let i = 0; i < 24; i++) {
+      for (let j = 0; j < 60; j += 15) {
+        const hour = i < 10 ? `0${i}` : `${i}`;
+        const minute = j < 10 ? `0${j}` : `${j}`;
+        options.push(`${hour}:${minute}:00`);
+      }
+    }
+    return options;
+  };
+  const timeOptions = generateTimeOptions();
+
   const showViewModal = (): void => {
     setEventModalIsOpen(true);
   };
@@ -349,30 +365,46 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                 <div className="me-1">
                   <label htmlFor="startTime">{t('startTime')}</label>
                   <Form.Control
+                    as="select"
                     id="startTime"
-                    value={formState.startTime}
                     data-testid="updateStartTime"
-                    onChange={(e): void =>
-                      setFormState({
-                        ...formState,
-                        startTime: e.target.value,
-                      })
+                    placeholder={startTime}
+                    value={startTime}
+                    onChange={
+                      /* istanbul ignore next */
+                      (e): void => setStartTime(e.target.value)
                     }
-                  />
+                    className="form-select"
+                    size="sm"
+                  >
+                    {timeOptions.map((time) => (
+                      <option key={time} value={time}>
+                        {time}
+                      </option>
+                    ))}
+                  </Form.Control>
                 </div>
-                <div className="ms-1">
+                <div>
                   <label htmlFor="endTime">{t('endTime')}</label>
                   <Form.Control
+                    as="select"
                     id="endTime"
-                    value={formState.endTime}
                     data-testid="updateEndTime"
-                    onChange={(e): void =>
-                      setFormState({
-                        ...formState,
-                        endTime: e.target.value,
-                      })
+                    placeholder={endTime}
+                    value={endTime}
+                    onChange={
+                      /* istanbul ignore next */
+                      (e): void => setEndTime(e.target.value)
                     }
-                  />
+                    className="form-select"
+                    size="sm"
+                  >
+                    {timeOptions.map((time) => (
+                      <option key={time} value={time}>
+                        {time}
+                      </option>
+                    ))}
+                  </Form.Control>
                 </div>
               </div>
             )}

@@ -65,6 +65,18 @@ export default function events(): JSX.Element {
   const [startTime, setStartTime] = React.useState('08:00:00');
   const [endTime, setEndTime] = React.useState('10:00:00');
 
+  const generateTimeOptions = (): string[] => {
+    const options: string[] = [];
+    for (let i = 0; i < 24; i++) {
+      for (let j = 0; j < 60; j += 15) {
+        const hour = i < 10 ? `0${i}` : `${i}`;
+        const minute = j < 10 ? `0${j}` : `${j}`;
+        options.push(`${hour}:${minute}:00`);
+      }
+    }
+    return options;
+  };
+  const timeOptions = generateTimeOptions();
   const organizationId = getOrganizationId(window.location.href);
 
   const modes = [t('listView'), t('calendarView')];
@@ -439,28 +451,46 @@ export default function events(): JSX.Element {
                   <div className="mr-3">
                     <label htmlFor="startTime">{t('startTime')}</label>
                     <Form.Control
+                      as="select"
                       id="startTime"
-                      placeholder={t('startTime')}
-                      value={startTime}
                       data-testid="startTimeEventInput"
+                      placeholder={startTime}
+                      value={startTime}
                       onChange={
                         /* istanbul ignore next */
                         (e): void => setStartTime(e.target.value)
                       }
-                    />
+                      className="form-select"
+                      size="sm"
+                    >
+                      {timeOptions.map((time) => (
+                        <option key={time} value={time}>
+                          {time}
+                        </option>
+                      ))}
+                    </Form.Control>
                   </div>
                   <div>
                     <label htmlFor="endTime">{t('endTime')}</label>
                     <Form.Control
+                      as="select"
                       id="endTime"
-                      placeholder={t('endTime')}
-                      value={endTime}
                       data-testid="endTimeEventInput"
+                      placeholder={endTime}
+                      value={endTime}
                       onChange={
                         /* istanbul ignore next */
                         (e): void => setEndTime(e.target.value)
                       }
-                    />
+                      className="form-select"
+                      size="sm"
+                    >
+                      {timeOptions.map((time) => (
+                        <option key={time} value={time}>
+                          {time}
+                        </option>
+                      ))}
+                    </Form.Control>
                   </div>
                 </div>
               )}
