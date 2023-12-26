@@ -87,7 +87,12 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             {state == 1 ? (
               <div className={styles.mainpageright}>
                 <Row className={styles.flexclm}>
-                  <p className={styles.logintitle}>{t('title')}</p>
+                  <p
+                    className={styles.logintitle}
+                    data-testid="dashboardTitleBtn"
+                  >
+                    {t('title')}
+                  </p>
                   <div className={styles.btngroup}>
                     <Button
                       className={styles.memberfontcreatedbtn}
