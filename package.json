@@ -58,7 +58,6 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-redux": "^7.2.5",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "5.0.1",
     "react-toastify": "^9.0.3",
     "redux": "^4.1.1",
     "redux-thunk": "^2.3.0",
@@ -69,8 +68,8 @@
     "yarn": "^1.22.17"
   },
   "scripts": {
-    "serve": "react-app-rewired start",
-    "build": "react-app-rewired build",
+    "serve": "node ./config-overrides/custom_start.js",
+    "build": "node ./config-overrides/custom_build.js",
     "test": "cross-env NODE_ENV=test node scripts/test.js --env=./scripts/custom-test-env.js --watchAll --coverage",
     "eject": "react-scripts eject",
     "lint:check": "eslint \"**/*.{ts,tsx}\" --max-warnings=0",
@@ -122,7 +121,8 @@
     "jest-preview": "^0.3.1",
     "jquery": "^3.2.1",
     "postcss-modules": "^6.0.0",
-    "react-app-rewired": "^2.2.1"
+    "react-app-rewired": "^2.2.1",
+    "react-scripts": "^5.0.1"
   },
   "resolutions": {
     "@apollo/client": "^3.4.0-beta.19",
