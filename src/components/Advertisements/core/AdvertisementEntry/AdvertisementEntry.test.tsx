@@ -26,7 +26,7 @@ const advertisementProps = {
   name: 'Sample Advertisement',
   type: 'Sample Type',
   orgId: 'org_id',
-  link: 'samplelink.com',
+  link: 'test.png',
   endDate: new Date(),
   startDate: new Date(),
 };
@@ -119,7 +119,7 @@ describe('Testing Advertisement Entry Component', () => {
                   startDate={new Date()}
                   id="1"
                   key={1}
-                  link="google.com"
+                  link="test.png"
                   name="Advert1"
                   orgId="1"
                   type="POPUP"
@@ -134,7 +134,8 @@ describe('Testing Advertisement Entry Component', () => {
     expect(getAllByText('POPUP')[0]).toBeInTheDocument();
     expect(getAllByText('Advert1')[0]).toBeInTheDocument();
 
-    fireEvent.click(getByTestId('AddOnEntry_btn_install'));
+    fireEvent.click(getByTestId('moreiconbtn'));
+    fireEvent.click(getByTestId('deletebtn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('delete_title')).toBeInTheDocument();
@@ -189,7 +190,7 @@ describe('Testing Advertisement Entry Component', () => {
                 startDate={new Date()}
                 id="1"
                 key={1}
-                link="google.com"
+                link="test.png"
                 name="Advert1"
                 orgId="1"
                 type="POPUP"
@@ -238,9 +239,11 @@ describe('Testing Advertisement Entry Component', () => {
       </ApolloProvider>
     );
     await wait();
-    const optionsButton = getByTestId('moreiconbtn');
-    fireEvent.click(optionsButton);
-    const deleteButton = getByTestId('deletebtn');
-    fireEvent.click(deleteButton);
+    await waitFor(() => {
+      const optionsButton = getByTestId('moreiconbtn');
+      fireEvent.click(optionsButton);
+      const deleteButton = getByTestId('deletebtn');
+      fireEvent.click(deleteButton);
+    });
   });
 });
