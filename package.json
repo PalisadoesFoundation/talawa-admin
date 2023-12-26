@@ -69,8 +69,8 @@
     "yarn": "^1.22.17"
   },
   "scripts": {
-    "serve": "react-scripts start",
-    "build": "react-scripts build",
+    "serve": "react-app-rewired start",
+    "build": "react-app-rewired build",
     "test": "cross-env NODE_ENV=test node scripts/test.js --env=./scripts/custom-test-env.js --watchAll --coverage",
     "eject": "react-scripts eject",
     "lint:check": "eslint \"**/*.{ts,tsx}\" --max-warnings=0",
@@ -112,6 +112,7 @@
     "@typescript-eslint/parser": "^5.9.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.8.0",
     "cross-env": "^7.0.3",
+    "customize-cra": "^1.0.0",
     "husky": "^8.0.3",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.4.5",
@@ -120,7 +121,8 @@
     "jest-location-mock": "^1.0.9",
     "jest-preview": "^0.3.1",
     "jquery": "^3.2.1",
-    "postcss-modules": "^6.0.0"
+    "postcss-modules": "^6.0.0",
+    "react-app-rewired": "^2.2.1"
   },
   "resolutions": {
     "@apollo/client": "^3.4.0-beta.19",
