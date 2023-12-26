@@ -229,74 +229,7 @@ describe('Testing Advertisement Component', () => {
     });
   });
 
-  // test('for creating new Advertisements', async () => {
-  //   const mocks = [
-  //     ORGANIZATIONS_LIST_MOCK,
-  //     PLUGIN_GET_MOCK,
-  //     ADD_ADVERTISEMENT_MUTATION_MOCK,
-  //     {
-  //       request: {
-  //         query: ADVERTISEMENTS_GET,
-  //       },
-  //       result: {
-  //         data: {
-  //           getAdvertisements: [],
-  //         },
-  //         loading: false,
-  //       },
-  //     },
-  //   ];
-
-  //   render(
-  //     <MockedProvider addTypename={false} mocks={mocks}>
-  //       <BrowserRouter>
-  //         <Provider store={store}>
-  //           <I18nextProvider i18n={i18nForTest}>
-  //             <ToastContainer />
-  //             <Advertisement />
-  //           </I18nextProvider>
-  //         </Provider>
-  //       </BrowserRouter>
-  //     </MockedProvider>
-  //   );
-
-  //   await wait();
-
-  //   await userEvent.click(screen.getByText('Create new advertisement'));
-  //   userEvent.type(
-  //     screen.getByLabelText('Enter name of Advertisement'),
-  //     'Cookie Shop'
-  //   );
-  //   const mediaFile = new File(['media content'], 'test.png', {
-  //     type: 'image/png',
-  //   });
-
-  //   const mediaInput = screen.getByTestId('advertisementMedia');
-  //   fireEvent.change(mediaInput, {
-  //     target: {
-  //       files: [mediaFile],
-  //     },
-  //   });
-
-  //   const mediaPreview = await screen.findByTestId('mediaPreview');
-  //   expect(mediaPreview).toBeInTheDocument();
-  //   userEvent.selectOptions(
-  //     screen.getByLabelText('Select type of Advertisement'),
-  //     'POPUP'
-  //   );
-  //   userEvent.type(screen.getByLabelText('Select Start Date'), '2023-01-01');
-  //   userEvent.type(screen.getByLabelText('Select End Date'), '2023-02-02');
-
-  //   // await userEvent.click(screen.getByTestId('addonregister'));
-  //   fireEvent.click(screen.getByTestId('addonregister'));
-  //   expect(
-  //     await screen.findByText('Advertisement created successfully')
-  //   ).toBeInTheDocument();
-  // });
-
   test('Submits the form and shows success toast on successful advertisement creation', async () => {
-    const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
-
     const mocks = [
       ORGANIZATIONS_LIST_MOCK,
       PLUGIN_GET_MOCK,
