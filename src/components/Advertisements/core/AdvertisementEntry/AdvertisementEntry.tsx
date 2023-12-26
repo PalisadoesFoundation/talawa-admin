@@ -6,8 +6,6 @@ import { DELETE_ADVERTISEMENT_BY_ID } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
-import AdvertisementRegister from '../AdvertisementRegister/AdvertisementRegister';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { toast } from 'react-toastify';
 interface InterfaceAddOnEntryProps {
   id: string;
@@ -31,8 +29,8 @@ function advertisementEntry({
 }: InterfaceAddOnEntryProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const [buttonLoading, setButtonLoading] = useState(false);
-  const [dropdown, setDropdown] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   const [deleteAdById] = useMutation(DELETE_ADVERTISEMENT_BY_ID, {
     refetchQueries: [ADVERTISEMENTS_GET],
   });
@@ -53,43 +51,12 @@ function advertisementEntry({
       setButtonLoading(false);
     }
   };
-  const handleOptionsClick = (): void => {
-    setDropdown(!dropdown);
-  };
   return (
     <>
       <Row data-testid="AdEntry" xs={1} md={2} className="g-4">
         {Array.from({ length: 1 }).map((_, idx) => (
           <Col key={idx}>
             <Card>
-              <div className={styles.dropdownContainer}>
-                <button
-                  className={styles.dropdownButton}
-                  onClick={handleOptionsClick}
-                  data-testid="moreiconbtn"
-                >
-                  <MoreVertIcon />
-                </button>
-                {dropdown && (
-                  <ul className={styles.dropdownmenu}>
-                    <li>
-                      <AdvertisementRegister
-                        formStatus="edit"
-                        idEdit={id}
-                        nameEdit={name}
-                        typeEdit={type}
-                        orgIdEdit={orgId}
-                        linkEdit={link}
-                        endDateEdit={endDate}
-                        startDateEdit={startDate}
-                      />
-                    </li>
-                    <li onClick={toggleShowDeleteModal} data-testid="deletebtn">
-                      {t('delete')}
-                    </li>
-                  </ul>
-                )}
-              </div>
               {link.includes('data:video') ? (
                 <video
                   muted
@@ -109,21 +76,21 @@ function advertisementEntry({
                 <Card.Subtitle className="mb-2 text-muted author">
                   {type}
                 </Card.Subtitle>
-                <div className={styles.buttons}>
-                  <Button
-                    className={styles.entryaction}
-                    variant="primary"
-                    disabled={buttonLoading}
-                    data-testid="AddOnEntry_btn_install"
-                  >
-                    {buttonLoading ? (
-                      <Spinner animation="grow" />
-                    ) : (
-                      <i className={'fa fa-eye'}></i>
-                    )}
-                    {t('view')}
-                  </Button>
-                </div>
+                <Card.Text>{link}</Card.Text>
+                <Button
+                  className={styles.entryaction}
+                  variant="danger"
+                  disabled={buttonLoading}
+                  data-testid="AddOnEntry_btn_install"
+                  onClick={toggleShowDeleteModal}
+                >
+                  {buttonLoading ? (
+                    <Spinner animation="grow" />
+                  ) : (
+                    <i className={'fa fa-trash'}></i>
+                  )}
+                  {t('delete')}
+                </Button>
                 <Modal show={showDeleteModal} onHide={toggleShowDeleteModal}>
                   <Modal.Header>
                     <h5 data-testid="delete_title">

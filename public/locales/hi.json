@@ -662,11 +662,7 @@
     "deleteAdvertisement": "विज्ञापन हटाएं",
     "deleteAdvertisementMsg": "क्या आप इस विज्ञापन को हटाना चाहते हैं?",
     "no": "नहीं",
-    "yes": "हाँ",
-    "view": "देखें",
-    "edit": "संपादित करें",
-    "editAdvertisement": "विज्ञापन संपादित करें",
-    "saveChanges": "परिवर्तन सहेजें"
+    "yes": "हाँ"
   },
   "userChat": {
     "chat": "बात",
