@@ -76,12 +76,11 @@ function advertisementEntry({
                 <Card.Subtitle className="mb-2 text-muted author">
                   {type}
                 </Card.Subtitle>
-                <Card.Text>{link}</Card.Text>
                 <Button
                   className={styles.entryaction}
                   variant="danger"
                   disabled={buttonLoading}
-                  data-testid="AddOnEntry_btn_install"
+                  data-testid="delete_btn"
                   onClick={toggleShowDeleteModal}
                 >
                   {buttonLoading ? (

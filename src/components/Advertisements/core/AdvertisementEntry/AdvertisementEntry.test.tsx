@@ -69,17 +69,12 @@ describe('Testing Advertisement Entry Component', () => {
     expect(getAllByText('POPUP')[0]).toBeInTheDocument();
     expect(getAllByText('Advert1')[0]).toBeInTheDocument();
 
-    fireEvent.click(getByTestId('moreiconbtn'));
-    fireEvent.click(getByTestId('deletebtn'));
+    fireEvent.click(getByTestId('delete_btn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('delete_title')).toBeInTheDocument();
       expect(screen.getByTestId('delete_body')).toBeInTheDocument();
     });
-
-    fireEvent.click(getByTestId('AddOnEntry_btn_install'));
-
-    fireEvent.click(getByTestId('AddOnEntry_btn_install'));
 
     fireEvent.click(getByTestId('delete_yes'));
 
@@ -95,7 +90,7 @@ describe('Testing Advertisement Entry Component', () => {
 
     deleteAdByIdMock.mockRejectedValueOnce(new Error('Deletion Failed'));
 
-    fireEvent.click(getByTestId('AddOnEntry_btn_install'));
+    fireEvent.click(getByTestId('delete_btn'));
 
     fireEvent.click(getByTestId('delete_yes'));
 

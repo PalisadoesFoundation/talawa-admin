@@ -1,12 +1,6 @@
 import React from 'react';
 import 'jest-location-mock';
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import {
   ApolloClient,
@@ -32,7 +26,6 @@ import {
 import userEvent from '@testing-library/user-event';
 import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { ToastContainer } from 'react-toastify';
-import i18n from 'utils/i18nForTest';
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
@@ -48,11 +41,6 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
-
-const translations = JSON.parse(
-  // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-  JSON.stringify(i18n.getDataByLanguage('en')?.translation.advertisement!)
-);
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
@@ -102,7 +90,7 @@ const ADD_ADVERTISEMENT_MUTATION_MOCK = {
     variables: {
       orgId: 'undefined',
       name: 'Cookie Shop',
-      link: 'test.png',
+      link: 'data:image/png;base64,bWVkaWEgY29udGVudA==',
       type: 'POPUP',
       startDate: '2023-01-01',
       endDate: '2023-02-02',
@@ -189,7 +177,7 @@ describe('Testing Advertisement Component', () => {
                 name: 'Advertisement1',
                 type: 'POPUP',
                 orgId: 'undefined',
-                link: 'data:image/png;base64,bWVkaWEgY29udGVudA==',
+                link: 'http://example1.com',
                 endDate: '2023-01-01',
                 startDate: '2022-01-01',
               },
@@ -219,17 +207,14 @@ describe('Testing Advertisement Component', () => {
     await wait();
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('moreiconbtn'));
+      await userEvent.click(screen.getByText('Delete'));
     });
     await act(async () => {
-      userEvent.click(screen.getByTestId('deletebtn'));
-    });
-    await act(async () => {
-      userEvent.click(screen.getByText('Yes'));
+      await userEvent.click(screen.getByText('Yes'));
     });
   });
 
-  test('Submits the form and shows success toast on successful advertisement creation', async () => {
+  test('for creating new Advertisements', async () => {
     const mocks = [
       ORGANIZATIONS_LIST_MOCK,
       PLUGIN_GET_MOCK,
@@ -247,66 +232,49 @@ describe('Testing Advertisement Component', () => {
       },
     ];
 
-    const { getByText, getByLabelText, queryByText } = render(
+    render(
       <MockedProvider addTypename={false} mocks={mocks}>
-        <Provider store={store}>
-          <BrowserRouter>
+        <BrowserRouter>
+          <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              {<Advertisement />}
+              <ToastContainer />
+              <Advertisement />
             </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
+          </Provider>
+        </BrowserRouter>
       </MockedProvider>
     );
 
-    await waitFor(async () => {
-      await userEvent.click(screen.getByText('Create new advertisement'));
-      fireEvent.click(getByText(translations.addNew));
-      expect(queryByText(translations.RClose)).toBeInTheDocument();
+    await wait();
 
-      fireEvent.change(getByLabelText(translations.Rname), {
-        target: { value: 'Test Advertisement' },
-      });
-      expect(getByLabelText(translations.Rname)).toHaveValue(
-        'Test Advertisement'
-      );
-
-      const mediaFile = new File(['media content'], 'test.png', {
-        type: 'image/png',
-      });
-
-      const mediaInput = screen.getByTestId('advertisementMedia');
-      fireEvent.change(mediaInput, {
-        target: {
-          files: [mediaFile],
-        },
-      });
-
-      const mediaPreview = await screen.findByTestId('mediaPreview');
-      expect(mediaPreview).toBeInTheDocument();
-
-      fireEvent.change(getByLabelText(translations.Rtype), {
-        target: { value: 'BANNER' },
-      });
-      expect(getByLabelText(translations.Rtype)).toHaveValue('BANNER');
-
-      fireEvent.change(getByLabelText(translations.RstartDate), {
-        target: { value: '2023-01-01' },
-      });
-      expect(getByLabelText(translations.RstartDate)).toHaveValue('2023-01-01');
-
-      fireEvent.change(getByLabelText(translations.RendDate), {
-        target: { value: '2023-02-01' },
-      });
-      expect(getByLabelText(translations.RendDate)).toHaveValue('2023-02-01');
-
-      fireEvent.click(getByText(translations.register));
-      expect(
-        await screen.findByText('Advertisement created successfully')
-      ).toBeInTheDocument();
+    await userEvent.click(screen.getByText('Create new advertisement'));
+    userEvent.type(
+      screen.getByLabelText('Enter name of Advertisement'),
+      'Cookie Shop'
+    );
+    const mediaFile = new File(['media content'], 'test.png', {
+      type: 'image/png',
     });
 
-    expect(queryByText(translations.close)).not.toBeInTheDocument();
+    const mediaInput = screen.getByTestId('advertisementMedia');
+    fireEvent.change(mediaInput, {
+      target: {
+        files: [mediaFile],
+      },
+    });
+    const mediaPreview = await screen.findByTestId('mediaPreview');
+    expect(mediaPreview).toBeInTheDocument();
+    userEvent.selectOptions(
+      screen.getByLabelText('Select type of Advertisement'),
+      'POPUP'
+    );
+    userEvent.type(screen.getByLabelText('Select Start Date'), '2023-01-01');
+    userEvent.type(screen.getByLabelText('Select End Date'), '2023-02-02');
+
+    await userEvent.click(screen.getByTestId('addonregister'));
+    expect(
+      await screen.findByText('Advertisement created successfully')
+    ).toBeInTheDocument();
   });
 
   test('if the component renders correctly and ads are correctly categorized date wise', async () => {
