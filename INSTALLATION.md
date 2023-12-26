@@ -69,7 +69,7 @@ If you've followed the previous steps you should have already set up node.js on 
 Run the following command to install the packages and dependencies required by `talawa-admin`:
 
 ```
-npm install --legacy-peer-deps
+npm install 
 ```
 # Configuration
 It's important to configure Talawa-Admin. Here's how to do it.
