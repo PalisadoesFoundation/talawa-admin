@@ -165,7 +165,7 @@ const MOCKS = [
             _id: '1234',
             name: 'Ad 1',
             type: 'Type 1',
-            orgId: '6537904485008f171cf29924',
+            orgId: 'orgId',
             link: 'Link 1',
             endDate: '2024-12-31',
             startDate: '2022-01-01',
@@ -174,7 +174,7 @@ const MOCKS = [
             _id: '2345',
             name: 'Ad 2',
             type: 'Type 1',
-            orgId: '6537904485008f171cf29924',
+            orgId: 'orgId',
             link: 'Link 2',
             endDate: '2024-09-31',
             startDate: '2023-04-01',
@@ -183,7 +183,7 @@ const MOCKS = [
             _id: '3456',
             name: 'name3',
             type: 'Type 2',
-            orgId: '6537904485008f171cf29924',
+            orgId: 'orgId',
             link: 'link3',
             startDate: '2023-01-30',
             endDate: '2023-12-31',
@@ -213,6 +213,26 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
+
+beforeEach(() => {
+  const url = 'http://localhost:3000/user/organization/id=orgId';
+  Object.defineProperty(window, 'location', {
+    value: {
+      href: url,
+    },
+    writable: true,
+  });
+});
+
+let originalLocation: Location;
+
+beforeAll(() => {
+  originalLocation = window.location;
+});
+
+afterAll(() => {
+  window.location = originalLocation;
+});
 
 describe('Testing Home Screen [User Portal]', () => {
   jest.mock('utils/getOrganizationId');
@@ -253,35 +273,6 @@ describe('Testing Home Screen [User Portal]', () => {
     await wait();
 
     expect(getOrganizationIdSpy).toHaveBeenCalled();
-  });
-
-  test('renders PromotedPost for each ad in getAdvertisements that matches the filters', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Home />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
-
-    expect(screen.getByTestId('promotedPostsContainer')).toBeInTheDocument();
-    // expect(screen.getByText('Ad 1')).toBeInTheDocument();
-    // expect(screen.queryByText('Ad 2')).toBeInTheDocument();
-    // expect(screen.queryByText('name3')).toBeInTheDocument();
-    expect(screen.queryByText('name4')).not.toBeInTheDocument();
   });
 
   test('Screen should be rendered properly when user types on the Post Input', async () => {

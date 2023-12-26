@@ -83,11 +83,11 @@ export default function home(): JSX.Element {
   const [posts, setPosts] = React.useState([]);
   const [postContent, setPostContent] = React.useState<string>('');
   const [postImage, setPostImage] = React.useState<string>('');
-  const currentOrgId = window.location.href.split('/id=')[1] + '';
   const [adContent, setAdContent] = React.useState<InterfaceAdContent[]>([]);
   const [filteredAd, setFilteredAd] = useState<InterfaceAdContent[]>([]);
   const [showStartPost, setShowStartPost] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const currentOrgId = window.location.href.split('/id=')[1] + '';
 
   const navbarProps = {
     currentPage: 'home',
@@ -163,21 +163,18 @@ export default function home(): JSX.Element {
   }, [data]);
 
   useEffect(() => {
-    setFilteredAd(filterAdContent(adContent));
+    setFilteredAd(filterAdContent(adContent, currentOrgId));
   }, [adContent]);
 
   const filterAdContent = (
-    adCont: InterfaceAdContent[]
-  ): InterfaceAdContent[] | [] => {
-    const ad1: InterfaceAdContent[] | [] = adCont.filter(
-      (ad: InterfaceAdContent) => ad.orgId === currentOrgId
+    adCont: InterfaceAdContent[],
+    currentOrgId: string,
+    currentDate: Date = new Date()
+  ): InterfaceAdContent[] => {
+    return adCont.filter(
+      (ad: InterfaceAdContent) =>
+        ad.orgId === currentOrgId && new Date(ad.endDate) > currentDate
     );
-
-    const ad2: InterfaceAdContent[] | [] = ad1.filter(
-      (ad: InterfaceAdContent) => new Date(ad.endDate) > new Date()
-    );
-
-    return ad2;
   };
 
   const handlePostButtonClick = (): void => {
@@ -197,16 +194,6 @@ export default function home(): JSX.Element {
     setPostImage('');
     setShowStartPost(false);
   };
-
-  const adsList = filteredAd.map((post: any) => (
-    <PromotedPost
-      key={post._id}
-      id={post._id}
-      image={post.link}
-      title={post.name}
-      data-testid={post._id}
-    />
-  ));
 
   return (
     <>
@@ -324,7 +311,17 @@ export default function home(): JSX.Element {
           {filteredAd.length === 0 ? (
             ''
           ) : (
-            <div data-testid="promotedPostsContainer">{adsList}</div>
+            <div data-testid="promotedPostsContainer">
+              {filteredAd.map((post: any) => (
+                <PromotedPost
+                  key={post._id}
+                  id={post._id}
+                  image={post.link}
+                  title={post.name}
+                  data-testid="postid"
+                />
+              ))}
+            </div>
           )}
           {loadingPosts ? (
             <div className={`d-flex flex-row justify-content-center`}>
