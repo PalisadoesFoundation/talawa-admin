@@ -410,7 +410,11 @@ function orgPost(): JSX.Element {
               <div className={styles.preview} data-testid="mediaPreview">
                 {/* Display preview for both image and video */}
                 {file.type.startsWith('image') ? (
-                  <img src={postformState.addMedia} alt="Post Image Preview" />
+                  <img
+                    src={postformState.addMedia}
+                    data-testid="imagePreview"
+                    alt="Post Image Preview"
+                  />
                 ) : (
                   <video controls data-testid="videoPreview">
                     <source src={postformState.addMedia} type={file.type} />(
