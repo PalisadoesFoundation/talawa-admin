@@ -102,7 +102,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16.14.1'
+          node-version: '20.x'
 
       - name: resolve dependency
         run: npm install -g @graphql-inspector/cli

@@ -22,6 +22,9 @@ env:
 jobs:
   Code-Coverage:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
