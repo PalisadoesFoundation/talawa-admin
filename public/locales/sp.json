@@ -88,6 +88,8 @@
     "displayImage": "Mostrar imagen",
     "enterName": "Ingrese su nombre",
     "sort": "Ordenar",
+    "Earliest": "Más Temprano",
+    "Latest": "El último",
     "filter": "Filtrar",
     "cancel": "Cancelar",
     "endOfResults": "Fin de los resultados",
