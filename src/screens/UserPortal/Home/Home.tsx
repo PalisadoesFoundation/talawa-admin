@@ -137,6 +137,7 @@ export default function home(): JSX.Element {
         refetch();
         setPostContent('');
         setPostImage('');
+        setShowStartPost(false);
       }
     } catch (error: any) {
       /* istanbul ignore next */
