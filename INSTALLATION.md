@@ -126,7 +126,7 @@ REACT_APP_RECAPTCHA_SITE_KEY="this_is_the_recaptcha_key"
 ```
 ## Setting up Compiletime and Runtime logs
 
-Set the `LOG_LEVEL_OVERRIDE` to "YES" if you want warnings , info and error messages in your console or leave it blank if you dont need them or want to keep the console clean
+Set the `LOG_CONFIG_LEVEL` to "YES" if you want warnings , info and error messages in your console or leave it blank if you dont need them or want to keep the console clean
 
 # Post Configuration Steps
 It's now time to start Talawa-Admin and get it running
