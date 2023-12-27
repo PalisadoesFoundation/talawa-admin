@@ -105,7 +105,7 @@ jest.mock('@apollo/client', () => {
 });
 
 describe('Testing Advertisement Entry Component', () => {
-  test('Temporary test for Advertisement Entry', async () => {
+  test('Testing rendering and deleting of advertisement', async () => {
     const deleteAdByIdMock = jest.fn();
     mockUseMutation.mockReturnValue([deleteAdByIdMock]);
     const { getByTestId, getAllByText } = render(
@@ -113,37 +113,35 @@ describe('Testing Advertisement Entry Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              {
-                <AdvertisementEntry
-                  endDate={new Date()}
-                  startDate={new Date()}
-                  id="1"
-                  key={1}
-                  link="google.com"
-                  name="Advert1"
-                  orgId="1"
-                  type="POPUP"
-                />
-              }
+              <AdvertisementEntry
+                endDate={new Date()}
+                startDate={new Date()}
+                id="1"
+                key={1}
+                link="google.com"
+                name="Advert1"
+                orgId="1"
+                type="POPUP"
+              />
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
       </ApolloProvider>
     );
+
+    //Testing rendering
     expect(getByTestId('AdEntry')).toBeInTheDocument();
     expect(getAllByText('POPUP')[0]).toBeInTheDocument();
     expect(getAllByText('Advert1')[0]).toBeInTheDocument();
 
-    fireEvent.click(getByTestId('AddOnEntry_btn_install'));
+    //Testing successful deletion
+    fireEvent.click(getByTestId('moreiconbtn'));
+    fireEvent.click(getByTestId('deletebtn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('delete_title')).toBeInTheDocument();
       expect(screen.getByTestId('delete_body')).toBeInTheDocument();
     });
-
-    fireEvent.click(getByTestId('AddOnEntry_btn_install'));
-
-    fireEvent.click(getByTestId('AddOnEntry_btn_install'));
 
     fireEvent.click(getByTestId('delete_yes'));
 
@@ -157,9 +155,10 @@ describe('Testing Advertisement Entry Component', () => {
       expect(deletedMessage).toBeNull();
     });
 
+    //Testing unsuccessful deletion
     deleteAdByIdMock.mockRejectedValueOnce(new Error('Deletion Failed'));
 
-    fireEvent.click(getByTestId('AddOnEntry_btn_install'));
+    fireEvent.click(getByTestId('moreiconbtn'));
 
     fireEvent.click(getByTestId('delete_yes'));
 
@@ -222,25 +221,5 @@ describe('Testing Advertisement Entry Component', () => {
 
     // After the second click, the dropdown should be hidden again
     expect(queryByText('Edit')).toBeNull();
-  });
-  test('should delete an advertisement when delete button is clicked', async () => {
-    const { getByTestId } = render(
-      <ApolloProvider client={client}>
-        <MockedProvider mocks={mocks} addTypename={false} link={link}>
-          <Provider store={store}>
-            <BrowserRouter>
-              <I18nextProvider i18n={i18nForTest}>
-                <AdvertisementEntry {...advertisementProps} />
-              </I18nextProvider>
-            </BrowserRouter>
-          </Provider>
-        </MockedProvider>
-      </ApolloProvider>
-    );
-    await wait();
-    const optionsButton = getByTestId('moreiconbtn');
-    fireEvent.click(optionsButton);
-    const deleteButton = getByTestId('deletebtn');
-    fireEvent.click(deleteButton);
   });
 });

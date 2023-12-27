@@ -446,12 +446,12 @@ export const UPDATE_ADVERTISEMENT_MUTATION = gql`
     $name: String
     $link: String
     $type: String
-    $startDate: Date
-    $endDate: Date
+    $startDate: String
+    $endDate: String
   ) {
     updateAdvertisement(
-      id: $id
-      data: {
+      input: {
+        id: $id
         name: $name
         link: $link
         type: $type

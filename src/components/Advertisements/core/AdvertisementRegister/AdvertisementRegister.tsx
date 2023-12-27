@@ -140,6 +140,7 @@ function advertisementRegister({
 
       if (data) {
         toast.success('Advertisement updated successfully');
+        refetch();
       }
     } catch (error: any) {
       toast.error(error.message);
