@@ -14,7 +14,6 @@ import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { ToastContainer } from 'react-toastify';
-import { debug } from 'jest-preview';
 
 const MOCKS = [
   {
@@ -209,14 +208,8 @@ describe('Organisation Post Page', () => {
     userEvent.type(screen.getByTestId('modalTitle'), formData.posttitle);
 
     userEvent.type(screen.getByTestId('modalinfo'), formData.postinfo);
-    userEvent.upload(
-      screen.getByTestId('organisationImage'),
-      formData.postImage
-    );
-    userEvent.upload(
-      screen.getByTestId('organisationImage'),
-      formData.postVideo
-    );
+    userEvent.upload(screen.getByTestId('addMediaField'), formData.postImage);
+    userEvent.upload(screen.getByTestId('addMediaField'), formData.postVideo);
 
     userEvent.click(screen.getByTestId('createPostBtn'));
 
@@ -400,18 +393,24 @@ describe('Organisation Post Page', () => {
     fireEvent.change(postInfoTextarea, {
       target: { value: 'Test post information' },
     });
-    const file = new File(['image content'], 'image.png', {
+
+    // Simulate uploading an image
+    const imageFile = new File(['image content'], 'image.png', {
       type: 'image/png',
     });
-    const input = screen.getByTestId('organisationImage');
-    userEvent.upload(input, file);
+    const imageInput = screen.getByTestId('addMediaField');
+    userEvent.upload(imageInput, imageFile);
 
-    await screen.findByAltText('Post Image Preview');
-    expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
+    // Check if the image is displayed
+    const imagePreview = await screen.findByAltText('Post Image Preview');
+    expect(imagePreview).toBeInTheDocument();
 
-    const createPostBtn = screen.getByTestId('createPostBtn');
-    fireEvent.click(createPostBtn);
-    debug();
+    // Check if the close button for the image works
+    const closeButton = screen.getByTestId('mediaCloseButton');
+    fireEvent.click(closeButton);
+
+    // Check if the image is removed from the preview
+    expect(imagePreview).not.toBeInTheDocument();
   }, 15000);
 
   test('Modal opens and closes', async () => {
@@ -436,7 +435,7 @@ describe('Organisation Post Page', () => {
     const modalTitle = screen.getByTestId('modalOrganizationHeader');
     expect(modalTitle).toBeInTheDocument();
 
-    const closeButton = screen.getByTestId('closeOrganizationModal');
+    const closeButton = screen.getByTestId(/closeModalBtn/i);
     userEvent.click(closeButton);
 
     await wait();
@@ -464,8 +463,6 @@ describe('Organisation Post Page', () => {
     // Check if input fields and buttons are present
     expect(screen.getByTestId('modalTitle')).toBeInTheDocument();
     expect(screen.getByTestId('modalinfo')).toBeInTheDocument();
-    expect(screen.getByTestId('organisationImage')).toBeInTheDocument();
-    expect(screen.getByTestId('organisationVideo')).toBeInTheDocument();
     expect(screen.getByTestId('createPostBtn')).toBeInTheDocument();
   });
 
@@ -526,13 +523,13 @@ describe('Organisation Post Page', () => {
     const file = new File(['image content'], 'image.png', {
       type: 'image/png',
     });
-    const input = screen.getByTestId('organisationImage');
+    const input = screen.getByTestId('addMediaField');
     userEvent.upload(input, file);
 
     await screen.findByAltText('Post Image Preview');
     expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
 
-    const closeButton = screen.getByTestId('closePreview');
+    const closeButton = screen.getByTestId('mediaCloseButton');
     fireEvent.click(closeButton);
   }, 15000);
   test('Create post, preview image, and close preview', async () => {
@@ -566,19 +563,14 @@ describe('Organisation Post Page', () => {
         type: 'video/mp4',
       });
 
-      const videoInput = screen.getByTestId('organisationVideo');
-      fireEvent.change(videoInput, {
-        target: {
-          files: [videoFile],
-        },
-      });
+      userEvent.upload(screen.getByTestId('addMediaField'), videoFile);
 
       // Check if the video is displayed
       const videoPreview = await screen.findByTestId('videoPreview');
       expect(videoPreview).toBeInTheDocument();
 
       // Check if the close button for the video works
-      const closeVideoPreviewButton = screen.getByTestId('videoclosebutton');
+      const closeVideoPreviewButton = screen.getByTestId('mediaCloseButton');
       fireEvent.click(closeVideoPreviewButton);
       expect(videoPreview).not.toBeInTheDocument();
     });
