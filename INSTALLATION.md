@@ -62,7 +62,7 @@ cd talawa-admin
 
 ## Setting up NPM
 
-If you've followed the previous steps you should have already set up node.js on your system. [Click here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) for the official setup guide for npm.
+If you've followed the previous steps you should have already set up node.js (v20 LTS) on your system. [Click here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) for the official setup guide for npm.
 
 ## Installing required packages/dependencies
 
