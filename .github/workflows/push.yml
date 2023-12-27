@@ -55,10 +55,11 @@ jobs:
 
       - name: Generate Documentation of Markdown pages
         run: |
-          yarn global add typedoc
-          yarn add typedoc-plugin-markdown
-          yarn typedoc --entryPoints src/components src/screens --out talawa-admin-docs --plugin typedoc-plugin-markdown --theme markdown --entryPointStrategy expand --exclude "**/*.test.ts" --exclude "**/*.css"
-          
+          npm install --global typedoc
+          npm install typedoc-plugin-markdown
+          npm install --save-dev @types/node
+          npx typedoc --entryPoints src/components src/screens --out talawa-admin-docs --plugin typedoc-plugin-markdown --theme markdown --entryPointStrategy expand --exclude "**/*.test.ts" --exclude "**/*.css"
+
       - name: Checking doc updated
         id: DocUpdated
         run: |

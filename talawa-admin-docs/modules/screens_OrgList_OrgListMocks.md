@@ -14,7 +14,21 @@
 
 ### MOCKS
 
-• `Const` **MOCKS**: ({ `request`: { `query`: `DocumentNode` = ORGANIZATION\_CONNECTION\_LIST; `variables?`: `undefined`  } ; `result`: { `data`: { `organizationsConnection`: `InterfaceOrgConnectionInfoType`[] = organizations }  }  } \| { `request`: { `query`: `DocumentNode` = USER\_ORGANIZATION\_LIST; `variables`: { `id`: `string` = '123' }  } ; `result`: { `data`: `InterfaceUserType` = superAdminUser }  })[]
+• **MOCKS** (Array of objects):
+  - Object option 1:
+    - **request**: Object with properties:
+      - `query` (DocumentNode): Default value `ORGANIZATION_CONNECTION_LIST`.
+      - `variables?`: `undefined`.
+    - **result**: Object with properties:
+      - `data`: Object with properties:
+        - `organizationsConnection`: Array of `InterfaceOrgConnectionInfoType`, default value `organizations`.
+  - Object option 2:
+    - **request**: Object with properties:
+      - `query` (DocumentNode): Default value `USER_ORGANIZATION_LIST`.
+      - `variables`: Object with property:
+        - `id` (string): Default value `'123'`.
+    - **result**: Object with property:
+      - `data`: `InterfaceUserType`, default value `superAdminUser`.
 
 #### Defined in
 
@@ -24,7 +38,21 @@ ___
 
 ### MOCKS\_ADMIN
 
-• `Const` **MOCKS\_ADMIN**: ({ `request`: { `query`: `DocumentNode` = ORGANIZATION\_CONNECTION\_LIST; `variables?`: `undefined`  } ; `result`: { `data`: { `organizationsConnection`: `InterfaceOrgConnectionInfoType`[] = organizations }  }  } \| { `request`: { `query`: `DocumentNode` = USER\_ORGANIZATION\_LIST; `variables`: { `id`: `string` = '123' }  } ; `result`: { `data`: `InterfaceUserType` = adminUser }  })[]
+• **MOCKS_ADMIN** (Array of object options):
+  - Option 1:
+    - **request**: Object with properties:
+      - `query` (DocumentNode): Default value `ORGANIZATION_CONNECTION_LIST`.
+      - `variables?`: `undefined`.
+    - **result**: Object with properties:
+      - `data`: Object with properties:
+        - `organizationsConnection`: Array of `InterfaceOrgConnectionInfoType`, default value `organizations`.
+  - Option 2:
+    - **request**: Object with properties:
+      - `query` (DocumentNode): Default value `USER_ORGANIZATION_LIST`.
+      - `variables`: Object with property:
+        - `id` (string): Default value `'123'`.
+    - **result**: Object with property:
+      - `data`: `InterfaceUserType`, default value `adminUser`.
 
 #### Defined in
 
@@ -34,7 +62,21 @@ ___
 
 ### MOCKS\_EMPTY
 
-• `Const` **MOCKS\_EMPTY**: ({ `request`: { `query`: `DocumentNode` = ORGANIZATION\_CONNECTION\_LIST; `variables?`: `undefined`  } ; `result`: { `data`: { `organizationsConnection`: `never`[] = [] }  }  } \| { `request`: { `query`: `DocumentNode` = USER\_ORGANIZATION\_LIST; `variables`: { `id`: `string` = '123' }  } ; `result`: { `data`: `InterfaceUserType` = superAdminUser }  })[]
+• **MOCKS_ADMIN** (Array of object options):
+  - Option 1:
+    - **request**: Object with properties:
+      - `query` (DocumentNode): Default value `ORGANIZATION_CONNECTION_LIST`.
+      - `variables?`: `undefined`.
+    - **result**: Object with properties:
+      - `data`: Object with properties:
+        - `organizationsConnection`: Array of `InterfaceOrgConnectionInfoType`, default value `organizations`.
+  - Option 2:
+    - **request**: Object with properties:
+      - `query` (DocumentNode): Default value `USER_ORGANIZATION_LIST`.
+      - `variables`: Object with property:
+        - `id` (string): Default value `'123'`.
+    - **result**: Object with property:
+      - `data`: `InterfaceUserType`, default value `adminUser`.
 
 #### Defined in
 

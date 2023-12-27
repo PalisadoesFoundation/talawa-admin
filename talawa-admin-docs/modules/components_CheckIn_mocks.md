@@ -14,7 +14,18 @@
 
 ### checkInMutationSuccess
 
-• `Const` **checkInMutationSuccess**: { `request`: { `query`: `DocumentNode` = MARK\_CHECKIN; `variables`: { `allotedRoom`: `string` = ''; `allotedSeat`: `string` = ''; `eventId`: `string` = 'event123'; `userId`: `string` = 'user123' }  } ; `result`: { `data`: { `checkIn`: { `_id`: `string` = '123' }  }  }  }[]
+• **`checkInMutationSuccess`** (Array of objects):
+  - **request**: Object with properties:
+    - `query` (DocumentNode): Default value is `MARK_CHECKIN`.
+    - `variables`: Object with default properties:
+      - `allotedRoom` (string): Default value `''`.
+      - `allotedSeat` (string): Default value `''`.
+      - `eventId` (string): Default value `'event123'`.
+      - `userId` (string): Default value `'user123'`.
+  - **result**: Object with properties:
+    - `data`: Object containing:
+      - `checkIn`: Object with properties:
+        - `_id` (string): Default value `'123'`.
 
 #### Defined in
 
@@ -24,7 +35,15 @@ ___
 
 ### checkInMutationUnsuccess
 
-• `Const` **checkInMutationUnsuccess**: { `error`: `Error` ; `request`: { `query`: `DocumentNode` = MARK\_CHECKIN; `variables`: { `allotedRoom`: `string` = ''; `allotedSeat`: `string` = ''; `eventId`: `string` = 'event123'; `userId`: `string` = 'user123' }  }  }[]
+• **`checkInMutationUnsuccess`** (Array of objects):
+  - **error**: `Error`
+  - **request**: Object with properties:
+    - `query` (DocumentNode): Default value is `MARK_CHECKIN`.
+    - `variables`: Object with default properties:
+      - `allotedRoom` (string): Default value `''`.
+      - `allotedSeat` (string): Default value `''`.
+      - `eventId` (string): Default value `'event123'`.
+      - `userId` (string): Default value `'user123'`.
 
 #### Defined in
 
@@ -34,7 +53,14 @@ ___
 
 ### checkInQueryMock
 
-• `Const` **checkInQueryMock**: { `request`: { `query`: `DocumentNode` = EVENT\_CHECKINS; `variables`: { `id`: `string` = 'event123' }  } ; `result`: { `data`: [`InterfaceAttendeeQueryResponse`](../interfaces/components_CheckIn_types.InterfaceAttendeeQueryResponse.md) = checkInQueryData }  }[]
+• **`checkInQueryMock`** (Array of objects):
+  - **request**: Object with properties:
+    - `query` (DocumentNode): Default value is `EVENT_CHECKINS`.
+    - `variables`: Object with property:
+      - `id` (string): Default value `'event123'`.
+  - **result**: Object with properties:
+    - `data`: Array of [`InterfaceAttendeeQueryResponse`](../interfaces/components_CheckIn_types.InterfaceAttendeeQueryResponse.md), default value `checkInQueryData`.
+
 
 #### Defined in
 

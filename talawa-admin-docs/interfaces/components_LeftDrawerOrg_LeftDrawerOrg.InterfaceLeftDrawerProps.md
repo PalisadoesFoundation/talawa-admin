@@ -48,7 +48,7 @@ ___
 
 ### setHideDrawer
 
-• **setHideDrawer**: `Dispatch`<`SetStateAction`<``null`` \| `boolean`\>\>
+- **setHideDrawer**: `Dispatch<SetStateAction<null | boolean>>`
 
 #### Defined in
 

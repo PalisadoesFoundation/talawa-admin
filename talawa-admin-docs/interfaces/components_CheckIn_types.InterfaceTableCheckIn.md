@@ -18,7 +18,7 @@
 
 ### checkIn
 
-• **checkIn**: ``null`` \| { `_id`: `string` ; `allotedRoom`: `string` ; `allotedSeat`: `string` ; `time`: `string`  }
+- **checkIn**: `null` \| `{ '_id': 'string'; 'allotedRoom': 'string'; 'allotedSeat': 'string'; 'time': 'string' }`
 
 #### Defined in
 

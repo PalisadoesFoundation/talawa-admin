@@ -14,7 +14,22 @@
 
 ### MOCKS\_NO\_TAGS
 
-• `Const` **MOCKS\_NO\_TAGS**: ({ `request`: { `query`: `DocumentNode` = ORGANIZATIONS\_LIST } ; `result`: { `data`: { `eventsByOrganization?`: `undefined` ; `organizations`: { `_id`: `number` = 1; `admins`: { `_id`: `string` = '123'; `email`: `string` = 'johndoe@gmail.com'; `firstName`: `string` = 'John'; `lastName`: `string` = 'Doe' } ; `blockedUsers`: { `_id`: `string` = '789'; `email`: `string` = 'stevesmith@gmail.com'; `firstName`: `string` = 'Steve'; `lastName`: `string` = 'Smith' } ; `creator`: { `email`: `string` = ''; `firstName`: `string` = ''; `lastName`: `string` = '' } ; `description`: `string` = 'This is a Dummy Organization'; `image`: `string` = ''; `location`: `string` = 'New Delhi'; `members`: { `_id`: `string` = '123'; `email`: `string` = 'johndoe@gmail.com'; `firstName`: `string` = 'John'; `lastName`: `string` = 'Doe' } ; `membershipRequests`: { `_id`: `string` = '456'; `user`: { `email`: `string` = 'samsmith@gmail.com'; `firstName`: `string` = 'Sam'; `lastName`: `string` = 'Smith' }  } ; `name`: `string` = 'Dummy Organization'; `spamCount`: { `_id`: `string` = '6954'; `groupchat`: { `_id`: `string` = '321'; `title`: `string` = 'Dummy' } ; `isReaded`: `boolean` = false; `user`: { `_id`: `string` = '878'; `email`: `string` = 'joeroot@gmail.com'; `firstName`: `string` = 'Joe'; `lastName`: `string` = 'Root' }  }[]  }[] ; `postsByOrganization?`: `undefined`  }  }  } \| { `request`: { `query`: `DocumentNode` = ORGANIZATION\_POST\_LIST } ; `result`: { `data`: { `eventsByOrganization?`: `undefined` ; `organizations?`: `undefined` ; `postsByOrganization`: { `_id`: `number` = 1; `creator`: { `_id`: `string` = '583'; `email`: `string` = 'johndoe@gmail.com'; `firstName`: `string` = 'John'; `lastName`: `string` = 'Doe' } ; `imageUrl`: `string` = ''; `text`: `string` = 'Capture Jinchuriki'; `title`: `string` = 'Akatsuki'; `videoUrl`: `string` = '' }[]  }  }  } \| { `request`: { `query`: `DocumentNode` = ORGANIZATION\_EVENT\_LIST } ; `result`: { `data`: { `eventsByOrganization`: { `_id`: `number` = 1; `allDay`: `boolean` = false; `description`: `string` = 'Event Test'; `endDate`: `string` = ''; `endTime`: `string` = '06:00'; `isPublic`: `boolean` = true; `isRegisterable`: `boolean` = true; `location`: `string` = 'New Delhi'; `recurring`: `boolean` = false; `startDate`: `string` = ''; `startTime`: `string` = '02:00'; `title`: `string` = 'Event' }[] ; `organizations?`: `undefined` ; `postsByOrganization?`: `undefined`  }  }  })[]
+• **MOCKS_NO_TAGS** (Array of object options):
+  - Option 1:
+    - **request**: Object with property:
+      - `query` (DocumentNode): Default value `ORGANIZATIONS_LIST`.
+    - **result**: Object with properties:
+      - `data`: Object with properties...
+        - `eventsByOrganization?`: `undefined`.
+        - `organizations`: Array of objects...
+        - `postsByOrganization?`: `undefined`.
+  - Option 2:
+    - **request**: Object with property:
+      - `query` (DocumentNode): Default value `ORGANIZATION_POST_LIST`.
+    - **result**: Object with properties...
+  - Option 3:
+    - **request
+
 
 #### Defined in
 
@@ -24,7 +39,11 @@ ___
 
 ### MOCKS\_WITHOUT\_IMAGE
 
-• `Const` **MOCKS\_WITHOUT\_IMAGE**: ({ `request`: { `query`: `DocumentNode` = ORGANIZATIONS\_LIST } ; `result`: { `data`: { `eventsByOrganization?`: `undefined` ; `organizations`: { `_id`: `number` = 1; `admins`: { `_id`: `string` = '123'; `email`: `string` = 'johndoe@gmail.com'; `firstName`: `string` = 'John'; `lastName`: `string` = 'Doe' } ; `blockedUsers`: { `_id`: `string` = '789'; `email`: `string` = 'stevesmith@gmail.com'; `firstName`: `string` = 'Steve'; `lastName`: `string` = 'Smith' } ; `creator`: { `email`: `string` = ''; `firstName`: `string` = ''; `lastName`: `string` = '' } ; `description`: `string` = 'This is a Dummy Organization'; `image`: `string` = ''; `location`: `string` = 'New Delhi'; `members`: { `_id`: `string` = '123'; `email`: `string` = 'johndoe@gmail.com'; `firstName`: `string` = 'John'; `lastName`: `string` = 'Doe' } ; `membershipRequests`: { `_id`: `string` = '456'; `user`: { `email`: `string` = 'samsmith@gmail.com'; `firstName`: `string` = 'Sam'; `lastName`: `string` = 'Smith' }  } ; `name`: `string` = 'Dummy Organization'; `spamCount`: { `_id`: `string` = '6954'; `groupchat`: { `_id`: `string` = '321'; `title`: `string` = 'Dummy' } ; `isReaded`: `boolean` = false; `user`: { `_id`: `string` = '878'; `email`: `string` = 'joeroot@gmail.com'; `firstName`: `string` = 'Joe'; `lastName`: `string` = 'Root' }  }[]  }[] ; `postsByOrganization?`: `undefined` ; `removeOrganization?`: `undefined`  }  }  } \| { `request`: { `query`: `DocumentNode` = ORGANIZATION\_POST\_LIST } ; `result`: { `data`: { `eventsByOrganization?`: `undefined` ; `organizations?`: `undefined` ; `postsByOrganization`: { `_id`: `number` = 1; `creator`: { `_id`: `string` = '583'; `email`: `string` = 'johndoe@gmail.com'; `firstName`: `string` = 'John'; `lastName`: `string` = 'Doe' } ; `imageUrl`: `string` = ''; `text`: `string` = 'Capture Jinchuriki'; `title`: `string` = 'Akatsuki'; `videoUrl`: `string` = '' }[] ; `removeOrganization?`: `undefined`  }  }  } \| { `request`: { `query`: `DocumentNode` = DELETE\_ORGANIZATION\_MUTATION } ; `result`: { `data`: { `eventsByOrganization?`: `undefined` ; `organizations?`: `undefined` ; `postsByOrganization?`: `undefined` ; `removeOrganization`: { `_id`: `number` = 1 }[]  }  }  } \| { `request`: { `query`: `DocumentNode` = ORGANIZATION\_EVENT\_LIST } ; `result`: { `data`: { `eventsByOrganization`: { `_id`: `number` = 1; `allDay`: `boolean` = false; `description`: `string` = 'Event Test'; `endDate`: `string` = ''; `endTime`: `string` = '06:00'; `isPublic`: `boolean` = true; `isRegisterable`: `boolean` = true; `location`: `string` = 'New Delhi'; `recurring`: `boolean` = false; `startDate`: `string` = ''; `startTime`: `string` = '02:00'; `title`: `string` = 'Event' }[] ; `organizations?`: `undefined` ; `postsByOrganization?`: `undefined` ; `removeOrganization?`: `undefined`  }  }  })[]
+• **MOCKS_WITHOUT_IMAGE** (Array of object options):
+  - Option 1:
+    - **request**: Object with property:
+      - `query` (DocumentNode): Default value `ORGANIZATIONS_LIST`.
+    - **result**: Object with properties:
 
 #### Defined in
 
@@ -34,7 +53,22 @@ ___
 
 ### MOCKS\_WITH\_IMAGE
 
-• `Const` **MOCKS\_WITH\_IMAGE**: ({ `request`: { `query`: `DocumentNode` = ORGANIZATIONS\_LIST } ; `result`: { `data`: { `eventsByOrganization?`: `undefined` ; `organizations`: { `_id`: `number` = 1; `admins`: { `_id`: `string` = '123'; `email`: `string` = 'johndoe@gmail.com'; `firstName`: `string` = 'John'; `lastName`: `string` = 'Doe' } ; `blockedUsers`: { `_id`: `string` = '789'; `email`: `string` = 'stevesmith@gmail.com'; `firstName`: `string` = 'Steve'; `lastName`: `string` = 'Smith' } ; `creator`: { `email`: `string` = ''; `firstName`: `string` = ''; `lastName`: `string` = '' } ; `description`: `string` = 'This is a Dummy Organization'; `image`: `string` = 'https://via.placeholder.com/200x200'; `location`: `string` = 'New Delhi'; `members`: { `_id`: `string` = '123'; `email`: `string` = 'johndoe@gmail.com'; `firstName`: `string` = 'John'; `lastName`: `string` = 'Doe' } ; `membershipRequests`: { `_id`: `string` = '456'; `user`: { `email`: `string` = 'samsmith@gmail.com'; `firstName`: `string` = 'Sam'; `lastName`: `string` = 'Smith' }  } ; `name`: `string` = 'Dummy Organization'; `spamCount`: { `_id`: `string` = '6954'; `groupchat`: { `_id`: `string` = '321'; `title`: `string` = 'Dummy' } ; `isReaded`: `boolean` = false; `user`: { `_id`: `string` = '878'; `email`: `string` = 'joeroot@gmail.com'; `firstName`: `string` = 'Joe'; `lastName`: `string` = 'Root' }  }[]  }[] ; `postsByOrganization?`: `undefined`  }  }  } \| { `request`: { `query`: `DocumentNode` = ORGANIZATION\_POST\_LIST } ; `result`: { `data`: { `eventsByOrganization?`: `undefined` ; `organizations?`: `undefined` ; `postsByOrganization`: { `_id`: `number` = 1; `creator`: { `_id`: `string` = '583'; `email`: `string` = 'johndoe@gmail.com'; `firstName`: `string` = 'John'; `lastName`: `string` = 'Doe' } ; `imageUrl`: `string` = ''; `text`: `string` = 'Capture Jinchuriki'; `title`: `string` = 'Akatsuki'; `videoUrl`: `string` = '' }[]  }  }  } \| { `request`: { `query`: `DocumentNode` = ORGANIZATION\_EVENT\_LIST } ; `result`: { `data`: { `eventsByOrganization`: { `_id`: `number` = 1; `allDay`: `boolean` = false; `description`: `string` = 'Event Test'; `endDate`: `string` = ''; `endTime`: `string` = '06:00'; `isPublic`: `boolean` = true; `isRegisterable`: `boolean` = true; `location`: `string` = 'New Delhi'; `recurring`: `boolean` = false; `startDate`: `string` = ''; `startTime`: `string` = '02:00'; `title`: `string` = 'Event' }[] ; `organizations?`: `undefined` ; `postsByOrganization?`: `undefined`  }  }  })[]
+• **MOCKS_WITH_IMAGE** (Array of object options):
+  - Option 1:
+    - **request**: Object with property:
+      - `query` (DocumentNode): Default value `ORGANIZATIONS_LIST`.
+    - **result**: Object with properties:
+      - `data`: Object with properties...
+        - `eventsByOrganization?`: `undefined`.
+        - `organizations`: Array of objects...
+        - `postsByOrganization?`: `undefined`.
+  - Option 2:
+    - **request**: Object with property:
+      - `query` (DocumentNode): Default value `ORGANIZATION_POST_LIST`.
+    - **result**: Object with properties...
+  - Option 3:
+    - **request**: Object with property:
+      - `query`
 
 #### Defined in
 
