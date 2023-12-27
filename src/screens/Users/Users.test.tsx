@@ -287,7 +287,7 @@ describe('Testing Users screen', () => {
     });
   });
 
-  test('hello', async () => {
+  test('check for rerendering', async () => {
     const { rerender } = render(
       <MockedProvider addTypename={false} link={link3}>
         <BrowserRouter>
