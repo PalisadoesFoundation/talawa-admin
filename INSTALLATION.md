@@ -65,24 +65,12 @@ cd talawa-admin
 
 ## Setting up NPM
 
-If you've followed the previous steps you should have already set up node.js on your system. [Click here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) for the official setup guide for npm.
+Best way to install and manage `node.js` is making use of node version managers. Two most popular node version managers right now are [fnm](https://github.com/Schniz/fnm) and [nvm](https://github.com/nvm-sh/nvm). We'd recommend `fnm` because it's written in `rust` and is much faster than `nvm`. Install whichever one you want and follow their guide to set up `node.js` on your system.
 
 ## Setting up Typescript
 
 As `talawa-admin` and `talawa-api` repositories are written using [Typescript](https://www.typescriptlang.org/), you will need to install typescript on your machine.
-We recommend to install typescript globally on your machine by running the following command in your terminal:
-
-```
-npm install typescript -g
-```
-
-To verify that typescript has been successfully installed on your machine, run :
-
-```
-tsc --version
-```
-
-The above command should show the version of typescript which is downloaded. For additional details please refer to offical typescript [installation guide](https://www.typescriptlang.org/download).
+We recommend to install typescript globally on your machine by following the installation guideliens provided in the [official docs](https://www.typescriptlang.org/download).
 
 ## Installing required packages/dependencies
 
