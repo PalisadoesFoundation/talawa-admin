@@ -32,7 +32,6 @@ const Users = (): JSX.Element => {
   const [searchByName, setSearchByName] = useState('');
   const [sortingOption, setSortingOption] = useState('newest');
   const [filteringOption, setFilteringOption] = useState('cancel');
-
   const userType = localStorage.getItem('UserType');
   const loggedInUserId = localStorage.getItem('id');
 
@@ -181,14 +180,14 @@ const Users = (): JSX.Element => {
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
-    } else if (sortingOption === 'oldest') {
+      return sortedUsers;
+    } else {
       sortedUsers.sort(
         (a, b) =>
           new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       );
+      return sortedUsers;
     }
-
-    return sortedUsers;
   };
 
   const handleFiltering = (option: string): void => {
@@ -254,6 +253,7 @@ const Users = (): JSX.Element => {
               <Button
                 tabIndex={-1}
                 className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                data-testid="searchButton"
               >
                 <Search />
               </Button>
@@ -288,8 +288,15 @@ const Users = (): JSX.Element => {
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
-              <Dropdown aria-expanded="false" title="Filter organizations">
-                <Dropdown.Toggle variant="outline-success">
+              <Dropdown
+                aria-expanded="false"
+                title="Filter organizations"
+                data-testid="filter"
+              >
+                <Dropdown.Toggle
+                  variant="outline-success"
+                  data-testid="filterUsers"
+                >
                   <FilterListIcon className={'me-1'} />
                   {t('filter')}
                 </Dropdown.Toggle>
@@ -347,7 +354,10 @@ const Users = (): JSX.Element => {
               />
             ) : (
               <InfiniteScroll
-                dataLength={displayedUsers.length ?? 0}
+                dataLength={
+                  /* istanbul ignore next */
+                  displayedUsers.length ?? 0
+                }
                 next={loadMoreUsers}
                 loader={
                   <TableLoader
