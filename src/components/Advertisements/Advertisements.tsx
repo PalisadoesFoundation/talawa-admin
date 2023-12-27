@@ -141,7 +141,6 @@ export default function advertisements(): JSX.Element {
                             orgId={ad.orgId}
                             startDate={new Date(ad.startDate)}
                             endDate={new Date(ad.endDate)}
-                            link={ad.link}
                             // getInstalledPlugins={getInstalledPlugins}
                           />
                         )
