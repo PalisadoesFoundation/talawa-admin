@@ -62,7 +62,7 @@ export default function advertisements(): JSX.Element {
                             name: string | undefined;
                             type: string | undefined;
                             orgId: string;
-                            link: string;
+                            mediaUrl: string;
                             endDate: Date;
                             startDate: Date;
                           },
@@ -76,7 +76,7 @@ export default function advertisements(): JSX.Element {
                             orgId={ad.orgId}
                             startDate={new Date(ad.startDate)}
                             endDate={new Date(ad.endDate)}
-                            link={ad.link}
+                            mediaUrl={ad.mediaUrl}
                           />
                         )
                       )
@@ -99,7 +99,7 @@ export default function advertisements(): JSX.Element {
                             name: string | undefined;
                             type: string | undefined;
                             orgId: string;
-                            link: string;
+                            mediaUrl: string;
                             endDate: Date;
                             startDate: Date;
                           },
@@ -113,7 +113,7 @@ export default function advertisements(): JSX.Element {
                             orgId={ad.orgId}
                             startDate={new Date(ad.startDate)}
                             endDate={new Date(ad.endDate)}
-                            link={ad.link}
+                            mediaUrl={ad.mediaUrl}
                           />
                         )
                       )

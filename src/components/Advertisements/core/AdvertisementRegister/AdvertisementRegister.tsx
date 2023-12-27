@@ -16,7 +16,7 @@ interface InterfaceAddOnRegisterProps {
 }
 interface InterfaceFormStateTypes {
   name: string;
-  link: string;
+  mediaUrl: string;
   type: string;
   startDate: Date;
   endDate: Date;
@@ -40,7 +40,7 @@ function advertisementRegister({
   const currentOrg = window.location.href.split('/id=')[1] + '';
   const [formState, setFormState] = useState<InterfaceFormStateTypes>({
     name: '',
-    link: '',
+    mediaUrl: '',
     type: 'BANNER',
     startDate: new Date(),
     endDate: new Date(),
@@ -53,7 +53,7 @@ function advertisementRegister({
         variables: {
           orgId: currentOrg,
           name: formState.name as string,
-          link: formState.link as string,
+          mediaUrl: formState.mediaUrl as string,
           type: formState.type as string,
           startDate: dayjs(formState.startDate).format('YYYY-MM-DD'),
           endDate: dayjs(formState.endDate).format('YYYY-MM-DD'),
@@ -65,7 +65,7 @@ function advertisementRegister({
         refetch();
         setFormState({
           name: '',
-          link: '',
+          mediaUrl: '',
           type: 'BANNER',
           startDate: new Date(),
           endDate: new Date(),
@@ -131,19 +131,19 @@ function advertisementRegister({
                     const mediaBase64 = await convertToBase64(file);
                     setFormState({
                       ...formState,
-                      link: mediaBase64,
+                      mediaUrl: mediaBase64,
                     });
                   }
                 }}
               />
-              {formState.link && (
+              {formState.mediaUrl && (
                 <div className={styles.preview} data-testid="mediaPreview">
-                  {formState.link.includes('data:video') ? (
+                  {formState.mediaUrl.includes('data:video') ? (
                     <video muted autoPlay={true} loop={true} playsInline>
-                      <source src={formState.link} type="video/mp4" />
+                      <source src={formState.mediaUrl} type="video/mp4" />
                     </video>
                   ) : (
-                    <img src={formState.link} />
+                    <img src={formState.mediaUrl} />
                   )}
 
                   <button
@@ -151,7 +151,7 @@ function advertisementRegister({
                     onClick={(): void => {
                       setFormState({
                         ...formState,
-                        link: '',
+                        mediaUrl: '',
                       });
                       const fileInput = document.getElementById(
                         'advertisementMedia'
@@ -239,7 +239,7 @@ function advertisementRegister({
 
 advertisementRegister.defaultProps = {
   name: '',
-  link: '',
+  mediaUrl: '',
   type: 'BANNER',
   startDate: new Date(),
   endDate: new Date(),
@@ -248,7 +248,7 @@ advertisementRegister.defaultProps = {
 
 advertisementRegister.propTypes = {
   name: PropTypes.string,
-  link: PropTypes.string,
+  mediaUrl: PropTypes.string,
   type: PropTypes.string,
   startDate: PropTypes.instanceOf(Date),
   endDate: PropTypes.instanceOf(Date),

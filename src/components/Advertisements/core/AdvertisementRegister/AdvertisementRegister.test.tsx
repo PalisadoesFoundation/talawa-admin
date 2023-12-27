@@ -38,7 +38,7 @@ const MOCKS = [
       variables: {
         orgId: '1',
         name: 'Test Advertisement',
-        link: 'data:image/png;base64,bWVkaWEgY29udGVudA==',
+        mediaUrl: 'data:image/png;base64,bWVkaWEgY29udGVudA==',
         type: 'BANNER',
         startDate: dayjs(new Date('2023-01-01')).format('YYYY-MM-DD'),
         endDate: dayjs(new Date('2023-02-01')).format('YYYY-MM-DD'),
@@ -106,7 +106,7 @@ describe('Testing Advertisement Register Component', () => {
                   type="BANNER"
                   name="Advert1"
                   orgId="1"
-                  link="test.png"
+                  mediaUrl="test.png"
                 />
               }
             </I18nextProvider>
@@ -131,7 +131,7 @@ describe('Testing Advertisement Register Component', () => {
                   type="BANNER"
                   name="Advert1"
                   orgId="1"
-                  link="test.png"
+                  mediaUrl="test.png"
                 />
               }
             </I18nextProvider>
@@ -162,7 +162,7 @@ describe('Testing Advertisement Register Component', () => {
                   type="BANNER"
                   name="Advert1"
                   orgId="1"
-                  link="test.png"
+                  mediaUrl="test.png"
                 />
               }
             </I18nextProvider>
@@ -233,7 +233,7 @@ describe('Testing Advertisement Register Component', () => {
                   type="BANNER"
                   name="Advert1"
                   orgId="1"
-                  link="test.png"
+                  mediaUrl="test.png"
                 />
               }
             </I18nextProvider>

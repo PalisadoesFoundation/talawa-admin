@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 interface InterfaceAddOnEntryProps {
   id: string;
   name: string;
-  link: string;
+  mediaUrl: string;
   type: string;
   orgId: string;
   startDate: Date;
@@ -22,7 +22,7 @@ function advertisementEntry({
   type,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   orgId,
-  link,
+  mediaUrl,
   endDate,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   startDate,
@@ -57,7 +57,7 @@ function advertisementEntry({
         {Array.from({ length: 1 }).map((_, idx) => (
           <Col key={idx}>
             <Card>
-              {link.includes('data:video') ? (
+              {mediaUrl.includes('data:video') ? (
                 <video
                   muted
                   className={styles.adimage}
@@ -65,10 +65,14 @@ function advertisementEntry({
                   loop={true}
                   playsInline
                 >
-                  <source src={link} type="video/mp4" />
+                  <source src={mediaUrl} type="video/mp4" />
                 </video>
               ) : (
-                <Card.Img className={styles.adimage} variant="top" src={link} />
+                <Card.Img
+                  className={styles.adimage}
+                  variant="top"
+                  src={mediaUrl}
+                />
               )}
               <Card.Body>
                 <Card.Title>{name}</Card.Title>
@@ -132,7 +136,7 @@ advertisementEntry.propTypes = {
   name: PropTypes.string,
   type: PropTypes.string,
   orgId: PropTypes.string,
-  link: PropTypes.string,
+  mediaUrl: PropTypes.string,
   endDate: PropTypes.instanceOf(Date),
   startDate: PropTypes.instanceOf(Date),
 };
@@ -141,7 +145,7 @@ advertisementEntry.defaultProps = {
   name: '',
   type: '',
   orgId: '',
-  link: '',
+  mediaUrl: '',
   endDate: new Date(),
   startDate: new Date(),
 };

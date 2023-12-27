@@ -712,7 +712,7 @@ export const ADVERTISEMENTS_GET = gql`
       name
       type
       orgId
-      link
+      mediaUrl
       endDate
       startDate
     }
