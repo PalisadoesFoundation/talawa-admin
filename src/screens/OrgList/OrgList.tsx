@@ -51,10 +51,6 @@ function orgList(): JSX.Element {
 
   const perPageResult = 8;
   const [isLoading, setIsLoading] = useState(true);
-  const [sortingState, setSortingState] = useState({
-    option: '',
-    selectedOption: t('sort'),
-  });
   const [hasMore, sethasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
@@ -104,8 +100,6 @@ function orgList(): JSX.Element {
       first: perPageResult,
       skip: 0,
       filter: searchByName,
-      orderBy:
-        sortingState.option === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC',
     },
     notifyOnNetworkStatusChange: true,
   });
@@ -218,8 +212,6 @@ function orgList(): JSX.Element {
       filter: '',
       first: perPageResult,
       skip: 0,
-      orderBy:
-        sortingState.option === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC',
     });
     sethasMore(true);
   };
@@ -238,6 +230,7 @@ function orgList(): JSX.Element {
       });
     }
   };
+
   /* istanbul ignore next */
   const loadMoreOrganizations = (): void => {
     console.log('loadMoreOrganizations');
@@ -275,22 +268,6 @@ function orgList(): JSX.Element {
     });
   };
 
-  const handleSorting = (option: string): void => {
-    setSortingState({
-      option,
-      selectedOption: t(option),
-    });
-
-    const orderBy = option === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC';
-
-    refetchOrgs({
-      first: perPageResult,
-      skip: 0,
-      filter: searchByName,
-      orderBy,
-    });
-  };
-
   return (
     <>
       <SuperAdminScreen
@@ -319,33 +296,15 @@ function orgList(): JSX.Element {
           </div>
           <div className={styles.btnsBlock}>
             <div className="d-flex">
-              <Dropdown
-                aria-expanded="false"
-                title="Sort organizations"
-                data-testid="sort"
-              >
-                <Dropdown.Toggle
-                  variant={
-                    sortingState.option === '' ? 'outline-success' : 'success'
-                  }
-                  data-testid="sortOrgs"
-                >
+              <Dropdown aria-expanded="false" title="Sort organizations">
+                <Dropdown.Toggle variant="outline-success">
                   <SortIcon className={'me-1'} />
-                  {sortingState.selectedOption}
+                  {t('sort')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <Dropdown.Item
-                    onClick={(): void => handleSorting('Latest')}
-                    data-testid="latest"
-                  >
-                    {t('Latest')}
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={(): void => handleSorting('Earliest')}
-                    data-testid="oldest"
-                  >
-                    {t('Earliest')}
-                  </Dropdown.Item>
+                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
+                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
+                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
               <Dropdown aria-expanded="false" title="Filter organizations">

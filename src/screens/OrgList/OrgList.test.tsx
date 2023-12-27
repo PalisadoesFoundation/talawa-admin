@@ -1,12 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import {
-  act,
-  render,
-  screen,
-  fireEvent,
-  cleanup,
-} from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
@@ -17,7 +11,6 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrgList from './OrgList';
-
 import { MOCKS, MOCKS_ADMIN, MOCKS_EMPTY } from './OrgListMocks';
 
 async function wait(ms = 100): Promise<void> {
@@ -30,7 +23,6 @@ async function wait(ms = 100): Promise<void> {
 
 afterEach(() => {
   localStorage.clear();
-  cleanup();
 });
 
 describe('Organisations Page testing as SuperAdmin', () => {
@@ -206,39 +198,5 @@ describe('Organisations Page testing as Admin', () => {
 
     await wait();
     expect(screen.queryByText(/Create Organization/i)).toBeNull();
-  });
-
-  test('Testing sort latest and oldest toggle', async () => {
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <OrgList />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>
-      );
-
-      await wait();
-
-      const searchInput = screen.getByTestId('sort');
-      expect(searchInput).toBeInTheDocument();
-
-      const inputText = screen.getByTestId('sortOrgs');
-
-      fireEvent.click(inputText);
-      const toggleText = screen.getByTestId('latest');
-
-      fireEvent.click(toggleText);
-
-      expect(searchInput).toBeInTheDocument();
-      fireEvent.click(inputText);
-      const toggleTite = screen.getByTestId('oldest');
-      fireEvent.click(toggleTite);
-      expect(searchInput).toBeInTheDocument();
-    });
   });
 });
