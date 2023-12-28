@@ -70,7 +70,13 @@ Best way to install and manage `node.js` is making use of node version managers.
 ## Setting up Typescript
 
 As `talawa-admin` and `talawa-api` repositories are written using [Typescript](https://www.typescriptlang.org/), you will need to install typescript on your machine.
-We recommend to install typescript globally on your machine by following the installation guideliens provided in the [official docs](https://www.typescriptlang.org/download).
+We recommend to install `Typescript` globally on your machine by running the following command in the terminal:
+
+```
+npm install -g typescript
+```
+
+For more details please refer to the installation guidelines provided in the [official docs](https://www.typescriptlang.org/download).
 
 ## Installing required packages/dependencies
 
