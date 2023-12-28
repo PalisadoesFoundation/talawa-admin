@@ -3,7 +3,6 @@ import { Modal } from 'react-bootstrap';
 import { FeedbackStats } from './Statistics/Feedback';
 import { ReviewStats } from './Statistics/Review';
 import { AverageRating } from './Statistics/AverageRating';
-// import Stack from '@mui/material/Stack';
 import styles from './Loader.module.css';
 import styling from './EventStats.module.css';
 import { useQuery } from '@apollo/client';
