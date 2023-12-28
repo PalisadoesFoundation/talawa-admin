@@ -14,19 +14,7 @@ import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { ToastContainer } from 'react-toastify';
-import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
 
-interface InterfaceOrgPost {
-  _id: string;
-  title: string;
-  text: string;
-  imageUrl: string;
-  videoUrl: string;
-  organizationId: string;
-  creator: { firstName: string; lastName: string };
-  pinned: boolean;
-  createdAt: string;
-}
 
 const MOCKS = [
   {
@@ -627,17 +615,15 @@ describe('Organisation Post Page', () => {
       </MockedProvider>
     );
 
-    
-    await wait(); 
+    await wait();
 
-    
-    const sortedPosts = screen.getAllByTestId('post-item'); 
+    const sortedPosts = screen.getAllByTestId('post-item');
 
     // Assert that the posts are sorted correctly
     expect(sortedPosts).toHaveLength(mockedPosts.length);
     expect(sortedPosts[0]).toHaveTextContent(
       'postoneThis is the first po... Aditya Shelke'
-    ); 
+    );
     expect(sortedPosts[1]).toHaveTextContent(
       'posttwoTis is the post two Aditya Shelke'
     );
