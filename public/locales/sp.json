@@ -600,7 +600,7 @@
     "lastName": "Apellido",
     "emailAddress": "dirección de correo electrónico",
     "updateImage": "Actualizar imagen",
-    "save": "Ahorrar"
+    "saveChanges": "Guardar cambios"
   },
   "donate": {
     "donateTo": "Donar a",

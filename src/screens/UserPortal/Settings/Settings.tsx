@@ -83,59 +83,84 @@ export default function settings(): JSX.Element {
         <UserSidebar />
         <div className={`${styles.mainContainer}`}>
           <h3>{t('profileSettings')}</h3>
-          <div className={`${styles.content}`}>
-            <Form.Label htmlFor="inputFirstName">{t('firstName')}</Form.Label>
-            <Form.Control
-              type="text"
-              id="inputFirstName"
-              value={firstName}
-              onChange={handleFirstNameChange}
-              className={`${styles.colorLight}`}
-              data-testid="inputFirstName"
-            />
-            <Form.Label htmlFor="inputLastName">{t('lastName')}</Form.Label>
-            <Form.Control
-              type="text"
-              id="inputLastName"
-              value={lastName}
-              onChange={handleLastNameChange}
-              className={`${styles.colorLight}`}
-              data-testid="inputLastName"
-            />
-            <Form.Label htmlFor="inputEmail">{t('emailAddress')}</Form.Label>
-            <Form.Control
-              type="email"
-              id="inputEmail"
-              value={email}
-              className={`${styles.colorLight}`}
-              disabled
-            />
-            {t('updateImage')}
-            <Form.Control
-              accept="image/*"
-              id="postphoto"
-              name="photo"
-              type="file"
-              className={styles.imageInput}
-              multiple={false}
-              onChange={
-                /* istanbul ignore next */
-                async (e: React.ChangeEvent): Promise<void> => {
-                  const target = e.target as HTMLInputElement;
-                  const file = target.files && target.files[0];
-                  if (file) {
-                    const image = await convertToBase64(file);
-                    setImage(image);
+          <div className={`${styles.content} rounded-4`}>
+            <div className={`${styles.formHeader}`}>
+              <div className={`${styles.formTitle}`}>Update Profile</div>
+            </div>
+            <div className={`${styles.formBody}`}>
+              <Form.Label
+                htmlFor="inputFirstName"
+                className={`${styles.formLabel}`}
+              >
+                {t('firstName')}
+              </Form.Label>
+              <Form.Control
+                type="text"
+                id="inputFirstName"
+                value={firstName}
+                onChange={handleFirstNameChange}
+                className={`${styles.formControl}`}
+                data-testid="inputFirstName"
+              />
+              <Form.Label
+                htmlFor="inputLastName"
+                className={`${styles.formLabel}`}
+              >
+                {t('lastName')}
+              </Form.Label>
+              <Form.Control
+                type="text"
+                id="inputLastName"
+                value={lastName}
+                onChange={handleLastNameChange}
+                className={`${styles.formControl}`}
+                data-testid="inputLastName"
+              />
+              <Form.Label
+                htmlFor="inputEmail"
+                className={`${styles.formLabel}`}
+              >
+                {t('emailAddress')}
+              </Form.Label>
+              <Form.Control
+                type="email"
+                id="inputEmail"
+                value={email}
+                className={`${styles.formControl}`}
+                disabled
+              />
+              <Form.Label htmlFor="postphoto" className={`${styles.formLabel}`}>
+                {t('updateImage')}
+              </Form.Label>
+              <Form.Control
+                accept="image/*"
+                id="postphoto"
+                name="photo"
+                type="file"
+                className={styles.formControl}
+                multiple={false}
+                onChange={
+                  /* istanbul ignore next */
+                  async (e: React.ChangeEvent): Promise<void> => {
+                    const target = e.target as HTMLInputElement;
+                    const file = target.files && target.files[0];
+                    if (file) {
+                      const image = await convertToBase64(file);
+                      setImage(image);
+                    }
                   }
                 }
-              }
-            />
-            <Button
-              onClick={handleUpdateUserDetails}
-              data-testid="updateUserBtn"
-            >
-              {t('save')}
-            </Button>
+              />
+              <div>
+                <Button
+                  onClick={handleUpdateUserDetails}
+                  data-testid="updateUserBtn"
+                  className={`${styles.formButton}`}
+                >
+                  {t('saveChanges')}
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

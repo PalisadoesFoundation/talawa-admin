@@ -610,7 +610,7 @@
     "lastName": "Last Name",
     "emailAddress": "Email Address",
     "updateImage": "Update Image",
-    "save": "Save"
+    "saveChanges": "Save Changes"
   },
   "donate": {
     "donateTo": "Donate to",

@@ -1,7 +1,7 @@
 .mainContainer {
   width: 50%;
   flex-grow: 3;
-  padding: 40px;
+  padding: 25px;
   max-height: 100%;
   overflow: auto;
 }
@@ -11,16 +11,43 @@
 }
 
 .content {
+  max-width: 650px;
+  background-color: white;
+  margin-top: 30px;
+}
+
+.formHeader .formTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.formHeader {
+  padding: 1.25rem 1rem 1rem 1rem;
+  border-bottom: 1px solid var(--bs-gray-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.formBody {
+  padding: 1.25rem 1rem 1.5rem 1rem;
   display: flex;
   flex-direction: column;
-  max-width: 300px;
-  gap: 15px;
 }
 
-.imageInput {
-  background-color: white;
+.formLabel {
+  font-weight: bold;
+  padding-bottom: 1px;
+  font-size: 14px;
+  color: #707070;
+  margin-bottom: 10px;
 }
 
-.colorLight {
-  background-color: white;
+.formControl {
+  margin-bottom: 20px;
+}
+
+.formButton {
+  width: fit-content;
+  float: right;
 }

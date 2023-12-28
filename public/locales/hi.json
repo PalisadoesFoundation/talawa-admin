@@ -600,7 +600,7 @@
     "lastName": "उपनाम",
     "emailAddress": "मेल पता",
     "updateImage": "छवि अद्यतन करें",
-    "save": "बचाना"
+    "saveChanges": "परिवर्तनों को सुरक्षित करें"
   },
   "donate": {
     "donateTo": "दान दें",
