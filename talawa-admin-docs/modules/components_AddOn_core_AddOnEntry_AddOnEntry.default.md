@@ -41,11 +41,11 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `configurable` | `Requireable`<`boolean`\> |
-| `description` | `Requireable`<`string`\> |
-| `enabled` | `Requireable`<`boolean`\> |
-| `isInstalled` | `Requireable`<`boolean`\> |
-| `title` | `Requireable`<`string`\> |
+| `configurable` | `Requireable`\<`boolean`\\> |
+| `description` | `Requireable`\<`string`\\> |
+| `enabled` | `Requireable`\<`boolean`\\> |
+| `isInstalled` | `Requireable`\<`boolean`\\> |
+| `title` | `Requireable`\<`string`\\> |
 
 #### Defined in
 

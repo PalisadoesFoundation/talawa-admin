@@ -14,18 +14,18 @@
 
 ### default
 
-▸ **default**(`props`, `context?`): ``null`` \| `ReactElement`<`any`, `any`\>
+▸ **default**(`props`, `context?`): ``null`` \| `ReactElement`\<`any`, `any`\\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `props` | `PropsWithChildren`<`MemberDetailProps`\> |
+| `props` | `PropsWithChildren`\<`MemberDetailProps`\\> |
 | `context?` | `any` |
 
 #### Returns
 
-``null`` \| `ReactElement`<`any`, `any`\>
+``null`` \| `ReactElement`\<`any`, `any`\\>
 
 #### Defined in
 
