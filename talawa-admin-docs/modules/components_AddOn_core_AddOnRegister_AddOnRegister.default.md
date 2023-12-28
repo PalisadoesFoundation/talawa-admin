@@ -37,7 +37,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `createdBy` | `Requireable`<`string`\> |
+| `createdBy` | `Requireable`\<`string`\\> |
 
 #### Defined in
 
