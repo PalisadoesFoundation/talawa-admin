@@ -49,7 +49,7 @@ def process_file(filepath):
         filepath: The path to the Markdown file to process.
 
     Returns:
-        None, writes the processed content back to the file.
+        None, writes the processed content back to the file only if there are changes.
     """
     with open(filepath, 'r', encoding='utf-8') as file:
         content = file.read()
@@ -57,9 +57,10 @@ def process_file(filepath):
     # Escape MPX characters
     new_content = escape_mpx_characters(content)
 
-    # Write the processed content back to the file
-    with open(filepath, 'w', encoding='utf-8') as file:
-        file.write(new_content)
+    # Write the processed content back to the file only if there is a change
+    if new_content != content:
+        with open(filepath, 'w', encoding='utf-8') as file:
+            file.write(new_content)
 
 def main():
     """
@@ -87,7 +88,7 @@ def main():
     # Process each Markdown file in the directory
     for root, _, files in os.walk(args.directory):
         for file in files:
-            if file.endswith(".md"):
+            if file.lower().endswith(".md"):
                 process_file(os.path.join(root, file))
 
 if __name__ == "__main__":
