@@ -244,6 +244,8 @@
   color: #707070;
   font-weight: 600;
   font-size: 14px;
+  display: flex;
+  flex-direction: column;
 }
 .radio_buttons > input {
   transform: scale(1.2);
