@@ -253,12 +253,9 @@ function orgPost(): JSX.Element {
                     title="Sort Post"
                     data-testid="sort"
                   >
-                    <Dropdown.Toggle
-                      variant="outline-success"
-                      data-testid="sortpost"
-                    >
+                    <Dropdown.Toggle variant="success" data-testid="sortpost">
                       <SortIcon className={'me-1'} />
-                      {t('sortPost')}
+                      {sortingOption === 'latest' ? t('Latest') : t('Oldest')}
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
                       <Dropdown.Item

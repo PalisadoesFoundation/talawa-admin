@@ -266,12 +266,9 @@ const Users = (): JSX.Element => {
                 title="Sort Users"
                 data-testid="sort"
               >
-                <Dropdown.Toggle
-                  variant="outline-success"
-                  data-testid="sortUsers"
-                >
+                <Dropdown.Toggle variant="success" data-testid="sortUsers">
                   <SortIcon className={'me-1'} />
-                  {t('sort')}
+                  {sortingOption === 'newest' ? t('Newest') : t('Oldest')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item
