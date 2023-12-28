@@ -14,6 +14,19 @@ import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { ToastContainer } from 'react-toastify';
+import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
+
+interface InterfaceOrgPost {
+  _id: string;
+  title: string;
+  text: string;
+  imageUrl: string;
+  videoUrl: string;
+  organizationId: string;
+  creator: { firstName: string; lastName: string };
+  pinned: boolean;
+  createdAt: string;
+}
 
 const MOCKS = [
   {
@@ -574,5 +587,62 @@ describe('Organisation Post Page', () => {
       fireEvent.click(closeVideoPreviewButton);
       expect(videoPreview).not.toBeInTheDocument();
     });
+  });
+  test('Sorting posts by pinned status', async () => {
+    // Mocked data representing posts with different pinned statuses
+    const mockedPosts = [
+      {
+        _id: '1',
+        title: 'Post 1',
+        pinned: true,
+      },
+      {
+        _id: '2',
+        title: 'Post 2',
+        pinned: false,
+      },
+      {
+        _id: '3',
+        title: 'Post 3',
+        pinned: true,
+      },
+      {
+        _id: '4',
+        title: 'Post 4',
+        pinned: true,
+      },
+    ];
+
+    // Render the OrgPost component and pass the mocked data to it
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    
+    await wait(); 
+
+    
+    const sortedPosts = screen.getAllByTestId('post-item'); 
+
+    // Assert that the posts are sorted correctly
+    expect(sortedPosts).toHaveLength(mockedPosts.length);
+    expect(sortedPosts[0]).toHaveTextContent(
+      'postoneThis is the first po... Aditya Shelke'
+    ); 
+    expect(sortedPosts[1]).toHaveTextContent(
+      'posttwoTis is the post two Aditya Shelke'
+    );
+    expect(sortedPosts[2]).toHaveTextContent(
+      'posttwoTis is the post two Aditya Shelke'
+    );
   });
 });
