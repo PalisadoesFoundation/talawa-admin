@@ -469,5 +469,6 @@ describe('Testing Events Screen [User Portal]', () => {
     const calenderView = 'Calendar View';
 
     expect(screen.queryAllByText(calenderView)).not.toBeNull();
+    expect(screen.getByText('Sun')).toBeInTheDocument();
   });
 });

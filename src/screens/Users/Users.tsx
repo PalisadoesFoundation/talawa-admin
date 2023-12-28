@@ -31,7 +31,7 @@ const Users = (): JSX.Element => {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
   const [sortingOption, setSortingOption] = useState('newest');
-
+  const [filteringOption, setFilteringOption] = useState('cancel');
   const userType = localStorage.getItem('UserType');
   const loggedInUserId = localStorage.getItem('id');
 
@@ -68,10 +68,11 @@ const Users = (): JSX.Element => {
       setHasMore(false);
     }
     if (usersData && usersData.users) {
-      const newDisplayedUsers = sortUsers(usersData.users, sortingOption);
+      let newDisplayedUsers = sortUsers(usersData.users, sortingOption);
+      newDisplayedUsers = filterUsers(newDisplayedUsers, filteringOption);
       setDisplayedUsers(newDisplayedUsers);
     }
-  }, [usersData, sortingOption]);
+  }, [usersData, sortingOption, filteringOption]);
 
   // To clear the search when the component is unmounted
   useEffect(() => {
@@ -179,14 +180,44 @@ const Users = (): JSX.Element => {
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
-    } else if (sortingOption === 'oldest') {
+      return sortedUsers;
+    } else {
       sortedUsers.sort(
         (a, b) =>
           new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       );
+      return sortedUsers;
     }
+  };
 
-    return sortedUsers;
+  const handleFiltering = (option: string): void => {
+    setFilteringOption(option);
+  };
+
+  const filterUsers = (
+    allUsers: InterfaceQueryUserListItem[],
+    filteringOption: string
+  ): InterfaceQueryUserListItem[] => {
+    const filteredUsers = [...allUsers];
+
+    if (filteringOption === 'cancel') {
+      return filteredUsers;
+    } else if (filteringOption === 'user') {
+      const output = filteredUsers.filter((user) => {
+        return user.userType === 'USER';
+      });
+      return output;
+    } else if (filteringOption === 'admin') {
+      const output = filteredUsers.filter((user) => {
+        return user.userType == 'ADMIN';
+      });
+      return output;
+    } else {
+      const output = filteredUsers.filter((user) => {
+        return user.userType == 'SUPERADMIN';
+      });
+      return output;
+    }
   };
 
   const headerTitles: string[] = [
@@ -222,6 +253,7 @@ const Users = (): JSX.Element => {
               <Button
                 tabIndex={-1}
                 className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                data-testid="searchButton"
               >
                 <Search />
               </Button>
@@ -256,15 +288,44 @@ const Users = (): JSX.Element => {
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
-              <Dropdown aria-expanded="false" title="Filter organizations">
-                <Dropdown.Toggle variant="outline-success">
+              <Dropdown
+                aria-expanded="false"
+                title="Filter organizations"
+                data-testid="filter"
+              >
+                <Dropdown.Toggle
+                  variant="outline-success"
+                  data-testid="filterUsers"
+                >
                   <FilterListIcon className={'me-1'} />
                   {t('filter')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
+                  <Dropdown.Item
+                    data-testid="admin"
+                    onClick={(): void => handleFiltering('admin')}
+                  >
+                    {t('admin')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    data-testid="superAdmin"
+                    onClick={(): void => handleFiltering('superAdmin')}
+                  >
+                    {t('superAdmin')}
+                  </Dropdown.Item>
+
+                  <Dropdown.Item
+                    data-testid="user"
+                    onClick={(): void => handleFiltering('user')}
+                  >
+                    {t('user')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    data-testid="cancel"
+                    onClick={(): void => handleFiltering('cancel')}
+                  >
+                    {t('cancel')}
+                  </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </div>
@@ -293,7 +354,10 @@ const Users = (): JSX.Element => {
               />
             ) : (
               <InfiniteScroll
-                dataLength={displayedUsers.length ?? 0}
+                dataLength={
+                  /* istanbul ignore next */
+                  displayedUsers.length ?? 0
+                }
                 next={loadMoreUsers}
                 loader={
                   <TableLoader

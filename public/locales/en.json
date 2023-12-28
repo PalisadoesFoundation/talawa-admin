@@ -94,6 +94,8 @@
     "displayImage": "Display Image",
     "enterName": "Enter Name",
     "sort": "Sort",
+    "Latest": "Latest",
+    "Earliest": "Earliest",
     "filter": "Filter",
     "cancel": "Cancel",
     "noOrgErrorTitle": "Organizations Not Found",
@@ -147,7 +149,8 @@
     "noOrgError": "Organizations not found, please create an organization through dashboard",
     "roleUpdated": "Role Updated.",
     "noResultsFoundFor": "No results found for ",
-    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
+    "cancel": "Cancel"
   },
   "requests": {
     "title": "Talawa Requests",

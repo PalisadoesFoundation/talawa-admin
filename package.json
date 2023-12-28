@@ -127,5 +127,8 @@
     "@types/react": "17.0.2",
     "@types/react-dom": "17.0.2",
     "graphql": "^16.5.0"
+  },
+  "engines": {
+    "node": ">=20.x"
   }
 }
