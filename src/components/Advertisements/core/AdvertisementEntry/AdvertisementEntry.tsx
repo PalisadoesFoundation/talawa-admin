@@ -57,7 +57,7 @@ function advertisementEntry({
         {Array.from({ length: 1 }).map((_, idx) => (
           <Col key={idx}>
             <Card>
-              {mediaUrl.includes('data:video') ? (
+              {mediaUrl?.includes('data:video') ? (
                 <video
                   muted
                   className={styles.adimage}

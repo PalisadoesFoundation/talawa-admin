@@ -423,7 +423,7 @@ export const ADD_ADVERTISEMENT_MUTATION = gql`
   mutation (
     $orgId: ID!
     $name: String!
-    $mediaUrl: String!
+    $mediaUrl: URL
     $type: String!
     $startDate: Date!
     $endDate: Date!
