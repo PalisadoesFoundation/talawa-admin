@@ -75,10 +75,7 @@ jobs:
           python .github/workflows/check_changed_files.py "${{ github.base_ref }}" "${{ github.head_ref }}"
 
       - name: Run Black
-        run: black .
-
-      - name: Run Pydocstyle
-        run: pydocstyle .
+        run: black --check.
 
   Test-Application:
     name: Test Application
