@@ -7,7 +7,7 @@ const react_script_build = 'npx react-scripts build';
 //use custom config overriden by react-app-rewired 
 const react_app_rewired_build = 'npx react-app-rewired build';
 
-if (process.env.LOGS_CONFIG_OVERRIDE === "YES") {
+if (process.env.ALLOW_LOGS === "YES") {
   spawn(react_app_rewired_build, { stdio: 'inherit', shell: true });
 
 }
