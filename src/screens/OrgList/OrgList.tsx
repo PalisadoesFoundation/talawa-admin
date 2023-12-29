@@ -652,8 +652,8 @@ function orgList(): JSX.Element {
                   </a>
                   <Button
                     variant="secondary"
-                    onClick={(): void => toggleModal()}
-                    data-testid="closeOrganizationModal"
+                    onClick={toggleModal}
+                    data-testid="cancelOrganizationModal"
                   >
                     {t('cancel')}
                   </Button>
@@ -665,7 +665,7 @@ function orgList(): JSX.Element {
                 <div className={styles.pluginStoreBtnContainer}>
                   <Link
                     className={styles.secondbtn}
-                    data-testid="submitOrganizationForm"
+                    data-testid="goToStore"
                     to={`orgstore/id=${dialogRedirectOrgId}`}
                   >
                     {t('goToStore')}
@@ -676,7 +676,7 @@ function orgList(): JSX.Element {
                     className={styles.greenregbtn}
                     onClick={closeDialogModal}
                     value="invite"
-                    data-testid="submitOrganizationForm"
+                    data-testid="enableEverythingForm"
                   >
                     {t('enableEverything')}
                   </button>
