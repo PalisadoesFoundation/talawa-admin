@@ -42,7 +42,7 @@
   "leftDrawer": {
     "talawaAdminPortal": "Portal de administración de Talawa",
     "menu": "Menú",
-    "organizations": "Organizaciones",
+    "my organizations": "Mis Organizaciones",
     "requests": "Solicitudes",
     "users": "Usuarios",
     "logout": "Cerrar sesión"
@@ -78,7 +78,7 @@
     "designation": "Designacion",
     "email": "Correo electrónico",
     "searchByName": "Buscar por nombre",
-    "organizations": "Organizaciones",
+    "my organizations": "Mis Organizaciones.",
     "createOrganization": "Crear organización",
     "createSampleOrganization": "Crear organización de muestra",
     "description": "Descripción",
@@ -88,6 +88,8 @@
     "displayImage": "Mostrar imagen",
     "enterName": "Ingrese su nombre",
     "sort": "Ordenar",
+    "Earliest": "Más Temprano",
+    "Latest": "El último",
     "filter": "Filtrar",
     "cancel": "Cancelar",
     "endOfResults": "Fin de los resultados",
@@ -136,7 +138,8 @@
     "filter": "Filtrar",
     "roleUpdated": "Rol actualizado.",
     "noResultsFoundFor": "No se encontraron resultados para ",
-    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
+    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
+    "cancel": "Cancelar"
   },
   "requests": {
     "title": "Solicitudes Talawa",
@@ -589,7 +592,12 @@
   "home": {
     "feed": "Alimentar",
     "pinnedPosts": "Ver publicaciones fijadas",
-    "somethingOnYourMind": "¿Algo en tu mente?"
+    "somethingOnYourMind": "¿Algo en tu mente?",
+    "addPost": "Agregar publicación",
+    "startPost": "Comenzar una publicación",
+    "media": "Medios",
+    "event": "Evento",
+    "article": "Artículo"
   },
   "settings": {
     "profileSettings": "Configuración de perfil",

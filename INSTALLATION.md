@@ -25,8 +25,8 @@ This document provides instructions on how to set up and start a running instanc
   - [Debugging tests](#debugging-tests)
   - [Linting code files](#linting-code-files)
   - [Husky for Git Hooks](#husky-for-git-hooks)
-      - [pre-commit hook](#pre-commit-hook)
-      - [post-merge hook](#post-merge-hook)
+    - [pre-commit hook](#pre-commit-hook)
+    - [post-merge hook](#post-merge-hook)
 
 <!-- tocstop -->
 
@@ -63,7 +63,18 @@ This will setup the repository and the code files locally for you. For more deta
 
 ## Setting up npm
 
-If you've followed the previous steps you should have already set up node.js on your system. [Click here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) for the official setup guide for npm.
+Best way to install and manage `node.js` is making use of node version managers. Two most popular node version managers right now are [fnm](https://github.com/Schniz/fnm) and [nvm](https://github.com/nvm-sh/nvm). We'd recommend `fnm` because it's written in `rust` and is much faster than `nvm`. Install whichever one you want and follow their guide to set up `node.js` on your system.
+
+## Setting up Typescript
+
+As `talawa-admin` and `talawa-api` repositories are written using [Typescript](https://www.typescriptlang.org/), you will need to install typescript on your machine.
+We recommend to install `Typescript` globally on your machine by running the following command in the terminal:
+
+```
+npm install -g typescript
+```
+
+For more details please refer to the installation guidelines provided in the [official docs](https://www.typescriptlang.org/download).
 
 ## Installing required packages/dependencies
 
@@ -202,7 +213,6 @@ We run a pre-commit hook which automatically runs code quality checks each time 
 If you don't want these pre-commit checks running on each commit, you can manually opt out of it using the `--no-verify` flag with your commit message as shown:-
 
         git commit -m "commit message" --no-verify
-
 
 
 #### post-merge hook
