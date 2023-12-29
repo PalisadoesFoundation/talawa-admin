@@ -42,7 +42,7 @@
   "leftDrawer": {
     "talawaAdminPortal": "Portail d'administration Talawa",
     "menu": "Menu",
-    "organizations": "Organisations",
+    "my organizations": "Mes Organisations",
     "requests": "Demandes",
     "users": "Utilisateurs",
     "logout": "Déconnexion"
@@ -78,7 +78,7 @@
     "designation": "La désignation",
     "email": "E-mail",
     "searchByName": "Rechercher par nom",
-    "organizations": "Organisations",
+    "my organizations": "Mes Organisations",
     "createOrganization": "Créer une organisation",
     "createSampleOrganization": "Créer une organisation d'exemple",
     "description": "La description",
@@ -88,6 +88,8 @@
     "displayImage": "Afficher l'image",
     "enterName": "Entrez le nom",
     "sort": "Trier",
+    "Earliest": "Le plus tôt",
+    "Latest": "Dernière",
     "filter": "Filtre",
     "cancel": "Annuler",
     "endOfResults": "Fin des résultats",
@@ -137,7 +139,8 @@
     "filter": "Filtre",
     "roleUpdated": "Rôle mis à jour.",
     "noResultsFoundFor": "Aucun résultat trouvé pour ",
-    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
+    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau.",
+    "cancel": "Annuler"
   },
   "requests": {
     "title": "Demandes Talawa",

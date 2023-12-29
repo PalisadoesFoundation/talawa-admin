@@ -1,15 +1,13 @@
 .section {
-  position: relative;
-  margin: 20px auto;
-  width: 100%;
-  background-color: #fff;
-  padding: 4px;
-  border-radius: 0.5rem;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .error {
   font-size: 1.2rem;
-  color: #575656;
   font-weight: 500;
 }
 

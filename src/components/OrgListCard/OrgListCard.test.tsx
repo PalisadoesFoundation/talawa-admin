@@ -16,9 +16,6 @@ const MOCKS = [
   {
     request: {
       query: IS_SAMPLE_ORGANIZATION_QUERY,
-      variables: {
-        isSampleOrganizationId: 'xyz',
-      },
     },
     result: {
       data: {
