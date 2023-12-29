@@ -22,7 +22,7 @@
 | Name | Type |
 | :------ | :------ |
 | `children` | ``null`` |
-| `extras` | {} |
+| `extras` | \{\} |
 | `name` | `string` |
 
 #### Defined in
@@ -39,9 +39,9 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `children` | `Requireable`<`any`\> |
-| `extras` | `Requireable`<`InferProps`<{ `actions`: `Requireable`<`InferProps`<{}\>\> ; `components`: `Requireable`<`InferProps`<{}\>\>  }\>\> |
-| `name` | `Requireable`<`string`\> |
+| `children` | `Requireable`\<`any`\> |
+| `extras` | `Requireable`\<`InferProps`\<\{ `actions`: `Requireable`\<`InferProps`\<\{\}\>\> ; `components`: `Requireable`\<`InferProps`\<\{\}\>\>  \}\>\> |
+| `name` | `Requireable`\<`string`\> |
 
 #### Defined in
 
