@@ -4,14 +4,12 @@ This document provides instructions on how to set up and start a running instanc
 
 # Table of Contents
 
-- [Talawa-Admin Installation](#talawa-admin-installation)
-- [Table of Contents](#table-of-contents)
+<!-- toc -->
+
 - [Prerequisites for Developers](#prerequisites-for-developers)
 - [Installation](#installation)
-  - [Clone This Repository](#clone-this-repository)
-  - [Change Directory into the Cloned Repo](#change-directory-into-the-cloned-repo)
-  - [Setting up NPM](#setting-up-npm)
-  - [Setting up Typescript](#setting-up-typescript)
+  - [Setting up this repository](#setting-up-this-repository)
+  - [Setting up npm](#setting-up-npm)
   - [Installing required packages/dependencies](#installing-required-packagesdependencies)
 - [Configuration](#configuration)
   - [Creating .env file](#creating-env-file)
@@ -30,6 +28,8 @@ This document provides instructions on how to set up and start a running instanc
     - [pre-commit hook](#pre-commit-hook)
     - [post-merge hook](#post-merge-hook)
 
+<!-- tocstop -->
+
 # Prerequisites for Developers
 
 We recommend that you follow these steps before beginning development work on Talawa-Admin:
@@ -43,27 +43,25 @@ The INSTALLATION.md files in both repositories show you how. The Talawa-API INST
 
 You will need to have copies of your code on your local system. Here's how to do that.
 
-## Clone This Repository
+## Setting up this repository
 
 First you need a local copy of `talawa-admin`. Run the following command in the directory of choice on your local system.
 
-```
-git clone https://github.com/PalisadoesFoundation/talawa-admin
-```
-
-This will download a local copy of `talawa-admin` in that directory.
-
-## Change Directory into the Cloned Repo
-
-Right after cloning the repo you can change the directory of your current `terminal(shell)` to the root directory of cloned repository using this command:
+1. Navigate to the folder where you want to setup the repository. Here, I will set it up in a folder called `talawa`.
+2. Navigate to the folder and open a terminal in this folder (you can right-click and choose appropiate option based onn your OS). Next, we'll fork and clone the `talawa-admin` repository.
+3. Navigate to [https://github.com/PalisadoesFoundation/talawa-admin/](hhttps://github.com/PalisadoesFoundation/talawa-admin/) and click on the `fork` button. It is placed on the right corner opposite the repository name `PalisadoesFoundation/talawa-admin`.
+4. You should now see `talawa-admin` under your repositories. It will be marked as forked from `PalisadoesFoundation/talawa-admin`
+5. Clone the repository to your local computer (replacing the values in `{{}}`):
 
 ```
-cd talawa-admin
+$ git clone https://github.com/{{YOUR GITHUB USERNAME}}/talawa-admin.git
 ```
+
+This will setup the repository and the code files locally for you. For more detailed instructions on contributing code, and managing the versions of this repository with Git, checkout [CONTRIBUTING.md here](./CONTRIBUTING.md)
 
 **NOTE:** `All the commands we're going to execute in the following instructions will assume you are in the root directory of the cloned talawa-admin project. If you fail to do so, the commands will not work.`
 
-## Setting up NPM
+## Setting up npm
 
 Best way to install and manage `node.js` is making use of node version managers. Two most popular node version managers right now are [fnm](https://github.com/Schniz/fnm) and [nvm](https://github.com/nvm-sh/nvm). We'd recommend `fnm` because it's written in `rust` and is much faster than `nvm`. Install whichever one you want and follow their guide to set up `node.js` on your system.
 
@@ -207,7 +205,6 @@ npm run lint:fix
 
 We are using the package `Husky` to run git hooks that run according to different git workflows.
 
-<br/>
 
 #### pre-commit hook
 
@@ -217,7 +214,6 @@ If you don't want these pre-commit checks running on each commit, you can manual
 
         git commit -m "commit message" --no-verify
 
-<br/>
 
 #### post-merge hook
 

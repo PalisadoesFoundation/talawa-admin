@@ -1,4 +1,3 @@
-
 # Talawa Admin Code Style
 
 For Talawa Admin, most of the rules for the code style have been enforced with ESLint, but this document serves to provide an overview of the Code style used in Talawa Admin and the Rationale behind it.
@@ -6,6 +5,21 @@ For Talawa Admin, most of the rules for the code style have been enforced with E
 The code style must be strictly adhered to, to ensure that there is consistency throughout the contributions made to Talawa-Admin
 
 code style should not be changed and must be followed.
+
+# Table of Contents
+
+<!-- toc -->
+
+- [Tech Stack](#tech-stack)
+- [Component Structure](#component-structure)
+- [Code Style and Naming Conventions](#code-style-and-naming-conventions)
+- [Test and Code Linting](#test-and-code-linting)
+- [Folder/Directory Structure](#folderdirectory-structure)
+  - [Sub Directories of `src`](#sub-directories-of-src)
+- [Imports](#imports)
+- [Customising Bootstrap](#customising-bootstrap)
+
+<!-- tocstop -->
 
 ## Tech Stack
 
