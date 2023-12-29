@@ -26,7 +26,7 @@ import os
 import sys
 
 
-def count_changed_files(base_branch, current_branch):
+def _count_changed_files(base_branch, current_branch):
     """
     Count the number of changed files between two branches.
 
@@ -76,7 +76,7 @@ def main():
         print(current_branch)
 
         # Count changed files
-        file_count = count_changed_files(base_branch, current_branch)
+        file_count = _count_changed_files(base_branch, current_branch)
 
         print(f"Number of changed files: {file_count}")
 
