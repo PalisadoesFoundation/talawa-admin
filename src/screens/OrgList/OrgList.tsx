@@ -462,10 +462,13 @@ function orgList(): JSX.Element {
                 required
                 value={formState.name}
                 onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    name: e.target.value,
-                  });
+                  const inputText = e.target.value;
+                  if (inputText.length < 50) {
+                    setFormState({
+                      ...formState,
+                      name: e.target.value,
+                    });
+                  }
                 }}
               />
               <Form.Label htmlFor="descrip">{t('description')}</Form.Label>
@@ -478,10 +481,13 @@ function orgList(): JSX.Element {
                 required
                 value={formState.descrip}
                 onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    descrip: e.target.value,
-                  });
+                  const descriptionText = e.target.value;
+                  if (descriptionText.length < 100) {
+                    setFormState({
+                      ...formState,
+                      descrip: e.target.value,
+                    });
+                  }
                 }}
               />
               <Form.Label htmlFor="location">{t('location')}</Form.Label>
@@ -494,10 +500,13 @@ function orgList(): JSX.Element {
                 required
                 value={formState.location}
                 onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    location: e.target.value,
-                  });
+                  const locationText = e.target.value;
+                  if (locationText.length < 100) {
+                    setFormState({
+                      ...formState,
+                      location: e.target.value,
+                    });
+                  }
                 }}
               />
 
