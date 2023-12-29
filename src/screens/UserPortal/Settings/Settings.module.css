@@ -10,18 +10,12 @@
   height: calc(100vh - 66px);
 }
 
-.content {
-  max-width: 650px;
-  background-color: white;
-  margin-top: 30px;
-}
-
-.formHeader .formTitle {
+.cardHeader .cardTitle {
   font-size: 1.2rem;
   font-weight: 600;
 }
 
-.formHeader {
+.cardHeader {
   padding: 1.25rem 1rem 1rem 1rem;
   border-bottom: 1px solid var(--bs-gray-200);
   display: flex;
@@ -29,13 +23,13 @@
   align-items: center;
 }
 
-.formBody {
+.cardBody {
   padding: 1.25rem 1rem 1.5rem 1rem;
   display: flex;
   flex-direction: column;
 }
 
-.formLabel {
+.cardLabel {
   font-weight: bold;
   padding-bottom: 1px;
   font-size: 14px;
@@ -43,11 +37,11 @@
   margin-bottom: 10px;
 }
 
-.formControl {
+.cardControl {
   margin-bottom: 20px;
 }
 
-.formButton {
+.cardButton {
   width: fit-content;
   float: right;
 }

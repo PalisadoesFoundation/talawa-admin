@@ -600,7 +600,10 @@
     "lastName": "Apellido",
     "emailAddress": "dirección de correo electrónico",
     "updateImage": "Actualizar imagen",
-    "saveChanges": "Guardar cambios"
+    "saveChanges": "Guardar cambios",
+    "updateProfile": "Actualización del perfil",
+    "otherSettings": "Otras Configuraciones",
+    "changeLanguage": "Cambiar Idioma"
   },
   "donate": {
     "donateTo": "Donar a",
