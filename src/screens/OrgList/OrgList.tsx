@@ -482,7 +482,7 @@ function orgList(): JSX.Element {
                 value={formState.descrip}
                 onChange={(e): void => {
                   const descriptionText = e.target.value;
-                  if (descriptionText.length < 100) {
+                  if (descriptionText.length < 200) {
                     setFormState({
                       ...formState,
                       descrip: e.target.value,
