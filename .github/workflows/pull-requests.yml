@@ -51,7 +51,7 @@ jobs:
         if: steps.changed-files.outputs.only_changed != 'true'
         run: npm run lint:check  
 
-      - name: Compare translation files testing
+      - name: Compare translation files
         run: |
           chmod +x .github/workflows/compare-translational-files.py
           python .github/workflows/compare-translational-files.py --directory public/locales
