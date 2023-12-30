@@ -423,18 +423,20 @@ export const ADD_ADVERTISEMENT_MUTATION = gql`
   mutation (
     $orgId: ID!
     $name: String!
-    $mediaUrl: URL
+    $mediaUrl: URL!
     $type: String!
     $startDate: Date!
     $endDate: Date!
   ) {
     createAdvertisement(
-      orgId: $orgId
-      name: $name
-      mediaUrl: $mediaUrl
-      type: $type
-      startDate: $startDate
-      endDate: $endDate
+      data: {
+        orgId: $orgId
+        name: $name
+        mediaUrl: $mediaUrl
+        type: $type
+        startDate: $startDate
+        endDate: $endDate
+      }
     ) {
       _id
     }
