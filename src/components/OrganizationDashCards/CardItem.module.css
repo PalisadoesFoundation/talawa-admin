@@ -39,6 +39,12 @@
 .cardItem .title {
   font-size: 1rem;
   flex: 1;
+  margin-right: 0.3rem;
+  word-wrap: break-word;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .cardItem .time {
