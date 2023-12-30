@@ -9,6 +9,13 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import {
+  FaFacebook,
+  FaTwitter,
+  FaLinkedin,
+  FaGithub,
+  FaYoutube,
+} from 'react-icons/fa';
 
 import { REACT_APP_USE_RECAPTCHA, RECAPTCHA_SITE_KEY } from 'Constant/constant';
 import {
@@ -222,6 +229,54 @@ function loginPage(): JSX.Element {
             <div className={styles.inner}>
               <PalisadoesLogo className={styles.palisadoes_logo} />
               <p className="text-center">{t('fromPalisadoes')}</p>
+            </div>
+
+            <div className={styles.socialIcons}>
+              <a
+                href="https://twitter.com/palisadoesorg?lang=en"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaTwitter
+                  className={`${styles.socialIcon} ${styles.twitterIcon}`}
+                />
+              </a>
+              <a
+                href="https://www.facebook.com/palisadoesproject"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaFacebook
+                  className={`${styles.socialIcon} ${styles.facebookIcon}`}
+                />
+              </a>
+              <a
+                href="https://www.linkedin.com/company/palisadoes/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaLinkedin
+                  className={`${styles.socialIcon} ${styles.linkedinIcon}`}
+                />
+              </a>
+              <a
+                href="https://github.com/PalisadoesFoundation"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaGithub
+                  className={`${styles.socialIcon} ${styles.githubIcon}`}
+                />
+              </a>
+              <a
+                href="https://www.youtube.com/@PalisadoesOrganization"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaYoutube
+                  className={`${styles.socialIcon} ${styles.youtubeIcon}`}
+                />
+              </a>
             </div>
           </Col>
           <Col sm={12} md={6} lg={5}>
