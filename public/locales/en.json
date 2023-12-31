@@ -615,7 +615,10 @@
     "lastName": "Last Name",
     "emailAddress": "Email Address",
     "updateImage": "Update Image",
-    "save": "Save"
+    "saveChanges": "Save Changes",
+    "updateProfile": "Update Profile",
+    "otherSettings": "Other Settings",
+    "changeLanguage": "Change Language"
   },
   "donate": {
     "donateTo": "Donate to",

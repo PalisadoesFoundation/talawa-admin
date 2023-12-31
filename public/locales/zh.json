@@ -605,7 +605,10 @@
     "lastName": "姓",
     "emailAddress": "電子郵件地址",
     "updateImage": "更新圖片",
-    "save": "節省"
+    "saveChanges": "保存更改",
+    "updateProfile": "更新个人信息",
+    "otherSettings": "其他设置",
+    "changeLanguage": "更改语言"
   },
   "donate": {
     "donateTo": "捐贈給",

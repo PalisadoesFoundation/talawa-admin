@@ -605,7 +605,10 @@
     "lastName": "Apellido",
     "emailAddress": "dirección de correo electrónico",
     "updateImage": "Actualizar imagen",
-    "save": "Ahorrar"
+    "saveChanges": "Guardar cambios",
+    "updateProfile": "Actualización del perfil",
+    "otherSettings": "Otras Configuraciones",
+    "changeLanguage": "Cambiar Idioma"
   },
   "donate": {
     "donateTo": "Donar a",

@@ -605,7 +605,10 @@
     "lastName": "उपनाम",
     "emailAddress": "मेल पता",
     "updateImage": "छवि अद्यतन करें",
-    "save": "बचाना"
+    "saveChanges": "परिवर्तनों को सुरक्षित करें",
+    "updateProfile": "प्रोफ़ाइल अपडेट करें",
+    "otherSettings": "अन्य सेटिंग्स",
+    "changeLanguage": "भाषा बदलें"
   },
   "donate": {
     "donateTo": "दान दें",
