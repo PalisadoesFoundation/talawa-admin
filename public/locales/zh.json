@@ -592,7 +592,12 @@
   "home": {
     "feed": "餵養",
     "pinnedPosts": "查看固定帖子",
-    "somethingOnYourMind": "你有什麼心事嗎？"
+    "somethingOnYourMind": "你有什麼心事嗎？",
+    "addPost": "添加帖子",
+    "startPost": "开始一篇帖子",
+    "media": "媒体",
+    "event": "活动",
+    "article": "文章"
   },
   "settings": {
     "profileSettings": "配置文件設置",

@@ -592,7 +592,12 @@
   "home": {
     "feed": "Alimentation",
     "pinnedPosts": "Afficher les publications épinglées",
-    "somethingOnYourMind": "Quelque chose dans votre esprit?"
+    "somethingOnYourMind": "Quelque chose dans votre esprit?",
+    "addPost": "Ajouter une publication",
+    "startPost": "Commencer une publication",
+    "media": "Médias",
+    "event": "Événement",
+    "article": "Article"
   },
   "settings": {
     "profileSettings": "Paramètres de profil",
