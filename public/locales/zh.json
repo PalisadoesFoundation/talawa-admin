@@ -33,6 +33,11 @@
     "eventCardSeeAll": "查看全部",
     "noEvents": "暂无即将举行的活动"
   },
+  "latestPosts": {
+    "latestPostsTitle": "最新文章",
+    "seeAllLink": "查看全部",
+    "noPostsCreated": "暂无文章"
+  },
   "listNavbar": {
     "talawa_portal": "塔拉瓦管理門戶",
     "roles": "角色",
