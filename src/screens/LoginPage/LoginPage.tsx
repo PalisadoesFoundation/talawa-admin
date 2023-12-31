@@ -11,11 +11,12 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import {
   FaFacebook,
-  FaTwitter,
   FaLinkedin,
   FaGithub,
   FaYoutube,
+  FaInstagram,
 } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 
 import { REACT_APP_USE_RECAPTCHA, RECAPTCHA_SITE_KEY } from 'Constant/constant';
 import {
@@ -25,6 +26,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import { ReactComponent as PalisadoesLogo } from 'assets/svgs/palisadoes.svg';
+import { ReactComponent as SlackLogo } from 'assets/svgs/Slack-mark.svg';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
 import Loader from 'components/Loader/Loader';
 import { errorHandler } from 'utils/errorHandler';
@@ -246,7 +248,7 @@ function loginPage(): JSX.Element {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <FaTwitter
+                <FaXTwitter
                   className={`${styles.socialIcon} ${styles.twitterIcon}`}
                 />
               </a>
@@ -275,6 +277,24 @@ function loginPage(): JSX.Element {
               >
                 <FaYoutube
                   className={`${styles.socialIcon} ${styles.youtubeIcon}`}
+                />
+              </a>
+              <a
+                href="https://join.slack.com/t/thepalisadoes-dyb6419/shared_invite/zt-29oltereu-qJ931LcKxswuCAy29iA9WA"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <SlackLogo
+                  className={`${styles.socialIcon} ${styles.slackIcon}`}
+                />
+              </a>
+              <a
+                href="https://www.instagram.com/palisadoes/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaInstagram
+                  className={`${styles.socialIcon} ${styles.instagramIcon}`}
                 />
               </a>
             </div>

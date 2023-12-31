@@ -63,7 +63,7 @@ body::before {
 }
 
 .twitterIcon {
-  color: #1da1f2;
+  color: #000000;
 }
 
 .facebookIcon {
@@ -80,4 +80,13 @@ body::before {
 
 .youtubeIcon {
   color: #ff0000;
+}
+
+.slackIcon {
+  width: 30px;
+  height: 30px;
+}
+
+.instagramIcon {
+  color: #e4405f;
 }

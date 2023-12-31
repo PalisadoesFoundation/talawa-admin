@@ -7,13 +7,15 @@ import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLang
 import Login from 'components/UserPortal/Login/Login';
 import Register from 'components/UserPortal/Register/Register';
 import styles from './UserLoginPage.module.css';
+import { ReactComponent as SlackLogo } from '../../../assets/svgs/Slack-mark.svg';
 import {
   FaFacebook,
-  FaTwitter,
   FaLinkedin,
   FaGithub,
   FaYoutube,
+  FaInstagram,
 } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 
 export default function userLoginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -49,7 +51,7 @@ export default function userLoginPage(): JSX.Element {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <FaTwitter
+            <FaXTwitter
               className={`${styles.socialIcon} ${styles.twitterIcon}`}
             />
           </a>
@@ -76,6 +78,22 @@ export default function userLoginPage(): JSX.Element {
           >
             <FaYoutube
               className={`${styles.socialIcon} ${styles.youtubeIcon}`}
+            />
+          </a>
+          <a
+            href="https://join.slack.com/t/thepalisadoes-dyb6419/shared_invite/zt-29oltereu-qJ931LcKxswuCAy29iA9WA"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <SlackLogo className={`${styles.socialIcon} ${styles.slackIcon}`} />
+          </a>
+          <a
+            href="https://www.instagram.com/palisadoes/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaInstagram
+              className={`${styles.socialIcon} ${styles.instagramIcon}`}
             />
           </a>
         </div>
