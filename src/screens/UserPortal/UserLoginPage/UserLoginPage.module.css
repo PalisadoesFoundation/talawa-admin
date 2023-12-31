@@ -58,8 +58,26 @@ body::before {
 }
 
 .socialIcon {
-  font-size: 24px;
-  color: #555;
-  transition: color 0.3s ease;
+  font-size: 30px;
   cursor: pointer;
+}
+
+.twitterIcon {
+  color: #1da1f2;
+}
+
+.facebookIcon {
+  color: #1877f2;
+}
+
+.linkedinIcon {
+  color: #0a66c2;
+}
+
+.githubIcon {
+  color: #211f1f;
+}
+
+.youtubeIcon {
+  color: #ff0000;
 }

@@ -36,21 +36,21 @@ export default function userLoginPage(): JSX.Element {
         </h6>
         <div className={styles.socialIcons}>
           <a
-            href="https://twitter.com/palisadoesorg?lang=en"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FaTwitter
-              className={`${styles.socialIcon} ${styles.twitterIcon}`}
-            />
-          </a>
-          <a
             href="https://www.facebook.com/palisadoesproject"
             target="_blank"
             rel="noopener noreferrer"
           >
             <FaFacebook
               className={`${styles.socialIcon} ${styles.facebookIcon}`}
+            />
+          </a>
+          <a
+            href="https://twitter.com/palisadoesorg?lang=en"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaTwitter
+              className={`${styles.socialIcon} ${styles.twitterIcon}`}
             />
           </a>
           <a
