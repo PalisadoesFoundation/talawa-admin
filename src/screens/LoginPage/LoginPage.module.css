@@ -57,7 +57,48 @@
   background: var(--bs-white);
   color: var(--bs-secondary);
 }
+/* Add this style to your CSS file */
+.button_container {
+  display: flex;
+}
 
+.underline_btn {
+  color: black;
+  padding-left: 100px;
+  padding-right: 100px;
+  margin: 5px;
+  background: none;
+  border: none;
+  margin-bottom: 3rem;
+  border-bottom: var(--bs-btn-active-border-bottom);
+}
+.underline_btn:hover {
+  color: black !important;
+  background-color: transparent !important;
+  border-bottom: var(--bs-btn-active-border-bottom) !important;
+  border-bottom: 2px solid green !important;
+}
+
+.underline_btn_active {
+  color: black;
+  padding-left: 100px;
+  padding-right: 100px;
+  margin: 5px;
+  background: none;
+  border: none;
+  margin-bottom: 3rem;
+  border-bottom: var(--bs-btn-active-border-bottom);
+  border-bottom: 2px solid green;
+}
+.underline_btn_active:hover {
+  color: black !important;
+  background-color: transparent !important;
+}
+
+.underline_btn,
+.underline_btn_active {
+  transition: border-bottom 0.3s ease-in-out; /* Adjust the duration and timing function as needed */
+}
 @media (max-width: 992px) {
   .row .left_portion {
     padding: 0 2rem;

@@ -17,8 +17,8 @@ export default function userLoginPage(): JSX.Element {
   };
 
   return (
-    <div className={styles.mainContainer}>
-      <div className={styles.leftPane}>
+    <div>
+      {/* <div className={styles.leftPane}>
         <img
           className={styles.palisadoesImage}
           src={PalisadoesImage}
@@ -27,14 +27,14 @@ export default function userLoginPage(): JSX.Element {
         <h6 style={{ textAlign: `center` }}>
           <p>{t('fromPalisadoes')}</p>
         </h6>
-      </div>
-      <div className={`${styles.contentContainer} py-5`}>
-        <ChangeLanguageDropDown parentContainerStyle="m-0" />
+      </div> */}
+      <div className={`${styles.contentContainer}`}>
+        {/* <ChangeLanguageDropDown parentContainerStyle="m-0" />
         <img
           className={styles.talawaImage}
           src={TalawaImage}
           alt="Talawa Branding"
-        />
+        /> */}
         {
           /* istanbul ignore next */
           currentMode === 'login' ? (
