@@ -53,8 +53,8 @@ jobs:
 
       - name: Compare translation files
         run: |
-          chmod +x .github/workflows/compare-translational-files.py
-          python .github/workflows/compare-translational-files.py --directory public/locales
+          chmod +x .github/workflows/compare_translations.py
+          python .github/workflows/compare_translations.py --directory public/locales
 
 
   Test-Application:

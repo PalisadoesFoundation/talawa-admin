@@ -1,6 +1,4 @@
-"""
-Script to encourage more efficient coding practices.
-
+"""Script to encourage more efficient coding practices.
 Methodology:
 
     Utility for comparing translations between default and other languages.
@@ -9,7 +7,8 @@ Methodology:
     and print any missing keys in the other language's translation.
 Attributes:
 
-    FileTranslation : Named tuple to represent a combination of file and missing translations.
+    FileTranslation : Named tuple to represent a combination
+                        of file and missing translations.
 
         Fields:
             - file (str): The file name.
@@ -27,8 +26,9 @@ Functions:
 
      main():
         The main function to run the script.
-        Parses command-line arguments, checks for the existence of the specified directory,
-        and then calls check_translations with the provided or default directory.
+        Parses command-line arguments, checks for the
+        existence of the specified directory, and then
+        calls check_translations with the provided or default directory.
 
 
 Usage:
@@ -54,18 +54,22 @@ import os
 import sys
 from collections import namedtuple
 
-# Named tuple for file and missing translations combination
-FileTranslation = namedtuple("FileTranslation", ["file", "missing_translations"])
+# Named tuple for file and missing
+#   translations combination
+FileTranslation = namedtuple("FileTranslation",
+                    ["file", "missing_translations"])
 
 
-def compare_translations(default_translation, other_translation, default_file, other_file):
+def compare_translations(default_translation,
+    other_translation, default_file, other_file):
     """Compare two translations and return detailed info about missing/mismatched keys.
 
     Args:
         default_translation (dict): The default translation (en.json).
         other_translation (dict): The other language translation.
         default_file (str): The name of the default translation file.
-        other_file (str): The name of the other translation file.
+        other_file (str): The name of the other 
+                            translation file.
 
     Returns:
         list: A list of detailed error messages for each missing/mismatched key.
@@ -77,16 +81,12 @@ def compare_translations(default_translation, other_translation, default_file, o
         if key not in other_translation:
             error_msg = f"Missing Key: '{key}' - This key from '{default_file}' is missing in '{other_file}'."
             errors.append(error_msg)
-
     # Check for keys in other_translation that don't match any in default_translation
     for key in other_translation:
         if key not in default_translation:
             error_msg = f"Error Key: '{key}' - This key in '{other_file}' does not match any key in '{default_file}'."
             errors.append(error_msg)
-
     return errors
-
-
 
 
 def load_translation(filepath):
@@ -101,7 +101,6 @@ def load_translation(filepath):
     with open(filepath, "r", encoding="utf-8") as file:
         translation = json.load(file)
     return translation
-
 
 
 def check_translations(directory):
@@ -125,7 +124,9 @@ def check_translations(directory):
         other_translation = load_translation(other_file)
 
         # Compare translations and get detailed error messages
-        errors = compare_translations(default_translation, other_translation, default_file, translation_file)
+        errors = compare_translations(
+            default_translation, other_translation, default_file, translation_file
+        )
         if errors:
             error_found = True
             print(f"File {translation_file} has missing translations for:")
@@ -141,7 +142,8 @@ def check_translations(directory):
 
 def main():
     """
-     Parse command-line arguments, check for the existence of the specified directory,
+
+    Parse command-line arguments, check for the existence of the specified directory 
     and call check_translations with the provided or default directory.
 
     """
