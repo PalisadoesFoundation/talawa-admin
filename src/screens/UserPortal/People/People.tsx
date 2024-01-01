@@ -31,7 +31,6 @@ export default function people(): JSX.Element {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [members, setMembers] = React.useState([]);
-  const [filterName, setFilterName] = React.useState('');
   const [mode, setMode] = React.useState(0);
 
   const organizationId = getOrganizationId(window.location.href);
@@ -71,8 +70,6 @@ export default function people(): JSX.Element {
   };
 
   const handleSearch = (newFilter: string): void => {
-    setFilterName(newFilter);
-
     refetch({
       firstName_contains: newFilter,
     });

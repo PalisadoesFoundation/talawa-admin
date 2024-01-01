@@ -54,7 +54,6 @@ export default function events(): JSX.Element {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [events, setEvents] = React.useState([]);
-  const [filterName, setFilterName] = React.useState('');
   const [mode, setMode] = React.useState(0);
   const [showCreateEventModal, setShowCreateEventModal] = React.useState(false);
   const [eventTitle, setEventTitle] = React.useState('');
@@ -149,7 +148,6 @@ export default function events(): JSX.Element {
   };
 
   const handleSearch = (value: string): void => {
-    setFilterName(value);
     refetch({
       title_contains: value,
     });
