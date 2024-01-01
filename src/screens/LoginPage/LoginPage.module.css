@@ -44,6 +44,7 @@
   margin: 1rem auto;
   -webkit-animation: zoomIn 0.3s ease-in-out;
   animation: zoomIn 0.3s ease-in-out;
+  margin-top: 50px;
 }
 
 .row .orText {
@@ -123,6 +124,7 @@
   .row .right_portion .talawa_logo {
     height: 120px;
     margin: 0 auto 2rem auto;
+    margin-top: 60px;
   }
 }
 
