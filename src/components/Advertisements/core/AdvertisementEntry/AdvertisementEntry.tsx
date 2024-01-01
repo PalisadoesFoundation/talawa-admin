@@ -60,6 +60,7 @@ function advertisementEntry({
                   autoPlay={true}
                   loop={true}
                   playsInline
+                  data-testid="media"
                 >
                   <source src={mediaUrl} type="video/mp4" />
                 </video>
@@ -68,6 +69,7 @@ function advertisementEntry({
                   className={styles.admedia}
                   variant="top"
                   src={mediaUrl}
+                  data-testid="media"
                 />
               )}
               <Card.Body>

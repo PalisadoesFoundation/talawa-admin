@@ -49,7 +49,7 @@ describe('Testing PromotedPost Test', () => {
       media: 'data:image/png;base64,bWVkaWEgY29udGVudA==',
     };
 
-    render(
+    const { queryByRole } = render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
@@ -61,7 +61,13 @@ describe('Testing PromotedPost Test', () => {
       </MockedProvider>
     );
 
-    await wait();
+    await waitFor(() => {
+      const image = queryByRole('img');
+      expect(image).toHaveAttribute(
+        'src',
+        'data:image/png;base64,bWVkaWEgY29udGVudA=='
+      );
+    });
   });
 });
 
@@ -103,10 +109,10 @@ test('Component should display the text correctly', async () => {
   });
 });
 
-test('Component should display the image correctly', async () => {
+test('Component should display the media correctly', async () => {
   props = {
     ...props,
-    media: 'data:image/png;base64,bWVkaWEgY29udGVudA==',
+    media: 'data:video',
   };
   const { queryByRole } = render(
     <MockedProvider addTypename={false} link={link}>
@@ -121,10 +127,7 @@ test('Component should display the image correctly', async () => {
   );
 
   await waitFor(() => {
-    const image = queryByRole('img');
-    expect(image).toHaveAttribute(
-      'src',
-      'data:image/png;base64,bWVkaWEgY29udGVudA=='
-    );
+    const image = queryByRole('video');
+    expect(image).toHaveAttribute('src', 'data:video');
   });
 });

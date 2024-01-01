@@ -54,7 +54,7 @@ describe('Testing Advertisement Entry Component', () => {
                   startDate={new Date()}
                   id="1"
                   key={1}
-                  mediaUrl="test.png"
+                  mediaUrl="data:video"
                   name="Advert1"
                   orgId="1"
                   type="POPUP"
@@ -68,6 +68,7 @@ describe('Testing Advertisement Entry Component', () => {
     expect(getByTestId('AdEntry')).toBeInTheDocument();
     expect(getAllByText('POPUP')[0]).toBeInTheDocument();
     expect(getAllByText('Advert1')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('media')).toBeInTheDocument();
 
     fireEvent.click(getByTestId('delete_btn'));
 
