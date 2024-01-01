@@ -84,7 +84,7 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
   return (
     <>
       <h3 className="mt-3 font-weight-bold">{t('login')}</h3>
-      <div className="mt-1">{t('loginIntoYourAccount')}</div>
+      {/* <div className="mt-1">{t('loginIntoYourAccount')}</div>
 
       <div className="my-3">
         <h6>{t('emailAddress')}</h6>
@@ -141,7 +141,7 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
         data-testid="setRegisterBtn"
       >
         {t('register')}
-      </Button>
+      </Button> */}
     </>
   );
 }
