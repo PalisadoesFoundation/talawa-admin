@@ -20,6 +20,16 @@ Core features include:
 
 `talawa` is based on the original `quito` code created by the [Palisadoes Foundation][pfd] as part of its annual Calico Challenge program. Calico provides paid summer internships for Jamaican university students to work on selected open source projects. They are mentored by software professionals and receive stipends based on the completion of predefined milestones. Calico was started in 2015. Visit [The Palisadoes Foundation's website](http://www.palisadoes.org/) for more details on its origin and activities.
 
+# Table of Contents
+
+<!-- toc -->
+
+- [Talawa Components](#talawa-components)
+- [Documentation](#documentation)
+- [Installation](#installation)
+
+<!-- tocstop -->
+
 # Talawa Components
 
 `talawa` has these major software components:

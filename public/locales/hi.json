@@ -88,6 +88,8 @@
     "displayImage": "प्रदर्शन छवि",
     "enterName": "नाम दर्ज करें",
     "sort": "छांटें",
+    "Earliest": "सबसे पुराना",
+    "Latest": "सबसे नवीनतम",
     "filter": "फ़िल्टर",
     "cancel": "रद्द करना",
     "endOfResults": "परिणामों का अंत",
@@ -136,7 +138,8 @@
     "filter": "फ़िल्टर",
     "roleUpdated": "भूमिका अपडेट की गई।",
     "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला ",
-    "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।"
+    "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।",
+    "cancel": "रद्द करें"
   },
   "requests": {
     "title": "तलवा अनुरोध",
@@ -589,7 +592,12 @@
   "home": {
     "feed": "फ़ीड",
     "pinnedPosts": "पिन किए गए पोस्ट देखें",
-    "somethingOnYourMind": "आपके मन में कुछ है?"
+    "somethingOnYourMind": "आपके मन में कुछ है?",
+    "addPost": "पोस्ट जोड़ें",
+    "startPost": "एक पोस्ट शुरू करें",
+    "media": "मीडिया",
+    "event": "घटना",
+    "article": "लेख"
   },
   "settings": {
     "profileSettings": "पार्श्वचित्र समायोजन",
@@ -597,7 +605,10 @@
     "lastName": "उपनाम",
     "emailAddress": "मेल पता",
     "updateImage": "छवि अद्यतन करें",
-    "save": "बचाना"
+    "saveChanges": "परिवर्तनों को सुरक्षित करें",
+    "updateProfile": "प्रोफ़ाइल अपडेट करें",
+    "otherSettings": "अन्य सेटिंग्स",
+    "changeLanguage": "भाषा बदलें"
   },
   "donate": {
     "donateTo": "दान दें",

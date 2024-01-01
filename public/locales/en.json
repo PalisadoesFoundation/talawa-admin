@@ -94,6 +94,8 @@
     "displayImage": "Display Image",
     "enterName": "Enter Name",
     "sort": "Sort",
+    "Latest": "Latest",
+    "Earliest": "Earliest",
     "filter": "Filter",
     "cancel": "Cancel",
     "noOrgErrorTitle": "Organizations Not Found",
@@ -147,7 +149,8 @@
     "noOrgError": "Organizations not found, please create an organization through dashboard",
     "roleUpdated": "Role Updated.",
     "noResultsFoundFor": "No results found for ",
-    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
+    "cancel": "Cancel"
   },
   "requests": {
     "title": "Talawa Requests",
@@ -599,7 +602,12 @@
   "home": {
     "feed": "Feed",
     "pinnedPosts": "View Pinned Posts",
-    "somethingOnYourMind": "Something on your mind?"
+    "somethingOnYourMind": "Something on your mind?",
+    "addPost": "Add Post",
+    "startPost": "Start a post",
+    "media": "Media",
+    "event": "Event",
+    "article": "Article"
   },
   "settings": {
     "profileSettings": "Profile Settings",
@@ -607,7 +615,10 @@
     "lastName": "Last Name",
     "emailAddress": "Email Address",
     "updateImage": "Update Image",
-    "save": "Save"
+    "saveChanges": "Save Changes",
+    "updateProfile": "Update Profile",
+    "otherSettings": "Other Settings",
+    "changeLanguage": "Change Language"
   },
   "donate": {
     "donateTo": "Donate to",
