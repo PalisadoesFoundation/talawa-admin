@@ -117,16 +117,27 @@ const Requests = (): JSX.Element => {
     toast.error(memberError.message);
   }
 
-  const handleSearch = (e: any): void => {
+  const handleSearch = (value: string): void => {
+    setSearchByName(value);
+    memberRefetch({
+      orgId: currentUrl,
+      firstName_contains: searchByFirstName ? value : '',
+      lastName_contains: searchByFirstName ? '' : value,
+    });
+  };
+
+  const handleSearchByEnter = (e: any): void => {
     if (e.key === 'Enter') {
       const { value } = e.target;
-      setSearchByName(value);
-      memberRefetch({
-        orgId: currentUrl,
-        firstName_contains: searchByFirstName ? value : '',
-        lastName_contains: searchByFirstName ? '' : value,
-      });
+      handleSearch(value);
     }
+  };
+
+  const handleSearchByBtnClick = (): void => {
+    const inputValue =
+      (document.getElementById('searchBlockedUsers') as HTMLInputElement)
+        ?.value || '';
+    handleSearch(inputValue);
   };
 
   const headerTitles: string[] = [
@@ -145,6 +156,7 @@ const Requests = (): JSX.Element => {
             <div className={styles.input}>
               <Form.Control
                 type="name"
+                id="searchBlockedUsers"
                 className="bg-white"
                 placeholder={
                   searchByFirstName
@@ -154,11 +166,13 @@ const Requests = (): JSX.Element => {
                 data-testid="searchByName"
                 autoComplete="off"
                 required
-                onKeyUp={handleSearch}
+                onKeyUp={handleSearchByEnter}
               />
               <Button
                 tabIndex={-1}
                 className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                onClick={handleSearchByBtnClick}
+                data-testid="searchBtn"
               >
                 <Search />
               </Button>

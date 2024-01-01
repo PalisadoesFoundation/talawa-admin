@@ -73,6 +73,9 @@ describe('Organisations Page testing as SuperAdmin', () => {
     const searchBar = screen.getByTestId(/searchByName/i);
     expect(searchBar).toBeInTheDocument();
     userEvent.type(searchBar, 'Dummy');
+    fireEvent.keyUp(searchBar, { key: 'Enter' });
+    const searchBtn = screen.getByTestId(/searchBtn/i);
+    fireEvent.click(searchBtn);
   });
 
   test('Should render no organisation warning alert when there are no organization', async () => {

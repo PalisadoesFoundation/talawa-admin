@@ -370,10 +370,11 @@ describe('Testing User Table Item', () => {
     expect(screen.getByTestId(`changeRoleInOrgdef`)).toHaveValue('USER?def');
 
     // Search for Joined Organization 1
+    const searchBtn = screen.getByTestId(`searchBtnJoinedOrgs`);
     fireEvent.keyUp(inputBox, {
-      key: 'Enter',
       target: { value: 'Joined Organization 1' },
     });
+    fireEvent.click(searchBtn);
     expect(screen.getByText(/Joined Organization 1/i)).toBeInTheDocument();
     expect(
       screen.queryByText(/Joined Organization 2/i)
@@ -547,10 +548,11 @@ describe('Testing User Table Item', () => {
     expect(toast.success).toBeCalledWith('Profile Page Coming Soon !');
 
     // Search for Blocked Organization 1
+    const searchBtn = screen.getByTestId(`searchBtnOrgsBlockedBy`);
     fireEvent.keyUp(inputBox, {
-      key: 'Enter',
       target: { value: 'Blocked Organization 1' },
     });
+    fireEvent.click(searchBtn);
     expect(screen.getByText(/Blocked Organization 1/i)).toBeInTheDocument();
     expect(
       screen.queryByText(/Blocked Organization 2/i)

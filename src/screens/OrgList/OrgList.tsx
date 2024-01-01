@@ -225,18 +225,30 @@ function orgList(): JSX.Element {
   };
 
   /* istanbul ignore next */
-  const handleSearchByName = (e: any): void => {
+  const handleSearch = (value: string): void => {
+    setSearchByName(value);
+    if (value === '') {
+      resetAllParams();
+      return;
+    }
+    refetchOrgs({
+      filter: value,
+    });
+  };
+
+  const handleSearchByEnter = (e: any): void => {
     if (e.key === 'Enter') {
       const { value } = e.target;
-      setSearchByName(value);
-      if (value == '') {
-        resetAllParams();
-        return;
-      }
-      refetchOrgs({
-        filter: value,
-      });
+      handleSearch(value);
     }
+  };
+
+  const handleSearchByBtnClick = (): void => {
+    const inputElement = document.getElementById(
+      'searchOrgname'
+    ) as HTMLInputElement;
+    const inputValue = inputElement?.value || '';
+    handleSearch(inputValue);
   };
   /* istanbul ignore next */
   const loadMoreOrganizations = (): void => {
@@ -302,17 +314,19 @@ function orgList(): JSX.Element {
           <div className={styles.input}>
             <Form.Control
               type="name"
-              id="orgname"
+              id="searchOrgname"
               className="bg-white"
               placeholder={t('searchByName')}
               data-testid="searchByName"
               autoComplete="off"
               required
-              onKeyUp={handleSearchByName}
+              onKeyUp={handleSearchByEnter}
             />
             <Button
               tabIndex={-1}
               className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+              onClick={handleSearchByBtnClick}
+              data-testid="searchBtn"
             >
               <Search />
             </Button>

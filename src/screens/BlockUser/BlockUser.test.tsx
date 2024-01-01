@@ -630,4 +630,27 @@ describe('Testing Block/Unblock user screen', () => {
     ).toBeInTheDocument();
     expect(window.location).toBeAt('/blockuser/id=orgid');
   });
+
+  test('Testing Search functionality', async () => {
+    window.location.assign('/blockuser/id=orgid');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <BlockUser />
+              <ToastContainer />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    await wait();
+    const searchBar = screen.getByTestId(/searchByName/i);
+    expect(searchBar).toBeInTheDocument();
+    userEvent.type(searchBar, 'Dummy{enter}');
+    const searchBtn = screen.getByTestId(/searchBtn/i);
+    userEvent.click(searchBtn);
+  });
 });

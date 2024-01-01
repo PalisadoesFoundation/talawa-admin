@@ -148,16 +148,24 @@ export default function events(): JSX.Element {
     setPage(0);
   };
 
-  const handleSearch = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ): void => {
-    const newFilter = event.target.value;
-    setFilterName(newFilter);
-    const filter = {
-      title_contains: newFilter,
-    };
+  const handleSearch = (value: string): void => {
+    setFilterName(value);
+    refetch({
+      title_contains: value,
+    });
     setPage(0);
-    refetch(filter);
+  };
+  const handleSearchByEnter = (e: any): void => {
+    if (e.key === 'Enter') {
+      const { value } = e.target;
+      handleSearch(value);
+    }
+  };
+  const handleSearchByBtnClick = (): void => {
+    const value =
+      (document.getElementById('searchEvents') as HTMLInputElement)?.value ||
+      '';
+    handleSearch(value);
   };
 
   const handleEventTitleChange = (
@@ -210,15 +218,18 @@ export default function events(): JSX.Element {
           >
             <InputGroup className={styles.maxWidth}>
               <Form.Control
+                id="searchEvents"
                 placeholder={t('search')}
                 type="text"
                 className={`${styles.borderNone} ${styles.backgroundWhite}`}
-                value={filterName}
-                onChange={handleSearch}
+                onKeyUp={handleSearchByEnter}
                 data-testid="searchInput"
               />
               <InputGroup.Text
                 className={`${styles.colorPrimary} ${styles.borderNone}`}
+                style={{ cursor: 'pointer' }}
+                onClick={handleSearchByBtnClick}
+                data-testid="searchBtn"
               >
                 <SearchOutlined className={`${styles.colorWhite}`} />
               </InputGroup.Text>

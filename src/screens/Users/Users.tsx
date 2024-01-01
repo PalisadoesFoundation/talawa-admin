@@ -108,21 +108,32 @@ const Users = (): JSX.Element => {
     }
   }, [loading]);
 
-  const handleSearchByName = (e: any): void => {
-    /* istanbul ignore next */
+  const handleSearch = (value: string): void => {
+    setSearchByName(value);
+    if (value === '') {
+      resetAndRefetch();
+      return;
+    }
+    refetchUsers({
+      firstName_contains: value,
+      lastName_contains: '',
+      // Later on we can add several search and filter options
+    });
+  };
+
+  const handleSearchByEnter = (e: any): void => {
     if (e.key === 'Enter') {
       const { value } = e.target;
-      setSearchByName(value);
-      if (value.length === 0) {
-        resetAndRefetch();
-        return;
-      }
-      refetchUsers({
-        firstName_contains: value,
-        lastName_contains: '',
-        // Later on we can add several search and filter options
-      });
+      handleSearch(value);
     }
+  };
+
+  const handleSearchByBtnClick = (): void => {
+    const inputElement = document.getElementById(
+      'searchUsers'
+    ) as HTMLInputElement;
+    const inputValue = inputElement?.value || '';
+    handleSearch(inputValue);
   };
   /* istanbul ignore next */
   const resetAndRefetch = (): void => {
@@ -243,17 +254,19 @@ const Users = (): JSX.Element => {
             >
               <Form.Control
                 type="name"
+                id="searchUsers"
                 className="bg-white"
                 placeholder={t('enterName')}
                 data-testid="searchByName"
                 autoComplete="off"
                 required
-                onKeyUp={handleSearchByName}
+                onKeyUp={handleSearchByEnter}
               />
               <Button
                 tabIndex={-1}
                 className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
                 data-testid="searchButton"
+                onClick={handleSearchByBtnClick}
               >
                 <Search />
               </Button>

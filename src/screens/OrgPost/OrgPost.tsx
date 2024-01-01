@@ -138,17 +138,26 @@ function orgPost(): JSX.Element {
   if (orgPostListError) {
     window.location.assign('/orglist');
   }
+  const handleSearch = (value: string): void => {
+    const filterData = {
+      id: currentUrl,
+      title_contains: showTitle ? value : undefined,
+      text_contains: !showTitle ? value : undefined,
+    };
+    refetch(filterData);
+  };
 
-  const handleSearch = (e: any): void => {
+  const handleSearchByEnter = (e: any): void => {
     if (e.key === 'Enter') {
       const { value } = e.target;
-      const filterData = {
-        id: currentUrl,
-        title_contains: showTitle ? value : null,
-        text_contains: !showTitle ? value : null,
-      };
-      refetch(filterData);
+      handleSearch(value);
     }
+  };
+
+  const handleSearchByBtnClick = (): void => {
+    const inputValue =
+      (document.getElementById('searchPosts') as HTMLInputElement)?.value || '';
+    handleSearch(inputValue);
   };
 
   const handleSorting = (option: string): void => {
@@ -196,17 +205,19 @@ function orgPost(): JSX.Element {
               <div className={styles.input}>
                 <Form.Control
                   type="text"
-                  id="posttitle"
+                  id="searchPosts"
                   className="bg-white"
                   placeholder={showTitle ? t('searchTitle') : t('searchText')}
                   data-testid="searchByName"
                   autoComplete="off"
-                  onKeyUp={handleSearch}
+                  onKeyUp={handleSearchByEnter}
                   required
                 />
                 <Button
                   tabIndex={-1}
                   className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                  onClick={handleSearchByBtnClick}
+                  data-testid="searchBtn"
                 >
                   <Search />
                 </Button>

@@ -70,17 +70,26 @@ export default function people(): JSX.Element {
     setPage(0);
   };
 
-  const handleSearch = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ): void => {
-    const newFilter = event.target.value;
+  const handleSearch = (newFilter: string): void => {
     setFilterName(newFilter);
 
-    const filter = {
+    refetch({
       firstName_contains: newFilter,
-    };
+    });
+  };
 
-    refetch(filter);
+  const handleSearchByEnter = (e: any): void => {
+    if (e.key === 'Enter') {
+      const { value } = e.target;
+      handleSearch(value);
+    }
+  };
+
+  const handleSearchByBtnClick = (): void => {
+    const inputValue =
+      (document.getElementById('searchPeople') as HTMLInputElement)?.value ||
+      '';
+    handleSearch(inputValue);
   };
 
   /* istanbul ignore next */
@@ -119,14 +128,17 @@ export default function people(): JSX.Element {
             <InputGroup className={styles.maxWidth}>
               <Form.Control
                 placeholder={t('search')}
+                id="searchPeople"
                 type="text"
                 className={`${styles.borderNone} ${styles.backgroundWhite}`}
-                value={filterName}
-                onChange={handleSearch}
+                onKeyUp={handleSearchByEnter}
                 data-testid="searchInput"
               />
               <InputGroup.Text
                 className={`${styles.colorPrimary} ${styles.borderNone}`}
+                style={{ cursor: 'pointer' }}
+                onClick={handleSearchByBtnClick}
+                data-testid="searchBtn"
               >
                 <SearchOutlined className={`${styles.colorWhite}`} />
               </InputGroup.Text>
