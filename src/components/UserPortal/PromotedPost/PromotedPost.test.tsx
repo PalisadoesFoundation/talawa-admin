@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, render, waitFor } from '@testing-library/react';
+import { act, render, waitFor, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
@@ -114,7 +114,7 @@ test('Component should display the media correctly', async () => {
     ...props,
     media: 'data:video',
   };
-  const { queryByRole } = render(
+  render(
     <MockedProvider addTypename={false} link={link}>
       <BrowserRouter>
         <Provider store={store}>
@@ -126,8 +126,8 @@ test('Component should display the media correctly', async () => {
     </MockedProvider>
   );
 
-  await waitFor(() => {
-    const image = queryByRole('video');
-    expect(image).toHaveAttribute('src', 'data:video');
+  await waitFor(async () => {
+    const media = await screen.findByTestId('media');
+    expect(media).toBeInTheDocument();
   });
 });

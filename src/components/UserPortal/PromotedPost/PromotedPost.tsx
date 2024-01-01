@@ -29,6 +29,7 @@ export default function promotedPost(
               autoPlay={true}
               loop={true}
               playsInline
+              data-testid="media"
             >
               <source src={props.media} type="video/mp4" />
             </video>
