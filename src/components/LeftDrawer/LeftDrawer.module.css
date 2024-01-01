@@ -108,6 +108,11 @@
   margin-bottom: 50px;
 }
 
+.logout:hover {
+  background-color: var(--bs-danger);
+  color: var(--bs-white);
+}
+
 @media (max-width: 1120px) {
   .leftDrawer {
     width: calc(250px + 2rem);
