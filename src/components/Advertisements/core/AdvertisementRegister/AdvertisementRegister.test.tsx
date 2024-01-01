@@ -23,6 +23,7 @@ import { toast } from 'react-toastify';
 import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import userEvent from '@testing-library/user-event';
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -251,5 +252,44 @@ describe('Testing Advertisement Register Component', () => {
         'An error occured, could not create new advertisement'
       );
     });
+  });
+
+  test('Media preview renders correctly', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              {
+                <AdvertisementRegister
+                  endDate={new Date()}
+                  startDate={new Date()}
+                  type="BANNER"
+                  name="Advert1"
+                  orgId="1"
+                  mediaUrl="test.mp4"
+                />
+              }
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>
+    );
+
+    fireEvent.click(screen.getByText(translations.addNew));
+    await waitFor(() => screen.getByText(translations.RClose));
+
+    const mediaFile = new File(['video content'], 'test.mp4', {
+      type: 'video/mp4',
+    });
+    const mediaInput = screen.getByTestId('advertisementMedia');
+    userEvent.upload(mediaInput, mediaFile);
+
+    const mediaPreview = await screen.findByTestId('mediaPreview');
+    expect(mediaPreview).toBeInTheDocument();
+
+    const closeButton = await screen.findByTestId('closePreview');
+    fireEvent.click(closeButton);
+    expect(mediaPreview).not.toBeInTheDocument();
   });
 });

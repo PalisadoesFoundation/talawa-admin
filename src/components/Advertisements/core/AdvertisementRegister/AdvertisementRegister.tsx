@@ -145,10 +145,10 @@ function advertisementRegister({
                   ) : (
                     <img src={formState.mediaUrl} />
                   )}
-
                   <button
                     className={styles.closeButton}
-                    onClick={(): void => {
+                    onClick={(e): void => {
+                      e.preventDefault();
                       setFormState({
                         ...formState,
                         mediaUrl: '',
