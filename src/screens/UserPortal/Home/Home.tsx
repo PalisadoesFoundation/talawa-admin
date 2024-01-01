@@ -209,12 +209,12 @@ export default function home(): JSX.Element {
             : adContent
                 .filter((ad: any) => ad.orgId == currentOrgId)
                 .filter((ad: any) => new Date(ad.endDate) > new Date())
-                .map((post: any) => (
+                .map((ad: any) => (
                   <PromotedPost
-                    key={post.id}
-                    id={post.id}
-                    image={post.link}
-                    title={post.name}
+                    key={ad.id}
+                    id={ad.id}
+                    media={ad.mediaUrl}
+                    title={ad.name}
                   />
                 ))}
           {loadingPosts ? (

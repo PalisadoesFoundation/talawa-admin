@@ -56,7 +56,7 @@ function advertisementEntry({
               {mediaUrl?.includes('data:video') ? (
                 <video
                   muted
-                  className={styles.adimage}
+                  className={styles.admedia}
                   autoPlay={true}
                   loop={true}
                   playsInline
@@ -65,7 +65,7 @@ function advertisementEntry({
                 </video>
               ) : (
                 <Card.Img
-                  className={styles.adimage}
+                  className={styles.admedia}
                   variant="top"
                   src={mediaUrl}
                 />

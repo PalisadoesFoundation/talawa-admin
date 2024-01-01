@@ -22,7 +22,7 @@ async function wait(ms = 100): Promise<void> {
 
 let props = {
   id: '1',
-  image: '',
+  media: '',
   title: 'Test Post',
 };
 
@@ -46,7 +46,7 @@ describe('Testing PromotedPost Test', () => {
   test('Component should be rendered properly if prop image is not undefined', async () => {
     props = {
       ...props,
-      image: 'promotedPostImage',
+      media: 'data:image/png;base64,bWVkaWEgY29udGVudA==',
     };
 
     render(
@@ -106,7 +106,7 @@ test('Component should display the text correctly', async () => {
 test('Component should display the image correctly', async () => {
   props = {
     ...props,
-    image: 'promotedPostImage',
+    media: 'data:image/png;base64,bWVkaWEgY29udGVudA==',
   };
   const { queryByRole } = render(
     <MockedProvider addTypename={false} link={link}>
@@ -122,6 +122,9 @@ test('Component should display the image correctly', async () => {
 
   await waitFor(() => {
     const image = queryByRole('img');
-    expect(image).toHaveAttribute('src', 'promotedPostImage');
+    expect(image).toHaveAttribute(
+      'src',
+      'data:image/png;base64,bWVkaWEgY29udGVudA=='
+    );
   });
 });
