@@ -91,14 +91,15 @@
   padding-right: 5px;
   padding-left: 5px;
 }
-.checkboxdiv > label {
-  margin-right: 50px;
+.checkboxdiv > div label {
+  margin-right: 10px;
 }
 .checkboxdiv > label > input {
   margin-left: 10px;
 }
 .dispflex {
   display: flex;
+  justify-content: space-between;
   margin-bottom: 5px;
   margin-right: 5px;
 }
@@ -110,9 +111,14 @@
 }
 .checkboxdiv {
   display: flex;
+  flex-direction: column;
 }
-.checkboxdiv > div {
+/* .checkboxdiv > div {
   width: 50%;
+} */
+.checkboxContainer {
+  display: flex;
+  justify-content: space-between;
 }
 
 .preview {
