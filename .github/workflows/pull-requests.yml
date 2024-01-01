@@ -72,7 +72,7 @@ jobs:
 
       - name: Run Python script
         run: |
-          python .github/workflows/check_changed_files.py "${{ github.base_ref }}" "${{ github.head_ref }}"
+          python .github/workflows/count_changed_files.py "${{ github.base_ref }}" "${{ github.head_ref }}"
 
       - name: Run Black
         run: black --check.
