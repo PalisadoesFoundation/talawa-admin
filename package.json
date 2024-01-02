@@ -82,7 +82,7 @@
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "prepare": "husky install",
     "jest-preview": "jest-preview",
-    "setup": "tsx setup.ts"
+    "setup": "tsx setup.ts",
     "update:toc": "node scripts/githooks/update-toc.js"
   },
   "eslintConfig": {
