@@ -54,7 +54,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     image: new File(['hello'], 'hello.png', { type: 'image/png' }),
   };
 
-  test('Testing search functionality', async () => {
+  test('Testing search functionality by pressing enter', async () => {
     localStorage.setItem('id', '123');
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -72,9 +72,27 @@ describe('Organisations Page testing as SuperAdmin', () => {
     // Test that the search bar filters organizations by name
     const searchBar = screen.getByTestId(/searchByName/i);
     expect(searchBar).toBeInTheDocument();
+    userEvent.type(searchBar, 'Dummy{enter}');
+  });
+
+  test('Testing search functionality by Btn click', async () => {
+    localStorage.setItem('id', '123');
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgList />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    await wait();
+
+    const searchBar = screen.getByTestId('searchByName');
+    const searchBtn = screen.getByTestId('searchBtn');
     userEvent.type(searchBar, 'Dummy');
-    fireEvent.keyUp(searchBar, { key: 'Enter' });
-    const searchBtn = screen.getByTestId(/searchBtn/i);
     fireEvent.click(searchBtn);
   });
 

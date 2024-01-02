@@ -95,8 +95,6 @@ describe('Testing Request screen', () => {
     );
 
     await wait();
-    const searchBtn = screen.getByTestId('searchBtn');
-    userEvent.click(searchBtn);
   });
 
   test('Testing empty user requests', async () => {
@@ -115,8 +113,15 @@ describe('Testing Request screen', () => {
     await wait();
 
     const searchInput = screen.getByTestId('searchByName');
+    const searchBtn = screen.getByTestId('searchBtn');
     userEvent.type(searchInput, 'l{enter}');
+    await wait();
+    await screen.findByTestId('searchAndNotFound');
 
+    userEvent.clear(searchInput);
+    userEvent.type(searchInput, 'l');
+    userEvent.click(searchBtn);
+    await wait();
     await screen.findByTestId('searchAndNotFound');
   });
 
