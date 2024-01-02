@@ -397,29 +397,31 @@ function loginPage(): JSX.Element {
                       </div>
                     </Col>
                   </Row>
-                  <Form.Label>{t('email')}</Form.Label>
                   <div className="position-relative">
-                    <Form.Control
-                      type="email"
-                      data-testid="signInEmail"
-                      className="mb-3"
-                      placeholder={t('email')}
-                      autoComplete="username"
-                      required
-                      value={signformState.signEmail}
-                      onChange={(e): void => {
-                        setSignFormState({
-                          ...signformState,
-                          signEmail: e.target.value.toLowerCase(),
-                        });
-                      }}
-                    />
-                    <Button
-                      tabIndex={-1}
-                      className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
-                    >
-                      <EmailOutlinedIcon />
-                    </Button>
+                    <Form.Label>{t('email')}</Form.Label>
+                    <div className="position-relative">
+                      <Form.Control
+                        type="email"
+                        data-testid="signInEmail"
+                        className="mb-3"
+                        placeholder={t('email')}
+                        autoComplete="username"
+                        required
+                        value={signformState.signEmail}
+                        onChange={(e): void => {
+                          setSignFormState({
+                            ...signformState,
+                            signEmail: e.target.value.toLowerCase(),
+                          });
+                        }}
+                      />
+                      <Button
+                        tabIndex={-1}
+                        className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                      >
+                        <EmailOutlinedIcon />
+                      </Button>
+                    </div>
                   </div>
 
                   <div className="position-relative mb-3">
