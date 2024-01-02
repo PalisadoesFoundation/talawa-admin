@@ -39,7 +39,6 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
 
   return (
     <>
-      {console.log('name', name)}
       <div className={styles.orgCard}>
         <div className={styles.innerContainer}>
           <div className={styles.orgImgContainer}>
