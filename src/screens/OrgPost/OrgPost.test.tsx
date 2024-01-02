@@ -217,6 +217,8 @@ describe('Organisation Post Page', () => {
       screen.getByTestId('organisationImage'),
       formData.postVideo
     );
+    userEvent.click(screen.getByTestId('pinPost'));
+    expect(screen.getByTestId('pinPost')).toBeChecked();
 
     userEvent.click(screen.getByTestId('createPostBtn'));
 

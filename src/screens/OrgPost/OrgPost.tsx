@@ -44,6 +44,7 @@ function orgPost(): JSX.Element {
     postinfo: '',
     postImage: '',
     postVideo: '',
+    pinPost: false,
   });
   const [sortingOption, setSortingOption] = useState('latest');
   const [showTitle, setShowTitle] = useState(true);
@@ -60,6 +61,7 @@ function orgPost(): JSX.Element {
       postinfo: '',
       postImage: '',
       postVideo: '',
+      pinPost: false,
     });
   };
 
@@ -94,6 +96,7 @@ function orgPost(): JSX.Element {
       postinfo: _postinfo,
       postImage,
       postVideo,
+      pinPost,
     } = postformState;
 
     const posttitle = _posttitle.trim();
@@ -110,6 +113,7 @@ function orgPost(): JSX.Element {
           text: postinfo,
           organizationId: currentUrl,
           file: postImage || postVideo,
+          pinned: pinPost,
         },
       });
       /* istanbul ignore next */
@@ -121,6 +125,7 @@ function orgPost(): JSX.Element {
           postinfo: '',
           postImage: '',
           postVideo: '',
+          pinPost: false,
         });
         setPostModalIsOpen(false); // close the modal
       }
@@ -477,6 +482,19 @@ function orgPost(): JSX.Element {
                 )}
               </>
             )}
+            <Form.Label htmlFor="pinpost">{t('pinPost')}</Form.Label>
+            <Form.Switch
+              id="pinPost"
+              type="checkbox"
+              data-testid="pinPost"
+              defaultChecked={postformState.pinPost}
+              onChange={(): void =>
+                setPostFormState({
+                  ...postformState,
+                  pinPost: !postformState.pinPost,
+                })
+              }
+            />
           </Modal.Body>
           <Modal.Footer>
             <Button

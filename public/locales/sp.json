@@ -297,7 +297,8 @@
     "Oldest": "Más Antiguas Primero",
     "Latest": "Más Recientes Primero",
     "sortPost": "Ordenar Publicaciones",
-    "tag": "Su navegador no admite la etiqueta de video"
+    "tag": "Su navegador no admite la etiqueta de video",
+    "pinPost": "Fijar publicación"
   },
   "postNotFound": {
     "post": "Publicaciones",
