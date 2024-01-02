@@ -26,7 +26,7 @@ function validateRecaptcha(string: string): boolean {
 }
 
 async function main(): Promise<void> {
-  console.log('Welcome to the Talawa API setup! 🚀');
+  console.log('Welcome to the Talawa Admin setup! 🚀');
 
   if (!fs.existsSync('.env')) {
     fs.copyFileSync('.env.example', '.env');
