@@ -143,6 +143,8 @@ function loginPage(): JSX.Element {
               'Successfully Registered. Please wait until you will be approved.'
             );
 
+            setShowTab('LOGIN');
+
             setSignFormState({
               signfirstName: '',
               signlastName: '',
