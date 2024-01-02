@@ -192,8 +192,7 @@ describe('Delete Organization Component', () => {
     await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
     screen.getByTestId(/deleteOrganizationBtn/i).click();
-    await wait();
-    await wait();
+    await wait(2000);
     expect(window.location.replace).toHaveBeenCalledWith('/orglist');
   });
 
@@ -215,7 +214,6 @@ describe('Delete Organization Component', () => {
     await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
     screen.getByTestId(/deleteOrganizationBtn/i).click();
-    await wait();
     await wait();
     expect(toast.error).toHaveBeenCalledWith(
       'Failed to delete sample organization'
