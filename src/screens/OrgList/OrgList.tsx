@@ -1,13 +1,11 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Search } from '@mui/icons-material';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import SortIcon from '@mui/icons-material/Sort';
 import { CREATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-
 import { CREATE_SAMPLE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 
 import OrgListCard from 'components/OrgListCard/OrgListCard';
@@ -360,17 +358,6 @@ function orgList(): JSX.Element {
                   >
                     {t('Earliest')}
                   </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-              <Dropdown aria-expanded="false" title="Filter organizations">
-                <Dropdown.Toggle variant="outline-success">
-                  <FilterListIcon className={'me-1'} />
-                  {t('filter')}
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </div>
