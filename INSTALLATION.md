@@ -206,6 +206,7 @@ npm run lint:fix
 
 We are using the package `Husky` to run git hooks that run according to different git workflows.
 
+
 #### pre-commit hook
 
 We run a pre-commit hook which automatically runs code quality checks each time you make a commit and also fixes some of the issues. This way you don't have to run them manually each time.
@@ -213,6 +214,7 @@ We run a pre-commit hook which automatically runs code quality checks each time 
 If you don't want these pre-commit checks running on each commit, you can manually opt out of it using the `--no-verify` flag with your commit message as shown:-
 
         git commit -m "commit message" --no-verify
+
 
 #### post-merge hook
 
