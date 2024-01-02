@@ -1,13 +1,11 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Search } from '@mui/icons-material';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import SortIcon from '@mui/icons-material/Sort';
 import { CREATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-
 import { CREATE_SAMPLE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 
 import OrgListCard from 'components/OrgListCard/OrgListCard';
@@ -348,17 +346,6 @@ function orgList(): JSX.Element {
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
-              <Dropdown aria-expanded="false" title="Filter organizations">
-                <Dropdown.Toggle variant="outline-success">
-                  <FilterListIcon className={'me-1'} />
-                  {t('filter')}
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
             </div>
             {userData && userData.user.userType === 'SUPERADMIN' && (
               <Button
@@ -506,10 +493,13 @@ function orgList(): JSX.Element {
                 required
                 value={formState.name}
                 onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    name: e.target.value,
-                  });
+                  const inputText = e.target.value;
+                  if (inputText.length < 50) {
+                    setFormState({
+                      ...formState,
+                      name: e.target.value,
+                    });
+                  }
                 }}
               />
               <Form.Label htmlFor="descrip">{t('description')}</Form.Label>
@@ -522,10 +512,13 @@ function orgList(): JSX.Element {
                 required
                 value={formState.descrip}
                 onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    descrip: e.target.value,
-                  });
+                  const descriptionText = e.target.value;
+                  if (descriptionText.length < 200) {
+                    setFormState({
+                      ...formState,
+                      descrip: e.target.value,
+                    });
+                  }
                 }}
               />
               <Form.Label htmlFor="location">{t('location')}</Form.Label>
@@ -538,10 +531,13 @@ function orgList(): JSX.Element {
                 required
                 value={formState.location}
                 onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    location: e.target.value,
-                  });
+                  const locationText = e.target.value;
+                  if (locationText.length < 100) {
+                    setFormState({
+                      ...formState,
+                      location: e.target.value,
+                    });
+                  }
                 }}
               />
 
@@ -652,8 +648,8 @@ function orgList(): JSX.Element {
                   </a>
                   <Button
                     variant="secondary"
-                    onClick={(): void => toggleModal()}
-                    data-testid="closeOrganizationModal"
+                    onClick={toggleModal}
+                    data-testid="cancelOrganizationModal"
                   >
                     {t('cancel')}
                   </Button>
@@ -665,7 +661,7 @@ function orgList(): JSX.Element {
                 <div className={styles.pluginStoreBtnContainer}>
                   <Link
                     className={styles.secondbtn}
-                    data-testid="submitOrganizationForm"
+                    data-testid="goToStore"
                     to={`orgstore/id=${dialogRedirectOrgId}`}
                   >
                     {t('goToStore')}
@@ -676,7 +672,7 @@ function orgList(): JSX.Element {
                     className={styles.greenregbtn}
                     onClick={closeDialogModal}
                     value="invite"
-                    data-testid="submitOrganizationForm"
+                    data-testid="enableEverythingForm"
                   >
                     {t('enableEverything')}
                   </button>
