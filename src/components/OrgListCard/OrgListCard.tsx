@@ -39,21 +39,23 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
 
   return (
     <>
+      {console.log('name', name)}
       <div className={styles.orgCard}>
         <div className={styles.innerContainer}>
           <div className={styles.orgImgContainer}>
-            {image ? (
-              <img
-                src={image}
-                className={styles.orgimg}
-                alt={`${name} image`}
-              />
-            ) : (
-              <div
-                className={styles.emptyImg}
-                data-testid="emptyContainerForImage"
-              />
-            )}
+            <img
+              src={
+                image
+                  ? image
+                  : `https://api.dicebear.com/5.x/initials/svg?seed=${name
+                      .split(/\s+/)
+                      .map((word) => word.charAt(0))
+                      .slice(0, 2)
+                      .join('')}`
+              }
+              className={styles.orgimg}
+              alt={`${name} image`}
+            />
           </div>
           <div className={styles.content}>
             <Tooltip title={name} placement="top-end">
