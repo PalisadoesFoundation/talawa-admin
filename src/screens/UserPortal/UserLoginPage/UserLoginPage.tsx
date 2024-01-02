@@ -7,15 +7,16 @@ import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLang
 import Login from 'components/UserPortal/Login/Login';
 import Register from 'components/UserPortal/Register/Register';
 import styles from './UserLoginPage.module.css';
-import { ReactComponent as SlackLogo } from '../../../assets/svgs/Slack-mark.svg';
+
 import {
-  FaFacebook,
-  FaLinkedin,
-  FaGithub,
-  FaYoutube,
-  FaInstagram,
-} from 'react-icons/fa';
-import { FaXTwitter } from 'react-icons/fa6';
+  FacebookLogo,
+  LinkedInLogo,
+  GithubLogo,
+  InstagramLogo,
+  SlackLogo,
+  TwitterLogo,
+  YoutubeLogo,
+} from 'assets/svgs/social-icons';
 
 export default function userLoginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -42,59 +43,49 @@ export default function userLoginPage(): JSX.Element {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <FaFacebook
-              className={`${styles.socialIcon} ${styles.facebookIcon}`}
-            />
+            <img src={FacebookLogo} />
           </a>
           <a
             href="https://twitter.com/palisadoesorg?lang=en"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <FaXTwitter
-              className={`${styles.socialIcon} ${styles.twitterIcon}`}
-            />
+            <img src={TwitterLogo} className={styles.socialIcon} />
           </a>
           <a
             href="https://www.linkedin.com/company/palisadoes/"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <FaLinkedin
-              className={`${styles.socialIcon} ${styles.linkedinIcon}`}
-            />
+            <img src={LinkedInLogo} />
           </a>
           <a
             href="https://github.com/PalisadoesFoundation"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <FaGithub className={`${styles.socialIcon} ${styles.githubIcon}`} />
+            <img src={GithubLogo} />
           </a>
           <a
             href="https://www.youtube.com/@PalisadoesOrganization"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <FaYoutube
-              className={`${styles.socialIcon} ${styles.youtubeIcon}`}
-            />
+            <img src={YoutubeLogo} />
           </a>
           <a
-            href="https://join.slack.com/t/thepalisadoes-dyb6419/shared_invite/zt-29oltereu-qJ931LcKxswuCAy29iA9WA"
+            href="https://www.palisadoes.org/slack"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <SlackLogo className={`${styles.socialIcon} ${styles.slackIcon}`} />
+            <img src={SlackLogo} />
           </a>
           <a
             href="https://www.instagram.com/palisadoes/"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <FaInstagram
-              className={`${styles.socialIcon} ${styles.instagramIcon}`}
-            />
+            <img src={InstagramLogo} />
           </a>
         </div>
       </div>

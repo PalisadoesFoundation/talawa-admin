@@ -56,37 +56,3 @@ body::before {
   gap: 16px;
   justify-content: center;
 }
-
-.socialIcon {
-  font-size: 30px;
-  cursor: pointer;
-}
-
-.twitterIcon {
-  color: #000000;
-}
-
-.facebookIcon {
-  color: #1877f2;
-}
-
-.linkedinIcon {
-  color: #0a66c2;
-}
-
-.githubIcon {
-  color: #211f1f;
-}
-
-.youtubeIcon {
-  color: #ff0000;
-}
-
-.slackIcon {
-  width: 30px;
-  height: 30px;
-}
-
-.instagramIcon {
-  color: #e4405f;
-}
