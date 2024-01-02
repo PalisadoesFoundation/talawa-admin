@@ -89,7 +89,6 @@ export default function people(): JSX.Element {
     handleSearch(inputValue);
   };
 
-  /* istanbul ignore next */
   React.useEffect(() => {
     if (data) {
       setMembers(data.organizationsMemberConnection.edges);

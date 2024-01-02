@@ -238,7 +238,6 @@ const Requests = (): JSX.Element => {
     }
   };
 
-  /* istanbul ignore next */
   const handleSearch = async (value: string): Promise<void> => {
     setSearchByName(value);
     if (value === '') {
