@@ -13,7 +13,6 @@ export interface InterfacePropType {
       _id: string;
     };
   };
-  setShowAddEventProjectModal: React.Dispatch<React.SetStateAction<boolean>>;
   children: React.ReactNode;
 }
 
@@ -30,7 +29,6 @@ export const LeftDrawerEventWrapper = (
         setHideDrawer={setHideDrawer}
         {...props}
       />
-
       <div
         className={`${styles.pageContainer} ${
           hideDrawer === null

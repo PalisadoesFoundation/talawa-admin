@@ -23,14 +23,12 @@ export interface InterfaceLeftDrawerProps {
   };
   hideDrawer: boolean | null;
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
-  setShowAddEventProjectModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const leftDrawerEvent = ({
   event,
   hideDrawer,
   setHideDrawer,
-  setShowAddEventProjectModal,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const userType = localStorage.getItem('UserType');
@@ -105,22 +103,6 @@ const leftDrawerEvent = ({
         {/* Options List */}
         <div className={styles.optionList}>
           <h5 className={styles.titleHeader}>Event Options</h5>
-          <Button
-            variant="light"
-            className="text-secondary"
-            aria-label="addEventProject"
-            onClick={(): void => {
-              setShowAddEventProjectModal(true);
-            }}
-          >
-            <div className={styles.iconWrapper}>
-              <IconComponent
-                name="Add Event Project"
-                fill="var(--bs-secondary)"
-              />
-            </div>
-            Add an Event Project
-          </Button>
           <EventRegistrantsWrapper
             key={`${event?._id || 'loading'}Registrants`}
             eventId={event._id}
