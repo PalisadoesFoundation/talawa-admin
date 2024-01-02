@@ -33,6 +33,11 @@
     "eventCardSeeAll": "सभी देखें",
     "noEvents": "कोई आगामी घटनाएँ नहीं"
   },
+  "latestPosts": {
+    "latestPostsTitle": "नवीनतम पोस्ट",
+    "seeAllLink": "सभी देखें",
+    "noPostsCreated": "कोई पोस्ट नहीं बनाई गई"
+  },
   "listNavbar": {
     "talawa_portal": "तलावा प्रशासन पोर्टल",
     "roles": "भूमिकाएँ",
@@ -684,14 +689,14 @@
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
     "sendMessage": "मेसेज भेजें"
   },
-  "ऑर्गप्रोफ़ाइलफ़ील्ड": {
-    "लोड हो रहा है": "लोड हो रहा है...",
-    "noCustomField": "कोई कस्टम फ़ील्ड उपलब्ध नहीं",
-    "customFieldName": "फ़ील्ड नाम",
-    "enterCustomFieldName": "फ़ील्ड नाम दर्ज करें",
-    "customFieldType": "फ़ील्ड प्रकार",
+  "orgProfileField": {
+    "loading": "लोड हो रहा है...",
+    "noCustomField": "कोई कस्टम फ़ील्ड उपलब्ध नहीं है",
+    "customFieldName": "फ़ील्ड का नाम",
+    "enterCustomFieldName": "फ़ील्ड का नाम दर्ज करें",
+    "customFieldType": "फ़ील्ड का प्रकार",
     "saveChanges": "परिवर्तन सहेजें",
-    "कस्टम फ़ील्ड हटाएँ": "कस्टम फ़ील्ड हटाएँ",
+    "Remove Custom Field": "कस्टम फ़ील्ड हटाएँ",
     "fieldSuccessMessage": "फ़ील्ड सफलतापूर्वक जोड़ा गया",
     "fieldRemovalSuccess": "फ़ील्ड सफलतापूर्वक हटा दिया गया"
   }
