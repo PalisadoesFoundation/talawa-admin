@@ -33,7 +33,7 @@ function deleteOrg(): JSX.Element {
     if (data && data.isSampleOrganization) {
       removeSampleOrganization()
         .then(() => {
-          toast.success('Successfully deleted sample Organization');
+          toast.success(t('successfullyDeletedSampleOrganization'));
           setTimeout(() => {
             window.location.replace('/orglist');
           }, 1000);

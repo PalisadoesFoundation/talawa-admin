@@ -419,7 +419,8 @@
     "deleteMsg": "您是否要删除此组织？",
     "cancel": "取消",
     "confirmDelete": "确认删除",
-    "longDelOrgMsg": "点击删除组织按钮，组织将被永久删除，包括其事件、标签和所有相关数据。"
+    "longDelOrgMsg": "点击删除组织按钮，组织将被永久删除，包括其事件、标签和所有相关数据。",
+    "successfullyDeletedSampleOrganization": "已成功刪除樣本組織"
   },
   "userUpdate": {
     "firstName": "名",
