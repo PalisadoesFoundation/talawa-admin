@@ -482,7 +482,9 @@ function orgPost(): JSX.Element {
                 )}
               </>
             )}
-            <Form.Label htmlFor="pinpost">{t('pinPost')}</Form.Label>
+            <Form.Label htmlFor="pinpost" className="mt-3">
+              {t('pinPost')}
+            </Form.Label>
             <Form.Switch
               id="pinPost"
               type="checkbox"
