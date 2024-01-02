@@ -18,6 +18,12 @@ import DeleteOrg from './DeleteOrg';
 import { ToastContainer, toast } from 'react-toastify';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 
+async function wait(ms = 1000): Promise<void> {
+  await act(async () => {
+    await new Promise((resolve) => setTimeout(resolve, ms));
+  });
+}
+
 const MOCKS = [
   {
     request: {
@@ -113,9 +119,7 @@ describe('Delete Organization Component', () => {
         </BrowserRouter>
       </MockedProvider>
     );
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    });
+    await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
     expect(screen.getByTestId(/orgDeleteModal/i)).toBeInTheDocument();
     screen.getByTestId(/closeDelOrgModalBtn/i).click();
@@ -140,9 +144,7 @@ describe('Delete Organization Component', () => {
         </BrowserRouter>
       </MockedProvider>
     );
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    });
+    await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
     expect(screen.getByTestId(/orgDeleteModal/i)).toBeInTheDocument();
     screen.getByTestId(/closeDelOrgModalBtn/i).click();
@@ -166,14 +168,10 @@ describe('Delete Organization Component', () => {
         </BrowserRouter>
       </MockedProvider>
     );
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    });
+    await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
     screen.getByTestId(/deleteOrganizationBtn/i).click();
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    });
+    await wait();
     expect(window.location.replace).toHaveBeenCalledWith('/orglist');
   });
 
@@ -191,17 +189,11 @@ describe('Delete Organization Component', () => {
         </BrowserRouter>
       </MockedProvider>
     );
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    });
+    await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
     screen.getByTestId(/deleteOrganizationBtn/i).click();
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    });
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    });
+    await wait();
+    await wait();
     expect(window.location.replace).toHaveBeenCalledWith('/orglist');
   });
 
@@ -220,17 +212,11 @@ describe('Delete Organization Component', () => {
         </BrowserRouter>
       </MockedProvider>
     );
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    });
+    await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
     screen.getByTestId(/deleteOrganizationBtn/i).click();
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    });
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    });
+    await wait();
+    await wait();
     expect(toast.error).toHaveBeenCalledWith(
       'Failed to delete sample organization'
     );
@@ -250,13 +236,9 @@ describe('Delete Organization Component', () => {
         </BrowserRouter>
       </MockedProvider>
     );
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    });
+    await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
     screen.getByTestId(/deleteOrganizationBtn/i).click();
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    });
+    await wait();
   });
 });
