@@ -54,6 +54,7 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
               }
               className={styles.orgimg}
               alt={`${name} image`}
+              data-testid={image ? '' : 'emptyContainerForImage'}
             />
           </div>
           <div className={styles.content}>
