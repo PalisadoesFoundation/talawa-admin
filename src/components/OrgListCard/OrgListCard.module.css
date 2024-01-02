@@ -21,7 +21,7 @@
   border-radius: 4px;
 }
 
-.orgCard .innerContainer .orgImgContainer img {
+.orgCard .innerContainer .orgImgContainer {
   width: 125px;
   height: 120px;
   object-fit: contain;
