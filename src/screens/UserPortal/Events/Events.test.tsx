@@ -354,9 +354,13 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait();
 
     expect(getOrganizationIdSpy).toHaveBeenCalled();
-
+    const searchInput = screen.getByTestId('searchInput');
     const searchBtn = screen.getByTestId('searchBtn');
-    userEvent.type(screen.getByTestId('searchInput'), 'test');
+    userEvent.type(searchInput, '');
+    userEvent.click(searchBtn);
+    await wait();
+    userEvent.clear(searchInput);
+    userEvent.type(searchInput, 'test');
     userEvent.click(searchBtn);
 
     await wait();

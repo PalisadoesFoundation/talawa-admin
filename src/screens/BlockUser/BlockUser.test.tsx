@@ -18,6 +18,7 @@ import { ToastContainer } from 'react-toastify';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
+
 import BlockUser from './BlockUser';
 
 let userQueryCalled = false;
@@ -648,9 +649,16 @@ describe('Testing Block/Unblock user screen', () => {
     );
     await wait();
     const searchBar = screen.getByTestId(/searchByName/i);
+    const searchBtn = screen.getByTestId(/searchBtn/i);
     expect(searchBar).toBeInTheDocument();
     userEvent.type(searchBar, 'Dummy{enter}');
-    const searchBtn = screen.getByTestId(/searchBtn/i);
+    await wait();
+    userEvent.clear(searchBar);
+    userEvent.type(searchBar, 'Dummy');
+    userEvent.click(searchBtn);
+    await wait();
+    userEvent.clear(searchBar);
+    userEvent.type(searchBar, '');
     userEvent.click(searchBtn);
   });
 });

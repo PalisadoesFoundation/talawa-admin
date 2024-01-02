@@ -8,7 +8,6 @@ import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import { MOCKS } from './UserTableItemMocks';
 import UsersTableItem from './UsersTableItem';
-
 const link = new StaticMockLink(MOCKS, true);
 
 async function wait(ms = 100): Promise<void> {
@@ -391,7 +390,8 @@ describe('Testing User Table Item', () => {
 
     // Now clear the search box
     fireEvent.keyUp(inputBox, { key: 'Enter', target: { value: '' } });
-
+    fireEvent.keyUp(inputBox, { target: { value: '' } });
+    fireEvent.click(searchBtn);
     // Click on Creator Link
     fireEvent.click(screen.getByTestId(`creatorabc`));
     expect(toast.success).toBeCalledWith('Profile Page Coming Soon !');
@@ -569,6 +569,8 @@ describe('Testing User Table Item', () => {
 
     // Now clear the search box
     fireEvent.keyUp(inputBox, { key: 'Enter', target: { value: '' } });
+    fireEvent.keyUp(inputBox, { target: { value: '' } });
+    fireEvent.click(searchBtn);
 
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Blocked Organization 1/i));

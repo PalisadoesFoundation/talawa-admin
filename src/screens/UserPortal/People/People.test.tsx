@@ -2,7 +2,6 @@ import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
-
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   ORGANIZATION_ADMINS_LIST,
@@ -194,6 +193,9 @@ describe('Testing People Screen [User Portal]', () => {
 
     await wait();
     const searchBtn = screen.getByTestId('searchBtn');
+    userEvent.type(screen.getByTestId('searchInput'), '');
+    userEvent.click(searchBtn);
+    await wait();
     userEvent.type(screen.getByTestId('searchInput'), 'j');
     userEvent.click(searchBtn);
     await wait();
