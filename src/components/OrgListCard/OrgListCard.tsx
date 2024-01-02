@@ -52,7 +52,6 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
                       .slice(0, 2)
                       .join('')}`
               }
-              className={styles.orgimg}
               alt={`${name} image`}
               data-testid={image ? '' : 'emptyContainerForImage'}
             />
