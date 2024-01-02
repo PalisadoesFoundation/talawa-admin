@@ -33,6 +33,11 @@
     "eventCardSeeAll": "Voir Tout",
     "noEvents": "Aucun événement à venir"
   },
+  "latestPosts": {
+    "latestPostsTitle": "Dernières Publications",
+    "seeAllLink": "Voir Tout",
+    "noPostsCreated": "Aucune Publication Créée"
+  },
   "listNavbar": {
     "talawa_portal": "Portail D'Administrateur Talawa",
     "roles": "Les rôles",
