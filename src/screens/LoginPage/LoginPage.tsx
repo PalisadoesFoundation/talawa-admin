@@ -9,7 +9,6 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { z } from 'zod';
 
 import { REACT_APP_USE_RECAPTCHA, RECAPTCHA_SITE_KEY } from 'Constant/constant';
 import {
@@ -104,14 +103,6 @@ function loginPage(): JSX.Element {
     }
   };
 
-  const signupFormSchema = z.object({
-    signfirstName: z.string().min(1),
-    signlastName: z.string().min(1),
-    signEmail: z.string().email().min(8),
-    signPassword: z.string().min(1),
-    cPassword: z.string().min(1),
-  });
-
   const signupLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
@@ -127,23 +118,21 @@ function loginPage(): JSX.Element {
       toast.error(t('Please_check_the_captcha'));
       return;
     }
-    const parsedInput = signupFormSchema.safeParse({
-      signfirstName,
-      signlastName,
-      signEmail,
-      signPassword,
-      cPassword,
-    });
 
-    if (parsedInput.success) {
+    if (
+      signfirstName.length > 1 &&
+      signlastName.length > 1 &&
+      signEmail.length >= 8 &&
+      signPassword.length > 1
+    ) {
       if (cPassword == signPassword) {
         try {
           const { data: signUpData } = await signup({
             variables: {
-              firstName: parsedInput.data.signfirstName,
-              lastName: parsedInput.data.signlastName,
-              email: parsedInput.data.signEmail,
-              password: parsedInput.data.cPassword,
+              firstName: signfirstName,
+              lastName: signlastName,
+              email: signEmail,
+              password: signPassword,
             },
           });
 
