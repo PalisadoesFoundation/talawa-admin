@@ -46,6 +46,7 @@
     "i18next-http-backend": "^1.4.1",
     "jest-docblock": "^27.4.0",
     "js-cookie": "^3.0.1",
+    "lint-staged": "^15.2.0",
     "markdown-toc": "^1.2.0",
     "node-sass": "^9.0.0",
     "prettier": "^2.3.2",
@@ -75,13 +76,14 @@
     "test": "cross-env NODE_ENV=test node scripts/test.js --env=./scripts/custom-test-env.js --watchAll --coverage",
     "eject": "react-scripts eject",
     "lint:check": "eslint \"**/*.{ts,tsx}\" --max-warnings=0",
-    "lint:fix": "eslint \"**/*.{ts,tsx}\" --fix",
-    "format:fix": "prettier --write \"**/*.{ts,tsx,json,scss,css}\"",
+    "lint:fix": "eslint --fix",
+    "format:fix": "prettier --write",
     "format:check": "prettier --check \"**/*.{ts,tsx,json,scss,css}\"",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "prepare": "husky install",
     "jest-preview": "jest-preview",
-    "update:toc": "node scripts/githooks/update-toc.js"
+    "update:toc": "node scripts/githooks/update-toc.js",
+    "lint-staged": "lint-staged --concurrent false"
   },
   "eslintConfig": {
     "extends": [
