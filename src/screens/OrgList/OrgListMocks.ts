@@ -1,4 +1,8 @@
 import {
+  CREATE_ORGANIZATION_MUTATION,
+  CREATE_SAMPLE_ORGANIZATION_MUTATION,
+} from 'GraphQl/Mutations/mutations';
+import {
   ORGANIZATION_CONNECTION_LIST,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
@@ -103,6 +107,39 @@ const MOCKS = [
       data: superAdminUser,
     },
   },
+  {
+    request: {
+      query: CREATE_SAMPLE_ORGANIZATION_MUTATION,
+    },
+    result: {
+      data: {
+        createSampleOrganization: {
+          id: '1',
+          name: 'Sample Organization',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_ORGANIZATION_MUTATION,
+      variables: {
+        description: 'This is a dummy organization',
+        location: 'Delhi, India',
+        name: 'Dummy Organization',
+        visibleInSearch: true,
+        isPublic: false,
+        image: '',
+      },
+    },
+    result: {
+      data: {
+        createOrganization: {
+          _id: '1',
+        },
+      },
+    },
+  },
 ];
 const MOCKS_EMPTY = [
   {
@@ -130,6 +167,40 @@ const MOCKS_EMPTY = [
     result: {
       data: superAdminUser,
     },
+  },
+];
+const MOCKS_WITH_ERROR = [
+  {
+    request: {
+      query: ORGANIZATION_CONNECTION_LIST,
+      variables: {
+        first: 8,
+        skip: 0,
+        filter: '',
+        orderBy: 'createdAt_ASC',
+      },
+      notifyOnNetworkStatusChange: true,
+    },
+    result: {
+      data: {
+        organizationsConnection: organizations,
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_ORGANIZATION_LIST,
+      variables: { id: '123' },
+    },
+    result: {
+      data: superAdminUser,
+    },
+  },
+  {
+    request: {
+      query: CREATE_SAMPLE_ORGANIZATION_MUTATION,
+    },
+    error: new Error('Failed to create sample organization'),
   },
 ];
 
@@ -163,4 +234,4 @@ const MOCKS_ADMIN = [
   },
 ];
 
-export { MOCKS, MOCKS_ADMIN, MOCKS_EMPTY };
+export { MOCKS, MOCKS_ADMIN, MOCKS_EMPTY, MOCKS_WITH_ERROR };
