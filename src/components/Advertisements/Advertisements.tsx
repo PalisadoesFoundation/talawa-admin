@@ -11,15 +11,15 @@ import AdvertisementEntry from './core/AdvertisementEntry/AdvertisementEntry';
 import AdvertisementRegister from './core/AdvertisementRegister/AdvertisementRegister';
 export default function advertisements(): JSX.Element {
   const {
-    data: data2,
-    loading: loading2,
-    error: error2,
+    data: advertisementsData,
+    loading: loadingAdvertisements,
+    error: errorAdvertisement,
   } = useQuery(ADVERTISEMENTS_GET);
   const currentOrgId = window.location.href.split('/id=')[1] + '';
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   document.title = t('title');
 
-  if (loading2) {
+  if (loadingAdvertisements) {
     return (
       <>
         <div data-testid="AdEntryStore" className={styles.loader}></div>
@@ -46,13 +46,13 @@ export default function advertisements(): JSX.Element {
                 className="mb-3"
               >
                 <Tab eventKey="activeAds" title={t('activeAds')}>
-                  {data2?.getAdvertisements
+                  {advertisementsData?.getAdvertisements
                     .filter((ad: any) => ad.orgId == currentOrgId)
                     .filter((ad: any) => new Date(ad.endDate) > new Date())
                     .length == 0 ? (
                     <h4>{t('pMessage')} </h4> // eslint-disable-line
                   ) : (
-                    data2?.getAdvertisements
+                    advertisementsData?.getAdvertisements
                       .filter((ad: any) => ad.orgId == currentOrgId)
                       .filter((ad: any) => new Date(ad.endDate) > new Date())
                       .map(
@@ -83,13 +83,13 @@ export default function advertisements(): JSX.Element {
                   )}
                 </Tab>
                 <Tab eventKey="archievedAds" title={t('archievedAds')}>
-                  {data2?.getAdvertisements
+                  {advertisementsData?.getAdvertisements
                     .filter((ad: any) => ad.orgId == currentOrgId)
                     .filter((ad: any) => new Date(ad.endDate) < new Date())
                     .length == 0 ? (
                     <h4>{t('pMessage')} </h4> // eslint-disable-line
                   ) : (
-                    data2?.getAdvertisements
+                    advertisementsData?.getAdvertisements
                       .filter((ad: any) => ad.orgId == currentOrgId)
                       .filter((ad: any) => new Date(ad.endDate) < new Date())
                       .map(

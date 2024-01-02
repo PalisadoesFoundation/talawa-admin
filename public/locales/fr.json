@@ -673,7 +673,8 @@
     "deleteAdvertisement": "Supprimer l'annonce",
     "deleteAdvertisementMsg": "Voulez-vous supprimer cette annonce ?",
     "no": "Non",
-    "yes": "Oui"
+    "yes": "Oui",
+    "Rmedia": "Fournir du contenu multimédia à afficher"
   },
   "userChat": {
     "chat": "Chat",

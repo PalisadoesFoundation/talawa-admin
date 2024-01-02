@@ -673,7 +673,8 @@
     "deleteAdvertisement": "删除广告",
     "deleteAdvertisementMsg": "您是否要删除此广告？",
     "no": "不",
-    "yes": "是"
+    "yes": "是",
+    "Rmedia": "提供要显示的媒体内容"
   },
   "userChat": {
     "chat": "聊天",
