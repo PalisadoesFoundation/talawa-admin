@@ -301,6 +301,54 @@ describe('Testing Login Page Screen', () => {
     userEvent.click(screen.getByTestId('registrationBtn'));
   });
 
+  test('switches to login tab on successful registration', async () => {
+    const formData = {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'johndoe@gmail.com',
+      password: 'johndoe',
+      confirmPassword: 'johndoe',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+    userEvent.type(
+      screen.getByPlaceholderText(/First Name/i),
+      formData.firstName
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Last name/i),
+      formData.lastName
+    );
+    userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
+    userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
+    userEvent.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      formData.confirmPassword
+    );
+
+    userEvent.click(screen.getByTestId('registrationBtn'));
+
+    await wait();
+
+    // Check if the login tab is now active by checking for elements that only appear in the login tab
+    expect(screen.getByTestId('loginBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('goToRegisterPortion')).toBeInTheDocument();
+  });
+
   test('Testing toggle login register portion', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
