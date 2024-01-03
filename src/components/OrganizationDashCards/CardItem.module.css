@@ -2,7 +2,13 @@
   position: relative;
   display: flex;
   align-items: center;
-  padding: 0.75rem 0;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 1.5rem;
+  padding-right: 3rem;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  margin-top: 20px;
 }
 
 .cardItem .iconWrapper {
@@ -39,11 +45,36 @@
 .cardItem .title {
   font-size: 1rem;
   flex: 1;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 18px;
+  color: #000000;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  margin-left: 3px;
+}
+
+.cardItem .location {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #31bb6b;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
 }
 
 .cardItem .time {
   font-size: 0.9rem;
   color: var(--bs-secondary);
+  font-style: normal;
+  font-weight: 600;
+  color: #737373;
 }
 
 .cardItem .creator {
@@ -53,8 +84,9 @@
 
 .rightCard {
   display: flex;
-  gap: 5px;
+  gap: 7px;
   min-width: 170px;
   justify-content: center;
   flex-direction: column;
+  margin-left: 10px;
 }
