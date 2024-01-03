@@ -2,16 +2,20 @@
   position: relative;
   display: flex;
   align-items: center;
-  padding: 0.75rem 0;
+  background-color: #f1f3f68f;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 20px;
 }
 
 .cardItem .iconWrapper {
   position: relative;
-  height: 40px;
-  width: 40px;
+  height: 52px;
+  width: 52px;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-left: 18px;
 }
 
 .cardItem .iconWrapper .themeOverlay {
@@ -22,7 +26,7 @@
   bottom: 0;
   left: 0;
   opacity: 0.12;
-  border-radius: 50%;
+  border-radius: 4px;
 }
 
 .cardItem .iconWrapper .dangerOverlay {
@@ -33,11 +37,12 @@
   bottom: 0;
   left: 0;
   opacity: 0.12;
-  border-radius: 50%;
+  border-radius: 4px;
 }
 
 .cardItem .title {
-  font-size: 1rem;
+  font-size: 15px;
+  font-weight: 600;
   flex: 1;
   margin-right: 0.3rem;
   word-wrap: break-word;
@@ -48,13 +53,14 @@
 }
 
 .cardItem .time {
-  font-size: 0.9rem;
-  color: var(--bs-secondary);
+  font-size: 0.8rem;
+  font-weight: 300;
+  color: #808080;
 }
 
 .cardItem .creator {
-  font-size: 1rem;
-  color: rgb(33, 208, 21);
+  font-size: 0.8rem;
+  color: black;
 }
 
 .rightCard {
@@ -63,4 +69,10 @@
   min-width: 170px;
   justify-content: center;
   flex-direction: column;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  max-width: 60%;
 }
