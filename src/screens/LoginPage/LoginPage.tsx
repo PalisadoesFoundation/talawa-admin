@@ -10,6 +10,16 @@ import { useTranslation } from 'react-i18next';
 import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
+import {
+  FacebookLogo,
+  LinkedInLogo,
+  GithubLogo,
+  InstagramLogo,
+  SlackLogo,
+  TwitterLogo,
+  YoutubeLogo,
+} from 'assets/svgs/social-icons';
+
 import { REACT_APP_USE_RECAPTCHA, RECAPTCHA_SITE_KEY } from 'Constant/constant';
 import {
   LOGIN_MUTATION,
@@ -143,6 +153,8 @@ function loginPage(): JSX.Element {
               'Successfully Registered. Please wait until you will be approved.'
             );
 
+            setShowTab('LOGIN');
+
             setSignFormState({
               signfirstName: '',
               signlastName: '',
@@ -223,6 +235,58 @@ function loginPage(): JSX.Element {
             <div className={styles.inner}>
               <PalisadoesLogo className={styles.palisadoes_logo} />
               <p className="text-center">{t('fromPalisadoes')}</p>
+            </div>
+
+            <div className={styles.socialIcons}>
+              <a
+                href="https://www.facebook.com/palisadoesproject"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={FacebookLogo} />
+              </a>
+              <a
+                href="https://twitter.com/palisadoesorg?lang=en"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={TwitterLogo} className={styles.socialIcon} />
+              </a>
+              <a
+                href="https://www.linkedin.com/company/palisadoes/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={LinkedInLogo} />
+              </a>
+              <a
+                href="https://github.com/PalisadoesFoundation"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={GithubLogo} />
+              </a>
+              <a
+                href="https://www.youtube.com/@PalisadoesOrganization"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={YoutubeLogo} />
+              </a>
+              <a
+                href="https://www.palisadoes.org/slack"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={SlackLogo} />
+              </a>
+              <a
+                href="https://www.instagram.com/palisadoes/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={InstagramLogo} />
+              </a>
             </div>
           </Col>
           <Col sm={12} md={6} lg={5}>
@@ -397,29 +461,31 @@ function loginPage(): JSX.Element {
                       </div>
                     </Col>
                   </Row>
-                  <Form.Label>{t('email')}</Form.Label>
                   <div className="position-relative">
-                    <Form.Control
-                      type="email"
-                      data-testid="signInEmail"
-                      className="mb-3"
-                      placeholder={t('email')}
-                      autoComplete="username"
-                      required
-                      value={signformState.signEmail}
-                      onChange={(e): void => {
-                        setSignFormState({
-                          ...signformState,
-                          signEmail: e.target.value.toLowerCase(),
-                        });
-                      }}
-                    />
-                    <Button
-                      tabIndex={-1}
-                      className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
-                    >
-                      <EmailOutlinedIcon />
-                    </Button>
+                    <Form.Label>{t('email')}</Form.Label>
+                    <div className="position-relative">
+                      <Form.Control
+                        type="email"
+                        data-testid="signInEmail"
+                        className="mb-3"
+                        placeholder={t('email')}
+                        autoComplete="username"
+                        required
+                        value={signformState.signEmail}
+                        onChange={(e): void => {
+                          setSignFormState({
+                            ...signformState,
+                            signEmail: e.target.value.toLowerCase(),
+                          });
+                        }}
+                      />
+                      <Button
+                        tabIndex={-1}
+                        className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                      >
+                        <EmailOutlinedIcon />
+                      </Button>
+                    </div>
                   </div>
 
                   <div className="position-relative mb-3">
