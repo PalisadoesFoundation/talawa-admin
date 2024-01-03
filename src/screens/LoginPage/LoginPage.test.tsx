@@ -505,7 +505,7 @@ describe('Testing Login Page Screen', () => {
     expect(screen.queryByTestId('passwordCheck')).toBeNull();
   });
 
-  test('Testing for the password error warning when user clicks on password field and password is less than 8 character', async () => {
+  test('Testing for the password error warning when user clicks on password field and password is less than 6 character', async () => {
     const password = {
       password: '7',
     };
@@ -558,7 +558,7 @@ describe('Testing Login Page Screen', () => {
 
     expect(screen.getByTestId('passwordField')).toHaveFocus();
 
-    expect(password.password.length).toBeGreaterThanOrEqual(8);
+    expect(password.password.length).toBeGreaterThanOrEqual(6);
 
     expect(screen.queryByTestId('passwordCheck')).toBeNull();
   });
@@ -587,7 +587,7 @@ describe('Testing Login Page Screen', () => {
 
     userEvent.type(screen.getByPlaceholderText('Password'), password.password);
 
-    expect(password.password.length).toBeLessThan(8);
+    expect(password.password.length).toBeLessThan(6);
 
     expect(screen.queryByTestId('passwordCheck')).toBeInTheDocument();
   });

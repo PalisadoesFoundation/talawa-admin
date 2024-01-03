@@ -118,12 +118,34 @@ function loginPage(): JSX.Element {
       toast.error(t('Please_check_the_captcha'));
       return;
     }
+    const isValidatedString = (value: string): boolean =>
+      /^[a-zA-Z]+$/.test(value);
+
+    const validatePassword = (password: string): boolean => {
+      const lengthCheck = new RegExp('^.{7,}$');
+      const lowercaseCheck = new RegExp('[a-z]');
+      const uppercaseCheck = new RegExp('[A-Z]');
+      const numericalCheck = new RegExp('\\d');
+      const specialCharCheck = new RegExp(
+        '[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\/-]'
+      );
+      return (
+        lengthCheck.test(password) &&
+        lowercaseCheck.test(password) &&
+        uppercaseCheck.test(password) &&
+        numericalCheck.test(password) &&
+        specialCharCheck.test(password)
+      );
+    };
 
     if (
+      isValidatedString(signfirstName) &&
+      isValidatedString(signlastName) &&
       signfirstName.length > 1 &&
       signlastName.length > 1 &&
       signEmail.length >= 8 &&
-      signPassword.length > 1
+      signPassword.length > 1 &&
+      validatePassword(signPassword)
     ) {
       if (cPassword == signPassword) {
         try {
@@ -158,7 +180,18 @@ function loginPage(): JSX.Element {
         toast.warn(t('passwordMismatches'));
       }
     } else {
-      toast.warn(t('fillCorrectly'));
+      if (!isValidatedString(signfirstName)) {
+        toast.warn(t('firstName_invalid'));
+      }
+      if (!isValidatedString(signlastName)) {
+        toast.warn(t('lastName_invalid'));
+      }
+      if (!validatePassword(signPassword)) {
+        toast.warn(t('password_invalid'));
+      }
+      if (signEmail.length < 8) {
+        toast.warn(t('email_invalid'));
+      }
     }
   };
 
@@ -454,22 +487,22 @@ function loginPage(): JSX.Element {
                       </Button>
                     </div>
                     {isInputFocused &&
-                      signformState.signPassword.length < 8 && (
+                      signformState.signPassword.length < 6 && (
                         <div
                           className="form-text text-danger"
                           data-testid="passwordCheck"
                         >
-                          {t('atleast_8_char_long')}
+                          {t('atleast_6_char_long')}
                         </div>
                       )}
                     {!isInputFocused &&
                       signformState.signPassword.length > 0 &&
-                      signformState.signPassword.length < 8 && (
+                      signformState.signPassword.length < 6 && (
                         <div
                           className="form-text text-danger"
                           data-testid="passwordCheck"
                         >
-                          {t('atleast_8_char_long')}
+                          {t('atleast_6_char_long')}
                         </div>
                       )}
                   </div>
