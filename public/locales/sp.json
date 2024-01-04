@@ -564,7 +564,6 @@
     "events": "Eventos",
     "chat": "Charlar",
     "donate": "Donar",
-    "myTasks": "Mis tareas",
     "settings": "Ajustes",
     "language": "Idioma",
     "logout": "Cerrar sesión",
@@ -650,22 +649,6 @@
     "creator": "Creadora",
     "alreadyRegistered": "Ya registrado",
     "register": "Registro"
-  },
-  "userTasks": {
-    "yourAssignedTasks": "Tus tareas asignadas",
-    "nothingToShow": "No hay nada que mostrar aquí."
-  },
-  "userTaskCard": {
-    "description": "Descripción",
-    "deadline": "Fecha límite",
-    "created": "Creado",
-    "assignees": "Cesionarias",
-    "completed": "Terminada",
-    "incomplete": "Incompleta",
-    "taskCompleted": "La tarea ha sido completada",
-    "taskNotCompleted": "La tarea aún no se ha completado",
-    "event": "Evento",
-    "organization": "Organización"
   },
   "advertisement": {
     "title": "Anuncios",

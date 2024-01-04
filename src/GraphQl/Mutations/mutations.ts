@@ -525,14 +525,6 @@ export const REGISTER_EVENT = gql`
   }
 `;
 
-export const SET_TASK_VOLUNTEERS_MUTATION = gql`
-  mutation SetTaskVolunteers($id: ID!, $volunteers: [ID]!) {
-    setTaskVolunteers(id: $id, volunteers: $volunteers) {
-      _id
-    }
-  }
-`;
-
 export const ADD_EVENT_ATTENDEE = gql`
   mutation addEventAttendee($userId: ID!, $eventId: ID!) {
     addEventAttendee(data: { userId: $userId, eventId: $eventId }) {

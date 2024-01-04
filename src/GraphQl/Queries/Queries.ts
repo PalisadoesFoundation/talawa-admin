@@ -188,23 +188,6 @@ export const EVENT_DETAILS = gql`
       attendees {
         _id
       }
-      projects {
-        _id
-        title
-        description
-        tasks {
-          _id
-          title
-          description
-          deadline
-          completed
-          volunteers {
-            _id
-            firstName
-            lastName
-          }
-        }
-      }
     }
   }
 `;
@@ -762,42 +745,6 @@ export const ORGANIZATION_EVENTS_CONNECTION = gql`
       }
       attendees {
         _id
-      }
-    }
-  }
-`;
-
-export const USER_TASKS_LIST = gql`
-  query User($id: ID!) {
-    user(id: $id) {
-      _id
-      assignedTasks {
-        _id
-        title
-        description
-        deadline
-        volunteers {
-          _id
-          firstName
-          lastName
-          email
-        }
-        createdAt
-        completed
-        event {
-          _id
-          title
-          organization {
-            _id
-            name
-            image
-          }
-        }
-        creator {
-          _id
-          firstName
-          lastName
-        }
       }
     }
   }

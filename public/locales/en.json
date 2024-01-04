@@ -569,7 +569,6 @@
     "events": "Events",
     "chat": "Chat",
     "donate": "Donate",
-    "myTasks": "My Tasks",
     "settings": "Settings",
     "language": "Language",
     "logout": "Logout",
@@ -655,22 +654,6 @@
     "creator": "Creator",
     "alreadyRegistered": "Already registered",
     "register": "Register"
-  },
-  "userTasks": {
-    "yourAssignedTasks": "Your assigned tasks",
-    "nothingToShow": "Nothing to show here."
-  },
-  "userTaskCard": {
-    "description": "Description",
-    "deadline": "Deadline",
-    "created": "Created",
-    "assignees": "Assignees",
-    "completed": "Completed",
-    "incomplete": "Incomplete",
-    "taskCompleted": "The task has been completed",
-    "taskNotCompleted": "The task has not been completed yet",
-    "event": "Event",
-    "organization": "Organization"
   },
   "advertisement": {
     "title": "Advertisements",

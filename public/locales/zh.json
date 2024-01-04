@@ -564,7 +564,6 @@
     "events": "活動",
     "chat": "聊天",
     "donate": "捐",
-    "myTasks": "我的任務",
     "settings": "設置",
     "language": "語言",
     "logout": "登出",
@@ -650,22 +649,6 @@
     "creator": "創作者",
     "alreadyRegistered": "已經註冊",
     "register": "登記"
-  },
-  "userTasks": {
-    "yourAssignedTasks": "您指派的任務",
-    "nothingToShow": "這裡沒有什麼可顯示的。"
-  },
-  "userTaskCard": {
-    "description": "描述",
-    "deadline": "最後期限",
-    "created": "已創建",
-    "assignees": "受讓人",
-    "completed": "完全的",
-    "incomplete": "不完整",
-    "taskCompleted": "任務已完成",
-    "taskNotCompleted": "任務還沒完成",
-    "event": "事件",
-    "organization": "組織"
   },
   "advertisement": {
     "title": "广告",
