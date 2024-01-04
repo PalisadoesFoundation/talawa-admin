@@ -3,6 +3,7 @@
   "version": "3.0.0",
   "private": true,
   "type": "module",
+  "config-overrides-path": "scripts/config-overrides",
   "dependencies": {
     "@apollo/client": "^3.4.0-beta.19",
     "@apollo/link-error": "^2.0.0-beta.3",
@@ -72,8 +73,8 @@
     "yarn": "^1.22.17"
   },
   "scripts": {
-    "serve": "node ./config-overrides/custom_start.js",
-    "build": "node ./config-overrides/custom_build.js",
+    "serve": "node ./scripts/config-overrides/custom_start.js",
+    "build": "node ./scripts/config-overrides/custom_build.js",
     "test": "cross-env NODE_ENV=test node scripts/test.js --env=./scripts/custom-test-env.js --watchAll --coverage",
     "eject": "react-scripts eject",
     "lint:check": "eslint \"**/*.{ts,tsx}\" --max-warnings=0",
