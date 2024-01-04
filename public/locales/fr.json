@@ -277,6 +277,7 @@
     "postDetails": "Détails de la publication",
     "postTitle1": "Écrire le titre de la publication",
     "postTitle": "Titre",
+    "addMedia": "Télécharger une photo ou une vidéo",
     "information": "Informations",
     "information1": "Écrire les informations de la publication",
     "image": "Image de la publication",
@@ -293,7 +294,8 @@
     "Oldest": "Les plus anciennes d'abord",
     "Latest": "Les plus récentes d'abord",
     "sortPost": "Trier les publications",
-    "tag": "Votre navigateur ne prend pas en charge la balise vidéo"
+    "tag": "Votre navigateur ne prend pas en charge la balise vidéo",
+    "postCreatedSuccess": "Félicitations ! Vous avez publié quelque chose."
   },
   "postNotFound": {
     "post": "Poste",
