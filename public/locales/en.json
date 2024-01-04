@@ -305,7 +305,8 @@
     "Oldest": "Oldest First",
     "Latest": "Latest First",
     "sortPost": "Sort Post",
-    "tag": " Your browser does not support the video tag"
+    "tag": " Your browser does not support the video tag",
+    "postCreatedSuccess": "Congratulations! You have Posted Something."
   },
   "postNotFound": {
     "post": "Post",
