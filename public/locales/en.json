@@ -94,6 +94,8 @@
     "displayImage": "Display Image",
     "enterName": "Enter Name",
     "sort": "Sort",
+    "Latest": "Latest",
+    "Earliest": "Earliest",
     "filter": "Filter",
     "cancel": "Cancel",
     "noOrgErrorTitle": "Organizations Not Found",
@@ -600,7 +602,12 @@
   "home": {
     "feed": "Feed",
     "pinnedPosts": "View Pinned Posts",
-    "somethingOnYourMind": "Something on your mind?"
+    "somethingOnYourMind": "Something on your mind?",
+    "addPost": "Add Post",
+    "startPost": "Start a post",
+    "media": "Media",
+    "event": "Event",
+    "article": "Article"
   },
   "settings": {
     "profileSettings": "Profile Settings",
@@ -608,7 +615,10 @@
     "lastName": "Last Name",
     "emailAddress": "Email Address",
     "updateImage": "Update Image",
-    "save": "Save"
+    "saveChanges": "Save Changes",
+    "updateProfile": "Update Profile",
+    "otherSettings": "Other Settings",
+    "changeLanguage": "Change Language"
   },
   "donate": {
     "donateTo": "Donate to",

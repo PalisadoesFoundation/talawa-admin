@@ -4,6 +4,18 @@
 
 In order to give everyone a chance to submit a pull request and contribute to the Talawa project, we have put restrictions in place. This section outlines the guidelines that should be imposed upon pull requests in the Talawa project.
 
+# Table of Contents
+
+<!-- toc -->
+
+- [Pull Requests and Issues](#pull-requests-and-issues)
+- [Linting and Formatting](#linting-and-formatting)
+- [Testing](#testing)
+- [Pull Request Processing](#pull-request-processing)
+  - [Only submit PRs against our `develop` branch, not the default `main` branch](#only-submit-prs-against-our-develop-branch-not-the-default-main-branch)
+
+<!-- tocstop -->
+
 ## Pull Requests and Issues
 
 1. Do not start working on any open issue and raise a PR unless the issue is assigned to you. PRs that don't meet these guidelines will be closed.

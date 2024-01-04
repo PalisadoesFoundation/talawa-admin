@@ -33,6 +33,11 @@
     "eventCardSeeAll": "查看全部",
     "noEvents": "暂无即将举行的活动"
   },
+  "latestPosts": {
+    "latestPostsTitle": "最新文章",
+    "seeAllLink": "查看全部",
+    "noPostsCreated": "暂无文章"
+  },
   "listNavbar": {
     "talawa_portal": "塔拉瓦管理門戶",
     "roles": "角色",
@@ -88,6 +93,8 @@
     "displayImage": "顯示圖像",
     "enterName": "输入名字",
     "sort": "排序",
+    "Earliest": "最早的",
+    "Latest": "最新的",
     "filter": "過濾",
     "cancel": "取消",
     "endOfResults": "結果結束",
@@ -590,7 +597,12 @@
   "home": {
     "feed": "餵養",
     "pinnedPosts": "查看固定帖子",
-    "somethingOnYourMind": "你有什麼心事嗎？"
+    "somethingOnYourMind": "你有什麼心事嗎？",
+    "addPost": "添加帖子",
+    "startPost": "开始一篇帖子",
+    "media": "媒体",
+    "event": "活动",
+    "article": "文章"
   },
   "settings": {
     "profileSettings": "配置文件設置",
@@ -598,7 +610,10 @@
     "lastName": "姓",
     "emailAddress": "電子郵件地址",
     "updateImage": "更新圖片",
-    "save": "節省"
+    "saveChanges": "保存更改",
+    "updateProfile": "更新个人信息",
+    "otherSettings": "其他设置",
+    "changeLanguage": "更改语言"
   },
   "donate": {
     "donateTo": "捐贈給",

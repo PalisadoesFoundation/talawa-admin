@@ -33,6 +33,11 @@
     "eventCardSeeAll": "Ver Todos",
     "noEvents": "No Hay Eventos Próximos"
   },
+  "latestPosts": {
+    "latestPostsTitle": "Últimas Publicaciones",
+    "seeAllLink": "Ver Todo",
+    "noPostsCreated": "No se han creado publicaciones"
+  },
   "listNavbar": {
     "talawa_portal": "Portal De Administración Talawa",
     "roles": "Roles",
@@ -88,6 +93,8 @@
     "displayImage": "Mostrar imagen",
     "enterName": "Ingrese su nombre",
     "sort": "Ordenar",
+    "Earliest": "Más Temprano",
+    "Latest": "El último",
     "filter": "Filtrar",
     "cancel": "Cancelar",
     "endOfResults": "Fin de los resultados",
@@ -590,7 +597,12 @@
   "home": {
     "feed": "Alimentar",
     "pinnedPosts": "Ver publicaciones fijadas",
-    "somethingOnYourMind": "¿Algo en tu mente?"
+    "somethingOnYourMind": "¿Algo en tu mente?",
+    "addPost": "Agregar publicación",
+    "startPost": "Comenzar una publicación",
+    "media": "Medios",
+    "event": "Evento",
+    "article": "Artículo"
   },
   "settings": {
     "profileSettings": "Configuración de perfil",
@@ -598,7 +610,10 @@
     "lastName": "Apellido",
     "emailAddress": "dirección de correo electrónico",
     "updateImage": "Actualizar imagen",
-    "save": "Ahorrar"
+    "saveChanges": "Guardar cambios",
+    "updateProfile": "Actualización del perfil",
+    "otherSettings": "Otras Configuraciones",
+    "changeLanguage": "Cambiar Idioma"
   },
   "donate": {
     "donateTo": "Donar a",
@@ -674,15 +689,16 @@
     "selectContact": "Seleccione un contacto para iniciar una conversación",
     "sendMessage": "Enviar mensaje"
   },
-  "campoPerfildeOrganización": {
-    "cargando": "Cargando...",
+
+  "orgProfileField": {
+    "loading": "Cargando..",
     "noCustomField": "No hay campos personalizados disponibles",
-    "customFieldName": "Nombre de campo",
-    "enterCustomFieldName": "Ingrese el nombre del campo",
-    "customFieldType": "Tipo de campo",
-    "saveChanges": "Guardar cambios",
-    "Eliminar campo personalizado": "Eliminar campo personalizado",
-    "fieldSuccessMessage": "Campo agregado exitosamente",
+    "customFieldName": "Nombre del Campo",
+    "enterCustomFieldName": "Ingrese el Nombre del Campo",
+    "customFieldType": "Tipo de Campo",
+    "saveChanges": "Guardar Cambios",
+    "Remove Custom Field": "Eliminar Campo Personalizado",
+    "fieldSuccessMessage": "Campo añadido exitosamente",
     "fieldRemovalSuccess": "Campo eliminado exitosamente"
   }
 }

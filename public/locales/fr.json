@@ -33,6 +33,11 @@
     "eventCardSeeAll": "Voir Tout",
     "noEvents": "Aucun événement à venir"
   },
+  "latestPosts": {
+    "latestPostsTitle": "Dernières Publications",
+    "seeAllLink": "Voir Tout",
+    "noPostsCreated": "Aucune Publication Créée"
+  },
   "listNavbar": {
     "talawa_portal": "Portail D'Administrateur Talawa",
     "roles": "Les rôles",
@@ -88,6 +93,8 @@
     "displayImage": "Afficher l'image",
     "enterName": "Entrez le nom",
     "sort": "Trier",
+    "Earliest": "Le plus tôt",
+    "Latest": "Dernière",
     "filter": "Filtre",
     "cancel": "Annuler",
     "endOfResults": "Fin des résultats",
@@ -590,7 +597,12 @@
   "home": {
     "feed": "Alimentation",
     "pinnedPosts": "Afficher les publications épinglées",
-    "somethingOnYourMind": "Quelque chose dans votre esprit?"
+    "somethingOnYourMind": "Quelque chose dans votre esprit?",
+    "addPost": "Ajouter une publication",
+    "startPost": "Commencer une publication",
+    "media": "Médias",
+    "event": "Événement",
+    "article": "Article"
   },
   "settings": {
     "profileSettings": "Paramètres de profil",
@@ -598,7 +610,10 @@
     "lastName": "Nom de famille",
     "emailAddress": "Adresse e-mail",
     "updateImage": "Mettre à jour l'image",
-    "save": "Sauvegarder"
+    "saveChanges": "Sauvegarder les modifications",
+    "updateProfile": "Mettre à jour le profil",
+    "otherSettings": "Autres paramètres",
+    "changeLanguage": "Changer la langue"
   },
   "donate": {
     "donateTo": "Faire un don à",
