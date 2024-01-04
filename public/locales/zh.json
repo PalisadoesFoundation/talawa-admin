@@ -276,6 +276,7 @@
     "postDetails": "帖子详情",
     "postTitle1": "填写帖子标题",
     "postTitle": "标题",
+    "addMedia": "上传照片或视频",
     "information": "信息",
     "information1": "填写帖子信息",
     "image": "帖子图片",
@@ -292,7 +293,8 @@
     "Oldest": "最旧的优先",
     "Latest": "最新的优先",
     "sortPost": "排序帖子",
-    "tag": "您的浏览器不支持视频标签"
+    "tag": "您的浏览器不支持视频标签",
+    "postCreatedSuccess": "恭喜！您已经发布了一些内容。"
   },
   "postNotFound": {
     "post": "郵政",
