@@ -25,8 +25,9 @@
     "notAuthorised": "Désolé ! vous n'êtes pas autorisé !",
     "notFound": "Utilisateur introuvable !",
     "successfullyRegistered": "Enregistré avec succès. Veuillez patienter jusqu'à ce que vous soyez approuvé.",
-    "login_to_admin_portal": "Connexion à l'administration du portail",
-    "OR": "OU"
+    "OR": "OU",
+    "admin": "ADMIN",
+    "user": "UTILISATEUR"
   },
   "latestEvents": {
     "eventCardTitle": "Événements à venir",

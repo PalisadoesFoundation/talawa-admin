@@ -166,7 +166,7 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    expect(screen.getByText(/Admin Portal/i)).toBeInTheDocument();
+    expect(screen.getByText(/Admin/i)).toBeInTheDocument();
     expect(window.location).toBeAt('/orglist');
   });
 

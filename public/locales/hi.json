@@ -25,8 +25,9 @@
     "notAuthorised": "क्षमा करें! आप अधिकृत नहीं हैं!",
     "notFound": "उपयोगकर्ता नहीं मिला!",
     "successfullyRegistered": "सफलतापूर्वक पंजीकृत। कृपया स्वीकृत होने तक प्रतीक्षा करें।",
-    "login_to_admin_portal": "एडमिन पोर्टल लॉगिन",
-    "OR": "या"
+    "OR": "या",
+    "admin": "व्यवस्थापक",
+    "user": "उपयोगकर्ता"
   },
   "latestEvents": {
     "eventCardTitle": "आगामी घटनाएँ",

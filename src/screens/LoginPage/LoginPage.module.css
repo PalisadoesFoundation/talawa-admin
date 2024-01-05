@@ -58,6 +58,31 @@
   color: var(--bs-secondary);
 }
 
+.navLinkClass {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  color: #212529;
+  border-radius: 0.25rem;
+  width: 100%;
+  box-sizing: border-box;
+  font-weight: 500;
+  transition: font-weight 0.3s ease;
+}
+
+.navLinkClass:hover {
+  font-weight: 700;
+}
+
+.activeLink {
+  border-bottom: 3px solid;
+  width: 100%;
+}
+
 @media (max-width: 992px) {
   .row .left_portion {
     padding: 0 2rem;

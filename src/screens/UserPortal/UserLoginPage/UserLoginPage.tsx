@@ -17,6 +17,8 @@ import {
   TwitterLogo,
   YoutubeLogo,
 } from 'assets/svgs/social-icons';
+import { NavLink } from 'react-router-dom';
+import { Col, Row } from 'react-bootstrap';
 
 export default function userLoginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -96,6 +98,28 @@ export default function userLoginPage(): JSX.Element {
           src={TalawaImage}
           alt="Talawa Branding"
         />
+        <Row className="mb-3">
+          <Col>
+            <NavLink
+              className={styles.navLinkClass}
+              activeClassName={styles.activeLink}
+              exact
+              to="/"
+            >
+              {t('admin')}
+            </NavLink>
+          </Col>
+          <Col>
+            <NavLink
+              className={styles.navLinkClass}
+              activeClassName={styles.activeLink}
+              exact
+              to="/user"
+            >
+              {t('user')}
+            </NavLink>
+          </Col>
+        </Row>
         {
           /* istanbul ignore next */
           currentMode === 'login' ? (

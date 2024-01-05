@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, NavLink, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import {
@@ -299,6 +299,29 @@ function loginPage(): JSX.Element {
                   showTab === 'REGISTER' && styles.marginTopForReg
                 }`}
               />
+
+              <Row className="mb-5">
+                <Col>
+                  <NavLink
+                    className={styles.navLinkClass}
+                    activeClassName={styles.activeLink}
+                    exact
+                    to="/"
+                  >
+                    {t('admin')}
+                  </NavLink>
+                </Col>
+                <Col>
+                  <NavLink
+                    className={styles.navLinkClass}
+                    activeClassName={styles.activeLink}
+                    exact
+                    to="/user"
+                  >
+                    {t('user')}
+                  </NavLink>
+                </Col>
+              </Row>
               {/* LOGIN FORM */}
               <div
                 className={`${
@@ -306,9 +329,7 @@ function loginPage(): JSX.Element {
                 }`}
               >
                 <form onSubmit={loginLink}>
-                  <h1 className="fs-2 fw-bold text-dark mb-3">
-                    {t('login_to_admin_portal')}
-                  </h1>
+                  <h1 className="fs-2 fw-bold text-dark mb-3">{t('login')}</h1>
                   <Form.Label>{t('email')}</Form.Label>
                   <div className="position-relative">
                     <Form.Control

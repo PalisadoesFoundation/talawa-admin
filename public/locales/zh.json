@@ -25,8 +25,9 @@
     "notAuthorised": "抱歉！你沒有被授權！",
     "notFound": "找不到用戶！",
     "successfullyRegistered": "註冊成功，請等待審核通過。",
-    "login_to_admin_portal": " 管理员门户登录 ",
-    "OR": "或者"
+    "OR": "或者",
+    "admin": "行政",
+    "user": "用戶"
   },
   "latestEvents": {
     "eventCardTitle": "即将举行的活动",
