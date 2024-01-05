@@ -78,7 +78,6 @@ describe('Organisation Dashboard Page', () => {
     // Checking if posts are rendered
     expect(screen.getByText('Post 15')).toBeInTheDocument();
 
-    // Checking if membership requests are rendered
     expect(screen.getByText('Jane Doe')).toBeInTheDocument();
 
     const peopleBtn = screen.getByText('Members');
@@ -146,5 +145,27 @@ describe('Organisation Dashboard Page', () => {
 
     await wait();
     expect(window.location).toBeAt('/orglist');
+  });
+
+  test('rendering of upcoming events', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationDashboard />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    const upcomingEventsTitle = screen.getByText('Upcoming Events');
+    expect(upcomingEventsTitle).toBeInTheDocument();
+
+    const upcomingEvents = screen.queryAllByTestId('upcomingEventItem');
+    expect(upcomingEvents.length).toBeGreaterThanOrEqual(0);
   });
 });

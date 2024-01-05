@@ -228,7 +228,7 @@ function organizationDashboard(): JSX.Element {
                   {t('viewAll')}
                 </Button>
               </div>
-              <Card.Body className={styles.cardBody}>
+              <Card.Body className={styles.memeberShipCard}>
                 {loadingOrgData ? (
                   [...Array(4)].map((_, index) => {
                     return <CardItemLoading key={index} />;
