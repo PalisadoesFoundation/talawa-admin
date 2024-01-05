@@ -13,7 +13,7 @@
     "atleast_6_char_long": "Atleast 6 Character long",
     "firstName_invalid": "First name should contain only lower and upper case letters",
     "lastName_invalid": "First name should contain only lower and upper case letters",
-    "password_invalid": "Password should contain atleast one lowercase, one uppercase, one numeric value and one special character",
+    "password_invalid": "Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character",
     "Password_and_Confirm_password_mismatches.": "Password and Confirm password mismatches.",
     "confirmPassword": "Confirm Password",
     "forgotPassword": "Forgot Password ?",
