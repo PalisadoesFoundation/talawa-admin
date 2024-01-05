@@ -40,13 +40,19 @@ export const ORGANIZATION_LIST = gql`
   }
 `;
 
-// Query to take the Organization list with filter option
+// Query to take the Organization list with filter  and sort option
 export const ORGANIZATION_CONNECTION_LIST = gql`
-  query OrganizationsConnection($filter: String, $first: Int, $skip: Int) {
+  query OrganizationsConnection(
+    $filter: String
+    $first: Int
+    $skip: Int
+    $orderBy: OrganizationOrderByInput
+  ) {
     organizationsConnection(
       where: { name_contains: $filter }
       first: $first
       skip: $skip
+      orderBy: $orderBy
     ) {
       _id
       image
