@@ -210,93 +210,6 @@ function organizationDashboard(): JSX.Element {
                 </Col>
               </Row>
             )}
-            <Row>
-              <Col lg={6} className="mb-4">
-                <Card border="0" className="rounded-4">
-                  <div className={styles.cardHeader}>
-                    <div className={styles.cardTitle}>
-                      {t('upcomingEvents')}
-                    </div>
-                    <Button
-                      size="sm"
-                      variant="light"
-                      data-testid="viewAllEvents"
-                      onClick={(): void => history.push(eventsLink)}
-                    >
-                      {t('viewAll')}
-                    </Button>
-                  </div>
-                  <Card.Body className={styles.cardBody}>
-                    {loadingEvent ? (
-                      [...Array(4)].map((_, index) => {
-                        return <CardItemLoading key={index} />;
-                      })
-                    ) : upcomingEvents.length == 0 ? (
-                      <div className={styles.emptyContainer}>
-                        <h6>{t('noUpcomingEvents')}</h6>
-                      </div>
-                    ) : (
-                      upcomingEvents.map(
-                        (event: InterfaceQueryOrganizationEventListItem) => {
-                          return (
-                            <CardItem
-                              type="Event"
-                              key={event._id}
-                              time={event.startDate}
-                              title={event.title}
-                              location={event.location}
-                            />
-                          );
-                        }
-                      )
-                    )}
-                  </Card.Body>
-                </Card>
-              </Col>
-              <Col lg={6} className="mb-4">
-                <Card border="0" className="rounded-4">
-                  <div className={styles.cardHeader}>
-                    <div className={styles.cardTitle}>{t('latestPosts')}</div>
-                    <Button
-                      size="sm"
-                      variant="light"
-                      data-testid="viewAllPosts"
-                      onClick={(): void => history.push(postsLink)}
-                    >
-                      {t('viewAll')}
-                    </Button>
-                  </div>
-                  <Card.Body className={styles.cardBody}>
-                    {loadingPost ? (
-                      [...Array(4)].map((_, index) => {
-                        return <CardItemLoading key={index} />;
-                      })
-                    ) : postData?.postsByOrganizationConnection.edges.length ==
-                      0 ? (
-                      /* eslint-disable */
-                      <div className={styles.emptyContainer}>
-                        <h6>{t('noPostsPresent')}</h6>
-                      </div>
-                    ) : (
-                      /* eslint-enable */
-                      postData?.postsByOrganizationConnection.edges
-                        .slice(0, 5)
-                        .map((post: any) => {
-                          return (
-                            <CardItem
-                              type="Post"
-                              key={post._id}
-                              title={post.title}
-                              time={post.createdAt}
-                              creator={post.creator}
-                            />
-                          );
-                        })
-                    )}
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
           </Col>
           <Col xl={4}>
             <Card border="0" className="rounded-4">
@@ -333,6 +246,91 @@ function organizationDashboard(): JSX.Element {
                           type="MembershipRequest"
                           key={request._id}
                           title={`${request.user.firstName} ${request.user.lastName}`}
+                        />
+                      );
+                    })
+                )}
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+        <Row className={styles.BottomRow}>
+          <Col lg={6} className="mb-4">
+            <Card border="0" className="rounded-4">
+              <div className={styles.cardHeader}>
+                <div className={styles.cardTitle}>{t('upcomingEvents')}</div>
+                <Button
+                  size="sm"
+                  variant="light"
+                  data-testid="viewAllEvents"
+                  onClick={(): void => history.push(eventsLink)}
+                >
+                  {t('viewAll')}
+                </Button>
+              </div>
+              <Card.Body className={styles.cardBody}>
+                {loadingEvent ? (
+                  [...Array(4)].map((_, index) => {
+                    return <CardItemLoading key={index} />;
+                  })
+                ) : upcomingEvents.length == 0 ? (
+                  <div className={styles.emptyContainer}>
+                    <h6>{t('noUpcomingEvents')}</h6>
+                  </div>
+                ) : (
+                  upcomingEvents.map(
+                    (event: InterfaceQueryOrganizationEventListItem) => {
+                      return (
+                        <CardItem
+                          type="Event"
+                          key={event._id}
+                          time={event.startDate}
+                          title={event.title}
+                          location={event.location}
+                        />
+                      );
+                    }
+                  )
+                )}
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col lg={6} className="mb-4">
+            <Card border="0" className="rounded-4">
+              <div className={styles.cardHeader}>
+                <div className={styles.cardTitle}>{t('latestPosts')}</div>
+                <Button
+                  size="sm"
+                  variant="light"
+                  data-testid="viewAllPosts"
+                  onClick={(): void => history.push(postsLink)}
+                >
+                  {t('viewAll')}
+                </Button>
+              </div>
+              <Card.Body className={styles.cardBody}>
+                {loadingPost ? (
+                  [...Array(4)].map((_, index) => {
+                    return <CardItemLoading key={index} />;
+                  })
+                ) : postData?.postsByOrganizationConnection.edges.length ==
+                  0 ? (
+                  /* eslint-disable */
+                  <div className={styles.emptyContainer}>
+                    <h6>{t('noPostsPresent')}</h6>
+                  </div>
+                ) : (
+                  /* eslint-enable */
+                  postData?.postsByOrganizationConnection.edges
+                    .slice(0, 5)
+                    .map((post: any) => {
+                      return (
+                        <CardItem
+                          type="Post"
+                          key={post._id}
+                          title={post.title}
+                          time={post.createdAt}
+                          creator={post.creator}
                         />
                       );
                     })

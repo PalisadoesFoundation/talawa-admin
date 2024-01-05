@@ -4,7 +4,7 @@
   align-items: center;
   background-color: #f1f3f68f;
   border-radius: 8px;
-  padding: 16px;
+  padding: 15px;
   margin-top: 20px;
 }
 
@@ -15,7 +15,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 18px;
+  /* margin-right: 18px; */
 }
 
 .cardItem .iconWrapper .themeOverlay {
@@ -27,6 +27,7 @@
   left: 0;
   opacity: 0.12;
   border-radius: 4px;
+  /* margin-right: 18px; */
 }
 
 .cardItem .iconWrapper .dangerOverlay {
@@ -48,7 +49,7 @@
   word-wrap: break-word;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
 }
 
@@ -74,5 +75,5 @@
 .content {
   display: flex;
   flex-direction: column;
-  max-width: 60%;
+  max-width: 85%;
 }
