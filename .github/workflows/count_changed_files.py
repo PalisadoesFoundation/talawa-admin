@@ -75,10 +75,14 @@ def _arg_parser_resolver():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--base_branch",
+        type=str,
+        required=True,
         help="Base branch where pull request should be made."
     ),
     parser.add_argument(
         "--PR_branch",
+        type=str,
+        required=True,
         help="PR branch from where the pull request is made.",
     ),
     parser.add_argument(
