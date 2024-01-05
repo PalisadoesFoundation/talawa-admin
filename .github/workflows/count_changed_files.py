@@ -28,13 +28,13 @@ import argparse
 import subprocess
 
 
-def _count_changed_files(base_branch, current_branch):
+def _count_changed_files(base_branch, PR_branch):
     """
     Count the number of changed files between two branches.
 
     Args:
         base_branch (str): The base branch.
-        current_branch (str): The current branch.
+        PR_branch (str): The PR branch.
 
     Returns:
         int: The number of changed files.
@@ -42,21 +42,11 @@ def _count_changed_files(base_branch, current_branch):
     Raises:
         SystemExit: If an error occurs during execution.
     """
-    try:
-        base_branch = f"origin/{base_branch}"
-    except Exception as e:
-        print(f"Error setting base_branch: {e}")
-        sys.exit(1)
-
-    try:
-        current_branch = f"origin/{current_branch}"
-    except Exception as e:
-        print(f"Error setting current_branch: {e}")
-        sys.exit(1)
-
+    base_branch = f"origin/{base_branch}"
+    PR_branch = f"origin/{PR_branch}"
     try:
         # Run git command to get the list of changed files
-        command = f"git diff --name-only {base_branch}...{current_branch} | wc -l"
+        command = f"git diff --name-only {base_branch}...{PR_branch} | wc -l"
         process = subprocess.Popen(
             command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
@@ -85,13 +75,18 @@ def _arg_parser_resolver():
     """
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "base_branch", type=str, help="Base branch where pull request should be made."
+        "--base_branch",
+        help="Base branch where pull request should be made."
     ),
     parser.add_argument(
-        "current_commit",
-        type=str,
-        help="Current branch from where the pull request is made.",
+        "--PR_branch",
+        help="PR branch from where the pull request is made.",
     ),
+    parser.add_argument(
+        "--file_count",
+        type=int,
+        default=20,
+        help="Number of files changes allowed in a single commit")
     return parser.parse_args()
 
 
@@ -101,7 +96,7 @@ def main():
 
     This function serves as the entry point for the script. It performs
     the following tasks:
-    1. Validates and retrieves the base branch and current commit from
+    1. Validates and retrieves the base branch and PR commit from
        command line arguments.
     2. Counts the number of changed files between the specified branches.
     3. Checks if the count of changed files exceeds the acceptable
@@ -115,15 +110,15 @@ def main():
     args = _arg_parser_resolver()
     base_branch = args.base_branch
     print(f"You are trying to merge on branch: {base_branch}")  # Print for verification
-    current_branch = args.current_commit
+    PR_branch = args.PR_branch
     print(
-        f"You are making commit from your branch: {current_branch}"
+        f"You are making commit from your branch: {PR_branch}"
     )  # Print for verification
     # Count changed files
-    file_count = _count_changed_files(base_branch, current_branch)
+    file_count = _count_changed_files(base_branch, PR_branch)
     print(f"Number of changed files: {file_count}")
     # Check if the count exceeds 20
-    if file_count > 20:
+    if file_count > args.file_count:
         print("Error: Too many files (greater than 20) changed in the pull request.")
         print("Possible issues:")
         print("- Contributor may be merging into an incorrect branch.")
