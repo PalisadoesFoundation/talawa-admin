@@ -30,7 +30,11 @@
     "notFound": "Utilisateur introuvable !",
     "successfullyRegistered": "Enregistré avec succès. Veuillez patienter jusqu'à ce que vous soyez approuvé.",
     "login_to_admin_portal": "Connexion à l'administration du portail",
-    "OR": "OU"
+    "OR": "OU",
+    "lowercase_check": "Au moins une lettre minuscule",
+    "uppercase_check": "Au moins une lettre majuscule",
+    "special_char_check": "Au moins un caractère spécial",
+    "numeric_value_check": "Au moins une valeur numérique"
   },
   "latestEvents": {
     "eventCardTitle": "Événements à venir",

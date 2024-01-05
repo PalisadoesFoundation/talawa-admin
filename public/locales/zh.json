@@ -30,7 +30,11 @@
     "notFound": "找不到用戶！",
     "successfullyRegistered": "註冊成功，請等待審核通過。",
     "login_to_admin_portal": " 管理员门户登录 ",
-    "OR": "或者"
+    "OR": "或者",
+    "lowercase_check": "至少一個小寫字母",
+    "uppercase_check": "至少有一個大寫字母",
+    "numeric_value_check": "至少一個數值",
+    "special_char_check": "至少一個特殊字符"
   },
   "latestEvents": {
     "eventCardTitle": "即将举行的活动",

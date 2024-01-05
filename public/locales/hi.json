@@ -30,7 +30,11 @@
     "notFound": "उपयोगकर्ता नहीं मिला!",
     "successfullyRegistered": "सफलतापूर्वक पंजीकृत। कृपया स्वीकृत होने तक प्रतीक्षा करें।",
     "login_to_admin_portal": "एडमिन पोर्टल लॉगिन",
-    "OR": "या"
+    "OR": "या",
+    "lowercase_check": "कम से कम एक छोटा अक्षर",
+    "uppercase_check": "कम से कम एक बड़ा अक्षर",
+    "numeric_value_check": "कम से कम एक संख्यात्मक मान",
+    "special_char_check": "कम से कम एक विशेष पात्र"
   },
   "latestEvents": {
     "eventCardTitle": "आगामी घटनाएँ",

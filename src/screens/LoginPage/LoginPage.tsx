@@ -9,6 +9,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
 import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Check, Clear } from '@mui/icons-material';
 
 import {
   FacebookLogo,
@@ -57,6 +58,53 @@ function loginPage(): JSX.Element {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
+  const [showLowercaseCharAlert, setShowLowercaseCharAlert] =
+    useState<boolean>(true);
+  const [showUppercaseCharAlert, setShowUppercaseCharAlert] =
+    useState<boolean>(true);
+  const [showNumericValueAlert, setShowNumericValueAlert] =
+    useState<boolean>(true);
+  const [showSpecialCharAlert, setShowSpecialCharAler] =
+    useState<boolean>(true);
+
+  const handleLowercasePassCheck = (pass: string): void => {
+    const lowercaseCheck = new RegExp('[a-z]');
+    const success = lowercaseCheck.test(pass);
+    if (success) {
+      setShowLowercaseCharAlert(false);
+    } else {
+      setShowLowercaseCharAlert(true);
+    }
+  };
+
+  const handleUppercasePassCheck = (pass: string): void => {
+    const uppercaseCheck = new RegExp('[A-Z]');
+    const success = uppercaseCheck.test(pass);
+    if (success) {
+      setShowUppercaseCharAlert(false);
+    } else {
+      setShowUppercaseCharAlert(true);
+    }
+  };
+  const handleNumericalValuePassCheck = (pass: string): void => {
+    const numericalCheck = new RegExp('\\d');
+    const success = numericalCheck.test(pass);
+    if (success) {
+      setShowNumericValueAlert(false);
+    } else {
+      setShowNumericValueAlert(true);
+    }
+  };
+  const handleSpecialCharPassCheck = (pass: string): void => {
+    const specialCharCheck = new RegExp('[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\/-]');
+    const success = specialCharCheck.test(pass);
+    if (success) {
+      setShowSpecialCharAler(false);
+    } else {
+      setShowSpecialCharAler(true);
+    }
+  };
+
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   useEffect(() => {
@@ -542,6 +590,10 @@ function loginPage(): JSX.Element {
                             ...signformState,
                             signPassword: e.target.value,
                           });
+                          handleLowercasePassCheck(e.target.value);
+                          handleUppercasePassCheck(e.target.value);
+                          handleNumericalValuePassCheck(e.target.value);
+                          handleSpecialCharPassCheck(e.target.value);
                         }}
                       />
                       <Button
@@ -556,25 +608,108 @@ function loginPage(): JSX.Element {
                         )}
                       </Button>
                     </div>
-                    {isInputFocused &&
-                      signformState.signPassword.length < 6 && (
-                        <div
-                          className="form-text text-danger"
-                          data-testid="passwordCheck"
-                        >
-                          {t('atleast_6_char_long')}
-                        </div>
-                      )}
-                    {!isInputFocused &&
-                      signformState.signPassword.length > 0 &&
-                      signformState.signPassword.length < 6 && (
-                        <div
-                          className="form-text text-danger"
-                          data-testid="passwordCheck"
-                        >
-                          {t('atleast_6_char_long')}
-                        </div>
-                      )}
+                    <div>
+                      {isInputFocused ? (
+                        signformState.signPassword.length < 6 ? (
+                          <div data-testid="passwordCheck">
+                            <p className="form-text text-danger">
+                              <span>
+                                <Clear className="" />
+                              </span>
+                              {t('atleast_6_char_long')}
+                            </p>
+                          </div>
+                        ) : (
+                          <p className="form-text text-success">
+                            <span>
+                              <Check />
+                            </span>
+                            {t('atleast_6_char_long')}
+                          </p>
+                        )
+                      ) : null}
+                      {!isInputFocused &&
+                        signformState.signPassword.length > 0 &&
+                        signformState.signPassword.length < 6 && (
+                          <div
+                            className="form-text text-danger"
+                            data-testid="passwordCheck"
+                          >
+                            <span>
+                              <Check className="size-sm" />
+                            </span>
+                            {t('atleast_6_char_long')}
+                          </div>
+                        )}
+                      {isInputFocused ? (
+                        showLowercaseCharAlert ? (
+                          <p className="form-text text-danger">
+                            <span>
+                              <Clear />
+                              {t('lowercase_check')}
+                            </span>
+                          </p>
+                        ) : (
+                          <p className="form-text text-success">
+                            <span>
+                              <Check />
+                            </span>
+                            {t('lowercase_check')}
+                          </p>
+                        )
+                      ) : null}
+                      {isInputFocused ? (
+                        showUppercaseCharAlert ? (
+                          <p className="form-text text-danger">
+                            <span>
+                              <Clear />
+                            </span>
+                            {t('uppercase_check')}
+                          </p>
+                        ) : (
+                          <p className="form-text text-success">
+                            <span>
+                              <Check />
+                            </span>
+                            {t('uppercase_check')}
+                          </p>
+                        )
+                      ) : null}
+                      {isInputFocused ? (
+                        showNumericValueAlert ? (
+                          <p className="form-text text-danger">
+                            <span>
+                              <Clear />
+                            </span>
+                            {t('numeric_value_check')}
+                          </p>
+                        ) : (
+                          <p className="form-text text-success">
+                            <span>
+                              <Check />
+                            </span>
+                            {t('numeric_value_check')}
+                          </p>
+                        )
+                      ) : null}
+                      {isInputFocused ? (
+                        showSpecialCharAlert ? (
+                          <p className="form-text text-danger">
+                            <span>
+                              <Clear />
+                            </span>
+                            {t('special_char_check')}
+                          </p>
+                        ) : (
+                          <p className="form-text text-success">
+                            <span>
+                              <Check />
+                            </span>
+                            {t('special_char_check')}
+                          </p>
+                        )
+                      ) : null}
+                    </div>
                   </div>
                   <div className="position-relative">
                     <Form.Label>{t('confirmPassword')}</Form.Label>

@@ -30,7 +30,11 @@
     "notFound": "¡Usuario no encontrado!",
     "successfullyRegistered": "Registrado con éxito. Espere hasta que sea aprobado",
     "login_to_admin_portal": "Inicio de sesión en el portal de administración",
-    "OR": "O"
+    "OR": "O",
+    "lowercase_check": "Al menos una letra mayuscula",
+    "uppercase_check": "Al menos una letra minúscula",
+    "numeric_value_check": "Al menos un valor numérico",
+    "special_char_check": "Al menos un carácter especial"
   },
   "latestEvents": {
     "eventCardTitle": "Próximos Eventos",
