@@ -16,6 +16,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
+import { toast } from 'react-toastify';
 
 const MOCKS = [
   {
@@ -256,7 +257,6 @@ describe('Testing Login Page Screen', () => {
       screen.getByPlaceholderText('Confirm Password'),
       formData.confirmPassword
     );
-
     userEvent.click(screen.getByTestId('registrationBtn'));
   });
 
