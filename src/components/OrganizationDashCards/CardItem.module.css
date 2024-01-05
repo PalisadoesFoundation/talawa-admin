@@ -15,7 +15,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* margin-right: 18px; */
 }
 
 .cardItem .iconWrapper .themeOverlay {
@@ -27,7 +26,6 @@
   left: 0;
   opacity: 0.12;
   border-radius: 4px;
-  /* margin-right: 18px; */
 }
 
 .cardItem .iconWrapper .dangerOverlay {
