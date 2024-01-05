@@ -428,7 +428,8 @@
     "deleteMsg": "Voulez-vous supprimer cette organisation ?",
     "cancel": "Annuler",
     "confirmDelete": "Confirmer la suppression",
-    "longDelOrgMsg": "En cliquant sur le bouton Supprimer l'organisation, l'organisation sera définitivement supprimée ainsi que ses événements, balises et toutes les données associées."
+    "longDelOrgMsg": "En cliquant sur le bouton Supprimer l'organisation, l'organisation sera définitivement supprimée ainsi que ses événements, balises et toutes les données associées.",
+    "successfullyDeletedSampleOrganization": "Exemple d'organisation supprimé avec succès"
   },
   "userUpdate": {
     "firstName": "Prénom",

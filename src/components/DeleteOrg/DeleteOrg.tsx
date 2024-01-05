@@ -33,12 +33,14 @@ function deleteOrg(): JSX.Element {
     if (data && data.isSampleOrganization) {
       removeSampleOrganization()
         .then(() => {
-          toast.success('Successfully deleted sample Organization');
+          toast.success(t('successfullyDeletedSampleOrganization'));
+          setTimeout(() => {
+            window.location.replace('/orglist');
+          }, 1000);
         })
         .catch((error) => {
           toast.error(error.message);
         });
-      window.location.replace('/orglist');
     } else {
       try {
         await del({
@@ -82,7 +84,7 @@ function deleteOrg(): JSX.Element {
           onHide={toggleDeleteModal}
           data-testid="orgDeleteModal"
         >
-          <Modal.Header className="bg-danger" closeButton>
+          <Modal.Header className="bg-primary" closeButton>
             <h5 className="text-white fw-bold">{t('deleteOrganization')}</h5>
           </Modal.Header>
           <Modal.Body>{t('deleteMsg')}</Modal.Body>
