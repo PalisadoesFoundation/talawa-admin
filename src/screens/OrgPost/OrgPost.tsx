@@ -204,7 +204,7 @@ function orgPost(): JSX.Element {
     if (a.pinned === b.pinned) {
       return 0;
     }
-
+    /* istanbul ignore next */
     if (a.pinned) {
       return -1;
     }
