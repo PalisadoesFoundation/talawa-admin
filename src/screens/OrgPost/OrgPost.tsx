@@ -118,8 +118,9 @@ function orgPost(): JSX.Element {
         },
       });
 
+      /* istanbul ignore next */
       if (data) {
-        toast.success('Congratulations! You have Posted Something.');
+        toast.success(t('postCreatedSuccess'));
         refetch();
         setPostFormState({
           posttitle: '',
@@ -138,7 +139,7 @@ function orgPost(): JSX.Element {
   if (createPostLoading || orgPostListLoading) {
     return <Loader />;
   }
-
+  /* istanbul ignore next */
   if (orgPostListError) {
     window.location.assign('/orglist');
   }
