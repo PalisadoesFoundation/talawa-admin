@@ -45,4 +45,14 @@ body::before {
   .leftPane {
     width: 100%;
   }
+
+  .socialIcons {
+    margin-bottom: 1rem;
+  }
+}
+
+.socialIcons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
 }
