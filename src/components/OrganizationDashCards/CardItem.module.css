@@ -2,10 +2,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  padding-left: 1.5rem;
-  padding-right: 3rem;
+  padding: 1rem 3rem 1rem 1.5rem;
   border: 1px solid #dddddd;
   border-radius: 8px;
   margin-top: 20px;
@@ -89,4 +86,6 @@
   justify-content: center;
   flex-direction: column;
   margin-left: 10px;
+  overflow-x: hidden;
+  width: 210px;
 }

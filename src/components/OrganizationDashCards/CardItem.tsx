@@ -26,7 +26,7 @@ const cardItem = (props: InterfaceCardItem): JSX.Element => {
         <div className={`${styles.iconWrapper} me-3`}>
           <div className={styles.themeOverlay} />
           {type == 'Event' ? (
-            <EventsIcon width={40} height={40} />
+            <EventsIcon fill="var(--bs-primary)" width={20} height={20} />
           ) : type == 'Post' ? (
             <PostsIcon fill="var(--bs-primary)" width={20} height={20} />
           ) : (
