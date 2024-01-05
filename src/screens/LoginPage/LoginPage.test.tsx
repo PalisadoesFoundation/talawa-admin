@@ -16,7 +16,6 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import { toast } from 'react-toastify';
 
 const MOCKS = [
   {
