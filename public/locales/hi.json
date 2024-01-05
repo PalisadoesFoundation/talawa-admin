@@ -48,7 +48,6 @@
     "talawaAdminPortal": "तलावा व्यवस्थापक पोर्टल",
     "menu": "मेन्यू",
     "my organizations": "मेरे संगठन",
-    "requests": "अनुरोध",
     "users": "उपयोगकर्ता",
     "logout": "लॉग आउट"
   },
@@ -145,27 +144,6 @@
     "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला ",
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।",
     "cancel": "रद्द करें"
-  },
-  "requests": {
-    "title": "तलवा अनुरोध",
-    "searchByName": "नाम से खोजें",
-    "requests": "अनुरोध",
-    "name": "नाम",
-    "email": "ईमेल",
-    "accept": "स्वीकार करना",
-    "reject": "अस्वीकार",
-    "enterName": "नाम दर्ज करें",
-    "endOfResults": "परिणामों का अंत",
-    "loadingRequests": "अनुरोध लोड हो रहा है ...",
-    "noRequestFound": "कोई अनुरोध नहीं मिला।",
-    "sort": "छांटें",
-    "filter": "फ़िल्टर",
-    "Oldest": "सबसे पुराना पहले",
-    "Latest": "सबसे नवीनतम पहले",
-    "userApproved": "उपयोगकर्ता स्वीकृत",
-    "userRejected": "उपयोगकर्ता अस्वीकृत",
-    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला ",
-    "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।"
   },
   "dashboard": {
     "title": "डैशबोर्ड",
