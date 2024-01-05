@@ -147,25 +147,52 @@ describe('Organisation Dashboard Page', () => {
     expect(window.location).toBeAt('/orglist');
   });
 
-  test('rendering of upcoming events', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link1}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationDashboard />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
+  test('Testing empty membership requests and upcoming events with populated posts', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link2}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrganizationDashboard />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+    });
 
     await wait();
 
-    const upcomingEventsTitle = screen.getByText('Upcoming Events');
-    expect(upcomingEventsTitle).toBeInTheDocument();
+    const viewMSBtn = screen.getByTestId('viewAllMembershipRequests');
 
-    const upcomingEvents = screen.queryAllByTestId('upcomingEventItem');
-    expect(upcomingEvents.length).toBeGreaterThanOrEqual(0);
+    fireEvent.click(viewMSBtn);
+    expect(toast.success).toBeCalledWith('Coming soon!');
+
+    expect(
+      screen.getByText(/No Membership requests present/i)
+    ).toBeInTheDocument();
+    expect(screen.getByText(/No Upcoming Events/i)).toBeInTheDocument();
+    expect(screen.queryByText(/No Posts Present/i)).toBeInTheDocument();
+  });
+
+  test('Testing error scenario redirects to orglist page', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link3}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrganizationDashboard />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+    });
+
+    await wait();
+
+    expect(window.location.pathname).toBe('/orglist');
   });
 });
