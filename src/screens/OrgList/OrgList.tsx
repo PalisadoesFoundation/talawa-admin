@@ -597,7 +597,7 @@ function orgList(): JSX.Element {
                   <Button
                     variant="secondary"
                     onClick={closeDialogModal}
-                    data-testid="closeModalBtn"
+                    data-testid="submitOrganizationForm"
                   >
                     <i
                       className="fa fa-times"
