@@ -608,11 +608,13 @@ function loginPage(): JSX.Element {
                         )}
                       </Button>
                     </div>
-                    <div>
+                    <div className={styles.password_checks}>
                       {isInputFocused ? (
                         signformState.signPassword.length < 6 ? (
                           <div data-testid="passwordCheck">
-                            <p className="form-text text-danger">
+                            <p
+                              className={`form-text text-danger ${styles.password_check_element_top}`}
+                            >
                               <span>
                                 <Clear className="" />
                               </span>
@@ -620,7 +622,9 @@ function loginPage(): JSX.Element {
                             </p>
                           </div>
                         ) : (
-                          <p className="form-text text-success">
+                          <p
+                            className={`form-text text-success ${styles.password_check_element_top}`}
+                          >
                             <span>
                               <Check />
                             </span>
@@ -628,11 +632,12 @@ function loginPage(): JSX.Element {
                           </p>
                         )
                       ) : null}
+
                       {!isInputFocused &&
                         signformState.signPassword.length > 0 &&
                         signformState.signPassword.length < 6 && (
                           <div
-                            className="form-text text-danger"
+                            className={`form-text text-danger ${styles.password_check_element}`}
                             data-testid="passwordCheck"
                           >
                             <span>
@@ -643,14 +648,18 @@ function loginPage(): JSX.Element {
                         )}
                       {isInputFocused ? (
                         showLowercaseCharAlert ? (
-                          <p className="form-text text-danger">
+                          <p
+                            className={`form-text text-danger ${styles.password_check_element}`}
+                          >
                             <span>
                               <Clear />
                               {t('lowercase_check')}
                             </span>
                           </p>
                         ) : (
-                          <p className="form-text text-success">
+                          <p
+                            className={`form-text text-success ${styles.password_check_element}`}
+                          >
                             <span>
                               <Check />
                             </span>
@@ -658,16 +667,21 @@ function loginPage(): JSX.Element {
                           </p>
                         )
                       ) : null}
+
                       {isInputFocused ? (
                         showUppercaseCharAlert ? (
-                          <p className="form-text text-danger">
+                          <p
+                            className={`form-text text-danger ${styles.password_check_element}`}
+                          >
                             <span>
                               <Clear />
                             </span>
                             {t('uppercase_check')}
                           </p>
                         ) : (
-                          <p className="form-text text-success">
+                          <p
+                            className={`form-text text-success ${styles.password_check_element}`}
+                          >
                             <span>
                               <Check />
                             </span>
@@ -677,14 +691,18 @@ function loginPage(): JSX.Element {
                       ) : null}
                       {isInputFocused ? (
                         showNumericValueAlert ? (
-                          <p className="form-text text-danger">
+                          <p
+                            className={`form-text text-danger ${styles.password_check_element}`}
+                          >
                             <span>
                               <Clear />
                             </span>
                             {t('numeric_value_check')}
                           </p>
                         ) : (
-                          <p className="form-text text-success">
+                          <p
+                            className={`form-text text-success ${styles.password_check_element}`}
+                          >
                             <span>
                               <Check />
                             </span>
@@ -694,14 +712,18 @@ function loginPage(): JSX.Element {
                       ) : null}
                       {isInputFocused ? (
                         showSpecialCharAlert ? (
-                          <p className="form-text text-danger">
+                          <p
+                            className={`form-text text-danger ${styles.password_check_element_bottom} ${styles.password_check_element}`}
+                          >
                             <span>
                               <Clear />
                             </span>
                             {t('special_char_check')}
                           </p>
                         ) : (
-                          <p className="form-text text-success">
+                          <p
+                            className={`form-text text-success ${styles.password_check_element_bottom} ${styles.password_check_element}`}
+                          >
                             <span>
                               <Check />
                             </span>
