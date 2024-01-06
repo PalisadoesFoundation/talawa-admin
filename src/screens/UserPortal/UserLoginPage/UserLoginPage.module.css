@@ -1,53 +1,197 @@
-body::before {
-  content: none !important;
-}
-
-.leftPane {
-  align-items: center;
-  width: 60%;
-  min-width: 300px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.palisadoesImage {
-  width: 100%;
-  height: auto;
-  max-width: 700px;
-}
-
-.talawaImage {
-  width: 40%;
-  height: auto;
-  margin-left: 50%;
-  transform: translateX(-50%);
-}
-
-.mainContainer {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 10px;
+.login_background {
   min-height: 100vh;
 }
 
-.contentContainer {
-  flex-grow: 1;
+.row .left_portion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.row .left_portion .inner .palisadoes_logo {
+  width: 600px;
+  height: auto;
+}
+
+.row .right_portion {
+  min-height: 100vh;
+  position: relative;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 20px 50px;
-  background-color: var(--bs-white);
+  padding: 1rem 2.5rem;
+  background: var(--bs-white);
 }
 
-@media only screen and (max-width: 800px) {
-  .leftPane {
+.row .right_portion::-webkit-scrollbar {
+  display: none;
+}
+
+.row .right_portion .langChangeBtn {
+  margin: 0;
+  position: absolute;
+  top: 1rem;
+  left: 2rem;
+}
+
+.row .right_portion .talawa_logo {
+  height: 150px;
+  width: 150px;
+  display: block;
+  margin: 1rem auto;
+  -webkit-animation: zoomIn 0.3s ease-in-out;
+  animation: zoomIn 0.3s ease-in-out;
+}
+
+.row .orText {
+  display: block;
+  position: absolute;
+  top: calc(-0.7rem - 0.5rem);
+  left: calc(50% - 2.6rem);
+  margin: 0 auto;
+  padding: 0.5rem 2rem;
+  z-index: 100;
+  background: var(--bs-white);
+  color: var(--bs-secondary);
+}
+
+@media (max-width: 992px) {
+  .row .left_portion {
+    padding: 0 2rem;
+  }
+
+  .row .left_portion .inner .palisadoes_logo {
     width: 100%;
+  }
+}
+
+@media (max-width: 769px) {
+  .row {
+    flex-direction: column-reverse;
+  }
+
+  .row .right_portion,
+  .row .left_portion {
+    height: unset;
+  }
+
+  .row .right_portion {
+    min-height: 100vh;
+    overflow-y: unset;
+  }
+
+  .row .left_portion .inner {
+    display: flex;
+    justify-content: center;
+  }
+
+  .row .left_portion .inner .palisadoes_logo {
+    height: 70px;
+    width: unset;
+    position: absolute;
+    margin: 0.5rem;
+    top: 0;
+    right: 0;
+    z-index: 100;
+  }
+
+  .row .left_portion .inner p {
+    margin-bottom: 0;
+    padding: 1rem;
   }
 
   .socialIcons {
     margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 577px) {
+  .row .right_portion {
+    padding: 1rem 1rem 0 1rem;
+  }
+
+  .row .right_portion .langChangeBtn {
+    position: absolute;
+    margin: 1rem;
+    left: 0;
+    top: 0;
+  }
+
+  .marginTopForReg {
+    margin-top: 4rem !important;
+  }
+
+  .row .right_portion .talawa_logo {
+    height: 120px;
+    margin: 0 auto 2rem auto;
+  }
+
+  .socialIcons {
+    margin-bottom: 1rem;
+  }
+}
+
+.active_tab {
+  -webkit-animation: fadeIn 0.3s ease-in-out;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@-webkit-keyframes zoomIn {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(0.5);
+    transform: scale(0.5);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+@keyframes zoomIn {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(0.5);
+    transform: scale(0.5);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(2rem);
+    transform: translateY(2rem);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(2rem);
+    transform: translateY(2rem);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
   }
 }
 
