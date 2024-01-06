@@ -29,6 +29,7 @@ import {
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import { ReactComponent as PalisadoesLogo } from 'assets/svgs/palisadoes.svg';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
+import LoginPortalToggle from 'components/LoginPortalToggle/LoginPortalToggle';
 import Loader from 'components/Loader/Loader';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './UserLoginPage.module.css';
@@ -283,12 +284,16 @@ function loginPage(): JSX.Element {
             <div className={styles.right_portion}>
               <ChangeLanguageDropDown
                 parentContainerStyle={styles.langChangeBtn}
+                btnStyle={styles.langChangeBtnStyle}
               />
               <TalawaLogo
                 className={`${styles.talawa_logo}  ${
                   showTab === 'REGISTER' && styles.marginTopForReg
                 }`}
               />
+
+              <LoginPortalToggle />
+
               {/* LOGIN FORM */}
               <div
                 className={`${

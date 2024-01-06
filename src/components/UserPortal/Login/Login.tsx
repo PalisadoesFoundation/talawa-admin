@@ -52,10 +52,10 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
           /* istanbul ignore next */
           window.location.assign('/user/organizations');
         } else {
+          /* istanbul ignore next */
           toast.warn(t('notAuthorised'));
         }
       } catch (error: any) {
-        /* istanbul ignore next */
         errorHandler(t, error);
       }
     }
@@ -84,7 +84,6 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
   return (
     <>
       <h3 className="mt-3 font-weight-bold">{t('login')}</h3>
-      <div className="mt-1">{t('loginIntoYourAccount')}</div>
 
       <div className="my-3">
         <h6>{t('emailAddress')}</h6>
