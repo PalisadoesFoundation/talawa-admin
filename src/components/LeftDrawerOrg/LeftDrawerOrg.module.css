@@ -110,9 +110,13 @@
   margin-top: 5rem;
   height: 52px;
   border-radius: 8px;
-  background-color: var(--bs-white);
   display: flex;
   align-items: center;
+  padding: 2.5rem 1rem 2.5rem 1rem;
+}
+
+.leftDrawer .profileContainer:focus {
+  background-color: #5ac989 !important;
 }
 
 .leftDrawer .profileContainer:focus {
@@ -139,6 +143,9 @@
   font-size: 1.1rem;
   font-weight: 600;
 }
+.leftDrawer .profileContainer .profileText .primaryText .primaryTextWhite {
+  color: white;
+}
 
 .leftDrawer .profileContainer .profileText .secondaryText {
   font-size: 0.8rem;
@@ -146,6 +153,14 @@
   color: var(--bs-secondary);
   display: block;
   text-transform: capitalize;
+}
+
+.leftDrawer .profileContainer .profileText .secondaryTextBlack {
+  color: var(--bs-secondary);
+}
+
+.leftDrawer .profileContainer .profileText .secondaryTextWhite {
+  color: rgb(230, 230, 230);
 }
 
 .logout {

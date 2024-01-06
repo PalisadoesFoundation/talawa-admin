@@ -175,6 +175,32 @@ describe('MemberDetail', () => {
     userEvent.click(screen.getByTestId('stateBtn'));
   });
 
+  test('should render OrganizationScreen if from is from is orgdash', async () => {
+    const props = {
+      id: 'rishav-jha-mech',
+      from: 'orgdash',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <MemberDetail {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+    await wait();
+    expect(screen.getAllByText(/People/i)).toBeTruthy();
+    expect(screen.getAllByText(/Events/i)).toBeTruthy();
+    expect(screen.getAllByText(/Posts/i)).toBeTruthy();
+    expect(screen.getAllByText(/Advertisement/i)).toBeTruthy();
+  });
+
   test('prettyDate function should work properly', () => {
     // If the date is provided
     const datePretty = jest.fn(prettyDate);

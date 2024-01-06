@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
 import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
 import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
@@ -137,33 +137,51 @@ const leftDrawer = ({
           )}
         </div>
         <div style={{ marginTop: 'auto' }}>
-          <button
-            className={styles.profileContainer}
-            data-testid="profileBtn"
-            onClick={(): void => {
-              history.push(`/member/id=${userId}`);
+          <Link
+            to={{
+              pathname: `/member/id=${userId}`,
+              state: { from: 'orglist' },
             }}
           >
-            <div className={styles.imageContainer}>
-              {userImage && userImage !== 'null' ? (
-                <img src={userImage} alt={`profile picture`} />
-              ) : (
-                <img
-                  src={`https://api.dicebear.com/5.x/initials/svg?seed=${firstName}%20${lastName}`}
-                  alt={`dummy picture`}
-                />
-              )}
-            </div>
-            <div className={styles.profileText}>
-              <span className={styles.primaryText}>
-                {firstName} {lastName}
-              </span>
-              <span className={styles.secondaryText}>
-                {`${userType}`.toLowerCase()}
-              </span>
-            </div>
-            <AngleRightIcon fill={'var(--bs-secondary)'} />
-          </button>
+            <Button
+              key={'orglistBtn'}
+              data-testid="profileBtn"
+              variant={screenName === 'orglist' ? 'success' : 'light'}
+              className={styles.profileContainer}
+            >
+              <div className={styles.imageContainer}>
+                {userImage && userImage !== 'null' ? (
+                  <img src={userImage} alt={`profile picture`} />
+                ) : (
+                  <img
+                    src={`https://api.dicebear.com/5.x/initials/svg?seed=${firstName}%20${lastName}`}
+                    alt={`dummy picture`}
+                  />
+                )}
+              </div>
+              <div className={styles.profileText}>
+                <span
+                  className={`${styles.primaryText} 
+                  ${screenName === 'orglist' ? styles.primaryTextWhite : ''}`}
+                >
+                  {firstName} {lastName}
+                </span>
+                <span
+                  className={`${styles.secondaryText} 
+                  ${screenName === 'orglist' ? styles.secondaryTextWhite : ''}`}
+                >
+                  {`${userType}`.toLowerCase()}
+                </span>
+              </div>
+              <AngleRightIcon
+                fill={
+                  screenName === 'orglist'
+                    ? 'var(--bs-white)'
+                    : 'var(--bs-secondary)'
+                }
+              />
+            </Button>
+          </Link>
 
           <Button
             variant="light"
