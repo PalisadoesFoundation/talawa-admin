@@ -103,9 +103,11 @@ describe('Testing Users screen', () => {
     );
 
     await wait();
-
-    const search1 = 'John{backspace}{backspace}{backspace}{backspace}';
+    const searchBtn = screen.getByTestId('searchButton');
+    const search1 = 'John';
     userEvent.type(screen.getByTestId(/searchByName/i), search1);
+    userEvent.click(searchBtn);
+    await wait();
 
     const search2 = 'Pete{backspace}{backspace}{backspace}{backspace}';
     userEvent.type(screen.getByTestId(/searchByName/i), search2);
@@ -119,7 +121,10 @@ describe('Testing Users screen', () => {
 
     const search5 = 'Xe';
     userEvent.type(screen.getByTestId(/searchByName/i), search5);
+    userEvent.clear(screen.getByTestId(/searchByName/i));
     userEvent.type(screen.getByTestId(/searchByName/i), '');
+    userEvent.click(searchBtn);
+    await wait();
   });
 
   test('testing search not found', async () => {
