@@ -14,6 +14,7 @@
     "firstName_invalid": "First name should contain only lower and upper case letters",
     "lastName_invalid": "Last name should contain only lower and upper case letters",
     "password_invalid": "Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character",
+    "email_invalid": "Email should have atleast 8 characters",
     "Password_and_Confirm_password_mismatches.": "Password and Confirm password mismatches.",
     "confirmPassword": "Confirm Password",
     "forgotPassword": "Forgot Password ?",

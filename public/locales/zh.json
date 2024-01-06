@@ -14,6 +14,7 @@
     "firstName_invalid": "名字只能包含小寫和大寫字母",
     "lastName_invalid": "姓氏只能包含小寫和大寫字母",
     "password_invalid": "密碼應至少包含1個小寫字母、1個大寫字母、1個數字和1個特殊字符",
+    "email_invalid": "電子郵件應至少包含 8 個字符",
     "Password_and_Confirm_password_mismatches.": "密碼和確認密碼不匹配。",
     "confirmPassword": "確認密碼",
     "forgotPassword": "忘記密碼 ？",

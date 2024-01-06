@@ -14,6 +14,7 @@
     "firstName_invalid": "Le prénom ne doit contenir que des lettres minuscules et majuscules",
     "lastName_invalid": "Le nom de famille ne doit contenir que des lettres minuscules et majuscules",
     "password_invalid": "Le mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule, une valeur numérique et un caractère spécial",
+    "email_invalid": "L'e-mail doit contenir au moins 8 caractères",
     "Password_and_Confirm_password_mismatches.": "Le mot de passe et la confirmation du mot de passe ne correspondent pas.",
     "confirmPassword": "Confirmez le mot de passe",
     "forgotPassword": "Mot de passe oublié ?",

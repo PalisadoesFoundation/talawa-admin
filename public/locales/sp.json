@@ -14,6 +14,7 @@
     "firstName_invalid": "El nombre debe contener solo letras minúsculas y mayúsculas.",
     "lastName_invalid": "El apellido debe contener solo letras minúsculas y mayúsculas.",
     "password_invalid": "La contraseña debe contener al menos una letra minúscula, una letra mayúscula, un valor numérico y un carácter especial.",
+    "email_invalid": "El correo electrónico debe tener al menos 8 caracteres.",
     "Password_and_Confirm_password_mismatches.": "Contraseña y Confirmar contraseña no coinciden.",
     "confirmPassword": "Confirmar contraseña",
     "forgotPassword": "Has olvidado tu contraseña ?",

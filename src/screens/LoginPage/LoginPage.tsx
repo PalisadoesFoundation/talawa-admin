@@ -64,14 +64,6 @@ function loginPage(): JSX.Element {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
-  // const [showLowercaseCharAlert, setShowLowercaseCharAlert] =
-  //   useState<boolean>(true);
-  // const [showUppercaseCharAlert, setShowUppercaseCharAlert] =
-  //   useState<boolean>(true);
-  // const [showNumericValueAlert, setShowNumericValueAlert] =
-  //   useState<boolean>(true);
-  // const [showSpecialCharAlert, setShowSpecialCharAler] =
-  //   useState<boolean>(true);
   const [showAlert, setShowAlert] = useState<PasswordValidation>({
     lowercaseChar: true,
     uppercaseChar: true,
@@ -79,9 +71,14 @@ function loginPage(): JSX.Element {
     specialChar: true,
   });
 
+  const passwordValidationRegExp = {
+    lowercaseCharRegExp: new RegExp('[a-z]'),
+    uppercasaeCharRegExp: new RegExp('[A-Z]'),
+    numericalValueRegExp: new RegExp('\\d'),
+    specialCharRegExp: new RegExp('[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\/-]'),
+  };
   const handleLowercasePassCheck = (pass: string): void => {
-    const lowercaseCheck = new RegExp('[a-z]');
-    const success = lowercaseCheck.test(pass);
+    const success = passwordValidationRegExp.lowercaseCharRegExp.test(pass);
     if (success) {
       setShowAlert((prevAlert) => ({ ...prevAlert, lowercaseChar: false }));
     } else {
@@ -90,8 +87,7 @@ function loginPage(): JSX.Element {
   };
 
   const handleUppercasePassCheck = (pass: string): void => {
-    const uppercaseCheck = new RegExp('[A-Z]');
-    const success = uppercaseCheck.test(pass);
+    const success = passwordValidationRegExp.uppercasaeCharRegExp.test(pass);
     if (success) {
       setShowAlert((prevAlert) => ({ ...prevAlert, uppercaseChar: false }));
     } else {
@@ -99,8 +95,7 @@ function loginPage(): JSX.Element {
     }
   };
   const handleNumericalValuePassCheck = (pass: string): void => {
-    const numericalCheck = new RegExp('\\d');
-    const success = numericalCheck.test(pass);
+    const success = passwordValidationRegExp.numericalValueRegExp.test(pass);
     if (success) {
       setShowAlert((prevAlert) => ({ ...prevAlert, numericValue: false }));
     } else {
@@ -108,8 +103,7 @@ function loginPage(): JSX.Element {
     }
   };
   const handleSpecialCharPassCheck = (pass: string): void => {
-    const specialCharCheck = new RegExp('[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\/-]');
-    const success = specialCharCheck.test(pass);
+    const success = passwordValidationRegExp.specialCharRegExp.test(pass);
     if (success) {
       setShowAlert((prevAlert) => ({ ...prevAlert, specialChar: false }));
     } else {
@@ -194,18 +188,12 @@ function loginPage(): JSX.Element {
 
     const validatePassword = (password: string): boolean => {
       const lengthCheck = new RegExp('^.{7,}$');
-      const lowercaseCheck = new RegExp('[a-z]');
-      const uppercaseCheck = new RegExp('[A-Z]');
-      const numericalCheck = new RegExp('\\d');
-      const specialCharCheck = new RegExp(
-        '[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\/-]'
-      );
       return (
         lengthCheck.test(password) &&
-        lowercaseCheck.test(password) &&
-        uppercaseCheck.test(password) &&
-        numericalCheck.test(password) &&
-        specialCharCheck.test(password)
+        passwordValidationRegExp.lowercaseCharRegExp.test(password) &&
+        passwordValidationRegExp.uppercasaeCharRegExp.test(password) &&
+        passwordValidationRegExp.uppercasaeCharRegExp.test(password) &&
+        passwordValidationRegExp.specialCharRegExp.test(password)
       );
     };
 
