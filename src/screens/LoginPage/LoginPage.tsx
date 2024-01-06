@@ -78,33 +78,29 @@ function loginPage(): JSX.Element {
     specialCharRegExp: new RegExp('[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\/-]'),
   };
   const handleLowercasePassCheck = (pass: string): void => {
-    if (passwordValidationRegExp.lowercaseCharRegExp.test(pass)) {
-      setShowAlert((prevAlert) => ({ ...prevAlert, lowercaseChar: false }));
-    } else {
-      setShowAlert((prevAlert) => ({ ...prevAlert, lowercaseChar: true }));
-    }
+    setShowAlert((prevAlert) => ({
+      ...prevAlert,
+      lowercaseChar: !passwordValidationRegExp.lowercaseCharRegExp.test(pass),
+    }));
   };
 
   const handleUppercasePassCheck = (pass: string): void => {
-    if (passwordValidationRegExp.uppercaseCharRegExp.test(pass)) {
-      setShowAlert((prevAlert) => ({ ...prevAlert, uppercaseChar: false }));
-    } else {
-      setShowAlert((prevAlert) => ({ ...prevAlert, uppercaseChar: true }));
-    }
+    setShowAlert((prevAlert) => ({
+      ...prevAlert,
+      uppercaseChar: !passwordValidationRegExp.uppercaseCharRegExp.test(pass),
+    }));
   };
   const handleNumericalValuePassCheck = (pass: string): void => {
-    if (passwordValidationRegExp.numericalValueRegExp.test(pass)) {
-      setShowAlert((prevAlert) => ({ ...prevAlert, numericValue: false }));
-    } else {
-      setShowAlert((prevAlert) => ({ ...prevAlert, numericValue: true }));
-    }
+    setShowAlert((prevAlert) => ({
+      ...prevAlert,
+      numericValue: !passwordValidationRegExp.numericalValueRegExp.test(pass),
+    }));
   };
   const handleSpecialCharPassCheck = (pass: string): void => {
-    if (passwordValidationRegExp.specialCharRegExp.test(pass)) {
-      setShowAlert((prevAlert) => ({ ...prevAlert, specialChar: false }));
-    } else {
-      setShowAlert((prevAlert) => ({ ...prevAlert, specialChar: true }));
-    }
+    setShowAlert((prevAlert) => ({
+      ...prevAlert,
+      specialChar: !passwordValidationRegExp.specialCharRegExp.test(pass),
+    }));
   };
 
   const recaptchaRef = useRef<ReCAPTCHA>(null);
