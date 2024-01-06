@@ -34,14 +34,20 @@
   margin: 0;
   position: absolute;
   top: 1rem;
-  left: 2rem;
+  left: 1rem;
+}
+
+.langChangeBtnStyle {
+  width: 7.5rem;
+  height: 2.2rem;
+  padding: 0;
 }
 
 .row .right_portion .talawa_logo {
-  height: 150px;
-  width: 150px;
+  height: 5rem;
+  width: 5rem;
   display: block;
-  margin: 1rem auto;
+  margin: 3rem auto 1rem;
   -webkit-animation: zoomIn 0.3s ease-in-out;
   animation: zoomIn 0.3s ease-in-out;
 }
