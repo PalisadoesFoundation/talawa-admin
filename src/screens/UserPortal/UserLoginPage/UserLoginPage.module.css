@@ -47,7 +47,7 @@
   height: 5rem;
   width: 5rem;
   display: block;
-  margin: 3rem auto 1rem;
+  margin: 1.5rem auto 1rem;
   -webkit-animation: zoomIn 0.3s ease-in-out;
   animation: zoomIn 0.3s ease-in-out;
 }
