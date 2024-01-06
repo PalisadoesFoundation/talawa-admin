@@ -66,7 +66,7 @@ jobs:
 
       - name: Run Python script
         run: |
-          python .github/workflows/count_changed_files.py --base_branch "${{ github.base_ref }}" --PR_branch "${{ github.head_ref }}"
+          python .github/workflows/count_changed_files.py --base_branch "${{ github.base_ref }}" --pr_branch "${{ github.head_ref }}"
 
   Test-Application:
     name: Test Application
