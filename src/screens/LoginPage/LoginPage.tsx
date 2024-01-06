@@ -41,6 +41,12 @@ function loginPage(): JSX.Element {
 
   document.title = t('title');
 
+  type PasswordValidation = {
+    lowercaseChar: boolean;
+    uppercaseChar: boolean;
+    numericValue: boolean;
+    specialChar: boolean;
+  };
   const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
   const [componentLoader, setComponentLoader] = useState(true);
   const [isInputFocused, setIsInputFocused] = useState(false);
@@ -58,22 +64,28 @@ function loginPage(): JSX.Element {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
-  const [showLowercaseCharAlert, setShowLowercaseCharAlert] =
-    useState<boolean>(true);
-  const [showUppercaseCharAlert, setShowUppercaseCharAlert] =
-    useState<boolean>(true);
-  const [showNumericValueAlert, setShowNumericValueAlert] =
-    useState<boolean>(true);
-  const [showSpecialCharAlert, setShowSpecialCharAler] =
-    useState<boolean>(true);
+  // const [showLowercaseCharAlert, setShowLowercaseCharAlert] =
+  //   useState<boolean>(true);
+  // const [showUppercaseCharAlert, setShowUppercaseCharAlert] =
+  //   useState<boolean>(true);
+  // const [showNumericValueAlert, setShowNumericValueAlert] =
+  //   useState<boolean>(true);
+  // const [showSpecialCharAlert, setShowSpecialCharAler] =
+  //   useState<boolean>(true);
+  const [showAlert, setShowAlert] = useState<PasswordValidation>({
+    lowercaseChar: true,
+    uppercaseChar: true,
+    numericValue: true,
+    specialChar: true,
+  });
 
   const handleLowercasePassCheck = (pass: string): void => {
     const lowercaseCheck = new RegExp('[a-z]');
     const success = lowercaseCheck.test(pass);
     if (success) {
-      setShowLowercaseCharAlert(false);
+      setShowAlert((prevAlert) => ({ ...prevAlert, lowercaseChar: false }));
     } else {
-      setShowLowercaseCharAlert(true);
+      setShowAlert((prevAlert) => ({ ...prevAlert, lowercaseChar: true }));
     }
   };
 
@@ -81,27 +93,27 @@ function loginPage(): JSX.Element {
     const uppercaseCheck = new RegExp('[A-Z]');
     const success = uppercaseCheck.test(pass);
     if (success) {
-      setShowUppercaseCharAlert(false);
+      setShowAlert((prevAlert) => ({ ...prevAlert, uppercaseChar: false }));
     } else {
-      setShowUppercaseCharAlert(true);
+      setShowAlert((prevAlert) => ({ ...prevAlert, uppercaseChar: true }));
     }
   };
   const handleNumericalValuePassCheck = (pass: string): void => {
     const numericalCheck = new RegExp('\\d');
     const success = numericalCheck.test(pass);
     if (success) {
-      setShowNumericValueAlert(false);
+      setShowAlert((prevAlert) => ({ ...prevAlert, numericValue: false }));
     } else {
-      setShowNumericValueAlert(true);
+      setShowAlert((prevAlert) => ({ ...prevAlert, numericValue: true }));
     }
   };
   const handleSpecialCharPassCheck = (pass: string): void => {
     const specialCharCheck = new RegExp('[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\/-]');
     const success = specialCharCheck.test(pass);
     if (success) {
-      setShowSpecialCharAler(false);
+      setShowAlert((prevAlert) => ({ ...prevAlert, specialChar: false }));
     } else {
-      setShowSpecialCharAler(true);
+      setShowAlert((prevAlert) => ({ ...prevAlert, specialChar: true }));
     }
   };
 
@@ -646,91 +658,88 @@ function loginPage(): JSX.Element {
                             {t('atleast_6_char_long')}
                           </div>
                         )}
-                      {isInputFocused ? (
-                        showLowercaseCharAlert ? (
-                          <p
-                            className={`form-text text-danger ${styles.password_check_element}`}
-                          >
-                            <span>
-                              <Clear />
-                              {t('lowercase_check')}
-                            </span>
-                          </p>
-                        ) : (
-                          <p
-                            className={`form-text text-success ${styles.password_check_element}`}
-                          >
-                            <span>
-                              <Check />
-                            </span>
-                            {t('lowercase_check')}
-                          </p>
-                        )
-                      ) : null}
-
-                      {isInputFocused ? (
-                        showUppercaseCharAlert ? (
-                          <p
-                            className={`form-text text-danger ${styles.password_check_element}`}
-                          >
+                      {isInputFocused && (
+                        <p
+                          className={`form-text ${
+                            showAlert.lowercaseChar
+                              ? 'text-danger'
+                              : 'text-success'
+                          } ${styles.password_check_element}`}
+                        >
+                          {showAlert.lowercaseChar ? (
                             <span>
                               <Clear />
                             </span>
-                            {t('uppercase_check')}
-                          </p>
-                        ) : (
-                          <p
-                            className={`form-text text-success ${styles.password_check_element}`}
-                          >
+                          ) : (
                             <span>
                               <Check />
                             </span>
-                            {t('uppercase_check')}
-                          </p>
-                        )
-                      ) : null}
-                      {isInputFocused ? (
-                        showNumericValueAlert ? (
-                          <p
-                            className={`form-text text-danger ${styles.password_check_element}`}
-                          >
+                          )}
+                          {t('lowercase_check')}
+                        </p>
+                      )}
+                      {isInputFocused && (
+                        <p
+                          className={`form-text ${
+                            showAlert.uppercaseChar
+                              ? 'text-danger'
+                              : 'text-success'
+                          } ${styles.password_check_element}`}
+                        >
+                          {showAlert.uppercaseChar ? (
                             <span>
                               <Clear />
                             </span>
-                            {t('numeric_value_check')}
-                          </p>
-                        ) : (
-                          <p
-                            className={`form-text text-success ${styles.password_check_element}`}
-                          >
+                          ) : (
                             <span>
                               <Check />
                             </span>
-                            {t('numeric_value_check')}
-                          </p>
-                        )
-                      ) : null}
-                      {isInputFocused ? (
-                        showSpecialCharAlert ? (
-                          <p
-                            className={`form-text text-danger ${styles.password_check_element_bottom} ${styles.password_check_element}`}
-                          >
+                          )}
+                          {t('uppercase_check')}
+                        </p>
+                      )}
+                      {isInputFocused && (
+                        <p
+                          className={`form-text ${
+                            showAlert.numericValue
+                              ? 'text-danger'
+                              : 'text-success'
+                          } ${styles.password_check_element}`}
+                        >
+                          {showAlert.numericValue ? (
                             <span>
                               <Clear />
                             </span>
-                            {t('special_char_check')}
-                          </p>
-                        ) : (
-                          <p
-                            className={`form-text text-success ${styles.password_check_element_bottom} ${styles.password_check_element}`}
-                          >
+                          ) : (
                             <span>
                               <Check />
                             </span>
-                            {t('special_char_check')}
-                          </p>
-                        )
-                      ) : null}
+                          )}
+                          {t('numeric_value_check')}
+                        </p>
+                      )}
+                      {isInputFocused && (
+                        <p
+                          className={`form-text ${
+                            showAlert.specialChar
+                              ? 'text-danger'
+                              : 'text-success'
+                          } ${styles.password_check_element} ${
+                            styles.password_check_element_bottom
+                          }`}
+                        >
+                          {showAlert.specialChar ? (
+                            <span>
+                              <Clear />
+                            </span>
+                          ) : (
+                            <span>
+                              <Check />
+                            </span>
+                          )}
+                          {t('special_char_check')}
+                        </p>
+                      )}
                     </div>
                   </div>
                   <div className="position-relative">
