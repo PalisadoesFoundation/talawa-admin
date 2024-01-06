@@ -19,11 +19,7 @@ import Loader from 'components/Loader/Loader';
 
 type MemberDetailProps = {
   id: string; // This is the userId
-  from?: string;
-};
-type LocationStateProps = {
-  id: string;
-  from: string; // stores from where this component is called
+  from?: string; // stores from where this component was called
 };
 
 const MemberDetail: React.FC<MemberDetailProps> = ({
@@ -36,7 +32,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({
 
   const [state, setState] = useState(1);
 
-  const location = useLocation<LocationStateProps>();
+  const location = useLocation<MemberDetailProps>();
   const currentUrl = location.state?.id || localStorage.getItem('id') || id;
   document.title = t('title');
 

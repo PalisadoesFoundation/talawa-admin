@@ -214,11 +214,7 @@ const leftDrawerOrg = ({
                 </span>
                 <span
                   className={`${styles.secondaryText} 
-                  ${
-                    screenName === 'orgdash'
-                      ? styles.secondaryTextWhite
-                      : styles.secondaryTextBlack
-                  }`}
+                  ${screenName === 'orgdash' ? styles.secondaryTextWhite : ''}`}
                 >
                   {`${userType}`.toLowerCase()}
                 </span>
