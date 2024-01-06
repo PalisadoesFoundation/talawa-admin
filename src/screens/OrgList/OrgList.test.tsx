@@ -193,7 +193,6 @@ describe('Organisations Page testing as SuperAdmin', () => {
         screen.queryByText(/Congratulation the Organization is created/i)
       ).toBeInTheDocument()
     );
-    userEvent.click(screen.getByTestId(/closeOrganizationModal/i));
   });
 
   test('Plugin Notification model should work properly', async () => {

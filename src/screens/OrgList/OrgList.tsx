@@ -629,31 +629,18 @@ function orgList(): JSX.Element {
         </Modal>{' '}
         {/* Plugin Notification Modal after Org is Created */}
         <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
+          <Modal.Header
+            className="bg-primary"
+            closeButton
+            data-testid="modalOrganizationHeader"
+          >
+            <Modal.Title className="text-white">
+              {t('manageFeatures')}
+            </Modal.Title>
+          </Modal.Header>
           <Modal.Body>
             <section id={styles.grid_wrapper}>
               <div>
-                <div className={styles.flexdir}>
-                  <p className={styles.titlemodal}>{t('manageFeatures')}</p>
-                  <a
-                    onClick={toggleDialogModal}
-                    className={styles.cancel}
-                    data-testid="closeOrganizationModal"
-                  >
-                    <i
-                      className="fa fa-times"
-                      style={{
-                        cursor: 'pointer',
-                      }}
-                    ></i>
-                  </a>
-                  <Button
-                    variant="secondary"
-                    onClick={toggleModal}
-                    data-testid="cancelOrganizationModal"
-                  >
-                    {t('cancel')}
-                  </Button>
-                </div>
                 <h4 className={styles.titlemodaldialog}>
                   {t('manageFeaturesInfo')}
                 </h4>
