@@ -29,6 +29,36 @@
     "admin": "行政",
     "user": "用戶"
   },
+  "userLoginPage": {
+    "title": "塔拉瓦管理員",
+    "fromPalisadoes": "柵欄 基金会志愿者的开源应用程序",
+    "talawa_portal": "塔拉瓦管理門戶",
+    "login": "登錄",
+    "register": "登記",
+    "firstName": "名",
+    "lastName": "姓",
+    "email": "電子郵件",
+    "password": "密碼",
+    "atleast_8_char_long": "至少 8 個字符長",
+    "Password_and_Confirm_password_mismatches.": "密碼和確認密碼不匹配。",
+    "confirmPassword": "確認密碼",
+    "forgotPassword": "忘記密碼 ？",
+    "enterEmail": "输入电子邮件",
+    "enterPassword": "输入密码",
+    "doNotOwnAnAccount": "沒有帳戶嗎？",
+    "talawaApiUnavailable": "服務不可用。它正在運行嗎？還要檢查您的網絡連接。",
+    "captchaError": "驗證碼錯誤！",
+    "Please_check_the_captcha": "請檢查驗證碼。",
+    "Something_went_wrong": "出了點問題，請稍後再試。",
+    "passwordMismatches": "密碼和確認密碼不匹配。",
+    "fillCorrectly": "正確填寫所有細節。",
+    "notAuthorised": "抱歉！你沒有被授權！",
+    "notFound": "找不到用戶！",
+    "successfullyRegistered": "註冊成功，請等待審核通過。",
+    "userLogin": "用户登录",
+    "afterRegister": "註冊成功。 請等待管理員批准您的請求。",
+    "OR": "或者"
+  },
   "latestEvents": {
     "eventCardTitle": "即将举行的活动",
     "eventCardSeeAll": "查看全部",
@@ -428,7 +458,8 @@
     "deleteMsg": "您是否要删除此组织？",
     "cancel": "取消",
     "confirmDelete": "确认删除",
-    "longDelOrgMsg": "点击删除组织按钮，组织将被永久删除，包括其事件、标签和所有相关数据。"
+    "longDelOrgMsg": "点击删除组织按钮，组织将被永久删除，包括其事件、标签和所有相关数据。",
+    "successfullyDeletedSampleOrganization": "已成功刪除樣本組織"
   },
   "userUpdate": {
     "firstName": "名",

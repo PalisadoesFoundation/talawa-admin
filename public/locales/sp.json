@@ -29,6 +29,36 @@
     "admin": "ADMINISTRACIÓN",
     "user": "USUARIO"
   },
+  "userLoginPage": {
+    "title": "Administrador Talawa",
+    "fromPalisadoes": "Una aplicación de código abierto de los voluntarios de la Fundación palisados",
+    "talawa_portal": "Portal De Administración Talawa",
+    "login": "Acceso",
+    "register": "Registro",
+    "firstName": "Primer nombre",
+    "lastName": "Apellido",
+    "email": "Correo electrónico",
+    "password": "Clave",
+    "atleast_8_char_long": "Al menos 8 caracteres de largo",
+    "Password_and_Confirm_password_mismatches.": "Contraseña y Confirmar contraseña no coinciden.",
+    "confirmPassword": "Confirmar contraseña",
+    "forgotPassword": "Has olvidado tu contraseña ?",
+    "enterEmail": "ingrese correo electrónico",
+    "enterPassword": "introducir la contraseña",
+    "doNotOwnAnAccount": "¿No tienes una cuenta?",
+    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Verifica también la conectividad de tu red.",
+    "captchaError": "¡Error de captcha!",
+    "Please_check_the_captcha": "Por favor, revisa el captcha.",
+    "Something_went_wrong": "Algo salió mal. Inténtalo después de un tiempo",
+    "passwordMismatches": "Contraseña y Confirmar contraseña no coinciden.",
+    "fillCorrectly": "Complete todos los detalles correctamente.",
+    "notAuthorised": "¡Lo siento! ¡No estás autorizado!",
+    "notFound": "¡Usuario no encontrado!",
+    "successfullyRegistered": "Registrado con éxito. Espere hasta que sea aprobado",
+    "userLogin": "Inicio de sesión de usuario",
+    "afterRegister": "Registrado exitosamente. Espere a que el administrador apruebe su solicitud.",
+    "OR": "O"
+  },
   "latestEvents": {
     "eventCardTitle": "Próximos Eventos",
     "eventCardSeeAll": "Ver Todos",
@@ -428,7 +458,8 @@
     "deleteMsg": "¿Desea eliminar esta organización?",
     "cancel": "Cancelar",
     "confirmDelete": "Confirmar eliminación",
-    "longDelOrgMsg": "Al hacer clic en el botón Eliminar organización, la organización se eliminará permanentemente junto con sus eventos, etiquetas y todos los datos relacionados."
+    "longDelOrgMsg": "Al hacer clic en el botón Eliminar organización, la organización se eliminará permanentemente junto con sus eventos, etiquetas y todos los datos relacionados.",
+    "successfullyDeletedSampleOrganization": "Organización de muestra eliminada correctamente"
   },
   "userUpdate": {
     "firstName": "Primer nombre",
