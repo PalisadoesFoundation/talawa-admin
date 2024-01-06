@@ -89,7 +89,7 @@
   padding-left: 5px;
 }
 .checkboxdiv > div label {
-  margin-right: 50px;
+  margin-right: 30px;
 }
 .checkboxdiv > label > input {
   margin-left: 10px;
@@ -99,6 +99,7 @@
   justify-content: space-between;
   margin-bottom: 5px;
   margin-right: 5px;
+  margin-top: 10px;
 }
 .dispflex > input {
   width: 20%;
