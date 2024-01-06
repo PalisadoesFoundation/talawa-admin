@@ -2,8 +2,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  padding: 1rem 3rem 1rem 1.5rem;
-  border: 1px solid #dddddd;
+  border: 1px solid var(--bs-gray-200);
   border-radius: 8px;
   margin-top: 20px;
 }
@@ -42,10 +41,6 @@
 .cardItem .title {
   font-size: 1rem;
   flex: 1;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 18px;
-  color: #000000;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 1;
@@ -55,10 +50,8 @@
 }
 
 .cardItem .location {
-  font-style: normal;
-  font-weight: 600;
   font-size: 0.9rem;
-  color: #31bb6b;
+  color: var(--bs-primary);
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 1;
@@ -69,9 +62,6 @@
 .cardItem .time {
   font-size: 0.9rem;
   color: var(--bs-secondary);
-  font-style: normal;
-  font-weight: 600;
-  color: #737373;
 }
 
 .cardItem .creator {

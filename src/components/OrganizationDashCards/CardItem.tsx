@@ -22,7 +22,7 @@ const cardItem = (props: InterfaceCardItem): JSX.Element => {
   const { creator, type, title, startdate, time, enddate, location } = props;
   return (
     <>
-      <div className={`${styles.cardItem} border-bottom`}>
+      <div className={`${styles.cardItem} border-bottom py-3 pe-5 ps-4`}>
         <div className={`${styles.iconWrapper} me-3`}>
           <div className={styles.themeOverlay} />
           {type == 'Event' ? (
@@ -56,20 +56,26 @@ const cardItem = (props: InterfaceCardItem): JSX.Element => {
             </small>
           )}
 
-          {title && <span className={styles.title}>{title}</span>}
+          {title && (
+            <span
+              className={`${styles.title} fst-normal fw-semibold --bs-black`}
+            >
+              {title}
+            </span>
+          )}
 
           {location && (
-            <span className={styles.location}>
+            <span className={`${styles.location} fst-normal fw-semibold`}>
               <MarkerIcon title="Event Location" width={22} height={22} />{' '}
               {location}
             </span>
           )}
           {type == 'Event' && startdate && (
-            <span className={styles.time}>
+            <span className={`${styles.time} fst-normal fw-semibold`}>
               {type === 'Event' && (
                 <DateIcon
                   title="Event Date"
-                  fill="#4cd964"
+                  fill="var(--bs-gray-600)"
                   width={20}
                   height={20}
                 />
@@ -79,11 +85,11 @@ const cardItem = (props: InterfaceCardItem): JSX.Element => {
             </span>
           )}
           {type == 'Post' && time && (
-            <span className={styles.time}>
+            <span className={`${styles.time} fst-normal fw-semibold`}>
               {type === 'Post' && (
                 <DateIcon
                   title="Event Date"
-                  fill="#4cd964"
+                  fill="var(--bs-gray-600)"
                   width={20}
                   height={20}
                 />
