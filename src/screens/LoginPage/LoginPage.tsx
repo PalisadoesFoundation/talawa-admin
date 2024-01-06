@@ -180,7 +180,7 @@ function loginPage(): JSX.Element {
       /^[a-zA-Z]+$/.test(value);
 
     const validatePassword = (password: string): boolean => {
-      const lengthCheck = new RegExp('^.{7,}$');
+      const lengthCheck = new RegExp('^.{6,}$');
       return (
         lengthCheck.test(password) &&
         passwordValidationRegExp.lowercaseCharRegExp.test(password) &&
