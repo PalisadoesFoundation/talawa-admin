@@ -9,6 +9,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
 import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Check, Clear } from '@mui/icons-material';
 
 import {
   FacebookLogo,
@@ -40,6 +41,12 @@ function loginPage(): JSX.Element {
 
   document.title = t('title');
 
+  type PasswordValidation = {
+    lowercaseChar: boolean;
+    uppercaseChar: boolean;
+    numericValue: boolean;
+    specialChar: boolean;
+  };
   const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
   const [componentLoader, setComponentLoader] = useState(true);
   const [isInputFocused, setIsInputFocused] = useState(false);
@@ -57,6 +64,45 @@ function loginPage(): JSX.Element {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
+  const [showAlert, setShowAlert] = useState<PasswordValidation>({
+    lowercaseChar: true,
+    uppercaseChar: true,
+    numericValue: true,
+    specialChar: true,
+  });
+
+  const passwordValidationRegExp = {
+    lowercaseCharRegExp: new RegExp('[a-z]'),
+    uppercaseCharRegExp: new RegExp('[A-Z]'),
+    numericalValueRegExp: new RegExp('\\d'),
+    specialCharRegExp: new RegExp('[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\/-]'),
+  };
+  const handleLowercasePassCheck = (pass: string): void => {
+    setShowAlert((prevAlert) => ({
+      ...prevAlert,
+      lowercaseChar: !passwordValidationRegExp.lowercaseCharRegExp.test(pass),
+    }));
+  };
+
+  const handleUppercasePassCheck = (pass: string): void => {
+    setShowAlert((prevAlert) => ({
+      ...prevAlert,
+      uppercaseChar: !passwordValidationRegExp.uppercaseCharRegExp.test(pass),
+    }));
+  };
+  const handleNumericalValuePassCheck = (pass: string): void => {
+    setShowAlert((prevAlert) => ({
+      ...prevAlert,
+      numericValue: !passwordValidationRegExp.numericalValueRegExp.test(pass),
+    }));
+  };
+  const handleSpecialCharPassCheck = (pass: string): void => {
+    setShowAlert((prevAlert) => ({
+      ...prevAlert,
+      specialChar: !passwordValidationRegExp.specialCharRegExp.test(pass),
+    }));
+  };
+
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   useEffect(() => {
@@ -129,12 +175,28 @@ function loginPage(): JSX.Element {
       toast.error(t('Please_check_the_captcha'));
       return;
     }
+    const isValidatedString = (value: string): boolean =>
+      /^[a-zA-Z]+$/.test(value);
+
+    const validatePassword = (password: string): boolean => {
+      const lengthCheck = new RegExp('^.{7,}$');
+      return (
+        lengthCheck.test(password) &&
+        passwordValidationRegExp.lowercaseCharRegExp.test(password) &&
+        passwordValidationRegExp.uppercaseCharRegExp.test(password) &&
+        passwordValidationRegExp.numericalValueRegExp.test(password) &&
+        passwordValidationRegExp.specialCharRegExp.test(password)
+      );
+    };
 
     if (
+      isValidatedString(signfirstName) &&
+      isValidatedString(signlastName) &&
       signfirstName.length > 1 &&
       signlastName.length > 1 &&
       signEmail.length >= 8 &&
-      signPassword.length > 1
+      signPassword.length > 1 &&
+      validatePassword(signPassword)
     ) {
       if (cPassword == signPassword) {
         try {
@@ -153,8 +215,6 @@ function loginPage(): JSX.Element {
               'Successfully Registered. Please wait until you will be approved.'
             );
 
-            setShowTab('LOGIN');
-
             setSignFormState({
               signfirstName: '',
               signlastName: '',
@@ -171,7 +231,18 @@ function loginPage(): JSX.Element {
         toast.warn(t('passwordMismatches'));
       }
     } else {
-      toast.warn(t('fillCorrectly'));
+      if (!isValidatedString(signfirstName)) {
+        toast.warn(t('firstName_invalid'));
+      }
+      if (!isValidatedString(signlastName)) {
+        toast.warn(t('lastName_invalid'));
+      }
+      if (!validatePassword(signPassword)) {
+        toast.warn(t('password_invalid'));
+      }
+      if (signEmail.length < 8) {
+        toast.warn(t('email_invalid'));
+      }
     }
   };
 
@@ -511,6 +582,10 @@ function loginPage(): JSX.Element {
                             ...signformState,
                             signPassword: e.target.value,
                           });
+                          handleLowercasePassCheck(e.target.value);
+                          handleUppercasePassCheck(e.target.value);
+                          handleNumericalValuePassCheck(e.target.value);
+                          handleSpecialCharPassCheck(e.target.value);
                         }}
                       />
                       <Button
@@ -525,25 +600,127 @@ function loginPage(): JSX.Element {
                         )}
                       </Button>
                     </div>
-                    {isInputFocused &&
-                      signformState.signPassword.length < 8 && (
-                        <div
-                          className="form-text text-danger"
-                          data-testid="passwordCheck"
+                    <div className={styles.password_checks}>
+                      {isInputFocused ? (
+                        signformState.signPassword.length < 6 ? (
+                          <div data-testid="passwordCheck">
+                            <p
+                              className={`form-text text-danger ${styles.password_check_element_top}`}
+                            >
+                              <span>
+                                <Clear className="" />
+                              </span>
+                              {t('atleast_6_char_long')}
+                            </p>
+                          </div>
+                        ) : (
+                          <p
+                            className={`form-text text-success ${styles.password_check_element_top}`}
+                          >
+                            <span>
+                              <Check />
+                            </span>
+                            {t('atleast_6_char_long')}
+                          </p>
+                        )
+                      ) : null}
+
+                      {!isInputFocused &&
+                        signformState.signPassword.length > 0 &&
+                        signformState.signPassword.length < 6 && (
+                          <div
+                            className={`form-text text-danger ${styles.password_check_element}`}
+                            data-testid="passwordCheck"
+                          >
+                            <span>
+                              <Check className="size-sm" />
+                            </span>
+                            {t('atleast_6_char_long')}
+                          </div>
+                        )}
+                      {isInputFocused && (
+                        <p
+                          className={`form-text ${
+                            showAlert.lowercaseChar
+                              ? 'text-danger'
+                              : 'text-success'
+                          } ${styles.password_check_element}`}
                         >
-                          {t('atleast_8_char_long')}
-                        </div>
+                          {showAlert.lowercaseChar ? (
+                            <span>
+                              <Clear />
+                            </span>
+                          ) : (
+                            <span>
+                              <Check />
+                            </span>
+                          )}
+                          {t('lowercase_check')}
+                        </p>
                       )}
-                    {!isInputFocused &&
-                      signformState.signPassword.length > 0 &&
-                      signformState.signPassword.length < 8 && (
-                        <div
-                          className="form-text text-danger"
-                          data-testid="passwordCheck"
+                      {isInputFocused && (
+                        <p
+                          className={`form-text ${
+                            showAlert.uppercaseChar
+                              ? 'text-danger'
+                              : 'text-success'
+                          } ${styles.password_check_element}`}
                         >
-                          {t('atleast_8_char_long')}
-                        </div>
+                          {showAlert.uppercaseChar ? (
+                            <span>
+                              <Clear />
+                            </span>
+                          ) : (
+                            <span>
+                              <Check />
+                            </span>
+                          )}
+                          {t('uppercase_check')}
+                        </p>
                       )}
+                      {isInputFocused && (
+                        <p
+                          className={`form-text ${
+                            showAlert.numericValue
+                              ? 'text-danger'
+                              : 'text-success'
+                          } ${styles.password_check_element}`}
+                        >
+                          {showAlert.numericValue ? (
+                            <span>
+                              <Clear />
+                            </span>
+                          ) : (
+                            <span>
+                              <Check />
+                            </span>
+                          )}
+                          {t('numeric_value_check')}
+                        </p>
+                      )}
+                      {isInputFocused && (
+                        <p
+                          className={`form-text ${
+                            showAlert.specialChar
+                              ? 'text-danger'
+                              : 'text-success'
+                          } ${styles.password_check_element} ${
+                            styles.password_check_element_bottom
+                          }`}
+                        >
+                          {showAlert.specialChar ? (
+                            <span>
+                              <Clear />
+                            </span>
+                          ) : (
+                            <span>
+                              <Check />
+                            </span>
+                          )}
+                          {t('special_char_check')}
+                        </p>
+                      )}
+                    </div>
                   </div>
                   <div className="position-relative">
                     <Form.Label>{t('confirmPassword')}</Form.Label>
