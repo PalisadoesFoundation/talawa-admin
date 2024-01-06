@@ -81,7 +81,7 @@ const leftDrawer = ({
             <div className={styles.iconWrapper}>
               <OrganizationsIcon
                 stroke={`${
-                  screenName === 'Organizations'
+                  screenName === 'My Organizations'
                     ? 'var(--bs-white)'
                     : 'var(--bs-secondary)'
                 }`}
@@ -167,12 +167,12 @@ const leftDrawer = ({
 
           <Button
             variant="light"
-            className="mt-4 d-flex justify-content-start px-0 mb-2 w-100"
+            className={`mt-4 d-flex justify-content-start px-0 w-100 bg-danger text-white  ${styles.logout}`}
             onClick={(): void => logout()}
             data-testid="logoutBtn"
           >
             <div className={styles.imageContainer}>
-              <LogoutIcon fill={'var(--bs-secondary)'} />
+              <LogoutIcon fill={'white'} />
             </div>
             {t('logout')}
           </Button>

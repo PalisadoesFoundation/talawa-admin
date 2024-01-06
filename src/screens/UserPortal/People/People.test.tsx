@@ -2,7 +2,6 @@ import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
-
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   ORGANIZATION_ADMINS_LIST,
@@ -156,7 +155,7 @@ describe('Testing People Screen [User Portal]', () => {
     expect(screen.queryAllByText('Noble Mittal')).not.toBe([]);
   });
 
-  test('Search works properly', async () => {
+  test('Search works properly by pressing enter', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -171,7 +170,34 @@ describe('Testing People Screen [User Portal]', () => {
 
     await wait();
 
+    userEvent.type(screen.getByTestId('searchInput'), 'j{enter}');
+    await wait();
+
+    expect(getOrganizationIdSpy).toHaveBeenCalled();
+    expect(screen.queryByText('John Cena')).toBeInTheDocument();
+    expect(screen.queryByText('Noble Mittal')).not.toBeInTheDocument();
+  });
+
+  test('Search works properly by clicking search Btn', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+    const searchBtn = screen.getByTestId('searchBtn');
+    userEvent.type(screen.getByTestId('searchInput'), '');
+    userEvent.click(searchBtn);
+    await wait();
     userEvent.type(screen.getByTestId('searchInput'), 'j');
+    userEvent.click(searchBtn);
     await wait();
 
     expect(getOrganizationIdSpy).toHaveBeenCalled();

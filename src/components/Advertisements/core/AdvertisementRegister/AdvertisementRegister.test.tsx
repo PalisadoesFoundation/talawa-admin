@@ -211,12 +211,7 @@ describe('Testing Advertisement Register Component', () => {
       expect(setTimeoutSpy).toHaveBeenCalled();
     });
 
-    await waitFor(
-      () => {
-        expect(window.location.reload).toHaveBeenCalled();
-      },
-      { timeout: 2500 }
-    );
+    expect(queryByText(translations.close)).not.toBeInTheDocument();
   });
   test('Logs error to the console and shows error toast when advertisement creation fails', async () => {
     const { getByText, queryByText } = render(

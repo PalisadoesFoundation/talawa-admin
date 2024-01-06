@@ -10,6 +10,11 @@
     "email": "Correo electrónico",
     "password": "Clave",
     "atleast_8_char_long": "Al menos 8 caracteres de largo",
+    "atleast_6_char_long": "Al menos 6 caracteres de largo",
+    "firstName_invalid": "El nombre debe contener solo letras minúsculas y mayúsculas.",
+    "lastName_invalid": "El apellido debe contener solo letras minúsculas y mayúsculas.",
+    "password_invalid": "La contraseña debe contener al menos una letra minúscula, una letra mayúscula, un valor numérico y un carácter especial.",
+    "email_invalid": "El correo electrónico debe tener al menos 8 caracteres.",
     "Password_and_Confirm_password_mismatches.": "Contraseña y Confirmar contraseña no coinciden.",
     "confirmPassword": "Confirmar contraseña",
     "forgotPassword": "Has olvidado tu contraseña ?",
@@ -25,13 +30,53 @@
     "notAuthorised": "¡Lo siento! ¡No estás autorizado!",
     "notFound": "¡Usuario no encontrado!",
     "successfullyRegistered": "Registrado con éxito. Espere hasta que sea aprobado",
-    "login_to_admin_portal": "Inicio de sesión en el portal de administración",
+    "OR": "O",
+    "admin": "ADMINISTRACIÓN",
+    "user": "USUARIO",
+    "lowercase_check": "Al menos una letra mayuscula",
+    "uppercase_check": "Al menos una letra minúscula",
+    "numeric_value_check": "Al menos un valor numérico",
+    "special_char_check": "Al menos un carácter especial"
+  },
+  "userLoginPage": {
+    "title": "Administrador Talawa",
+    "fromPalisadoes": "Una aplicación de código abierto de los voluntarios de la Fundación palisados",
+    "talawa_portal": "Portal De Administración Talawa",
+    "login": "Acceso",
+    "register": "Registro",
+    "firstName": "Primer nombre",
+    "lastName": "Apellido",
+    "email": "Correo electrónico",
+    "password": "Clave",
+    "atleast_8_char_long": "Al menos 8 caracteres de largo",
+    "Password_and_Confirm_password_mismatches.": "Contraseña y Confirmar contraseña no coinciden.",
+    "confirmPassword": "Confirmar contraseña",
+    "forgotPassword": "Has olvidado tu contraseña ?",
+    "enterEmail": "ingrese correo electrónico",
+    "enterPassword": "introducir la contraseña",
+    "doNotOwnAnAccount": "¿No tienes una cuenta?",
+    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Verifica también la conectividad de tu red.",
+    "captchaError": "¡Error de captcha!",
+    "Please_check_the_captcha": "Por favor, revisa el captcha.",
+    "Something_went_wrong": "Algo salió mal. Inténtalo después de un tiempo",
+    "passwordMismatches": "Contraseña y Confirmar contraseña no coinciden.",
+    "fillCorrectly": "Complete todos los detalles correctamente.",
+    "notAuthorised": "¡Lo siento! ¡No estás autorizado!",
+    "notFound": "¡Usuario no encontrado!",
+    "successfullyRegistered": "Registrado con éxito. Espere hasta que sea aprobado",
+    "userLogin": "Inicio de sesión de usuario",
+    "afterRegister": "Registrado exitosamente. Espere a que el administrador apruebe su solicitud.",
     "OR": "O"
   },
   "latestEvents": {
     "eventCardTitle": "Próximos Eventos",
     "eventCardSeeAll": "Ver Todos",
     "noEvents": "No Hay Eventos Próximos"
+  },
+  "latestPosts": {
+    "latestPostsTitle": "Últimas Publicaciones",
+    "seeAllLink": "Ver Todo",
+    "noPostsCreated": "No se han creado publicaciones"
   },
   "listNavbar": {
     "talawa_portal": "Portal De Administración Talawa",
@@ -88,6 +133,8 @@
     "displayImage": "Mostrar imagen",
     "enterName": "Ingrese su nombre",
     "sort": "Ordenar",
+    "Earliest": "Más Temprano",
+    "Latest": "El último",
     "filter": "Filtrar",
     "cancel": "Cancelar",
     "endOfResults": "Fin de los resultados",
@@ -136,7 +183,8 @@
     "filter": "Filtrar",
     "roleUpdated": "Rol actualizado.",
     "noResultsFoundFor": "No se encontraron resultados para ",
-    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
+    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
+    "cancel": "Cancelar"
   },
   "requests": {
     "title": "Solicitudes Talawa",
@@ -419,7 +467,8 @@
     "deleteMsg": "¿Desea eliminar esta organización?",
     "cancel": "Cancelar",
     "confirmDelete": "Confirmar eliminación",
-    "longDelOrgMsg": "Al hacer clic en el botón Eliminar organización, la organización se eliminará permanentemente junto con sus eventos, etiquetas y todos los datos relacionados."
+    "longDelOrgMsg": "Al hacer clic en el botón Eliminar organización, la organización se eliminará permanentemente junto con sus eventos, etiquetas y todos los datos relacionados.",
+    "successfullyDeletedSampleOrganization": "Organización de muestra eliminada correctamente"
   },
   "userUpdate": {
     "firstName": "Primer nombre",
@@ -589,7 +638,12 @@
   "home": {
     "feed": "Alimentar",
     "pinnedPosts": "Ver publicaciones fijadas",
-    "somethingOnYourMind": "¿Algo en tu mente?"
+    "somethingOnYourMind": "¿Algo en tu mente?",
+    "addPost": "Agregar publicación",
+    "startPost": "Comenzar una publicación",
+    "media": "Medios",
+    "event": "Evento",
+    "article": "Artículo"
   },
   "settings": {
     "profileSettings": "Configuración de perfil",
@@ -597,7 +651,10 @@
     "lastName": "Apellido",
     "emailAddress": "dirección de correo electrónico",
     "updateImage": "Actualizar imagen",
-    "save": "Ahorrar"
+    "saveChanges": "Guardar cambios",
+    "updateProfile": "Actualización del perfil",
+    "otherSettings": "Otras Configuraciones",
+    "changeLanguage": "Cambiar Idioma"
   },
   "donate": {
     "donateTo": "Donar a",
@@ -673,15 +730,16 @@
     "selectContact": "Seleccione un contacto para iniciar una conversación",
     "sendMessage": "Enviar mensaje"
   },
-  "campoPerfildeOrganización": {
-    "cargando": "Cargando...",
+
+  "orgProfileField": {
+    "loading": "Cargando..",
     "noCustomField": "No hay campos personalizados disponibles",
-    "customFieldName": "Nombre de campo",
-    "enterCustomFieldName": "Ingrese el nombre del campo",
-    "customFieldType": "Tipo de campo",
-    "saveChanges": "Guardar cambios",
-    "Eliminar campo personalizado": "Eliminar campo personalizado",
-    "fieldSuccessMessage": "Campo agregado exitosamente",
+    "customFieldName": "Nombre del Campo",
+    "enterCustomFieldName": "Ingrese el Nombre del Campo",
+    "customFieldType": "Tipo de Campo",
+    "saveChanges": "Guardar Cambios",
+    "Remove Custom Field": "Eliminar Campo Personalizado",
+    "fieldSuccessMessage": "Campo añadido exitosamente",
     "fieldRemovalSuccess": "Campo eliminado exitosamente"
   }
 }
