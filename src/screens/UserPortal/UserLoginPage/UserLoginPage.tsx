@@ -6,6 +6,7 @@ import TalawaImage from 'assets/images/talawa-logo-200x200.png';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
 import Login from 'components/UserPortal/Login/Login';
 import Register from 'components/UserPortal/Register/Register';
+import LoginPortalToggle from 'components/LoginPortalToggle/LoginPortalToggle';
 import styles from './UserLoginPage.module.css';
 
 import {
@@ -17,8 +18,6 @@ import {
   TwitterLogo,
   YoutubeLogo,
 } from 'assets/svgs/social-icons';
-import { NavLink } from 'react-router-dom';
-import { Col, Row } from 'react-bootstrap';
 
 export default function userLoginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -92,34 +91,17 @@ export default function userLoginPage(): JSX.Element {
         </div>
       </div>
       <div className={`${styles.contentContainer} py-5`}>
-        <ChangeLanguageDropDown parentContainerStyle="m-0" />
+        <ChangeLanguageDropDown
+          parentContainerStyle={styles.langChangeBtn}
+          btnStyle={styles.langChangeBtnStyle}
+        />
         <img
           className={styles.talawaImage}
           src={TalawaImage}
           alt="Talawa Branding"
         />
-        <Row className="mb-3">
-          <Col>
-            <NavLink
-              className={styles.navLinkClass}
-              activeClassName={styles.activeLink}
-              exact
-              to="/"
-            >
-              {t('admin')}
-            </NavLink>
-          </Col>
-          <Col>
-            <NavLink
-              className={styles.navLinkClass}
-              activeClassName={styles.activeLink}
-              exact
-              to="/user"
-            >
-              {t('user')}
-            </NavLink>
-          </Col>
-        </Row>
+
+        <LoginPortalToggle />
         {
           /* istanbul ignore next */
           currentMode === 'login' ? (

@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
-import { Link, NavLink, useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import {
@@ -29,6 +29,7 @@ import {
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import { ReactComponent as PalisadoesLogo } from 'assets/svgs/palisadoes.svg';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
+import LoginPortalToggle from 'components/LoginPortalToggle/LoginPortalToggle';
 import Loader from 'components/Loader/Loader';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './LoginPage.module.css';
@@ -293,6 +294,7 @@ function loginPage(): JSX.Element {
             <div className={styles.right_portion}>
               <ChangeLanguageDropDown
                 parentContainerStyle={styles.langChangeBtn}
+                btnStyle={styles.langChangeBtnStyle}
               />
               <TalawaLogo
                 className={`${styles.talawa_logo}  ${
@@ -300,37 +302,17 @@ function loginPage(): JSX.Element {
                 }`}
               />
 
-              <Row className="mb-5">
-                <Col>
-                  <NavLink
-                    className={styles.navLinkClass}
-                    activeClassName={styles.activeLink}
-                    exact
-                    to="/"
-                  >
-                    {t('admin')}
-                  </NavLink>
-                </Col>
-                <Col>
-                  <NavLink
-                    className={styles.navLinkClass}
-                    activeClassName={styles.activeLink}
-                    exact
-                    to="/user"
-                  >
-                    {t('user')}
-                  </NavLink>
-                </Col>
-              </Row>
+              <LoginPortalToggle />
+
               {/* LOGIN FORM */}
               <div
                 className={`${
                   showTab === 'LOGIN' ? styles.active_tab : 'd-none'
                 }`}
               >
-                <form onSubmit={loginLink}>
-                  <h1 className="fs-2 fw-bold text-dark mb-3">{t('login')}</h1>
-                  <Form.Label>{t('email')}</Form.Label>
+                <form onSubmit={loginLink} className="gap-1">
+                  <h1 className="fs-4 fw-bold text-dark mb-3">{t('login')}</h1>
+                  <Form.Label className="mb-1">{t('email')}</Form.Label>
                   <div className="position-relative">
                     <Form.Control
                       type="email"
@@ -343,6 +325,7 @@ function loginPage(): JSX.Element {
                           email: e.target.value,
                         });
                       }}
+                      className="lh-1"
                       autoComplete="username"
                       data-testid="loginEmail"
                     />
@@ -353,11 +336,11 @@ function loginPage(): JSX.Element {
                       <EmailOutlinedIcon />
                     </Button>
                   </div>
-                  <Form.Label className="mt-3">{t('password')}</Form.Label>
+                  <Form.Label className="mt-2 mb-1">{t('password')}</Form.Label>
                   <div className="position-relative">
                     <Form.Control
                       type={showPassword ? 'text' : 'password'}
-                      className="input_box_second"
+                      className="input_box_second lh-1"
                       placeholder={t('enterPassword')}
                       required
                       value={formState.password}
@@ -382,7 +365,7 @@ function loginPage(): JSX.Element {
                       )}
                     </Button>
                   </div>
-                  <div className="text-end mt-3">
+                  <div className="text-end mt-2 mb-3">
                     <Link
                       to="/forgotPassword"
                       className="text-secondary"
@@ -395,7 +378,7 @@ function loginPage(): JSX.Element {
                     <div className="googleRecaptcha">
                       <ReCAPTCHA
                         ref={recaptchaRef}
-                        className="mt-3"
+                        className="mt-2"
                         sitekey={
                           /* istanbul ignore next */
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
@@ -408,7 +391,7 @@ function loginPage(): JSX.Element {
                   )}
                   <Button
                     type="submit"
-                    className="mt-3 mb-3 w-100"
+                    className="mb-0 w-100 lh-1"
                     value="Login"
                     data-testid="loginBtn"
                   >
@@ -421,7 +404,7 @@ function loginPage(): JSX.Element {
                   <Button
                     variant="outline-secondary"
                     value="Register"
-                    className="mt-3 mb-3 w-100"
+                    className="w-100 lh-1"
                     data-testid="goToRegisterPortion"
                     onClick={(): void => {
                       setShowTab('REGISTER');
@@ -438,18 +421,20 @@ function loginPage(): JSX.Element {
                   showTab === 'REGISTER' ? styles.active_tab : 'd-none'
                 }`}
               >
-                <Form onSubmit={signupLink}>
-                  <h1 className="fs-2 fw-bold text-dark mb-3">
+                <Form onSubmit={signupLink} className="gap-0">
+                  <h1 className="fs-4 fw-bold text-dark mb-3">
                     {t('register')}
                   </h1>
                   <Row>
                     <Col sm={6}>
                       <div>
-                        <Form.Label>{t('firstName')}</Form.Label>
+                        <Form.Label className="mb-1">
+                          {t('firstName')}
+                        </Form.Label>
                         <Form.Control
                           type="text"
                           id="signfirstname"
-                          className="mb-3"
+                          className="lh-1"
                           placeholder={t('firstName')}
                           required
                           value={signformState.signfirstName}
@@ -464,11 +449,13 @@ function loginPage(): JSX.Element {
                     </Col>
                     <Col sm={6}>
                       <div>
-                        <Form.Label>{t('lastName')}</Form.Label>
+                        <Form.Label className="mb-1">
+                          {t('lastName')}
+                        </Form.Label>
                         <Form.Control
                           type="text"
                           id="signlastname"
-                          className="mb-3"
+                          className="lh-1"
                           placeholder={t('lastName')}
                           required
                           value={signformState.signlastName}
@@ -482,13 +469,13 @@ function loginPage(): JSX.Element {
                       </div>
                     </Col>
                   </Row>
-                  <div className="position-relative">
-                    <Form.Label>{t('email')}</Form.Label>
+                  <div className="position-relative mt-2">
+                    <Form.Label className="mb-1">{t('email')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
                         type="email"
                         data-testid="signInEmail"
-                        className="mb-3"
+                        className="lh-1"
                         placeholder={t('email')}
                         autoComplete="username"
                         required
@@ -509,14 +496,15 @@ function loginPage(): JSX.Element {
                     </div>
                   </div>
 
-                  <div className="position-relative mb-3">
-                    <Form.Label>{t('password')}</Form.Label>
+                  <div className="position-relative my-2">
+                    <Form.Label className="mb-1">{t('password')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
                         type={showPassword ? 'text' : 'password'}
                         data-testid="passwordField"
                         placeholder={t('password')}
                         autoComplete="new-password"
+                        className="lh-1"
                         onFocus={(): void => setIsInputFocused(true)}
                         onBlur={(): void => setIsInputFocused(false)}
                         required
@@ -560,13 +548,16 @@ function loginPage(): JSX.Element {
                         </div>
                       )}
                   </div>
-                  <div className="position-relative">
-                    <Form.Label>{t('confirmPassword')}</Form.Label>
+                  <div className="position-relative my-2">
+                    <Form.Label className="mb-1">
+                      {t('confirmPassword')}
+                    </Form.Label>
                     <div className="position-relative">
                       <Form.Control
                         type={showConfirmPassword ? 'text' : 'password'}
                         placeholder={t('confirmPassword')}
                         required
+                        className="lh-1"
                         value={signformState.cPassword}
                         onChange={(e): void => {
                           setSignFormState({
@@ -616,7 +607,7 @@ function loginPage(): JSX.Element {
                   )}
                   <Button
                     type="submit"
-                    className="mt-4 w-100 mb-3"
+                    className="mt-4 mb-1 w-100 lh-1"
                     value="Register"
                     data-testid="registrationBtn"
                   >
@@ -629,7 +620,7 @@ function loginPage(): JSX.Element {
                   <Button
                     variant="outline-secondary"
                     value="Register"
-                    className="mt-3 mb-5 w-100"
+                    className="mt-1 w-100 lh-1"
                     data-testid="goToLoginPortion"
                     onClick={(): void => {
                       setShowTab('LOGIN');

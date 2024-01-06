@@ -2,31 +2,6 @@ body::before {
   content: none !important;
 }
 
-.navLinkClass {
-  display: inline-block;
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
-  color: #212529;
-  border-radius: 0.25rem;
-  width: 100%;
-  box-sizing: border-box;
-  font-weight: 400;
-  transition: font-weight 0.3s ease;
-}
-
-.navLinkClass:hover {
-  font-weight: 700;
-}
-
-.activeLink {
-  border-bottom: 3px solid;
-  width: 100%;
-}
-
 .leftPane {
   align-items: center;
   width: 60%;
@@ -43,8 +18,8 @@ body::before {
 }
 
 .talawaImage {
-  width: 40%;
-  height: auto;
+  height: 5rem;
+  width: 5rem;
   margin-left: 50%;
   transform: translateX(-50%);
 }
@@ -62,8 +37,22 @@ body::before {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  position: relative;
   padding: 20px 50px;
   background-color: var(--bs-white);
+}
+
+.langChangeBtn {
+  margin: 0;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+}
+
+.langChangeBtnStyle {
+  width: 7.5rem;
+  height: 2.2rem;
+  padding: 0;
 }
 
 @media only screen and (max-width: 800px) {
