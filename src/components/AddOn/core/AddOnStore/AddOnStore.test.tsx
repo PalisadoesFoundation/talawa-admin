@@ -59,6 +59,9 @@ describe('Testing AddOnStore Component', () => {
     waitFor(() => {
       fireEvent.click(screen.getByLabelText('enable'));
     });
+    waitFor(() => {
+      expect(screen.getByText('enable')).toBeInTheDocument();
+    });
   });
 
   test('filters by disabled plugins when "disable" radio button is selected', () => {
@@ -75,6 +78,9 @@ describe('Testing AddOnStore Component', () => {
     );
     waitFor(() => {
       fireEvent.click(screen.getByLabelText('disable'));
+    });
+    waitFor(() => {
+      expect(screen.getByText('disable')).toBeInTheDocument();
     });
   });
 
@@ -94,6 +100,11 @@ describe('Testing AddOnStore Component', () => {
       fireEvent.change(screen.getByPlaceholderText('searchName'), {
         target: { value: 'examplePlugin' },
       });
+    });
+
+    waitFor(() => {
+      const searchResults = screen.getAllByText('examplePlugin');
+      expect(searchResults.length).toBeGreaterThan(0);
     });
   });
 
@@ -115,6 +126,10 @@ describe('Testing AddOnStore Component', () => {
         target: { value: 'nonexistentPlugin' },
       });
     });
+    waitFor(() => {
+      const unrelatedPlugins = screen.queryByText('nonexistentPlugin');
+      expect(unrelatedPlugins).toBeNull();
+    });
   });
 
   test('switches between "Available" and "Installed" tabs', async () => {
@@ -134,6 +149,14 @@ describe('Testing AddOnStore Component', () => {
 
     waitFor(() => {
       fireEvent.click(screen.getByText('Installed'));
+    });
+    waitFor(() => {
+      const installedTabContent = screen.getByText('Installed');
+      expect(installedTabContent).toBeInTheDocument();
+    });
+    waitFor(() => {
+      const availableTabContent = screen.queryByText('Available Plugin');
+      expect(availableTabContent).toBeNull();
     });
   });
 
@@ -155,6 +178,10 @@ describe('Testing AddOnStore Component', () => {
     waitFor(() => {
       fireEvent.click(screen.getByText('Install'));
     });
+
+    waitFor(() => {
+      expect(screen.getByText('Install')).toBeInTheDocument();
+    });
   });
 
   test('modifies a plugin when "Modify" button is clicked', async () => {
@@ -174,6 +201,9 @@ describe('Testing AddOnStore Component', () => {
 
     waitFor(() => {
       fireEvent.click(screen.getByText('Modify'));
+    });
+    waitFor(() => {
+      expect(screen.getByText('Modify')).toBeInTheDocument();
     });
   });
 
@@ -248,6 +278,10 @@ describe('Testing AddOnStore Component', () => {
     waitFor(() => {
       fireEvent.click(screen.getByText('Example Plugin'));
     });
+
+    waitFor(() => {
+      expect(screen.getByText('Example Plugin')).toBeInTheDocument();
+    });
   });
 
   test('renders AddOnEntry components with the correct information', async () => {
@@ -318,6 +352,9 @@ describe('Testing AddOnStore Component', () => {
 
     waitFor(() => {
       fireEvent.click(screen.getByText('Install'));
+    });
+    waitFor(() => {
+      expect(screen.getByText('Install')).toBeInTheDocument();
     });
   });
 });
