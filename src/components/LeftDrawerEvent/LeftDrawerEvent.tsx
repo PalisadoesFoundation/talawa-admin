@@ -36,7 +36,6 @@ const leftDrawerEvent = ({
   const userType = localStorage.getItem('UserType');
   const firstName = localStorage.getItem('FirstName');
   const lastName = localStorage.getItem('LastName');
-  const userImage = localStorage.getItem('UserImage');
   const userId = localStorage.getItem('id');
 
   const history = useHistory();
@@ -160,14 +159,10 @@ const leftDrawerEvent = ({
             }}
           >
             <div className={styles.imageContainer}>
-              {userImage && userImage ? (
-                <img src={userImage} alt={`Profile Picture`} />
-              ) : (
-                <img
-                  src={`https://api.dicebear.com/5.x/initials/svg?seed=${firstName}%20${lastName}`}
-                  alt={`Dummy User Picture`}
-                />
-              )}
+              <img
+                src={`https://api.dicebear.com/5.x/initials/svg?seed=${firstName}%20${lastName}`}
+                alt={`Profile Picture`}
+              />
             </div>
             <div className={styles.profileText}>
               <span className={styles.primaryText}>
