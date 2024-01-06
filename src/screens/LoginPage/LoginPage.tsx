@@ -73,13 +73,12 @@ function loginPage(): JSX.Element {
 
   const passwordValidationRegExp = {
     lowercaseCharRegExp: new RegExp('[a-z]'),
-    uppercasaeCharRegExp: new RegExp('[A-Z]'),
+    uppercaseCharRegExp: new RegExp('[A-Z]'),
     numericalValueRegExp: new RegExp('\\d'),
     specialCharRegExp: new RegExp('[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\/-]'),
   };
   const handleLowercasePassCheck = (pass: string): void => {
-    const success = passwordValidationRegExp.lowercaseCharRegExp.test(pass);
-    if (success) {
+    if (passwordValidationRegExp.lowercaseCharRegExp.test(pass)) {
       setShowAlert((prevAlert) => ({ ...prevAlert, lowercaseChar: false }));
     } else {
       setShowAlert((prevAlert) => ({ ...prevAlert, lowercaseChar: true }));
@@ -87,24 +86,21 @@ function loginPage(): JSX.Element {
   };
 
   const handleUppercasePassCheck = (pass: string): void => {
-    const success = passwordValidationRegExp.uppercasaeCharRegExp.test(pass);
-    if (success) {
+    if (passwordValidationRegExp.uppercaseCharRegExp.test(pass)) {
       setShowAlert((prevAlert) => ({ ...prevAlert, uppercaseChar: false }));
     } else {
       setShowAlert((prevAlert) => ({ ...prevAlert, uppercaseChar: true }));
     }
   };
   const handleNumericalValuePassCheck = (pass: string): void => {
-    const success = passwordValidationRegExp.numericalValueRegExp.test(pass);
-    if (success) {
+    if (passwordValidationRegExp.numericalValueRegExp.test(pass)) {
       setShowAlert((prevAlert) => ({ ...prevAlert, numericValue: false }));
     } else {
       setShowAlert((prevAlert) => ({ ...prevAlert, numericValue: true }));
     }
   };
   const handleSpecialCharPassCheck = (pass: string): void => {
-    const success = passwordValidationRegExp.specialCharRegExp.test(pass);
-    if (success) {
+    if (passwordValidationRegExp.specialCharRegExp.test(pass)) {
       setShowAlert((prevAlert) => ({ ...prevAlert, specialChar: false }));
     } else {
       setShowAlert((prevAlert) => ({ ...prevAlert, specialChar: true }));
@@ -191,8 +187,8 @@ function loginPage(): JSX.Element {
       return (
         lengthCheck.test(password) &&
         passwordValidationRegExp.lowercaseCharRegExp.test(password) &&
-        passwordValidationRegExp.uppercasaeCharRegExp.test(password) &&
-        passwordValidationRegExp.uppercasaeCharRegExp.test(password) &&
+        passwordValidationRegExp.uppercaseCharRegExp.test(password) &&
+        passwordValidationRegExp.numericalValueRegExp.test(password) &&
         passwordValidationRegExp.specialCharRegExp.test(password)
       );
     };
