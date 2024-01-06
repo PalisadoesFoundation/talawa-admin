@@ -47,8 +47,7 @@
   height: 5rem;
   width: 5rem;
   display: block;
-  margin: 1rem auto;
-  margin-top: 30px;
+  margin: 1.5rem auto 1rem;
   -webkit-animation: zoomIn 0.3s ease-in-out;
   animation: zoomIn 0.3s ease-in-out;
 }
@@ -132,8 +131,8 @@
   }
 
   .row .right_portion .talawa_logo {
-    height: 80px;
-    margin: 1rem auto 0.5rem auto;
+    height: 120px;
+    margin: 0 auto 2rem auto;
   }
 
   .socialIcons {
@@ -206,4 +205,23 @@
   display: flex;
   gap: 16px;
   justify-content: center;
+}
+
+.password_checks {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.password_check_element {
+  margin-top: -10px;
+}
+
+.password_check_element_top {
+  margin-top: 18px;
+}
+
+.password_check_element_bottom {
+  margin-bottom: -20px;
 }
