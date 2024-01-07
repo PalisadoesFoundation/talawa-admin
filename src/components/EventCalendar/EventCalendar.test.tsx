@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import Calendar from './EventCalendar';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
@@ -271,5 +271,19 @@ describe('Calendar', () => {
     const lessButton = screen.getByText('Less');
     fireEvent.click(lessButton);
     expect(screen.queryByText('Event 3')).not.toBeInTheDocument();
+  });
+
+  test('Handles window resize', () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={eventData} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    act(() => {
+      window.dispatchEvent(new Event('resize'));
+    });
   });
 });

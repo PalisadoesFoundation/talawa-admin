@@ -79,9 +79,13 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   const [expanded, setExpanded] = useState<number>(-1);
   const [windowWidth, setWindowWidth] = useState<number>(window.screen.width);
 
-  window.addEventListener('resize', () => {
-    setWindowWidth(window.screen.width);
-  });
+  useEffect(() => {
+    function handleResize(): void {
+      setWindowWidth(window.screen.width);
+    }
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const filterData = (
     eventData: InterfaceEvent[],
