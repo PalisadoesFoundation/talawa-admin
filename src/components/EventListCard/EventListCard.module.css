@@ -109,9 +109,6 @@
   display: flex;
   flex-direction: column;
 }
-/* .checkboxdiv > div {
-  width: 50%;
-} */
 .checkboxContainer {
   display: flex;
   justify-content: space-between;
