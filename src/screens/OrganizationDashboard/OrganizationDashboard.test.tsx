@@ -195,4 +195,28 @@ describe('Organisation Dashboard Page', () => {
 
     expect(window.location.pathname).toBe('/orglist');
   });
+
+  test('Clicking viewAllMembershipRequests triggers toast.success', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link1}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrganizationDashboard />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+    });
+
+    await wait();
+
+    const viewMSBtn = screen.getByTestId('viewAllMembershipRequests');
+    fireEvent.click(viewMSBtn);
+
+    // Ensure that toast.success is called with 'Coming soon!'
+    expect(toast.success).toBeCalledWith('Coming soon!');
+  });
 });
