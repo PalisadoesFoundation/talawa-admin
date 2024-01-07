@@ -21,13 +21,13 @@
   border-radius: 4px;
 }
 
-.orgCard .innerContainer .orgImgContainer img {
+.orgCard .innerContainer .orgImgContainer {
   width: 125px;
   height: 120px;
   object-fit: contain;
 }
 
-.orgCard .innerContainer .orgImgContainer .emptyImg {
+.orgCard .innerContainer .orgImgContainer {
   width: 125px;
   height: 120px;
   background-color: var(--bs-gray-200);

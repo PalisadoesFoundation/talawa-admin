@@ -14,7 +14,7 @@
 
 ### MOCKS
 
-• `Const` **MOCKS**: ({ `request`: { `query`: `DocumentNode` = ORGANIZATION\_CONNECTION\_LIST; `variables?`: `undefined`  } ; `result`: { `data`: { `organizationsConnection`: `InterfaceOrgConnectionInfoType`[] = organizations }  }  } \| { `request`: { `query`: `DocumentNode` = USER\_ORGANIZATION\_LIST; `variables`: { `id`: `string` = '123' }  } ; `result`: { `data`: `InterfaceUserType` = superAdminUser }  })[]
+• `Const` **MOCKS**: (\{ `request`: \{ `query`: `DocumentNode` = ORGANIZATION\_CONNECTION\_LIST; `variables?`: `undefined`  \} ; `result`: \{ `data`: \{ `organizationsConnection`: `InterfaceOrgConnectionInfoType`[] = organizations \}  \}  \} \| \{ `request`: \{ `query`: `DocumentNode` = USER\_ORGANIZATION\_LIST; `variables`: \{ `id`: `string` = '123' \}  \} ; `result`: \{ `data`: `InterfaceUserType` = superAdminUser \}  \})[]
 
 #### Defined in
 
@@ -24,7 +24,7 @@ ___
 
 ### MOCKS\_ADMIN
 
-• `Const` **MOCKS\_ADMIN**: ({ `request`: { `query`: `DocumentNode` = ORGANIZATION\_CONNECTION\_LIST; `variables?`: `undefined`  } ; `result`: { `data`: { `organizationsConnection`: `InterfaceOrgConnectionInfoType`[] = organizations }  }  } \| { `request`: { `query`: `DocumentNode` = USER\_ORGANIZATION\_LIST; `variables`: { `id`: `string` = '123' }  } ; `result`: { `data`: `InterfaceUserType` = adminUser }  })[]
+• `Const` **MOCKS\_ADMIN**: (\{ `request`: \{ `query`: `DocumentNode` = ORGANIZATION\_CONNECTION\_LIST; `variables?`: `undefined`  \} ; `result`: \{ `data`: \{ `organizationsConnection`: `InterfaceOrgConnectionInfoType`[] = organizations \}  \}  \} \| \{ `request`: \{ `query`: `DocumentNode` = USER\_ORGANIZATION\_LIST; `variables`: \{ `id`: `string` = '123' \}  \} ; `result`: \{ `data`: `InterfaceUserType` = adminUser \}  \})[]
 
 #### Defined in
 
@@ -34,7 +34,7 @@ ___
 
 ### MOCKS\_EMPTY
 
-• `Const` **MOCKS\_EMPTY**: ({ `request`: { `query`: `DocumentNode` = ORGANIZATION\_CONNECTION\_LIST; `variables?`: `undefined`  } ; `result`: { `data`: { `organizationsConnection`: `never`[] = [] }  }  } \| { `request`: { `query`: `DocumentNode` = USER\_ORGANIZATION\_LIST; `variables`: { `id`: `string` = '123' }  } ; `result`: { `data`: `InterfaceUserType` = superAdminUser }  })[]
+• `Const` **MOCKS\_EMPTY**: (\{ `request`: \{ `query`: `DocumentNode` = ORGANIZATION\_CONNECTION\_LIST; `variables?`: `undefined`  \} ; `result`: \{ `data`: \{ `organizationsConnection`: `never`[] = [] \}  \}  \} \| \{ `request`: \{ `query`: `DocumentNode` = USER\_ORGANIZATION\_LIST; `variables`: \{ `id`: `string` = '123' \}  \} ; `result`: \{ `data`: `InterfaceUserType` = superAdminUser \}  \})[]
 
 #### Defined in
 

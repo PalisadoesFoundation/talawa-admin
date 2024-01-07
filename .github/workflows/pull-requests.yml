@@ -51,6 +51,27 @@ jobs:
         if: steps.changed-files.outputs.only_changed != 'true'
         run: npm run lint:check  
 
+      - name: Compare translation files
+        run: |
+          chmod +x .github/workflows/compare_translations.py
+          python .github/workflows/compare_translations.py --directory public/locales
+
+
+  Check-Changed-Files:
+    runs-on: ubuntu-latest
+    needs: Code-Quality-Checks
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Run Python script
+        run: |
+          python .github/workflows/count_changed_files.py --base_branch "${{ github.base_ref }}" --pr_branch "${{ github.head_ref }}"
 
   Test-Application:
     name: Test Application

@@ -1,13 +1,11 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Search } from '@mui/icons-material';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import SortIcon from '@mui/icons-material/Sort';
 import { CREATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-
 import { CREATE_SAMPLE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 
 import OrgListCard from 'components/OrgListCard/OrgListCard';
@@ -225,18 +223,30 @@ function orgList(): JSX.Element {
   };
 
   /* istanbul ignore next */
-  const handleSearchByName = (e: any): void => {
+  const handleSearch = (value: string): void => {
+    setSearchByName(value);
+    if (value === '') {
+      resetAllParams();
+      return;
+    }
+    refetchOrgs({
+      filter: value,
+    });
+  };
+
+  const handleSearchByEnter = (e: any): void => {
     if (e.key === 'Enter') {
       const { value } = e.target;
-      setSearchByName(value);
-      if (value == '') {
-        resetAllParams();
-        return;
-      }
-      refetchOrgs({
-        filter: value,
-      });
+      handleSearch(value);
     }
+  };
+
+  const handleSearchByBtnClick = (): void => {
+    const inputElement = document.getElementById(
+      'searchOrgname'
+    ) as HTMLInputElement;
+    const inputValue = inputElement?.value || '';
+    handleSearch(inputValue);
   };
   /* istanbul ignore next */
   const loadMoreOrganizations = (): void => {
@@ -302,17 +312,19 @@ function orgList(): JSX.Element {
           <div className={styles.input}>
             <Form.Control
               type="name"
-              id="orgname"
+              id="searchOrgname"
               className="bg-white"
               placeholder={t('searchByName')}
               data-testid="searchByName"
               autoComplete="off"
               required
-              onKeyUp={handleSearchByName}
+              onKeyUp={handleSearchByEnter}
             />
             <Button
               tabIndex={-1}
               className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+              onClick={handleSearchByBtnClick}
+              data-testid="searchBtn"
             >
               <Search />
             </Button>
@@ -346,17 +358,6 @@ function orgList(): JSX.Element {
                   >
                     {t('Earliest')}
                   </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-              <Dropdown aria-expanded="false" title="Filter organizations">
-                <Dropdown.Toggle variant="outline-success">
-                  <FilterListIcon className={'me-1'} />
-                  {t('filter')}
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </div>
@@ -506,10 +507,13 @@ function orgList(): JSX.Element {
                 required
                 value={formState.name}
                 onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    name: e.target.value,
-                  });
+                  const inputText = e.target.value;
+                  if (inputText.length < 50) {
+                    setFormState({
+                      ...formState,
+                      name: e.target.value,
+                    });
+                  }
                 }}
               />
               <Form.Label htmlFor="descrip">{t('description')}</Form.Label>
@@ -522,10 +526,13 @@ function orgList(): JSX.Element {
                 required
                 value={formState.descrip}
                 onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    descrip: e.target.value,
-                  });
+                  const descriptionText = e.target.value;
+                  if (descriptionText.length < 200) {
+                    setFormState({
+                      ...formState,
+                      descrip: e.target.value,
+                    });
+                  }
                 }}
               />
               <Form.Label htmlFor="location">{t('location')}</Form.Label>
@@ -538,10 +545,13 @@ function orgList(): JSX.Element {
                 required
                 value={formState.location}
                 onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    location: e.target.value,
-                  });
+                  const locationText = e.target.value;
+                  if (locationText.length < 100) {
+                    setFormState({
+                      ...formState,
+                      location: e.target.value,
+                    });
+                  }
                 }}
               />
 

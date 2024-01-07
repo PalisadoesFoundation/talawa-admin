@@ -10,6 +10,11 @@
     "email": "ईमेल",
     "password": "पासवर्ड",
     "atleast_8_char_long": "कम से कम 8 कैरेक्टर लंबा",
+    "atleast_6_char_long": "कम से कम 6 अक्षर लंबा",
+    "firstName_invalid": "प्रथम नाम में केवल छोटे और बड़े अक्षर होने चाहिए",
+    "lastName_invalid": "अंतिम नाम में केवल छोटे और बड़े अक्षर होने चाहिए",
+    "password_invalid": "पासवर्ड में कम से कम एक लोअरकेस अक्षर, एक अपरकेस अक्षर, एक संख्यात्मक मान और एक विशेष अक्षर होना चाहिए",
+    "email_invalid": "ईमेल में कम से कम 8 अक्षर होने चाहिए",
     "Password_and_Confirm_password_mismatches.": "पासवर्ड और पुष्टि पासवर्ड बेमेल।",
     "confirmPassword": "पासवर्ड की पुष्टि कीजिये",
     "forgotPassword": "पासवर्ड भूल गए ?",
@@ -25,13 +30,53 @@
     "notAuthorised": "क्षमा करें! आप अधिकृत नहीं हैं!",
     "notFound": "उपयोगकर्ता नहीं मिला!",
     "successfullyRegistered": "सफलतापूर्वक पंजीकृत। कृपया स्वीकृत होने तक प्रतीक्षा करें।",
-    "login_to_admin_portal": "एडमिन पोर्टल लॉगिन",
+    "OR": "या",
+    "admin": "व्यवस्थापक",
+    "user": "उपयोगकर्ता",
+    "lowercase_check": "कम से कम एक छोटा अक्षर",
+    "uppercase_check": "कम से कम एक बड़ा अक्षर",
+    "numeric_value_check": "कम से कम एक संख्यात्मक मान",
+    "special_char_check": "कम से कम एक विशेष पात्र"
+  },
+  "userLoginPage": {
+    "title": "तलवा व्यवस्थापक",
+    "fromPalisadoes": "पलिसाडो के स्वयंसेवकों द्वारा एक खुला स्रोत अनुप्रयोग",
+    "talawa_portal": "तलावा प्रशासन पोर्टल",
+    "login": "लॉग इन करें",
+    "register": "पंजीकरण करवाना",
+    "firstName": "पहला नाम",
+    "lastName": "उपनाम",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "atleast_8_char_long": "कम से कम 8 कैरेक्टर लंबा",
+    "Password_and_Confirm_password_mismatches.": "पासवर्ड और पुष्टि पासवर्ड बेमेल।",
+    "confirmPassword": "पासवर्ड की पुष्टि कीजिये",
+    "forgotPassword": "पासवर्ड भूल गए ?",
+    "enterEmail": "ईमेल दर्ज करें",
+    "enterPassword": "पास वर्ड दर्ज करें",
+    "doNotOwnAnAccount": "क्या आपके पास खाता नहीं है?",
+    "talawaApiUnavailable": "तलावा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रही है? अपनी नेटवर्क कनेक्टिविटी की भी जाँच करें।",
+    "captchaError": "कैप्चा त्रुटि!",
+    "Please_check_the_captcha": "कृपया, कैप्चा जांचें।",
+    "Something_went_wrong": "कुछ गलत हुआ, कृपया कुछ समय बाद प्रयास करें।",
+    "passwordMismatches": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",
+    "fillCorrectly": "सभी विवरण सही ढंग से भरें।",
+    "notAuthorised": "क्षमा करें! आप अधिकृत नहीं हैं!",
+    "notFound": "उपयोगकर्ता नहीं मिला!",
+    "successfullyRegistered": "सफलतापूर्वक पंजीकृत। कृपया स्वीकृत होने तक प्रतीक्षा करें।",
+    "afterRegister": "पंजीकरण सफलतापूर्वक हो गया है। कृपया आपके अनुरोध को स्वीकार करने के लिए व्यवस्थापक की प्रतीक्षा करें।",
+    "userLogin": "उपयोगकर्ता लॉगिन",
     "OR": "या"
   },
   "latestEvents": {
     "eventCardTitle": "आगामी घटनाएँ",
     "eventCardSeeAll": "सभी देखें",
     "noEvents": "कोई आगामी घटनाएँ नहीं"
+  },
+  "latestPosts": {
+    "latestPostsTitle": "नवीनतम पोस्ट",
+    "seeAllLink": "सभी देखें",
+    "noPostsCreated": "कोई पोस्ट नहीं बनाई गई"
   },
   "listNavbar": {
     "talawa_portal": "तलावा प्रशासन पोर्टल",
@@ -422,7 +467,8 @@
     "deleteMsg": "क्या आप इस संगठन को हटाना चाहते हैं?",
     "cancel": "रद्द करना",
     "confirmDelete": "हटाने की पुष्टि करें",
-    "longDelOrgMsg": "संगठन को हमेशा के लिए हटा देने के लिए संगठन हटाने के बटन पर क्लिक करके, उसके इवेंट्स, टैग्स और सभी संबंधित डेटा सहित सभी जानकारी हटा दी जाएगी।"
+    "longDelOrgMsg": "संगठन को हमेशा के लिए हटा देने के लिए संगठन हटाने के बटन पर क्लिक करके, उसके इवेंट्स, टैग्स और सभी संबंधित डेटा सहित सभी जानकारी हटा दी जाएगी।",
+    "successfullyDeletedSampleOrganization": "नमूना संगठन सफलतापूर्वक हटा दिया गया"
   },
   "userUpdate": {
     "firstName": "पहला नाम",
@@ -605,7 +651,10 @@
     "lastName": "उपनाम",
     "emailAddress": "मेल पता",
     "updateImage": "छवि अद्यतन करें",
-    "save": "बचाना"
+    "saveChanges": "परिवर्तनों को सुरक्षित करें",
+    "updateProfile": "प्रोफ़ाइल अपडेट करें",
+    "otherSettings": "अन्य सेटिंग्स",
+    "changeLanguage": "भाषा बदलें"
   },
   "donate": {
     "donateTo": "दान दें",
@@ -681,14 +730,14 @@
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
     "sendMessage": "मेसेज भेजें"
   },
-  "ऑर्गप्रोफ़ाइलफ़ील्ड": {
-    "लोड हो रहा है": "लोड हो रहा है...",
-    "noCustomField": "कोई कस्टम फ़ील्ड उपलब्ध नहीं",
-    "customFieldName": "फ़ील्ड नाम",
-    "enterCustomFieldName": "फ़ील्ड नाम दर्ज करें",
-    "customFieldType": "फ़ील्ड प्रकार",
+  "orgProfileField": {
+    "loading": "लोड हो रहा है...",
+    "noCustomField": "कोई कस्टम फ़ील्ड उपलब्ध नहीं है",
+    "customFieldName": "फ़ील्ड का नाम",
+    "enterCustomFieldName": "फ़ील्ड का नाम दर्ज करें",
+    "customFieldType": "फ़ील्ड का प्रकार",
     "saveChanges": "परिवर्तन सहेजें",
-    "कस्टम फ़ील्ड हटाएँ": "कस्टम फ़ील्ड हटाएँ",
+    "Remove Custom Field": "कस्टम फ़ील्ड हटाएँ",
     "fieldSuccessMessage": "फ़ील्ड सफलतापूर्वक जोड़ा गया",
     "fieldRemovalSuccess": "फ़ील्ड सफलतापूर्वक हटा दिया गया"
   }
