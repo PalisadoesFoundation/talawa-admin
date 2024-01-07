@@ -233,14 +233,8 @@ function loginPage(): JSX.Element {
         <Row className={styles.row}>
           <Col sm={0} md={6} lg={7} className={styles.left_portion}>
             <div className={styles.inner}>
-              <a
-                href="https://www.palisadoes.org/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <PalisadoesLogo className={styles.palisadoes_logo} />
-                <p className="text-center">{t('fromPalisadoes')}</p>
-              </a>
+              <PalisadoesLogo className={styles.palisadoes_logo} />
+              <p className="text-center">{t('fromPalisadoes')}</p>
             </div>
 
             <div className={styles.socialIcons}>

@@ -29,21 +29,14 @@ export default function userLoginPage(): JSX.Element {
   return (
     <div className={styles.mainContainer}>
       <div className={styles.leftPane}>
-        <a
-          href="https://www.palisadoes.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img
-            className={styles.palisadoesImage}
-            src={PalisadoesImage}
-            alt="Palisadoes Branding"
-          />
-
-          <h6 style={{ textAlign: `center` }}>
-            <p>{t('fromPalisadoes')}</p>
-          </h6>
-        </a>
+        <img
+          className={styles.palisadoesImage}
+          src={PalisadoesImage}
+          alt="Palisadoes Branding"
+        />
+        <h6 style={{ textAlign: `center` }}>
+          <p>{t('fromPalisadoes')}</p>
+        </h6>
         <div className={styles.socialIcons}>
           <a
             href="https://www.facebook.com/palisadoesproject"
