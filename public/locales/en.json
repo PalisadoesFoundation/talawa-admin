@@ -10,6 +10,11 @@
     "email": "Email",
     "password": "Password",
     "atleast_8_char_long": "Atleast 8 Character long",
+    "atleast_6_char_long": "Atleast 6 Character long",
+    "firstName_invalid": "First name should contain only lower and upper case letters",
+    "lastName_invalid": "Last name should contain only lower and upper case letters",
+    "password_invalid": "Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character",
+    "email_invalid": "Email should have atleast 8 characters",
     "Password_and_Confirm_password_mismatches.": "Password and Confirm password mismatches.",
     "confirmPassword": "Confirm Password",
     "forgotPassword": "Forgot Password ?",
@@ -25,7 +30,42 @@
     "notAuthorised": "Sorry! you are not Authorised!",
     "notFound": "User not found!",
     "successfullyRegistered": "Successfully Registered. Please wait until you will be approved.",
-    "login_to_admin_portal": "Admin Portal Login",
+    "OR": "OR",
+    "admin": "ADMIN",
+    "user": "USER",
+    "lowercase_check": "Atleast one lowercase letter",
+    "uppercase_check": "Atleast one uppercase letter",
+    "numeric_value_check": "Atleaset one numeric value",
+    "special_char_check": "Atleast one special character"
+  },
+  "userLoginPage": {
+    "title": "Talawa Admin",
+    "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
+    "talawa_portal": "Talawa Admin Portal",
+    "login": "Login",
+    "register": "Register",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "password": "Password",
+    "atleast_8_char_long": "Atleast 8 Character long",
+    "Password_and_Confirm_password_mismatches.": "Password and Confirm password mismatches.",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot Password ?",
+    "enterEmail": "Enter Email",
+    "enterPassword": "Enter Password",
+    "doNotOwnAnAccount": "Do not own an account?",
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
+    "captchaError": "Captcha Error!",
+    "Please_check_the_captcha": "Please, check the captcha.",
+    "Something_went_wrong": "Something went wrong, Please try after sometime.",
+    "passwordMismatches": "Password and Confirm password mismatches.",
+    "fillCorrectly": "Fill all the Details Correctly.",
+    "notAuthorised": "Sorry! you are not Authorised!",
+    "notFound": "User not found!",
+    "successfullyRegistered": "Successfully Registered. Please wait until you will be approved.",
+    "userLogin": "User Login",
+    "afterRegister": "Successfully registered. Please wait for admin to approve your request.",
     "OR": "OR"
   },
   "latestEvents": {
@@ -94,6 +134,8 @@
     "displayImage": "Display Image",
     "enterName": "Enter Name",
     "sort": "Sort",
+    "Latest": "Latest",
+    "Earliest": "Earliest",
     "filter": "Filter",
     "cancel": "Cancel",
     "noOrgErrorTitle": "Organizations Not Found",
@@ -147,7 +189,8 @@
     "noOrgError": "Organizations not found, please create an organization through dashboard",
     "roleUpdated": "Role Updated.",
     "noResultsFoundFor": "No results found for ",
-    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
+    "cancel": "Cancel"
   },
   "requests": {
     "title": "Talawa Requests",
@@ -428,7 +471,8 @@
     "deleteMsg": "Do you want to delete this organization?",
     "cancel": "Cancel",
     "confirmDelete": "Confirm Delete",
-    "longDelOrgMsg": "By clicking on Delete Organization button the organization will be permanently deleted along with its events, tags and all related data."
+    "longDelOrgMsg": "By clicking on Delete Organization button the organization will be permanently deleted along with its events, tags and all related data.",
+    "successfullyDeletedSampleOrganization": "Successfully deleted sample Organization"
   },
   "userUpdate": {
     "firstName": "First Name",
@@ -599,7 +643,12 @@
   "home": {
     "feed": "Feed",
     "pinnedPosts": "View Pinned Posts",
-    "somethingOnYourMind": "Something on your mind?"
+    "somethingOnYourMind": "Something on your mind?",
+    "addPost": "Add Post",
+    "startPost": "Start a post",
+    "media": "Media",
+    "event": "Event",
+    "article": "Article"
   },
   "settings": {
     "profileSettings": "Profile Settings",
@@ -607,7 +656,10 @@
     "lastName": "Last Name",
     "emailAddress": "Email Address",
     "updateImage": "Update Image",
-    "save": "Save"
+    "saveChanges": "Save Changes",
+    "updateProfile": "Update Profile",
+    "otherSettings": "Other Settings",
+    "changeLanguage": "Change Language"
   },
   "donate": {
     "donateTo": "Donate to",

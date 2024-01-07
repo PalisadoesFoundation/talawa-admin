@@ -6,18 +6,20 @@ If you are new to contributing to open source, please read the Open Source Guide
 
 ## Table of Contents
 
-- [Contributing to Talawa-Admin](#contributing-to-talawa-admin)
-  - [Table of Contents](#table-of-contents)
-  - [Code of Conduct](#code-of-conduct)
-  - [Ways to Contribute](#ways-to-contribute)
-    - [Our Development Process](#our-development-process)
-      - [Issues](#issues)
-      - [Pull Requests](#pull-requests)
-      - [Branching Strategy](#branching-strategy)
-      - [Conflict Resolution](#conflict-resolution)
-    - [Contributing Code](#contributing-code)
-  - [Internships](#internships)
-  - [Community](#community)
+<!-- toc -->
+
+- [Code of Conduct](#code-of-conduct)
+- [Ways to Contribute](#ways-to-contribute)
+  - [Our Development Process](#our-development-process)
+    - [Issues](#issues)
+    - [Pull Requests](#pull-requests)
+    - [Branching Strategy](#branching-strategy)
+    - [Conflict Resolution](#conflict-resolution)
+  - [Contributing Code](#contributing-code)
+- [Internships](#internships)
+- [Community](#community)
+
+<!-- tocstop -->
 
 ## Code of Conduct
 

@@ -8,11 +8,13 @@ import cookies from 'js-cookie';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import { useHistory } from 'react-router-dom';
 
 function userNavbar(): JSX.Element {
+  const history = useHistory();
+
   const { t } = useTranslation('translation', {
     keyPrefix: 'userNavbar',
   });
@@ -95,16 +97,21 @@ function userNavbar(): JSX.Element {
               <Dropdown.ItemText>
                 <b>{userName}</b>
               </Dropdown.ItemText>
-              <Dropdown.Item>
-                <Link to="/user/settings" className={styles.link}>
-                  {t('settings')}
-                </Link>
+
+              <Dropdown.Item
+                onClick={() => history.push('/user/settings')}
+                className={styles.link}
+              >
+                {t('settings')}
               </Dropdown.Item>
-              <Dropdown.Item>
-                <Link to="/user/tasks" className={styles.link}>
-                  {t('myTasks')}
-                </Link>
+
+              <Dropdown.Item
+                onClick={() => history.push('/user/tasks')}
+                className={styles.link}
+              >
+                {t('myTasks')}
               </Dropdown.Item>
+
               <Dropdown.Item onClick={handleLogout} data-testid={`logoutBtn`}>
                 {t('logout')}
               </Dropdown.Item>
