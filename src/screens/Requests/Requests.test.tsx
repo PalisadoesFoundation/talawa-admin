@@ -113,8 +113,20 @@ describe('Testing Request screen', () => {
     await wait();
 
     const searchInput = screen.getByTestId('searchByName');
-    userEvent.type(searchInput, 'l{enter}');
+    const searchBtn = screen.getByTestId('searchBtn');
+    userEvent.type(searchInput, '');
+    userEvent.click(searchBtn);
+    await wait();
+    userEvent.clear(searchInput);
 
+    userEvent.type(searchInput, 'l{enter}');
+    await wait();
+    await screen.findByTestId('searchAndNotFound');
+
+    userEvent.clear(searchInput);
+    userEvent.type(searchInput, 'l');
+    userEvent.click(searchBtn);
+    await wait();
     await screen.findByTestId('searchAndNotFound');
   });
 
