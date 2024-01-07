@@ -97,9 +97,7 @@
 .dispflex {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 5px;
-  margin-right: 5px;
-  margin-top: 10px;
+  margin: 10px 5px 5px unset;
 }
 .dispflex > input {
   width: 20%;
