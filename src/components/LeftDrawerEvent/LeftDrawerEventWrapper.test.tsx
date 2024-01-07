@@ -96,5 +96,9 @@ describe('Testing Left Drawer Wrapper component for the Event Dashboard', () => 
     await waitFor(() =>
       expect(queryByText('Event Management')).toBeInTheDocument()
     );
+    // sets hideDrawer to true
+    fireEvent.click(getByTestId('menuBtn') as HTMLElement);
+    // sets hideDrawer to false
+    fireEvent.click(getByTestId('openMenu') as HTMLElement);
   });
 });
