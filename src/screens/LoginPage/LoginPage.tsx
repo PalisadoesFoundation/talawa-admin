@@ -35,8 +35,11 @@ import Loader from 'components/Loader/Loader';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './LoginPage.module.css';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+interface InterfaceComponentProps {
+  role: string;
+}
 
-function loginPage(): JSX.Element {
+function loginPage({ role }: InterfaceComponentProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
   const history = useHistory();
 
@@ -109,7 +112,9 @@ function loginPage(): JSX.Element {
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('IsLoggedIn');
     if (isLoggedIn == 'TRUE') {
-      history.push('/orglist');
+      role === 'admin'
+        ? history.push('/orglist')
+        : history.push('/user/organizations/');
     }
     setComponentLoader(false);
   }, []);
@@ -161,6 +166,17 @@ function loginPage(): JSX.Element {
     }
   };
 
+  const validatePassword = (password: string): boolean => {
+    const lengthCheck = new RegExp('^.{6,}$');
+    return (
+      lengthCheck.test(password) &&
+      passwordValidationRegExp.lowercaseCharRegExp.test(password) &&
+      passwordValidationRegExp.uppercaseCharRegExp.test(password) &&
+      passwordValidationRegExp.numericalValueRegExp.test(password) &&
+      passwordValidationRegExp.specialCharRegExp.test(password)
+    );
+  };
+
   const signupLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
@@ -178,17 +194,6 @@ function loginPage(): JSX.Element {
     }
     const isValidatedString = (value: string): boolean =>
       /^[a-zA-Z]+$/.test(value);
-
-    const validatePassword = (password: string): boolean => {
-      const lengthCheck = new RegExp('^.{6,}$');
-      return (
-        lengthCheck.test(password) &&
-        passwordValidationRegExp.lowercaseCharRegExp.test(password) &&
-        passwordValidationRegExp.uppercaseCharRegExp.test(password) &&
-        passwordValidationRegExp.numericalValueRegExp.test(password) &&
-        passwordValidationRegExp.specialCharRegExp.test(password)
-      );
-    };
 
     if (
       isValidatedString(signfirstName) &&
@@ -213,15 +218,23 @@ function loginPage(): JSX.Element {
           /* istanbul ignore next */
           if (signUpData) {
             toast.success(
-              'Successfully Registered. Please wait until you will be approved.'
+              role === 'admin'
+                ? 'Successfully Registered. Please wait until you will be approved.'
+                : 'Successfully registered. Please wait for admin to approve your request.'
             );
-
+            setShowTab('LOGIN');
             setSignFormState({
               signfirstName: '',
               signlastName: '',
               signEmail: '',
               signPassword: '',
               cPassword: '',
+            });
+            setShowAlert({
+              lowercaseChar: true,
+              uppercaseChar: true,
+              numericValue: true,
+              specialChar: true,
             });
           }
         } catch (error: any) {
@@ -260,6 +273,11 @@ function loginPage(): JSX.Element {
       return;
     }
 
+    if (!validatePassword(formState.password)) {
+      toast.warn(t('password_invalid'));
+      return;
+    }
+
     try {
       const { data: loginData } = await login({
         variables: {
@@ -270,21 +288,29 @@ function loginPage(): JSX.Element {
 
       /* istanbul ignore next */
       if (loginData) {
-        if (
-          loginData.login.user.userType === 'SUPERADMIN' ||
-          (loginData.login.user.userType === 'ADMIN' &&
-            loginData.login.user.adminApproved === true)
-        ) {
-          localStorage.setItem('token', loginData.login.accessToken);
-          localStorage.setItem('refreshToken', loginData.login.refreshToken);
-          localStorage.setItem('id', loginData.login.user._id);
-          localStorage.setItem('IsLoggedIn', 'TRUE');
-          localStorage.setItem('UserType', loginData.login.user.userType);
-          if (localStorage.getItem('IsLoggedIn') == 'TRUE') {
-            history.push('/orglist');
+        if (role === 'admin') {
+          if (
+            loginData.login.user.userType === 'SUPERADMIN' ||
+            (loginData.login.user.userType === 'ADMIN' &&
+              loginData.login.user.adminApproved === true)
+          ) {
+            localStorage.setItem('token', loginData.login.accessToken);
+            localStorage.setItem('refreshToken', loginData.login.refreshToken);
+            localStorage.setItem('id', loginData.login.user._id);
+            localStorage.setItem('UserType', loginData.login.user.userType);
+            localStorage.setItem('IsLoggedIn', 'TRUE');
+          } else {
+            toast.warn(t('notAuthorised'));
           }
         } else {
-          toast.warn(t('notAuthorised'));
+          localStorage.setItem('token', loginData.login.accessToken);
+          localStorage.setItem('userId', loginData.login.user._id);
+          localStorage.setItem('refreshToken', loginData.login.refreshToken);
+          localStorage.setItem('IsLoggedIn', 'TRUE');
+          navigator.clipboard.writeText('');
+        }
+        if (localStorage.getItem('IsLoggedIn') == 'TRUE') {
+          history.push(role === 'admin' ? '/orglist' : '/user/organizations/');
         }
       } else {
         toast.warn(t('notFound'));

@@ -115,7 +115,7 @@ describe('Talawa-API server fetch check', () => {
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
-                <LoginPage />
+                <LoginPage role="admin" />
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
@@ -136,7 +136,7 @@ describe('Talawa-API server fetch check', () => {
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
-                <LoginPage />
+                <LoginPage role="admin" />
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
@@ -157,7 +157,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -184,7 +184,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -229,7 +229,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -273,7 +273,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -316,7 +316,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -359,7 +359,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -399,7 +399,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -426,7 +426,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -452,7 +452,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -481,7 +481,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -512,7 +512,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -543,7 +543,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -564,7 +564,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -593,7 +593,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -622,7 +622,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -651,7 +651,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
