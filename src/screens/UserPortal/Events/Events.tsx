@@ -5,7 +5,10 @@ import EventCard from 'components/UserPortal/EventCard/EventCard';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import PaginationList from 'components/PaginationList/PaginationList';
-import { ORGANIZATION_EVENTS_CONNECTION } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATION_EVENTS_CONNECTION,
+  ORGANIZATIONS_LIST,
+} from 'GraphQl/Queries/Queries';
 import { useMutation, useQuery } from '@apollo/client';
 import { SearchOutlined } from '@mui/icons-material';
 import styles from './Events.module.css';
@@ -18,6 +21,7 @@ import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
+import EventCalendar from 'components/EventCalendar/EventCalendar';
 
 interface InterfaceEventCardProps {
   id: string;
@@ -76,7 +80,14 @@ export default function events(): JSX.Element {
     },
   });
 
+  const { data: orgData } = useQuery(ORGANIZATIONS_LIST, {
+    variables: { id: organizationId },
+  });
+
   const [create] = useMutation(CREATE_EVENT_MUTATION);
+
+  const userId = localStorage.getItem('id') as string;
+  const userRole = localStorage.getItem('UserType') as string;
 
   const createEvent = async (): Promise<void> => {
     try {
@@ -109,6 +120,7 @@ export default function events(): JSX.Element {
         setStartTime('08:00:00');
         setEndTime('10:00:00');
       }
+      setShowCreateEventModal(false);
     } catch (error: any) {
       /* istanbul ignore next */
       errorHandler(t, error);
@@ -243,83 +255,95 @@ export default function events(): JSX.Element {
               </Dropdown>
             </div>
           </div>
-          <div
-            className={`d-flex flex-column justify-content-between ${styles.content}`}
-          >
+          {mode === 0 && (
             <div
-              className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
+              className={`d-flex flex-column justify-content-between ${styles.content}`}
             >
-              {loading ? (
-                <div className={`d-flex flex-row justify-content-center`}>
-                  <HourglassBottomIcon /> <span>Loading...</span>
-                </div>
-              ) : (
-                <>
-                  {events && events.length > 0 ? (
-                    (rowsPerPage > 0
-                      ? events.slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage
-                        )
-                      : /* istanbul ignore next */
-                        events
-                    ).map((event: any) => {
-                      const attendees: any = [];
-                      event.attendees.forEach((attendee: any) => {
-                        const r = {
-                          id: attendee._id,
+              <div
+                className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
+              >
+                {loading ? (
+                  <div className={`d-flex flex-row justify-content-center`}>
+                    <HourglassBottomIcon /> <span>Loading...</span>
+                  </div>
+                ) : (
+                  <>
+                    {events && events.length > 0 ? (
+                      (rowsPerPage > 0
+                        ? events.slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage
+                          )
+                        : /* istanbul ignore next */
+                          events
+                      ).map((event: any) => {
+                        const attendees: any = [];
+                        event.attendees.forEach((attendee: any) => {
+                          const r = {
+                            id: attendee._id,
+                          };
+
+                          attendees.push(r);
+                        });
+
+                        const creator: any = {};
+                        creator.firstName = event.creator.firstName;
+                        creator.lastName = event.creator.lastName;
+                        creator.id = event.creator._id;
+
+                        const cardProps: InterfaceEventCardProps = {
+                          id: event._id,
+                          title: event.title,
+                          description: event.description,
+                          location: event.location,
+                          startDate: event.startDate,
+                          endDate: event.endDate,
+                          isRegisterable: event.isRegisterable,
+                          isPublic: event.isPublic,
+                          endTime: event.endTime,
+                          startTime: event.startTime,
+                          recurring: event.recurring,
+                          allDay: event.allDay,
+                          registrants: attendees,
+                          creator,
                         };
 
-                        attendees.push(r);
-                      });
-
-                      const creator: any = {};
-                      creator.firstName = event.creator.firstName;
-                      creator.lastName = event.creator.lastName;
-                      creator.id = event.creator._id;
-
-                      const cardProps: InterfaceEventCardProps = {
-                        id: event._id,
-                        title: event.title,
-                        description: event.description,
-                        location: event.location,
-                        startDate: event.startDate,
-                        endDate: event.endDate,
-                        isRegisterable: event.isRegisterable,
-                        isPublic: event.isPublic,
-                        endTime: event.endTime,
-                        startTime: event.startTime,
-                        recurring: event.recurring,
-                        allDay: event.allDay,
-                        registrants: attendees,
-                        creator,
-                      };
-
-                      return <EventCard key={event._id} {...cardProps} />;
-                    })
-                  ) : (
-                    <span>{t('nothingToShow')}</span>
-                  )}
-                </>
-              )}
+                        return <EventCard key={event._id} {...cardProps} />;
+                      })
+                    ) : (
+                      <span>{t('nothingToShow')}</span>
+                    )}
+                  </>
+                )}
+              </div>
+              <table>
+                <tbody>
+                  <tr>
+                    <PaginationList
+                      count={
+                        /* istanbul ignore next */
+                        events ? events.length : 0
+                      }
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            <table>
-              <tbody>
-                <tr>
-                  <PaginationList
-                    count={
-                      /* istanbul ignore next */
-                      events ? events.length : 0
-                    }
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          )}
+          {mode === 1 && (
+            <div className="mt-4">
+              <EventCalendar
+                eventData={events}
+                orgData={orgData}
+                userRole={userRole}
+                userId={userId}
+              />
+            </div>
+          )}
         </div>
         <OrganizationSidebar />
         <Modal show={showCreateEventModal} onHide={toggleCreateEventModal}>
