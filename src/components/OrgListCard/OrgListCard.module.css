@@ -46,6 +46,23 @@
   z-index: 1;
 }
 
+.flaskIcon {
+  margin-top:4px;
+}
+
+.manageBtn {
+  display: flex;
+  justify-content: space-around;
+  width: 118px;
+}
+
+.orgName {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+
 @media (max-width: 450px) {
   .orgCard {
     height: unset;
@@ -77,23 +94,14 @@
     margin-left: auto;
     display: block;
   }
+  .flaskIcon {
+    margin-bottom:6px;
+  }
+  .manageBtn {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+  }
+
 }
 
-.flaskIcon {
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 10px 20px 0px 0px;
-}
-
-.manageBtn {
-  display: flex;
-  justify-content: space-around;
-  width: 118px;
-}
-
-.orgName {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
