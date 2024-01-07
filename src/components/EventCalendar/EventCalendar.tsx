@@ -77,6 +77,11 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
   const [expanded, setExpanded] = useState<number>(-1);
+  const [windowWidth, setWindowWidth] = useState<number>(window.screen.width);
+
+  window.addEventListener('resize', () => {
+    setWindowWidth(window.screen.width);
+  });
 
   const filterData = (
     eventData: InterfaceEvent[],
@@ -222,7 +227,8 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             >
               {expanded === index ? allEventsList : allEventsList?.slice(0, 2)}
             </div>
-            {allEventsList?.length > 2 && (
+            {(allEventsList?.length > 2 ||
+              (windowWidth <= 700 && allEventsList?.length > 0)) && (
               <button
                 className={styles.btn__more}
                 onClick={() => {
