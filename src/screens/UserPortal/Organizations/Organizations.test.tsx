@@ -165,12 +165,16 @@ describe('Testing Organizations Screen [User Portal]', () => {
     );
 
     await wait();
-
-    userEvent.type(screen.getByTestId('searchInput'), '2');
+    const searchBtn = screen.getByTestId('searchBtn');
+    userEvent.type(screen.getByTestId('searchInput'), '2{enter}');
     await wait();
 
     expect(screen.queryByText('anyOrganization2')).toBeInTheDocument();
     expect(screen.queryByText('anyOrganization1')).not.toBeInTheDocument();
+
+    userEvent.clear(screen.getByTestId('searchInput'));
+    userEvent.click(searchBtn);
+    await wait();
   });
 
   test('Mode is changed to joined organizations', async () => {

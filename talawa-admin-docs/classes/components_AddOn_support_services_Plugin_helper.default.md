@@ -26,11 +26,11 @@
 
 ### fetchInstalled
 
-▸ **fetchInstalled**(): `Promise`<`any`\>
+▸ **fetchInstalled**(): `Promise`\<`any`\>
 
 #### Returns
 
-`Promise`<`any`\>
+`Promise`\<`any`\>
 
 #### Defined in
 
@@ -40,11 +40,11 @@ ___
 
 ### fetchStore
 
-▸ **fetchStore**(): `Promise`<`any`\>
+▸ **fetchStore**(): `Promise`\<`any`\>
 
 #### Returns
 
-`Promise`<`any`\>
+`Promise`\<`any`\>
 
 #### Defined in
 
@@ -54,7 +54,7 @@ ___
 
 ### generateLinks
 
-▸ **generateLinks**(`plugins`): { `name`: `string` ; `url`: `string`  }[]
+▸ **generateLinks**(`plugins`): \{ `name`: `string` ; `url`: `string`  \}[]
 
 #### Parameters
 
@@ -64,7 +64,7 @@ ___
 
 #### Returns
 
-{ `name`: `string` ; `url`: `string`  }[]
+\{ `name`: `string` ; `url`: `string`  \}[]
 
 #### Defined in
 
