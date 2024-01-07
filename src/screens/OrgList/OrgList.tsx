@@ -543,10 +543,12 @@ function orgList(): JSX.Element {
 
               <Row className="mb-3">
                 <Col>
-                  <Form.Label htmlFor="ispublic">{t('isPublic')}</Form.Label>
+                  <Form.Label htmlFor="userRegistrationRequired">
+                    {t('userRegistrationRequired')}
+                  </Form.Label>
                   <Form.Switch
-                    id="ispublic"
-                    data-testid="isPublic"
+                    id="userRegistrationRequired"
+                    data-testid="userRegistrationRequired"
                     type="checkbox"
                     defaultChecked={formState.ispublic}
                     onChange={(): void =>

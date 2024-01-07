@@ -165,9 +165,11 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           />
           <Row>
             <Col sm={6} className="d-flex mb-3">
-              <Form.Label className="me-3">{t('isPublic')}:</Form.Label>
+              <Form.Label className="me-3">
+                {t('userRegistrationRequired')}:
+              </Form.Label>
               <Form.Switch
-                placeholder={t('isPublic')}
+                placeholder={t('userRegistrationRequired')}
                 checked={publicchecked}
                 onChange={(): void => setPublicChecked(!publicchecked)}
               />

@@ -167,7 +167,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
       formData.description
     );
     userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
-    userEvent.click(screen.getByTestId(/isPublic/i));
+    userEvent.click(screen.getByTestId(/userRegistrationRequired/i));
     userEvent.click(screen.getByTestId(/visibleInSearch/i));
     userEvent.upload(screen.getByLabelText(/Display Image/i), formData.image);
 
@@ -180,7 +180,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(screen.getByPlaceholderText(/Location/i)).toHaveValue(
       formData.location
     );
-    expect(screen.getByTestId(/isPublic/i)).not.toBeChecked();
+    expect(screen.getByTestId(/userRegistrationRequired/i)).not.toBeChecked();
     expect(screen.getByTestId(/visibleInSearch/i)).toBeChecked();
     expect(screen.getByLabelText(/Display Image/i)).toBeTruthy();
 
@@ -228,7 +228,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
       formData.description
     );
     userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
-    userEvent.click(screen.getByTestId(/isPublic/i));
+    userEvent.click(screen.getByTestId(/userRegistrationRequired/i));
     userEvent.click(screen.getByTestId(/visibleInSearch/i));
     userEvent.upload(screen.getByLabelText(/Display Image/i), formData.image);
 
@@ -241,7 +241,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(screen.getByPlaceholderText(/Location/i)).toHaveValue(
       formData.location
     );
-    expect(screen.getByTestId(/isPublic/i)).not.toBeChecked();
+    expect(screen.getByTestId(/userRegistrationRequired/i)).not.toBeChecked();
     expect(screen.getByTestId(/visibleInSearch/i)).toBeChecked();
     expect(screen.getByLabelText(/Display Image/i)).toBeTruthy();
 

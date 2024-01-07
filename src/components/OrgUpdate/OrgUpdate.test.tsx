@@ -54,21 +54,22 @@ describe('Testing Organization Update', () => {
     expect(screen.getByText('Description')).toBeInTheDocument();
     expect(screen.getByText('Location')).toBeInTheDocument();
     expect(screen.getByText('Display Image:')).toBeInTheDocument();
-    expect(screen.getByText('Public:')).toBeInTheDocument();
+    expect(screen.getByText(/Registration/)).toBeInTheDocument();
     expect(screen.getByText('Visible in Search:')).toBeInTheDocument();
 
     // Get the input fields, and btns
     const name = screen.getByPlaceholderText(/Enter Organization Name/i);
     const des = screen.getByPlaceholderText(/Description/i);
     const location = screen.getByPlaceholderText(/Location/i);
-    const isPublic = screen.getByPlaceholderText(/Public/i);
+    const userRegistrationRequired =
+      screen.getByPlaceholderText(/Registration/i);
     const isVisible = screen.getByPlaceholderText(/Visible/i);
 
     // Checking if form fields got updated according to the mock data
     expect(name).toHaveValue('Palisadoes');
     expect(des).toHaveValue('Equitable Access to STEM Education Jobs');
     expect(location).toHaveValue('Jamaica');
-    expect(isPublic).toBeChecked();
+    expect(userRegistrationRequired).toBeChecked();
     expect(isVisible).not.toBeChecked();
   });
 
@@ -90,7 +91,8 @@ describe('Testing Organization Update', () => {
     const des = screen.getByPlaceholderText(/Description/i);
     const location = screen.getByPlaceholderText(/Location/i);
     const displayImage = screen.getByPlaceholderText(/Display Image/i);
-    const isPublic = screen.getByPlaceholderText(/Public/i);
+    const userRegistrationRequired =
+      screen.getByPlaceholderText(/Registration/i);
     const isVisible = screen.getByPlaceholderText(/Visible/i);
     const saveChangesBtn = screen.getByText(/Save Changes/i);
 
@@ -104,7 +106,7 @@ describe('Testing Organization Update', () => {
     userEvent.type(des, formData.description);
     userEvent.type(location, formData.location);
     userEvent.upload(displayImage, formData.displayImage);
-    userEvent.click(isPublic);
+    userEvent.click(userRegistrationRequired);
     userEvent.click(isVisible);
 
     await wait();
@@ -115,7 +117,7 @@ describe('Testing Organization Update', () => {
     expect(des).toHaveValue(formData.description);
     expect(location).toHaveValue(formData.location);
     expect(displayImage).toBeTruthy();
-    expect(isPublic).not.toBeChecked();
+    expect(userRegistrationRequired).not.toBeChecked();
     expect(isVisible).toBeChecked();
   });
 
@@ -151,7 +153,8 @@ describe('Testing Organization Update', () => {
     const des = screen.getByPlaceholderText(/Description/i);
     const location = screen.getByPlaceholderText(/Location/i);
     const displayImage = screen.getByPlaceholderText(/Display Image/i);
-    const isPublic = screen.getByPlaceholderText(/Public/i);
+    const userRegistrationRequired =
+      screen.getByPlaceholderText(/Registration/i);
     const isVisible = screen.getByPlaceholderText(/Visible/i);
     const saveChangesBtn = screen.getByText(/Save Changes/i);
 
@@ -165,7 +168,7 @@ describe('Testing Organization Update', () => {
     userEvent.type(des, formData.description);
     userEvent.type(location, formData.location);
     userEvent.upload(displayImage, formData.displayImage);
-    userEvent.click(isPublic);
+    userEvent.click(userRegistrationRequired);
     userEvent.click(isVisible);
 
     await wait();
