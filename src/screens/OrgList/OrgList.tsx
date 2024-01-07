@@ -661,22 +661,22 @@ function orgList(): JSX.Element {
 
                 <div className={styles.pluginStoreBtnContainer}>
                   <Link
-                    className={styles.secondbtn}
+                    className={`btn btn-primary ${styles.pluginStoreBtn}`}
                     data-testid="goToStore"
                     to={`orgstore/id=${dialogRedirectOrgId}`}
                   >
                     {t('goToStore')}
                   </Link>
                   {/* </button> */}
-                  <button
+                  <Button
                     type="submit"
-                    className={styles.greenregbtn}
+                    className={styles.enableEverythingBtn}
                     onClick={closeDialogModal}
                     value="invite"
                     data-testid="enableEverythingForm"
                   >
                     {t('enableEverything')}
-                  </button>
+                  </Button>
                 </div>
               </div>
             </section>

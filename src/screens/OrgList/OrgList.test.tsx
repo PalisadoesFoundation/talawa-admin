@@ -275,6 +275,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
       ).toBeInTheDocument()
     );
     userEvent.click(screen.getByTestId(/enableEverythingForm/i));
+    userEvent.click(screen.getByTestId(/goToStore/i));
   });
 
   test('Testing create sample organization working properly', async () => {
