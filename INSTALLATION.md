@@ -88,6 +88,13 @@ npm install --legacy-peer-deps
 # Configuration
 
 It's important to configure Talawa-Admin. Here's how to do it.
+You can use our interactive setup script for the configuration. Use the following command for the same.
+
+```
+npm run setup
+```
+
+All the options in "setup" can be done manually as well and here's how to do it. - [Creating .env file](#creating-env-file)
 
 ## Creating .env file
 
