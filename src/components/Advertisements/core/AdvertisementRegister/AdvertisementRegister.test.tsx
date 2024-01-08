@@ -1,5 +1,11 @@
 import React from 'react';
-import { render, fireEvent, screen, waitFor } from '@testing-library/react';
+import {
+  render,
+  fireEvent,
+  screen,
+  waitFor,
+  act,
+} from '@testing-library/react';
 
 import {
   ApolloClient,
@@ -37,12 +43,12 @@ const MOCKS = [
     request: {
       query: ADD_ADVERTISEMENT_MUTATION,
       variables: {
-        orgId: '1',
+        organizationId: '1',
         name: 'Test Advertisement',
-        mediaUrl: 'data:image/png;base64,bWVkaWEgY29udGVudA==',
         type: 'BANNER',
         startDate: dayjs(new Date('2023-01-01')).format('YYYY-MM-DD'),
         endDate: dayjs(new Date('2023-02-01')).format('YYYY-MM-DD'),
+        file: 'data:image/png;base64,bWVkaWEgY29udGVudA==',
       },
     },
     result: {
@@ -106,8 +112,8 @@ describe('Testing Advertisement Register Component', () => {
                   startDate={new Date()}
                   type="BANNER"
                   name="Advert1"
-                  orgId="1"
-                  mediaUrl="test.png"
+                  organizationId="1"
+                  advertisementMedia="test.png"
                 />
               }
             </I18nextProvider>
@@ -131,8 +137,8 @@ describe('Testing Advertisement Register Component', () => {
                   startDate={new Date()}
                   type="BANNER"
                   name="Advert1"
-                  orgId="1"
-                  mediaUrl="test.png"
+                  organizationId="1"
+                  advertisementMedia="test.png"
                 />
               }
             </I18nextProvider>
@@ -162,8 +168,8 @@ describe('Testing Advertisement Register Component', () => {
                   startDate={new Date()}
                   type="BANNER"
                   name="Advert1"
-                  orgId="1"
-                  mediaUrl="test.png"
+                  organizationId="1"
+                  advertisementMedia=""
                 />
               }
             </I18nextProvider>
@@ -187,7 +193,7 @@ describe('Testing Advertisement Register Component', () => {
         type: 'image/png',
       });
 
-      const mediaInput = screen.getByTestId('advertisementMedia');
+      const mediaInput = getByLabelText(translations.Rmedia);
       fireEvent.change(mediaInput, {
         target: {
           files: [mediaFile],
@@ -213,6 +219,7 @@ describe('Testing Advertisement Register Component', () => {
       expect(getByLabelText(translations.RendDate)).toHaveValue('2023-02-01');
 
       fireEvent.click(getByText(translations.register));
+
       expect(toast.success).toBeCalledWith(
         'Advertisement created successfully'
       );
@@ -233,8 +240,8 @@ describe('Testing Advertisement Register Component', () => {
                   startDate={new Date()}
                   type="BANNER"
                   name="Advert1"
-                  orgId="1"
-                  mediaUrl="test.png"
+                  organizationId="1"
+                  advertisementMedia="test.png"
                 />
               }
             </I18nextProvider>
@@ -266,8 +273,8 @@ describe('Testing Advertisement Register Component', () => {
                   startDate={new Date()}
                   type="BANNER"
                   name="Advert1"
-                  orgId="1"
-                  mediaUrl="test.mp4"
+                  organizationId="1"
+                  advertisementMedia="test.mp4"
                 />
               }
             </I18nextProvider>

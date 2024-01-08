@@ -12,7 +12,7 @@ interface InterfaceAddOnEntryProps {
   name: string;
   mediaUrl: string;
   type: string;
-  orgId: string;
+  organizationId: string;
   startDate: Date;
   endDate: Date;
 }
@@ -53,7 +53,7 @@ function advertisementEntry({
         {Array.from({ length: 1 }).map((_, idx) => (
           <Col key={idx}>
             <Card>
-              {mediaUrl?.includes('data:video') ? (
+              {mediaUrl?.includes('videos') ? (
                 <video
                   muted
                   className={styles.admedia}
@@ -133,7 +133,7 @@ function advertisementEntry({
 advertisementEntry.propTypes = {
   name: PropTypes.string,
   type: PropTypes.string,
-  orgId: PropTypes.string,
+  organizationId: PropTypes.string,
   mediaUrl: PropTypes.string,
   endDate: PropTypes.instanceOf(Date),
   startDate: PropTypes.instanceOf(Date),
@@ -142,7 +142,7 @@ advertisementEntry.propTypes = {
 advertisementEntry.defaultProps = {
   name: '',
   type: '',
-  orgId: '',
+  organizationId: '',
   mediaUrl: '',
   endDate: new Date(),
   startDate: new Date(),

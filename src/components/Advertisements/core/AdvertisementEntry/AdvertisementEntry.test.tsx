@@ -56,7 +56,7 @@ describe('Testing Advertisement Entry Component', () => {
                   key={1}
                   mediaUrl="data:video"
                   name="Advert1"
-                  orgId="1"
+                  organizationId="1"
                   type="POPUP"
                 />
               }

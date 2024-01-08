@@ -7,7 +7,7 @@ type Advertisement {
   endDate: Date!
   mediaUrl: URL!
   name: String!
-  orgId: ID
+  organizationId: ID!
   startDate: Date!
   type: String!
 }
@@ -419,9 +419,15 @@ input CreateAdvertisementInput {
   endDate: Date!
   mediaUrl: URL!
   name: String!
-  orgId: ID!
+  organizationId: ID!
   startDate: Date!
   type: String!
+  file: String!
+}
+
+type CreateAdvertisementPayload {
+  _id: id,
+  advertisement: Advertisement!
 }
 
 type Mutation {
@@ -441,7 +447,7 @@ type Mutation {
   cancelMembershipRequest(membershipRequestId: ID!): MembershipRequest!
   checkIn(data: CheckInInput!): CheckIn!
   createAdmin(data: UserAndOrganizationInput!): User!
-  createAdvertisement(input: CreateAdvertisementInput!): Advertisement!
+  createAdvertisement(input: CreateAdvertisementInput!): CreateAdvertisementPayload
   createComment(data: CommentInput!, postId: ID!): Comment
   createDirectChat(data: createChatInput!): DirectChat!
   createDonation(

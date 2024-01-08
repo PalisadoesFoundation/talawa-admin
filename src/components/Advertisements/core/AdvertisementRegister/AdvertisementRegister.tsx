@@ -11,16 +11,16 @@ import convertToBase64 from 'utils/convertToBase64';
 import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
 
 interface InterfaceAddOnRegisterProps {
-  id?: string; // OrgId
+  id?: string; // organizationId
   createdBy?: string; // User
 }
 interface InterfaceFormStateTypes {
   name: string;
-  mediaUrl: string;
+  advertisementMedia: string;
   type: string;
   startDate: Date;
   endDate: Date;
-  orgId: string;
+  organizationId: string;
 }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function advertisementRegister({
@@ -36,27 +36,27 @@ function advertisementRegister({
   const [create] = useMutation(ADD_ADVERTISEMENT_MUTATION);
   const { refetch } = useQuery(ADVERTISEMENTS_GET);
 
-  //getting orgId from URL
+  //getting organizationId from URL
   const currentOrg = window.location.href.split('/id=')[1] + '';
   const [formState, setFormState] = useState<InterfaceFormStateTypes>({
     name: '',
-    mediaUrl: '',
+    advertisementMedia: '',
     type: 'BANNER',
     startDate: new Date(),
     endDate: new Date(),
-    orgId: currentOrg,
+    organizationId: currentOrg,
   });
   const handleRegister = async (): Promise<void> => {
     try {
       console.log('At handle register', formState);
       const { data } = await create({
         variables: {
-          orgId: currentOrg,
+          organizationId: currentOrg,
           name: formState.name as string,
-          mediaUrl: formState.mediaUrl as string,
           type: formState.type as string,
           startDate: dayjs(formState.startDate).format('YYYY-MM-DD'),
           endDate: dayjs(formState.endDate).format('YYYY-MM-DD'),
+          file: formState.advertisementMedia as string,
         },
       });
 
@@ -65,11 +65,11 @@ function advertisementRegister({
         refetch();
         setFormState({
           name: '',
-          mediaUrl: '',
+          advertisementMedia: '',
           type: 'BANNER',
           startDate: new Date(),
           endDate: new Date(),
-          orgId: currentOrg,
+          organizationId: currentOrg,
         });
         handleClose();
       }
@@ -131,19 +131,22 @@ function advertisementRegister({
                     const mediaBase64 = await convertToBase64(file);
                     setFormState({
                       ...formState,
-                      mediaUrl: mediaBase64,
+                      advertisementMedia: mediaBase64,
                     });
                   }
                 }}
               />
-              {formState.mediaUrl && (
+              {formState.advertisementMedia && (
                 <div className={styles.preview} data-testid="mediaPreview">
-                  {formState.mediaUrl.includes('data:video') ? (
+                  {formState.advertisementMedia.includes('data:video') ? (
                     <video muted autoPlay={true} loop={true} playsInline>
-                      <source src={formState.mediaUrl} type="video/mp4" />
+                      <source
+                        src={formState.advertisementMedia}
+                        type="video/mp4"
+                      />
                     </video>
                   ) : (
-                    <img src={formState.mediaUrl} />
+                    <img src={formState.advertisementMedia} />
                   )}
                   <button
                     className={styles.closeButton}
@@ -151,7 +154,7 @@ function advertisementRegister({
                       e.preventDefault();
                       setFormState({
                         ...formState,
-                        mediaUrl: '',
+                        advertisementMedia: '',
                       });
                       const fileInput = document.getElementById(
                         'advertisementMedia'
@@ -239,20 +242,20 @@ function advertisementRegister({
 
 advertisementRegister.defaultProps = {
   name: '',
-  mediaUrl: '',
+  advertisementMedia: '',
   type: 'BANNER',
   startDate: new Date(),
   endDate: new Date(),
-  orgId: '',
+  organizationId: '',
 };
 
 advertisementRegister.propTypes = {
   name: PropTypes.string,
-  mediaUrl: PropTypes.string,
+  advertisementMedia: PropTypes.string,
   type: PropTypes.string,
   startDate: PropTypes.instanceOf(Date),
   endDate: PropTypes.instanceOf(Date),
-  orgId: PropTypes.string,
+  organizationId: PropTypes.string,
 };
 
 export default advertisementRegister;

@@ -421,21 +421,21 @@ export const ADD_PLUGIN_MUTATION = gql`
 `;
 export const ADD_ADVERTISEMENT_MUTATION = gql`
   mutation (
-    $orgId: ID!
+    $organizationId: ID!
     $name: String!
-    $mediaUrl: URL!
     $type: String!
     $startDate: Date!
     $endDate: Date!
+    $file: String!
   ) {
     createAdvertisement(
-      data: {
-        orgId: $orgId
+      input: {
+        organizationId: $organizationId
         name: $name
-        mediaUrl: $mediaUrl
         type: $type
         startDate: $startDate
         endDate: $endDate
+        file: $file
       }
     ) {
       _id
