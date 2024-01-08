@@ -123,7 +123,7 @@ describe('Talawa-API server fetch check', () => {
       );
     });
 
-    expect(fetch).toHaveBeenCalledWith('http://localhost:4000/graphql/');
+    expect(fetch).toHaveBeenCalledWith(process.env.REACT_APP_TALAWA_URL + 'graphql/');
   });
 
   test('displays warning message when resource loading fails', async () => {
@@ -144,7 +144,7 @@ describe('Talawa-API server fetch check', () => {
       );
     });
 
-    expect(fetch).toHaveBeenCalledWith('http://localhost:4000/graphql/');
+    expect(fetch).toHaveBeenCalledWith(process.env.REACT_APP_TALAWA_URL + 'graphql/');
   });
 });
 

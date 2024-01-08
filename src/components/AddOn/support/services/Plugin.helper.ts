@@ -1,11 +1,11 @@
 class PluginHelper {
   fetchStore = async (): Promise<any> => {
-    const result = await fetch(`http://localhost:3005/store`);
+    const result = await fetch(process.env.REACT_BASE_URL + `/store`);
     return await result.json();
   };
 
   fetchInstalled = async (): Promise<any> => {
-    const result = await fetch(`http://localhost:3005/installed`);
+    const result = await fetch(process.env.REACT_BASE_URL + `/installed`);
     return await result.json();
   };
 
