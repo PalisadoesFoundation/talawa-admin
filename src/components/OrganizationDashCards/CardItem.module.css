@@ -52,14 +52,14 @@
 }
 
 .cardItem .time {
-  font-size: 0.8rem;
-  font-weight: 300;
-  color: #808080;
+  font-size: var(--bs-font-size-sm);
+  font-weight: var(--bs-font-weight-light);
+  color: var(--bs-gray-600);
 }
 
 .cardItem .creator {
-  font-size: 0.8rem;
-  color: black;
+  font-size: var(--bs-font-size-sm);
+  color: var(--bs-body-color);
 }
 
 .rightCard {
