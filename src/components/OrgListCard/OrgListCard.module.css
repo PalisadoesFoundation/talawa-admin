@@ -47,7 +47,7 @@
 }
 
 .flaskIcon {
-  margin-top:4px;
+  margin-top: 4px;
 }
 
 .manageBtn {
@@ -61,7 +61,6 @@
   white-space: nowrap;
   overflow: hidden;
 }
-
 
 @media (max-width: 450px) {
   .orgCard {
@@ -95,13 +94,11 @@
     display: block;
   }
   .flaskIcon {
-    margin-bottom:6px;
+    margin-bottom: 6px;
   }
   .manageBtn {
     display: flex;
     justify-content: space-around;
     width: 100%;
   }
-
 }
-
