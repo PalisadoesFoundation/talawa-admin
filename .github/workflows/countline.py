@@ -193,6 +193,32 @@ directories to exclude from the analysis.""",
     result = parser.parse_args()
     return result
 
+def check_file_length(limit, dir_path):
+    """
+        Determine the number of lines of code in a TypeScript file or TypeScript file with React Components.
+
+        Args:
+            limit: Maximum allowable lines of code in a file.
+            dir_path: Path of the directory to check.
+
+        Returns:
+            result: Returns True if all files contain fewer or equal to 
+                    'limit' lines of code. Returns False if any file contains more than 
+                    'limit' lines of code.
+
+    """
+    for root, dirs, files in os.walk(dir_path):
+        for file in files:
+            if file.endswith((".ts", ".tsx")):  # Adjust the file extensions as needed
+                file_path = os.path.join(root, file)
+                with open(file_path, encoding="latin-1") as code:
+                    line_count = sum(
+                        1 for line in code if line.strip() and not (line.strip().startswith("#") or line.strip().startswith("/"))
+                    )
+                    if line_count > limit:
+                        print(f"File exceeds line limit: {file_path}")
+                        return False
+    return True
 
 def main():
     """Analyze dart files.
@@ -276,6 +302,15 @@ LINE COUNT ERROR: Files with excessive lines of code have been found\n"""
                 )
 
             print("  Line count: {:>5} File: {}".format(line_count, filepath))
+
+    # Check TypeScript file length
+    dir_path = '.'  # directory path
+    limit = 600  # line limit
+    if not check_file_length(limit, dir_path):
+        print("Some TypeScript files have more than 600 lines of code.")
+        exit(1)
+    else:
+        print("All TypeScript files have 600 or fewer lines of code.")
 
     # Evaluate and exit
     if bool(errors_found) is True:
