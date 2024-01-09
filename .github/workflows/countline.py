@@ -195,21 +195,20 @@ directories to exclude from the analysis.""",
 
 def check_file_length(limit, dir_path):
     """
-        Determine the number of lines of code in a TypeScript file or TypeScript file with React Components.
+        Determine the number of lines of code in TypeScript files excluding test files.
 
         Args:
             limit: Maximum allowable lines of code in a file.
             dir_path: Path of the directory to check.
 
         Returns:
-            result: Returns True if all files contain fewer or equal to 
-                    'limit' lines of code. Returns False if any file contains more than 
-                    'limit' lines of code.
-
+            result: Returns True if all non-test TypeScript files contain fewer 
+                    or equal to 'limit' lines of code. Returns False if any file 
+                    contains more than 'limit' lines of code.
     """
     for root, dirs, files in os.walk(dir_path):
         for file in files:
-            if file.endswith((".ts", ".tsx")):  # Adjust the file extensions as needed
+            if file.endswith((".ts", ".tsx")) and not file.endswith((".test.ts", ".test.tsx")):
                 file_path = os.path.join(root, file)
                 with open(file_path, encoding="latin-1") as code:
                     line_count = sum(
