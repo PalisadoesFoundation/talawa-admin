@@ -3,6 +3,7 @@
   "version": "3.0.0",
   "private": true,
   "type": "module",
+  "config-overrides-path": "scripts/config-overrides",
   "dependencies": {
     "@apollo/client": "^3.4.0-beta.19",
     "@apollo/link-error": "^2.0.0-beta.3",
@@ -17,6 +18,7 @@
     "@mui/x-date-pickers": "^6.6.0",
     "@pdfme/generator": "^1.2.6",
     "bootstrap": "^5.3.0",
+    "customize-cra": "^1.0.0",
     "dayjs": "^1.10.7",
     "enzyme": "^3.11.0",
     "flag-icons": "^6.6.6",
@@ -32,6 +34,7 @@
     "node-sass": "^9.0.0",
     "prettier": "^2.3.2",
     "react": "^17.0.2",
+    "react-app-rewired": "^2.2.1",
     "react-bootstrap": "^2.7.4",
     "react-datepicker": "^4.2.0",
     "react-dom": "^17.0.2",
@@ -49,8 +52,8 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "serve": "react-scripts start",
-    "build": "react-scripts build",
+    "serve": "node ./scripts/config-overrides/custom_start.js",
+    "build": "node ./scripts/config-overrides/custom_build.js",
     "test": "cross-env NODE_ENV=test node scripts/test.js --env=./scripts/custom-test-env.js --watchAll --coverage",
     "eject": "react-scripts eject",
     "lint:check": "eslint \"**/*.{ts,tsx}\" --max-warnings=0",
