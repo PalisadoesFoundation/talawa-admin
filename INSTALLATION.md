@@ -16,6 +16,7 @@ This document provides instructions on how to set up and start a running instanc
   - [Creating .env file](#creating-env-file)
   - [Setting up REACT_APP_TALAWA_URL in .env file](#setting-up-react_app_talawa_url-in-env-file)
   - [Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-react_app_recaptcha_site_key-in-env-file)
+  - [Setting up Compiletime and Runtime logs](#setting-up-compiletime-and-runtime-logs)
 - [Post Configuration Steps](#post-configuration-steps)
   - [Running Talawa-Admin](#running-talawa-admin)
   - [Accessing Talawa-Admin](#accessing-talawa-admin)
@@ -140,6 +141,9 @@ Copy/paste this `reCAPTCHA site key` to the variable named `REACT_APP_RECAPTCHA_
 ```
 REACT_APP_RECAPTCHA_SITE_KEY="this_is_the_recaptcha_key"
 ```
+## Setting up Compiletime and Runtime logs
+
+Set the `ALLOW_LOGS` to "YES" if you want warnings , info and error messages in your console or leave it blank if you dont need them or want to keep the console clean
 
 # Post Configuration Steps
 

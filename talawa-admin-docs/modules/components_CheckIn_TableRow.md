@@ -20,7 +20,7 @@
 | :------ | :------ |
 | `«destructured»` | `Object` |
 | › `data` | [`InterfaceTableCheckIn`](../interfaces/components_CheckIn_types.InterfaceTableCheckIn.md) |
-| › `refetch` | () => `void` |
+| › `refetch` | () =\> `void` |
 
 #### Returns
 

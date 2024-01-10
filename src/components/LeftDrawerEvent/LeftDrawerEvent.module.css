@@ -149,6 +149,10 @@
   text-transform: capitalize;
 }
 
+.logout {
+  margin-bottom: 50px;
+}
+
 @media (max-width: 1120px) {
   .leftDrawer {
     width: calc(250px + 2rem);
@@ -189,6 +193,10 @@
     display: flex;
     z-index: 100;
     animation: openDrawer 0.6s ease-in-out;
+  }
+
+  .logout {
+    margin-bottom: 1.5rem !important;
   }
 }
 
