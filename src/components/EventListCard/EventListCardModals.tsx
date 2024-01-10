@@ -255,8 +255,8 @@ function EventListCardModals({
           startDate: dayjs(eventStartDate).format('YYYY-MM-DD'),
           endDate: dayjs(eventEndDate).format('YYYY-MM-DD'),
           location: formState.location,
-          startTime: !alldaychecked ? formState.startTime + 'Z' : undefined,
-          endTime: !alldaychecked ? formState.endTime + 'Z' : undefined,
+          startTime: !alldaychecked ? formState.startTime : undefined,
+          endTime: !alldaychecked ? formState.endTime : undefined,
           recurrenceStartDate: recurringchecked
             ? recurringEventUpdateType === thisAndFollowingInstances &&
               (instanceDatesChanged || recurrenceRuleChanged)
