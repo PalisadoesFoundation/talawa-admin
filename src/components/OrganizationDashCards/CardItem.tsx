@@ -66,7 +66,12 @@ const cardItem = (props: InterfaceCardItem): JSX.Element => {
 
           {location && (
             <span className={`${styles.location} fst-normal fw-semibold`}>
-              <MarkerIcon title="Event Location" width={22} height={22} />{' '}
+              <MarkerIcon
+                title="Event Location"
+                stroke="var(--bs-primary)"
+                width={22}
+                height={22}
+              />{' '}
               {location}
             </span>
           )}
