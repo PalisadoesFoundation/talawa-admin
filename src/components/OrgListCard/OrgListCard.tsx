@@ -80,7 +80,8 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
           {data && data?.isSampleOrganization && (
             <FlaskIcon
               fill="var(--bs-white)"
-              width={20}
+              width={12}
+              className={styles.flaskIcon}
               title={t('sampleOrganization')}
             />
           )}
