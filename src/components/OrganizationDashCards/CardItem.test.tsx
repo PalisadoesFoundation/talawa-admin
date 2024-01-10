@@ -9,8 +9,8 @@ describe('Testing the Organization Card', () => {
     const props: InterfaceCardItem = {
       type: 'Event',
       title: 'Event Title',
-      startdate: '2023-09-03',
-      enddate: '2023-09-04',
+      startdate: '2023-09-13',
+      enddate: '2023-09-14',
       location: 'Event Location',
     };
 
@@ -18,10 +18,11 @@ describe('Testing the Organization Card', () => {
 
     expect(screen.getByText(/Event Title/i)).toBeInTheDocument();
     expect(
-      screen.getByText(dayjs(props.startdate).format('MMM D, YYYY'))
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(dayjs(props.enddate).format('MMM D, YYYY'))
+      screen.getByText(
+        `${dayjs(props.startdate).format('MMM D, YYYY')} - ${dayjs(
+          props.enddate
+        ).format('MMM D, YYYY')}`
+      )
     ).toBeInTheDocument();
     expect(screen.getByText(/Event Location/i)).toBeInTheDocument();
   });
