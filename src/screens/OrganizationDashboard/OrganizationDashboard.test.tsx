@@ -9,7 +9,12 @@ import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import OrganizationDashboard from './OrganizationDashboard';
-import { EMPTY_MOCKS, ERROR_MOCKS, MOCKS } from './OrganizationDashboardMocks';
+import {
+  EMPTY_MOCKS,
+  ERROR_MOCKS,
+  MOCKS,
+  EVENT_MOCK,
+} from './OrganizationDashboardMocks';
 import i18nForTest from 'utils/i18nForTest';
 import { toast } from 'react-toastify';
 import userEvent from '@testing-library/user-event';
@@ -24,6 +29,7 @@ async function wait(ms = 100): Promise<void> {
 const link1 = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_MOCKS, true);
 const link3 = new StaticMockLink(ERROR_MOCKS, true);
+const link4 = new StaticMockLink(EVENT_MOCK, true);
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -218,5 +224,24 @@ describe('Organisation Dashboard Page', () => {
 
     // Ensure that toast.success is called with 'Coming soon!'
     expect(toast.success).toBeCalledWith('Coming soon!');
+  });
+
+  test('Checking for Upcoming Event is getting rendered or not.', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link4}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrganizationDashboard />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+    });
+
+    await wait();
+    expect(screen.getByText('Sample Event')).toBeInTheDocument();
   });
 });

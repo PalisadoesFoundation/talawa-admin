@@ -260,6 +260,37 @@ export const EMPTY_MOCKS = [
   },
 ];
 
+export const EVENT_MOCK = [
+  {
+    request: {
+      query: ORGANIZATION_EVENT_CONNECTION_LIST,
+      variables: {
+        organization_id: '6437904485008f171cf29924',
+      },
+    },
+    result: {
+      data: {
+        eventsByOrganizationConnection: [
+          {
+            _id: '1',
+            title: 'Sample Event',
+            description: 'Sample Description',
+            startDate: '2023-10-29T00:00:00.000Z',
+            endDate: '2023-10-29T23:59:59.000Z',
+            location: 'Sample Location',
+            startTime: '08:00:00',
+            endTime: '17:00:00',
+            allDay: false,
+            recurring: false,
+            isPublic: true,
+            isRegisterable: true,
+          },
+        ],
+      },
+    },
+  },
+];
+
 export const ERROR_MOCKS = [
   {
     request: {
