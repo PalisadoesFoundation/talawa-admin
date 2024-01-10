@@ -69,8 +69,8 @@ export const MOCKS = [
         startDate: '2022-03-18',
         endDate: '2022-03-20',
         location: 'New Delhi',
-        startTime: '09:00:00Z',
-        endTime: '17:00:00Z',
+        startTime: '09:00:00',
+        endTime: '17:00:00',
       },
     },
     result: {
