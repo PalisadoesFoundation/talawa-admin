@@ -88,7 +88,6 @@
     "talawaAdminPortal": "Portal de administración de Talawa",
     "menu": "Menú",
     "my organizations": "Mis Organizaciones",
-    "requests": "Solicitudes",
     "users": "Usuarios",
     "logout": "Cerrar sesión"
   },
@@ -185,27 +184,6 @@
     "noResultsFoundFor": "No se encontraron resultados para ",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
     "cancel": "Cancelar"
-  },
-  "requests": {
-    "title": "Solicitudes Talawa",
-    "searchByName": "Buscar por nombre",
-    "requests": "Peticiones",
-    "name": "Nombre",
-    "email": "Correo electrónico",
-    "accept": "Aceptar",
-    "reject": "Rechazar",
-    "enterName": "Ingrese su nombre",
-    "endOfResults": "Fin de los resultados",
-    "loadingRequests": "Cargando solicitudes ...",
-    "noRequestFound": "No se encontró ninguna solicitud.",
-    "sort": "Ordenar",
-    "filter": "Filtrar",
-    "Oldest": "Más Antiguas Primero",
-    "Latest": "Más Recientes Primero",
-    "userApproved": "Aprobado por el usuario",
-    "userRejected": "Usuario rechazado",
-    "noResultsFoundFor": "No se encontraron resultados para ",
-    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
   "dashboard": {
     "title": "Panel de",
