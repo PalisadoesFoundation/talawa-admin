@@ -160,7 +160,7 @@ const leftDrawerEvent = ({
             }}
           >
             <div className={styles.imageContainer}>
-              {userImage && userImage ? (
+              {userImage && userImage !== 'null' ? (
                 <img src={userImage} alt={`Profile Picture`} />
               ) : (
                 <img
