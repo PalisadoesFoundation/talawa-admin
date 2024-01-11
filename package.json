@@ -28,7 +28,7 @@
     "i18next": "^21.8.14",
     "i18next-browser-languagedetector": "^6.1.4",
     "i18next-http-backend": "^1.4.1",
-    "inquirer": "^9.2.12",
+    "inquirer": "^8.0.0",
     "jest-docblock": "^27.4.0",
     "js-cookie": "^3.0.1",
     "lint-staged": "^15.2.0",
