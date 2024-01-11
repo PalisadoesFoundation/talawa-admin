@@ -212,7 +212,7 @@ describe('Calendar', () => {
     // const todayCell = screen.getByText(new Date().getDate().toString());
     // expect(todayCell).toHaveClass(styles.day__today);
   });
-  it('Should expand and contract when clicked on more and less button', () => {
+  it('Should expand and contract when clicked on View all and View less button', () => {
     const multipleEventData = [
       {
         _id: '1',
@@ -265,10 +265,10 @@ describe('Calendar', () => {
         </I18nextProvider>
       </MockedProvider>
     );
-    const moreButton = screen.getByText('More');
+    const moreButton = screen.getByText('View all');
     fireEvent.click(moreButton);
     expect(screen.getByText('Event 3')).toBeInTheDocument();
-    const lessButton = screen.getByText('Less');
+    const lessButton = screen.getByText('View less');
     fireEvent.click(lessButton);
     expect(screen.queryByText('Event 3')).not.toBeInTheDocument();
   });
