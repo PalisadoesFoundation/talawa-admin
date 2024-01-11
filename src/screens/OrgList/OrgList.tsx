@@ -83,6 +83,9 @@ function orgList(): JSX.Element {
     error?: Error | undefined;
   } = useQuery(USER_ORGANIZATION_LIST, {
     variables: { id: localStorage.getItem('id') },
+    context: {
+      headers: { authorization: `Bearer ${localStorage.getItem('token')}` },
+    },
   });
 
   const {

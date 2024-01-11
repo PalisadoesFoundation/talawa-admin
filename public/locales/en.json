@@ -88,7 +88,6 @@
     "talawaAdminPortal": "Talawa Admin Portal",
     "menu": "Menu",
     "my organizations": "My Organizations",
-    "requests": "Requests",
     "users": "Users",
     "logout": "Logout"
   },
@@ -191,28 +190,6 @@
     "noResultsFoundFor": "No results found for ",
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
     "cancel": "Cancel"
-  },
-  "requests": {
-    "title": "Talawa Requests",
-    "searchByName": "Search By Name",
-    "requests": "Requests",
-    "name": "Name",
-    "email": "Email",
-    "accept": "Accept",
-    "reject": "Reject",
-    "enterName": "Enter Name",
-    "endOfResults": "End of results",
-    "loadingRequests": "Loading Requests...",
-    "noRequestFound": "No Request Found",
-    "sort": "Sort",
-    "filter": "Filter",
-    "Oldest": "Oldest First",
-    "Latest": "Latest First",
-    "noOrgError": "Organizations not found, please create an organization through dashboard",
-    "userApproved": "User Approved",
-    "userRejected": "User Rejected",
-    "noResultsFoundFor": "No results found for ",
-    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "dashboard": {
     "title": "Dashboard",

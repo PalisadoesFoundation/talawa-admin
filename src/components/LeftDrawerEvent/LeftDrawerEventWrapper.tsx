@@ -21,15 +21,39 @@ export const LeftDrawerEventWrapper = (
   props: InterfacePropType
 ): JSX.Element => {
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
+  const toggleDrawerVisibility = (): void => {
+    setHideDrawer(!hideDrawer);
+  };
 
   return (
     <>
-      <LeftDrawerEvent
-        key={`${props.event?._id || 'loading'}EventWrapper`}
-        hideDrawer={hideDrawer}
-        setHideDrawer={setHideDrawer}
-        {...props}
-      />
+      {hideDrawer ? (
+        <Button
+          className={styles.opendrawer}
+          onClick={toggleDrawerVisibility}
+          data-testid="openMenu"
+        >
+          <i className="fa fa-angle-double-right" aria-hidden="true"></i>
+        </Button>
+      ) : (
+        <Button
+          className={styles.collapseSidebarButton}
+          onClick={(): void => {
+            setHideDrawer(!hideDrawer);
+          }}
+          data-testid="menuBtn"
+        >
+          <i className="fa fa-angle-double-left" aria-hidden="true"></i>
+        </Button>
+      )}
+      <div className={styles.drawer}>
+        <LeftDrawerEvent
+          key={`${props.event?._id || 'loading'}EventWrapper`}
+          hideDrawer={hideDrawer}
+          setHideDrawer={setHideDrawer}
+          {...props}
+        />
+      </div>
 
       <div
         className={`${styles.pageContainer} ${
@@ -46,7 +70,7 @@ export const LeftDrawerEventWrapper = (
             <h2>Event Management</h2>
           </div>
           <Button
-            className="ms-2"
+            className={styles.mobileopenBtn}
             onClick={(): void => {
               setHideDrawer(!hideDrawer);
             }}
