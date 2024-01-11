@@ -1,12 +1,14 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Search } from '@mui/icons-material';
 import SortIcon from '@mui/icons-material/Sort';
-import { CREATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  CREATE_ORGANIZATION_MUTATION,
+  CREATE_SAMPLE_ORGANIZATION_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-import { CREATE_SAMPLE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 
 import OrgListCard from 'components/OrgListCard/OrgListCard';
 import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
