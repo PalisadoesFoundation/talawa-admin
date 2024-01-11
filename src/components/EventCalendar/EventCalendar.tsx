@@ -217,7 +217,13 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         });
 
       return (
-        <div key={index} className={className} data-testid="day">
+        <div
+          key={index}
+          className={
+            className + ' ' + (allEventsList?.length > 0 && styles.day__events)
+          }
+          data-testid="day"
+        >
           {date.getDate()}
           <div
             className={expanded === index ? styles.expand_list_container : ''}
@@ -239,7 +245,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   toggleExpand(index);
                 }}
               >
-                {expanded === index ? 'Less' : 'More'}
+                {expanded === index ? 'View less' : 'View all'}
               </button>
             )}
           </div>
