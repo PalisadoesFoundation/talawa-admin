@@ -366,8 +366,9 @@ export const REJECT_ADMIN_MUTATION = gql`
 `;
 
 /**
- * @name UPDATE_INSTALL_STATUS_PLUGIN_MUTATION
- * @description used to toggle `installStatus` (boolean value) of a Plugin
+ * {@label UPDATE_INSTALL_STATUS_PLUGIN_MUTATION}
+ * @remarks
+ * used to toggle `installStatus` (boolean value) of a Plugin
  */
 export const UPDATE_INSTALL_STATUS_PLUGIN_MUTATION = gql`
   mutation ($id: ID!, $orgId: ID!) {
@@ -382,8 +383,9 @@ export const UPDATE_INSTALL_STATUS_PLUGIN_MUTATION = gql`
 `;
 
 /**
- * @name UPDATE_ORG_STATUS_PLUGIN_MUTATION
- * @description used  `updatePluginStatus`to add or remove the current Organization the in the plugin list `uninstalledOrgs`
+ * {@label UPDATE_ORG_STATUS_PLUGIN_MUTATION}
+ * @remarks
+ * used  `updatePluginStatus`to add or remove the current Organization the in the plugin list `uninstalledOrgs`
  */
 export const UPDATE_ORG_STATUS_PLUGIN_MUTATION = gql`
   mutation update_install_status_plugin_mutation($id: ID!, $orgId: ID!) {
@@ -398,8 +400,9 @@ export const UPDATE_ORG_STATUS_PLUGIN_MUTATION = gql`
 `;
 
 /**
- * @name ADD_PLUGIN_MUTATION
- * @description used  `createPlugin` to add new Plugin in database
+ * {@label ADD_PLUGIN_MUTATION}
+ * @remarks
+ * used  `createPlugin` to add new Plugin in database
  */
 export const ADD_PLUGIN_MUTATION = gql`
   mutation add_plugin_mutation(

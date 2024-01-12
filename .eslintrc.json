@@ -27,10 +27,16 @@
   },
 
   // Specify the ESLint plugins tobe used
-  "plugins": ["react", "@typescript-eslint", "jest"],
+  "plugins": [
+    "react",
+    "@typescript-eslint",
+    "jest",
+    "import",
+    "eslint-plugin-tsdoc"
+  ],
   "rules": {
     "react/destructuring-assignment": ["off"],
-    "@typescript-eslint/no-explicit-any": ["off"],
+    // "@typescript-eslint/no-explicit-any": ["off"],
     "@typescript-eslint/explicit-module-boundary-types": ["off"],
     "react/no-multi-comp": [
       "error",
@@ -44,6 +50,14 @@
         "extensions": [".tsx"]
       }
     ],
+    "import/no-duplicates": "error",
+    "tsdoc/syntax": "error",
+    "@typescript-eslint/ban-ts-comment": "error",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-inferrable-types": "error",
+    "@typescript-eslint/no-non-null-asserted-optional-chain": "error",
+    "@typescript-eslint/no-non-null-assertion": "error",
+    "@typescript-eslint/no-var-requires": "error",
     "@typescript-eslint/ban-types": "error",
     "@typescript-eslint/no-duplicate-enum-values": "error",
     "@typescript-eslint/array-type": "error",

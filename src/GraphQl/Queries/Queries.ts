@@ -697,8 +697,9 @@ export const ORGANIZATION_ADMINS_LIST = gql`
 `;
 
 /**
- * @name PLUGIN_GET
- * @description used to fetch list of plugins
+ * {@label PLUGIN_GET}
+ * @remarks
+ * used to fetch list of plugins
  */
 export const PLUGIN_GET = gql`
   query getPluginList {
