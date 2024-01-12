@@ -1,6 +1,5 @@
-import MenuIcon from '@mui/icons-material/Menu';
 import LeftDrawerEvent from './LeftDrawerEvent';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import styles from './LeftDrawerEventWrapper.module.css';
 
@@ -21,16 +20,27 @@ export const LeftDrawerEventWrapper = (
   props: InterfacePropType
 ): JSX.Element => {
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
-  const toggleDrawerVisibility = (): void => {
-    setHideDrawer(!hideDrawer);
+  const handleResize = (): void => {
+    if (window.innerWidth <= 820) {
+      setHideDrawer(!hideDrawer);
+    }
   };
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     <>
       {hideDrawer ? (
         <Button
           className={styles.opendrawer}
-          onClick={toggleDrawerVisibility}
+          onClick={(): void => {
+            setHideDrawer(!hideDrawer);
+          }}
           data-testid="openMenu"
         >
           <i className="fa fa-angle-double-right" aria-hidden="true"></i>
@@ -69,15 +79,6 @@ export const LeftDrawerEventWrapper = (
           <div style={{ flex: 1 }}>
             <h2>Event Management</h2>
           </div>
-          <Button
-            className={styles.mobileopenBtn}
-            onClick={(): void => {
-              setHideDrawer(!hideDrawer);
-            }}
-            data-testid="closeLeftDrawerBtn"
-          >
-            <MenuIcon fontSize="medium" />
-          </Button>
         </div>
         {props.children}
       </div>
