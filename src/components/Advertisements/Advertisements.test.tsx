@@ -126,7 +126,7 @@ const ORGANIZATIONS_LIST_MOCK = {
           },
           name: 'name',
           description: 'description',
-          isPublic: true,
+          userRegistrationRequired: true,
 
           visibleInSearch: true,
           location: 'location',

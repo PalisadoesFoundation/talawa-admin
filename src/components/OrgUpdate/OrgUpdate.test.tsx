@@ -32,7 +32,7 @@ describe('Testing Organization Update', () => {
     description: 'This is a updated description',
     location: 'This is updated location',
     displayImage: new File(['hello'], 'hello.png', { type: 'image/png' }),
-    isPublic: false,
+    userRegistrationRequired: false,
     isVisible: true,
   };
 

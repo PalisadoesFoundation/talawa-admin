@@ -271,7 +271,7 @@ export const ORGANIZATIONS_LIST = gql`
       name
       description
       location
-      isPublic
+      userRegistrationRequired
       visibleInSearch
       members {
         _id
@@ -646,7 +646,7 @@ export const USER_ORGANIZATION_CONNECTION = gql`
       name
       image
       description
-      isPublic
+      userRegistrationRequired
       creator {
         firstName
         lastName

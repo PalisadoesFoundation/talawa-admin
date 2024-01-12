@@ -34,7 +34,8 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     orgImage: null,
   });
 
-  const [publicchecked, setPublicChecked] = React.useState(false);
+  const [userRegistrationRequiredChecked, setuserRegistrationRequiredChecked] =
+    React.useState(false);
   const [visiblechecked, setVisibleChecked] = React.useState(false);
 
   const [login] = useMutation(UPDATE_ORGANIZATION_MUTATION);
@@ -69,7 +70,9 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
         orgDescrip: data.organizations[0].description,
         location: data.organizations[0].location,
       });
-      setPublicChecked(data.organizations[0].isPublic);
+      setuserRegistrationRequiredChecked(
+        data.organizations[0].userRegistrationRequired
+      );
       setVisibleChecked(data.organizations[0].visibleInSearch);
     }
     return () => {
@@ -85,7 +88,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           name: formState.orgName,
           description: formState.orgDescrip,
           location: formState.location,
-          isPublic: publicchecked,
+          userRegistrationRequired: userRegistrationRequiredChecked,
           visibleInSearch: visiblechecked,
           file: formState.orgImage,
         },
@@ -170,8 +173,12 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               </Form.Label>
               <Form.Switch
                 placeholder={t('userRegistrationRequired')}
-                checked={publicchecked}
-                onChange={(): void => setPublicChecked(!publicchecked)}
+                checked={userRegistrationRequiredChecked}
+                onChange={(): void =>
+                  setuserRegistrationRequiredChecked(
+                    !userRegistrationRequiredChecked
+                  )
+                }
               />
             </Col>
             <Col sm={6} className="d-flex mb-3">
