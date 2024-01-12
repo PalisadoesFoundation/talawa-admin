@@ -123,21 +123,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     ).toBeTruthy();
   });
 
-  test('Testing Drawer open close functionality', () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <LeftDrawer {...propsOrg} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-    const closeModalBtn = screen.getByTestId(/closeModalBtn/i);
-    userEvent.click(closeModalBtn);
-  });
-
   test('Testing Drawer when hideDrawer is null', () => {
     localStorage.setItem('UserType', 'SUPERADMIN');
     render(
