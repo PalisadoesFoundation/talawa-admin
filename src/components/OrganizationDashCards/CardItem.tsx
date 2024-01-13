@@ -1,8 +1,8 @@
 import React from 'react';
-import { ReactComponent as EventsIcon } from 'assets/svgs/eventsnew.svg';
+import { ReactComponent as EventsIcon } from 'assets/svgs/cardItemEvent.svg';
 import { ReactComponent as PostsIcon } from 'assets/svgs/post.svg';
-import { ReactComponent as MarkerIcon } from 'assets/svgs/locationnew.svg';
-import { ReactComponent as DateIcon } from 'assets/svgs/datenew.svg';
+import { ReactComponent as MarkerIcon } from 'assets/svgs/cardItemLocation.svg';
+import { ReactComponent as DateIcon } from 'assets/svgs/cardItemDate.svg';
 import { ReactComponent as UserIcon } from 'assets/svgs/user.svg';
 import dayjs from 'dayjs';
 import styles from './CardItem.module.css';
