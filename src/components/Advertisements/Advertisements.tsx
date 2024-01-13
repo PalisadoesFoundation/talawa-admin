@@ -95,7 +95,7 @@ export default function advertisements(): JSX.Element {
     <>
       <OrganizationScreen
         data-testid="AdEntryStore"
-        screenName="Advertisement Store"
+        screenName="Advertisement"
         title={t('title')}
       >
         <Row>
