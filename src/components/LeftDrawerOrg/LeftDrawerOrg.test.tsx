@@ -89,7 +89,7 @@ const MOCKS = [
             name: 'Test Organization',
             description: 'Testing this organization',
             location: 'Gotham, DC',
-            isPublic: true,
+            userRegistrationRequired: true,
             visibleInSearch: true,
             members: [
               {
@@ -143,7 +143,7 @@ const MOCKS_WITH_IMAGE = [
             name: 'Test Organization',
             description: 'Testing this organization',
             location: 'Gotham, DC',
-            isPublic: true,
+            userRegistrationRequired: true,
             visibleInSearch: true,
             members: [
               {
