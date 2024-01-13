@@ -20,7 +20,6 @@ export interface InterfaceLeftDrawerProps {
 const leftDrawer = ({
   screenName,
   hideDrawer,
-  setHideDrawer,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
 
@@ -51,16 +50,6 @@ const leftDrawer = ({
         }`}
         data-testid="leftDrawerContainer"
       >
-        <Button
-          variant="danger"
-          className={styles.closeModalBtn}
-          onClick={(): void => {
-            setHideDrawer(false);
-          }}
-          data-testid="closeModalBtn"
-        >
-          <i className="fa fa-times"></i>
-        </Button>
         <TalawaLogo className={styles.talawaLogo} />
         <p className={styles.talawaText}>{t('talawaAdminPortal')}</p>
         <h5 className={styles.titleHeader}>{t('menu')}</h5>

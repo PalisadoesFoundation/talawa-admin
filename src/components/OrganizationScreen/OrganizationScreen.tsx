@@ -1,6 +1,5 @@
-import MenuIcon from '@mui/icons-material/Menu';
 import LeftDrawerOrg from 'components/LeftDrawerOrg/LeftDrawerOrg';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import styles from './OrganizationScreen.module.css';
 import { useSelector } from 'react-redux';
@@ -25,15 +24,27 @@ const organizationScreen = ({
   } = useSelector((state: RootState) => state.appRoutes);
   const { targets, configUrl } = appRoutes;
 
-  const toggleDrawerVisibility = (): void => {
-    setHideDrawer(!hideDrawer);
+  const handleResize = (): void => {
+    if (window.innerWidth <= 820) {
+      setHideDrawer(!hideDrawer);
+    }
   };
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
     <>
       {hideDrawer ? (
         <Button
           className={styles.opendrawer}
-          onClick={toggleDrawerVisibility}
+          onClick={(): void => {
+            setHideDrawer(!hideDrawer);
+          }}
           data-testid="openMenu"
         >
           <i className="fa fa-angle-double-right" aria-hidden="true"></i>
@@ -72,15 +83,6 @@ const organizationScreen = ({
           <div style={{ flex: 1 }}>
             <h2>{title}</h2>
           </div>
-          <Button
-            className={styles.mobileopenBtn}
-            onClick={(): void => {
-              setHideDrawer(!hideDrawer);
-            }}
-            data-testid="menuBtnmobile"
-          >
-            <MenuIcon fontSize="medium" />
-          </Button>
         </div>
         {children}
       </div>

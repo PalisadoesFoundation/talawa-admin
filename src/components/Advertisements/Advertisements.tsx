@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'react';
+// import PropTypes from 'react';
 import styles from './Advertisements.module.css';
 import { useQuery } from '@apollo/client';
 import { ADVERTISEMENTS_GET, PLUGIN_GET } from 'GraphQl/Queries/Queries'; // PLUGIN_LIST

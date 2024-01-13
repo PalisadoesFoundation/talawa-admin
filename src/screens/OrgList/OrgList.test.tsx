@@ -153,7 +153,6 @@ describe('Organisations Page testing as SuperAdmin', () => {
     const createOrgBtn = screen.getByTestId(/createOrganizationBtn/i);
     expect(createOrgBtn).toBeInTheDocument();
     userEvent.click(createOrgBtn);
-    userEvent.click(screen.getByTestId(/closeModalBtn/i));
   });
 
   test('Create organization model should work properly', async () => {
@@ -214,7 +213,6 @@ describe('Organisations Page testing as SuperAdmin', () => {
         screen.queryByText(/Congratulation the Organization is created/i)
       ).toBeInTheDocument()
     );
-    userEvent.click(screen.getByTestId(/closeOrganizationModal/i));
   });
 
   test('Plugin Notification model should work properly', async () => {
