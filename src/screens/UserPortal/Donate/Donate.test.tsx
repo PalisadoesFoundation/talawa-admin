@@ -55,7 +55,7 @@ const MOCKS = [
             image: '',
             name: 'anyOrganization2',
             description: 'desc',
-            isPublic: true,
+            userRegistrationRequired: true,
             creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
           },
         ],
