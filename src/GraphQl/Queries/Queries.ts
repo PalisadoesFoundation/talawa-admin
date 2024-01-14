@@ -271,7 +271,7 @@ export const ORGANIZATIONS_LIST = gql`
       name
       description
       location
-      isPublic
+      userRegistrationRequired
       visibleInSearch
       members {
         _id
@@ -646,7 +646,7 @@ export const USER_ORGANIZATION_CONNECTION = gql`
       name
       image
       description
-      isPublic
+      userRegistrationRequired
       creator {
         firstName
         lastName
@@ -697,8 +697,9 @@ export const ORGANIZATION_ADMINS_LIST = gql`
 `;
 
 /**
- * @name PLUGIN_GET
- * @description used to fetch list of plugins
+ * {@label PLUGIN_GET}
+ * @remarks
+ * used to fetch list of plugins
  */
 export const PLUGIN_GET = gql`
   query getPluginList {

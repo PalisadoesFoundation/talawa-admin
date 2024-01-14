@@ -19,7 +19,7 @@ export const MOCKS = [
             name: 'Dummy Organization',
             description: 'This is a Dummy Organization',
             location: 'New Delhi',
-            isPublic: true,
+            userRegistrationRequired: true,
             visibleInSearch: false,
             creator: {
               firstName: '',
@@ -199,7 +199,7 @@ export const EMPTY_MOCKS = [
             name: 'Dummy Organization',
             description: 'This is a Dummy Organization',
             location: 'New Delhi',
-            isPublic: true,
+            userRegistrationRequired: true,
             visibleInSearch: false,
             creator: {
               firstName: 'John',

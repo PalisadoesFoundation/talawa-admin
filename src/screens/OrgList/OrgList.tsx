@@ -1,12 +1,14 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Search } from '@mui/icons-material';
 import SortIcon from '@mui/icons-material/Sort';
-import { CREATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  CREATE_ORGANIZATION_MUTATION,
+  CREATE_SAMPLE_ORGANIZATION_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-import { CREATE_SAMPLE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 
 import OrgListCard from 'components/OrgListCard/OrgListCard';
 import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
@@ -60,7 +62,7 @@ function orgList(): JSX.Element {
   const [formState, setFormState] = useState({
     name: '',
     descrip: '',
-    ispublic: true,
+    userRegistrationRequired: true,
     visible: false,
     location: '',
     image: '',
@@ -118,7 +120,7 @@ function orgList(): JSX.Element {
       setFormState({
         name: '',
         descrip: '',
-        ispublic: true,
+        userRegistrationRequired: true,
         visible: false,
         location: '',
         image: '',
@@ -167,7 +169,7 @@ function orgList(): JSX.Element {
       descrip: _descrip,
       location: _location,
       visible,
-      ispublic,
+      userRegistrationRequired,
       image,
     } = formState;
 
@@ -182,7 +184,7 @@ function orgList(): JSX.Element {
           description: descrip,
           location: location,
           visibleInSearch: visible,
-          isPublic: ispublic,
+          userRegistrationRequired: userRegistrationRequired,
           image: image,
         },
       });
@@ -195,7 +197,7 @@ function orgList(): JSX.Element {
         setFormState({
           name: '',
           descrip: '',
-          ispublic: true,
+          userRegistrationRequired: true,
           visible: false,
           location: '',
           image: '',
@@ -560,16 +562,19 @@ function orgList(): JSX.Element {
 
               <Row className="mb-3">
                 <Col>
-                  <Form.Label htmlFor="ispublic">{t('isPublic')}</Form.Label>
+                  <Form.Label htmlFor="userRegistrationRequired">
+                    {t('userRegistrationRequired')}
+                  </Form.Label>
                   <Form.Switch
-                    id="ispublic"
-                    data-testid="isPublic"
+                    id="userRegistrationRequired"
+                    data-testid="userRegistrationRequired"
                     type="checkbox"
-                    defaultChecked={formState.ispublic}
+                    defaultChecked={formState.userRegistrationRequired}
                     onChange={(): void =>
                       setFormState({
                         ...formState,
-                        ispublic: !formState.ispublic,
+                        userRegistrationRequired:
+                          !formState.userRegistrationRequired,
                       })
                     }
                   />

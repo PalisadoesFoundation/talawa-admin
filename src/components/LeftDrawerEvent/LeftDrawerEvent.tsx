@@ -29,7 +29,6 @@ export interface InterfaceLeftDrawerProps {
 const leftDrawerEvent = ({
   event,
   hideDrawer,
-  setHideDrawer,
   setShowAddEventProjectModal,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
@@ -58,18 +57,6 @@ const leftDrawerEvent = ({
         }`}
         data-testid="leftDrawerContainer"
       >
-        {/* Close Drawer Button for small devices */}
-        <Button
-          variant="danger"
-          className={styles.closeModalBtn}
-          onClick={(): void => {
-            setHideDrawer(false);
-          }}
-          data-testid="closeModalBtn"
-        >
-          <i className="fa fa-times"></i>
-        </Button>
-
         {/* Branding Section */}
         <div className={styles.brandingContainer}>
           <TalawaLogo className={styles.talawaLogo} />

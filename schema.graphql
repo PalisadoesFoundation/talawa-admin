@@ -545,7 +545,7 @@ type Organization {
   creator: User!
   description: String!
   image: String
-  isPublic: Boolean!
+  userRegistrationRequired: Boolean!
   location: String
   members: [User]
   membershipRequests: [MembershipRequest]
@@ -566,7 +566,7 @@ type OrganizationInfoNode {
   creator: User!
   description: String!
   image: String
-  isPublic: Boolean!
+  userRegistrationRequired: Boolean!
   name: String!
   visibleInSearch: Boolean!
 }
@@ -576,7 +576,7 @@ input OrganizationInput {
   attendees: String
   description: String!
   image: String
-  isPublic: Boolean!
+  userRegistrationRequired: Boolean!
   location: String
   name: String!
   visibleInSearch: Boolean!
@@ -614,7 +614,7 @@ input OrganizationWhereInput {
   id_not: ID
   id_not_in: [ID!]
   id_starts_with: ID
-  isPublic: Boolean
+  userRegistrationRequired: Boolean
   name: String
   name_contains: String
   name_in: [String!]
@@ -949,7 +949,7 @@ input UpdateEventProjectInput {
 
 input UpdateOrganizationInput {
   description: String
-  isPublic: Boolean
+  userRegistrationRequired: Boolean
   location: String
   name: String
   visibleInSearch: Boolean
