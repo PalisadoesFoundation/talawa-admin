@@ -81,6 +81,7 @@ describe('Testing User Update', () => {
   const props = {
     key: '123',
     id: '1',
+    toggleStateValue: jest.fn(),
   };
 
   const formData = {

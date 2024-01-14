@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'react';
+// import PropTypes from 'react';
 import styles from './AddOnStore.module.css';
 import AddOnEntry from '../AddOnEntry/AddOnEntry';
 import Action from '../../support/components/Action/Action';
@@ -160,7 +160,7 @@ function addOnStore(): JSX.Element {
                   Search results for <b>{searchText}</b>
                 </p>
               ) : null}
-              <AddOnRegister />
+
               <Tabs
                 defaultActiveKey="available"
                 id="uncontrolled-tab-example"

@@ -18,6 +18,7 @@ import { ToastContainer } from 'react-toastify';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
+
 import BlockUser from './BlockUser';
 
 let userQueryCalled = false;
@@ -367,6 +368,10 @@ describe('Testing Block/Unblock user screen', () => {
       </MockedProvider>
     );
 
+    await act(async () => {
+      userEvent.click(screen.getByTestId('userFilter'));
+    });
+    userEvent.click(screen.getByTestId('showMembers'));
     await wait();
 
     expect(screen.getByTestId('unBlockUser123')).toBeInTheDocument();
@@ -395,6 +400,10 @@ describe('Testing Block/Unblock user screen', () => {
         </BrowserRouter>
       </MockedProvider>
     );
+    await act(async () => {
+      userEvent.click(screen.getByTestId('userFilter'));
+    });
+    userEvent.click(screen.getByTestId('showMembers'));
 
     await wait();
 
@@ -424,20 +433,24 @@ describe('Testing Block/Unblock user screen', () => {
         </BrowserRouter>
       </MockedProvider>
     );
+    await act(async () => {
+      userEvent.click(screen.getByTestId('userFilter'));
+    });
+    userEvent.click(screen.getByTestId('showMembers'));
 
     await wait();
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('Sam Smith')).toBeInTheDocument();
 
-    const firstNameInput = screen.getByPlaceholderText(/Search by First Name/i);
     // Open Dropdown
     await act(async () => {
       userEvent.click(screen.getByTestId('nameFilter'));
     });
     // Select option and enter first name
     userEvent.click(screen.getByTestId('searchByFirstName'));
-    userEvent.type(firstNameInput, 'john');
+    const firstNameInput = screen.getByPlaceholderText(/Search by First Name/i);
+    userEvent.type(firstNameInput, 'john{enter}');
 
     await wait(700);
 
@@ -462,6 +475,11 @@ describe('Testing Block/Unblock user screen', () => {
       </MockedProvider>
     );
 
+    await act(async () => {
+      userEvent.click(screen.getByTestId('userFilter'));
+    });
+    userEvent.click(screen.getByTestId('showMembers'));
+
     await wait();
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -474,7 +492,7 @@ describe('Testing Block/Unblock user screen', () => {
     // Select option and enter last name
     userEvent.click(screen.getByTestId('searchByLastName'));
     const lastNameInput = screen.getByPlaceholderText(/Search by Last Name/i);
-    userEvent.type(lastNameInput, 'doe');
+    userEvent.type(lastNameInput, 'doe{enter}');
 
     await wait(700);
 
@@ -576,6 +594,10 @@ describe('Testing Block/Unblock user screen', () => {
         </BrowserRouter>
       </MockedProvider>
     );
+    await act(async () => {
+      userEvent.click(screen.getByTestId('userFilter'));
+    });
+    userEvent.click(screen.getByTestId('showMembers'));
 
     await wait();
 
@@ -601,12 +623,42 @@ describe('Testing Block/Unblock user screen', () => {
 
     const input = screen.getByPlaceholderText('Search By First Name');
     await act(async () => {
-      userEvent.type(input, 'Peter');
+      userEvent.type(input, 'Peter{enter}');
     });
     await wait(700);
     expect(
       screen.getByText(`No results found for "Peter"`)
     ).toBeInTheDocument();
     expect(window.location).toBeAt('/blockuser/id=orgid');
+  });
+
+  test('Testing Search functionality', async () => {
+    window.location.assign('/blockuser/id=orgid');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <BlockUser />
+              <ToastContainer />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    await wait();
+    const searchBar = screen.getByTestId(/searchByName/i);
+    const searchBtn = screen.getByTestId(/searchBtn/i);
+    expect(searchBar).toBeInTheDocument();
+    userEvent.type(searchBar, 'Dummy{enter}');
+    await wait();
+    userEvent.clear(searchBar);
+    userEvent.type(searchBar, 'Dummy');
+    userEvent.click(searchBtn);
+    await wait();
+    userEvent.clear(searchBar);
+    userEvent.type(searchBar, '');
+    userEvent.click(searchBtn);
   });
 });

@@ -1,7 +1,5 @@
 import type { ChangeEvent } from 'react';
 import React, { useState } from 'react';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import DatePicker from 'react-datepicker';
@@ -10,8 +8,6 @@ import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import EventCalendar from 'components/EventCalendar/EventCalendar';
-import Calendar from 'react-calendar';
-import './calendar.css';
 
 import styles from './OrganizationEvents.module.css';
 import {
@@ -150,37 +146,25 @@ function organizationEvents(): JSX.Element {
   return (
     <>
       <OrganizationScreen screenName="Events" title={t('title')}>
-        <Row>
-          <Col sm={3}>
-            <div className={styles.sidebar}>
-              <div className={styles.sidebarsticky}>
-                <h6 className={styles.searchtitle}>Search Date</h6>
-                <Calendar />
-              </div>
-            </div>
-          </Col>
-          <Col sm={8}>
-            <div className={styles.mainpageright}>
-              <Row className={styles.justifysp}>
-                <p className={styles.logintitle}>{t('events')}</p>
-                <Button
-                  variant="success"
-                  className={styles.addbtn}
-                  onClick={showInviteModal}
-                  data-testid="createEventModalBtn"
-                >
-                  <i className="fa fa-plus"></i> {t('addEvent')}
-                </Button>
-              </Row>
-            </div>
-            <EventCalendar
-              eventData={data?.eventsByOrganizationConnection}
-              orgData={orgData}
-              userRole={userRole}
-              userId={userId}
-            />
-          </Col>
-        </Row>
+        <div className={styles.mainpageright}>
+          <div className={styles.justifysp}>
+            <p className={styles.logintitle}>{t('events')}</p>
+            <Button
+              variant="success"
+              className={styles.addbtn}
+              onClick={showInviteModal}
+              data-testid="createEventModalBtn"
+            >
+              <i className="fa fa-plus"></i> {t('addEvent')}
+            </Button>
+          </div>
+        </div>
+        <EventCalendar
+          eventData={data?.eventsByOrganizationConnection}
+          orgData={orgData}
+          userRole={userRole}
+          userId={userId}
+        />
       </OrganizationScreen>
 
       <Modal show={eventmodalisOpen} onHide={hideInviteModal}>

@@ -40,13 +40,19 @@ export const ORGANIZATION_LIST = gql`
   }
 `;
 
-// Query to take the Organization list with filter option
+// Query to take the Organization list with filter  and sort option
 export const ORGANIZATION_CONNECTION_LIST = gql`
-  query OrganizationsConnection($filter: String, $first: Int, $skip: Int) {
+  query OrganizationsConnection(
+    $filter: String
+    $first: Int
+    $skip: Int
+    $orderBy: OrganizationOrderByInput
+  ) {
     organizationsConnection(
       where: { name_contains: $filter }
       first: $first
       skip: $skip
+      orderBy: $orderBy
     ) {
       _id
       image
@@ -265,7 +271,7 @@ export const ORGANIZATIONS_LIST = gql`
       name
       description
       location
-      isPublic
+      userRegistrationRequired
       visibleInSearch
       members {
         _id
@@ -617,6 +623,7 @@ export const ORGANIZATION_POST_CONNECTION_LIST = gql`
           firstName
           lastName
         }
+        pinned
       }
     }
   }
@@ -639,7 +646,7 @@ export const USER_ORGANIZATION_CONNECTION = gql`
       name
       image
       description
-      isPublic
+      userRegistrationRequired
       creator {
         firstName
         lastName
@@ -690,8 +697,9 @@ export const ORGANIZATION_ADMINS_LIST = gql`
 `;
 
 /**
- * @name PLUGIN_GET
- * @description used to fetch list of plugins
+ * {@label PLUGIN_GET}
+ * @remarks
+ * used to fetch list of plugins
  */
 export const PLUGIN_GET = gql`
   query getPluginList {
@@ -704,7 +712,19 @@ export const PLUGIN_GET = gql`
     }
   }
 `;
-
+export const ADVERTISEMENTS_GET = gql`
+  query getAdvertisement {
+    getAdvertisements {
+      _id
+      name
+      type
+      orgId
+      link
+      endDate
+      startDate
+    }
+  }
+`;
 export const ORGANIZATION_EVENTS_CONNECTION = gql`
   query EventsByOrganizationConnection(
     $organization_id: ID!
@@ -829,5 +849,15 @@ export const DIRECT_CHATS_LIST = gql`
 export const IS_SAMPLE_ORGANIZATION_QUERY = gql`
   query ($isSampleOrganizationId: ID!) {
     isSampleOrganization(id: $isSampleOrganizationId)
+  }
+`;
+
+export const ORGANIZATION_CUSTOM_FIELDS = gql`
+  query ($customFieldsByOrganizationId: ID!) {
+    customFieldsByOrganization(id: $customFieldsByOrganizationId) {
+      _id
+      type
+      name
+    }
   }
 `;

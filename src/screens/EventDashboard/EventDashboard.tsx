@@ -123,7 +123,7 @@ const EventDashboard = (): JSX.Element => {
                   : null}
                 {eventData.event.projects.map(
                   (project: InterfaceEventProject) => (
-                    <Col sm={4} className="mb-5" key={project._id}>
+                    <Col sm={14} className="mb-5" key={project._id}>
                       <div className={`card ${styles.cardContainer}`}>
                         <div className="card-body">
                           <div className="text-center">

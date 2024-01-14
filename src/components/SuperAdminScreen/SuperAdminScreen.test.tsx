@@ -1,8 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import 'jest-localstorage-mock';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -34,9 +32,31 @@ describe('Testing LeftDrawer in SuperAdminScreen', () => {
       </MockedProvider>
     );
 
-    // Expand LeftDrawer
-    userEvent.click(screen.getByTestId('menuBtn'));
-    // Contract LeftDrawer
-    userEvent.click(screen.getByTestId('menuBtn'));
+    // Resize window to trigger handleResize
+    window.innerWidth = 800; // Set a width less than or equal to 820
+    fireEvent(window, new Event('resize'));
+
+    await waitFor(() => {
+      fireEvent.click(screen.getByTestId('openMenu') as HTMLElement);
+    });
+
+    // sets hideDrawer to true
+    await waitFor(() => {
+      fireEvent.click(screen.getByTestId('menuBtn') as HTMLElement);
+    });
+
+    // Resize window back to a larger width
+    window.innerWidth = 1000; // Set a larger width
+    fireEvent(window, new Event('resize'));
+
+    // sets hideDrawer to false
+    await waitFor(() => {
+      fireEvent.click(screen.getByTestId('openMenu') as HTMLElement);
+    });
+
+    // sets hideDrawer to true
+    await waitFor(() => {
+      fireEvent.click(screen.getByTestId('menuBtn') as HTMLElement);
+    });
   });
 });

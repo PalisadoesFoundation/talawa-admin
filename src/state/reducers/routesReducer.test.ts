@@ -10,6 +10,7 @@ describe('Testing Routes reducer', () => {
       })
     ).toEqual({
       targets: [
+        { name: 'My Organizations', url: '/orglist/id=undefined' },
         { name: 'Dashboard', url: '/orgdash/id=undefined' },
         { name: 'People', url: '/orgpeople/id=undefined' },
         { name: 'Events', url: '/orgevents/id=undefined' },
@@ -18,6 +19,7 @@ describe('Testing Routes reducer', () => {
           name: 'Block/Unblock',
           url: '/blockuser/id=undefined',
         },
+        { name: 'Advertisement', url: '/orgads/id=undefined' },
         {
           name: 'Plugins',
           subTargets: [
@@ -29,10 +31,10 @@ describe('Testing Routes reducer', () => {
           ],
         },
         { name: 'Settings', url: '/orgsetting/id=undefined' },
-        { name: 'All Organizations', url: '/orglist/id=undefined' },
       ],
       configUrl: 'undefined',
       components: [
+        { name: 'My Organizations', comp_id: 'orglist', component: 'OrgList' },
         {
           name: 'Dashboard',
           comp_id: 'orgdash',
@@ -51,6 +53,11 @@ describe('Testing Routes reducer', () => {
         { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
         { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
         {
+          name: 'Advertisement',
+          comp_id: 'orgads',
+          component: 'Advertisements',
+        },
+        {
           name: 'Plugins',
           comp_id: null,
           component: 'AddOnStore',
@@ -64,7 +71,6 @@ describe('Testing Routes reducer', () => {
           ],
         },
         { name: 'Settings', comp_id: 'orgsetting', component: 'OrgSettings' },
-        { name: 'All Organizations', comp_id: 'orglist', component: 'OrgList' },
         { name: '', comp_id: 'member', component: 'MemberDetail' },
       ],
     });
@@ -78,11 +84,13 @@ describe('Testing Routes reducer', () => {
       })
     ).toEqual({
       targets: [
+        { name: 'My Organizations', url: '/orglist/id=undefined' },
         { name: 'Dashboard', url: '/orgdash/id=undefined' },
         { name: 'People', url: '/orgpeople/id=undefined' },
         { name: 'Events', url: '/orgevents/id=undefined' },
         { name: 'Posts', url: '/orgpost/id=undefined' },
         { name: 'Block/Unblock', url: '/blockuser/id=undefined' },
+        { name: 'Advertisement', url: '/orgads/id=undefined' },
         {
           name: 'Plugins',
           subTargets: [
@@ -94,11 +102,11 @@ describe('Testing Routes reducer', () => {
           ],
         },
         { name: 'Settings', url: '/orgsetting/id=undefined' },
-        { name: 'All Organizations', url: '/orglist/id=undefined' },
         { test: 'testupdate' },
       ],
       configUrl: 'undefined',
       components: [
+        { name: 'My Organizations', comp_id: 'orglist', component: 'OrgList' },
         {
           name: 'Dashboard',
           comp_id: 'orgdash',
@@ -117,6 +125,11 @@ describe('Testing Routes reducer', () => {
         { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
         { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
         {
+          name: 'Advertisement',
+          comp_id: 'orgads',
+          component: 'Advertisements',
+        },
+        {
           name: 'Plugins',
           comp_id: null,
           component: 'AddOnStore',
@@ -130,7 +143,6 @@ describe('Testing Routes reducer', () => {
           ],
         },
         { name: 'Settings', comp_id: 'orgsetting', component: 'OrgSettings' },
-        { name: 'All Organizations', comp_id: 'orglist', component: 'OrgList' },
         { name: '', comp_id: 'member', component: 'MemberDetail' },
       ],
     });
@@ -144,6 +156,7 @@ describe('Testing Routes reducer', () => {
       })
     ).toEqual({
       targets: [
+        { name: 'My Organizations', url: '/orglist/id=undefined' },
         { name: 'Dashboard', url: '/orgdash/id=undefined' },
         { name: 'People', url: '/orgpeople/id=undefined' },
         { name: 'Events', url: '/orgevents/id=undefined' },
@@ -152,8 +165,8 @@ describe('Testing Routes reducer', () => {
           name: 'Block/Unblock',
           url: '/blockuser/id=undefined',
         },
+        { name: 'Advertisement', url: '/orgads/id=undefined' },
         { name: 'Settings', url: '/orgsetting/id=undefined' },
-        { name: 'All Organizations', url: '/orglist/id=undefined' },
         {
           comp_id: null,
           component: null,
@@ -170,6 +183,7 @@ describe('Testing Routes reducer', () => {
       ],
       configUrl: 'undefined',
       components: [
+        { name: 'My Organizations', comp_id: 'orglist', component: 'OrgList' },
         {
           name: 'Dashboard',
           comp_id: 'orgdash',
@@ -185,8 +199,14 @@ describe('Testing Routes reducer', () => {
           comp_id: 'orgevents',
           component: 'OrganizationEvents',
         },
+
         { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
         { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
+        {
+          name: 'Advertisement',
+          comp_id: 'orgads',
+          component: 'Advertisements',
+        },
         {
           name: 'Plugins',
           comp_id: null,
@@ -201,7 +221,6 @@ describe('Testing Routes reducer', () => {
           ],
         },
         { name: 'Settings', comp_id: 'orgsetting', component: 'OrgSettings' },
-        { name: 'All Organizations', comp_id: 'orglist', component: 'OrgList' },
         { name: '', comp_id: 'member', component: 'MemberDetail' },
       ],
     });

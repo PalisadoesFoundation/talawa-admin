@@ -16,11 +16,13 @@ import Loader from 'components/Loader/Loader';
 
 interface InterfaceUserUpdateProps {
   id: string;
+  toggleStateValue: () => void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
   id,
+  toggleStateValue,
 }): JSX.Element => {
   const location = useLocation<InterfaceUserUpdateProps>();
   const currentUrl = location.state?.id || localStorage.getItem('id') || id;
@@ -104,10 +106,13 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
           applangcode: '',
           file: '',
         });
+        localStorage.setItem('FirstName', firstName);
+        localStorage.setItem('LastName', lastName);
+        localStorage.setItem('Email', email);
+        localStorage.setItem('UserImage', file);
         toast.success('Successful updated');
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
+
+        toggleStateValue();
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -117,7 +122,7 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
 
   /* istanbul ignore next */
   const cancelUpdate = (): void => {
-    window.location.reload();
+    toggleStateValue();
   };
 
   return (
@@ -206,43 +211,45 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
               </label>
             </div>
           </div>
-          <label htmlFor="orgphoto" className={styles.orgphoto}>
-            {t('displayImage')}:
-            <Form.Control
-              accept="image/*"
-              id="orgphoto"
-              name="photo"
-              type="file"
-              multiple={false}
-              onChange={async (e: React.ChangeEvent): Promise<void> => {
-                const target = e.target as HTMLInputElement;
-                const file = target.files && target.files[0];
-                if (file)
-                  setFormState({
-                    ...formState,
-                    file: await convertToBase64(file),
-                  });
-              }}
-              data-testid="organisationImage"
-            />
-          </label>
-          <div className={styles.dispbtnflex}>
-            <Button
-              type="button"
-              className={styles.greenregbtn}
-              value="savechanges"
-              onClick={loginLink}
-            >
-              {t('saveChanges')}
-            </Button>
-            <Button
-              type="button"
-              className={styles.whitebtn}
-              value="cancelchanges"
-              onClick={cancelUpdate}
-            >
-              {t('cancel')}
-            </Button>
+          <div className={styles.dispflex}>
+            <label htmlFor="orgphoto" className={styles.orgphoto}>
+              {t('displayImage')}:
+              <Form.Control
+                accept="image/*"
+                id="orgphoto"
+                name="photo"
+                type="file"
+                multiple={false}
+                onChange={async (e: React.ChangeEvent): Promise<void> => {
+                  const target = e.target as HTMLInputElement;
+                  const file = target.files && target.files[0];
+                  if (file)
+                    setFormState({
+                      ...formState,
+                      file: await convertToBase64(file),
+                    });
+                }}
+                data-testid="organisationImage"
+              />
+            </label>
+            <div className={styles.dispbtnflex}>
+              <Button
+                type="button"
+                className={styles.greenregbtn}
+                value="savechanges"
+                onClick={loginLink}
+              >
+                {t('saveChanges')}
+              </Button>
+              <Button
+                type="button"
+                className={styles.whitebtn}
+                value="cancelchanges"
+                onClick={cancelUpdate}
+              >
+                {t('cancel')}
+              </Button>
+            </div>
           </div>
         </form>
       </div>

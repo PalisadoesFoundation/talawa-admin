@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import Button from 'react-bootstrap/Button';
 import React, { useState, useEffect } from 'react';
 import styles from './EventCalendar.module.css';
+import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 
 interface InterfaceEvent {
   _id: string;
@@ -75,6 +76,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
+  const [expanded, setExpanded] = useState<number>(-1);
 
   const filterData = (
     eventData: InterfaceEvent[],
@@ -162,6 +164,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         currentDate.getDate() + 1
       );
     }
+
     return days.map((date, index) => {
       const className = [
         date.toLocaleDateString() === today.toLocaleDateString() //Styling for today day cell
@@ -171,34 +174,64 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         selectedDate?.getTime() === date.getTime() ? styles.day__selected : '',
         styles.day,
       ].join(' ');
+
+      const toggleExpand = (index: number): void => {
+        if (expanded === index) {
+          setExpanded(-1);
+        } else {
+          setExpanded(index);
+        }
+      };
+
+      const allEventsList: any = events
+        ?.filter((datas) => {
+          if (datas.startDate == dayjs(date).format('YYYY-MM-DD')) return datas;
+        })
+        .map((datas: InterfaceEvent) => {
+          return (
+            <EventListCard
+              key={datas._id}
+              id={datas._id}
+              eventLocation={datas.location}
+              eventName={datas.title}
+              eventDescription={datas.description}
+              regDate={datas.startDate}
+              regEndDate={datas.endDate}
+              startTime={datas.startTime}
+              endTime={datas.endTime}
+              allDay={datas.allDay}
+              recurring={datas.recurring}
+              isPublic={datas.isPublic}
+              isRegisterable={datas.isRegisterable}
+            />
+          );
+        });
+
       return (
-        <div style={{}} key={index} className={className} data-testid="day">
+        <div key={index} className={className} data-testid="day">
           {date.getDate()}
-          <div className={styles.list_box}>
-            {events
-              ?.filter((datas) => {
-                if (datas.startDate == dayjs(date).format('YYYY-MM-DD'))
-                  return datas;
-              })
-              .map((datas: InterfaceEvent) => {
-                return (
-                  <EventListCard
-                    key={datas._id}
-                    id={datas._id}
-                    eventLocation={datas.location}
-                    eventName={datas.title}
-                    eventDescription={datas.description}
-                    regDate={datas.startDate}
-                    regEndDate={datas.endDate}
-                    startTime={datas.startTime}
-                    endTime={datas.endTime}
-                    allDay={datas.allDay}
-                    recurring={datas.recurring}
-                    isPublic={datas.isPublic}
-                    isRegisterable={datas.isRegisterable}
-                  />
-                );
-              })}
+          <div
+            className={expanded === index ? styles.expand_list_container : ''}
+          >
+            <div
+              className={
+                expanded === index
+                  ? styles.expand_event_list
+                  : styles.event_list
+              }
+            >
+              {expanded === index ? allEventsList : allEventsList?.slice(0, 2)}
+            </div>
+            {allEventsList?.length > 2 && (
+              <button
+                className={styles.btn__more}
+                onClick={() => {
+                  toggleExpand(index);
+                }}
+              >
+                {expanded === index ? 'Less' : 'More'}
+              </button>
+            )}
           </div>
         </div>
       );
@@ -208,8 +241,12 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   return (
     <div className={styles.calendar}>
       <div className={styles.calendar__header}>
-        <Button className={styles.button} onClick={handlePrevMonth}>
-          {'<'}
+        <Button
+          className={styles.button}
+          onClick={handlePrevMonth}
+          data-testid="prevmonth"
+        >
+          <ChevronLeft />
         </Button>
         <div
           className={styles.calendar__header_month}
@@ -218,10 +255,14 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           {months[currentMonth]} {currentYear}
         </div>
         <Button className={styles.button} onClick={handleNextMonth}>
-          {'>'}
+          <ChevronRight />
         </Button>
         <div>
-          <Button className={styles.btn__today} onClick={handleTodayButton}>
+          <Button
+            className={styles.btn__today}
+            onClick={handleTodayButton}
+            data-testid="nextmonth"
+          >
             Today
           </Button>
         </div>
