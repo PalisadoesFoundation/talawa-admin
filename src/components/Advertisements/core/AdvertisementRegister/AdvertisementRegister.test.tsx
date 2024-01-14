@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react';
+import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 
 import {
   ApolloClient,
@@ -48,6 +48,7 @@ const MOCKS = [
       data: {
         createAdvertisement: {
           _id: '1',
+          __typename: 'Advertisement',
         },
       },
     },
@@ -93,7 +94,7 @@ describe('Testing Advertisement Register Component', () => {
     });
   });
 
-  test('AdvertismentRegister component loads correctly', async () => {
+  test('AdvertismentRegister component loads correctly in register mode', async () => {
     const { getByText } = render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -116,6 +117,32 @@ describe('Testing Advertisement Register Component', () => {
     );
     await waitFor(() => {
       expect(getByText(translations.addNew)).toBeInTheDocument();
+    });
+  });
+  test('AdvertismentRegister component loads correctly in edit mode', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              {
+                <AdvertisementRegister
+                  endDate={new Date()}
+                  startDate={new Date()}
+                  type="BANNER"
+                  name="Advert1"
+                  orgId="1"
+                  link="google.com"
+                  formStatus="edit"
+                />
+              }
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>
+    );
+    await waitFor(() => {
+      expect(screen.getByTestId('editBtn')).toBeInTheDocument();
     });
   });
   test('Opens and closes modals on button click', async () => {
@@ -171,40 +198,41 @@ describe('Testing Advertisement Register Component', () => {
       </MockedProvider>
     );
 
+    fireEvent.click(getByText(translations.addNew));
+    expect(queryByText(translations.RClose)).toBeInTheDocument();
+
+    fireEvent.change(getByLabelText(translations.Rname), {
+      target: { value: 'Test Advertisement' },
+    });
+    expect(getByLabelText(translations.Rname)).toHaveValue(
+      'Test Advertisement'
+    );
+
+    fireEvent.change(getByLabelText(translations.Rlink), {
+      target: { value: 'http://example.com' },
+    });
+    expect(getByLabelText(translations.Rlink)).toHaveValue(
+      'http://example.com'
+    );
+
+    fireEvent.change(getByLabelText(translations.Rtype), {
+      target: { value: 'BANNER' },
+    });
+    expect(getByLabelText(translations.Rtype)).toHaveValue('BANNER');
+
+    fireEvent.change(getByLabelText(translations.RstartDate), {
+      target: { value: '2023-01-01' },
+    });
+    expect(getByLabelText(translations.RstartDate)).toHaveValue('2023-01-01');
+
+    fireEvent.change(getByLabelText(translations.RendDate), {
+      target: { value: '2023-02-01' },
+    });
+    expect(getByLabelText(translations.RendDate)).toHaveValue('2023-02-01');
+
+    fireEvent.click(getByText(translations.register));
     await waitFor(() => {
-      fireEvent.click(getByText(translations.addNew));
-      expect(queryByText(translations.RClose)).toBeInTheDocument();
-
-      fireEvent.change(getByLabelText(translations.Rname), {
-        target: { value: 'Test Advertisement' },
-      });
-      expect(getByLabelText(translations.Rname)).toHaveValue(
-        'Test Advertisement'
-      );
-
-      fireEvent.change(getByLabelText(translations.Rlink), {
-        target: { value: 'http://example.com' },
-      });
-      expect(getByLabelText(translations.Rlink)).toHaveValue(
-        'http://example.com'
-      );
-
-      fireEvent.change(getByLabelText(translations.Rtype), {
-        target: { value: 'BANNER' },
-      });
-      expect(getByLabelText(translations.Rtype)).toHaveValue('BANNER');
-
-      fireEvent.change(getByLabelText(translations.RstartDate), {
-        target: { value: '2023-01-01' },
-      });
-      expect(getByLabelText(translations.RstartDate)).toHaveValue('2023-01-01');
-
-      fireEvent.change(getByLabelText(translations.RendDate), {
-        target: { value: '2023-02-01' },
-      });
-      expect(getByLabelText(translations.RendDate)).toHaveValue('2023-02-01');
-
-      fireEvent.click(getByText(translations.register));
+      // Assert the success toast and setTimeout
       expect(toast.success).toBeCalledWith(
         'Advertisement created successfully'
       );
@@ -221,12 +249,12 @@ describe('Testing Advertisement Register Component', () => {
             <I18nextProvider i18n={i18nForTest}>
               {
                 <AdvertisementRegister
-                  endDate={new Date()}
-                  startDate={new Date()}
-                  type="BANNER"
-                  name="Advert1"
-                  orgId="1"
-                  link="google.com"
+                  endDateEdit={new Date()}
+                  startDateEdit={new Date()}
+                  typeEdit="BANNER"
+                  nameEdit="Advert1"
+                  orgIdEdit="1"
+                  linkEdit="google.com"
                 />
               }
             </I18nextProvider>
@@ -235,11 +263,11 @@ describe('Testing Advertisement Register Component', () => {
       </MockedProvider>
     );
 
-    await waitFor(() => {
-      fireEvent.click(getByText(translations.addNew));
-      expect(queryByText(translations.RClose)).toBeInTheDocument();
+    fireEvent.click(getByText(translations.addNew));
+    expect(queryByText(translations.RClose)).toBeInTheDocument();
 
-      fireEvent.click(getByText(translations.register));
+    fireEvent.click(getByText(translations.register));
+    await waitFor(() => {
       expect(toast.error).toBeCalledWith(
         'An error occured, could not create new advertisement'
       );

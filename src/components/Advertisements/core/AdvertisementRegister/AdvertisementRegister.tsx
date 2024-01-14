@@ -125,22 +125,56 @@ function advertisementRegister({
   };
   const handleUpdate = async (): Promise<void> => {
     try {
-      console.log('At handle update', formState);
+      const updatedFields: Partial<InterfaceFormStateTypes> = {};
+
+      // Only include the fields which are updated
+      if (formState.name !== nameEdit) {
+        updatedFields.name = formState.name;
+      }
+      if (formState.link !== linkEdit) {
+        updatedFields.link = formState.link;
+      }
+      if (formState.type !== typeEdit) {
+        updatedFields.type = formState.type;
+      }
+      const startDateFormattedString = dayjs(formState.startDate).format(
+        'YYYY-MM-DD'
+      );
+      const endDateFormattedString = dayjs(formState.endDate).format(
+        'YYYY-MM-DD'
+      );
+
+      const startDateDate = dayjs(
+        startDateFormattedString,
+        'YYYY-MM-DD'
+      ).toDate();
+      const endDateDate = dayjs(endDateFormattedString, 'YYYY-MM-DD').toDate();
+
+      if (!dayjs(startDateDate).isSame(startDateEdit, 'day')) {
+        updatedFields.startDate = startDateDate;
+      }
+      if (!dayjs(endDateDate).isSame(endDateEdit, 'day')) {
+        updatedFields.endDate = endDateDate;
+      }
+
+      console.log('At handle update', updatedFields);
       const { data } = await updateAdvertisement({
         variables: {
           id: idEdit,
-          // orgId: currentOrg,
-          name: formState.name,
-          link: formState.link,
-          type: formState.type,
-          startDate: dayjs(formState.startDate).format('YYYY-MM-DD'),
-          endDate: dayjs(formState.endDate).format('YYYY-MM-DD'),
+          ...(updatedFields.name && { name: updatedFields.name }),
+          ...(updatedFields.link && { link: updatedFields.link }),
+          ...(updatedFields.type && { type: updatedFields.type }),
+          ...(updatedFields.startDate && {
+            startDate: startDateFormattedString,
+          }),
+          ...(updatedFields.endDate && { endDate: endDateFormattedString }),
         },
       });
 
       if (data) {
         toast.success('Advertisement updated successfully');
         refetch();
+        handleClose();
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -153,12 +187,15 @@ function advertisementRegister({
           className={styles.modalbtn}
           variant="primary"
           onClick={handleShow}
+          data-testid="createAdvertisement"
         >
           <i className="fa fa-plus"></i>
           {t('addNew')}
         </Button>
       ) : (
-        <div onClick={handleShow}>{t('edit')}</div>
+        <div onClick={handleShow} data-testid="editBtn">
+          {t('edit')}
+        </div>
       )}
 
       <Modal show={show} onHide={handleClose}>
@@ -213,7 +250,6 @@ function advertisementRegister({
                     ...formState,
                     type: e.target.value,
                   });
-                  console.log(e.target, e.target.value, typeof e.target.value);
                 }}
               >
                 <option value="POPUP">Popup Ad</option>

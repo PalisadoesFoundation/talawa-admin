@@ -1,6 +1,4 @@
 import React from 'react';
-import { DELETE_ADVERTISEMENT_BY_ID } from 'GraphQl/Mutations/mutations';
-import { MockedProvider } from '@apollo/client/testing';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import {
   ApolloClient,
@@ -9,86 +7,28 @@ import {
   ApolloLink,
   HttpLink,
 } from '@apollo/client';
-import { StaticMockLink } from 'utils/StaticMockLink';
 import type { NormalizedCacheObject } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
 import AdvertisementEntry from './AdvertisementEntry';
+import AdvertisementRegister from '../AdvertisementRegister/AdvertisementRegister';
 import { Provider } from 'react-redux';
+import i18n from 'utils/i18nForTest';
 import { store } from 'state/store';
 import { BACKEND_URL } from 'Constant/constant';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
-import { act } from 'react-dom/test-utils';
-import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
+import dayjs from 'dayjs';
 
-const advertisementProps = {
-  id: '1',
-  name: 'Sample Advertisement',
-  type: 'Sample Type',
-  orgId: 'org_id',
-  link: 'samplelink.com',
-  endDate: new Date(),
-  startDate: new Date(),
-};
-const mocks = [
-  {
-    request: {
-      query: DELETE_ADVERTISEMENT_BY_ID,
-      variables: { id: '1' },
-    },
-    result: {
-      data: {
-        deleteAdvertisementById: {
-          success: true,
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: ADVERTISEMENTS_GET,
-    },
-    result: {
-      data: {
-        getAdvertisements: [
-          {
-            _id: '6574cf9caa18987e28d248d9',
-            name: 'Cookie',
-            orgId: '6437904485008f171cf29924',
-            link: '123',
-            type: 'BANNER',
-            startDate: '2023-12-10',
-            endDate: '2023-12-10',
-          },
-          {
-            _id: '6574e38aaa18987e28d24979',
-            name: 'HEy',
-            orgId: '6437904485008f171cf29924',
-            link: '123',
-            type: 'BANNER',
-            startDate: '2023-12-10',
-            endDate: '2023-12-10',
-          },
-        ],
-      },
-    },
-  },
-];
-
-const link = new StaticMockLink(mocks, true);
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
   headers: {
     authorization: 'Bearer ' + localStorage.getItem('token') || '',
   },
 });
+const translations = JSON.parse(
+  // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+  JSON.stringify(i18n.getDataByLanguage('en')?.translation.advertisement!)
+);
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
@@ -221,5 +161,275 @@ describe('Testing Advertisement Entry Component', () => {
 
     // After the second click, the dropdown should be hidden again
     expect(queryByText('Edit')).toBeNull();
+  });
+  test('Updates the advertisement and shows success toast on successful update', async () => {
+    const updateAdByIdMock = jest.fn().mockResolvedValue({
+      data: {
+        updateAdvertisement: {
+          advertisement: {
+            _id: '1',
+            name: 'Updated Advertisement',
+            link: 'google.com',
+            startDate: dayjs(new Date()).add(1, 'day').format('YYYY-MM-DD'),
+            endDate: dayjs(new Date()).add(2, 'days').format('YYYY-MM-DD'),
+            type: 'BANNER',
+          },
+        },
+      },
+    });
+
+    mockUseMutation.mockReturnValue([updateAdByIdMock]);
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              {
+                <AdvertisementEntry
+                  endDate={new Date()}
+                  startDate={new Date()}
+                  type="POPUP"
+                  name="Advert1"
+                  orgId="1"
+                  link="google.com"
+                  id="1"
+                />
+              }
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>
+    );
+
+    const optionsButton = screen.getByTestId('moreiconbtn');
+    fireEvent.click(optionsButton);
+    fireEvent.click(screen.getByTestId('editBtn'));
+
+    fireEvent.change(screen.getByLabelText('Enter name of Advertisement'), {
+      target: { value: 'Updated Advertisement' },
+    });
+
+    expect(screen.getByLabelText('Enter name of Advertisement')).toHaveValue(
+      'Updated Advertisement'
+    );
+
+    fireEvent.change(screen.getByLabelText(translations.Rlink), {
+      target: { value: 'http://example.com' },
+    });
+    expect(screen.getByLabelText(translations.Rlink)).toHaveValue(
+      'http://example.com'
+    );
+
+    fireEvent.change(screen.getByLabelText(translations.Rtype), {
+      target: { value: 'BANNER' },
+    });
+    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('BANNER');
+
+    fireEvent.change(screen.getByLabelText(translations.RstartDate), {
+      target: { value: dayjs().add(1, 'day').format('YYYY-MM-DD') },
+    });
+
+    fireEvent.change(screen.getByLabelText(translations.RendDate), {
+      target: { value: dayjs().add(2, 'days').format('YYYY-MM-DD') },
+    });
+
+    fireEvent.click(screen.getByTestId('addonupdate'));
+
+    expect(updateAdByIdMock).toHaveBeenCalledWith({
+      variables: {
+        id: '1',
+        name: 'Updated Advertisement',
+        link: 'http://example.com',
+        type: 'BANNER',
+        startDate: dayjs().add(1, 'day').format('YYYY-MM-DD'),
+        endDate: dayjs().add(2, 'days').format('YYYY-MM-DD'),
+      },
+    });
+  });
+  test('Simulating if the mutation doesnt have data variable while updating', async () => {
+    const updateAdByIdMock = jest.fn().mockResolvedValue({
+      updateAdvertisement: {
+        _id: '1',
+        name: 'Updated Advertisement',
+        type: 'BANNER',
+      },
+    });
+
+    mockUseMutation.mockReturnValue([updateAdByIdMock]);
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              {
+                <AdvertisementEntry
+                  endDate={new Date()}
+                  startDate={new Date()}
+                  type="POPUP"
+                  name="Advert1"
+                  orgId="1"
+                  link="google.com"
+                  id="1"
+                />
+              }
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>
+    );
+
+    const optionsButton = screen.getByTestId('moreiconbtn');
+    fireEvent.click(optionsButton);
+    fireEvent.click(screen.getByTestId('editBtn'));
+
+    fireEvent.change(screen.getByLabelText('Enter name of Advertisement'), {
+      target: { value: 'Updated Advertisement' },
+    });
+
+    expect(screen.getByLabelText('Enter name of Advertisement')).toHaveValue(
+      'Updated Advertisement'
+    );
+
+    fireEvent.change(screen.getByLabelText(translations.Rtype), {
+      target: { value: 'BANNER' },
+    });
+    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('BANNER');
+
+    fireEvent.click(screen.getByTestId('addonupdate'));
+
+    expect(updateAdByIdMock).toHaveBeenCalledWith({
+      variables: {
+        id: '1',
+        name: 'Updated Advertisement',
+        type: 'BANNER',
+      },
+    });
+  });
+  test('Updates the advertisement and shows error toast on successful update', async () => {
+    const updateAdByIdMock = jest.fn();
+
+    mockUseMutation.mockReturnValue([updateAdByIdMock]);
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              {
+                <AdvertisementRegister
+                  formStatus="edit"
+                  idEdit="-100"
+                  nameEdit="Updated"
+                  endDateEdit={new Date()}
+                  startDateEdit={new Date()}
+                  typeEdit="POPUP"
+                  orgId="1"
+                  linkEdit="google.com"
+                />
+              }
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>
+    );
+
+    fireEvent.click(screen.getByTestId('editBtn'));
+
+    fireEvent.change(screen.getByLabelText(translations.Rlink), {
+      target: { value: 'http://example.com' },
+    });
+    expect(screen.getByLabelText(translations.Rlink)).toHaveValue(
+      'http://example.com'
+    );
+
+    fireEvent.click(screen.getByTestId('addonupdate'));
+
+    expect(updateAdByIdMock).toHaveBeenCalledWith({
+      variables: {
+        id: '-100',
+        link: 'http://example.com',
+      },
+    });
+  });
+  test('Simulating if the mutation does not have data variable while registering', async () => {
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: {
+        reload: jest.fn(),
+        href: 'https://example.com/page/id=1',
+      },
+    });
+    const createAdByIdMock = jest.fn().mockResolvedValue({
+      data1: {
+        createAdvertisement: {
+          _id: '1',
+        },
+      },
+    });
+
+    mockUseMutation.mockReturnValue([createAdByIdMock]);
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              {<AdvertisementRegister formStatus="register" />}
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>
+    );
+
+    fireEvent.click(screen.getByTestId('createAdvertisement'));
+
+    fireEvent.change(screen.getByLabelText('Enter name of Advertisement'), {
+      target: { value: 'Updated Advertisement' },
+    });
+
+    expect(screen.getByLabelText('Enter name of Advertisement')).toHaveValue(
+      'Updated Advertisement'
+    );
+
+    fireEvent.change(screen.getByLabelText(translations.Rlink), {
+      target: { value: 'http://example.com' },
+    });
+    expect(screen.getByLabelText(translations.Rlink)).toHaveValue(
+      'http://example.com'
+    );
+
+    fireEvent.change(screen.getByLabelText(translations.Rtype), {
+      target: { value: 'BANNER' },
+    });
+    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('BANNER');
+
+    fireEvent.change(screen.getByLabelText(translations.RstartDate), {
+      target: { value: '2023-01-01' },
+    });
+    expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
+      '2023-01-01'
+    );
+
+    fireEvent.change(screen.getByLabelText(translations.RendDate), {
+      target: { value: '2023-02-01' },
+    });
+    expect(screen.getByLabelText(translations.RendDate)).toHaveValue(
+      '2023-02-01'
+    );
+
+    fireEvent.click(screen.getByTestId('addonregister'));
+
+    expect(createAdByIdMock).toHaveBeenCalledWith({
+      variables: {
+        orgId: '1',
+        name: 'Updated Advertisement',
+        link: 'http://example.com',
+        type: 'BANNER',
+        startDate: dayjs(new Date('2023-01-01')).format('YYYY-MM-DD'),
+        endDate: dayjs(new Date('2023-02-01')).format('YYYY-MM-DD'),
+      },
+    });
   });
 });

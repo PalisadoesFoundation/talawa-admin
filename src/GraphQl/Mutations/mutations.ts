@@ -445,13 +445,13 @@ export const UPDATE_ADVERTISEMENT_MUTATION = gql`
     $id: ID!
     $name: String
     $link: String
-    $type: String
-    $startDate: String
-    $endDate: String
+    $type: AdvertisementType
+    $startDate: Date
+    $endDate: Date
   ) {
     updateAdvertisement(
       input: {
-        id: $id
+        _id: $id
         name: $name
         link: $link
         type: $type
@@ -459,7 +459,9 @@ export const UPDATE_ADVERTISEMENT_MUTATION = gql`
         endDate: $endDate
       }
     ) {
-      _id
+      advertisement {
+        _id
+      }
     }
   }
 `;
