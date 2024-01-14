@@ -136,4 +136,23 @@ describe('Testing Settings Screen [User Portal]', () => {
     userEvent.click(screen.getByTestId('updateUserBtn'));
     await wait();
   });
+
+  test('Other settings card is rendered properly', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Settings />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(screen.getByText('Other Settings')).toBeInTheDocument();
+    expect(screen.getByText('Change Language')).toBeInTheDocument();
+  });
 });

@@ -24,12 +24,12 @@ const MOCKS = [
   {
     request: {
       query: DELETE_POST_MUTATION,
-      variable: { id: '123' },
+      variables: { id: '12' },
     },
     result: {
       data: {
         removePost: {
-          _id: '123',
+          _id: '12',
         },
       },
     },
@@ -37,8 +37,8 @@ const MOCKS = [
   {
     request: {
       query: UPDATE_POST_MUTATION,
-      variable: {
-        id: '123',
+      variables: {
+        id: '12',
         title: 'updated title',
         text: 'This is a updated text',
       },
@@ -46,7 +46,7 @@ const MOCKS = [
     result: {
       data: {
         updatePost: {
-          _id: '32',
+          _id: '12',
         },
       },
     },
@@ -55,13 +55,13 @@ const MOCKS = [
     request: {
       query: TOGGLE_PINNED_POST,
       variables: {
-        id: '32',
+        id: '12',
       },
     },
     result: {
       data: {
         togglePostPin: {
-          _id: '32',
+          _id: '12',
         },
       },
     },
@@ -83,6 +83,24 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 describe('Testing Organization Post Card', () => {
+  const originalLocation = window.location;
+
+  beforeAll(() => {
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: {
+        reload: jest.fn(),
+      },
+    });
+  });
+
+  afterAll(() => {
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: originalLocation,
+    });
+  });
+
   const props = {
     key: '123',
     id: '12',
@@ -168,7 +186,7 @@ describe('Testing Organization Post Card', () => {
     expect(screen.getByAltText('Post Image')).toBeInTheDocument();
   });
   test('Testing post updating after post is updated', async () => {
-    render(
+    const { getByTestId } = render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
@@ -182,9 +200,20 @@ describe('Testing Organization Post Card', () => {
     userEvent.click(screen.getByTestId('moreiconbtn'));
 
     userEvent.click(screen.getByTestId('editPostModalBtn'));
-    userEvent.type(screen.getByTestId('updateTitle'), 'updated title');
-    userEvent.type(screen.getByTestId('updateText'), 'This is a updated text');
+    fireEvent.change(getByTestId('updateTitle'), {
+      target: { value: 'updated title' },
+    });
+    fireEvent.change(getByTestId('updateText'), {
+      target: { value: 'This is a updated text' },
+    });
     userEvent.click(screen.getByTestId('updatePostBtn'));
+
+    await waitFor(
+      () => {
+        expect(window.location.reload).toHaveBeenCalled();
+      },
+      { timeout: 2500 }
+    );
   });
   test('Testing pin post functionality', async () => {
     render(
@@ -199,7 +228,38 @@ describe('Testing Organization Post Card', () => {
 
     userEvent.click(screen.getByAltText('image'));
     userEvent.click(screen.getByTestId('moreiconbtn'));
+    userEvent.click(screen.getByTestId('pinpostBtn'));
 
+    await waitFor(
+      () => {
+        expect(window.location.reload).toHaveBeenCalled();
+      },
+      { timeout: 3000 }
+    );
+  });
+  test('Testing pin post functionality fail case', async () => {
+    const props2 = {
+      key: '123',
+      id: '',
+      postTitle: 'Event Info',
+      postInfo: 'Time change',
+      postAuthor: 'John Doe',
+      postPhoto: 'test.png',
+      postVideo: 'test.mp4',
+      pinned: true,
+    };
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...props2} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByAltText('image'));
+    userEvent.click(screen.getByTestId('moreiconbtn'));
     userEvent.click(screen.getByTestId('pinpostBtn'));
   });
   test('Testing post delete functionality', async () => {
@@ -208,6 +268,42 @@ describe('Testing Organization Post Card', () => {
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPostCard {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByAltText('image'));
+    userEvent.click(screen.getByTestId('moreiconbtn'));
+
+    userEvent.click(screen.getByTestId('deletePostModalBtn'));
+    fireEvent.click(screen.getByTestId('deletePostBtn'));
+
+    await waitFor(
+      () => {
+        expect(window.location.reload).toHaveBeenCalled();
+      },
+      { timeout: 3000 }
+    );
+  });
+  test('Testing post delete functionality fail case', async () => {
+    const props2 = {
+      key: '123',
+      id: '',
+      postTitle: 'Event Info',
+      postInfo: 'Time change',
+      postAuthor: 'John Doe',
+      postPhoto: 'test.png',
+      postVideo: 'test.mp4',
+      pinned: true,
+    };
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPostCard {...props2} />
           </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>
@@ -251,7 +347,7 @@ describe('Testing Organization Post Card', () => {
     userEvent.click(screen.getByTestId('closebtn'));
   });
   test('renders without "Read more" button when postInfo length is less than or equal to 43', () => {
-    const props = {
+    const props2 = {
       key: '123',
       id: '12',
       postTitle: 'Event Info',
@@ -264,7 +360,7 @@ describe('Testing Organization Post Card', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
+          <OrgPostCard {...props2} />
         </I18nextProvider>
       </MockedProvider>
     );
@@ -396,8 +492,50 @@ describe('Testing Organization Post Card', () => {
     fireEvent.click(pinButton);
     await waitFor(() => {
       expect(MOCKS[2].request.variables).toEqual({
-        id: '32',
+        id: '12',
       });
     });
+  });
+  test('testing video play and pause on mouse enter and leave events', async () => {
+    const { getByTestId } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...props} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    const card = getByTestId('cardVid');
+
+    HTMLVideoElement.prototype.play = jest.fn();
+    HTMLVideoElement.prototype.pause = jest.fn();
+
+    fireEvent.mouseEnter(card);
+    expect(HTMLVideoElement.prototype.play).toHaveBeenCalled();
+
+    fireEvent.mouseLeave(card);
+    expect(HTMLVideoElement.prototype.pause).toHaveBeenCalled();
+  });
+  test('for rendering when no image and no video is available', async () => {
+    const props2 = {
+      key: '123',
+      id: '',
+      postTitle: 'Event Info',
+      postInfo: 'Time change',
+      postAuthor: 'John Doe',
+      postPhoto: '',
+      postVideo: '',
+      pinned: true,
+    };
+
+    const { getByAltText } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...props2} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    expect(getByAltText('image not found')).toBeInTheDocument();
   });
 });

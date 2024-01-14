@@ -28,7 +28,6 @@ const leftDrawerOrg = ({
   targets,
   orgId,
   hideDrawer,
-  setHideDrawer,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawerOrg' });
   const [organization, setOrganization] =
@@ -83,18 +82,6 @@ const leftDrawerOrg = ({
         }`}
         data-testid="leftDrawerContainer"
       >
-        {/* Close Drawer Btn for small devices */}
-        <Button
-          variant="danger"
-          className={styles.closeModalBtn}
-          onClick={(): void => {
-            setHideDrawer(false);
-          }}
-          data-testid="closeModalBtn"
-        >
-          <i className="fa fa-times"></i>
-        </Button>
-
         {/* Branding Section */}
         <div className={styles.brandingContainer}>
           <TalawaLogo className={styles.talawaLogo} />
@@ -212,7 +199,7 @@ const leftDrawerOrg = ({
           </button>
           <Button
             variant="light"
-            className="mt-4 d-flex justify-content-start px-0 mb-2 w-100"
+            className={`mt-4 d-flex justify-content-start px-0 w-100 ${styles.logout}`}
             onClick={(): void => logout()}
             data-testid="logoutBtn"
           >

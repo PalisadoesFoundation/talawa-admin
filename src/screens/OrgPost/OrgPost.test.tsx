@@ -46,11 +46,49 @@ const MOCKS = [
               likeCount: 0,
               commentCount: 0,
               comments: [],
-              pinned: false,
+              pinned: true,
               likedBy: [],
             },
             {
               _id: '6411e54835d7ba2344a78e29',
+              title: 'posttwo',
+              text: 'Tis is the post two',
+              imageUrl: null,
+              videoUrl: null,
+              createdAt: '2023-08-24T09:26:56.524+00:00',
+              creator: {
+                _id: '640d98d9eb6a743d75341067',
+                firstName: 'Aditya',
+                lastName: 'Shelke',
+                email: 'adidacreator1@gmail.com',
+              },
+              likeCount: 0,
+              commentCount: 0,
+              pinned: false,
+              likedBy: [],
+              comments: [],
+            },
+            {
+              _id: '6411e54835d7ba2344a78e30',
+              title: 'posttwo',
+              text: 'Tis is the post two',
+              imageUrl: null,
+              videoUrl: null,
+              createdAt: '2023-08-24T09:26:56.524+00:00',
+              creator: {
+                _id: '640d98d9eb6a743d75341067',
+                firstName: 'Aditya',
+                lastName: 'Shelke',
+                email: 'adidacreator1@gmail.com',
+              },
+              likeCount: 0,
+              commentCount: 0,
+              pinned: true,
+              likedBy: [],
+              comments: [],
+            },
+            {
+              _id: '6411e54835d7ba2344a78e31',
               title: 'posttwo',
               text: 'Tis is the post two',
               imageUrl: null,
@@ -145,7 +183,7 @@ describe('Organisation Post Page', () => {
       },
       likeCount: 0,
       commentCount: 0,
-      pinned: false,
+      pinned: true,
       likedBy: [],
       comments: [],
     });
@@ -207,7 +245,9 @@ describe('Organisation Post Page', () => {
       });
     }
     await debounceWait();
-    userEvent.type(screen.getByPlaceholderText(/Search By/i), 'postone');
+    const searchBtn = screen.getByTestId('searchBtn');
+    userEvent.type(screen.getByPlaceholderText(/Search By/i), 'postone{enter}');
+    userEvent.click(searchBtn);
     await debounceWait();
     const sortDropdown = screen.getByTestId('sort');
     userEvent.click(sortDropdown);

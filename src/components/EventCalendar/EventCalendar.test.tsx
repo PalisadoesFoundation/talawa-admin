@@ -135,10 +135,10 @@ describe('Calendar', () => {
         </I18nextProvider>
       </MockedProvider>
     );
-    const prevButton = screen.getByText('<');
+    const prevButton = screen.getByTestId('prevmonth');
     fireEvent.click(prevButton);
     //testing next month button
-    const nextButton = screen.getByText('>');
+    const nextButton = screen.getByTestId('nextmonth');
     fireEvent.click(nextButton);
     //Testing year change
     for (let index = 0; index < 13; index++) {
@@ -203,13 +203,73 @@ describe('Calendar', () => {
       </MockedProvider>
     );
     //Changing the month
-    const prevButton = screen.getByText('<');
+    const prevButton = screen.getByTestId('prevmonth');
     fireEvent.click(prevButton);
 
     // Clicking today button
-    const todayButton = screen.getByText('Today');
+    const todayButton = screen.getByTestId('nextmonth');
     fireEvent.click(todayButton);
     // const todayCell = screen.getByText(new Date().getDate().toString());
     // expect(todayCell).toHaveClass(styles.day__today);
+  });
+  it('Should expand and contract when clicked on more and less button', () => {
+    const multipleEventData = [
+      {
+        _id: '1',
+        title: 'Event 1',
+        description: 'This is event 1',
+        startDate: new Date().toISOString().split('T')[0],
+        endDate: new Date().toISOString().split('T')[0],
+        location: 'Los Angeles',
+        startTime: '14:00',
+        endTime: '16:00',
+        allDay: false,
+        recurring: false,
+        isPublic: true,
+        isRegisterable: true,
+      },
+      {
+        _id: '2',
+        title: 'Event 2',
+        description: 'This is event 2',
+        startDate: new Date().toISOString().split('T')[0],
+        endDate: new Date().toISOString().split('T')[0],
+        location: 'Los Angeles',
+        startTime: '14:00',
+        endTime: '16:00',
+        allDay: false,
+        recurring: false,
+        isPublic: true,
+        isRegisterable: true,
+      },
+      {
+        _id: '3',
+        title: 'Event 3',
+        description: 'This is event 3',
+        startDate: new Date().toISOString().split('T')[0],
+        endDate: new Date().toISOString().split('T')[0],
+        location: 'Los Angeles',
+        startTime: '14:00',
+        endTime: '16:00',
+        allDay: false,
+        recurring: false,
+        isPublic: true,
+        isRegisterable: true,
+      },
+    ];
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={multipleEventData} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+    const moreButton = screen.getByText('More');
+    fireEvent.click(moreButton);
+    expect(screen.getByText('Event 3')).toBeInTheDocument();
+    const lessButton = screen.getByText('Less');
+    fireEvent.click(lessButton);
+    expect(screen.queryByText('Event 3')).not.toBeInTheDocument();
   });
 });

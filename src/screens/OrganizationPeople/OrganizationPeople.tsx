@@ -1,6 +1,7 @@
 import { useLazyQuery } from '@apollo/client';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Container, Form } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -16,10 +17,13 @@ import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen
 import PaginationList from 'components/PaginationList/PaginationList';
 import UserListCard from 'components/UserListCard/UserListCard';
 import { useTranslation } from 'react-i18next';
-import debounce from 'utils/debounce';
 import styles from './OrganizationPeople.module.css';
 
 import { toast } from 'react-toastify';
+
+interface InterfaceLocationState {
+  role: number;
+}
 
 function organizationPeople(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -28,9 +32,12 @@ function organizationPeople(): JSX.Element {
 
   document.title = t('title');
 
+  const location = useLocation<InterfaceLocationState>();
+  const role = location?.state;
+
   const currentUrl = window.location.href.split('=')[1];
 
-  const [state, setState] = useState(0);
+  const [state, setState] = useState(role?.role || 0);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -38,6 +45,8 @@ function organizationPeople(): JSX.Element {
     firstName_contains: '',
     lastName_contains: '',
   });
+
+  const [fullName, setFullName] = useState('');
 
   const {
     data: memberData,
@@ -103,24 +112,34 @@ function organizationPeople(): JSX.Element {
     toast.error(error?.message);
   }
 
-  /* istanbul ignore next */
-  const handleFirstNameSearchChange = (filterData: any): void => {
+  const handleFullNameSearchChange = (e: any): void => {
     /* istanbul ignore next */
-    if (state === 0) {
-      memberRefetch({
-        ...filterData,
-        orgId: currentUrl,
-      });
-    } else if (state === 1) {
-      adminRefetch({
-        ...filterData,
-        orgId: currentUrl,
-        admin_for: currentUrl,
-      });
-    } else {
-      usersRefetch({
-        ...filterData,
-      });
+    if (e.key === 'Enter') {
+      const [firstName, lastName] = fullName.split(' ');
+
+      const newFilterData = {
+        firstName_contains: firstName ?? '',
+        lastName_contains: lastName ?? '',
+      };
+
+      setFilterData(newFilterData);
+
+      if (state === 0) {
+        memberRefetch({
+          ...newFilterData,
+          orgId: currentUrl,
+        });
+      } else if (state === 1) {
+        adminRefetch({
+          ...newFilterData,
+          orgId: currentUrl,
+          admin_for: currentUrl,
+        });
+      } else {
+        usersRefetch({
+          ...newFilterData,
+        });
+      }
     }
   };
 
@@ -140,10 +159,6 @@ function organizationPeople(): JSX.Element {
     setPage(0);
   };
 
-  const debouncedHandleFirstNameSearchChange = debounce(
-    handleFirstNameSearchChange
-  );
-
   return (
     <>
       <OrganizationScreen screenName="People" title={t('title')}>
@@ -154,85 +169,67 @@ function organizationPeople(): JSX.Element {
                 <h6 className={styles.searchtitle}>{t('filterByName')}</h6>
                 <Form.Control
                   type="name"
-                  id="searchname"
-                  placeholder={t('searchFirstName')}
-                  autoComplete="off"
-                  required
-                  value={filterData.firstName_contains}
-                  onChange={(e): void => {
-                    const { value } = e.target;
-
-                    const newFilterData = {
-                      ...filterData,
-                      firstName_contains: value?.trim(),
-                    };
-
-                    setFilterData(newFilterData);
-                    debouncedHandleFirstNameSearchChange(newFilterData);
-                  }}
-                />
-                <Form.Control
-                  type="name"
                   id="searchLastName"
-                  placeholder={t('searchLastName')}
+                  placeholder={t('searchFullName')}
                   autoComplete="off"
                   required
-                  value={filterData.lastName_contains}
+                  value={fullName}
                   onChange={(e): void => {
                     const { value } = e.target;
-
-                    const newFilterData = {
-                      ...filterData,
-                      lastName_contains: value?.trim(),
-                    };
-
-                    setFilterData(newFilterData);
-                    debouncedHandleFirstNameSearchChange(newFilterData);
+                    setFullName(value);
+                    // handleFullNameSearchChange(value);
                   }}
+                  onKeyUp={handleFullNameSearchChange}
                 />
                 <div
                   className={styles.radio_buttons}
                   data-testid="usertypelist"
                 >
-                  <Form.Check
-                    type="radio"
-                    inline
-                    id="userslist"
-                    value="userslist"
-                    name="displaylist"
-                    data-testid="users"
-                    defaultChecked={state == 2 ? true : false}
-                    onClick={(): void => {
-                      setState(2);
-                    }}
-                  />
-                  <label htmlFor="userslist">{t('users')}</label>
-                  <Form.Check
-                    type="radio"
-                    inline
-                    id="memberslist"
-                    value="memberslist"
-                    name="displaylist"
-                    data-testid="members"
-                    defaultChecked={state == 0 ? true : false}
-                    onClick={(): void => {
-                      setState(0);
-                    }}
-                  />
-                  <label htmlFor="memberslist">{t('members')}</label>
-                  <Form.Check
-                    type="radio"
-                    inline
-                    id="adminslist"
-                    value="adminslist"
-                    name="displaylist"
-                    data-testid="admins"
-                    defaultChecked={state == 1 ? true : false}
-                    onClick={(): void => {
-                      setState(1);
-                    }}
-                  />
-                  <label htmlFor="adminslist">{t('admins')}</label>
+                  <div>
+                    <Form.Check
+                      type="radio"
+                      inline
+                      id="userslist"
+                      value="userslist"
+                      name="displaylist"
+                      data-testid="users"
+                      defaultChecked={state == 2 ? true : false}
+                      onClick={(): void => {
+                        setState(2);
+                      }}
+                    />
+                    <label htmlFor="userslist">{t('users')}</label>
+                  </div>
+                  <div>
+                    <Form.Check
+                      type="radio"
+                      inline
+                      id="memberslist"
+                      value="memberslist"
+                      name="displaylist"
+                      data-testid="members"
+                      defaultChecked={state == 0 ? true : false}
+                      onClick={(): void => {
+                        setState(0);
+                      }}
+                    />
+                    <label htmlFor="memberslist">{t('members')}</label>
+                  </div>
+                  <div>
+                    <Form.Check
+                      type="radio"
+                      inline
+                      id="adminslist"
+                      value="adminslist"
+                      name="displaylist"
+                      data-testid="admins"
+                      defaultChecked={state == 1 ? true : false}
+                      onClick={(): void => {
+                        setState(1);
+                      }}
+                    />
+                    <label htmlFor="adminslist">{t('admins')}</label>
+                  </div>
                 </div>
               </div>
             </div>

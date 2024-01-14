@@ -14,7 +14,6 @@ import { BLOCK_PAGE_MEMBER_LIST } from 'GraphQl/Queries/Queries';
 import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 import TableLoader from 'components/TableLoader/TableLoader';
 import { useTranslation } from 'react-i18next';
-import debounce from 'utils/debounce';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './BlockUser.module.css';
 
@@ -40,7 +39,7 @@ const Requests = (): JSX.Element => {
   const [membersData, setMembersData] = useState<InterfaceMember[]>([]);
   const [searchByFirstName, setSearchByFirstName] = useState<boolean>(true);
   const [searchByName, setSearchByName] = useState<string>('');
-  const [showBlockedMembers, setShowBlockedMembers] = useState<boolean>(false);
+  const [showBlockedMembers, setShowBlockedMembers] = useState<boolean>(true);
 
   const {
     data: memberData,
@@ -118,8 +117,7 @@ const Requests = (): JSX.Element => {
     toast.error(memberError.message);
   }
 
-  const handleSearch = (e: any): void => {
-    const { value } = e.target;
+  const handleSearch = (value: string): void => {
     setSearchByName(value);
     memberRefetch({
       orgId: currentUrl,
@@ -128,7 +126,20 @@ const Requests = (): JSX.Element => {
     });
   };
 
-  const handleSearchDebounced = debounce(handleSearch);
+  const handleSearchByEnter = (e: any): void => {
+    if (e.key === 'Enter') {
+      const { value } = e.target;
+      handleSearch(value);
+    }
+  };
+
+  const handleSearchByBtnClick = (): void => {
+    const inputValue =
+      (document.getElementById('searchBlockedUsers') as HTMLInputElement)
+        ?.value || '';
+    handleSearch(inputValue);
+  };
+
   const headerTitles: string[] = [
     '#',
     t('name'),
@@ -145,6 +156,7 @@ const Requests = (): JSX.Element => {
             <div className={styles.input}>
               <Form.Control
                 type="name"
+                id="searchBlockedUsers"
                 className="bg-white"
                 placeholder={
                   searchByFirstName
@@ -154,11 +166,13 @@ const Requests = (): JSX.Element => {
                 data-testid="searchByName"
                 autoComplete="off"
                 required
-                onChange={handleSearchDebounced}
+                onKeyUp={handleSearchByEnter}
               />
               <Button
                 tabIndex={-1}
                 className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                onClick={handleSearchByBtnClick}
+                data-testid="searchBtn"
               >
                 <Search />
               </Button>

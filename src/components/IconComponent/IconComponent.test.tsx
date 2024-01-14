@@ -32,8 +32,8 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
     testId: 'Icon-Component-SettingsIcon',
   },
   AllOrganizations: {
-    name: 'All Organizations',
-    testId: 'Icon-Component-AllOrganizationsIcon',
+    name: 'My Organizations',
+    testId: 'Icon-Component-MyOrganizationsIcon',
   },
   EventProject: {
     name: 'Add Event Project',

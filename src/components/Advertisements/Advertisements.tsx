@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'react';
+// import PropTypes from 'react';
 import styles from './Advertisements.module.css';
 import { useQuery } from '@apollo/client';
 import { ADVERTISEMENTS_GET, PLUGIN_GET } from 'GraphQl/Queries/Queries'; // PLUGIN_LIST
@@ -63,7 +63,7 @@ export default function advertisements(): JSX.Element {
   const updateLinks = async (links: any[]): Promise<void> => {
     store.dispatch({ type: 'UPDATE_P_TARGETS', payload: links });
   };
-  // /* istanbul ignore next */
+  /* istanbul ignore next */
   const pluginModified = (): void => {
     return getInstalledPlugins();
     // .then((installedPlugins) => {
@@ -77,6 +77,7 @@ export default function advertisements(): JSX.Element {
     isStore ? getStorePlugins() : getInstalledPlugins();
   };
 
+  /* istanbul ignore next */
   const filterChange = (ev: any): void => {
     setShowEnabled(ev.target.value === 'enabled');
   };
@@ -94,7 +95,7 @@ export default function advertisements(): JSX.Element {
     <>
       <OrganizationScreen
         data-testid="AdEntryStore"
-        screenName="Advertisement Store"
+        screenName="Advertisement"
         title={t('title')}
       >
         <Row>

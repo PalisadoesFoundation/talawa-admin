@@ -8,6 +8,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import styles from './OrgSettings.module.css';
+import OrgProfileFieldSettings from 'components/OrgProfileFieldSettings/OrgProfileFieldSettings';
 
 function orgSettings(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -46,6 +47,18 @@ function orgSettings(): JSX.Element {
                   </Form.Label>
                   <ChangeLanguageDropDown />
                 </div>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col lg={7}>
+            <Card border="0" className="rounded-4 mb-4">
+              <div className={styles.cardHeader}>
+                <div className={styles.cardTitle}>
+                  {t('manageCustomFields')}
+                </div>
+              </div>
+              <Card.Body className={styles.cardBody}>
+                {orgId && <OrgProfileFieldSettings />}
               </Card.Body>
             </Card>
           </Col>

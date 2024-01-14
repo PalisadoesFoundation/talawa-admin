@@ -5,7 +5,6 @@ import { useHistory } from 'react-router-dom';
 import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
 import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
 import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
-import { ReactComponent as RequestsIcon } from 'assets/svgs/requests.svg';
 import { ReactComponent as RolesIcon } from 'assets/svgs/roles.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import styles from './LeftDrawer.module.css';
@@ -21,7 +20,6 @@ export interface InterfaceLeftDrawerProps {
 const leftDrawer = ({
   screenName,
   hideDrawer,
-  setHideDrawer,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
 
@@ -52,24 +50,16 @@ const leftDrawer = ({
         }`}
         data-testid="leftDrawerContainer"
       >
-        <Button
-          variant="danger"
-          className={styles.closeModalBtn}
-          onClick={(): void => {
-            setHideDrawer(false);
-          }}
-          data-testid="closeModalBtn"
-        >
-          <i className="fa fa-times"></i>
-        </Button>
         <TalawaLogo className={styles.talawaLogo} />
         <p className={styles.talawaText}>{t('talawaAdminPortal')}</p>
         <h5 className={styles.titleHeader}>{t('menu')}</h5>
         <div className={styles.optionList}>
           <Button
-            variant={screenName === 'Organizations' ? 'success' : 'light'}
+            variant={screenName === 'My Organizations' ? 'success' : 'light'}
             className={`${
-              screenName === 'Organizations' ? 'text-white' : 'text-secondary'
+              screenName === 'My Organizations'
+                ? 'text-white'
+                : 'text-secondary'
             }`}
             data-testid="orgsBtn"
             onClick={(): void => {
@@ -79,37 +69,14 @@ const leftDrawer = ({
             <div className={styles.iconWrapper}>
               <OrganizationsIcon
                 stroke={`${
-                  screenName === 'Organizations'
+                  screenName === 'My Organizations'
                     ? 'var(--bs-white)'
                     : 'var(--bs-secondary)'
                 }`}
               />
             </div>
-            {t('organizations')}
+            {t('my organizations')}
           </Button>
-          {userType === 'SUPERADMIN' && (
-            <Button
-              variant={screenName === 'Requests' ? 'success' : 'light'}
-              className={`${
-                screenName === 'Requests' ? 'text-white' : 'text-secondary'
-              }`}
-              onClick={(): void => {
-                history.push('/requests');
-              }}
-              data-testid="requestsBtn"
-            >
-              <div className={styles.iconWrapper}>
-                <RequestsIcon
-                  fill={`${
-                    screenName === 'Requests'
-                      ? 'var(--bs-white)'
-                      : 'var(--bs-secondary)'
-                  }`}
-                />
-              </div>
-              {t('requests')}
-            </Button>
-          )}
           {userType === 'SUPERADMIN' && (
             <Button
               variant={screenName === 'Users' ? 'success' : 'light'}
@@ -165,12 +132,12 @@ const leftDrawer = ({
 
           <Button
             variant="light"
-            className="mt-4 d-flex justify-content-start px-0 mb-2 w-100"
+            className={`mt-4 d-flex justify-content-start px-0 w-100 bg-danger text-white  ${styles.logout}`}
             onClick={(): void => logout()}
             data-testid="logoutBtn"
           >
             <div className={styles.imageContainer}>
-              <LogoutIcon fill={'var(--bs-secondary)'} />
+              <LogoutIcon fill={'white'} />
             </div>
             {t('logout')}
           </Button>

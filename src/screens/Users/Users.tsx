@@ -17,7 +17,6 @@ import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 import TableLoader from 'components/TableLoader/TableLoader';
 import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import debounce from 'utils/debounce';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import styles from './Users.module.css';
 
@@ -32,7 +31,7 @@ const Users = (): JSX.Element => {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
   const [sortingOption, setSortingOption] = useState('newest');
-
+  const [filteringOption, setFilteringOption] = useState('cancel');
   const userType = localStorage.getItem('UserType');
   const loggedInUserId = localStorage.getItem('id');
 
@@ -69,10 +68,11 @@ const Users = (): JSX.Element => {
       setHasMore(false);
     }
     if (usersData && usersData.users) {
-      const newDisplayedUsers = sortUsers(usersData.users, sortingOption);
+      let newDisplayedUsers = sortUsers(usersData.users, sortingOption);
+      newDisplayedUsers = filterUsers(newDisplayedUsers, filteringOption);
       setDisplayedUsers(newDisplayedUsers);
     }
-  }, [usersData, sortingOption]);
+  }, [usersData, sortingOption, filteringOption]);
 
   // To clear the search when the component is unmounted
   useEffect(() => {
@@ -108,11 +108,9 @@ const Users = (): JSX.Element => {
     }
   }, [loading]);
 
-  const handleSearchByName = (e: any): void => {
-    const { value } = e.target;
+  const handleSearch = (value: string): void => {
     setSearchByName(value);
-    /* istanbul ignore next */
-    if (value.length === 0) {
+    if (value === '') {
       resetAndRefetch();
       return;
     }
@@ -121,6 +119,21 @@ const Users = (): JSX.Element => {
       lastName_contains: '',
       // Later on we can add several search and filter options
     });
+  };
+
+  const handleSearchByEnter = (e: any): void => {
+    if (e.key === 'Enter') {
+      const { value } = e.target;
+      handleSearch(value);
+    }
+  };
+
+  const handleSearchByBtnClick = (): void => {
+    const inputElement = document.getElementById(
+      'searchUsers'
+    ) as HTMLInputElement;
+    const inputValue = inputElement?.value || '';
+    handleSearch(inputValue);
   };
   /* istanbul ignore next */
   const resetAndRefetch = (): void => {
@@ -160,7 +173,6 @@ const Users = (): JSX.Element => {
       },
     });
   };
-  const debouncedHandleSearchByName = debounce(handleSearchByName);
   // console.log(usersData);
 
   const handleSorting = (option: string): void => {
@@ -178,14 +190,44 @@ const Users = (): JSX.Element => {
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
-    } else if (sortingOption === 'oldest') {
+      return sortedUsers;
+    } else {
       sortedUsers.sort(
         (a, b) =>
           new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       );
+      return sortedUsers;
     }
+  };
 
-    return sortedUsers;
+  const handleFiltering = (option: string): void => {
+    setFilteringOption(option);
+  };
+
+  const filterUsers = (
+    allUsers: InterfaceQueryUserListItem[],
+    filteringOption: string
+  ): InterfaceQueryUserListItem[] => {
+    const filteredUsers = [...allUsers];
+
+    if (filteringOption === 'cancel') {
+      return filteredUsers;
+    } else if (filteringOption === 'user') {
+      const output = filteredUsers.filter((user) => {
+        return user.userType === 'USER';
+      });
+      return output;
+    } else if (filteringOption === 'admin') {
+      const output = filteredUsers.filter((user) => {
+        return user.userType == 'ADMIN';
+      });
+      return output;
+    } else {
+      const output = filteredUsers.filter((user) => {
+        return user.userType == 'SUPERADMIN';
+      });
+      return output;
+    }
   };
 
   const headerTitles: string[] = [
@@ -211,16 +253,19 @@ const Users = (): JSX.Element => {
             >
               <Form.Control
                 type="name"
+                id="searchUsers"
                 className="bg-white"
                 placeholder={t('enterName')}
                 data-testid="searchByName"
                 autoComplete="off"
                 required
-                onChange={debouncedHandleSearchByName}
+                onKeyUp={handleSearchByEnter}
               />
               <Button
                 tabIndex={-1}
                 className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                data-testid="searchButton"
+                onClick={handleSearchByBtnClick}
               >
                 <Search />
               </Button>
@@ -233,12 +278,9 @@ const Users = (): JSX.Element => {
                 title="Sort Users"
                 data-testid="sort"
               >
-                <Dropdown.Toggle
-                  variant="outline-success"
-                  data-testid="sortUsers"
-                >
+                <Dropdown.Toggle variant="success" data-testid="sortUsers">
                   <SortIcon className={'me-1'} />
-                  {t('sort')}
+                  {sortingOption === 'newest' ? t('Newest') : t('Oldest')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item
@@ -255,15 +297,44 @@ const Users = (): JSX.Element => {
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
-              <Dropdown aria-expanded="false" title="Filter organizations">
-                <Dropdown.Toggle variant="outline-success">
+              <Dropdown
+                aria-expanded="false"
+                title="Filter organizations"
+                data-testid="filter"
+              >
+                <Dropdown.Toggle
+                  variant="outline-success"
+                  data-testid="filterUsers"
+                >
                   <FilterListIcon className={'me-1'} />
                   {t('filter')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
+                  <Dropdown.Item
+                    data-testid="admin"
+                    onClick={(): void => handleFiltering('admin')}
+                  >
+                    {t('admin')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    data-testid="superAdmin"
+                    onClick={(): void => handleFiltering('superAdmin')}
+                  >
+                    {t('superAdmin')}
+                  </Dropdown.Item>
+
+                  <Dropdown.Item
+                    data-testid="user"
+                    onClick={(): void => handleFiltering('user')}
+                  >
+                    {t('user')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    data-testid="cancel"
+                    onClick={(): void => handleFiltering('cancel')}
+                  >
+                    {t('cancel')}
+                  </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </div>
@@ -292,7 +363,10 @@ const Users = (): JSX.Element => {
               />
             ) : (
               <InfiniteScroll
-                dataLength={displayedUsers.length ?? 0}
+                dataLength={
+                  /* istanbul ignore next */
+                  displayedUsers.length ?? 0
+                }
                 next={loadMoreUsers}
                 loader={
                   <TableLoader
