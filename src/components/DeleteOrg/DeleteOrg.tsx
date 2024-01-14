@@ -4,8 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { errorHandler } from 'utils/errorHandler';
 import { toast } from 'react-toastify';
-import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
-import { REMOVE_SAMPLE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  DELETE_ORGANIZATION_MUTATION,
+  REMOVE_SAMPLE_ORGANIZATION_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 import styles from './DeleteOrg.module.css';
 
@@ -33,12 +35,14 @@ function deleteOrg(): JSX.Element {
     if (data && data.isSampleOrganization) {
       removeSampleOrganization()
         .then(() => {
-          toast.success('Successfully deleted sample Organization');
+          toast.success(t('successfullyDeletedSampleOrganization'));
+          setTimeout(() => {
+            window.location.replace('/orglist');
+          }, 1000);
         })
         .catch((error) => {
           toast.error(error.message);
         });
-      window.location.replace('/orglist');
     } else {
       try {
         await del({
@@ -82,7 +86,7 @@ function deleteOrg(): JSX.Element {
           onHide={toggleDeleteModal}
           data-testid="orgDeleteModal"
         >
-          <Modal.Header className="bg-danger" closeButton>
+          <Modal.Header className="bg-primary" closeButton>
             <h5 className="text-white fw-bold">{t('deleteOrganization')}</h5>
           </Modal.Header>
           <Modal.Body>{t('deleteMsg')}</Modal.Body>

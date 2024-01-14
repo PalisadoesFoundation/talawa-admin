@@ -14,7 +14,7 @@
 
 ### checkInMutationSuccess
 
-• `Const` **checkInMutationSuccess**: { `request`: { `query`: `DocumentNode` = MARK\_CHECKIN; `variables`: { `allotedRoom`: `string` = ''; `allotedSeat`: `string` = ''; `eventId`: `string` = 'event123'; `userId`: `string` = 'user123' }  } ; `result`: { `data`: { `checkIn`: { `_id`: `string` = '123' }  }  }  }[]
+• `Const` **checkInMutationSuccess**: \{ `request`: \{ `query`: `DocumentNode` = MARK\_CHECKIN; `variables`: \{ `allotedRoom`: `string` = ''; `allotedSeat`: `string` = ''; `eventId`: `string` = 'event123'; `userId`: `string` = 'user123' \}  \} ; `result`: \{ `data`: \{ `checkIn`: \{ `_id`: `string` = '123' \}  \}  \}  \}[]
 
 #### Defined in
 
@@ -24,7 +24,7 @@ ___
 
 ### checkInMutationUnsuccess
 
-• `Const` **checkInMutationUnsuccess**: { `error`: `Error` ; `request`: { `query`: `DocumentNode` = MARK\_CHECKIN; `variables`: { `allotedRoom`: `string` = ''; `allotedSeat`: `string` = ''; `eventId`: `string` = 'event123'; `userId`: `string` = 'user123' }  }  }[]
+• `Const` **checkInMutationUnsuccess**: \{ `error`: `Error` ; `request`: \{ `query`: `DocumentNode` = MARK\_CHECKIN; `variables`: \{ `allotedRoom`: `string` = ''; `allotedSeat`: `string` = ''; `eventId`: `string` = 'event123'; `userId`: `string` = 'user123' \}  \}  \}[]
 
 #### Defined in
 
@@ -34,7 +34,7 @@ ___
 
 ### checkInQueryMock
 
-• `Const` **checkInQueryMock**: { `request`: { `query`: `DocumentNode` = EVENT\_CHECKINS; `variables`: { `id`: `string` = 'event123' }  } ; `result`: { `data`: [`InterfaceAttendeeQueryResponse`](../interfaces/components_CheckIn_types.InterfaceAttendeeQueryResponse.md) = checkInQueryData }  }[]
+• `Const` **checkInQueryMock**: \{ `request`: \{ `query`: `DocumentNode` = EVENT\_CHECKINS; `variables`: \{ `id`: `string` = 'event123' \}  \} ; `result`: \{ `data`: [`InterfaceAttendeeQueryResponse`](../interfaces/components_CheckIn_types.InterfaceAttendeeQueryResponse.md) = checkInQueryData \}  \}[]
 
 #### Defined in
 

@@ -148,7 +148,7 @@ describe('Testing People Screen [User Portal]', () => {
     expect(screen.queryAllByText('Noble Mittal')).not.toBe([]);
   });
 
-  test('Search functionality works as expected', async () => {
+  test('Search functionality works as expected by pressing enter key', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -163,7 +163,31 @@ describe('Testing People Screen [User Portal]', () => {
 
     await wait();
 
+    userEvent.type(screen.getByTestId('searchInput'), 'j{enter}');
+    await wait();
+
+    expect(getOrganizationIdSpy).toHaveBeenCalled();
+    expect(screen.queryByText('John Cena')).toBeInTheDocument();
+    expect(screen.queryByText('Noble Mittal')).not.toBeInTheDocument();
+  });
+
+  test('Search functionality works as expected by clicking search Btn', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Chat />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+    const searchBtn = screen.getByTestId('searchBtn');
     userEvent.type(screen.getByTestId('searchInput'), 'j');
+    userEvent.click(searchBtn);
     await wait();
 
     expect(getOrganizationIdSpy).toHaveBeenCalled();

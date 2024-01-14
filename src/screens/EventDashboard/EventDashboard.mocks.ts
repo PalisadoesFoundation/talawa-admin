@@ -1,5 +1,4 @@
-import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
-import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
+import { EVENT_DETAILS, EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
 
 const constantMocks = [
   {

@@ -58,7 +58,7 @@ const MOCKS = [
             image: '',
             name: 'anyOrganization1',
             description: 'desc',
-            isPublic: true,
+            userRegistrationRequired: true,
             creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
           },
           {
@@ -67,7 +67,7 @@ const MOCKS = [
             image: '',
             name: 'anyOrganization2',
             description: 'desc',
-            isPublic: true,
+            userRegistrationRequired: true,
             creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
           },
         ],
@@ -115,7 +115,7 @@ const MOCKS = [
             image: '',
             name: 'anyOrganization2',
             description: 'desc',
-            isPublic: true,
+            userRegistrationRequired: true,
             creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
           },
         ],
@@ -165,12 +165,16 @@ describe('Testing Organizations Screen [User Portal]', () => {
     );
 
     await wait();
-
-    userEvent.type(screen.getByTestId('searchInput'), '2');
+    const searchBtn = screen.getByTestId('searchBtn');
+    userEvent.type(screen.getByTestId('searchInput'), '2{enter}');
     await wait();
 
     expect(screen.queryByText('anyOrganization2')).toBeInTheDocument();
     expect(screen.queryByText('anyOrganization1')).not.toBeInTheDocument();
+
+    userEvent.clear(screen.getByTestId('searchInput'));
+    userEvent.click(searchBtn);
+    await wait();
   });
 
   test('Mode is changed to joined organizations', async () => {
