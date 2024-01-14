@@ -15,7 +15,7 @@ import AdvertisementRegister from './AdvertisementRegister';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { BACKEND_URL } from 'Constant/constant';
-import i18nForTest from 'utils/i18nForTest';
+// import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
 import { MockedProvider } from '@apollo/client/testing';
 import i18n from 'utils/i18nForTest';
@@ -99,7 +99,7 @@ describe('Testing Advertisement Register Component', () => {
       <ApolloProvider client={client}>
         <Provider store={store}>
           <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               {
                 <AdvertisementRegister
                   endDate={new Date()}
@@ -150,7 +150,7 @@ describe('Testing Advertisement Register Component', () => {
       <ApolloProvider client={client}>
         <Provider store={store}>
           <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               {
                 <AdvertisementRegister
                   endDate={new Date()}
@@ -181,7 +181,7 @@ describe('Testing Advertisement Register Component', () => {
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
           <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               {
                 <AdvertisementRegister
                   endDate={new Date()}
@@ -246,7 +246,7 @@ describe('Testing Advertisement Register Component', () => {
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
           <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               {
                 <AdvertisementRegister
                   endDateEdit={new Date()}

@@ -1,14 +1,14 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Search } from '@mui/icons-material';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import SortIcon from '@mui/icons-material/Sort';
-import { CREATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  CREATE_ORGANIZATION_MUTATION,
+  CREATE_SAMPLE_ORGANIZATION_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-
-import { CREATE_SAMPLE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 
 import OrgListCard from 'components/OrgListCard/OrgListCard';
 import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
@@ -51,6 +51,10 @@ function orgList(): JSX.Element {
 
   const perPageResult = 8;
   const [isLoading, setIsLoading] = useState(true);
+  const [sortingState, setSortingState] = useState({
+    option: '',
+    selectedOption: t('sort'),
+  });
   const [hasMore, sethasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
@@ -58,7 +62,7 @@ function orgList(): JSX.Element {
   const [formState, setFormState] = useState({
     name: '',
     descrip: '',
-    ispublic: true,
+    userRegistrationRequired: true,
     visible: false,
     location: '',
     image: '',
@@ -81,6 +85,9 @@ function orgList(): JSX.Element {
     error?: Error | undefined;
   } = useQuery(USER_ORGANIZATION_LIST, {
     variables: { id: localStorage.getItem('id') },
+    context: {
+      headers: { authorization: `Bearer ${localStorage.getItem('token')}` },
+    },
   });
 
   const {
@@ -100,6 +107,8 @@ function orgList(): JSX.Element {
       first: perPageResult,
       skip: 0,
       filter: searchByName,
+      orderBy:
+        sortingState.option === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC',
     },
     notifyOnNetworkStatusChange: true,
   });
@@ -111,7 +120,7 @@ function orgList(): JSX.Element {
       setFormState({
         name: '',
         descrip: '',
-        ispublic: true,
+        userRegistrationRequired: true,
         visible: false,
         location: '',
         image: '',
@@ -160,7 +169,7 @@ function orgList(): JSX.Element {
       descrip: _descrip,
       location: _location,
       visible,
-      ispublic,
+      userRegistrationRequired,
       image,
     } = formState;
 
@@ -175,7 +184,7 @@ function orgList(): JSX.Element {
           description: descrip,
           location: location,
           visibleInSearch: visible,
-          isPublic: ispublic,
+          userRegistrationRequired: userRegistrationRequired,
           image: image,
         },
       });
@@ -188,7 +197,7 @@ function orgList(): JSX.Element {
         setFormState({
           name: '',
           descrip: '',
-          ispublic: true,
+          userRegistrationRequired: true,
           visible: false,
           location: '',
           image: '',
@@ -212,25 +221,38 @@ function orgList(): JSX.Element {
       filter: '',
       first: perPageResult,
       skip: 0,
+      orderBy:
+        sortingState.option === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC',
     });
     sethasMore(true);
   };
 
   /* istanbul ignore next */
-  const handleSearchByName = (e: any): void => {
+  const handleSearch = (value: string): void => {
+    setSearchByName(value);
+    if (value === '') {
+      resetAllParams();
+      return;
+    }
+    refetchOrgs({
+      filter: value,
+    });
+  };
+
+  const handleSearchByEnter = (e: any): void => {
     if (e.key === 'Enter') {
       const { value } = e.target;
-      setSearchByName(value);
-      if (value == '') {
-        resetAllParams();
-        return;
-      }
-      refetchOrgs({
-        filter: value,
-      });
+      handleSearch(value);
     }
   };
 
+  const handleSearchByBtnClick = (): void => {
+    const inputElement = document.getElementById(
+      'searchOrgname'
+    ) as HTMLInputElement;
+    const inputValue = inputElement?.value || '';
+    handleSearch(inputValue);
+  };
   /* istanbul ignore next */
   const loadMoreOrganizations = (): void => {
     console.log('loadMoreOrganizations');
@@ -268,6 +290,22 @@ function orgList(): JSX.Element {
     });
   };
 
+  const handleSorting = (option: string): void => {
+    setSortingState({
+      option,
+      selectedOption: t(option),
+    });
+
+    const orderBy = option === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC';
+
+    refetchOrgs({
+      first: perPageResult,
+      skip: 0,
+      filter: searchByName,
+      orderBy,
+    });
+  };
+
   return (
     <>
       <SuperAdminScreen
@@ -279,43 +317,52 @@ function orgList(): JSX.Element {
           <div className={styles.input}>
             <Form.Control
               type="name"
-              id="orgname"
+              id="searchOrgname"
               className="bg-white"
               placeholder={t('searchByName')}
               data-testid="searchByName"
               autoComplete="off"
               required
-              onKeyUp={handleSearchByName}
+              onKeyUp={handleSearchByEnter}
             />
             <Button
               tabIndex={-1}
               className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+              onClick={handleSearchByBtnClick}
+              data-testid="searchBtn"
             >
               <Search />
             </Button>
           </div>
           <div className={styles.btnsBlock}>
             <div className="d-flex">
-              <Dropdown aria-expanded="false" title="Sort organizations">
-                <Dropdown.Toggle variant="outline-success">
+              <Dropdown
+                aria-expanded="false"
+                title="Sort organizations"
+                data-testid="sort"
+              >
+                <Dropdown.Toggle
+                  variant={
+                    sortingState.option === '' ? 'outline-success' : 'success'
+                  }
+                  data-testid="sortOrgs"
+                >
                   <SortIcon className={'me-1'} />
-                  {t('sort')}
+                  {sortingState.selectedOption}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-              <Dropdown aria-expanded="false" title="Filter organizations">
-                <Dropdown.Toggle variant="outline-success">
-                  <FilterListIcon className={'me-1'} />
-                  {t('filter')}
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={(): void => handleSorting('Latest')}
+                    data-testid="latest"
+                  >
+                    {t('Latest')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={(): void => handleSorting('Earliest')}
+                    data-testid="oldest"
+                  >
+                    {t('Earliest')}
+                  </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </div>
@@ -465,10 +512,13 @@ function orgList(): JSX.Element {
                 required
                 value={formState.name}
                 onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    name: e.target.value,
-                  });
+                  const inputText = e.target.value;
+                  if (inputText.length < 50) {
+                    setFormState({
+                      ...formState,
+                      name: e.target.value,
+                    });
+                  }
                 }}
               />
               <Form.Label htmlFor="descrip">{t('description')}</Form.Label>
@@ -481,10 +531,13 @@ function orgList(): JSX.Element {
                 required
                 value={formState.descrip}
                 onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    descrip: e.target.value,
-                  });
+                  const descriptionText = e.target.value;
+                  if (descriptionText.length < 200) {
+                    setFormState({
+                      ...formState,
+                      descrip: e.target.value,
+                    });
+                  }
                 }}
               />
               <Form.Label htmlFor="location">{t('location')}</Form.Label>
@@ -497,25 +550,31 @@ function orgList(): JSX.Element {
                 required
                 value={formState.location}
                 onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    location: e.target.value,
-                  });
+                  const locationText = e.target.value;
+                  if (locationText.length < 100) {
+                    setFormState({
+                      ...formState,
+                      location: e.target.value,
+                    });
+                  }
                 }}
               />
 
               <Row className="mb-3">
                 <Col>
-                  <Form.Label htmlFor="ispublic">{t('isPublic')}</Form.Label>
+                  <Form.Label htmlFor="userRegistrationRequired">
+                    {t('userRegistrationRequired')}
+                  </Form.Label>
                   <Form.Switch
-                    id="ispublic"
-                    data-testid="isPublic"
+                    id="userRegistrationRequired"
+                    data-testid="userRegistrationRequired"
                     type="checkbox"
-                    defaultChecked={formState.ispublic}
+                    defaultChecked={formState.userRegistrationRequired}
                     onChange={(): void =>
                       setFormState({
                         ...formState,
-                        ispublic: !formState.ispublic,
+                        userRegistrationRequired:
+                          !formState.userRegistrationRequired,
                       })
                     }
                   />
@@ -611,8 +670,8 @@ function orgList(): JSX.Element {
                   </a>
                   <Button
                     variant="secondary"
-                    onClick={(): void => toggleModal()}
-                    data-testid="closeOrganizationModal"
+                    onClick={toggleModal}
+                    data-testid="cancelOrganizationModal"
                   >
                     {t('cancel')}
                   </Button>
@@ -624,7 +683,7 @@ function orgList(): JSX.Element {
                 <div className={styles.pluginStoreBtnContainer}>
                   <Link
                     className={styles.secondbtn}
-                    data-testid="submitOrganizationForm"
+                    data-testid="goToStore"
                     to={`orgstore/id=${dialogRedirectOrgId}`}
                   >
                     {t('goToStore')}
@@ -635,7 +694,7 @@ function orgList(): JSX.Element {
                     className={styles.greenregbtn}
                     onClick={closeDialogModal}
                     value="invite"
-                    data-testid="submitOrganizationForm"
+                    data-testid="enableEverythingForm"
                   >
                     {t('enableEverything')}
                   </button>

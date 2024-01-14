@@ -58,14 +58,119 @@
 }
 
 .postInput {
-  height: 200px !important;
   resize: none;
   border: none;
+  outline: none;
   box-shadow: none;
   background-color: white;
   margin-bottom: 10px;
 }
 
+.postInput:focus {
+  box-shadow: none;
+}
+
 .imageInput {
-  background-color: white;
+  display: none;
+}
+
+.postContainer {
+  margin: 1rem auto;
+  background-color: transparent;
+  padding: 1rem;
+  border-radius: 4px;
+  /* max-width: 40rem; */
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+.userImage {
+  display: flex;
+  width: 50px;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 50%;
+  position: relative;
+  border: 2px solid #31bb6b;
+}
+
+.userImage img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  scale: 1.5;
+}
+
+.startPostBtn {
+  width: 100%;
+  border-radius: 25px;
+  background-color: transparent;
+  /* border: 1px solid #acacac; */
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  outline: none;
+  border: none;
+  color: #000;
+  font-weight: 900;
+}
+
+.startPostBtn:hover {
+  background-color: #00000010;
+  border: 0;
+  color: #000 !important;
+}
+
+.icons {
+  width: 25px;
+}
+
+.icons svg {
+  stroke: #000;
+}
+
+.icons.dark {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+
+.icons.dark svg {
+  stroke: #000;
+}
+
+.iconLabel {
+  margin: 0;
+  color: #000;
+  font-weight: 900;
+}
+
+.uploadLink {
+  text-align: center;
+  width: min-content;
+  padding: 8px 4px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.uploadLink:hover {
+  background-color: #00000010;
+}
+
+.modal {
+  width: 100dvw;
+  margin: 0 auto;
+}
+
+.previewImage {
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.previewImage img {
+  border-radius: 8px;
 }
