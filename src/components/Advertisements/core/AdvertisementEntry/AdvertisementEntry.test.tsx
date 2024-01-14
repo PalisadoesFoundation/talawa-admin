@@ -12,7 +12,6 @@ import { BrowserRouter } from 'react-router-dom';
 import AdvertisementEntry from './AdvertisementEntry';
 import AdvertisementRegister from '../AdvertisementRegister/AdvertisementRegister';
 import { Provider } from 'react-redux';
-import i18n from 'utils/i18nForTest';
 import { store } from 'state/store';
 import { BACKEND_URL } from 'Constant/constant';
 import i18nForTest from 'utils/i18nForTest';
@@ -26,8 +25,10 @@ const httpLink = new HttpLink({
   },
 });
 const translations = JSON.parse(
-  // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-  JSON.stringify(i18n.getDataByLanguage('en')?.translation.advertisement!)
+  JSON.stringify(
+    // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+    i18nForTest.getDataByLanguage('en')?.translation.advertisement!
+  )
 );
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({

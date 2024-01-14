@@ -124,7 +124,7 @@ describe('Testing Advertisement Register Component', () => {
       <ApolloProvider client={client}>
         <Provider store={store}>
           <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               {
                 <AdvertisementRegister
                   endDate={new Date()}

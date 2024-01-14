@@ -118,7 +118,6 @@ function advertisementEntry({
                     {t('view')}
                   </Button>
                 </div>
-                <Card.Text>{link}</Card.Text>
                 <Modal show={showDeleteModal} onHide={toggleShowDeleteModal}>
                   <Modal.Header>
                     <h5 data-testid="delete_title">
