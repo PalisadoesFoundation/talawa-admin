@@ -10,6 +10,7 @@ import LeftDrawerEvent, {
 } from './LeftDrawerEvent';
 import { MockedProvider } from '@apollo/react-testing';
 import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
+import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 
 const props: InterfaceLeftDrawerProps = {
   event: {
@@ -40,6 +41,12 @@ const props2: InterfaceLeftDrawerProps = {
 };
 
 const mocks = [
+  {
+    request: {
+      query: REVOKE_REFRESH_TOKEN,
+    },
+    result: {},
+  },
   {
     request: {
       query: EVENT_FEEDBACKS,
@@ -163,21 +170,6 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
         </BrowserRouter>
       </MockedProvider>
     );
-  });
-
-  test('Testing Drawer open close functionality', () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
-    render(
-      <MockedProvider mocks={mocks}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <LeftDrawerEvent {...props} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-    const closeModalBtn = screen.getByTestId(/closeModalBtn/i);
-    userEvent.click(closeModalBtn);
   });
 
   test('Testing logout functionality', async () => {

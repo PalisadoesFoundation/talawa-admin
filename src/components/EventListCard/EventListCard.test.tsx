@@ -114,6 +114,8 @@ describe('Testing Event List Card', () => {
 
     userEvent.click(screen.getByTestId('card'));
 
+    userEvent.click(screen.getByTestId('showEventDashboardBtn'));
+
     userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
 
     await wait();

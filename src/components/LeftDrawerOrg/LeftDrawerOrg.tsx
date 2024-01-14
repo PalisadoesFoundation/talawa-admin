@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberOutlined } from '@mui/icons-material';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
@@ -13,6 +13,7 @@ import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
 import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import styles from './LeftDrawerOrg.module.css';
+import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 
 export interface InterfaceLeftDrawerProps {
   orgId: string;
@@ -27,7 +28,6 @@ const leftDrawerOrg = ({
   targets,
   orgId,
   hideDrawer,
-  setHideDrawer,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawerOrg' });
   const [organization, setOrganization] =
@@ -43,6 +43,8 @@ const leftDrawerOrg = ({
   } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: orgId },
   });
+
+  const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
 
   const userType = localStorage.getItem('UserType');
   const firstName = localStorage.getItem('FirstName');
@@ -63,6 +65,7 @@ const leftDrawerOrg = ({
   }, [data]);
 
   const logout = (): void => {
+    revokeRefreshToken();
     localStorage.clear();
     history.push('/');
   };
@@ -79,18 +82,6 @@ const leftDrawerOrg = ({
         }`}
         data-testid="leftDrawerContainer"
       >
-        {/* Close Drawer Btn for small devices */}
-        <Button
-          variant="danger"
-          className={styles.closeModalBtn}
-          onClick={(): void => {
-            setHideDrawer(false);
-          }}
-          data-testid="closeModalBtn"
-        >
-          <i className="fa fa-times"></i>
-        </Button>
-
         {/* Branding Section */}
         <div className={styles.brandingContainer}>
           <TalawaLogo className={styles.talawaLogo} />
@@ -208,7 +199,7 @@ const leftDrawerOrg = ({
           </button>
           <Button
             variant="light"
-            className="mt-4 d-flex justify-content-start px-0 mb-2 w-100"
+            className={`mt-4 d-flex justify-content-start px-0 w-100 ${styles.logout}`}
             onClick={(): void => logout()}
             data-testid="logoutBtn"
           >

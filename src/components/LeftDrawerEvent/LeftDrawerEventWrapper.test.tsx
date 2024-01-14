@@ -76,7 +76,7 @@ afterEach(() => {
 
 describe('Testing Left Drawer Wrapper component for the Event Dashboard', () => {
   test('Component should be rendered properly and the close menu button should function', async () => {
-    const { queryByText, queryByTestId } = render(
+    const { queryByText, getByTestId } = render(
       <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
@@ -86,9 +86,36 @@ describe('Testing Left Drawer Wrapper component for the Event Dashboard', () => 
       </MockedProvider>
     );
 
+    const pageContainer = getByTestId('mainpageright');
+    expect(pageContainer.className).toMatch(/pageContainer/i);
     await waitFor(() =>
       expect(queryByText('Event Management')).toBeInTheDocument()
     );
-    fireEvent.click(queryByTestId('closeLeftDrawerBtn') as HTMLElement);
+    // Resize window to trigger handleResize
+    window.innerWidth = 800; // Set a width less than or equal to 820
+    fireEvent(window, new Event('resize'));
+
+    await waitFor(() => {
+      fireEvent.click(getByTestId('openMenu') as HTMLElement);
+    });
+
+    // sets hideDrawer to true
+    await waitFor(() => {
+      fireEvent.click(getByTestId('menuBtn') as HTMLElement);
+    });
+
+    // Resize window back to a larger width
+    window.innerWidth = 1000; // Set a larger width
+    fireEvent(window, new Event('resize'));
+
+    // sets hideDrawer to false
+    await waitFor(() => {
+      fireEvent.click(getByTestId('openMenu') as HTMLElement);
+    });
+
+    // sets hideDrawer to true
+    await waitFor(() => {
+      fireEvent.click(getByTestId('menuBtn') as HTMLElement);
+    });
   });
 });

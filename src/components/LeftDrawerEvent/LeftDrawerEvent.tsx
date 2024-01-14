@@ -9,6 +9,8 @@ import IconComponent from 'components/IconComponent/IconComponent';
 import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
 import { EventStatsWrapper } from 'components/EventStats/EventStatsWrapper';
+import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import { useMutation } from '@apollo/client';
 
 export interface InterfaceLeftDrawerProps {
   event: {
@@ -27,9 +29,9 @@ export interface InterfaceLeftDrawerProps {
 const leftDrawerEvent = ({
   event,
   hideDrawer,
-  setHideDrawer,
   setShowAddEventProjectModal,
 }: InterfaceLeftDrawerProps): JSX.Element => {
+  const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const userType = localStorage.getItem('UserType');
   const firstName = localStorage.getItem('FirstName');
   const lastName = localStorage.getItem('LastName');
@@ -38,6 +40,7 @@ const leftDrawerEvent = ({
 
   const history = useHistory();
   const logout = (): void => {
+    revokeRefreshToken();
     localStorage.clear();
     history.push('/');
   };
@@ -54,18 +57,6 @@ const leftDrawerEvent = ({
         }`}
         data-testid="leftDrawerContainer"
       >
-        {/* Close Drawer Button for small devices */}
-        <Button
-          variant="danger"
-          className={styles.closeModalBtn}
-          onClick={(): void => {
-            setHideDrawer(false);
-          }}
-          data-testid="closeModalBtn"
-        >
-          <i className="fa fa-times"></i>
-        </Button>
-
         {/* Branding Section */}
         <div className={styles.brandingContainer}>
           <TalawaLogo className={styles.talawaLogo} />
@@ -156,7 +147,7 @@ const leftDrawerEvent = ({
             }}
           >
             <div className={styles.imageContainer}>
-              {userImage && userImage ? (
+              {userImage && userImage !== 'null' ? (
                 <img src={userImage} alt={`Profile Picture`} />
               ) : (
                 <img
@@ -177,7 +168,7 @@ const leftDrawerEvent = ({
           </button>
           <Button
             variant="light"
-            className="mt-4 d-flex justify-content-start px-0 mb-2 w-100"
+            className={`mt-4 d-flex justify-content-start px-0 w-100 ${styles.logout}`}
             onClick={(): void => logout()}
             data-testid="logoutBtn"
           >

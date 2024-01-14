@@ -14,7 +14,6 @@ import styles from './OrgPost.module.css';
 import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
 import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
-import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
 import NotFound from 'components/NotFound/NotFound';
 import { errorHandler } from 'utils/errorHandler';
@@ -139,18 +138,27 @@ function orgPost(): JSX.Element {
   if (orgPostListError) {
     window.location.assign('/orglist');
   }
-
-  const handleSearch = (e: any): void => {
-    const { value } = e.target;
+  const handleSearch = (value: string): void => {
     const filterData = {
       id: currentUrl,
-      title_contains: showTitle ? value : null,
-      text_contains: !showTitle ? value : null,
+      title_contains: showTitle ? value : undefined,
+      text_contains: !showTitle ? value : undefined,
     };
     refetch(filterData);
   };
 
-  const debouncedHandleSearch = debounce(handleSearch);
+  const handleSearchByEnter = (e: any): void => {
+    if (e.key === 'Enter') {
+      const { value } = e.target;
+      handleSearch(value);
+    }
+  };
+
+  const handleSearchByBtnClick = (): void => {
+    const inputValue =
+      (document.getElementById('searchPosts') as HTMLInputElement)?.value || '';
+    handleSearch(inputValue);
+  };
 
   const handleSorting = (option: string): void => {
     setSortingOption(option);
@@ -197,17 +205,19 @@ function orgPost(): JSX.Element {
               <div className={styles.input}>
                 <Form.Control
                   type="text"
-                  id="posttitle"
+                  id="searchPosts"
                   className="bg-white"
                   placeholder={showTitle ? t('searchTitle') : t('searchText')}
                   data-testid="searchByName"
                   autoComplete="off"
-                  onChange={debouncedHandleSearch}
+                  onKeyUp={handleSearchByEnter}
                   required
                 />
                 <Button
                   tabIndex={-1}
                   className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                  onClick={handleSearchByBtnClick}
+                  data-testid="searchBtn"
                 >
                   <Search />
                 </Button>
@@ -254,12 +264,9 @@ function orgPost(): JSX.Element {
                     title="Sort Post"
                     data-testid="sort"
                   >
-                    <Dropdown.Toggle
-                      variant="outline-success"
-                      data-testid="sortpost"
-                    >
+                    <Dropdown.Toggle variant="success" data-testid="sortpost">
                       <SortIcon className={'me-1'} />
-                      {t('sortPost')}
+                      {sortingOption === 'latest' ? t('Latest') : t('Oldest')}
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
                       <Dropdown.Item

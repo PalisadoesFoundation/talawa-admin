@@ -21,13 +21,13 @@
   border-radius: 4px;
 }
 
-.orgCard .innerContainer .orgImgContainer img {
+.orgCard .innerContainer .orgImgContainer {
   width: 125px;
   height: 120px;
   object-fit: contain;
 }
 
-.orgCard .innerContainer .orgImgContainer .emptyImg {
+.orgCard .innerContainer .orgImgContainer {
   width: 125px;
   height: 120px;
   background-color: var(--bs-gray-200);
@@ -36,6 +36,7 @@
 .orgCard .innerContainer .content {
   flex: 1;
   margin-left: 1rem;
+  width: 70%;
 }
 
 .orgCard button {
@@ -43,6 +44,22 @@
   bottom: 1rem;
   right: 1rem;
   z-index: 1;
+}
+
+.flaskIcon {
+  margin-top: 4px;
+}
+
+.manageBtn {
+  display: flex;
+  justify-content: space-around;
+  width: 118px;
+}
+
+.orgName {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 @media (max-width: 450px) {
@@ -76,17 +93,12 @@
     margin-left: auto;
     display: block;
   }
-}
-
-.flaskIcon {
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 10px 20px 0px 0px;
-}
-
-.manageBtn {
-  display: flex;
-  justify-content: space-around;
-  width: 150px;
+  .flaskIcon {
+    margin-bottom: 6px;
+  }
+  .manageBtn {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+  }
 }

@@ -127,8 +127,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
   function handleCreator(): void {
     toast.success('Profile Page Coming Soon !');
   }
-  function handleSearchJoinedOrgs(e: any): void {
-    const { value } = e.target;
+  const searchJoinedOrgs = (value: string): void => {
     setSearchByNameJoinedOrgs(value);
     if (value == '') {
       setJoinedOrgs(user.joinedOrganizations);
@@ -138,9 +137,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
       );
       setJoinedOrgs(filteredOrgs);
     }
-  }
-  function handleSearcgByOrgsBlockedBy(e: any): void {
-    const { value } = e.target;
+  };
+  const searchOrgsBlockedBy = (value: string): void => {
     setSearchByNameOrgsBlockedBy(value);
     if (value == '') {
       setOrgsBlockedBy(user.organizationsBlockedBy);
@@ -150,7 +148,32 @@ const UsersTableItem = (props: Props): JSX.Element => {
       );
       setOrgsBlockedBy(filteredOrgs);
     }
-  }
+  };
+  const handleSearchJoinedOrgs = (e: any): void => {
+    if (e.key === 'Enter') {
+      const { value } = e.target;
+      searchJoinedOrgs(value);
+    }
+  };
+  const handleSearcgByOrgsBlockedBy = (e: any): void => {
+    if (e.key === 'Enter') {
+      const { value } = e.target;
+      searchOrgsBlockedBy(value);
+    }
+  };
+  const handleSearchButtonClickJoinedOrgs = (): void => {
+    const inputValue =
+      (document.getElementById('orgname-joined-orgs') as HTMLInputElement)
+        ?.value || '';
+    searchJoinedOrgs(inputValue);
+  };
+
+  const handleSearchButtonClickOrgsBlockedBy = (): void => {
+    const inputValue =
+      (document.getElementById('orgname-blocked-by') as HTMLInputElement)
+        ?.value || '';
+    searchOrgsBlockedBy(inputValue);
+  };
 
   /* istanbul ignore next */
   function onHideRemoveUserModal(): void {
@@ -219,17 +242,19 @@ const UsersTableItem = (props: Props): JSX.Element => {
             <div className={'position-relative mb-4 border rounded'}>
               <Form.Control
                 type="name"
-                id="orgname"
+                id="orgname-joined-orgs"
                 className="bg-white"
                 defaultValue={searchByNameJoinedOrgs}
                 placeholder={t('searchByOrgName')}
                 data-testid="searchByNameJoinedOrgs"
                 autoComplete="off"
-                onChange={handleSearchJoinedOrgs}
+                onKeyUp={handleSearchJoinedOrgs}
               />
               <Button
                 tabIndex={-1}
                 className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                onClick={handleSearchButtonClickJoinedOrgs}
+                data-testid="searchBtnJoinedOrgs"
               >
                 <Search />
               </Button>
@@ -392,18 +417,20 @@ const UsersTableItem = (props: Props): JSX.Element => {
             <div className={'position-relative mb-4 border rounded'}>
               <Form.Control
                 type="name"
-                id="orgname"
+                id="orgname-blocked-by"
                 className="bg-white"
                 defaultValue={searchByNameOrgsBlockedBy}
                 placeholder={t('searchByOrgName')}
                 data-testid="searchByNameOrgsBlockedBy"
                 autoComplete="off"
-                onChange={handleSearcgByOrgsBlockedBy}
+                onKeyUp={handleSearcgByOrgsBlockedBy}
               />
               <Button
                 tabIndex={-1}
                 variant="danger"
                 className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                onClick={handleSearchButtonClickOrgsBlockedBy}
+                data-testid="searchBtnOrgsBlockedBy"
               >
                 <Search />
               </Button>

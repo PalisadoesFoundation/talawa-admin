@@ -31,7 +31,6 @@ export default function people(): JSX.Element {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [members, setMembers] = React.useState([]);
-  const [filterName, setFilterName] = React.useState('');
   const [mode, setMode] = React.useState(0);
 
   const organizationId = getOrganizationId(window.location.href);
@@ -70,20 +69,26 @@ export default function people(): JSX.Element {
     setPage(0);
   };
 
-  const handleSearch = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ): void => {
-    const newFilter = event.target.value;
-    setFilterName(newFilter);
-
-    const filter = {
+  const handleSearch = (newFilter: string): void => {
+    refetch({
       firstName_contains: newFilter,
-    };
-
-    refetch(filter);
+    });
   };
 
-  /* istanbul ignore next */
+  const handleSearchByEnter = (e: any): void => {
+    if (e.key === 'Enter') {
+      const { value } = e.target;
+      handleSearch(value);
+    }
+  };
+
+  const handleSearchByBtnClick = (): void => {
+    const inputValue =
+      (document.getElementById('searchPeople') as HTMLInputElement)?.value ||
+      '';
+    handleSearch(inputValue);
+  };
+
   React.useEffect(() => {
     if (data) {
       setMembers(data.organizationsMemberConnection.edges);
@@ -119,14 +124,17 @@ export default function people(): JSX.Element {
             <InputGroup className={styles.maxWidth}>
               <Form.Control
                 placeholder={t('search')}
+                id="searchPeople"
                 type="text"
                 className={`${styles.borderNone} ${styles.backgroundWhite}`}
-                value={filterName}
-                onChange={handleSearch}
+                onKeyUp={handleSearchByEnter}
                 data-testid="searchInput"
               />
               <InputGroup.Text
                 className={`${styles.colorPrimary} ${styles.borderNone}`}
+                style={{ cursor: 'pointer' }}
+                onClick={handleSearchByBtnClick}
+                data-testid="searchBtn"
               >
                 <SearchOutlined className={`${styles.colorWhite}`} />
               </InputGroup.Text>

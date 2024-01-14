@@ -22,6 +22,13 @@ export interface InterfaceIconComponent {
 
 const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
   switch (props.name) {
+    case 'My Organizations':
+      return (
+        <OrganizationsIcon
+          stroke={props.fill}
+          data-testid="Icon-Component-MyOrganizationsIcon"
+        />
+      );
     case 'Dashboard':
       return (
         <DashboardIcon {...props} data-testid="Icon-Component-DashboardIcon" />
@@ -53,13 +60,6 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
           data-testid="Icon-Component-SettingsIcon"
         />
       );
-    case 'All Organizations':
-      return (
-        <OrganizationsIcon
-          stroke={props.fill}
-          data-testid="Icon-Component-AllOrganizationsIcon"
-        />
-      );
     case 'Add Event Project':
       return (
         <AddEventProjectIcon
@@ -88,6 +88,8 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
           stroke={props.fill}
         />
       );
+    case 'Advertisement':
+      return <PostsIcon stroke={props.fill} />;
     default:
       return (
         <QuestionMarkOutlined

@@ -12,18 +12,18 @@
 
 ### default
 
-▸ **default**(`props`, `context?`): ``null`` \| `ReactElement`<`any`, `any`\>
+▸ **default**(`props`, `context?`): ``null`` \| `ReactElement`\<`any`, `any`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `props` | `PropsWithChildren`<`InterfaceUserPasswordUpdateProps`\> |
+| `props` | `PropsWithChildren`\<`InterfaceUserPasswordUpdateProps`\> |
 | `context?` | `any` |
 
 #### Returns
 
-``null`` \| `ReactElement`<`any`, `any`\>
+``null`` \| `ReactElement`\<`any`, `any`\>
 
 #### Defined in
 

@@ -11,6 +11,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 
 import UserNavbar from './UserNavbar';
 import userEvent from '@testing-library/user-event';
+import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -20,7 +21,16 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-const link = new StaticMockLink([], true);
+const MOCKS = [
+  {
+    request: {
+      query: REVOKE_REFRESH_TOKEN,
+    },
+    result: {},
+  },
+];
+
+const link = new StaticMockLink(MOCKS, true);
 
 describe('Testing UserNavbar Component [User Portal]', () => {
   afterEach(async () => {
@@ -163,5 +173,66 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     await wait();
 
     expect(cookies.get('i18next')).toBe('zh');
+  });
+
+  test('User can see and interact with the dropdown menu', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserNavbar />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('logoutDropdown'));
+    expect(screen.getByText('Settings')).toBeInTheDocument();
+    expect(screen.getByText('My Tasks')).toBeInTheDocument();
+    expect(screen.getByTestId('logoutBtn')).toBeInTheDocument();
+  });
+
+  test('User can navigate to the "Settings" page', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserNavbar />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('logoutDropdown'));
+    userEvent.click(screen.getByText('Settings'));
+    expect(window.location.pathname).toBe('/user/settings');
+  });
+
+  test('User can navigate to the "My Tasks" page', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserNavbar />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('logoutDropdown'));
+    userEvent.click(screen.getByText('My Tasks'));
+    expect(window.location.pathname).toBe('/user/tasks');
   });
 });

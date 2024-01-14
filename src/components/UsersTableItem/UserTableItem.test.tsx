@@ -8,7 +8,6 @@ import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import { MOCKS } from './UserTableItemMocks';
 import UsersTableItem from './UsersTableItem';
-
 const link = new StaticMockLink(MOCKS, true);
 
 async function wait(ms = 100): Promise<void> {
@@ -370,21 +369,29 @@ describe('Testing User Table Item', () => {
     expect(screen.getByTestId(`changeRoleInOrgdef`)).toHaveValue('USER?def');
 
     // Search for Joined Organization 1
-    fireEvent.change(inputBox, { target: { value: 'Joined Organization 1' } });
+    const searchBtn = screen.getByTestId(`searchBtnJoinedOrgs`);
+    fireEvent.keyUp(inputBox, {
+      target: { value: 'Joined Organization 1' },
+    });
+    fireEvent.click(searchBtn);
     expect(screen.getByText(/Joined Organization 1/i)).toBeInTheDocument();
     expect(
       screen.queryByText(/Joined Organization 2/i)
     ).not.toBeInTheDocument();
 
     // Search for an Organization which does not exist
-    fireEvent.change(inputBox, { target: { value: 'Joined Organization 3' } });
+    fireEvent.keyUp(inputBox, {
+      key: 'Enter',
+      target: { value: 'Joined Organization 3' },
+    });
     expect(
       screen.getByText(`No results found for "Joined Organization 3"`)
     ).toBeInTheDocument();
 
     // Now clear the search box
-    fireEvent.change(inputBox, { target: { value: '' } });
-
+    fireEvent.keyUp(inputBox, { key: 'Enter', target: { value: '' } });
+    fireEvent.keyUp(inputBox, { target: { value: '' } });
+    fireEvent.click(searchBtn);
     // Click on Creator Link
     fireEvent.click(screen.getByTestId(`creatorabc`));
     expect(toast.success).toBeCalledWith('Profile Page Coming Soon !');
@@ -541,20 +548,29 @@ describe('Testing User Table Item', () => {
     expect(toast.success).toBeCalledWith('Profile Page Coming Soon !');
 
     // Search for Blocked Organization 1
-    fireEvent.change(inputBox, { target: { value: 'Blocked Organization 1' } });
+    const searchBtn = screen.getByTestId(`searchBtnOrgsBlockedBy`);
+    fireEvent.keyUp(inputBox, {
+      target: { value: 'Blocked Organization 1' },
+    });
+    fireEvent.click(searchBtn);
     expect(screen.getByText(/Blocked Organization 1/i)).toBeInTheDocument();
     expect(
       screen.queryByText(/Blocked Organization 2/i)
     ).not.toBeInTheDocument();
 
     // Search for an Organization which does not exist
-    fireEvent.change(inputBox, { target: { value: 'Blocked Organization 3' } });
+    fireEvent.keyUp(inputBox, {
+      key: 'Enter',
+      target: { value: 'Blocked Organization 3' },
+    });
     expect(
       screen.getByText(`No results found for "Blocked Organization 3"`)
     ).toBeInTheDocument();
 
     // Now clear the search box
-    fireEvent.change(inputBox, { target: { value: '' } });
+    fireEvent.keyUp(inputBox, { key: 'Enter', target: { value: '' } });
+    fireEvent.keyUp(inputBox, { target: { value: '' } });
+    fireEvent.click(searchBtn);
 
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Blocked Organization 1/i));
