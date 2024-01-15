@@ -1,28 +1,4 @@
 import gql from 'graphql-tag';
-// Mutations/index.ts
-export { UPDATE_EVENT_PROJECT_TASK_MUTATION } from './EventTaskMutations';
-export { DELETE_EVENT_TASK_MUTATION } from './EventTaskMutations';
-export { SET_TASK_VOLUNTEERS_MUTATION } from './EventTaskMutations';
-
-export { ADD_EVENT_ATTENDEE } from './EventAttendeeMutations';
-export { REMOVE_EVENT_ATTENDEE } from './EventAttendeeMutations';
-export { MARK_CHECKIN } from './EventAttendeeMutations';
-export { CREATE_COMMENT_POST } from './CommentMutations';
-export { LIKE_COMMENT } from './CommentMutations';
-export { UNLIKE_COMMENT } from './CommentMutations';
-
-export { UPDATE_USER_ROLE_IN_ORG_MUTATION } from './OrganizationMutations';
-export { CREATE_SAMPLE_ORGANIZATION_MUTATION } from './OrganizationMutations';
-export { REMOVE_SAMPLE_ORGANIZATION_MUTATION } from './OrganizationMutations';
-export { CREATE_DIRECT_CHAT } from './OrganizationMutations';
-export { PLUGIN_SUBSCRIPTION } from './OrganizationMutations';
-export { TOGGLE_PINNED_POST } from './OrganizationMutations';
-export { ADD_CUSTOM_FIELD } from './OrganizationMutations';
-export { REMOVE_CUSTOM_FIELD } from './OrganizationMutations';
-// Export other functions individually if needed...
-// List of the mutations used in the code
-
-// to unblock the user
 
 export const UNBLOCK_USER_MUTATION = gql`
   mutation UnblockUser($userId: ID!, $orgId: ID!) {
@@ -596,5 +572,27 @@ export const ADD_EVENT_PROJECT_TASK_MUTATION = gql`
     }
   }
 `;
-// export UPDATE_EVENT_PROJECT_TASK_MUTATION;
-// export DELETE_EVENT_TASK_MUTATION;
+// Changes the role of a event in an organization and add and remove the event from the organization
+export { UPDATE_EVENT_PROJECT_TASK_MUTATION } from './EventTaskMutations';
+export { DELETE_EVENT_TASK_MUTATION } from './EventTaskMutations';
+export { SET_TASK_VOLUNTEERS_MUTATION } from './EventTaskMutations';
+
+// Changes the role of a event in an organization and add and remove the event from the organization
+export { ADD_EVENT_ATTENDEE } from './EventAttendeeMutations';
+export { REMOVE_EVENT_ATTENDEE } from './EventAttendeeMutations';
+export { MARK_CHECKIN } from './EventAttendeeMutations';
+
+// Create the new comment on a post and Like and Unlike the comment
+export { CREATE_COMMENT_POST } from './CommentMutations';
+export { LIKE_COMMENT } from './CommentMutations';
+export { UNLIKE_COMMENT } from './CommentMutations';
+
+// Changes the role of a user in an organization
+export { UPDATE_USER_ROLE_IN_ORG_MUTATION } from './OrganizationMutations';
+export { CREATE_SAMPLE_ORGANIZATION_MUTATION } from './OrganizationMutations';
+export { REMOVE_SAMPLE_ORGANIZATION_MUTATION } from './OrganizationMutations';
+export { CREATE_DIRECT_CHAT } from './OrganizationMutations';
+export { PLUGIN_SUBSCRIPTION } from './OrganizationMutations';
+export { TOGGLE_PINNED_POST } from './OrganizationMutations';
+export { ADD_CUSTOM_FIELD } from './OrganizationMutations';
+export { REMOVE_CUSTOM_FIELD } from './OrganizationMutations';
