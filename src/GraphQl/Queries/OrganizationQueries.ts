@@ -2,6 +2,14 @@
 import gql from 'graphql-tag';
 
 // display posts
+
+/**
+ * GraphQL query to retrieve posts by organization.
+ *
+ * @param id - The ID of the organization for which posts are being retrieved.
+ * @returns The list of posts associated with the organization.
+ */
+
 export const ORGANIZATION_POST_LIST = gql`
   query PostsByOrganization($id: ID!) {
     postsByOrganization(id: $id) {
@@ -20,6 +28,15 @@ export const ORGANIZATION_POST_LIST = gql`
     }
   }
 `;
+
+/**
+ * GraphQL query to retrieve posts by organization with additional filtering options.
+ *
+ * @param id - The ID of the organization for which posts are being retrieved.
+ * @param title_contains - Optional. Filter posts by title containing a specified string.
+ * @param text_contains - Optional. Filter posts by text containing a specified string.
+ * @returns The list of posts associated with the organization based on the applied filters.
+ */
 
 export const ORGANIZATION_POST_CONNECTION_LIST = gql`
   query PostsByOrganizationConnection(
@@ -72,6 +89,16 @@ export const ORGANIZATION_POST_CONNECTION_LIST = gql`
   }
 `;
 
+/**
+ * GraphQL query to retrieve organizations based on user connection.
+ *
+ * @param first - Optional. Number of organizations to retrieve in the first batch.
+ * @param skip - Optional. Number of organizations to skip before starting to collect the result set.
+ * @param filter - Optional. Filter organizations by a specified string.
+ * @param id - Optional. The ID of a specific organization to retrieve.
+ * @returns The list of organizations based on the applied filters.
+ */
+
 export const USER_ORGANIZATION_CONNECTION = gql`
   query organizationsConnection(
     $first: Int
@@ -98,6 +125,13 @@ export const USER_ORGANIZATION_CONNECTION = gql`
   }
 `;
 
+/**
+ * GraphQL query to retrieve organizations joined by a user.
+ *
+ * @param id - The ID of the user for which joined organizations are being retrieved.
+ * @returns The list of organizations joined by the user.
+ */
+
 export const USER_JOINED_ORGANIZATIONS = gql`
   query UserJoinedOrganizations($id: ID!) {
     users(where: { id: $id }) {
@@ -111,6 +145,13 @@ export const USER_JOINED_ORGANIZATIONS = gql`
   }
 `;
 
+/**
+ * GraphQL query to retrieve organizations created by a user.
+ *
+ * @param id - The ID of the user for which created organizations are being retrieved.
+ * @returns The list of organizations created by the user.
+ */
+
 export const USER_CREATED_ORGANIZATIONS = gql`
   query UserJoinedOrganizations($id: ID!) {
     users(where: { id: $id }) {
@@ -123,6 +164,13 @@ export const USER_CREATED_ORGANIZATIONS = gql`
     }
   }
 `;
+
+/**
+ * GraphQL query to retrieve the list of admins for a specific organization.
+ *
+ * @param id - The ID of the organization for which admins are being retrieved.
+ * @returns The list of admins associated with the organization.
+ */
 
 export const ORGANIZATION_ADMINS_LIST = gql`
   query Organizations($id: ID!) {

@@ -1,20 +1,6 @@
 import gql from 'graphql-tag';
 
 //Query List
-export { PLUGIN_GET } from './PlugInQueries';
-export { ADVERTISEMENTS_GET } from './PlugInQueries';
-export { ORGANIZATION_EVENTS_CONNECTION } from './PlugInQueries';
-export { USER_TASKS_LIST } from './PlugInQueries';
-export { DIRECT_CHATS_LIST } from './PlugInQueries';
-export { IS_SAMPLE_ORGANIZATION_QUERY } from './PlugInQueries';
-export { ORGANIZATION_CUSTOM_FIELDS } from './PlugInQueries';
-
-export { ORGANIZATION_POST_LIST } from './OrganizationQueries';
-export { ORGANIZATION_POST_CONNECTION_LIST } from './OrganizationQueries';
-export { USER_ORGANIZATION_CONNECTION } from './OrganizationQueries';
-export { USER_JOINED_ORGANIZATIONS } from './OrganizationQueries';
-export { USER_CREATED_ORGANIZATIONS } from './OrganizationQueries';
-export { ORGANIZATION_ADMINS_LIST } from './OrganizationQueries';
 // Check Auth
 
 export const CHECK_AUTH = gql`
@@ -569,3 +555,20 @@ export const MEMBERSHIP_REQUEST = gql`
     }
   }
 `;
+
+// to take the list of the blocked users
+export { PLUGIN_GET } from './PlugInQueries';
+export { ADVERTISEMENTS_GET } from './PlugInQueries';
+export { ORGANIZATION_EVENTS_CONNECTION } from './PlugInQueries';
+export { USER_TASKS_LIST } from './PlugInQueries';
+export { DIRECT_CHATS_LIST } from './PlugInQueries';
+export { IS_SAMPLE_ORGANIZATION_QUERY } from './PlugInQueries';
+export { ORGANIZATION_CUSTOM_FIELDS } from './PlugInQueries';
+
+// display posts
+export { ORGANIZATION_POST_LIST } from './OrganizationQueries';
+export { ORGANIZATION_POST_CONNECTION_LIST } from './OrganizationQueries';
+export { USER_ORGANIZATION_CONNECTION } from './OrganizationQueries';
+export { USER_JOINED_ORGANIZATIONS } from './OrganizationQueries';
+export { USER_CREATED_ORGANIZATIONS } from './OrganizationQueries';
+export { ORGANIZATION_ADMINS_LIST } from './OrganizationQueries';

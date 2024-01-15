@@ -1,5 +1,11 @@
 import gql from 'graphql-tag';
 
+/**
+ * GraphQL query to retrieve a list of plugins.
+ *
+ * @returns The list of plugins with details such as ID, name, creator, description, and uninstalled organizations.
+ */
+
 export const PLUGIN_GET = gql`
   query getPluginList {
     getPlugins {
@@ -11,6 +17,12 @@ export const PLUGIN_GET = gql`
     }
   }
 `;
+
+/**
+ * GraphQL query to retrieve a list of advertisements.
+ *
+ * @returns The list of advertisements with details such as ID, name, type, organization ID, link, start date, and end date.
+ */
 
 export const ADVERTISEMENTS_GET = gql`
   query getAdvertisement {
@@ -25,6 +37,18 @@ export const ADVERTISEMENTS_GET = gql`
     }
   }
 `;
+
+/**
+ * GraphQL query to retrieve a list of events based on organization connection.
+ *
+ * @param organization_id - The ID of the organization for which events are being retrieved.
+ * @param title_contains - Optional. Filter events by title containing a specified string.
+ * @param description_contains - Optional. Filter events by description containing a specified string.
+ * @param location_contains - Optional. Filter events by location containing a specified string.
+ * @param first - Optional. Number of events to retrieve in the first batch.
+ * @param skip - Optional. Number of events to skip before starting to collect the result set.
+ * @returns The list of events associated with the organization based on the applied filters.
+ */
 
 export const ORGANIZATION_EVENTS_CONNECTION = gql`
   query EventsByOrganizationConnection(
@@ -69,6 +93,13 @@ export const ORGANIZATION_EVENTS_CONNECTION = gql`
   }
 `;
 
+/**
+ * GraphQL query to retrieve a list of tasks assigned to a user.
+ *
+ * @param id - The ID of the user for which assigned tasks are being retrieved.
+ * @returns The list of tasks assigned to the user with details such as ID, title, description, deadline, volunteers, creation date, completion status, associated event, and creator.
+ */
+
 export const USER_TASKS_LIST = gql`
   query User($id: ID!) {
     user(id: $id) {
@@ -104,6 +135,13 @@ export const USER_TASKS_LIST = gql`
     }
   }
 `;
+
+/**
+ * GraphQL query to retrieve a list of direct chats based on user ID.
+ *
+ * @param id - The ID of the user for which direct chats are being retrieved.
+ * @returns The list of direct chats associated with the user, including details such as ID, creator, messages, organization, and participating users.
+ */
 
 export const DIRECT_CHATS_LIST = gql`
   query DirectChatsByUserID($id: ID!) {
@@ -147,11 +185,25 @@ export const DIRECT_CHATS_LIST = gql`
   }
 `;
 
+/**
+ * GraphQL query to check if an organization is a sample organization.
+ *
+ * @param isSampleOrganizationId - The ID of the organization being checked.
+ * @returns A boolean indicating whether the organization is a sample organization.
+ */
+
 export const IS_SAMPLE_ORGANIZATION_QUERY = gql`
   query ($isSampleOrganizationId: ID!) {
     isSampleOrganization(id: $isSampleOrganizationId)
   }
 `;
+
+/**
+ * GraphQL query to retrieve custom fields for a specific organization.
+ *
+ * @param customFieldsByOrganizationId - The ID of the organization for which custom fields are being retrieved.
+ * @returns The list of custom fields associated with the organization, including details such as ID, type, and name.
+ */
 
 export const ORGANIZATION_CUSTOM_FIELDS = gql`
   query ($customFieldsByOrganizationId: ID!) {
