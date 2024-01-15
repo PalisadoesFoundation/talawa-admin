@@ -132,13 +132,10 @@ jobs:
         run: |
           # Retrieve the complete branch name directly from the GitHub context
           FULL_BRANCH_NAME=${{ github.base_ref }}
-          
-          # Extract just the branch name without the 'refs/heads/' prefix
-          BRANCH_NAME=$(basename $FULL_BRANCH_NAME)
-          echo "Current Branch: $BRANCH_NAME"
+          echo "FULL_Branch_NAME: $FULL_BRANCH_NAME"
           
           # Clone the specified repository using the extracted branch name
-          git clone --branch $BRANCH_NAME https://github.com/PalisadoesFoundation/talawa-api && ls -a 
+          git clone --branch $FULL_BRANCH_NAME https://github.com/PalisadoesFoundation/talawa-api && ls -a 
 
       - name: Validate Documents
         run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
