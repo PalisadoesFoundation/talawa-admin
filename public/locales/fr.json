@@ -531,7 +531,6 @@
     "main": "Principal",
     "firstName": "Prénom",
     "lastName": "Nom de famille",
-    "memberOfOrganization": "Membre de l'organisation",
     "language": "Langue",
     "adminApproved": "Approuvé par l'administrateur",
     "pluginCreationAllowed": "Autorisation de création de plugin",

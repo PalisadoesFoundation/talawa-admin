@@ -154,7 +154,6 @@ describe('MemberDetail', () => {
     expect(screen.getAllByText(/Main/i)).toBeTruthy();
     expect(screen.getAllByText(/First name/i)).toBeTruthy();
     expect(screen.getAllByText(/Last name/i)).toBeTruthy();
-    expect(screen.getAllByText(/Member of Organization/i)).toBeTruthy();
     expect(screen.getAllByText(/Language/i)).toBeTruthy();
     expect(screen.getByText(/Admin approved/i)).toBeInTheDocument();
     expect(screen.getByText(/Plugin creation allowed/i)).toBeInTheDocument();

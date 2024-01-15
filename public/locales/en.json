@@ -535,7 +535,6 @@
     "main": "Main",
     "firstName": "First name",
     "lastName": "Last name",
-    "memberOfOrganization": "Member of Organization",
     "language": "Language",
     "adminApproved": "Admin approved",
     "pluginCreationAllowed": "Plugin creation allowed",

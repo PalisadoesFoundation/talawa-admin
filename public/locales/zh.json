@@ -531,7 +531,6 @@
     "main": "主要的",
     "firstName": "名字",
     "lastName": "姓氏",
-    "memberOfOrganization": "组织成员",
     "language": "语言",
     "adminApproved": "管理员已批准",
     "pluginCreationAllowed": "允许创建插件",
