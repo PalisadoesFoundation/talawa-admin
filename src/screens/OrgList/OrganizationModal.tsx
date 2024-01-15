@@ -4,6 +4,9 @@ import convertToBase64 from 'utils/convertToBase64';
 import type { ChangeEvent } from 'react';
 import styles from './OrgList.module.css';
 
+/**
+ * Represents the state of the form in the organization modal.
+ */
 interface InterfaceFormStateType {
   name: string;
   descrip: string;
@@ -12,6 +15,10 @@ interface InterfaceFormStateType {
   location: string;
   image: string;
 }
+
+/**
+ * Represents a user type.
+ */
 interface InterfaceUserType {
   user: {
     firstName: string;
@@ -28,6 +35,9 @@ interface InterfaceUserType {
   // Add more properties if needed
 }
 
+/**
+ * Represents the properties of the OrganizationModal component.
+ */
 interface InterfaceOrganizationModalProps {
   showModal: boolean;
   toggleModal: () => void;
@@ -38,6 +48,10 @@ interface InterfaceOrganizationModalProps {
   userData: InterfaceUserType | undefined;
   triggerCreateSampleOrg: () => void;
 }
+
+/**
+ * Represents the organization modal component.
+ */
 
 const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
   showModal,

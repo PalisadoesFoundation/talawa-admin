@@ -484,6 +484,19 @@ function orgList(): JSX.Element {
           </>
         )}
         {/* Create Organization Modal */}
+        {/**
+         * Renders the `OrganizationModal` component.
+         *
+         * @param showModal - A boolean indicating whether the modal should be displayed.
+         * @param toggleModal - A function to toggle the visibility of the modal.
+         * @param formState - The state of the form in the organization modal.
+         * @param setFormState - A function to update the state of the form in the organization modal.
+         * @param createOrg - A function to handle the submission of the organization creation form.
+         * @param t - A translation function for localization.
+         * @param userData - Information about the current user.
+         * @param triggerCreateSampleOrg - A function to trigger the creation of a sample organization.
+         * @returns JSX element representing the `OrganizationModal`.
+         */}
         <OrganizationModal
           showModal={showModal}
           toggleModal={toggleModal}
