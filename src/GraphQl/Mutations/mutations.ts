@@ -1,9 +1,5 @@
 import gql from 'graphql-tag';
 
-// List of the mutations used in the code
-
-// to unblock the user
-
 export const UNBLOCK_USER_MUTATION = gql`
   mutation UnblockUser($userId: ID!, $orgId: ID!) {
     unblockUser(organizationId: $orgId, userId: $userId) {
@@ -576,196 +572,27 @@ export const ADD_EVENT_PROJECT_TASK_MUTATION = gql`
     }
   }
 `;
+// Changes the role of a event in an organization and add and remove the event from the organization
+export { UPDATE_EVENT_PROJECT_TASK_MUTATION } from './EventTaskMutations';
+export { DELETE_EVENT_TASK_MUTATION } from './EventTaskMutations';
+export { SET_TASK_VOLUNTEERS_MUTATION } from './EventTaskMutations';
 
-export const UPDATE_EVENT_PROJECT_TASK_MUTATION = gql`
-  mutation UpdateEventTask(
-    $title: String!
-    $description: String!
-    $taskId: ID!
-    $deadline: DateTime!
-    $completed: Boolean!
-  ) {
-    updateTask(
-      id: $taskId
-      data: {
-        title: $title
-        description: $description
-        deadline: $deadline
-        completed: $completed
-      }
-    ) {
-      _id
-    }
-  }
-`;
+// Changes the role of a event in an organization and add and remove the event from the organization
+export { ADD_EVENT_ATTENDEE } from './EventAttendeeMutations';
+export { REMOVE_EVENT_ATTENDEE } from './EventAttendeeMutations';
+export { MARK_CHECKIN } from './EventAttendeeMutations';
 
-export const DELETE_EVENT_TASK_MUTATION = gql`
-  mutation DeleteTask($id: ID!) {
-    removeTask(id: $id) {
-      _id
-    }
-  }
-`;
-
-export const SET_TASK_VOLUNTEERS_MUTATION = gql`
-  mutation SetTaskVolunteers($id: ID!, $volunteers: [ID]!) {
-    setTaskVolunteers(id: $id, volunteers: $volunteers) {
-      _id
-    }
-  }
-`;
-
-export const ADD_EVENT_ATTENDEE = gql`
-  mutation addEventAttendee($userId: ID!, $eventId: ID!) {
-    addEventAttendee(data: { userId: $userId, eventId: $eventId }) {
-      _id
-    }
-  }
-`;
-
-export const REMOVE_EVENT_ATTENDEE = gql`
-  mutation removeEventAttendee($userId: ID!, $eventId: ID!) {
-    removeEventAttendee(data: { userId: $userId, eventId: $eventId }) {
-      _id
-    }
-  }
-`;
-
-export const MARK_CHECKIN = gql`
-  mutation checkIn(
-    $userId: ID!
-    $eventId: ID!
-    $allotedRoom: String
-    $allotedSeat: String
-  ) {
-    checkIn(
-      data: {
-        userId: $userId
-        eventId: $eventId
-        allotedRoom: $allotedRoom
-        allotedSeat: $allotedSeat
-      }
-    ) {
-      _id
-    }
-  }
-`;
-
-export const CREATE_COMMENT_POST = gql`
-  mutation createComment($comment: String!, $postId: ID!) {
-    createComment(data: { text: $comment }, postId: $postId) {
-      _id
-      creator {
-        _id
-        firstName
-        lastName
-        email
-      }
-      likeCount
-      likedBy {
-        _id
-      }
-      text
-    }
-  }
-`;
-
-export const LIKE_COMMENT = gql`
-  mutation likeComment($commentId: ID!) {
-    likeComment(id: $commentId) {
-      _id
-    }
-  }
-`;
-
-export const UNLIKE_COMMENT = gql`
-  mutation unlikeComment($commentId: ID!) {
-    unlikeComment(id: $commentId) {
-      _id
-    }
-  }
-`;
+// Create the new comment on a post and Like and Unlike the comment
+export { CREATE_COMMENT_POST } from './CommentMutations';
+export { LIKE_COMMENT } from './CommentMutations';
+export { UNLIKE_COMMENT } from './CommentMutations';
 
 // Changes the role of a user in an organization
-export const UPDATE_USER_ROLE_IN_ORG_MUTATION = gql`
-  mutation updateUserRoleInOrganization(
-    $organizationId: ID!
-    $userId: ID!
-    $role: String!
-  ) {
-    updateUserRoleInOrganization(
-      organizationId: $organizationId
-      userId: $userId
-      role: $role
-    ) {
-      _id
-    }
-  }
-`;
-
-export const CREATE_SAMPLE_ORGANIZATION_MUTATION = gql`
-  mutation {
-    createSampleOrganization
-  }
-`;
-
-export const REMOVE_SAMPLE_ORGANIZATION_MUTATION = gql`
-  mutation {
-    removeSampleOrganization
-  }
-`;
-
-export const CREATE_DIRECT_CHAT = gql`
-  mutation createDirectChat($userIds: [ID!]!, $organizationId: ID!) {
-    createDirectChat(
-      data: { userIds: $userIds, organizationId: $organizationId }
-    ) {
-      _id
-    }
-  }
-`;
-
-//Plugin WebSocket listner
-export const PLUGIN_SUBSCRIPTION = gql`
-  subscription onPluginUpdate {
-    onPluginUpdate {
-      pluginName
-      _id
-      pluginDesc
-      uninstalledOrgs
-    }
-  }
-`;
-export const TOGGLE_PINNED_POST = gql`
-  mutation TogglePostPin($id: ID!) {
-    togglePostPin(id: $id) {
-      _id
-    }
-  }
-`;
-
-// Handles custom organization fields
-export const ADD_CUSTOM_FIELD = gql`
-  mutation ($organizationId: ID!, $type: String!, $name: String!) {
-    addOrganizationCustomField(
-      organizationId: $organizationId
-      type: $type
-      name: $name
-    ) {
-      name
-      type
-    }
-  }
-`;
-
-export const REMOVE_CUSTOM_FIELD = gql`
-  mutation ($organizationId: ID!, $customFieldId: ID!) {
-    removeOrganizationCustomField(
-      organizationId: $organizationId
-      customFieldId: $customFieldId
-    ) {
-      type
-      name
-    }
-  }
-`;
+export { UPDATE_USER_ROLE_IN_ORG_MUTATION } from './OrganizationMutations';
+export { CREATE_SAMPLE_ORGANIZATION_MUTATION } from './OrganizationMutations';
+export { REMOVE_SAMPLE_ORGANIZATION_MUTATION } from './OrganizationMutations';
+export { CREATE_DIRECT_CHAT } from './OrganizationMutations';
+export { PLUGIN_SUBSCRIPTION } from './OrganizationMutations';
+export { TOGGLE_PINNED_POST } from './OrganizationMutations';
+export { ADD_CUSTOM_FIELD } from './OrganizationMutations';
+export { REMOVE_CUSTOM_FIELD } from './OrganizationMutations';
