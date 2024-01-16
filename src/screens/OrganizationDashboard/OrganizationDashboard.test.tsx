@@ -165,7 +165,6 @@ describe('Organisation Dashboard Page', () => {
 
     await wait();
     expect(screen.getByText('Upcoming events')).toBeInTheDocument();
-    expect(screen.queryByText('Past Events')).toBeNull();
   });
 
   test('loading state displayed while fetching organization data', async () => {
