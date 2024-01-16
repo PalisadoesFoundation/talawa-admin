@@ -97,6 +97,7 @@
     "@types/jest": "^26.0.24",
     "@types/js-cookie": "^3.0.2",
     "@types/node": "^12.20.16",
+    "@types/node-fetch": "^2.6.10",
     "@types/react": "^17.0.14",
     "@types/react-bootstrap": "^0.32.32",
     "@types/react-datepicker": "^4.1.4",

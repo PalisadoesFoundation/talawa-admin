@@ -2,31 +2,20 @@
 import dotenv from 'dotenv';
 import fs from 'fs';
 import inquirer from 'inquirer';
-import http from 'http';
+import fetch from 'node-fetch';
 
 dotenv.config();
 
 async function checkConnection(url: string): Promise<any> {
   console.log('\nChecking Talawa-API connection....');
   let isConnected = false;
-  await new Promise((resolve) => {
-    const req = http.request(url, (res) => {
-      return res;
-    });
-
-    req.on('response', (res) => {
-      resolve(res);
-      isConnected = true;
-      console.log('\nConnection to Talawa-API successful! 🎉');
-    });
-
-    req.on('error', (err) => {
-      console.log(
-        '\nTalawa-API service is unavailable. Is it running? Check your network connectivity too.'
-      );
-      resolve(err);
-      isConnected = false;
-    });
+  const resp = await fetch(url).then((res) => {
+    isConnected = true;
+    console.log('\nConnection to Talawa-API successful! 🎉');
+  }).catch((err) => {
+    console.log(
+      '\nTalawa-API service is unavailable. Is it running? Check your network connectivity too.'
+    );
   });
   return isConnected;
 }
