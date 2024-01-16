@@ -28,7 +28,6 @@ export interface InterfaceLeftDrawerProps {
 const leftDrawerEvent = ({
   event,
   hideDrawer,
-  setHideDrawer,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const userType = localStorage.getItem('UserType');
@@ -56,18 +55,6 @@ const leftDrawerEvent = ({
         }`}
         data-testid="leftDrawerContainer"
       >
-        {/* Close Drawer Button for small devices */}
-        <Button
-          variant="danger"
-          className={styles.closeModalBtn}
-          onClick={(): void => {
-            setHideDrawer(false);
-          }}
-          data-testid="closeModalBtn"
-        >
-          <i className="fa fa-times"></i>
-        </Button>
-
         {/* Branding Section */}
         <div className={styles.brandingContainer}>
           <TalawaLogo className={styles.talawaLogo} />
@@ -142,7 +129,7 @@ const leftDrawerEvent = ({
             }}
           >
             <div className={styles.imageContainer}>
-              {userImage && userImage ? (
+              {userImage && userImage !== 'null' ? (
                 <img src={userImage} alt={`Profile Picture`} />
               ) : (
                 <img
@@ -163,7 +150,7 @@ const leftDrawerEvent = ({
           </button>
           <Button
             variant="light"
-            className="mt-4 d-flex justify-content-start px-0 mb-2 w-100"
+            className={`mt-4 d-flex justify-content-start px-0 w-100 ${styles.logout}`}
             onClick={(): void => logout()}
             data-testid="logoutBtn"
           >

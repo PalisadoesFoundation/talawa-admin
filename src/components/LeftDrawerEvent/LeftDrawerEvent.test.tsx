@@ -167,21 +167,6 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
     );
   });
 
-  test('Testing Drawer open close functionality', () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
-    render(
-      <MockedProvider mocks={mocks}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <LeftDrawerEvent {...props} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-    const closeModalBtn = screen.getByTestId(/closeModalBtn/i);
-    userEvent.click(closeModalBtn);
-  });
-
   test('Testing logout functionality', async () => {
     localStorage.setItem('UserType', 'SUPERADMIN');
     render(

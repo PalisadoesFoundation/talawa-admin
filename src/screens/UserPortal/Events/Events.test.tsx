@@ -288,7 +288,7 @@ describe('Testing Events Screen [User Portal]', () => {
     expect(screen.queryByText(mockEventTitle)).toBeInTheDocument();
   });
 
-  test('Search works as expected when user types in search input', async () => {
+  test('Search works as expected when user types in search input and press enter key', async () => {
     const getOrganizationIdSpy = jest
       .spyOn(getOrganizationId, 'default')
       .mockImplementation(() => {
@@ -311,8 +311,57 @@ describe('Testing Events Screen [User Portal]', () => {
 
     expect(getOrganizationIdSpy).toHaveBeenCalled();
 
-    const randomSearchInput = 'test';
+    const randomSearchInput = 'test{enter}';
     userEvent.type(screen.getByTestId('searchInput'), randomSearchInput);
+
+    await wait();
+
+    let mockEventTitle = '';
+    if (MOCKS[0].result?.data.eventsByOrganizationConnection) {
+      mockEventTitle =
+        MOCKS[0].result?.data.eventsByOrganizationConnection[0].title;
+    }
+
+    let mockEventTitleAbsent = '';
+    if (MOCKS[0].result?.data.eventsByOrganizationConnection) {
+      mockEventTitleAbsent =
+        MOCKS[0].result?.data.eventsByOrganizationConnection[1].title;
+    }
+
+    expect(screen.queryByText(mockEventTitle)).toBeInTheDocument();
+    expect(screen.queryByText(mockEventTitleAbsent)).not.toBeInTheDocument();
+  });
+
+  test('Search works as expected when user types in search input and clicks search Btn', async () => {
+    const getOrganizationIdSpy = jest
+      .spyOn(getOrganizationId, 'default')
+      .mockImplementation(() => {
+        return '';
+      });
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Events />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(getOrganizationIdSpy).toHaveBeenCalled();
+    const searchInput = screen.getByTestId('searchInput');
+    const searchBtn = screen.getByTestId('searchBtn');
+    userEvent.type(searchInput, '');
+    userEvent.click(searchBtn);
+    await wait();
+    userEvent.clear(searchInput);
+    userEvent.type(searchInput, 'test');
+    userEvent.click(searchBtn);
 
     await wait();
 

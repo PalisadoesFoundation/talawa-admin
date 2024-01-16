@@ -46,7 +46,7 @@ export interface InterfaceQueryOrganizationsListObject {
   name: string;
   description: string;
   location: string;
-  isPublic: boolean;
+  userRegistrationRequired: boolean;
   visibleInSearch: boolean;
   members: {
     _id: string;

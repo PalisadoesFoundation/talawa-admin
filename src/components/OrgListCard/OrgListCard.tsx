@@ -42,18 +42,19 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
       <div className={styles.orgCard}>
         <div className={styles.innerContainer}>
           <div className={styles.orgImgContainer}>
-            {image ? (
-              <img
-                src={image}
-                className={styles.orgimg}
-                alt={`${name} image`}
-              />
-            ) : (
-              <div
-                className={styles.emptyImg}
-                data-testid="emptyContainerForImage"
-              />
-            )}
+            <img
+              src={
+                image
+                  ? image
+                  : `https://api.dicebear.com/5.x/initials/svg?seed=${name
+                      .split(/\s+/)
+                      .map((word) => word.charAt(0))
+                      .slice(0, 2)
+                      .join('')}`
+              }
+              alt={`${name} image`}
+              data-testid={image ? '' : 'emptyContainerForImage'}
+            />
           </div>
           <div className={styles.content}>
             <Tooltip title={name} placement="top-end">
@@ -79,7 +80,8 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
           {data && data?.isSampleOrganization && (
             <FlaskIcon
               fill="var(--bs-white)"
-              width={20}
+              width={12}
+              className={styles.flaskIcon}
               title={t('sampleOrganization')}
             />
           )}

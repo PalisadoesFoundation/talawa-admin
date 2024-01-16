@@ -33,7 +33,7 @@ jobs:
       - name: Count number of lines
         run: |
           chmod +x ./.github/workflows/countline.py
-          ./.github/workflows/countline.py --lines 1000 --exclude_files src/screens/LoginPage/LoginPage.tsx
+          ./.github/workflows/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx
 
       - name: Get changed TypeScript files
         id: changed-files
@@ -56,6 +56,22 @@ jobs:
           chmod +x .github/workflows/compare_translations.py
           python .github/workflows/compare_translations.py --directory public/locales
 
+
+  Check-Changed-Files:
+    runs-on: ubuntu-latest
+    needs: Code-Quality-Checks
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Run Python script
+        run: |
+          python .github/workflows/count_changed_files.py --base_branch "${{ github.base_ref }}" --pr_branch "${{ github.head_ref }}"
 
   Test-Application:
     name: Test Application
@@ -111,9 +127,15 @@ jobs:
 
       - name: resolve dependency
         run: npm install -g @graphql-inspector/cli
-
-      - name: Clone API repository
-        run: git clone https://github.com/PalisadoesFoundation/talawa-api && ls -a
+      
+      - name: Clone API Repository
+        run: |
+          # Retrieve the complete branch name directly from the GitHub context
+          FULL_BRANCH_NAME=${{ github.base_ref }}
+          echo "FULL_Branch_NAME: $FULL_BRANCH_NAME"
+          
+          # Clone the specified repository using the extracted branch name
+          git clone --branch $FULL_BRANCH_NAME https://github.com/PalisadoesFoundation/talawa-api && ls -a 
 
       - name: Validate Documents
         run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'

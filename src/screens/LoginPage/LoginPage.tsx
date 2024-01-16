@@ -9,6 +9,17 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
 import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Check, Clear } from '@mui/icons-material';
+
+import {
+  FacebookLogo,
+  LinkedInLogo,
+  GithubLogo,
+  InstagramLogo,
+  SlackLogo,
+  TwitterLogo,
+  YoutubeLogo,
+} from 'assets/svgs/social-icons';
 
 import { REACT_APP_USE_RECAPTCHA, RECAPTCHA_SITE_KEY } from 'Constant/constant';
 import {
@@ -19,6 +30,7 @@ import {
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import { ReactComponent as PalisadoesLogo } from 'assets/svgs/palisadoes.svg';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
+import LoginPortalToggle from 'components/LoginPortalToggle/LoginPortalToggle';
 import Loader from 'components/Loader/Loader';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './LoginPage.module.css';
@@ -30,6 +42,12 @@ function loginPage(): JSX.Element {
 
   document.title = t('title');
 
+  type PasswordValidation = {
+    lowercaseChar: boolean;
+    uppercaseChar: boolean;
+    numericValue: boolean;
+    specialChar: boolean;
+  };
   const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
   const [componentLoader, setComponentLoader] = useState(true);
   const [isInputFocused, setIsInputFocused] = useState(false);
@@ -47,6 +65,45 @@ function loginPage(): JSX.Element {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
+  const [showAlert, setShowAlert] = useState<PasswordValidation>({
+    lowercaseChar: true,
+    uppercaseChar: true,
+    numericValue: true,
+    specialChar: true,
+  });
+
+  const passwordValidationRegExp = {
+    lowercaseCharRegExp: new RegExp('[a-z]'),
+    uppercaseCharRegExp: new RegExp('[A-Z]'),
+    numericalValueRegExp: new RegExp('\\d'),
+    specialCharRegExp: new RegExp('[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\/-]'),
+  };
+  const handleLowercasePassCheck = (pass: string): void => {
+    setShowAlert((prevAlert) => ({
+      ...prevAlert,
+      lowercaseChar: !passwordValidationRegExp.lowercaseCharRegExp.test(pass),
+    }));
+  };
+
+  const handleUppercasePassCheck = (pass: string): void => {
+    setShowAlert((prevAlert) => ({
+      ...prevAlert,
+      uppercaseChar: !passwordValidationRegExp.uppercaseCharRegExp.test(pass),
+    }));
+  };
+  const handleNumericalValuePassCheck = (pass: string): void => {
+    setShowAlert((prevAlert) => ({
+      ...prevAlert,
+      numericValue: !passwordValidationRegExp.numericalValueRegExp.test(pass),
+    }));
+  };
+  const handleSpecialCharPassCheck = (pass: string): void => {
+    setShowAlert((prevAlert) => ({
+      ...prevAlert,
+      specialChar: !passwordValidationRegExp.specialCharRegExp.test(pass),
+    }));
+  };
+
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   useEffect(() => {
@@ -119,12 +176,28 @@ function loginPage(): JSX.Element {
       toast.error(t('Please_check_the_captcha'));
       return;
     }
+    const isValidatedString = (value: string): boolean =>
+      /^[a-zA-Z]+$/.test(value);
+
+    const validatePassword = (password: string): boolean => {
+      const lengthCheck = new RegExp('^.{6,}$');
+      return (
+        lengthCheck.test(password) &&
+        passwordValidationRegExp.lowercaseCharRegExp.test(password) &&
+        passwordValidationRegExp.uppercaseCharRegExp.test(password) &&
+        passwordValidationRegExp.numericalValueRegExp.test(password) &&
+        passwordValidationRegExp.specialCharRegExp.test(password)
+      );
+    };
 
     if (
+      isValidatedString(signfirstName) &&
+      isValidatedString(signlastName) &&
       signfirstName.length > 1 &&
       signlastName.length > 1 &&
       signEmail.length >= 8 &&
-      signPassword.length > 1
+      signPassword.length > 1 &&
+      validatePassword(signPassword)
     ) {
       if (cPassword == signPassword) {
         try {
@@ -143,8 +216,6 @@ function loginPage(): JSX.Element {
               'Successfully Registered. Please wait until you will be approved.'
             );
 
-            setShowTab('LOGIN');
-
             setSignFormState({
               signfirstName: '',
               signlastName: '',
@@ -161,7 +232,18 @@ function loginPage(): JSX.Element {
         toast.warn(t('passwordMismatches'));
       }
     } else {
-      toast.warn(t('fillCorrectly'));
+      if (!isValidatedString(signfirstName)) {
+        toast.warn(t('firstName_invalid'));
+      }
+      if (!isValidatedString(signlastName)) {
+        toast.warn(t('lastName_invalid'));
+      }
+      if (!validatePassword(signPassword)) {
+        toast.warn(t('password_invalid'));
+      }
+      if (signEmail.length < 8) {
+        toast.warn(t('email_invalid'));
+      }
     }
   };
 
@@ -223,34 +305,95 @@ function loginPage(): JSX.Element {
         <Row className={styles.row}>
           <Col sm={0} md={6} lg={7} className={styles.left_portion}>
             <div className={styles.inner}>
-              <PalisadoesLogo className={styles.palisadoes_logo} />
-              <p className="text-center">{t('fromPalisadoes')}</p>
+              <a
+                href="https://www.palisadoes.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <PalisadoesLogo className={styles.palisadoes_logo} />
+                <p className="text-center">{t('fromPalisadoes')}</p>
+              </a>
+            </div>
+
+            <div className={styles.socialIcons}>
+              <a
+                href="https://www.facebook.com/palisadoesproject"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={FacebookLogo} />
+              </a>
+              <a
+                href="https://twitter.com/palisadoesorg?lang=en"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={TwitterLogo} className={styles.socialIcon} />
+              </a>
+              <a
+                href="https://www.linkedin.com/company/palisadoes/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={LinkedInLogo} />
+              </a>
+              <a
+                href="https://github.com/PalisadoesFoundation"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={GithubLogo} />
+              </a>
+              <a
+                href="https://www.youtube.com/@PalisadoesOrganization"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={YoutubeLogo} />
+              </a>
+              <a
+                href="https://www.palisadoes.org/slack"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={SlackLogo} />
+              </a>
+              <a
+                href="https://www.instagram.com/palisadoes/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={InstagramLogo} />
+              </a>
             </div>
           </Col>
           <Col sm={12} md={6} lg={5}>
             <div className={styles.right_portion}>
               <ChangeLanguageDropDown
                 parentContainerStyle={styles.langChangeBtn}
+                btnStyle={styles.langChangeBtnStyle}
               />
               <TalawaLogo
                 className={`${styles.talawa_logo}  ${
                   showTab === 'REGISTER' && styles.marginTopForReg
                 }`}
               />
+
+              <LoginPortalToggle />
+
               {/* LOGIN FORM */}
               <div
                 className={`${
                   showTab === 'LOGIN' ? styles.active_tab : 'd-none'
                 }`}
               >
-                <form onSubmit={loginLink}>
-                  <h1 className="fs-2 fw-bold text-dark mb-3">
-                    {t('login_to_admin_portal')}
-                  </h1>
-                  <Form.Label>{t('email')}</Form.Label>
+                <form onSubmit={loginLink} className="gap-0">
+                  <h1 className="fs-2 fw-bold text-dark mb-3">{t('login')}</h1>
+                  <Form.Label className="mb-1">{t('email')}</Form.Label>
                   <div className="position-relative">
                     <Form.Control
                       type="email"
+                      className="lh-1"
                       placeholder={t('enterEmail')}
                       required
                       value={formState.email}
@@ -270,11 +413,11 @@ function loginPage(): JSX.Element {
                       <EmailOutlinedIcon />
                     </Button>
                   </div>
-                  <Form.Label className="mt-3">{t('password')}</Form.Label>
+                  <Form.Label className="mt-2 mb-1">{t('password')}</Form.Label>
                   <div className="position-relative">
                     <Form.Control
                       type={showPassword ? 'text' : 'password'}
-                      className="input_box_second"
+                      className="input_box_second lh-1"
                       placeholder={t('enterPassword')}
                       required
                       value={formState.password}
@@ -299,7 +442,7 @@ function loginPage(): JSX.Element {
                       )}
                     </Button>
                   </div>
-                  <div className="text-end mt-3">
+                  <div className="text-end mt-2 mb-3">
                     <Link
                       to="/forgotPassword"
                       className="text-secondary"
@@ -312,7 +455,7 @@ function loginPage(): JSX.Element {
                     <div className="googleRecaptcha">
                       <ReCAPTCHA
                         ref={recaptchaRef}
-                        className="mt-3"
+                        className="mt-2"
                         sitekey={
                           /* istanbul ignore next */
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
@@ -325,20 +468,20 @@ function loginPage(): JSX.Element {
                   )}
                   <Button
                     type="submit"
-                    className="mt-3 mb-3 w-100"
+                    className="mb-0 w-100 lh-1"
                     value="Login"
                     data-testid="loginBtn"
                   >
                     {t('login')}
                   </Button>
-                  <div className="position-relative">
+                  <div className="position-relative my-2">
                     <hr />
                     <span className={styles.orText}>{t('OR')}</span>
                   </div>
                   <Button
                     variant="outline-secondary"
                     value="Register"
-                    className="mt-3 mb-3 w-100"
+                    className="w-100 lh-1"
                     data-testid="goToRegisterPortion"
                     onClick={(): void => {
                       setShowTab('REGISTER');
@@ -355,18 +498,20 @@ function loginPage(): JSX.Element {
                   showTab === 'REGISTER' ? styles.active_tab : 'd-none'
                 }`}
               >
-                <Form onSubmit={signupLink}>
+                <Form onSubmit={signupLink} className="gap-0">
                   <h1 className="fs-2 fw-bold text-dark mb-3">
                     {t('register')}
                   </h1>
                   <Row>
                     <Col sm={6}>
                       <div>
-                        <Form.Label>{t('firstName')}</Form.Label>
+                        <Form.Label className="mb-1">
+                          {t('firstName')}
+                        </Form.Label>
                         <Form.Control
                           type="text"
                           id="signfirstname"
-                          className="mb-3"
+                          className="lh-1"
                           placeholder={t('firstName')}
                           required
                           value={signformState.signfirstName}
@@ -381,11 +526,13 @@ function loginPage(): JSX.Element {
                     </Col>
                     <Col sm={6}>
                       <div>
-                        <Form.Label>{t('lastName')}</Form.Label>
+                        <Form.Label className="mb-1">
+                          {t('lastName')}
+                        </Form.Label>
                         <Form.Control
                           type="text"
                           id="signlastname"
-                          className="mb-3"
+                          className="lh-1"
                           placeholder={t('lastName')}
                           required
                           value={signformState.signlastName}
@@ -399,36 +546,39 @@ function loginPage(): JSX.Element {
                       </div>
                     </Col>
                   </Row>
-                  <Form.Label>{t('email')}</Form.Label>
-                  <div className="position-relative">
-                    <Form.Control
-                      type="email"
-                      data-testid="signInEmail"
-                      className="mb-3"
-                      placeholder={t('email')}
-                      autoComplete="username"
-                      required
-                      value={signformState.signEmail}
-                      onChange={(e): void => {
-                        setSignFormState({
-                          ...signformState,
-                          signEmail: e.target.value.toLowerCase(),
-                        });
-                      }}
-                    />
-                    <Button
-                      tabIndex={-1}
-                      className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
-                    >
-                      <EmailOutlinedIcon />
-                    </Button>
+                  <div className="position-relative mt-2">
+                    <Form.Label className="mb-1">{t('email')}</Form.Label>
+                    <div className="position-relative">
+                      <Form.Control
+                        type="email"
+                        data-testid="signInEmail"
+                        className="lh-1"
+                        placeholder={t('email')}
+                        autoComplete="username"
+                        required
+                        value={signformState.signEmail}
+                        onChange={(e): void => {
+                          setSignFormState({
+                            ...signformState,
+                            signEmail: e.target.value.toLowerCase(),
+                          });
+                        }}
+                      />
+                      <Button
+                        tabIndex={-1}
+                        className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                      >
+                        <EmailOutlinedIcon />
+                      </Button>
+                    </div>
                   </div>
 
-                  <div className="position-relative mb-3">
-                    <Form.Label>{t('password')}</Form.Label>
+                  <div className="position-relative my-2">
+                    <Form.Label className="mb-1">{t('password')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
                         type={showPassword ? 'text' : 'password'}
+                        className="lh-1"
                         data-testid="passwordField"
                         placeholder={t('password')}
                         autoComplete="new-password"
@@ -441,6 +591,10 @@ function loginPage(): JSX.Element {
                             ...signformState,
                             signPassword: e.target.value,
                           });
+                          handleLowercasePassCheck(e.target.value);
+                          handleUppercasePassCheck(e.target.value);
+                          handleNumericalValuePassCheck(e.target.value);
+                          handleSpecialCharPassCheck(e.target.value);
                         }}
                       />
                       <Button
@@ -455,31 +609,134 @@ function loginPage(): JSX.Element {
                         )}
                       </Button>
                     </div>
-                    {isInputFocused &&
-                      signformState.signPassword.length < 8 && (
-                        <div
-                          className="form-text text-danger"
-                          data-testid="passwordCheck"
+                    <div className={styles.password_checks}>
+                      {isInputFocused ? (
+                        signformState.signPassword.length < 6 ? (
+                          <div data-testid="passwordCheck">
+                            <p
+                              className={`form-text text-danger ${styles.password_check_element_top}`}
+                            >
+                              <span>
+                                <Clear className="" />
+                              </span>
+                              {t('atleast_6_char_long')}
+                            </p>
+                          </div>
+                        ) : (
+                          <p
+                            className={`form-text text-success ${styles.password_check_element_top}`}
+                          >
+                            <span>
+                              <Check />
+                            </span>
+                            {t('atleast_6_char_long')}
+                          </p>
+                        )
+                      ) : null}
+
+                      {!isInputFocused &&
+                        signformState.signPassword.length > 0 &&
+                        signformState.signPassword.length < 6 && (
+                          <div
+                            className={`form-text text-danger ${styles.password_check_element}`}
+                            data-testid="passwordCheck"
+                          >
+                            <span>
+                              <Check className="size-sm" />
+                            </span>
+                            {t('atleast_6_char_long')}
+                          </div>
+                        )}
+                      {isInputFocused && (
+                        <p
+                          className={`form-text ${
+                            showAlert.lowercaseChar
+                              ? 'text-danger'
+                              : 'text-success'
+                          } ${styles.password_check_element}`}
                         >
-                          {t('atleast_8_char_long')}
-                        </div>
+                          {showAlert.lowercaseChar ? (
+                            <span>
+                              <Clear />
+                            </span>
+                          ) : (
+                            <span>
+                              <Check />
+                            </span>
+                          )}
+                          {t('lowercase_check')}
+                        </p>
                       )}
-                    {!isInputFocused &&
-                      signformState.signPassword.length > 0 &&
-                      signformState.signPassword.length < 8 && (
-                        <div
-                          className="form-text text-danger"
-                          data-testid="passwordCheck"
+                      {isInputFocused && (
+                        <p
+                          className={`form-text ${
+                            showAlert.uppercaseChar
+                              ? 'text-danger'
+                              : 'text-success'
+                          } ${styles.password_check_element}`}
                         >
-                          {t('atleast_8_char_long')}
-                        </div>
+                          {showAlert.uppercaseChar ? (
+                            <span>
+                              <Clear />
+                            </span>
+                          ) : (
+                            <span>
+                              <Check />
+                            </span>
+                          )}
+                          {t('uppercase_check')}
+                        </p>
                       )}
+                      {isInputFocused && (
+                        <p
+                          className={`form-text ${
+                            showAlert.numericValue
+                              ? 'text-danger'
+                              : 'text-success'
+                          } ${styles.password_check_element}`}
+                        >
+                          {showAlert.numericValue ? (
+                            <span>
+                              <Clear />
+                            </span>
+                          ) : (
+                            <span>
+                              <Check />
+                            </span>
+                          )}
+                          {t('numeric_value_check')}
+                        </p>
+                      )}
+                      {isInputFocused && (
+                        <p
+                          className={`form-text ${
+                            showAlert.specialChar
+                              ? 'text-danger'
+                              : 'text-success'
+                          } ${styles.password_check_element} ${
+                            styles.password_check_element_bottom
+                          }`}
+                        >
+                          {showAlert.specialChar ? (
+                            <span>
+                              <Clear />
+                            </span>
+                          ) : (
+                            <span>
+                              <Check />
+                            </span>
+                          )}
+                          {t('special_char_check')}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                  <div className="position-relative">
+                  <div className="position-relative  my-2">
                     <Form.Label>{t('confirmPassword')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
                         type={showConfirmPassword ? 'text' : 'password'}
+                        className="lh-1"
                         placeholder={t('confirmPassword')}
                         required
                         value={signformState.cPassword}
@@ -531,7 +788,7 @@ function loginPage(): JSX.Element {
                   )}
                   <Button
                     type="submit"
-                    className="mt-4 w-100 mb-3"
+                    className="mt-4 w-100 mb-2"
                     value="Register"
                     data-testid="registrationBtn"
                   >
@@ -544,7 +801,7 @@ function loginPage(): JSX.Element {
                   <Button
                     variant="outline-secondary"
                     value="Register"
-                    className="mt-3 mb-5 w-100"
+                    className="mt-2 mb-1 w-100 lh-1"
                     data-testid="goToLoginPortion"
                     onClick={(): void => {
                       setShowTab('LOGIN');
