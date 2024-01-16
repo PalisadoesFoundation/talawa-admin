@@ -14,7 +14,6 @@ import {
   HttpLink,
 } from '@apollo/client';
 
-import type { NormalizedCacheObject } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
 import AddOnStore from './AddOnStore';
 import { Provider } from 'react-redux';
