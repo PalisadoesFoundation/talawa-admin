@@ -242,7 +242,8 @@ function organizationDashboard(): JSX.Element {
                             <CardItem
                               type="Event"
                               key={event._id}
-                              time={event.startDate}
+                              startdate={event.startDate}
+                              enddate={event.endDate}
                               title={event.title}
                               location={event.location}
                             />
