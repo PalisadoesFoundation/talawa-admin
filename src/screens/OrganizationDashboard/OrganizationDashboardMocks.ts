@@ -167,10 +167,10 @@ export const MOCKS = [
         eventsByOrganizationConnection: [
           {
             _id: '1',
-            title: 'Sample Event',
+            title: 'Upcoming Events',
             description: 'Sample Description',
-            startDate: '2023-10-29T00:00:00.000Z',
-            endDate: '2023-10-29T23:59:59.000Z',
+            startDate: new Date(Date.now() + 10000),
+            endDate: new Date(Date.now() + 10000),
             location: 'Sample Location',
             startTime: '08:00:00',
             endTime: '17:00:00',

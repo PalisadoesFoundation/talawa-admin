@@ -147,4 +147,42 @@ describe('Organisation Dashboard Page', () => {
     await wait();
     expect(window.location).toBeAt('/orglist');
   });
+
+  test('Display upcoming events only', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link2}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrganizationDashboard />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+    });
+
+    await wait();
+    expect(screen.getByText('Upcoming events')).toBeInTheDocument();
+    expect(screen.queryByText('Past Events')).toBeNull();
+  });
+
+  test('loading state displayed while fetching organization data', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link2}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrganizationDashboard />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+    });
+
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
+  });
 });
