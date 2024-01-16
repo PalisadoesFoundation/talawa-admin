@@ -10,6 +10,11 @@
     "email": "電子郵件",
     "password": "密碼",
     "atleast_8_char_long": "至少 8 個字符長",
+    "atleast_6_char_long": "至少 6 個字元長",
+    "firstName_invalid": "名字只能包含小寫和大寫字母",
+    "lastName_invalid": "姓氏只能包含小寫和大寫字母",
+    "password_invalid": "密碼應至少包含1個小寫字母、1個大寫字母、1個數字和1個特殊字符",
+    "email_invalid": "電子郵件應至少包含 8 個字符",
     "Password_and_Confirm_password_mismatches.": "密碼和確認密碼不匹配。",
     "confirmPassword": "確認密碼",
     "forgotPassword": "忘記密碼 ？",
@@ -25,13 +30,53 @@
     "notAuthorised": "抱歉！你沒有被授權！",
     "notFound": "找不到用戶！",
     "successfullyRegistered": "註冊成功，請等待審核通過。",
-    "login_to_admin_portal": " 管理员门户登录 ",
+    "OR": "或者",
+    "admin": "行政",
+    "user": "用戶",
+    "lowercase_check": "至少一個小寫字母",
+    "uppercase_check": "至少有一個大寫字母",
+    "numeric_value_check": "至少一個數值",
+    "special_char_check": "至少一個特殊字符"
+  },
+  "userLoginPage": {
+    "title": "塔拉瓦管理員",
+    "fromPalisadoes": "柵欄 基金会志愿者的开源应用程序",
+    "talawa_portal": "塔拉瓦管理門戶",
+    "login": "登錄",
+    "register": "登記",
+    "firstName": "名",
+    "lastName": "姓",
+    "email": "電子郵件",
+    "password": "密碼",
+    "atleast_8_char_long": "至少 8 個字符長",
+    "Password_and_Confirm_password_mismatches.": "密碼和確認密碼不匹配。",
+    "confirmPassword": "確認密碼",
+    "forgotPassword": "忘記密碼 ？",
+    "enterEmail": "输入电子邮件",
+    "enterPassword": "输入密码",
+    "doNotOwnAnAccount": "沒有帳戶嗎？",
+    "talawaApiUnavailable": "服務不可用。它正在運行嗎？還要檢查您的網絡連接。",
+    "captchaError": "驗證碼錯誤！",
+    "Please_check_the_captcha": "請檢查驗證碼。",
+    "Something_went_wrong": "出了點問題，請稍後再試。",
+    "passwordMismatches": "密碼和確認密碼不匹配。",
+    "fillCorrectly": "正確填寫所有細節。",
+    "notAuthorised": "抱歉！你沒有被授權！",
+    "notFound": "找不到用戶！",
+    "successfullyRegistered": "註冊成功，請等待審核通過。",
+    "userLogin": "用户登录",
+    "afterRegister": "註冊成功。 請等待管理員批准您的請求。",
     "OR": "或者"
   },
   "latestEvents": {
     "eventCardTitle": "即将举行的活动",
     "eventCardSeeAll": "查看全部",
     "noEvents": "暂无即将举行的活动"
+  },
+  "latestPosts": {
+    "latestPostsTitle": "最新文章",
+    "seeAllLink": "查看全部",
+    "noPostsCreated": "暂无文章"
   },
   "listNavbar": {
     "talawa_portal": "塔拉瓦管理門戶",
@@ -42,8 +87,7 @@
   "leftDrawer": {
     "talawaAdminPortal": "塔拉瓦管理门户",
     "menu": "菜单",
-    "organizations": "组织",
-    "requests": "请求",
+    "my organizations": "我的组织",
     "users": "用户",
     "logout": "退出登录"
   },
@@ -78,16 +122,18 @@
     "designation": "指定",
     "email": "電子郵件",
     "searchByName": "按名稱搜索",
-    "organizations": "组织",
+    "my organizations": "我的组织",
     "createOrganization": "創建組織",
     "createSampleOrganization": "创建示范组织",
     "description": "描述",
     "location": "地點",
-    "isPublic": "是否公開",
+    "isPubluserRegistrationRequiredic": "需要用户注册",
     "visibleInSearch": "在搜索中可見",
     "displayImage": "顯示圖像",
     "enterName": "输入名字",
     "sort": "排序",
+    "Earliest": "最早的",
+    "Latest": "最新的",
     "filter": "過濾",
     "cancel": "取消",
     "endOfResults": "結果結束",
@@ -136,26 +182,8 @@
     "filter": "過濾",
     "roleUpdated": "角色已更新。",
     "noResultsFoundFor": "未找到结果 ",
-    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
-  },
-  "requests": {
-    "title": "塔拉瓦請求",
-    "searchByName": "按名稱搜索",
-    "requests": "要求",
-    "name": "姓名",
-    "email": "電子郵件",
-    "accept": "接受",
-    "reject": "拒絕",
-    "enterName": "输入名字",
-    "endOfResults": "結果結束",
-    "loadingRequests": "正在加載請求...",
-    "noRequestFound": "找不到請求。",
-    "sort": "排序",
-    "filter": "過濾",
-    "userApproved": "用戶批准",
-    "userRejected": "用戶被拒絕",
-    "noResultsFoundFor": "未找到结果 ",
-    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
+    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。",
+    "cancel": "取消"
   },
   "dashboard": {
     "title": "儀表板",
@@ -410,7 +438,8 @@
     "settings": "設置",
     "noData": "沒有數據",
     "otherSettings": "其他设置",
-    "changeLanguage": "更改语言"
+    "changeLanguage": "更改语言",
+    "manageCustomFields": "管理自定义字段"
   },
   "deleteOrg": {
     "deleteOrganization": "删除组织",
@@ -418,7 +447,8 @@
     "deleteMsg": "您是否要删除此组织？",
     "cancel": "取消",
     "confirmDelete": "确认删除",
-    "longDelOrgMsg": "点击删除组织按钮，组织将被永久删除，包括其事件、标签和所有相关数据。"
+    "longDelOrgMsg": "点击删除组织按钮，组织将被永久删除，包括其事件、标签和所有相关数据。",
+    "successfullyDeletedSampleOrganization": "已成功刪除樣本組織"
   },
   "userUpdate": {
     "firstName": "名",
@@ -455,7 +485,7 @@
     "description": "描述",
     "location": "地點",
     "displayImage": "顯示圖像",
-    "isPublic": "公开",
+    "userRegistrationRequired": "需要用户注册",
     "isVisibleInSearch": "在搜索中可见",
     "saveChanges": "保存更改",
     "cancel": "取消",
@@ -588,7 +618,12 @@
   "home": {
     "feed": "餵養",
     "pinnedPosts": "查看固定帖子",
-    "somethingOnYourMind": "你有什麼心事嗎？"
+    "somethingOnYourMind": "你有什麼心事嗎？",
+    "addPost": "添加帖子",
+    "startPost": "开始一篇帖子",
+    "media": "媒体",
+    "event": "活动",
+    "article": "文章"
   },
   "settings": {
     "profileSettings": "配置文件設置",
@@ -596,7 +631,10 @@
     "lastName": "姓",
     "emailAddress": "電子郵件地址",
     "updateImage": "更新圖片",
-    "save": "節省"
+    "saveChanges": "保存更改",
+    "updateProfile": "更新个人信息",
+    "otherSettings": "其他设置",
+    "changeLanguage": "更改语言"
   },
   "donate": {
     "donateTo": "捐贈給",
@@ -656,7 +694,12 @@
     "activeAds": "活动广告",
     "archievedAds": "已完成的广告活动",
     "pMessage": "此广告活动没有相关广告。",
-    "delete": "删除"
+    "delete": "删除",
+    "close": "关闭",
+    "deleteAdvertisement": "删除广告",
+    "deleteAdvertisementMsg": "您是否要删除此广告？",
+    "no": "不",
+    "yes": "是"
   },
   "userChat": {
     "chat": "聊天",
@@ -666,5 +709,16 @@
   "userChatRoom": {
     "selectContact": "選擇聯絡人開始對話",
     "sendMessage": "傳訊息"
+  },
+  "orgProfileField": {
+    "loading": "正在加载...",
+    "noCustomField": "没有可用的自定义字段",
+    "customFieldName": "字段名称",
+    "enterCustomFieldName": "输入字段名称",
+    "customFieldType": "字段类型",
+    "saveChanges": "保存更改",
+    "删除自定义字段": "删除自定义字段",
+    "fieldSuccessMessage": "字段添加成功",
+    "fieldRemovalSuccess": "字段删除成功"
   }
 }
