@@ -10,11 +10,6 @@
     "email": "Correo electrónico",
     "password": "Clave",
     "atleast_8_char_long": "Al menos 8 caracteres de largo",
-    "atleast_6_char_long": "Al menos 6 caracteres de largo",
-    "firstName_invalid": "El nombre debe contener solo letras minúsculas y mayúsculas.",
-    "lastName_invalid": "El apellido debe contener solo letras minúsculas y mayúsculas.",
-    "password_invalid": "La contraseña debe contener al menos una letra minúscula, una letra mayúscula, un valor numérico y un carácter especial.",
-    "email_invalid": "El correo electrónico debe tener al menos 8 caracteres.",
     "Password_and_Confirm_password_mismatches.": "Contraseña y Confirmar contraseña no coinciden.",
     "confirmPassword": "Confirmar contraseña",
     "forgotPassword": "Has olvidado tu contraseña ?",
@@ -30,53 +25,13 @@
     "notAuthorised": "¡Lo siento! ¡No estás autorizado!",
     "notFound": "¡Usuario no encontrado!",
     "successfullyRegistered": "Registrado con éxito. Espere hasta que sea aprobado",
-    "OR": "O",
-    "admin": "ADMINISTRACIÓN",
-    "user": "USUARIO",
-    "lowercase_check": "Al menos una letra mayuscula",
-    "uppercase_check": "Al menos una letra minúscula",
-    "numeric_value_check": "Al menos un valor numérico",
-    "special_char_check": "Al menos un carácter especial"
-  },
-  "userLoginPage": {
-    "title": "Administrador Talawa",
-    "fromPalisadoes": "Una aplicación de código abierto de los voluntarios de la Fundación palisados",
-    "talawa_portal": "Portal De Administración Talawa",
-    "login": "Acceso",
-    "register": "Registro",
-    "firstName": "Primer nombre",
-    "lastName": "Apellido",
-    "email": "Correo electrónico",
-    "password": "Clave",
-    "atleast_8_char_long": "Al menos 8 caracteres de largo",
-    "Password_and_Confirm_password_mismatches.": "Contraseña y Confirmar contraseña no coinciden.",
-    "confirmPassword": "Confirmar contraseña",
-    "forgotPassword": "Has olvidado tu contraseña ?",
-    "enterEmail": "ingrese correo electrónico",
-    "enterPassword": "introducir la contraseña",
-    "doNotOwnAnAccount": "¿No tienes una cuenta?",
-    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Verifica también la conectividad de tu red.",
-    "captchaError": "¡Error de captcha!",
-    "Please_check_the_captcha": "Por favor, revisa el captcha.",
-    "Something_went_wrong": "Algo salió mal. Inténtalo después de un tiempo",
-    "passwordMismatches": "Contraseña y Confirmar contraseña no coinciden.",
-    "fillCorrectly": "Complete todos los detalles correctamente.",
-    "notAuthorised": "¡Lo siento! ¡No estás autorizado!",
-    "notFound": "¡Usuario no encontrado!",
-    "successfullyRegistered": "Registrado con éxito. Espere hasta que sea aprobado",
-    "userLogin": "Inicio de sesión de usuario",
-    "afterRegister": "Registrado exitosamente. Espere a que el administrador apruebe su solicitud.",
+    "login_to_admin_portal": "Inicio de sesión en el portal de administración",
     "OR": "O"
   },
   "latestEvents": {
     "eventCardTitle": "Próximos Eventos",
     "eventCardSeeAll": "Ver Todos",
     "noEvents": "No Hay Eventos Próximos"
-  },
-  "latestPosts": {
-    "latestPostsTitle": "Últimas Publicaciones",
-    "seeAllLink": "Ver Todo",
-    "noPostsCreated": "No se han creado publicaciones"
   },
   "listNavbar": {
     "talawa_portal": "Portal De Administración Talawa",
@@ -87,7 +42,8 @@
   "leftDrawer": {
     "talawaAdminPortal": "Portal de administración de Talawa",
     "menu": "Menú",
-    "my organizations": "Mis Organizaciones",
+    "organizations": "Organizaciones",
+    "requests": "Solicitudes",
     "users": "Usuarios",
     "logout": "Cerrar sesión"
   },
@@ -122,18 +78,16 @@
     "designation": "Designacion",
     "email": "Correo electrónico",
     "searchByName": "Buscar por nombre",
-    "my organizations": "Mis Organizaciones.",
+    "organizations": "Organizaciones",
     "createOrganization": "Crear organización",
     "createSampleOrganization": "Crear organización de muestra",
     "description": "Descripción",
     "location": "Ubicación",
-    "userRegistrationRequired": "Registro de usuario requerido",
+    "isPublic": "Es público",
     "visibleInSearch": "Visible en la búsqueda",
     "displayImage": "Mostrar imagen",
     "enterName": "Ingrese su nombre",
     "sort": "Ordenar",
-    "Earliest": "Más Temprano",
-    "Latest": "El último",
     "filter": "Filtrar",
     "cancel": "Cancelar",
     "endOfResults": "Fin de los resultados",
@@ -182,8 +136,26 @@
     "filter": "Filtrar",
     "roleUpdated": "Rol actualizado.",
     "noResultsFoundFor": "No se encontraron resultados para ",
-    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
-    "cancel": "Cancelar"
+    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
+  },
+  "requests": {
+    "title": "Solicitudes Talawa",
+    "searchByName": "Buscar por nombre",
+    "requests": "Peticiones",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "accept": "Aceptar",
+    "reject": "Rechazar",
+    "enterName": "Ingrese su nombre",
+    "endOfResults": "Fin de los resultados",
+    "loadingRequests": "Cargando solicitudes ...",
+    "noRequestFound": "No se encontró ninguna solicitud.",
+    "sort": "Ordenar",
+    "filter": "Filtrar",
+    "userApproved": "Aprobado por el usuario",
+    "userRejected": "Usuario rechazado",
+    "noResultsFoundFor": "No se encontraron resultados para ",
+    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
   "dashboard": {
     "title": "Panel de",
@@ -304,6 +276,7 @@
     "postDetails": "Detalles de la Publicación",
     "postTitle1": "Escribir título de la publicación",
     "postTitle": "Título",
+    "addMedia": "Subir foto o video",
     "information": "Información",
     "information1": "Escribir información de la publicación",
     "image": "Imagen de la Publicación",
@@ -320,7 +293,8 @@
     "Oldest": "Más Antiguas Primero",
     "Latest": "Más Recientes Primero",
     "sortPost": "Ordenar Publicaciones",
-    "tag": "Su navegador no admite la etiqueta de video"
+    "tag": "Su navegador no admite la etiqueta de video",
+    "postCreatedSuccess": "¡Felicidades! Has publicado algo."
   },
   "postNotFound": {
     "post": "Publicaciones",
@@ -436,8 +410,7 @@
     "settings": "Ajustes",
     "noData": "Sin datos",
     "otherSettings": "Otras Configuraciones",
-    "changeLanguage": "Cambiar Idioma",
-    "manageCustomFields": "Gestionar Campos Personalizados"
+    "changeLanguage": "Cambiar Idioma"
   },
   "deleteOrg": {
     "deleteOrganization": "Eliminar organización",
@@ -445,8 +418,7 @@
     "deleteMsg": "¿Desea eliminar esta organización?",
     "cancel": "Cancelar",
     "confirmDelete": "Confirmar eliminación",
-    "longDelOrgMsg": "Al hacer clic en el botón Eliminar organización, la organización se eliminará permanentemente junto con sus eventos, etiquetas y todos los datos relacionados.",
-    "successfullyDeletedSampleOrganization": "Organización de muestra eliminada correctamente"
+    "longDelOrgMsg": "Al hacer clic en el botón Eliminar organización, la organización se eliminará permanentemente junto con sus eventos, etiquetas y todos los datos relacionados."
   },
   "userUpdate": {
     "firstName": "Primer nombre",
@@ -483,7 +455,7 @@
     "description": "Descripción",
     "location": "ubicación",
     "displayImage": "Mostrar imagen",
-    "userRegistrationRequired": "Registro de usuario requerido",
+    "isPublic": "Público",
     "isVisibleInSearch": "Visible en la búsqueda",
     "saveChanges": "Guardar cambios",
     "cancel": "Cancelar",
@@ -616,12 +588,7 @@
   "home": {
     "feed": "Alimentar",
     "pinnedPosts": "Ver publicaciones fijadas",
-    "somethingOnYourMind": "¿Algo en tu mente?",
-    "addPost": "Agregar publicación",
-    "startPost": "Comenzar una publicación",
-    "media": "Medios",
-    "event": "Evento",
-    "article": "Artículo"
+    "somethingOnYourMind": "¿Algo en tu mente?"
   },
   "settings": {
     "profileSettings": "Configuración de perfil",
@@ -629,10 +596,7 @@
     "lastName": "Apellido",
     "emailAddress": "dirección de correo electrónico",
     "updateImage": "Actualizar imagen",
-    "saveChanges": "Guardar cambios",
-    "updateProfile": "Actualización del perfil",
-    "otherSettings": "Otras Configuraciones",
-    "changeLanguage": "Cambiar Idioma"
+    "save": "Ahorrar"
   },
   "donate": {
     "donateTo": "Donar a",
@@ -692,12 +656,7 @@
     "activeAds": "Campañas activas",
     "archievedAds": "Campañas completadas",
     "pMessage": "No hay anuncios disponibles para esta campaña.",
-    "delete": "Eliminar",
-    "close": "Cerrar",
-    "deleteAdvertisement": "Eliminar anuncio",
-    "deleteAdvertisementMsg": "¿Desea eliminar este anuncio?",
-    "no": "No",
-    "yes": "Sí"
+    "delete": "Eliminar"
   },
   "userChat": {
     "chat": "Charlar",
@@ -707,17 +666,5 @@
   "userChatRoom": {
     "selectContact": "Seleccione un contacto para iniciar una conversación",
     "sendMessage": "Enviar mensaje"
-  },
-
-  "orgProfileField": {
-    "loading": "Cargando..",
-    "noCustomField": "No hay campos personalizados disponibles",
-    "customFieldName": "Nombre del Campo",
-    "enterCustomFieldName": "Ingrese el Nombre del Campo",
-    "customFieldType": "Tipo de Campo",
-    "saveChanges": "Guardar Cambios",
-    "Remove Custom Field": "Eliminar Campo Personalizado",
-    "fieldSuccessMessage": "Campo añadido exitosamente",
-    "fieldRemovalSuccess": "Campo eliminado exitosamente"
   }
 }
