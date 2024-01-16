@@ -528,13 +528,13 @@ describe('Organisation Post Page', () => {
     const file = new File(['image content'], 'image.png', {
       type: 'image/png',
     });
-    const input = screen.getByTestId('organisationImage');
+    const input = screen.getByTestId('addMediaField');
     userEvent.upload(input, file);
 
     await screen.findByAltText('Post Image Preview');
     expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
 
-    const closeButton = screen.getByTestId('closePreview');
+    const closeButton = screen.getByTestId('mediaCloseButton');
     fireEvent.click(closeButton);
   }, 15000);
   test('Create post, preview image, and close preview', async () => {
@@ -580,7 +580,7 @@ describe('Organisation Post Page', () => {
       expect(videoPreview).toBeInTheDocument();
 
       // Check if the close button for the video works
-      const closeVideoPreviewButton = screen.getByTestId('videoclosebutton');
+      const closeVideoPreviewButton = screen.getByTestId('mediaCloseButton');
       fireEvent.click(closeVideoPreviewButton);
       expect(videoPreview).not.toBeInTheDocument();
     });
