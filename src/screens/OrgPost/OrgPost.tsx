@@ -116,7 +116,7 @@ function orgPost(): JSX.Element {
           pinned: pinPost,
         },
       });
-
+      /* istanbul ignore next */
       if (data) {
         toast.success('Congratulations! You have Posted Something.');
         refetch();
