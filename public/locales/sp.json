@@ -532,7 +532,6 @@
     "main": "Principal",
     "firstName": "Nombre",
     "lastName": "Apellido",
-    "memberOfOrganization": "Miembro de la organización",
     "language": "Idioma",
     "adminApproved": "Aprobado por el administrador",
     "pluginCreationAllowed": "Permitir creación de complementos",

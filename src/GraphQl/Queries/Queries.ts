@@ -423,9 +423,6 @@ export const USER_DETAILS = gql`
       joinedOrganizations {
         _id
       }
-      organizationUserBelongsTo {
-        _id
-      }
       organizationsBlockedBy {
         _id
       }
