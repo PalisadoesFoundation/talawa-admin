@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import React, { useState, useEffect } from 'react';
 import styles from './EventCalendar.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+import { Dropdown } from 'react-bootstrap';
 
 interface InterfaceEvent {
   _id: string;
@@ -41,8 +42,8 @@ enum Role {
 }
 
 enum ViewType {
-  DAY = 'day',
-  MONTH = 'month',
+  DAY = 'Day',
+  MONTH = 'Month',
 }
 interface InterfaceIEventAttendees {
   userId: string;
@@ -137,8 +138,8 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     setEvents(data);
   }, [eventData, orgData, userRole, userId]);
 
-  const handleChangeView = (e: React.ChangeEvent<HTMLSelectElement>): void => {
-    setViewType(e.target.value);
+  const handleChangeView = (item: any): void => {
+    setViewType(item);
   };
 
   const handlePrevMonth = (): void => {
@@ -246,34 +247,18 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
 
     return (
       <>
-        {allDayEventsList && (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              borderBottom: '1px solid gray',
-              position: 'relative',
-              minHeight: '70px',
-              borderBottomRightRadius: '5px',
-            }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'flex-end',
-                borderRight: '1px solid gray',
-                width: '50px',
-              }}
-            ></div>
-            <div style={{ width: 1 }}></div>
-            <div style={{ position: 'relative' }}>
+        {allDayEventsList.length > 0 && (
+          <div className={styles.calendar_hour_block}>
+            <div className={styles.calendar_hour_text_container}>{``}</div>
+            <div className={styles.dummyWidth}></div>
+            <div className={styles.event_list_parent}>
               <div
-                className={expanded === 1 ? styles.expand_list_container : ''}
-                style={{
-                  margin: '10px',
-                  width: 'fit-content',
-                }}
+                className={
+                  expanded === -100
+                    ? styles.expand_list_container
+                    : styles.list_container
+                }
+                style={{ width: 'fit-content' }}
               >
                 <div
                   className={
@@ -282,7 +267,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                       : styles.event_list
                   }
                 >
-                  {expanded === 1
+                  {expanded === -100
                     ? allDayEventsList
                     : allDayEventsList?.slice(0, 1)}
                 </div>
@@ -291,10 +276,10 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   <button
                     className={styles.btn__more}
                     onClick={() => {
-                      toggleExpand(1);
+                      toggleExpand(-100);
                     }}
                   >
-                    {expanded === 1 ? 'View less' : 'View all'}
+                    {expanded === 0 ? 'View less' : 'View all'}
                   </button>
                 )}
               </div>
@@ -334,44 +319,19 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             });
 
           return (
-            <div
-              key={hour}
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                borderBottom: '1px solid gray',
-                position: 'relative',
-                minHeight: '70px',
-                borderBottomRightRadius: '5px',
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'flex-end',
-                  borderRight: '1px solid gray',
-                  width: '50px',
-                }}
-              >
-                <p
-                  style={{
-                    top: '20px',
-                    left: '-5px',
-                    position: 'relative',
-                  }}
-                >{`${hour}:00`}</p>
+            <div key={hour} className={styles.calendar_hour_block}>
+              <div className={styles.calendar_hour_text_container}>
+                <p className={styles.calendar_hour_text}>{`${hour}:00`}</p>
               </div>
-              <div style={{ width: 1 }}></div>
-              <div style={{ position: 'relative' }}>
+              <div className={styles.dummyWidth}></div>
+              <div className={styles.event_list_parent}>
                 <div
                   className={
-                    expanded === index ? styles.expand_list_container : ''
+                    expanded === index
+                      ? styles.expand_list_container
+                      : styles.list_container
                   }
-                  style={{
-                    margin: '10px',
-                    width: 'fit-content',
-                  }}
+                  style={{ width: 'fit-content' }}
                 >
                   <div
                     className={
@@ -541,12 +501,25 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             Today
           </Button>
         </div>
-        <div style={{ flexGrow: 1 }}></div>
+        <div className={styles.flex_grow}></div>
         <div>
-          <select className={styles.selectType} onChange={handleChangeView}>
+          {/* <Dropdown className={styles.selectType} onChange={handleChangeView}>
             <option value="month">Month</option>
             <option value="day">Day</option>
-          </select>
+          </Dropdown> */}
+          <Dropdown onSelect={handleChangeView} className={styles.selectType}>
+            <Dropdown.Toggle variant="success" id="dropdown-basic">
+              {viewType || ViewType.MONTH}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item eventKey={ViewType.MONTH}>
+                {ViewType.MONTH}
+              </Dropdown.Item>
+              <Dropdown.Item eventKey={ViewType.DAY}>
+                {ViewType.DAY}
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
       </div>
       <div style={{ height: '80vh', overflowY: 'scroll', padding: '10px' }}>
