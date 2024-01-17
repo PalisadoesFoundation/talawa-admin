@@ -34,14 +34,20 @@
   margin: 0;
   position: absolute;
   top: 1rem;
-  left: 2rem;
+  left: 1rem;
+}
+
+.langChangeBtnStyle {
+  width: 7.5rem;
+  height: 2.2rem;
+  padding: 0;
 }
 
 .row .right_portion .talawa_logo {
-  height: 150px;
-  width: 150px;
+  height: 5rem;
+  width: 5rem;
   display: block;
-  margin: 1rem auto;
+  margin: 1.5rem auto 1rem;
   -webkit-animation: zoomIn 0.3s ease-in-out;
   animation: zoomIn 0.3s ease-in-out;
 }
@@ -49,10 +55,10 @@
 .row .orText {
   display: block;
   position: absolute;
-  top: calc(-0.7rem - 0.5rem);
+  top: 0;
   left: calc(50% - 2.6rem);
   margin: 0 auto;
-  padding: 0.5rem 2rem;
+  padding: 0.35rem 2rem;
   z-index: 100;
   background: var(--bs-white);
   color: var(--bs-secondary);
@@ -199,4 +205,23 @@
   display: flex;
   gap: 16px;
   justify-content: center;
+}
+
+.password_checks {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.password_check_element {
+  margin-top: -10px;
+}
+
+.password_check_element_top {
+  margin-top: 18px;
+}
+
+.password_check_element_bottom {
+  margin-bottom: -20px;
 }

@@ -247,7 +247,9 @@ describe('Organisation Post Page', () => {
       });
     }
     await debounceWait();
+    const searchBtn = screen.getByTestId('searchBtn');
     userEvent.type(screen.getByPlaceholderText(/Search By/i), 'postone{enter}');
+    userEvent.click(searchBtn);
     await debounceWait();
     const sortDropdown = screen.getByTestId('sort');
     userEvent.click(sortDropdown);
