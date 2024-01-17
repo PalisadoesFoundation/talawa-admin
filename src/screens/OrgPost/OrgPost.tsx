@@ -1,7 +1,7 @@
 import type { ChangeEvent } from 'react';
 import React, { useState, useEffect } from 'react';
-import { Search } from '@mui/icons-material';
 import SortIcon from '@mui/icons-material/Sort';
+import { Search } from '@mui/icons-material';
 import Row from 'react-bootstrap/Row';
 import Modal from 'react-bootstrap/Modal';
 import { Form } from 'react-bootstrap';
@@ -14,6 +14,7 @@ import styles from './OrgPost.module.css';
 import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
 import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
+import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
 import NotFound from 'components/NotFound/NotFound';
 import { errorHandler } from 'utils/errorHandler';
@@ -47,14 +48,14 @@ function orgPost(): JSX.Element {
     addMedia: '',
   });
   const [sortingOption, setSortingOption] = useState('latest');
-  const [showTitle, setShowTitle] = useState(true);
   const [file, setFile] = useState<File | null>(null);
-
   const currentUrl = window.location.href.split('=')[1];
+  const [showTitle, setShowTitle] = useState(true);
 
   const showInviteModal = (): void => {
     setPostModalIsOpen(true);
   };
+
   const hideInviteModal = (): void => {
     setPostModalIsOpen(false);
     setPostFormState({
@@ -89,6 +90,7 @@ function orgPost(): JSX.Element {
       setDisplayedPosts(newDisplayedPosts);
     }
   }, [orgPostListData, sortingOption]);
+
   const createPost = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
@@ -115,9 +117,10 @@ function orgPost(): JSX.Element {
           file: postImage || postVideo || postformState.addMedia,
         },
       });
+
       /* istanbul ignore next */
       if (data) {
-        toast.success('Congratulations! You have Posted Something.');
+        toast.success(t('postCreatedSuccess'));
         refetch();
         setPostFormState({
           posttitle: '',
@@ -126,10 +129,9 @@ function orgPost(): JSX.Element {
           postVideo: '',
           addMedia: '',
         });
-        setPostModalIsOpen(false); // close the modal
+        setPostModalIsOpen(false);
       }
     } catch (error: any) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
@@ -137,7 +139,6 @@ function orgPost(): JSX.Element {
   if (createPostLoading || orgPostListLoading) {
     return <Loader />;
   }
-
   /* istanbul ignore next */
   if (orgPostListError) {
     window.location.assign('/orglist');
@@ -160,27 +161,18 @@ function orgPost(): JSX.Element {
       });
     }
   };
-  const handleSearch = (value: string): void => {
+
+  const handleSearch = (e: any): void => {
+    const { value } = e.target;
     const filterData = {
       id: currentUrl,
-      title_contains: showTitle ? value : undefined,
-      text_contains: !showTitle ? value : undefined,
+      title_contains: showTitle ? value : null,
+      text_contains: !showTitle ? value : null,
     };
     refetch(filterData);
   };
 
-  const handleSearchByEnter = (e: any): void => {
-    if (e.key === 'Enter') {
-      const { value } = e.target;
-      handleSearch(value);
-    }
-  };
-
-  const handleSearchByBtnClick = (): void => {
-    const inputValue =
-      (document.getElementById('searchPosts') as HTMLInputElement)?.value || '';
-    handleSearch(inputValue);
-  };
+  const debouncedHandleSearch = debounce(handleSearch);
 
   const handleSorting = (option: string): void => {
     setSortingOption(option);
@@ -212,12 +204,13 @@ function orgPost(): JSX.Element {
     if (a.pinned === b.pinned) {
       return 0;
     }
-
+    /* istanbul ignore next */
     if (a.pinned) {
       return -1;
     }
     return 1;
   });
+
   return (
     <>
       <OrganizationScreen screenName="Posts" title={t('title')}>
@@ -232,13 +225,12 @@ function orgPost(): JSX.Element {
                   placeholder={showTitle ? t('searchTitle') : t('searchText')}
                   data-testid="searchByName"
                   autoComplete="off"
-                  onKeyUp={handleSearchByEnter}
+                  onChange={debouncedHandleSearch}
                   required
                 />
                 <Button
                   tabIndex={-1}
                   className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
-                  onClick={handleSearchByBtnClick}
                 >
                   <Search />
                 </Button>
@@ -469,4 +461,5 @@ function orgPost(): JSX.Element {
     </>
   );
 }
+
 export default orgPost;
