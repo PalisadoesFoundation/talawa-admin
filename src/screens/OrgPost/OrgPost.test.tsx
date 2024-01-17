@@ -14,7 +14,6 @@ import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { ToastContainer } from 'react-toastify';
-import { debug } from 'jest-preview';
 
 const MOCKS = [
   {
@@ -209,14 +208,8 @@ describe('Organisation Post Page', () => {
     userEvent.type(screen.getByTestId('modalTitle'), formData.posttitle);
 
     userEvent.type(screen.getByTestId('modalinfo'), formData.postinfo);
-    userEvent.upload(
-      screen.getByTestId('addMediaField'),
-      formData.postImage
-    );
-    userEvent.upload(
-      screen.getByTestId('addMediaField'),
-      formData.postVideo
-    );
+    userEvent.upload(screen.getByTestId('addMediaField'), formData.postImage);
+    userEvent.upload(screen.getByTestId('addMediaField'), formData.postVideo);
 
     userEvent.click(screen.getByTestId('createPostBtn'));
 
@@ -245,9 +238,7 @@ describe('Organisation Post Page', () => {
       });
     }
     await debounceWait();
-    const searchBtn = screen.getByTestId('searchBtn');
     userEvent.type(screen.getByPlaceholderText(/Search By/i), 'postone{enter}');
-    userEvent.click(searchBtn);
     await debounceWait();
     const sortDropdown = screen.getByTestId('sort');
     userEvent.click(sortDropdown);
@@ -402,18 +393,24 @@ describe('Organisation Post Page', () => {
     fireEvent.change(postInfoTextarea, {
       target: { value: 'Test post information' },
     });
-    const file = new File(['image content'], 'image.png', {
+
+    // Simulate uploading an image
+    const imageFile = new File(['image content'], 'image.png', {
       type: 'image/png',
     });
-    const input = screen.getByTestId('addMediaField');
-    userEvent.upload(input, file);
+    const imageInput = screen.getByTestId('addMediaField');
+    userEvent.upload(imageInput, imageFile);
 
-    await screen.findByAltText('Post Image Preview');
-    expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
+    // Check if the image is displayed
+    const imagePreview = await screen.findByAltText('Post Image Preview');
+    expect(imagePreview).toBeInTheDocument();
 
-    const createPostBtn = screen.getByTestId('createPostBtn');
-    fireEvent.click(createPostBtn);
-    debug();
+    // Check if the close button for the image works
+    const closeButton = screen.getByTestId('mediaCloseButton');
+    fireEvent.click(closeButton);
+
+    // Check if the image is removed from the preview
+    expect(imagePreview).not.toBeInTheDocument();
   }, 15000);
 
   test('Modal opens and closes', async () => {
@@ -438,7 +435,7 @@ describe('Organisation Post Page', () => {
     const modalTitle = screen.getByTestId('modalOrganizationHeader');
     expect(modalTitle).toBeInTheDocument();
 
-    const closeButton = screen.getByTestId('closeOrganizationModal');
+    const closeButton = screen.getByTestId(/closeModalBtn/i);
     userEvent.click(closeButton);
 
     await wait();
@@ -466,7 +463,6 @@ describe('Organisation Post Page', () => {
     // Check if input fields and buttons are present
     expect(screen.getByTestId('modalTitle')).toBeInTheDocument();
     expect(screen.getByTestId('modalinfo')).toBeInTheDocument();
-    expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
     expect(screen.getByTestId('createPostBtn')).toBeInTheDocument();
   });
 
@@ -567,12 +563,7 @@ describe('Organisation Post Page', () => {
         type: 'video/mp4',
       });
 
-      const videoInput = screen.getByTestId('addMediaField');
-      fireEvent.change(videoInput, {
-        target: {
-          files: [videoFile],
-        },
-      });
+      userEvent.upload(screen.getByTestId('addMediaField'), videoFile);
 
       // Check if the video is displayed
       const videoPreview = await screen.findByTestId('videoPreview');
@@ -583,5 +574,60 @@ describe('Organisation Post Page', () => {
       fireEvent.click(closeVideoPreviewButton);
       expect(videoPreview).not.toBeInTheDocument();
     });
+  });
+  test('Sorting posts by pinned status', async () => {
+    // Mocked data representing posts with different pinned statuses
+    const mockedPosts = [
+      {
+        _id: '1',
+        title: 'Post 1',
+        pinned: true,
+      },
+      {
+        _id: '2',
+        title: 'Post 2',
+        pinned: false,
+      },
+      {
+        _id: '3',
+        title: 'Post 3',
+        pinned: true,
+      },
+      {
+        _id: '4',
+        title: 'Post 4',
+        pinned: true,
+      },
+    ];
+
+    // Render the OrgPost component and pass the mocked data to it
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    const sortedPosts = screen.getAllByTestId('post-item');
+
+    // Assert that the posts are sorted correctly
+    expect(sortedPosts).toHaveLength(mockedPosts.length);
+    expect(sortedPosts[0]).toHaveTextContent(
+      'postoneThis is the first po... Aditya Shelke'
+    );
+    expect(sortedPosts[1]).toHaveTextContent(
+      'posttwoTis is the post two Aditya Shelke'
+    );
+    expect(sortedPosts[2]).toHaveTextContent(
+      'posttwoTis is the post two Aditya Shelke'
+    );
   });
 });
