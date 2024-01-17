@@ -38,6 +38,15 @@
   grid-template-columns: repeat(7, minmax(0, 1fr));
   grid-template-rows: repeat(6, 1fr);
 }
+.calendar__hours {
+  display: flex;
+}
+.calendar__hour {
+  border-bottom: 1px solid gray;
+  list-style: none;
+  display: flex;
+  border-end-end-radius: 5px;
+}
 .day {
   background-color: #ffffff;
   padding-left: 0.3rem;
@@ -75,6 +84,11 @@
   margin-left: 20px;
   border: none;
 }
+.selectType {
+  padding: 10px 10px 10px 10px;
+  border-radius: 10px;
+  margin: 0px 5px 0px 5px;
+}
 .btn__more {
   border: 0px;
   font-size: 14px;
@@ -97,7 +111,7 @@
   width: 200px;
   max-height: 250px;
   z-index: 10;
-  position: relative;
+  position: absolute;
   left: auto;
   right: auto;
   overflow: auto;
