@@ -14,7 +14,6 @@ import styles from './OrgPost.module.css';
 import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
 import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
-import debounce from 'utils/debounce';
 import convertToBase64 from 'utils/convertToBase64';
 import NotFound from 'components/NotFound/NotFound';
 import { errorHandler } from 'utils/errorHandler';
@@ -172,7 +171,7 @@ function orgPost(): JSX.Element {
     refetch(filterData);
   };
 
-  const debouncedHandleSearch = debounce(handleSearch);
+  const debouncedHandleSearch = handleSearch;
 
   const handleSorting = (option: string): void => {
     setSortingOption(option);
