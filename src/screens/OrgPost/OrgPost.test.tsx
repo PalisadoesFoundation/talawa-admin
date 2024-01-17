@@ -210,11 +210,11 @@ describe('Organisation Post Page', () => {
 
     userEvent.type(screen.getByTestId('modalinfo'), formData.postinfo);
     userEvent.upload(
-      screen.getByTestId('organisationImage'),
+      screen.getByTestId('addMediaField'),
       formData.postImage
     );
     userEvent.upload(
-      screen.getByTestId('organisationImage'),
+      screen.getByTestId('addMediaField'),
       formData.postVideo
     );
 
@@ -405,7 +405,7 @@ describe('Organisation Post Page', () => {
     const file = new File(['image content'], 'image.png', {
       type: 'image/png',
     });
-    const input = screen.getByTestId('organisationImage');
+    const input = screen.getByTestId('addMediaField');
     userEvent.upload(input, file);
 
     await screen.findByAltText('Post Image Preview');
@@ -466,8 +466,7 @@ describe('Organisation Post Page', () => {
     // Check if input fields and buttons are present
     expect(screen.getByTestId('modalTitle')).toBeInTheDocument();
     expect(screen.getByTestId('modalinfo')).toBeInTheDocument();
-    expect(screen.getByTestId('organisationImage')).toBeInTheDocument();
-    expect(screen.getByTestId('organisationVideo')).toBeInTheDocument();
+    expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
     expect(screen.getByTestId('createPostBtn')).toBeInTheDocument();
   });
 
@@ -568,7 +567,7 @@ describe('Organisation Post Page', () => {
         type: 'video/mp4',
       });
 
-      const videoInput = screen.getByTestId('organisationVideo');
+      const videoInput = screen.getByTestId('addMediaField');
       fireEvent.change(videoInput, {
         target: {
           files: [videoFile],
