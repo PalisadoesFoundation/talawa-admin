@@ -139,3 +139,14 @@ jobs:
 
       - name: Validate Documents
         run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
+
+  Check-Target-Branch:
+    name: Check Target Branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if the target branch is develop
+        if: github.event.pull_request.base.ref != 'develop'
+        run: |
+          echo "Error: Pull request target branch must be 'develop'. Please refer PR_GUIDELINES.md"
+          exit 1
+
