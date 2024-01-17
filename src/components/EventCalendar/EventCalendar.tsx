@@ -206,6 +206,14 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   };
 
   const renderHours = (): JSX.Element => {
+    const toggleExpand = (index: number): void => {
+      if (expanded === index) {
+        setExpanded(-1);
+      } else {
+        setExpanded(index);
+      }
+    };
+
     const allDayEventsList: any = events
       ?.filter((datas) => {
         const currDate = new Date(currentYear, currentMonth, currentDate);
@@ -238,26 +246,62 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
 
     return (
       <>
-        {allDayEventsList.length > 0 && (
+        {allDayEventsList && (
           <div
             style={{
+              display: 'flex',
+              flexDirection: 'row',
               borderBottom: '1px solid gray',
+              position: 'relative',
+              minHeight: '70px',
               borderBottomRightRadius: '5px',
-              padding: '3px',
             }}
           >
-            {allDayEventsList}
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'flex-end',
+                borderRight: '1px solid gray',
+                width: '50px',
+              }}
+            ></div>
+            <div style={{ width: 1 }}></div>
+            <div style={{ position: 'relative' }}>
+              <div
+                className={expanded === 1 ? styles.expand_list_container : ''}
+                style={{
+                  margin: '10px',
+                  width: 'fit-content',
+                }}
+              >
+                <div
+                  className={
+                    expanded === -1
+                      ? styles.expand_event_list
+                      : styles.event_list
+                  }
+                >
+                  {expanded === 1
+                    ? allDayEventsList
+                    : allDayEventsList?.slice(0, 1)}
+                </div>
+                {(allDayEventsList?.length > 1 ||
+                  (windowWidth <= 700 && allDayEventsList?.length > 0)) && (
+                  <button
+                    className={styles.btn__more}
+                    onClick={() => {
+                      toggleExpand(1);
+                    }}
+                  >
+                    {expanded === 1 ? 'View less' : 'View all'}
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         )}
         {hours.map((hour, index) => {
-          const toggleExpand = (index: number): void => {
-            if (expanded === index) {
-              setExpanded(-1);
-            } else {
-              setExpanded(index);
-            }
-          };
-
           const timeEventsList: any = events
             ?.filter((datas) => {
               const currDate = new Date(currentYear, currentMonth, currentDate);
@@ -306,6 +350,8 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   display: 'flex',
                   flexDirection: 'row',
                   alignItems: 'flex-end',
+                  borderRight: '1px solid gray',
+                  width: '50px',
                 }}
               >
                 <p
