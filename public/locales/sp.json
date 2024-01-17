@@ -323,6 +323,7 @@
     "sortPost": "Ordenar Publicaciones",
     "tag": "Su navegador no admite la etiqueta de video",
     "postCreatedSuccess": "¡Felicidades! Has publicado algo."
+    "pinPost": "Fijar publicación"
   },
   "postNotFound": {
     "post": "Publicaciones",

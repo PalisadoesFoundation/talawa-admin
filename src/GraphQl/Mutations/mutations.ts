@@ -295,6 +295,7 @@ export const CREATE_POST_MUTATION = gql`
     $videoUrl: URL
     $organizationId: ID!
     $file: String
+    $pinned: Boolean
   ) {
     createPost(
       data: {
@@ -303,6 +304,7 @@ export const CREATE_POST_MUTATION = gql`
         imageUrl: $imageUrl
         videoUrl: $videoUrl
         organizationId: $organizationId
+        pinned: $pinned
       }
       file: $file
     ) {

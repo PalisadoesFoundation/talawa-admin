@@ -323,6 +323,7 @@
     "sortPost": "Trier les publications",
     "tag": "Votre navigateur ne prend pas en charge la balise vidéo",
     "postCreatedSuccess": "Félicitations ! Vous avez publié quelque chose."
+    "pinPost": "Épingler le message"
   },
   "postNotFound": {
     "post": "Poste",

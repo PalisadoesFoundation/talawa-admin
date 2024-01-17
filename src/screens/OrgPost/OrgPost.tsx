@@ -45,6 +45,7 @@ function orgPost(): JSX.Element {
     postImage: '',
     postVideo: '',
     addMedia: '',
+    pinPost: false,
   });
   const [sortingOption, setSortingOption] = useState('latest');
   const [file, setFile] = useState<File | null>(null);
@@ -63,6 +64,7 @@ function orgPost(): JSX.Element {
       postImage: '',
       postVideo: '',
       addMedia: '',
+      pinPost: false,
     });
   };
 
@@ -98,6 +100,7 @@ function orgPost(): JSX.Element {
       postinfo: _postinfo,
       postImage,
       postVideo,
+      pinPost,
     } = postformState;
 
     const posttitle = _posttitle.trim();
@@ -114,6 +117,7 @@ function orgPost(): JSX.Element {
           text: postinfo,
           organizationId: currentUrl,
           file: postImage || postVideo || postformState.addMedia,
+          pinned: pinPost,
         },
       });
 
@@ -127,6 +131,7 @@ function orgPost(): JSX.Element {
           postImage: '',
           postVideo: '',
           addMedia: '',
+          pinPost: false,
         });
         setPostModalIsOpen(false);
       }
@@ -441,6 +446,21 @@ function orgPost(): JSX.Element {
                 </button>
               </div>
             )}
+            <Form.Label htmlFor="pinpost" className="mt-3">
+              {t('pinPost')}
+            </Form.Label>
+            <Form.Switch
+              id="pinPost"
+              type="checkbox"
+              data-testid="pinPost"
+              defaultChecked={postformState.pinPost}
+              onChange={(): void =>
+                setPostFormState({
+                  ...postformState,
+                  pinPost: !postformState.pinPost,
+                })
+              }
+            />
           </Modal.Body>
 
           <Modal.Footer>
