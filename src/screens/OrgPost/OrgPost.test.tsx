@@ -435,7 +435,7 @@ describe('Organisation Post Page', () => {
     const modalTitle = screen.getByTestId('modalOrganizationHeader');
     expect(modalTitle).toBeInTheDocument();
 
-    const closeButton = screen.getByTestId(/closeModalBtn/i);
+    const closeButton = screen.getByTestId(/modalOrganizationHeader/i);
     userEvent.click(closeButton);
 
     await wait();
