@@ -30,8 +30,8 @@ export const ADVERTISEMENTS_GET = gql`
       _id
       name
       type
-      orgId
-      link
+      organizationId
+      mediaUrl
       endDate
       startDate
     }
