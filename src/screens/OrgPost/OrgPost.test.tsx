@@ -211,11 +211,11 @@ describe('Organisation Post Page', () => {
     userEvent.upload(screen.getByTestId('addMediaField'), formData.postImage);
     userEvent.upload(screen.getByTestId('addMediaField'), formData.postVideo);
     userEvent.upload(
-      screen.getByTestId('organisationImage'),
+      screen.getByTestId('addMediaField'),
       formData.postImage
     );
     userEvent.upload(
-      screen.getByTestId('organisationImage'),
+      screen.getByTestId('addMediaField'),
       formData.postVideo
     );
     userEvent.click(screen.getByTestId('pinPost'));
