@@ -181,8 +181,9 @@ function advertisementRegister({
     }
   };
   return (
+    //If register show register button else show edit button
     <>
-      {formStatus === 'register' ? ( //If register show register button else show edit button
+      {formStatus === 'register' ? (
         <Button
           className={styles.modalbtn}
           variant="primary"

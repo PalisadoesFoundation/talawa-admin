@@ -118,6 +118,7 @@ describe('Testing Advertisement Entry Component', () => {
       expect(deletionFailedText).toBeNull();
     });
   });
+
   it('should open and close the dropdown when options button is clicked', () => {
     const { getByTestId, queryByText, getAllByText } = render(
       <ApolloProvider client={client}>
@@ -163,6 +164,7 @@ describe('Testing Advertisement Entry Component', () => {
     // After the second click, the dropdown should be hidden again
     expect(queryByText('Edit')).toBeNull();
   });
+
   test('Updates the advertisement and shows success toast on successful update', async () => {
     const updateAdByIdMock = jest.fn().mockResolvedValue({
       data: {
@@ -248,6 +250,7 @@ describe('Testing Advertisement Entry Component', () => {
       },
     });
   });
+
   test('Simulating if the mutation doesnt have data variable while updating', async () => {
     const updateAdByIdMock = jest.fn().mockResolvedValue({
       updateAdvertisement: {
@@ -308,6 +311,7 @@ describe('Testing Advertisement Entry Component', () => {
       },
     });
   });
+
   test('Updates the advertisement and shows error toast on successful update', async () => {
     const updateAdByIdMock = jest.fn();
 
@@ -354,6 +358,7 @@ describe('Testing Advertisement Entry Component', () => {
       },
     });
   });
+
   test('Simulating if the mutation does not have data variable while registering', async () => {
     Object.defineProperty(window, 'location', {
       configurable: true,

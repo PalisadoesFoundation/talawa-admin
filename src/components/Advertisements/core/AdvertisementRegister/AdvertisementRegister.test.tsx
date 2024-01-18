@@ -119,6 +119,7 @@ describe('Testing Advertisement Register Component', () => {
       expect(getByText(translations.addNew)).toBeInTheDocument();
     });
   });
+
   test('AdvertismentRegister component loads correctly in edit mode', async () => {
     render(
       <ApolloProvider client={client}>
@@ -145,6 +146,7 @@ describe('Testing Advertisement Register Component', () => {
       expect(screen.getByTestId('editBtn')).toBeInTheDocument();
     });
   });
+
   test('Opens and closes modals on button click', async () => {
     const { getByText, queryByText } = render(
       <ApolloProvider client={client}>
@@ -174,6 +176,7 @@ describe('Testing Advertisement Register Component', () => {
       expect(queryByText(translations.close)).not.toBeInTheDocument();
     });
   });
+
   test('Submits the form and shows success toast on successful advertisement creation', async () => {
     const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
 
@@ -241,6 +244,7 @@ describe('Testing Advertisement Register Component', () => {
 
     expect(queryByText(translations.close)).not.toBeInTheDocument();
   });
+
   test('Logs error to the console and shows error toast when advertisement creation fails', async () => {
     const { getByText, queryByText } = render(
       <MockedProvider addTypename={false} link={link}>

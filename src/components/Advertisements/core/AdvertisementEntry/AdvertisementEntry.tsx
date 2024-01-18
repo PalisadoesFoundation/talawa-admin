@@ -33,6 +33,7 @@ function advertisementEntry({
   const [buttonLoading, setButtonLoading] = useState(false);
   const [dropdown, setDropdown] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   const [deleteAdById] = useMutation(DELETE_ADVERTISEMENT_BY_ID, {
     refetchQueries: [ADVERTISEMENTS_GET],
   });
