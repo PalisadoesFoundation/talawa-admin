@@ -141,7 +141,7 @@ function loginPage(): JSX.Element {
   }, []);
 
   const verifyRecaptcha = async (
-    recaptchaToken: any
+    recaptchaToken: any,
   ): Promise<boolean | void> => {
     try {
       /* istanbul ignore next */
@@ -213,7 +213,7 @@ function loginPage(): JSX.Element {
           /* istanbul ignore next */
           if (signUpData) {
             toast.success(
-              'Successfully Registered. Please wait until you will be approved.'
+              'Successfully Registered. Please wait until you will be approved.',
             );
 
             setSignFormState({

@@ -39,7 +39,7 @@ const OrgProfileFieldSettings = (): any => {
       variables: {
         customFieldsByOrganizationId: currentOrgId,
       },
-    }
+    },
   );
 
   const handleSave = async (): Promise<void> => {
@@ -91,7 +91,7 @@ const OrgProfileFieldSettings = (): any => {
                   name: string;
                   type: string;
                 },
-                index: number
+                index: number,
               ) => (
                 <tr key={index}>
                   <td>{field.name}</td>
@@ -108,7 +108,7 @@ const OrgProfileFieldSettings = (): any => {
                     </Button>
                   </td>
                 </tr>
-              )
+              ),
             )}
           </tbody>
         </table>

@@ -15,7 +15,7 @@ jest.mock('@apollo/client', () => {
               refreshToken: 'newRefreshToken',
             },
           },
-        })
+        }),
       ),
     })),
   };
@@ -40,11 +40,11 @@ describe('refreshToken', () => {
 
     expect(localStorage.setItem).toHaveBeenCalledWith(
       'token',
-      'newAccessToken'
+      'newAccessToken',
     );
     expect(localStorage.setItem).toHaveBeenCalledWith(
       'refreshToken',
-      'newRefreshToken'
+      'newRefreshToken',
     );
     expect(result).toBe(true);
     expect(window.location.reload).toHaveBeenCalled();

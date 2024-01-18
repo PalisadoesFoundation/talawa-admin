@@ -106,13 +106,13 @@ describe('Organisation Settings Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     expect(screen.getAllByText(/Delete Organization/i)).toHaveLength(3);
     expect(
       screen.getByText(
-        /By clicking on Delete Organization button the organization will be permanently deleted along with its events, tags and all related data/i
-      )
+        /By clicking on Delete Organization button the organization will be permanently deleted along with its events, tags and all related data/i,
+      ),
     ).toBeInTheDocument();
     expect(screen.getByText(/Other Settings/i)).toBeInTheDocument();
     expect(screen.getByText(/Change Language/i)).toBeInTheDocument();

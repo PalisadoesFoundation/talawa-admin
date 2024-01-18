@@ -29,7 +29,7 @@ describe('Testing LeftDrawer in SuperAdminScreen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     // Resize window to trigger handleResize

@@ -249,7 +249,7 @@ describe('Testing Events Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -273,7 +273,7 @@ describe('Testing Events Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -304,7 +304,7 @@ describe('Testing Events Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -348,7 +348,7 @@ describe('Testing Events Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -397,7 +397,7 @@ describe('Testing Events Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -412,11 +412,11 @@ describe('Testing Events Screen [User Portal]', () => {
     userEvent.type(screen.getByTestId('eventTitleInput'), randomEventTitle);
     userEvent.type(
       screen.getByTestId('eventDescriptionInput'),
-      randomEventDescription
+      randomEventDescription,
     );
     userEvent.type(
       screen.getByTestId('eventLocationInput'),
-      randomEventLocation
+      randomEventLocation,
     );
 
     userEvent.click(screen.getByTestId('publicEventCheck'));
@@ -438,7 +438,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait();
 
     expect(toast.success).toBeCalledWith(
-      'Event created and posted successfully.'
+      'Event created and posted successfully.',
     );
   });
 
@@ -458,7 +458,7 @@ describe('Testing Events Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -473,11 +473,11 @@ describe('Testing Events Screen [User Portal]', () => {
     userEvent.type(screen.getByTestId('eventTitleInput'), randomEventTitle);
     userEvent.type(
       screen.getByTestId('eventDescriptionInput'),
-      randomEventDescription
+      randomEventDescription,
     );
     userEvent.type(
       screen.getByTestId('eventLocationInput'),
-      randomEventLocation
+      randomEventLocation,
     );
 
     userEvent.click(screen.getByTestId('createEventBtn'));
@@ -485,7 +485,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait();
 
     expect(toast.success).toBeCalledWith(
-      'Event created and posted successfully.'
+      'Event created and posted successfully.',
     );
   });
 
@@ -505,7 +505,7 @@ describe('Testing Events Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();

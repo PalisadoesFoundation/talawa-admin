@@ -45,7 +45,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
 
   const [currentLanguageCode, setCurrentLanguageCode] = React.useState(
     /* istanbul ignore next */
-    cookies.get('i18next') || 'en'
+    cookies.get('i18next') || 'en',
   );
 
   /* istanbul ignore next */
@@ -98,7 +98,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data: updatedPluginData, loading: _loadingSub } = useSubscription(
-    PLUGIN_SUBSCRIPTION
+    PLUGIN_SUBSCRIPTION,
     // { variables: {  } }
   );
   function getPluginIndex(pluginName: string, pluginsArray: Plugin[]): number {
@@ -166,7 +166,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                     >
                       {plugin.translated}
                     </Nav.Link>
-                  )
+                  ),
               )}
             </Nav>
             <Navbar.Collapse className="justify-content-end">

@@ -63,21 +63,21 @@ describe('Testing Add Event Project Modal', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await waitFor(() =>
-      expect(queryByText('Add an Event Project')).toBeInTheDocument()
+      expect(queryByText('Add an Event Project')).toBeInTheDocument(),
     );
 
     fireEvent.click(queryByText('Create Project') as Element);
 
     // Check for blank entry warning modals
     await waitFor(() =>
-      expect(queryByText('Title cannot be empty!')).toBeInTheDocument()
+      expect(queryByText('Title cannot be empty!')).toBeInTheDocument(),
     );
     await waitFor(() =>
-      expect(queryByText('Description cannot be empty!')).toBeInTheDocument()
+      expect(queryByText('Description cannot be empty!')).toBeInTheDocument(),
     );
 
     // Type in the title and the description of the event project
@@ -91,11 +91,13 @@ describe('Testing Add Event Project Modal', () => {
     fireEvent.click(queryByText('Create Project') as Element);
 
     await waitFor(() =>
-      expect(queryByText('Adding the project...')).toBeInTheDocument()
+      expect(queryByText('Adding the project...')).toBeInTheDocument(),
     );
 
     await waitFor(() =>
-      expect(queryByText('Added the project successfully!')).toBeInTheDocument()
+      expect(
+        queryByText('Added the project successfully!'),
+      ).toBeInTheDocument(),
     );
   });
 
@@ -110,7 +112,7 @@ describe('Testing Add Event Project Modal', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     // Type in the title and the description of the event project
@@ -125,8 +127,8 @@ describe('Testing Add Event Project Modal', () => {
 
     await waitFor(() =>
       expect(
-        queryByText('There was an error in adding the project!')
-      ).toBeInTheDocument()
+        queryByText('There was an error in adding the project!'),
+      ).toBeInTheDocument(),
     );
   });
 });

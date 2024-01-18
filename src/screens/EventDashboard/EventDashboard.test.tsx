@@ -70,13 +70,13 @@ describe('Testing Event Dashboard Screen', () => {
             <EventDashboard />
           </LocalizationProvider>
         </MockedProvider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
     await waitFor(() => expect(queryAllByText('Event Title').length).toBe(2));
 
     await waitFor(() =>
-      expect(queryAllByText('Event Description').length).toBe(2)
+      expect(queryAllByText('Event Description').length).toBe(2),
     );
 
     await waitFor(() => expect(queryByText('India')).toBeInTheDocument());
@@ -84,8 +84,8 @@ describe('Testing Event Dashboard Screen', () => {
     // Relevant message should be shown if the projects are 0 in length
     await waitFor(() =>
       expect(
-        queryByText('There are no active projects for this event!')
-      ).toBeInTheDocument()
+        queryByText('There are no active projects for this event!'),
+      ).toBeInTheDocument(),
     );
 
     await wait();
@@ -104,7 +104,7 @@ describe('Testing Event Dashboard Screen', () => {
             <EventDashboard />
           </LocalizationProvider>
         </MockedProvider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
     await waitFor(() => expect(queryAllByText('Event Title').length).toBe(2));
@@ -127,13 +127,13 @@ describe('Testing Event Dashboard Screen', () => {
             </I18nextProvider>
           </LocalizationProvider>
         </MockedProvider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
     await waitFor(() => expect(queryByText('Project 1')).toBeInTheDocument());
 
     await waitFor(() =>
-      expect(queryByText('Project Description 1')).toBeInTheDocument()
+      expect(queryByText('Project Description 1')).toBeInTheDocument(),
     );
 
     await wait();
@@ -152,7 +152,7 @@ describe('Testing Event Dashboard Screen', () => {
             <EventDashboard />
           </LocalizationProvider>
         </MockedProvider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
     await waitFor(() => expect(queryAllByText('Event Title').length).toBe(2));
@@ -160,30 +160,30 @@ describe('Testing Event Dashboard Screen', () => {
     // Add Event Project Modal
     await waitFor(() =>
       fireEvent.click(
-        getByRole('button', { name: 'addEventProject' }) as HTMLElement
-      )
+        getByRole('button', { name: 'addEventProject' }) as HTMLElement,
+      ),
     );
 
     fireEvent.click(queryByRole('button', { name: /close/i }) as HTMLElement);
     // Edit Event Project Modal
     await waitFor(() =>
       fireEvent.click(
-        getByRole('button', { name: 'editEventProject' }) as HTMLElement
-      )
+        getByRole('button', { name: 'editEventProject' }) as HTMLElement,
+      ),
     );
     fireEvent.click(queryByRole('button', { name: /close/i }) as HTMLElement);
 
     // Delete Event Project Modal
     await waitFor(() =>
       fireEvent.click(
-        getByRole('button', { name: 'deleteEventProject' }) as HTMLElement
-      )
+        getByRole('button', { name: 'deleteEventProject' }) as HTMLElement,
+      ),
     );
     fireEvent.click(queryByRole('button', { name: /close/i }) as HTMLElement);
 
     // Add Task Modal
     await waitFor(() =>
-      fireEvent.click(getByRole('button', { name: 'addTask' }) as HTMLElement)
+      fireEvent.click(getByRole('button', { name: 'addTask' }) as HTMLElement),
     );
     fireEvent.click(queryByRole('button', { name: /close/i }) as HTMLElement);
 

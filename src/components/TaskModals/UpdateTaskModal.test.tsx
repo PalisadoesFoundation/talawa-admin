@@ -88,11 +88,11 @@ describe('Testing Update Event Task Modal', () => {
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await waitFor(() =>
-      expect(queryByText('Update the Event Task')).toBeInTheDocument()
+      expect(queryByText('Update the Event Task')).toBeInTheDocument(),
     );
 
     // Set the title and the description of the event task to blank
@@ -107,10 +107,10 @@ describe('Testing Update Event Task Modal', () => {
 
     // Check for blank entry warning modals
     await waitFor(() =>
-      expect(queryByText('Title cannot be empty!')).toBeInTheDocument()
+      expect(queryByText('Title cannot be empty!')).toBeInTheDocument(),
     );
     await waitFor(() =>
-      expect(queryByText('Description cannot be empty!')).toBeInTheDocument()
+      expect(queryByText('Description cannot be empty!')).toBeInTheDocument(),
     );
 
     // Type in the title and the description of the event task
@@ -129,11 +129,11 @@ describe('Testing Update Event Task Modal', () => {
     fireEvent.click(queryByText('Update Task') as Element);
 
     await waitFor(() =>
-      expect(queryByText('Updating the task...')).toBeInTheDocument()
+      expect(queryByText('Updating the task...')).toBeInTheDocument(),
     );
 
     await waitFor(() =>
-      expect(queryByText('Updated the task successfully!')).toBeInTheDocument()
+      expect(queryByText('Updated the task successfully!')).toBeInTheDocument(),
     );
   });
 
@@ -150,13 +150,13 @@ describe('Testing Update Event Task Modal', () => {
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await waitFor(() =>
       expect(
-        queryByText('There are no volunteers assigned for this task.')
-      ).toBeInTheDocument()
+        queryByText('There are no volunteers assigned for this task.'),
+      ).toBeInTheDocument(),
     );
   });
 
@@ -182,13 +182,13 @@ describe('Testing Update Event Task Modal', () => {
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await waitFor(() =>
       expect(
-        queryByText('There are no volunteers assigned for this task.')
-      ).not.toBeInTheDocument()
+        queryByText('There are no volunteers assigned for this task.'),
+      ).not.toBeInTheDocument(),
     );
 
     await waitFor(() => expect(queryByText('John Doe')).toBeInTheDocument());
@@ -207,7 +207,7 @@ describe('Testing Update Event Task Modal', () => {
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     // Type in the title and the description of the event project
@@ -226,8 +226,8 @@ describe('Testing Update Event Task Modal', () => {
 
     await waitFor(() =>
       expect(
-        queryByText('There was an error in updating the task!')
-      ).toBeInTheDocument()
+        queryByText('There was an error in updating the task!'),
+      ).toBeInTheDocument(),
     );
   });
 
@@ -244,19 +244,19 @@ describe('Testing Update Event Task Modal', () => {
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     // Manage Volunteer Modal
     fireEvent.click(queryByText('Manage Volunteers') as Element);
     queryAllByRole('button', { name: /close/i }).forEach((ele) =>
-      fireEvent.click(ele as HTMLElement)
+      fireEvent.click(ele as HTMLElement),
     );
 
     // Delete Task Modal
     fireEvent.click(queryByText('Delete Task') as Element);
     queryAllByRole('button', { name: /close/i }).forEach((ele) =>
-      fireEvent.click(ele as HTMLElement)
+      fireEvent.click(ele as HTMLElement),
     );
   });
 });

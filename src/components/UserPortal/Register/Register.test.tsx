@@ -81,7 +81,7 @@ describe('Testing Register Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -97,7 +97,7 @@ describe('Testing Register Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -117,7 +117,7 @@ describe('Testing Register Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -137,7 +137,7 @@ describe('Testing Register Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -158,7 +158,7 @@ describe('Testing Register Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -182,7 +182,7 @@ describe('Testing Register Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -208,7 +208,7 @@ describe('Testing Register Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -224,7 +224,7 @@ describe('Testing Register Component [User Portal]', () => {
     userEvent.click(screen.getByTestId('registerBtn'));
 
     expect(toast.error).toBeCalledWith(
-      "Password doesn't match. Confirm Password and try again."
+      "Password doesn't match. Confirm Password and try again.",
     );
   });
 
@@ -238,7 +238,7 @@ describe('Testing Register Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -247,7 +247,7 @@ describe('Testing Register Component [User Portal]', () => {
 
     userEvent.type(
       screen.getByTestId('confirmPasswordInput'),
-      formData.confirmPassword
+      formData.confirmPassword,
     );
 
     userEvent.type(screen.getByTestId('emailInput'), formData.email);
@@ -261,7 +261,7 @@ describe('Testing Register Component [User Portal]', () => {
     await wait();
 
     expect(toast.success).toBeCalledWith(
-      'Successfully registered. Please wait for admin to approve your request.'
+      'Successfully registered. Please wait for admin to approve your request.',
     );
   });
 });

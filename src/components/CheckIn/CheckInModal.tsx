@@ -45,8 +45,8 @@ export const CheckInModal = (props: InterfaceModalProp): JSX.Element => {
               checkIn: checkIn.checkIn,
               eventId: props.eventId,
             },
-          })
-        )
+          }),
+        ),
       );
   }, [checkInData, props.eventId, checkInLoading]);
 

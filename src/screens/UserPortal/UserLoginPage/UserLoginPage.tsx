@@ -95,7 +95,7 @@ function loginPage(): JSX.Element {
   }, []);
 
   const verifyRecaptcha = async (
-    recaptchaToken: any
+    recaptchaToken: any,
   ): Promise<boolean | void> => {
     try {
       /* istanbul ignore next */

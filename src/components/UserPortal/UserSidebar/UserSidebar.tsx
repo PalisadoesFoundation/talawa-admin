@@ -26,7 +26,7 @@ function userSidebar(): JSX.Element {
     USER_JOINED_ORGANIZATIONS,
     {
       variables: { id: userId },
-    }
+    },
   );
 
   const { data: data2, loading: loadingUserDetails } = useQuery(USER_DETAILS, {

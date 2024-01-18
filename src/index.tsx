@@ -59,10 +59,10 @@ const errorLink = onError(
         'API server unavailable. Check your connection or try again later',
         {
           toastId: 'apiServer',
-        }
+        },
       );
     }
-  }
+  },
 );
 
 const httpLink = new HttpLink({
@@ -76,7 +76,7 @@ const httpLink = new HttpLink({
 const wsLink = new GraphQLWsLink(
   createClient({
     url: REACT_APP_BACKEND_WEBSOCKET_URL,
-  })
+  }),
 );
 // The split function takes three parameters:
 //
@@ -92,7 +92,7 @@ const splitLink = split(
     );
   },
   wsLink,
-  httpLink
+  httpLink,
 );
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
@@ -113,5 +113,5 @@ ReactDOM.render(
       </BrowserRouter>
     </ApolloProvider>
   </Suspense>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );

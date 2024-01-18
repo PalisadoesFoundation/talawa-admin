@@ -46,7 +46,7 @@ describe('Testing AddOnStore Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>
+      </ApolloProvider>,
     );
     expect(getByTestId('AddOnEntryStore')).toBeInTheDocument();
   });

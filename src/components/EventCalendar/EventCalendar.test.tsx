@@ -101,7 +101,7 @@ describe('Calendar', () => {
     const currentYear = getByTestId('current-date');
 
     expect(currentMonth).toHaveTextContent(
-      today.toLocaleString('default', { month: 'long' })
+      today.toLocaleString('default', { month: 'long' }),
     );
     expect(currentYear).toHaveTextContent(today.getFullYear().toString());
   });
@@ -133,7 +133,7 @@ describe('Calendar', () => {
         <I18nextProvider i18n={i18nForTest}>
           <Calendar eventData={eventData} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
     const prevButton = screen.getByTestId('prevmonth');
     fireEvent.click(prevButton);
@@ -170,7 +170,7 @@ describe('Calendar', () => {
         <I18nextProvider i18n={i18nForTest}>
           <Calendar eventData={currentDayEventMock} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
   });
   it('Test for superadmin case', () => {
@@ -179,7 +179,7 @@ describe('Calendar', () => {
         <I18nextProvider i18n={i18nForTest}>
           <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
   });
   it('Today Cell is having correct styles', () => {
@@ -188,7 +188,7 @@ describe('Calendar', () => {
         <I18nextProvider i18n={i18nForTest}>
           <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
     // const todayDate = new Date().getDate();
     // const todayElement = screen.getByText(todayDate.toString());
@@ -200,7 +200,7 @@ describe('Calendar', () => {
         <I18nextProvider i18n={i18nForTest}>
           <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
     //Changing the month
     const prevButton = screen.getByTestId('prevmonth');
@@ -263,7 +263,7 @@ describe('Calendar', () => {
         <I18nextProvider i18n={i18nForTest}>
           <Calendar eventData={multipleEventData} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
     const moreButton = screen.getByText('View all');
     fireEvent.click(moreButton);
@@ -279,7 +279,7 @@ describe('Calendar', () => {
         <I18nextProvider i18n={i18nForTest}>
           <Calendar eventData={eventData} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     act(() => {
