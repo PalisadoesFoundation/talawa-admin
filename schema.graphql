@@ -1002,7 +1002,6 @@ type User {
   joinedOrganizations: [Organization]
   lastName: String!
   membershipRequests: [MembershipRequest]
-  organizationUserBelongsTo: Organization
   organizationsBlockedBy: [Organization]
   pluginCreationAllowed: Boolean
   registeredEvents: [Event]

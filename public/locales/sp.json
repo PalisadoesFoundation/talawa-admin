@@ -320,7 +320,8 @@
     "Oldest": "Más Antiguas Primero",
     "Latest": "Más Recientes Primero",
     "sortPost": "Ordenar Publicaciones",
-    "tag": "Su navegador no admite la etiqueta de video"
+    "tag": "Su navegador no admite la etiqueta de video",
+    "pinPost": "Fijar publicación"
   },
   "postNotFound": {
     "post": "Publicaciones",
@@ -531,7 +532,6 @@
     "main": "Principal",
     "firstName": "Nombre",
     "lastName": "Apellido",
-    "memberOfOrganization": "Miembro de la organización",
     "language": "Idioma",
     "adminApproved": "Aprobado por el administrador",
     "pluginCreationAllowed": "Permitir creación de complementos",

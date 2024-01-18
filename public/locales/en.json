@@ -325,7 +325,8 @@
     "Oldest": "Oldest First",
     "Latest": "Latest First",
     "sortPost": "Sort Post",
-    "tag": " Your browser does not support the video tag"
+    "tag": " Your browser does not support the video tag",
+    "pinPost": "Pin post"
   },
   "postNotFound": {
     "post": "Post",
@@ -535,7 +536,6 @@
     "main": "Main",
     "firstName": "First name",
     "lastName": "Last name",
-    "memberOfOrganization": "Member of Organization",
     "language": "Language",
     "adminApproved": "Admin approved",
     "pluginCreationAllowed": "Plugin creation allowed",

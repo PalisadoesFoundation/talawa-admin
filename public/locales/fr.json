@@ -321,7 +321,8 @@
     "Oldest": "Les plus anciennes d'abord",
     "Latest": "Les plus récentes d'abord",
     "sortPost": "Trier les publications",
-    "tag": "Votre navigateur ne prend pas en charge la balise vidéo"
+    "tag": "Votre navigateur ne prend pas en charge la balise vidéo",
+    "pinPost": "Épingler le message"
   },
   "postNotFound": {
     "post": "Poste",
@@ -531,7 +532,6 @@
     "main": "Principal",
     "firstName": "Prénom",
     "lastName": "Nom de famille",
-    "memberOfOrganization": "Membre de l'organisation",
     "language": "Langue",
     "adminApproved": "Approuvé par l'administrateur",
     "pluginCreationAllowed": "Autorisation de création de plugin",

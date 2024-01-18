@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import Calendar from './EventCalendar';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
@@ -212,7 +212,7 @@ describe('Calendar', () => {
     // const todayCell = screen.getByText(new Date().getDate().toString());
     // expect(todayCell).toHaveClass(styles.day__today);
   });
-  it('Should expand and contract when clicked on more and less button', () => {
+  it('Should expand and contract when clicked on View all and View less button', () => {
     const multipleEventData = [
       {
         _id: '1',
@@ -265,11 +265,25 @@ describe('Calendar', () => {
         </I18nextProvider>
       </MockedProvider>
     );
-    const moreButton = screen.getByText('More');
+    const moreButton = screen.getByText('View all');
     fireEvent.click(moreButton);
     expect(screen.getByText('Event 3')).toBeInTheDocument();
-    const lessButton = screen.getByText('Less');
+    const lessButton = screen.getByText('View less');
     fireEvent.click(lessButton);
     expect(screen.queryByText('Event 3')).not.toBeInTheDocument();
+  });
+
+  test('Handles window resize', () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={eventData} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    act(() => {
+      window.dispatchEvent(new Event('resize'));
+    });
   });
 });
