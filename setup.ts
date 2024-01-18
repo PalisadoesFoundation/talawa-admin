@@ -54,7 +54,6 @@ async function main(): Promise<void> {
   console.log('Welcome to the Talawa Admin setup! 🚀');
 
   if (!fs.existsSync('.env')) {
-    // fs.copyFileSync('.env.example', '.env');
     fs.openSync('.env', 'w');
     const config = dotenv.parse(fs.readFileSync('.env.example'));
     for (const key in config) {
