@@ -21,11 +21,6 @@ const propsOrg: InterfaceLeftDrawerProps = {
   ...props,
   screenName: 'My Organizations',
 };
-const propsReq: InterfaceLeftDrawerProps = {
-  ...props,
-  hideDrawer: false,
-  screenName: 'Requests',
-};
 const propsUsers: InterfaceLeftDrawerProps = {
   ...props,
   hideDrawer: null,
@@ -80,7 +75,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     );
 
     expect(screen.getByText('My Organizations')).toBeInTheDocument();
-    expect(screen.getByText('Requests')).toBeInTheDocument();
     expect(screen.getByText('Users')).toBeInTheDocument();
     expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
 
@@ -89,14 +83,10 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     expect(screen.getByAltText(/dummy picture/i)).toBeInTheDocument();
 
     const orgsBtn = screen.getByTestId(/orgsBtn/i);
-    const requestsBtn = screen.getByTestId(/requestsBtn/i);
     const rolesBtn = screen.getByTestId(/rolesBtn/i);
 
     expect(
       orgsBtn.className.includes('text-white btn btn-success')
-    ).toBeTruthy();
-    expect(
-      requestsBtn.className.includes('text-secondary btn btn-light')
     ).toBeTruthy();
     expect(
       rolesBtn.className.includes('text-secondary btn btn-light')
@@ -108,25 +98,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     // Send to roles screen
     userEvent.click(rolesBtn);
     expect(global.window.location.pathname).toContain('/users');
-  });
-
-  test('Testing in requests screen', () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <LeftDrawer {...propsOrg} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    const orgsBtn = screen.getByTestId(/orgsBtn/i);
-
-    // Send to organizations screen
-    userEvent.click(orgsBtn);
-    expect(global.window.location.pathname).toContain('/orglist');
   });
 
   test('Testing in roles screen', () => {
@@ -142,37 +113,14 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     );
 
     const orgsBtn = screen.getByTestId(/orgsBtn/i);
-    const requestsBtn = screen.getByTestId(/requestsBtn/i);
     const rolesBtn = screen.getByTestId(/rolesBtn/i);
 
     expect(
       orgsBtn.className.includes('text-secondary btn btn-light')
     ).toBeTruthy();
     expect(
-      requestsBtn.className.includes('text-secondary btn btn-light')
-    ).toBeTruthy();
-    expect(
       rolesBtn.className.includes('text-white btn btn-success')
     ).toBeTruthy();
-
-    // Send to requests screen
-    userEvent.click(requestsBtn);
-    expect(global.window.location.pathname).toContain('/requests');
-  });
-
-  test('Testing Drawer open close functionality', () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <LeftDrawer {...propsOrg} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-    const closeModalBtn = screen.getByTestId(/closeModalBtn/i);
-    userEvent.click(closeModalBtn);
   });
 
   test('Testing Drawer when hideDrawer is null', () => {
@@ -182,19 +130,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <LeftDrawer {...propsUsers} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-  });
-
-  test('Testing Drawer when hideDrawer is true', () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <LeftDrawer {...propsReq} />
           </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>
@@ -246,7 +181,6 @@ describe('Testing Left Drawer component for ADMIN', () => {
 
     // These screens arent meant for admins so they should not be present
     expect(screen.queryByTestId(/rolesBtn/i)).toBeNull();
-    expect(screen.queryByTestId(/requestsBtn/i)).toBeNull();
 
     // Coming soon
     userEvent.click(screen.getByTestId(/profileBtn/i));

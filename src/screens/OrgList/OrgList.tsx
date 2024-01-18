@@ -1,27 +1,26 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Search } from '@mui/icons-material';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import SortIcon from '@mui/icons-material/Sort';
-import { CREATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  CREATE_ORGANIZATION_MUTATION,
+  CREATE_SAMPLE_ORGANIZATION_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 
-import { CREATE_SAMPLE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
-
 import OrgListCard from 'components/OrgListCard/OrgListCard';
 import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { Col, Dropdown, Form, Row } from 'react-bootstrap';
+import { Dropdown, Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useTranslation } from 'react-i18next';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import type {
   InterfaceOrgConnectionInfoType,
@@ -29,6 +28,7 @@ import type {
   InterfaceUserType,
 } from 'utils/interfaces';
 import styles from './OrgList.module.css';
+import OrganizationModal from './OrganizationModal';
 
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
@@ -62,7 +62,7 @@ function orgList(): JSX.Element {
   const [formState, setFormState] = useState({
     name: '',
     descrip: '',
-    ispublic: true,
+    userRegistrationRequired: true,
     visible: false,
     location: '',
     image: '',
@@ -85,6 +85,9 @@ function orgList(): JSX.Element {
     error?: Error | undefined;
   } = useQuery(USER_ORGANIZATION_LIST, {
     variables: { id: localStorage.getItem('id') },
+    context: {
+      headers: { authorization: `Bearer ${localStorage.getItem('token')}` },
+    },
   });
 
   const {
@@ -117,7 +120,7 @@ function orgList(): JSX.Element {
       setFormState({
         name: '',
         descrip: '',
-        ispublic: true,
+        userRegistrationRequired: true,
         visible: false,
         location: '',
         image: '',
@@ -166,7 +169,7 @@ function orgList(): JSX.Element {
       descrip: _descrip,
       location: _location,
       visible,
-      ispublic,
+      userRegistrationRequired,
       image,
     } = formState;
 
@@ -181,7 +184,7 @@ function orgList(): JSX.Element {
           description: descrip,
           location: location,
           visibleInSearch: visible,
-          isPublic: ispublic,
+          userRegistrationRequired: userRegistrationRequired,
           image: image,
         },
       });
@@ -194,7 +197,7 @@ function orgList(): JSX.Element {
         setFormState({
           name: '',
           descrip: '',
-          ispublic: true,
+          userRegistrationRequired: true,
           visible: false,
           location: '',
           image: '',
@@ -225,18 +228,30 @@ function orgList(): JSX.Element {
   };
 
   /* istanbul ignore next */
-  const handleSearchByName = (e: any): void => {
+  const handleSearch = (value: string): void => {
+    setSearchByName(value);
+    if (value === '') {
+      resetAllParams();
+      return;
+    }
+    refetchOrgs({
+      filter: value,
+    });
+  };
+
+  const handleSearchByEnter = (e: any): void => {
     if (e.key === 'Enter') {
       const { value } = e.target;
-      setSearchByName(value);
-      if (value == '') {
-        resetAllParams();
-        return;
-      }
-      refetchOrgs({
-        filter: value,
-      });
+      handleSearch(value);
     }
+  };
+
+  const handleSearchByBtnClick = (): void => {
+    const inputElement = document.getElementById(
+      'searchOrgname'
+    ) as HTMLInputElement;
+    const inputValue = inputElement?.value || '';
+    handleSearch(inputValue);
   };
   /* istanbul ignore next */
   const loadMoreOrganizations = (): void => {
@@ -302,17 +317,19 @@ function orgList(): JSX.Element {
           <div className={styles.input}>
             <Form.Control
               type="name"
-              id="orgname"
+              id="searchOrgname"
               className="bg-white"
               placeholder={t('searchByName')}
               data-testid="searchByName"
               autoComplete="off"
               required
-              onKeyUp={handleSearchByName}
+              onKeyUp={handleSearchByEnter}
             />
             <Button
               tabIndex={-1}
               className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+              onClick={handleSearchByBtnClick}
+              data-testid="searchBtn"
             >
               <Search />
             </Button>
@@ -346,17 +363,6 @@ function orgList(): JSX.Element {
                   >
                     {t('Earliest')}
                   </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-              <Dropdown aria-expanded="false" title="Filter organizations">
-                <Dropdown.Toggle variant="outline-success">
-                  <FilterListIcon className={'me-1'} />
-                  {t('filter')}
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </div>
@@ -478,168 +484,29 @@ function orgList(): JSX.Element {
           </>
         )}
         {/* Create Organization Modal */}
-        <Modal
-          show={showModal}
-          onHide={toggleModal}
-          aria-labelledby="contained-modal-title-vcenter"
-          centered
-        >
-          <Modal.Header
-            className="bg-primary"
-            closeButton
-            data-testid="modalOrganizationHeader"
-          >
-            <Modal.Title className="text-white">
-              {t('createOrganization')}
-            </Modal.Title>
-          </Modal.Header>
-          <Form onSubmitCapture={createOrg}>
-            <Modal.Body>
-              <Form.Label htmlFor="orgname">{t('name')}</Form.Label>
-              <Form.Control
-                type="name"
-                id="orgname"
-                className="mb-3"
-                placeholder={t('enterName')}
-                data-testid="modalOrganizationName"
-                autoComplete="off"
-                required
-                value={formState.name}
-                onChange={(e): void => {
-                  const inputText = e.target.value;
-                  if (inputText.length < 50) {
-                    setFormState({
-                      ...formState,
-                      name: e.target.value,
-                    });
-                  }
-                }}
-              />
-              <Form.Label htmlFor="descrip">{t('description')}</Form.Label>
-              <Form.Control
-                type="descrip"
-                id="descrip"
-                className="mb-3"
-                placeholder={t('description')}
-                autoComplete="off"
-                required
-                value={formState.descrip}
-                onChange={(e): void => {
-                  const descriptionText = e.target.value;
-                  if (descriptionText.length < 200) {
-                    setFormState({
-                      ...formState,
-                      descrip: e.target.value,
-                    });
-                  }
-                }}
-              />
-              <Form.Label htmlFor="location">{t('location')}</Form.Label>
-              <Form.Control
-                type="text"
-                id="location"
-                className="mb-3"
-                placeholder={t('location')}
-                autoComplete="off"
-                required
-                value={formState.location}
-                onChange={(e): void => {
-                  const locationText = e.target.value;
-                  if (locationText.length < 100) {
-                    setFormState({
-                      ...formState,
-                      location: e.target.value,
-                    });
-                  }
-                }}
-              />
-
-              <Row className="mb-3">
-                <Col>
-                  <Form.Label htmlFor="ispublic">{t('isPublic')}</Form.Label>
-                  <Form.Switch
-                    id="ispublic"
-                    data-testid="isPublic"
-                    type="checkbox"
-                    defaultChecked={formState.ispublic}
-                    onChange={(): void =>
-                      setFormState({
-                        ...formState,
-                        ispublic: !formState.ispublic,
-                      })
-                    }
-                  />
-                </Col>
-                <Col>
-                  <Form.Label htmlFor="visibleInSearch">
-                    {t('visibleInSearch')}
-                  </Form.Label>
-                  <Form.Switch
-                    id="visibleInSearch"
-                    data-testid="visibleInSearch"
-                    type="checkbox"
-                    defaultChecked={formState.visible}
-                    onChange={(): void =>
-                      setFormState({
-                        ...formState,
-                        visible: !formState.visible,
-                      })
-                    }
-                  />
-                </Col>
-              </Row>
-              <Form.Label htmlFor="orgphoto">{t('displayImage')}</Form.Label>
-              <Form.Control
-                accept="image/*"
-                id="orgphoto"
-                className="mb-3"
-                name="photo"
-                type="file"
-                multiple={false}
-                onChange={async (e: React.ChangeEvent): Promise<void> => {
-                  const target = e.target as HTMLInputElement;
-                  const file = target.files && target.files[0];
-                  /* istanbul ignore else */
-                  if (file)
-                    setFormState({
-                      ...formState,
-                      image: await convertToBase64(file),
-                    });
-                }}
-                data-testid="organisationImage"
-              />
-              <Col className={styles.sampleOrgSection}>
-                <Button
-                  className={styles.orgCreationBtn}
-                  type="submit"
-                  value="invite"
-                  data-testid="submitOrganizationForm"
-                >
-                  {t('createOrganization')}
-                </Button>
-
-                <div className="position-relative">
-                  <hr />
-                  <span className={styles.orText}>{t('OR')}</span>
-                </div>
-                {userData &&
-                  ((userData.user.userType === 'ADMIN' &&
-                    userData.user.adminFor.length > 0) ||
-                    userData.user.userType === 'SUPERADMIN') && (
-                    <div className={styles.sampleOrgSection}>
-                      <Button
-                        className={styles.sampleOrgCreationBtn}
-                        onClick={() => triggerCreateSampleOrg()}
-                        data-testid="createSampleOrganizationBtn"
-                      >
-                        {t('createSampleOrganization')}
-                      </Button>
-                    </div>
-                  )}
-              </Col>
-            </Modal.Body>
-          </Form>
-        </Modal>{' '}
+        {/**
+         * Renders the `OrganizationModal` component.
+         *
+         * @param showModal - A boolean indicating whether the modal should be displayed.
+         * @param toggleModal - A function to toggle the visibility of the modal.
+         * @param formState - The state of the form in the organization modal.
+         * @param setFormState - A function to update the state of the form in the organization modal.
+         * @param createOrg - A function to handle the submission of the organization creation form.
+         * @param t - A translation function for localization.
+         * @param userData - Information about the current user.
+         * @param triggerCreateSampleOrg - A function to trigger the creation of a sample organization.
+         * @returns JSX element representing the `OrganizationModal`.
+         */}
+        <OrganizationModal
+          showModal={showModal}
+          toggleModal={toggleModal}
+          formState={formState}
+          setFormState={setFormState}
+          createOrg={createOrg}
+          t={t}
+          userData={userData}
+          triggerCreateSampleOrg={triggerCreateSampleOrg}
+        />
         {/* Plugin Notification Modal after Org is Created */}
         <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
           <Modal.Body>

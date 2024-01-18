@@ -13,7 +13,7 @@
 
 ### changeLanguage
 
-▸ **changeLanguage**(`languageCode`): `Promise`<`void`\>
+▸ **changeLanguage**(`languageCode`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -23,7 +23,7 @@
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 

@@ -181,13 +181,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                             <Col sm={6}>{userData?.user?.userType}</Col>
                           </Row>
                           <Row className="border-bottom py-3">
-                            <Col sm={6}>{t('memberOfOrganization')}</Col>
-                            <Col sm={6}>
-                              {userData?.user?.organizationUserBelongsTo ??
-                                'None'}
-                            </Col>
-                          </Row>
-                          <Row className="border-bottom py-3">
                             <Col sm={6}>{t('language')}</Col>
                             <Col sm={6}>
                               {getLanguageName(userData?.user?.appLanguageCode)}

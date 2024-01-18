@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'react';
+// import PropTypes from 'react';
 import styles from './Advertisements.module.css';
 import { useQuery } from '@apollo/client';
 import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
@@ -31,7 +31,7 @@ export default function advertisements(): JSX.Element {
     <>
       <OrganizationScreen
         data-testid="AdEntryStore"
-        screenName="Advertisement Store"
+        screenName="Advertisement"
         title={t('title')}
       >
         <Row>

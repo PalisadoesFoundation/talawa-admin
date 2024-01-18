@@ -12,7 +12,7 @@ import { ToastContainer } from 'react-toastify';
 import { GENERATE_OTP_MUTATION } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import i18nForTest from 'utils/i18nForTest';
+// import i18nForTest from 'utils/i18nForTest';
 import ForgotPassword from './ForgotPassword';
 import i18n from 'utils/i18nForTest';
 
@@ -91,7 +91,7 @@ describe('Testing Forgot Password screen', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               <ForgotPassword />
             </I18nextProvider>
           </Provider>
@@ -115,7 +115,7 @@ describe('Testing Forgot Password screen', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               <ForgotPassword />
             </I18nextProvider>
           </Provider>
@@ -135,7 +135,7 @@ describe('Testing Forgot Password screen', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               <ForgotPassword />
             </I18nextProvider>
           </Provider>
@@ -166,7 +166,7 @@ describe('Testing Forgot Password screen', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               <ForgotPassword />
             </I18nextProvider>
           </Provider>
@@ -207,7 +207,7 @@ describe('Testing Forgot Password screen', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               <ForgotPassword />
             </I18nextProvider>
           </Provider>
@@ -248,7 +248,7 @@ describe('Testing Forgot Password screen', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               <ForgotPassword />
             </I18nextProvider>
           </Provider>
@@ -285,7 +285,7 @@ describe('Testing Forgot Password screen', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               <ToastContainer />
               <ForgotPassword />
             </I18nextProvider>
@@ -314,7 +314,7 @@ describe('Testing Forgot Password screen', () => {
       <MockedProvider addTypename={false} link={notWorkingLink}>
         <BrowserRouter>
           <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               <ToastContainer />
               <ForgotPassword />
             </I18nextProvider>
@@ -338,7 +338,7 @@ describe('Testing Forgot Password screen', () => {
       <MockedProvider addTypename={false} link={talawaApiUnavailableLink}>
         <BrowserRouter>
           <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               <ToastContainer />
               <ForgotPassword />
             </I18nextProvider>
@@ -375,7 +375,7 @@ describe('Testing Forgot Password screen', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               <ForgotPassword />
             </I18nextProvider>
           </Provider>
