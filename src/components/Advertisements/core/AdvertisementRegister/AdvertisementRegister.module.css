@@ -4,7 +4,8 @@
   align-items: center;
 }
 
-.modalbtn i {
+.modalbtn i,
+.button i {
   margin-right: 8px;
 }
 

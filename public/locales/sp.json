@@ -698,7 +698,11 @@
     "deleteAdvertisementMsg": "¿Desea eliminar este anuncio?",
     "no": "No",
     "yes": "Sí",
-    "Rmedia": "Proporcionar contenido multimedia para mostrar"
+    "Rmedia": "Proporcionar contenido multimedia para mostrar",
+    "view": "Ver",
+    "edit": "Editar",
+    "editAdvertisement": "Editar Anuncio",
+    "saveChanges": "Guardar Cambios"
   },
   "userChat": {
     "chat": "Charlar",

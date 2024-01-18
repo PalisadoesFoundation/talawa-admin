@@ -443,6 +443,31 @@ export const ADD_ADVERTISEMENT_MUTATION = gql`
     }
   }
 `;
+export const UPDATE_ADVERTISEMENT_MUTATION = gql`
+  mutation UpdateAdvertisement(
+    $id: ID!
+    $name: String
+    $link: String
+    $type: AdvertisementType
+    $startDate: Date
+    $endDate: Date
+  ) {
+    updateAdvertisement(
+      input: {
+        _id: $id
+        name: $name
+        link: $link
+        type: $type
+        startDate: $startDate
+        endDate: $endDate
+      }
+    ) {
+      advertisement {
+        _id
+      }
+    }
+  }
+`;
 export const DELETE_ADVERTISEMENT_BY_ID = gql`
   mutation ($id: ID!) {
     deleteAdvertisementById(id: $id) {

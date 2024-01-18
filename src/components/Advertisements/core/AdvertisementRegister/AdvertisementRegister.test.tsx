@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, screen, waitFor } from '@testing-library/react';
+import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 
 import {
   ApolloClient,
@@ -49,6 +49,7 @@ const MOCKS = [
       data: {
         createAdvertisement: {
           _id: '1',
+          __typename: 'Advertisement',
         },
       },
     },
@@ -94,7 +95,7 @@ describe('Testing Advertisement Register Component', () => {
     });
   });
 
-  test('AdvertismentRegister component loads correctly', async () => {
+  test('AdvertismentRegister component loads correctly in register mode', async () => {
     const { getByText } = render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -119,6 +120,34 @@ describe('Testing Advertisement Register Component', () => {
       expect(getByText(translations.addNew)).toBeInTheDocument();
     });
   });
+
+  test('AdvertismentRegister component loads correctly in edit mode', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              {
+                <AdvertisementRegister
+                  endDate={new Date()}
+                  startDate={new Date()}
+                  type="BANNER"
+                  name="Advert1"
+                  organizationId="1"
+                  advertisementMedia="google.com"
+                  formStatus="edit"
+                />
+              }
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>
+    );
+    await waitFor(() => {
+      expect(screen.getByTestId('editBtn')).toBeInTheDocument();
+    });
+  });
+
   test('Opens and closes modals on button click', async () => {
     const { getByText, queryByText } = render(
       <ApolloProvider client={client}>
@@ -148,6 +177,7 @@ describe('Testing Advertisement Register Component', () => {
       expect(queryByText(translations.close)).not.toBeInTheDocument();
     });
   });
+
   test('Submits the form and shows success toast on successful advertisement creation', async () => {
     const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
 
@@ -222,6 +252,7 @@ describe('Testing Advertisement Register Component', () => {
 
     expect(queryByText(translations.close)).not.toBeInTheDocument();
   });
+
   test('Logs error to the console and shows error toast when advertisement creation fails', async () => {
     const { getByText, queryByText } = render(
       <MockedProvider addTypename={false} link={link}>
@@ -230,12 +261,12 @@ describe('Testing Advertisement Register Component', () => {
             <I18nextProvider i18n={i18n}>
               {
                 <AdvertisementRegister
-                  endDate={new Date()}
-                  startDate={new Date()}
-                  type="BANNER"
-                  name="Advert1"
-                  organizationId="1"
-                  advertisementMedia="test.png"
+                  endDateEdit={new Date()}
+                  startDateEdit={new Date()}
+                  typeEdit="BANNER"
+                  nameEdit="Advert1"
+                  orgIdEdit="1"
+                  linkEdit="google.com"
                 />
               }
             </I18nextProvider>
@@ -244,11 +275,11 @@ describe('Testing Advertisement Register Component', () => {
       </MockedProvider>
     );
 
-    await waitFor(() => {
-      fireEvent.click(getByText(translations.addNew));
-      expect(queryByText(translations.RClose)).toBeInTheDocument();
+    fireEvent.click(getByText(translations.addNew));
+    expect(queryByText(translations.RClose)).toBeInTheDocument();
 
-      fireEvent.click(getByText(translations.register));
+    fireEvent.click(getByText(translations.register));
+    await waitFor(() => {
       expect(toast.error).toBeCalledWith(
         'An error occured, could not create new advertisement'
       );
@@ -260,7 +291,7 @@ describe('Testing Advertisement Register Component', () => {
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
           <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               {
                 <AdvertisementRegister
                   endDate={new Date()}
