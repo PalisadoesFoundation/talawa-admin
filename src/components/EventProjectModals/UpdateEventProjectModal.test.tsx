@@ -67,19 +67,19 @@ describe('Testing Update Event Project Modal', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await waitFor(() =>
-      expect(queryByText('Update Event Project')).toBeInTheDocument(),
+      expect(queryByText('Update Event Project')).toBeInTheDocument()
     );
 
     // Check for already populated values
     await waitFor(() =>
-      expect(queryByLabelText('Title')).toHaveValue('OldTitle'),
+      expect(queryByLabelText('Title')).toHaveValue('OldTitle')
     );
     await waitFor(() =>
-      expect(queryByLabelText('Description')).toHaveValue('OldDescription'),
+      expect(queryByLabelText('Description')).toHaveValue('OldDescription')
     );
 
     // Update the values to blank ones
@@ -95,10 +95,10 @@ describe('Testing Update Event Project Modal', () => {
 
     // Check for blank entry warning modals
     await waitFor(() =>
-      expect(queryByText('Title cannot be empty!')).toBeInTheDocument(),
+      expect(queryByText('Title cannot be empty!')).toBeInTheDocument()
     );
     await waitFor(() =>
-      expect(queryByText('Description cannot be empty!')).toBeInTheDocument(),
+      expect(queryByText('Description cannot be empty!')).toBeInTheDocument()
     );
 
     // Set the title and the description of the event project to new values
@@ -112,13 +112,13 @@ describe('Testing Update Event Project Modal', () => {
     fireEvent.click(queryByText('Update Details') as Element);
 
     await waitFor(() =>
-      expect(queryByText('Updating the project...')).toBeInTheDocument(),
+      expect(queryByText('Updating the project...')).toBeInTheDocument()
     );
 
     await waitFor(() =>
       expect(
-        queryByText('Updated the project successfully!'),
-      ).toBeInTheDocument(),
+        queryByText('Updated the project successfully!')
+      ).toBeInTheDocument()
     );
   });
 
@@ -133,7 +133,7 @@ describe('Testing Update Event Project Modal', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     // Type in the title and the description of the event project
@@ -148,8 +148,8 @@ describe('Testing Update Event Project Modal', () => {
 
     await waitFor(() =>
       expect(
-        queryByText('There was an error in updating the project details!'),
-      ).toBeInTheDocument(),
+        queryByText('There was an error in updating the project details!')
+      ).toBeInTheDocument()
     );
   });
 });

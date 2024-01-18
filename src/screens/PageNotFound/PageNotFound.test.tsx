@@ -17,13 +17,13 @@ describe('Testing Page not found component', () => {
             <PageNotFound />
           </I18nextProvider>
         </Provider>
-      </BrowserRouter>,
+      </BrowserRouter>
     );
 
     expect(screen.getByText(/Talawa Admin/i)).toBeTruthy();
     expect(screen.getByText(/404/i)).toBeTruthy();
     expect(
-      screen.getByText(/Oops! The Page you requested was not found!/i),
+      screen.getByText(/Oops! The Page you requested was not found!/i)
     ).toBeTruthy();
     expect(screen.getByText(/Back to Home/i)).toBeTruthy();
   });

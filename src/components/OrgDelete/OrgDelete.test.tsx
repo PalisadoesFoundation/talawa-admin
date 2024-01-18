@@ -20,7 +20,7 @@ describe('Testing Organization People List Card', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgDelete />
         </I18nextProvider>
-      </ApolloProvider>,
+      </ApolloProvider>
     );
     expect(screen.getByText('Delete Org')).toBeInTheDocument();
   });

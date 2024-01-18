@@ -24,7 +24,7 @@ describe('Testing LoginPortalToggle component', () => {
             <LoginPortalToggle />
           </I18nextProvider>
         </Provider>
-      </BrowserRouter>,
+      </BrowserRouter>
     );
 
     await wait();

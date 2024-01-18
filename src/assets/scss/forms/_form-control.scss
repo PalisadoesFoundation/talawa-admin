@@ -82,9 +82,7 @@ $input-height-lg: add(
   add($input-padding-y-lg * 2, $input-height-border, false)
 );
 
-$input-transition:
-  border-color 0.15s ease-in-out,
-  box-shadow 0.15s ease-in-out;
+$input-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
 $form-color-width: 3rem;
 

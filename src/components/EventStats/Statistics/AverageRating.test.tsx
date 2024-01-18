@@ -44,15 +44,15 @@ describe('Testing Average Rating Card', () => {
             <AverageRating {...props} />
           </I18nextProvider>
         </Provider>
-      </BrowserRouter>,
+      </BrowserRouter>
     );
 
     await waitFor(() =>
-      expect(queryByText('Average Review Score')).toBeInTheDocument(),
+      expect(queryByText('Average Review Score')).toBeInTheDocument()
     );
 
     await waitFor(() =>
-      expect(queryByText('Rated 5.00 / 5')).toBeInTheDocument(),
+      expect(queryByText('Rated 5.00 / 5')).toBeInTheDocument()
     );
   });
 });

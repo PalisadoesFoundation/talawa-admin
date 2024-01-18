@@ -74,11 +74,11 @@ describe('Testing Manage Volunteers Modal', () => {
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await waitFor(() =>
-      expect(queryByText('Manage Volunteers')).toBeInTheDocument(),
+      expect(queryByText('Manage Volunteers')).toBeInTheDocument()
     );
 
     // Fill out the autocomplete with volunteer information
@@ -94,13 +94,13 @@ describe('Testing Manage Volunteers Modal', () => {
     fireEvent.click(queryByText('Update Volunteers') as Element);
 
     await waitFor(() =>
-      expect(queryByText('Updating the volunteers...')).toBeInTheDocument(),
+      expect(queryByText('Updating the volunteers...')).toBeInTheDocument()
     );
 
     await waitFor(() =>
       expect(
-        queryByText('Successfully updated the volunteers!'),
-      ).toBeInTheDocument(),
+        queryByText('Successfully updated the volunteers!')
+      ).toBeInTheDocument()
     );
   });
 
@@ -117,19 +117,19 @@ describe('Testing Manage Volunteers Modal', () => {
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     fireEvent.click(queryByText('Update Volunteers') as Element);
 
     await waitFor(() =>
-      expect(queryByText('Updating the volunteers...')).toBeInTheDocument(),
+      expect(queryByText('Updating the volunteers...')).toBeInTheDocument()
     );
 
     await waitFor(() =>
       expect(
-        queryByText('There was an error in updating the volunteers!'),
-      ).toBeInTheDocument(),
+        queryByText('There was an error in updating the volunteers!')
+      ).toBeInTheDocument()
     );
   });
 });

@@ -56,14 +56,14 @@ export default function tasks(): JSX.Element {
   /* istanbul ignore next */
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
+    newPage: number
   ): void => {
     setPage(newPage);
   };
 
   /* istanbul ignore next */
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
     const newRowsPerPage = event.target.value;
 
@@ -101,7 +101,7 @@ export default function tasks(): JSX.Element {
                     (rowsPerPage > 0
                       ? tasks.slice(
                           page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage,
+                          page * rowsPerPage + rowsPerPage
                         )
                       : /* istanbul ignore next */
                         tasks
@@ -114,7 +114,7 @@ export default function tasks(): JSX.Element {
                             lastName: volunteer.lastName,
                             email: volunteer.email,
                           };
-                        },
+                        }
                       );
 
                       const cardProps: InterfaceTaskCardProps = {

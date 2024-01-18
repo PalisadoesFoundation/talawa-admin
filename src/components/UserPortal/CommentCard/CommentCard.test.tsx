@@ -92,7 +92,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -131,7 +131,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -170,7 +170,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -214,7 +214,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();

@@ -52,29 +52,29 @@ describe('Testing Delete Event Project Modal', () => {
             </Provider>
           </LocalizationProvider>
         </MockedProvider>
-      </BrowserRouter>,
+      </BrowserRouter>
     );
 
     await waitFor(() =>
-      expect(queryByText(props.task.title)).toBeInTheDocument(),
+      expect(queryByText(props.task.title)).toBeInTheDocument()
     );
 
     await waitFor(() =>
-      expect(queryByText(props.task.description)).toBeInTheDocument(),
+      expect(queryByText(props.task.description)).toBeInTheDocument()
     );
 
     // Open the Update Task Modal
     fireEvent.click(queryByText('View') as Element);
 
     await waitFor(() =>
-      expect(queryByText('Update the Event Task')).toBeInTheDocument(),
+      expect(queryByText('Update the Event Task')).toBeInTheDocument()
     );
 
     // Close the Update Task Modal
     fireEvent.click(queryByRole('button', { name: /close/i }) as HTMLElement);
 
     await waitFor(() =>
-      expect(queryByText('Update the Event Task')).not.toBeInTheDocument(),
+      expect(queryByText('Update the Event Task')).not.toBeInTheDocument()
     );
   });
 
@@ -91,14 +91,14 @@ describe('Testing Delete Event Project Modal', () => {
             </Provider>
           </LocalizationProvider>
         </MockedProvider>
-      </BrowserRouter>,
+      </BrowserRouter>
     );
 
     await waitFor(() =>
-      expect(queryByTestId('AssignmentIcon')).toBeInTheDocument(),
+      expect(queryByTestId('AssignmentIcon')).toBeInTheDocument()
     );
     await waitFor(() =>
-      expect(queryByTestId('AssignmentTurnedInIcon')).not.toBeInTheDocument(),
+      expect(queryByTestId('AssignmentTurnedInIcon')).not.toBeInTheDocument()
     );
   });
 
@@ -117,14 +117,14 @@ describe('Testing Delete Event Project Modal', () => {
             </Provider>
           </LocalizationProvider>
         </MockedProvider>
-      </BrowserRouter>,
+      </BrowserRouter>
     );
 
     await waitFor(() =>
-      expect(queryByTestId('AssignmentIcon')).not.toBeInTheDocument(),
+      expect(queryByTestId('AssignmentIcon')).not.toBeInTheDocument()
     );
     await waitFor(() =>
-      expect(queryByTestId('AssignmentTurnedInIcon')).toBeInTheDocument(),
+      expect(queryByTestId('AssignmentTurnedInIcon')).toBeInTheDocument()
     );
   });
 });

@@ -64,7 +64,7 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
     // Resize window to trigger handleResize
     window.innerWidth = 800; // Set a width less than or equal to 820

@@ -32,11 +32,11 @@ function addOnEntry({
   const currentOrg = window.location.href.split('/id=')[1] + '';
   const [buttonLoading, setButtonLoading] = useState(false);
   const [isInstalledLocal, setIsInstalledLocal] = useState(
-    uninstalledOrgs.includes(currentOrg),
+    uninstalledOrgs.includes(currentOrg)
   );
   // const [addOrgAsUninstalled] = useMutation(UPDATE_ORG_STATUS_PLUGIN_MUTATION);
   const [addOrgAsUninstalled] = useMutation(
-    UPDATE_INSTALL_STATUS_PLUGIN_MUTATION,
+    UPDATE_INSTALL_STATUS_PLUGIN_MUTATION
   );
 
   const togglePluginInstall = async (): Promise<void> => {

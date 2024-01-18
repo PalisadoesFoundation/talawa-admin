@@ -106,7 +106,7 @@ describe('Testing Login Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -122,7 +122,7 @@ describe('Testing Login Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -142,7 +142,7 @@ describe('Testing Login Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -150,7 +150,7 @@ describe('Testing Login Component [User Portal]', () => {
     userEvent.click(screen.getByTestId('loginBtn'));
 
     expect(toast.error).toBeCalledWith(
-      'Please enter a valid email and password.',
+      'Please enter a valid email and password.'
     );
   });
 
@@ -169,19 +169,19 @@ describe('Testing Login Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter your email address/i),
-      formData.email,
+      formData.email
     );
     userEvent.click(screen.getByTestId('loginBtn'));
 
     expect(toast.error).toBeCalledWith(
-      'Please enter a valid email and password.',
+      'Please enter a valid email and password.'
     );
   });
 
@@ -200,19 +200,19 @@ describe('Testing Login Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter your email address/i),
-      formData.email,
+      formData.email
     );
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter your password/i),
-      formData.password,
+      formData.password
     );
 
     userEvent.click(screen.getByTestId('loginBtn'));
@@ -237,19 +237,19 @@ describe('Testing Login Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter your email address/i),
-      formData.email,
+      formData.email
     );
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter your password/i),
-      formData.password,
+      formData.password
     );
 
     userEvent.click(screen.getByTestId('loginBtn'));
@@ -272,19 +272,19 @@ describe('Testing Login Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter your email address/i),
-      formData.email,
+      formData.email
     );
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter your password/i),
-      formData.password,
+      formData.password
     );
 
     userEvent.click(screen.getByTestId('loginBtn'));

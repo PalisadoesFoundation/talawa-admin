@@ -43,7 +43,7 @@ describe('Testing ContactCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -64,7 +64,7 @@ describe('Testing ContactCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -80,7 +80,7 @@ describe('Testing ContactCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -104,7 +104,7 @@ describe('Testing ContactCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();

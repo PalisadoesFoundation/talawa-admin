@@ -63,7 +63,7 @@ describe('Testing Advertisement Entry Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>,
+      </ApolloProvider>
     );
     expect(getByTestId('AdEntry')).toBeInTheDocument();
     expect(getAllByText('POPUP')[0]).toBeInTheDocument();

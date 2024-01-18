@@ -74,8 +74,8 @@ const organizationScreen = ({
           hideDrawer === null
             ? ''
             : hideDrawer
-              ? styles.expand
-              : styles.contract
+            ? styles.expand
+            : styles.contract
         } `}
         data-testid="mainpageright"
       >

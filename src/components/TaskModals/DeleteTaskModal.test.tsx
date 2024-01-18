@@ -57,17 +57,17 @@ describe('Testing Delete Event Project Modal', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await waitFor(() => expect(queryByText('Delete Task')).toBeInTheDocument());
 
     fireEvent.click(queryByText('Delete') as Element);
     await waitFor(() =>
-      expect(queryByText('Deleting the task...')).toBeInTheDocument(),
+      expect(queryByText('Deleting the task...')).toBeInTheDocument()
     );
     await waitFor(() =>
-      expect(queryByText('Deleted the task successfully!')).toBeInTheDocument(),
+      expect(queryByText('Deleted the task successfully!')).toBeInTheDocument()
     );
   });
 
@@ -82,19 +82,19 @@ describe('Testing Delete Event Project Modal', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await waitFor(() => expect(queryByText('Delete Task')).toBeInTheDocument());
 
     fireEvent.click(queryByText('Delete') as Element);
     await waitFor(() =>
-      expect(queryByText('Deleting the task...')).toBeInTheDocument(),
+      expect(queryByText('Deleting the task...')).toBeInTheDocument()
     );
     await waitFor(() =>
       expect(
-        queryByText('There was an error in deleting the task!'),
-      ).toBeInTheDocument(),
+        queryByText('There was an error in deleting the task!')
+      ).toBeInTheDocument()
     );
   });
 });

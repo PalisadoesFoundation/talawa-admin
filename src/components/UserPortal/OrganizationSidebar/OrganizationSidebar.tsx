@@ -34,7 +34,7 @@ export default function organizationSidebar(): JSX.Element {
         first: 3,
         skip: 0,
       },
-    },
+    }
   );
 
   const { data: eventsData, loading: eventsLoading } = useQuery(
@@ -45,7 +45,7 @@ export default function organizationSidebar(): JSX.Element {
         first: 3,
         skip: 0,
       },
-    },
+    }
   );
 
   /* istanbul ignore next */

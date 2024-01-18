@@ -37,7 +37,7 @@ describe('Testing CollapsibleDropdown component', () => {
     render(
       <BrowserRouter>
         <CollapsibleDropdown {...props} />
-      </BrowserRouter>,
+      </BrowserRouter>
     );
     const parentDropdownBtn = screen.getByTestId('collapsible-dropdown');
     const activeDropdownBtn = screen.getByText('SubCategory 1');

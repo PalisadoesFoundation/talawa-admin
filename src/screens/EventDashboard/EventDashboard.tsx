@@ -201,7 +201,7 @@ const EventDashboard = (): JSX.Element => {
                         </div>
                       </div>
                     </Col>
-                  ),
+                  )
                 )}
               </Row>
             </div>

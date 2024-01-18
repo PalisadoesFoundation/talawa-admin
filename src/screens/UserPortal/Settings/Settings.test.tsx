@@ -66,7 +66,7 @@ describe('Testing Settings Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -84,7 +84,7 @@ describe('Testing Settings Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -103,7 +103,7 @@ describe('Testing Settings Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -122,7 +122,7 @@ describe('Testing Settings Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -147,7 +147,7 @@ describe('Testing Settings Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();

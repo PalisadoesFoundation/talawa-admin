@@ -33,14 +33,14 @@ describe('Testing CheckIn Wrapper', () => {
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     // Open the modal
     fireEvent.click(queryByText('Check In Registrants') as Element);
 
     await waitFor(() =>
-      expect(queryByText('Event Check In Management')).toBeInTheDocument(),
+      expect(queryByText('Event Check In Management')).toBeInTheDocument()
     );
 
     /* 

@@ -35,11 +35,11 @@ describe('Testing Check In Attendees Modal', () => {
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await waitFor(() =>
-      expect(queryByText('Event Check In Management')).toBeInTheDocument(),
+      expect(queryByText('Event Check In Management')).toBeInTheDocument()
     );
 
     await waitFor(() => expect(queryByText('John Doe')).toBeInTheDocument());
@@ -52,7 +52,7 @@ describe('Testing Check In Attendees Modal', () => {
 
     await waitFor(() => expect(queryByText('John Doe')).toBeInTheDocument());
     await waitFor(() =>
-      expect(queryByText('John2 Doe2')).not.toBeInTheDocument(),
+      expect(queryByText('John2 Doe2')).not.toBeInTheDocument()
     );
   });
 });

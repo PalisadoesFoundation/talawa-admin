@@ -14,7 +14,7 @@ interface InterfaceEditCustomFieldDropDownProps {
 [];
 
 const EditOrgCustomFieldDropDown = (
-  props: InterfaceEditCustomFieldDropDownProps,
+  props: InterfaceEditCustomFieldDropDownProps
 ): JSX.Element => {
   return (
     <Dropdown

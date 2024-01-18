@@ -69,32 +69,32 @@ describe('Testing User Password Update', () => {
         <I18nextProvider i18n={i18nForTest}>
           <UserPasswordUpdate {...props} />
         </I18nextProvider>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Previous Password/i),
-      formData.previousPassword,
+      formData.previousPassword
     );
     userEvent.type(
       screen.getAllByPlaceholderText(/New Password/i)[0],
-      formData.newPassword,
+      formData.newPassword
     );
     userEvent.type(
       screen.getByPlaceholderText(/Confirm New Password/i),
-      formData.confirmNewPassword,
+      formData.confirmNewPassword
     );
 
     userEvent.click(screen.getByText(/Save Changes/i));
 
     expect(screen.getByText(/Cancel/i)).toBeTruthy();
     expect(
-      screen.getByPlaceholderText(/Previous Password/i),
+      screen.getByPlaceholderText(/Previous Password/i)
     ).toBeInTheDocument();
     expect(
-      screen.getByPlaceholderText(/Confirm New Password/i),
+      screen.getByPlaceholderText(/Confirm New Password/i)
     ).toBeInTheDocument();
   });
 
@@ -104,14 +104,14 @@ describe('Testing User Password Update', () => {
         <I18nextProvider i18n={i18nForTest}>
           <UserPasswordUpdate {...props} />
         </I18nextProvider>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     userEvent.click(screen.getByText(/Save Changes/i));
 
     await wait();
     expect(mockToast.error).toHaveBeenCalledWith(
-      'The password field cannot be empty.',
+      'The password field cannot be empty.'
     );
   });
 
@@ -121,22 +121,22 @@ describe('Testing User Password Update', () => {
         <I18nextProvider i18n={i18nForTest}>
           <UserPasswordUpdate {...props} />
         </I18nextProvider>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Previous Password/i),
-      formData.previousPassword,
+      formData.previousPassword
     );
     userEvent.type(
       screen.getAllByPlaceholderText(/New Password/i)[0],
-      formData.wrongPassword,
+      formData.wrongPassword
     );
     userEvent.type(
       screen.getByPlaceholderText(/Confirm New Password/i),
-      formData.confirmNewPassword,
+      formData.confirmNewPassword
     );
 
     userEvent.click(screen.getByText(/Save Changes/i));
@@ -144,7 +144,7 @@ describe('Testing User Password Update', () => {
     expect(screen.getByText(/Cancel/i)).toBeTruthy();
     await wait();
     expect(mockToast.error).toHaveBeenCalledWith(
-      'New and Confirm password do not match.',
+      'New and Confirm password do not match.'
     );
   });
 });

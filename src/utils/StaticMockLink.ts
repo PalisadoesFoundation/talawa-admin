@@ -47,7 +47,7 @@ export class StaticMockLink extends ApolloLink {
       this._normalizeMockedResponse(mockedResponse);
     const key = requestToKey(
       normalizedMockedResponse.request,
-      this.addTypename,
+      this.addTypename
     );
     let mockedResponses = this._mockedResponsesByKey[key];
     if (!mockedResponses) {
@@ -70,7 +70,7 @@ export class StaticMockLink extends ApolloLink {
           return true;
         }
         return false;
-      },
+      }
     );
 
     let configError: Error;
@@ -78,8 +78,8 @@ export class StaticMockLink extends ApolloLink {
     if (!response || typeof responseIndex === 'undefined') {
       configError = new Error(
         `No more mocked responses for the query: ${print(
-          operation.query,
-        )}, variables: ${JSON.stringify(operation.variables)}`,
+          operation.query
+        )}, variables: ${JSON.stringify(operation.variables)}`
       );
     } else {
       const { newData } = response;
@@ -90,44 +90,41 @@ export class StaticMockLink extends ApolloLink {
 
       if (!response.result && !response.error) {
         configError = new Error(
-          `Mocked response should contain either result or error: ${key}`,
+          `Mocked response should contain either result or error: ${key}`
         );
       }
     }
 
     return new Observable((observer) => {
-      const timer = setTimeout(
-        () => {
-          if (configError) {
-            try {
-              // The onError function can return false to indicate that
-              // configError need not be passed to observer.error. For
-              // example, the default implementation of onError calls
-              // observer.error(configError) and then returns false to
-              // prevent this extra (harmless) observer.error call.
-              if (this.onError(configError, observer) !== false) {
-                throw configError;
-              }
-            } catch (error) {
-              observer.error(error);
+      const timer = setTimeout(() => {
+        if (configError) {
+          try {
+            // The onError function can return false to indicate that
+            // configError need not be passed to observer.error. For
+            // example, the default implementation of onError calls
+            // observer.error(configError) and then returns false to
+            // prevent this extra (harmless) observer.error call.
+            if (this.onError(configError, observer) !== false) {
+              throw configError;
             }
-          } else if (response) {
-            if (response.error) {
-              observer.error(response.error);
-            } else {
-              if (response.result) {
-                observer.next(
-                  typeof response.result === 'function'
-                    ? (response.result as ResultFunction<FetchResult>)()
-                    : response.result,
-                );
-              }
-              observer.complete();
-            }
+          } catch (error) {
+            observer.error(error);
           }
-        },
-        (response && response.delay) || 0,
-      );
+        } else if (response) {
+          if (response.error) {
+            observer.error(response.error);
+          } else {
+            if (response.result) {
+              observer.next(
+                typeof response.result === 'function'
+                  ? (response.result as ResultFunction<FetchResult>)()
+                  : response.result
+              );
+            }
+            observer.complete();
+          }
+        }
+      }, (response && response.delay) || 0);
 
       return () => {
         clearTimeout(timer);
@@ -136,11 +133,11 @@ export class StaticMockLink extends ApolloLink {
   }
 
   private _normalizeMockedResponse(
-    mockedResponse: MockedResponse,
+    mockedResponse: MockedResponse
   ): MockedResponse {
     const newMockedResponse = cloneDeep(mockedResponse);
     const queryWithoutConnection = removeConnectionDirectiveFromDocument(
-      newMockedResponse.request.query,
+      newMockedResponse.request.query
     );
     invariant(queryWithoutConnection, 'query is required');
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

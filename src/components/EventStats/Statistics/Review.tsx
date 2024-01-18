@@ -20,7 +20,7 @@ type FeedbackType = {
 
 export const ReviewStats = ({ data }: ModalPropType): JSX.Element => {
   const reviews = data.event.feedback.filter(
-    (feedback: FeedbackType) => feedback.review != null,
+    (feedback: FeedbackType) => feedback.review != null
   );
 
   return (

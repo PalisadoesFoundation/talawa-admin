@@ -65,7 +65,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
     await wait();
 
@@ -86,7 +86,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
     await wait();
 
@@ -109,13 +109,13 @@ describe('Organisations Page testing as SuperAdmin', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
     expect(screen.queryByText('Organizations Not Found')).toBeInTheDocument();
     expect(
-      screen.queryByText('Please create an organization through dashboard'),
+      screen.queryByText('Please create an organization through dashboard')
     ).toBeInTheDocument();
     expect(window.location).toBeAt('/');
   });
@@ -128,7 +128,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
             <OrgList />
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -146,7 +146,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -169,14 +169,14 @@ describe('Organisations Page testing as SuperAdmin', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait(500);
 
     expect(localStorage.setItem).toHaveBeenLastCalledWith(
       'UserType',
-      'SUPERADMIN',
+      'SUPERADMIN'
     );
 
     userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
@@ -184,7 +184,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     userEvent.type(screen.getByTestId(/modalOrganizationName/i), formData.name);
     userEvent.type(
       screen.getByPlaceholderText(/Description/i),
-      formData.description,
+      formData.description
     );
     userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
     userEvent.click(screen.getByTestId(/userRegistrationRequired/i));
@@ -192,13 +192,13 @@ describe('Organisations Page testing as SuperAdmin', () => {
     userEvent.upload(screen.getByLabelText(/Display Image/i), formData.image);
 
     expect(screen.getByTestId(/modalOrganizationName/i)).toHaveValue(
-      formData.name,
+      formData.name
     );
     expect(screen.getByPlaceholderText(/Description/i)).toHaveValue(
-      formData.description,
+      formData.description
     );
     expect(screen.getByPlaceholderText(/Location/i)).toHaveValue(
-      formData.location,
+      formData.location
     );
     expect(screen.getByTestId(/userRegistrationRequired/i)).not.toBeChecked();
     expect(screen.getByTestId(/visibleInSearch/i)).toBeChecked();
@@ -210,8 +210,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
     });
     await waitFor(() =>
       expect(
-        screen.queryByText(/Congratulation the Organization is created/i),
-      ).toBeInTheDocument(),
+        screen.queryByText(/Congratulation the Organization is created/i)
+      ).toBeInTheDocument()
     );
   });
 
@@ -229,14 +229,14 @@ describe('Organisations Page testing as SuperAdmin', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait(500);
 
     expect(localStorage.setItem).toHaveBeenLastCalledWith(
       'UserType',
-      'SUPERADMIN',
+      'SUPERADMIN'
     );
 
     userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
@@ -244,7 +244,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     userEvent.type(screen.getByTestId(/modalOrganizationName/i), formData.name);
     userEvent.type(
       screen.getByPlaceholderText(/Description/i),
-      formData.description,
+      formData.description
     );
     userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
     userEvent.click(screen.getByTestId(/userRegistrationRequired/i));
@@ -252,13 +252,13 @@ describe('Organisations Page testing as SuperAdmin', () => {
     userEvent.upload(screen.getByLabelText(/Display Image/i), formData.image);
 
     expect(screen.getByTestId(/modalOrganizationName/i)).toHaveValue(
-      formData.name,
+      formData.name
     );
     expect(screen.getByPlaceholderText(/Description/i)).toHaveValue(
-      formData.description,
+      formData.description
     );
     expect(screen.getByPlaceholderText(/Location/i)).toHaveValue(
-      formData.location,
+      formData.location
     );
     expect(screen.getByTestId(/userRegistrationRequired/i)).not.toBeChecked();
     expect(screen.getByTestId(/visibleInSearch/i)).toBeChecked();
@@ -270,8 +270,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
     });
     await waitFor(() =>
       expect(
-        screen.queryByText(/Congratulation the Organization is created/i),
-      ).toBeInTheDocument(),
+        screen.queryByText(/Congratulation the Organization is created/i)
+      ).toBeInTheDocument()
     );
     userEvent.click(screen.getByTestId(/enableEverythingForm/i));
   });
@@ -290,15 +290,15 @@ describe('Organisations Page testing as SuperAdmin', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
     await wait();
     userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
     userEvent.click(screen.getByTestId(/createSampleOrganizationBtn/i));
     await waitFor(() =>
       expect(
-        screen.queryByText(/Sample Organization Successfully created/i),
-      ).toBeInTheDocument(),
+        screen.queryByText(/Sample Organization Successfully created/i)
+      ).toBeInTheDocument()
     );
   });
   test('Testing error handling for CreateSampleOrg', async () => {
@@ -313,15 +313,15 @@ describe('Organisations Page testing as SuperAdmin', () => {
             <OrgList />
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
     await wait();
     userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
     userEvent.click(screen.getByTestId(/createSampleOrganizationBtn/i));
     await waitFor(() =>
       expect(
-        screen.queryByText(/Only one sample organization allowed/i),
-      ).toBeInTheDocument(),
+        screen.queryByText(/Only one sample organization allowed/i)
+      ).toBeInTheDocument()
     );
   });
 });
@@ -341,7 +341,7 @@ describe('Organisations Page testing as Admin', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -359,7 +359,7 @@ describe('Organisations Page testing as Admin', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>,
+        </MockedProvider>
       );
 
       await wait();

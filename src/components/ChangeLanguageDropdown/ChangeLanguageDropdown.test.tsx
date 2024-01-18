@@ -23,7 +23,7 @@ describe('Testing Change Language Dropdown', () => {
         <I18nextProvider i18n={i18nForTest}>
           <ChangeLanguageDropDown />
         </I18nextProvider>
-      </BrowserRouter>,
+      </BrowserRouter>
     );
 
     expect(getByTestId('language-dropdown-container')).toBeInTheDocument();
@@ -39,7 +39,7 @@ describe('Testing Change Language Dropdown', () => {
 
     languages.map((language) => {
       expect(
-        getByTestId(`change-language-btn-${language.code}`),
+        getByTestId(`change-language-btn-${language.code}`)
       ).toBeInTheDocument();
     });
   });
@@ -55,10 +55,10 @@ describe('Testing Change Language Dropdown', () => {
         <I18nextProvider i18n={i18nForTest}>
           <ChangeLanguageDropDown {...props} />
         </I18nextProvider>
-      </BrowserRouter>,
+      </BrowserRouter>
     );
     getByTestId('language-dropdown-container').className.includes(
-      props.parentContainerStyle,
+      props.parentContainerStyle
     );
     getByTestId('language-dropdown-btn').className.includes(props.btnStyle);
     getByTestId('dropdown-btn-0').className.includes(props.btnTextStyle);
@@ -73,7 +73,7 @@ describe('Testing Change Language Dropdown', () => {
     render(
       <I18nextProvider i18n={i18nForTest}>
         <ChangeLanguageDropDown />
-      </I18nextProvider>,
+      </I18nextProvider>
     );
 
     await wait();
@@ -89,14 +89,14 @@ describe('Testing Change Language Dropdown', () => {
     const { getByTestId } = render(
       <I18nextProvider i18n={i18nForTest}>
         <ChangeLanguageDropDown />
-      </I18nextProvider>,
+      </I18nextProvider>
     );
 
     userEvent.click(getByTestId('language-dropdown-btn'));
     await wait();
     languages.map((language) => {
       const changeLanguageBtn = getByTestId(
-        `change-language-btn-${language.code}`,
+        `change-language-btn-${language.code}`
       );
       expect(changeLanguageBtn).toBeInTheDocument();
       userEvent.click(changeLanguageBtn);

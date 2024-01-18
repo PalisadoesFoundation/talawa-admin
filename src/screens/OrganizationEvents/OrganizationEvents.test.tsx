@@ -186,7 +186,7 @@ describe('Organisation Events Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     expect(container.textContent).not.toBe('Loading data...');
@@ -205,7 +205,7 @@ describe('Organisation Events Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -221,7 +221,7 @@ describe('Organisation Events Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -241,7 +241,7 @@ describe('Organisation Events Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -251,15 +251,15 @@ describe('Organisation Events Page', () => {
     userEvent.type(screen.getByPlaceholderText(/Enter Title/i), formData.title);
     userEvent.type(
       screen.getByPlaceholderText(/Enter Description/i),
-      formData.description,
+      formData.description
     );
     userEvent.type(
       screen.getByPlaceholderText(/Enter Location/i),
-      formData.location,
+      formData.location
     );
     userEvent.type(
       screen.getByPlaceholderText(/Enter Location/i),
-      formData.location,
+      formData.location
     );
 
     const endDateDatePicker = screen.getByPlaceholderText(/End Date/i);
@@ -288,10 +288,10 @@ describe('Organisation Events Page', () => {
     await wait();
 
     expect(screen.getByPlaceholderText(/Enter Title/i)).toHaveValue(
-      formData.title,
+      formData.title
     );
     expect(screen.getByPlaceholderText(/Enter Description/i)).toHaveValue(
-      formData.description,
+      formData.description
     );
 
     expect(endDateDatePicker).toHaveValue(formData.endDate);
@@ -327,7 +327,7 @@ describe('Organisation Events Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -337,15 +337,15 @@ describe('Organisation Events Page', () => {
     userEvent.type(screen.getByPlaceholderText(/Enter Title/i), formData.title);
     userEvent.type(
       screen.getByPlaceholderText(/Enter Description/i),
-      formData.description,
+      formData.description
     );
     userEvent.type(
       screen.getByPlaceholderText(/Enter Location/i),
-      formData.location,
+      formData.location
     );
     userEvent.type(
       screen.getByPlaceholderText(/Enter Location/i),
-      formData.location,
+      formData.location
     );
 
     const endDateDatePicker = screen.getByPlaceholderText(/End Date/i);
@@ -399,7 +399,7 @@ describe('Organisation Events Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -408,18 +408,18 @@ describe('Organisation Events Page', () => {
     userEvent.type(screen.getByPlaceholderText(/Enter Title/i), formData.title);
     userEvent.type(
       screen.getByPlaceholderText(/Enter Description/i),
-      formData.description,
+      formData.description
     );
     userEvent.type(
       screen.getByPlaceholderText(/Enter Location/i),
-      formData.location,
+      formData.location
     );
     userEvent.click(screen.getByTestId('alldayCheck'));
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Start Time/i),
-      formData.startTime,
+      formData.startTime
     );
     userEvent.type(screen.getByPlaceholderText(/End Time/i), formData.endTime);
 

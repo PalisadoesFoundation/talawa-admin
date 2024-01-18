@@ -66,7 +66,7 @@ function app(): JSX.Element {
     if (data) {
       localStorage.setItem(
         'name',
-        `${data.checkAuth.firstName} ${data.checkAuth.lastName}`,
+        `${data.checkAuth.firstName} ${data.checkAuth.lastName}`
       );
       localStorage.setItem('id', data.checkAuth._id);
       localStorage.setItem('email', data.checkAuth.email);
@@ -89,7 +89,7 @@ function app(): JSX.Element {
           component={extraComponent}
         />
       );
-    },
+    }
   );
 
   if (loading) {

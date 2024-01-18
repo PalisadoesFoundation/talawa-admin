@@ -25,7 +25,7 @@ describe('Testing Addon component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     expect(getByTestId('pluginContainer')).toBeInTheDocument();

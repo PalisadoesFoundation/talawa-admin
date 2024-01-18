@@ -73,21 +73,21 @@ describe('Testing Add Event Task Modal', () => {
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await waitFor(() =>
-      expect(queryByText('Add an Event Task')).toBeInTheDocument(),
+      expect(queryByText('Add an Event Task')).toBeInTheDocument()
     );
 
     fireEvent.click(queryByText('Create Task') as Element);
 
     // Check for blank entry warning modals
     await waitFor(() =>
-      expect(queryByText('Title cannot be empty!')).toBeInTheDocument(),
+      expect(queryByText('Title cannot be empty!')).toBeInTheDocument()
     );
     await waitFor(() =>
-      expect(queryByText('Description cannot be empty!')).toBeInTheDocument(),
+      expect(queryByText('Description cannot be empty!')).toBeInTheDocument()
     );
 
     // Type in the title and the description of the event project
@@ -104,11 +104,11 @@ describe('Testing Add Event Task Modal', () => {
     fireEvent.click(queryByText('Create Task') as Element);
 
     await waitFor(() =>
-      expect(queryByText('Adding the task...')).toBeInTheDocument(),
+      expect(queryByText('Adding the task...')).toBeInTheDocument()
     );
 
     await waitFor(() =>
-      expect(queryByText('Added the task successfully!')).toBeInTheDocument(),
+      expect(queryByText('Added the task successfully!')).toBeInTheDocument()
     );
   });
 
@@ -125,7 +125,7 @@ describe('Testing Add Event Task Modal', () => {
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     // Type in the title and the description of the event project
@@ -143,8 +143,8 @@ describe('Testing Add Event Task Modal', () => {
 
     await waitFor(() =>
       expect(
-        queryByText('There was an error in adding the task!'),
-      ).toBeInTheDocument(),
+        queryByText('There was an error in adding the task!')
+      ).toBeInTheDocument()
     );
   });
 });

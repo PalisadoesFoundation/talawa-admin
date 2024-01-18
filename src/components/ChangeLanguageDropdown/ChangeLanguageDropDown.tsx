@@ -15,7 +15,7 @@ export const changeLanguage = async (languageCode: string): Promise<void> => {
 };
 
 const ChangeLanguageDropDown = (
-  props: InterfaceChangeLanguageDropDownProps,
+  props: InterfaceChangeLanguageDropDownProps
 ): JSX.Element => {
   const currentLanguageCode = cookies.get('i18next') || 'en';
 

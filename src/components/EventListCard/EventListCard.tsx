@@ -103,7 +103,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   };
 
   const updateEventHandler = async (
-    e: ChangeEvent<HTMLFormElement>,
+    e: ChangeEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
 

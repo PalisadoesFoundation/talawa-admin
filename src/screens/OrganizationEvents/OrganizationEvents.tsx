@@ -63,7 +63,7 @@ function organizationEvents(): JSX.Element {
         description_contains: '',
         location_contains: '',
       },
-    },
+    }
   );
 
   const { data: orgData } = useQuery(ORGANIZATIONS_LIST, {
@@ -76,7 +76,7 @@ function organizationEvents(): JSX.Element {
   const [create, { loading: loading2 }] = useMutation(CREATE_EVENT_MUTATION);
 
   const createEvent = async (
-    e: ChangeEvent<HTMLFormElement>,
+    e: ChangeEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
     if (

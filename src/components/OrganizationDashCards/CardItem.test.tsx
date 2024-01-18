@@ -20,9 +20,9 @@ describe('Testing the Organization Card', () => {
     expect(
       screen.getByText(
         `${dayjs(props.startdate).format('MMM D, YYYY')} - ${dayjs(
-          props.enddate,
-        ).format('MMM D, YYYY')}`,
-      ),
+          props.enddate
+        ).format('MMM D, YYYY')}`
+      )
     ).toBeInTheDocument();
     expect(screen.getByText(/Event Location/i)).toBeInTheDocument();
   });
@@ -45,7 +45,7 @@ describe('Testing the Organization Card', () => {
 
     expect(screen.getByText(/Post Title/i)).toBeInTheDocument();
     expect(
-      screen.getByText(dayjs(props.time).format('MMM D, YYYY')),
+      screen.getByText(dayjs(props.time).format('MMM D, YYYY'))
     ).toBeInTheDocument();
     expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
   });

@@ -87,7 +87,7 @@ beforeEach(() => {
   localStorage.setItem('LastName', 'Doe');
   localStorage.setItem(
     'UserImage',
-    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
+    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe'
   );
 });
 
@@ -108,18 +108,18 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
             <LeftDrawerEvent {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await waitFor(() =>
-      expect(queryByText('Talawa Admin Portal')).toBeInTheDocument(),
+      expect(queryByText('Talawa Admin Portal')).toBeInTheDocument()
     );
     await waitFor(() => expect(queryByText('Test Event')).toBeInTheDocument());
     await waitFor(() =>
-      expect(queryByText('Test Description')).toBeInTheDocument(),
+      expect(queryByText('Test Description')).toBeInTheDocument()
     );
     await waitFor(() =>
-      expect(queryByText('Event Options')).toBeInTheDocument(),
+      expect(queryByText('Event Options')).toBeInTheDocument()
     );
   });
 
@@ -133,11 +133,11 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
             <LeftDrawerEvent {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await waitFor(() =>
-      expect(queryByText('Talawa Admin Portal')).toBeInTheDocument(),
+      expect(queryByText('Talawa Admin Portal')).toBeInTheDocument()
     );
 
     fireEvent.click(queryByText('Add an Event Project') as HTMLElement);
@@ -155,7 +155,7 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
             <LeftDrawerEvent {...props} hideDrawer={null} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
   });
 
@@ -168,7 +168,7 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
             <LeftDrawerEvent {...props} hideDrawer={true} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
   });
 
@@ -181,7 +181,7 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
             <LeftDrawerEvent {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     userEvent.click(screen.getByTestId('logoutBtn'));
@@ -197,7 +197,7 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
             <LeftDrawerEvent {...props2} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
     const eventTitle = props2.event.title;
     expect(eventTitle.length).toBeGreaterThan(20);
@@ -217,12 +217,12 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
             <LeftDrawerEvent {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     userEvent.click(screen.getByTestId('allEventsBtn'));
     expect(global.window.location.pathname).toBe(
-      `/orgevents/id=${props.event.organization._id}`,
+      `/orgevents/id=${props.event.organization._id}`
     );
   });
 });

@@ -68,7 +68,7 @@ const Requests = (): JSX.Element => {
     } else {
       const blockUsers = memberData?.organizationsMemberConnection.edges.filter(
         (user: InterfaceMember) =>
-          user.organizationsBlockedBy.some((org) => org._id === currentUrl),
+          user.organizationsBlockedBy.some((org) => org._id === currentUrl)
       );
       setMembersData(blockUsers);
     }
@@ -268,7 +268,7 @@ const Requests = (): JSX.Element => {
                         <td>{user.email}</td>
                         <td>
                           {user.organizationsBlockedBy.some(
-                            (spam: any) => spam._id === currentUrl,
+                            (spam: any) => spam._id === currentUrl
                           ) ? (
                             <Button
                               variant="danger"

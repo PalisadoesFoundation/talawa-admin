@@ -128,7 +128,7 @@ export default function postCard(props: InterfacePostCardProps): JSX.Element {
   };
 
   const handleCommentInput = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
     const comment = event.target.value;
     setCommentInput(comment);

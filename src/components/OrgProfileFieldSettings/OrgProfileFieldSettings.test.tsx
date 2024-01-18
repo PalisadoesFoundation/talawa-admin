@@ -163,7 +163,7 @@ describe('Testing Save Button', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgProfileFieldSettings />
         </I18nextProvider>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -176,7 +176,7 @@ describe('Testing Save Button', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgProfileFieldSettings />
         </I18nextProvider>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -190,7 +190,7 @@ describe('Testing Save Button', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgProfileFieldSettings />
         </I18nextProvider>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -202,7 +202,7 @@ describe('Testing Save Button', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgProfileFieldSettings />
         </I18nextProvider>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -215,7 +215,7 @@ describe('Testing Save Button', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgProfileFieldSettings />
         </I18nextProvider>
-      </MockedProvider>,
+      </MockedProvider>
     );
     await wait();
     expect(getByText('Field Type')).toBeInTheDocument();

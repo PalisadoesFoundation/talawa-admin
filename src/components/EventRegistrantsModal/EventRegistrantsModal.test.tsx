@@ -153,21 +153,21 @@ describe('Testing Event Registrants Modal', () => {
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await waitFor(() =>
-      expect(queryByText('Event Registrants')).toBeInTheDocument(),
+      expect(queryByText('Event Registrants')).toBeInTheDocument()
     );
 
     await waitFor(() =>
-      expect(queryByText('Registered Registrants')).toBeInTheDocument(),
+      expect(queryByText('Registered Registrants')).toBeInTheDocument()
     );
 
     await waitFor(() =>
       expect(
-        queryByText('There are no registered attendees for this event.'),
-      ).toBeInTheDocument(),
+        queryByText('There are no registered attendees for this event.')
+      ).toBeInTheDocument()
     );
 
     // Get warning modal on blank button click
@@ -175,8 +175,8 @@ describe('Testing Event Registrants Modal', () => {
 
     await waitFor(() =>
       expect(
-        queryByText('Please choose an user to add first!'),
-      ).toBeInTheDocument(),
+        queryByText('Please choose an user to add first!')
+      ).toBeInTheDocument()
     );
 
     // Choose a user to add as an attendee
@@ -190,13 +190,13 @@ describe('Testing Event Registrants Modal', () => {
     fireEvent.click(queryByText('Add Registrant') as Element);
 
     await waitFor(() =>
-      expect(queryByText('Adding the attendee...')).toBeInTheDocument(),
+      expect(queryByText('Adding the attendee...')).toBeInTheDocument()
     );
 
     await waitFor(() =>
       expect(
-        queryByText('Added the attendee successfully!'),
-      ).toBeInTheDocument(),
+        queryByText('Added the attendee successfully!')
+      ).toBeInTheDocument()
     );
   });
 
@@ -220,13 +220,13 @@ describe('Testing Event Registrants Modal', () => {
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await waitFor(() =>
       expect(
-        queryByText('There are no registered attendees for this event.'),
-      ).toBeInTheDocument(),
+        queryByText('There are no registered attendees for this event.')
+      ).toBeInTheDocument()
     );
 
     // Choose a user to add as an attendee
@@ -240,13 +240,13 @@ describe('Testing Event Registrants Modal', () => {
     fireEvent.click(queryByText('Add Registrant') as Element);
 
     await waitFor(() =>
-      expect(queryByText('Adding the attendee...')).toBeInTheDocument(),
+      expect(queryByText('Adding the attendee...')).toBeInTheDocument()
     );
 
     await waitFor(() =>
       expect(
-        queryByText('There was an error in adding the attendee!'),
-      ).toBeInTheDocument(),
+        queryByText('There was an error in adding the attendee!')
+      ).toBeInTheDocument()
     );
   });
 
@@ -270,11 +270,11 @@ describe('Testing Event Registrants Modal', () => {
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await waitFor(() =>
-      expect(queryByText('Registered Registrants')).toBeInTheDocument(),
+      expect(queryByText('Registered Registrants')).toBeInTheDocument()
     );
 
     await waitFor(() => expect(queryByText('John Doe')).toBeInTheDocument());
@@ -282,13 +282,13 @@ describe('Testing Event Registrants Modal', () => {
     fireEvent.click(queryByTestId('CancelIcon') as Element);
 
     await waitFor(() =>
-      expect(queryByText('Removing the attendee...')).toBeInTheDocument(),
+      expect(queryByText('Removing the attendee...')).toBeInTheDocument()
     );
 
     await waitFor(() =>
       expect(
-        queryByText('Removed the attendee successfully!'),
-      ).toBeInTheDocument(),
+        queryByText('Removed the attendee successfully!')
+      ).toBeInTheDocument()
     );
   });
 
@@ -312,11 +312,11 @@ describe('Testing Event Registrants Modal', () => {
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await waitFor(() =>
-      expect(queryByText('Registered Registrants')).toBeInTheDocument(),
+      expect(queryByText('Registered Registrants')).toBeInTheDocument()
     );
 
     await waitFor(() => expect(queryByText('John Doe')).toBeInTheDocument());
@@ -324,13 +324,13 @@ describe('Testing Event Registrants Modal', () => {
     fireEvent.click(queryByTestId('CancelIcon') as Element);
 
     await waitFor(() =>
-      expect(queryByText('Removing the attendee...')).toBeInTheDocument(),
+      expect(queryByText('Removing the attendee...')).toBeInTheDocument()
     );
 
     await waitFor(() =>
       expect(
-        queryByText('There was an error in removing the attendee!'),
-      ).toBeInTheDocument(),
+        queryByText('There was an error in removing the attendee!')
+      ).toBeInTheDocument()
     );
   });
 });

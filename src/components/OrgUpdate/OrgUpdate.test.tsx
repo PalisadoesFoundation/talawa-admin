@@ -45,7 +45,7 @@ describe('Testing Organization Update', () => {
           <I18nextProvider i18n={i18nForTest}>
             <OrgUpdate {...props} />
           </I18nextProvider>
-        </MockedProvider>,
+        </MockedProvider>
       );
     });
     await wait();
@@ -80,7 +80,7 @@ describe('Testing Organization Update', () => {
           <I18nextProvider i18n={i18nForTest}>
             <OrgUpdate {...props} />
           </I18nextProvider>
-        </MockedProvider>,
+        </MockedProvider>
       );
     });
 
@@ -128,7 +128,7 @@ describe('Testing Organization Update', () => {
           <I18nextProvider i18n={i18nForTest}>
             <OrgUpdate {...props} />
           </I18nextProvider>
-        </MockedProvider>,
+        </MockedProvider>
       );
     });
     await wait();
@@ -142,7 +142,7 @@ describe('Testing Organization Update', () => {
           <I18nextProvider i18n={i18nForTest}>
             <OrgUpdate {...props} />
           </I18nextProvider>
-        </MockedProvider>,
+        </MockedProvider>
       );
     });
 

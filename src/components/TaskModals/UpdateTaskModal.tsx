@@ -165,7 +165,7 @@ export const UpdateTaskModal = (props: ModalPropType): JSX.Element => {
                         label={`${user.firstName} ${user.lastName}`}
                         variant="outlined"
                       />
-                    ),
+                    )
                   )}
                 </Stack>
                 <Button

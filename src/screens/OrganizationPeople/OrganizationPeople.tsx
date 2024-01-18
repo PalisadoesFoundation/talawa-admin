@@ -146,14 +146,14 @@ function organizationPeople(): JSX.Element {
   /* istanbul ignore next */
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
+    newPage: number
   ): void => {
     setPage(newPage);
   };
 
   /* istanbul ignore next */
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -242,8 +242,8 @@ function organizationPeople(): JSX.Element {
                     {state == 0
                       ? t('members')
                       : state == 1
-                        ? t('admins')
-                        : t('users')}
+                      ? t('admins')
+                      : t('users')}
                   </p>
                 </Row>
                 {memberLoading || usersLoading || adminLoading ? (
@@ -261,7 +261,7 @@ function organizationPeople(): JSX.Element {
                           (rowsPerPage > 0
                             ? memberData.organizationsMemberConnection.edges.slice(
                                 page * rowsPerPage,
-                                page * rowsPerPage + rowsPerPage,
+                                page * rowsPerPage + rowsPerPage
                               )
                             : memberData.organizationsMemberConnection.edges
                           ).map(
@@ -279,7 +279,7 @@ function organizationPeople(): JSX.Element {
                                   id={datas._id}
                                   memberImage={datas.image}
                                   joinDate={dayjs(datas.createdAt).format(
-                                    'DD/MM/YYYY',
+                                    'DD/MM/YYYY'
                                   )}
                                   memberName={
                                     datas.firstName + ' ' + datas.lastName
@@ -287,7 +287,7 @@ function organizationPeople(): JSX.Element {
                                   memberEmail={datas.email}
                                 />
                               );
-                            },
+                            }
                           )
                         ) : (
                           <NotFound title="member" keyPrefix="userNotFound" />
@@ -299,7 +299,7 @@ function organizationPeople(): JSX.Element {
                           (rowsPerPage > 0
                             ? adminData.organizationsMemberConnection.edges.slice(
                                 page * rowsPerPage,
-                                page * rowsPerPage + rowsPerPage,
+                                page * rowsPerPage + rowsPerPage
                               )
                             : adminData.organizationsMemberConnection.edges
                           ).map(
@@ -317,7 +317,7 @@ function organizationPeople(): JSX.Element {
                                   id={datas._id}
                                   memberImage={datas.image}
                                   joinDate={dayjs(datas.createdAt).format(
-                                    'DD/MM/YYYY',
+                                    'DD/MM/YYYY'
                                   )}
                                   memberName={
                                     datas.firstName + ' ' + datas.lastName
@@ -325,7 +325,7 @@ function organizationPeople(): JSX.Element {
                                   memberEmail={datas.email}
                                 />
                               );
-                            },
+                            }
                           )
                         ) : (
                           <NotFound title="admin" keyPrefix="userNotFound" />
@@ -335,7 +335,7 @@ function organizationPeople(): JSX.Element {
                           (rowsPerPage > 0
                             ? usersData.users.slice(
                                 page * rowsPerPage,
-                                page * rowsPerPage + rowsPerPage,
+                                page * rowsPerPage + rowsPerPage
                               )
                             : usersData.users
                           ).map(
@@ -353,7 +353,7 @@ function organizationPeople(): JSX.Element {
                                   id={datas._id}
                                   memberImage={datas.image}
                                   joinDate={dayjs(datas.createdAt).format(
-                                    'DD/MM/YYYY',
+                                    'DD/MM/YYYY'
                                   )}
                                   memberName={
                                     datas.firstName + ' ' + datas.lastName
@@ -361,7 +361,7 @@ function organizationPeople(): JSX.Element {
                                   memberEmail={datas.email}
                                 />
                               );
-                            },
+                            }
                           )
                         ) : (
                           <NotFound title="user" keyPrefix="userNotFound" />
@@ -391,9 +391,9 @@ function organizationPeople(): JSX.Element {
                               ? memberData?.organizationsMemberConnection.edges
                                   .length ?? 0
                               : state === 1
-                                ? adminData?.organizationsMemberConnection.edges
-                                    .length ?? 0
-                                : usersData?.users.length ?? 0
+                              ? adminData?.organizationsMemberConnection.edges
+                                  .length ?? 0
+                              : usersData?.users.length ?? 0
                           }
                           rowsPerPage={rowsPerPage}
                           page={page}

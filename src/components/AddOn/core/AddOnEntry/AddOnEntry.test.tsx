@@ -63,7 +63,7 @@ describe('Testing AddOnEntry', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>,
+      </ApolloProvider>
     );
     expect(getByTestId('AddOnEntry')).toBeInTheDocument();
   });
@@ -95,7 +95,7 @@ describe('Testing AddOnEntry', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>,
+      </ApolloProvider>
     );
 
     expect(getByText('Test Addon')).toBeInTheDocument();
@@ -130,7 +130,7 @@ describe('Testing AddOnEntry', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>,
+      </MockedProvider>
     );
     await wait(100);
     const btn = getByTestId('AddOnEntry_btn_install');
@@ -138,14 +138,14 @@ describe('Testing AddOnEntry', () => {
     await wait(100);
     expect(btn.innerHTML).toMatch(/Install/i);
     expect(
-      await findByText('This feature is now removed from your organization'),
+      await findByText('This feature is now removed from your organization')
     ).toBeInTheDocument();
     await userEvent.click(btn);
     await wait(100);
 
     expect(btn.innerHTML).toMatch(/Uninstall/i);
     expect(
-      await findByText('This feature is now enabled in your organization'),
+      await findByText('This feature is now enabled in your organization')
     ).toBeInTheDocument();
   });
 
@@ -176,7 +176,7 @@ describe('Testing AddOnEntry', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>,
+      </MockedProvider>
     );
     await wait(100);
     const btn = getByTestId('AddOnEntry_btn_install');

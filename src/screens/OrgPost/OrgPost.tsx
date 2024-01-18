@@ -76,14 +76,14 @@ function orgPost(): JSX.Element {
   const [create, { loading: createPostLoading }] =
     useMutation(CREATE_POST_MUTATION);
   const [displayedPosts, setDisplayedPosts] = useState(
-    orgPostListData?.postsByOrganizationConnection.edges || [],
+    orgPostListData?.postsByOrganizationConnection.edges || []
   );
 
   useEffect(() => {
     if (orgPostListData && orgPostListData.postsByOrganizationConnection) {
       const newDisplayedPosts = sortPosts(
         orgPostListData.postsByOrganizationConnection.edges,
-        sortingOption,
+        sortingOption
       );
       setDisplayedPosts(newDisplayedPosts);
     }
@@ -171,19 +171,19 @@ function orgPost(): JSX.Element {
 
   const sortPosts = (
     posts: InterfaceOrgPost[],
-    sortingOption: string,
+    sortingOption: string
   ): InterfaceOrgPost[] => {
     const sortedPosts = [...posts];
 
     if (sortingOption === 'latest') {
       sortedPosts.sort(
         (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
     } else if (sortingOption === 'oldest') {
       sortedPosts.sort(
         (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       );
     }
 
@@ -323,7 +323,7 @@ function orgPost(): JSX.Element {
                       postVideo={datas.videoUrl}
                       pinned={datas.pinned}
                     />
-                  ),
+                  )
                 )
               ) : (
                 <NotFound title="post" keyPrefix="postNotFound" />
@@ -393,7 +393,7 @@ function orgPost(): JSX.Element {
                   data-testid="organisationImage"
                   multiple={false}
                   onChange={async (
-                    e: React.ChangeEvent<HTMLInputElement>,
+                    e: React.ChangeEvent<HTMLInputElement>
                   ): Promise<void> => {
                     setPostFormState((prevPostFormState) => ({
                       ...prevPostFormState,
@@ -423,7 +423,7 @@ function orgPost(): JSX.Element {
                           postImage: '',
                         });
                         const fileInput = document.getElementById(
-                          'postphoto',
+                          'postphoto'
                         ) as HTMLInputElement;
                         if (fileInput) {
                           fileInput.value = '';
@@ -480,7 +480,7 @@ function orgPost(): JSX.Element {
                           postVideo: '',
                         });
                         const fileInput = document.getElementById(
-                          'postvideo',
+                          'postvideo'
                         ) as HTMLInputElement;
                         if (fileInput) {
                           fileInput.value = '';

@@ -107,7 +107,7 @@ describe('Testing Event List Card', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -143,7 +143,7 @@ describe('Testing Event List Card', () => {
             isRegisterable={false}
           />
         </I18nextProvider>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -161,7 +161,7 @@ describe('Testing Event List Card', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -181,7 +181,7 @@ describe('Testing Event List Card', () => {
         <I18nextProvider i18n={i18nForTest}>
           <EventListCard {...props} />
         </I18nextProvider>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -190,7 +190,7 @@ describe('Testing Event List Card', () => {
     userEvent.type(screen.getByTestId('updateTitle'), props.eventName);
     userEvent.type(
       screen.getByTestId('updateDescription'),
-      props.eventDescription,
+      props.eventDescription
     );
     userEvent.type(screen.getByTestId('updateLocation'), props.eventLocation);
     userEvent.click(screen.getByTestId('updateAllDay'));
@@ -208,7 +208,7 @@ describe('Testing Event List Card', () => {
             <I18nextProvider i18n={i18nForTest}></I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     expect(container.textContent).not.toBe('Loading data...');
@@ -222,7 +222,7 @@ describe('Testing Event List Card', () => {
         <I18nextProvider i18n={i18nForTest}>
           <EventListCard {...props} />
         </I18nextProvider>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -231,7 +231,7 @@ describe('Testing Event List Card', () => {
     userEvent.type(screen.getByTestId('updateTitle'), props.eventName);
     userEvent.type(
       screen.getByTestId('updateDescription'),
-      props.eventDescription,
+      props.eventDescription
     );
     userEvent.type(screen.getByTestId('updateLocation'), props.eventLocation);
     userEvent.click(screen.getByTestId('updateAllDay'));
@@ -248,7 +248,7 @@ describe('Testing Event List Card', () => {
         <I18nextProvider i18n={i18nForTest}>
           <EventListCard {...props} />
         </I18nextProvider>
-      </MockedProvider>,
+      </MockedProvider>
     );
     await wait();
     expect(screen.getByText(props.eventName)).toBeInTheDocument();
@@ -258,7 +258,7 @@ describe('Testing Event List Card', () => {
       render(
         <MockedProvider link={link} addTypename={false}>
           <EventListCard {...props} />
-        </MockedProvider>,
+        </MockedProvider>
       );
       userEvent.click(screen.getByTestId('card'));
       userEvent.click(screen.getByTestId('deleteEventModalBtn'));
@@ -271,7 +271,7 @@ describe('Testing Event List Card', () => {
       render(
         <MockedProvider link={link} addTypename={false}>
           <EventListCard {...props} />
-        </MockedProvider>,
+        </MockedProvider>
       );
       userEvent.click(screen.getByTestId('card'));
       userEvent.click(screen.getByTestId('deleteEventModalBtn'));
@@ -295,7 +295,7 @@ describe('Testing Event List Card', () => {
       render(
         <MockedProvider link={link2} addTypename={false}>
           <EventListCard {...props} />
-        </MockedProvider>,
+        </MockedProvider>
       );
       userEvent.click(screen.getByTestId('card'));
       userEvent.click(screen.getByTestId('deleteEventModalBtn'));
@@ -332,7 +332,7 @@ describe('Testing Event List Card', () => {
             isRegisterable={false}
           />
         </I18nextProvider>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();

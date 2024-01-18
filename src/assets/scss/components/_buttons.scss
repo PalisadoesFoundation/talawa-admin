@@ -17,9 +17,7 @@ $btn-font-size-lg: $input-btn-font-size-lg;
 $btn-border-width: $input-btn-border-width;
 
 $btn-font-weight: $font-weight-normal;
-$btn-box-shadow:
-  inset 0 1px 0 rgba($white, 0.15),
-  0 1px 1px rgba($black, 0.075);
+$btn-box-shadow: inset 0 1px 0 rgba($white, 0.15), 0 1px 1px rgba($black, 0.075);
 $btn-focus-width: $input-btn-focus-width;
 $btn-focus-box-shadow: $input-btn-focus-box-shadow;
 $btn-disabled-opacity: 0.65;
@@ -34,11 +32,8 @@ $btn-border-radius: var(--#{$prefix}border-radius);
 $btn-border-radius-sm: var(--#{$prefix}border-radius-sm);
 $btn-border-radius-lg: var(--#{$prefix}border-radius-lg);
 
-$btn-transition:
-  color 0.15s ease-in-out,
-  background-color 0.15s ease-in-out,
-  border-color 0.15s ease-in-out,
-  box-shadow 0.15s ease-in-out;
+$btn-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+  border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
 $btn-hover-bg-shade-amount: 15%;
 $btn-hover-bg-tint-amount: 15%;

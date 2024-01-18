@@ -62,7 +62,7 @@ describe('Testing TaskCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -85,7 +85,7 @@ describe('Testing TaskCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();

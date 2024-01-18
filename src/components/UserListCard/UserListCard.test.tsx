@@ -56,7 +56,7 @@ describe('Testing User List Card', () => {
             <UserListCard {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -85,7 +85,7 @@ describe('Testing User List Card', () => {
             <UserListCard {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();

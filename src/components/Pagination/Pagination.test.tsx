@@ -23,7 +23,7 @@ describe('Testing Pagination component', () => {
         <Provider store={store}>
           <Pagination {...props} />
         </Provider>
-      </BrowserRouter>,
+      </BrowserRouter>
     );
 
     userEvent.click(screen.getByTestId(/nextPage/i));
@@ -53,7 +53,7 @@ test('Component should be rendered properly', () => {
           <Pagination {...props} />
         </ThemeProvider>
       </Provider>
-    </BrowserRouter>,
+    </BrowserRouter>
   );
 
   userEvent.click(screen.getByTestId(/nextPage/i));

@@ -42,7 +42,7 @@ export default function advertisements(): JSX.Element {
   const getStorePlugins = async () => {
     let plugins = await new PluginHelper().fetchStore();
     const installIds = (await new PluginHelper().fetchInstalled()).map(
-      (plugin: any) => plugin.id,
+      (plugin: any) => plugin.id
     );
     plugins = plugins.map((plugin: any) => {
       plugin.installed = installIds.includes(plugin.id);
@@ -131,7 +131,7 @@ export default function advertisements(): JSX.Element {
                             endDate: Date;
                             startDate: Date;
                           },
-                          i: React.Key | null | undefined,
+                          i: React.Key | null | undefined
                         ): JSX.Element => (
                           <AdvertisementEntry
                             id={ad._id}
@@ -143,7 +143,7 @@ export default function advertisements(): JSX.Element {
                             endDate={new Date(ad.endDate)}
                             // getInstalledPlugins={getInstalledPlugins}
                           />
-                        ),
+                        )
                       )
                   )}
                 </Tab>
@@ -168,7 +168,7 @@ export default function advertisements(): JSX.Element {
                             endDate: Date;
                             startDate: Date;
                           },
-                          i: React.Key | null | undefined,
+                          i: React.Key | null | undefined
                         ): JSX.Element => (
                           <AdvertisementEntry
                             id={ad._id}
@@ -180,7 +180,7 @@ export default function advertisements(): JSX.Element {
                             endDate={new Date(ad.endDate)}
                             // getInstalledPlugins={getInstalledPlugins}
                           />
-                        ),
+                        )
                       )
                   )}
                 </Tab>

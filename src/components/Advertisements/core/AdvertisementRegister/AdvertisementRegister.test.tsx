@@ -70,7 +70,7 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 
 const translations = JSON.parse(
   // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-  JSON.stringify(i18n.getDataByLanguage('en')?.translation.advertisement!),
+  JSON.stringify(i18n.getDataByLanguage('en')?.translation.advertisement!)
 );
 
 describe('Testing Advertisement Register Component', () => {
@@ -112,7 +112,7 @@ describe('Testing Advertisement Register Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>,
+      </ApolloProvider>
     );
     await waitFor(() => {
       expect(getByText(translations.addNew)).toBeInTheDocument();
@@ -137,7 +137,7 @@ describe('Testing Advertisement Register Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>,
+      </ApolloProvider>
     );
     await waitFor(() => {
       fireEvent.click(getByText(translations.addNew));
@@ -168,7 +168,7 @@ describe('Testing Advertisement Register Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await waitFor(() => {
@@ -179,14 +179,14 @@ describe('Testing Advertisement Register Component', () => {
         target: { value: 'Test Advertisement' },
       });
       expect(getByLabelText(translations.Rname)).toHaveValue(
-        'Test Advertisement',
+        'Test Advertisement'
       );
 
       fireEvent.change(getByLabelText(translations.Rlink), {
         target: { value: 'http://example.com' },
       });
       expect(getByLabelText(translations.Rlink)).toHaveValue(
-        'http://example.com',
+        'http://example.com'
       );
 
       fireEvent.change(getByLabelText(translations.Rtype), {
@@ -206,7 +206,7 @@ describe('Testing Advertisement Register Component', () => {
 
       fireEvent.click(getByText(translations.register));
       expect(toast.success).toBeCalledWith(
-        'Advertisement created successfully',
+        'Advertisement created successfully'
       );
       expect(setTimeoutSpy).toHaveBeenCalled();
     });
@@ -232,7 +232,7 @@ describe('Testing Advertisement Register Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await waitFor(() => {
@@ -241,7 +241,7 @@ describe('Testing Advertisement Register Component', () => {
 
       fireEvent.click(getByText(translations.register));
       expect(toast.error).toBeCalledWith(
-        'An error occured, could not create new advertisement',
+        'An error occured, could not create new advertisement'
       );
     });
   });

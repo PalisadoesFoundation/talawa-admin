@@ -65,7 +65,7 @@ for (let i = 0; i < 100; i++) {
 const createMemberMock = (
   orgId = '',
   firstNameContains = '',
-  lastNameContains = '',
+  lastNameContains = ''
 ): any => ({
   request: {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
@@ -117,7 +117,7 @@ const createAdminMock = (
   orgId = '',
   firstNameContains = '',
   lastNameContains = '',
-  adminFor = '',
+  adminFor = ''
 ): any => ({
   request: {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
@@ -170,7 +170,7 @@ const createAdminMock = (
 
 const createUserMock = (
   firstNameContains = '',
-  lastNameContains = '',
+  lastNameContains = ''
 ): any => ({
   request: {
     query: USER_LIST,
@@ -480,7 +480,7 @@ describe('Organization People Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -490,9 +490,7 @@ describe('Organization People Page', () => {
     // Get the reference to all userTypes through the radio buttons in the DOM
     // => users, members, admins
     const allPeopleTypes = Array.from(
-      screen
-        .getByTestId('usertypelist')
-        .querySelectorAll('input[type="radio"]'),
+      screen.getByTestId('usertypelist').querySelectorAll('input[type="radio"]')
     ).map((radioButton: HTMLInputElement | any) => radioButton.dataset?.testid);
 
     // This variable represents the array index of currently selected UserType(i.e "member" or "admin" or "user")
@@ -514,13 +512,13 @@ describe('Organization People Page', () => {
       // Get all possible dropdown options
       // => -1, 5, 10, 30
       const rowsPerPageOptions: any[] = Array.from(
-        rowsPerPageSelect?.querySelectorAll('option'),
+        rowsPerPageSelect?.querySelectorAll('option')
       );
 
       // Change the selected option of dropdown to the value of the current option
       userEvent.selectOptions(
         rowsPerPageSelect,
-        rowsPerPageOptions[currRowPPindex].textContent,
+        rowsPerPageOptions[currRowPPindex].textContent
       );
 
       const expectedUsersLength = MOCKS[3]?.result?.data?.users?.filter(
@@ -540,7 +538,7 @@ describe('Organization People Page', () => {
           const pathname = window.location.pathname;
           const id = pathname.split('=')[1];
           return datas.joinedOrganizations.some((org) => org._id === id);
-        },
+        }
       ).length;
 
       await wait();
@@ -672,7 +670,7 @@ describe('Organization People Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     expect(container.textContent).not.toBe('Loading data...');
@@ -703,7 +701,7 @@ describe('Organization People Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
     await wait();
 
@@ -718,11 +716,11 @@ describe('Organization People Page', () => {
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter Full Name/i),
-      searchData.fullNameMember,
+      searchData.fullNameMember
     );
     await wait();
     expect(screen.getByPlaceholderText(/Enter Full Name/i)).toHaveValue(
-      searchData.fullNameMember,
+      searchData.fullNameMember
     );
 
     await wait();
@@ -747,7 +745,7 @@ describe('Organization People Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
     await wait();
 
@@ -793,7 +791,7 @@ describe('Organization People Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -808,11 +806,11 @@ describe('Organization People Page', () => {
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter Full Name/i),
-      searchData.fullNameAdmin,
+      searchData.fullNameAdmin
     );
     await wait();
     expect(screen.getByPlaceholderText(/Enter Full Name/i)).toHaveValue(
-      searchData.fullNameAdmin,
+      searchData.fullNameAdmin
     );
     await wait();
 
@@ -838,7 +836,7 @@ describe('Organization People Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -885,7 +883,7 @@ describe('Organization People Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
     await wait();
     userEvent.click(screen.getByLabelText(/Users/i));
@@ -909,7 +907,7 @@ describe('Organization People Page', () => {
         const pathname = window.location.pathname;
         const id = pathname.split('=')[1];
         return datas.joinedOrganizations?.some((org) => org._id === id);
-      },
+      }
     );
     await wait();
     expect(orgUsers?.length).toBe(1);
@@ -938,7 +936,7 @@ describe('Organization People Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
     await wait();
     userEvent.click(screen.getByLabelText(/Users/i));
@@ -969,7 +967,7 @@ describe('Organization People Page', () => {
         const pathname = window.location.pathname;
         const id = pathname.split('=')[1];
         return datas.joinedOrganizations?.some((org) => org._id === id);
-      },
+      }
     );
     await wait();
     expect(orgUsers?.length).toBe(1);
@@ -990,7 +988,7 @@ describe('Organization People Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();

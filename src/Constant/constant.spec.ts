@@ -17,13 +17,13 @@ describe('constants', () => {
 
   it('RECAPTCHA_SITE_KEY should be equal to REACT_APP_RECAPTCHA_SITE_KEY environment variable', () => {
     expect(RECAPTCHA_SITE_KEY).toEqual(
-      process.env.REACT_APP_RECAPTCHA_SITE_KEY,
+      process.env.REACT_APP_RECAPTCHA_SITE_KEY
     );
   });
 
   it('REACT_APP_USE_RECAPTCHA should be equal to REACT_APP_USE_RECAPTCHA environment variable', () => {
     expect(REACT_APP_USE_RECAPTCHA).toEqual(
-      process.env.REACT_APP_USE_RECAPTCHA,
+      process.env.REACT_APP_USE_RECAPTCHA
     );
   });
 });

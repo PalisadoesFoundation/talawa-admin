@@ -199,7 +199,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -211,11 +211,11 @@ describe('Organisation Post Page', () => {
     userEvent.type(screen.getByTestId('modalinfo'), formData.postinfo);
     userEvent.upload(
       screen.getByTestId('organisationImage'),
-      formData.postImage,
+      formData.postImage
     );
     userEvent.upload(
       screen.getByTestId('organisationImage'),
-      formData.postVideo,
+      formData.postVideo
     );
     userEvent.click(screen.getByTestId('pinPost'));
     expect(screen.getByTestId('pinPost')).toBeChecked();
@@ -237,7 +237,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
     async function debounceWait(ms = 200): Promise<void> {
       await act(() => {
@@ -266,7 +266,7 @@ describe('Organisation Post Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>,
+        </MockedProvider>
       );
 
       await wait();
@@ -300,7 +300,7 @@ describe('Organisation Post Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>,
+        </MockedProvider>
       );
 
       await wait();
@@ -335,7 +335,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -362,7 +362,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -391,7 +391,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -428,7 +428,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -459,7 +459,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -484,7 +484,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -514,7 +514,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -551,7 +551,7 @@ describe('Organisation Post Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>,
+        </MockedProvider>
       );
 
       await wait();

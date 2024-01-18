@@ -59,21 +59,21 @@ describe('Testing Delete Event Project Modal', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await waitFor(() =>
-      expect(queryByText('Delete Event Project')).toBeInTheDocument(),
+      expect(queryByText('Delete Event Project')).toBeInTheDocument()
     );
 
     fireEvent.click(queryByText('Delete') as Element);
     await waitFor(() =>
-      expect(queryByText('Deleting the project...')).toBeInTheDocument(),
+      expect(queryByText('Deleting the project...')).toBeInTheDocument()
     );
     await waitFor(() =>
       expect(
-        queryByText('Deleted the project successfully!'),
-      ).toBeInTheDocument(),
+        queryByText('Deleted the project successfully!')
+      ).toBeInTheDocument()
     );
   });
 
@@ -88,21 +88,21 @@ describe('Testing Delete Event Project Modal', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await waitFor(() =>
-      expect(queryByText('Delete Event Project')).toBeInTheDocument(),
+      expect(queryByText('Delete Event Project')).toBeInTheDocument()
     );
 
     fireEvent.click(queryByText('Delete') as Element);
     await waitFor(() =>
-      expect(queryByText('Deleting the project...')).toBeInTheDocument(),
+      expect(queryByText('Deleting the project...')).toBeInTheDocument()
     );
     await waitFor(() =>
       expect(
-        queryByText('There was an error in deleting the project details!'),
-      ).toBeInTheDocument(),
+        queryByText('There was an error in deleting the project details!')
+      ).toBeInTheDocument()
     );
   });
 });
