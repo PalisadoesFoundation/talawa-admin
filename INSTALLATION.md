@@ -11,6 +11,7 @@ This document provides instructions on how to set up and start a running instanc
   - [Setting up this repository](#setting-up-this-repository)
   - [Setting up npm](#setting-up-npm)
   - [Setting up Typescript](#setting-up-typescript)
+  - [Installation With Docker](#installation-using-docker)
   - [Installing required packages/dependencies](#installing-required-packagesdependencies)
 - [Configuration](#configuration)
   - [Creating .env file](#creating-env-file)
@@ -27,8 +28,8 @@ This document provides instructions on how to set up and start a running instanc
   - [Debugging tests](#debugging-tests)
   - [Linting code files](#linting-code-files)
   - [Husky for Git Hooks](#husky-for-git-hooks)
-      - [pre-commit hook](#pre-commit-hook)
-      - [post-merge hook](#post-merge-hook)
+    - [pre-commit hook](#pre-commit-hook)
+    - [post-merge hook](#post-merge-hook)
 
 <!-- tocstop -->
 
@@ -79,12 +80,34 @@ npm install -g typescript
 
 For more details please refer to the installation guidelines provided in the [official docs](https://www.typescriptlang.org/download).
 
+## Installation Using Docker
+
+> - **Requires Docker and Docker Compose to be installed**
+
+Add the endpoint for accessing talawa-api graphql service to the variable named `REACT_APP_TALAWA_URL` in the `.env` file.
+
+```
+REACT_APP_TALAWA_URL="http://HOST-MACHINE-IP-ADDRESS:4000/graphql/"
+```
+
+Now use the following command to run docker containers -
+
+```sh
+docker compose up
+```
+
+OR
+
+```sh
+docker-compose up
+```
+
 ## Installing required packages/dependencies
 
 Run the following command to install the packages and dependencies required by `talawa-admin`:
 
 ```
-npm install 
+npm install
 ```
 
 # Configuration
@@ -122,7 +145,7 @@ Follow the instructions from section [Setting up REACT_APP_TALAWA_URL in .env fi
 Add the endpoint for accessing talawa-api graphql service to the variable named `REACT_APP_TALAWA_URL` in the `.env` file.
 
 ```
-REACT_APP_TALAWA_URL="http://API-IP-ADRESS:4000/graphql/"
+REACT_APP_TALAWA_URL="http://API-IP-ADDRESS:4000/graphql/"
 ```
 
 If you are a software developer working on your local system, then the URL would be:
@@ -150,6 +173,7 @@ Copy/paste this `reCAPTCHA site key` to the variable named `REACT_APP_RECAPTCHA_
 ```
 REACT_APP_RECAPTCHA_SITE_KEY="this_is_the_recaptcha_key"
 ```
+
 ## Setting up Compiletime and Runtime logs
 
 Set the `ALLOW_LOGS` to "YES" if you want warnings , info and error messages in your console or leave it blank if you dont need them or want to keep the console clean
@@ -158,7 +182,7 @@ Set the `ALLOW_LOGS` to "YES" if you want warnings , info and error messages in 
 
 It's now time to start Talawa-Admin and get it running
 
-## Running Talawa-Admin
+## Running Talawa-Admin without Docker
 
 Run the following command to start `talawa-admin` development server:
 
@@ -219,7 +243,6 @@ npm run lint:fix
 
 We are using the package `Husky` to run git hooks that run according to different git workflows.
 
-
 #### pre-commit hook
 
 We run a pre-commit hook which automatically runs code quality checks each time you make a commit and also fixes some of the issues. This way you don't have to run them manually each time.
@@ -227,7 +250,6 @@ We run a pre-commit hook which automatically runs code quality checks each time 
 If you don't want these pre-commit checks running on each commit, you can manually opt out of it using the `--no-verify` flag with your commit message as shown:-
 
         git commit -m "commit message" --no-verify
-
 
 #### post-merge hook
 
