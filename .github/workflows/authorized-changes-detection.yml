@@ -28,6 +28,9 @@ on:
       - 'CODEOWNERS'
       - 'LICENSE'
       - 'setup.ts'
+      - 'Dockerfile'
+      - 'docker-compose.yml'
+      - '.dockerignore'
       
 jobs:
   Checking-for-unauthorized-file-changes:
