@@ -447,7 +447,7 @@ export const UPDATE_ADVERTISEMENT_MUTATION = gql`
   mutation UpdateAdvertisement(
     $id: ID!
     $name: String
-    $link: String
+    $file: URL
     $type: AdvertisementType
     $startDate: Date
     $endDate: Date
@@ -456,7 +456,7 @@ export const UPDATE_ADVERTISEMENT_MUTATION = gql`
       input: {
         _id: $id
         name: $name
-        link: $link
+        file: $file
         type: $type
         startDate: $startDate
         endDate: $endDate

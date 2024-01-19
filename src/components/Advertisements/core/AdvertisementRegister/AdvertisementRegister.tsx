@@ -21,7 +21,7 @@ interface InterfaceAddOnRegisterProps {
   nameEdit?: string;
   typeEdit?: string;
   orgIdEdit?: string;
-  linkEdit?: string;
+  advertisementMediaEdit?: string;
   endDateEdit?: Date;
   startDateEdit?: Date;
 }
@@ -43,7 +43,7 @@ function advertisementRegister({
   typeEdit,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   orgIdEdit,
-  linkEdit,
+  advertisementMediaEdit,
   endDateEdit,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   startDateEdit,
@@ -75,7 +75,7 @@ function advertisementRegister({
       setFormState((prevState) => ({
         ...prevState,
         name: nameEdit || '',
-        link: linkEdit || '',
+        advertisementMedia: advertisementMediaEdit || '',
         type: typeEdit || 'BANNER',
         startDate: startDateEdit || new Date(),
         endDate: endDateEdit || new Date(),
@@ -85,7 +85,7 @@ function advertisementRegister({
   }, [
     formStatus,
     nameEdit,
-    linkEdit,
+    advertisementMediaEdit,
     typeEdit,
     startDateEdit,
     endDateEdit,
@@ -132,7 +132,7 @@ function advertisementRegister({
       if (formState.name !== nameEdit) {
         updatedFields.name = formState.name;
       }
-      if (formState.advertisementMedia !== linkEdit) {
+      if (formState.advertisementMedia !== advertisementMediaEdit) {
         updatedFields.advertisementMedia = formState.advertisementMedia;
       }
       if (formState.type !== typeEdit) {

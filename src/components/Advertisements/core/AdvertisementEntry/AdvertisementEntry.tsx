@@ -78,7 +78,7 @@ function advertisementEntry({
                         nameEdit={name}
                         typeEdit={type}
                         orgIdEdit={organizationId}
-                        linkEdit={mediaUrl}
+                        advertisementMediaEdit={mediaUrl}
                         endDateEdit={endDate}
                         startDateEdit={startDate}
                       />

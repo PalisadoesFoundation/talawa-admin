@@ -266,7 +266,7 @@ describe('Testing Advertisement Register Component', () => {
                   typeEdit="BANNER"
                   nameEdit="Advert1"
                   orgIdEdit="1"
-                  linkEdit="google.com"
+                  advertisementMediaEdit="google.com"
                 />
               }
             </I18nextProvider>

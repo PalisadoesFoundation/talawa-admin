@@ -175,7 +175,7 @@ describe('Testing Advertisement Entry Component', () => {
           advertisement: {
             _id: '1',
             name: 'Updated Advertisement',
-            link: 'google.com',
+            mediaUrl: 'google.com',
             startDate: dayjs(new Date()).add(1, 'day').format('YYYY-MM-DD'),
             endDate: dayjs(new Date()).add(2, 'days').format('YYYY-MM-DD'),
             type: 'BANNER',
@@ -334,7 +334,7 @@ describe('Testing Advertisement Entry Component', () => {
                   startDateEdit={new Date()}
                   typeEdit="POPUP"
                   organizationId="1"
-                  linkEdit="google.com"
+                  advertisementMediaEdit="google.com"
                 />
               }
             </I18nextProvider>
