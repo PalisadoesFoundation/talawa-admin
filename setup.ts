@@ -6,6 +6,7 @@ import fetch from 'node-fetch';
 
 dotenv.config();
 
+// Check Talawa API Connection
 async function checkConnection(url: string): Promise<any> {
   console.log('\nChecking Talawa-API connection....');
   let isConnected = false;
@@ -47,6 +48,7 @@ function checkEnvFile(): void {
   }
 }
 
+// Validate ReCaptcha
 function validateRecaptcha(string: string): boolean {
   const pattern = /^[a-zA-Z0-9_-]{40}$/;
   return pattern.test(string);
