@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/TaskModals/DeleteTaskModal.tsx:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/TaskModals/DeleteTaskModal.tsx#L14)
+[src/components/TaskModals/DeleteTaskModal.tsx:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/de1d4ad/src/components/TaskModals/DeleteTaskModal.tsx#L14)

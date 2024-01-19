@@ -30,4 +30,4 @@
 
 #### Defined in
 
-[src/components/OrganizationScreen/OrganizationScreen.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/OrganizationScreen/OrganizationScreen.tsx#L15)
+[src/components/OrganizationScreen/OrganizationScreen.tsx:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/de1d4ad/src/components/OrganizationScreen/OrganizationScreen.tsx#L14)
