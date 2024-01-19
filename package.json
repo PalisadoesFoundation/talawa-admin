@@ -20,6 +20,7 @@
     "bootstrap": "^5.3.0",
     "customize-cra": "^1.0.0",
     "dayjs": "^1.10.7",
+    "dotenv": "^16.3.1",
     "enzyme": "^3.11.0",
     "flag-icons": "^6.6.6",
     "graphql": "^15.5.1",
