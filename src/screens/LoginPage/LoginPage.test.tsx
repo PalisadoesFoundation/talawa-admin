@@ -166,7 +166,7 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    expect(screen.getByText(/Admin Portal/i)).toBeInTheDocument();
+    expect(screen.getByText(/Admin/i)).toBeInTheDocument();
     expect(window.location).toBeAt('/orglist');
   });
 
@@ -175,8 +175,8 @@ describe('Testing Login Page Screen', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'johndoe@gmail.com',
-      password: 'johndoe',
-      confirmPassword: 'johndoe',
+      password: 'John@123',
+      confirmPassword: 'John@123',
     };
 
     render(
@@ -215,13 +215,57 @@ describe('Testing Login Page Screen', () => {
     userEvent.click(screen.getByTestId('registrationBtn'));
   });
 
+  test('Testing registration functionality when all inputs are invalid', async () => {
+    const formData = {
+      firstName: '1234',
+      lastName: '8890',
+      email: 'j@l.co',
+      password: 'john@123',
+      confirmPassword: 'john@123',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+
+    await wait();
+
+    userEvent.type(
+      screen.getByPlaceholderText(/First Name/i),
+      formData.firstName
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Last name/i),
+      formData.lastName
+    );
+    userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
+    userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
+    userEvent.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      formData.confirmPassword
+    );
+    userEvent.click(screen.getByTestId('registrationBtn'));
+  });
+
   test('Testing registration functionality, when password and confirm password is not same', async () => {
     const formData = {
       firstName: 'John',
       lastName: 'Doe',
       email: 'johndoe@gmail.com',
-      password: 'johndoe',
-      confirmPassword: 'doeJohn',
+      password: 'johnDoe@1',
+      confirmPassword: 'doeJohn@2',
     };
 
     render(

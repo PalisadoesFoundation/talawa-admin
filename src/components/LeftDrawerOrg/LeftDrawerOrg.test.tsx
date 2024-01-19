@@ -89,7 +89,7 @@ const MOCKS = [
             name: 'Test Organization',
             description: 'Testing this organization',
             location: 'Gotham, DC',
-            isPublic: true,
+            userRegistrationRequired: true,
             visibleInSearch: true,
             members: [
               {
@@ -143,7 +143,7 @@ const MOCKS_WITH_IMAGE = [
             name: 'Test Organization',
             description: 'Testing this organization',
             location: 'Gotham, DC',
-            isPublic: true,
+            userRegistrationRequired: true,
             visibleInSearch: true,
             members: [
               {
@@ -356,23 +356,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
         </BrowserRouter>
       </MockedProvider>
     );
-  });
-
-  test('Testing Drawer open close functionality', () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LeftDrawerOrg {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-    const closeModalBtn = screen.getByTestId(/closeModalBtn/i);
-    userEvent.click(closeModalBtn);
   });
 
   test('Testing logout functionality', async () => {

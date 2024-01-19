@@ -24,6 +24,7 @@ on:
       - 'vite.config.ts'
       - 'CODEOWNERS'
       - 'LICENSE'
+      - 'setup.ts'
       
 jobs:
   Checking-for-unauthorized-file-changes:
