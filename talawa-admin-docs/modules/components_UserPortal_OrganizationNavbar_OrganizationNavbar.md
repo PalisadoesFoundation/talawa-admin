@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/UserPortal/OrganizationNavbar/OrganizationNavbar.tsx:29](https://github.com/disha1202/talawa-admin/blob/eed3bdc/src/components/UserPortal/OrganizationNavbar/OrganizationNavbar.tsx#L29)
+[src/components/UserPortal/OrganizationNavbar/OrganizationNavbar.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/UserPortal/OrganizationNavbar/OrganizationNavbar.tsx#L21)

@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Namespaces
+
+- [default](components_AddOn_AddOn.default.md)
+
 ### Functions
 
 - [default](components_AddOn_AddOn.md#default)
@@ -26,4 +30,4 @@
 
 #### Defined in
 
-[src/components/AddOn/AddOn.tsx:11](https://github.com/disha1202/talawa-admin/blob/eed3bdc/src/components/AddOn/AddOn.tsx#L11)
+[src/components/AddOn/AddOn.tsx:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/AddOn/AddOn.tsx#L11)

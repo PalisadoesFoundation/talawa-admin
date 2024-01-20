@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Namespaces
+
+- [default](components_AddOn_core_AddOnStore_AddOnStore.default.md)
+
 ### Functions
 
 - [default](components_AddOn_core_AddOnStore_AddOnStore.md#default)
@@ -20,4 +24,4 @@
 
 #### Defined in
 
-[src/components/AddOn/core/AddOnStore/AddOnStore.tsx:26](https://github.com/disha1202/talawa-admin/blob/eed3bdc/src/components/AddOn/core/AddOnStore/AddOnStore.tsx#L26)
+[src/components/AddOn/core/AddOnStore/AddOnStore.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/AddOn/core/AddOnStore/AddOnStore.tsx#L26)

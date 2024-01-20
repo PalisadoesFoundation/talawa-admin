@@ -4,10 +4,6 @@
 
 ## Table of contents
 
-### Interfaces
-
-- [InterfaceTableLoader](../interfaces/components_TableLoader_TableLoader.InterfaceTableLoader.md)
-
 ### Functions
 
 - [default](components_TableLoader_TableLoader.md#default)
@@ -22,7 +18,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `props` | [`InterfaceTableLoader`](../interfaces/components_TableLoader_TableLoader.InterfaceTableLoader.md) |
+| `props` | `InterfaceTableLoader` |
 
 #### Returns
 
@@ -30,4 +26,4 @@
 
 #### Defined in
 
-[src/components/TableLoader/TableLoader.tsx:11](https://github.com/disha1202/talawa-admin/blob/eed3bdc/src/components/TableLoader/TableLoader.tsx#L11)
+[src/components/TableLoader/TableLoader.tsx:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/TableLoader/TableLoader.tsx#L10)

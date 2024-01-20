@@ -20,11 +20,7 @@
 
 ### constructor
 
-• **new default**(): [`default`](components_AddOn_support_services_Plugin_helper.default.md)
-
-#### Returns
-
-[`default`](components_AddOn_support_services_Plugin_helper.default.md)
+• **new default**()
 
 ## Methods
 
@@ -38,7 +34,7 @@
 
 #### Defined in
 
-[src/components/AddOn/support/services/Plugin.helper.ts:7](https://github.com/disha1202/talawa-admin/blob/eed3bdc/src/components/AddOn/support/services/Plugin.helper.ts#L7)
+[src/components/AddOn/support/services/Plugin.helper.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/AddOn/support/services/Plugin.helper.ts#L7)
 
 ___
 
@@ -52,7 +48,7 @@ ___
 
 #### Defined in
 
-[src/components/AddOn/support/services/Plugin.helper.ts:2](https://github.com/disha1202/talawa-admin/blob/eed3bdc/src/components/AddOn/support/services/Plugin.helper.ts#L2)
+[src/components/AddOn/support/services/Plugin.helper.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/AddOn/support/services/Plugin.helper.ts#L2)
 
 ___
 
@@ -72,4 +68,4 @@ ___
 
 #### Defined in
 
-[src/components/AddOn/support/services/Plugin.helper.ts:12](https://github.com/disha1202/talawa-admin/blob/eed3bdc/src/components/AddOn/support/services/Plugin.helper.ts#L12)
+[src/components/AddOn/support/services/Plugin.helper.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/AddOn/support/services/Plugin.helper.ts#L12)
