@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/EventProjectModals/AddEventProjectModal.tsx:14](https://github.com/disha1202/talawa-admin/blob/171fdd3/src/components/EventProjectModals/AddEventProjectModal.tsx#L14)
+[src/components/EventProjectModals/AddEventProjectModal.tsx:14](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/components/EventProjectModals/AddEventProjectModal.tsx#L14)

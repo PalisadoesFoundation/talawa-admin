@@ -21,7 +21,7 @@
 
 #### Defined in
 
-[src/components/IconComponent/IconComponent.tsx:18](https://github.com/disha1202/talawa-admin/blob/171fdd3/src/components/IconComponent/IconComponent.tsx#L18)
+[src/components/IconComponent/IconComponent.tsx:18](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/components/IconComponent/IconComponent.tsx#L18)
 
 ___
 
@@ -31,7 +31,7 @@ ___
 
 #### Defined in
 
-[src/components/IconComponent/IconComponent.tsx:19](https://github.com/disha1202/talawa-admin/blob/171fdd3/src/components/IconComponent/IconComponent.tsx#L19)
+[src/components/IconComponent/IconComponent.tsx:19](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/components/IconComponent/IconComponent.tsx#L19)
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 #### Defined in
 
-[src/components/IconComponent/IconComponent.tsx:17](https://github.com/disha1202/talawa-admin/blob/171fdd3/src/components/IconComponent/IconComponent.tsx#L17)
+[src/components/IconComponent/IconComponent.tsx:17](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/components/IconComponent/IconComponent.tsx#L17)
 
 ___
 
@@ -51,4 +51,4 @@ ___
 
 #### Defined in
 
-[src/components/IconComponent/IconComponent.tsx:20](https://github.com/disha1202/talawa-admin/blob/171fdd3/src/components/IconComponent/IconComponent.tsx#L20)
+[src/components/IconComponent/IconComponent.tsx:20](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/components/IconComponent/IconComponent.tsx#L20)

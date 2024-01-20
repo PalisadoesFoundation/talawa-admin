@@ -31,7 +31,7 @@
 
 #### Defined in
 
-[src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:16](https://github.com/disha1202/talawa-admin/blob/171fdd3/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L16)
+[src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:16](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L16)
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 #### Defined in
 
-[src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:24](https://github.com/disha1202/talawa-admin/blob/171fdd3/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L24)
+[src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:24](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L24)
 
 ___
 
@@ -51,7 +51,7 @@ ___
 
 #### Defined in
 
-[src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:25](https://github.com/disha1202/talawa-admin/blob/171fdd3/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L25)
+[src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:25](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L25)
 
 ___
 
@@ -61,4 +61,4 @@ ___
 
 #### Defined in
 
-[src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:26](https://github.com/disha1202/talawa-admin/blob/171fdd3/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L26)
+[src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:26](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L26)
