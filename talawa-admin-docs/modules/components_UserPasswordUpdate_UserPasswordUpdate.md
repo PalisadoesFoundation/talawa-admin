@@ -27,4 +27,4 @@
 
 #### Defined in
 
-node_modules/@types/react/index.d.ts:543
+[src/components/UserPasswordUpdate/UserPasswordUpdate.tsx:15](https://github.com/chandel-aman/talawa-admin/blob/45920a7/src/components/UserPasswordUpdate/UserPasswordUpdate.tsx#L15)

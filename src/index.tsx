@@ -18,7 +18,7 @@ import 'bootstrap/dist/js/bootstrap.min.js';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'flag-icons/css/flag-icons.min.css';
 import { Provider } from 'react-redux';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -31,7 +31,6 @@ import {
   REACT_APP_BACKEND_WEBSOCKET_URL,
 } from 'Constant/constant';
 import { refreshToken } from 'utils/getRefreshToken';
-import { toast } from 'react-toastify';
 import useLocalStorage from 'utils/useLocalStorage';
 const { getItem } = useLocalStorage();
 

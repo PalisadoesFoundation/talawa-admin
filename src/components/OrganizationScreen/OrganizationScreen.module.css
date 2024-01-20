@@ -34,6 +34,9 @@
 }
 .opendrawer {
   position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   top: 0;
   left: 0;
   width: 40px;
@@ -46,9 +49,6 @@
   color: black;
 }
 
-.mobileopenBtn {
-  display: none;
-}
 @media (max-width: 1120px) {
   .contract {
     padding-left: calc(250px + 2rem + 1.5rem);
@@ -61,7 +61,11 @@
 /* For tablets */
 @media (max-width: 820px) {
   .pageContainer {
-    padding-left: 1.5rem;
+    padding-left: 2.5rem;
+  }
+
+  .opendrawer {
+    width: 25px;
   }
 
   .contract,
@@ -70,19 +74,8 @@
   }
 
   .collapseSidebarButton {
-    display: none;
-  }
-}
-
-@media (max-width: 820px) {
-  .pageContainer {
-    padding: 1rem;
-  }
-  .mobileopenBtn {
-    display: block;
-  }
-  .opendrawer,
-  .collapseSidebarButton {
-    display: none;
+    width: 100%;
+    left: 0;
+    right: 0;
   }
 }

@@ -39,7 +39,7 @@ const MOCK_ORGANIZATION_CONNECTION = {
           image: '',
           name: 'anyOrganization1',
           description: 'desc',
-          isPublic: true,
+          userRegistrationRequired: true,
           creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
         },
       ],

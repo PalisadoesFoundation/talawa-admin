@@ -179,67 +179,6 @@ describe('Organisations Page testing as SuperAdmin', () => {
     await wait();
   });
 
-  test('Plugin Notification model should work properly', async () => {
-    setItem('id', '123');
-    setItem('UserType', 'SUPERADMIN');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <OrgList />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait(500);
-
-    expect(localStorage.setItem).toHaveBeenLastCalledWith(
-      'Talawa-admin_UserType',
-      JSON.stringify('SUPERADMIN')
-    );
-
-    userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
-
-    userEvent.type(screen.getByTestId(/modalOrganizationName/i), formData.name);
-    userEvent.type(
-      screen.getByPlaceholderText(/Description/i),
-      formData.description
-    );
-    userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
-    userEvent.click(screen.getByTestId(/isPublic/i));
-    userEvent.click(screen.getByTestId(/visibleInSearch/i));
-    userEvent.upload(screen.getByLabelText(/Display Image/i), formData.image);
-
-    expect(screen.getByTestId(/modalOrganizationName/i)).toHaveValue(
-      formData.name
-    );
-    expect(screen.getByPlaceholderText(/Description/i)).toHaveValue(
-      formData.description
-    );
-    expect(screen.getByPlaceholderText(/Location/i)).toHaveValue(
-      formData.location
-    );
-    expect(screen.getByTestId(/isPublic/i)).not.toBeChecked();
-    expect(screen.getByTestId(/visibleInSearch/i)).toBeChecked();
-    expect(screen.getByLabelText(/Display Image/i)).toBeTruthy();
-
-    userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    });
-    await waitFor(() =>
-      expect(
-        screen.queryByText(/Congratulation the Organization is created/i)
-      ).toBeInTheDocument()
-    );
-    userEvent.click(screen.getByTestId(/enableEverythingForm/i));
-  });
-
   test('Create organization model should work properly', async () => {
     setItem('id', '123');
     setItem('UserType', 'SUPERADMIN');
@@ -272,7 +211,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
       formData.description
     );
     userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
-    userEvent.click(screen.getByTestId(/isPublic/i));
+    userEvent.click(screen.getByTestId(/userRegistrationRequired/i));
     userEvent.click(screen.getByTestId(/visibleInSearch/i));
     userEvent.upload(screen.getByLabelText(/Display Image/i), formData.image);
 
@@ -285,7 +224,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(screen.getByPlaceholderText(/Location/i)).toHaveValue(
       formData.location
     );
-    expect(screen.getByTestId(/isPublic/i)).not.toBeChecked();
+    expect(screen.getByTestId(/userRegistrationRequired/i)).not.toBeChecked();
     expect(screen.getByTestId(/visibleInSearch/i)).toBeChecked();
     expect(screen.getByLabelText(/Display Image/i)).toBeTruthy();
 

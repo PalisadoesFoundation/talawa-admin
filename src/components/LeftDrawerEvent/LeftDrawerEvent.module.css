@@ -45,10 +45,6 @@
   animation: goToLeftBigScreen 0.5s ease-in-out;
 }
 
-.leftDrawer .closeModalBtn {
-  display: none;
-}
-
 .leftDrawer .brandingContainer {
   display: flex;
   justify-content: flex-start;
@@ -149,6 +145,10 @@
   text-transform: capitalize;
 }
 
+.logout {
+  margin-bottom: 50px;
+}
+
 @media (max-width: 1120px) {
   .leftDrawer {
     width: calc(250px + 2rem);
@@ -168,27 +168,21 @@
     right: 0;
   }
 
-  .leftDrawer .closeModalBtn {
-    display: block;
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    z-index: 10;
-  }
-
-  /* For smaller devices .activeDrawer in real behaves like inactive */
-  .activeDrawer {
+  .inactiveDrawer {
     opacity: 0;
     left: 0;
     z-index: -1;
     animation: closeDrawer 0.4s ease-in-out;
   }
 
-  /* For smaller devices .inactiveDrawer in real behaves like active */
-  .inactiveDrawer {
+  .activeDrawer {
     display: flex;
     z-index: 100;
     animation: openDrawer 0.6s ease-in-out;
+  }
+
+  .logout {
+    margin-bottom: 2.5rem !important;
   }
 }
 

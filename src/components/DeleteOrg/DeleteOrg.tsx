@@ -4,8 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { errorHandler } from 'utils/errorHandler';
 import { toast } from 'react-toastify';
-import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
-import { REMOVE_SAMPLE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  DELETE_ORGANIZATION_MUTATION,
+  REMOVE_SAMPLE_ORGANIZATION_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 import styles from './DeleteOrg.module.css';
 import useLocalStorage from 'utils/useLocalStorage';

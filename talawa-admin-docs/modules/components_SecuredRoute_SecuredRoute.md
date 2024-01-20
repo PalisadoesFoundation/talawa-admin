@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/SecuredRoute/SecuredRoute.tsx:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/SecuredRoute/SecuredRoute.tsx#L5)
+[src/components/SecuredRoute/SecuredRoute.tsx:5](https://github.com/chandel-aman/talawa-admin/blob/45920a7/src/components/SecuredRoute/SecuredRoute.tsx#L5)

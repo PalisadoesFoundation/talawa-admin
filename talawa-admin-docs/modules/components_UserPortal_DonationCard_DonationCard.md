@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/UserPortal/DonationCard/DonationCard.tsx:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/UserPortal/DonationCard/DonationCard.tsx#L12)
+[src/components/UserPortal/DonationCard/DonationCard.tsx:12](https://github.com/chandel-aman/talawa-admin/blob/45920a7/src/components/UserPortal/DonationCard/DonationCard.tsx#L12)

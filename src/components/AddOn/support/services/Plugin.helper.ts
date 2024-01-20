@@ -1,6 +1,6 @@
 class PluginHelper {
   fetchStore = async (): Promise<any> => {
-    const result = await fetch(`http://localhost:3005/store`);
+    const result = await fetch(`http://localhost:3000/store`);
     return await result.json();
   };
 

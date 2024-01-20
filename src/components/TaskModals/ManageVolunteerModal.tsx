@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Modal } from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
-import { Button } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
 import { SET_TASK_VOLUNTEERS_MUTATION } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';

@@ -5,7 +5,6 @@ import { useHistory } from 'react-router-dom';
 import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
 import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
 import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
-import { ReactComponent as RequestsIcon } from 'assets/svgs/requests.svg';
 import { ReactComponent as RolesIcon } from 'assets/svgs/roles.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import styles from './LeftDrawer.module.css';
@@ -22,7 +21,6 @@ export interface InterfaceLeftDrawerProps {
 const leftDrawer = ({
   screenName,
   hideDrawer,
-  setHideDrawer,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
 
@@ -55,16 +53,6 @@ const leftDrawer = ({
         }`}
         data-testid="leftDrawerContainer"
       >
-        <Button
-          variant="danger"
-          className={styles.closeModalBtn}
-          onClick={(): void => {
-            setHideDrawer(false);
-          }}
-          data-testid="closeModalBtn"
-        >
-          <i className="fa fa-times"></i>
-        </Button>
         <TalawaLogo className={styles.talawaLogo} />
         <p className={styles.talawaText}>{t('talawaAdminPortal')}</p>
         <h5 className={styles.titleHeader}>{t('menu')}</h5>
@@ -92,29 +80,6 @@ const leftDrawer = ({
             </div>
             {t('my organizations')}
           </Button>
-          {userType === 'SUPERADMIN' && (
-            <Button
-              variant={screenName === 'Requests' ? 'success' : 'light'}
-              className={`${
-                screenName === 'Requests' ? 'text-white' : 'text-secondary'
-              }`}
-              onClick={(): void => {
-                history.push('/requests');
-              }}
-              data-testid="requestsBtn"
-            >
-              <div className={styles.iconWrapper}>
-                <RequestsIcon
-                  fill={`${
-                    screenName === 'Requests'
-                      ? 'var(--bs-white)'
-                      : 'var(--bs-secondary)'
-                  }`}
-                />
-              </div>
-              {t('requests')}
-            </Button>
-          )}
           {userType === 'SUPERADMIN' && (
             <Button
               variant={screenName === 'Users' ? 'success' : 'light'}
