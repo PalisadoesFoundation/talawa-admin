@@ -3,6 +3,8 @@ talawa-admin / [Modules](modules.md)
 # Talawa Admin
 💬 Join the community on Slack. The link can be found in the `Talawa` [README.md](https://github.com/PalisadoesFoundation/talawa) file.
 
+![talawa-logo-lite-200x200](https://github.com/PalisadoesFoundation/talawa-admin/assets/16875803/26291ec5-d3c1-4135-8bc7-80885dff613d)
+
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![GitHub stars](https://img.shields.io/github/stars/PalisadoesFoundation/talawa-admin.svg?style=social&label=Star&maxAge=2592000)](https://github.com/PalisadoesFoundation/talawa-admin)
 [![GitHub forks](https://img.shields.io/github/forks/PalisadoesFoundation/talawa-admin.svg?style=social&label=Fork&maxAge=2592000)](https://github.com/PalisadoesFoundation/talawa-admin)
@@ -19,6 +21,16 @@ Core features include:
 5.  Facilities registrations
 
 `talawa` is based on the original `quito` code created by the [Palisadoes Foundation][pfd] as part of its annual Calico Challenge program. Calico provides paid summer internships for Jamaican university students to work on selected open source projects. They are mentored by software professionals and receive stipends based on the completion of predefined milestones. Calico was started in 2015. Visit [The Palisadoes Foundation's website](http://www.palisadoes.org/) for more details on its origin and activities.
+
+# Table of Contents
+
+\<!-- toc --\>
+
+- [Talawa Components](#talawa-components)
+- [Documentation](#documentation)
+- [Installation](#installation)
+
+\<!-- tocstop --\>
 
 # Talawa Components
 
