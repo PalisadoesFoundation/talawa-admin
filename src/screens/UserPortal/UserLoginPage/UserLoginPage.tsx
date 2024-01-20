@@ -34,12 +34,15 @@ import Loader from 'components/Loader/Loader';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './UserLoginPage.module.css';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import useLocalStorage from 'utils/useLocalStorage';
 
 function loginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userLoginPage' });
   const history = useHistory();
 
   document.title = t('title');
+
+  const { getItem, setItem } = useLocalStorage();
 
   const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
   const [componentLoader, setComponentLoader] = useState(true);
@@ -61,7 +64,7 @@ function loginPage(): JSX.Element {
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem('IsLoggedIn');
+    const isLoggedIn = getItem('IsLoggedIn');
     if (isLoggedIn == 'TRUE') {
       history.push('/user/organizations/');
     }
@@ -197,12 +200,12 @@ function loginPage(): JSX.Element {
 
       /* istanbul ignore next */
       if (loginData) {
-        localStorage.setItem('token', loginData.login.accessToken);
-        localStorage.setItem('userId', loginData.login.user._id);
-        localStorage.setItem('refreshToken', loginData.login.refreshToken);
-        localStorage.setItem('IsLoggedIn', 'TRUE');
+        setItem('token', loginData.login.accessToken);
+        setItem('userId', loginData.login.user._id);
+        setItem('refreshToken', loginData.login.refreshToken);
+        setItem('IsLoggedIn', 'TRUE');
         navigator.clipboard.writeText('');
-        if (localStorage.getItem('IsLoggedIn') == 'TRUE') {
+        if (getItem('IsLoggedIn') == 'TRUE') {
           history.push('/user/organizations/');
         }
       } else {

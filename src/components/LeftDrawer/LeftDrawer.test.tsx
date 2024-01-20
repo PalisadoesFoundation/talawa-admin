@@ -52,10 +52,10 @@ jest.mock('react-toastify', () => ({
 }));
 
 beforeEach(() => {
-  localStorage.setItem('FirstName', 'John');
-  localStorage.setItem('LastName', 'Doe');
+  localStorage.setItem('Talawa-admin_FirstName', 'John');
+  localStorage.setItem('Talawa-admin_LastName', 'Doe');
   localStorage.setItem(
-    'UserImage',
+    'Talawa-admin_UserImage',
     'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe'
   );
 });
@@ -67,8 +67,8 @@ afterEach(() => {
 
 describe('Testing Left Drawer component for SUPERADMIN', () => {
   test('Component should be rendered properly', () => {
-    localStorage.setItem('UserImage', '');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    localStorage.setItem('Talawa-admin_UserImage', '');
+    localStorage.setItem('Talawa-admin_UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -130,7 +130,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing in roles screen', () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    localStorage.setItem('Talawa-admin_UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -218,9 +218,33 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 });
 
+test('Styles should be applied correctly for Requests button', () => {
+  localStorage.setItem('Talawa-admin_UserType', 'SUPERADMIN');
+  render(
+    <MockedProvider addTypename={false} link={link}>
+      <BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <LeftDrawer {...propsReq} />
+        </I18nextProvider>
+      </BrowserRouter>
+    </MockedProvider>
+  );
+
+  const requestsBtn = screen.getByTestId(/requestsBtn/i);
+
+  expect(
+    requestsBtn.className.includes('text-white btn btn-success')
+  ).toBeTruthy();
+
+  // Assert that the 'light' variant is not present
+  expect(
+    requestsBtn.className.includes('text-secondary btn btn-light')
+  ).toBeFalsy();
+});
+
 describe('Testing Left Drawer component for ADMIN', () => {
   test('Components should be rendered properly', () => {
-    localStorage.setItem('UserType', 'ADMIN');
+    localStorage.setItem('Talawa-admin_UserType', 'ADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -254,5 +278,29 @@ describe('Testing Left Drawer component for ADMIN', () => {
     // Send to roles screen
     userEvent.click(orgsBtn);
     expect(global.window.location.pathname).toContain('/orglist');
+  });
+
+  test('Styles should be applied correctly for Users button', () => {
+    localStorage.setItem('Talawa-admin_UserType', 'SUPERADMIN');
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <LeftDrawer {...propsUsers} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    const rolesBtn = screen.getByTestId(/rolesBtn/i);
+
+    expect(
+      rolesBtn.className.includes('text-white btn btn-success')
+    ).toBeTruthy();
+
+    // Assert that the 'light' variant is not present
+    expect(
+      rolesBtn.className.includes('text-secondary btn btn-light')
+    ).toBeFalsy();
   });
 });

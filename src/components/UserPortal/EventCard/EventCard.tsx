@@ -9,6 +9,9 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 
 import { REGISTER_EVENT } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
+import useLocalStorage from 'utils/useLocalStorage';
+
+const { getItem } = useLocalStorage();
 
 interface InterfaceEventCardProps {
   id: string;
@@ -37,7 +40,7 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userEventCard',
   });
-  const userId = localStorage.getItem('userId');
+  const userId = getItem('userId');
   const creatorName = `${props.creator.firstName} ${props.creator.lastName}`;
   const isInitiallyRegistered = props.registrants.some(
     (registrant) => registrant.id === userId

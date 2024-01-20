@@ -17,12 +17,14 @@ import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './ForgotPassword.module.css';
+import useLocalStorage from 'utils/useLocalStorage';
 
 const ForgotPassword = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'forgotPassword',
   });
 
+  const { getItem, setItem, removeItem } = useLocalStorage();
   document.title = t('title');
 
   const [showEnterEmail, setShowEnterEmail] = useState(true);
@@ -39,13 +41,13 @@ const ForgotPassword = (): JSX.Element => {
   const [forgotPassword, { loading: forgotPasswordLoading }] = useMutation(
     FORGOT_PASSWORD_MUTATION
   );
-  const isLoggedIn = localStorage.getItem('IsLoggedIn');
+  const isLoggedIn = getItem('IsLoggedIn');
   useEffect(() => {
     if (isLoggedIn == 'TRUE') {
       window.location.replace('/orglist');
     }
     return () => {
-      localStorage.removeItem('otpToken');
+      removeItem('otpToken');
     };
   }, []);
 
@@ -60,7 +62,7 @@ const ForgotPassword = (): JSX.Element => {
       });
 
       if (data) {
-        localStorage.setItem('otpToken', data.otp.otpToken);
+        setItem('otpToken', data.otp.otpToken);
         toast.success(t('OTPsent'));
         setShowEnterEmail(false);
       }
@@ -86,7 +88,7 @@ const ForgotPassword = (): JSX.Element => {
       return;
     }
 
-    const otpToken = localStorage.getItem('otpToken');
+    const otpToken = getItem('otpToken');
 
     if (!otpToken) {
       return;

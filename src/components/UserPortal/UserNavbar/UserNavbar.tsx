@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useHistory } from 'react-router-dom';
+import useLocalStorage from 'utils/useLocalStorage';
 
 function userNavbar(): JSX.Element {
   const history = useHistory();
@@ -18,6 +19,7 @@ function userNavbar(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userNavbar',
   });
+  const { getItem } = useLocalStorage();
 
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
 
@@ -33,7 +35,7 @@ function userNavbar(): JSX.Element {
     window.location.replace('/user');
   };
 
-  const userName = localStorage.getItem('name');
+  const userName = getItem('name');
 
   return (
     <Navbar variant="dark" className={`${styles.colorPrimary}`}>

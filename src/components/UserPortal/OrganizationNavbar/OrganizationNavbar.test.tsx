@@ -15,6 +15,9 @@ import OrganizationNavbar from './OrganizationNavbar';
 import userEvent from '@testing-library/user-event';
 import { USER_ORGANIZATION_CONNECTION } from 'GraphQl/Queries/Queries';
 import { PLUGIN_SUBSCRIPTION } from 'GraphQl/Mutations/mutations';
+import useLocalStorage from 'utils/useLocalStorage';
+
+const { setItem } = useLocalStorage();
 
 import { createMemoryHistory } from 'history';
 
@@ -339,7 +342,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
   });
 
   test('Component should be rendered properly if plugins are present in localStorage', async () => {
-    localStorage.setItem('talawaPlugins', JSON.stringify(testPlugins));
+    setItem('talawaPlugins', JSON.stringify(testPlugins));
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -359,11 +362,11 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
       expect(screen.queryByText(plugin.translated)).toBeInTheDocument();
     });
 
-    localStorage.removeItem('talawaPlugins');
+    localStorage.removeItem('Talawa-admin_talawaPlugins');
   });
 
   test('should remove plugin if uninstalledOrgs contains organizationId', async () => {
-    localStorage.setItem('talawaPlugins', JSON.stringify(testPlugins));
+    setItem('talawaPlugins', JSON.stringify(testPlugins));
 
     render(
       <MockedProvider addTypename={false} link={link2}>
@@ -384,8 +387,24 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     });
   });
 
+  test('should do nothing if pluginName is not found in the rendered plugins', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link4}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationNavbar {...navbarProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+  });
+
   test('should render plugin if uninstalledOrgs does not contain organizationId', async () => {
-    localStorage.setItem('talawaPlugins', JSON.stringify(testPlugins));
+    setItem('talawaPlugins', JSON.stringify(testPlugins));
 
     render(
       <MockedProvider addTypename={false} link={link3}>
@@ -404,21 +423,5 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     testPlugins.forEach((plugin) => {
       expect(screen.queryByText(plugin.translated)).toBeInTheDocument();
     });
-  });
-
-  test('should do nothing if pluginName is not found in the rendered plugins', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link4}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationNavbar {...navbarProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
   });
 });

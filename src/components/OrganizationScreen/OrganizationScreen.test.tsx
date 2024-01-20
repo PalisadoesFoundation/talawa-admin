@@ -9,6 +9,9 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceOrganizationScreenProps } from './OrganizationScreen';
 import OrganizationScreen from './OrganizationScreen';
+import useLocalStorage from 'utils/useLocalStorage';
+
+const { setItem } = useLocalStorage();
 
 const props: InterfaceOrganizationScreenProps = {
   title: 'Dashboard',
@@ -33,7 +36,7 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
     window.dispatchEvent(new Event('resize'));
   };
   test('Testing LeftDrawer in page functionality', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
 
     render(
       <MockedProvider addTypename={false}>
@@ -53,7 +56,7 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
   });
 
   test('Testing expanding and closing on a tablet-sized screen', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
 
     // Render the component with tablet-sized screen
     render(

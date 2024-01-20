@@ -11,6 +11,9 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Tasks from './Tasks';
+import useLocalStorage from 'utils/useLocalStorage';
+
+const { getItem } = useLocalStorage();
 
 const MOCKS = [
   {
@@ -33,7 +36,7 @@ const MOCKS = [
     request: {
       query: USER_TASKS_LIST,
       variables: {
-        id: localStorage.getItem('userId'),
+        id: getItem('userId'),
       },
     },
     result: {

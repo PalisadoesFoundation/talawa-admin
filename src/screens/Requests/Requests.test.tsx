@@ -19,6 +19,9 @@ import {
   MOCKS,
   ORG_LIST_MOCK,
 } from './RequestsMocks';
+import useLocalStorage from 'utils/useLocalStorage';
+
+const { setItem } = useLocalStorage();
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_ORG_MOCKS, true);
@@ -34,9 +37,9 @@ async function wait(ms = 100): Promise<void> {
 }
 
 beforeEach(() => {
-  localStorage.setItem('UserType', 'SUPERADMIN');
-  localStorage.setItem('FirstName', 'John');
-  localStorage.setItem('LastName', 'Doe');
+  setItem('UserType', 'SUPERADMIN');
+  setItem('FirstName', 'John');
+  setItem('LastName', 'Doe');
 });
 
 afterEach(() => {
@@ -64,7 +67,7 @@ describe('Testing Request screen', () => {
   });
 
   test('Testing, If userType is not SUPERADMIN', async () => {
-    localStorage.setItem('UserType', 'USER');
+    setItem('UserType', 'USER');
 
     render(
       <MockedProvider addTypename={false} link={link}>

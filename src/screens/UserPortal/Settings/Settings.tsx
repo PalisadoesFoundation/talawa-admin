@@ -11,6 +11,9 @@ import { errorHandler } from 'utils/errorHandler';
 import { toast } from 'react-toastify';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
+import useLocalStorage from 'utils/useLocalStorage';
+
+const { setItem } = useLocalStorage();
 
 export default function settings(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -51,7 +54,7 @@ export default function settings(): JSX.Element {
         }, 500);
 
         const userFullName = `${firstName} ${lastName}`;
-        localStorage.setItem('name', userFullName);
+        setItem('name', userFullName);
       }
     } catch (error: any) {
       errorHandler(t, error);

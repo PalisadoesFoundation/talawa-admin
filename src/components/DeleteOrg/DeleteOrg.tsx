@@ -8,14 +8,16 @@ import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { REMOVE_SAMPLE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 import styles from './DeleteOrg.module.css';
+import useLocalStorage from 'utils/useLocalStorage';
 
 function deleteOrg(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'deleteOrg',
   });
+  const { getItem } = useLocalStorage();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const currentUrl = window.location.href.split('=')[1];
-  const canDelete = localStorage.getItem('UserType') === 'SUPERADMIN';
+  const canDelete = getItem('UserType') === 'SUPERADMIN';
   const toggleDeleteModal = (): void => setShowDeleteModal(!showDeleteModal);
 
   const [del] = useMutation(DELETE_ORGANIZATION_MUTATION);

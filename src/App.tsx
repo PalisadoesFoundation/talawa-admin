@@ -34,6 +34,7 @@ import Events from 'screens/UserPortal/Events/Events';
 import Tasks from 'screens/UserPortal/Tasks/Tasks';
 // import Chat from 'screens/UserPortal/Chat/Chat';
 import Advertisements from 'components/Advertisements/Advertisements';
+import useLocalStorage from 'utils/useLocalStorage';
 
 function app(): JSX.Element {
   /*const { updatePluginLinks, updateInstalled } = bindActionCreators(
@@ -63,20 +64,19 @@ function app(): JSX.Element {
 
   const { data, loading } = useQuery(CHECK_AUTH);
 
+  const { setItem } = useLocalStorage();
+
   useEffect(() => {
     if (data) {
-      localStorage.setItem(
-        'name',
-        `${data.checkAuth.firstName} ${data.checkAuth.lastName}`
-      );
-      localStorage.setItem('id', data.checkAuth._id);
-      localStorage.setItem('email', data.checkAuth.email);
-      localStorage.setItem('IsLoggedIn', 'TRUE');
-      localStorage.setItem('UserType', data.checkAuth.userType);
-      localStorage.setItem('FirstName', data.checkAuth.firstName);
-      localStorage.setItem('LastName', data.checkAuth.lastName);
-      localStorage.setItem('UserImage', data.checkAuth.image);
-      localStorage.setItem('Email', data.checkAuth.email);
+      setItem('name', `${data.checkAuth.firstName} ${data.checkAuth.lastName}`);
+      setItem('id', data.checkAuth._id);
+      setItem('email', data.checkAuth.email);
+      setItem('IsLoggedIn', 'TRUE');
+      setItem('UserType', data.checkAuth.userType);
+      setItem('FirstName', data.checkAuth.firstName);
+      setItem('LastName', data.checkAuth.lastName);
+      setItem('UserImage', data.checkAuth.image);
+      setItem('Email', data.checkAuth.email);
     }
   }, [data, loading]);
 

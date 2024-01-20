@@ -7,12 +7,15 @@ import {
   USER_LIST_REQUEST,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
+import useLocalStorage from 'utils/useLocalStorage';
+
+const { getItem } = useLocalStorage();
 
 export const MOCKS = [
   {
     request: {
       query: USER_ORGANIZATION_LIST,
-      variables: { id: localStorage.getItem('id') },
+      variables: { id: getItem('id') },
     },
     result: {
       data: {
@@ -152,7 +155,7 @@ export const EMPTY_REQUEST_MOCKS = [
   {
     request: {
       query: USER_ORGANIZATION_LIST,
-      variables: { id: localStorage.getItem('id') },
+      variables: { id: getItem('id') },
     },
     result: {
       data: {

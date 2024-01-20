@@ -8,6 +8,9 @@ import { useQuery } from '@apollo/client';
 import styles from './Tasks.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import useLocalStorage from 'utils/useLocalStorage';
+
+const { getItem } = useLocalStorage();
 
 interface InterfaceTaskCardProps {
   id: string;
@@ -47,7 +50,7 @@ export default function tasks(): JSX.Element {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [tasks, setTasks] = React.useState([]);
 
-  const userId: string | null = localStorage.getItem('userId');
+  const userId: string | null = getItem('userId');
 
   const { data: tasksData, loading: loadingTasks } = useQuery(USER_TASKS_LIST, {
     variables: { id: userId },

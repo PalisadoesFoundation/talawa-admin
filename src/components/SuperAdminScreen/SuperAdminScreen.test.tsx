@@ -11,6 +11,9 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceSuperAdminScreenProps } from './SuperAdminScreen';
 import SuperAdminScreen from './SuperAdminScreen';
+import useLocalStorage from 'utils/useLocalStorage';
+
+const { setItem } = useLocalStorage();
 
 const props: InterfaceSuperAdminScreenProps = {
   title: 'Organizations',
@@ -35,7 +38,7 @@ describe('Testing LeftDrawer in SuperAdminScreen', () => {
     window.dispatchEvent(new Event('resize'));
   };
   test('Testing LeftDrawer in page functionality', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
 
     render(
       <MockedProvider addTypename={false}>
@@ -55,7 +58,7 @@ describe('Testing LeftDrawer in SuperAdminScreen', () => {
     userEvent.click(screen.getByTestId('openMenu'));
   });
   test('Testing expanding and closing on a tablet-sized screen', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
 
     // Render the component with tablet-sized screen
     render(

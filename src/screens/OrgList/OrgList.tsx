@@ -1,12 +1,14 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Search } from '@mui/icons-material';
 import SortIcon from '@mui/icons-material/Sort';
-import { CREATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  CREATE_ORGANIZATION_MUTATION,
+  CREATE_SAMPLE_ORGANIZATION_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-import { CREATE_SAMPLE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 
 import OrgListCard from 'components/OrgListCard/OrgListCard';
 import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
@@ -27,24 +29,22 @@ import type {
   InterfaceUserType,
 } from 'utils/interfaces';
 import styles from './OrgList.module.css';
+import useLocalStorage from 'utils/useLocalStorage';
+
+const { getItem } = useLocalStorage();
 
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
   const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
   const [dialogRedirectOrgId, setDialogRedirectOrgId] = useState('<ORG_ID>');
   /* eslint-disable @typescript-eslint/explicit-function-return-type */
-  function openDialogModal(redirectOrgId: string) {
+  const openDialogModal = (redirectOrgId: string) => {
     setDialogRedirectOrgId(redirectOrgId);
-    // console.log(redirectOrgId, dialogRedirectOrgId);
     setdialogModalIsOpen(true);
-  }
+  };
+  const closeDialogModal = (): void => setdialogModalIsOpen(false);
 
-  /* eslint-disable @typescript-eslint/explicit-function-return-type */
-  function closeDialogModal() {
-    setdialogModalIsOpen(false);
-  }
-  const toggleDialogModal = (): void =>
-    setdialogModalIsOpen(!dialogModalisOpen);
+  const toggleDialogModal = (): void => setdialogModalIsOpen(false);
   document.title = t('title');
 
   const perPageResult = 8;
@@ -82,7 +82,7 @@ function orgList(): JSX.Element {
     loading: boolean;
     error?: Error | undefined;
   } = useQuery(USER_ORGANIZATION_LIST, {
-    variables: { id: localStorage.getItem('id') },
+    variables: { id: getItem('id') },
   });
 
   const {

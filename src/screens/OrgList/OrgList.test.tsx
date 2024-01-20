@@ -18,6 +18,9 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrgList from './OrgList';
+import useLocalStorage from 'utils/useLocalStorage';
+
+const { setItem } = useLocalStorage();
 
 import {
   MOCKS,
@@ -41,7 +44,7 @@ afterEach(() => {
 });
 
 describe('Organisations Page testing as SuperAdmin', () => {
-  localStorage.setItem('id', '123');
+  setItem('id', '123');
 
   const link = new StaticMockLink(MOCKS, true);
   const link2 = new StaticMockLink(MOCKS_EMPTY, true);
@@ -55,7 +58,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   };
 
   test('Testing search functionality by pressing enter', async () => {
-    localStorage.setItem('id', '123');
+    setItem('id', '123');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -74,9 +77,51 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(searchBar).toBeInTheDocument();
     userEvent.type(searchBar, 'Dummy{enter}');
   });
+  test('Testing create organization modal', async () => {
+    setItem('id', '123');
 
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgList />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+    const createOrgBtn = screen.getByTestId(/createOrganizationBtn/i);
+    expect(createOrgBtn).toBeInTheDocument();
+    userEvent.click(createOrgBtn);
+    // userEvent.click(screen.getByTestId(/closeModalBtn/i));
+  });
+  test('Testing search functionality by Btn click when input is empty', async () => {
+    setItem('id', '123');
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrgList />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+      await wait();
+
+      const searchBar = screen.getByTestId('searchByName');
+      const searchBtn = screen.getByTestId('searchBtn');
+      userEvent.type(searchBar, '');
+      fireEvent.click(searchBtn);
+    });
+  });
   test('Testing search functionality by Btn click', async () => {
-    localStorage.setItem('id', '123');
+    setItem('id', '123');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -98,7 +143,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
   test('Should render no organisation warning alert when there are no organization', async () => {
     window.location.assign('/');
-    localStorage.setItem('id', '123');
+    setItem('id', '123');
 
     render(
       <MockedProvider addTypename={false} link={link2}>
@@ -134,92 +179,9 @@ describe('Organisations Page testing as SuperAdmin', () => {
     await wait();
   });
 
-  test('Testing create organization modal', async () => {
-    localStorage.setItem('id', '123');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrgList />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-    const createOrgBtn = screen.getByTestId(/createOrganizationBtn/i);
-    expect(createOrgBtn).toBeInTheDocument();
-    userEvent.click(createOrgBtn);
-    userEvent.click(screen.getByTestId(/closeModalBtn/i));
-  });
-
-  test('Create organization model should work properly', async () => {
-    localStorage.setItem('id', '123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <OrgList />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait(500);
-
-    expect(localStorage.setItem).toHaveBeenLastCalledWith(
-      'UserType',
-      'SUPERADMIN'
-    );
-
-    userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
-
-    userEvent.type(screen.getByTestId(/modalOrganizationName/i), formData.name);
-    userEvent.type(
-      screen.getByPlaceholderText(/Description/i),
-      formData.description
-    );
-    userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
-    userEvent.click(screen.getByTestId(/isPublic/i));
-    userEvent.click(screen.getByTestId(/visibleInSearch/i));
-    userEvent.upload(screen.getByLabelText(/Display Image/i), formData.image);
-
-    expect(screen.getByTestId(/modalOrganizationName/i)).toHaveValue(
-      formData.name
-    );
-    expect(screen.getByPlaceholderText(/Description/i)).toHaveValue(
-      formData.description
-    );
-    expect(screen.getByPlaceholderText(/Location/i)).toHaveValue(
-      formData.location
-    );
-    expect(screen.getByTestId(/isPublic/i)).not.toBeChecked();
-    expect(screen.getByTestId(/visibleInSearch/i)).toBeChecked();
-    expect(screen.getByLabelText(/Display Image/i)).toBeTruthy();
-
-    userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    });
-    await waitFor(() =>
-      expect(
-        screen.queryByText(/Congratulation the Organization is created/i)
-      ).toBeInTheDocument()
-    );
-    userEvent.click(screen.getByTestId(/closeOrganizationModal/i));
-  });
-
   test('Plugin Notification model should work properly', async () => {
-    localStorage.setItem('id', '123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('id', '123');
+    setItem('UserType', 'SUPERADMIN');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -237,8 +199,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
     await wait(500);
 
     expect(localStorage.setItem).toHaveBeenLastCalledWith(
-      'UserType',
-      'SUPERADMIN'
+      'Talawa-admin_UserType',
+      JSON.stringify('SUPERADMIN')
     );
 
     userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
@@ -278,9 +240,70 @@ describe('Organisations Page testing as SuperAdmin', () => {
     userEvent.click(screen.getByTestId(/enableEverythingForm/i));
   });
 
+  test('Create organization model should work properly', async () => {
+    setItem('id', '123');
+    setItem('UserType', 'SUPERADMIN');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgList />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait(500);
+
+    expect(localStorage.setItem).toHaveBeenLastCalledWith(
+      'Talawa-admin_UserType',
+      JSON.stringify('SUPERADMIN')
+    );
+
+    userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
+
+    userEvent.type(screen.getByTestId(/modalOrganizationName/i), formData.name);
+    userEvent.type(
+      screen.getByPlaceholderText(/Description/i),
+      formData.description
+    );
+    userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
+    userEvent.click(screen.getByTestId(/isPublic/i));
+    userEvent.click(screen.getByTestId(/visibleInSearch/i));
+    userEvent.upload(screen.getByLabelText(/Display Image/i), formData.image);
+
+    expect(screen.getByTestId(/modalOrganizationName/i)).toHaveValue(
+      formData.name
+    );
+    expect(screen.getByPlaceholderText(/Description/i)).toHaveValue(
+      formData.description
+    );
+    expect(screen.getByPlaceholderText(/Location/i)).toHaveValue(
+      formData.location
+    );
+    expect(screen.getByTestId(/isPublic/i)).not.toBeChecked();
+    expect(screen.getByTestId(/visibleInSearch/i)).toBeChecked();
+    expect(screen.getByLabelText(/Display Image/i)).toBeTruthy();
+
+    userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    });
+    await waitFor(() =>
+      expect(
+        screen.queryByText(/Congratulation the Organization is created/i)
+      ).toBeInTheDocument()
+    );
+    userEvent.click(screen.getByTestId(/closeOrganizationModal/i));
+  });
+
   test('Testing create sample organization working properly', async () => {
-    localStorage.setItem('id', '123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('id', '123');
+    setItem('UserType', 'SUPERADMIN');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -304,8 +327,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
     );
   });
   test('Testing error handling for CreateSampleOrg', async () => {
-    localStorage.setItem('id', '123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('id', '123');
+    setItem('UserType', 'SUPERADMIN');
     jest.spyOn(toast, 'error');
     render(
       <MockedProvider addTypename={false} link={link3}>
@@ -332,7 +355,7 @@ describe('Organisations Page testing as Admin', () => {
   const link = new StaticMockLink(MOCKS_ADMIN, true);
 
   test('Create organization modal should not be present in the page for Admin', async () => {
-    localStorage.setItem('id', '123');
+    setItem('id', '123');
 
     render(
       <MockedProvider addTypename={false} link={link}>

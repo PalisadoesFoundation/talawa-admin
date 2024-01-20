@@ -15,6 +15,9 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import ForgotPassword from './ForgotPassword';
 import i18n from 'utils/i18nForTest';
+import useLocalStorage from 'utils/useLocalStorage';
+
+const { removeItem, setItem } = useLocalStorage();
 
 const MOCKS = [
   {
@@ -77,7 +80,7 @@ const translations = JSON.parse(
 );
 
 beforeEach(() => {
-  localStorage.setItem('IsLoggedIn', 'FALSE');
+  setItem('IsLoggedIn', 'FALSE');
 });
 afterEach(() => {
   localStorage.clear();
@@ -109,7 +112,7 @@ describe('Testing Forgot Password screen', () => {
   });
 
   test('Testing, If user is already loggedIn', async () => {
-    localStorage.setItem('IsLoggedIn', 'TRUE');
+    setItem('IsLoggedIn', 'TRUE');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -190,7 +193,7 @@ describe('Testing Forgot Password screen', () => {
       screen.getByTestId('confirmNewPassword'),
       formData.confirmNewPassword
     );
-    localStorage.setItem('otpToken', 'lorem ipsum');
+    setItem('otpToken', 'lorem ipsum');
     userEvent.click(screen.getByText('Change Password'));
     await wait();
   });
@@ -231,7 +234,7 @@ describe('Testing Forgot Password screen', () => {
       screen.getByTestId('confirmNewPassword'),
       formData.confirmNewPassword
     );
-    localStorage.removeItem('otpToken');
+    removeItem('otpToken');
     userEvent.click(screen.getByText('Change Password'));
     await wait();
   });
@@ -280,7 +283,7 @@ describe('Testing Forgot Password screen', () => {
     const formData = {
       email: 'notexists@gmail.com',
     };
-    // localStorage.setItem('otpToken', '');
+    // setItem('otpToken', '');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -369,7 +372,7 @@ describe('Testing Forgot Password screen', () => {
       email: 'johndoe@gmail.com',
     };
 
-    localStorage.setItem('otpToken', '');
+    setItem('otpToken', '');
 
     render(
       <MockedProvider addTypename={false} link={link}>

@@ -31,6 +31,9 @@ import { toast } from 'react-toastify';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
 import UserDefault from '../../../assets/images/defaultImg.png';
+import useLocalStorage from 'utils/useLocalStorage';
+
+const { getItem } = useLocalStorage();
 
 interface InterfacePostCardProps {
   id: string;
@@ -107,7 +110,7 @@ export default function home(): JSX.Element {
     variables: { id: organizationId },
   });
 
-  const userId: string | null = localStorage.getItem('userId');
+  const userId: string | null = getItem('userId');
 
   const { data: userData } = useQuery(USER_DETAILS, {
     variables: { id: userId },

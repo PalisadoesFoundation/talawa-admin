@@ -9,6 +9,9 @@ import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import { MOCKS } from './UserTableItemMocks';
 import UsersTableItem from './UsersTableItem';
 const link = new StaticMockLink(MOCKS, true);
+import useLocalStorage from 'utils/useLocalStorage';
+
+const { setItem } = useLocalStorage();
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -44,8 +47,8 @@ jest.mock('react-router-dom', () => ({
 }));
 
 beforeEach(() => {
-  localStorage.setItem('UserType', 'SUPERADMIN');
-  localStorage.setItem('id', '123');
+  setItem('UserType', 'SUPERADMIN');
+  setItem('id', '123');
 });
 
 afterEach(() => {

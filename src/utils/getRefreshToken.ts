@@ -1,6 +1,7 @@
 import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
 import { BACKEND_URL } from 'Constant/constant';
 import { REFRESH_TOKEN_MUTATION } from 'GraphQl/Mutations/mutations';
+import useLocalStorage from './useLocalStorage';
 
 export async function refreshToken(): Promise<boolean> {
   const client = new ApolloClient({
@@ -10,7 +11,9 @@ export async function refreshToken(): Promise<boolean> {
     cache: new InMemoryCache(),
   });
 
-  const refreshToken = localStorage.getItem('refreshToken');
+  const { getItem, setItem } = useLocalStorage();
+
+  const refreshToken = getItem('refreshToken');
   /* istanbul ignore next */
   try {
     const { data } = await client.mutate({
@@ -20,8 +23,9 @@ export async function refreshToken(): Promise<boolean> {
       },
     });
 
-    localStorage.setItem('token', data.refreshToken.accessToken);
-    localStorage.setItem('refreshToken', data.refreshToken.refreshToken);
+    setItem('token', data.refreshToken.accessToken);
+    setItem('refreshToken', data.refreshToken.refreshToken);
+
     window.location.reload();
     return true;
   } catch (error) {

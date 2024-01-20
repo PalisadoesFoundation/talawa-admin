@@ -14,6 +14,9 @@ import getOrganizationId from 'utils/getOrganizationId';
 import type { DropDirection } from 'react-bootstrap/esm/DropdownContext';
 import { Link, useHistory } from 'react-router-dom';
 import { PLUGIN_SUBSCRIPTION } from 'GraphQl/Mutations/mutations';
+import useLocalStorage from 'utils/useLocalStorage';
+
+const { getItem, setItem } = useLocalStorage();
 interface InterfaceNavbarProps {
   currentPage: string | null;
 }
@@ -54,7 +57,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     window.location.replace('/user');
   };
 
-  const userName = localStorage.getItem('name');
+  const userName = getItem('name');
   React.useEffect(() => {
     if (data) {
       setOrganizationDetails(data.organizationsConnection[0]);
@@ -92,8 +95,8 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     //   view: true,
     // },
   ];
-  if (localStorage.getItem('talawaPlugins')) {
-    const talawaPlugins: string = localStorage.getItem('talawaPlugins') || '{}';
+  if (getItem('talawaPlugins')) {
+    const talawaPlugins: string = getItem('talawaPlugins') || '{}';
     plugins = JSON.parse(talawaPlugins);
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -112,7 +115,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     if (uninstalledOrgs.includes(organizationId)) {
       if (pluginIndexToRemove != -1) {
         plugins[pluginIndexToRemove].view = false;
-        localStorage.setItem('talawaPlugins', JSON.stringify(plugins));
+        setItem('talawaPlugins', JSON.stringify(plugins));
         console.log(`Plugin ${pluginName} has been removed.`);
       } else {
         console.log(`Plugin ${pluginName} is not present.`);
@@ -120,7 +123,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     } else {
       if (pluginIndexToRemove != -1) {
         plugins[pluginIndexToRemove].view = true;
-        localStorage.setItem('talawaPlugins', JSON.stringify(plugins));
+        setItem('talawaPlugins', JSON.stringify(plugins));
       }
     }
   }

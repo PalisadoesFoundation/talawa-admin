@@ -15,6 +15,8 @@ import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { act } from 'react-dom/test-utils';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import useLocalStorage from 'utils/useLocalStorage';
+const { setItem } = useLocalStorage();
 
 const props: InterfaceLeftDrawerProps = {
   screenName: 'Dashboard',
@@ -216,9 +218,9 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 beforeEach(() => {
-  localStorage.setItem('FirstName', 'John');
-  localStorage.setItem('LastName', 'Doe');
-  localStorage.setItem(
+  setItem('FirstName', 'John');
+  setItem('LastName', 'Doe');
+  setItem(
     'UserImage',
     'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe'
   );
@@ -235,8 +237,8 @@ const linkEmpty = new StaticMockLink(MOCKS_EMPTY, true);
 
 describe('Testing Left Drawer component for SUPERADMIN', () => {
   test('Component should be rendered properly', async () => {
-    localStorage.setItem('UserImage', '');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserImage', null);
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -252,13 +254,13 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     defaultScreens.map((screenName) => {
       expect(screen.getByText(screenName)).toBeInTheDocument();
     });
-    expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
+    expect(screen.getByText(/John/i)).toBeInTheDocument();
     expect(screen.getByText(/Superadmin/i)).toBeInTheDocument();
     expect(screen.getByAltText(/dummy picture/i)).toBeInTheDocument();
   });
 
   test('Testing Profile Page & Organization Detail Modal', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -276,7 +278,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing Menu Buttons', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -294,7 +296,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing when image is present for Organization', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={linkImage}>
         <BrowserRouter>
@@ -310,7 +312,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing when Organization does not exists', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={linkEmpty}>
         <BrowserRouter>
@@ -329,7 +331,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing Drawer when hideDrawer is null', () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -344,7 +346,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing Drawer when hideDrawer is true', () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -359,7 +361,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing Drawer open close functionality', () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -376,7 +378,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing logout functionality', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>

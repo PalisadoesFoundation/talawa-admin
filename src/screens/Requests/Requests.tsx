@@ -32,6 +32,9 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
 import styles from './Requests.module.css';
+import useLocalStorage from 'utils/useLocalStorage';
+
+const { getItem } = useLocalStorage();
 
 const Requests = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'requests' });
@@ -55,7 +58,7 @@ const Requests = (): JSX.Element => {
     data?: InterfaceUserType;
     error?: ApolloError;
   } = useQuery(USER_ORGANIZATION_LIST, {
-    variables: { id: localStorage.getItem('id') },
+    variables: { id: getItem('id') },
   });
 
   const {
@@ -123,7 +126,7 @@ const Requests = (): JSX.Element => {
 
   // If the user is not Superadmin, redirect to Organizations screen
   useEffect(() => {
-    const userType = localStorage.getItem('UserType');
+    const userType = getItem('UserType');
     if (userType != 'SUPERADMIN') {
       window.location.assign('/orglist');
     }
