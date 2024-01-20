@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import dotenv from 'dotenv';
 import fs from 'fs';
 import inquirer from 'inquirer';
