@@ -12,7 +12,13 @@
 
 ### default
 
-▸ **default**(): `Element`
+▸ **default**(`props`): `Element`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `props` | `InterfaceLoaderProps` |
 
 #### Returns
 
@@ -20,4 +26,4 @@
 
 #### Defined in
 
-[src/components/Loader/Loader.tsx:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/Loader/Loader.tsx#L5)
+[src/components/Loader/Loader.tsx:10](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/components/Loader/Loader.tsx#L10)

@@ -4,10 +4,6 @@
 
 ## Table of contents
 
-### Namespaces
-
-- [default](components_plugins_DummyPlugin_DummyPlugin.default.md)
-
 ### Functions
 
 - [default](components_plugins_DummyPlugin_DummyPlugin.md#default)
@@ -24,4 +20,4 @@
 
 #### Defined in
 
-[src/components/plugins/DummyPlugin/DummyPlugin.tsx:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/plugins/DummyPlugin/DummyPlugin.tsx#L5)
+[src/components/plugins/DummyPlugin/DummyPlugin.tsx:5](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/components/plugins/DummyPlugin/DummyPlugin.tsx#L5)
