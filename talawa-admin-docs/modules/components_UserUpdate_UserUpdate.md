@@ -27,4 +27,4 @@
 
 #### Defined in
 
-node_modules/@types/react/index.d.ts:543
+[src/components/UserUpdate/UserUpdate.tsx:23](https://github.com/disha1202/talawa-admin/blob/171fdd3/src/components/UserUpdate/UserUpdate.tsx#L23)

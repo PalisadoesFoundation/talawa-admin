@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/OrganizationCard/OrganizationCard.tsx:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/OrganizationCard/OrganizationCard.tsx#L13)
+[src/components/OrganizationCard/OrganizationCard.tsx:13](https://github.com/disha1202/talawa-admin/blob/171fdd3/src/components/OrganizationCard/OrganizationCard.tsx#L13)
