@@ -27,4 +27,4 @@
 
 #### Defined in
 
-[src/components/EventCalendar/EventCalendar.tsx:52](https://github.com/chandel-aman/talawa-admin/blob/45920a7/src/components/EventCalendar/EventCalendar.tsx#L52)
+[src/components/EventCalendar/EventCalendar.tsx:52](https://github.com/chandel-aman/talawa-admin/blob/8321f36/src/components/EventCalendar/EventCalendar.tsx#L52)

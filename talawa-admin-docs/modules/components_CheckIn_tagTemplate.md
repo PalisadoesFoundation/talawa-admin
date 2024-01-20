@@ -16,4 +16,4 @@
 
 #### Defined in
 
-[src/components/CheckIn/tagTemplate.ts:3](https://github.com/chandel-aman/talawa-admin/blob/45920a7/src/components/CheckIn/tagTemplate.ts#L3)
+[src/components/CheckIn/tagTemplate.ts:3](https://github.com/chandel-aman/talawa-admin/blob/8321f36/src/components/CheckIn/tagTemplate.ts#L3)

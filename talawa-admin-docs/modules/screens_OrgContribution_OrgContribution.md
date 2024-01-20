@@ -20,4 +20,4 @@
 
 #### Defined in
 
-[src/screens/OrgContribution/OrgContribution.tsx:11](https://github.com/chandel-aman/talawa-admin/blob/45920a7/src/screens/OrgContribution/OrgContribution.tsx#L11)
+[src/screens/OrgContribution/OrgContribution.tsx:11](https://github.com/chandel-aman/talawa-admin/blob/8321f36/src/screens/OrgContribution/OrgContribution.tsx#L11)

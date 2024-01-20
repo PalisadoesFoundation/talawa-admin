@@ -27,7 +27,7 @@
 
 #### Defined in
 
-[src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx:13](https://github.com/chandel-aman/talawa-admin/blob/45920a7/src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx#L13)
+[src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx:13](https://github.com/chandel-aman/talawa-admin/blob/8321f36/src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx#L13)
 
 ___
 
@@ -47,4 +47,4 @@ ___
 
 #### Defined in
 
-[src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx:17](https://github.com/chandel-aman/talawa-admin/blob/45920a7/src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx#L17)
+[src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx:17](https://github.com/chandel-aman/talawa-admin/blob/8321f36/src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx#L17)

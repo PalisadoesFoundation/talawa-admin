@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/UserListCard/UserListCard.tsx:24](https://github.com/chandel-aman/talawa-admin/blob/45920a7/src/components/UserListCard/UserListCard.tsx#L24)
+[src/components/UserListCard/UserListCard.tsx:24](https://github.com/chandel-aman/talawa-admin/blob/8321f36/src/components/UserListCard/UserListCard.tsx#L24)

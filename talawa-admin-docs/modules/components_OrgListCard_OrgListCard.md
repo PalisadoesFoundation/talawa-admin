@@ -30,4 +30,4 @@
 
 #### Defined in
 
-[src/components/OrgListCard/OrgListCard.tsx:17](https://github.com/chandel-aman/talawa-admin/blob/45920a7/src/components/OrgListCard/OrgListCard.tsx#L17)
+[src/components/OrgListCard/OrgListCard.tsx:17](https://github.com/chandel-aman/talawa-admin/blob/8321f36/src/components/OrgListCard/OrgListCard.tsx#L17)

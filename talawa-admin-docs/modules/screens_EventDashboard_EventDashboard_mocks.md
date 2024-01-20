@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[src/screens/EventDashboard/EventDashboard.mocks.ts:138](https://github.com/chandel-aman/talawa-admin/blob/45920a7/src/screens/EventDashboard/EventDashboard.mocks.ts#L138)
+[src/screens/EventDashboard/EventDashboard.mocks.ts:138](https://github.com/chandel-aman/talawa-admin/blob/8321f36/src/screens/EventDashboard/EventDashboard.mocks.ts#L138)
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 #### Defined in
 
-[src/screens/EventDashboard/EventDashboard.mocks.ts:179](https://github.com/chandel-aman/talawa-admin/blob/45920a7/src/screens/EventDashboard/EventDashboard.mocks.ts#L179)
+[src/screens/EventDashboard/EventDashboard.mocks.ts:179](https://github.com/chandel-aman/talawa-admin/blob/8321f36/src/screens/EventDashboard/EventDashboard.mocks.ts#L179)
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 #### Defined in
 
-[src/screens/EventDashboard/EventDashboard.mocks.ts:70](https://github.com/chandel-aman/talawa-admin/blob/45920a7/src/screens/EventDashboard/EventDashboard.mocks.ts#L70)
+[src/screens/EventDashboard/EventDashboard.mocks.ts:70](https://github.com/chandel-aman/talawa-admin/blob/8321f36/src/screens/EventDashboard/EventDashboard.mocks.ts#L70)
 
 ___
 
@@ -49,4 +49,4 @@ ___
 
 #### Defined in
 
-[src/screens/EventDashboard/EventDashboard.mocks.ts:104](https://github.com/chandel-aman/talawa-admin/blob/45920a7/src/screens/EventDashboard/EventDashboard.mocks.ts#L104)
+[src/screens/EventDashboard/EventDashboard.mocks.ts:104](https://github.com/chandel-aman/talawa-admin/blob/8321f36/src/screens/EventDashboard/EventDashboard.mocks.ts#L104)

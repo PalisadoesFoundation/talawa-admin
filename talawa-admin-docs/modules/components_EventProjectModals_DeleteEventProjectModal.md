@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/EventProjectModals/DeleteEventProjectModal.tsx:18](https://github.com/chandel-aman/talawa-admin/blob/45920a7/src/components/EventProjectModals/DeleteEventProjectModal.tsx#L18)
+[src/components/EventProjectModals/DeleteEventProjectModal.tsx:18](https://github.com/chandel-aman/talawa-admin/blob/8321f36/src/components/EventProjectModals/DeleteEventProjectModal.tsx#L18)

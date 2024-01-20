@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[src/components/LeftDrawerEvent/LeftDrawerEventWrapper.tsx:16](https://github.com/chandel-aman/talawa-admin/blob/45920a7/src/components/LeftDrawerEvent/LeftDrawerEventWrapper.tsx#L16)
+[src/components/LeftDrawerEvent/LeftDrawerEventWrapper.tsx:16](https://github.com/chandel-aman/talawa-admin/blob/8321f36/src/components/LeftDrawerEvent/LeftDrawerEventWrapper.tsx#L16)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[src/components/LeftDrawerEvent/LeftDrawerEventWrapper.tsx:7](https://github.com/chandel-aman/talawa-admin/blob/45920a7/src/components/LeftDrawerEvent/LeftDrawerEventWrapper.tsx#L7)
+[src/components/LeftDrawerEvent/LeftDrawerEventWrapper.tsx:7](https://github.com/chandel-aman/talawa-admin/blob/8321f36/src/components/LeftDrawerEvent/LeftDrawerEventWrapper.tsx#L7)
 
 ___
 
@@ -50,4 +50,4 @@ ___
 
 #### Defined in
 
-[src/components/LeftDrawerEvent/LeftDrawerEventWrapper.tsx:15](https://github.com/chandel-aman/talawa-admin/blob/45920a7/src/components/LeftDrawerEvent/LeftDrawerEventWrapper.tsx#L15)
+[src/components/LeftDrawerEvent/LeftDrawerEventWrapper.tsx:15](https://github.com/chandel-aman/talawa-admin/blob/8321f36/src/components/LeftDrawerEvent/LeftDrawerEventWrapper.tsx#L15)
