@@ -23,6 +23,8 @@ on:
       - '.eslintrc.json'
       - '.eslintignore '
       - 'vite.config.ts'
+      - 'docker-compose.yaml'
+      - 'Dockerfile'      
       - 'CODEOWNERS'
       - 'LICENSE'
       - 'setup.ts'
