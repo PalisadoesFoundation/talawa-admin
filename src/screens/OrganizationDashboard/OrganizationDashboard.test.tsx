@@ -15,7 +15,7 @@ import { toast } from 'react-toastify';
 import userEvent from '@testing-library/user-event';
 import useLocalStorage from 'utils/useLocalStorage';
 
-const { getItem, setItem } = useLocalStorage();
+const { setItem } = useLocalStorage();
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
