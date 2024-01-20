@@ -32,7 +32,7 @@
 
 #### Defined in
 
-[src/components/TaskModals/UpdateTaskModal.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/TaskModals/UpdateTaskModal.tsx#L31)
+[src/components/TaskModals/UpdateTaskModal.tsx:31](https://github.com/chandel-aman/talawa-admin/blob/45920a7/src/components/TaskModals/UpdateTaskModal.tsx#L31)
 
 ## Functions
 
@@ -52,4 +52,4 @@
 
 #### Defined in
 
-[src/components/TaskModals/UpdateTaskModal.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/TaskModals/UpdateTaskModal.tsx#L42)
+[src/components/TaskModals/UpdateTaskModal.tsx:42](https://github.com/chandel-aman/talawa-admin/blob/45920a7/src/components/TaskModals/UpdateTaskModal.tsx#L42)
