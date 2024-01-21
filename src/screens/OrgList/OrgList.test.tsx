@@ -274,6 +274,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
         screen.queryByText(/Congratulation the Organization is created/i)
       ).toBeInTheDocument()
     );
+    await screen.findByTestId(/pluginNotificationHeader/i);
     userEvent.click(screen.getByTestId(/enableEverythingForm/i));
     userEvent.click(screen.getByTestId(/goToStore/i));
   });
@@ -331,9 +332,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
 describe('Organisations Page testing as Admin', () => {
   const link = new StaticMockLink(MOCKS_ADMIN, true);
 
-  test('Create organization modal should not be present in the page for Admin', async () => {
+  test('Create organization modal should not be present on the page for Admin', async () => {
     localStorage.setItem('id', '123');
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -345,11 +345,10 @@ describe('Organisations Page testing as Admin', () => {
         </BrowserRouter>
       </MockedProvider>
     );
-
-    await wait();
-    expect(screen.queryByText(/Create Organization/i)).toBeNull();
+    await waitFor(() => {
+      expect(screen.queryByText(/Create Organization/i)).toBeNull();
+    });
   });
-
   test('Testing sort latest and oldest toggle', async () => {
     await act(async () => {
       render(

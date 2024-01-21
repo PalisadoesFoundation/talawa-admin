@@ -646,7 +646,7 @@ function orgList(): JSX.Element {
           <Modal.Header
             className="bg-primary"
             closeButton
-            data-testid="modalOrganizationHeader"
+            data-testid="pluginNotificationHeader"
           >
             <Modal.Title className="text-white">
               {t('manageFeatures')}
