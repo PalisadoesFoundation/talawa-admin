@@ -39,12 +39,12 @@ describe('refreshToken', () => {
     const result = await refreshToken();
 
     expect(localStorage.setItem).toHaveBeenCalledWith(
-      'token',
-      'newAccessToken'
+      'Talawa-admin_token',
+      JSON.stringify('newAccessToken')
     );
     expect(localStorage.setItem).toHaveBeenCalledWith(
-      'refreshToken',
-      'newRefreshToken'
+      'Talawa-admin_refreshToken',
+      JSON.stringify('newRefreshToken')
     );
     expect(result).toBe(true);
     expect(window.location.reload).toHaveBeenCalled();

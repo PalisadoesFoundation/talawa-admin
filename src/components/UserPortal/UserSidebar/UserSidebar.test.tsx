@@ -13,13 +13,16 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import UserSidebar from './UserSidebar';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { getItem, setItem } = useLocalStorage();
 
 const MOCKS = [
   {
     request: {
       query: USER_DETAILS,
       variables: {
-        id: localStorage.getItem('userId'),
+        id: getItem('userId'),
       },
     },
     result: {
@@ -85,7 +88,7 @@ const MOCKS = [
     request: {
       query: USER_JOINED_ORGANIZATIONS,
       variables: {
-        id: localStorage.getItem('userId'),
+        id: getItem('userId'),
       },
     },
     result: {
@@ -178,9 +181,9 @@ describe('Testing UserSidebar Component [User Portal]', () => {
   });
 
   test('Component should be rendered properly when userImage is not undefined', async () => {
-    const beforeUserId = localStorage.getItem('userId');
+    const beforeUserId = getItem('userId');
 
-    localStorage.setItem('userId', '2');
+    setItem('userId', '2');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -196,14 +199,14 @@ describe('Testing UserSidebar Component [User Portal]', () => {
 
     await wait();
     if (beforeUserId) {
-      localStorage.setItem('userId', beforeUserId);
+      setItem('userId', beforeUserId);
     }
   });
 
   test('Component should be rendered properly when organizationImage is not undefined', async () => {
-    const beforeUserId = localStorage.getItem('userId');
+    const beforeUserId = getItem('userId');
 
-    localStorage.setItem('userId', '2');
+    setItem('userId', '2');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -220,14 +223,14 @@ describe('Testing UserSidebar Component [User Portal]', () => {
     await wait();
 
     if (beforeUserId) {
-      localStorage.setItem('userId', beforeUserId);
+      setItem('userId', beforeUserId);
     }
   });
 
   test('Component should be rendered properly when joinedOrganizations list is empty', async () => {
-    const beforeUserId = localStorage.getItem('userId');
+    const beforeUserId = getItem('userId');
 
-    localStorage.setItem('userId', '3');
+    setItem('userId', '3');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -244,7 +247,7 @@ describe('Testing UserSidebar Component [User Portal]', () => {
     await wait();
 
     if (beforeUserId) {
-      localStorage.setItem('userId', beforeUserId);
+      setItem('userId', beforeUserId);
     }
   });
 });

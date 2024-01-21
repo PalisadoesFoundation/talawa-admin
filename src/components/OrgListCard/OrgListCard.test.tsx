@@ -11,6 +11,9 @@ import { BrowserRouter } from 'react-router-dom';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { MockedProvider } from '@apollo/react-testing';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem } = useLocalStorage();
 
 const MOCKS = [
   {
@@ -53,7 +56,7 @@ const props: InterfaceOrgListCardProps = {
 
 describe('Testing the Super Dash List', () => {
   test('should render props and text elements test for the page component', () => {
-    localStorage.setItem('id', '123'); // Means the user is an admin
+    setItem('id', '123'); // Means the user is an admin
 
     render(
       <MockedProvider addTypename={false} link={link}>

@@ -11,6 +11,9 @@ import LeftDrawerEvent, {
 import { MockedProvider } from '@apollo/react-testing';
 import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem } = useLocalStorage();
 
 const props: InterfaceLeftDrawerProps = {
   event: {
@@ -81,9 +84,9 @@ jest.mock('@mui/x-charts/PieChart', () => ({
 }));
 
 beforeEach(() => {
-  localStorage.setItem('FirstName', 'John');
-  localStorage.setItem('LastName', 'Doe');
-  localStorage.setItem(
+  setItem('FirstName', 'John');
+  setItem('LastName', 'Doe');
+  setItem(
     'UserImage',
     'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe'
   );
@@ -96,8 +99,8 @@ afterEach(() => {
 
 describe('Testing Left Drawer component for the Event Dashboard', () => {
   test('Component should be rendered properly', async () => {
-    localStorage.setItem('UserImage', '');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserImage', '');
+    setItem('UserType', 'SUPERADMIN');
 
     const { queryByText } = render(
       <MockedProvider mocks={mocks}>
@@ -122,7 +125,7 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
   });
 
   test('Add Event profile page button should work properly', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
 
     const { queryByText, queryByTestId } = render(
       <MockedProvider mocks={mocks}>
@@ -142,7 +145,7 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
   });
 
   test('Testing Drawer when hideDrawer is null', () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider mocks={mocks}>
         <BrowserRouter>
@@ -155,7 +158,7 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
   });
 
   test('Testing Drawer when hideDrawer is true', () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider mocks={mocks}>
         <BrowserRouter>
@@ -168,7 +171,7 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
   });
 
   test('Testing logout functionality', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider mocks={mocks}>
         <BrowserRouter>
@@ -184,7 +187,7 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
     expect(global.window.location.pathname).toBe('/');
   });
   test('Testing substring functionality in event title and description', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider mocks={mocks}>
         <BrowserRouter>
@@ -204,7 +207,7 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
     expect(truncatedEventDescription).toContain('...');
   });
   test('Testing all events button', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider mocks={mocks}>
         <BrowserRouter>

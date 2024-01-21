@@ -15,6 +15,9 @@ import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { getItem } = useLocalStorage();
 
 type MemberDetailProps = {
   id: string; // This is the userId
@@ -28,7 +31,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const [state, setState] = useState(1);
 
   const location = useLocation<MemberDetailProps>();
-  const currentUrl = location.state?.id || localStorage.getItem('id') || id;
+  const currentUrl = location.state?.id || getItem('id') || id;
   document.title = t('title');
 
   const [adda] = useMutation(ADD_ADMIN_MUTATION);

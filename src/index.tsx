@@ -31,6 +31,9 @@ import {
   REACT_APP_BACKEND_WEBSOCKET_URL,
 } from 'Constant/constant';
 import { refreshToken } from 'utils/getRefreshToken';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { getItem } = useLocalStorage();
 
 const errorLink = onError(
   ({ graphQLErrors, networkError, operation, forward }) => {
@@ -43,7 +46,7 @@ const errorLink = onError(
               operation.setContext({
                 headers: {
                   ...oldHeaders,
-                  authorization: 'Bearer ' + localStorage.getItem('token'),
+                  authorization: 'Bearer ' + getItem('token'),
                 },
               });
               return forward(operation);
@@ -68,7 +71,7 @@ const errorLink = onError(
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
   headers: {
-    authorization: 'Bearer ' + localStorage.getItem('token') || '',
+    authorization: 'Bearer ' + getItem('token') || '',
   },
 });
 

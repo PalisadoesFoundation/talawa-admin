@@ -26,6 +26,9 @@ import {
   MOCKS_WITH_ERROR,
 } from './OrgListMocks';
 import { ToastContainer, toast } from 'react-toastify';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem } = useLocalStorage();
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -41,7 +44,7 @@ afterEach(() => {
 });
 
 describe('Organisations Page testing as SuperAdmin', () => {
-  localStorage.setItem('id', '123');
+  setItem('id', '123');
 
   const link = new StaticMockLink(MOCKS, true);
   const link2 = new StaticMockLink(MOCKS_EMPTY, true);
@@ -55,7 +58,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   };
 
   test('Testing search functionality by pressing enter', async () => {
-    localStorage.setItem('id', '123');
+    setItem('id', '123');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -76,7 +79,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing search functionality by Btn click', async () => {
-    localStorage.setItem('id', '123');
+    setItem('id', '123');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -98,7 +101,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
   test('Should render no organisation warning alert when there are no organization', async () => {
     window.location.assign('/');
-    localStorage.setItem('id', '123');
+    setItem('id', '123');
 
     render(
       <MockedProvider addTypename={false} link={link2}>
@@ -135,7 +138,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing create organization modal', async () => {
-    localStorage.setItem('id', '123');
+    setItem('id', '123');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -156,8 +159,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Create organization model should work properly', async () => {
-    localStorage.setItem('id', '123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('id', '123');
+    setItem('UserType', 'SUPERADMIN');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -175,8 +178,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
     await wait(500);
 
     expect(localStorage.setItem).toHaveBeenLastCalledWith(
-      'UserType',
-      'SUPERADMIN'
+      'Talawa-admin_UserType',
+      JSON.stringify('SUPERADMIN')
     );
 
     userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
@@ -216,8 +219,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Plugin Notification model should work properly', async () => {
-    localStorage.setItem('id', '123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('id', '123');
+    setItem('UserType', 'SUPERADMIN');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -235,8 +238,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
     await wait(500);
 
     expect(localStorage.setItem).toHaveBeenLastCalledWith(
-      'UserType',
-      'SUPERADMIN'
+      'Talawa-admin_UserType',
+      JSON.stringify('SUPERADMIN')
     );
 
     userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
@@ -277,8 +280,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing create sample organization working properly', async () => {
-    localStorage.setItem('id', '123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('id', '123');
+    setItem('UserType', 'SUPERADMIN');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -302,8 +305,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
     );
   });
   test('Testing error handling for CreateSampleOrg', async () => {
-    localStorage.setItem('id', '123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('id', '123');
+    setItem('UserType', 'SUPERADMIN');
     jest.spyOn(toast, 'error');
     render(
       <MockedProvider addTypename={false} link={link3}>
@@ -330,7 +333,7 @@ describe('Organisations Page testing as Admin', () => {
   const link = new StaticMockLink(MOCKS_ADMIN, true);
 
   test('Create organization modal should not be present in the page for Admin', async () => {
-    localStorage.setItem('id', '123');
+    setItem('id', '123');
 
     render(
       <MockedProvider addTypename={false} link={link}>

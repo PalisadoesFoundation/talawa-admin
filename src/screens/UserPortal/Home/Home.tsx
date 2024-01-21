@@ -30,6 +30,7 @@ import { toast } from 'react-toastify';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
 import UserDefault from '../../../assets/images/defaultImg.png';
+import useLocalStorage from 'utils/useLocalstorage';
 
 interface InterfacePostCardProps {
   id: string;
@@ -78,6 +79,8 @@ interface InterfaceAdContent {
 export default function home(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'home' });
 
+  const { getItem } = useLocalStorage();
+
   const organizationId = getOrganizationId(window.location.href);
   const [posts, setPosts] = React.useState([]);
   const [postContent, setPostContent] = React.useState<string>('');
@@ -106,7 +109,7 @@ export default function home(): JSX.Element {
     variables: { id: organizationId },
   });
 
-  const userId: string | null = localStorage.getItem('userId');
+  const userId: string | null = getItem('userId');
 
   const { data: userData } = useQuery(USER_DETAILS, {
     variables: { id: userId },

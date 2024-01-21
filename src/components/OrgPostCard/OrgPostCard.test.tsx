@@ -20,6 +20,9 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import convertToBase64 from 'utils/convertToBase64';
 import { BrowserRouter } from 'react-router-dom';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem } = useLocalStorage();
 
 const MOCKS = [
   {
@@ -155,7 +158,7 @@ describe('Testing Organization Post Card', () => {
     expect(toggleButton).toHaveTextContent('Read more');
   });
   test('opens and closes edit modal', async () => {
-    localStorage.setItem('id', '123');
+    setItem('id', '123');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -458,7 +461,7 @@ describe('Testing Organization Post Card', () => {
     fireEvent.click(clearImageButton);
   });
   test('Testing create organization modal', async () => {
-    localStorage.setItem('id', '123');
+    setItem('id', '123');
 
     render(
       <MockedProvider addTypename={false} link={link}>
