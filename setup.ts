@@ -22,13 +22,17 @@ async function checkConnection(url: string): Promise<any> {
   return isConnected;
 }
 
-async function askForTalawaApiUrl(): Promise<string> {
+async function askForTalawaApiUrl(
+  isDockerInstallation: boolean
+): Promise<string> {
   const { endpoint } = await inquirer.prompt([
     {
       type: 'input',
       name: 'endpoint',
       message: 'Enter your talawa-api endpoint:',
-      default: 'http://localhost:4000/graphql/',
+      default: isDockerInstallation
+        ? 'http://host-machine-ip-address:4000/graphql/'
+        : 'http://localhost:4000/graphql/',
     },
   ]);
   return endpoint;
@@ -68,19 +72,32 @@ async function main(): Promise<void> {
 
   let shouldSetTalawaApiUrl: boolean;
 
-  if (process.env.REACT_APP_TALAWA_URL) {
+  const { isDockerInstallation } = await inquirer.prompt({
+    type: 'confirm',
+    name: 'isDockerInstallation',
+    message: 'Are you setting up this project using Docker?',
+    default: false,
+  });
+  if (!isDockerInstallation) {
+    if (process.env.REACT_APP_TALAWA_URL) {
+      console.log(
+        `\nEndpoint for accessing talawa-api graphql service already exists with the value:\n${process.env.REACT_APP_TALAWA_URL}`
+      );
+      shouldSetTalawaApiUrl = true;
+    } else {
+      const { shouldSetTalawaApiUrlResponse } = await inquirer.prompt({
+        type: 'confirm',
+        name: 'shouldSetTalawaApiUrlResponse',
+        message: 'Would you like to set up talawa-api endpoint?',
+        default: true,
+      });
+      shouldSetTalawaApiUrl = shouldSetTalawaApiUrlResponse;
+    }
+  } else {
     console.log(
-      `\nEndpoint for accessing talawa-api graphql service already exists with the value:\n${process.env.REACT_APP_TALAWA_URL}`
+      `\nEnter endpoint for accessing talawa-api graphql:\nhttp://host-machine-ip-address:4000/graphql`
     );
     shouldSetTalawaApiUrl = true;
-  } else {
-    const { shouldSetTalawaApiUrlResponse } = await inquirer.prompt({
-      type: 'confirm',
-      name: 'shouldSetTalawaApiUrlResponse',
-      message: 'Would you like to set up talawa-api endpoint?',
-      default: true,
-    });
-    shouldSetTalawaApiUrl = shouldSetTalawaApiUrlResponse;
   }
 
   if (shouldSetTalawaApiUrl) {
@@ -88,7 +105,7 @@ async function main(): Promise<void> {
       endpoint = '';
 
     while (!isConnected) {
-      endpoint = await askForTalawaApiUrl();
+      endpoint = await askForTalawaApiUrl(isDockerInstallation);
       const url = new URL(endpoint);
       isConnected = await checkConnection(url.origin);
     }
