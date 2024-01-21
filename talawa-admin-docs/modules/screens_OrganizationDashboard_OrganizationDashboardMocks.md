@@ -18,7 +18,7 @@
 
 #### Defined in
 
-[src/screens/OrganizationDashboard/OrganizationDashboardMocks.ts:188](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/screens/OrganizationDashboard/OrganizationDashboardMocks.ts#L188)
+[src/screens/OrganizationDashboard/OrganizationDashboardMocks.ts:188](https://github.com/chandel-aman/talawa-admin/blob/97994b9/src/screens/OrganizationDashboard/OrganizationDashboardMocks.ts#L188)
 
 ___
 
@@ -28,7 +28,7 @@ ___
 
 #### Defined in
 
-[src/screens/OrganizationDashboard/OrganizationDashboardMocks.ts:263](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/screens/OrganizationDashboard/OrganizationDashboardMocks.ts#L263)
+[src/screens/OrganizationDashboard/OrganizationDashboardMocks.ts:263](https://github.com/chandel-aman/talawa-admin/blob/97994b9/src/screens/OrganizationDashboard/OrganizationDashboardMocks.ts#L263)
 
 ___
 
@@ -38,4 +38,4 @@ ___
 
 #### Defined in
 
-[src/screens/OrganizationDashboard/OrganizationDashboardMocks.ts:8](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/screens/OrganizationDashboard/OrganizationDashboardMocks.ts#L8)
+[src/screens/OrganizationDashboard/OrganizationDashboardMocks.ts:8](https://github.com/chandel-aman/talawa-admin/blob/97994b9/src/screens/OrganizationDashboard/OrganizationDashboardMocks.ts#L8)

@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[src/screens/OrgList/OrgListMocks.ts:83](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/screens/OrgList/OrgListMocks.ts#L83)
+[src/screens/OrgList/OrgListMocks.ts:83](https://github.com/chandel-aman/talawa-admin/blob/97994b9/src/screens/OrgList/OrgListMocks.ts#L83)
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 #### Defined in
 
-[src/screens/OrgList/OrgListMocks.ts:208](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/screens/OrgList/OrgListMocks.ts#L208)
+[src/screens/OrgList/OrgListMocks.ts:208](https://github.com/chandel-aman/talawa-admin/blob/97994b9/src/screens/OrgList/OrgListMocks.ts#L208)
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 #### Defined in
 
-[src/screens/OrgList/OrgListMocks.ts:144](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/screens/OrgList/OrgListMocks.ts#L144)
+[src/screens/OrgList/OrgListMocks.ts:144](https://github.com/chandel-aman/talawa-admin/blob/97994b9/src/screens/OrgList/OrgListMocks.ts#L144)
 
 ___
 
@@ -49,4 +49,4 @@ ___
 
 #### Defined in
 
-[src/screens/OrgList/OrgListMocks.ts:172](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/screens/OrgList/OrgListMocks.ts#L172)
+[src/screens/OrgList/OrgListMocks.ts:172](https://github.com/chandel-aman/talawa-admin/blob/97994b9/src/screens/OrgList/OrgListMocks.ts#L172)
