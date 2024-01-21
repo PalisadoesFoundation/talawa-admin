@@ -332,7 +332,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
 describe('Organisations Page testing as Admin', () => {
   const link = new StaticMockLink(MOCKS_ADMIN, true);
 
-  test('Create organization modal should not be present on the page for Admin', async () => {
+  test('Create organization modal should not be present in the page for Admin', async () => {
     localStorage.setItem('id', '123');
     render(
       <MockedProvider addTypename={false} link={link}>
