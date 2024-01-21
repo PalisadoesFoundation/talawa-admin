@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/UserPortal/Register/Register.tsx:19](https://github.com/palisadoes/talawa-admin/blob/97994b9/src/components/UserPortal/Register/Register.tsx#L19)
+[src/components/UserPortal/Register/Register.tsx:19](https://github.com/palisadoes/talawa-admin/blob/5828937/src/components/UserPortal/Register/Register.tsx#L19)

@@ -20,4 +20,4 @@
 
 #### Defined in
 
-[src/components/OrganizationDashCards/CardItemLoading.tsx:4](https://github.com/palisadoes/talawa-admin/blob/97994b9/src/components/OrganizationDashCards/CardItemLoading.tsx#L4)
+[src/components/OrganizationDashCards/CardItemLoading.tsx:4](https://github.com/palisadoes/talawa-admin/blob/5828937/src/components/OrganizationDashCards/CardItemLoading.tsx#L4)
