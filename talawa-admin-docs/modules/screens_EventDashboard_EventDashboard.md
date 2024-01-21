@@ -20,4 +20,4 @@
 
 #### Defined in
 
-[src/screens/EventDashboard/EventDashboard.tsx:37](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/screens/EventDashboard/EventDashboard.tsx#L37)
+[src/screens/EventDashboard/EventDashboard.tsx:10](https://github.com/palisadoes/talawa-admin/blob/97994b9/src/screens/EventDashboard/EventDashboard.tsx#L10)
