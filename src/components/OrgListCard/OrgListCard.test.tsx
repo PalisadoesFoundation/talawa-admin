@@ -32,7 +32,16 @@ const props: InterfaceOrgListCardProps = {
     _id: 'xyz',
     name: 'Dogs Care',
     image: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
-    location: 'India',
+    address: {
+      city: 'Sample City',
+      countryCode: 'US',
+      dependentLocality: 'Sample Dependent Locality',
+      line1: '123 Sample Street',
+      line2: 'Apartment 456',
+      postalCode: '12345',
+      sortingCode: 'ABC-123',
+      state: 'Sample State',
+    },
     admins: [
       {
         _id: '123',

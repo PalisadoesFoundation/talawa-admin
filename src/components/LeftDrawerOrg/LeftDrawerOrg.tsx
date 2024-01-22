@@ -124,7 +124,7 @@ const leftDrawerOrg = ({
               <div className={styles.profileText}>
                 <span className={styles.primaryText}>{organization.name}</span>
                 <span className={styles.secondaryText}>
-                  {organization.location}
+                  {organization.address.city}
                 </span>
               </div>
             </button>

@@ -34,7 +34,7 @@ export const ORGANIZATION_LIST = gql`
         _id
       }
       createdAt
-      location
+      address
     }
   }
 `;
@@ -67,7 +67,7 @@ export const ORGANIZATION_CONNECTION_LIST = gql`
         _id
       }
       createdAt
-      location
+      address
     }
   }
 `;
@@ -103,7 +103,7 @@ export const USER_LIST = gql`
         _id
         name
         image
-        location
+        address
         createdAt
         creator {
           _id
@@ -118,7 +118,7 @@ export const USER_LIST = gql`
         _id
         name
         image
-        location
+        address
         createdAt
         creator {
           _id
@@ -252,7 +252,7 @@ export const ORGANIZATIONS_LIST = gql`
       }
       name
       description
-      location
+      address
       userRegistrationRequired
       visibleInSearch
       members {

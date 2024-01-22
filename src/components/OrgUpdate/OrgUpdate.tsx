@@ -12,8 +12,11 @@ import Loader from 'components/Loader/Loader';
 import { Col, Form, Row } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
-import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import styles from './OrgUpdate.module.css';
+import type {
+  InterfaceQueryOrganizationsListObject,
+  InterfaceAddress,
+} from 'utils/interfaces';
 
 interface InterfaceOrgUpdateProps {
   orgId: string;
@@ -25,14 +28,33 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   const [formState, setFormState] = useState<{
     orgName: string;
     orgDescrip: string;
-    location: string;
+    address: InterfaceAddress;
     orgImage: string | null;
   }>({
     orgName: '',
     orgDescrip: '',
-    location: '',
+    address: {
+      city: '',
+      countryCode: '',
+      dependentLocality: '',
+      line1: '',
+      line2: '',
+      postalCode: '',
+      sortingCode: '',
+      state: '',
+    },
     orgImage: null,
   });
+
+  const handleInputChange = (fieldName: string, value: string): void => {
+    setFormState((prevState) => ({
+      ...prevState,
+      address: {
+        ...prevState.address,
+        [fieldName]: value,
+      },
+    }));
+  };
 
   const [userRegistrationRequiredChecked, setuserRegistrationRequiredChecked] =
     React.useState(false);
@@ -68,7 +90,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
         ...formState,
         orgName: data.organizations[0].name,
         orgDescrip: data.organizations[0].description,
-        location: data.organizations[0].location,
+        address: data.organizations[0].address,
       });
       setuserRegistrationRequiredChecked(
         data.organizations[0].userRegistrationRequired
@@ -87,7 +109,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           id: orgId,
           name: formState.orgName,
           description: formState.orgDescrip,
-          location: formState.location,
+          address: formState.address,
           userRegistrationRequired: userRegistrationRequiredChecked,
           visibleInSearch: visiblechecked,
           file: formState.orgImage,
@@ -152,19 +174,72 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               });
             }}
           />
-          <Form.Label>{t('location')}</Form.Label>
+          <Form.Label>{t('address')}</Form.Label>
           <Form.Control
             className="mb-4"
-            placeholder={t('location')}
+            placeholder={t('city')}
             autoComplete="off"
             required
-            value={formState.location}
-            onChange={(e): void => {
-              setFormState({
-                ...formState,
-                location: e.target.value,
-              });
-            }}
+            value={formState.address.city}
+            onChange={(e) => handleInputChange('city', e.target.value)}
+          />
+          <Form.Control
+            className="mb-4"
+            placeholder={t('countryCode')}
+            autoComplete="off"
+            required
+            value={formState.address.countryCode}
+            onChange={(e) => handleInputChange('countryCode', e.target.value)}
+          />
+          <Form.Control
+            className="mb-4"
+            placeholder={t('dependentLocality')}
+            autoComplete="off"
+            required
+            value={formState.address.dependentLocality}
+            onChange={(e) =>
+              handleInputChange('dependentLocality', e.target.value)
+            }
+          />
+          <Form.Control
+            className="mb-4"
+            placeholder={t('line1')}
+            autoComplete="off"
+            required
+            value={formState.address.line1}
+            onChange={(e) => handleInputChange('line1', e.target.value)}
+          />
+          <Form.Control
+            className="mb-4"
+            placeholder={t('line2')}
+            autoComplete="off"
+            required
+            value={formState.address.line2}
+            onChange={(e) => handleInputChange('line2', e.target.value)}
+          />
+          <Form.Control
+            className="mb-4"
+            placeholder={t('postalCode')}
+            autoComplete="off"
+            required
+            value={formState.address.postalCode}
+            onChange={(e) => handleInputChange('postalCode', e.target.value)}
+          />
+          <Form.Control
+            className="mb-4"
+            placeholder={t('sortingCode')}
+            autoComplete="off"
+            required
+            value={formState.address.sortingCode}
+            onChange={(e) => handleInputChange('sortingCode', e.target.value)}
+          />
+          <Form.Control
+            className="mb-4"
+            placeholder={t('state')}
+            autoComplete="off"
+            required
+            value={formState.address.state}
+            onChange={(e) => handleInputChange('state', e.target.value)}
           />
           <Row>
             <Col sm={6} className="d-flex mb-3">

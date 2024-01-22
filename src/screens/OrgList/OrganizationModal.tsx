@@ -3,6 +3,7 @@ import { Modal, Form, Row, Col, Button } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
 import type { ChangeEvent } from 'react';
 import styles from './OrgList.module.css';
+import type { InterfaceAddress } from 'utils/interfaces';
 
 /**
  * Represents the state of the form in the organization modal.
@@ -12,7 +13,7 @@ interface InterfaceFormStateType {
   descrip: string;
   userRegistrationRequired: boolean;
   visible: boolean;
-  location: string;
+  address: InterfaceAddress;
   image: string;
 }
 
@@ -63,6 +64,16 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
   userData,
   triggerCreateSampleOrg,
 }) => {
+  // function to update the state of the parameters inside address.
+  const handleInputChange = (fieldName: string, value: string): void => {
+    setFormState((prevState) => ({
+      ...prevState,
+      address: {
+        ...prevState.address,
+        [fieldName]: value,
+      },
+    }));
+  };
   return (
     <Modal
       show={showModal}
@@ -120,26 +131,73 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               }
             }}
           />
-          <Form.Label htmlFor="location">{t('location')}</Form.Label>
+          <Form.Label>{t('address')}</Form.Label>
           <Form.Control
-            type="text"
-            id="location"
-            className="mb-3"
-            placeholder={t('location')}
+            className="mb-4"
+            placeholder={t('city')}
             autoComplete="off"
             required
-            value={formState.location}
-            onChange={(e): void => {
-              const locationText = e.target.value;
-              if (locationText.length < 100) {
-                setFormState({
-                  ...formState,
-                  location: e.target.value,
-                });
-              }
-            }}
+            value={formState.address.city}
+            onChange={(e) => handleInputChange('city', e.target.value)}
           />
-
+          <Form.Control
+            className="mb-4"
+            placeholder={t('countryCode')}
+            autoComplete="off"
+            required
+            value={formState.address.countryCode}
+            onChange={(e) => handleInputChange('countryCode', e.target.value)}
+          />
+          <Form.Control
+            className="mb-4"
+            placeholder={t('dependentLocality')}
+            autoComplete="off"
+            required
+            value={formState.address.dependentLocality}
+            onChange={(e) =>
+              handleInputChange('dependentLocality', e.target.value)
+            }
+          />
+          <Form.Control
+            className="mb-4"
+            placeholder={t('line1')}
+            autoComplete="off"
+            required
+            value={formState.address.line1}
+            onChange={(e) => handleInputChange('line1', e.target.value)}
+          />
+          <Form.Control
+            className="mb-4"
+            placeholder={t('line2')}
+            autoComplete="off"
+            required
+            value={formState.address.line2}
+            onChange={(e) => handleInputChange('line2', e.target.value)}
+          />
+          <Form.Control
+            className="mb-4"
+            placeholder={t('postalCode')}
+            autoComplete="off"
+            required
+            value={formState.address.postalCode}
+            onChange={(e) => handleInputChange('postalCode', e.target.value)}
+          />
+          <Form.Control
+            className="mb-4"
+            placeholder={t('sortingCode')}
+            autoComplete="off"
+            required
+            value={formState.address.sortingCode}
+            onChange={(e) => handleInputChange('sortingCode', e.target.value)}
+          />
+          <Form.Control
+            className="mb-4"
+            placeholder={t('state')}
+            autoComplete="off"
+            required
+            value={formState.address.state}
+            onChange={(e) => handleInputChange('state', e.target.value)}
+          />
           <Row className="mb-3">
             <Col>
               <Form.Label htmlFor="userRegistrationRequired">

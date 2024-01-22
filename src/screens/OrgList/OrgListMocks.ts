@@ -50,7 +50,16 @@ const organizations: InterfaceOrgConnectionInfoType[] = [
         _id: '234',
       },
     ],
-    location: 'Jamaica',
+    address: {
+      city: 'Kingston',
+      countryCode: 'JM',
+      dependentLocality: 'Sample Dependent Locality',
+      line1: '123 Jamaica Street',
+      line2: 'Apartment 456',
+      postalCode: 'JM12345',
+      sortingCode: 'ABC-123',
+      state: 'Kingston Parish',
+    },
   },
 ];
 
@@ -75,7 +84,16 @@ for (let x = 0; x < 100; x++) {
       },
     ],
     createdAt: new Date().toISOString(),
-    location: 'location',
+    address: {
+      city: 'Kingston',
+      countryCode: 'JM',
+      dependentLocality: 'Sample Dependent Locality',
+      line1: '123 Jamaica Street',
+      line2: 'Apartment 456',
+      postalCode: 'JM12345',
+      sortingCode: 'ABC-123',
+      state: 'Kingston Parish',
+    },
   });
 }
 
@@ -125,7 +143,16 @@ const MOCKS = [
       query: CREATE_ORGANIZATION_MUTATION,
       variables: {
         description: 'This is a dummy organization',
-        location: 'Delhi, India',
+        address: {
+          city: 'Kingston',
+          countryCode: 'JM',
+          dependentLocality: 'Sample Dependent Locality',
+          line1: '123 Jamaica Street',
+          line2: 'Apartment 456',
+          postalCode: 'JM12345',
+          sortingCode: 'ABC-123',
+          state: 'Kingston Parish',
+        },
         name: 'Dummy Organization',
         visibleInSearch: true,
         userRegistrationRequired: false,

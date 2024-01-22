@@ -45,7 +45,7 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
     $id: ID!
     $name: String
     $description: String
-    $location: String
+    $address: AddressInput
     $userRegistrationRequired: Boolean
     $visibleInSearch: Boolean
     $file: String
@@ -57,12 +57,26 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
         description: $description
         userRegistrationRequired: $userRegistrationRequired
         visibleInSearch: $visibleInSearch
-        location: $location
+        address: $address
       }
       file: $file
     ) {
       _id
     }
+  }
+`;
+
+// fragment for defining the Address input type.
+export const ADDRESS_DETAILS_FRAGMENT = gql`
+  fragment AddressDetails on AddressInput {
+    city
+    countryCode
+    dependentLocality
+    line1
+    line2
+    postalCode
+    sortingCode
+    state
   }
 `;
 
@@ -178,7 +192,7 @@ export const RECAPTCHA_MUTATION = gql`
 export const CREATE_ORGANIZATION_MUTATION = gql`
   mutation CreateOrganization(
     $description: String!
-    $location: String!
+    $address: AddressInput!
     $name: String!
     $visibleInSearch: Boolean!
     $userRegistrationRequired: Boolean!
@@ -187,7 +201,7 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
     createOrganization(
       data: {
         description: $description
-        location: $location
+        address: $address
         name: $name
         visibleInSearch: $visibleInSearch
         userRegistrationRequired: $userRegistrationRequired
