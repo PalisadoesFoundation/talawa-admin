@@ -3,7 +3,6 @@ import type { ChangeEvent } from 'react';
 import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
 import styles from './Home.module.css';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
-import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/OrganizationSidebar';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import {
   Button,
@@ -391,7 +390,6 @@ export default function home(): JSX.Element {
             </>
           )}
         </div>
-        <OrganizationSidebar />
         <Modal
           size="lg"
           show={showStartPost}

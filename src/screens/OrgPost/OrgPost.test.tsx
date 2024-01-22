@@ -217,6 +217,8 @@ describe('Organisation Post Page', () => {
       screen.getByTestId('organisationImage'),
       formData.postVideo
     );
+    userEvent.click(screen.getByTestId('pinPost'));
+    expect(screen.getByTestId('pinPost')).toBeChecked();
 
     userEvent.click(screen.getByTestId('createPostBtn'));
 
@@ -245,7 +247,9 @@ describe('Organisation Post Page', () => {
       });
     }
     await debounceWait();
+    const searchBtn = screen.getByTestId('searchBtn');
     userEvent.type(screen.getByPlaceholderText(/Search By/i), 'postone{enter}');
+    userEvent.click(searchBtn);
     await debounceWait();
     const sortDropdown = screen.getByTestId('sort');
     userEvent.click(sortDropdown);

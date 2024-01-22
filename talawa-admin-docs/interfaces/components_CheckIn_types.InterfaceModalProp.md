@@ -26,7 +26,7 @@ ___
 
 ### handleClose
 
-• **handleClose**: () => `void`
+• **handleClose**: () =\> `void`
 
 #### Type declaration
 

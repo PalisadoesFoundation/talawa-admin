@@ -18,6 +18,7 @@ import { ToastContainer } from 'react-toastify';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
+
 import BlockUser from './BlockUser';
 
 let userQueryCalled = false;
@@ -629,5 +630,35 @@ describe('Testing Block/Unblock user screen', () => {
       screen.getByText(`No results found for "Peter"`)
     ).toBeInTheDocument();
     expect(window.location).toBeAt('/blockuser/id=orgid');
+  });
+
+  test('Testing Search functionality', async () => {
+    window.location.assign('/blockuser/id=orgid');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <BlockUser />
+              <ToastContainer />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    await wait();
+    const searchBar = screen.getByTestId(/searchByName/i);
+    const searchBtn = screen.getByTestId(/searchBtn/i);
+    expect(searchBar).toBeInTheDocument();
+    userEvent.type(searchBar, 'Dummy{enter}');
+    await wait();
+    userEvent.clear(searchBar);
+    userEvent.type(searchBar, 'Dummy');
+    userEvent.click(searchBtn);
+    await wait();
+    userEvent.clear(searchBar);
+    userEvent.type(searchBar, '');
+    userEvent.click(searchBtn);
   });
 });

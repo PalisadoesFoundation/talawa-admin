@@ -128,7 +128,7 @@ const MOCKS = [
         location: 'Delhi, India',
         name: 'Dummy Organization',
         visibleInSearch: true,
-        isPublic: false,
+        userRegistrationRequired: false,
         image: '',
       },
     },

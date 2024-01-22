@@ -77,6 +77,15 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
   const [expanded, setExpanded] = useState<number>(-1);
+  const [windowWidth, setWindowWidth] = useState<number>(window.screen.width);
+
+  useEffect(() => {
+    function handleResize(): void {
+      setWindowWidth(window.screen.width);
+    }
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const filterData = (
     eventData: InterfaceEvent[],
@@ -208,7 +217,13 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         });
 
       return (
-        <div key={index} className={className} data-testid="day">
+        <div
+          key={index}
+          className={
+            className + ' ' + (allEventsList?.length > 0 && styles.day__events)
+          }
+          data-testid="day"
+        >
           {date.getDate()}
           <div
             className={expanded === index ? styles.expand_list_container : ''}
@@ -222,14 +237,15 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             >
               {expanded === index ? allEventsList : allEventsList?.slice(0, 2)}
             </div>
-            {allEventsList?.length > 2 && (
+            {(allEventsList?.length > 2 ||
+              (windowWidth <= 700 && allEventsList?.length > 0)) && (
               <button
                 className={styles.btn__more}
                 onClick={() => {
                   toggleExpand(index);
                 }}
               >
-                {expanded === index ? 'Less' : 'More'}
+                {expanded === index ? 'View less' : 'View all'}
               </button>
             )}
           </div>
