@@ -26,6 +26,8 @@
 .dispflex {
   display: flex;
   cursor: pointer;
+  justify-content: space-between;
+  margin: 10px 5px 5px 0px;
 }
 .eventtitle {
   margin-bottom: 0px;
@@ -88,8 +90,8 @@
   padding-right: 5px;
   padding-left: 5px;
 }
-.checkboxdiv > label {
-  margin-right: 50px;
+.checkboxdiv > div label {
+  margin-right: 30px;
 }
 .checkboxdiv > label > input {
   margin-left: 10px;
@@ -101,11 +103,15 @@
   box-shadow: none;
   margin-top: 5px;
 }
+
+.checkboxContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
 .checkboxdiv {
   display: flex;
-}
-.checkboxdiv > div {
-  width: 50%;
+  flex-direction: column;
 }
 
 .preview {
@@ -177,6 +183,9 @@
   .form_wrapper {
     width: 90%;
     top: 45%;
+  }
+  .checkboxContainer {
+    flex-direction: column;
   }
 }
 
