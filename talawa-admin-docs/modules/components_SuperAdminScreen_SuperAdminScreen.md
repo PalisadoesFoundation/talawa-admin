@@ -30,4 +30,4 @@
 
 #### Defined in
 
-[src/components/SuperAdminScreen/SuperAdminScreen.tsx:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/SuperAdminScreen/SuperAdminScreen.tsx#L12)
+[src/components/SuperAdminScreen/SuperAdminScreen.tsx:11](https://github.com/palisadoes/talawa-admin/blob/5828937/src/components/SuperAdminScreen/SuperAdminScreen.tsx#L11)

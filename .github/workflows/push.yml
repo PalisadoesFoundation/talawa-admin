@@ -53,15 +53,22 @@ jobs:
       - name: Present and upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
         uses: codecov/codecov-action@v3
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
           fail_ci_if_error: false
           name: '${{env.CODECOV_UNIQUE_NAME}}'
 
   Generate-Documentation:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/automated-docs'
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v3
+
+      - name: Node.js Version
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
       - name: Restore node_modules from cache
         id: cache-npm
@@ -136,6 +143,7 @@ jobs:
           path: talawa-admin-docs
 
   Copy-docs-to-talawa-docs:
+    needs: Generate-Documentation
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3

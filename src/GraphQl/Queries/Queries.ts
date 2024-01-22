@@ -187,23 +187,6 @@ export const EVENT_DETAILS = gql`
       attendees {
         _id
       }
-      projects {
-        _id
-        title
-        description
-        tasks {
-          _id
-          title
-          description
-          deadline
-          completed
-          volunteers {
-            _id
-            firstName
-            lastName
-          }
-        }
-      }
     }
   }
 `;

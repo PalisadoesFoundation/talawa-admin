@@ -20,7 +20,6 @@ const props: InterfacePropType = {
       _id: 'Test Organization',
     },
   },
-  setShowAddEventProjectModal: jest.fn(),
   children: null,
 };
 
