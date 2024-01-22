@@ -69,14 +69,14 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
 // fragment for defining the Address input type.
 export const ADDRESS_DETAILS_FRAGMENT = gql`
   fragment AddressDetails on AddressInput {
-    city
-    countryCode
-    dependentLocality
-    line1
-    line2
-    postalCode
-    sortingCode
-    state
+    city: String
+    countryCode: String
+    dependentLocality: String
+    line1: String
+    line2: String
+    postalCode: String
+    sortingCode: String
+    state: String
   }
 `;
 
