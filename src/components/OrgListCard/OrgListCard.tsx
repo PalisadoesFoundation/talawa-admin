@@ -60,10 +60,12 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
             <Tooltip title={name} placement="top-end">
               <h4 className={styles.orgName}>{name}</h4>
             </Tooltip>
-            <h6 className="text-secondary">
-              <LocationOnIcon fontSize="inherit" className="fs-5" />
-              {address.city}
-            </h6>
+            {address && address.city && (
+              <h6 className="text-secondary">
+                <LocationOnIcon fontSize="inherit" className="fs-5" />
+                {address.city}
+              </h6>
+            )}
             <h6>
               {t('admins')}: <span>{admins.length}</span>
             </h6>

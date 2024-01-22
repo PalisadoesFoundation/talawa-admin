@@ -67,7 +67,16 @@ export const ORGANIZATION_CONNECTION_LIST = gql`
         _id
       }
       createdAt
-      address
+      address {
+        city
+        countryCode
+        dependentLocality
+        line1
+        line2
+        postalCode
+        sortingCode
+        state
+      }
     }
   }
 `;
@@ -252,7 +261,16 @@ export const ORGANIZATIONS_LIST = gql`
       }
       name
       description
-      address
+      address {
+        city: String
+        countryCode
+        dependentLocality
+        line1
+        line2
+        postalCode
+        sortingCode
+        state
+      }
       userRegistrationRequired
       visibleInSearch
       members {
