@@ -7,14 +7,16 @@
 }
 .textinput {
   align-self: stretch;
-  width: 608.5px;
-  position: relative;
+  /* width: 608.5px; */
+  height: 64px;
+  padding: var(--padding-smi) var(--padding-base) var(--padding-xs)
+    var(--padding-mini);
   border-radius: var(--br-5xs);
   background-color: var(--color-gray-100);
   box-shadow: 5px 5px 4px rgba(49, 187, 107, 0.12);
   border: 1px solid var(--color-gainsboro-200);
   box-sizing: border-box;
-  display: none;
+  /* display: none; */
   max-width: 100%;
 }
 .searchPeople {
@@ -57,12 +59,15 @@
 }
 .searchBox1,
 .searchIconBtn {
+  position: relative;
   border-radius: var(--br-5xs);
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 .searchIconBtn {
+  position: absolute;
+  right: 5px;
   cursor: pointer;
   border: 0;
   padding: var(--padding-smi) var(--padding-base) var(--padding-xs)
@@ -77,8 +82,7 @@
   box-shadow: 5px 5px 4px rgba(49, 187, 107, 0.12);
   border: 1px solid var(--color-gainsboro-200);
   justify-content: space-between;
-  padding: 0 2px 0 var(--padding-lgi);
-  gap: var(--gap-xl);
+  /* padding: 0 2px 0 var(--padding-lgi); */
   max-width: 100%;
 }
 .filterBtn,
@@ -98,31 +102,28 @@
 .filterBtn {
   height: 55px;
   width: 250px;
-  position: relative;
+  position: absolute;
   border-radius: var(--br-5xs);
   background-color: var(--color-gray-100);
   box-shadow: 5px 5px 4px rgba(49, 187, 107, 0.12);
   border: 1px solid var(--color-mediumseagreen-100);
   display: none;
+  z-index: 100;
 }
 .ionoptionsOutlineIcon {
   height: 32px;
   width: 32px;
-  position: relative;
+  position: absolute;
   overflow: hidden;
   flex-shrink: 0;
-  z-index: 1;
+  z-index: 2;
 }
-.searchByFirst {
+.sortBySearchP {
   position: relative;
-  font-size: var(--font-size-base);
-  font-weight: 600;
-  font-family: var(--font-lato);
-  color: var(--color-mediumseagreen-100);
-  text-align: left;
-  z-index: 1;
 }
 .sortBtn1 {
+  height: 64px;
+  position: relative;
   cursor: pointer;
   border: 1px solid var(--color-mediumseagreen-100);
   padding: var(--padding-xs) var(--padding-13xl) var(--padding-2xs)
@@ -136,6 +137,12 @@
   justify-content: flex-start;
   gap: 21px;
   white-space: nowrap;
+  width: fit-content;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  font-family: var(--font-lato);
+  color: var(--color-mediumseagreen-100);
+  text-align: left;
 }
 .filterBtn1,
 .sortBtn1:hover,
@@ -144,10 +151,20 @@
   border: 1px solid var(--color-mediumseagreen-200);
   box-sizing: border-box;
 }
+.sortBtn1:focus-visible,
+.sortBtn2:focus-visible {
+  width: fit-content;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  font-family: var(--font-lato);
+  color: var(--color-mediumseagreen-100);
+  text-align: left;
+}
 .filterBtn1 {
   height: 55px;
   width: 145px;
-  position: relative;
+  position: absolute;
+  z-index: 10;
   border-radius: var(--br-5xs);
   background-color: var(--color-gray-100);
   box-shadow: 5px 5px 4px rgba(49, 187, 107, 0.12);

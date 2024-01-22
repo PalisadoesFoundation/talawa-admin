@@ -11,6 +11,13 @@
   font-weight: 500;
   z-index: 1;
 }
+
+.talawaLogo {
+  width: 42px;
+  height: 42px;
+  margin-right: 0.5rem;
+}
+
 .palisadoesLogoIcon {
   height: 48px;
   width: 54.5px;
@@ -21,17 +28,17 @@
   object-fit: cover;
   z-index: 2;
 }
-.menuText,
-.profileFrame {
+.frameOrganization,
+.frameProfile {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
 }
-.profileFrame {
+.frameProfile {
   position: relative;
 }
-.menuText {
+.frameOrganization {
   padding: 0 var(--padding-18xl);
 }
 .organizationSectionChild {
@@ -80,7 +87,7 @@
   font-size: var(--font-size-sm);
   color: var(--color-dimgray-100);
 }
-.palisadoesLogoRectangle {
+.organizationNameText {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -134,7 +141,7 @@
   background-color: var(--color-white);
   display: none;
 }
-.eventsButtonText {
+.postsButton {
   position: absolute;
   top: 0;
   left: 0;
@@ -152,7 +159,7 @@
   z-index: 1;
 }
 .dashboard,
-.eventsButtonTextParent {
+.postsButtonParent {
   height: 51px;
   width: 50px;
   position: relative;
@@ -211,11 +218,11 @@
   display: inline-block;
 }
 .btnBg2,
-.peopleButton {
+.peopleButton1 {
   align-self: stretch;
   border-radius: var(--br-xs);
 }
-.peopleButton {
+.peopleButton1 {
   background-color: var(--color-mediumseagreen-100);
   display: flex;
   flex-direction: row;
@@ -362,12 +369,12 @@
   display: inline-block;
 }
 .btnBg5,
-.postsButton {
+.postsButton1 {
   align-self: stretch;
   border-radius: var(--br-xs);
   background-color: var(--color-white);
 }
-.postsButton {
+.postsButton1 {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -439,7 +446,7 @@
   text-align: left;
   display: inline-block;
 }
-.dashboardButtonGroupRectang,
+.peopleButton,
 .settingsButton {
   align-self: stretch;
   display: flex;
@@ -454,33 +461,33 @@
   cursor: pointer;
   z-index: 1;
 }
-.dashboardButtonGroupRectang {
+.peopleButton {
   flex-direction: column;
   align-items: flex-start;
   padding: 0 var(--padding-12xs) 0 0;
   gap: var(--gap-base);
 }
-.signOutButtonFrame {
+.menuText {
   gap: var(--gap-9xl);
   color: var(--color-dimgray-200);
 }
-.dashboardFrame,
-.signOutButtonFrame,
-.tableHeaderFrame {
+.frameDashboard,
+.frameMenu,
+.menuText {
   align-self: stretch;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
 }
-.tableHeaderFrame {
+.frameMenu {
   gap: var(--gap-17xl);
+  /* padding-top: var(--padding-7xl); */
   font-size: var(--font-size-5xl);
   color: var(--color-white);
 }
-.dashboardFrame {
+.frameDashboard {
   padding: 0 var(--padding-12xs) 0 0;
-  gap: var(--gap-27xl);
 }
 .rectangleDiv {
   height: 50px;
@@ -530,15 +537,15 @@
   font-size: var(--font-size-base);
   color: var(--color-dimgray-100);
 }
-.addAdminsGroupRectangle,
-.removeMembersText {
+.rJText,
+.removeMembersButton {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
   gap: var(--gap-7xs);
 }
-.addAdminsGroupRectangle {
+.rJText {
   flex-direction: row;
   gap: var(--gap-base);
 }
@@ -550,7 +557,7 @@
   flex-shrink: 0;
   z-index: 1;
 }
-.organizationFrame {
+.frameRoles {
   align-self: stretch;
   display: flex;
   flex-direction: row;
@@ -566,7 +573,7 @@
   background-color: var(--color-whitesmoke-100);
   display: none;
 }
-.rJ {
+.requestsRoleFrame {
   position: absolute;
   top: 0;
   left: 0;
@@ -583,7 +590,7 @@
   overflow: hidden;
   z-index: 1;
 }
-.rJParent,
+.requestsRoleFrameParent,
 .signOut {
   height: 51px;
   width: 50px;
@@ -602,25 +609,27 @@
   text-align: left;
   display: inline-block;
 }
+.drawer,
+.menuDropdown,
+.signOutButton {
+  display: flex;
+  justify-content: flex-start;
+}
 .signOutButton {
   align-self: stretch;
   border-radius: var(--br-xs);
   background-color: var(--color-whitesmoke-100);
-  display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
   gap: var(--gap-6xs);
   cursor: pointer;
   z-index: 1;
 }
 .drawer,
-.settingsButtonText {
-  display: flex;
+.menuDropdown {
   flex-direction: column;
-  justify-content: flex-start;
 }
-.settingsButtonText {
+.menuDropdown {
   align-self: stretch;
   align-items: flex-end;
   padding: 0 0 0 var(--padding-12xs);
@@ -634,7 +643,7 @@
   padding: var(--padding-7xl) var(--padding-4xl) var(--padding-3xl)
     var(--padding-3xl);
   box-sizing: border-box;
-  gap: var(--gap-143xl);
+  gap: var(--gap-70xl);
   max-width: 100%;
   text-align: center;
   font-size: var(--font-size-lg);
@@ -663,17 +672,17 @@
     justify-content: center;
   }
   .eventsButton,
-  .peopleButton,
+  .peopleButton1,
   .pluginsButton,
-  .postsButton,
+  .postsButton1,
   .settingsButton,
   .tagsButton {
     flex-wrap: wrap;
   }
-  .tableHeaderFrame {
+  .frameMenu {
     gap: var(--gap-lg);
   }
-  .dashboardFrame {
+  .frameDashboard {
     gap: var(--gap-4xl);
   }
   .rj {

@@ -4,8 +4,10 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import styles from './OrganizationScreen.module.css';
 import { useSelector } from 'react-redux';
+import drawer from 'components/Drawer/Drawer';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import type { RootState } from 'state/reducers';
+import Drawer from 'components/Drawer/Drawer';
 
 export interface InterfaceOrganizationScreenProps {
   title: string; // Multilingual Page title

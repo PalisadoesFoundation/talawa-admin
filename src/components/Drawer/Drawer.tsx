@@ -1,7 +1,71 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './Drawer.module.css';
+import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
+import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
+import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import { useMutation, useQuery } from '@apollo/client';
+import type { TargetsType } from 'state/reducers/routesReducer';
+import { WarningAmberOutlined } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
+import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import { useHistory } from 'react-router-dom';
 
-function drawer(): JSX.Element {
+export interface InterfaceLeftDrawerProps {
+  orgId: string;
+  screenName: string;
+  targets: TargetsType[];
+  hideDrawer: boolean | null;
+  setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
+}
+
+const drawer = ({
+  screenName,
+  targets,
+  orgId,
+  hideDrawer,
+  setHideDrawer,
+}: InterfaceLeftDrawerProps): JSX.Element => {
+  const { t } = useTranslation('translation', { keyPrefix: 'leftDrawerOrg' });
+  const [organization, setOrganization] =
+    useState<InterfaceQueryOrganizationsListObject>();
+  const {
+    data,
+    loading,
+  }: {
+    data:
+      | { organizations: InterfaceQueryOrganizationsListObject[] }
+      | undefined;
+    loading: boolean;
+  } = useQuery(ORGANIZATIONS_LIST, {
+    variables: { id: orgId },
+  });
+
+  const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
+
+  const userType = localStorage.getItem('UserType');
+  const firstName = localStorage.getItem('FirstName');
+  const lastName = localStorage.getItem('LastName');
+  const userImage = localStorage.getItem('UserImage');
+  const userId = localStorage.getItem('id');
+  const history = useHistory();
+
+  // Set organization data
+  useEffect(() => {
+    let isMounted = true;
+    if (data && isMounted) {
+      setOrganization(data?.organizations[0]);
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [data]);
+
+  const logout = (): void => {
+    revokeRefreshToken();
+    localStorage.clear();
+    history.push('/');
+  };
+
   const onOrganizationSectionContainerClick = React.useCallback(() => {
     // Please sync "Organization| Dashboard" to the project
   }, []);
@@ -37,51 +101,44 @@ function drawer(): JSX.Element {
   return (
     <div className={styles.drawer}>
       <div className={styles.drawerBg} />
-      <div className={styles.dashboardFrame}>
-        <div className={styles.menuText}>
-          <div className={styles.profileFrame}>
+      <div className={styles.frameDashboard}>
+        <div className={styles.frameOrganization}>
+          <div className={styles.frameProfile}>
+            <TalawaLogo className={styles.palisadoesLogoIcon} />
             <div className={styles.talawaAdminPortal}>Talawa Admin Portal</div>
-            <img
-              className={styles.palisadoesLogoIcon}
-              loading="eager"
-              alt=""
-              src="/palisadoes-logo@2x.png"
-            />
           </div>
         </div>
-        <div className={styles.tableHeaderFrame}>
-          <div
-            className={styles.organizationSection}
-            onClick={onOrganizationSectionContainerClick}
-          >
+        <div className={styles.frameMenu}>
+          Organization Section
+          <div className={styles.organizationSection}>
             <div className={styles.organizationSectionChild} />
             <div className={styles.rectangleParent}>
               <div className={styles.frameChild} />
               <h2 className={styles.po}>PO</h2>
             </div>
-            <div className={styles.palisadoesLogoRectangle}>
+            <div className={styles.organizationNameText}>
               <div className={styles.palisadoesOrganization}>
-                Palisadoes Organization
+                {organization?.name}
               </div>
-              <div className={styles.jamaica}>Jamaica</div>
+              <div className={styles.jamaica}>{organization?.location}</div>
             </div>
             <img
+              src={organization?.image || ''}
+              alt={`profile picture`}
               className={styles.icons8angleRight}
               loading="eager"
-              alt=""
-              src="/icons8angleright.svg"
             />
           </div>
-          <div className={styles.signOutButtonFrame}>
+          <div className={styles.menuText}>
             <h2 className={styles.menu}>Menu</h2>
-            <div className={styles.dashboardButtonGroupRectang}>
+            <div className={styles.peopleButton}>
               <div
                 className={styles.dashboardButton}
                 onClick={onDashboardButtonContainerClick}
               >
                 <div className={styles.btnBg} />
-                <div className={styles.eventsButtonTextParent}>
-                  <div className={styles.eventsButtonText} />
+                <div className={styles.postsButtonParent}>
+                  <div className={styles.postsButton} />
                   <img
                     className={styles.akarIconsdashboard}
                     alt=""
@@ -94,7 +151,7 @@ function drawer(): JSX.Element {
                   type="text"
                 />
               </div>
-              <div className={styles.peopleButton}>
+              <div className={styles.peopleButton1}>
                 <div className={styles.btnBg1} />
                 <img
                   className={styles.peopleButtonChild}
@@ -143,7 +200,7 @@ function drawer(): JSX.Element {
                 />
               </div>
               <div
-                className={styles.postsButton}
+                className={styles.postsButton1}
                 onClick={onPostsButtonContainerClick}
               >
                 <div className={styles.btnBg4} />
@@ -197,14 +254,14 @@ function drawer(): JSX.Element {
           </div>
         </div>
       </div>
-      <div className={styles.settingsButtonText}>
-        <div className={styles.organizationFrame}>
-          <div className={styles.addAdminsGroupRectangle}>
+      <div className={styles.menuDropdown}>
+        <div className={styles.frameRoles}>
+          <div className={styles.rJText}>
             <button className={styles.groupButton}>
               <div className={styles.rectangleDiv} />
               <div className={styles.rj}>RJ</div>
             </button>
-            <div className={styles.removeMembersText}>
+            <div className={styles.removeMembersButton}>
               <h3 className={styles.rishavJha}>Rishav Jha</h3>
               <div className={styles.superAdmin}>Super Admin</div>
             </div>
@@ -217,8 +274,8 @@ function drawer(): JSX.Element {
         </div>
         <div className={styles.signOutButton} onClick={onSignOutButtonClick}>
           <div className={styles.btnBg7} />
-          <div className={styles.rJParent}>
-            <div className={styles.rJ} />
+          <div className={styles.requestsRoleFrameParent}>
+            <div className={styles.requestsRoleFrame} />
             <img
               className={styles.materialSymbolslogoutIcon}
               alt=""
@@ -234,6 +291,6 @@ function drawer(): JSX.Element {
       </div>
     </div>
   );
-}
+};
 
 export default drawer;

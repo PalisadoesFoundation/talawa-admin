@@ -22,6 +22,9 @@ import debounce from 'utils/debounce';
 import styles from './OrganizationPeople.module.css';
 
 import { toast } from 'react-toastify';
+import type { TargetsType } from 'state/reducers/routesReducer';
+import { useSelector } from 'react-redux';
+import type { RootState } from 'state/reducers';
 
 function organizationPeople(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -39,6 +42,7 @@ function organizationPeople(): JSX.Element {
   const [filterData, setFilterData] = useState({
     firstName_contains: '',
     lastName_contains: '',
+    searchCriteria: 'firstname',
   });
 
   const {
@@ -106,7 +110,7 @@ function organizationPeople(): JSX.Element {
   }
 
   /* istanbul ignore next */
-  const handleFirstNameSearchChange = (filterData: any): void => {
+  const handleNameSearchChange = (filterData: any): void => {
     /* istanbul ignore next */
     if (state === 0) {
       memberRefetch({
@@ -142,217 +146,273 @@ function organizationPeople(): JSX.Element {
     setPage(0);
   };
 
-  const debouncedHandleFirstNameSearchChange = debounce(
-    handleFirstNameSearchChange
-  );
+  const debouncedHandleFirstNameSearchChange = debounce(handleNameSearchChange);
+
+  //for now
+  const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
+
+  const appRoutes: {
+    targets: TargetsType[];
+    configUrl: string;
+  } = useSelector((state: RootState) => state.appRoutes);
+  const { targets, configUrl } = appRoutes;
+
   return (
-    <div className={styles.organizationPeople}>
-      <Drawer />
-      <header className={styles.peopleFrame}>
-        <section className={styles.organizationSection}>
-          <h1 className={styles.people}>People</h1>
-          <div className={styles.pO}>
-            <div className={styles.searchBox}>
-              <div className={styles.sortBtn}>
-                <div className={styles.searchBox1}>
-                  <div className={styles.textinput} />
-                  <div className={styles.searchPeople}>Search people</div>
-                  <button className={styles.searchIconBtn}>
-                    <div className={styles.searchIconBtnChild} />
-                    <div className={styles.materialSymbolssearchRounde}>
-                      <div className={styles.joinedon} />
-                      <img
-                        className={styles.rectangleIcon}
-                        alt=""
-                        src="/rectangle.svg"
-                      />
-                    </div>
-                  </button>
-                </div>
-              </div>
-              <button className={styles.sortBtn1}>
-                <div className={styles.filterBtn} />
-                <img
-                  className={styles.ionoptionsOutlineIcon}
-                  alt=""
-                  src="/ionoptionsoutline.svg"
-                />
-                <div className={styles.searchByFirst}>Search by First name</div>
-              </button>
-            </div>
-            <div className={styles.addadminsGroup}>
-              <div className={styles.sendemails}>
-                <div className={styles.removeadmins}>
-                  <div className={styles.tableHeader}>
-                    <div className={styles.tableHeaderChild} />
-                    <div className={styles.mdiusersaddoutline}>#</div>
-                    <div className={styles.mdiusersaddoutline1}>
-                      <div className={styles.profile}>Profile</div>
-                    </div>
-                    <div className={styles.mdiusersaddoutline2}>
-                      <div className={styles.name}>Name</div>
-                    </div>
-                    <div className={styles.mdiusersaddoutline3}>
-                      <div className={styles.email}>Email</div>
-                    </div>
-                    <div className={styles.joinedOn}>Joined on</div>
+    <>
+      {/* <OrganizationScreen screenName="People" title={t('title')}> */}
+      <div className={styles.organizationPeople}>
+        <Drawer
+          orgId={configUrl}
+          targets={targets}
+          screenName={'People'}
+          hideDrawer={hideDrawer}
+          setHideDrawer={setHideDrawer}
+        />
+        <header className={styles.peopleFrame}>
+          <section className={styles.organizationSection}>
+            <h1 className={styles.people}>People</h1>
+            <div className={styles.pO}>
+              <div className={styles.searchBox}>
+                <div className={styles.sortBtn}>
+                  <div className={styles.searchBox1}>
+                    <Form.Control
+                      type="name"
+                      id="searchname"
+                      className={styles.textinput}
+                      placeholder={'Search People'}
+                      autoComplete="off"
+                      required
+                      value={filterData.firstName_contains}
+                      onChange={(e): void => {
+                        const { value } = e.target;
+
+                        const newFilterData = {
+                          ...filterData,
+                          firstName_contains: value?.trim(),
+                        };
+
+                        setFilterData(newFilterData);
+                        debouncedHandleFirstNameSearchChange(newFilterData);
+                      }}
+                    />
+                    <button className={styles.searchIconBtn}>
+                      <div className={styles.searchIconBtnChild} />
+                      <div className={styles.materialSymbolssearchRounde}>
+                        <div className={styles.joinedon} />
+                        <img
+                          className={styles.rectangleIcon}
+                          alt=""
+                          src="/rectangle.svg"
+                        />
+                      </div>
+                    </button>
                   </div>
-                  <div className={styles.mdiuserminusoutline}>
-                    <div className={styles.tableBg} />
-                    <div className={styles.lists}>
-                      {memberLoading || usersLoading || adminLoading ? (
-                        <>
-                          <div className={styles.loader}></div>
-                        </>
-                      ) : (
-                        <div
-                          className={styles.list_box}
-                          data-testid="orgpeoplelist"
-                        >
-                          {
-                            /* istanbul ignore next */
-                            state == 0 ? (
-                              memberData &&
-                              memberData.organizationsMemberConnection.edges
-                                .length > 0 ? (
-                                (rowsPerPage > 0
-                                  ? memberData.organizationsMemberConnection.edges.slice(
-                                      page * rowsPerPage,
-                                      page * rowsPerPage + rowsPerPage
-                                    )
-                                  : memberData.organizationsMemberConnection
-                                      .edges
-                                ).map(
-                                  (
-                                    datas: {
+                </div>
+                <Form.Control
+                  as="select"
+                  className={styles.sortBtn1}
+                  onChange={(e): void => {
+                    const selectedCriteria = e.target.value;
+                    setFilterData({
+                      ...filterData,
+                      searchCriteria: selectedCriteria,
+                    });
+                  }}
+                >
+                  <div className={styles.filterBtn} />
+                  <img
+                    className={styles.ionoptionsOutlineIcon}
+                    alt=""
+                    src="/ionoptionsoutline.svg"
+                  />
+                  <option value="firstName">Search by First name</option>
+                  <option value="lastName">Search by Last name</option>
+                </Form.Control>
+              </div>
+              <div className={styles.addadminsGroup}>
+                <div className={styles.sendemails}>
+                  <div className={styles.removeadmins}>
+                    <div className={styles.tableHeader}>
+                      <div className={styles.tableHeaderChild} />
+                      <div className={styles.mdiusersaddoutline}>#</div>
+                      <div className={styles.mdiusersaddoutline1}>
+                        <div className={styles.profile}>Profile</div>
+                      </div>
+                      <div className={styles.mdiusersaddoutline2}>
+                        <div className={styles.name}>Name</div>
+                      </div>
+                      <div className={styles.mdiusersaddoutline3}>
+                        <div className={styles.email}>Email</div>
+                      </div>
+                      <div className={styles.joinedOn}>Joined on</div>
+                    </div>
+                    <div className={styles.mdiuserminusoutline}>
+                      <div className={styles.tableBg} />
+                      <div className={styles.lists}>
+                        {memberLoading || usersLoading || adminLoading ? (
+                          <>
+                            <div className={styles.loader}></div>
+                          </>
+                        ) : (
+                          <div
+                            className={styles.list_box}
+                            data-testid="orgpeoplelist"
+                          >
+                            {
+                              /* istanbul ignore next */
+                              state == 0 ? (
+                                memberData &&
+                                memberData.organizationsMemberConnection.edges
+                                  .length > 0 ? (
+                                  (rowsPerPage > 0
+                                    ? memberData.organizationsMemberConnection.edges.slice(
+                                        page * rowsPerPage,
+                                        page * rowsPerPage + rowsPerPage
+                                      )
+                                    : memberData.organizationsMemberConnection
+                                        .edges
+                                  ).map(
+                                    (
+                                      datas: {
+                                        _id: string;
+                                        lastName: string;
+                                        firstName: string;
+                                        image: string;
+                                        email: string;
+                                        createdAt: string;
+                                      },
+                                      index: any
+                                    ) => {
+                                      return (
+                                        <OrgPeopleListCard
+                                          key={index.toString()}
+                                          id={datas._id}
+                                          memberImage={datas.image}
+                                          joinDate={dayjs(
+                                            datas.createdAt
+                                          ).format('DD MMMM YYYY')}
+                                          memberName={
+                                            datas.firstName +
+                                            ' ' +
+                                            datas.lastName
+                                          }
+                                          memberEmail={datas.email}
+                                        />
+                                      );
+                                    }
+                                  )
+                                ) : (
+                                  <NotFound
+                                    title="member"
+                                    keyPrefix="userNotFound"
+                                  />
+                                )
+                              ) : state == 1 ? (
+                                adminData &&
+                                adminData.organizationsMemberConnection.edges
+                                  .length > 0 ? (
+                                  (rowsPerPage > 0
+                                    ? adminData.organizationsMemberConnection.edges.slice(
+                                        page * rowsPerPage,
+                                        page * rowsPerPage + rowsPerPage
+                                      )
+                                    : adminData.organizationsMemberConnection
+                                        .edges
+                                  ).map(
+                                    (datas: {
                                       _id: string;
                                       lastName: string;
                                       firstName: string;
                                       image: string;
                                       email: string;
                                       createdAt: string;
-                                    },
-                                    index: any
-                                  ) => {
-                                    return (
-                                      <OrgPeopleListCard
-                                        key={index.toString()}
-                                        id={datas._id}
-                                        memberImage={datas.image}
-                                        joinDate={dayjs(datas.createdAt).format(
-                                          'DD MMMM YYYY'
-                                        )}
-                                        memberName={
-                                          datas.firstName + ' ' + datas.lastName
-                                        }
-                                        memberEmail={datas.email}
-                                      />
-                                    );
-                                  }
+                                    }) => {
+                                      return (
+                                        <OrgAdminListCard
+                                          key={datas._id}
+                                          id={datas._id}
+                                          memberImage={datas.image}
+                                          joinDate={dayjs(
+                                            datas.createdAt
+                                          ).format('DD/MM/YYYY')}
+                                          memberName={
+                                            datas.firstName +
+                                            ' ' +
+                                            datas.lastName
+                                          }
+                                          memberEmail={datas.email}
+                                        />
+                                      );
+                                    }
+                                  )
+                                ) : (
+                                  <NotFound
+                                    title="admin"
+                                    keyPrefix="userNotFound"
+                                  />
+                                )
+                              ) : state == 2 ? (
+                                usersData && usersData.users.length > 0 ? (
+                                  (rowsPerPage > 0
+                                    ? usersData.users.slice(
+                                        page * rowsPerPage,
+                                        page * rowsPerPage + rowsPerPage
+                                      )
+                                    : usersData.users
+                                  ).map(
+                                    (datas: {
+                                      _id: string;
+                                      lastName: string;
+                                      firstName: string;
+                                      image: string;
+                                      email: string;
+                                      createdAt: string;
+                                    }) => {
+                                      return (
+                                        <UserListCard
+                                          key={datas._id}
+                                          id={datas._id}
+                                          memberImage={datas.image}
+                                          joinDate={dayjs(
+                                            datas.createdAt
+                                          ).format('DD/MM/YYYY')}
+                                          memberName={
+                                            datas.firstName +
+                                            ' ' +
+                                            datas.lastName
+                                          }
+                                          memberEmail={datas.email}
+                                        />
+                                      );
+                                    }
+                                  )
+                                ) : (
+                                  <NotFound
+                                    title="user"
+                                    keyPrefix="userNotFound"
+                                  />
                                 )
                               ) : (
-                                <NotFound
-                                  title="member"
-                                  keyPrefix="userNotFound"
-                                />
-                              )
-                            ) : state == 1 ? (
-                              adminData &&
-                              adminData.organizationsMemberConnection.edges
-                                .length > 0 ? (
-                                (rowsPerPage > 0
-                                  ? adminData.organizationsMemberConnection.edges.slice(
-                                      page * rowsPerPage,
-                                      page * rowsPerPage + rowsPerPage
-                                    )
-                                  : adminData.organizationsMemberConnection
-                                      .edges
-                                ).map(
-                                  (datas: {
-                                    _id: string;
-                                    lastName: string;
-                                    firstName: string;
-                                    image: string;
-                                    email: string;
-                                    createdAt: string;
-                                  }) => {
-                                    return (
-                                      <OrgAdminListCard
-                                        key={datas._id}
-                                        id={datas._id}
-                                        memberImage={datas.image}
-                                        joinDate={dayjs(datas.createdAt).format(
-                                          'DD/MM/YYYY'
-                                        )}
-                                        memberName={
-                                          datas.firstName + ' ' + datas.lastName
-                                        }
-                                        memberEmail={datas.email}
-                                      />
-                                    );
-                                  }
-                                )
-                              ) : (
-                                <NotFound
-                                  title="admin"
-                                  keyPrefix="userNotFound"
-                                />
-                              )
-                            ) : state == 2 ? (
-                              usersData && usersData.users.length > 0 ? (
-                                (rowsPerPage > 0
-                                  ? usersData.users.slice(
-                                      page * rowsPerPage,
-                                      page * rowsPerPage + rowsPerPage
-                                    )
-                                  : usersData.users
-                                ).map(
-                                  (datas: {
-                                    _id: string;
-                                    lastName: string;
-                                    firstName: string;
-                                    image: string;
-                                    email: string;
-                                    createdAt: string;
-                                  }) => {
-                                    return (
-                                      <UserListCard
-                                        key={datas._id}
-                                        id={datas._id}
-                                        memberImage={datas.image}
-                                        joinDate={dayjs(datas.createdAt).format(
-                                          'DD/MM/YYYY'
-                                        )}
-                                        memberName={
-                                          datas.firstName + ' ' + datas.lastName
-                                        }
-                                        memberEmail={datas.email}
-                                      />
-                                    );
-                                  }
-                                )
-                              ) : (
+                                /* istanbul ignore next */
                                 <NotFound
                                   title="user"
                                   keyPrefix="userNotFound"
                                 />
                               )
-                            ) : (
-                              /* istanbul ignore next */
-                              <NotFound title="user" keyPrefix="userNotFound" />
-                            )
-                          }
-                        </div>
-                      )}
+                            }
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-      </header>
-    </div>
+          </section>
+        </header>
+      </div>
+      {/* </OrganizationScreen> */}
+    </>
   );
 }
 
