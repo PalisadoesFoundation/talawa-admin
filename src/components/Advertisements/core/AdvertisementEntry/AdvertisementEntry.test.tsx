@@ -54,18 +54,16 @@ describe('Testing Advertisement Entry Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              {
-                <AdvertisementEntry
-                  endDate={new Date()}
-                  startDate={new Date()}
-                  id="1"
-                  key={1}
-                  mediaUrl="data:videos"
-                  name="Advert1"
-                  organizationId="1"
-                  type="POPUP"
-                />
-              }
+              <AdvertisementEntry
+                endDate={new Date()}
+                startDate={new Date()}
+                id="1"
+                key={1}
+                mediaUrl="data:videos"
+                name="Advert1"
+                organizationId="1"
+                type="POPUP"
+              />
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
