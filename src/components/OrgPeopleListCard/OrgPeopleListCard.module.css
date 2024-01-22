@@ -1,74 +1,80 @@
-.memberlist {
-  margin-top: -1px;
+.membername,
+.memberemail {
+  position: relative;
+  white-space: nowrap;
 }
-.memberimg {
-  width: 200px;
-  height: 100px;
-  border-radius: 7px;
-  margin-left: 20px;
+
+.membername {
+  color: black;
 }
-.singledetails {
+
+.memberemail1,
+.listItemParent {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  box-sizing: border-box;
+}
+
+.listItemParent {
+  align-self: stretch;
+  flex-direction: row;
+  padding: 0 var(--padding-12xs) 0 0;
+  gap: var(--gap-43xl);
+  max-width: 100%;
+}
+
+.listItemChild,
+.rectangle {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.rectangle {
+  width: 186px;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0 0 var(--padding-7xs);
+  box-sizing: border-box;
+}
+
+.listItemChild {
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--gap-37xl);
+  max-width: 100%;
+}
+
+.tableHeader1 {
+  width: 146px;
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: space-between;
+  padding: 0 var(--padding-5xs) 0 0;
+  box-sizing: border-box;
+  gap: var(--gap-xl);
 }
-.singledetails p {
-  margin-bottom: -5px;
+
+.memberimg {
+  height: 42px;
+  width: 47px;
+  position: relative;
+  border-radius: var(--br-7xl);
+  background-color: var(--color-mediumseagreen-400);
 }
-.singledetails_data_left {
-  margin-top: 10px;
-  margin-left: 10px;
-  color: #707070;
+
+.memberdateParent {
+  width: 159px;
+  flex-direction: column;
+  padding: var(--padding-8xs) 0 0;
 }
-.singledetails_data_right {
-  justify-content: right;
-  margin-top: 10px;
-  text-align: right;
-  color: #707070;
-}
-.membername {
-  font-size: 16px;
-  font-weight: bold;
-}
-.memberfont {
-  margin-top: 3px;
-}
-.memberfont > span {
-  width: 80%;
-}
-.memberfontcreated {
-  margin-top: 18px;
-}
-.memberfontcreatedbtn {
-  margin-top: 33px;
-  border-radius: 7px;
-  border-color: #31bb6b;
-  background-color: #31bb6b;
-  color: white;
-  padding-right: 10px;
-  padding-left: 10px;
-  justify-content: flex-end;
-  float: right;
-  text-align: right;
-  box-shadow: none;
-}
-#grid_wrapper {
-  align-items: left;
-}
-.peoplelistdiv {
-  margin-right: 50px;
-}
-@media only screen and (max-width: 600px) {
-  .singledetails {
-    margin-left: 20px;
-  }
-  .memberimg {
-    margin: auto;
-  }
-  .singledetails_data_right {
-    margin-right: -52px;
-  }
-  .singledetails_data_left {
-    margin-left: 0px;
-  }
+
+.memberJoinDate {
+  align-self: stretch;
+  position: relative;
+  white-space: nowrap;
+  margin-bottom: 0;
+  margin-top: 8px;
 }

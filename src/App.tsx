@@ -22,6 +22,7 @@ import BlockUser from 'screens/BlockUser/BlockUser';
 import EventDashboard from 'screens/EventDashboard/EventDashboard';
 import MemberDetail from 'screens/MemberDetail/MemberDetail';
 import Loader from 'components/Loader/Loader';
+import './global.css';
 
 // User Portal Components
 import UserLoginPage from 'screens/UserPortal/UserLoginPage/UserLoginPage';
