@@ -164,7 +164,7 @@ const leftDrawerEvent = ({
                 <img src={userImage} alt={`Profile Picture`} />
               ) : (
                 <img
-                  src={`https://api.dicebear.com/5.x/initials/svg?seed=${firstName}%20${lastName}`}
+                  src={`https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`}
                   alt={`Dummy User Picture`}
                 />
               )}

@@ -154,7 +154,7 @@ const leftDrawer = ({
                   <img src={userImage} alt={`profile picture`} />
                 ) : (
                   <img
-                    src={`https://api.dicebear.com/5.x/initials/svg?seed=${firstName}%20${lastName}`}
+                    src={`https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`}
                     alt={`dummy picture`}
                   />
                 )}
