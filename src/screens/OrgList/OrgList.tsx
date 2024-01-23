@@ -35,15 +35,14 @@ function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
   const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
   const [dialogRedirectOrgId, setDialogRedirectOrgId] = useState('<ORG_ID>');
-
-  const { getItem } = useLocalStorage();
-
   /* eslint-disable @typescript-eslint/explicit-function-return-type */
   function openDialogModal(redirectOrgId: string) {
     setDialogRedirectOrgId(redirectOrgId);
     // console.log(redirectOrgId, dialogRedirectOrgId);
     setdialogModalIsOpen(true);
   }
+
+  const { getItem } = useLocalStorage();
 
   /* eslint-disable @typescript-eslint/explicit-function-return-type */
   function closeDialogModal() {
@@ -513,53 +512,40 @@ function orgList(): JSX.Element {
         />
         {/* Plugin Notification Modal after Org is Created */}
         <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
+          <Modal.Header
+            className="bg-primary"
+            closeButton
+            data-testid="pluginNotificationHeader"
+          >
+            <Modal.Title className="text-white">
+              {t('manageFeatures')}
+            </Modal.Title>
+          </Modal.Header>
           <Modal.Body>
             <section id={styles.grid_wrapper}>
               <div>
-                <div className={styles.flexdir}>
-                  <p className={styles.titlemodal}>{t('manageFeatures')}</p>
-                  <a
-                    onClick={toggleDialogModal}
-                    className={styles.cancel}
-                    data-testid="closeOrganizationModal"
-                  >
-                    <i
-                      className="fa fa-times"
-                      style={{
-                        cursor: 'pointer',
-                      }}
-                    ></i>
-                  </a>
-                  <Button
-                    variant="secondary"
-                    onClick={toggleModal}
-                    data-testid="cancelOrganizationModal"
-                  >
-                    {t('cancel')}
-                  </Button>
-                </div>
                 <h4 className={styles.titlemodaldialog}>
                   {t('manageFeaturesInfo')}
                 </h4>
 
                 <div className={styles.pluginStoreBtnContainer}>
                   <Link
-                    className={styles.secondbtn}
+                    className={`btn btn-primary ${styles.pluginStoreBtn}`}
                     data-testid="goToStore"
                     to={`orgstore/id=${dialogRedirectOrgId}`}
                   >
                     {t('goToStore')}
                   </Link>
                   {/* </button> */}
-                  <button
+                  <Button
                     type="submit"
-                    className={styles.greenregbtn}
+                    className={styles.enableEverythingBtn}
                     onClick={closeDialogModal}
                     value="invite"
                     data-testid="enableEverythingForm"
                   >
                     {t('enableEverything')}
-                  </button>
+                  </Button>
                 </div>
               </div>
             </section>

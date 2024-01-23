@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/ContriStats/ContriStats.tsx:14](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/components/ContriStats/ContriStats.tsx#L14)
+[src/components/ContriStats/ContriStats.tsx:14](https://github.com/palisadoes/talawa-admin/blob/5828937/src/components/ContriStats/ContriStats.tsx#L14)
