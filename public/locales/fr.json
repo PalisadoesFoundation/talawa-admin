@@ -351,6 +351,8 @@
     "yes": "Oui",
     "editPost": "Modifier la publication",
     "postTitle": "Titre",
+    "postTitle1": "Modifier le titre du message",
+    "information1": "Modifier les informations du message",
     "information": "Informations",
     "image": "Image",
     "video": "Vidéo",
