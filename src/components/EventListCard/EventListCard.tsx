@@ -376,50 +376,54 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                 </div>
               </div>
             )}
-            <div className={styles.checkboxdiv}>
-              <div className={styles.dispflex}>
-                <label htmlFor="allday">{t('allDay')}?</label>
-                <Form.Switch
-                  id="allday"
-                  type="checkbox"
-                  data-testid="updateAllDay"
-                  checked={alldaychecked}
-                  onChange={(): void => setAllDayChecked(!alldaychecked)}
-                />
+            <div className={styles.checkboxContainer}>
+              <div className={styles.checkboxdiv}>
+                <div className={styles.dispflex}>
+                  <label htmlFor="allday">{t('allDay')}?</label>
+                  <Form.Switch
+                    id="allday"
+                    type="checkbox"
+                    data-testid="updateAllDay"
+                    checked={alldaychecked}
+                    onChange={(): void => setAllDayChecked(!alldaychecked)}
+                  />
+                </div>
+                <div className={styles.dispflex}>
+                  <label htmlFor="recurring">{t('recurringEvent')}:</label>
+                  <Form.Switch
+                    id="recurring"
+                    type="checkbox"
+                    data-testid="updateRecurring"
+                    checked={recurringchecked}
+                    onChange={(): void =>
+                      setRecurringChecked(!recurringchecked)
+                    }
+                  />
+                </div>
               </div>
-              <div className={styles.dispflex}>
-                <label htmlFor="recurring">{t('recurringEvent')}:</label>
-                <Form.Switch
-                  id="recurring"
-                  type="checkbox"
-                  data-testid="updateRecurring"
-                  checked={recurringchecked}
-                  onChange={(): void => setRecurringChecked(!recurringchecked)}
-                />
-              </div>
-            </div>
-            <div className={styles.checkboxdiv}>
-              <div className={styles.dispflex}>
-                <label htmlFor="ispublic">{t('isPublic')}?</label>
-                <Form.Switch
-                  id="ispublic"
-                  type="checkbox"
-                  data-testid="updateIsPublic"
-                  checked={publicchecked}
-                  onChange={(): void => setPublicChecked(!publicchecked)}
-                />
-              </div>
-              <div className={styles.dispflex}>
-                <label htmlFor="registrable">{t('isRegistrable')}?</label>
-                <Form.Switch
-                  id="registrable"
-                  type="checkbox"
-                  data-testid="updateRegistrable"
-                  checked={registrablechecked}
-                  onChange={(): void =>
-                    setRegistrableChecked(!registrablechecked)
-                  }
-                />
+              <div className={styles.checkboxdiv}>
+                <div className={styles.dispflex}>
+                  <label htmlFor="ispublic">{t('isPublic')}?</label>
+                  <Form.Switch
+                    id="ispublic"
+                    type="checkbox"
+                    data-testid="updateIsPublic"
+                    checked={publicchecked}
+                    onChange={(): void => setPublicChecked(!publicchecked)}
+                  />
+                </div>
+                <div className={styles.dispflex}>
+                  <label htmlFor="registrable">{t('isRegistrable')}?</label>
+                  <Form.Switch
+                    id="registrable"
+                    type="checkbox"
+                    data-testid="updateRegistrable"
+                    checked={registrablechecked}
+                    onChange={(): void =>
+                      setRegistrableChecked(!registrablechecked)
+                    }
+                  />
+                </div>
               </div>
             </div>
           </Modal.Body>
