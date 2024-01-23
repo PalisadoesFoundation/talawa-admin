@@ -447,7 +447,7 @@ export const UPDATE_ADVERTISEMENT_MUTATION = gql`
   mutation UpdateAdvertisement(
     $id: ID!
     $name: String
-    $file: URL
+    $file: String
     $type: AdvertisementType
     $startDate: Date
     $endDate: Date
