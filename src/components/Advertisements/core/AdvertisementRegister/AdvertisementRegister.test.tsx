@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  render,
-  fireEvent,
-  waitFor,
-  screen,
-  getByTestId,
-} from '@testing-library/react';
+import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 
 import {
   ApolloClient,
@@ -79,7 +73,7 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 
 const translations = JSON.parse(
   // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-  JSON.stringify(i18n.getDataByLanguage('en')?.translation.advertisement!),
+  JSON.stringify(i18n.getDataByLanguage('en')?.translation.advertisement!)
 );
 
 describe('Testing Advertisement Register Component', () => {
@@ -121,7 +115,7 @@ describe('Testing Advertisement Register Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>,
+      </ApolloProvider>
     );
     await waitFor(() => {
       expect(getByText(translations.addNew)).toBeInTheDocument();
@@ -148,7 +142,7 @@ describe('Testing Advertisement Register Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>,
+      </ApolloProvider>
     );
     await waitFor(() => {
       expect(screen.getByTestId('editBtn')).toBeInTheDocument();
@@ -174,7 +168,7 @@ describe('Testing Advertisement Register Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>,
+      </ApolloProvider>
     );
     await waitFor(() => {
       fireEvent.click(getByText(translations.addNew));
@@ -206,7 +200,7 @@ describe('Testing Advertisement Register Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await waitFor(async () => {
@@ -217,7 +211,7 @@ describe('Testing Advertisement Register Component', () => {
         target: { value: 'Test Advertisement' },
       });
       expect(getByLabelText(translations.Rname)).toHaveValue(
-        'Test Advertisement',
+        'Test Advertisement'
       );
 
       const mediaFile = new File(['media content'], 'test.png', {
@@ -252,7 +246,7 @@ describe('Testing Advertisement Register Component', () => {
       fireEvent.click(getByText(translations.register));
 
       expect(toast.success).toBeCalledWith(
-        'Advertisement created successfully',
+        'Advertisement created successfully'
       );
       expect(setTimeoutSpy).toHaveBeenCalled();
     });
@@ -282,7 +276,7 @@ describe('Testing Advertisement Register Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await waitFor(async () => {
@@ -295,7 +289,7 @@ describe('Testing Advertisement Register Component', () => {
       });
 
       expect(getByLabelText(translations.Rname)).toHaveValue(
-        'Updated Advertisement',
+        'Updated Advertisement'
       );
 
       const mediaFile = new File(['media content'], 'test.png', {
@@ -354,7 +348,7 @@ describe('Testing Advertisement Register Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     fireEvent.click(getByText(translations.addNew));
@@ -363,7 +357,7 @@ describe('Testing Advertisement Register Component', () => {
     fireEvent.click(getByText(translations.register));
     await waitFor(() => {
       expect(toast.error).toBeCalledWith(
-        'An error occured, could not create new advertisement',
+        'An error occured, could not create new advertisement'
       );
     });
   });
@@ -387,7 +381,7 @@ describe('Testing Advertisement Register Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     fireEvent.click(screen.getByText(translations.addNew));
