@@ -29,7 +29,7 @@
 
 #### Defined in
 
-[src/screens/MemberDetail/MemberDetail.tsx:23](https://github.com/chandel-aman/talawa-admin/blob/97994b9/src/screens/MemberDetail/MemberDetail.tsx#L23)
+[src/screens/MemberDetail/MemberDetail.tsx:23](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/screens/MemberDetail/MemberDetail.tsx#L23)
 
 ___
 
@@ -49,7 +49,7 @@ ___
 
 #### Defined in
 
-[src/screens/MemberDetail/MemberDetail.tsx:296](https://github.com/chandel-aman/talawa-admin/blob/97994b9/src/screens/MemberDetail/MemberDetail.tsx#L296)
+[src/screens/MemberDetail/MemberDetail.tsx:296](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/screens/MemberDetail/MemberDetail.tsx#L296)
 
 ___
 
@@ -69,4 +69,4 @@ ___
 
 #### Defined in
 
-[src/screens/MemberDetail/MemberDetail.tsx:288](https://github.com/chandel-aman/talawa-admin/blob/97994b9/src/screens/MemberDetail/MemberDetail.tsx#L288)
+[src/screens/MemberDetail/MemberDetail.tsx:288](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/screens/MemberDetail/MemberDetail.tsx#L288)

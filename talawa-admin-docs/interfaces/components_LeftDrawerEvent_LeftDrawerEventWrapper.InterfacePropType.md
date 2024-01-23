@@ -10,6 +10,7 @@
 
 - [children](components_LeftDrawerEvent_LeftDrawerEventWrapper.InterfacePropType.md#children)
 - [event](components_LeftDrawerEvent_LeftDrawerEventWrapper.InterfacePropType.md#event)
+- [setShowAddEventProjectModal](components_LeftDrawerEvent_LeftDrawerEventWrapper.InterfacePropType.md#setshowaddeventprojectmodal)
 
 ## Properties
 
@@ -19,7 +20,7 @@
 
 #### Defined in
 
-[src/components/LeftDrawerEvent/LeftDrawerEventWrapper.tsx:15](https://github.com/chandel-aman/talawa-admin/blob/97994b9/src/components/LeftDrawerEvent/LeftDrawerEventWrapper.tsx#L15)
+[src/components/LeftDrawerEvent/LeftDrawerEventWrapper.tsx:16](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/components/LeftDrawerEvent/LeftDrawerEventWrapper.tsx#L16)
 
 ___
 
@@ -39,4 +40,14 @@ ___
 
 #### Defined in
 
-[src/components/LeftDrawerEvent/LeftDrawerEventWrapper.tsx:7](https://github.com/chandel-aman/talawa-admin/blob/97994b9/src/components/LeftDrawerEvent/LeftDrawerEventWrapper.tsx#L7)
+[src/components/LeftDrawerEvent/LeftDrawerEventWrapper.tsx:7](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/components/LeftDrawerEvent/LeftDrawerEventWrapper.tsx#L7)
+
+___
+
+### setShowAddEventProjectModal
+
+• **setShowAddEventProjectModal**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
+
+#### Defined in
+
+[src/components/LeftDrawerEvent/LeftDrawerEventWrapper.tsx:15](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/components/LeftDrawerEvent/LeftDrawerEventWrapper.tsx#L15)

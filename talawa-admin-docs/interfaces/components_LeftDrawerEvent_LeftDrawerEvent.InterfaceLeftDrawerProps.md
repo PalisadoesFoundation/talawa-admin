@@ -11,6 +11,7 @@
 - [event](components_LeftDrawerEvent_LeftDrawerEvent.InterfaceLeftDrawerProps.md#event)
 - [hideDrawer](components_LeftDrawerEvent_LeftDrawerEvent.InterfaceLeftDrawerProps.md#hidedrawer)
 - [setHideDrawer](components_LeftDrawerEvent_LeftDrawerEvent.InterfaceLeftDrawerProps.md#sethidedrawer)
+- [setShowAddEventProjectModal](components_LeftDrawerEvent_LeftDrawerEvent.InterfaceLeftDrawerProps.md#setshowaddeventprojectmodal)
 
 ## Properties
 
@@ -30,7 +31,7 @@
 
 #### Defined in
 
-[src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:16](https://github.com/chandel-aman/talawa-admin/blob/97994b9/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L16)
+[src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:16](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L16)
 
 ___
 
@@ -40,7 +41,7 @@ ___
 
 #### Defined in
 
-[src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:24](https://github.com/chandel-aman/talawa-admin/blob/97994b9/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L24)
+[src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:24](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L24)
 
 ___
 
@@ -50,4 +51,14 @@ ___
 
 #### Defined in
 
-[src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:25](https://github.com/chandel-aman/talawa-admin/blob/97994b9/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L25)
+[src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:25](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L25)
+
+___
+
+### setShowAddEventProjectModal
+
+• **setShowAddEventProjectModal**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
+
+#### Defined in
+
+[src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:26](https://github.com/disha1202/talawa-admin/blob/6c7f6a1/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L26)
