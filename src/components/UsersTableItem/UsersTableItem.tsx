@@ -317,7 +317,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             {org.name}
                           </Button>
                         </td>
-                        <td>{org.address.city}</td>
+                        {org.address && <td>{org.address.city}</td>}
                         <td>{dayjs(org.createdAt).format('DD-MM-YYYY')}</td>
                         <td>
                           <Button
@@ -494,7 +494,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             {org.name}
                           </Button>
                         </td>
-                        <td>{org.address.city}</td>
+                        {org.address && <td>{org.address.city}</td>}
                         <td>{dayjs(org.createdAt).format('DD-MM-YYYY')}</td>
                         <td>
                           <Button

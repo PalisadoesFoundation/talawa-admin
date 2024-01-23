@@ -34,7 +34,16 @@ export const ORGANIZATION_LIST = gql`
         _id
       }
       createdAt
-      address
+      address {
+        city
+        countryCode
+        dependentLocality
+        line1
+        line2
+        postalCode
+        sortingCode
+        state
+      }
     }
   }
 `;
@@ -112,7 +121,16 @@ export const USER_LIST = gql`
         _id
         name
         image
-        address
+        address {
+          city
+          countryCode
+          dependentLocality
+          line1
+          line2
+          postalCode
+          sortingCode
+          state
+        }
         createdAt
         creator {
           _id
@@ -127,7 +145,16 @@ export const USER_LIST = gql`
         _id
         name
         image
-        address
+        address {
+          city
+          countryCode
+          dependentLocality
+          line1
+          line2
+          postalCode
+          sortingCode
+          state
+        }
         createdAt
         creator {
           _id
