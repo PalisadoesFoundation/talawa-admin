@@ -81,7 +81,7 @@ Make sure you have read the [Documentation for Setting up the Project](https://g
 The process of proposing a change to Talawa Admin can be summarized as:
 
 1. Fork the Talawa Admin repository and branch off `develop`.
-1. The repository can be cloned locally using `git clone <forked repo url>`.
+1. Your newly forked repository can be cloned locally using `git clone <YOUR FORKED REPO URL>`.
 1. Make the desired changes to the Talawa Admin project.
 1. Run the app and test your changes.
 1. If you've added code, then test suites must be added. 
