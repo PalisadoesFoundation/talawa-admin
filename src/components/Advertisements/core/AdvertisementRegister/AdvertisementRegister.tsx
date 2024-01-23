@@ -7,6 +7,7 @@ import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
+import { isValidLink } from 'utils/linkValidation';
 
 interface InterfaceAddOnRegisterProps {
   id?: string; // OrgId
@@ -45,6 +46,10 @@ function advertisementRegister({
   });
   const handleRegister = async (): Promise<void> => {
     try {
+      if (!isValidLink(formState.link)) {
+        toast.error('Enter a valid link for the content to be displayed');
+        return;
+      }
       console.log('At handle register', formState);
       const { data } = await create({
         variables: {
