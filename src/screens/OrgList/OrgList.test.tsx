@@ -276,7 +276,9 @@ describe('Organisations Page testing as SuperAdmin', () => {
       ).toBeInTheDocument()
     );
     await screen.findByTestId(/pluginNotificationHeader/i);
+    await screen.findByTestId(/pluginNotificationHeader/i);
     userEvent.click(screen.getByTestId(/enableEverythingForm/i));
+    userEvent.click(screen.getByTestId(/goToStore/i));
     userEvent.click(screen.getByTestId(/goToStore/i));
   });
 
