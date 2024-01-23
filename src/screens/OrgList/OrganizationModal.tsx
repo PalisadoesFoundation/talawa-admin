@@ -132,72 +132,94 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             }}
           />
           <Form.Label>{t('address')}</Form.Label>
-          <Form.Control
-            className="mb-4"
-            placeholder={t('city')}
-            autoComplete="off"
-            required
-            value={formState.address.city}
-            onChange={(e) => handleInputChange('city', e.target.value)}
-          />
-          <Form.Control
-            className="mb-4"
-            placeholder={t('countryCode')}
-            autoComplete="off"
-            required
-            value={formState.address.countryCode}
-            onChange={(e) => handleInputChange('countryCode', e.target.value)}
-          />
-          <Form.Control
-            className="mb-4"
-            placeholder={t('dependentLocality')}
-            autoComplete="off"
-            required
-            value={formState.address.dependentLocality}
-            onChange={(e) =>
-              handleInputChange('dependentLocality', e.target.value)
-            }
-          />
-          <Form.Control
-            className="mb-4"
-            placeholder={t('line1')}
-            autoComplete="off"
-            required
-            value={formState.address.line1}
-            onChange={(e) => handleInputChange('line1', e.target.value)}
-          />
-          <Form.Control
-            className="mb-4"
-            placeholder={t('line2')}
-            autoComplete="off"
-            required
-            value={formState.address.line2}
-            onChange={(e) => handleInputChange('line2', e.target.value)}
-          />
-          <Form.Control
-            className="mb-4"
-            placeholder={t('postalCode')}
-            autoComplete="off"
-            required
-            value={formState.address.postalCode}
-            onChange={(e) => handleInputChange('postalCode', e.target.value)}
-          />
-          <Form.Control
-            className="mb-4"
-            placeholder={t('sortingCode')}
-            autoComplete="off"
-            required
-            value={formState.address.sortingCode}
-            onChange={(e) => handleInputChange('sortingCode', e.target.value)}
-          />
-          <Form.Control
-            className="mb-4"
-            placeholder={t('state')}
-            autoComplete="off"
-            required
-            value={formState.address.state}
-            onChange={(e) => handleInputChange('state', e.target.value)}
-          />
+          <Row className="mb-1">
+            <Col sm={6} className="mb-3">
+              <Form.Control
+                placeholder={t('countryCode')}
+                autoComplete="off"
+                required
+                value={formState.address.countryCode}
+                onChange={(e) =>
+                  handleInputChange('countryCode', e.target.value)
+                }
+              />
+            </Col>
+            <Col sm={6} className="mb-3">
+              <Form.Control
+                placeholder={t('city')}
+                autoComplete="off"
+                required
+                value={formState.address.city}
+                onChange={(e) => handleInputChange('city', e.target.value)}
+              />
+            </Col>
+          </Row>
+          <Row className="mb-1">
+            <Col sm={6} className="mb-3">
+              <Form.Control
+                placeholder={t('state')}
+                autoComplete="off"
+                required
+                value={formState.address.state}
+                onChange={(e) => handleInputChange('state', e.target.value)}
+              />
+            </Col>
+            <Col sm={6} className="mb-3">
+              <Form.Control
+                placeholder={t('dependentLocality')}
+                autoComplete="off"
+                required
+                value={formState.address.dependentLocality}
+                onChange={(e) =>
+                  handleInputChange('dependentLocality', e.target.value)
+                }
+              />
+            </Col>
+          </Row>
+          <Row className="mb-3">
+            <Col sm={6} className="mb-1">
+              <Form.Control
+                placeholder={t('line1')}
+                autoComplete="off"
+                required
+                value={formState.address.line1}
+                onChange={(e) => handleInputChange('line1', e.target.value)}
+              />
+            </Col>
+            <Col sm={6} className="mb-1">
+              <Form.Control
+                placeholder={t('line2')}
+                autoComplete="off"
+                required
+                value={formState.address.line2}
+                onChange={(e) => handleInputChange('line2', e.target.value)}
+              />
+            </Col>
+          </Row>
+          <Row className="mb-1">
+            <Col sm={6} className="mb-1">
+              <Form.Control
+                placeholder={t('postalCode')}
+                autoComplete="off"
+                required
+                value={formState.address.postalCode}
+                onChange={(e) =>
+                  handleInputChange('postalCode', e.target.value)
+                }
+              />
+            </Col>
+            <Col sm={6} className="mb-1">
+              <Form.Control
+                placeholder={t('sortingCode')}
+                autoComplete="off"
+                required
+                value={formState.address.sortingCode}
+                onChange={(e) =>
+                  handleInputChange('sortingCode', e.target.value)
+                }
+              />
+            </Col>
+          </Row>
           <Row className="mb-3">
             <Col>
               <Form.Label htmlFor="userRegistrationRequired">

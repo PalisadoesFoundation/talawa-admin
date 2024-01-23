@@ -262,7 +262,7 @@ export const ORGANIZATIONS_LIST = gql`
       name
       description
       address {
-        city: String
+        city
         countryCode
         dependentLocality
         line1
