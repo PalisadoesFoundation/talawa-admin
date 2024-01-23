@@ -512,7 +512,7 @@ export default function OrgPostCard(
               data-testid="updateText"
               required
             />
-            {props.postPhoto && (
+            {!props.postPhoto && (
               <>
                 <Form.Label htmlFor="postPhoto">{t('image')}</Form.Label>
                 <Form.Control
@@ -561,7 +561,7 @@ export default function OrgPostCard(
                 )}
               </>
             )}
-            {props.postVideo && (
+            {!props.postVideo && (
               <>
                 <Form.Label htmlFor="postvideo">{t('video')}</Form.Label>
                 <Form.Control
