@@ -208,6 +208,45 @@ describe('Testing Organization Post Card', () => {
     fireEvent.change(getByTestId('updateText'), {
       target: { value: 'This is a updated text' },
     });
+    const postVideoUrlInput = screen.queryByTestId('postVideoUrl');
+    if (postVideoUrlInput) {
+      fireEvent.change(getByTestId('postVideoUrl'), {
+        target: { value: 'This is a updated video' },
+      });
+      userEvent.click(screen.getByPlaceholderText(/video/i));
+      const input = getByTestId('postVideoUrl');
+      const file = new File(['test-video'], 'test.mp4', { type: 'video/mp4' });
+      Object.defineProperty(input, 'files', {
+        value: [file],
+      });
+      fireEvent.change(input);
+      await waitFor(() => {
+        convertToBase64(file);
+      });
+
+      userEvent.click(screen.getByTestId('closePreview'));
+    }
+    const imageUrlInput = screen.queryByTestId('postImageUrl');
+    if (imageUrlInput) {
+      fireEvent.change(getByTestId('postImageUrl'), {
+        target: { value: 'This is a updated image' },
+      });
+      userEvent.click(screen.getByPlaceholderText(/image/i));
+      const input = getByTestId('postImageUrl');
+      const file = new File(['test-image'], 'test.jpg', { type: 'image/jpeg' });
+      Object.defineProperty(input, 'files', {
+        value: [file],
+      });
+      fireEvent.change(input);
+
+      // Simulate the asynchronous base64 conversion function
+      await waitFor(() => {
+        convertToBase64(file); // Replace with the expected base64-encoded image
+      });
+      document.getElementById = jest.fn(() => input);
+      const clearImageButton = getByTestId('closeimage');
+      fireEvent.click(clearImageButton);
+    }
     userEvent.click(screen.getByTestId('updatePostBtn'));
 
     await waitFor(
@@ -442,7 +481,7 @@ describe('Testing Organization Post Card', () => {
 
     userEvent.click(screen.getByTestId('editPostModalBtn'));
 
-    const imageUrlInput = screen.queryByTestId('postVideoUrl');
+    const imageUrlInput = screen.queryByTestId('postImageUrl');
 
     if (imageUrlInput) {
       fireEvent.change(getByTestId('postImageUrl'), {
