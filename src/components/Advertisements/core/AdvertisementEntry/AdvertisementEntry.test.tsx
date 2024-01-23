@@ -54,16 +54,18 @@ describe('Testing Advertisement Entry Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <AdvertisementEntry
-                endDate={new Date()}
-                startDate={new Date()}
-                id="1"
-                key={1}
-                mediaUrl="data:videos"
-                name="Advert1"
-                organizationId="1"
-                type="POPUP"
-              />
+              {
+                <AdvertisementEntry
+                  endDate={new Date()}
+                  startDate={new Date()}
+                  id="1"
+                  key={1}
+                  mediaUrl="data:videos"
+                  name="Advert1"
+                  organizationId="1"
+                  type="POPUP"
+                />
+              }
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
@@ -131,7 +133,7 @@ describe('Testing Advertisement Entry Component', () => {
                 startDate={new Date()}
                 id="1"
                 key={1}
-                mediaUrl="google.com"
+                mediaUrl=""
                 name="Advert1"
                 organizationId="1"
                 type="POPUP"
@@ -173,7 +175,7 @@ describe('Testing Advertisement Entry Component', () => {
           advertisement: {
             _id: '1',
             name: 'Updated Advertisement',
-            mediaUrl: 'google.com',
+            mediaUrl: '',
             startDate: dayjs(new Date()).add(1, 'day').format('YYYY-MM-DD'),
             endDate: dayjs(new Date()).add(2, 'days').format('YYYY-MM-DD'),
             type: 'BANNER',
@@ -196,7 +198,7 @@ describe('Testing Advertisement Entry Component', () => {
                   type="POPUP"
                   name="Advert1"
                   organizationId="1"
-                  mediaUrl="google.com"
+                  mediaUrl=""
                   id="1"
                 />
               }
@@ -218,13 +220,6 @@ describe('Testing Advertisement Entry Component', () => {
       'Updated Advertisement'
     );
 
-    fireEvent.change(screen.getByLabelText(translations.Rlink), {
-      target: { value: 'http://example.com' },
-    });
-    expect(screen.getByLabelText(translations.Rlink)).toHaveValue(
-      'http://example.com'
-    );
-
     fireEvent.change(screen.getByLabelText(translations.Rtype), {
       target: { value: 'BANNER' },
     });
@@ -244,7 +239,6 @@ describe('Testing Advertisement Entry Component', () => {
       variables: {
         id: '1',
         name: 'Updated Advertisement',
-        link: 'http://example.com',
         type: 'BANNER',
         startDate: dayjs().add(1, 'day').format('YYYY-MM-DD'),
         endDate: dayjs().add(2, 'days').format('YYYY-MM-DD'),
@@ -275,7 +269,7 @@ describe('Testing Advertisement Entry Component', () => {
                   type="POPUP"
                   name="Advert1"
                   organizationId="1"
-                  mediaUrl="google.com"
+                  mediaUrl=""
                   id="1"
                 />
               }
@@ -332,7 +326,7 @@ describe('Testing Advertisement Entry Component', () => {
                   startDateEdit={new Date()}
                   typeEdit="POPUP"
                   organizationId="1"
-                  advertisementMediaEdit="google.com"
+                  advertisementMediaEdit=""
                 />
               }
             </I18nextProvider>
@@ -343,19 +337,11 @@ describe('Testing Advertisement Entry Component', () => {
 
     fireEvent.click(screen.getByTestId('editBtn'));
 
-    fireEvent.change(screen.getByLabelText(translations.Rlink), {
-      target: { value: 'http://example.com' },
-    });
-    expect(screen.getByLabelText(translations.Rlink)).toHaveValue(
-      'http://example.com'
-    );
-
     fireEvent.click(screen.getByTestId('addonupdate'));
 
     expect(updateAdByIdMock).toHaveBeenCalledWith({
       variables: {
         id: '-100',
-        link: 'http://example.com',
       },
     });
   });
@@ -400,13 +386,6 @@ describe('Testing Advertisement Entry Component', () => {
       'Updated Advertisement'
     );
 
-    fireEvent.change(screen.getByLabelText(translations.Rlink), {
-      target: { value: 'http://example.com' },
-    });
-    expect(screen.getByLabelText(translations.Rlink)).toHaveValue(
-      'http://example.com'
-    );
-
     fireEvent.change(screen.getByLabelText(translations.Rtype), {
       target: { value: 'BANNER' },
     });
@@ -432,7 +411,7 @@ describe('Testing Advertisement Entry Component', () => {
       variables: {
         organizationId: '1',
         name: 'Updated Advertisement',
-        link: 'http://example.com',
+        file: '',
         type: 'BANNER',
         startDate: dayjs(new Date('2023-01-01')).format('YYYY-MM-DD'),
         endDate: dayjs(new Date('2023-02-01')).format('YYYY-MM-DD'),

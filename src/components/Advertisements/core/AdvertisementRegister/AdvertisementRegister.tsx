@@ -33,19 +33,13 @@ interface InterfaceFormStateTypes {
   endDate: Date;
   organizationId: string;
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function advertisementRegister({
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  createdBy,
   formStatus,
   idEdit,
   nameEdit,
   typeEdit,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  orgIdEdit,
   advertisementMediaEdit,
   endDateEdit,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   startDateEdit,
 }: InterfaceAddOnRegisterProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+import { render, fireEvent, waitFor, screen, getByTestId } from '@testing-library/react';
 
 import {
   ApolloClient,
@@ -24,6 +24,7 @@ import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import userEvent from '@testing-library/user-event';
+import AdvertisementEntry from '../AdvertisementEntry/AdvertisementEntry';
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -247,6 +248,81 @@ describe('Testing Advertisement Register Component', () => {
       expect(toast.success).toBeCalledWith(
         'Advertisement created successfully'
       );
+      expect(setTimeoutSpy).toHaveBeenCalled();
+    });
+
+    expect(queryByText(translations.close)).not.toBeInTheDocument();
+  });
+
+  test('advertisement update', async () => {
+    const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
+
+    const { getByLabelText, queryByText } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              {
+                <AdvertisementEntry
+                  endDate={new Date()}
+                  startDate={new Date()}
+                  type="POPUP"
+                  name="Advert1"
+                  organizationId="1"
+                  mediaUrl=""
+                  id="1"
+                />
+              }
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>
+    );
+
+    await waitFor(async () => {
+      const optionsButton = screen.getByTestId('moreiconbtn');
+      fireEvent.click(optionsButton);
+      fireEvent.click(screen.getByTestId('editBtn'));
+
+      fireEvent.change(screen.getByLabelText('Enter name of Advertisement'), {
+        target: { value: 'Updated Advertisement' },
+      });
+
+      expect(getByLabelText(translations.Rname)).toHaveValue(
+        'Updated Advertisement'
+      );
+
+      const mediaFile = new File(['media content'], 'test.png', {
+        type: 'image/png',
+      });
+
+      const mediaInput = getByLabelText(translations.Rmedia);
+      fireEvent.change(mediaInput, {
+        target: {
+          files: [mediaFile],
+        },
+      });
+
+      const mediaPreview = await screen.findByTestId('mediaPreview');
+      expect(mediaPreview).toBeInTheDocument();
+
+      fireEvent.change(getByLabelText(translations.Rtype), {
+        target: { value: 'BANNER' },
+      });
+      expect(getByLabelText(translations.Rtype)).toHaveValue('BANNER');
+
+      fireEvent.change(getByLabelText(translations.RstartDate), {
+        target: { value: '2023-01-01' },
+      });
+      expect(getByLabelText(translations.RstartDate)).toHaveValue('2023-01-01');
+
+      fireEvent.change(getByLabelText(translations.RendDate), {
+        target: { value: '2023-02-01' },
+      });
+      expect(getByLabelText(translations.RendDate)).toHaveValue('2023-02-01');
+
+      fireEvent.click(screen.getByTestId('addonupdate'));
+
       expect(setTimeoutSpy).toHaveBeenCalled();
     });
 
