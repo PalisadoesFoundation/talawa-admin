@@ -407,7 +407,6 @@ describe('Testing Organization Post Card', () => {
     userEvent.click(screen.getByTestId('moreiconbtn'));
 
     userEvent.click(screen.getByTestId('editPostModalBtn'));
-    userEvent.click(screen.getByTestId('closePreview'));
 
     fireEvent.change(getByTestId('postVideoUrl'), {
       target: { value: '' },
@@ -422,6 +421,8 @@ describe('Testing Organization Post Card', () => {
     await waitFor(() => {
       convertToBase64(file);
     });
+
+    userEvent.click(screen.getByTestId('closePreview'));
   });
   test('clears postimage state and resets file input value', async () => {
     const { getByTestId } = render(
