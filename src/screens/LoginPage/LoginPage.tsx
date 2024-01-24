@@ -114,7 +114,7 @@ function loginPage({ role = 'user' }: InterfaceComponentProps): JSX.Element {
     if (isLoggedIn == 'TRUE') {
       role === 'admin'
         ? history.push('/orglist')
-        : history.push('/user/organizations/');
+        : history.push('/user/organizations');
     }
     setComponentLoader(false);
   }, []);
