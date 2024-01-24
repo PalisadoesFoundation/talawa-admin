@@ -43,19 +43,21 @@
   flex-direction: row;
   align-items: flex-end;
   border-right: 1px solid #8d8d8d55;
-  width: 50px;
+  width: 40px;
 }
 .calendar_hour_text {
   top: 20px;
   left: -5px;
   position: relative;
+  color: #707070;
+  font-size: 12px;
 }
 .calendar_hour_block {
   display: flex;
   flex-direction: row;
   border-bottom: 1px solid #8d8d8d55;
   position: relative;
-  height: 70px;
+  height: 50px;
   border-bottom-right-radius: 5px;
 }
 .event_list_parent {
@@ -116,6 +118,7 @@
   transition: all 200ms;
   position: relative;
   display: block;
+  margin: 2px;
 }
 .btn__more:hover {
   color: #3ce080;
@@ -127,6 +130,12 @@
 .list_container {
   padding: 5px;
   width: fit-content;
+  display: flex;
+  flex-direction: row;
+}
+.event_list_hour {
+  display: flex;
+  flex-direction: row;
 }
 .expand_list_container {
   width: 200px;

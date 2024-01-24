@@ -77,7 +77,30 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     'November',
     'December',
   ];
-  const hours = Array.from({ length: 24 }, (_, index) => index);
+  const hours = [
+    '12 AM',
+    '01 AM',
+    '02 AM',
+    '03 AM',
+    '04 AM',
+    '05 AM',
+    '06 AM',
+    '07 AM',
+    '09 AM',
+    '10 AM',
+    '11 AM',
+    '12 PM',
+    '01 PM',
+    '02 PM',
+    '03 PM',
+    '04 PM',
+    '05 PM',
+    '06 PM',
+    '07 PM',
+    '09 PM',
+    '10 PM',
+    '11 PM',
+  ];
 
   const today = new Date();
   const [currentDate, setCurrentDate] = useState(today.getDate());
@@ -262,9 +285,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
               >
                 <div
                   className={
-                    expanded === -1
+                    expanded === -100
                       ? styles.expand_event_list
-                      : styles.event_list
+                      : styles.event_list_hour
                   }
                 >
                   {expanded === -100
@@ -289,10 +312,11 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         {hours.map((hour, index) => {
           const timeEventsList: any = events
             ?.filter((datas) => {
+              console.log(dayjs(hour, { format: 'hh A' }));
               const currDate = new Date(currentYear, currentMonth, currentDate);
               if (
                 datas.startTime?.slice(0, 2) ==
-                  dayjs().hour(hour).format('HH') &&
+                  dayjs(hour, { format: 'hh A' }).format('HH') &&
                 datas.startDate == dayjs(currDate).format('YYYY-MM-DD')
               ) {
                 return datas;
@@ -321,7 +345,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           return (
             <div key={hour} className={styles.calendar_hour_block}>
               <div className={styles.calendar_hour_text_container}>
-                <p className={styles.calendar_hour_text}>{`${hour}:00`}</p>
+                <p className={styles.calendar_hour_text}>{`${hour}`}</p>
               </div>
               <div className={styles.dummyWidth}></div>
               <div className={styles.event_list_parent}>
