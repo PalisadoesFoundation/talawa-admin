@@ -47,7 +47,7 @@ describe('Testing Event Dashboard Screen', () => {
     global.window = Object.create(window);
     Object.defineProperty(window, 'location', {
       value: {
-        href: 'http://localhost:3000/event/event123',
+        href: `http://localhost:${process.env.PORT}/event/event123`,
       },
       writable: true,
     });
