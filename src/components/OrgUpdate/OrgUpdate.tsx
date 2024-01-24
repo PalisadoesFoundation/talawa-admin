@@ -17,6 +17,7 @@ import type {
   InterfaceQueryOrganizationsListObject,
   InterfaceAddress,
 } from 'utils/interfaces';
+import countryOptions from 'utils/countryList';
 
 interface InterfaceOrgUpdateProps {
   orgId: string;
@@ -187,14 +188,25 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           <Row className="mb-1">
             <Col sm={6} className="mb-3">
               <Form.Control
-                placeholder={t('countryCode')}
-                autoComplete="off"
-                required
+                as="select"
                 value={formState.address.countryCode}
-                onChange={(e) =>
-                  handleInputChange('countryCode', e.target.value)
-                }
-              />
+                onChange={(e) => {
+                  const countryCode = e.target.value;
+                  handleInputChange('countryCode', countryCode);
+                }}
+              >
+                <option value="" disabled>
+                  Select a country
+                </option>
+                {countryOptions.map((country) => (
+                  <option
+                    key={country.value.toUpperCase()}
+                    value={country.value.toUpperCase()}
+                  >
+                    {country.label}
+                  </option>
+                ))}
+              </Form.Control>
             </Col>
             <Col sm={6} className="mb-3">
               <Form.Control

@@ -4,6 +4,7 @@ import convertToBase64 from 'utils/convertToBase64';
 import type { ChangeEvent } from 'react';
 import styles from './OrgList.module.css';
 import type { InterfaceAddress } from 'utils/interfaces';
+import countryOptions from 'utils/countryList';
 
 /**
  * Represents the state of the form in the organization modal.
@@ -135,14 +136,25 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           <Row className="mb-1">
             <Col sm={6} className="mb-3">
               <Form.Control
-                placeholder={t('countryCode')}
-                autoComplete="off"
-                required
+                as="select"
                 value={formState.address.countryCode}
-                onChange={(e) =>
-                  handleInputChange('countryCode', e.target.value)
-                }
-              />
+                onChange={(e) => {
+                  const countryCode = e.target.value;
+                  handleInputChange('countryCode', countryCode);
+                }}
+              >
+                <option value="" disabled>
+                  Select a country
+                </option>
+                {countryOptions.map((country) => (
+                  <option
+                    key={country.value.toUpperCase()}
+                    value={country.value.toUpperCase()}
+                  >
+                    {country.label}
+                  </option>
+                ))}
+              </Form.Control>
             </Col>
             <Col sm={6} className="mb-3">
               <Form.Control
