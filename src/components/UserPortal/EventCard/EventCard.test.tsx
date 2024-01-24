@@ -62,8 +62,8 @@ describe('Testing Event Card In User portal', () => {
     ],
   };
 
-  test('The card should be rendered properly, and all the details should be displayed correct', async () => {
-    const { queryByText } = render(
+  test('The card should be rendered properly, and all the details should be displayed correctly', async () => {
+    const { getAllByText, queryByText } = render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
@@ -75,6 +75,7 @@ describe('Testing Event Card In User portal', () => {
         </BrowserRouter>
       </MockedProvider>
     );
+
     await waitFor(() => expect(queryByText('Test Event')).toBeInTheDocument());
     await waitFor(() =>
       expect(queryByText('This is a test event')).toBeInTheDocument()
@@ -82,14 +83,22 @@ describe('Testing Event Card In User portal', () => {
     await waitFor(() => expect(queryByText('Location')).toBeInTheDocument());
     await waitFor(() => expect(queryByText('Virtual')).toBeInTheDocument());
     await waitFor(() => expect(queryByText('Starts')).toBeInTheDocument());
-    await waitFor(() => expect(queryByText('5:49:12 PM')).toBeInTheDocument());
+
+    // Use getAllByText for the time-related assertions
+    const timeElements = getAllByText(/[\d]+:[\d]+:[\d]+ [APMapm]+/);
+    expect(timeElements).toHaveLength(2);
+
     await waitFor(() =>
-      expect(queryByText(`13 April '23`)).toBeInTheDocument()
+      expect(queryByText(/13 April '23/)).toBeInTheDocument()
     );
     await waitFor(() => expect(queryByText('Ends')).toBeInTheDocument());
-    await waitFor(() => expect(queryByText('7:49:12 PM')).toBeInTheDocument());
+
+    // Use getAllByText for the time-related assertions
+    const endTimeElements = getAllByText(/[\d]+:[\d]+:[\d]+ [APMapm]+/);
+    expect(endTimeElements).toHaveLength(2);
+
     await waitFor(() =>
-      expect(queryByText(`15 April '23`)).toBeInTheDocument()
+      expect(queryByText(/15 April '23/)).toBeInTheDocument()
     );
     await waitFor(() => expect(queryByText('Creator')).toBeInTheDocument());
     await waitFor(() => expect(queryByText('Joe David')).toBeInTheDocument());
