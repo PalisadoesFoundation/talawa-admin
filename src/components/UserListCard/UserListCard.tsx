@@ -64,10 +64,8 @@ function userListCard(props: InterfaceUserListCardProps): JSX.Element {
             <div className={styles.singledetails_data_left}>
               <Link
                 className={styles.membername}
-                to={{
-                  pathname: `/member/id=${currentUrl}`,
-                  state: { id: props.id },
-                }}
+                to={`/member/id=${currentUrl}`}
+                state={{ id: props.id }}
               >
                 {props.memberName ? <>{props.memberName}</> : <>Dogs Care</>}
               </Link>

@@ -14,7 +14,7 @@ import {
 import type { NormalizedCacheObject } from '@apollo/client';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, useNavigate } from 'react-router-dom';
 import { BACKEND_URL } from 'Constant/constant';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
@@ -41,7 +41,7 @@ const mocks = [
         pluginCreatedBy: 'Test Creator',
         pluginDesc: 'Test Description',
         pluginInstallStatus: false,
-        installedOrgs: [undefined],
+        installedOrgs: ['id'],
       },
     },
     result: {
@@ -76,26 +76,17 @@ jest.mock('react-toastify', () => ({
     success: jest.fn(),
   },
 }));
+const mockNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: 'id' }),
+  useNavigate: () => mockNavigate,
+}));
 
 describe('Testing AddOnRegister', () => {
   const props = {
     id: '6234d8bf6ud937ddk70ecc5c9',
   };
-
-  const original = window.location;
-  beforeAll(() => {
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: { reload: jest.fn() },
-    });
-  });
-
-  afterAll(() => {
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: original,
-    });
-  });
 
   test('should render modal and take info to add plugin for registered organization', async () => {
     await act(async () => {
@@ -184,7 +175,7 @@ describe('Testing AddOnRegister', () => {
       userEvent.click(screen.getByTestId('addonregisterBtn'));
 
       await wait(3000); // Waiting for 3 seconds to reload the page as timeout is set to 2 seconds in the component
-      expect(window.location.reload).toHaveBeenCalled();
+      expect(mockNavigate).toHaveBeenCalledWith(0);
     });
   });
 });

@@ -191,15 +191,13 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     const history = createMemoryHistory();
     render(
       <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Router history={history}>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <OrganizationNavbar {...navbarProps} />
-              </I18nextProvider>
-            </Provider>
-          </Router>
-        </BrowserRouter>
+        <Router location={history.location} navigator={history}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationNavbar {...navbarProps} />
+            </I18nextProvider>
+          </Provider>
+        </Router>
       </MockedProvider>
     );
 

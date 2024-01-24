@@ -12,9 +12,14 @@ function loginPortalToggle(): JSX.Element {
     <Row className="mb-4">
       <Col>
         <NavLink
-          className={styles.navLinkClass}
-          activeClassName={styles.activeLink}
-          exact
+          // className={styles.navLinkClass}
+          // activeClassName={styles.activeLink}
+          className={({ isActive }): any => {
+            isActive
+              ? [styles.navLinkClass, styles.activeLink].join(' ')
+              : styles.navLinkClass;
+          }}
+          // exact
           to="/"
         >
           {t('admin')}
@@ -22,9 +27,14 @@ function loginPortalToggle(): JSX.Element {
       </Col>
       <Col>
         <NavLink
-          className={styles.navLinkClass}
-          activeClassName={styles.activeLink}
-          exact
+          // className={styles.navLinkClass}
+          // activeClassName={styles.activeLink}
+          className={({ isActive }): any => {
+            isActive
+              ? [styles.navLinkClass, styles.activeLink].join(' ')
+              : styles.navLinkClass;
+          }}
+          // exact
           to="/user"
         >
           {t('user')}

@@ -4,10 +4,9 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import UserUpdate from 'components/UserUpdate/UserUpdate';
 
-import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import styles from './MemberDetail.module.css';
 import { languages } from 'utils/languages';
@@ -17,18 +16,19 @@ import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
 
 type MemberDetailProps = {
-  id: string; // This is the userId
+  id?: string; // This is the userId
 };
 
 const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'memberDetail',
   });
-
+  const navigate = useNavigate();
   const [state, setState] = useState(1);
-
-  const location = useLocation<MemberDetailProps>();
-  const currentUrl = location.state?.id || localStorage.getItem('id') || id;
+  const currentUrl = id || localStorage.getItem('id');
+  if (!currentUrl) {
+    return <Navigate to={'/'} replace />;
+  }
   document.title = t('title');
 
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
@@ -54,14 +54,14 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
   /* istanbul ignore next */
   if (error) {
-    window.location.assign(`/orgpeople/id=${currentUrl}`);
+    navigate(`/orgpeople/${currentUrl}`);
   }
 
   const addAdmin = async (): Promise<void> => {
     try {
       const { data } = await adda({
         variables: {
-          userid: location.state?.id,
+          userid: currentUrl,
           orgid: currentUrl,
         },
       });
@@ -70,7 +70,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       if (data) {
         toast.success(t('addedAsAdmin'));
         setTimeout(() => {
-          window.location.reload();
+          navigate(0);
         }, 2000);
       }
     } catch (error: any) {
@@ -81,206 +81,202 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
   return (
     <>
-      <OrganizationScreen screenName="User" title={t('title')}>
-        <Row>
-          <Col sm={8}>
-            {state == 1 ? (
-              <div className={styles.mainpageright}>
-                <Row className={styles.flexclm}>
-                  <p
-                    className={styles.logintitle}
-                    data-testid="dashboardTitleBtn"
+      <Row>
+        <Col sm={8}>
+          {state == 1 ? (
+            <div className={styles.mainpageright}>
+              <Row className={styles.flexclm}>
+                <p
+                  className={styles.logintitle}
+                  data-testid="dashboardTitleBtn"
+                >
+                  {t('title')}
+                </p>
+                <div className={styles.btngroup}>
+                  <Button
+                    className={styles.memberfontcreatedbtn}
+                    onClick={addAdmin}
                   >
-                    {t('title')}
-                  </p>
-                  <div className={styles.btngroup}>
-                    <Button
-                      className={styles.memberfontcreatedbtn}
-                      onClick={addAdmin}
-                    >
-                      {t('addAdmin')}
-                    </Button>
-                    <Button
-                      className={styles.memberfontcreatedbtn}
-                      role="stateBtn"
-                      data-testid="stateBtn"
-                      onClick={(): void => {
-                        setState(2);
-                      }}
-                    >
-                      Edit Profile
-                    </Button>
+                    {t('addAdmin')}
+                  </Button>
+                  <Button
+                    className={styles.memberfontcreatedbtn}
+                    role="stateBtn"
+                    data-testid="stateBtn"
+                    onClick={(): void => {
+                      setState(2);
+                    }}
+                  >
+                    Edit Profile
+                  </Button>
+                </div>
+              </Row>
+              <Row className={styles.justifysp}>
+                <Col sm={6} lg={4}>
+                  <div>
+                    {userData?.user?.image ? (
+                      <img
+                        className={styles.userImage}
+                        src={userData?.user?.image}
+                        data-testid="userImagePresent"
+                      />
+                    ) : (
+                      <img
+                        className={styles.userImage}
+                        src={`https://api.dicebear.com/5.x/initials/svg?seed=${userData?.user?.firstName} ${userData?.user?.lastName}`}
+                        data-testid="userImageAbsent"
+                      />
+                    )}
                   </div>
-                </Row>
+                </Col>
+                <Col sm={6} lg={8}>
+                  {/* User section */}
+                  <div>
+                    <h2>
+                      <strong>
+                        {userData?.user?.firstName} {userData?.user?.lastName}
+                      </strong>
+                    </h2>
+                    <p>
+                      <strong>{t('role')} :</strong>{' '}
+                      <span>{userData?.user?.userType}</span>
+                    </p>
+                    <p>
+                      <strong>{t('email')} :</strong>{' '}
+                      <span>{userData?.user?.email}</span>
+                    </p>
+                    <p>
+                      <strong>{t('createdOn')} :</strong>{' '}
+                      {prettyDate(userData?.user?.createdAt)}
+                    </p>
+                  </div>
+                </Col>
+              </Row>
+              <br />
+              <br />
+              <br />
+              {/* Main Section And Activity section */}
+              <section className="mb-5">
                 <Row className={styles.justifysp}>
-                  <Col sm={6} lg={4}>
-                    <div>
-                      {userData?.user?.image ? (
-                        <img
-                          className={styles.userImage}
-                          src={userData?.user?.image}
-                          data-testid="userImagePresent"
-                        />
-                      ) : (
-                        <img
-                          className={styles.userImage}
-                          src={`https://api.dicebear.com/5.x/initials/svg?seed=${userData?.user?.firstName} ${userData?.user?.lastName}`}
-                          data-testid="userImageAbsent"
-                        />
-                      )}
+                  {/* Main Section */}
+                  <Col sm={12} lg={6}>
+                    <div className="card mb-4">
+                      <div className="card-header">
+                        <h5>
+                          <strong>{t('main')}</strong>
+                        </h5>
+                      </div>
+                      <div className="card-body">
+                        <Row className="border-bottom pt-2 pb-3">
+                          <Col sm={6}>{t('firstName')}</Col>
+                          <Col sm={6}>{userData?.user?.firstName}</Col>
+                        </Row>
+                        <Row className="border-bottom py-3">
+                          <Col sm={6}>{t('lastName')}</Col>
+                          <Col sm={6}>{userData?.user?.lastName}</Col>
+                        </Row>
+                        <Row className="border-bottom py-3">
+                          <Col sm={6}>{t('role')}</Col>
+                          <Col sm={6}>{userData?.user?.userType}</Col>
+                        </Row>
+                        <Row className="border-bottom py-3">
+                          <Col sm={6}>{t('language')}</Col>
+                          <Col sm={6}>
+                            {getLanguageName(userData?.user?.appLanguageCode)}
+                          </Col>
+                        </Row>
+                        <Row className="border-bottom py-3">
+                          <Col sm={6}>{t('adminApproved')}</Col>
+                          <Col sm={6} data-testid="adminApproved">
+                            {userData?.user?.adminApproved ? 'Yes' : 'No'}
+                          </Col>
+                        </Row>
+                        <Row className="border-bottom py-3">
+                          <Col sm={6}>{t('pluginCreationAllowed')}</Col>
+                          <Col sm={6} data-testid="pluginCreationAllowed">
+                            {userData?.user?.pluginCreationAllowed
+                              ? 'Yes'
+                              : 'No'}
+                          </Col>
+                        </Row>
+                        <Row className="pt-3">
+                          <Col sm={6}>{t('createdOn')}</Col>
+                          <Col data-testid="createdOn" sm={6}>
+                            {prettyDate(userData?.user?.createdAt)}
+                          </Col>
+                        </Row>
+                      </div>
                     </div>
                   </Col>
-                  <Col sm={6} lg={8}>
-                    {/* User section */}
-                    <div>
-                      <h2>
-                        <strong>
-                          {userData?.user?.firstName} {userData?.user?.lastName}
-                        </strong>
-                      </h2>
-                      <p>
-                        <strong>{t('role')} :</strong>{' '}
-                        <span>{userData?.user?.userType}</span>
-                      </p>
-                      <p>
-                        <strong>{t('email')} :</strong>{' '}
-                        <span>{userData?.user?.email}</span>
-                      </p>
-                      <p>
-                        <strong>{t('createdOn')} :</strong>{' '}
-                        {prettyDate(userData?.user?.createdAt)}
-                      </p>
+                  {/* Activity Section */}
+                  <Col sm={12} lg={6}>
+                    {/* Organizations */}
+                    <div className="card">
+                      <div className="card-header">
+                        <h5>
+                          <strong>{t('organizations')}</strong>
+                        </h5>
+                      </div>
+                      <div className="card-body">
+                        <Row className="border-bottom pt-2 pb-3">
+                          <Col sm={8}>{t('created')}</Col>
+                          <Col sm={4}>
+                            {userData?.user?.createdOrganizations?.length}
+                          </Col>
+                        </Row>
+                        <Row className="border-bottom py-3">
+                          <Col sm={8}>{t('joined')}</Col>
+                          <Col sm={4}>
+                            {userData?.user?.joinedOrganizations?.length}
+                          </Col>
+                        </Row>
+                        <Row className="border-bottom py-3">
+                          <Col sm={8}>{t('adminForOrganizations')}</Col>
+                          <Col sm={4}>{userData?.user?.adminFor?.length}</Col>
+                        </Row>
+                        <Row className="pt-3">
+                          <Col sm={8}>{t('membershipRequests')}</Col>
+                          <Col sm={4}>
+                            {userData?.user?.membershipRequests?.length}
+                          </Col>
+                        </Row>
+                      </div>
+                    </div>
+                    {/* Events */}
+                    <div className="card mt-4">
+                      <div className="card-header">
+                        <h5>
+                          <strong>{t('events')}</strong>
+                        </h5>
+                      </div>
+                      <div className="card-body">
+                        <Row className="border-bottom pt-2 pb-3">
+                          <Col sm={8}>{t('created')}</Col>
+                          <Col sm={4}>
+                            {userData?.user?.createdEvents?.length}
+                          </Col>
+                        </Row>
+                        <Row className="border-bottom py-3">
+                          <Col sm={8}>{t('joined')}</Col>
+                          <Col sm={4}>
+                            {userData?.user?.registeredEvents?.length}
+                          </Col>
+                        </Row>
+                        <Row className="pt-3">
+                          <Col sm={8}>{t('adminForEvents')}</Col>
+                          <Col sm={4}>{userData?.user?.eventAdmin?.length}</Col>
+                        </Row>
+                      </div>
                     </div>
                   </Col>
                 </Row>
-                <br />
-                <br />
-                <br />
-                {/* Main Section And Activity section */}
-                <section className="mb-5">
-                  <Row className={styles.justifysp}>
-                    {/* Main Section */}
-                    <Col sm={12} lg={6}>
-                      <div className="card mb-4">
-                        <div className="card-header">
-                          <h5>
-                            <strong>{t('main')}</strong>
-                          </h5>
-                        </div>
-                        <div className="card-body">
-                          <Row className="border-bottom pt-2 pb-3">
-                            <Col sm={6}>{t('firstName')}</Col>
-                            <Col sm={6}>{userData?.user?.firstName}</Col>
-                          </Row>
-                          <Row className="border-bottom py-3">
-                            <Col sm={6}>{t('lastName')}</Col>
-                            <Col sm={6}>{userData?.user?.lastName}</Col>
-                          </Row>
-                          <Row className="border-bottom py-3">
-                            <Col sm={6}>{t('role')}</Col>
-                            <Col sm={6}>{userData?.user?.userType}</Col>
-                          </Row>
-                          <Row className="border-bottom py-3">
-                            <Col sm={6}>{t('language')}</Col>
-                            <Col sm={6}>
-                              {getLanguageName(userData?.user?.appLanguageCode)}
-                            </Col>
-                          </Row>
-                          <Row className="border-bottom py-3">
-                            <Col sm={6}>{t('adminApproved')}</Col>
-                            <Col sm={6} data-testid="adminApproved">
-                              {userData?.user?.adminApproved ? 'Yes' : 'No'}
-                            </Col>
-                          </Row>
-                          <Row className="border-bottom py-3">
-                            <Col sm={6}>{t('pluginCreationAllowed')}</Col>
-                            <Col sm={6} data-testid="pluginCreationAllowed">
-                              {userData?.user?.pluginCreationAllowed
-                                ? 'Yes'
-                                : 'No'}
-                            </Col>
-                          </Row>
-                          <Row className="pt-3">
-                            <Col sm={6}>{t('createdOn')}</Col>
-                            <Col data-testid="createdOn" sm={6}>
-                              {prettyDate(userData?.user?.createdAt)}
-                            </Col>
-                          </Row>
-                        </div>
-                      </div>
-                    </Col>
-                    {/* Activity Section */}
-                    <Col sm={12} lg={6}>
-                      {/* Organizations */}
-                      <div className="card">
-                        <div className="card-header">
-                          <h5>
-                            <strong>{t('organizations')}</strong>
-                          </h5>
-                        </div>
-                        <div className="card-body">
-                          <Row className="border-bottom pt-2 pb-3">
-                            <Col sm={8}>{t('created')}</Col>
-                            <Col sm={4}>
-                              {userData?.user?.createdOrganizations?.length}
-                            </Col>
-                          </Row>
-                          <Row className="border-bottom py-3">
-                            <Col sm={8}>{t('joined')}</Col>
-                            <Col sm={4}>
-                              {userData?.user?.joinedOrganizations?.length}
-                            </Col>
-                          </Row>
-                          <Row className="border-bottom py-3">
-                            <Col sm={8}>{t('adminForOrganizations')}</Col>
-                            <Col sm={4}>{userData?.user?.adminFor?.length}</Col>
-                          </Row>
-                          <Row className="pt-3">
-                            <Col sm={8}>{t('membershipRequests')}</Col>
-                            <Col sm={4}>
-                              {userData?.user?.membershipRequests?.length}
-                            </Col>
-                          </Row>
-                        </div>
-                      </div>
-                      {/* Events */}
-                      <div className="card mt-4">
-                        <div className="card-header">
-                          <h5>
-                            <strong>{t('events')}</strong>
-                          </h5>
-                        </div>
-                        <div className="card-body">
-                          <Row className="border-bottom pt-2 pb-3">
-                            <Col sm={8}>{t('created')}</Col>
-                            <Col sm={4}>
-                              {userData?.user?.createdEvents?.length}
-                            </Col>
-                          </Row>
-                          <Row className="border-bottom py-3">
-                            <Col sm={8}>{t('joined')}</Col>
-                            <Col sm={4}>
-                              {userData?.user?.registeredEvents?.length}
-                            </Col>
-                          </Row>
-                          <Row className="pt-3">
-                            <Col sm={8}>{t('adminForEvents')}</Col>
-                            <Col sm={4}>
-                              {userData?.user?.eventAdmin?.length}
-                            </Col>
-                          </Row>
-                        </div>
-                      </div>
-                    </Col>
-                  </Row>
-                </section>
-              </div>
-            ) : (
-              <UserUpdate id={currentUrl} toggleStateValue={toggleStateValue} />
-            )}
-          </Col>
-        </Row>
-      </OrganizationScreen>
+              </section>
+            </div>
+          ) : (
+            <UserUpdate id={currentUrl} toggleStateValue={toggleStateValue} />
+          )}
+        </Col>
+      </Row>
     </>
   );
 };

@@ -3,7 +3,7 @@ import { ReactComponent as FlaskIcon } from 'assets/svgs/flask.svg';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import styles from './OrgListCard.module.css';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import type { InterfaceOrgConnectionInfoType } from 'utils/interfaces';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
@@ -23,14 +23,13 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
     },
   });
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   function handleClick(): void {
-    const url = '/orgdash/id=' + _id;
+    const url = '/orgdash/' + _id;
 
     // Dont change the below two lines
-    window.location.replace(url);
-    history.push(url);
+    navigate(url);
   }
 
   const { t } = useTranslation('translation', {

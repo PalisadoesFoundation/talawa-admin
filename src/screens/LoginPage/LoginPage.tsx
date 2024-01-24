@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Check, Clear } from '@mui/icons-material';
 
@@ -35,10 +35,11 @@ import Loader from 'components/Loader/Loader';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './LoginPage.module.css';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 
 function loginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
-  const history = useHistory();
+  const navigate = useNavigate();
 
   document.title = t('title');
 
@@ -109,7 +110,7 @@ function loginPage(): JSX.Element {
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('IsLoggedIn');
     if (isLoggedIn == 'TRUE') {
-      history.push('/orglist');
+      navigate('/orglist');
     }
     setComponentLoader(false);
   }, []);
@@ -280,9 +281,15 @@ function loginPage(): JSX.Element {
           localStorage.setItem('id', loginData.login.user._id);
           localStorage.setItem('IsLoggedIn', 'TRUE');
           localStorage.setItem('UserType', loginData.login.user.userType);
-          if (localStorage.getItem('IsLoggedIn') == 'TRUE') {
-            history.push('/orglist');
-          }
+          localStorage.setItem(
+            'name',
+            `${loginData.login.user.firstName} ${loginData.login.user.lastName}`
+          );
+          localStorage.setItem('email', loginData.login.user.email);
+          localStorage.setItem('FirstName', loginData.login.user.firstName);
+          localStorage.setItem('LastName', loginData.login.user.lastName);
+          localStorage.setItem('UserImage', loginData.login.user.image);
+          navigate(0);
         } else {
           toast.warn(t('notAuthorised'));
         }

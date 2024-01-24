@@ -330,7 +330,7 @@ describe('Testing Advertisement Entry Component', () => {
                   endDateEdit={new Date()}
                   startDateEdit={new Date()}
                   typeEdit="POPUP"
-                  orgId="1"
+                  orgIdEdit="1"
                   linkEdit="google.com"
                 />
               }
@@ -382,7 +382,7 @@ describe('Testing Advertisement Entry Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              {<AdvertisementRegister formStatus="register" />}
+              {<AdvertisementRegister formStatus="register" orgIdEdit="1" />}
             </I18nextProvider>
           </BrowserRouter>
         </Provider>

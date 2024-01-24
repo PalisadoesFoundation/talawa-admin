@@ -1,5 +1,5 @@
 import type { ChangeEvent } from 'react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import DatePicker from 'react-datepicker';
@@ -18,7 +18,7 @@ import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
 import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
-import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
+import { useParams, useNavigate } from 'react-router-dom';
 
 function organizationEvents(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -45,7 +45,8 @@ function organizationEvents(): JSX.Element {
     startTime: '08:00:00',
     endTime: '18:00:00',
   });
-  const currentUrl = window.location.href.split('=')[1];
+  const { orgId: currentUrl } = useParams();
+  const navigate = useNavigate();
 
   const showInviteModal = (): void => {
     setEventModalIsOpen(true);
@@ -132,40 +133,40 @@ function organizationEvents(): JSX.Element {
     }
   };
 
+  /* istanbul ignore next */
+  useEffect(() => {
+    if (error) {
+      navigate('/orglist');
+    }
+  }, [error]);
+
   if (loading || loading2) {
     return <Loader />;
-  }
-
-  /* istanbul ignore next */
-  if (error) {
-    window.location.assign('/orglist');
   }
 
   /* istanbul ignore next */
 
   return (
     <>
-      <OrganizationScreen screenName="Events" title={t('title')}>
-        <div className={styles.mainpageright}>
-          <div className={styles.justifysp}>
-            <p className={styles.logintitle}>{t('events')}</p>
-            <Button
-              variant="success"
-              className={styles.addbtn}
-              onClick={showInviteModal}
-              data-testid="createEventModalBtn"
-            >
-              <i className="fa fa-plus"></i> {t('addEvent')}
-            </Button>
-          </div>
+      <div className={styles.mainpageright}>
+        <div className={styles.justifysp}>
+          <p className={styles.logintitle}>{t('events')}</p>
+          <Button
+            variant="success"
+            className={styles.addbtn}
+            onClick={showInviteModal}
+            data-testid="createEventModalBtn"
+          >
+            <i className="fa fa-plus"></i> {t('addEvent')}
+          </Button>
         </div>
-        <EventCalendar
-          eventData={data?.eventsByOrganizationConnection}
-          orgData={orgData}
-          userRole={userRole}
-          userId={userId}
-        />
-      </OrganizationScreen>
+      </div>
+      <EventCalendar
+        eventData={data?.eventsByOrganizationConnection}
+        orgData={orgData}
+        userRole={userRole}
+        userId={userId}
+      />
 
       <Modal show={eventmodalisOpen} onHide={hideInviteModal}>
         <Modal.Header>

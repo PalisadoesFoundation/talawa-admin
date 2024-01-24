@@ -139,6 +139,10 @@ export const LOGIN_MUTATION = gql`
         _id
         userType
         adminApproved
+        firstName
+        lastName
+        email
+        image
       }
       accessToken
       refreshToken

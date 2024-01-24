@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
+import { useParams } from 'react-router-dom';
 
 interface InterfaceAddOnRegisterProps {
   id?: string; // OrgId
@@ -30,7 +31,7 @@ interface InterfaceFormStateTypes {
   type: string;
   startDate: Date;
   endDate: Date;
-  orgId: string;
+  orgId: string | undefined;
 }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function advertisementRegister({
@@ -58,7 +59,8 @@ function advertisementRegister({
   const { refetch } = useQuery(ADVERTISEMENTS_GET);
 
   //getting orgId from URL
-  const currentOrg = window.location.href.split('/id=')[1] + '';
+  const params = useParams();
+  const currentOrg = params.orgId || orgIdEdit;
   const [formState, setFormState] = useState<InterfaceFormStateTypes>({
     name: '',
     link: '',

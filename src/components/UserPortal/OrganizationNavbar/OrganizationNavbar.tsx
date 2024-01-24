@@ -12,7 +12,7 @@ import { useQuery, useSubscription } from '@apollo/client';
 import { USER_ORGANIZATION_CONNECTION } from 'GraphQl/Queries/Queries';
 import getOrganizationId from 'utils/getOrganizationId';
 import type { DropDirection } from 'react-bootstrap/esm/DropdownContext';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { PLUGIN_SUBSCRIPTION } from 'GraphQl/Mutations/mutations';
 interface InterfaceNavbarProps {
   currentPage: string | null;
@@ -31,7 +31,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     keyPrefix: 'userNavbar',
   });
 
-  const history = useHistory();
+  const history = useNavigate();
 
   const [organizationDetails, setOrganizationDetails]: any = React.useState({});
   // const dropDirection: DropDirection = screen.width > 767 ? 'start' : 'down';
@@ -151,7 +151,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                 active={props.currentPage === 'home'}
                 onClick={
                   /* istanbul ignore next */
-                  (): void => history.push(homeLink)
+                  (): void => history(homeLink)
                 }
               >
                 {t('home')}
@@ -161,7 +161,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                   plugin.view && (
                     <Nav.Link
                       active={props.currentPage == plugin.alias}
-                      onClick={(): void => history.push(plugin.link)}
+                      onClick={(): void => history(plugin.link)}
                       key={idx}
                     >
                       {plugin.translated}

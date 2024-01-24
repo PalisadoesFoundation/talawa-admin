@@ -1,12 +1,24 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
 import CollapsibleDropdown from './CollapsibleDropdown';
 import type { InterfaceCollapsibleDropdown } from './CollapsibleDropdown';
 
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useLocation: () => ({
+    pathname: '/orgstore',
+    state: {},
+    key: '',
+    search: '',
+    hash: '',
+  }),
+}));
+
 const props: InterfaceCollapsibleDropdown = {
-  screenName: 'SubCategory 1',
+  showDropdown: true,
+  setShowDropdown: jest.fn(),
   target: {
     name: 'DropDown Category',
     url: undefined,
@@ -27,7 +39,11 @@ const props: InterfaceCollapsibleDropdown = {
 
 describe('Testing CollapsibleDropdown component', () => {
   test('Component should be rendered properly', () => {
-    render(<CollapsibleDropdown {...props} />);
+    render(
+      <BrowserRouter>
+        <CollapsibleDropdown {...props} />
+      </BrowserRouter>
+    );
     expect(screen.getByText('DropDown Category')).toBeInTheDocument();
     expect(screen.getByText('SubCategory 1')).toBeInTheDocument();
     expect(screen.getByText('SubCategory 2')).toBeInTheDocument();
@@ -44,6 +60,7 @@ describe('Testing CollapsibleDropdown component', () => {
     const nonActiveDropdownBtn = screen.getByText('SubCategory 2');
 
     // Check if dropdown is rendered with correct classes
+    activeDropdownBtn.click();
     expect(parentDropdownBtn).toBeInTheDocument();
     expect(parentDropdownBtn).toHaveClass('text-white');
     expect(parentDropdownBtn).toHaveClass('btn-success');
@@ -58,17 +75,14 @@ describe('Testing CollapsibleDropdown component', () => {
     expect(nonActiveDropdownBtn).toHaveClass('text-secondary');
     expect(nonActiveDropdownBtn).toHaveClass('btn-light');
 
-    // Check if dropdown is expanded by default since the screenName prop passes
-    // the same value as the name prop of the subTarget
-    expect(parentDropdownBtn).toHaveAttribute('aria-expanded', 'true');
-
     // Check if dropdown is collapsed after clicking on it
-    parentDropdownBtn.click();
-    expect(parentDropdownBtn).toHaveAttribute('aria-expanded', 'false');
+    fireEvent.click(parentDropdownBtn);
+    expect(props.setShowDropdown).toHaveBeenCalledWith(false);
+    // expect(parentDropdownBtn).toHaveAttribute('aria-expanded', 'false');
 
     // Check if dropdown is expanded after clicking on it again
-    parentDropdownBtn.click();
-    expect(parentDropdownBtn).toHaveAttribute('aria-expanded', 'true');
+    fireEvent.click(parentDropdownBtn);
+    expect(props.setShowDropdown).toHaveBeenCalledWith(true);
 
     // Click on non active dropdown button and check if it navigates to the correct url
     nonActiveDropdownBtn.click();

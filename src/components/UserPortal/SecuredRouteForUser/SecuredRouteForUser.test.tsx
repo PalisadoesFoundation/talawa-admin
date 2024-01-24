@@ -1,5 +1,5 @@
 import React from 'react';
-import { MemoryRouter, Route } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
 import { render, screen, waitFor } from '@testing-library/react';
 import SecuredRouteForUser from './SecuredRouteForUser';
 
@@ -10,19 +10,18 @@ describe('SecuredRouteForUser', () => {
 
     render(
       <MemoryRouter initialEntries={['/user/organizations']}>
-        <Route
-          path="/user/organizations"
-          render={() => (
-            <SecuredRouteForUser
+        <Routes>
+          <Route element={<SecuredRouteForUser />}>
+            <Route
               path="/user/organizations"
-              component={() => (
+              element={
                 <div data-testid="organizations-content">
                   Organizations Component
                 </div>
-              )}
+              }
             />
-          )}
-        />
+          </Route>
+        </Routes>
       </MemoryRouter>
     );
 
@@ -34,21 +33,25 @@ describe('SecuredRouteForUser', () => {
     localStorage.setItem('IsLoggedIn', 'FALSE');
 
     render(
-      <MemoryRouter initialEntries={['/secured']}>
-        <Route
-          path="/secured"
-          exact
-          render={() => (
-            <SecuredRouteForUser>
-              <div data-testid="secured-content">Secured Content</div>
-            </SecuredRouteForUser>
-          )}
-        />
+      <MemoryRouter initialEntries={['/organizations']}>
+        <Routes>
+          <Route path="/user" element={<div>User Login Page</div>} />
+          <Route element={<SecuredRouteForUser />}>
+            <Route
+              path="/organizations"
+              element={
+                <div data-testid="organizations-content">
+                  Organizations Component
+                </div>
+              }
+            />
+          </Route>
+        </Routes>
       </MemoryRouter>
     );
 
     await waitFor(() => {
-      expect(window.location.pathname).toBe('/');
+      expect(screen.getByText('User Login Page')).toBeInTheDocument();
     });
   });
 });

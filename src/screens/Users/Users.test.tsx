@@ -51,7 +51,7 @@ describe('Testing Users screen', () => {
     );
 
     await wait();
-    expect(screen.getAllByText(/Users/i)).toBeTruthy();
+    expect(screen.getByTestId('users')).toBeInTheDocument();
   });
 
   test(`Component should be rendered properly when user is not superAdmin

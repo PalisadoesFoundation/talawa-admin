@@ -8,7 +8,7 @@ import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import defaultImg from 'assets/images/blank.png';
 import { errorHandler } from 'utils/errorHandler';
 
@@ -24,7 +24,7 @@ interface InterfaceOrgPeopleListCardProps {
 function orgPeopleListCard(
   props: InterfaceOrgPeopleListCardProps
 ): JSX.Element {
-  const currentUrl = window.location.href.split('=')[1];
+  const { orgId: currentUrl } = useParams();
   const [remove] = useMutation(REMOVE_MEMBER_MUTATION);
   const [showRemoveAdminModal, setShowRemoveAdminModal] = React.useState(false);
 
@@ -69,10 +69,8 @@ function orgPeopleListCard(
             <div className={styles.singledetails_data_left}>
               <Link
                 className={styles.membername}
-                to={{
-                  pathname: `/member/id=${currentUrl}`,
-                  state: { id: props.id },
-                }}
+                to={`/member/${currentUrl}`}
+                state={{ id: props.id }}
               >
                 {props.memberName ? <>{props.memberName}</> : <>Dogs Care</>}
               </Link>

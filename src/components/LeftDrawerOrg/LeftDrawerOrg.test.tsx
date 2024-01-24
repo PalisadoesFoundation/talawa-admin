@@ -17,7 +17,6 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 
 const props: InterfaceLeftDrawerProps = {
-  screenName: 'Dashboard',
   orgId: '123',
   targets: [
     {

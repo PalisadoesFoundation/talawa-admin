@@ -1,15 +1,9 @@
 import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
-const SecuredRouteForUser = (props: any): JSX.Element => {
+const SecuredRouteForUser = (): any => {
   const isLoggedIn = localStorage.getItem('IsLoggedIn');
-  return isLoggedIn === 'TRUE' ? (
-    <>
-      <Route {...props} />
-    </>
-  ) : (
-    <Redirect to="/user" />
-  );
+  return isLoggedIn === 'TRUE' ? <Outlet /> : <Navigate to="/user" replace />;
 };
 
 export default SecuredRouteForUser;

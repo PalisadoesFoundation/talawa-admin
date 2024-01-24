@@ -10,13 +10,15 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 import styles from './DeleteOrg.module.css';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function deleteOrg(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'deleteOrg',
   });
+  const { orgId: currentUrl } = useParams();
+  const navigate = useNavigate();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const currentUrl = window.location.href.split('=')[1];
   const canDelete = localStorage.getItem('UserType') === 'SUPERADMIN';
   const toggleDeleteModal = (): void => setShowDeleteModal(!showDeleteModal);
 
@@ -30,14 +32,13 @@ function deleteOrg(): JSX.Element {
       isSampleOrganizationId: currentUrl,
     },
   });
-
   const deleteOrg = async (): Promise<void> => {
     if (data && data.isSampleOrganization) {
       removeSampleOrganization()
         .then(() => {
           toast.success(t('successfullyDeletedSampleOrganization'));
           setTimeout(() => {
-            window.location.replace('/orglist');
+            navigate('/orglist');
           }, 1000);
         })
         .catch((error) => {
@@ -50,7 +51,7 @@ function deleteOrg(): JSX.Element {
             id: currentUrl,
           },
         });
-        window.location.replace('/orglist');
+        navigate('/orglist');
       } catch (error: any) {
         errorHandler(t, error);
       }

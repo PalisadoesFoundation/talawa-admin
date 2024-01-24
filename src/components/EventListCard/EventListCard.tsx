@@ -12,7 +12,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { Form } from 'react-bootstrap';
 import { errorHandler } from 'utils/errorHandler';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface InterfaceEventListCardProps {
   key: string;
@@ -40,7 +40,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   const [registrablechecked, setRegistrableChecked] = React.useState(false);
   const [eventDeleteModalIsOpen, setEventDeleteModalIsOpen] = useState(false);
   const [eventUpdateModalIsOpen, setEventUpdateModalIsOpen] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
   const [formState, setFormState] = useState({
     title: '',
     eventdescrip: '',
@@ -137,7 +137,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   };
 
   const openEventDashboard = (): void => {
-    history.push(`/event/${props.id}`);
+    navigate(`/event/${props.id}`);
   };
 
   return (

@@ -42,17 +42,12 @@ async function wait(ms = 500): Promise<void> {
   });
 }
 
-describe('Testing Event Dashboard Screen', () => {
-  beforeEach(() => {
-    global.window = Object.create(window);
-    Object.defineProperty(window, 'location', {
-      value: {
-        href: `http://localhost:${process.env.PORT}/event/event123`,
-      },
-      writable: true,
-    });
-  });
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ eventId: 'event123' }),
+}));
 
+describe('Testing Event Dashboard Screen', () => {
   test('The page should display event details correctly and also show the time if provided', async () => {
     const { queryByText, queryAllByText } = render(
       <BrowserRouter>

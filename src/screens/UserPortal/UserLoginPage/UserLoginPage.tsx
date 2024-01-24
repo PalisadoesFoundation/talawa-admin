@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import {
@@ -37,7 +37,7 @@ import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 
 function loginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userLoginPage' });
-  const history = useHistory();
+  const navigation = useNavigate();
 
   document.title = t('title');
 
@@ -63,7 +63,7 @@ function loginPage(): JSX.Element {
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('IsLoggedIn');
     if (isLoggedIn == 'TRUE') {
-      history.push('/user/organizations/');
+      navigation('/user/organizations/');
     }
     setComponentLoader(false);
   }, []);
@@ -203,7 +203,7 @@ function loginPage(): JSX.Element {
         localStorage.setItem('IsLoggedIn', 'TRUE');
         navigator.clipboard.writeText('');
         if (localStorage.getItem('IsLoggedIn') == 'TRUE') {
-          history.push('/user/organizations/');
+          navigation('/user/organizations/');
         }
       } else {
         toast.warn(t('notAuthorised'));

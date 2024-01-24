@@ -7,14 +7,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import type { InterfaceSuperAdminScreenProps } from './SuperAdminScreen';
 import SuperAdminScreen from './SuperAdminScreen';
-
-const props: InterfaceSuperAdminScreenProps = {
-  title: 'Organizations',
-  screenName: 'Organizations',
-  children: <div>Testing ...</div>,
-};
 
 describe('Testing LeftDrawer in SuperAdminScreen', () => {
   test('Testing LeftDrawer in page functionality', async () => {
@@ -25,7 +18,7 @@ describe('Testing LeftDrawer in SuperAdminScreen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <SuperAdminScreen {...props} />
+              <SuperAdminScreen />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>

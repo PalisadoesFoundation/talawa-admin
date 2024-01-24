@@ -18,7 +18,7 @@ import convertToBase64 from 'utils/convertToBase64';
 import NotFound from 'components/NotFound/NotFound';
 import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
-import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface InterfaceOrgPost {
   _id: string;
@@ -49,7 +49,8 @@ function orgPost(): JSX.Element {
   const [sortingOption, setSortingOption] = useState('latest');
   const [showTitle, setShowTitle] = useState(true);
 
-  const currentUrl = window.location.href.split('=')[1];
+  const { orgId: currentUrl } = useParams();
+  const navigate = useNavigate();
 
   const showInviteModal = (): void => {
     setPostModalIsOpen(true);
@@ -135,14 +136,17 @@ function orgPost(): JSX.Element {
     }
   };
 
+  /* istanbul ignore next */
+  useEffect(() => {
+    if (orgPostListError) {
+      navigate('/orglist');
+    }
+  }, [orgPostListError]);
+
   if (createPostLoading || orgPostListLoading) {
     return <Loader />;
   }
 
-  /* istanbul ignore next */
-  if (orgPostListError) {
-    window.location.assign('/orglist');
-  }
   const handleSearch = (value: string): void => {
     const filterData = {
       id: currentUrl,
@@ -203,135 +207,133 @@ function orgPost(): JSX.Element {
   });
   return (
     <>
-      <OrganizationScreen screenName="Posts" title={t('title')}>
-        <Row className={styles.head}>
-          <div className={styles.mainpageright}>
-            <div className={styles.btnsContainer}>
-              <div className={styles.input}>
-                <Form.Control
-                  type="text"
-                  id="searchPosts"
-                  className="bg-white"
-                  placeholder={showTitle ? t('searchTitle') : t('searchText')}
-                  data-testid="searchByName"
-                  autoComplete="off"
-                  onKeyUp={handleSearchByEnter}
-                  required
-                />
-                <Button
-                  tabIndex={-1}
-                  className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
-                  onClick={handleSearchByBtnClick}
-                  data-testid="searchBtn"
-                >
-                  <Search />
-                </Button>
-              </div>
-              <div className={styles.btnsBlock}>
-                <div className="d-flex">
-                  <Dropdown
-                    aria-expanded="false"
-                    title="SearchBy"
-                    data-tesid="sea"
-                  >
-                    <Dropdown.Toggle
-                      data-testid="searchBy"
-                      variant="outline-success"
-                    >
-                      <SortIcon className={'me-1'} />
-                      {t('searchBy')}
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      <Dropdown.Item
-                        value="searchText"
-                        onClick={(e): void => {
-                          setShowTitle(false);
-                          e.preventDefault();
-                        }}
-                        data-testid="Text"
-                      >
-                        {t('Text')}
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        value="searchTitle"
-                        onClick={(e): void => {
-                          setShowTitle(true);
-                          e.preventDefault();
-                        }}
-                        data-testid="searchTitle"
-                      >
-                        {t('Title')}
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                  <Dropdown
-                    aria-expanded="false"
-                    title="Sort Post"
-                    data-testid="sort"
-                  >
-                    <Dropdown.Toggle variant="success" data-testid="sortpost">
-                      <SortIcon className={'me-1'} />
-                      {sortingOption === 'latest' ? t('Latest') : t('Oldest')}
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      <Dropdown.Item
-                        onClick={(): void => handleSorting('latest')}
-                        data-testid="latest"
-                      >
-                        {t('Latest')}
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        onClick={(): void => handleSorting('oldest')}
-                        data-testid="oldest"
-                      >
-                        {t('Oldest')}
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-
-                <Button
-                  variant="success"
-                  onClick={showInviteModal}
-                  data-testid="createPostModalBtn"
-                >
-                  <i className={'fa fa-plus me-2'} />
-                  {t('createPost')}
-                </Button>
-              </div>
+      <Row className={styles.head}>
+        <div className={styles.mainpageright}>
+          <div className={styles.btnsContainer}>
+            <div className={styles.input}>
+              <Form.Control
+                type="text"
+                id="searchPosts"
+                className="bg-white"
+                placeholder={showTitle ? t('searchTitle') : t('searchText')}
+                data-testid="searchByName"
+                autoComplete="off"
+                onKeyUp={handleSearchByEnter}
+                required
+              />
+              <Button
+                tabIndex={-1}
+                className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                onClick={handleSearchByBtnClick}
+                data-testid="searchBtn"
+              >
+                <Search />
+              </Button>
             </div>
-            <div className={`row ${styles.list_box}`}>
-              {sortedPostsList && sortedPostsList.length > 0 ? (
-                sortedPostsList.map(
-                  (datas: {
-                    _id: string;
-                    title: string;
-                    text: string;
-                    imageUrl: string;
-                    videoUrl: string;
-                    organizationId: string;
-                    creator: { firstName: string; lastName: string };
-                    pinned: boolean;
-                  }) => (
-                    <OrgPostCard
-                      key={datas._id}
-                      id={datas._id}
-                      postTitle={datas.title}
-                      postInfo={datas.text}
-                      postAuthor={`${datas.creator.firstName} ${datas.creator.lastName}`}
-                      postPhoto={datas.imageUrl}
-                      postVideo={datas.videoUrl}
-                      pinned={datas.pinned}
-                    />
-                  )
-                )
-              ) : (
-                <NotFound title="post" keyPrefix="postNotFound" />
-              )}
+            <div className={styles.btnsBlock}>
+              <div className="d-flex">
+                <Dropdown
+                  aria-expanded="false"
+                  title="SearchBy"
+                  data-tesid="sea"
+                >
+                  <Dropdown.Toggle
+                    data-testid="searchBy"
+                    variant="outline-success"
+                  >
+                    <SortIcon className={'me-1'} />
+                    {t('searchBy')}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item
+                      value="searchText"
+                      onClick={(e): void => {
+                        setShowTitle(false);
+                        e.preventDefault();
+                      }}
+                      data-testid="Text"
+                    >
+                      {t('Text')}
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      value="searchTitle"
+                      onClick={(e): void => {
+                        setShowTitle(true);
+                        e.preventDefault();
+                      }}
+                      data-testid="searchTitle"
+                    >
+                      {t('Title')}
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+                <Dropdown
+                  aria-expanded="false"
+                  title="Sort Post"
+                  data-testid="sort"
+                >
+                  <Dropdown.Toggle variant="success" data-testid="sortpost">
+                    <SortIcon className={'me-1'} />
+                    {sortingOption === 'latest' ? t('Latest') : t('Oldest')}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item
+                      onClick={(): void => handleSorting('latest')}
+                      data-testid="latest"
+                    >
+                      {t('Latest')}
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={(): void => handleSorting('oldest')}
+                      data-testid="oldest"
+                    >
+                      {t('Oldest')}
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+
+              <Button
+                variant="success"
+                onClick={showInviteModal}
+                data-testid="createPostModalBtn"
+              >
+                <i className={'fa fa-plus me-2'} />
+                {t('createPost')}
+              </Button>
             </div>
           </div>
-        </Row>
-      </OrganizationScreen>
+          <div className={`row ${styles.list_box}`}>
+            {sortedPostsList && sortedPostsList.length > 0 ? (
+              sortedPostsList.map(
+                (datas: {
+                  _id: string;
+                  title: string;
+                  text: string;
+                  imageUrl: string;
+                  videoUrl: string;
+                  organizationId: string;
+                  creator: { firstName: string; lastName: string };
+                  pinned: boolean;
+                }) => (
+                  <OrgPostCard
+                    key={datas._id}
+                    id={datas._id}
+                    postTitle={datas.title}
+                    postInfo={datas.text}
+                    postAuthor={`${datas.creator.firstName} ${datas.creator.lastName}`}
+                    postPhoto={datas.imageUrl}
+                    postVideo={datas.videoUrl}
+                    pinned={datas.pinned}
+                  />
+                )
+              )
+            ) : (
+              <NotFound title="post" keyPrefix="postNotFound" />
+            )}
+          </div>
+        </div>
+      </Row>
       <Modal
         show={postmodalisOpen}
         onHide={hideInviteModal}

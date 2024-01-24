@@ -32,6 +32,11 @@ jest.mock('react-toastify', () => ({
     error: jest.fn(),
   },
 }));
+const mockNavgate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavgate,
+}));
 
 beforeEach(() => {
   localStorage.setItem('FirstName', 'John');
@@ -67,8 +72,8 @@ describe('Organisation Dashboard Page', () => {
     await wait();
     expect(screen.getByText('Members')).toBeInTheDocument();
     expect(screen.getByText('Admins')).toBeInTheDocument();
-    expect(screen.getAllByText('Posts')).toHaveLength(2);
-    expect(screen.getAllByText('Events')).toHaveLength(2);
+    expect(screen.getAllByText('Posts')).toHaveLength(1);
+    expect(screen.getAllByText('Events')).toHaveLength(1);
     expect(screen.getByText('Blocked Users')).toBeInTheDocument();
     expect(screen.getByText('Requests')).toBeInTheDocument();
     expect(screen.getByText('Upcoming Events')).toBeInTheDocument();
@@ -91,8 +96,8 @@ describe('Organisation Dashboard Page', () => {
     userEvent.click(adminBtn);
     userEvent.click(postBtn[0]);
     userEvent.click(eventBtn[0]);
-    userEvent.click(postBtn[1]);
-    userEvent.click(eventBtn[1]);
+    userEvent.click(postBtn[0]);
+    userEvent.click(eventBtn[0]);
     userEvent.click(blockUserBtn);
     userEvent.click(requestBtn);
   });
@@ -145,6 +150,6 @@ describe('Organisation Dashboard Page', () => {
     });
 
     await wait();
-    expect(window.location).toBeAt('/orglist');
+    expect(mockNavgate).toHaveBeenCalledWith('/orglist');
   });
 });

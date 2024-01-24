@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import { Button, Form, Modal, Row, Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
@@ -49,7 +49,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
   const [removeUser] = useMutation(REMOVE_MEMBER_MUTATION);
   const [updateUserInOrgType] = useMutation(UPDATE_USER_ROLE_IN_ORG_MUTATION);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   /* istanbul ignore next */
   const changeRole = async (e: any): Promise<void> => {
@@ -118,11 +118,11 @@ const UsersTableItem = (props: Props): JSX.Element => {
   };
 
   function goToOrg(_id: string): void {
-    const url = '/orgdash/id=' + _id;
+    const url = '/orgdash/' + _id;
 
     // Dont change the below two lines
     window.location.replace(url);
-    history.push(url);
+    navigate(url);
   }
   function handleCreator(): void {
     toast.success('Profile Page Coming Soon !');

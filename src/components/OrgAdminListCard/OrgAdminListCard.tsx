@@ -9,10 +9,9 @@ import { toast } from 'react-toastify';
 import styles from './OrgAdminListCard.module.css';
 import { REMOVE_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import defaultImg from 'assets/images/blank.png';
 import { errorHandler } from 'utils/errorHandler';
-
 interface InterfaceOrgPeopleListCardProps {
   key: string;
   id: string;
@@ -21,9 +20,10 @@ interface InterfaceOrgPeopleListCardProps {
   memberImage: string;
   memberEmail: string;
 }
-const currentUrl = window.location.href.split('=')[1];
 
 function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
+  const { orgId: currentUrl } = useParams();
+
   const [remove] = useMutation(REMOVE_ADMIN_MUTATION);
   const [showRemoveAdminModal, setShowRemoveAdminModal] = React.useState(false);
 
@@ -68,10 +68,8 @@ function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
             <div className={styles.singledetails_data_left}>
               <Link
                 className={styles.membername}
-                to={{
-                  pathname: `/member/id=${currentUrl}`,
-                  state: { id: props.id },
-                }}
+                to={`/member/id=${currentUrl}`}
+                state={{ id: props.id }}
               >
                 {props.memberName ? <>{props.memberName}</> : <>Dogs Care</>}
               </Link>

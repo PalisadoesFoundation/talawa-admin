@@ -15,13 +15,14 @@ import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen
 import AdvertisementEntry from './core/AdvertisementEntry/AdvertisementEntry';
 import AdvertisementRegister from './core/AdvertisementRegister/AdvertisementRegister';
 import AddOnRegister from 'components/AddOn/core/AddOnRegister/AddOnRegister';
+import { useNavigate, useParams } from 'react-router-dom';
 export default function advertisements(): JSX.Element {
   const {
     data: data2,
     loading: loading2,
     error: error2,
   } = useQuery(ADVERTISEMENTS_GET);
-  const currentOrgId = window.location.href.split('/id=')[1] + '';
+  const { orgId: currentOrgId } = useParams();
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   document.title = t('title');
 
@@ -32,7 +33,7 @@ export default function advertisements(): JSX.Element {
 
   const [render, setRender] = useState(true);
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
-  const { targets, configUrl } = appRoutes;
+  const { targets } = appRoutes;
 
   const plugins = useSelector((state: RootState) => state.plugins);
   const { installed, addonStore } = plugins;
@@ -93,103 +94,97 @@ export default function advertisements(): JSX.Element {
 
   return (
     <>
-      <OrganizationScreen
-        data-testid="AdEntryStore"
-        screenName="Advertisement"
-        title={t('title')}
-      >
-        <Row>
-          <Col col={8}>
-            <div className={styles.justifysp}>
-              <p className={styles.logintitle}>{t('pHeading')}</p>
+      <Row>
+        <Col col={8}>
+          <div className={styles.justifysp}>
+            <p className={styles.logintitle}>{t('pHeading')}</p>
 
-              <AdvertisementRegister />
-              <Tabs
-                defaultActiveKey="archievedAds"
-                id="uncontrolled-tab-example"
-                className="mb-3"
-                onSelect={updateSelectedTab}
-              >
-                <Tab eventKey="avaactiveAdsilable" title={t('activeAds')}>
-                  {data2?.getAdvertisements
+            <AdvertisementRegister />
+            <Tabs
+              defaultActiveKey="archievedAds"
+              id="uncontrolled-tab-example"
+              className="mb-3"
+              onSelect={updateSelectedTab}
+            >
+              <Tab eventKey="avaactiveAdsilable" title={t('activeAds')}>
+                {data2?.getAdvertisements
+                  .filter((ad: any) => ad.orgId == currentOrgId)
+                  .filter((ad: any) => new Date(ad.endDate) > new Date())
+                  .length == 0 ? (
+                  <h4>{t('pMessage')} </h4> // eslint-disable-line
+                ) : (
+                  data2?.getAdvertisements
                     .filter((ad: any) => ad.orgId == currentOrgId)
                     .filter((ad: any) => new Date(ad.endDate) > new Date())
-                    .length == 0 ? (
-                    <h4>{t('pMessage')} </h4> // eslint-disable-line
-                  ) : (
-                    data2?.getAdvertisements
-                      .filter((ad: any) => ad.orgId == currentOrgId)
-                      .filter((ad: any) => new Date(ad.endDate) > new Date())
-                      .map(
-                        (
-                          ad: {
-                            _id: string;
-                            name: string | undefined;
-                            type: string | undefined;
-                            orgId: string;
-                            link: string;
-                            endDate: Date;
-                            startDate: Date;
-                          },
-                          i: React.Key | null | undefined
-                        ): JSX.Element => (
-                          <AdvertisementEntry
-                            id={ad._id}
-                            key={i}
-                            name={ad.name}
-                            type={ad.type}
-                            orgId={ad.orgId}
-                            startDate={new Date(ad.startDate)}
-                            endDate={new Date(ad.endDate)}
-                            link={ad.link}
-                            // getInstalledPlugins={getInstalledPlugins}
-                          />
-                        )
+                    .map(
+                      (
+                        ad: {
+                          _id: string;
+                          name: string | undefined;
+                          type: string | undefined;
+                          orgId: string;
+                          link: string;
+                          endDate: Date;
+                          startDate: Date;
+                        },
+                        i: React.Key | null | undefined
+                      ): JSX.Element => (
+                        <AdvertisementEntry
+                          id={ad._id}
+                          key={i}
+                          name={ad.name}
+                          type={ad.type}
+                          orgId={ad.orgId}
+                          startDate={new Date(ad.startDate)}
+                          endDate={new Date(ad.endDate)}
+                          link={ad.link}
+                          // getInstalledPlugins={getInstalledPlugins}
+                        />
                       )
-                  )}
-                </Tab>
-                <Tab eventKey="archievedAds" title={t('archievedAds')}>
-                  {data2?.getAdvertisements
+                    )
+                )}
+              </Tab>
+              <Tab eventKey="archievedAds" title={t('archievedAds')}>
+                {data2?.getAdvertisements
+                  .filter((ad: any) => ad.orgId == currentOrgId)
+                  .filter((ad: any) => new Date(ad.endDate) < new Date())
+                  .length == 0 ? (
+                  <h4>{t('pMessage')} </h4> // eslint-disable-line
+                ) : (
+                  data2?.getAdvertisements
                     .filter((ad: any) => ad.orgId == currentOrgId)
                     .filter((ad: any) => new Date(ad.endDate) < new Date())
-                    .length == 0 ? (
-                    <h4>{t('pMessage')} </h4> // eslint-disable-line
-                  ) : (
-                    data2?.getAdvertisements
-                      .filter((ad: any) => ad.orgId == currentOrgId)
-                      .filter((ad: any) => new Date(ad.endDate) < new Date())
-                      .map(
-                        (
-                          ad: {
-                            _id: string;
-                            name: string | undefined;
-                            type: string | undefined;
-                            orgId: string;
-                            link: string;
-                            endDate: Date;
-                            startDate: Date;
-                          },
-                          i: React.Key | null | undefined
-                        ): JSX.Element => (
-                          <AdvertisementEntry
-                            id={ad._id}
-                            key={i}
-                            name={ad.name}
-                            type={ad.type}
-                            orgId={ad.orgId}
-                            startDate={new Date(ad.startDate)}
-                            endDate={new Date(ad.endDate)}
-                            // getInstalledPlugins={getInstalledPlugins}
-                          />
-                        )
+                    .map(
+                      (
+                        ad: {
+                          _id: string;
+                          name: string | undefined;
+                          type: string | undefined;
+                          orgId: string;
+                          link: string;
+                          endDate: Date;
+                          startDate: Date;
+                        },
+                        i: React.Key | null | undefined
+                      ): JSX.Element => (
+                        <AdvertisementEntry
+                          id={ad._id}
+                          key={i}
+                          name={ad.name}
+                          type={ad.type}
+                          orgId={ad.orgId}
+                          startDate={new Date(ad.startDate)}
+                          endDate={new Date(ad.endDate)}
+                          // getInstalledPlugins={getInstalledPlugins}
+                        />
                       )
-                  )}
-                </Tab>
-              </Tabs>
-            </div>
-          </Col>
-        </Row>
-      </OrganizationScreen>
+                    )
+                )}
+              </Tab>
+            </Tabs>
+          </div>
+        </Col>
+      </Row>
     </>
   );
 }

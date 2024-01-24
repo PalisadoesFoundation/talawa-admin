@@ -12,11 +12,10 @@ import OrganizationScreen from './OrganizationScreen';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
-const props: InterfaceOrganizationScreenProps = {
-  title: 'Dashboard',
-  screenName: 'Dashboard',
-  children: <div>Testing ...</div>,
-};
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: '123' }),
+}));
 const MOCKS = [
   {
     request: {
@@ -37,7 +36,7 @@ const MOCKS = [
             name: 'Test Organization',
             description: 'Testing this organization',
             location: 'Lucknow, India',
-            isPublic: true,
+            userRegistrationRequired: true,
             visibleInSearch: true,
             members: [],
             admins: [],
@@ -60,7 +59,7 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <OrganizationScreen {...props} />
+              <OrganizationScreen />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
