@@ -23,14 +23,11 @@ export interface InterfaceLeftDrawerProps {
   };
   hideDrawer: boolean | null;
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
-  setShowAddEventProjectModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const leftDrawerEvent = ({
   event,
   hideDrawer,
-  setHideDrawer,
-  setShowAddEventProjectModal,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const userType = localStorage.getItem('UserType');
@@ -58,18 +55,6 @@ const leftDrawerEvent = ({
         }`}
         data-testid="leftDrawerContainer"
       >
-        {/* Close Drawer Button for small devices */}
-        <Button
-          variant="danger"
-          className={styles.closeModalBtn}
-          onClick={(): void => {
-            setHideDrawer(false);
-          }}
-          data-testid="closeModalBtn"
-        >
-          <i className="fa fa-times"></i>
-        </Button>
-
         {/* Branding Section */}
         <div className={styles.brandingContainer}>
           <TalawaLogo className={styles.talawaLogo} />
@@ -105,22 +90,6 @@ const leftDrawerEvent = ({
         {/* Options List */}
         <div className={styles.optionList}>
           <h5 className={styles.titleHeader}>Event Options</h5>
-          <Button
-            variant="light"
-            className="text-secondary"
-            aria-label="addEventProject"
-            onClick={(): void => {
-              setShowAddEventProjectModal(true);
-            }}
-          >
-            <div className={styles.iconWrapper}>
-              <IconComponent
-                name="Add Event Project"
-                fill="var(--bs-secondary)"
-              />
-            </div>
-            Add an Event Project
-          </Button>
           <EventRegistrantsWrapper
             key={`${event?._id || 'loading'}Registrants`}
             eventId={event._id}
@@ -160,7 +129,7 @@ const leftDrawerEvent = ({
             }}
           >
             <div className={styles.imageContainer}>
-              {userImage && userImage ? (
+              {userImage && userImage !== 'null' ? (
                 <img src={userImage} alt={`Profile Picture`} />
               ) : (
                 <img
@@ -181,7 +150,7 @@ const leftDrawerEvent = ({
           </button>
           <Button
             variant="light"
-            className="mt-4 d-flex justify-content-start px-0 mb-2 w-100"
+            className={`mt-4 d-flex justify-content-start px-0 w-100 ${styles.logout}`}
             onClick={(): void => logout()}
             data-testid="logoutBtn"
           >

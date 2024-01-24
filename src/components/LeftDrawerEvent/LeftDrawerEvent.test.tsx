@@ -23,7 +23,6 @@ const props: InterfaceLeftDrawerProps = {
   },
   hideDrawer: false,
   setHideDrawer: jest.fn(),
-  setShowAddEventProjectModal: jest.fn(),
 };
 const props2: InterfaceLeftDrawerProps = {
   event: {
@@ -37,7 +36,6 @@ const props2: InterfaceLeftDrawerProps = {
   },
   hideDrawer: false,
   setHideDrawer: jest.fn(),
-  setShowAddEventProjectModal: jest.fn(),
 };
 
 const mocks = [
@@ -123,7 +121,7 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
     );
   });
 
-  test('Add Event Project button and profile page button should work properly', async () => {
+  test('Add Event profile page button should work properly', async () => {
     localStorage.setItem('UserType', 'SUPERADMIN');
 
     const { queryByText, queryByTestId } = render(
@@ -139,9 +137,6 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
     await waitFor(() =>
       expect(queryByText('Talawa Admin Portal')).toBeInTheDocument()
     );
-
-    fireEvent.click(queryByText('Add an Event Project') as HTMLElement);
-    expect(props.setShowAddEventProjectModal).toHaveBeenCalled();
 
     fireEvent.click(queryByTestId(/profileBtn/i) as HTMLElement);
   });
@@ -170,21 +165,6 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
         </BrowserRouter>
       </MockedProvider>
     );
-  });
-
-  test('Testing Drawer open close functionality', () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
-    render(
-      <MockedProvider mocks={mocks}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <LeftDrawerEvent {...props} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-    const closeModalBtn = screen.getByTestId(/closeModalBtn/i);
-    userEvent.click(closeModalBtn);
   });
 
   test('Testing logout functionality', async () => {

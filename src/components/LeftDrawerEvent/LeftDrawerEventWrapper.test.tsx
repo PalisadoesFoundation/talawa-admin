@@ -20,7 +20,6 @@ const props: InterfacePropType = {
       _id: 'Test Organization',
     },
   },
-  setShowAddEventProjectModal: jest.fn(),
   children: null,
 };
 
@@ -88,13 +87,34 @@ describe('Testing Left Drawer Wrapper component for the Event Dashboard', () => 
 
     const pageContainer = getByTestId('mainpageright');
     expect(pageContainer.className).toMatch(/pageContainer/i);
-    fireEvent.click(getByTestId('closeLeftDrawerBtn') as HTMLElement);
-    expect(pageContainer.className).toMatch(/expand/i);
-    fireEvent.click(getByTestId('closeLeftDrawerBtn') as HTMLElement);
-    expect(pageContainer.className).toMatch(/contract/i);
-
     await waitFor(() =>
       expect(queryByText('Event Management')).toBeInTheDocument()
     );
+    // Resize window to trigger handleResize
+    window.innerWidth = 800; // Set a width less than or equal to 820
+    fireEvent(window, new Event('resize'));
+
+    await waitFor(() => {
+      fireEvent.click(getByTestId('openMenu') as HTMLElement);
+    });
+
+    // sets hideDrawer to true
+    await waitFor(() => {
+      fireEvent.click(getByTestId('menuBtn') as HTMLElement);
+    });
+
+    // Resize window back to a larger width
+    window.innerWidth = 1000; // Set a larger width
+    fireEvent(window, new Event('resize'));
+
+    // sets hideDrawer to false
+    await waitFor(() => {
+      fireEvent.click(getByTestId('openMenu') as HTMLElement);
+    });
+
+    // sets hideDrawer to true
+    await waitFor(() => {
+      fireEvent.click(getByTestId('menuBtn') as HTMLElement);
+    });
   });
 });

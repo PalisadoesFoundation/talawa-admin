@@ -88,7 +88,6 @@
     "talawaAdminPortal": "Portal de administración de Talawa",
     "menu": "Menú",
     "my organizations": "Mis Organizaciones",
-    "requests": "Solicitudes",
     "users": "Usuarios",
     "logout": "Cerrar sesión"
   },
@@ -128,7 +127,7 @@
     "createSampleOrganization": "Crear organización de muestra",
     "description": "Descripción",
     "location": "Ubicación",
-    "isPublic": "Es público",
+    "userRegistrationRequired": "Registro de usuario requerido",
     "visibleInSearch": "Visible en la búsqueda",
     "displayImage": "Mostrar imagen",
     "enterName": "Ingrese su nombre",
@@ -185,27 +184,6 @@
     "noResultsFoundFor": "No se encontraron resultados para ",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
     "cancel": "Cancelar"
-  },
-  "requests": {
-    "title": "Solicitudes Talawa",
-    "searchByName": "Buscar por nombre",
-    "requests": "Peticiones",
-    "name": "Nombre",
-    "email": "Correo electrónico",
-    "accept": "Aceptar",
-    "reject": "Rechazar",
-    "enterName": "Ingrese su nombre",
-    "endOfResults": "Fin de los resultados",
-    "loadingRequests": "Cargando solicitudes ...",
-    "noRequestFound": "No se encontró ninguna solicitud.",
-    "sort": "Ordenar",
-    "filter": "Filtrar",
-    "Oldest": "Más Antiguas Primero",
-    "Latest": "Más Recientes Primero",
-    "userApproved": "Aprobado por el usuario",
-    "userRejected": "Usuario rechazado",
-    "noResultsFoundFor": "No se encontraron resultados para ",
-    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
   "dashboard": {
     "title": "Panel de",
@@ -342,7 +320,8 @@
     "Oldest": "Más Antiguas Primero",
     "Latest": "Más Recientes Primero",
     "sortPost": "Ordenar Publicaciones",
-    "tag": "Su navegador no admite la etiqueta de video"
+    "tag": "Su navegador no admite la etiqueta de video",
+    "pinPost": "Fijar publicación"
   },
   "postNotFound": {
     "post": "Publicaciones",
@@ -505,7 +484,7 @@
     "description": "Descripción",
     "location": "ubicación",
     "displayImage": "Mostrar imagen",
-    "isPublic": "Público",
+    "userRegistrationRequired": "Registro de usuario requerido",
     "isVisibleInSearch": "Visible en la búsqueda",
     "saveChanges": "Guardar cambios",
     "cancel": "Cancelar",
@@ -553,7 +532,6 @@
     "main": "Principal",
     "firstName": "Nombre",
     "lastName": "Apellido",
-    "memberOfOrganization": "Miembro de la organización",
     "language": "Idioma",
     "adminApproved": "Aprobado por el administrador",
     "pluginCreationAllowed": "Permitir creación de complementos",
@@ -605,7 +583,6 @@
     "events": "Eventos",
     "chat": "Charlar",
     "donate": "Donar",
-    "myTasks": "Mis tareas",
     "settings": "Ajustes",
     "language": "Idioma",
     "logout": "Cerrar sesión",
@@ -692,22 +669,6 @@
     "alreadyRegistered": "Ya registrado",
     "register": "Registro"
   },
-  "userTasks": {
-    "yourAssignedTasks": "Tus tareas asignadas",
-    "nothingToShow": "No hay nada que mostrar aquí."
-  },
-  "userTaskCard": {
-    "description": "Descripción",
-    "deadline": "Fecha límite",
-    "created": "Creado",
-    "assignees": "Cesionarias",
-    "completed": "Terminada",
-    "incomplete": "Incompleta",
-    "taskCompleted": "La tarea ha sido completada",
-    "taskNotCompleted": "La tarea aún no se ha completado",
-    "event": "Evento",
-    "organization": "Organización"
-  },
   "advertisement": {
     "title": "Anuncios",
     "pHeading": "Gestionar anuncios",
@@ -719,7 +680,11 @@
     "deleteAdvertisement": "Eliminar anuncio",
     "deleteAdvertisementMsg": "¿Desea eliminar este anuncio?",
     "no": "No",
-    "yes": "Sí"
+    "yes": "Sí",
+    "view": "Ver",
+    "edit": "Editar",
+    "editAdvertisement": "Editar Anuncio",
+    "saveChanges": "Guardar Cambios"
   },
   "userChat": {
     "chat": "Charlar",

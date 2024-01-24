@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[src/components/SuperAdminScreen/SuperAdminScreen.tsx:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/SuperAdminScreen/SuperAdminScreen.tsx#L10)
+[src/components/SuperAdminScreen/SuperAdminScreen.tsx:9](https://github.com/palisadoes/talawa-admin/blob/5828937/src/components/SuperAdminScreen/SuperAdminScreen.tsx#L9)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[src/components/SuperAdminScreen/SuperAdminScreen.tsx:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/SuperAdminScreen/SuperAdminScreen.tsx#L9)
+[src/components/SuperAdminScreen/SuperAdminScreen.tsx:8](https://github.com/palisadoes/talawa-admin/blob/5828937/src/components/SuperAdminScreen/SuperAdminScreen.tsx#L8)
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-[src/components/SuperAdminScreen/SuperAdminScreen.tsx:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/SuperAdminScreen/SuperAdminScreen.tsx#L8)
+[src/components/SuperAdminScreen/SuperAdminScreen.tsx:7](https://github.com/palisadoes/talawa-admin/blob/5828937/src/components/SuperAdminScreen/SuperAdminScreen.tsx#L7)

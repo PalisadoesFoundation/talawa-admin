@@ -88,7 +88,6 @@
     "talawaAdminPortal": "Portail d'administration Talawa",
     "menu": "Menu",
     "my organizations": "Mes Organisations",
-    "requests": "Demandes",
     "users": "Utilisateurs",
     "logout": "Déconnexion"
   },
@@ -128,7 +127,7 @@
     "createSampleOrganization": "Créer une organisation d'exemple",
     "description": "La description",
     "location": "Emplacement",
-    "isPublic": "Est publique",
+    "userRegistrationRequired": "enregistrement requis",
     "visibleInSearch": "Visible dans la recherche",
     "displayImage": "Afficher l'image",
     "enterName": "Entrez le nom",
@@ -186,27 +185,6 @@
     "noResultsFoundFor": "Aucun résultat trouvé pour ",
     "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau.",
     "cancel": "Annuler"
-  },
-  "requests": {
-    "title": "Demandes Talawa",
-    "searchByName": "Recherche par nom",
-    "requests": "Demandes",
-    "name": "Nom",
-    "email": "E-mail",
-    "accept": "Accepter",
-    "reject": "Rejeter",
-    "enterName": "Entrez le nom",
-    "endOfResults": "Fin des résultats",
-    "loadingRequests": "Chargement des demandes...",
-    "noRequestFound": "Aucune demande trouvée",
-    "sort": "Trier",
-    "filter": "Filtre",
-    "Oldest": "Les plus anciennes d'abord",
-    "Latest": "Les plus récentes d'abord",
-    "userApproved": "Approuvé par l'utilisateur",
-    "userRejected": "Utilisateur rejeté",
-    "noResultsFoundFor": "Aucun résultat trouvé pour ",
-    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "dashboard": {
     "title": "Tableau de bord",
@@ -343,7 +321,8 @@
     "Oldest": "Les plus anciennes d'abord",
     "Latest": "Les plus récentes d'abord",
     "sortPost": "Trier les publications",
-    "tag": "Votre navigateur ne prend pas en charge la balise vidéo"
+    "tag": "Votre navigateur ne prend pas en charge la balise vidéo",
+    "pinPost": "Épingler le message"
   },
   "postNotFound": {
     "post": "Poste",
@@ -506,7 +485,7 @@
     "description": "La description",
     "location": "emplacement",
     "displayImage": "Afficher l'image",
-    "isPublic": "Public",
+    "userRegistrationRequired": "enregistrement requis",
     "isVisibleInSearch": "Visible dans la recherche",
     "saveChanges": "Sauvegarder les modifications",
     "enterNameOrganization": "Entrez le nom de l'organisation",
@@ -553,7 +532,6 @@
     "main": "Principal",
     "firstName": "Prénom",
     "lastName": "Nom de famille",
-    "memberOfOrganization": "Membre de l'organisation",
     "language": "Langue",
     "adminApproved": "Approuvé par l'administrateur",
     "pluginCreationAllowed": "Autorisation de création de plugin",
@@ -605,7 +583,6 @@
     "events": "Événements",
     "chat": "Discuter",
     "donate": "Donner",
-    "myTasks": "Mes tâches",
     "settings": "Paramètres",
     "language": "Langue",
     "logout": "Se déconnecter",
@@ -692,22 +669,6 @@
     "alreadyRegistered": "Déjà enregistré",
     "register": "Registre"
   },
-  "userTasks": {
-    "yourAssignedTasks": "Vos tâches assignées",
-    "nothingToShow": "Rien à montrer ici."
-  },
-  "userTaskCard": {
-    "description": "Description",
-    "deadline": "Date limite",
-    "created": "Créé",
-    "assignees": "Destinataires",
-    "completed": "Complété",
-    "incomplete": "Incomplète",
-    "taskCompleted": "La tâche est terminée",
-    "taskNotCompleted": "La tâche n'est pas encore terminée",
-    "event": "Événement",
-    "organization": "Organisation"
-  },
   "advertisement": {
     "title": "Publicités",
     "pHeading": "Gérer les publicités",
@@ -719,7 +680,11 @@
     "deleteAdvertisement": "Supprimer l'annonce",
     "deleteAdvertisementMsg": "Voulez-vous supprimer cette annonce ?",
     "no": "Non",
-    "yes": "Oui"
+    "yes": "Oui",
+    "view": "Voir",
+    "edit": "Éditer",
+    "editAdvertisement": "Éditer l'annonce",
+    "saveChanges": "Enregistrer les modifications"
   },
   "userChat": {
     "chat": "Chat",

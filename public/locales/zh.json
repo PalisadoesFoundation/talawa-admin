@@ -88,7 +88,6 @@
     "talawaAdminPortal": "塔拉瓦管理门户",
     "menu": "菜单",
     "my organizations": "我的组织",
-    "requests": "请求",
     "users": "用户",
     "logout": "退出登录"
   },
@@ -128,7 +127,7 @@
     "createSampleOrganization": "创建示范组织",
     "description": "描述",
     "location": "地點",
-    "isPublic": "是否公開",
+    "isPubluserRegistrationRequiredic": "需要用户注册",
     "visibleInSearch": "在搜索中可見",
     "displayImage": "顯示圖像",
     "enterName": "输入名字",
@@ -185,27 +184,6 @@
     "noResultsFoundFor": "未找到结果 ",
     "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。",
     "cancel": "取消"
-  },
-  "requests": {
-    "title": "塔拉瓦請求",
-    "searchByName": "按名稱搜索",
-    "requests": "要求",
-    "name": "姓名",
-    "email": "電子郵件",
-    "accept": "接受",
-    "reject": "拒絕",
-    "enterName": "输入名字",
-    "endOfResults": "結果結束",
-    "loadingRequests": "正在加載請求...",
-    "noRequestFound": "找不到請求。",
-    "sort": "排序",
-    "filter": "過濾",
-    "Oldest": "最旧的优先",
-    "Latest": "最新的优先",
-    "userApproved": "用戶批准",
-    "userRejected": "用戶被拒絕",
-    "noResultsFoundFor": "未找到结果 ",
-    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "dashboard": {
     "title": "儀表板",
@@ -342,7 +320,8 @@
     "Oldest": "最旧的优先",
     "Latest": "最新的优先",
     "sortPost": "排序帖子",
-    "tag": "您的浏览器不支持视频标签"
+    "tag": "您的浏览器不支持视频标签",
+    "pinPost": "针柱"
   },
   "postNotFound": {
     "post": "郵政",
@@ -505,7 +484,7 @@
     "description": "描述",
     "location": "地點",
     "displayImage": "顯示圖像",
-    "isPublic": "公开",
+    "userRegistrationRequired": "需要用户注册",
     "isVisibleInSearch": "在搜索中可见",
     "saveChanges": "保存更改",
     "cancel": "取消",
@@ -553,7 +532,6 @@
     "main": "主要的",
     "firstName": "名字",
     "lastName": "姓氏",
-    "memberOfOrganization": "组织成员",
     "language": "语言",
     "adminApproved": "管理员已批准",
     "pluginCreationAllowed": "允许创建插件",
@@ -605,7 +583,6 @@
     "events": "活動",
     "chat": "聊天",
     "donate": "捐",
-    "myTasks": "我的任務",
     "settings": "設置",
     "language": "語言",
     "logout": "登出",
@@ -692,22 +669,6 @@
     "alreadyRegistered": "已經註冊",
     "register": "登記"
   },
-  "userTasks": {
-    "yourAssignedTasks": "您指派的任務",
-    "nothingToShow": "這裡沒有什麼可顯示的。"
-  },
-  "userTaskCard": {
-    "description": "描述",
-    "deadline": "最後期限",
-    "created": "已創建",
-    "assignees": "受讓人",
-    "completed": "完全的",
-    "incomplete": "不完整",
-    "taskCompleted": "任務已完成",
-    "taskNotCompleted": "任務還沒完成",
-    "event": "事件",
-    "organization": "組織"
-  },
   "advertisement": {
     "title": "广告",
     "pHeading": "管理广告",
@@ -719,7 +680,11 @@
     "deleteAdvertisement": "删除广告",
     "deleteAdvertisementMsg": "您是否要删除此广告？",
     "no": "不",
-    "yes": "是"
+    "yes": "是",
+    "view": "查看",
+    "edit": "编辑",
+    "editAdvertisement": "编辑广告",
+    "saveChanges": "保存更改"
   },
   "userChat": {
     "chat": "聊天",

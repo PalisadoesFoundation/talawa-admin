@@ -97,21 +97,12 @@ function userNavbar(): JSX.Element {
               <Dropdown.ItemText>
                 <b>{userName}</b>
               </Dropdown.ItemText>
-
               <Dropdown.Item
                 onClick={() => history.push('/user/settings')}
                 className={styles.link}
               >
                 {t('settings')}
               </Dropdown.Item>
-
-              <Dropdown.Item
-                onClick={() => history.push('/user/tasks')}
-                className={styles.link}
-              >
-                {t('myTasks')}
-              </Dropdown.Item>
-
               <Dropdown.Item onClick={handleLogout} data-testid={`logoutBtn`}>
                 {t('logout')}
               </Dropdown.Item>

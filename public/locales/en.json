@@ -88,7 +88,6 @@
     "talawaAdminPortal": "Talawa Admin Portal",
     "menu": "Menu",
     "my organizations": "My Organizations",
-    "requests": "Requests",
     "users": "Users",
     "logout": "Logout"
   },
@@ -129,7 +128,7 @@
     "createSampleOrganization": "Create Sample Organization",
     "description": "Description",
     "location": "Location",
-    "isPublic": "Is Public",
+    "userRegistrationRequired": "User Registration Required",
     "visibleInSearch": "Visible In Search",
     "displayImage": "Display Image",
     "enterName": "Enter Name",
@@ -191,28 +190,6 @@
     "noResultsFoundFor": "No results found for ",
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
     "cancel": "Cancel"
-  },
-  "requests": {
-    "title": "Talawa Requests",
-    "searchByName": "Search By Name",
-    "requests": "Requests",
-    "name": "Name",
-    "email": "Email",
-    "accept": "Accept",
-    "reject": "Reject",
-    "enterName": "Enter Name",
-    "endOfResults": "End of results",
-    "loadingRequests": "Loading Requests...",
-    "noRequestFound": "No Request Found",
-    "sort": "Sort",
-    "filter": "Filter",
-    "Oldest": "Oldest First",
-    "Latest": "Latest First",
-    "noOrgError": "Organizations not found, please create an organization through dashboard",
-    "userApproved": "User Approved",
-    "userRejected": "User Rejected",
-    "noResultsFoundFor": "No results found for ",
-    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "dashboard": {
     "title": "Dashboard",
@@ -348,7 +325,8 @@
     "Oldest": "Oldest First",
     "Latest": "Latest First",
     "sortPost": "Sort Post",
-    "tag": " Your browser does not support the video tag"
+    "tag": " Your browser does not support the video tag",
+    "pinPost": "Pin post"
   },
   "postNotFound": {
     "post": "Post",
@@ -509,7 +487,7 @@
     "description": "Description",
     "location": "Location",
     "displayImage": "Display Image",
-    "isPublic": "Public",
+    "userRegistrationRequired": "User Registration Required",
     "isVisibleInSearch": "Visible in Search",
     "saveChanges": "Save Changes",
     "enterNameOrganization": "Enter Organization Name",
@@ -558,7 +536,6 @@
     "main": "Main",
     "firstName": "First name",
     "lastName": "Last name",
-    "memberOfOrganization": "Member of Organization",
     "language": "Language",
     "adminApproved": "Admin approved",
     "pluginCreationAllowed": "Plugin creation allowed",
@@ -610,7 +587,6 @@
     "events": "Events",
     "chat": "Chat",
     "donate": "Donate",
-    "myTasks": "My Tasks",
     "settings": "Settings",
     "language": "Language",
     "logout": "Logout",
@@ -697,22 +673,6 @@
     "alreadyRegistered": "Already registered",
     "register": "Register"
   },
-  "userTasks": {
-    "yourAssignedTasks": "Your assigned tasks",
-    "nothingToShow": "Nothing to show here."
-  },
-  "userTaskCard": {
-    "description": "Description",
-    "deadline": "Deadline",
-    "created": "Created",
-    "assignees": "Assignees",
-    "completed": "Completed",
-    "incomplete": "Incomplete",
-    "taskCompleted": "The task has been completed",
-    "taskNotCompleted": "The task has not been completed yet",
-    "event": "Event",
-    "organization": "Organization"
-  },
   "advertisement": {
     "title": "Advertisements",
     "pHeading": "Manage Ads",
@@ -734,7 +694,11 @@
     "deleteAdvertisement": "Delete Advertisement",
     "deleteAdvertisementMsg": "Do you want to remove this advertisement?",
     "no": "No",
-    "yes": "Yes"
+    "yes": "Yes",
+    "view": "View",
+    "edit": "Edit",
+    "editAdvertisement": "Edit Advertisement",
+    "saveChanges": "Save Changes"
   },
   "userChat": {
     "chat": "Chat",

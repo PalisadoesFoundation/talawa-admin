@@ -17,7 +17,6 @@ import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import AddOnStore from 'components/AddOn/core/AddOnStore/AddOnStore';
 import ForgotPassword from 'screens/ForgotPassword/ForgotPassword';
 import Users from 'screens/Users/Users';
-import Requests from 'screens/Requests/Requests';
 import BlockUser from 'screens/BlockUser/BlockUser';
 import EventDashboard from 'screens/EventDashboard/EventDashboard';
 import MemberDetail from 'screens/MemberDetail/MemberDetail';
@@ -30,7 +29,6 @@ import People from 'screens/UserPortal/People/People';
 import Settings from 'screens/UserPortal/Settings/Settings';
 import Donate from 'screens/UserPortal/Donate/Donate';
 import Events from 'screens/UserPortal/Events/Events';
-import Tasks from 'screens/UserPortal/Tasks/Tasks';
 // import Chat from 'screens/UserPortal/Chat/Chat';
 import Advertisements from 'components/Advertisements/Advertisements';
 
@@ -110,7 +108,6 @@ function app(): JSX.Element {
         <SecuredRoute path="/orgstore" component={AddOnStore} />
         <SecuredRoute path="/orgads" component={Advertisements} />
         <SecuredRoute path="/users" component={Users} />
-        <SecuredRoute path="/requests" component={Requests} />
         <SecuredRoute path="/blockuser" component={BlockUser} />
         <SecuredRoute path="/event/:eventId" component={EventDashboard} />
         {extraRoutes}
@@ -127,7 +124,6 @@ function app(): JSX.Element {
         <SecuredRouteForUser path="/user/settings" component={Settings} />
         <SecuredRouteForUser path="/user/donate" component={Donate} />
         <SecuredRouteForUser path="/user/events" component={Events} />
-        <SecuredRouteForUser path="/user/tasks" component={Tasks} />
         {/* <SecuredRouteForUser path="/user/chat" component={Chat} /> */}
 
         <Route exact path="*" component={PageNotFound} />

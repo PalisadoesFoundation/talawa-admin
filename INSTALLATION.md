@@ -16,6 +16,7 @@ This document provides instructions on how to set up and start a running instanc
   - [Creating .env file](#creating-env-file)
   - [Setting up REACT_APP_TALAWA_URL in .env file](#setting-up-react_app_talawa_url-in-env-file)
   - [Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-react_app_recaptcha_site_key-in-env-file)
+  - [Setting up Compiletime and Runtime logs](#setting-up-compiletime-and-runtime-logs)
 - [Post Configuration Steps](#post-configuration-steps)
   - [Running Talawa-Admin](#running-talawa-admin)
   - [Accessing Talawa-Admin](#accessing-talawa-admin)
@@ -35,6 +36,7 @@ This document provides instructions on how to set up and start a running instanc
 
 We recommend that you follow these steps before beginning development work on Talawa-Admin:
 
+1. You need to have `nodejs` installed in your machine. We recommend using Node version greater than 20.0.0. You can install it either through [nvm](https://github.com/nvm-sh/nvm) (Node Version Manager) or by visiting the official [Nodejs](https://nodejs.org/download/release/v16.20.2/) website.
 1. [Talawa-API](https://github.com/PalisadoesFoundation/talawa-api): (**This is mandatory**) The API system that the mobile app uses for accessing data. Setup your own **_local instance_**
 1. [Talawa](https://github.com/PalisadoesFoundation/talawa): (Optional) The mobile app that people will use to access Talawa's features. This may be useful if you need to verify administrative features you have added or modified.
 
@@ -82,12 +84,20 @@ For more details please refer to the installation guidelines provided in the [of
 Run the following command to install the packages and dependencies required by `talawa-admin`:
 
 ```
-npm install --legacy-peer-deps
+npm install 
 ```
 
 # Configuration
 
 It's important to configure Talawa-Admin. Here's how to do it.
+
+You can use our interactive setup script for the configuration. Use the following command for the same.
+
+```
+npm run setup
+```
+
+All the options in "setup" can be done manually as well and here's how to do it. - [Creating .env file](#creating-env-file)
 
 ## Creating .env file
 
@@ -140,6 +150,9 @@ Copy/paste this `reCAPTCHA site key` to the variable named `REACT_APP_RECAPTCHA_
 ```
 REACT_APP_RECAPTCHA_SITE_KEY="this_is_the_recaptcha_key"
 ```
+## Setting up Compiletime and Runtime logs
+
+Set the `ALLOW_LOGS` to "YES" if you want warnings , info and error messages in your console or leave it blank if you dont need them or want to keep the console clean
 
 # Post Configuration Steps
 

@@ -88,7 +88,6 @@
     "talawaAdminPortal": "तलावा व्यवस्थापक पोर्टल",
     "menu": "मेन्यू",
     "my organizations": "मेरे संगठन",
-    "requests": "अनुरोध",
     "users": "उपयोगकर्ता",
     "logout": "लॉग आउट"
   },
@@ -128,7 +127,7 @@
     "createSampleOrganization": " सैंपल संगठन बनाएं",
     "description": "विवरण",
     "location": "स्थान",
-    "isPublic": "सार्वजनिक है",
+    "userRegistrationRequired": "उपयोगकर्ता पंजीकरण आवश्यक",
     "visibleInSearch": "खोज में दृश्यमान",
     "displayImage": "प्रदर्शन छवि",
     "enterName": "नाम दर्ज करें",
@@ -185,27 +184,6 @@
     "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला ",
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।",
     "cancel": "रद्द करें"
-  },
-  "requests": {
-    "title": "तलवा अनुरोध",
-    "searchByName": "नाम से खोजें",
-    "requests": "अनुरोध",
-    "name": "नाम",
-    "email": "ईमेल",
-    "accept": "स्वीकार करना",
-    "reject": "अस्वीकार",
-    "enterName": "नाम दर्ज करें",
-    "endOfResults": "परिणामों का अंत",
-    "loadingRequests": "अनुरोध लोड हो रहा है ...",
-    "noRequestFound": "कोई अनुरोध नहीं मिला।",
-    "sort": "छांटें",
-    "filter": "फ़िल्टर",
-    "Oldest": "सबसे पुराना पहले",
-    "Latest": "सबसे नवीनतम पहले",
-    "userApproved": "उपयोगकर्ता स्वीकृत",
-    "userRejected": "उपयोगकर्ता अस्वीकृत",
-    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला ",
-    "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।"
   },
   "dashboard": {
     "title": "डैशबोर्ड",
@@ -342,7 +320,8 @@
     "Oldest": "सबसे पुराना पहले",
     "Latest": "सबसे नवीनतम पहले",
     "sortPost": "पोस्ट को क्रमित करें",
-    "tag": "आपका ब्राउज़र वीडियो टैग का समर्थन नहीं करता"
+    "tag": "आपका ब्राउज़र वीडियो टैग का समर्थन नहीं करता",
+    "pinPost": "पोस्ट को पिन करें"
   },
   "postNotFound": {
     "post": "पोस्ट",
@@ -505,7 +484,7 @@
     "description": "विवरण",
     "location": "जगह",
     "displayImage": "प्रदर्शन छवि",
-    "isPublic": "सार्वजनिक",
+    "userRegistrationRequired": "उपयोगकर्ता पंजीकरण आवश्यक",
     "isVisibleInSearch": "खोज में दिखाए जा सकते हैं",
     "saveChanges": "परिवर्तनों को सुरक्षित करें",
     "cancel": "रद्द करना",
@@ -553,7 +532,6 @@
     "main": "मुख्य",
     "firstName": "पहला नाम",
     "lastName": "अंतिम नाम",
-    "memberOfOrganization": "संगठन का सदस्य",
     "language": "भाषा",
     "adminApproved": "व्यवस्थापक द्वारा स्वीकृत",
     "pluginCreationAllowed": "प्लगइन निर्माण अनुमति दी गई",
@@ -605,7 +583,6 @@
     "events": "आयोजन",
     "chat": "बातचीत",
     "donate": "दान देना",
-    "myTasks": "मेरा काम",
     "settings": "समायोजन",
     "language": "भाषा",
     "logout": "लॉग आउट",
@@ -692,22 +669,6 @@
     "alreadyRegistered": "पहले से ही पंजीकृत",
     "register": "पंजीकरण करवाना"
   },
-  "userTasks": {
-    "yourAssignedTasks": "आपके असाइन किए गए कार्य",
-    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है."
-  },
-  "userTaskCard": {
-    "description": "विवरण",
-    "deadline": "अंतिम तारीख",
-    "created": "बनाया",
-    "assignees": "असाइनी",
-    "completed": "पुरा",
-    "incomplete": "अधूरा",
-    "taskCompleted": "काम पूरा हो गया",
-    "taskNotCompleted": "कार्य अभी तक पूरा नहीं हुआ है",
-    "event": "आयोजन",
-    "organization": "संगठन"
-  },
   "advertisement": {
     "title": "विज्ञापन",
     "pHeading": "विज्ञापन प्रबंधन",
@@ -719,7 +680,11 @@
     "deleteAdvertisement": "विज्ञापन हटाएं",
     "deleteAdvertisementMsg": "क्या आप इस विज्ञापन को हटाना चाहते हैं?",
     "no": "नहीं",
-    "yes": "हाँ"
+    "yes": "हाँ",
+    "view": "देखें",
+    "edit": "संपादित करें",
+    "editAdvertisement": "विज्ञापन संपादित करें",
+    "saveChanges": "परिवर्तन सहेजें"
   },
   "userChat": {
     "chat": "बात",
