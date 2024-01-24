@@ -114,7 +114,7 @@ function app(): JSX.Element {
         <Route exact path="/forgotPassword" component={ForgotPassword} />
 
         {/* User Portal Routes */}
-        <Route exact path="/user" component={() => <LoginPage role="user" />} />
+        <Route exact path="/user" component={LoginPage} />
         <SecuredRouteForUser
           path="/user/organizations"
           component={Organizations}

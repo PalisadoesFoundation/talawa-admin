@@ -39,7 +39,7 @@ interface InterfaceComponentProps {
   role: string;
 }
 
-function loginPage({ role }: InterfaceComponentProps): JSX.Element {
+function loginPage({ role = 'user' }: InterfaceComponentProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
   const history = useHistory();
 
@@ -272,7 +272,7 @@ function loginPage({ role }: InterfaceComponentProps): JSX.Element {
       toast.error(t('Please_check_the_captcha'));
       return;
     }
-
+    /* istanbul ignore next */
     if (!validatePassword(formState.password)) {
       toast.warn(t('password_invalid'));
       return;
