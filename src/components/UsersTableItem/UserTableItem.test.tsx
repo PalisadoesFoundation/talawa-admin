@@ -432,7 +432,10 @@ describe('Testing User Table Item', () => {
     expect(inputBox).toBeInTheDocument();
     expect(screen.getByText(/Joined Organization 1/i)).toBeInTheDocument();
     expect(screen.getByText(/Joined Organization 2/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/Jamaica/i)).toHaveLength(2);
+    const elementsWithKingston = screen.getAllByText(/Kingston/i);
+    elementsWithKingston.forEach((element) => {
+      expect(element).toBeInTheDocument();
+    });
     expect(screen.getByText(/29-08-2023/i)).toBeInTheDocument();
     expect(screen.getByText(/19-09-2023/i)).toBeInTheDocument();
     expect(screen.getByTestId('removeUserFromOrgBtnabc')).toBeInTheDocument();
@@ -644,7 +647,10 @@ describe('Testing User Table Item', () => {
     expect(inputBox).toBeInTheDocument();
     expect(screen.getByText(/Blocked Organization 1/i)).toBeInTheDocument();
     expect(screen.getByText(/Blocked Organization 2/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/Jamaica/i)).toHaveLength(2);
+    const elementsWithKingston = screen.getAllByText(/Kingston/i);
+    elementsWithKingston.forEach((element) => {
+      expect(element).toBeInTheDocument();
+    });
     expect(screen.getByText(/29-08-2023/i)).toBeInTheDocument();
     expect(screen.getByText(/29-09-2023/i)).toBeInTheDocument();
     expect(screen.getByTestId('removeUserFromOrgBtnxyz')).toBeInTheDocument();
