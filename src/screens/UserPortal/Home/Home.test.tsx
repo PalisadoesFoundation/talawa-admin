@@ -215,7 +215,7 @@ async function wait(ms = 100): Promise<void> {
 }
 
 beforeEach(() => {
-  const url = 'http://localhost:3000/user/organization/id=orgId';
+  const url = `http://localhost:${process.env.PORT}/user/organization/id=orgId`;
   Object.defineProperty(window, 'location', {
     value: {
       href: url,

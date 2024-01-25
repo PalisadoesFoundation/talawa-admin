@@ -38,6 +38,19 @@ async function askForTalawaApiUrl(
   return endpoint;
 }
 
+async function askForCustomPort(): Promise<number> {
+  const { customPort } = await inquirer.prompt([
+    {
+      type: 'input',
+      name: 'customPort',
+      message:
+        'Enter custom port for development server (leave blank for default 4321):',
+      default: 4321,
+    },
+  ]);
+  return customPort;
+}
+
 // Check if all the fields in .env.example are present in .env
 function checkEnvFile(): void {
   const env = dotenv.parse(fs.readFileSync('.env'));
@@ -68,6 +81,34 @@ async function main(): Promise<void> {
     }
   } else {
     checkEnvFile();
+  }
+
+  let shouldSetCustomPort: boolean;
+
+  if (process.env.PORT) {
+    console.log(
+      `\nCustom port for development server already exists with the value:\n${process.env.PORT}`
+    );
+    shouldSetCustomPort = true;
+  } else {
+    const { shouldSetCustomPortResponse } = await inquirer.prompt({
+      type: 'confirm',
+      name: 'shouldSetCustomPortResponse',
+      message: 'Would you like to set up a custom port?',
+      default: true,
+    });
+    shouldSetCustomPort = shouldSetCustomPortResponse;
+  }
+
+  if (shouldSetCustomPort) {
+    const customPort = await askForCustomPort();
+
+    const port = dotenv.parse(fs.readFileSync('.env')).PORT;
+
+    fs.readFile('.env', 'utf8', (err, data) => {
+      const result = data.replace(`PORT=${port}`, `PORT=${customPort}`);
+      fs.writeFileSync('.env', result, 'utf8');
+    });
   }
 
   let shouldSetTalawaApiUrl: boolean;
