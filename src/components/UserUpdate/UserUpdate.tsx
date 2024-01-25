@@ -90,6 +90,7 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
       const { data } = await updateUser({
         variables: {
           //Currently on these  fields are supported by the api
+          id: currentUrl,
           firstName,
           lastName,
           email,
@@ -106,10 +107,10 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
           applangcode: '',
           file: '',
         });
-        localStorage.setItem('FirstName', firstName);
-        localStorage.setItem('LastName', lastName);
-        localStorage.setItem('Email', email);
-        localStorage.setItem('UserImage', file);
+        // localStorage.setItem('FirstName', firstName);
+        // localStorage.setItem('LastName', lastName);
+        // localStorage.setItem('Email', email);
+        // localStorage.setItem('UserImage', file);
         toast.success('Successful updated');
 
         toggleStateValue();
