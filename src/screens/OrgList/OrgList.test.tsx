@@ -402,7 +402,6 @@ describe('Organisations Page testing as Admin', () => {
 
   test('Create organization modal should not be present in the page for Admin', async () => {
     localStorage.setItem('id', '123');
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -414,11 +413,10 @@ describe('Organisations Page testing as Admin', () => {
         </BrowserRouter>
       </MockedProvider>
     );
-
-    await wait();
-    expect(screen.queryByText(/Create Organization/i)).toBeNull();
+    await waitFor(() => {
+      expect(screen.queryByText(/Create Organization/i)).toBeNull();
+    });
   });
-
   test('Testing sort latest and oldest toggle', async () => {
     await act(async () => {
       render(

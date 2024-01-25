@@ -12,6 +12,25 @@
   border: None;
 }
 
+.enableEverythingBtn {
+  width: 100%;
+  border: None;
+}
+
+.pluginStoreBtn {
+  width: 100%;
+  background-color: white;
+  color: #31bb6b;
+  border: 0.5px solid #31bb6b;
+}
+
+.pluginStoreBtn:hover,
+.pluginStoreBtn:focus {
+  background-color: #dfe1e2 !important;
+  color: #31bb6b !important;
+  border-color: #31bb6b !important;
+}
+
 .line::before {
   content: '';
   display: inline-block;
@@ -241,13 +260,6 @@ form > input {
   margin-bottom: 0.8rem;
 }
 
-.cancel > i {
-  margin-top: 5px;
-  transform: scale(1.2);
-  cursor: pointer;
-  color: #707070;
-}
-
 .modalbody {
   width: 50px;
 }
@@ -257,49 +269,10 @@ form > input {
   gap: 1rem;
 }
 
-.greenregbtn {
-  margin: 1rem 0 0;
-  margin-top: 10px;
-  border: 1px solid #e8e5e5;
-  box-shadow: 0 2px 2px #e8e5e5;
-  padding: 10px 10px;
-  border-radius: 5px;
-  background-color: #31bb6b;
-  width: 100%;
-  font-size: 16px;
-  color: white;
-  outline: none;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  width: 100%;
-}
-
 .itemCard .loadingWrapper .innerContainer .content h6[title='Location'] {
   display: block;
   width: 45%;
   height: 18px;
-}
-
-.secondbtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 1rem 0 0;
-  margin-top: 10px;
-  border: 1px solid #d0cfcf;
-  box-shadow: 0 2px 2px #d0cfcf;
-  padding: 10px 10px;
-  border-radius: 5px;
-  background-color: white;
-  width: 100%;
-  font-size: 16px;
-  color: #31bb6b;
-  outline: none;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  width: 100%;
 }
 
 .itemCard .loadingWrapper .innerContainer .content h6 {
