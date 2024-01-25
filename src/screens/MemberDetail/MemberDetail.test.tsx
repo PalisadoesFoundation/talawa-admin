@@ -130,7 +130,7 @@ describe('MemberDetail', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -208,16 +208,13 @@ describe('MemberDetail', () => {
     );
 
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+    await wait();
 
     const user = MOCKS1[0].result.data.user;
 
-    waitFor(() =>
-      expect(screen.getByTestId('userImageAbsent')).toBeInTheDocument()
-    );
-    waitFor(() =>
-      expect(screen.getByTestId('userImageAbsent').getAttribute('src')).toBe(
-        `https://api.dicebear.com/5.x/initials/svg?seed=${user?.firstName} ${user?.lastName}`
-      )
+    expect(screen.getByTestId('userImageAbsent')).toBeInTheDocument();
+    expect(screen.getByTestId('userImageAbsent').getAttribute('src')).toBe(
+      `https://api.dicebear.com/5.x/initials/svg?seed=${user?.firstName} ${user?.lastName}`
     );
   });
 
