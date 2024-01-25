@@ -101,6 +101,12 @@ jest.mock('Constant/constant.ts', () => ({
   RECAPTCHA_SITE_KEY: 'xxx',
 }));
 
+const mockNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+}));
+
 describe('Talawa-API server fetch check', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -670,5 +676,22 @@ describe('Testing Login Page Screen', () => {
     expect(password.password.length).toBeGreaterThanOrEqual(8);
 
     expect(screen.queryByTestId('passwordCheck')).toBeNull();
+  });
+  test('should be redirected to orglist if already loggedIn', async () => {
+    localStorage.setItem('IsLoggedIn', 'TRUE');
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    await wait();
+    expect(mockNavigate).toHaveBeenCalledWith('/orglist');
+    localStorage.clear();
   });
 });

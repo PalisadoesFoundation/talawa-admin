@@ -43,18 +43,9 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
             password: loginVariables.password,
           },
         });
-
-        if (data) {
-          localStorage.setItem('token', data.login.accessToken);
-          localStorage.setItem('userId', data.login.user._id);
-
-          navigator.clipboard.writeText('');
-          /* istanbul ignore next */
-          navigate('/user/organizations');
-        } else {
-          /* istanbul ignore next */
-          toast.warn(t('notAuthorised'));
-        }
+        localStorage.setItem('token', data.login.accessToken);
+        localStorage.setItem('userId', data.login.user._id);
+        navigate('/user/organizations');
       } catch (error: any) {
         errorHandler(t, error);
       }

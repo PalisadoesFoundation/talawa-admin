@@ -11,9 +11,10 @@ import OrganizationScreen from './OrganizationScreen';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
+let mockID: string | undefined = '123';
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ orgId: '123' }),
+  useParams: () => ({ orgId: mockID }),
 }));
 const MOCKS = [
   {
@@ -90,5 +91,20 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
     await waitFor(() => {
       fireEvent.click(screen.getByTestId('menuBtn') as HTMLElement);
     });
+  });
+  test('should be redirected to / if orgId is undefined', async () => {
+    mockID = undefined;
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationScreen />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    expect(window.location.pathname).toEqual('/');
   });
 });

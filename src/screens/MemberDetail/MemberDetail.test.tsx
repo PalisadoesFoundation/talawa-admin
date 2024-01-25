@@ -313,4 +313,18 @@ describe('MemberDetail', () => {
       expect(screen.getByTestId('adminApproved')).toHaveTextContent('No');
     });
   });
+  test('should be redirected to / if member id is undefined', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <MemberDetail />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+    expect(window.location.pathname).toEqual('/');
+  });
 });

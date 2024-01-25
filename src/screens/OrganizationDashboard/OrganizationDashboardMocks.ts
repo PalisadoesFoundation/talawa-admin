@@ -169,7 +169,7 @@ export const MOCKS = [
             _id: '1',
             title: 'Sample Event',
             description: 'Sample Description',
-            startDate: '2023-10-29T00:00:00.000Z',
+            startDate: '2024-10-29T00:00:00.000Z',
             endDate: '2023-10-29T23:59:59.000Z',
             location: 'Sample Location',
             startTime: '08:00:00',

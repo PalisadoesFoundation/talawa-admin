@@ -41,10 +41,10 @@ async function wait(ms = 500): Promise<void> {
     });
   });
 }
-
+let mockID: string | undefined = 'event123';
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ eventId: 'event123' }),
+  useParams: () => ({ eventId: mockID }),
 }));
 
 describe('Testing Event Dashboard Screen', () => {
@@ -94,5 +94,25 @@ describe('Testing Event Dashboard Screen', () => {
     await waitFor(() => expect(queryAllByText('Event Title').length).toBe(2));
 
     await wait();
+  });
+
+  test('should be redirected to /orglist if eventId is undefined', async () => {
+    mockID = undefined;
+    render(
+      <BrowserRouter>
+        <MockedProvider
+          addTypename={false}
+          mocks={queryMockWithTime}
+          defaultOptions={defaultOptions}
+        >
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <ToastContainer />
+            <EventDashboard />
+          </LocalizationProvider>
+        </MockedProvider>
+      </BrowserRouter>
+    );
+    await wait(100);
+    expect(window.location.pathname).toEqual('/orglist');
   });
 });
