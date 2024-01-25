@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import UserUpdate from 'components/UserUpdate/UserUpdate';
 
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
@@ -24,8 +24,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     keyPrefix: 'memberDetail',
   });
   const navigate = useNavigate();
+  const location = useLocation();
   const [state, setState] = useState(1);
-  const currentUrl = id || localStorage.getItem('id');
+  const currentUrl = location.state?.id || id || localStorage.getItem('id');
   if (!currentUrl) {
     return <Navigate to={'/'} replace />;
   }

@@ -107,10 +107,12 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
           applangcode: '',
           file: '',
         });
-        localStorage.setItem('FirstName', firstName);
-        localStorage.setItem('LastName', lastName);
-        localStorage.setItem('Email', email);
-        localStorage.setItem('UserImage', file);
+        if (currentUrl === localStorage.getItem('id')) {
+          localStorage.setItem('FirstName', firstName);
+          localStorage.setItem('LastName', lastName);
+          localStorage.setItem('Email', email);
+          localStorage.setItem('UserImage', file);
+        }
         toast.success('Successful updated');
         navigate(0);
       }

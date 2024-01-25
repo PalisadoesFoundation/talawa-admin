@@ -68,7 +68,7 @@ function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
             <div className={styles.singledetails_data_left}>
               <Link
                 className={styles.membername}
-                to={`/member/id=${currentUrl}`}
+                to={`/member/${currentUrl}`}
                 state={{ id: props.id }}
               >
                 {props.memberName ? <>{props.memberName}</> : <>Dogs Care</>}

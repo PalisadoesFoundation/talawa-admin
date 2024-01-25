@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import styles from './UserListCard.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import defaultImg from 'assets/images/blank.png';
 import { errorHandler } from 'utils/errorHandler';
 
@@ -22,7 +22,7 @@ interface InterfaceUserListCardProps {
 }
 
 function userListCard(props: InterfaceUserListCardProps): JSX.Element {
-  const currentUrl = window.location.href.split('=')[1];
+  const { orgId: currentUrl } = useParams();
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
 
   const { t } = useTranslation('translation', {
@@ -64,7 +64,7 @@ function userListCard(props: InterfaceUserListCardProps): JSX.Element {
             <div className={styles.singledetails_data_left}>
               <Link
                 className={styles.membername}
-                to={`/member/id=${currentUrl}`}
+                to={`/member/${currentUrl}`}
                 state={{ id: props.id }}
               >
                 {props.memberName ? <>{props.memberName}</> : <>Dogs Care</>}
