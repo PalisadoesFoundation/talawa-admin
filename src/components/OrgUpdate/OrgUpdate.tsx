@@ -188,6 +188,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           <Row className="mb-1">
             <Col sm={6} className="mb-3">
               <Form.Control
+                required
                 as="select"
                 value={formState.address.countryCode}
                 onChange={(e) => {
@@ -223,7 +224,6 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               <Form.Control
                 placeholder={t('state')}
                 autoComplete="off"
-                required
                 value={formState.address.state}
                 onChange={(e) => handleInputChange('state', e.target.value)}
               />
@@ -232,7 +232,6 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               <Form.Control
                 placeholder={t('dependentLocality')}
                 autoComplete="off"
-                required
                 value={formState.address.dependentLocality}
                 onChange={(e) =>
                   handleInputChange('dependentLocality', e.target.value)
@@ -245,7 +244,6 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               <Form.Control
                 placeholder={t('line1')}
                 autoComplete="off"
-                required
                 value={formState.address.line1}
                 onChange={(e) => handleInputChange('line1', e.target.value)}
               />
@@ -254,7 +252,6 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               <Form.Control
                 placeholder={t('line2')}
                 autoComplete="off"
-                required
                 value={formState.address.line2}
                 onChange={(e) => handleInputChange('line2', e.target.value)}
               />
@@ -265,7 +262,6 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               <Form.Control
                 placeholder={t('postalCode')}
                 autoComplete="off"
-                required
                 value={formState.address.postalCode}
                 onChange={(e) =>
                   handleInputChange('postalCode', e.target.value)
@@ -276,7 +272,6 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               <Form.Control
                 placeholder={t('sortingCode')}
                 autoComplete="off"
-                required
                 value={formState.address.sortingCode}
                 onChange={(e) =>
                   handleInputChange('sortingCode', e.target.value)
