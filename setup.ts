@@ -108,6 +108,7 @@ async function main(): Promise<void> {
   }
 
   let shouldSetTalawaApiUrl: boolean;
+  let shouldSetTalawaAdminUrl: boolean;
 
   if (process.env.REACT_APP_TALAWA_URL) {
     console.log(
@@ -142,6 +143,44 @@ async function main(): Promise<void> {
       const result = data.replace(
         `REACT_APP_TALAWA_URL=${talawaApiUrl}`,
         `REACT_APP_TALAWA_URL=${endpoint}`
+      );
+      fs.writeFileSync('.env', result, 'utf8');
+    });
+  }
+
+  if (process.env.REACT_ADMIN_FRONTEND_HOST) {
+    console.log(
+      `\nReact admin frontend endpoint already exists with the value:\n${process.env.REACT_ADMIN_FRONTEND_HOST}`
+    );
+    shouldSetTalawaAdminUrl = true;
+  } else {
+    const { shouldSetTalawaAdminResponse } = await inquirer.prompt({
+      type: 'confirm',
+      name: 'shouldSetTalawaAdminResponse',
+      message: 'Would you like to set up talawa-admin frontend host or IP?',
+      default: true,
+    });
+    shouldSetTalawaAdminUrl = shouldSetTalawaAdminResponse;
+  }
+
+  if (shouldSetTalawaAdminUrl) {
+    const { frontendEndpoint } = await inquirer.prompt([
+      {
+        type: 'input',
+        name: 'frontendEndpoint',
+        message: 'Enter your talawa-admin frontend host or IP:',
+        default: 'http://localhost',
+      },
+    ]);
+
+    const talawaAdminUrl = dotenv.parse(
+      fs.readFileSync('.env')
+    ).REACT_ADMIN_FRONTEND_URL;
+
+    fs.readFile('.env', 'utf8', (err, data) => {
+      const result = data.replace(
+        `REACT_ADMIN_FRONTEND_URL=${talawaAdminUrl}`,
+        `REACT_ADMIN_FRONTEND_URL=${frontendEndpoint}`
       );
       fs.writeFileSync('.env', result, 'utf8');
     });

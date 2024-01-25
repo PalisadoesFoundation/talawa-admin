@@ -113,6 +113,7 @@ This `.env` file must be populated with the following environment variables for 
 | Variable                     | Description                                       |
 | ---------------------------- | ------------------------------------------------- |
 | PORT                         | Custom port for Talawa-Admin development purposes |
+| REACT_FRONTEND_HOST          | Host for running tests                            |
 | REACT_APP_TALAWA_URL         | URL endpoint for talawa-api graphql service       |
 | REACT_APP_USE_RECAPTCHA      | Whether you want to use reCAPTCHA or not          |
 | REACT_APP_RECAPTCHA_SITE_KEY | Site key for authentication using reCAPTCHA       |
