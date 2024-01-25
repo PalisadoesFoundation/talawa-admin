@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { render, screen, waitFor } from '@testing-library/react';
 import SecuredRouteForUser from './SecuredRouteForUser';
 

@@ -15,7 +15,7 @@ import TableLoader from 'components/TableLoader/TableLoader';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './BlockUser.module.css';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 interface InterfaceMember {
   _id: string;
@@ -36,7 +36,6 @@ const Requests = (): JSX.Element => {
 
   document.title = t('title');
   const { orgId: currentUrl } = useParams();
-  const navigate = useNavigate();
   const [membersData, setMembersData] = useState<InterfaceMember[]>([]);
   const [searchByFirstName, setSearchByFirstName] = useState<boolean>(true);
   const [searchByName, setSearchByName] = useState<string>('');

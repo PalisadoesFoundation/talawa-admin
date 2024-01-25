@@ -9,9 +9,6 @@ import { updateTargets } from 'state/action-creators';
 import { Navigate, useParams, useLocation, Outlet } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-export interface InterfaceOrganizationScreenProps {
-  children: React.ReactNode;
-}
 const organizationScreen = (): JSX.Element => {
   const location = useLocation();
   const titleKey = map[location.pathname.split('/')[1]];

@@ -54,6 +54,11 @@ jest.mock('components/AddOn/support/services/Plugin.helper', () => ({
     fetchStore: jest.fn().mockResolvedValue([]),
   })),
 }));
+let mockID: any = undefined;
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: mockID }),
+}));
 
 const today = new Date();
 const tomorrow = today;
@@ -218,126 +223,127 @@ describe('Testing Advertisement Component', () => {
     ).toBeInTheDocument();
   });
 
-  // test('if the component renders correctly and ads are correctly categorized date wise', async () => {
-  //   const mocks = [
-  //     ORGANIZATIONS_LIST_MOCK,
-  //     PLUGIN_GET_MOCK,
-  //     ADD_ADVERTISEMENT_MUTATION_MOCK,
-  //     {
-  //       request: {
-  //         query: ADVERTISEMENTS_GET,
-  //       },
-  //       result: {
-  //         data: {
-  //           getAdvertisements: [
-  //             {
-  //               _id: '1',
-  //               name: 'Advertisement1',
-  //               type: 'POPUP',
-  //               orgId: 'undefined',
-  //               link: 'http://example1.com',
-  //               endDate: '2023-01-01',
-  //               startDate: '2022-01-01',
-  //             },
-  //           ],
-  //         },
-  //         loading: false,
-  //       },
-  //     },
-  //   ];
+  test('if the component renders correctly and ads are correctly categorized date wise', async () => {
+    mockID = 'undefined';
+    const mocks = [
+      ORGANIZATIONS_LIST_MOCK,
+      PLUGIN_GET_MOCK,
+      ADD_ADVERTISEMENT_MUTATION_MOCK,
+      {
+        request: {
+          query: ADVERTISEMENTS_GET,
+        },
+        result: {
+          data: {
+            getAdvertisements: [
+              {
+                _id: '1',
+                name: 'Advertisement1',
+                type: 'POPUP',
+                orgId: 'undefined',
+                link: 'http://example1.com',
+                endDate: '2023-01-01',
+                startDate: '2022-01-01',
+              },
+            ],
+          },
+          loading: false,
+        },
+      },
+    ];
 
-  //   render(
-  //     <ApolloProvider client={client}>
-  //       <Provider store={store}>
-  //         <BrowserRouter>
-  //           <I18nextProvider i18n={i18nForTest}>
-  //             <MockedProvider mocks={mocks} addTypename={false}>
-  //               <Advertisement />
-  //             </MockedProvider>
-  //           </I18nextProvider>
-  //         </BrowserRouter>
-  //       </Provider>
-  //     </ApolloProvider>
-  //   );
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={mocks} addTypename={false}>
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>
+    );
 
-  //   await wait();
+    await wait();
 
-  //   const date = await screen.findAllByText(/Ends/i);
-  //   const dateString = date[0].innerHTML;
-  //   const dateMatch = dateString.match(
-  //     /\b(?:Sun|Mon|Tue|Wed|Thu|Fri|Sat)\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})\s+(\d{4})\b/
-  //   );
-  //   let dateObject = new Date();
+    const date = await screen.findAllByText(/Ends/i);
+    const dateString = date[0].innerHTML;
+    const dateMatch = dateString.match(
+      /\b(?:Sun|Mon|Tue|Wed|Thu|Fri|Sat)\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})\s+(\d{4})\b/
+    );
+    let dateObject = new Date();
 
-  //   if (dateMatch) {
-  //     const monthName = dateMatch[1];
-  //     const day = parseInt(dateMatch[2], 10);
-  //     const year = parseInt(dateMatch[3], 10);
+    if (dateMatch) {
+      const monthName = dateMatch[1];
+      const day = parseInt(dateMatch[2], 10);
+      const year = parseInt(dateMatch[3], 10);
 
-  //     const monthIndex =
-  //       'JanFebMarAprMayJunJulAugSepOctNovDec'.indexOf(monthName) / 3;
+      const monthIndex =
+        'JanFebMarAprMayJunJulAugSepOctNovDec'.indexOf(monthName) / 3;
 
-  //     dateObject = new Date(year, monthIndex, day);
-  //   }
+      dateObject = new Date(year, monthIndex, day);
+    }
 
-  //   expect(dateObject.getTime()).toBeLessThan(new Date().getTime());
-  // });
+    expect(dateObject.getTime()).toBeLessThan(new Date().getTime());
+  });
 
-  // test('for the working of the tabs', async () => {
-  //   const mocks = [
-  //     ORGANIZATIONS_LIST_MOCK,
-  //     PLUGIN_GET_MOCK,
-  //     ADD_ADVERTISEMENT_MUTATION_MOCK,
-  //     {
-  //       request: {
-  //         query: ADVERTISEMENTS_GET,
-  //       },
-  //       result: {
-  //         data: {
-  //           getAdvertisements: [
-  //             {
-  //               _id: '1',
-  //               name: 'Advertisement1',
-  //               type: 'POPUP',
-  //               orgId: 'undefined',
-  //               link: 'http://example1.com',
-  //               endDate: '2023-01-01',
-  //               startDate: '2022-01-01',
-  //             },
-  //             {
-  //               _id: '2',
-  //               name: 'Advertisement2',
-  //               type: 'BANNER',
-  //               orgId: 'undefined',
-  //               link: 'http://example2.com',
-  //               endDate: tomorrow,
-  //               startDate: today,
-  //             },
-  //           ],
-  //         },
-  //         loading: false,
-  //       },
-  //     },
-  //   ];
+  test('for the working of the tabs', async () => {
+    const mocks = [
+      ORGANIZATIONS_LIST_MOCK,
+      PLUGIN_GET_MOCK,
+      ADD_ADVERTISEMENT_MUTATION_MOCK,
+      {
+        request: {
+          query: ADVERTISEMENTS_GET,
+        },
+        result: {
+          data: {
+            getAdvertisements: [
+              {
+                _id: '1',
+                name: 'Advertisement1',
+                type: 'POPUP',
+                orgId: 'undefined',
+                link: 'http://example1.com',
+                endDate: '2023-01-01',
+                startDate: '2022-01-01',
+              },
+              {
+                _id: '2',
+                name: 'Advertisement2',
+                type: 'BANNER',
+                orgId: 'undefined',
+                link: 'http://example2.com',
+                endDate: tomorrow,
+                startDate: today,
+              },
+            ],
+          },
+          loading: false,
+        },
+      },
+    ];
 
-  //   render(
-  //     <ApolloProvider client={client}>
-  //       <Provider store={store}>
-  //         <BrowserRouter>
-  //           <I18nextProvider i18n={i18nForTest}>
-  //             <MockedProvider mocks={mocks} addTypename={false}>
-  //               <Advertisement />
-  //             </MockedProvider>
-  //           </I18nextProvider>
-  //         </BrowserRouter>
-  //       </Provider>
-  //     </ApolloProvider>
-  //   );
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={mocks} addTypename={false}>
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>
+    );
 
-  //   await wait();
-  //   userEvent.click(screen.getByText('Active Campaigns'));
+    await wait();
+    userEvent.click(screen.getByText('Active Campaigns'));
 
-  //   await wait();
-  //   userEvent.click(screen.getByText('Completed Campaigns'));
-  // });
+    await wait();
+    userEvent.click(screen.getByText('Completed Campaigns'));
+  });
 });
