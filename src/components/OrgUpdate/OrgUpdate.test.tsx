@@ -30,7 +30,16 @@ describe('Testing Organization Update', () => {
   const formData = {
     name: 'Palisadoes Organization',
     description: 'This is a updated description',
-    location: 'This is updated location',
+    address: {
+      city: 'Kingston',
+      countryCode: 'JM',
+      dependentLocality: 'Sample Dependent Locality',
+      line1: '123 Jamaica Street',
+      line2: 'Apartment 456',
+      postalCode: 'JM12345',
+      sortingCode: 'ABC-123',
+      state: 'Kingston Parish',
+    },
     displayImage: new File(['hello'], 'hello.png', { type: 'image/png' }),
     userRegistrationRequired: false,
     isVisible: true,
@@ -52,7 +61,7 @@ describe('Testing Organization Update', () => {
     // Check labels are present or not
     expect(screen.getByText('Name')).toBeInTheDocument();
     expect(screen.getByText('Description')).toBeInTheDocument();
-    expect(screen.getByText('Location')).toBeInTheDocument();
+    expect(screen.getByText('Address')).toBeInTheDocument();
     expect(screen.getByText('Display Image:')).toBeInTheDocument();
     expect(screen.getByText(/Registration/)).toBeInTheDocument();
     expect(screen.getByText('Visible in Search:')).toBeInTheDocument();
@@ -60,7 +69,13 @@ describe('Testing Organization Update', () => {
     // Get the input fields, and btns
     const name = screen.getByPlaceholderText(/Enter Organization Name/i);
     const des = screen.getByPlaceholderText(/Description/i);
-    const location = screen.getByPlaceholderText(/Location/i);
+    const city = screen.getByPlaceholderText(/City/i);
+    const line1 = screen.getByPlaceholderText(/Line 1/i);
+    const line2 = screen.getByPlaceholderText(/Line 2/i);
+    const dependentLocality =
+      screen.getByPlaceholderText(/Dependent Locality/i);
+    const sortingCode = screen.getByPlaceholderText(/Sorting code/i);
+    const postalCode = screen.getByPlaceholderText(/Postal Code/i);
     const userRegistrationRequired =
       screen.getByPlaceholderText(/Registration/i);
     const isVisible = screen.getByPlaceholderText(/Visible/i);
@@ -68,7 +83,12 @@ describe('Testing Organization Update', () => {
     // Checking if form fields got updated according to the mock data
     expect(name).toHaveValue('Palisadoes');
     expect(des).toHaveValue('Equitable Access to STEM Education Jobs');
-    expect(location).toHaveValue('Jamaica');
+    expect(city).toHaveValue('Kingston');
+    expect(dependentLocality).toHaveValue('Sample Dependent Locality');
+    expect(line1).toHaveValue('123 Jamaica Street');
+    expect(line2).toHaveValue('Apartment 456');
+    expect(postalCode).toHaveValue('JM12345');
+    expect(sortingCode).toHaveValue('ABC-123');
     expect(userRegistrationRequired).toBeChecked();
     expect(isVisible).not.toBeChecked();
   });
@@ -89,7 +109,14 @@ describe('Testing Organization Update', () => {
     // Get the input fields, and btns
     const name = screen.getByPlaceholderText(/Enter Organization Name/i);
     const des = screen.getByPlaceholderText(/Description/i);
-    const location = screen.getByPlaceholderText(/Location/i);
+
+    const city = screen.getByPlaceholderText(/City/i);
+    const line1 = screen.getByPlaceholderText(/Line 1/i);
+    const line2 = screen.getByPlaceholderText(/Line 2/i);
+    const dependentLocality =
+      screen.getByPlaceholderText(/Dependent Locality/i);
+    const sortingCode = screen.getByPlaceholderText(/Sorting code/i);
+    const postalCode = screen.getByPlaceholderText(/Postal Code/i);
     const displayImage = screen.getByPlaceholderText(/Display Image/i);
     const userRegistrationRequired =
       screen.getByPlaceholderText(/Registration/i);
@@ -99,12 +126,22 @@ describe('Testing Organization Update', () => {
     // Emptying the text fields to add updated data
     fireEvent.change(name, { target: { value: '' } });
     fireEvent.change(des, { target: { value: '' } });
-    fireEvent.change(location, { target: { value: '' } });
+    fireEvent.change(city, { target: { value: '' } });
+    fireEvent.change(line1, { target: { value: '' } });
+    fireEvent.change(line2, { target: { value: '' } });
+    fireEvent.change(postalCode, { target: { value: '' } });
+    fireEvent.change(sortingCode, { target: { value: '' } });
+    fireEvent.change(dependentLocality, { target: { value: '' } });
 
     // Mocking filling form behaviour
     userEvent.type(name, formData.name);
     userEvent.type(des, formData.description);
-    userEvent.type(location, formData.location);
+    userEvent.type(city, formData.address.city);
+    userEvent.type(line1, formData.address.line1);
+    userEvent.type(line2, formData.address.line2);
+    userEvent.type(postalCode, formData.address.postalCode);
+    userEvent.type(dependentLocality, formData.address.dependentLocality);
+    userEvent.type(sortingCode, formData.address.sortingCode);
     userEvent.upload(displayImage, formData.displayImage);
     userEvent.click(userRegistrationRequired);
     userEvent.click(isVisible);
@@ -115,7 +152,12 @@ describe('Testing Organization Update', () => {
     // Checking if the form got update accordingly
     expect(name).toHaveValue(formData.name);
     expect(des).toHaveValue(formData.description);
-    expect(location).toHaveValue(formData.location);
+    expect(city).toHaveValue(formData.address.city);
+    expect(dependentLocality).toHaveValue(formData.address.dependentLocality);
+    expect(line1).toHaveValue(formData.address.line1);
+    expect(line2).toHaveValue(formData.address.line2);
+    expect(postalCode).toHaveValue(formData.address.postalCode);
+    expect(sortingCode).toHaveValue(formData.address.sortingCode);
     expect(displayImage).toBeTruthy();
     expect(userRegistrationRequired).not.toBeChecked();
     expect(isVisible).toBeChecked();
@@ -151,7 +193,13 @@ describe('Testing Organization Update', () => {
     // Get the input fields, and btns
     const name = screen.getByPlaceholderText(/Enter Organization Name/i);
     const des = screen.getByPlaceholderText(/Description/i);
-    const location = screen.getByPlaceholderText(/Location/i);
+    const city = screen.getByPlaceholderText(/City/i);
+    const line1 = screen.getByPlaceholderText(/Line 1/i);
+    const line2 = screen.getByPlaceholderText(/Line 2/i);
+    const dependentLocality =
+      screen.getByPlaceholderText(/Dependent Locality/i);
+    const sortingCode = screen.getByPlaceholderText(/Sorting code/i);
+    const postalCode = screen.getByPlaceholderText(/Postal Code/i);
     const displayImage = screen.getByPlaceholderText(/Display Image/i);
     const userRegistrationRequired =
       screen.getByPlaceholderText(/Registration/i);
@@ -161,12 +209,22 @@ describe('Testing Organization Update', () => {
     // Emptying the text fields to add updated data
     fireEvent.change(name, { target: { value: '' } });
     fireEvent.change(des, { target: { value: '' } });
-    fireEvent.change(location, { target: { value: '' } });
+    fireEvent.change(city, { target: { value: '' } });
+    fireEvent.change(line1, { target: { value: '' } });
+    fireEvent.change(line2, { target: { value: '' } });
+    fireEvent.change(postalCode, { target: { value: '' } });
+    fireEvent.change(sortingCode, { target: { value: '' } });
+    fireEvent.change(dependentLocality, { target: { value: '' } });
 
     // Mocking filling form behaviour
     userEvent.type(name, formData.name);
     userEvent.type(des, formData.description);
-    userEvent.type(location, formData.location);
+    userEvent.type(city, formData.address.city);
+    userEvent.type(line1, formData.address.line1);
+    userEvent.type(line2, formData.address.line2);
+    userEvent.type(postalCode, formData.address.postalCode);
+    userEvent.type(dependentLocality, formData.address.dependentLocality);
+    userEvent.type(sortingCode, formData.address.sortingCode);
     userEvent.upload(displayImage, formData.displayImage);
     userEvent.click(userRegistrationRequired);
     userEvent.click(isVisible);
