@@ -436,7 +436,7 @@ export const ADD_ADVERTISEMENT_MUTATION = gql`
         type: $type
         startDate: $startDate
         endDate: $endDate
-        file: $file
+        mediaFile: $file
       }
     ) {
       _id
@@ -456,7 +456,7 @@ export const UPDATE_ADVERTISEMENT_MUTATION = gql`
       input: {
         _id: $id
         name: $name
-        file: $file
+        mediaFile: $file
         type: $type
         startDate: $startDate
         endDate: $endDate

@@ -249,8 +249,14 @@ function advertisementRegister({
               />
               {formState.advertisementMedia && (
                 <div className={styles.preview} data-testid="mediaPreview">
-                  {formState.advertisementMedia.includes('data:video') ? (
-                    <video muted autoPlay={true} loop={true} playsInline>
+                  {formState.advertisementMedia.includes('video') ? (
+                    <video
+                      muted
+                      autoPlay={true}
+                      loop={true}
+                      playsInline
+                      crossOrigin="anonymous"
+                    >
                       <source
                         src={formState.advertisementMedia}
                         type="video/mp4"

@@ -409,7 +409,7 @@ input CreateAdvertisementInput {
   organizationId: ID!
   startDate: Date!
   type: String!
-  file: String!
+  mediaFile: String!
 }
 
 type CreateAdvertisementPayload {

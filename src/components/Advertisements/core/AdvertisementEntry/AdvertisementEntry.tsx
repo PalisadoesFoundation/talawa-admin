@@ -97,6 +97,7 @@ function advertisementEntry({
                   loop={true}
                   playsInline
                   data-testid="media"
+                  crossOrigin="anonymous"
                 >
                   <source src={mediaUrl} type="video/mp4" />
                 </video>
