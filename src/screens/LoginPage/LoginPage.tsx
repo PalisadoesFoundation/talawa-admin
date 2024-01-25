@@ -112,9 +112,7 @@ function loginPage({ role = 'user' }: InterfaceComponentProps): JSX.Element {
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('IsLoggedIn');
     if (isLoggedIn == 'TRUE') {
-      role === 'admin'
-        ? history.push('/orglist')
-        : history.push('/user/organizations');
+      history.push(role === 'admin' ? '/orglist' : '/user/organizations');
     }
     setComponentLoader(false);
   }, []);
@@ -310,7 +308,7 @@ function loginPage({ role = 'user' }: InterfaceComponentProps): JSX.Element {
           navigator.clipboard.writeText('');
         }
         if (localStorage.getItem('IsLoggedIn') == 'TRUE') {
-          history.push(role === 'admin' ? '/orglist' : '/user/organizations/');
+          history.push(role === 'admin' ? '/orglist' : '/user/organizations');
         }
       } else {
         toast.warn(t('notFound'));
