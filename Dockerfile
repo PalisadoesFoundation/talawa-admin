@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM node:lts
 
 WORKDIR /usr/src/app
 
@@ -8,6 +8,6 @@ RUN npm install --legacy-peer-deps
 
 COPY . .
 
-EXPOSE 3000
+EXPOSE $PORT
 
 CMD ["npm", "run", "serve"]

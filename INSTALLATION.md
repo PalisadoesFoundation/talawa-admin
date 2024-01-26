@@ -11,7 +11,7 @@ This document provides instructions on how to set up and start a running instanc
   - [Setting up this repository](#setting-up-this-repository)
   - [Setting up npm](#setting-up-npm)
   - [Setting up Typescript](#setting-up-typescript)
-  - [Installation With Docker](#installation-using-docker)
+  - [Installation Using Docker](#installation-using-docker)
   - [Installing required packages/dependencies](#installing-required-packagesdependencies)
 - [Configuration](#configuration)
   - [Creating .env file](#creating-env-file)
@@ -20,7 +20,7 @@ This document provides instructions on how to set up and start a running instanc
   - [Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-react_app_recaptcha_site_key-in-env-file)
   - [Setting up Compiletime and Runtime logs](#setting-up-compiletime-and-runtime-logs)
 - [Post Configuration Steps](#post-configuration-steps)
-  - [Running Talawa-Admin](#running-talawa-admin)
+  - [Running Talawa-Admin without Docker](#running-talawa-admin-without-docker)
   - [Accessing Talawa-Admin](#accessing-talawa-admin)
   - [Talawa-Admin Registration](#talawa-admin-registration)
   - [Talawa-Admin Login](#talawa-admin-login)
@@ -29,8 +29,8 @@ This document provides instructions on how to set up and start a running instanc
   - [Debugging tests](#debugging-tests)
   - [Linting code files](#linting-code-files)
   - [Husky for Git Hooks](#husky-for-git-hooks)
-    - [pre-commit hook](#pre-commit-hook)
-    - [post-merge hook](#post-merge-hook)
+      - [pre-commit hook](#pre-commit-hook)
+      - [post-merge hook](#post-merge-hook)
 
 <!-- tocstop -->
 
