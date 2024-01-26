@@ -138,6 +138,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               <Form.Control
                 required
                 as="select"
+                data-testid="countrycode"
                 value={formState.address.countryCode}
                 onChange={(e) => {
                   const countryCode = e.target.value;

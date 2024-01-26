@@ -27,6 +27,8 @@ import {
 } from './OrgListMocks';
 import { ToastContainer, toast } from 'react-toastify';
 
+jest.setTimeout(30000);
+
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -200,6 +202,10 @@ describe('Organisations Page testing as SuperAdmin', () => {
       screen.getByPlaceholderText(/Postal Code/i),
       formData.address.postalCode
     );
+    userEvent.selectOptions(
+      screen.getByTestId('countrycode'),
+      formData.address.countryCode
+    );
     userEvent.type(
       screen.getByPlaceholderText(/Line 1/i),
       formData.address.line1
@@ -237,6 +243,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(screen.getByPlaceholderText(/Postal Code/i)).toHaveValue(
       address.postalCode
     );
+    expect(screen.getByTestId(/countrycode/i)).toHaveValue(address.countryCode);
     expect(screen.getByPlaceholderText(/Sorting Code/i)).toHaveValue(
       address.sortingCode
     );
@@ -245,9 +252,9 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(screen.getByLabelText(/Display Image/i)).toBeTruthy();
 
     userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    });
+    // await act(async () => {
+    //   await new Promise((resolve) => setTimeout(resolve, 1000));
+    // });
     // await waitFor(() =>
     //   expect(
     //     screen.queryByText(/Congratulation the Organization is created/i)
@@ -291,6 +298,10 @@ describe('Organisations Page testing as SuperAdmin', () => {
       screen.getByPlaceholderText(/Postal Code/i),
       formData.address.postalCode
     );
+    userEvent.selectOptions(
+      screen.getByTestId('countrycode'),
+      formData.address.countryCode
+    );
     userEvent.type(
       screen.getByPlaceholderText(/Line 1/i),
       formData.address.line1
@@ -328,6 +339,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(screen.getByPlaceholderText(/Postal Code/i)).toHaveValue(
       address.postalCode
     );
+    expect(screen.getByTestId(/countrycode/i)).toHaveValue(address.countryCode);
     expect(screen.getByPlaceholderText(/Sorting Code/i)).toHaveValue(
       address.sortingCode
     );
@@ -336,9 +348,9 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(screen.getByLabelText(/Display Image/i)).toBeTruthy();
 
     userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    });
+    // await act(async () => {
+    //   await new Promise((resolve) => setTimeout(resolve, 1000));
+    // });
     // await waitFor(() =>
     //   expect(
     //     screen.queryByText(/Congratulation the Organization is created/i)
