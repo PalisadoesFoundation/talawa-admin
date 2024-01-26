@@ -11,6 +11,8 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
+import { isValidLink } from 'utils/linkValidator';
+import { Clear } from '@mui/icons-material';
 
 interface InterfaceAddOnRegisterProps {
   id?: string; // OrgId
@@ -53,6 +55,7 @@ function advertisementRegister({
 
   const handleClose = (): void => setShow(false);
   const handleShow = (): void => setShow(true);
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const [create] = useMutation(ADD_ADVERTISEMENT_MUTATION);
   const [updateAdvertisement] = useMutation(UPDATE_ADVERTISEMENT_MUTATION);
   const { refetch } = useQuery(ADVERTISEMENTS_GET);
@@ -93,6 +96,10 @@ function advertisementRegister({
 
   const handleRegister = async (): Promise<void> => {
     try {
+      if (!isValidLink(formState.link)) {
+        toast.error('An error occured, could not create new advertisement');
+        return;
+      }
       console.log('At handle register', formState);
       const { data } = await create({
         variables: {
@@ -232,6 +239,7 @@ function advertisementRegister({
                 placeholder={t('EXlink')}
                 autoComplete="off"
                 required
+                onFocus={(): void => setIsInputFocused(true)}
                 value={formState.link}
                 onChange={(e): void => {
                   setFormState({
@@ -240,6 +248,20 @@ function advertisementRegister({
                   });
                 }}
               />
+              {isInputFocused && (
+                <div className={styles.link_checks}>
+                  {!isValidLink(formState.link) ? (
+                    <>
+                      <div className={styles.link_check_warning}>
+                        <Clear />
+                        Enter a Valid link
+                      </div>
+                    </>
+                  ) : (
+                    setIsInputFocused(false)
+                  )}
+                </div>
+              )}
             </Form.Group>
             <Form.Group className="mb-3" controlId="registerForm.Rtype">
               <Form.Label>{t('Rtype')}</Form.Label>
