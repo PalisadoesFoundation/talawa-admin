@@ -540,7 +540,6 @@ export const MEMBERSHIP_REQUEST = gql`
 export { PLUGIN_GET } from './PlugInQueries';
 export { ADVERTISEMENTS_GET } from './PlugInQueries';
 export { ORGANIZATION_EVENTS_CONNECTION } from './PlugInQueries';
-export { USER_TASKS_LIST } from './PlugInQueries';
 export { DIRECT_CHATS_LIST } from './PlugInQueries';
 export { IS_SAMPLE_ORGANIZATION_QUERY } from './PlugInQueries';
 export { ORGANIZATION_CUSTOM_FIELDS } from './PlugInQueries';

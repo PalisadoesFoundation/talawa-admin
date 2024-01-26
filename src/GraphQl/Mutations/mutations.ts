@@ -550,10 +550,6 @@ export const REGISTER_EVENT = gql`
     }
   }
 `;
-// Changes the role of a event in an organization and add and remove the event from the organization
-export { UPDATE_EVENT_PROJECT_TASK_MUTATION } from './EventTaskMutations';
-export { DELETE_EVENT_TASK_MUTATION } from './EventTaskMutations';
-export { SET_TASK_VOLUNTEERS_MUTATION } from './EventTaskMutations';
 
 // Changes the role of a event in an organization and add and remove the event from the organization
 export { ADD_EVENT_ATTENDEE } from './EventAttendeeMutations';
