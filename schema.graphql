@@ -903,6 +903,7 @@ input UpdateUserInput {
   email: EmailAddress
   firstName: String
   lastName: String
+  applangcode: String
   id: String
 }
 
