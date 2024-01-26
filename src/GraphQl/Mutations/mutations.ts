@@ -73,7 +73,7 @@ export const UPDATE_USER_MUTATION = gql`
     $firstName: String
     $lastName: String
     $email: EmailAddress
-    $id: String
+    $id: ID
     $applangcode: String
     $file: String
   ) {
