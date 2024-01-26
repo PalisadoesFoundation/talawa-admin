@@ -18,10 +18,7 @@ import * as getOrganizationId from 'utils/getOrganizationId';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
-import {
-  REACT_ADMIN_FRONTEND_HOST,
-  REACT_APP_CUSTOM_PORT,
-} from 'Constant/constant';
+import { REACT_APP_CUSTOM_PORT } from 'Constant/constant';
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -219,9 +216,7 @@ async function wait(ms = 100): Promise<void> {
 }
 
 beforeEach(() => {
-  const url = REACT_APP_CUSTOM_PORT
-    ? `${REACT_ADMIN_FRONTEND_HOST}:${REACT_APP_CUSTOM_PORT}/user/organization/id=orgId`
-    : `${REACT_ADMIN_FRONTEND_HOST}/user/organization/id=orgId`;
+  const url = `http://localhost:${REACT_APP_CUSTOM_PORT}/user/organization/id=orgId`;
   Object.defineProperty(window, 'location', {
     value: {
       href: url,

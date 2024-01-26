@@ -11,10 +11,7 @@ import {
   queryMockWithTime,
   queryMockWithoutTime,
 } from './EventDashboard.mocks';
-import {
-  REACT_ADMIN_FRONTEND_HOST,
-  REACT_APP_CUSTOM_PORT,
-} from 'Constant/constant';
+import { REACT_APP_CUSTOM_PORT } from 'Constant/constant';
 
 // We want to disable all forms of caching so that we do not need to define a custom merge function in testing for the network requests
 const defaultOptions: DefaultOptions = {
@@ -48,9 +45,7 @@ async function wait(ms = 500): Promise<void> {
 
 describe('Testing Event Dashboard Screen', () => {
   beforeEach(() => {
-    const url = REACT_APP_CUSTOM_PORT
-      ? `${REACT_ADMIN_FRONTEND_HOST}:${REACT_APP_CUSTOM_PORT}/event/event123`
-      : `${REACT_ADMIN_FRONTEND_HOST}/event/event123`;
+    const url = `http://localhost:${REACT_APP_CUSTOM_PORT}/event/event123`;
     global.window = Object.create(window);
     Object.defineProperty(window, 'location', {
       value: {
