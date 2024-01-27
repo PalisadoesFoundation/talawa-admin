@@ -275,6 +275,32 @@ async function main(): Promise<void> {
   tempEnv['PORT'] = customPort;
   tempEnv['REACT_APP_TALAWA_URL'] = endpoint;
   tempEnv['ALLOW_LOGS'] = 'YES';
+
+  const existingEnv = dotenv.parse(fs.readFileSync(envPath, 'utf8'));
+  let hasChanges = false;
+
+  for (const key in tempEnv) {
+    if (existingEnv[key] !== tempEnv[key]) {
+      hasChanges = true;
+      break;
+    }
+  }
+
+  if (hasChanges) {
+    // Update .env with tempEnv values
+    for (const key in tempEnv) {
+      const result =
+        existingEnv[key] !== undefined
+          ? data.replace(`${key}=${existingEnv[key]}`, `${key}=${tempEnv[key]}`)
+          : `${key}=${tempEnv[key]}\n`;
+      fs.writeFileSync(envPath, result, 'utf8');
+    }
+
+    console.log('\nChanges applied to .env file.');
+  } else {
+    console.log('\nNo changes detected. .env file remains unchanged.');
+  }
+
   console.log(
     '\nCongratulations! Talawa Admin has been successfully setup! 🥂🎉'
   );
