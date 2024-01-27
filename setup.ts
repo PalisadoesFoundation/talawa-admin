@@ -289,6 +289,7 @@ async function main(): Promise<void> {
   if (hasChanges) {
     // Update .env with tempEnv values
     for (const key in tempEnv) {
+      const data = fs.readFileSync(envPath, 'utf8');
       const result =
         existingEnv[key] !== undefined
           ? data.replace(`${key}=${existingEnv[key]}`, `${key}=${tempEnv[key]}`)
