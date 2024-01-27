@@ -14,6 +14,18 @@ import i18nForTest from 'utils/i18nForTest';
 import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
+import { createTheme } from '@mui/material';
+import { ThemeProvider } from 'react-bootstrap';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#31bb6b',
+    },
+  },
+});
 
 const MOCKS = [
   {
@@ -113,6 +125,14 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
+  return {
+    DateTimePicker: jest.requireActual(
+      '@mui/x-date-pickers/DesktopDateTimePicker'
+    ).DesktopDateTimePicker,
+  };
+});
+
 jest.mock('react-toastify', () => ({
   toast: {
     success: jest.fn(),
@@ -181,9 +201,13 @@ describe('Organisation Events Page', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationEvents />
-            </I18nextProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <OrganizationEvents />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -200,9 +224,13 @@ describe('Organisation Events Page', () => {
       <MockedProvider link={link2}>
         <BrowserRouter>
           <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationEvents />
-            </I18nextProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <OrganizationEvents />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -216,9 +244,13 @@ describe('Organisation Events Page', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationEvents />
-            </I18nextProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <OrganizationEvents />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -236,9 +268,13 @@ describe('Organisation Events Page', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationEvents />
-            </I18nextProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <OrganizationEvents />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -262,24 +298,16 @@ describe('Organisation Events Page', () => {
       formData.location
     );
 
-    const endDateDatePicker = screen.getByPlaceholderText(/End Date/i);
-    const startDateDatePicker = screen.getByPlaceholderText(/Start Date/i);
+    const endDateDatePicker = screen.getByLabelText('End Date');
+    const startDateDatePicker = screen.getByLabelText('Start Date');
 
-    fireEvent.click(endDateDatePicker);
-    fireEvent.click(startDateDatePicker);
-
-    await act(async () => {
-      fireEvent.change(endDateDatePicker, {
-        target: {
-          value: formData.endDate,
-        },
-      });
-      fireEvent.change(startDateDatePicker, {
-        target: {
-          value: formData.startDate,
-        },
-      });
+    fireEvent.change(endDateDatePicker, {
+      target: { value: formData.endDate },
     });
+    fireEvent.change(startDateDatePicker, {
+      target: { value: formData.startDate },
+    });
+
     userEvent.click(screen.getByTestId('alldayCheck'));
     userEvent.click(screen.getByTestId('recurringCheck'));
     userEvent.click(screen.getByTestId('ispublicCheck'));
@@ -322,9 +350,13 @@ describe('Organisation Events Page', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationEvents />
-            </I18nextProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <OrganizationEvents />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -348,24 +380,16 @@ describe('Organisation Events Page', () => {
       formData.location
     );
 
-    const endDateDatePicker = screen.getByPlaceholderText(/End Date/i);
-    const startDateDatePicker = screen.getByPlaceholderText(/Start Date/i);
+    const endDateDatePicker = screen.getByLabelText('End Date');
+    const startDateDatePicker = screen.getByLabelText('Start Date');
 
-    fireEvent.click(endDateDatePicker);
-    fireEvent.click(startDateDatePicker);
-
-    await act(async () => {
-      fireEvent.change(endDateDatePicker, {
-        target: {
-          value: formData.endDate,
-        },
-      });
-      fireEvent.change(startDateDatePicker, {
-        target: {
-          value: formData.startDate,
-        },
-      });
+    fireEvent.change(endDateDatePicker, {
+      target: { value: formData.endDate },
     });
+    fireEvent.change(startDateDatePicker, {
+      target: { value: formData.startDate },
+    });
+
     userEvent.click(screen.getByTestId('alldayCheck'));
     userEvent.click(screen.getByTestId('recurringCheck'));
     userEvent.click(screen.getByTestId('ispublicCheck'));
@@ -394,9 +418,13 @@ describe('Organisation Events Page', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationEvents />
-            </I18nextProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <OrganizationEvents />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>
@@ -417,11 +445,8 @@ describe('Organisation Events Page', () => {
     userEvent.click(screen.getByTestId('alldayCheck'));
     await wait();
 
-    userEvent.type(
-      screen.getByPlaceholderText(/Start Time/i),
-      formData.startTime
-    );
-    userEvent.type(screen.getByPlaceholderText(/End Time/i), formData.endTime);
+    userEvent.type(screen.getByLabelText('Start Time'), formData.startTime);
+    userEvent.type(screen.getByLabelText('End Time'), formData.endTime);
 
     userEvent.click(screen.getByTestId('createEventBtn'));
   });
