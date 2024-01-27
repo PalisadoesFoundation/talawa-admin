@@ -6,7 +6,7 @@ import fetch from 'node-fetch';
 dotenv.config();
 
 // Check Talawa API Connection
-async function checkConnection(url: string): Promise<any> {
+export async function checkConnection(url: string): Promise<any> {
   console.log('\nChecking Talawa-API connection....');
   let isConnected = false;
   await fetch(url)
@@ -22,7 +22,7 @@ async function checkConnection(url: string): Promise<any> {
   return isConnected;
 }
 
-function isValidUrl(url): boolean {
+export function isValidUrl(url): boolean {
   try {
     new URL(url);
     return true;
@@ -31,7 +31,7 @@ function isValidUrl(url): boolean {
   }
 }
 
-async function askForTalawaApiUrl(): Promise<string> {
+export async function askForTalawaApiUrl(): Promise<string> {
   const env = dotenv.parse(fs.readFileSync('.env'));
   const defaultEndpoint =
     env.REACT_APP_TALAWA_URL || 'http://localhost:4000/graphql/';
@@ -54,7 +54,7 @@ async function askForTalawaApiUrl(): Promise<string> {
   return endpoint;
 }
 
-async function askForCustomPort(): Promise<number> {
+export async function askForCustomPort(): Promise<number> {
   const { customPort } = await inquirer.prompt([
     {
       type: 'input',

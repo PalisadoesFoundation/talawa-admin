@@ -67,7 +67,7 @@
     "jest-preview": "jest-preview",
     "update:toc": "node scripts/githooks/update-toc.js",
     "lint-staged": "lint-staged --concurrent false",
-    "setup": "tsx setup.ts"
+    "test-setup": "npx jest ./setup.test.ts"
   },
   "eslintConfig": {
     "extends": [
