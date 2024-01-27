@@ -239,7 +239,7 @@ function orgList(): JSX.Element {
 
   /* istanbul ignore next */
   if (errorList || errorUser) {
-    // window.location.assign('/');
+    window.location.assign('/');
   }
 
   /* istanbul ignore next */
