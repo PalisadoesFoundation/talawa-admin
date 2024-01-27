@@ -22,15 +22,35 @@ async function checkConnection(url: string): Promise<any> {
   return isConnected;
 }
 
+function isValidUrl(url): boolean {
+  try {
+    new URL(url);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
 async function askForTalawaApiUrl(): Promise<string> {
+  const env = dotenv.parse(fs.readFileSync('.env'));
+  const defaultEndpoint =
+    env.REACT_APP_TALAWA_URL || 'http://localhost:4000/graphql/';
+
   const { endpoint } = await inquirer.prompt([
     {
       type: 'input',
       name: 'endpoint',
       message: 'Enter your talawa-api endpoint:',
-      default: 'http://localhost:4000/graphql/',
+      default: defaultEndpoint,
+      validate: (input) => {
+        if (isValidUrl(input)) {
+          return true;
+        }
+        return 'Invalid URL. Please enter a valid URL.';
+      },
     },
   ]);
+
   return endpoint;
 }
 
@@ -42,8 +62,16 @@ async function askForCustomPort(): Promise<number> {
       message:
         'Enter custom port for development server (leave blank for default 4321):',
       default: 4321,
+      validate: (input) => {
+        const port = parseInt(input, 10);
+        if (!isNaN(port) && port >= 0 && port <= 65535) {
+          return true;
+        }
+        return 'Invalid port. Please enter a valid port number.';
+      },
     },
   ]);
+
   return customPort;
 }
 
@@ -68,6 +96,19 @@ function validateRecaptcha(string: string): boolean {
 
 async function main(): Promise<void> {
   console.log('Welcome to the Talawa Admin setup! 🚀');
+  const envPath = '.env';
+
+  if (!fs.existsSync(envPath)) {
+    fs.openSync(envPath, 'w');
+    const config = dotenv.parse(fs.readFileSync('.env.example'));
+    for (const key in config) {
+      fs.appendFileSync(envPath, `${key}=${config[key]}\n`);
+    }
+  } else {
+    checkEnvFile();
+  }
+
+  const tempEnv = {};
 
   if (!fs.existsSync('.env')) {
     fs.openSync('.env', 'w');
@@ -219,6 +260,9 @@ async function main(): Promise<void> {
     default: true,
   });
 
+  const customPort = 4321; // Replace 4321 with the desired port number
+
+  const endpoint = 'http://localhost:4000/graphql/'; // Replace 'http://localhost:4000/graphql/' with the actual value
   if (shouldLogErrors) {
     const logErrors = dotenv.parse(fs.readFileSync('.env')).ALLOW_LOGS;
 
@@ -228,6 +272,9 @@ async function main(): Promise<void> {
     });
   }
 
+  tempEnv['PORT'] = customPort;
+  tempEnv['REACT_APP_TALAWA_URL'] = endpoint;
+  tempEnv['ALLOW_LOGS'] = 'YES';
   console.log(
     '\nCongratulations! Talawa Admin has been successfully setup! 🥂🎉'
   );
