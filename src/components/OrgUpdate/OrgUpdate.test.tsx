@@ -70,6 +70,7 @@ describe('Testing Organization Update', () => {
     const name = screen.getByPlaceholderText(/Enter Organization Name/i);
     const des = screen.getByPlaceholderText(/Description/i);
     const city = screen.getByPlaceholderText(/City/i);
+    const countryCode = screen.getByTestId('countrycode');
     const line1 = screen.getByPlaceholderText(/Line 1/i);
     const line2 = screen.getByPlaceholderText(/Line 2/i);
     const dependentLocality =
@@ -84,6 +85,7 @@ describe('Testing Organization Update', () => {
     expect(name).toHaveValue('Palisadoes');
     expect(des).toHaveValue('Equitable Access to STEM Education Jobs');
     expect(city).toHaveValue('Kingston');
+    expect(countryCode).toHaveValue('JM');
     expect(dependentLocality).toHaveValue('Sample Dependent Locality');
     expect(line1).toHaveValue('123 Jamaica Street');
     expect(line2).toHaveValue('Apartment 456');
@@ -111,6 +113,7 @@ describe('Testing Organization Update', () => {
     const des = screen.getByPlaceholderText(/Description/i);
 
     const city = screen.getByPlaceholderText(/City/i);
+    const countryCode = screen.getByTestId('countrycode');
     const line1 = screen.getByPlaceholderText(/Line 1/i);
     const line2 = screen.getByPlaceholderText(/Line 2/i);
     const dependentLocality =
@@ -137,6 +140,7 @@ describe('Testing Organization Update', () => {
     userEvent.type(name, formData.name);
     userEvent.type(des, formData.description);
     userEvent.type(city, formData.address.city);
+    userEvent.selectOptions(countryCode, formData.address.countryCode);
     userEvent.type(line1, formData.address.line1);
     userEvent.type(line2, formData.address.line2);
     userEvent.type(postalCode, formData.address.postalCode);
@@ -153,6 +157,7 @@ describe('Testing Organization Update', () => {
     expect(name).toHaveValue(formData.name);
     expect(des).toHaveValue(formData.description);
     expect(city).toHaveValue(formData.address.city);
+    expect(countryCode).toHaveValue(formData.address.countryCode);
     expect(dependentLocality).toHaveValue(formData.address.dependentLocality);
     expect(line1).toHaveValue(formData.address.line1);
     expect(line2).toHaveValue(formData.address.line2);
@@ -194,6 +199,7 @@ describe('Testing Organization Update', () => {
     const name = screen.getByPlaceholderText(/Enter Organization Name/i);
     const des = screen.getByPlaceholderText(/Description/i);
     const city = screen.getByPlaceholderText(/City/i);
+    const countryCode = screen.getByTestId('countrycode');
     const line1 = screen.getByPlaceholderText(/Line 1/i);
     const line2 = screen.getByPlaceholderText(/Line 2/i);
     const dependentLocality =
@@ -220,6 +226,7 @@ describe('Testing Organization Update', () => {
     userEvent.type(name, formData.name);
     userEvent.type(des, formData.description);
     userEvent.type(city, formData.address.city);
+    userEvent.selectOptions(countryCode, formData.address.countryCode);
     userEvent.type(line1, formData.address.line1);
     userEvent.type(line2, formData.address.line2);
     userEvent.type(postalCode, formData.address.postalCode);

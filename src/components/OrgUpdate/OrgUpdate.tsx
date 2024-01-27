@@ -191,6 +191,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
                 required
                 as="select"
                 value={formState.address.countryCode}
+                data-testid="countrycode"
                 onChange={(e) => {
                   const countryCode = e.target.value;
                   handleInputChange('countryCode', countryCode);
