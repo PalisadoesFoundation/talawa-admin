@@ -102,16 +102,14 @@ describe('Testing Advertisement Register Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
-              {
-                <AdvertisementRegister
-                  endDate={new Date()}
-                  startDate={new Date()}
-                  type="BANNER"
-                  name="Advert1"
-                  organizationId="1"
-                  advertisementMedia="test.png"
-                />
-              }
+              <AdvertisementRegister
+                endDate={new Date()}
+                startDate={new Date()}
+                type="BANNER"
+                name="Advert1"
+                organizationId="1"
+                advertisementMedia="test.png"
+              />
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
@@ -128,17 +126,15 @@ describe('Testing Advertisement Register Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
-              {
-                <AdvertisementRegister
-                  endDate={new Date()}
-                  startDate={new Date()}
-                  type="BANNER"
-                  name="Advert1"
-                  organizationId="1"
-                  advertisementMedia="google.com"
-                  formStatus="edit"
-                />
-              }
+              <AdvertisementRegister
+                endDate={new Date()}
+                startDate={new Date()}
+                type="BANNER"
+                name="Advert1"
+                organizationId="1"
+                advertisementMedia="google.com"
+                formStatus="edit"
+              />
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
@@ -155,16 +151,14 @@ describe('Testing Advertisement Register Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
-              {
-                <AdvertisementRegister
-                  endDate={new Date()}
-                  startDate={new Date()}
-                  type="BANNER"
-                  name="Advert1"
-                  organizationId="1"
-                  advertisementMedia="test.png"
-                />
-              }
+              <AdvertisementRegister
+                endDate={new Date()}
+                startDate={new Date()}
+                type="BANNER"
+                name="Advert1"
+                organizationId="1"
+                advertisementMedia="test.png"
+              />
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
@@ -187,16 +181,14 @@ describe('Testing Advertisement Register Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
-              {
-                <AdvertisementRegister
-                  endDate={new Date()}
-                  startDate={new Date()}
-                  type="BANNER"
-                  name="Advert1"
-                  organizationId="1"
-                  advertisementMedia=""
-                />
-              }
+              <AdvertisementRegister
+                endDate={new Date()}
+                startDate={new Date()}
+                type="BANNER"
+                name="Advert1"
+                organizationId="1"
+                advertisementMedia=""
+              />
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
@@ -262,17 +254,15 @@ describe('Testing Advertisement Register Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
-              {
-                <AdvertisementEntry
-                  endDate={new Date()}
-                  startDate={new Date()}
-                  type="POPUP"
-                  name="Advert1"
-                  organizationId="1"
-                  mediaUrl=""
-                  id="1"
-                />
-              }
+              <AdvertisementEntry
+                endDate={new Date()}
+                startDate={new Date()}
+                type="POPUP"
+                name="Advert1"
+                organizationId="1"
+                mediaUrl=""
+                id="1"
+              />
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
@@ -335,16 +325,14 @@ describe('Testing Advertisement Register Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
-              {
-                <AdvertisementRegister
-                  endDateEdit={new Date()}
-                  startDateEdit={new Date()}
-                  typeEdit="BANNER"
-                  nameEdit="Advert1"
-                  orgIdEdit="1"
-                  advertisementMediaEdit="google.com"
-                />
-              }
+              <AdvertisementRegister
+                endDateEdit={new Date()}
+                startDateEdit={new Date()}
+                typeEdit="BANNER"
+                nameEdit="Advert1"
+                orgIdEdit="1"
+                advertisementMediaEdit="google.com"
+              />
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
@@ -368,16 +356,14 @@ describe('Testing Advertisement Register Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
-              {
-                <AdvertisementRegister
-                  endDate={new Date()}
-                  startDate={new Date()}
-                  type="BANNER"
-                  name="Advert1"
-                  organizationId="1"
-                  advertisementMedia="test.mp4"
-                />
-              }
+              <AdvertisementRegister
+                endDate={new Date()}
+                startDate={new Date()}
+                type="BANNER"
+                name="Advert1"
+                organizationId="1"
+                advertisementMedia="test.mp4"
+              />
             </I18nextProvider>
           </BrowserRouter>
         </Provider>

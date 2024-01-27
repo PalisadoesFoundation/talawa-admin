@@ -54,18 +54,16 @@ describe('Testing Advertisement Entry Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              {
-                <AdvertisementEntry
-                  endDate={new Date()}
-                  startDate={new Date()}
-                  id="1"
-                  key={1}
-                  mediaUrl="data:videos"
-                  name="Advert1"
-                  organizationId="1"
-                  type="POPUP"
-                />
-              }
+              <AdvertisementEntry
+                endDate={new Date()}
+                startDate={new Date()}
+                id="1"
+                key={1}
+                mediaUrl="data:videos"
+                name="Advert1"
+                organizationId="1"
+                type="POPUP"
+              />
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
@@ -191,17 +189,15 @@ describe('Testing Advertisement Entry Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              {
-                <AdvertisementEntry
-                  endDate={new Date()}
-                  startDate={new Date()}
-                  type="POPUP"
-                  name="Advert1"
-                  organizationId="1"
-                  mediaUrl=""
-                  id="1"
-                />
-              }
+              <AdvertisementEntry
+                endDate={new Date()}
+                startDate={new Date()}
+                type="POPUP"
+                name="Advert1"
+                organizationId="1"
+                mediaUrl=""
+                id="1"
+              />
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
@@ -262,17 +258,15 @@ describe('Testing Advertisement Entry Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              {
-                <AdvertisementEntry
-                  endDate={new Date()}
-                  startDate={new Date()}
-                  type="POPUP"
-                  name="Advert1"
-                  organizationId="1"
-                  mediaUrl=""
-                  id="1"
-                />
-              }
+              <AdvertisementEntry
+                endDate={new Date()}
+                startDate={new Date()}
+                type="POPUP"
+                name="Advert1"
+                organizationId="1"
+                mediaUrl=""
+                id="1"
+              />
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
@@ -317,18 +311,16 @@ describe('Testing Advertisement Entry Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              {
-                <AdvertisementRegister
-                  formStatus="edit"
-                  idEdit="-100"
-                  nameEdit="Updated"
-                  endDateEdit={new Date()}
-                  startDateEdit={new Date()}
-                  typeEdit="POPUP"
-                  organizationId="1"
-                  advertisementMediaEdit=""
-                />
-              }
+              <AdvertisementRegister
+                formStatus="edit"
+                idEdit="-100"
+                nameEdit="Updated"
+                endDateEdit={new Date()}
+                startDateEdit={new Date()}
+                typeEdit="POPUP"
+                organizationId="1"
+                advertisementMediaEdit=""
+              />
             </I18nextProvider>
           </BrowserRouter>
         </Provider>

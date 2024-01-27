@@ -22,7 +22,7 @@ export default function promotedPost(
         <Card.Body>
           <Card.Title>{props.title}</Card.Title>
           <Card.Text>{props.title}</Card.Text>
-          {props.media?.includes('data:video') ? (
+          {props.media?.includes('videos') ? (
             <video
               muted
               className={styles.admedia}
