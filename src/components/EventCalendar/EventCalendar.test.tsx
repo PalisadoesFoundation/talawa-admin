@@ -1,12 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import Calendar from './EventCalendar';
-import {
-  render,
-  screen,
-  fireEvent,
-  act,
-  RenderResult,
-} from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { debug } from 'jest-preview';
@@ -18,8 +12,6 @@ import {
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import styles from './EventCalendar.module.css';
-import { BrowserRouter } from 'react-router-dom';
-import userEvent from '@testing-library/user-event';
 
 const eventData = [
   {
