@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './EventCalendar.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { Dropdown } from 'react-bootstrap';
+import CurrentHourIndicator from 'components/CurrentHourIndicator/CurrentHourIndicator';
 
 interface InterfaceEvent {
   _id: string;
@@ -41,7 +42,7 @@ enum Role {
   ADMIN = 'ADMIN',
 }
 
-enum ViewType {
+export enum ViewType {
   DAY = 'Day',
   MONTH = 'Month',
 }
@@ -86,6 +87,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     '05 AM',
     '06 AM',
     '07 AM',
+    '08 AM',
     '09 AM',
     '10 AM',
     '11 AM',
@@ -97,6 +99,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     '05 PM',
     '06 PM',
     '07 PM',
+    '08 PM',
     '09 PM',
     '10 PM',
     '11 PM',
@@ -229,6 +232,13 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     setCurrentDate(today.getDate());
   };
 
+  const timezoneString = `UTC${
+    new Date().getTimezoneOffset() > 0 ? '-' : '+'
+  }${String(Math.floor(Math.abs(new Date().getTimezoneOffset()) / 60)).padStart(
+    2,
+    '0'
+  )}:${String(Math.abs(new Date().getTimezoneOffset()) % 60).padStart(2, '0')}`;
+
   const renderHours = (): JSX.Element => {
     const toggleExpand = (index: number): void => {
       if (expanded === index) {
@@ -272,9 +282,17 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       <>
         {allDayEventsList.length > 0 && (
           <div className={styles.calendar_hour_block}>
-            <div className={styles.calendar_hour_text_container}>{``}</div>
+            <div className={styles.calendar_hour_text_container}>
+              <p className={styles.calendar_timezone_text}>{timezoneString}</p>
+            </div>
             <div className={styles.dummyWidth}></div>
-            <div className={styles.event_list_parent}>
+            <div
+              className={
+                allDayEventsList.length > 0
+                  ? styles.event_list_parent_current
+                  : styles.event_list_parent
+              }
+            >
               <div
                 className={
                   expanded === -100
@@ -312,11 +330,10 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         {hours.map((hour, index) => {
           const timeEventsList: any = events
             ?.filter((datas) => {
-              console.log(dayjs(hour, { format: 'hh A' }));
               const currDate = new Date(currentYear, currentMonth, currentDate);
+
               if (
-                datas.startTime?.slice(0, 2) ==
-                  dayjs(hour, { format: 'hh A' }).format('HH') &&
+                datas.startTime?.slice(0, 2) == (index % 24).toString() &&
                 datas.startDate == dayjs(currDate).format('YYYY-MM-DD')
               ) {
                 return datas;
@@ -348,7 +365,17 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                 <p className={styles.calendar_hour_text}>{`${hour}`}</p>
               </div>
               <div className={styles.dummyWidth}></div>
-              <div className={styles.event_list_parent}>
+              <div
+                className={
+                  timeEventsList.length > 0
+                    ? styles.event_list_parent_current
+                    : styles.event_list_parent
+                }
+              >
+                {index % 24 == new Date().getHours() &&
+                  new Date().getDate() == currentDate && (
+                    <CurrentHourIndicator />
+                  )}
                 <div
                   className={
                     expanded === index
@@ -527,19 +554,18 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         </div>
         <div className={styles.flex_grow}></div>
         <div>
-          {/* <Dropdown className={styles.selectType} onChange={handleChangeView}>
-            <option value="month">Month</option>
-            <option value="day">Day</option>
-          </Dropdown> */}
           <Dropdown onSelect={handleChangeView} className={styles.selectType}>
             <Dropdown.Toggle variant="success" id="dropdown-basic">
               {viewType || ViewType.MONTH}
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item eventKey={ViewType.MONTH}>
+              <Dropdown.Item
+                eventKey={ViewType.MONTH}
+                data-testid="selectMonth"
+              >
                 {ViewType.MONTH}
               </Dropdown.Item>
-              <Dropdown.Item eventKey={ViewType.DAY}>
+              <Dropdown.Item eventKey={ViewType.DAY} data-testid="selectDay">
                 {ViewType.DAY}
               </Dropdown.Item>
             </Dropdown.Menu>

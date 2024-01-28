@@ -3,6 +3,7 @@ import Calendar from './EventCalendar';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
+import { debug } from 'jest-preview';
 
 import {
   DELETE_EVENT_MUTATION,
@@ -11,6 +12,7 @@ import {
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import styles from './EventCalendar.module.css';
+import { BrowserRouter } from 'react-router-dom';
 
 const eventData = [
   {
@@ -272,6 +274,63 @@ describe('Calendar', () => {
     fireEvent.click(lessButton);
     expect(screen.queryByText('Event 3')).not.toBeInTheDocument();
   });
+  // it('Should open the day view calendar', async () => {
+  //   const multipleEventData = [
+  //     {
+  //       _id: '1',
+  //       title: 'Event 1',
+  //       description: 'This is event 1',
+  //       startDate: new Date().toISOString().split('T')[0],
+  //       endDate: new Date().toISOString().split('T')[0],
+  //       location: 'Los Angeles',
+  //       startTime: '14:00',
+  //       endTime: '16:00',
+  //       allDay: false,
+  //       recurring: false,
+  //       isPublic: true,
+  //       isRegisterable: true,
+  //     },
+  //     {
+  //       _id: '2',
+  //       title: 'Event 2',
+  //       description: 'This is event 2',
+  //       startDate: new Date().toISOString().split('T')[0],
+  //       endDate: new Date().toISOString().split('T')[0],
+  //       location: 'Los Angeles',
+  //       startTime: '14:00',
+  //       endTime: '16:00',
+  //       allDay: false,
+  //       recurring: false,
+  //       isPublic: true,
+  //       isRegisterable: true,
+  //     },
+  //     {
+  //       _id: '3',
+  //       title: 'Event 3',
+  //       description: 'This is event 3',
+  //       startDate: new Date().toISOString().split('T')[0],
+  //       endDate: new Date().toISOString().split('T')[0],
+  //       location: 'Los Angeles',
+  //       startTime: '14:00',
+  //       endTime: '16:00',
+  //       allDay: false,
+  //       recurring: false,
+  //       isPublic: true,
+  //       isRegisterable: true,
+  //     },
+  //   ];
+  //    act(() => {
+  //   render(< />);
+  // });
+  //   const selector = screen.getByText('Month');
+  //   await act(() => {
+  //     fireEvent.click(selector);
+  //   });
+  //   act(() => {
+  //     fireEvent.click(getByTestId('selectDay'));
+  //   });
+  //   debug();
+  // });
 
   test('Handles window resize', () => {
     render(

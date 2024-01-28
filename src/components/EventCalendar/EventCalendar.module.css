@@ -46,11 +46,18 @@
   width: 40px;
 }
 .calendar_hour_text {
-  top: 20px;
+  top: -10px;
   left: -5px;
   position: relative;
   color: #707070;
   font-size: 12px;
+}
+.calendar_timezone_text {
+  top: -10px;
+  left: -11px;
+  position: relative;
+  color: #707070;
+  font-size: 9px;
 }
 .calendar_hour_block {
   display: flex;
@@ -62,6 +69,12 @@
 }
 .event_list_parent {
   position: relative;
+  width: 100%;
+}
+.event_list_parent_current {
+  background-color: #def6e1;
+  position: relative;
+  width: 100%;
 }
 .dummyWidth {
   width: 1px;
