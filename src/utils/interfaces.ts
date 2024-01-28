@@ -29,7 +29,7 @@ export interface InterfaceOrgConnectionInfoType {
     _id: string;
   }[];
   createdAt: string;
-  location: string;
+  address: InterfaceAddress;
 }
 export interface InterfaceOrgConnectionType {
   organizationsConnection: InterfaceOrgConnectionInfoType[];
@@ -45,7 +45,7 @@ export interface InterfaceQueryOrganizationsListObject {
   };
   name: string;
   description: string;
-  location: string;
+  address: InterfaceAddress;
   userRegistrationRequired: boolean;
   visibleInSearch: boolean;
   members: {
@@ -127,7 +127,7 @@ export interface InterfaceQueryUserListItem {
   organizationsBlockedBy: {
     _id: string;
     name: string;
-    location: string;
+    address: InterfaceAddress;
     image: string | null;
     createdAt: string;
     creator: {
@@ -141,7 +141,7 @@ export interface InterfaceQueryUserListItem {
   joinedOrganizations: {
     _id: string;
     name: string;
-    location: string;
+    address: InterfaceAddress;
     image: string | null;
     createdAt: string;
     creator: {
@@ -164,4 +164,15 @@ export interface InterfaceQueryRequestListItem {
   userType: string;
   adminApproved: boolean;
   createdAt: string;
+}
+
+export interface InterfaceAddress {
+  city: string;
+  countryCode: string;
+  dependentLocality: string;
+  line1: string;
+  line2: string;
+  postalCode: string;
+  sortingCode: string;
+  state: string;
 }
