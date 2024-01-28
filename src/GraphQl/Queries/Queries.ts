@@ -34,7 +34,16 @@ export const ORGANIZATION_LIST = gql`
         _id
       }
       createdAt
-      location
+      address {
+        city
+        countryCode
+        dependentLocality
+        line1
+        line2
+        postalCode
+        sortingCode
+        state
+      }
     }
   }
 `;
@@ -67,7 +76,16 @@ export const ORGANIZATION_CONNECTION_LIST = gql`
         _id
       }
       createdAt
-      location
+      address {
+        city
+        countryCode
+        dependentLocality
+        line1
+        line2
+        postalCode
+        sortingCode
+        state
+      }
     }
   }
 `;
@@ -103,7 +121,16 @@ export const USER_LIST = gql`
         _id
         name
         image
-        location
+        address {
+          city
+          countryCode
+          dependentLocality
+          line1
+          line2
+          postalCode
+          sortingCode
+          state
+        }
         createdAt
         creator {
           _id
@@ -118,7 +145,16 @@ export const USER_LIST = gql`
         _id
         name
         image
-        location
+        address {
+          city
+          countryCode
+          dependentLocality
+          line1
+          line2
+          postalCode
+          sortingCode
+          state
+        }
         createdAt
         creator {
           _id
@@ -252,7 +288,16 @@ export const ORGANIZATIONS_LIST = gql`
       }
       name
       description
-      location
+      address {
+        city
+        countryCode
+        dependentLocality
+        line1
+        line2
+        postalCode
+        sortingCode
+        state
+      }
       userRegistrationRequired
       visibleInSearch
       members {
@@ -540,7 +585,6 @@ export const MEMBERSHIP_REQUEST = gql`
 export { PLUGIN_GET } from './PlugInQueries';
 export { ADVERTISEMENTS_GET } from './PlugInQueries';
 export { ORGANIZATION_EVENTS_CONNECTION } from './PlugInQueries';
-export { USER_TASKS_LIST } from './PlugInQueries';
 export { DIRECT_CHATS_LIST } from './PlugInQueries';
 export { IS_SAMPLE_ORGANIZATION_QUERY } from './PlugInQueries';
 export { ORGANIZATION_CUSTOM_FIELDS } from './PlugInQueries';
