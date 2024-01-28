@@ -112,7 +112,7 @@ test('Component should display the text correctly', async () => {
 test('Component should display the media correctly', async () => {
   props = {
     ...props,
-    media: 'data:video',
+    media: 'data:videos',
   };
   render(
     <MockedProvider addTypename={false} link={link}>
