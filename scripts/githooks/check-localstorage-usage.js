@@ -36,7 +36,6 @@ const checkLocalStorageUsage = (file) => {
   }
 
   try {
-    // Check if the file exists
     if (fs.existsSync(file)) {
       const content = readFileSync(file, 'utf-8');
 
