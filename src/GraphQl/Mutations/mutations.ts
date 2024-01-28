@@ -70,10 +70,10 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
 
 export const UPDATE_USER_MUTATION = gql`
   mutation UpdateUserProfile(
+    $id: ID
     $firstName: String
     $lastName: String
     $email: EmailAddress
-    $id: ID
     $applangcode: String
     $file: String
   ) {
