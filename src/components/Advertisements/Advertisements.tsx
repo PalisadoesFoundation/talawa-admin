@@ -46,13 +46,13 @@ export default function advertisements(): JSX.Element {
               >
                 <Tab eventKey="activeAds" title={t('activeAds')}>
                   {advertisementsData?.getAdvertisements
-                    .filter((ad: any) => ad.organizationId == currentOrgId)
+                    .filter((ad: any) => ad.organization._id == currentOrgId)
                     .filter((ad: any) => new Date(ad.endDate) > new Date())
                     .length == 0 ? (
                     <h4>{t('pMessage')} </h4> // eslint-disable-line
                   ) : (
                     advertisementsData?.getAdvertisements
-                      .filter((ad: any) => ad.organizationId == currentOrgId)
+                      .filter((ad: any) => ad.organization._id == currentOrgId)
                       .filter((ad: any) => new Date(ad.endDate) > new Date())
                       .map(
                         (
@@ -60,7 +60,7 @@ export default function advertisements(): JSX.Element {
                             _id: string;
                             name: string | undefined;
                             type: string | undefined;
-                            organizationId: string;
+                            organization: any;
                             mediaUrl: string;
                             endDate: Date;
                             startDate: Date;
@@ -72,7 +72,7 @@ export default function advertisements(): JSX.Element {
                             key={i}
                             name={ad.name}
                             type={ad.type}
-                            organizationId={ad.organizationId}
+                            organizationId={ad.organization._id}
                             startDate={new Date(ad.startDate)}
                             endDate={new Date(ad.endDate)}
                             mediaUrl={ad.mediaUrl}
@@ -83,13 +83,13 @@ export default function advertisements(): JSX.Element {
                 </Tab>
                 <Tab eventKey="archievedAds" title={t('archievedAds')}>
                   {advertisementsData?.getAdvertisements
-                    .filter((ad: any) => ad.organizationId == currentOrgId)
+                    .filter((ad: any) => ad.organization._id == currentOrgId)
                     .filter((ad: any) => new Date(ad.endDate) < new Date())
                     .length == 0 ? (
                     <h4>{t('pMessage')} </h4> // eslint-disable-line
                   ) : (
                     advertisementsData?.getAdvertisements
-                      .filter((ad: any) => ad.organizationId == currentOrgId)
+                      .filter((ad: any) => ad.organization._id == currentOrgId)
                       .filter((ad: any) => new Date(ad.endDate) < new Date())
                       .map(
                         (
@@ -97,7 +97,7 @@ export default function advertisements(): JSX.Element {
                             _id: string;
                             name: string | undefined;
                             type: string | undefined;
-                            organizationId: string;
+                            organization: any;
                             mediaUrl: string;
                             endDate: Date;
                             startDate: Date;
@@ -109,7 +109,7 @@ export default function advertisements(): JSX.Element {
                             key={i}
                             name={ad.name}
                             type={ad.type}
-                            organizationId={ad.organizationId}
+                            organizationId={ad.organization._id}
                             startDate={new Date(ad.startDate)}
                             endDate={new Date(ad.endDate)}
                             mediaUrl={ad.mediaUrl}
