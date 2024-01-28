@@ -6,12 +6,14 @@ import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import UserUpdate from 'components/UserUpdate/UserUpdate';
-
 import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import styles from './MemberDetail.module.css';
 import { languages } from 'utils/languages';
-import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  ADD_ADMIN_MUTATION,
+  UPDATE_USERTYPE_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
@@ -26,12 +28,16 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   });
 
   const [state, setState] = useState(1);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const location = useLocation<MemberDetailProps>();
   const currentUrl = location.state?.id || localStorage.getItem('id') || id;
+  const orgId = window.location.href.split('=')[1];
   document.title = t('title');
 
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
+  const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
+
   const {
     data: userData,
     loading: loading,
@@ -62,20 +68,37 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       const { data } = await adda({
         variables: {
           userid: location.state?.id,
-          orgid: currentUrl,
+          orgid: orgId,
         },
       });
 
       /* istanbul ignore next */
       if (data) {
-        toast.success(t('addedAsAdmin'));
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        try {
+          const { data } = await updateUserType({
+            variables: {
+              id: location.state?.id,
+              userType: 'ADMIN',
+            },
+          });
+          if (data) {
+            toast.success(t('addedAsAdmin'));
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          }
+        } catch (error: any) {
+          errorHandler(t, error);
+        }
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      errorHandler(t, error);
+      if (userData.user.userType === 'ADMIN') {
+        setIsAdmin(true);
+        toast.error(t('alreadyIsAdmin'));
+      } else {
+        errorHandler(t, error);
+      }
     }
   };
 
@@ -94,12 +117,22 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     {t('title')}
                   </p>
                   <div className={styles.btngroup}>
-                    <Button
-                      className={styles.memberfontcreatedbtn}
-                      onClick={addAdmin}
-                    >
-                      {t('addAdmin')}
-                    </Button>
+                    {isAdmin ? (
+                      <Button
+                        className={styles.memberfontcreatedbtn}
+                        onClick={addAdmin}
+                        disabled
+                      >
+                        {t('addAdmin')}
+                      </Button>
+                    ) : (
+                      <Button
+                        className={styles.memberfontcreatedbtn}
+                        onClick={addAdmin}
+                      >
+                        {t('addAdmin')}
+                      </Button>
+                    )}
                     <Button
                       className={styles.memberfontcreatedbtn}
                       role="stateBtn"
