@@ -31,6 +31,15 @@ import {
   REACT_APP_BACKEND_WEBSOCKET_URL,
 } from 'Constant/constant';
 import { refreshToken } from 'utils/getRefreshToken';
+import { ThemeProvider, createTheme } from '@mui/material';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#31bb6b',
+    },
+  },
+});
 import useLocalStorage from 'utils/useLocalstorage';
 
 const { getItem } = useLocalStorage();
@@ -108,10 +117,12 @@ ReactDOM.render(
     <ApolloProvider client={client}>
       <BrowserRouter>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <Provider store={store}>
-            <App />
-            <ToastContainer limit={5} />
-          </Provider>
+          <ThemeProvider theme={theme}>
+            <Provider store={store}>
+              <App />
+              <ToastContainer limit={5} />
+            </Provider>
+          </ThemeProvider>
         </LocalizationProvider>
       </BrowserRouter>
     </ApolloProvider>

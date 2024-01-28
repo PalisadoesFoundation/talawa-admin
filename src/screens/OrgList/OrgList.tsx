@@ -67,7 +67,16 @@ function orgList(): JSX.Element {
     descrip: '',
     userRegistrationRequired: true,
     visible: false,
-    location: '',
+    address: {
+      city: '',
+      countryCode: '',
+      dependentLocality: '',
+      line1: '',
+      line2: '',
+      postalCode: '',
+      sortingCode: '',
+      state: '',
+    },
     image: '',
   });
 
@@ -125,7 +134,16 @@ function orgList(): JSX.Element {
         descrip: '',
         userRegistrationRequired: true,
         visible: false,
-        location: '',
+        address: {
+          city: '',
+          countryCode: '',
+          dependentLocality: '',
+          line1: '',
+          line2: '',
+          postalCode: '',
+          sortingCode: '',
+          state: '',
+        },
         image: '',
       });
     };
@@ -170,7 +188,7 @@ function orgList(): JSX.Element {
     const {
       name: _name,
       descrip: _descrip,
-      location: _location,
+      address: _address,
       visible,
       userRegistrationRequired,
       image,
@@ -178,14 +196,14 @@ function orgList(): JSX.Element {
 
     const name = _name.trim();
     const descrip = _descrip.trim();
-    const location = _location.trim();
+    const address = _address;
 
     try {
       const { data } = await create({
         variables: {
           name: name,
           description: descrip,
-          location: location,
+          address: address,
           visibleInSearch: visible,
           userRegistrationRequired: userRegistrationRequired,
           image: image,
@@ -202,7 +220,16 @@ function orgList(): JSX.Element {
           descrip: '',
           userRegistrationRequired: true,
           visible: false,
-          location: '',
+          address: {
+            city: '',
+            countryCode: '',
+            dependentLocality: '',
+            line1: '',
+            line2: '',
+            postalCode: '',
+            sortingCode: '',
+            state: '',
+          },
           image: '',
         });
         toggleModal();

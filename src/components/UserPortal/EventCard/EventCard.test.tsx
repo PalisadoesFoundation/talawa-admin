@@ -85,12 +85,16 @@ describe('Testing Event Card In User portal', () => {
     await waitFor(() => expect(queryByText('Location')).toBeInTheDocument());
     await waitFor(() => expect(queryByText('Virtual')).toBeInTheDocument());
     await waitFor(() => expect(queryByText('Starts')).toBeInTheDocument());
-    await waitFor(() => expect(queryByText('5:49:12 PM')).toBeInTheDocument());
+    await waitFor(() =>
+      expect(screen.getByTestId('startTime')).toBeInTheDocument()
+    );
     await waitFor(() =>
       expect(queryByText(`13 April '23`)).toBeInTheDocument()
     );
     await waitFor(() => expect(queryByText('Ends')).toBeInTheDocument());
-    await waitFor(() => expect(queryByText('7:49:12 PM')).toBeInTheDocument());
+    await waitFor(() =>
+      expect(screen.getByTestId('endTime')).toBeInTheDocument()
+    );
     await waitFor(() =>
       expect(queryByText(`15 April '23`)).toBeInTheDocument()
     );

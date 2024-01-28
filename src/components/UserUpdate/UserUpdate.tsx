@@ -56,6 +56,7 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
         firstName: data?.user?.firstName,
         lastName: data?.user?.lastName,
         email: data?.user?.email,
+        applangcode: data?.user?.applangcode,
       });
     }
   }, [data]);
@@ -74,6 +75,7 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
       const firstName = formState.firstName;
       const lastName = formState.lastName;
       const email = formState.email;
+      const applangcode = formState.applangcode;
       const file = formState.file;
       let toSubmit = true;
       if (firstName.trim().length == 0 || !firstName) {
@@ -92,9 +94,11 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
       const { data } = await updateUser({
         variables: {
           //Currently on these  fields are supported by the api
+          id: currentUrl,
           firstName,
           lastName,
           email,
+          applangcode,
           file,
         },
       });
@@ -108,10 +112,13 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
           applangcode: '',
           file: '',
         });
-        setItem('FirstName', firstName);
-        setItem('LastName', lastName);
-        setItem('Email', email);
-        setItem('UserImage', file);
+
+        if (getItem('id') === currentUrl) {
+          setItem('FirstName', firstName);
+          setItem('LastName', lastName);
+          setItem('Email', email);
+          setItem('UserImage', file);
+        }
         toast.success('Successful updated');
 
         toggleStateValue();

@@ -21,7 +21,11 @@ import {
   YoutubeLogo,
 } from 'assets/svgs/social-icons';
 
-import { REACT_APP_USE_RECAPTCHA, RECAPTCHA_SITE_KEY } from 'Constant/constant';
+import {
+  REACT_APP_USE_RECAPTCHA,
+  RECAPTCHA_SITE_KEY,
+  BACKEND_URL,
+} from 'Constant/constant';
 import {
   LOGIN_MUTATION,
   RECAPTCHA_MUTATION,
@@ -132,8 +136,7 @@ function loginPage(): JSX.Element {
   useEffect(() => {
     async function loadResource(): Promise<void> {
       try {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const response = await fetch('http://localhost:4000/graphql/');
+        await fetch(BACKEND_URL as string);
       } catch (error: any) {
         /* istanbul ignore next */
         errorHandler(t, error);
