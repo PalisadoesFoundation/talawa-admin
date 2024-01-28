@@ -14,8 +14,8 @@ interface InterfaceEvent {
   startDate: string;
   endDate: string;
   location: string;
-  startTime: string;
-  endTime: string;
+  startTime: string | undefined;
+  endTime: string | undefined;
   allDay: boolean;
   recurring: boolean;
   registrants?: InterfaceIEventAttendees[];
@@ -313,14 +313,14 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                     : allDayEventsList?.slice(0, 1)}
                 </div>
                 {(allDayEventsList?.length > 1 ||
-                  (windowWidth <= 700 && allDayEventsList?.length > 0)) && (
+                  (windowWidth <= 700 && allDayEventsList?.length > 1)) && (
                   <button
                     className={styles.btn__more}
                     onClick={() => {
                       toggleExpand(-100);
                     }}
                   >
-                    {expanded === 0 ? 'View less' : 'View all'}
+                    {expanded === -100 ? 'View less' : 'View all'}
                   </button>
                 )}
               </div>
@@ -525,7 +525,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         <Button
           className={styles.button}
           onClick={viewType == ViewType.DAY ? handlePrevDate : handlePrevMonth}
-          data-testid="prevmonth"
+          data-testid="prevmonthordate"
         >
           <ChevronLeft />
         </Button>
@@ -540,6 +540,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         <Button
           className={styles.button}
           onClick={viewType == ViewType.DAY ? handleNextDate : handleNextMonth}
+          data-testid="nextmonthordate"
         >
           <ChevronRight />
         </Button>
@@ -547,7 +548,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           <Button
             className={styles.btn__today}
             onClick={handleTodayButton}
-            data-testid="nextmonth"
+            data-testid="today"
           >
             Today
           </Button>

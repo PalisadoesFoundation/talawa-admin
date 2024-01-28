@@ -1,6 +1,12 @@
 /* eslint-disable react/react-in-jsx-scope */
 import Calendar from './EventCalendar';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  act,
+  RenderResult,
+} from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { debug } from 'jest-preview';
@@ -13,6 +19,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import styles from './EventCalendar.module.css';
 import { BrowserRouter } from 'react-router-dom';
+import userEvent from '@testing-library/user-event';
 
 const eventData = [
   {
@@ -137,10 +144,10 @@ describe('Calendar', () => {
         </I18nextProvider>
       </MockedProvider>
     );
-    const prevButton = screen.getByTestId('prevmonth');
+    const prevButton = screen.getByTestId('prevmonthordate');
     fireEvent.click(prevButton);
     //testing next month button
-    const nextButton = screen.getByTestId('nextmonth');
+    const nextButton = screen.getByTestId('nextmonthordate');
     fireEvent.click(nextButton);
     //Testing year change
     for (let index = 0; index < 13; index++) {
@@ -148,6 +155,35 @@ describe('Calendar', () => {
     }
     for (let index = 0; index < 13; index++) {
       fireEvent.click(prevButton);
+    }
+  });
+  it('Should show prev and next date on clicking < & > buttons in the day view', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={eventData} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+    await act(async () => {
+      fireEvent.click(screen.getByText('Month'));
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByText('Day'));
+    });
+    //testing previous date button
+    const prevButton = screen.getByTestId('prevmonthordate');
+    fireEvent.click(prevButton);
+    //testing next date button
+    const nextButton = screen.getByTestId('nextmonthordate');
+    fireEvent.click(nextButton);
+    debug();
+    //Testing year change and month change
+    for (let index = 0; index < 366; index++) {
+      fireEvent.click(prevButton);
+    }
+    for (let index = 0; index < 732; index++) {
+      fireEvent.click(nextButton);
     }
   });
   it('Should render eventlistcard of current day event', () => {
@@ -205,11 +241,11 @@ describe('Calendar', () => {
       </MockedProvider>
     );
     //Changing the month
-    const prevButton = screen.getByTestId('prevmonth');
+    const prevButton = screen.getByTestId('prevmonthordate');
     fireEvent.click(prevButton);
 
     // Clicking today button
-    const todayButton = screen.getByTestId('nextmonth');
+    const todayButton = screen.getByTestId('today');
     fireEvent.click(todayButton);
     // const todayCell = screen.getByText(new Date().getDate().toString());
     // expect(todayCell).toHaveClass(styles.day__today);
@@ -274,63 +310,106 @@ describe('Calendar', () => {
     fireEvent.click(lessButton);
     expect(screen.queryByText('Event 3')).not.toBeInTheDocument();
   });
-  // it('Should open the day view calendar', async () => {
-  //   const multipleEventData = [
-  //     {
-  //       _id: '1',
-  //       title: 'Event 1',
-  //       description: 'This is event 1',
-  //       startDate: new Date().toISOString().split('T')[0],
-  //       endDate: new Date().toISOString().split('T')[0],
-  //       location: 'Los Angeles',
-  //       startTime: '14:00',
-  //       endTime: '16:00',
-  //       allDay: false,
-  //       recurring: false,
-  //       isPublic: true,
-  //       isRegisterable: true,
-  //     },
-  //     {
-  //       _id: '2',
-  //       title: 'Event 2',
-  //       description: 'This is event 2',
-  //       startDate: new Date().toISOString().split('T')[0],
-  //       endDate: new Date().toISOString().split('T')[0],
-  //       location: 'Los Angeles',
-  //       startTime: '14:00',
-  //       endTime: '16:00',
-  //       allDay: false,
-  //       recurring: false,
-  //       isPublic: true,
-  //       isRegisterable: true,
-  //     },
-  //     {
-  //       _id: '3',
-  //       title: 'Event 3',
-  //       description: 'This is event 3',
-  //       startDate: new Date().toISOString().split('T')[0],
-  //       endDate: new Date().toISOString().split('T')[0],
-  //       location: 'Los Angeles',
-  //       startTime: '14:00',
-  //       endTime: '16:00',
-  //       allDay: false,
-  //       recurring: false,
-  //       isPublic: true,
-  //       isRegisterable: true,
-  //     },
-  //   ];
-  //    act(() => {
-  //   render(< />);
-  // });
-  //   const selector = screen.getByText('Month');
-  //   await act(() => {
-  //     fireEvent.click(selector);
-  //   });
-  //   act(() => {
-  //     fireEvent.click(getByTestId('selectDay'));
-  //   });
-  //   debug();
-  // });
+  it('Should open the day view calendar', async () => {
+    await act(async () => {
+      render(<Calendar eventData={eventData} />);
+    });
+    expect(screen.getByText('Month')).toBeInTheDocument();
+    await act(async () => {
+      fireEvent.click(screen.getByText('Month'));
+    });
+    expect(screen.getByText('Day')).toBeInTheDocument();
+    await act(async () => {
+      fireEvent.click(screen.getByText('Day'));
+    });
+    expect(screen.getByText('12 AM')).toBeInTheDocument();
+    // debug();
+  });
+  it('Should Expand and contract when clicked on view all and view less in day view', async () => {
+    const multipleEventData = [
+      {
+        _id: '1',
+        title: 'Event 1',
+        description: 'This is event 1',
+        startDate: new Date().toISOString().split('T')[0],
+        endDate: new Date().toISOString().split('T')[0],
+        location: 'Los Angeles',
+        startTime: undefined,
+        endTime: undefined,
+        allDay: true,
+        recurring: false,
+        isPublic: true,
+        isRegisterable: true,
+      },
+      {
+        _id: '2',
+        title: 'Event 2',
+        description: 'This is event 2',
+        startDate: new Date().toISOString().split('T')[0],
+        endDate: new Date().toISOString().split('T')[0],
+        location: 'Los Angeles',
+        startTime: undefined,
+        endTime: undefined,
+        allDay: true,
+        recurring: false,
+        isPublic: true,
+        isRegisterable: true,
+      },
+      {
+        _id: '3',
+        title: 'Event 3',
+        description: 'This is event 3',
+        startDate: new Date().toISOString().split('T')[0],
+        endDate: new Date().toISOString().split('T')[0],
+        location: 'Los Angeles',
+        startTime: '14:00',
+        endTime: '16:00',
+        allDay: false,
+        recurring: false,
+        isPublic: true,
+        isRegisterable: true,
+      },
+      {
+        _id: '4',
+        title: 'Event 4',
+        description: 'This is event 4',
+        startDate: new Date().toISOString().split('T')[0],
+        endDate: new Date().toISOString().split('T')[0],
+        location: 'Los Angeles',
+        startTime: '14:00',
+        endTime: '16:00',
+        allDay: false,
+        recurring: false,
+        isPublic: true,
+        isRegisterable: true,
+      },
+    ];
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={multipleEventData} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+    expect(screen.getByText('Month')).toBeInTheDocument();
+    await act(async () => {
+      fireEvent.click(screen.getByText('Month'));
+    });
+    expect(screen.getByText('Day')).toBeInTheDocument();
+    await act(async () => {
+      fireEvent.click(screen.getByText('Day'));
+    });
+    const moreButtons = screen.getAllByText('View all');
+    moreButtons.forEach((moreButton) => {
+      fireEvent.click(moreButton);
+      expect(screen.getByText('View less')).toBeInTheDocument();
+      const lessButton = screen.getByText('View less');
+      fireEvent.click(lessButton);
+      expect(screen.queryByText('View less')).not.toBeInTheDocument();
+    });
+
+    // debug();
+  });
 
   test('Handles window resize', () => {
     render(
