@@ -255,7 +255,7 @@ function orgPost(): JSX.Element {
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
                       <Dropdown.Item
-                        value="searchText"
+                        id="searchText"
                         onClick={(e): void => {
                           setShowTitle(false);
                           e.preventDefault();
@@ -265,7 +265,7 @@ function orgPost(): JSX.Element {
                         {t('Text')}
                       </Dropdown.Item>
                       <Dropdown.Item
-                        value="searchTitle"
+                        id="searchTitle"
                         onClick={(e): void => {
                           setShowTitle(true);
                           e.preventDefault();
