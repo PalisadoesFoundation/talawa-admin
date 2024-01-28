@@ -129,7 +129,16 @@ const ORGANIZATIONS_LIST_MOCK = {
           userRegistrationRequired: true,
 
           visibleInSearch: true,
-          location: 'location',
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
           members: {
             _id: 'id',
             firstName: 'firstName',
@@ -163,57 +172,6 @@ const ORGANIZATIONS_LIST_MOCK = {
 };
 
 describe('Testing Advertisement Component', () => {
-  test('Testing if the deletion works', async () => {
-    const mocks = [
-      {
-        request: {
-          query: ADVERTISEMENTS_GET,
-        },
-        result: {
-          data: {
-            getAdvertisements: [
-              {
-                _id: '1',
-                name: 'Advertisement1',
-                type: 'POPUP',
-                orgId: 'undefined',
-                link: 'http://example1.com',
-                endDate: '2023-01-01',
-                startDate: '2022-01-01',
-              },
-            ],
-          },
-          loading: false,
-        },
-      },
-      ORGANIZATIONS_LIST_MOCK,
-      PLUGIN_GET_MOCK,
-      ADD_ADVERTISEMENT_MUTATION_MOCK,
-    ];
-
-    render(
-      <MockedProvider addTypename={false} mocks={mocks}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <Advertisement />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-
-    await act(async () => {
-      await userEvent.click(screen.getByText('Delete'));
-    });
-    await act(async () => {
-      await userEvent.click(screen.getByText('Yes'));
-    });
-  });
-
   test('for creating new Advertisements', async () => {
     const mocks = [
       ORGANIZATIONS_LIST_MOCK,

@@ -27,4 +27,4 @@
 
 #### Defined in
 
-node_modules/@types/react/index.d.ts:543
+[src/components/EventCalendar/EventCalendar.tsx:52](https://github.com/palisadoes/talawa-admin/blob/5828937/src/components/EventCalendar/EventCalendar.tsx#L52)
