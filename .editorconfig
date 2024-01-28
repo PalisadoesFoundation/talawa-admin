@@ -1,0 +1,19 @@
+# Top-most EditorConfig file
+root = true
+
+# Set the indentation style and size for TypeScript and JavaScript files
+[*.{js,ts,tsx}]
+indent_style = space
+indent_size = 2
+
+# Specify indentation for JSX and React files
+[*.{jsx,tsx}]
+indent_size = 2
+
+# Specify line endings and encoding
+end_of_line = lf
+charset = utf-8
+
+# Enforce whitespace conventions
+trim_trailing_whitespace = true
+insert_final_newline = true
