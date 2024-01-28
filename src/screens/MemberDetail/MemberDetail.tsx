@@ -93,7 +93,10 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      if (userData.user.userType === 'ADMIN') {
+      if (
+        userData.user.userType === 'ADMIN' ||
+        userData.user.userType === 'SUPERADMIN'
+      ) {
         setIsAdmin(true);
         toast.error(t('alreadyIsAdmin'));
       } else {
