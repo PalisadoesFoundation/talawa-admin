@@ -96,49 +96,6 @@ export const ORGANIZATION_EVENTS_CONNECTION = gql`
 `;
 
 /**
- * GraphQL query to retrieve a list of tasks assigned to a user.
- *
- * @param id - The ID of the user for which assigned tasks are being retrieved.
- * @returns The list of tasks assigned to the user with details such as ID, title, description, deadline, volunteers, creation date, completion status, associated event, and creator.
- */
-
-export const USER_TASKS_LIST = gql`
-  query User($id: ID!) {
-    user(id: $id) {
-      _id
-      assignedTasks {
-        _id
-        title
-        description
-        deadline
-        volunteers {
-          _id
-          firstName
-          lastName
-          email
-        }
-        createdAt
-        completed
-        event {
-          _id
-          title
-          organization {
-            _id
-            name
-            image
-          }
-        }
-        creator {
-          _id
-          firstName
-          lastName
-        }
-      }
-    }
-  }
-`;
-
-/**
  * GraphQL query to retrieve a list of direct chats based on user ID.
  *
  * @param id - The ID of the user for which direct chats are being retrieved.

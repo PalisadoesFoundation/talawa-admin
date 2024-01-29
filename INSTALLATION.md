@@ -14,6 +14,7 @@ This document provides instructions on how to set up and start a running instanc
   - [Installing required packages/dependencies](#installing-required-packagesdependencies)
 - [Configuration](#configuration)
   - [Creating .env file](#creating-env-file)
+  - [Setting up PORT in .env file](#setting-up-port-in-env-file)
   - [Setting up REACT_APP_TALAWA_URL in .env file](#setting-up-react_app_talawa_url-in-env-file)
   - [Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-react_app_recaptcha_site_key-in-env-file)
   - [Setting up Compiletime and Runtime logs](#setting-up-compiletime-and-runtime-logs)
@@ -84,7 +85,7 @@ For more details please refer to the installation guidelines provided in the [of
 Run the following command to install the packages and dependencies required by `talawa-admin`:
 
 ```
-npm install 
+npm install
 ```
 
 # Configuration
@@ -109,13 +110,18 @@ cp .env.example .env
 
 This `.env` file must be populated with the following environment variables for `talawa-admin` to work:
 
-| Variable                     | Description                                 |
-| ---------------------------- | ------------------------------------------- |
-| REACT_APP_TALAWA_URL         | URL endpoint for talawa-api graphql service |
-| REACT_APP_USE_RECAPTCHA      | Whether you want to use reCAPTCHA or not    |
-| REACT_APP_RECAPTCHA_SITE_KEY | Site key for authentication using reCAPTCHA |
+| Variable                     | Description                                       |
+| ---------------------------- | ------------------------------------------------- |
+| PORT                         | Custom port for Talawa-Admin development purposes |
+| REACT_APP_TALAWA_URL         | URL endpoint for talawa-api graphql service       |
+| REACT_APP_USE_RECAPTCHA      | Whether you want to use reCAPTCHA or not          |
+| REACT_APP_RECAPTCHA_SITE_KEY | Site key for authentication using reCAPTCHA       |
 
-Follow the instructions from section [Setting up REACT_APP_TALAWA_URL in .env file](#setting-up-REACT_APP_TALAWA_URL-in-env-file) up to and including section [Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-REACT_APP_RECAPTCHA_SITE_KEY-in-env-file) to set up these environment variables.
+Follow the instructions from the sections [Setting up PORT in .env file](#setting-up-port-in-env-file), [Setting up REACT_APP_TALAWA_URL in .env file](#setting-up-REACT_APP_TALAWA_URL-in-env-file), [Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-REACT_APP_RECAPTCHA_SITE_KEY-in-env-file) and [Setting up Compiletime and Runtime logs](#setting-up-compiletime-and-runtime-logs) to set up these environment variables.
+
+## Setting up PORT in .env file
+
+Add a custom port number for Talawa-Admin development purposes to the variable named `PORT` in the `.env` file.
 
 ## Setting up REACT_APP_TALAWA_URL in .env file
 
@@ -150,6 +156,7 @@ Copy/paste this `reCAPTCHA site key` to the variable named `REACT_APP_RECAPTCHA_
 ```
 REACT_APP_RECAPTCHA_SITE_KEY="this_is_the_recaptcha_key"
 ```
+
 ## Setting up Compiletime and Runtime logs
 
 Set the `ALLOW_LOGS` to "YES" if you want warnings , info and error messages in your console or leave it blank if you dont need them or want to keep the console clean
@@ -168,11 +175,19 @@ npm run serve
 
 ## Accessing Talawa-Admin
 
-By default `talawa-admin` runs on port `3000` on your system's localhost. It is available on the following endpoint:
+By default `talawa-admin` runs on port `4321` on your system's localhost. It is available on the following endpoint:
 
 ```
-http://localhost:3000/
+http://localhost:4321/
 ```
+
+If you have specified a custom port number in your `.env` file, Talawa-Admin will run on the following endpoint:
+
+```
+http://localhost:${{customPort}}/
+```
+
+Replace `${{customPort}}` with the actual custom port number you have configured in your `.env` file.
 
 ## Talawa-Admin Registration
 
@@ -219,7 +234,6 @@ npm run lint:fix
 
 We are using the package `Husky` to run git hooks that run according to different git workflows.
 
-
 #### pre-commit hook
 
 We run a pre-commit hook which automatically runs code quality checks each time you make a commit and also fixes some of the issues. This way you don't have to run them manually each time.
@@ -228,10 +242,9 @@ If you don't want these pre-commit checks running on each commit, you can manual
 
         git commit -m "commit message" --no-verify
 
-
 #### post-merge hook
 
-We are also running a post-merge(post-pull) hook which will automatically run "npm install --legacy-peer-deps" only if there is any change made to pakage.json file so that the developer has all the required dependencies when pulling files from remote.
+We are also running a post-merge(post-pull) hook which will automatically run "npm install" only if there is any change made to pakage.json file so that the developer has all the required dependencies when pulling files from remote.
 
 If you don't want this hook to run, you can manually opt out of this using the `no verify` flag while using the merge command(git pull):
 

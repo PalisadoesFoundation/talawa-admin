@@ -64,7 +64,16 @@ function orgList(): JSX.Element {
     descrip: '',
     userRegistrationRequired: true,
     visible: false,
-    location: '',
+    address: {
+      city: '',
+      countryCode: '',
+      dependentLocality: '',
+      line1: '',
+      line2: '',
+      postalCode: '',
+      sortingCode: '',
+      state: '',
+    },
     image: '',
   });
 
@@ -122,7 +131,16 @@ function orgList(): JSX.Element {
         descrip: '',
         userRegistrationRequired: true,
         visible: false,
-        location: '',
+        address: {
+          city: '',
+          countryCode: '',
+          dependentLocality: '',
+          line1: '',
+          line2: '',
+          postalCode: '',
+          sortingCode: '',
+          state: '',
+        },
         image: '',
       });
     };
@@ -167,7 +185,7 @@ function orgList(): JSX.Element {
     const {
       name: _name,
       descrip: _descrip,
-      location: _location,
+      address: _address,
       visible,
       userRegistrationRequired,
       image,
@@ -175,14 +193,14 @@ function orgList(): JSX.Element {
 
     const name = _name.trim();
     const descrip = _descrip.trim();
-    const location = _location.trim();
+    const address = _address;
 
     try {
       const { data } = await create({
         variables: {
           name: name,
           description: descrip,
-          location: location,
+          address: address,
           visibleInSearch: visible,
           userRegistrationRequired: userRegistrationRequired,
           image: image,
@@ -199,7 +217,16 @@ function orgList(): JSX.Element {
           descrip: '',
           userRegistrationRequired: true,
           visible: false,
-          location: '',
+          address: {
+            city: '',
+            countryCode: '',
+            dependentLocality: '',
+            line1: '',
+            line2: '',
+            postalCode: '',
+            sortingCode: '',
+            state: '',
+          },
           image: '',
         });
         toggleModal();
@@ -509,53 +536,40 @@ function orgList(): JSX.Element {
         />
         {/* Plugin Notification Modal after Org is Created */}
         <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
+          <Modal.Header
+            className="bg-primary"
+            closeButton
+            data-testid="pluginNotificationHeader"
+          >
+            <Modal.Title className="text-white">
+              {t('manageFeatures')}
+            </Modal.Title>
+          </Modal.Header>
           <Modal.Body>
             <section id={styles.grid_wrapper}>
               <div>
-                <div className={styles.flexdir}>
-                  <p className={styles.titlemodal}>{t('manageFeatures')}</p>
-                  <a
-                    onClick={toggleDialogModal}
-                    className={styles.cancel}
-                    data-testid="closeOrganizationModal"
-                  >
-                    <i
-                      className="fa fa-times"
-                      style={{
-                        cursor: 'pointer',
-                      }}
-                    ></i>
-                  </a>
-                  <Button
-                    variant="secondary"
-                    onClick={toggleModal}
-                    data-testid="cancelOrganizationModal"
-                  >
-                    {t('cancel')}
-                  </Button>
-                </div>
                 <h4 className={styles.titlemodaldialog}>
                   {t('manageFeaturesInfo')}
                 </h4>
 
                 <div className={styles.pluginStoreBtnContainer}>
                   <Link
-                    className={styles.secondbtn}
+                    className={`btn btn-primary ${styles.pluginStoreBtn}`}
                     data-testid="goToStore"
                     to={`orgstore/id=${dialogRedirectOrgId}`}
                   >
                     {t('goToStore')}
                   </Link>
                   {/* </button> */}
-                  <button
+                  <Button
                     type="submit"
-                    className={styles.greenregbtn}
+                    className={styles.enableEverythingBtn}
                     onClick={closeDialogModal}
                     value="invite"
                     data-testid="enableEverythingForm"
                   >
                     {t('enableEverything')}
-                  </button>
+                  </Button>
                 </div>
               </div>
             </section>
