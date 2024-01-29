@@ -210,10 +210,14 @@ describe('Testing Advertisement Component', () => {
       screen.getByLabelText('Enter name of Advertisement'),
       'Cookie Shop'
     );
+    userEvent.click(
+      screen.getByLabelText('Provide a link for content to be displayed')
+    );
     userEvent.type(
       screen.getByLabelText('Provide a link for content to be displayed'),
       'http://yourwebsite.com/photo'
     );
+    userEvent.click(screen.getByLabelText('Select type of Advertisement'));
     userEvent.selectOptions(
       screen.getByLabelText('Select type of Advertisement'),
       'POPUP'
