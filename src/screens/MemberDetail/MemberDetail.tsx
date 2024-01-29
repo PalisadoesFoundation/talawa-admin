@@ -124,6 +124,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       <Button
                         className={styles.memberfontcreatedbtn}
                         onClick={addAdmin}
+                        data-testid="addAdminBtn"
                         disabled
                       >
                         {t('addAdmin')}
@@ -131,6 +132,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     ) : (
                       <Button
                         className={styles.memberfontcreatedbtn}
+                        data-testid="addAdminBtn"
                         onClick={addAdmin}
                       >
                         {t('addAdmin')}

@@ -168,6 +168,12 @@ describe('MemberDetail', () => {
     expect(screen.getAllByText(/Role/i)).toHaveLength(2);
     expect(screen.getAllByText(/Created/i)).toHaveLength(4);
     expect(screen.getAllByText(/Joined/i)).toHaveLength(2);
+    expect(screen.getByTestId('addAdminBtn')).toBeInTheDocument();
+    const addAdminBtn = screen.queryByTestId('addAdminBtn');
+    // if the button is not disabled
+    if (addAdminBtn) {
+      userEvent.click(screen.getByTestId('addAdminBtn'));
+    }
     expect(screen.getByTestId('stateBtn')).toBeInTheDocument();
     userEvent.click(screen.getByTestId('stateBtn'));
   });
