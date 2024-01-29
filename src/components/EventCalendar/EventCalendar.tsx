@@ -280,53 +280,51 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
 
     return (
       <>
-        {allDayEventsList.length > 0 && (
-          <div className={styles.calendar_hour_block}>
-            <div className={styles.calendar_hour_text_container}>
-              <p className={styles.calendar_timezone_text}>{timezoneString}</p>
-            </div>
-            <div className={styles.dummyWidth}></div>
+        <div className={styles.calendar_hour_block}>
+          <div className={styles.calendar_hour_text_container}>
+            <p className={styles.calendar_timezone_text}>{timezoneString}</p>
+          </div>
+          <div className={styles.dummyWidth}></div>
+          <div
+            className={
+              allDayEventsList.length > 0
+                ? styles.event_list_parent_current
+                : styles.event_list_parent
+            }
+          >
             <div
               className={
-                allDayEventsList.length > 0
-                  ? styles.event_list_parent_current
-                  : styles.event_list_parent
+                expanded === -100
+                  ? styles.expand_list_container
+                  : styles.list_container
               }
+              style={{ width: 'fit-content' }}
             >
               <div
                 className={
                   expanded === -100
-                    ? styles.expand_list_container
-                    : styles.list_container
+                    ? styles.expand_event_list
+                    : styles.event_list_hour
                 }
-                style={{ width: 'fit-content' }}
               >
-                <div
-                  className={
-                    expanded === -100
-                      ? styles.expand_event_list
-                      : styles.event_list_hour
-                  }
-                >
-                  {expanded === -100
-                    ? allDayEventsList
-                    : allDayEventsList?.slice(0, 1)}
-                </div>
-                {(allDayEventsList?.length > 1 ||
-                  (windowWidth <= 700 && allDayEventsList?.length > 1)) && (
-                  <button
-                    className={styles.btn__more}
-                    onClick={() => {
-                      toggleExpand(-100);
-                    }}
-                  >
-                    {expanded === -100 ? 'View less' : 'View all'}
-                  </button>
-                )}
+                {expanded === -100
+                  ? allDayEventsList
+                  : allDayEventsList?.slice(0, 1)}
               </div>
+              {(allDayEventsList?.length > 2 ||
+                (windowWidth <= 700 && allDayEventsList?.length > 0)) && (
+                <button
+                  className={styles.btn__more}
+                  onClick={() => {
+                    toggleExpand(-100);
+                  }}
+                >
+                  {expanded === -100 ? 'View less' : 'View all'}
+                </button>
+              )}
             </div>
           </div>
-        )}
+        </div>
         {hours.map((hour, index) => {
           const timeEventsList: any = events
             ?.filter((datas) => {
