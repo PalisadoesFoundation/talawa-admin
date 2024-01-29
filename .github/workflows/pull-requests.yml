@@ -60,6 +60,7 @@ jobs:
         with:
           path: "./coverage/lcov.info"
           min_coverage: 95.0
+
   Graphql-Inspector:
     name: Runs Introspection on the github talawa-api repo on the schema.graphql file
     runs-on: ubuntu-latest
@@ -80,3 +81,13 @@ jobs:
 
       - name: Validate Documents
         run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
+
+  Branch-check:
+    name: "Base branch check"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Check if base branch is develop"
+        if: github.event.pull_request.base.ref != 'develop'
+        run: |
+          echo "PR is not against develop branch. Please refer PR_GUIDELINES.md"
+          exit 1
