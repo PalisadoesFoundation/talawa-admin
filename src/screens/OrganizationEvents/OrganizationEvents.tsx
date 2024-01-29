@@ -2,23 +2,28 @@ import type { ChangeEvent } from 'react';
 import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import DatePicker from 'react-datepicker';
 import { Form } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import EventCalendar from 'components/EventCalendar/EventCalendar';
-
+import { TimePicker, DatePicker } from '@mui/x-date-pickers';
 import styles from './OrganizationEvents.module.css';
 import {
   ORGANIZATION_EVENT_CONNECTION_LIST,
   ORGANIZATIONS_LIST,
 } from 'GraphQl/Queries/Queries';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
+import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
 import { useParams, useNavigate } from 'react-router-dom';
+
+const timeToDayJs = (time: string): Dayjs => {
+  const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
+  return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
+};
 
 function organizationEvents(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -228,58 +233,76 @@ function organizationEvents(): JSX.Element {
             />
             <div className={styles.datediv}>
               <div>
-                <label htmlFor="startdate">{t('startDate')}</label>
                 <DatePicker
+                  label={t('startDate')}
                   className={styles.datebox}
-                  id="startdate"
-                  selected={startDate}
-                  onChange={(date: Date | null): void => setStartDate(date)}
-                  placeholderText={t('startDate')}
+                  value={dayjs(startDate)}
+                  onChange={(date: Dayjs | null): void => {
+                    if (date) {
+                      setStartDate(date?.toDate());
+                      setEndDate(
+                        endDate &&
+                          (endDate < date?.toDate() ? date?.toDate() : endDate)
+                      );
+                    }
+                  }}
                 />
               </div>
               <div>
-                <label htmlFor="enddate">{t('endDate')}</label>
                 <DatePicker
+                  label={t('endDate')}
                   className={styles.datebox}
-                  id="enddate"
-                  selected={endDate}
-                  onChange={(date: Date | null): void => setEndDate(date)}
-                  placeholderText={t('endDate')}
+                  value={dayjs(endDate)}
+                  onChange={(date: Dayjs | null): void => {
+                    if (date) {
+                      setEndDate(date?.toDate());
+                    }
+                  }}
+                  minDate={dayjs(startDate)}
                 />
               </div>
             </div>
-            {!alldaychecked && (
-              <div className={styles.datediv}>
-                <div className="mr-3">
-                  <label htmlFor="startTime">{t('startTime')}</label>
-                  <Form.Control
-                    id="startTime"
-                    placeholder={t('startTime')}
-                    value={formState.startTime}
-                    onChange={(e): void =>
+            <div className={styles.datediv}>
+              <div className="mr-3">
+                <TimePicker
+                  label={t('startTime')}
+                  className={styles.datebox}
+                  timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
+                  value={timeToDayJs(formState.startTime)}
+                  onChange={(time): void => {
+                    if (time) {
                       setFormState({
                         ...formState,
-                        startTime: e.target.value,
-                      })
+                        startTime: time?.format('HH:mm:ss'),
+                        endTime:
+                          timeToDayJs(formState.endTime) < time
+                            ? time?.format('HH:mm:ss')
+                            : formState.endTime,
+                      });
                     }
-                  />
-                </div>
-                <div>
-                  <label htmlFor="endTime">{t('endTime')}</label>
-                  <Form.Control
-                    id="endTime"
-                    placeholder={t('endTime')}
-                    value={formState.endTime}
-                    onChange={(e): void =>
-                      setFormState({
-                        ...formState,
-                        endTime: e.target.value,
-                      })
-                    }
-                  />
-                </div>
+                  }}
+                  disabled={alldaychecked}
+                />
               </div>
-            )}
+              <div>
+                <TimePicker
+                  label={t('endTime')}
+                  className={styles.datebox}
+                  timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
+                  value={timeToDayJs(formState.endTime)}
+                  onChange={(time): void => {
+                    if (time) {
+                      setFormState({
+                        ...formState,
+                        endTime: time?.format('HH:mm:ss'),
+                      });
+                    }
+                  }}
+                  minTime={timeToDayJs(formState.startTime)}
+                  disabled={alldaychecked}
+                />
+              </div>
+            </div>
             <div className={styles.checkboxdiv}>
               <div className={styles.dispflex}>
                 <label htmlFor="allday">{t('allDay')}?</label>

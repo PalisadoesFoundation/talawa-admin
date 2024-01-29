@@ -45,7 +45,7 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
     $id: ID!
     $name: String
     $description: String
-    $location: String
+    $address: AddressInput
     $userRegistrationRequired: Boolean
     $visibleInSearch: Boolean
     $file: String
@@ -57,7 +57,7 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
         description: $description
         userRegistrationRequired: $userRegistrationRequired
         visibleInSearch: $visibleInSearch
-        location: $location
+        address: $address
       }
       file: $file
     ) {
@@ -66,17 +66,39 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
   }
 `;
 
+// fragment for defining the Address input type.
+export const ADDRESS_DETAILS_FRAGMENT = gql`
+  fragment AddressDetails on AddressInput {
+    city: String
+    countryCode: String
+    dependentLocality: String
+    line1: String
+    line2: String
+    postalCode: String
+    sortingCode: String
+    state: String
+  }
+`;
+
 // to update the details of the user
 
 export const UPDATE_USER_MUTATION = gql`
   mutation UpdateUserProfile(
+    $id: ID
     $firstName: String
     $lastName: String
     $email: EmailAddress
+    $applangcode: String
     $file: String
   ) {
     updateUserProfile(
-      data: { firstName: $firstName, lastName: $lastName, email: $email }
+      data: {
+        firstName: $firstName
+        lastName: $lastName
+        email: $email
+        id: $id
+        applangcode: $applangcode
+      }
       file: $file
     ) {
       _id
@@ -182,7 +204,7 @@ export const RECAPTCHA_MUTATION = gql`
 export const CREATE_ORGANIZATION_MUTATION = gql`
   mutation CreateOrganization(
     $description: String!
-    $location: String!
+    $address: AddressInput!
     $name: String!
     $visibleInSearch: Boolean!
     $userRegistrationRequired: Boolean!
@@ -191,7 +213,7 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
     createOrganization(
       data: {
         description: $description
-        location: $location
+        address: $address
         name: $name
         visibleInSearch: $visibleInSearch
         userRegistrationRequired: $userRegistrationRequired
@@ -554,10 +576,6 @@ export const REGISTER_EVENT = gql`
     }
   }
 `;
-// Changes the role of a event in an organization and add and remove the event from the organization
-export { UPDATE_EVENT_PROJECT_TASK_MUTATION } from './EventTaskMutations';
-export { DELETE_EVENT_TASK_MUTATION } from './EventTaskMutations';
-export { SET_TASK_VOLUNTEERS_MUTATION } from './EventTaskMutations';
 
 // Changes the role of a event in an organization and add and remove the event from the organization
 export { ADD_EVENT_ATTENDEE } from './EventAttendeeMutations';

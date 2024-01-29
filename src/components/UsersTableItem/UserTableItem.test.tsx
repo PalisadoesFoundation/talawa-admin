@@ -86,7 +86,16 @@ describe('Testing User Table Item', () => {
             _id: 'xyz',
             name: 'XYZ',
             image: null,
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-01-29T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -100,7 +109,16 @@ describe('Testing User Table Item', () => {
             _id: 'mno',
             name: 'MNO',
             image: null,
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-01-29T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -116,7 +134,16 @@ describe('Testing User Table Item', () => {
             _id: 'abc',
             name: 'Joined Organization 1',
             image: null,
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-06-29T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -130,7 +157,16 @@ describe('Testing User Table Item', () => {
             _id: 'def',
             name: 'Joined Organization 2',
             image: null,
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-07-29T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -258,7 +294,16 @@ describe('Testing User Table Item', () => {
             _id: 'xyz',
             name: 'Blocked Organization 1',
             image: null,
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-08-29T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -272,7 +317,16 @@ describe('Testing User Table Item', () => {
             _id: 'mno',
             name: 'Blocked Organization 2',
             image: null,
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-09-29T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -289,7 +343,16 @@ describe('Testing User Table Item', () => {
             name: 'Joined Organization 1',
             image:
               'https://api.dicebear.com/5.x/initials/svg?seed=Joined%20Organization%201',
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-08-29T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -304,7 +367,16 @@ describe('Testing User Table Item', () => {
             _id: 'def',
             name: 'Joined Organization 2',
             image: null,
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-09-19T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -361,7 +433,10 @@ describe('Testing User Table Item', () => {
     expect(inputBox).toBeInTheDocument();
     expect(screen.getByText(/Joined Organization 1/i)).toBeInTheDocument();
     expect(screen.getByText(/Joined Organization 2/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/Jamaica/i)).toHaveLength(2);
+    const elementsWithKingston = screen.getAllByText(/Kingston/i);
+    elementsWithKingston.forEach((element) => {
+      expect(element).toBeInTheDocument();
+    });
     expect(screen.getByText(/29-08-2023/i)).toBeInTheDocument();
     expect(screen.getByText(/19-09-2023/i)).toBeInTheDocument();
     expect(screen.getByTestId('removeUserFromOrgBtnabc')).toBeInTheDocument();
@@ -434,7 +509,16 @@ describe('Testing User Table Item', () => {
             name: 'Blocked Organization 1',
             image:
               'https://api.dicebear.com/5.x/initials/svg?seed=Blocked%20Organization%201',
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-08-29T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -449,7 +533,16 @@ describe('Testing User Table Item', () => {
             _id: 'mno',
             name: 'Blocked Organization 2',
             image: null,
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-09-29T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -465,7 +558,16 @@ describe('Testing User Table Item', () => {
             _id: 'abc',
             name: 'Joined Organization 1',
             image: null,
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-08-29T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -479,7 +581,16 @@ describe('Testing User Table Item', () => {
             _id: 'def',
             name: 'Joined Organization 2',
             image: null,
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-09-19T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -539,7 +650,10 @@ describe('Testing User Table Item', () => {
     expect(inputBox).toBeInTheDocument();
     expect(screen.getByText(/Blocked Organization 1/i)).toBeInTheDocument();
     expect(screen.getByText(/Blocked Organization 2/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/Jamaica/i)).toHaveLength(2);
+    const elementsWithKingston = screen.getAllByText(/Kingston/i);
+    elementsWithKingston.forEach((element) => {
+      expect(element).toBeInTheDocument();
+    });
     expect(screen.getByText(/29-08-2023/i)).toBeInTheDocument();
     expect(screen.getByText(/29-09-2023/i)).toBeInTheDocument();
     expect(screen.getByTestId('removeUserFromOrgBtnxyz')).toBeInTheDocument();
@@ -612,7 +726,16 @@ describe('Testing User Table Item', () => {
             name: 'Blocked Organization 1',
             image:
               'https://api.dicebear.com/5.x/initials/svg?seed=Blocked%20Organization%201',
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-08-29T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -627,7 +750,16 @@ describe('Testing User Table Item', () => {
             _id: 'mno',
             name: 'Blocked Organization 2',
             image: null,
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-09-29T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -643,7 +775,16 @@ describe('Testing User Table Item', () => {
             _id: 'abc',
             name: 'Joined Organization 1',
             image: null,
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-08-29T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -657,7 +798,16 @@ describe('Testing User Table Item', () => {
             _id: 'def',
             name: 'Joined Organization 2',
             image: null,
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-09-19T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -752,7 +902,16 @@ describe('Testing User Table Item', () => {
             name: 'Blocked Organization 1',
             image:
               'https://api.dicebear.com/5.x/initials/svg?seed=Blocked%20Organization%201',
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-08-29T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -767,7 +926,16 @@ describe('Testing User Table Item', () => {
             _id: 'mno',
             name: 'Blocked Organization 2',
             image: null,
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-09-29T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -783,7 +951,16 @@ describe('Testing User Table Item', () => {
             _id: 'abc',
             name: 'Joined Organization 1',
             image: null,
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-08-29T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -797,7 +974,16 @@ describe('Testing User Table Item', () => {
             _id: 'def',
             name: 'Joined Organization 2',
             image: null,
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-09-19T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -894,7 +1080,16 @@ describe('Testing User Table Item', () => {
             name: 'Blocked Organization 1',
             image:
               'https://api.dicebear.com/5.x/initials/svg?seed=Blocked%20Organization%201',
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-08-29T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -909,7 +1104,16 @@ describe('Testing User Table Item', () => {
             _id: 'mno',
             name: 'Blocked Organization 2',
             image: null,
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-09-29T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -925,7 +1129,16 @@ describe('Testing User Table Item', () => {
             _id: 'abc',
             name: 'Joined Organization 1',
             image: null,
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-08-29T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -939,7 +1152,16 @@ describe('Testing User Table Item', () => {
             _id: 'def',
             name: 'Joined Organization 2',
             image: null,
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-09-19T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -1002,7 +1224,16 @@ describe('Testing User Table Item', () => {
             name: 'Blocked Organization 1',
             image:
               'https://api.dicebear.com/5.x/initials/svg?seed=Blocked%20Organization%201',
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-08-29T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -1017,7 +1248,16 @@ describe('Testing User Table Item', () => {
             _id: 'mno',
             name: 'Blocked Organization 2',
             image: null,
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-09-29T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -1033,7 +1273,16 @@ describe('Testing User Table Item', () => {
             _id: 'abc',
             name: 'Joined Organization 1',
             image: null,
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-08-29T15:39:36.355Z',
             creator: {
               _id: '123',
@@ -1047,7 +1296,16 @@ describe('Testing User Table Item', () => {
             _id: 'def',
             name: 'Joined Organization 2',
             image: null,
-            location: 'Jamaica',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
             createdAt: '2023-09-19T15:39:36.355Z',
             creator: {
               _id: '123',

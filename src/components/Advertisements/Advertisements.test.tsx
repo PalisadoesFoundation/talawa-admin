@@ -134,7 +134,16 @@ const ORGANIZATIONS_LIST_MOCK = {
           userRegistrationRequired: true,
 
           visibleInSearch: true,
-          location: 'location',
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
           members: {
             _id: 'id',
             firstName: 'firstName',

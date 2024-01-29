@@ -15,7 +15,7 @@ export interface InterfaceOrgListCardProps {
 }
 
 function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
-  const { _id, admins, image, location, members, name } = props.data;
+  const { _id, admins, image, address, members, name } = props.data;
 
   const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
     variables: {
@@ -59,10 +59,19 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
             <Tooltip title={name} placement="top-end">
               <h4 className={styles.orgName}>{name}</h4>
             </Tooltip>
-            <h6 className="text-secondary">
-              <LocationOnIcon fontSize="inherit" className="fs-5" />
-              {location}
-            </h6>
+            {address && address.city && (
+              <div>
+                <h6 className="text-secondary">
+                  <LocationOnIcon fontSize="inherit" className="fs-5" />
+                  <span className="address-line">{address.city}, </span>
+                  <span className="address-line">{address.state}</span>
+                  <br />
+                  <LocationOnIcon fontSize="inherit" className="fs-5" />
+                  <span className="address-line">{address.postalCode}, </span>
+                  <span className="address-line">{address.countryCode}</span>
+                </h6>
+              </div>
+            )}
             <h6>
               {t('admins')}: <span>{admins.length}</span>
             </h6>

@@ -16,6 +16,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
+import { BACKEND_URL } from 'Constant/constant';
 
 const MOCKS = [
   {
@@ -129,7 +130,7 @@ describe('Talawa-API server fetch check', () => {
       );
     });
 
-    expect(fetch).toHaveBeenCalledWith('http://localhost:4000/graphql/');
+    expect(fetch).toHaveBeenCalledWith(BACKEND_URL);
   });
 
   test('displays warning message when resource loading fails', async () => {
@@ -150,7 +151,7 @@ describe('Talawa-API server fetch check', () => {
       );
     });
 
-    expect(fetch).toHaveBeenCalledWith('http://localhost:4000/graphql/');
+    expect(fetch).toHaveBeenCalledWith(BACKEND_URL);
   });
 });
 
