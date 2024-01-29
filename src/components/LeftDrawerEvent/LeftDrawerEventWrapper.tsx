@@ -12,7 +12,6 @@ export interface InterfacePropType {
       _id: string;
     };
   };
-  setShowAddEventProjectModal: React.Dispatch<React.SetStateAction<boolean>>;
   children: React.ReactNode;
 }
 

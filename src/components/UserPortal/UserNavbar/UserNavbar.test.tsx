@@ -192,7 +192,6 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     userEvent.click(screen.getByTestId('logoutDropdown'));
     expect(screen.getByText('Settings')).toBeInTheDocument();
-    expect(screen.getByText('My Tasks')).toBeInTheDocument();
     expect(screen.getByTestId('logoutBtn')).toBeInTheDocument();
   });
 
@@ -214,25 +213,5 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     userEvent.click(screen.getByTestId('logoutDropdown'));
     userEvent.click(screen.getByText('Settings'));
     expect(window.location.pathname).toBe('/user/settings');
-  });
-
-  test('User can navigate to the "My Tasks" page', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserNavbar />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-
-    userEvent.click(screen.getByTestId('logoutDropdown'));
-    userEvent.click(screen.getByText('My Tasks'));
-    expect(window.location.pathname).toBe('/user/tasks');
   });
 });

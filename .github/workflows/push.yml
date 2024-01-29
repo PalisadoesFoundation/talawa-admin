@@ -48,17 +48,19 @@ jobs:
       
       - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
         name: List the state of node modules
-        run: npm install --legacy-peer-deps
+        run: npm install
       - run: npm run test -- --watchAll=false --coverage
       - name: Present and upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
         uses: codecov/codecov-action@v3
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
           fail_ci_if_error: false
           name: '${{env.CODECOV_UNIQUE_NAME}}'
 
   Generate-Documentation:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/automated-docs'
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v3
@@ -84,7 +86,7 @@ jobs:
             ${{ runner.os }}-
 
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: npm install
 
       - name: Install TypeScript Globally and add GraphQL tag
         run: yarn global add typescript

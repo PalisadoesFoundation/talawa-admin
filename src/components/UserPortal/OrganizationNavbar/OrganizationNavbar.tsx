@@ -223,11 +223,6 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                       {t('settings')}
                     </Link>
                   </Dropdown.Item>
-                  <Dropdown.Item>
-                    <Link to="/user/tasks" className={styles.link}>
-                      {t('myTasks')}
-                    </Link>
-                  </Dropdown.Item>
                   <Dropdown.Item
                     onClick={handleLogout}
                     data-testid={`logoutBtn`}
