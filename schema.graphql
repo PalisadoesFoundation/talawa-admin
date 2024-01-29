@@ -404,7 +404,6 @@ type MinimumValueError implements FieldError {
 
 input CreateAdvertisementInput {
   endDate: Date!
-  mediaUrl: URL!
   name: String!
   organizationId: ID!
   startDate: Date!
