@@ -412,8 +412,7 @@ input CreateAdvertisementInput {
 }
 
 type CreateAdvertisementPayload {
-  _id: id,
-  advertisement: Advertisement!
+  advertisement: Advertisement
 }
 
 type Mutation {

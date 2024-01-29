@@ -251,7 +251,9 @@ describe('Testing Advertisement Component', () => {
                 _id: '1',
                 name: 'Advertisement1',
                 type: 'POPUP',
-                organizationId: 'undefined',
+                organization: {
+                  _id: 'undefined', 
+                },
                 mediaUrl: 'http://example1.com',
                 endDate: '2023-01-01',
                 startDate: '2022-01-01',
@@ -316,7 +318,9 @@ describe('Testing Advertisement Component', () => {
                 _id: '1',
                 name: 'Advertisement1',
                 type: 'POPUP',
-                organizationId: 'undefined',
+                organization: {
+                  _id: 'undefined', 
+                },
                 mediaUrl: 'http://example1.com',
                 endDate: '2023-01-01',
                 startDate: '2022-01-01',
@@ -325,7 +329,9 @@ describe('Testing Advertisement Component', () => {
                 _id: '2',
                 name: 'Advertisement2',
                 type: 'BANNER',
-                organizationId: 'undefined',
+                organization: {
+                  _id: 'undefined', 
+                },
                 mediaUrl: 'http://example2.com',
                 endDate: tomorrow,
                 startDate: today,
