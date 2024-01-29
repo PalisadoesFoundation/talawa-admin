@@ -120,24 +120,15 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     {t('title')}
                   </p>
                   <div className={styles.btngroup}>
-                    {isAdmin ? (
-                      <Button
-                        className={styles.memberfontcreatedbtn}
-                        onClick={addAdmin}
-                        data-testid="addAdminBtn"
-                        disabled
-                      >
-                        {t('addAdmin')}
-                      </Button>
-                    ) : (
-                      <Button
-                        className={styles.memberfontcreatedbtn}
-                        data-testid="addAdminBtn"
-                        onClick={addAdmin}
-                      >
-                        {t('addAdmin')}
-                      </Button>
-                    )}
+                    <Button
+                      className={styles.memberfontcreatedbtn}
+                      data-testid="addAdminBtn"
+                      onClick={addAdmin}
+                      disabled={isAdmin}
+                    >
+                      {t('addAdmin')}
+                    </Button>
+
                     <Button
                       className={styles.memberfontcreatedbtn}
                       role="stateBtn"
