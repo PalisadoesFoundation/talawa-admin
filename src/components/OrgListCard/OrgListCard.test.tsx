@@ -123,7 +123,7 @@ describe('Testing the Super Dash List', () => {
       </MockedProvider>
     );
     userEvent.click(screen.getByTestId('manageBtn'));
-    expect(screen.getByTestId(/icon/)).toBeInTheDocument();
+    expect(screen.getByTestId(/manageIcon/i)).toBeInTheDocument();
     expect(window.location).toBeAt('/orgdash/id=xyz');
   });
 });

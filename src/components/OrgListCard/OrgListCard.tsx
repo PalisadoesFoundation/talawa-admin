@@ -91,7 +91,7 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
               fill="var(--bs-white)"
               width={12}
               className={styles.flaskIcon}
-              data-testid="icon"
+              data-testid="manageIcon"
               title={t('sampleOrganization')}
             />
           )}
