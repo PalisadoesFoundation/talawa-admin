@@ -452,7 +452,8 @@
     "noData": "No data",
     "otherSettings": "Other Settings",
     "changeLanguage": "Change Language",
-    "manageCustomFields": "Manage Custom Fields"
+    "manageCustomFields": "Manage Custom Fields",
+    "actionItemCategories": "Action Item Categories"
   },
   "deleteOrg": {
     "deleteOrganization": "Delete Organization",
@@ -739,5 +740,12 @@
     "Remove Custom Field": "Remove Custom Field",
     "fieldSuccessMessage": "Field added successfully",
     "fieldRemovalSuccess": "Field removed successfully"
+  },
+  "orgActionItemCategories": {
+    "addActionItemCategory": "Create",
+    "updateActionItemCategory": "Update",
+    "actionItemCategoryName": "Name",
+    "actionItemCategoryDetails": "Action Item Category Details",
+    "enterName": "Enter Name"
   }
 }

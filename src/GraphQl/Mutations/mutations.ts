@@ -573,6 +573,10 @@ export const REGISTER_EVENT = gql`
   }
 `;
 
+// Create and Update an ActionItemCategory
+export { CREATE_ACTION_ITEM_CATEGORY_MUTATION } from './ActionItemCategoryMutations';
+export { UPDATE_ACTION_ITEM_CATEGORY_MUTATION } from './ActionItemCategoryMutations';
+
 // Changes the role of a event in an organization and add and remove the event from the organization
 export { ADD_EVENT_ATTENDEE } from './EventAttendeeMutations';
 export { REMOVE_EVENT_ATTENDEE } from './EventAttendeeMutations';
