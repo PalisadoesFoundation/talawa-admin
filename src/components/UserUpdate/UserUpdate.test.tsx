@@ -36,7 +36,6 @@ const MOCKS = [
           adminFor: [],
           createdOrganizations: [],
           joinedOrganizations: [],
-          organizationUserBelongsTo: null,
           organizationsBlockedBy: [],
           createdEvents: [],
           registeredEvents: [],

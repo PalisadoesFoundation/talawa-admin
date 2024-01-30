@@ -13,6 +13,9 @@ import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import { Form } from 'react-bootstrap';
 import Loader from 'components/Loader/Loader';
+// import useLocalStorage from 'utils/useLocalStorage';
+
+// const { getItem, setItem } = useLocalStorage();
 
 interface InterfaceUserUpdateProps {
   id: string;
@@ -54,6 +57,7 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
         firstName: data?.user?.firstName,
         lastName: data?.user?.lastName,
         email: data?.user?.email,
+        applangcode: data?.user?.applangcode,
       });
     }
   }, [data]);
@@ -72,6 +76,7 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
       const firstName = formState.firstName;
       const lastName = formState.lastName;
       const email = formState.email;
+      const applangcode = formState.applangcode;
       const file = formState.file;
       let toSubmit = true;
       if (firstName.trim().length == 0 || !firstName) {
@@ -90,9 +95,11 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
       const { data } = await updateUser({
         variables: {
           //Currently on these  fields are supported by the api
+          id: currentUrl,
           firstName,
           lastName,
           email,
+          applangcode,
           file,
         },
       });
@@ -106,10 +113,13 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
           applangcode: '',
           file: '',
         });
-        localStorage.setItem('FirstName', firstName);
-        localStorage.setItem('LastName', lastName);
-        localStorage.setItem('Email', email);
-        localStorage.setItem('UserImage', file);
+
+        if (localStorage.getItem('id') === currentUrl) {
+          localStorage.setItem('FirstName', firstName);
+          localStorage.setItem('LastName', lastName);
+          localStorage.setItem('Email', email);
+          localStorage.setItem('UserImage', file);
+        }
         toast.success('Successful updated');
 
         toggleStateValue();

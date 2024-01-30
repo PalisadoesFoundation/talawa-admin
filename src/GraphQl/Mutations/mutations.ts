@@ -45,7 +45,7 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
     $id: ID!
     $name: String
     $description: String
-    $location: String
+    $address: AddressInput
     $userRegistrationRequired: Boolean
     $visibleInSearch: Boolean
     $file: String
@@ -57,7 +57,7 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
         description: $description
         userRegistrationRequired: $userRegistrationRequired
         visibleInSearch: $visibleInSearch
-        location: $location
+        address: $address
       }
       file: $file
     ) {
@@ -66,17 +66,39 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
   }
 `;
 
+// fragment for defining the Address input type.
+export const ADDRESS_DETAILS_FRAGMENT = gql`
+  fragment AddressDetails on AddressInput {
+    city: String
+    countryCode: String
+    dependentLocality: String
+    line1: String
+    line2: String
+    postalCode: String
+    sortingCode: String
+    state: String
+  }
+`;
+
 // to update the details of the user
 
 export const UPDATE_USER_MUTATION = gql`
   mutation UpdateUserProfile(
+    $id: ID
     $firstName: String
     $lastName: String
     $email: EmailAddress
+    $applangcode: String
     $file: String
   ) {
     updateUserProfile(
-      data: { firstName: $firstName, lastName: $lastName, email: $email }
+      data: {
+        firstName: $firstName
+        lastName: $lastName
+        email: $email
+        id: $id
+        applangcode: $applangcode
+      }
       file: $file
     ) {
       _id
@@ -178,7 +200,7 @@ export const RECAPTCHA_MUTATION = gql`
 export const CREATE_ORGANIZATION_MUTATION = gql`
   mutation CreateOrganization(
     $description: String!
-    $location: String!
+    $address: AddressInput!
     $name: String!
     $visibleInSearch: Boolean!
     $userRegistrationRequired: Boolean!
@@ -187,7 +209,7 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
     createOrganization(
       data: {
         description: $description
-        location: $location
+        address: $address
         name: $name
         visibleInSearch: $visibleInSearch
         userRegistrationRequired: $userRegistrationRequired
@@ -295,6 +317,7 @@ export const CREATE_POST_MUTATION = gql`
     $videoUrl: URL
     $organizationId: ID!
     $file: String
+    $pinned: Boolean
   ) {
     createPost(
       data: {
@@ -303,6 +326,7 @@ export const CREATE_POST_MUTATION = gql`
         imageUrl: $imageUrl
         videoUrl: $videoUrl
         organizationId: $organizationId
+        pinned: $pinned
       }
       file: $file
     ) {
@@ -439,6 +463,31 @@ export const ADD_ADVERTISEMENT_MUTATION = gql`
     }
   }
 `;
+export const UPDATE_ADVERTISEMENT_MUTATION = gql`
+  mutation UpdateAdvertisement(
+    $id: ID!
+    $name: String
+    $link: String
+    $type: AdvertisementType
+    $startDate: Date
+    $endDate: Date
+  ) {
+    updateAdvertisement(
+      input: {
+        _id: $id
+        name: $name
+        link: $link
+        type: $type
+        startDate: $startDate
+        endDate: $endDate
+      }
+    ) {
+      advertisement {
+        _id
+      }
+    }
+  }
+`;
 export const DELETE_ADVERTISEMENT_BY_ID = gql`
   mutation ($id: ID!) {
     deleteAdvertisementById(id: $id) {
@@ -523,59 +572,6 @@ export const REGISTER_EVENT = gql`
     }
   }
 `;
-
-export const ADD_EVENT_PROJECT_MUTATION = gql`
-  mutation AddEventProject(
-    $title: String!
-    $description: String!
-    $eventId: ID!
-  ) {
-    createEventProject(
-      data: { title: $title, description: $description, eventId: $eventId }
-    ) {
-      _id
-    }
-  }
-`;
-
-export const UPDATE_EVENT_PROJECT_MUTATION = gql`
-  mutation UpdateEventProject($title: String, $description: String, $id: ID!) {
-    updateEventProject(
-      id: $id
-      data: { title: $title, description: $description }
-    ) {
-      _id
-    }
-  }
-`;
-
-export const DELETE_EVENT_PROJECT_MUTATION = gql`
-  mutation DeleteEventProject($id: ID!) {
-    removeEventProject(id: $id) {
-      _id
-    }
-  }
-`;
-
-export const ADD_EVENT_PROJECT_TASK_MUTATION = gql`
-  mutation AddEventTask(
-    $title: String!
-    $description: String!
-    $projectId: ID!
-    $deadline: DateTime!
-  ) {
-    createTask(
-      eventProjectId: $projectId
-      data: { title: $title, description: $description, deadline: $deadline }
-    ) {
-      _id
-    }
-  }
-`;
-// Changes the role of a event in an organization and add and remove the event from the organization
-export { UPDATE_EVENT_PROJECT_TASK_MUTATION } from './EventTaskMutations';
-export { DELETE_EVENT_TASK_MUTATION } from './EventTaskMutations';
-export { SET_TASK_VOLUNTEERS_MUTATION } from './EventTaskMutations';
 
 // Changes the role of a event in an organization and add and remove the event from the organization
 export { ADD_EVENT_ATTENDEE } from './EventAttendeeMutations';

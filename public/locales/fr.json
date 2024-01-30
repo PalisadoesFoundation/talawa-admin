@@ -127,6 +127,15 @@
     "createSampleOrganization": "Créer une organisation d'exemple",
     "description": "La description",
     "location": "Emplacement",
+    "address": "Adresse",
+    "city": "Ville",
+    "countryCode": "Code Pays",
+    "line1": "Ligne 1",
+    "line2": "Ligne 2",
+    "postalCode": "Code Postal",
+    "dependentLocality": "Localité Dépendante",
+    "sortingCode": "Code de Tri",
+    "state": "État / Province",
     "userRegistrationRequired": "enregistrement requis",
     "visibleInSearch": "Visible dans la recherche",
     "displayImage": "Afficher l'image",
@@ -150,7 +159,6 @@
     "manage": "Faire en sorte",
     "sampleOrganization": "Organisation d'exemple"
   },
-
   "paginationList": {
     "rowsPerPage": "lignes par page",
     "all": "Tout"
@@ -305,10 +313,9 @@
     "postDetails": "Détails de la publication",
     "postTitle1": "Écrire le titre de la publication",
     "postTitle": "Titre",
+    "addMedia": "Télécharger une photo ou une vidéo",
     "information": "Informations",
     "information1": "Écrire les informations de la publication",
-    "image": "Image de la publication",
-    "video": "Vidéo de la publication",
     "addPost": "Ajouter une publication",
     "searchTitle": "Rechercher par titre",
     "searchText": "Rechercher par texte",
@@ -321,7 +328,9 @@
     "Oldest": "Les plus anciennes d'abord",
     "Latest": "Les plus récentes d'abord",
     "sortPost": "Trier les publications",
-    "tag": "Votre navigateur ne prend pas en charge la balise vidéo"
+    "tag": "Votre navigateur ne prend pas en charge la balise vidéo",
+    "postCreatedSuccess": "Félicitations ! Vous avez publié quelque chose.",
+    "pinPost": "Épingler le message"
   },
   "postNotFound": {
     "post": "Poste",
@@ -350,6 +359,8 @@
     "yes": "Oui",
     "editPost": "Modifier la publication",
     "postTitle": "Titre",
+    "postTitle1": "Modifier le titre du message",
+    "information1": "Modifier les informations du message",
     "information": "Informations",
     "image": "Image",
     "video": "Vidéo",
@@ -483,6 +494,15 @@
     "name": "Nom",
     "description": "La description",
     "location": "emplacement",
+    "address": "Adresse",
+    "city": "Ville",
+    "countryCode": "Code Pays",
+    "line1": "Ligne 1",
+    "line2": "Ligne 2",
+    "postalCode": "Code Postal",
+    "dependentLocality": "Localité Dépendante",
+    "sortingCode": "Code de Tri",
+    "state": "État / Province",
     "displayImage": "Afficher l'image",
     "userRegistrationRequired": "enregistrement requis",
     "isVisibleInSearch": "Visible dans la recherche",
@@ -531,7 +551,6 @@
     "main": "Principal",
     "firstName": "Prénom",
     "lastName": "Nom de famille",
-    "memberOfOrganization": "Membre de l'organisation",
     "language": "Langue",
     "adminApproved": "Approuvé par l'administrateur",
     "pluginCreationAllowed": "Autorisation de création de plugin",
@@ -583,7 +602,6 @@
     "events": "Événements",
     "chat": "Discuter",
     "donate": "Donner",
-    "myTasks": "Mes tâches",
     "settings": "Paramètres",
     "language": "Langue",
     "logout": "Se déconnecter",
@@ -670,22 +688,6 @@
     "alreadyRegistered": "Déjà enregistré",
     "register": "Registre"
   },
-  "userTasks": {
-    "yourAssignedTasks": "Vos tâches assignées",
-    "nothingToShow": "Rien à montrer ici."
-  },
-  "userTaskCard": {
-    "description": "Description",
-    "deadline": "Date limite",
-    "created": "Créé",
-    "assignees": "Destinataires",
-    "completed": "Complété",
-    "incomplete": "Incomplète",
-    "taskCompleted": "La tâche est terminée",
-    "taskNotCompleted": "La tâche n'est pas encore terminée",
-    "event": "Événement",
-    "organization": "Organisation"
-  },
   "advertisement": {
     "title": "Publicités",
     "pHeading": "Gérer les publicités",
@@ -697,7 +699,11 @@
     "deleteAdvertisement": "Supprimer l'annonce",
     "deleteAdvertisementMsg": "Voulez-vous supprimer cette annonce ?",
     "no": "Non",
-    "yes": "Oui"
+    "yes": "Oui",
+    "view": "Voir",
+    "edit": "Éditer",
+    "editAdvertisement": "Éditer l'annonce",
+    "saveChanges": "Enregistrer les modifications"
   },
   "userChat": {
     "chat": "Chat",

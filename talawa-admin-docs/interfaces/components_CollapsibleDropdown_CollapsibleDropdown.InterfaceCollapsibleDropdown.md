@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[src/components/CollapsibleDropdown/CollapsibleDropdown.tsx:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/CollapsibleDropdown/CollapsibleDropdown.tsx#L9)
+[src/components/CollapsibleDropdown/CollapsibleDropdown.tsx:9](https://github.com/palisadoes/talawa-admin/blob/5828937/src/components/CollapsibleDropdown/CollapsibleDropdown.tsx#L9)
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[src/components/CollapsibleDropdown/CollapsibleDropdown.tsx:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/CollapsibleDropdown/CollapsibleDropdown.tsx#L10)
+[src/components/CollapsibleDropdown/CollapsibleDropdown.tsx:10](https://github.com/palisadoes/talawa-admin/blob/5828937/src/components/CollapsibleDropdown/CollapsibleDropdown.tsx#L10)

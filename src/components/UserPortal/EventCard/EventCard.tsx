@@ -84,7 +84,9 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
       <div className={`d-flex flex-row ${styles.eventDetails}`}>
         {`${t('starts')} `}
         {props.startTime ? (
-          <b>{dayjs(`2015-03-04T${props.startTime}`).format('h:mm:ss A')}</b>
+          <b data-testid="startTime">
+            {dayjs(`2015-03-04T${props.startTime}`).format('h:mm:ss A')}
+          </b>
         ) : (
           <></>
         )}
@@ -93,7 +95,9 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
       <div className={`d-flex flex-row ${styles.eventDetails}`}>
         {`${t('ends')} `}
         {props.endTime ? (
-          <b>{dayjs(`2015-03-04T${props.endTime}`).format('h:mm:ss A')}</b>
+          <b data-testid="endTime">
+            {dayjs(`2015-03-04T${props.endTime}`).format('h:mm:ss A')}
+          </b>
         ) : (
           <></>
         )}{' '}

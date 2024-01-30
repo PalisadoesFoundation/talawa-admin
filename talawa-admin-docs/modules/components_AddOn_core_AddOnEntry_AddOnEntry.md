@@ -4,10 +4,6 @@
 
 ## Table of contents
 
-### Namespaces
-
-- [default](components_AddOn_core_AddOnEntry_AddOnEntry.default.md)
-
 ### Functions
 
 - [default](components_AddOn_core_AddOnEntry_AddOnEntry.md#default)
@@ -30,4 +26,4 @@
 
 #### Defined in
 
-[src/components/AddOn/core/AddOnEntry/AddOnEntry.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/AddOn/core/AddOnEntry/AddOnEntry.tsx#L26)
+[src/components/AddOn/core/AddOnEntry/AddOnEntry.tsx:22](https://github.com/palisadoes/talawa-admin/blob/5828937/src/components/AddOn/core/AddOnEntry/AddOnEntry.tsx#L22)
