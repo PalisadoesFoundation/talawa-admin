@@ -32,7 +32,16 @@ const props: InterfaceOrgListCardProps = {
     _id: 'xyz',
     name: 'Dogs Care',
     image: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
-    location: 'India',
+    address: {
+      city: 'Sample City',
+      countryCode: 'US',
+      dependentLocality: 'Sample Dependent Locality',
+      line1: '123 Sample Street',
+      line2: 'Apartment 456',
+      postalCode: '12345',
+      sortingCode: 'ABC-123',
+      state: 'Sample State',
+    },
     admins: [
       {
         _id: '123',
@@ -68,7 +77,7 @@ describe('Testing the Super Dash List', () => {
     expect(screen.getByText('Admins:')).toBeInTheDocument();
     expect(screen.getByText('Members:')).toBeInTheDocument();
     expect(screen.getByText('Dogs Care')).toBeInTheDocument();
-    expect(screen.getByText('India')).toBeInTheDocument();
+    expect(screen.getByText(/Sample City/i)).toBeInTheDocument();
     userEvent.click(screen.getByTestId(/manageBtn/i));
   });
 
