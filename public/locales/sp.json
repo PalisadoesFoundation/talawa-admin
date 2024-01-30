@@ -127,6 +127,15 @@
     "createSampleOrganization": "Crear organización de muestra",
     "description": "Descripción",
     "location": "Ubicación",
+    "address": "Dirección",
+    "city": "Ciudad",
+    "countryCode": "Código de País",
+    "line1": "Línea 1",
+    "line2": "Línea 2",
+    "postalCode": "Código Postal",
+    "dependentLocality": "Localidad Dependiente",
+    "sortingCode": "Código de Ordenamiento",
+    "state": "Estado / Provincia",
     "userRegistrationRequired": "Registro de usuario requerido",
     "visibleInSearch": "Visible en la búsqueda",
     "displayImage": "Mostrar imagen",
@@ -304,10 +313,9 @@
     "postDetails": "Detalles de la Publicación",
     "postTitle1": "Escribir título de la publicación",
     "postTitle": "Título",
+    "addMedia": "Subir foto o video",
     "information": "Información",
     "information1": "Escribir información de la publicación",
-    "image": "Imagen de la Publicación",
-    "video": "Video de la Publicación",
     "addPost": "Agregar Publicación",
     "searchTitle": "Buscar por Título",
     "searchText": "Buscar por Texto",
@@ -321,6 +329,7 @@
     "Latest": "Más Recientes Primero",
     "sortPost": "Ordenar Publicaciones",
     "tag": "Su navegador no admite la etiqueta de video",
+    "postCreatedSuccess": "¡Felicidades! Has publicado algo.",
     "pinPost": "Fijar publicación"
   },
   "postNotFound": {
@@ -339,7 +348,6 @@
     "admin not found!": "Administrador no encontrado!",
     "roles not found!": "roles no encontrados!"
   },
-
   "orgPostCard": {
     "author": "Autor",
     "imageURL": "URL de la Imagen",
@@ -351,6 +359,8 @@
     "yes": "Sí",
     "editPost": "Editar Publicación",
     "postTitle": "Título",
+    "postTitle1": "Editar título de la publicación",
+    "information1": "Editar información de la publicación",
     "information": "Información",
     "image": "Imagen",
     "video": "Video",
@@ -483,6 +493,15 @@
     "name": "Nombre",
     "description": "Descripción",
     "location": "ubicación",
+    "address": "Dirección",
+    "city": "Ciudad",
+    "countryCode": "Código de País",
+    "line1": "Línea 1",
+    "line2": "Línea 2",
+    "postalCode": "Código Postal",
+    "dependentLocality": "Localidad Dependiente",
+    "sortingCode": "Código de Ordenamiento",
+    "state": "Estado / Provincia",
     "displayImage": "Mostrar imagen",
     "userRegistrationRequired": "Registro de usuario requerido",
     "isVisibleInSearch": "Visible en la búsqueda",
@@ -695,7 +714,6 @@
     "selectContact": "Seleccione un contacto para iniciar una conversación",
     "sendMessage": "Enviar mensaje"
   },
-
   "orgProfileField": {
     "loading": "Cargando..",
     "noCustomField": "No hay campos personalizados disponibles",

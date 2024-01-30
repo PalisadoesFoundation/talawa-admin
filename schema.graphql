@@ -900,9 +900,11 @@ input UpdateOrganizationInput {
 }
 
 input UpdateUserInput {
+  id: ID
   email: EmailAddress
   firstName: String
   lastName: String
+  applangcode: String
 }
 
 input UpdateUserPasswordInput {
