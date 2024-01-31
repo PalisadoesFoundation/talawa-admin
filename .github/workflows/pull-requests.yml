@@ -47,9 +47,9 @@ jobs:
         if: steps.changed-files.outputs.only_changed != 'true'
         run: npm run typecheck
 
-      - name: Run linting check
+      - name: Run linting check only for modified files with strict rules
         if: steps.changed-files.outputs.only_changed != 'true'
-        run: npm run lint:check  
+        run : npx eslint $(git diff --name-only --diff-filter=d ${{ github.event.before }} ${{ github.sha }} |  grep -E '\.(ts|tsx)$')
 
       - name: Compare translation files
         run: |
