@@ -18,7 +18,7 @@ function orgSettings(): JSX.Element {
     keyPrefix: 'orgSettings',
   });
 
-  const [setting, setSetting] = useState<SettingType>('General');
+  const [orgSetting, setOrgSetting] = useState<SettingType>('General');
 
   document.title = t('title');
   const orgId = window.location.href.split('=')[1];
@@ -34,20 +34,20 @@ function orgSettings(): JSX.Element {
               <Button
                 className="me-3 border rounded-3"
                 variant={
-                  setting === 'General' ? `success` : `outline-secondary`
+                  orgSetting === 'General' ? `success` : `outline-secondary`
                 }
-                onClick={() => setSetting('General')}
+                onClick={() => setOrgSetting('General')}
               >
                 {t('generalSettings')}
               </Button>
               <Button
                 className="border rounded-3"
                 variant={
-                  setting === 'ActionItemCategories'
+                  orgSetting === 'ActionItemCategories'
                     ? `success`
                     : `outline-secondary`
                 }
-                onClick={() => setSetting('ActionItemCategories')}
+                onClick={() => setOrgSetting('ActionItemCategories')}
               >
                 {t('actionItemCategorySettings')}
               </Button>
@@ -58,7 +58,7 @@ function orgSettings(): JSX.Element {
             </Row>
           </Row>
 
-          {setting === 'General' && (
+          {orgSetting === 'General' && (
             <Row className={`${styles.settingsBody} mt-3`}>
               <Col lg={7}>
                 <Card className="rounded-4 mb-4 mx-auto shadow-sm border border-light-subtle">
@@ -103,7 +103,7 @@ function orgSettings(): JSX.Element {
             </Row>
           )}
 
-          {setting === 'ActionItemCategories' && (
+          {orgSetting === 'ActionItemCategories' && (
             <Row
               className={`${styles.actionItemStyles} mt-3 mb-3 mx-4 position-relative shadow-sm rounded-4`}
             >

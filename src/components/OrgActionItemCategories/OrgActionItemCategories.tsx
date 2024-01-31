@@ -83,7 +83,7 @@ const OrgActionItemCategories = (): any => {
   const handleEdit = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     if (name === currName) {
-      toast.info(t('sameNameConflict'));
+      toast.error(t('sameNameConflict'));
     } else {
       try {
         await updateActionItemCategory({
@@ -173,7 +173,7 @@ const OrgActionItemCategories = (): any => {
         value="savechanges"
         onClick={showCreateModal}
         className={styles.addButton}
-        data-testid="saveChangesBtn"
+        data-testid="actionItemCategoryModalOpenBtn"
       >
         <i className={'fa fa-plus me-2'} />
         {t('createButton')}
@@ -199,6 +199,7 @@ const OrgActionItemCategories = (): any => {
                     size="sm"
                     variant="secondary"
                     className="me-2"
+                    data-testid="actionItemCategoryUpdateModalOpenBtn"
                   >
                     {t('editButton')}
                   </Button>
@@ -208,6 +209,7 @@ const OrgActionItemCategories = (): any => {
                     }
                     size="sm"
                     variant={category.isDisabled ? 'outline-success' : 'danger'}
+                    data-testid="disabilityStatusButton"
                   >
                     {category.isDisabled
                       ? t('enableButton')
@@ -236,7 +238,7 @@ const OrgActionItemCategories = (): any => {
           <Button
             variant="danger"
             onClick={hideModal}
-            data-testid="createEventModalCloseBtn"
+            data-testid="actionItemCategoryModalCloseBtn"
           >
             <i className="fa fa-times"></i>
           </Button>
@@ -266,10 +268,10 @@ const OrgActionItemCategories = (): any => {
               type="submit"
               className={styles.greenregbtn}
               value="creatActionItemCategory"
-              data-testid="creatActionItemCategoryBtn"
+              data-testid="formSubmitButton"
             >
               {modalType === 'Create'
-                ? t('addActionItemCategory')
+                ? t('createButton')
                 : t('updateActionItemCategory')}
             </Button>
           </Form>
