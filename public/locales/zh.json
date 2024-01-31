@@ -441,8 +441,8 @@
   "orgSettings": {
     "title": "塔拉瓦設置",
     "pageName": "设置",
-    "generalSettings": "一般",
-    "actionItemCategorySettings": "措施项类别",
+    "general": "一般",
+    "actionItemCategories": "措施项类别",
     "updateYourDetails": "更新您的詳細信息",
     "updateYourPassword": "更新您的密碼",
     "updateOrganization": "更新組織",
@@ -451,8 +451,7 @@
     "noData": "沒有數據",
     "otherSettings": "其他设置",
     "changeLanguage": "更改语言",
-    "manageCustomFields": "管理自定义字段",
-    "actionItemCategories": "措施项类别"
+    "manageCustomFields": "管理自定义字段"
   },
   "deleteOrg": {
     "deleteOrganization": "删除组织",

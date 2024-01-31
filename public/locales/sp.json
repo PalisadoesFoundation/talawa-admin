@@ -440,8 +440,8 @@
   "orgSettings": {
     "title": "Configuración Talawa",
     "pageName": "Configuración",
-    "generalSettings": "General",
-    "actionItemCategorySettings": "Categorías de elementos de acción",
+    "general": "General",
+    "actionItemCategories": "Categorías de elementos de acción",
     "updateYourDetails": "Actualiza tus datos",
     "updateYourPassword": "Actualice su contraseña",
     "updateOrganization": "Actualizar Organización",
@@ -450,8 +450,7 @@
     "noData": "Sin datos",
     "otherSettings": "Otras Configuraciones",
     "changeLanguage": "Cambiar Idioma",
-    "manageCustomFields": "Gestionar Campos Personalizados",
-    "actionItemCategories": "Categorías de elementos de acción"
+    "manageCustomFields": "Gestionar Campos Personalizados"
   },
   "deleteOrg": {
     "deleteOrganization": "Eliminar organización",

@@ -441,8 +441,8 @@
   "orgSettings": {
     "title": "तलावा सेटिंग",
     "pageName": "सेटिंग्स",
-    "generalSettings": "सामान्य",
-    "actionItemCategorySettings": "कार्रवाई आइटम श्रेणियाँ",
+    "general": "सामान्य",
+    "actionItemCategories": "कार्रवाई आइटम श्रेणियाँ",
     "updateYourDetails": "अपना विवरण अपडेट करें",
     "updateYourPassword": "अपना पासवर्ड अपडेट करें",
     "updateOrganization": "अद्यतन संगठन",
@@ -451,8 +451,7 @@
     "noData": "कोई डेटा नहीं",
     "otherSettings": "अन्य सेटिंग्स",
     "changeLanguage": "भाषा बदलें",
-    "manageCustomFields": "कस्टम फ़ील्ड प्रबंधन करें",
-    "actionItemCategories": "कार्रवाई आइटम श्रेणियाँ"
+    "manageCustomFields": "कस्टम फ़ील्ड प्रबंधन करें"
   },
   "deleteOrg": {
     "deleteOrganization": "संगठन हटाएं",

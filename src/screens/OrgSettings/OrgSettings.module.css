@@ -34,3 +34,20 @@ hr {
   height: 1px;
   background-color: var(--bs-gray-500);
 }
+
+.settingsTabs {
+  display: none;
+}
+
+@media (min-width: 577px) {
+  .settingsDropdown {
+    display: none;
+    border: 1px solid black;
+  }
+}
+
+@media (min-width: 577px) {
+  .settingsTabs {
+    display: block;
+  }
+}

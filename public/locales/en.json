@@ -446,16 +446,15 @@
   "orgSettings": {
     "title": "Talawa Setting",
     "pageName": "Settings",
-    "generalSettings": "General",
-    "actionItemCategorySettings": "Action Item Categories",
+    "general": "General",
+    "actionItemCategories": "Action Item Categories",
     "updateOrganization": "Update Organization",
     "seeRequest": "See Request",
     "settings": "Settings",
     "noData": "No data",
     "otherSettings": "Other Settings",
     "changeLanguage": "Change Language",
-    "manageCustomFields": "Manage Custom Fields",
-    "actionItemCategories": "Action Item Categories"
+    "manageCustomFields": "Manage Custom Fields"
   },
   "deleteOrg": {
     "deleteOrganization": "Delete Organization",

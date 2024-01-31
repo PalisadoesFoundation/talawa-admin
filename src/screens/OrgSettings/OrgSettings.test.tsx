@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -12,6 +12,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrgSettings from './OrgSettings';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import userEvent from '@testing-library/user-event';
 
 const MOCKS = [
   {
@@ -127,7 +128,7 @@ describe('Organisation Settings Page', () => {
     window.location.assign('/orgsetting/id=123');
     localStorage.setItem('UserType', 'SUPERADMIN');
 
-    const { getByText, queryByText } = render(
+    const { queryByText } = render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
@@ -140,14 +141,14 @@ describe('Organisation Settings Page', () => {
     );
 
     await waitFor(() => {
-      fireEvent.click(getByText(translations.actionItemCategorySettings));
+      userEvent.click(screen.getByTestId('actionItemCategoriesSettings'));
       expect(
         queryByText(translations.actionItemCategories)
       ).toBeInTheDocument();
     });
 
     await waitFor(() => {
-      fireEvent.click(getByText(translations.generalSettings));
+      userEvent.click(screen.getByTestId('generalSettings'));
       expect(queryByText(translations.updateOrganization)).toBeInTheDocument();
     });
   });

@@ -441,8 +441,8 @@
   "orgSettings": {
     "title": "Paramètre Talawa",
     "pageName": "Paramètres",
-    "generalSettings": "Général",
-    "actionItemCategorySettings": "Catégories d’éléments d’action",
+    "general": "Général",
+    "actionItemCategories": "Catégories d’éléments d’action",
     "updateYourDetails": "Mettre à jour vos informations",
     "updateYourPassword": "Mettez à jour votre mot de passe",
     "updateOrganization": "Mettre à jour l'organisation",
@@ -451,8 +451,7 @@
     "noData": "Pas de données",
     "otherSettings": "Autres paramètres",
     "changeLanguage": "Changer la langue",
-    "manageCustomFields": "Gérer les Champs Personnalisés",
-    "actionItemCategories": "Catégories d’éléments d’action"
+    "manageCustomFields": "Gérer les Champs Personnalisés"
   },
   "deleteOrg": {
     "deleteOrganization": "Supprimer l'organisation",
