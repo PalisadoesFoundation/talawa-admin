@@ -38,7 +38,7 @@ function orgSettings(): JSX.Element {
                 }
                 onClick={() => setSetting('General')}
               >
-                General
+                {t('generalSettings')}
               </Button>
               <Button
                 className="border rounded-3"
@@ -49,7 +49,7 @@ function orgSettings(): JSX.Element {
                 }
                 onClick={() => setSetting('ActionItemCategories')}
               >
-                Action Item Categories
+                {t('actionItemCategorySettings')}
               </Button>
             </Col>
 

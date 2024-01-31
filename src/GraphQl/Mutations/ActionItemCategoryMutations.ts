@@ -11,11 +11,6 @@ export const CREATE_ACTION_ITEM_CATEGORY_MUTATION = gql`
   mutation CreateActionItemCategory($name: String!, $organizationId: ID!) {
     createActionItemCategory(name: $name, organizationId: $organizationId) {
       _id
-      name
-      organization {
-        _id
-      }
-      isDisabled
     }
   }
 `;
@@ -39,11 +34,6 @@ export const UPDATE_ACTION_ITEM_CATEGORY_MUTATION = gql`
       data: { name: $name, isDisabled: $isDisabled }
     ) {
       _id
-      name
-      organization {
-        _id
-      }
-      isDisabled
     }
   }
 `;

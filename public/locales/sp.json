@@ -440,6 +440,8 @@
   "orgSettings": {
     "title": "Configuración Talawa",
     "pageName": "Configuración",
+    "generalSettings": "General",
+    "actionItemCategorySettings": "Categorías de elementos de acción",
     "updateYourDetails": "Actualiza tus datos",
     "updateYourPassword": "Actualice su contraseña",
     "updateOrganization": "Actualizar Organización",
@@ -448,7 +450,8 @@
     "noData": "Sin datos",
     "otherSettings": "Otras Configuraciones",
     "changeLanguage": "Cambiar Idioma",
-    "manageCustomFields": "Gestionar Campos Personalizados"
+    "manageCustomFields": "Gestionar Campos Personalizados",
+    "actionItemCategories": "Categorías de elementos de acción"
   },
   "deleteOrg": {
     "deleteOrganization": "Eliminar organización",
@@ -724,5 +727,20 @@
     "Remove Custom Field": "Eliminar Campo Personalizado",
     "fieldSuccessMessage": "Campo añadido exitosamente",
     "fieldRemovalSuccess": "Campo eliminado exitosamente"
+  },
+  "orgActionItemCategories": {
+    "createButton": "Crear",
+    "editButton": "Editar",
+    "enableButton": "Habilitar",
+    "disableButton": "Inhabilitar",
+    "updateActionItemCategory": "Actualizar",
+    "actionItemCategoryName": "Nombre",
+    "actionItemCategoryDetails": "Detalles de la categoría de elemento de acción",
+    "enterName": "Introduzca el nombre",
+    "successfulCreation": "Categoría de elemento de acción creada correctamente",
+    "successfulUpdation": "Categoría de elemento de acción actualizada correctamente",
+    "sameNameConflict": "Cambie el nombre para realizar una actualización",
+    "categoryEnabled": "Categoría de elemento de acción habilitada",
+    "categoryDisabled": "Categoría de elemento de acción deshabilitada"
   }
 }

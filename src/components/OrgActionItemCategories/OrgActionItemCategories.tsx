@@ -3,17 +3,17 @@ import React, { useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import styles from './OrgActionItemCategories.module.css';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import { WarningAmberRounded } from '@mui/icons-material';
 
 import { useMutation, useQuery } from '@apollo/client';
 import {
   CREATE_ACTION_ITEM_CATEGORY_MUTATION,
   UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { toast } from 'react-toastify';
-import type { InterfaceActionItemCategoryList } from 'utils/interfaces';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
+import type { InterfaceActionItemCategoryList } from 'utils/interfaces';
 import Loader from 'components/Loader/Loader';
-import { WarningAmberRounded } from '@mui/icons-material';
 
 type ModalType = 'Create' | 'Update';
 
@@ -27,6 +27,7 @@ const OrgActionItemCategories = (): any => {
   const [categoryId, setCategoryId] = useState('');
 
   const [name, setName] = useState('');
+  const [currName, setCurrName] = useState('');
 
   const currentUrl = window.location.href.split('=')[1];
 
@@ -60,7 +61,7 @@ const OrgActionItemCategories = (): any => {
   ): Promise<void> => {
     e.preventDefault();
     try {
-      const { data } = await createActionItemCategory({
+      await createActionItemCategory({
         variables: {
           name,
           organizationId: currentUrl,
@@ -72,8 +73,7 @@ const OrgActionItemCategories = (): any => {
 
       setAddModalIsOpen(false);
 
-      toast.success('Action Item Category created successfully');
-      console.log(data);
+      toast.success(t('successfulCreation'));
     } catch (error: any) {
       toast.error(error.message);
       console.log(error);
@@ -82,24 +82,28 @@ const OrgActionItemCategories = (): any => {
 
   const handleEdit = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    try {
-      await updateActionItemCategory({
-        variables: {
-          actionItemCategoryId: categoryId,
-          name,
-        },
-      });
+    if (name === currName) {
+      toast.info(t('sameNameConflict'));
+    } else {
+      try {
+        await updateActionItemCategory({
+          variables: {
+            actionItemCategoryId: categoryId,
+            name,
+          },
+        });
 
-      setName('');
-      setCategoryId('');
-      refetch();
+        setName('');
+        setCategoryId('');
+        refetch();
 
-      setAddModalIsOpen(false);
+        setAddModalIsOpen(false);
 
-      toast.success('Action Item Category updated successfully');
-    } catch (error: any) {
-      toast.error(error.message);
-      console.log(error);
+        toast.success(t('successfulUpdation'));
+      } catch (error: any) {
+        toast.error(error.message);
+        console.log(error);
+      }
     }
   };
 
@@ -118,9 +122,7 @@ const OrgActionItemCategories = (): any => {
       refetch();
 
       toast.success(
-        `Action Item Category ${
-          disabledStatus === true ? 'Enabled' : 'Disabled'
-        }`
+        disabledStatus ? t('categoryEnabled') : t('categoryDisabled')
       );
     } catch (error: any) {
       toast.error(error.message);
@@ -134,6 +136,7 @@ const OrgActionItemCategories = (): any => {
   };
 
   const showUpdateModal = (name: string, id: string): void => {
+    setCurrName(name);
     setName(name);
     setCategoryId(id);
     setModalType('Update');
@@ -173,7 +176,7 @@ const OrgActionItemCategories = (): any => {
         data-testid="saveChangesBtn"
       >
         <i className={'fa fa-plus me-2'} />
-        {t('addActionItemCategory')}
+        {t('createButton')}
       </Button>
 
       <div>
@@ -181,7 +184,15 @@ const OrgActionItemCategories = (): any => {
           return (
             <div key={index}>
               <div className="my-3 d-flex justify-content-between align-items-center">
-                <h6 className="fw-bold mb-0">{category.name}</h6>
+                <h6
+                  className={
+                    category.isDisabled
+                      ? 'text-secondary fw-bold mb-0'
+                      : 'fw-bold mb-0'
+                  }
+                >
+                  {category.name}
+                </h6>
                 <div>
                   <Button
                     onClick={() => showUpdateModal(category.name, category._id)}
@@ -189,7 +200,7 @@ const OrgActionItemCategories = (): any => {
                     variant="secondary"
                     className="me-2"
                   >
-                    Edit
+                    {t('editButton')}
                   </Button>
                   <Button
                     onClick={() =>
@@ -198,7 +209,9 @@ const OrgActionItemCategories = (): any => {
                     size="sm"
                     variant={category.isDisabled ? 'outline-success' : 'danger'}
                   >
-                    {category.isDisabled ? 'Enable' : 'Disable'}
+                    {category.isDisabled
+                      ? t('enableButton')
+                      : t('disableButton')}
                   </Button>
                 </div>
               </div>

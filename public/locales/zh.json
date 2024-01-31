@@ -441,6 +441,8 @@
   "orgSettings": {
     "title": "塔拉瓦設置",
     "pageName": "设置",
+    "generalSettings": "一般",
+    "actionItemCategorySettings": "措施项类别",
     "updateYourDetails": "更新您的詳細信息",
     "updateYourPassword": "更新您的密碼",
     "updateOrganization": "更新組織",
@@ -449,7 +451,8 @@
     "noData": "沒有數據",
     "otherSettings": "其他设置",
     "changeLanguage": "更改语言",
-    "manageCustomFields": "管理自定义字段"
+    "manageCustomFields": "管理自定义字段",
+    "actionItemCategories": "措施项类别"
   },
   "deleteOrg": {
     "deleteOrganization": "删除组织",
@@ -725,5 +728,20 @@
     "删除自定义字段": "删除自定义字段",
     "fieldSuccessMessage": "字段添加成功",
     "fieldRemovalSuccess": "字段删除成功"
+  },
+  "orgActionItemCategories": {
+    "createButton": "创建",
+    "editButton": "编辑",
+    "enableButton": "启用",
+    "disableButton": "禁用",
+    "updateActionItemCategory": "更新",
+    "actionItemCategoryName": "名称",
+    "actionItemCategoryDetails": "措施项类别详细信息",
+    "enterName": "输入名称",
+    "successfulCreation": "已成功创建措施项类别",
+    "successfulUpdation": "措施项类别已成功更新",
+    "sameNameConflict": "请更改名称以进行更新",
+    "categoryEnabled": "已启用措施项类别",
+    "categoryDisabled": "措施项类别已禁用"
   }
 }
