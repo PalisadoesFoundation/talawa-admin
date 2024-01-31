@@ -40,7 +40,6 @@ const translations = JSON.parse(
 describe('Testing Action Item Categories Component', () => {
   test('Component loads correctly', async () => {
     window.location.assign('/orgsetting/id=123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
     const { getByText } = render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -60,7 +59,6 @@ describe('Testing Action Item Categories Component', () => {
 
   test('render error component on unsuccessful query', async () => {
     window.location.assign('/orgsetting/id=123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
     const { queryByText } = render(
       <MockedProvider addTypename={false} link={link2}>
         <Provider store={store}>
@@ -80,7 +78,6 @@ describe('Testing Action Item Categories Component', () => {
 
   test('opens and closes create and update modals on button clicks', async () => {
     window.location.assign('/orgsetting/id=123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -108,7 +105,6 @@ describe('Testing Action Item Categories Component', () => {
 
   test('create a new action item category', async () => {
     window.location.assign('/orgsetting/id=123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -138,7 +134,6 @@ describe('Testing Action Item Categories Component', () => {
 
   test('toast error on unsuccessful creation', async () => {
     window.location.assign('/orgsetting/id=123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link3}>
         <Provider store={store}>
@@ -168,7 +163,6 @@ describe('Testing Action Item Categories Component', () => {
 
   test('update an action item category', async () => {
     window.location.assign('/orgsetting/id=123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -204,7 +198,6 @@ describe('Testing Action Item Categories Component', () => {
 
   test('toast error on unsuccessful updation', async () => {
     window.location.assign('/orgsetting/id=123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link3}>
         <Provider store={store}>
@@ -240,7 +233,6 @@ describe('Testing Action Item Categories Component', () => {
 
   test('toast error on providing the same name on updation', async () => {
     window.location.assign('/orgsetting/id=123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -276,7 +268,6 @@ describe('Testing Action Item Categories Component', () => {
 
   test('toggle the disablity status of an action item category', async () => {
     window.location.assign('/orgsetting/id=123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -308,7 +299,6 @@ describe('Testing Action Item Categories Component', () => {
 
   test('toast error on unsuccessful toggling of the disablity status', async () => {
     window.location.assign('/orgsetting/id=123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link3}>
         <Provider store={store}>

@@ -42,7 +42,6 @@ hr {
 @media (min-width: 577px) {
   .settingsDropdown {
     display: none;
-    border: 1px solid black;
   }
 }
 
