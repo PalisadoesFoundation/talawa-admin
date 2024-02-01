@@ -107,7 +107,7 @@ const OrgActionItemCategories = (): any => {
     }
   };
 
-  const handleDisableStatus = async (
+  const handleStatusChange = async (
     id: string,
     disabledStatus: boolean
   ): Promise<void> => {
@@ -205,7 +205,7 @@ const OrgActionItemCategories = (): any => {
                   </Button>
                   <Button
                     onClick={() =>
-                      handleDisableStatus(category._id, category.isDisabled)
+                      handleStatusChange(category._id, category.isDisabled)
                     }
                     size="sm"
                     variant={category.isDisabled ? 'outline-success' : 'danger'}
