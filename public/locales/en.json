@@ -702,7 +702,7 @@
     "delete": "Delete",
     "Rname": "Enter name of Advertisement",
     "Rtype": "Select type of Advertisement",
-    "Rmedia": "Provide media content to be displayed",
+    "Rlink": "Provide a link for content to be displayed",
     "RstartDate": "Select Start Date",
     "RendDate": "Select End Date",
     "RClose": "Close the window",

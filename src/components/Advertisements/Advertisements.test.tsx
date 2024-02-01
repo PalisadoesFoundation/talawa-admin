@@ -1,6 +1,6 @@
 import React from 'react';
 import 'jest-location-mock';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import {
   ApolloClient,
@@ -88,9 +88,9 @@ const ADD_ADVERTISEMENT_MUTATION_MOCK = {
   request: {
     query: ADD_ADVERTISEMENT_MUTATION,
     variables: {
-      organizationId: 'undefined',
+      orgId: 'undefined',
       name: 'Cookie Shop',
-      file: 'data:image/png;base64,bWVkaWEgY29udGVudA==',
+      link: 'http://yourwebsite.com/photo',
       type: 'POPUP',
       startDate: '2023-01-01',
       endDate: '2023-02-02',
@@ -210,18 +210,10 @@ describe('Testing Advertisement Component', () => {
       screen.getByLabelText('Enter name of Advertisement'),
       'Cookie Shop'
     );
-    const mediaFile = new File(['media content'], 'test.png', {
-      type: 'image/png',
-    });
-
-    const mediaInput = screen.getByTestId('advertisementMedia');
-    fireEvent.change(mediaInput, {
-      target: {
-        files: [mediaFile],
-      },
-    });
-    const mediaPreview = await screen.findByTestId('mediaPreview');
-    expect(mediaPreview).toBeInTheDocument();
+    userEvent.type(
+      screen.getByLabelText('Provide a link for content to be displayed'),
+      'http://yourwebsite.com/photo'
+    );
     userEvent.selectOptions(
       screen.getByLabelText('Select type of Advertisement'),
       'POPUP'
@@ -229,7 +221,7 @@ describe('Testing Advertisement Component', () => {
     userEvent.type(screen.getByLabelText('Select Start Date'), '2023-01-01');
     userEvent.type(screen.getByLabelText('Select End Date'), '2023-02-02');
 
-    userEvent.click(screen.getByTestId('addonregister'));
+    await userEvent.click(screen.getByTestId('addonregister'));
     expect(
       await screen.findByText('Advertisement created successfully')
     ).toBeInTheDocument();
@@ -251,10 +243,8 @@ describe('Testing Advertisement Component', () => {
                 _id: '1',
                 name: 'Advertisement1',
                 type: 'POPUP',
-                organization: {
-                  _id: 'undefined',
-                },
-                mediaUrl: 'http://example1.com',
+                orgId: 'undefined',
+                link: 'http://example1.com',
                 endDate: '2023-01-01',
                 startDate: '2022-01-01',
               },
@@ -318,10 +308,8 @@ describe('Testing Advertisement Component', () => {
                 _id: '1',
                 name: 'Advertisement1',
                 type: 'POPUP',
-                organization: {
-                  _id: 'undefined',
-                },
-                mediaUrl: 'http://example1.com',
+                orgId: 'undefined',
+                link: 'http://example1.com',
                 endDate: '2023-01-01',
                 startDate: '2022-01-01',
               },
@@ -329,10 +317,8 @@ describe('Testing Advertisement Component', () => {
                 _id: '2',
                 name: 'Advertisement2',
                 type: 'BANNER',
-                organization: {
-                  _id: 'undefined',
-                },
-                mediaUrl: 'http://example2.com',
+                orgId: 'undefined',
+                link: 'http://example2.com',
                 endDate: tomorrow,
                 startDate: today,
               },
