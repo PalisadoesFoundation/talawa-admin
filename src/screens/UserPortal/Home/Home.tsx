@@ -316,7 +316,7 @@ export default function home(): JSX.Element {
                 <PromotedPost
                   key={post._id}
                   id={post._id}
-                  image={post.link}
+                  media={post.mediaUrl}
                   title={post.name}
                   data-testid="postid"
                 />

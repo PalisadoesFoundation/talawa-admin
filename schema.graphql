@@ -5,9 +5,9 @@ directive @role(requires: UserType) on FIELD_DEFINITION
 type Advertisement {
   _id: ID
   endDate: Date!
-  link: String!
+  mediaUrl: URL!
   name: String!
-  orgId: ID
+  organizationId: ID!
   startDate: Date!
   type: String!
 }
@@ -402,6 +402,19 @@ type MinimumValueError implements FieldError {
   path: [String!]!
 }
 
+input CreateAdvertisementInput {
+  endDate: Date!
+  name: String!
+  organizationId: ID!
+  startDate: Date!
+  type: String!
+  mediaFile: String!
+}
+
+type CreateAdvertisementPayload {
+  advertisement: Advertisement
+}
+
 type Mutation {
   acceptAdmin(id: ID!): Boolean!
   acceptMembershipRequest(membershipRequestId: ID!): MembershipRequest!
@@ -419,14 +432,7 @@ type Mutation {
   cancelMembershipRequest(membershipRequestId: ID!): MembershipRequest!
   checkIn(data: CheckInInput!): CheckIn!
   createAdmin(data: UserAndOrganizationInput!): User!
-  createAdvertisement(
-    endDate: Date!
-    link: String!
-    name: String!
-    orgId: ID!
-    startDate: Date!
-    type: String!
-  ): Advertisement!
+  createAdvertisement(input: CreateAdvertisementInput!): CreateAdvertisementPayload
   createComment(data: CommentInput!, postId: ID!): Comment
   createDirectChat(data: createChatInput!): DirectChat!
   createDonation(

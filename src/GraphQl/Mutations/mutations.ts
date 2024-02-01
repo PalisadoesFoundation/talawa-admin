@@ -444,20 +444,22 @@ export const ADD_PLUGIN_MUTATION = gql`
 `;
 export const ADD_ADVERTISEMENT_MUTATION = gql`
   mutation (
-    $orgId: ID!
+    $organizationId: ID!
     $name: String!
-    $link: String!
     $type: String!
     $startDate: Date!
     $endDate: Date!
+    $file: String!
   ) {
     createAdvertisement(
-      orgId: $orgId
-      name: $name
-      link: $link
-      type: $type
-      startDate: $startDate
-      endDate: $endDate
+      input: {
+        organizationId: $organizationId
+        name: $name
+        type: $type
+        startDate: $startDate
+        endDate: $endDate
+        mediaFile: $file
+      }
     ) {
       _id
     }
@@ -467,7 +469,7 @@ export const UPDATE_ADVERTISEMENT_MUTATION = gql`
   mutation UpdateAdvertisement(
     $id: ID!
     $name: String
-    $link: String
+    $file: String
     $type: AdvertisementType
     $startDate: Date
     $endDate: Date
@@ -476,7 +478,7 @@ export const UPDATE_ADVERTISEMENT_MUTATION = gql`
       input: {
         _id: $id
         name: $name
-        link: $link
+        mediaFile: $file
         type: $type
         startDate: $startDate
         endDate: $endDate

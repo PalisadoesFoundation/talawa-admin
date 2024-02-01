@@ -23,6 +23,8 @@ import { toast } from 'react-toastify';
 import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import userEvent from '@testing-library/user-event';
+import AdvertisementEntry from '../AdvertisementEntry/AdvertisementEntry';
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -36,12 +38,12 @@ const MOCKS = [
     request: {
       query: ADD_ADVERTISEMENT_MUTATION,
       variables: {
-        orgId: '1',
+        organizationId: '1',
         name: 'Test Advertisement',
-        link: 'http://example.com',
         type: 'BANNER',
         startDate: dayjs(new Date('2023-01-01')).format('YYYY-MM-DD'),
         endDate: dayjs(new Date('2023-02-01')).format('YYYY-MM-DD'),
+        file: 'data:image/png;base64,bWVkaWEgY29udGVudA==',
       },
     },
     result: {
@@ -100,16 +102,14 @@ describe('Testing Advertisement Register Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
-              {
-                <AdvertisementRegister
-                  endDate={new Date()}
-                  startDate={new Date()}
-                  type="BANNER"
-                  name="Advert1"
-                  orgId="1"
-                  link="google.com"
-                />
-              }
+              <AdvertisementRegister
+                endDate={new Date()}
+                startDate={new Date()}
+                type="BANNER"
+                name="Advert1"
+                organizationId="1"
+                advertisementMedia="test.png"
+              />
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
@@ -126,17 +126,15 @@ describe('Testing Advertisement Register Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
-              {
-                <AdvertisementRegister
-                  endDate={new Date()}
-                  startDate={new Date()}
-                  type="BANNER"
-                  name="Advert1"
-                  orgId="1"
-                  link="google.com"
-                  formStatus="edit"
-                />
-              }
+              <AdvertisementRegister
+                endDate={new Date()}
+                startDate={new Date()}
+                type="BANNER"
+                name="Advert1"
+                organizationId="1"
+                advertisementMedia="google.com"
+                formStatus="edit"
+              />
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
@@ -153,16 +151,14 @@ describe('Testing Advertisement Register Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
-              {
-                <AdvertisementRegister
-                  endDate={new Date()}
-                  startDate={new Date()}
-                  type="BANNER"
-                  name="Advert1"
-                  orgId="1"
-                  link="google.com"
-                />
-              }
+              <AdvertisementRegister
+                endDate={new Date()}
+                startDate={new Date()}
+                type="BANNER"
+                name="Advert1"
+                organizationId="1"
+                advertisementMedia="test.png"
+              />
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
@@ -185,60 +181,138 @@ describe('Testing Advertisement Register Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
-              {
-                <AdvertisementRegister
-                  endDate={new Date()}
-                  startDate={new Date()}
-                  type="BANNER"
-                  name="Advert1"
-                  orgId="1"
-                  link="google.com"
-                />
-              }
+              <AdvertisementRegister
+                endDate={new Date()}
+                startDate={new Date()}
+                type="BANNER"
+                name="Advert1"
+                organizationId="1"
+                advertisementMedia=""
+              />
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
       </MockedProvider>
     );
 
-    fireEvent.click(getByText(translations.addNew));
-    expect(queryByText(translations.RClose)).toBeInTheDocument();
+    await waitFor(async () => {
+      fireEvent.click(getByText(translations.addNew));
+      expect(queryByText(translations.RClose)).toBeInTheDocument();
 
-    fireEvent.change(getByLabelText(translations.Rname), {
-      target: { value: 'Test Advertisement' },
-    });
-    expect(getByLabelText(translations.Rname)).toHaveValue(
-      'Test Advertisement'
-    );
+      fireEvent.change(getByLabelText(translations.Rname), {
+        target: { value: 'Test Advertisement' },
+      });
+      expect(getByLabelText(translations.Rname)).toHaveValue(
+        'Test Advertisement'
+      );
 
-    fireEvent.change(getByLabelText(translations.Rlink), {
-      target: { value: 'http://example.com' },
-    });
-    expect(getByLabelText(translations.Rlink)).toHaveValue(
-      'http://example.com'
-    );
+      const mediaFile = new File(['media content'], 'test.png', {
+        type: 'image/png',
+      });
 
-    fireEvent.change(getByLabelText(translations.Rtype), {
-      target: { value: 'BANNER' },
-    });
-    expect(getByLabelText(translations.Rtype)).toHaveValue('BANNER');
+      const mediaInput = getByLabelText(translations.Rmedia);
+      fireEvent.change(mediaInput, {
+        target: {
+          files: [mediaFile],
+        },
+      });
 
-    fireEvent.change(getByLabelText(translations.RstartDate), {
-      target: { value: '2023-01-01' },
-    });
-    expect(getByLabelText(translations.RstartDate)).toHaveValue('2023-01-01');
+      const mediaPreview = await screen.findByTestId('mediaPreview');
+      expect(mediaPreview).toBeInTheDocument();
 
-    fireEvent.change(getByLabelText(translations.RendDate), {
-      target: { value: '2023-02-01' },
-    });
-    expect(getByLabelText(translations.RendDate)).toHaveValue('2023-02-01');
+      fireEvent.change(getByLabelText(translations.Rtype), {
+        target: { value: 'BANNER' },
+      });
+      expect(getByLabelText(translations.Rtype)).toHaveValue('BANNER');
 
-    fireEvent.click(getByText(translations.register));
-    await waitFor(() => {
-      // Assert the success toast and setTimeout
+      fireEvent.change(getByLabelText(translations.RstartDate), {
+        target: { value: '2023-01-01' },
+      });
+      expect(getByLabelText(translations.RstartDate)).toHaveValue('2023-01-01');
+
+      fireEvent.change(getByLabelText(translations.RendDate), {
+        target: { value: '2023-02-01' },
+      });
+      expect(getByLabelText(translations.RendDate)).toHaveValue('2023-02-01');
+
+      fireEvent.click(getByText(translations.register));
+
       expect(toast.success).toBeCalledWith(
         'Advertisement created successfully'
       );
+      expect(setTimeoutSpy).toHaveBeenCalled();
+    });
+
+    expect(queryByText(translations.close)).not.toBeInTheDocument();
+  });
+
+  test('advertisement update', async () => {
+    const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
+
+    const { getByLabelText, queryByText } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              <AdvertisementEntry
+                endDate={new Date()}
+                startDate={new Date()}
+                type="POPUP"
+                name="Advert1"
+                organizationId="1"
+                mediaUrl=""
+                id="1"
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>
+    );
+
+    await waitFor(async () => {
+      const optionsButton = screen.getByTestId('moreiconbtn');
+      fireEvent.click(optionsButton);
+      fireEvent.click(screen.getByTestId('editBtn'));
+
+      fireEvent.change(screen.getByLabelText('Enter name of Advertisement'), {
+        target: { value: 'Updated Advertisement' },
+      });
+
+      expect(getByLabelText(translations.Rname)).toHaveValue(
+        'Updated Advertisement'
+      );
+
+      const mediaFile = new File(['media content'], 'test.png', {
+        type: 'image/png',
+      });
+
+      const mediaInput = getByLabelText(translations.Rmedia);
+      fireEvent.change(mediaInput, {
+        target: {
+          files: [mediaFile],
+        },
+      });
+
+      const mediaPreview = await screen.findByTestId('mediaPreview');
+      expect(mediaPreview).toBeInTheDocument();
+
+      fireEvent.change(getByLabelText(translations.Rtype), {
+        target: { value: 'BANNER' },
+      });
+      expect(getByLabelText(translations.Rtype)).toHaveValue('BANNER');
+
+      fireEvent.change(getByLabelText(translations.RstartDate), {
+        target: { value: '2023-01-01' },
+      });
+      expect(getByLabelText(translations.RstartDate)).toHaveValue('2023-01-01');
+
+      fireEvent.change(getByLabelText(translations.RendDate), {
+        target: { value: '2023-02-01' },
+      });
+      expect(getByLabelText(translations.RendDate)).toHaveValue('2023-02-01');
+
+      fireEvent.click(screen.getByTestId('addonupdate'));
+
       expect(setTimeoutSpy).toHaveBeenCalled();
     });
 
@@ -251,16 +325,14 @@ describe('Testing Advertisement Register Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
-              {
-                <AdvertisementRegister
-                  endDateEdit={new Date()}
-                  startDateEdit={new Date()}
-                  typeEdit="BANNER"
-                  nameEdit="Advert1"
-                  orgIdEdit="1"
-                  linkEdit="google.com"
-                />
-              }
+              <AdvertisementRegister
+                endDateEdit={new Date()}
+                startDateEdit={new Date()}
+                typeEdit="BANNER"
+                nameEdit="Advert1"
+                orgIdEdit="1"
+                advertisementMediaEdit="google.com"
+              />
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
@@ -276,5 +348,42 @@ describe('Testing Advertisement Register Component', () => {
         'An error occured, could not create new advertisement'
       );
     });
+  });
+
+  test('Media preview renders correctly', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              <AdvertisementRegister
+                endDate={new Date()}
+                startDate={new Date()}
+                type="BANNER"
+                name="Advert1"
+                organizationId="1"
+                advertisementMedia="test.mp4"
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>
+    );
+
+    fireEvent.click(screen.getByText(translations.addNew));
+    await waitFor(() => screen.getByText(translations.RClose));
+
+    const mediaFile = new File(['video content'], 'test.mp4', {
+      type: 'video/mp4',
+    });
+    const mediaInput = screen.getByTestId('advertisementMedia');
+    userEvent.upload(mediaInput, mediaFile);
+
+    const mediaPreview = await screen.findByTestId('mediaPreview');
+    expect(mediaPreview).toBeInTheDocument();
+
+    const closeButton = await screen.findByTestId('closePreview');
+    fireEvent.click(closeButton);
+    expect(mediaPreview).not.toBeInTheDocument();
   });
 });
