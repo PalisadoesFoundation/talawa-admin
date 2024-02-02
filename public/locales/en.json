@@ -318,10 +318,9 @@
     "postDetails": "Post Details",
     "postTitle1": "Write title of the post",
     "postTitle": "Title",
+    "addMedia": "Upload Media",
     "information": "Information",
     "information1": "Write information of the post",
-    "image": "Post Image",
-    "video": "Post Video",
     "addPost": "Add Post",
     "searchTitle": "Search By Title",
     "searchText": "Search By Text",
@@ -335,6 +334,7 @@
     "Latest": "Latest First",
     "sortPost": "Sort Post",
     "tag": " Your browser does not support the video tag",
+    "postCreatedSuccess": "Congratulations! You have Posted Something.",
     "pinPost": "Pin post"
   },
   "postNotFound": {
@@ -364,6 +364,8 @@
     "yes": "Yes",
     "editPost": "Edit Post",
     "postTitle": "Title",
+    "postTitle1": "Edit title of the post",
+    "information1": "Edit information of the post",
     "information": "Information",
     "image": "Image",
     "video": "Video",

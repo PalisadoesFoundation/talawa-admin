@@ -234,7 +234,7 @@ export default function OrgPostCard(
 
   return (
     <>
-      <div className="col-xl-4 col-lg-4 col-md-6">
+      <div className="col-xl-4 col-lg-4 col-md-6" data-testid="post-item">
         <div
           className={styles.cards}
           onClick={handleCardClick}
@@ -512,7 +512,7 @@ export default function OrgPostCard(
               data-testid="updateText"
               required
             />
-            {props.postPhoto && (
+            {!props.postPhoto && (
               <>
                 <Form.Label htmlFor="postPhoto">{t('image')}</Form.Label>
                 <Form.Control
@@ -561,7 +561,7 @@ export default function OrgPostCard(
                 )}
               </>
             )}
-            {props.postVideo && (
+            {!props.postVideo && (
               <>
                 <Form.Label htmlFor="postvideo">{t('video')}</Form.Label>
                 <Form.Control
