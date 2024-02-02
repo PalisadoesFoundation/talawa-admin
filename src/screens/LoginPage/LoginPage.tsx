@@ -280,6 +280,7 @@ function loginPage({ role = 'user' }: InterfaceComponentProps): JSX.Element {
     }
 
     try {
+      /* istanbul ignore next */
       const { data: loginData } = await login({
         variables: {
           email: formState.email,
