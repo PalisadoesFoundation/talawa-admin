@@ -616,7 +616,7 @@
     "nothingToShow": "這裡沒有什麼可展示的。",
     "selectOrganization": "選擇組織"
   },
-  "userSidebar": {
+  "orgLeftDrawer": {
     "yourOrganizations": "您的組織",
     "noOrganizations": "您還沒有加入任何組織。",
     "viewAll": "查看全部"

@@ -1,6 +1,6 @@
 import React from 'react';
 import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
-import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
+import OrgScreen from 'components/UserPortal/OrgScreen/OrgScreen';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import styles from './Chat.module.css';
@@ -85,67 +85,68 @@ export default function chat(): JSX.Element {
   return (
     <>
       <OrganizationNavbar {...navbarProps} />
-      <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <UserSidebar />
-        <div className={`${styles.colorLight} ${styles.mainContainer}`}>
-          <div className={styles.contactContainer}>
-            <div
-              className={`d-flex flex-column align-items-center justify-content-center ${styles.addChatContainer}`}
-            >
-              <h4 className={`d-flex w-100 justify-content-start`}>
-                {t('contacts')}
-              </h4>
-              <InputGroup className={styles.maxWidth}>
-                <Form.Control
-                  placeholder={t('search')}
-                  id="searchChats"
-                  type="text"
-                  className={`${styles.borderNone} ${styles.backgroundWhite}`}
-                  onKeyUp={handleSearchByEnter}
-                  data-testid="searchInput"
-                />
-                <InputGroup.Text
-                  className={`${styles.colorPrimary} ${styles.borderNone}`}
-                  style={{ cursor: 'pointer' }}
-                  onClick={handleSearchByBtnClick}
-                  data-testid="searchBtn"
-                >
-                  <SearchOutlined className={`${styles.colorWhite}`} />
-                </InputGroup.Text>
-              </InputGroup>
+      <OrgScreen screenName="Chat">
+        <div className={`d-flex flex-row ${styles.containerHeight}`}>
+          <div className={`${styles.colorLight} ${styles.mainContainer}`}>
+            <div className={styles.contactContainer}>
+              <div
+                className={`d-flex flex-column align-items-center justify-content-center ${styles.addChatContainer}`}
+              >
+                <h4 className={`d-flex w-100 justify-content-start`}>
+                  {t('contacts')}
+                </h4>
+                <InputGroup className={styles.maxWidth}>
+                  <Form.Control
+                    placeholder={t('search')}
+                    id="searchChats"
+                    type="text"
+                    className={`${styles.borderNone} ${styles.backgroundWhite}`}
+                    onKeyUp={handleSearchByEnter}
+                    data-testid="searchInput"
+                  />
+                  <InputGroup.Text
+                    className={`${styles.colorPrimary} ${styles.borderNone}`}
+                    style={{ cursor: 'pointer' }}
+                    onClick={handleSearchByBtnClick}
+                    data-testid="searchBtn"
+                  >
+                    <SearchOutlined className={`${styles.colorWhite}`} />
+                  </InputGroup.Text>
+                </InputGroup>
+              </div>
+              <div className={styles.contactListContainer}>
+                {contactLoading ? (
+                  <div className={`d-flex flex-row justify-content-center`}>
+                    <HourglassBottomIcon /> <span>Loading...</span>
+                  </div>
+                ) : (
+                  contacts.map((contact: any, index: number) => {
+                    const cardProps: InterfaceContactCardProps = {
+                      id: contact._id,
+                      firstName: contact.firstName,
+                      lastName: contact.lastName,
+                      email: contact.email,
+                      image: contact.image,
+                      setSelectedContactName,
+                      selectedContact,
+                      setSelectedContact,
+                    };
+                    return <ContactCard {...cardProps} key={index} />;
+                  })
+                )}
+              </div>
             </div>
-            <div className={styles.contactListContainer}>
-              {contactLoading ? (
-                <div className={`d-flex flex-row justify-content-center`}>
-                  <HourglassBottomIcon /> <span>Loading...</span>
-                </div>
-              ) : (
-                contacts.map((contact: any, index: number) => {
-                  const cardProps: InterfaceContactCardProps = {
-                    id: contact._id,
-                    firstName: contact.firstName,
-                    lastName: contact.lastName,
-                    email: contact.email,
-                    image: contact.image,
-                    setSelectedContactName,
-                    selectedContact,
-                    setSelectedContact,
-                  };
-                  return <ContactCard {...cardProps} key={index} />;
-                })
-              )}
+            <div className={styles.chatContainer}>
+              <div
+                className={`d-flex flex-row justify-content-center align-items-center ${styles.chatHeadingContainer} ${styles.colorPrimary}`}
+              >
+                {selectedContact ? selectedContactName : t('chat')}
+              </div>
+              <ChatRoom {...chatRoomProps} />
             </div>
-          </div>
-          <div className={styles.chatContainer}>
-            <div
-              className={`d-flex flex-row justify-content-center align-items-center ${styles.chatHeadingContainer} ${styles.colorPrimary}`}
-            >
-              {selectedContact ? selectedContactName : t('chat')}
-            </div>
-            <ChatRoom {...chatRoomProps} />
           </div>
         </div>
-      </div>
+      </OrgScreen>
     </>
   );
 }

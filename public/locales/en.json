@@ -620,7 +620,7 @@
     "nothingToShow": "Nothing to show here.",
     "selectOrganization": "Select Organization"
   },
-  "userSidebar": {
+  "orgLeftDrawer": {
     "yourOrganizations": "Your Organizations",
     "noOrganizations": "You haven't joined any organization yet.",
     "viewAll": "View all"

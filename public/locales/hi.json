@@ -616,7 +616,7 @@
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
     "selectOrganization": "संगठन का चयन करें"
   },
-  "userSidebar": {
+  "orgLeftDrawer": {
     "yourOrganizations": "आपके संगठन",
     "noOrganizations": "आप अभी तक किसी संगठन में शामिल नहीं हुए हैं.",
     "viewAll": "सभी को देखें"

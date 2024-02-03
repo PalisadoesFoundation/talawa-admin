@@ -1,7 +1,7 @@
 import React from 'react';
 import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
 import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/OrganizationSidebar';
-import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
+import OrgScreen from 'components/UserPortal/OrgScreen/OrgScreen';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import PaginationList from 'components/PaginationList/PaginationList';
 import {
@@ -86,117 +86,118 @@ export default function donate(): JSX.Element {
   return (
     <>
       <OrganizationNavbar {...navbarProps} />
-      <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <UserSidebar />
-        <div className={`${styles.colorLight} ${styles.mainContainer}`}>
-          <div className={`${styles.box}`}>
-            <h4>
-              {t('donateTo')} {organizationDetails.name}
-            </h4>
-            <div className={styles.donationInputContainer}>
-              <InputGroup className={styles.maxWidth}>
-                <InputGroup.Text
-                  className={`${styles.colorPrimary} ${styles.borderNone}`}
-                >
-                  {t('amount')}
-                </InputGroup.Text>
-                <Form.Control
-                  type="text"
-                  className={styles.borderNone}
-                  data-testid="searchInput"
-                />
-                <Dropdown drop="down-centered">
-                  <Dropdown.Toggle
+      <OrgScreen screenName="Donate">
+        <div className={`d-flex flex-row ${styles.containerHeight}`}>
+          <div className={`${styles.colorLight} ${styles.mainContainer}`}>
+            <div className={`${styles.box}`}>
+              <h4>
+                {t('donateTo')} {organizationDetails.name}
+              </h4>
+              <div className={styles.donationInputContainer}>
+                <InputGroup className={styles.maxWidth}>
+                  <InputGroup.Text
                     className={`${styles.colorPrimary} ${styles.borderNone}`}
-                    variant="success"
-                    id="dropdown-basic"
-                    data-testid={`modeChangeBtn`}
                   >
-                    <span data-testid={`changeCurrencyBtn`}>
-                      {currencies[selectedCurrency]}
-                    </span>
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    {currencies.map((currency, index) => {
-                      return (
-                        <Dropdown.Item
-                          key={index}
-                          onClick={(): void => setSelectedCurrency(index)}
-                          data-testid={`currency${index}`}
-                        >
-                          {currency}
-                        </Dropdown.Item>
-                      );
-                    })}
-                  </Dropdown.Menu>
-                </Dropdown>
-              </InputGroup>
-            </div>
-            <div className={styles.donateActions}>
-              <Button data-testid={'donateBtn'}>
-                {t('donate')} <SendIcon />
-              </Button>
-            </div>
-          </div>
-          <div className={styles.donationsContainer}>
-            <h5>{t('yourPreviousDonations')}</h5>
-            <div
-              className={`d-flex flex-column justify-content-between ${styles.content}`}
-            >
-              <div
-                className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
-              >
-                {loading ? (
-                  <div className={`d-flex flex-row justify-content-center`}>
-                    <HourglassBottomIcon /> <span>Loading...</span>
-                  </div>
-                ) : (
-                  <>
-                    {donations && donations.length > 0 ? (
-                      (rowsPerPage > 0
-                        ? donations.slice(
-                            page * rowsPerPage,
-                            page * rowsPerPage + rowsPerPage
-                          )
-                        : /* istanbul ignore next */
-                          donations
-                      ).map((donation: any, index) => {
-                        const cardProps: InterfaceDonationCardProps = {
-                          name: donation.nameOfUser,
-                          id: donation._id,
-                          amount: donation.amount,
-                          userId: donation.userId,
-                          payPalId: donation.payPalId,
-                        };
-                        return <DonationCard key={index} {...cardProps} />;
-                      })
-                    ) : (
-                      <span>{t('nothingToShow')}</span>
-                    )}
-                  </>
-                )}
+                    {t('amount')}
+                  </InputGroup.Text>
+                  <Form.Control
+                    type="text"
+                    className={styles.borderNone}
+                    data-testid="searchInput"
+                  />
+                  <Dropdown drop="down-centered">
+                    <Dropdown.Toggle
+                      className={`${styles.colorPrimary} ${styles.borderNone}`}
+                      variant="success"
+                      id="dropdown-basic"
+                      data-testid={`modeChangeBtn`}
+                    >
+                      <span data-testid={`changeCurrencyBtn`}>
+                        {currencies[selectedCurrency]}
+                      </span>
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      {currencies.map((currency, index) => {
+                        return (
+                          <Dropdown.Item
+                            key={index}
+                            onClick={(): void => setSelectedCurrency(index)}
+                            data-testid={`currency${index}`}
+                          >
+                            {currency}
+                          </Dropdown.Item>
+                        );
+                      })}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </InputGroup>
               </div>
-              <table>
-                <tbody>
-                  <tr>
-                    <PaginationList
-                      count={
-                        /* istanbul ignore next */
-                        donations ? donations.length : 0
-                      }
-                      rowsPerPage={rowsPerPage}
-                      page={page}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                  </tr>
-                </tbody>
-              </table>
+              <div className={styles.donateActions}>
+                <Button data-testid={'donateBtn'}>
+                  {t('donate')} <SendIcon />
+                </Button>
+              </div>
+            </div>
+            <div className={styles.donationsContainer}>
+              <h5>{t('yourPreviousDonations')}</h5>
+              <div
+                className={`d-flex flex-column justify-content-between ${styles.content}`}
+              >
+                <div
+                  className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
+                >
+                  {loading ? (
+                    <div className={`d-flex flex-row justify-content-center`}>
+                      <HourglassBottomIcon /> <span>Loading...</span>
+                    </div>
+                  ) : (
+                    <>
+                      {donations && donations.length > 0 ? (
+                        (rowsPerPage > 0
+                          ? donations.slice(
+                              page * rowsPerPage,
+                              page * rowsPerPage + rowsPerPage
+                            )
+                          : /* istanbul ignore next */
+                            donations
+                        ).map((donation: any, index) => {
+                          const cardProps: InterfaceDonationCardProps = {
+                            name: donation.nameOfUser,
+                            id: donation._id,
+                            amount: donation.amount,
+                            userId: donation.userId,
+                            payPalId: donation.payPalId,
+                          };
+                          return <DonationCard key={index} {...cardProps} />;
+                        })
+                      ) : (
+                        <span>{t('nothingToShow')}</span>
+                      )}
+                    </>
+                  )}
+                </div>
+                <table>
+                  <tbody>
+                    <tr>
+                      <PaginationList
+                        count={
+                          /* istanbul ignore next */
+                          donations ? donations.length : 0
+                        }
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                      />
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
+          <OrganizationSidebar />
         </div>
-        <OrganizationSidebar />
-      </div>
+      </OrgScreen>
     </>
   );
 }

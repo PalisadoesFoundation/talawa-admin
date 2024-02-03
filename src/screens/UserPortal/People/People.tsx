@@ -2,7 +2,7 @@ import React from 'react';
 import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
 import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/OrganizationSidebar';
 import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
-import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
+import OrgScreen from 'components/UserPortal/OrgScreen/OrgScreen';
 import { Dropdown, Form, InputGroup } from 'react-bootstrap';
 import PaginationList from 'components/PaginationList/PaginationList';
 import {
@@ -115,111 +115,112 @@ export default function people(): JSX.Element {
   return (
     <>
       <OrganizationNavbar {...navbarProps} />
-      <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <UserSidebar />
-        <div className={`${styles.colorLight} ${styles.mainContainer}`}>
-          <div
-            className={`d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}
-          >
-            <InputGroup className={styles.maxWidth}>
-              <Form.Control
-                placeholder={t('search')}
-                id="searchPeople"
-                type="text"
-                className={`${styles.borderNone} ${styles.backgroundWhite}`}
-                onKeyUp={handleSearchByEnter}
-                data-testid="searchInput"
-              />
-              <InputGroup.Text
-                className={`${styles.colorPrimary} ${styles.borderNone}`}
-                style={{ cursor: 'pointer' }}
-                onClick={handleSearchByBtnClick}
-                data-testid="searchBtn"
-              >
-                <SearchOutlined className={`${styles.colorWhite}`} />
-              </InputGroup.Text>
-            </InputGroup>
-            <Dropdown drop="down-centered">
-              <Dropdown.Toggle
-                className={`${styles.colorPrimary} ${styles.borderNone}`}
-                variant="success"
-                id="dropdown-basic"
-                data-testid={`modeChangeBtn`}
-              >
-                {modes[mode]}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {modes.map((value, index) => {
-                  return (
-                    <Dropdown.Item
-                      key={index}
-                      data-testid={`modeBtn${index}`}
-                      onClick={(): void => setMode(index)}
-                    >
-                      {value}
-                    </Dropdown.Item>
-                  );
-                })}
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-          <div
-            className={`d-flex flex-column justify-content-between ${styles.content}`}
-          >
+      <OrgScreen screenName="People">
+        <div className={`d-flex flex-row ${styles.containerHeight}`}>
+          <div className={`${styles.colorLight} ${styles.mainContainer}`}>
             <div
-              className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
+              className={`d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}
             >
-              {loading ? (
-                <div className={`d-flex flex-row justify-content-center`}>
-                  <HourglassBottomIcon /> <span>Loading...</span>
-                </div>
-              ) : (
-                <>
-                  {members && members.length > 0 ? (
-                    (rowsPerPage > 0
-                      ? members.slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage
-                        )
-                      : /* istanbul ignore next */
-                        members
-                    ).map((member: any, index) => {
-                      const name = `${member.firstName} ${member.lastName}`;
-
-                      const cardProps: InterfaceOrganizationCardProps = {
-                        name,
-                        image: member.image,
-                        id: member._id,
-                        email: member.email,
-                      };
-                      return <PeopleCard key={index} {...cardProps} />;
-                    })
-                  ) : (
-                    <span>{t('nothingToShow')}</span>
-                  )}
-                </>
-              )}
+              <InputGroup className={styles.maxWidth}>
+                <Form.Control
+                  placeholder={t('search')}
+                  id="searchPeople"
+                  type="text"
+                  className={`${styles.borderNone} ${styles.backgroundWhite}`}
+                  onKeyUp={handleSearchByEnter}
+                  data-testid="searchInput"
+                />
+                <InputGroup.Text
+                  className={`${styles.colorPrimary} ${styles.borderNone}`}
+                  style={{ cursor: 'pointer' }}
+                  onClick={handleSearchByBtnClick}
+                  data-testid="searchBtn"
+                >
+                  <SearchOutlined className={`${styles.colorWhite}`} />
+                </InputGroup.Text>
+              </InputGroup>
+              <Dropdown drop="down-centered">
+                <Dropdown.Toggle
+                  className={`${styles.colorPrimary} ${styles.borderNone}`}
+                  variant="success"
+                  id="dropdown-basic"
+                  data-testid={`modeChangeBtn`}
+                >
+                  {modes[mode]}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {modes.map((value, index) => {
+                    return (
+                      <Dropdown.Item
+                        key={index}
+                        data-testid={`modeBtn${index}`}
+                        onClick={(): void => setMode(index)}
+                      >
+                        {value}
+                      </Dropdown.Item>
+                    );
+                  })}
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
-            <table>
-              <tbody>
-                <tr>
-                  <PaginationList
-                    count={
-                      /* istanbul ignore next */
-                      members ? members.length : 0
-                    }
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </tr>
-              </tbody>
-            </table>
+            <div
+              className={`d-flex flex-column justify-content-between ${styles.content}`}
+            >
+              <div
+                className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
+              >
+                {loading ? (
+                  <div className={`d-flex flex-row justify-content-center`}>
+                    <HourglassBottomIcon /> <span>Loading...</span>
+                  </div>
+                ) : (
+                  <>
+                    {members && members.length > 0 ? (
+                      (rowsPerPage > 0
+                        ? members.slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage
+                          )
+                        : /* istanbul ignore next */
+                          members
+                      ).map((member: any, index) => {
+                        const name = `${member.firstName} ${member.lastName}`;
+
+                        const cardProps: InterfaceOrganizationCardProps = {
+                          name,
+                          image: member.image,
+                          id: member._id,
+                          email: member.email,
+                        };
+                        return <PeopleCard key={index} {...cardProps} />;
+                      })
+                    ) : (
+                      <span>{t('nothingToShow')}</span>
+                    )}
+                  </>
+                )}
+              </div>
+              <table>
+                <tbody>
+                  <tr>
+                    <PaginationList
+                      count={
+                        /* istanbul ignore next */
+                        members ? members.length : 0
+                      }
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
+          <OrganizationSidebar />
         </div>
-        <OrganizationSidebar />
-      </div>
+      </OrgScreen>
     </>
   );
 }
