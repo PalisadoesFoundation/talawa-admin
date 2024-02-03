@@ -1,3 +1,4 @@
+// SKIP_LOCALSTORAGE_CHECK
 import { refreshToken } from './getRefreshToken';
 
 jest.mock('@apollo/client', () => {
