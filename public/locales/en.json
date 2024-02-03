@@ -286,6 +286,12 @@
     "eventCreated": "Congratulations! The Event is created.",
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
+  "organizationActionItems": {
+    "title": "Action Items",
+    "createActionItem": "Create Action Item",
+    "Latest": "Latest",
+    "Earliest": "Earliest"
+  },
   "eventListCard": {
     "location": "Location",
     "on": "On",

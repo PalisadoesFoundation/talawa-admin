@@ -1,0 +1,13 @@
+.container {
+  min-height: 100vh;
+}
+
+.dropdown {
+  display: inline;
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background-color: var(--bs-gray-500);
+}
