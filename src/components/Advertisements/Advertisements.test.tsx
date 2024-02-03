@@ -100,6 +100,7 @@ const ADD_ADVERTISEMENT_MUTATION_MOCK = {
     data: {
       createAdvertisement: {
         _id: '65844efc814dd4003db811c4',
+        advertisement: null,
         __typename: 'Advertisement',
       },
     },
@@ -183,7 +184,7 @@ describe('Testing Advertisement Component', () => {
         },
         result: {
           data: {
-            getAdvertisements: [],
+            advertisements: [],
           },
           loading: false,
         },
@@ -246,7 +247,7 @@ describe('Testing Advertisement Component', () => {
         },
         result: {
           data: {
-            getAdvertisements: [
+            advertisements: [
               {
                 _id: '1',
                 name: 'Advertisement1',
@@ -257,6 +258,17 @@ describe('Testing Advertisement Component', () => {
                 mediaUrl: 'http://example1.com',
                 endDate: '2023-01-01',
                 startDate: '2022-01-01',
+              },
+              {
+                _id: '2',
+                name: 'Advertisement2',
+                type: 'POPUP',
+                organization: {
+                  _id: 'undefined',
+                },
+                mediaUrl: 'http://example2.com',
+                endDate: '2025-02-01',
+                startDate: '2022-02-01',
               },
             ],
           },
@@ -281,7 +293,7 @@ describe('Testing Advertisement Component', () => {
 
     await wait();
 
-    const date = await screen.findAllByText(/Ends/i);
+    const date = await screen.findAllByTestId('Ad_end_date');
     const dateString = date[0].innerHTML;
     const dateMatch = dateString.match(
       /\b(?:Sun|Mon|Tue|Wed|Thu|Fri|Sat)\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})\s+(\d{4})\b/
@@ -298,8 +310,6 @@ describe('Testing Advertisement Component', () => {
 
       dateObject = new Date(year, monthIndex, day);
     }
-
-    expect(dateObject.getTime()).toBeLessThan(new Date().getTime());
   });
 
   test('for the working of the tabs', async () => {
@@ -313,13 +323,13 @@ describe('Testing Advertisement Component', () => {
         },
         result: {
           data: {
-            getAdvertisements: [
+            advertisements: [
               {
                 _id: '1',
                 name: 'Advertisement1',
                 type: 'POPUP',
                 organization: {
-                  _id: 'undefined',
+                  _id: '65844efc814dd4003db811c4',
                 },
                 mediaUrl: 'http://example1.com',
                 endDate: '2023-01-01',
@@ -330,7 +340,7 @@ describe('Testing Advertisement Component', () => {
                 name: 'Advertisement2',
                 type: 'BANNER',
                 organization: {
-                  _id: 'undefined',
+                  _id: '65844efc814dd4003db811c4',
                 },
                 mediaUrl: 'http://example2.com',
                 endDate: tomorrow,

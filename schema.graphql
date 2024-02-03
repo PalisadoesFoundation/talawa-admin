@@ -7,7 +7,7 @@ type Advertisement {
   endDate: Date!
   mediaUrl: URL!
   name: String!
-  organizationId: ID!
+  organization: Organization
   startDate: Date!
   type: String!
 }
@@ -774,7 +774,7 @@ type Query {
     skip: Int
     where: EventWhereInput
   ): [Event!]!
-  getAdvertisements: [Advertisement]
+  advertisements: [Advertisement]
   getDonationById(id: ID!): Donation!
   getDonationByOrgId(orgId: ID!): [Donation]
   getDonationByOrgIdConnection(

@@ -41,8 +41,8 @@ const MOCKS = [
         organizationId: '1',
         name: 'Test Advertisement',
         type: 'BANNER',
-        startDate: dayjs(new Date('2023-01-01')).format('YYYY-MM-DD'),
-        endDate: dayjs(new Date('2023-02-01')).format('YYYY-MM-DD'),
+        startDate: '2023-01-01',
+        endDate: '2023-02-01',
         file: 'data:image/png;base64,bWVkaWEgY29udGVudA==',
       },
     },
@@ -50,6 +50,7 @@ const MOCKS = [
       data: {
         createAdvertisement: {
           _id: '1',
+          advertisement: null,
           __typename: 'Advertisement',
         },
       },
@@ -186,8 +187,8 @@ describe('Testing Advertisement Register Component', () => {
                 startDate={new Date()}
                 type="BANNER"
                 name="Advert1"
-                organizationId="1"
-                advertisementMedia=""
+                organizationId="undefined"
+                advertisementMedia="data:image/png;base64,bWVkaWEgY29udGVudA=="
               />
             </I18nextProvider>
           </BrowserRouter>

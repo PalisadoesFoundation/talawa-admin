@@ -461,7 +461,9 @@ export const ADD_ADVERTISEMENT_MUTATION = gql`
         mediaFile: $file
       }
     ) {
-      _id
+      advertisement {
+        _id
+      }
     }
   }
 `;

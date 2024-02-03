@@ -111,7 +111,9 @@ function advertisementEntry({
               )}
               <Card.Body>
                 <Card.Title>{name}</Card.Title>
-                <Card.Text>Ends on {endDate?.toDateString()}</Card.Text>
+                <Card.Text data-testid="Ad_end_date">
+                  Ends on {endDate?.toDateString()}
+                </Card.Text>
                 <Card.Subtitle className="mb-2 text-muted author">
                   {type}
                 </Card.Subtitle>

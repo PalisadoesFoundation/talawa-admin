@@ -35,7 +35,7 @@ const EMPTY_MOCKS = [
     },
     result: {
       data: {
-        getAdvertisements: [],
+        advertisements: [],
       },
     },
   },
@@ -161,7 +161,7 @@ const MOCKS = [
     },
     result: {
       data: {
-        getAdvertisements: [
+        advertisements: [
           {
             _id: '1234',
             name: 'Ad 1',

@@ -158,7 +158,7 @@ export default function home(): JSX.Element {
 
   React.useEffect(() => {
     if (promotedPostsData) {
-      setAdContent(promotedPostsData.getAdvertisements);
+      setAdContent(promotedPostsData.advertisements);
     }
   }, [data]);
 

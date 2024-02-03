@@ -45,13 +45,13 @@ export default function advertisements(): JSX.Element {
                 className="mb-3"
               >
                 <Tab eventKey="activeAds" title={t('activeAds')}>
-                  {advertisementsData?.getAdvertisements
+                  {advertisementsData?.advertisements
                     .filter((ad: any) => ad.organization._id == currentOrgId)
                     .filter((ad: any) => new Date(ad.endDate) > new Date())
                     .length == 0 ? (
                     <h4>{t('pMessage')} </h4> // eslint-disable-line
                   ) : (
-                    advertisementsData?.getAdvertisements
+                    advertisementsData?.advertisements
                       .filter((ad: any) => ad.organization._id == currentOrgId)
                       .filter((ad: any) => new Date(ad.endDate) > new Date())
                       .map(
@@ -82,13 +82,13 @@ export default function advertisements(): JSX.Element {
                   )}
                 </Tab>
                 <Tab eventKey="archievedAds" title={t('archievedAds')}>
-                  {advertisementsData?.getAdvertisements
+                  {advertisementsData?.advertisements
                     .filter((ad: any) => ad.organization._id == currentOrgId)
                     .filter((ad: any) => new Date(ad.endDate) < new Date())
                     .length == 0 ? (
                     <h4>{t('pMessage')} </h4> // eslint-disable-line
                   ) : (
-                    advertisementsData?.getAdvertisements
+                    advertisementsData?.advertisements
                       .filter((ad: any) => ad.organization._id == currentOrgId)
                       .filter((ad: any) => new Date(ad.endDate) < new Date())
                       .map(
