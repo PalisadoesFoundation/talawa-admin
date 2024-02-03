@@ -268,7 +268,7 @@ describe('Testing Advertisement Component', () => {
                 },
                 mediaUrl: 'http://example2.com',
                 endDate: '2025-02-01',
-                startDate: '2022-02-01',
+                startDate: '2024-02-01',
               },
             ],
           },
@@ -294,7 +294,7 @@ describe('Testing Advertisement Component', () => {
     await wait();
 
     const date = await screen.findAllByTestId('Ad_end_date');
-    const dateString = date[0].innerHTML;
+    const dateString = date[1].innerHTML;
     const dateMatch = dateString.match(
       /\b(?:Sun|Mon|Tue|Wed|Thu|Fri|Sat)\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})\s+(\d{4})\b/
     );
@@ -310,6 +310,8 @@ describe('Testing Advertisement Component', () => {
 
       dateObject = new Date(year, monthIndex, day);
     }
+
+    expect(dateObject.getTime()).toBeLessThan(new Date().getTime());
   });
 
   test('for the working of the tabs', async () => {
