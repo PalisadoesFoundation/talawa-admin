@@ -57,8 +57,8 @@ def _count_changed_files(base_branch, pr_branch, sensitive_files):
     except Exception as e:
         print(f"Error: {e}")
         sys.exit(1)
-
-    changed_files = output.strip().split("\n")
+    
+    changed_files = output.decode("utf-8").strip().split("\n")
     unauthorized_changes = [file for file in changed_files if any(file.startswith(sf) for sf in sensitive_files)]
 
     file_count = len(changed_files)
