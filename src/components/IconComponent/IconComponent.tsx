@@ -3,6 +3,7 @@ import { QuestionMarkOutlined } from '@mui/icons-material';
 import { ReactComponent as BlockUserIcon } from 'assets/svgs/blockUser.svg';
 import { ReactComponent as DashboardIcon } from 'assets/svgs/dashboard.svg';
 import { ReactComponent as EventsIcon } from 'assets/svgs/events.svg';
+import { ReactComponent as ActionItemIcon } from 'assets/svgs/actionItem.svg';
 import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
 import { ReactComponent as PeopleIcon } from 'assets/svgs/people.svg';
 import { ReactComponent as PluginsIcon } from 'assets/svgs/plugins.svg';
@@ -36,6 +37,13 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
       return <PeopleIcon {...props} data-testid="Icon-Component-PeopleIcon" />;
     case 'Events':
       return <EventsIcon {...props} data-testid="Icon-Component-EventsIcon" />;
+    case 'Action Items':
+      return (
+        <ActionItemIcon
+          {...props}
+          data-testid="Icon-Component-ActionItemIcon"
+        />
+      );
     case 'Posts':
       return <PostsIcon {...props} data-testid="Icon-Component-PostsIcon" />;
     case 'Block/Unblock':

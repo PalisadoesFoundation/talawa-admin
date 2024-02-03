@@ -1,3 +1,61 @@
+.actionItemsContainer {
+  height: 90vh;
+}
+
+.btnsContainer {
+  display: flex;
+}
+
+.btnsContainer .btnsBlock {
+  display: flex;
+}
+
+.btnsContainer .btnsBlock button {
+  margin-left: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btnsContainer .input {
+  flex: 1;
+  position: relative;
+}
+
+.btnsContainer input {
+  outline: 1px solid var(--bs-gray-400);
+}
+
+.btnsContainer .input button {
+  width: 52px;
+}
+
+.cardHeader {
+  padding: 1.25rem 1rem 1rem 1rem;
+  border-bottom: 1px solid var(--bs-gray-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardHeader .cardTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.cardBody {
+  min-height: 150px;
+  background-color: var(--bs-gray-100);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cardBody .textBox {
+  margin: 0 0 3rem 0;
+  color: var(--bs-secondary);
+}
+
 .container {
   min-height: 100vh;
 }
@@ -6,8 +64,114 @@
   display: inline;
 }
 
+form > input {
+  display: block;
+  border: 1px solid #e8e5e5;
+  box-shadow: 2px 1px #e8e5e5;
+  padding: 10px 20px;
+  border-radius: 5px;
+  background: none;
+  width: 100%;
+  transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+}
+
 hr {
   border: none;
   height: 1px;
   background-color: var(--bs-gray-500);
+  margin: 1rem;
+}
+
+.icon {
+  transform: scale(1.5);
+  color: var(--bs-danger);
+  margin-bottom: 1rem;
+}
+
+.message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.searchForm {
+  display: inline;
+}
+
+@media (max-width: 1020px) {
+  .btnsContainer {
+    flex-direction: column;
+    margin: 1.5rem 0;
+  }
+
+  .btnsContainer .btnsBlock {
+    margin: 1.5rem 0 0 0;
+    justify-content: space-between;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin: 0;
+  }
+
+  .btnsContainer .btnsBlock div button {
+    margin-right: 1.5rem;
+  }
+}
+
+.dropdownToggle {
+  margin-bottom: 0;
+}
+
+@media (max-width: 767px) {
+  .btnsContainer .btnsBlock {
+    flex-direction: column;
+    margin: 1.5rem 0 0 0;
+    justify-content: space-between;
+  }
+
+  .dropdownToggle {
+    margin-bottom: 1rem;
+  }
+
+  .dropdownContainer {
+    margin-bottom: 0;
+    justify-content: space-between;
+  }
+}
+
+/* For mobile devices  */
+
+@media (max-width: 520px) {
+  .btnsContainer {
+    margin-bottom: 0;
+  }
+
+  .btnsContainer .btnsBlock {
+    display: block;
+    margin-top: 1rem;
+    margin-right: 0;
+  }
+
+  .btnsContainer .btnsBlock div {
+    flex: 1;
+  }
+
+  .btnsContainer .btnsBlock div[title='Sort organizations'] {
+    margin-right: 0.5rem;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin-bottom: 1rem;
+    margin-right: 0;
+    width: 100%;
+  }
+
+  .dropdownToggle {
+    margin-bottom: 0;
+  }
 }

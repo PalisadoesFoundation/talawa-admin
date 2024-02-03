@@ -288,9 +288,10 @@
   },
   "organizationActionItems": {
     "title": "Action Items",
-    "createActionItem": "Create Action Item",
-    "Latest": "Latest",
-    "Earliest": "Earliest"
+    "createActionItem": "Create",
+    "searchByName": "Search By Name",
+    "latest": "Latest",
+    "earliest": "Earliest"
   },
   "eventListCard": {
     "location": "Location",
