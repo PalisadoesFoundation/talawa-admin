@@ -37,5 +37,5 @@ jobs:
       - name: Unauthorized file modification in PR
         run: |
           chmod +x ./.github/workflows/authorized-change.py
-          ./.github/workflows/authorized-change.py
+          python ./.github/workflows/authorized-change.py
     
