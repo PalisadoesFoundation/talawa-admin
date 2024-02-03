@@ -12,6 +12,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import UserNavbar from './UserNavbar';
 import userEvent from '@testing-library/user-event';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -27,6 +28,23 @@ const MOCKS = [
       query: REVOKE_REFRESH_TOKEN,
     },
     result: {},
+  },
+  {
+    request: {
+      query: CHECK_AUTH,
+    },
+    result: {
+      data: {
+        checkAuth: {
+          _id: '123',
+          firstName: 'John',
+          lastName: 'Doe',
+          image: 'https://example.com/profile.jpg',
+          email: 'john.doe@example.com',
+          userType: 'user',
+        },
+      },
+    },
   },
 ];
 
