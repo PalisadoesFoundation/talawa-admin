@@ -1,3 +1,4 @@
+// SKIP_LOCALSTORAGE_CHECK
 import { refreshToken } from './getRefreshToken';
 
 jest.mock('@apollo/client', () => {
@@ -28,6 +29,7 @@ describe('refreshToken', () => {
   global.window.location = { ...location, reload: jest.fn() };
 
   // Mock localStorage.setItem() and localStorage.clear()
+
   Storage.prototype.setItem = jest.fn();
   Storage.prototype.clear = jest.fn();
 
