@@ -16,7 +16,7 @@ on:
       - '.github/**'   
       - 'env.example'
       - '.husky/**'
-      - '.scripts/**'
+      - 'scripts/**'
       - 'package.json'
       - 'tsconfig.json'
       - '.gitignore'
