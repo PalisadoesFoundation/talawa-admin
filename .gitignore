@@ -13,9 +13,6 @@ pnpm-lock.yaml
 coverage/
 codecov
 
-# production
-/build
-
 # misc
 .DS_Store
 .env
