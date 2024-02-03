@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -12,6 +12,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrgSettings from './OrgSettings';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import userEvent from '@testing-library/user-event';
 
 const MOCKS = [
   {
@@ -80,6 +81,10 @@ const MOCKS = [
 
 const link = new StaticMockLink(MOCKS, true);
 
+const translations = JSON.parse(
+  JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.orgSettings)
+);
+
 afterEach(() => {
   localStorage.clear();
 });
@@ -117,5 +122,34 @@ describe('Organisation Settings Page', () => {
     expect(screen.getByText(/Other Settings/i)).toBeInTheDocument();
     expect(screen.getByText(/Change Language/i)).toBeInTheDocument();
     expect(window.location).toBeAt('/orgsetting/id=123');
+  });
+
+  test('should render appropriate settings based on the orgSetting state', async () => {
+    window.location.assign('/orgsetting/id=123');
+    localStorage.setItem('UserType', 'SUPERADMIN');
+
+    const { queryByText } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgSettings />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await waitFor(() => {
+      userEvent.click(screen.getByTestId('actionItemCategoriesSettings'));
+      expect(
+        queryByText(translations.actionItemCategories)
+      ).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      userEvent.click(screen.getByTestId('generalSettings'));
+      expect(queryByText(translations.updateOrganization)).toBeInTheDocument();
+    });
   });
 });

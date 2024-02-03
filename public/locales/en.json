@@ -452,6 +452,8 @@
   "orgSettings": {
     "title": "Talawa Setting",
     "pageName": "Settings",
+    "general": "General",
+    "actionItemCategories": "Action Item Categories",
     "updateOrganization": "Update Organization",
     "seeRequest": "See Request",
     "settings": "Settings",
@@ -745,5 +747,20 @@
     "Remove Custom Field": "Remove Custom Field",
     "fieldSuccessMessage": "Field added successfully",
     "fieldRemovalSuccess": "Field removed successfully"
+  },
+  "orgActionItemCategories": {
+    "createButton": "Create",
+    "editButton": "Edit",
+    "enableButton": "Enable",
+    "disableButton": "Disable",
+    "updateActionItemCategory": "Update",
+    "actionItemCategoryName": "Name",
+    "actionItemCategoryDetails": "Action Item Category Details",
+    "enterName": "Enter Name",
+    "successfulCreation": "Action Item Category created successfully",
+    "successfulUpdation": "Action Item Category updated successfully",
+    "sameNameConflict": "Please change the name to make an update",
+    "categoryEnabled": "Action Item Category Enabled",
+    "categoryDisabled": "Action Item Category Disabled"
   }
 }

@@ -573,6 +573,10 @@ export const REGISTER_EVENT = gql`
   }
 `;
 
+// Create and Update an ActionItemCategory
+export { CREATE_ACTION_ITEM_CATEGORY_MUTATION } from './ActionItemCategoryMutations';
+export { UPDATE_ACTION_ITEM_CATEGORY_MUTATION } from './ActionItemCategoryMutations';
+
 // Create, update and delete Action Items
 export { CREATE_ACTION_ITEM_MUTATION } from './ActionItemMutations';
 export { UPDATE_ACTION_ITEM_MUTATION } from './ActionItemMutations';

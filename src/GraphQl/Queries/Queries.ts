@@ -581,6 +581,9 @@ export const MEMBERSHIP_REQUEST = gql`
   }
 `;
 
+// get the list of action item categories for an organization
+export { ACTION_ITEM_CATEGORY_LIST } from './ActionItemCategoryQueries';
+
 // to take the list of the blocked users
 export { PLUGIN_GET } from './PlugInQueries';
 export { ADVERTISEMENTS_GET } from './PlugInQueries';
