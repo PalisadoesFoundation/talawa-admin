@@ -21,7 +21,6 @@ import { MockedProvider } from '@apollo/client/testing';
 import i18n from 'utils/i18nForTest';
 import { toast } from 'react-toastify';
 import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
-import dayjs from 'dayjs';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import userEvent from '@testing-library/user-event';
 import AdvertisementEntry from '../AdvertisementEntry/AdvertisementEntry';
