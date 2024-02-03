@@ -616,9 +616,19 @@
     "selectOrganization": "Sélectionnez une organisation"
   },
   "orgLeftDrawer": {
-    "yourOrganizations": "Vos organisations",
-    "noOrganizations": "Vous n'avez encore rejoint aucune organisation.",
-    "viewAll": "Voir tout"
+    "talawaUserPortal": "Portail utilisateur Talawa",
+    "menu": "Menu",
+    "posts": "Des postes",
+    "events": "Événements",
+    "donations": "Des dons",
+    "signOut": "se déconnecter"
+  },
+  "userLeftDrawer": {
+    "talawaUserPortal": "Portail utilisateur Talawa",
+    "menu": "Menu",
+    "myOrganizations": "Mes organisations",
+    "settings": "Paramètres",
+    "signOut": "se déconnecter"
   },
   "organizationSidebar": {
     "viewAll": "Voir tout",

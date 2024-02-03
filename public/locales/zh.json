@@ -617,9 +617,19 @@
     "selectOrganization": "選擇組織"
   },
   "orgLeftDrawer": {
-    "yourOrganizations": "您的組織",
-    "noOrganizations": "您還沒有加入任何組織。",
-    "viewAll": "查看全部"
+    "talawaUserPortal": "塔拉瓦用户门户",
+    "menu": "菜单",
+    "posts": "帖子",
+    "events": "活动",
+    "donations": "捐款",
+    "signOut": "登出"
+  },
+  "userLeftDrawer": {
+    "talawaUserPortal": "塔拉瓦用户门户",
+    "menu": "菜单",
+    "myOrganizations": "我的组织",
+    "settings": "设置",
+    "signOut": "登出"
   },
   "organizationSidebar": {
     "viewAll": "查看全部",

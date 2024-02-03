@@ -10,6 +10,7 @@ import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation, useQuery } from '@apollo/client';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
+import { useTranslation } from 'react-i18next';
 
 export interface InterfaceUserLeftDrawerProps {
   screenName: string;
@@ -29,6 +30,10 @@ function userLeftDrawer({
   hideDrawer,
   setHideDrawer,
 }: InterfaceUserLeftDrawerProps): JSX.Element {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'userLeftDrawer',
+  });
+
   const history = useHistory();
 
   const userId = localStorage.getItem('userId');
@@ -63,8 +68,8 @@ function userLeftDrawer({
       }`}
     >
       <TalawaLogo className={styles.talawaLogo} />
-      <span className={styles.talawaText}>Talawa User Portal</span>
-      <h5 className={styles.titleHeader}>Menu</h5>
+      <span className={styles.talawaText}>{t('talawaUserPortal')}</span>
+      <h5 className={styles.titleHeader}>{t('menu')}</h5>
       <div className={styles.optionList}>
         <Button
           variant={screenName === 'Organizations' ? 'success' : 'light'}
@@ -84,7 +89,7 @@ function userLeftDrawer({
               }`}
             />
           </div>
-          My Organizations
+          {t('myOrganizations')}
         </Button>
         <Button
           variant={screenName === 'Settings' ? 'success' : 'light'}
@@ -104,7 +109,7 @@ function userLeftDrawer({
               }`}
             />
           </div>
-          Settings
+          {t('settings')}
         </Button>
       </div>
       <div className="mt-auto">
@@ -146,7 +151,7 @@ function userLeftDrawer({
           <div className={styles.imageContainer}>
             <LogoutIcon fill={'white'} />
           </div>
-          Sign out
+          {t('signOut')}
         </Button>
         <Button
           className={styles.collapseSidebarButton}

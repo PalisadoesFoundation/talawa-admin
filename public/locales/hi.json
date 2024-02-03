@@ -617,9 +617,19 @@
     "selectOrganization": "संगठन का चयन करें"
   },
   "orgLeftDrawer": {
-    "yourOrganizations": "आपके संगठन",
-    "noOrganizations": "आप अभी तक किसी संगठन में शामिल नहीं हुए हैं.",
-    "viewAll": "सभी को देखें"
+    "talawaUserPortal": "तलावा उपयोगकर्ता पोर्टल",
+    "menu": "मेन्यू",
+    "posts": "पदों",
+    "events": "आयोजन",
+    "donations": "दान",
+    "signOut": "साइन आउट"
+  },
+  "userLeftDrawer": {
+    "talawaUserPortal": "तलावा उपयोगकर्ता पोर्टल",
+    "menu": "मेन्यू",
+    "myOrganizations": "मेरे संगठन",
+    "settings": "समायोजन",
+    "signOut": "साइन आउट"
   },
   "organizationSidebar": {
     "viewAll": "सभी को देखें",

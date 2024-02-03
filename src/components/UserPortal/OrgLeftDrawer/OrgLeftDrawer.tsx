@@ -12,6 +12,7 @@ import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation, useQuery } from '@apollo/client';
 import { ORGANIZATIONS_LIST, USER_DETAILS } from 'GraphQl/Queries/Queries';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
+import { useTranslation } from 'react-i18next';
 
 export interface InterfaceOrgLeftDrawerProps {
   screenName: string;
@@ -31,6 +32,10 @@ function orgLeftDrawer({
   hideDrawer,
   setHideDrawer,
 }: InterfaceOrgLeftDrawerProps): JSX.Element {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'orgLeftDrawer',
+  });
+
   const history = useHistory();
 
   const userId = localStorage.getItem('userId');
@@ -80,7 +85,7 @@ function orgLeftDrawer({
     >
       <div className={styles.brandingContainer}>
         <TalawaLogo className={styles.talawaLogo} />
-        <span className={styles.talawaText}>Talawa User Portal</span>
+        <span className={styles.talawaText}>{t('talawaUserPortal')}</span>
       </div>
       {!orgLoading && (
         <button
@@ -106,7 +111,7 @@ function orgLeftDrawer({
           <AngleRightIcon fill={'var(--bs-secondary)'} />
         </button>
       )}
-      <h5 className={styles.titleHeader}>Menu</h5>
+      <h5 className={styles.titleHeader}>{t('menu')}</h5>
       <div className={styles.optionList}>
         <Button
           variant={screenName === 'Posts' ? 'success' : 'light'}
@@ -126,7 +131,7 @@ function orgLeftDrawer({
               }`}
             />
           </div>
-          Posts
+          {t('posts')}
         </Button>
         <Button
           variant={screenName === 'Events' ? 'success' : 'light'}
@@ -146,7 +151,7 @@ function orgLeftDrawer({
               }`}
             />
           </div>
-          Events
+          {t('events')}
         </Button>
         <Button
           variant={screenName === 'Donate' ? 'success' : 'light'}
@@ -166,7 +171,7 @@ function orgLeftDrawer({
               }`}
             />
           </div>
-          Donations
+          {t('donations')}
         </Button>
       </div>
       <div className="mt-auto">
@@ -208,7 +213,7 @@ function orgLeftDrawer({
           <div className={styles.imageContainer}>
             <LogoutIcon fill={'white'} />
           </div>
-          Sign out
+          {t('signOut')}
         </Button>
         <Button
           className={styles.collapseSidebarButton}

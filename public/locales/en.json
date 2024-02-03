@@ -621,9 +621,19 @@
     "selectOrganization": "Select Organization"
   },
   "orgLeftDrawer": {
-    "yourOrganizations": "Your Organizations",
-    "noOrganizations": "You haven't joined any organization yet.",
-    "viewAll": "View all"
+    "talawaUserPortal": "Talawa User Portal",
+    "menu": "Menu",
+    "posts": "Posts",
+    "events": "Events",
+    "donations": "Donations",
+    "signOut": "Sign out"
+  },
+  "userLeftDrawer": {
+    "talawaUserPortal": "Talawa User Portal",
+    "menu": "Menu",
+    "myOrganizations": "My Organizations",
+    "settings": "Settings",
+    "signOut": "Sign out"
   },
   "organizationSidebar": {
     "viewAll": "View all",
