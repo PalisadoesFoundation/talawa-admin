@@ -6,7 +6,10 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
-import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  ADD_ADMIN_MUTATION,
+  UPDATE_USERTYPE_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -52,6 +55,20 @@ const MOCKS1 = [
       variables: {
         userid: '123',
         orgid: '456',
+      },
+    },
+    result: {
+      data: {
+        success: true,
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_USERTYPE_MUTATION,
+      variables: {
+        id: '123',
+        userType: 'Admin',
       },
     },
     result: {
@@ -168,6 +185,14 @@ describe('MemberDetail', () => {
     expect(screen.getAllByText(/Role/i)).toHaveLength(2);
     expect(screen.getAllByText(/Created/i)).toHaveLength(4);
     expect(screen.getAllByText(/Joined/i)).toHaveLength(2);
+    expect(screen.getByTestId('addAdminBtn')).toBeInTheDocument();
+    const addAdminBtn = MOCKS1[2].request.variables.userType;
+    // if the button is not disabled
+    expect(screen.getByTestId('addAdminBtn').getAttribute('disabled')).toBe(
+      addAdminBtn == 'ADMIN' || addAdminBtn == 'SUPERADMIN'
+        ? expect.anything()
+        : null
+    );
     expect(screen.getByTestId('stateBtn')).toBeInTheDocument();
     userEvent.click(screen.getByTestId('stateBtn'));
   });
