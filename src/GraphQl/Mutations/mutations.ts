@@ -84,9 +84,11 @@ export const ADDRESS_DETAILS_FRAGMENT = gql`
 
 export const UPDATE_USER_MUTATION = gql`
   mutation UpdateUserProfile(
+    $id: ID
     $firstName: String
     $lastName: String
     $email: EmailAddress
+    $applangcode: String
     $file: String
   ) {
     updateUserProfile(
