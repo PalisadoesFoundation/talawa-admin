@@ -210,6 +210,12 @@ describe('Testing Save Button', () => {
     expect(
       screen.queryByText('Failed to add custom field')
     ).toBeInTheDocument();
+    await wait();
+    userEvent.type(screen.getByTestId('customFieldInput'), 'Age{enter}');
+    await wait();
+    expect(
+      screen.queryByText('Failed to add custom field')
+    ).toBeInTheDocument();
   });
 
   test('Testing Typing Organization Custom Field Name', async () => {
