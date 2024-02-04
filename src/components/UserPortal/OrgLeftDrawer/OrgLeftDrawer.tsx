@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styles from './OrgLeftDrawer.module.css';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import Button from 'react-bootstrap/Button';
@@ -11,7 +11,6 @@ import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation, useQuery } from '@apollo/client';
 import { ORGANIZATIONS_LIST, USER_DETAILS } from 'GraphQl/Queries/Queries';
-import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import { useTranslation } from 'react-i18next';
 
 export interface InterfaceOrgLeftDrawerProps {
@@ -19,13 +18,6 @@ export interface InterfaceOrgLeftDrawerProps {
   hideDrawer: boolean | null;
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
-
-type UserDetailsType = {
-  firstName: string;
-  lastName: string;
-  userType: string;
-  image: string;
-};
 
 function orgLeftDrawer({
   screenName,
@@ -41,31 +33,15 @@ function orgLeftDrawer({
   const userId = localStorage.getItem('userId');
   const orgId = window.location.href.split('=')[1];
 
-  const [details, setDetails] = useState<UserDetailsType | null>();
-  const [organization, setOrganization] =
-    useState<InterfaceQueryOrganizationsListObject>();
-
   const { data: orgData, loading: orgLoading } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: orgId },
   });
 
-  const { data, loading } = useQuery(USER_DETAILS, {
+  const { data: userData, loading } = useQuery(USER_DETAILS, {
     variables: { id: userId },
   });
 
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
-
-  useEffect(() => {
-    if (data) {
-      setDetails(data.user);
-    }
-  }, [data]);
-
-  useEffect(() => {
-    if (orgData) {
-      setOrganization(orgData.organizations[0]);
-    }
-  }, [orgData]);
 
   const logout = (): void => {
     revokeRefreshToken();
@@ -84,7 +60,7 @@ function orgLeftDrawer({
       }`}
     >
       <div className={styles.brandingContainer}>
-        <TalawaLogo className={styles.talawaLogo} />
+        <TalawaLogo className={styles.talawaLogo} data-testid="talawaLogo" />
         <span className={styles.talawaText}>{t('talawaUserPortal')}</span>
       </div>
       {!orgLoading && (
@@ -95,18 +71,25 @@ function orgLeftDrawer({
           }}
         >
           <div className={styles.imageContainer}>
-            {organization?.image ? (
-              <img src={organization.image} alt={`organization picture`} />
+            {orgData?.organizations[0]?.image ? (
+              <img
+                src={orgData?.organizations[0]?.image}
+                alt={`organization picture`}
+              />
             ) : (
               <img
-                src={`https://api.dicebear.com/5.x/initials/svg?seed=${organization?.name}`}
+                src={`https://api.dicebear.com/5.x/initials/svg?seed=${orgData?.organizations[0]?.name}`}
                 alt={`dummy picture`}
               />
             )}
           </div>
           <div className={styles.orgDetails}>
-            <div className={styles.orgName}>{organization?.name}</div>
-            <div className={styles.orgCity}>{organization?.address.city}</div>
+            <div className={styles.orgName}>
+              {orgData?.organizations[0]?.name}
+            </div>
+            <div className={styles.orgCity}>
+              {orgData?.organizations[0]?.address.city}
+            </div>
           </div>
           <AngleRightIcon fill={'var(--bs-secondary)'} />
         </button>
@@ -183,21 +166,21 @@ function orgLeftDrawer({
             }}
           >
             <div className={styles.imageContainer}>
-              {details?.image ? (
-                <img src={details.image} alt={`profile picture`} />
+              {userData?.user?.image ? (
+                <img src={userData?.user?.image} alt={`profile picture`} />
               ) : (
                 <img
-                  src={`https://api.dicebear.com/5.x/initials/svg?seed=${details?.firstName}%20${details?.lastName}`}
+                  src={`https://api.dicebear.com/5.x/initials/svg?seed=${userData?.user?.firstName}%20${userData?.user?.lastName}`}
                   alt={`dummy picture`}
                 />
               )}
             </div>
             <div className={styles.profileText}>
               <span className={styles.primaryText}>
-                {details?.firstName} {details?.lastName}
+                {userData?.user?.firstName} {userData?.user?.lastName}
               </span>
               <span className={styles.secondaryText}>
-                {`${details?.userType}`.toLowerCase()}
+                {`${userData?.user?.userType}`.toLowerCase()}
               </span>
             </div>
             <AngleRightIcon fill={'var(--bs-secondary)'} />
@@ -220,6 +203,7 @@ function orgLeftDrawer({
           onClick={(): void => {
             setHideDrawer(!hideDrawer);
           }}
+          data-testid="collapseButton"
         >
           <i className="fa fa-angle-double-left" aria-hidden="true"></i>
         </Button>

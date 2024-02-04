@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styles from './UserLeftDrawer.module.css';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import Button from 'react-bootstrap/Button';
@@ -18,13 +18,6 @@ export interface InterfaceUserLeftDrawerProps {
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-type UserDetailsType = {
-  firstName: string;
-  lastName: string;
-  userType: string;
-  image: string;
-};
-
 function userLeftDrawer({
   screenName,
   hideDrawer,
@@ -38,18 +31,10 @@ function userLeftDrawer({
 
   const userId = localStorage.getItem('userId');
 
-  const [details, setDetails] = useState<UserDetailsType | null>();
-
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
-  const { data, loading } = useQuery(USER_DETAILS, {
+  const { data: userData, loading } = useQuery(USER_DETAILS, {
     variables: { id: userId },
   });
-
-  useEffect(() => {
-    if (data) {
-      setDetails(data.user);
-    }
-  }, [data]);
 
   const logout = (): void => {
     revokeRefreshToken();
@@ -66,8 +51,9 @@ function userLeftDrawer({
           ? styles.inactiveDrawer
           : styles.activeDrawer
       }`}
+      data-testid="userLeftDrawer"
     >
-      <TalawaLogo className={styles.talawaLogo} />
+      <TalawaLogo className={styles.talawaLogo} data-testid="talawaLogo" />
       <span className={styles.talawaText}>{t('talawaUserPortal')}</span>
       <h5 className={styles.titleHeader}>{t('menu')}</h5>
       <div className={styles.optionList}>
@@ -79,6 +65,7 @@ function userLeftDrawer({
           onClick={(): void => {
             history.push('/user/organizations');
           }}
+          data-testid="orgButton"
         >
           <div className={styles.iconWrapper}>
             <OrganizationsIcon
@@ -99,6 +86,7 @@ function userLeftDrawer({
           onClick={(): void => {
             history.push('/user/settings');
           }}
+          data-testid="settingsButton"
         >
           <div className={styles.iconWrapper}>
             <SettingsIcon
@@ -119,23 +107,29 @@ function userLeftDrawer({
             onClick={(): void => {
               history.push(`/user/settings`);
             }}
+            data-testid="profileButton"
           >
             <div className={styles.imageContainer}>
-              {details?.image ? (
-                <img src={details.image} alt={`profile picture`} />
+              {userData?.user?.image ? (
+                <img
+                  src={userData.image}
+                  alt={`profile picture`}
+                  data-testid="profileImage"
+                />
               ) : (
                 <img
-                  src={`https://api.dicebear.com/5.x/initials/svg?seed=${details?.firstName}%20${details?.lastName}`}
+                  src={`https://api.dicebear.com/5.x/initials/svg?seed=${userData?.user?.firstName}%20${userData?.user?.lastName}`}
                   alt={`dummy picture`}
+                  data-testid="profileImage"
                 />
               )}
             </div>
             <div className={styles.profileText}>
               <span className={styles.primaryText}>
-                {details?.firstName} {details?.lastName}
+                {userData?.user?.firstName} {userData?.user?.lastName}
               </span>
               <span className={styles.secondaryText}>
-                {`${details?.userType}`.toLowerCase()}
+                {`${userData?.user?.userType}`.toLowerCase()}
               </span>
             </div>
             <AngleRightIcon fill={'var(--bs-secondary)'} />
@@ -158,6 +152,7 @@ function userLeftDrawer({
           onClick={(): void => {
             setHideDrawer(!hideDrawer);
           }}
+          data-testid="collapseButton"
         >
           <i className="fa fa-angle-double-left" aria-hidden="true"></i>
         </Button>

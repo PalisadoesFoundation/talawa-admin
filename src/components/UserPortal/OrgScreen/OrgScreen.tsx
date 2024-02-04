@@ -35,6 +35,7 @@ const orgScreen = ({
           onClick={(): void => {
             setHideDrawer(!hideDrawer);
           }}
+          data-testid="expandButton"
         >
           <i className="fa fa-angle-double-right" aria-hidden="true"></i>
         </Button>
@@ -52,6 +53,7 @@ const orgScreen = ({
             ? styles.expand
             : styles.contract
         } `}
+        data-testid="childrenContainer"
       >
         {children}
       </div>
