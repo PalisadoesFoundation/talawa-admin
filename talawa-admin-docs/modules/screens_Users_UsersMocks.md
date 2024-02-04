@@ -18,7 +18,7 @@
 
 #### Defined in
 
-[src/screens/Users/UsersMocks.ts:392](https://github.com/PalisadoesFoundation/talawa-admin/blob/e1a5f80/src/screens/Users/UsersMocks.ts#L392)
+[src/screens/Users/UsersMocks.ts:392](https://github.com/PalisadoesFoundation/talawa-admin/blob/780d70f/src/screens/Users/UsersMocks.ts#L392)
 
 ___
 
@@ -28,7 +28,7 @@ ___
 
 #### Defined in
 
-[src/screens/Users/UsersMocks.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/e1a5f80/src/screens/Users/UsersMocks.ts#L7)
+[src/screens/Users/UsersMocks.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/780d70f/src/screens/Users/UsersMocks.ts#L7)
 
 ___
 
@@ -38,4 +38,4 @@ ___
 
 #### Defined in
 
-[src/screens/Users/UsersMocks.ts:233](https://github.com/PalisadoesFoundation/talawa-admin/blob/e1a5f80/src/screens/Users/UsersMocks.ts#L233)
+[src/screens/Users/UsersMocks.ts:233](https://github.com/PalisadoesFoundation/talawa-admin/blob/780d70f/src/screens/Users/UsersMocks.ts#L233)

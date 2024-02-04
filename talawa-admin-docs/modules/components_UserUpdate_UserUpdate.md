@@ -27,4 +27,4 @@
 
 #### Defined in
 
-[src/components/UserUpdate/UserUpdate.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/e1a5f80/src/components/UserUpdate/UserUpdate.tsx#L26)
+[src/components/UserUpdate/UserUpdate.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/780d70f/src/components/UserUpdate/UserUpdate.tsx#L26)
