@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx:21](https://github.com/palisadoes/talawa-admin/blob/5828937/src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx#L21)
+[src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/e1a5f80/src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx#L21)

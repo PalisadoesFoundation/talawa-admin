@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[src/components/CheckIn/types.ts:47](https://github.com/palisadoes/talawa-admin/blob/5828937/src/components/CheckIn/types.ts#L47)
+[src/components/CheckIn/types.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/e1a5f80/src/components/CheckIn/types.ts#L47)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[src/components/CheckIn/types.ts:46](https://github.com/palisadoes/talawa-admin/blob/5828937/src/components/CheckIn/types.ts#L46)
+[src/components/CheckIn/types.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/e1a5f80/src/components/CheckIn/types.ts#L46)
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-[src/components/CheckIn/types.ts:45](https://github.com/palisadoes/talawa-admin/blob/5828937/src/components/CheckIn/types.ts#L45)
+[src/components/CheckIn/types.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/e1a5f80/src/components/CheckIn/types.ts#L45)

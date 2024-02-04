@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[src/components/OrganizationScreen/OrganizationScreen.tsx:12](https://github.com/palisadoes/talawa-admin/blob/5828937/src/components/OrganizationScreen/OrganizationScreen.tsx#L12)
+[src/components/OrganizationScreen/OrganizationScreen.tsx:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/e1a5f80/src/components/OrganizationScreen/OrganizationScreen.tsx#L12)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[src/components/OrganizationScreen/OrganizationScreen.tsx:11](https://github.com/palisadoes/talawa-admin/blob/5828937/src/components/OrganizationScreen/OrganizationScreen.tsx#L11)
+[src/components/OrganizationScreen/OrganizationScreen.tsx:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/e1a5f80/src/components/OrganizationScreen/OrganizationScreen.tsx#L11)
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-[src/components/OrganizationScreen/OrganizationScreen.tsx:10](https://github.com/palisadoes/talawa-admin/blob/5828937/src/components/OrganizationScreen/OrganizationScreen.tsx#L10)
+[src/components/OrganizationScreen/OrganizationScreen.tsx:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/e1a5f80/src/components/OrganizationScreen/OrganizationScreen.tsx#L10)

@@ -29,7 +29,7 @@
 
 #### Defined in
 
-[src/screens/MemberDetail/MemberDetail.tsx:23](https://github.com/palisadoes/talawa-admin/blob/5828937/src/screens/MemberDetail/MemberDetail.tsx#L23)
+[src/screens/MemberDetail/MemberDetail.tsx:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/e1a5f80/src/screens/MemberDetail/MemberDetail.tsx#L25)
 
 ___
 
@@ -49,7 +49,7 @@ ___
 
 #### Defined in
 
-[src/screens/MemberDetail/MemberDetail.tsx:296](https://github.com/palisadoes/talawa-admin/blob/5828937/src/screens/MemberDetail/MemberDetail.tsx#L296)
+[src/screens/MemberDetail/MemberDetail.tsx:325](https://github.com/PalisadoesFoundation/talawa-admin/blob/e1a5f80/src/screens/MemberDetail/MemberDetail.tsx#L325)
 
 ___
 
@@ -69,4 +69,4 @@ ___
 
 #### Defined in
 
-[src/screens/MemberDetail/MemberDetail.tsx:288](https://github.com/palisadoes/talawa-admin/blob/5828937/src/screens/MemberDetail/MemberDetail.tsx#L288)
+[src/screens/MemberDetail/MemberDetail.tsx:317](https://github.com/PalisadoesFoundation/talawa-admin/blob/e1a5f80/src/screens/MemberDetail/MemberDetail.tsx#L317)

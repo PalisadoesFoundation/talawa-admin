@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/UserPortal/SecuredRouteForUser/SecuredRouteForUser.tsx:4](https://github.com/palisadoes/talawa-admin/blob/5828937/src/components/UserPortal/SecuredRouteForUser/SecuredRouteForUser.tsx#L4)
+[src/components/UserPortal/SecuredRouteForUser/SecuredRouteForUser.tsx:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/e1a5f80/src/components/UserPortal/SecuredRouteForUser/SecuredRouteForUser.tsx#L4)
