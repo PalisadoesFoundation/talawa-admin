@@ -4,7 +4,7 @@
 
 Methodology:
 
-    Analyzes the Pull request to find if the count of file changes in a PR
+    Analyses the Pull request to find if the count of file changes in a PR
     exceeds a pre-defined number 20.
     Checks for unauthorized file changes based on a list of sensitive files.
 
@@ -13,7 +13,7 @@ reducing the likelihood of unintentional merges into incorrect branches.
 
 NOTE:
 
-    This script complies with our python3 coding and documentation standards.
+    This script complies with our Python3 coding and documentation standards.
     It complies with:
 
         1) Pylint
@@ -26,7 +26,11 @@ NOTE:
 import sys
 import argparse
 import subprocess
+from collections import namedtuple
+import glob
 
+# Use namedtuple for clarity in return values
+ScriptResult = namedtuple('ScriptResult', ['file_count', 'unauthorized_changes'])
 
 def _count_changed_files(base_branch, pr_branch, sensitive_files):
     """
@@ -38,7 +42,7 @@ def _count_changed_files(base_branch, pr_branch, sensitive_files):
         sensitive_files (list): List of sensitive files.
 
     Returns:
-        int: The number of changed files.
+        ScriptResult: Namedtuple containing file_count and unauthorized_changes.
 
     Raises:
         SystemExit: If an error occurs during execution.
@@ -58,12 +62,26 @@ def _count_changed_files(base_branch, pr_branch, sensitive_files):
         print(f"Error: {e}")
         sys.exit(1)
     
+    # Decode bytes to string
     changed_files = output.decode("utf-8").strip().split("\n")
     unauthorized_changes = [file for file in changed_files if any(file.startswith(sf) for sf in sensitive_files)]
 
     file_count = len(changed_files)
-    return file_count, unauthorized_changes
+    return ScriptResult(file_count=file_count, unauthorized_changes=unauthorized_changes)
 
+def _check_unauthorized_changes(changed_files, sensitive_files):
+    """
+    Check for unauthorized file changes.
+
+    Args:
+        changed_files (list): List of changed files.
+        sensitive_files (list): List of sensitive files.
+
+    Returns:
+        list: Unauthorized changes.
+
+    """
+    return [file for file in changed_files if any(file.startswith(sf) for sf in sensitive_files)]
 
 def _arg_parser_resolver():
     """Resolve the CLI arguments provided by the user.
@@ -92,31 +110,15 @@ def _arg_parser_resolver():
         "--file_count",
         type=int,
         default=20,
-        help="Number of files changes allowed in a single commit")
+        help="Number of files changes allowed in a single commit"
+    )
     parser.add_argument(
         "--sensitive_files",
-        nargs='+',
-        default=[
-            '.github/',
-            'env.example',
-            '.husky/',
-            'scripts/',
-            'package.json',
-            'tsconfig.json',
-            '.gitignore',
-            '.eslintrc.json',
-            '.eslintignore',
-            'vite.config.ts',
-            'docker-compose.yaml',
-            'Dockerfile',
-            'CODEOWNERS',
-            'LICENSE',
-            'setup.ts'
-        ],
-        help="List of sensitive files and directories."
+        type=str,
+        required=True,
+        help="Path to a file containing a list of sensitive files and directories."
     )
     return parser.parse_args()
-
 
 def main():
     """
@@ -144,14 +146,16 @@ def main():
     print(f"You are trying to merge on branch: {base_branch}")
     print(f"You are making a commit from your branch: {pr_branch}")
 
+    # Read sensitive files from the provided file
+    with open(args.sensitive_files, 'r') as sensitive_file:
+        sensitive_files = [line.strip() for line in sensitive_file]
+
     # Count changed files and check for unauthorized changes
-    file_count, unauthorized_changes = _count_changed_files(
-        base_branch, pr_branch, args.sensitive_files
-    )
-    print(f"Number of changed files: {file_count}")
+    result = _count_changed_files(base_branch, pr_branch, sensitive_files)
+    print(f"Number of changed files: {result.file_count}")
 
     # Check if the count exceeds the allowed limit
-    if file_count > args.file_count:
+    if result.file_count > args.file_count:
         print("Error: Too many files (greater than 20) changed in the pull request.")
         print("Possible issues:")
         print("- Contributor may be merging into an incorrect branch.")
@@ -159,12 +163,12 @@ def main():
         sys.exit(1)
 
     # Check for unauthorized changes
+    unauthorized_changes = _check_unauthorized_changes(result.unauthorized_changes, sensitive_files)
     if unauthorized_changes:
         print("Error: Unauthorized changes detected. Please review the list of modified files:")
         for file in unauthorized_changes:
             print(f" - {file}")
         sys.exit(1)
-
 
 if __name__ == "__main__":
     main()
