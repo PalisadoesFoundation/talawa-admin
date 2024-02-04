@@ -30,38 +30,46 @@
   width: 52px;
 }
 
-.cardHeader {
-  padding: 1.25rem 1rem 1rem 1rem;
-  border-bottom: 1px solid var(--bs-gray-200);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.cardHeader .cardTitle {
-  font-size: 1.3rem;
-  font-weight: 600;
-}
-
-.cardBody {
-  min-height: 150px;
-  background-color: var(--bs-gray-100);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.cardBody .textBox {
-  margin: 0 0 3rem 0;
-  color: var(--bs-secondary);
-}
-
 .container {
   min-height: 100vh;
 }
 
+.datediv {
+  display: flex;
+  flex-direction: row;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+.datebox {
+  width: 90%;
+  border-radius: 7px;
+  border-color: #e8e5e5;
+  outline: none;
+  box-shadow: none;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-right: 5px;
+  padding-left: 5px;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
 .dropdown {
   display: inline;
+}
+
+.dropdownToggle {
+  margin-bottom: 0;
+}
+
+.dropdownModalToggle {
+  width: 50%;
+}
+
+.errorIcon {
+  transform: scale(1.5);
+  color: var(--bs-danger);
+  margin-bottom: 1rem;
 }
 
 form > input {
@@ -79,6 +87,24 @@ form > input {
   -o-transition: all 0.3s ease-in-out;
 }
 
+.greenregbtn {
+  margin: 1rem 0 0;
+  margin-top: 15px;
+  border: 1px solid #e8e5e5;
+  box-shadow: 0 2px 2px #e8e5e5;
+  padding: 10px 10px;
+  border-radius: 5px;
+  background-color: #31bb6b;
+  width: 100%;
+  font-size: 16px;
+  color: white;
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+
 hr {
   border: none;
   height: 1px;
@@ -86,10 +112,12 @@ hr {
   margin: 1rem;
 }
 
+.iconContainer {
+  display: flex;
+  justify-content: flex-end;
+}
 .icon {
-  transform: scale(1.5);
-  color: var(--bs-danger);
-  margin-bottom: 1rem;
+  margin: 1px;
 }
 
 .message {
@@ -101,6 +129,16 @@ hr {
 
 .searchForm {
   display: inline;
+}
+
+.titlemodal {
+  color: #707070;
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid #31bb6b;
+  width: 65%;
 }
 
 @media (max-width: 1020px) {
@@ -121,10 +159,6 @@ hr {
   .btnsContainer .btnsBlock div button {
     margin-right: 1.5rem;
   }
-}
-
-.dropdownToggle {
-  margin-bottom: 0;
 }
 
 @media (max-width: 767px) {

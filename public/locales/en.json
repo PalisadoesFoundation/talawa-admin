@@ -288,10 +288,23 @@
   },
   "organizationActionItems": {
     "title": "Action Items",
+    "actionItemCategory": "Action Item Category",
+    "actionItemDetails": "Action Item Details",
     "createActionItem": "Create",
+    "close": "Close",
     "searchByName": "Search By Name",
+    "preCompletionNotes": "Pre Completion Notes",
+    "postCompletionNotes": "Post Completion Notes",
+    "dueDate": "Due Date",
+    "completionDate": "Completion Date",
     "latest": "Latest",
-    "earliest": "Earliest"
+    "earliest": "Earliest",
+    "update": "Update",
+    "editActionItem": "Edit Action Item",
+    "deleteActionItem": "Delete Action Item",
+    "deleteActionItemMsg": "Do you want to remove this action item?",
+    "yes": "Yes",
+    "no": "No"
   },
   "eventListCard": {
     "location": "Location",
