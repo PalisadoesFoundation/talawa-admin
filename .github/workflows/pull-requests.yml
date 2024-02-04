@@ -71,7 +71,7 @@ jobs:
 
       - name: Run Python script
         run: |
-         python .github/workflows/count_changed_files.py --base_branch "${{ github.base_ref }}" --pr_branch "${{ github.head_ref }}" --sensitive_files .github/workflows/sensitive_files.txt
+         python .github/workflows/count_changed_files.py --base_branch "${{ github.base_ref }}" --pr_branch "${{ github.head_ref }}" --sensitive_files .prettierignore
 
   Test-Application:
     name: Test Application
