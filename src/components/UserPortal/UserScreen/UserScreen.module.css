@@ -31,11 +31,6 @@
   color: black;
 }
 
-.opendrawer:hover {
-  opacity: 1;
-  color: black !important;
-}
-
 @media (max-width: 1120px) {
   .pageContainer {
     padding-left: calc(250px + 1.5rem);
