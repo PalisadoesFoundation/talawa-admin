@@ -35,6 +35,9 @@
   .pageContainer {
     padding-left: calc(250px + 1.5rem);
   }
+  .expand {
+    padding-left: 1.5rem;
+  }
   .contract {
     padding-left: calc(250px + 1.5rem);
   }
