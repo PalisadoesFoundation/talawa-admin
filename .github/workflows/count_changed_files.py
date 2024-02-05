@@ -63,9 +63,10 @@ def _count_changed_files(base_branch, pr_branch, sensitive_files):
         sys.exit(1)
     
     # Decode bytes to string
+    print(sensitive_files)
     changed_files = output.decode("utf-8").strip().split("\n")
-    unauthorized_changes = [file for file in changed_files if any(file.startswith(sf) for sf in sensitive_files)]
-
+    unauthorized_changes = [file for file in changed_files if any(glob.fnmatch.fnmatch(file, sf) for sf in sensitive_files)]
+    print(unauthorized_changes)
     file_count = len(changed_files)
     return ScriptResult(file_count=file_count, unauthorized_changes=unauthorized_changes)
 
@@ -161,7 +162,7 @@ def main():
         print("- Contributor may be merging into an incorrect branch.")
         print("- Source branch may be incorrect; please use 'develop' as the source branch.")
         sys.exit(1)
-
+    print(len(result.unauthorized_changes))
     # Check for unauthorized changes
     unauthorized_changes = _check_unauthorized_changes(result.unauthorized_changes, sensitive_files)
     if unauthorized_changes:
