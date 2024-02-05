@@ -26,20 +26,21 @@ NOTE:
 import sys
 import argparse
 import subprocess
+import fnmatch
 from collections import namedtuple
+from pathlib import Path
 import glob
 
 # Use namedtuple for clarity in return values
 ScriptResult = namedtuple('ScriptResult', ['file_count', 'unauthorized_changes'])
 
-def _count_changed_files(base_branch, pr_branch, sensitive_files):
+def _count_changed_files(base_branch, pr_branch):
     """
     Count the number of changed files between two branches.
 
     Args:
         base_branch (str): The base branch.
         pr_branch (str): The PR branch.
-        sensitive_files (list): List of sensitive files.
 
     Returns:
         ScriptResult: Namedtuple containing file_count and unauthorized_changes.
@@ -63,12 +64,9 @@ def _count_changed_files(base_branch, pr_branch, sensitive_files):
         sys.exit(1)
     
     # Decode bytes to string
-    print(sensitive_files)
     changed_files = output.decode("utf-8").strip().split("\n")
-    unauthorized_changes = [file for file in changed_files if any(glob.fnmatch.fnmatch(file, sf) for sf in sensitive_files)]
-    print(unauthorized_changes)
     file_count = len(changed_files)
-    return ScriptResult(file_count=file_count, unauthorized_changes=unauthorized_changes)
+    return ScriptResult(file_count=file_count, unauthorized_changes=changed_files)
 
 def _check_unauthorized_changes(changed_files, sensitive_files):
     """
@@ -80,9 +78,9 @@ def _check_unauthorized_changes(changed_files, sensitive_files):
 
     Returns:
         list: Unauthorized changes.
-
     """
-    return [file for file in changed_files if any(file.startswith(sf) for sf in sensitive_files)]
+    unauthorized_changes = [file for file in changed_files if any(glob.fnmatch.fnmatch(file, sf) for sf in sensitive_files if sf)]
+    return unauthorized_changes
 
 def _arg_parser_resolver():
     """Resolve the CLI arguments provided by the user.
@@ -152,8 +150,11 @@ def main():
         sensitive_files = [line.strip() for line in sensitive_file]
 
     # Count changed files and check for unauthorized changes
-    result = _count_changed_files(base_branch, pr_branch, sensitive_files)
+    result = _count_changed_files(base_branch, pr_branch)
     print(f"Number of changed files: {result.file_count}")
+    
+    unauthorized_changes = _check_unauthorized_changes(result.unauthorized_changes, sensitive_files)
+    print(f"Unauthorized changes: {unauthorized_changes}")
 
     # Check if the count exceeds the allowed limit
     if result.file_count > args.file_count:
@@ -162,14 +163,14 @@ def main():
         print("- Contributor may be merging into an incorrect branch.")
         print("- Source branch may be incorrect; please use 'develop' as the source branch.")
         sys.exit(1)
-    print(len(result.unauthorized_changes))
-    # Check for unauthorized changes
-    unauthorized_changes = _check_unauthorized_changes(result.unauthorized_changes, sensitive_files)
+
     if unauthorized_changes:
         print("Error: Unauthorized changes detected. Please review the list of modified files:")
         for file in unauthorized_changes:
             print(f" - {file}")
         sys.exit(1)
+    else:
+        print("No unauthorized changes detected. Test passed.")
 
 if __name__ == "__main__":
     main()
