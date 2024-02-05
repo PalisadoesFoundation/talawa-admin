@@ -26,9 +26,7 @@ NOTE:
 import sys
 import argparse
 import subprocess
-import fnmatch
 from collections import namedtuple
-from pathlib import Path
 import glob
 
 # Use namedtuple for clarity in return values
@@ -66,7 +64,7 @@ def _count_changed_files(base_branch, pr_branch):
     # Decode bytes to string
     changed_files = output.decode("utf-8").strip().split("\n")
     file_count = len(changed_files)
-    return ScriptResult(file_count=file_count, unauthorized_changes=changed_files)
+    return ScriptResult(file_count=file_count, unauthorized_changes=output)
 
 def _check_unauthorized_changes(changed_files, sensitive_files):
     """
