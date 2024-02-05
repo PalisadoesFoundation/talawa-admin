@@ -54,15 +54,15 @@ def _count_changed_files(base_branch, pr_branch):
     try:
         # Run git command to get the list of changed files
         process = subprocess.Popen(
-            command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
         )
         output, error = process.communicate()
     except Exception as e:
         print(f"Error: {e}")
         sys.exit(1)
     
-    # Decode bytes to string
-    changed_files = output.decode("utf-8").strip().split("\n")
+    changed_files = [file.strip() for file in output.split('\n') if file.strip()]
+    print(f"Changed files: {changed_files}")
     file_count = len(changed_files)
     return ScriptResult(file_count=file_count, unauthorized_changes=output)
 
