@@ -13,23 +13,6 @@ name: PR Workflow
 
 on:
   pull_request:
-    paths:
-      - '.github/**'
-      - 'env.example'
-      - '.husky/**'
-      - 'scripts/**'
-      - 'package.json'
-      - 'tsconfig.json'
-      - '.gitignore'
-      - '.eslintrc.json'
-      - '.eslintignore'
-      - 'vite.config.ts'
-      - 'docker-compose.yaml'
-      - 'Dockerfile'
-      - 'CODEOWNERS'
-      - 'LICENSE'
-      - 'setup.ts'
-      - '.github/workflows/sensitive_files.txt'
       
     branches:
       - '**'
@@ -89,7 +72,7 @@ jobs:
 
       - name: Run Python script
         run: |
-         python .github/workflows/count_changed_files.py --base_branch "${{ github.base_ref }}" --pr_branch "${{ github.head_ref }}" --sensitive_files .github/workflows/sensitive_files.txt
+         python .github/workflows/check_files.py --base_branch "${{ github.base_ref }}" --pr_branch "${{ github.head_ref }}" --sensitive_files .github/workflows/sensitive_files.txt
 
   Test-Application:
     name: Test Application

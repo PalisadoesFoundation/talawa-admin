@@ -1,7 +1,7 @@
-.github/
+.github/**
 env.example
-.husky/
-scripts/
+.husky/**
+scripts/**
 package.json
 tsconfig.json
 .gitignore
