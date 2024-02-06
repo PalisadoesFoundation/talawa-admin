@@ -11,6 +11,7 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import userEvent from '@testing-library/user-event';
+import { debug } from 'jest-preview';
 
 const MOCKS = [
   {
@@ -46,8 +47,8 @@ describe('Testing Event Card In User portal', () => {
     endDate: '2023-04-15',
     isRegisterable: true,
     isPublic: true,
-    endTime: '19:49:12Z',
-    startTime: '17:49:12Z',
+    endTime: '19:49:12',
+    startTime: '17:49:12',
     recurring: false,
     allDay: true,
     creator: {
@@ -75,6 +76,7 @@ describe('Testing Event Card In User portal', () => {
         </BrowserRouter>
       </MockedProvider>
     );
+    debug();
     await waitFor(() => expect(queryByText('Test Event')).toBeInTheDocument());
     await waitFor(() =>
       expect(queryByText('This is a test event')).toBeInTheDocument()

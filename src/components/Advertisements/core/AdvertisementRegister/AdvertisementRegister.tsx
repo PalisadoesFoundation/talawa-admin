@@ -89,6 +89,10 @@ function advertisementRegister({
   const handleRegister = async (): Promise<void> => {
     try {
       console.log('At handle register', formState);
+      if (formState.endDate < formState.startDate) {
+        toast.error('End date must be greater than or equal to start date');
+        return;
+      }
       const { data } = await create({
         variables: {
           organizationId: currentOrg,

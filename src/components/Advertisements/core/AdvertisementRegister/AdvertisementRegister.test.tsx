@@ -350,6 +350,74 @@ describe('Testing Advertisement Register Component', () => {
     });
   });
 
+  test('Throws error when the end date is less than the start date', async () => {
+    const { getByText, getByLabelText, queryByText } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              {
+                <AdvertisementRegister
+                  endDate={new Date()}
+                  startDate={new Date()}
+                  type="BANNER"
+                  name="Advert1"
+                  organizationId="1"
+                  advertisementMedia="test.png"
+                />
+              }
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>
+    );
+
+    fireEvent.click(getByText(translations.addNew));
+    expect(queryByText(translations.RClose)).toBeInTheDocument();
+    fireEvent.change(getByLabelText(translations.Rname), {
+      target: { value: 'Test Advertisement' },
+    });
+    expect(getByLabelText(translations.Rname)).toHaveValue(
+      'Test Advertisement'
+    );
+
+    const mediaFile = new File(['media content'], 'test.png', {
+      type: 'image/png',
+    });
+
+    const mediaInput = getByLabelText(translations.Rmedia);
+    fireEvent.change(mediaInput, {
+      target: {
+        files: [mediaFile],
+      },
+    });
+
+    const mediaPreview = await screen.findByTestId('mediaPreview');
+    expect(mediaPreview).toBeInTheDocument();
+
+    fireEvent.change(getByLabelText(translations.Rtype), {
+      target: { value: 'BANNER' },
+    });
+    expect(getByLabelText(translations.Rtype)).toHaveValue('BANNER');
+
+    fireEvent.change(getByLabelText(translations.RstartDate), {
+      target: { value: '2023-02-02' },
+    });
+    expect(getByLabelText(translations.RstartDate)).toHaveValue('2023-02-02');
+
+    fireEvent.change(getByLabelText(translations.RendDate), {
+      target: { value: '2023-01-01' },
+    });
+    expect(getByLabelText(translations.RendDate)).toHaveValue('2023-01-01');
+
+    fireEvent.click(getByText(translations.register));
+    await waitFor(() => {
+      expect(toast.error).toBeCalledWith(
+        'End date must be greater than or equal to start date'
+      );
+    });
+  });
+
   test('Media preview renders correctly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>

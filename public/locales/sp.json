@@ -543,6 +543,7 @@
   "memberDetail": {
     "title": "Detalles del usuario",
     "addAdmin": "Agregar administrador",
+    "alreadyIsAdmin": "El Miembro ya es Administrador",
     "organizations": "Organizaciones",
     "events": "Eventos",
     "role": "Rol",
