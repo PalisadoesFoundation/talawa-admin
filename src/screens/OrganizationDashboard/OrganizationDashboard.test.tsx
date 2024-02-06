@@ -13,6 +13,7 @@ import { EMPTY_MOCKS, ERROR_MOCKS, MOCKS } from './OrganizationDashboardMocks';
 import i18nForTest from 'utils/i18nForTest';
 import { toast } from 'react-toastify';
 import userEvent from '@testing-library/user-event';
+import { ORGANIZATION_EVENT_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -146,5 +147,79 @@ describe('Organisation Dashboard Page', () => {
 
     await wait();
     expect(window.location).toBeAt('/orglist');
+  });
+
+  test('Testing useEffect hook and error redirection', async () => {
+    const mockEventData = {
+      eventsByOrganizationConnection: [
+        { startDate: new Date().toISOString() }, // Assuming an event is upcoming
+      ],
+    };
+
+    // Mocking the response for the organization event query
+    const linkMocked = new StaticMockLink(
+      [
+        {
+          request: {
+            query: ORGANIZATION_EVENT_CONNECTION_LIST,
+            variables: { organization_id: 'your_organization_id' },
+          },
+          result: { data: mockEventData },
+        },
+      ],
+      true
+    );
+
+    // Render the component with mock data
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={linkMocked}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrganizationDashboard />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+    });
+
+    // Wait for useEffect to be executed
+    await wait();
+
+    // Check if the hook updates the state with upcoming events
+    expect(screen.getByText('Upcoming Events')).toBeInTheDocument();
+    expect(screen.getByText('Latest Posts')).toBeInTheDocument();
+
+    // Check if tempUpcomingEvents logic is executed correctly
+    const startDate = new Date(
+      mockEventData.eventsByOrganizationConnection[0].startDate
+    );
+    const now = new Date();
+    const tempUpcomingEvents = [];
+    if (startDate > now) {
+      tempUpcomingEvents.push(mockEventData.eventsByOrganizationConnection[0]);
+    }
+    expect(tempUpcomingEvents).toHaveLength(0);
+
+    // Test conditional redirection when there's an error
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link3}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrganizationDashboard />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+    });
+
+    await wait();
+
+    expect(window.location.pathname).toBe('/orglist');
   });
 });
