@@ -22,7 +22,6 @@ type FeedbackType = {
   review: string | null;
 };
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const StyledRating = styled(Rating)({
   '& .MuiRating-iconFilled': {
     color: '#ff6d75',

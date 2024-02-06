@@ -96,8 +96,8 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     const talawaPlugins: string = localStorage.getItem('talawaPlugins') || '{}';
     plugins = JSON.parse(talawaPlugins);
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data: updatedPluginData, loading: _loadingSub } = useSubscription(
+
+  const { data: updatedPluginData } = useSubscription(
     PLUGIN_SUBSCRIPTION
     // { variables: {  } }
   );

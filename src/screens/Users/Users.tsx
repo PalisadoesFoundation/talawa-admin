@@ -279,7 +279,6 @@ const Users = (): JSX.Element => {
             </h4>
           </div>
         ) : isLoading == false && usersData && displayedUsers.length === 0 ? (
-          // eslint-disable-next-line react/jsx-indent
           <div className={styles.notFound}>
             <h4>{t('noUserFound')}</h4>
           </div>

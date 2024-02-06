@@ -8,10 +8,10 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 
-interface InterfaceAddOnRegisterProps {
-  id?: string; // OrgId
-  createdBy?: string; // User
-}
+// interface InterfaceAddOnRegisterProps {
+//   id?: string; // OrgId
+//   createdBy?: string; // User
+// }
 interface InterfaceFormStateTypes {
   name: string;
   link: string;
@@ -20,11 +20,8 @@ interface InterfaceFormStateTypes {
   endDate: Date;
   orgId: string;
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function advertisementRegister({
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  createdBy,
-}: InterfaceAddOnRegisterProps): JSX.Element {
+
+function advertisementRegister(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
 
   const [show, setShow] = useState(false);

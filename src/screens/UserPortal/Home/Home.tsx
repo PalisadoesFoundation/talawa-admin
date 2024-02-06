@@ -72,10 +72,10 @@ export default function home(): JSX.Element {
   };
   const {
     data: promotedPostsData,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    refetch: _promotedPostsRefetch,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    loading: promotedPostsLoading,
+
+    // refetch: _promotedPostsRefetch,
+
+    // loading: promotedPostsLoading,
   } = useQuery(ADVERTISEMENTS_GET);
   const {
     data,

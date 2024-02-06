@@ -1,45 +1,38 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'react';
+import React, { useState } from 'react';
+
 import styles from './Advertisements.module.css';
 import { useQuery } from '@apollo/client';
 import { ADVERTISEMENTS_GET, PLUGIN_GET } from 'GraphQl/Queries/Queries'; // PLUGIN_LIST
-import { useSelector } from 'react-redux';
-import type { RootState } from '../../state/reducers';
-import { Col, Form, Row, Tab, Tabs } from 'react-bootstrap';
+// import { useSelector } from 'react-redux';
+// import type { RootState } from '../../state/reducers';
+import { Col, Row, Tab, Tabs } from 'react-bootstrap';
 import PluginHelper from 'components/AddOn/support/services/Plugin.helper';
 import { store } from 'state/store';
 import { useTranslation } from 'react-i18next';
-import Loader from 'components/Loader/Loader';
+
 import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 import AdvertisementEntry from './core/AdvertisementEntry/AdvertisementEntry';
 import AdvertisementRegister from './core/AdvertisementRegister/AdvertisementRegister';
-import AddOnRegister from 'components/AddOn/core/AddOnRegister/AddOnRegister';
+
 export default function advertisements(): JSX.Element {
-  const {
-    data: data2,
-    loading: loading2,
-    error: error2,
-  } = useQuery(ADVERTISEMENTS_GET);
+  const { data: data2 } = useQuery(ADVERTISEMENTS_GET);
   const currentOrgId = window.location.href.split('/id=')[1] + '';
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   document.title = t('title');
 
   const [isStore, setIsStore] = useState(true);
-  const [showEnabled, setShowEnabled] = useState(true);
-  const [searchText, setSearchText] = useState('');
-  const [dataList, setDataList] = useState([]);
+  // const [, setShowEnabled] = useState(true);
 
-  const [render, setRender] = useState(true);
-  const appRoutes = useSelector((state: RootState) => state.appRoutes);
-  const { targets, configUrl } = appRoutes;
+  const [, setDataList] = useState([]);
 
-  const plugins = useSelector((state: RootState) => state.plugins);
-  const { installed, addonStore } = plugins;
-  const { data, loading, error } = useQuery(PLUGIN_GET);
+  // const appRoutes = useSelector((state: RootState) => state.appRoutes);
+
+  // const plugins = useSelector((state: RootState) => state.plugins);
+
+  const { data, loading } = useQuery(PLUGIN_GET);
   /* istanbul ignore next */
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const getStorePlugins = async () => {
+
+  const getStorePlugins = async (): Promise<void> => {
     let plugins = await new PluginHelper().fetchStore();
     const installIds = (await new PluginHelper().fetchInstalled()).map(
       (plugin: any) => plugin.id
@@ -60,26 +53,26 @@ export default function advertisements(): JSX.Element {
   // }
 
   /* istanbul ignore next */
-  const updateLinks = async (links: any[]): Promise<void> => {
-    store.dispatch({ type: 'UPDATE_P_TARGETS', payload: links });
-  };
+  // const updateLinks = async (links: any[]): Promise<void> => {
+  //   store.dispatch({ type: 'UPDATE_P_TARGETS', payload: links });
+  // };
   // /* istanbul ignore next */
-  const pluginModified = (): void => {
-    return getInstalledPlugins();
-    // .then((installedPlugins) => {
-    //   getStorePlugins();
-    //   return installedPlugins;
-    // });
-  };
+  // const pluginModified = (): void => {
+  //   return getInstalledPlugins();
+  //   // .then((installedPlugins) => {
+  //   //   getStorePlugins();
+  //   //   return installedPlugins;
+  //   // });
+  // };
 
   const updateSelectedTab = (tab: any): void => {
     setIsStore(tab === 'activeAds');
     isStore ? getStorePlugins() : getInstalledPlugins();
   };
 
-  const filterChange = (ev: any): void => {
-    setShowEnabled(ev.target.value === 'enabled');
-  };
+  // const filterChange = (ev: any): void => {
+  //   setShowEnabled(ev.target.value === 'enabled');
+  // };
 
   /* istanbul ignore next */
   if (loading) {

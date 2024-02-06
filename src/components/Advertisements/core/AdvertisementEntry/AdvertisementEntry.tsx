@@ -18,12 +18,8 @@ function advertisementEntry({
   id,
   name,
   type,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  orgId,
   link,
   endDate,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  startDate,
 }: InterfaceAddOnEntryProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const [buttonLoading, setButtonLoading] = useState(false);

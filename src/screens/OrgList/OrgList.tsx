@@ -35,15 +35,14 @@ function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
   const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
   const [dialogRedirectOrgId, setDialogRedirectOrgId] = useState('<ORG_ID>');
-  /* eslint-disable @typescript-eslint/explicit-function-return-type */
-  function openDialogModal(redirectOrgId: string) {
+
+  function openDialogModal(redirectOrgId: string): void {
     setDialogRedirectOrgId(redirectOrgId);
     // console.log(redirectOrgId, dialogRedirectOrgId);
     setdialogModalIsOpen(true);
   }
 
-  /* eslint-disable @typescript-eslint/explicit-function-return-type */
-  function closeDialogModal() {
+  function closeDialogModal(): void {
     setdialogModalIsOpen(false);
   }
   const toggleDialogModal = (): void =>
@@ -142,7 +141,7 @@ function orgList(): JSX.Element {
     }
   };
 
-  const triggerCreateSampleOrg = () => {
+  const triggerCreateSampleOrg = (): void => {
     createSampleOrganization()
       .then(() => {
         toast.success(t('sampleOrgSuccess'));

@@ -31,7 +31,6 @@ interface InterfaceOrgPostCardProps {
   pinned: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export default function OrgPostCard(
   props: InterfaceOrgPostCardProps
 ): JSX.Element {
