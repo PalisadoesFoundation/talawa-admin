@@ -1,5 +1,4 @@
 import React from 'react';
-import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
 import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/OrganizationSidebar';
 import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
 import OrgScreen from 'components/UserPortal/OrgScreen/OrgScreen';
@@ -108,13 +107,8 @@ export default function people(): JSX.Element {
     }
   }, [mode]);
 
-  const navbarProps = {
-    currentPage: 'people',
-  };
-
   return (
     <>
-      <OrganizationNavbar {...navbarProps} />
       <OrgScreen screenName="People">
         <div className={`d-flex flex-row ${styles.containerHeight}`}>
           <div className={`${styles.colorLight} ${styles.mainContainer}`}>

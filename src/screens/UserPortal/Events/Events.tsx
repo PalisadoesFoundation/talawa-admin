@@ -1,5 +1,4 @@
 import React from 'react';
-import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
 import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/OrganizationSidebar';
 import EventCard from 'components/UserPortal/EventCard/EventCard';
 import OrgScreen from 'components/UserPortal/OrgScreen/OrgScreen';
@@ -201,13 +200,8 @@ export default function events(): JSX.Element {
     }
   }, [data]);
 
-  const navbarProps = {
-    currentPage: 'events',
-  };
-
   return (
     <>
-      <OrganizationNavbar {...navbarProps} />
       <OrgScreen screenName="Events">
         <div className={`d-flex flex-row ${styles.containerHeight}`}>
           <div className={`${styles.colorLight} ${styles.mainContainer}`}>

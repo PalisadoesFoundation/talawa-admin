@@ -597,18 +597,6 @@
     "invalidDetailsMessage": "कृपया मान्य विवरण दर्ज करें।",
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। कृपया अपना नेटवर्क कनेक्शन जांचें और कुछ देर प्रतीक्षा करें।"
   },
-  "userNavbar": {
-    "talawa": "तलावा",
-    "home": "घर",
-    "people": "लोग",
-    "events": "आयोजन",
-    "chat": "बातचीत",
-    "donate": "दान देना",
-    "settings": "समायोजन",
-    "language": "भाषा",
-    "logout": "लॉग आउट",
-    "close": "बंद करना"
-  },
   "userOrganizations": {
     "allOrganizations": "सभी संगठन",
     "joinedOrganizations": "संगठन शामिल हुए",

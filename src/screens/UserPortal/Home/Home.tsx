@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
-import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
 import styles from './Home.module.css';
 import OrgScreen from 'components/UserPortal/OrgScreen/OrgScreen';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -88,9 +87,6 @@ export default function home(): JSX.Element {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const currentOrgId = window.location.href.split('/id=')[1] + '';
 
-  const navbarProps = {
-    currentPage: 'home',
-  };
   const {
     data: promotedPostsData,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -197,7 +193,6 @@ export default function home(): JSX.Element {
 
   return (
     <>
-      <OrganizationNavbar {...navbarProps} />
       <OrgScreen screenName="Posts">
         <div className={`d-flex flex-row ${styles.containerHeight}`}>
           <div className={`${styles.colorLight} ${styles.mainContainer}`}>

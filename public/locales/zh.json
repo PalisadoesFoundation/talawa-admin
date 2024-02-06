@@ -597,18 +597,6 @@
     "invalidDetailsMessage": "請輸入有效的詳細信息。",
     "talawaApiUnavailable": "Talawa-API 服務不可用。 請檢查您的網絡連接並稍等片刻。"
   },
-  "userNavbar": {
-    "talawa": "塔拉瓦",
-    "home": "家",
-    "people": "人們",
-    "events": "活動",
-    "chat": "聊天",
-    "donate": "捐",
-    "settings": "設置",
-    "language": "語言",
-    "logout": "登出",
-    "close": "關閉"
-  },
   "userOrganizations": {
     "allOrganizations": "所有組織",
     "joinedOrganizations": "加入組織",

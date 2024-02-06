@@ -2,7 +2,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './Settings.module.css';
 import UserScreen from 'components/UserPortal/UserScreen/UserScreen';
-import UserNavbar from 'components/UserPortal/UserNavbar/UserNavbar';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -79,7 +78,6 @@ export default function settings(): JSX.Element {
 
   return (
     <>
-      <UserNavbar />
       <UserScreen screenName="Settings">
         <div className={`d-flex flex-row ${styles.containerHeight}`}>
           <div className={`${styles.mainContainer}`}>

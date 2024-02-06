@@ -601,18 +601,6 @@
     "invalidDetailsMessage": "Please enter valid details.",
     "talawaApiUnavailable": "Talawa-API service is unavailable. Kindly check your network connection and wait for a while."
   },
-  "userNavbar": {
-    "talawa": "Talawa",
-    "home": "Home",
-    "people": "People",
-    "events": "Events",
-    "chat": "Chat",
-    "donate": "Donate",
-    "settings": "Settings",
-    "language": "Language",
-    "logout": "Logout",
-    "close": "Close"
-  },
   "userOrganizations": {
     "allOrganizations": "All Organizations",
     "joinedOrganizations": "Joined Organizations",

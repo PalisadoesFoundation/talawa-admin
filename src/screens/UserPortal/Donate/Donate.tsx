@@ -1,5 +1,4 @@
 import React from 'react';
-import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
 import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/OrganizationSidebar';
 import OrgScreen from 'components/UserPortal/OrgScreen/OrgScreen';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
@@ -49,10 +48,6 @@ export default function donate(): JSX.Element {
     variables: { id: organizationId },
   });
 
-  const navbarProps = {
-    currentPage: 'donate',
-  };
-
   /* istanbul ignore next */
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
@@ -85,7 +80,6 @@ export default function donate(): JSX.Element {
 
   return (
     <>
-      <OrganizationNavbar {...navbarProps} />
       <OrgScreen screenName="Donate">
         <div className={`d-flex flex-row ${styles.containerHeight}`}>
           <div className={`${styles.colorLight} ${styles.mainContainer}`}>

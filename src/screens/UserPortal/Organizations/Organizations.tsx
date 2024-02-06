@@ -1,5 +1,4 @@
 import React from 'react';
-import UserNavbar from 'components/UserPortal/UserNavbar/UserNavbar';
 import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
 import UserScreen from 'components/UserPortal/UserScreen/UserScreen';
 import { Dropdown, Form, InputGroup } from 'react-bootstrap';
@@ -120,7 +119,6 @@ export default function organizations(): JSX.Element {
 
   return (
     <>
-      <UserNavbar />
       <UserScreen screenName="Organizations">
         <div className={`d-flex flex-row ${styles.containerHeight}`}>
           <div className={`${styles.colorLight} ${styles.mainContainer}`}>

@@ -596,18 +596,6 @@
     "invalidDetailsMessage": "Ingrese detalles válidos.",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. Compruebe amablemente su conexión de red y espere un momento."
   },
-  "userNavbar": {
-    "talawa": "Talawa",
-    "home": "Hogar",
-    "people": "Gente",
-    "events": "Eventos",
-    "chat": "Charlar",
-    "donate": "Donar",
-    "settings": "Ajustes",
-    "language": "Idioma",
-    "logout": "Cerrar sesión",
-    "close": "Cerca"
-  },
   "userOrganizations": {
     "allOrganizations": "Todas las organizaciones",
     "joinedOrganizations": "Organizaciones unidas",

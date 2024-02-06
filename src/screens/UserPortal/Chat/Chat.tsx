@@ -1,5 +1,4 @@
 import React from 'react';
-import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
 import OrgScreen from 'components/UserPortal/OrgScreen/OrgScreen';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
@@ -37,10 +36,6 @@ export default function chat(): JSX.Element {
   const [selectedContactName, setSelectedContactName] = React.useState('');
   const [contacts, setContacts] = React.useState([]);
   const [filterName, setFilterName] = React.useState('');
-
-  const navbarProps = {
-    currentPage: 'chat',
-  };
 
   const chatRoomProps: InterfaceChatRoomProps = {
     selectedContact,
@@ -84,7 +79,6 @@ export default function chat(): JSX.Element {
 
   return (
     <>
-      <OrganizationNavbar {...navbarProps} />
       <OrgScreen screenName="Chat">
         <div className={`d-flex flex-row ${styles.containerHeight}`}>
           <div className={`${styles.colorLight} ${styles.mainContainer}`}>
