@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/Loader/Loader.tsx:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/780d70f/src/components/Loader/Loader.tsx#L10)
+[src/components/Loader/Loader.tsx:10](https://github.com/disha1202/talawa-admin/blob/b5fc6de/src/components/Loader/Loader.tsx#L10)

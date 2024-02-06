@@ -25,4 +25,4 @@
 
 #### Defined in
 
-[src/components/CheckIn/types.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/780d70f/src/components/CheckIn/types.ts#L19)
+[src/components/CheckIn/types.ts:19](https://github.com/disha1202/talawa-admin/blob/b5fc6de/src/components/CheckIn/types.ts#L19)
