@@ -30,4 +30,4 @@
 
 #### Defined in
 
-[src/components/OrganizationDashCards/CardItem.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/66ecb91/src/components/OrganizationDashCards/CardItem.tsx#L21)
+[src/components/OrganizationDashCards/CardItem.tsx:21](https://github.com/pateldivyesh1323/talawa-admin/blob/cd0a761/src/components/OrganizationDashCards/CardItem.tsx#L21)

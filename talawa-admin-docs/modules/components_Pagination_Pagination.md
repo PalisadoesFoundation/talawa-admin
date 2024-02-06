@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/Pagination/Pagination.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/66ecb91/src/components/Pagination/Pagination.tsx#L20)
+[src/components/Pagination/Pagination.tsx:20](https://github.com/pateldivyesh1323/talawa-admin/blob/cd0a761/src/components/Pagination/Pagination.tsx#L20)

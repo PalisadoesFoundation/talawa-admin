@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/EventRegistrantsModal/EventRegistrantsModal.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/66ecb91/src/components/EventRegistrantsModal/EventRegistrantsModal.tsx#L30)
+[src/components/EventRegistrantsModal/EventRegistrantsModal.tsx:30](https://github.com/pateldivyesh1323/talawa-admin/blob/cd0a761/src/components/EventRegistrantsModal/EventRegistrantsModal.tsx#L30)
