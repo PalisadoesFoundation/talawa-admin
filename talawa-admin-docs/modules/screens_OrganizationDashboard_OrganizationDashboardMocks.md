@@ -18,7 +18,7 @@
 
 #### Defined in
 
-[src/screens/OrganizationDashboard/OrganizationDashboardMocks.ts:197](https://github.com/PalisadoesFoundation/talawa-admin/blob/780d70f/src/screens/OrganizationDashboard/OrganizationDashboardMocks.ts#L197)
+[src/screens/OrganizationDashboard/OrganizationDashboardMocks.ts:197](https://github.com/PalisadoesFoundation/talawa-admin/blob/66ecb91/src/screens/OrganizationDashboard/OrganizationDashboardMocks.ts#L197)
 
 ___
 
@@ -28,7 +28,7 @@ ___
 
 #### Defined in
 
-[src/screens/OrganizationDashboard/OrganizationDashboardMocks.ts:281](https://github.com/PalisadoesFoundation/talawa-admin/blob/780d70f/src/screens/OrganizationDashboard/OrganizationDashboardMocks.ts#L281)
+[src/screens/OrganizationDashboard/OrganizationDashboardMocks.ts:281](https://github.com/PalisadoesFoundation/talawa-admin/blob/66ecb91/src/screens/OrganizationDashboard/OrganizationDashboardMocks.ts#L281)
 
 ___
 
@@ -38,4 +38,4 @@ ___
 
 #### Defined in
 
-[src/screens/OrganizationDashboard/OrganizationDashboardMocks.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/780d70f/src/screens/OrganizationDashboard/OrganizationDashboardMocks.ts#L8)
+[src/screens/OrganizationDashboard/OrganizationDashboardMocks.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/66ecb91/src/screens/OrganizationDashboard/OrganizationDashboardMocks.ts#L8)
