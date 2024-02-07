@@ -4,6 +4,7 @@ import {
   ORGANIZATION_POST_CONNECTION_LIST,
 } from 'GraphQl/Queries/Queries';
 import dayjs from 'dayjs';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
 export const MOCKS = [
   {
@@ -298,3 +299,23 @@ export const ERROR_MOCKS = [
     error: new Error('Mock Graphql ORGANIZATION_EVENT_LIST Error'),
   },
 ];
+
+export const mockEventData = {
+  eventsByOrganizationConnection: [
+    { startDate: new Date().toISOString() }, // Assuming an event is upcoming
+  ],
+};
+
+// Mocking the response for the organization event query
+export const linkMocked = new StaticMockLink(
+  [
+    {
+      request: {
+        query: ORGANIZATION_EVENT_CONNECTION_LIST,
+        variables: { organization_id: 'your_organization_id' },
+      },
+      result: { data: mockEventData },
+    },
+  ],
+  true
+);

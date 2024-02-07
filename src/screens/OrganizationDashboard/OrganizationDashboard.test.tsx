@@ -9,11 +9,16 @@ import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import OrganizationDashboard from './OrganizationDashboard';
-import { EMPTY_MOCKS, ERROR_MOCKS, MOCKS } from './OrganizationDashboardMocks';
+import {
+  EMPTY_MOCKS,
+  ERROR_MOCKS,
+  MOCKS,
+  linkMocked,
+  mockEventData,
+} from './OrganizationDashboardMocks';
 import i18nForTest from 'utils/i18nForTest';
 import { toast } from 'react-toastify';
 import userEvent from '@testing-library/user-event';
-import { ORGANIZATION_EVENT_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -150,26 +155,6 @@ describe('Organisation Dashboard Page', () => {
   });
 
   test('Testing useEffect hook and error redirection', async () => {
-    const mockEventData = {
-      eventsByOrganizationConnection: [
-        { startDate: new Date().toISOString() }, // Assuming an event is upcoming
-      ],
-    };
-
-    // Mocking the response for the organization event query
-    const linkMocked = new StaticMockLink(
-      [
-        {
-          request: {
-            query: ORGANIZATION_EVENT_CONNECTION_LIST,
-            variables: { organization_id: 'your_organization_id' },
-          },
-          result: { data: mockEventData },
-        },
-      ],
-      true
-    );
-
     // Render the component with mock data
     await act(async () => {
       render(
