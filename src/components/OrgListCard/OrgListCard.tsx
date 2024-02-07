@@ -15,7 +15,8 @@ export interface InterfaceOrgListCardProps {
 }
 
 function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
-  const { _id, admins, image, address, members, name } = props.data;
+  const { _id, admins, image, address, members, name, description } =
+    props.data;
 
   const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
     variables: {
@@ -60,23 +61,35 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
             <Tooltip title={name} placement="top-end">
               <h4 className={styles.orgName}>{name}</h4>
             </Tooltip>
+            {description && (
+              <div>
+                <h6>
+                  About Us:{' '}
+                  <span title={description}>
+                    {description.length > 55
+                      ? description.substring(0, 55) + '...'
+                      : description}
+                  </span>
+                </h6>
+              </div>
+            )}
             {address && address.city && (
               <div>
                 <h6 className="text-secondary">
-                  <LocationOnIcon fontSize="inherit" className="fs-5" />
-                  <span className="address-line">{address.city}, </span>
-                  <span className="address-line">{address.state}</span>
+                  <span className="address-line">
+                    {address.city}
+                    {address.postalCode ? ', ' + address.postalCode : ''}
+                  </span>
+                  <span className="address-line">
+                    {address.state ? ', ' + address.state : ''}
+                  </span>
                   <br />
-                  <LocationOnIcon fontSize="inherit" className="fs-5" />
-                  <span className="address-line">{address.postalCode}, </span>
                   <span className="address-line">{address.countryCode}</span>
                 </h6>
               </div>
             )}
             <h6>
-              {t('admins')}: <span>{admins.length}</span>
-            </h6>
-            <h6>
+              {t('admins')}: <span>{admins.length}</span>&nbsp;
               {t('members')}: <span>{members.length}</span>
             </h6>
           </div>
