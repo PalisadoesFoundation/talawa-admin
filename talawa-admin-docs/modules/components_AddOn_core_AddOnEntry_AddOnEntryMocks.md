@@ -16,4 +16,4 @@
 
 #### Defined in
 
-[src/components/AddOn/core/AddOnEntry/AddOnEntryMocks.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/7d26438/src/components/AddOn/core/AddOnEntry/AddOnEntryMocks.ts#L13)
+[src/components/AddOn/core/AddOnEntry/AddOnEntryMocks.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/f07248e/src/components/AddOn/core/AddOnEntry/AddOnEntryMocks.ts#L13)
