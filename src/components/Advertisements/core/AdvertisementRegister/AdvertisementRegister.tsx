@@ -141,6 +141,10 @@ function advertisementRegister({
       if (formState.type !== typeEdit) {
         updatedFields.type = formState.type;
       }
+      if (formState.endDate < formState.startDate) {
+        toast.error('End date must be greater than or equal to start date');
+        return;
+      }
       const startDateFormattedString = dayjs(formState.startDate).format(
         'YYYY-MM-DD'
       );
