@@ -20,4 +20,4 @@
 
 #### Defined in
 
-[src/components/UserPortal/UserNavbar/UserNavbar.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/66ecb91/src/components/UserPortal/UserNavbar/UserNavbar.tsx#L15)
+[src/components/UserPortal/UserNavbar/UserNavbar.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/7d26438/src/components/UserPortal/UserNavbar/UserNavbar.tsx#L15)
