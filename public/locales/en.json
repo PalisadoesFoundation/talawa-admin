@@ -297,6 +297,7 @@
     "postCompletionNotes": "Post Completion Notes",
     "dueDate": "Due Date",
     "completionDate": "Completion Date",
+    "isCompleted": "Completed",
     "latest": "Latest",
     "earliest": "Earliest",
     "update": "Update",
@@ -305,7 +306,8 @@
     "deleteActionItemMsg": "Do you want to remove this action item?",
     "yes": "Yes",
     "no": "No",
-    "successfulCreation": "Action Item created successfully"
+    "successfulCreation": "Action Item created successfully",
+    "successfulUpdation": "Action Item updated successfully"
   },
   "eventListCard": {
     "location": "Location",

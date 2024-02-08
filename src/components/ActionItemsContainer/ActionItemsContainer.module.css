@@ -1,0 +1,63 @@
+.checkboxdiv > label {
+  margin-right: 50px;
+}
+.checkboxdiv > label > input {
+  margin-left: 10px;
+}
+
+.checkboxdiv > div {
+  width: 50%;
+}
+
+.dispflex {
+  display: flex;
+  align-items: center;
+}
+
+.datediv {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 15px;
+}
+
+.datebox {
+  width: 90%;
+  border-radius: 7px;
+  border-color: #e8e5e5;
+  outline: none;
+  box-shadow: none;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-right: 5px;
+  padding-left: 5px;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.greenregbtn {
+  margin: 1rem 0 0;
+  margin-top: 15px;
+  border: 1px solid #e8e5e5;
+  box-shadow: 0 2px 2px #e8e5e5;
+  padding: 10px 10px;
+  border-radius: 5px;
+  background-color: #31bb6b;
+  width: 100%;
+  font-size: 16px;
+  color: white;
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+
+.titlemodal {
+  color: #707070;
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid #31bb6b;
+  width: 65%;
+}

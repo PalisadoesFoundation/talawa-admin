@@ -22,7 +22,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import Loader from 'components/Loader/Loader';
-import ActionItemContainer from 'components/ActionItemContainer/ActionItemContainer';
+import ActionItemsContainer from 'components/ActionItemsContainer/ActionItemsContainer';
 import { CREATE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
 
@@ -33,8 +33,9 @@ function organizationActionItems(): JSX.Element {
 
   const currentUrl = window.location.href.split('=')[1];
 
-  const [eventCreateModalIsOpen, setEventCreateModalIsOpen] = useState(false);
-  const [dueDate, setDueDate] = React.useState<Date | null>(new Date());
+  const [actionItemCreateModalIsOpen, setActionItemCreateModalIsOpen] =
+    useState(false);
+  const [dueDate, setDueDate] = useState<Date | null>(new Date());
 
   const [formState, setFormState] = useState({
     actionItemCategoryId: '',
@@ -116,11 +117,11 @@ function organizationActionItems(): JSX.Element {
   };
 
   const showCreateModal = (): void => {
-    setEventCreateModalIsOpen(!eventCreateModalIsOpen);
+    setActionItemCreateModalIsOpen(!actionItemCreateModalIsOpen);
   };
 
   const hideCreateModal = (): void => {
-    setEventCreateModalIsOpen(!eventCreateModalIsOpen);
+    setActionItemCreateModalIsOpen(!actionItemCreateModalIsOpen);
   };
 
   if (actionItemCategoriesLoading || membersLoading || actionItemsLoading) {
@@ -263,18 +264,22 @@ function organizationActionItems(): JSX.Element {
 
           <hr />
 
-          <ActionItemContainer data={actionItemsData} />
+          <ActionItemsContainer
+            actionItemsData={actionItemsData}
+            membersData={membersData.organizations[0].members}
+            refetch={refetch}
+          />
         </div>
       </OrganizationScreen>
 
       {/* Create Modal */}
-      <Modal show={eventCreateModalIsOpen} onHide={hideCreateModal}>
+      <Modal show={actionItemCreateModalIsOpen} onHide={hideCreateModal}>
         <Modal.Header>
           <p className={styles.titlemodal}>{t('actionItemDetails')}</p>
           <Button
             variant="danger"
             onClick={hideCreateModal}
-            data-testid="createEventModalCloseBtn"
+            data-testid="createActionItemModalCloseBtn"
           >
             <i className="fa fa-times"></i>
           </Button>
@@ -328,10 +333,12 @@ function organizationActionItems(): JSX.Element {
               </Form.Select>
             </Form.Group>
 
-            <label htmlFor="eventdescrip">{t('preCompletionNotes')}</label>
+            <label htmlFor="actionItemPreCompletionNotes">
+              {t('preCompletionNotes')}
+            </label>
             <Form.Control
-              type="eventdescrip"
-              id="eventdescrip"
+              type="actionItemPreCompletionNotes"
+              id="actionItemPreCompletionNotes"
               placeholder={t('preCompletionNotes')}
               autoComplete="off"
               value={formState.preCompletionNotes}
@@ -359,8 +366,8 @@ function organizationActionItems(): JSX.Element {
             <Button
               type="submit"
               className={styles.greenregbtn}
-              value="createevent"
-              data-testid="createEventBtn"
+              value="createActionItem"
+              data-testid="createActionItem"
             >
               {t('createActionItem')}
             </Button>

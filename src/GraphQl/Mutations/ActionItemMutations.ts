@@ -82,6 +82,7 @@ export const UPDATE_ACTION_ITEM_MUTATION = gql`
       }
       assignmentDate
       dueDate
+      completionDate
       event {
         title
       }
