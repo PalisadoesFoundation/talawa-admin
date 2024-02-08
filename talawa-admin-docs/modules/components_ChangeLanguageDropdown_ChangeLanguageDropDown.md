@@ -47,4 +47,8 @@ ___
 
 #### Defined in
 
+<<<<<<< HEAD
 [src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/21489da/src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx#L17)
+=======
+[src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx:17](https://github.com/disha1202/talawa-admin/blob/b5fc6de/src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx#L17)
+>>>>>>> 5a5a122704c0782c3217dd93544440370746b092
