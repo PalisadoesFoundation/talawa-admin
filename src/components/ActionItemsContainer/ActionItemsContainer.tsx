@@ -11,7 +11,10 @@ import type {
 import styles from './ActionItemsContainer.module.css';
 import { DatePicker } from '@mui/x-date-pickers';
 import { toast } from 'react-toastify';
-import { UPDATE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  DELETE_ACTION_ITEM_MUTATION,
+  UPDATE_ACTION_ITEM_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 
 function actionItemsContainer({
@@ -29,6 +32,9 @@ function actionItemsContainer({
 
   const [actionItemUpdateModalIsOpen, setActionItemUpdateModalIsOpen] =
     useState(false);
+  const [actionItemDeleteModalIsOpen, setActionItemDeleteModalIsOpen] =
+    useState(false);
+
   const [dueDate, setDueDate] = useState<Date | null>(new Date());
   const [completionDate, setCompletionDate] = useState<Date | null>();
   const [actionItemId, setActionItemId] = useState('');
@@ -48,6 +54,10 @@ function actionItemsContainer({
   const hideUpdateModal = (): void => {
     setActionItemId('');
     setActionItemUpdateModalIsOpen(!actionItemUpdateModalIsOpen);
+  };
+
+  const toggleDeleteModal = (): void => {
+    setActionItemDeleteModalIsOpen(!actionItemDeleteModalIsOpen);
   };
 
   const [updateActionItem] = useMutation(UPDATE_ACTION_ITEM_MUTATION);
@@ -74,6 +84,24 @@ function actionItemsContainer({
       toast.success(t('successfulUpdation'));
     } catch (error: any) {
       toast.success(error.message);
+      console.log(error);
+    }
+  };
+
+  const [removeActionItem] = useMutation(DELETE_ACTION_ITEM_MUTATION);
+  const deleteActionItemHandler = async (): Promise<void> => {
+    try {
+      await removeActionItem({
+        variables: {
+          actionItemId,
+        },
+      });
+
+      refetch();
+      toggleDeleteModal();
+      toast.success(t('successfulDeletion'));
+    } catch (error: any) {
+      toast.error(error.message);
       console.log(error);
     }
   };
@@ -169,7 +197,10 @@ function actionItemsContainer({
                       size="sm"
                       data-testid="deleteActionItemModalBtn"
                       variant="danger"
-                      // onClick={toggleDeleteModal}
+                      onClick={() => {
+                        setActionItemId(actionItem._id);
+                        toggleDeleteModal();
+                      }}
                     >
                       {' '}
                       <i className="fa fa-trash"></i>
@@ -309,13 +340,49 @@ function actionItemsContainer({
             <Button
               type="submit"
               className={styles.greenregbtn}
-              value="updateActionItem"
-              data-testid="updateActionItemBtn"
+              value="editActionItem"
+              data-testid="editActionItemBtn"
             >
-              {t('update')}
+              {t('editActionItem')}
             </Button>
           </Form>
         </Modal.Body>
+      </Modal>
+
+      {/* Delete Modal */}
+      <Modal
+        size="sm"
+        id={`deleteActionItemModal`}
+        show={actionItemDeleteModalIsOpen}
+        onHide={toggleDeleteModal}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton className="bg-primary">
+          <Modal.Title className="text-white" id={`deleteActionItem`}>
+            {t('deleteActionItem')}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{t('deleteActionItemMsg')}</Modal.Body>
+        <Modal.Footer>
+          <Button
+            type="button"
+            className="btn btn-danger"
+            data-dismiss="modal"
+            onClick={toggleDeleteModal}
+            data-testid="actionItemDeleteModalCloseBtn"
+          >
+            {t('no')}
+          </Button>
+          <Button
+            type="button"
+            className="btn btn-success"
+            onClick={deleteActionItemHandler}
+            data-testid="deleteActionItemBtn"
+          >
+            {t('yes')}
+          </Button>
+        </Modal.Footer>
       </Modal>
     </>
   );

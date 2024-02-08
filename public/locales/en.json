@@ -300,14 +300,14 @@
     "isCompleted": "Completed",
     "latest": "Latest",
     "earliest": "Earliest",
-    "update": "Update",
     "editActionItem": "Edit Action Item",
     "deleteActionItem": "Delete Action Item",
     "deleteActionItemMsg": "Do you want to remove this action item?",
     "yes": "Yes",
     "no": "No",
     "successfulCreation": "Action Item created successfully",
-    "successfulUpdation": "Action Item updated successfully"
+    "successfulUpdation": "Action Item updated successfully",
+    "successfulDeletion": "Action Item deleted successfully"
   },
   "eventListCard": {
     "location": "Location",
