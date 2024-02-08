@@ -52,6 +52,22 @@
   width: 100%;
 }
 
+.iconContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+.icon {
+  margin: 1px;
+}
+
+.preview {
+  display: flex;
+  flex-direction: row;
+  font-weight: 900;
+  font-size: 16px;
+  color: rgb(80, 80, 80);
+}
+
 .titlemodal {
   color: #707070;
   font-weight: 600;
@@ -60,4 +76,11 @@
   padding-bottom: 5px;
   border-bottom: 3px solid #31bb6b;
   width: 65%;
+}
+
+.view {
+  margin-left: 2%;
+  font-weight: 600;
+  font-size: 16px;
+  color: #707070;
 }

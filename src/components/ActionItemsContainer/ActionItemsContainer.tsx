@@ -30,25 +30,51 @@ function actionItemsContainer({
     keyPrefix: 'organizationActionItems',
   });
 
+  const [actionItemPreviewModalIsOpen, setActionItemPreviewModalIsOpen] =
+    useState(false);
   const [actionItemUpdateModalIsOpen, setActionItemUpdateModalIsOpen] =
     useState(false);
   const [actionItemDeleteModalIsOpen, setActionItemDeleteModalIsOpen] =
     useState(false);
 
+  const [assignmentDate, setAssignmentDate] = useState<Date | null>(new Date());
   const [dueDate, setDueDate] = useState<Date | null>(new Date());
   const [completionDate, setCompletionDate] = useState<Date | null>();
   const [actionItemId, setActionItemId] = useState('');
 
   const [formState, setFormState] = useState({
     assignee: '',
+    assigner: '',
     assigneeId: '',
+    assignmentDate: '',
     preCompletionNotes: '',
     postCompletionNotes: '',
     isCompleted: false,
   });
 
+  const showPreviewModal = (actionItem: InterfaceActionItemInfo): void => {
+    setFormState({
+      ...formState,
+      assignee: `${actionItem.assignee.firstName} ${actionItem.assignee.lastName}`,
+      assigner: `${actionItem.assigner.firstName} ${actionItem.assigner.lastName}`,
+      assigneeId: actionItem.assignee._id,
+      preCompletionNotes: actionItem.preCompletionNotes,
+      postCompletionNotes: actionItem.postCompletionNotes,
+      isCompleted: actionItem.isCompleted,
+    });
+    setActionItemId(actionItem._id);
+    setAssignmentDate(actionItem.assignmentDate);
+    setDueDate(actionItem.dueDate);
+    setCompletionDate(actionItem.completionDate);
+    setActionItemPreviewModalIsOpen(true);
+  };
+
   const showUpdateModal = (): void => {
     setActionItemUpdateModalIsOpen(!actionItemUpdateModalIsOpen);
+  };
+
+  const hidePreviewModal = (): void => {
+    setActionItemPreviewModalIsOpen(false);
   };
 
   const hideUpdateModal = (): void => {
@@ -179,7 +205,7 @@ function actionItemsContainer({
                     <Button
                       className="btn btn-sm me-2"
                       variant="outline-secondary"
-                      // onClick={showDetailsModal}
+                      onClick={() => showPreviewModal(actionItem)}
                     >
                       Details
                     </Button>
@@ -235,7 +261,6 @@ function actionItemsContainer({
             <Form.Group className="mb-3">
               <Form.Label>Assignee</Form.Label>
               <Form.Select
-                required
                 defaultValue=""
                 onChange={(e) =>
                   setFormState({ ...formState, assigneeId: e.target.value })
@@ -307,7 +332,7 @@ function actionItemsContainer({
               <div>
                 <DatePicker
                   label={t('completionDate')}
-                  className={`${styles.datebox} ms-auto`}
+                  className={styles.datebox}
                   value={dayjs(completionDate)}
                   onChange={(date: Dayjs | null): void => {
                     if (date) {
@@ -383,6 +408,86 @@ function actionItemsContainer({
             {t('yes')}
           </Button>
         </Modal.Footer>
+      </Modal>
+
+      {/* preview modal */}
+      <Modal show={actionItemPreviewModalIsOpen}>
+        <Modal.Header>
+          <p className={styles.titlemodal}>{t('actionItemDetails')}</p>
+          <Button
+            onClick={hidePreviewModal}
+            data-testid="previewActionItemModalCloseBtn"
+          >
+            <i className="fa fa-times"></i>
+          </Button>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <div>
+              <p className={styles.preview}>
+                {t('assignee')}:{' '}
+                <span className={styles.view}>{formState.assignee}</span>
+              </p>
+              <p className={styles.preview}>
+                {t('assigner')}:{' '}
+                <span className={styles.view}>{formState.assigner}</span>
+              </p>
+              <p className={styles.preview}>
+                {t('preCompletionNotes')}:
+                <span className={styles.view}>
+                  {formState.preCompletionNotes}
+                </span>
+              </p>
+              <p className={styles.preview}>
+                {t('postCompletionNotes')}:
+                <span className={styles.view}>
+                  {formState.postCompletionNotes}
+                </span>
+              </p>
+              <p className={styles.preview}>
+                {t('assignmentDate')}:{' '}
+                <span className={styles.view}>{assignmentDate}</span>
+              </p>
+              <p className={styles.preview}>
+                {t('dueDate')}: <span className={styles.view}>{dueDate}</span>
+              </p>
+              <p className={styles.preview}>
+                {t('completionDate')}:{' '}
+                <span className={styles.view}>{completionDate}</span>
+              </p>
+              <p className={styles.preview}>
+                {t('status')}:{' '}
+                <span className={styles.view}>
+                  {formState.isCompleted ? 'Completed' : 'In Progress'}
+                </span>
+              </p>
+            </div>
+            <div className={styles.iconContainer}>
+              <Button
+                size="sm"
+                data-testid="editActionItemModalBtn"
+                className={styles.icon}
+                onClick={() => {
+                  hidePreviewModal();
+                  showUpdateModal();
+                }}
+              >
+                {' '}
+                <i className="fas fa-edit"></i>
+              </Button>
+              <Button
+                size="sm"
+                data-testid="deleteActionItemModalBtn"
+                className={`${styles.icon} ms-2`}
+                onClick={toggleDeleteModal}
+                variant="danger"
+              >
+                {' '}
+                <i className="fa fa-trash"></i>
+              </Button>
+            </div>
+          </Form>
+        </Modal.Body>
       </Modal>
     </>
   );

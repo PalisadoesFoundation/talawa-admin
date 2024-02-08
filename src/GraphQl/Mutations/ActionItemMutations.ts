@@ -3,8 +3,8 @@ import gql from 'graphql-tag';
 /**
  * GraphQL mutation to create an action item.
  *
- * @param assigneeId - User to whom the ActionItem is assigned.
  * @param actionItemCategoryId - ActionItemCategory to which the ActionItem is related.
+ * @param assigneeId - User to whom the ActionItem is assigned.
  * @param preCompletionNotes - Notes prior to completion.
  * @param dueDate - Due date.
  * @param eventId - Event to which the ActionItem is related.
@@ -28,16 +28,6 @@ export const CREATE_ACTION_ITEM_MUTATION = gql`
       }
     ) {
       _id
-      creator {
-        _id
-        email
-      }
-      assignmentDate
-      dueDate
-      event {
-        title
-      }
-      isCompleted
     }
   }
 `;
@@ -45,8 +35,8 @@ export const CREATE_ACTION_ITEM_MUTATION = gql`
 /**
  * GraphQL mutation to update an action item.
  *
- * @param assigneeId - User to whom the ActionItem is assigned.
  * @param id - Id of the ActionItem to be updated.
+ * @param assigneeId - User to whom the ActionItem is assigned.
  * @param preCompletionNotes - Notes prior to completion.
  * @param postCompletionNotes - Notes on completion.
  * @param dueDate - Due date.
@@ -76,17 +66,6 @@ export const UPDATE_ACTION_ITEM_MUTATION = gql`
       }
     ) {
       _id
-      creator {
-        _id
-        email
-      }
-      assignmentDate
-      dueDate
-      completionDate
-      event {
-        title
-      }
-      isCompleted
     }
   }
 `;
@@ -101,16 +80,6 @@ export const DELETE_ACTION_ITEM_MUTATION = gql`
   mutation RemoveActionItem($actionItemId: ID!) {
     removeActionItem(id: $actionItemId) {
       _id
-      creator {
-        _id
-        email
-      }
-      assignmentDate
-      dueDate
-      event {
-        title
-      }
-      isCompleted
     }
   }
 `;
