@@ -20,4 +20,4 @@
 
 #### Defined in
 
-[src/screens/ForgotPassword/ForgotPassword.tsx:21](https://github.com/void-hr/talawa-admin/blob/df259fc/src/screens/ForgotPassword/ForgotPassword.tsx#L21)
+[src/screens/ForgotPassword/ForgotPassword.tsx:21](https://github.com/void-hr/talawa-admin/blob/0b408e7/src/screens/ForgotPassword/ForgotPassword.tsx#L21)

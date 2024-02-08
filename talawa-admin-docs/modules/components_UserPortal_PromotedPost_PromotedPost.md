@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/UserPortal/PromotedPost/PromotedPost.tsx:10](https://github.com/void-hr/talawa-admin/blob/df259fc/src/components/UserPortal/PromotedPost/PromotedPost.tsx#L10)
+[src/components/UserPortal/PromotedPost/PromotedPost.tsx:10](https://github.com/void-hr/talawa-admin/blob/0b408e7/src/components/UserPortal/PromotedPost/PromotedPost.tsx#L10)

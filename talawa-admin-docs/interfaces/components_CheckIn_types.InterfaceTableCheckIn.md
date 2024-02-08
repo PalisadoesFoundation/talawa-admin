@@ -22,7 +22,7 @@
 
 #### Defined in
 
-[src/components/CheckIn/types.ts:35](https://github.com/void-hr/talawa-admin/blob/df259fc/src/components/CheckIn/types.ts#L35)
+[src/components/CheckIn/types.ts:35](https://github.com/void-hr/talawa-admin/blob/0b408e7/src/components/CheckIn/types.ts#L35)
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-[src/components/CheckIn/types.ts:41](https://github.com/void-hr/talawa-admin/blob/df259fc/src/components/CheckIn/types.ts#L41)
+[src/components/CheckIn/types.ts:41](https://github.com/void-hr/talawa-admin/blob/0b408e7/src/components/CheckIn/types.ts#L41)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-[src/components/CheckIn/types.ts:32](https://github.com/void-hr/talawa-admin/blob/df259fc/src/components/CheckIn/types.ts#L32)
+[src/components/CheckIn/types.ts:32](https://github.com/void-hr/talawa-admin/blob/0b408e7/src/components/CheckIn/types.ts#L32)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[src/components/CheckIn/types.ts:33](https://github.com/void-hr/talawa-admin/blob/df259fc/src/components/CheckIn/types.ts#L33)
+[src/components/CheckIn/types.ts:33](https://github.com/void-hr/talawa-admin/blob/0b408e7/src/components/CheckIn/types.ts#L33)
 
 ___
 
@@ -62,4 +62,4 @@ ___
 
 #### Defined in
 
-[src/components/CheckIn/types.ts:34](https://github.com/void-hr/talawa-admin/blob/df259fc/src/components/CheckIn/types.ts#L34)
+[src/components/CheckIn/types.ts:34](https://github.com/void-hr/talawa-admin/blob/0b408e7/src/components/CheckIn/types.ts#L34)

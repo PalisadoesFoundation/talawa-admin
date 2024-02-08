@@ -16,4 +16,4 @@
 
 #### Defined in
 
-[src/components/UsersTableItem/UserTableItemMocks.ts:7](https://github.com/void-hr/talawa-admin/blob/df259fc/src/components/UsersTableItem/UserTableItemMocks.ts#L7)
+[src/components/UsersTableItem/UserTableItemMocks.ts:7](https://github.com/void-hr/talawa-admin/blob/0b408e7/src/components/UsersTableItem/UserTableItemMocks.ts#L7)

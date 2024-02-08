@@ -20,4 +20,4 @@
 
 #### Defined in
 
-[src/screens/UserPortal/UserLoginPage/UserLoginPage.tsx:42](https://github.com/void-hr/talawa-admin/blob/df259fc/src/screens/UserPortal/UserLoginPage/UserLoginPage.tsx#L42)
+[src/screens/UserPortal/UserLoginPage/UserLoginPage.tsx:42](https://github.com/void-hr/talawa-admin/blob/0b408e7/src/screens/UserPortal/UserLoginPage/UserLoginPage.tsx#L42)

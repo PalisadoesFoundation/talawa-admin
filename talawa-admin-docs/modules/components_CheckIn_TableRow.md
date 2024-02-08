@@ -28,4 +28,4 @@
 
 #### Defined in
 
-[src/components/CheckIn/TableRow.tsx:10](https://github.com/void-hr/talawa-admin/blob/df259fc/src/components/CheckIn/TableRow.tsx#L10)
+[src/components/CheckIn/TableRow.tsx:10](https://github.com/void-hr/talawa-admin/blob/0b408e7/src/components/CheckIn/TableRow.tsx#L10)

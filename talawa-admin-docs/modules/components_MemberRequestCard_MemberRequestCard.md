@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/MemberRequestCard/MemberRequestCard.tsx:26](https://github.com/void-hr/talawa-admin/blob/df259fc/src/components/MemberRequestCard/MemberRequestCard.tsx#L26)
+[src/components/MemberRequestCard/MemberRequestCard.tsx:26](https://github.com/void-hr/talawa-admin/blob/0b408e7/src/components/MemberRequestCard/MemberRequestCard.tsx#L26)

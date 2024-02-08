@@ -31,4 +31,4 @@
 
 #### Defined in
 
-[src/components/EventCalendar/EventCalendar.tsx:59](https://github.com/void-hr/talawa-admin/blob/df259fc/src/components/EventCalendar/EventCalendar.tsx#L59)
+[src/components/EventCalendar/EventCalendar.tsx:59](https://github.com/void-hr/talawa-admin/blob/0b408e7/src/components/EventCalendar/EventCalendar.tsx#L59)

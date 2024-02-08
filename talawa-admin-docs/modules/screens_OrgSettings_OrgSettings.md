@@ -20,4 +20,4 @@
 
 #### Defined in
 
-[src/screens/OrgSettings/OrgSettings.tsx:13](https://github.com/void-hr/talawa-admin/blob/df259fc/src/screens/OrgSettings/OrgSettings.tsx#L13)
+[src/screens/OrgSettings/OrgSettings.tsx:13](https://github.com/void-hr/talawa-admin/blob/0b408e7/src/screens/OrgSettings/OrgSettings.tsx#L13)

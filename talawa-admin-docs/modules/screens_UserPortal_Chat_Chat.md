@@ -20,4 +20,4 @@
 
 #### Defined in
 
-[src/screens/UserPortal/Chat/Chat.tsx:30](https://github.com/void-hr/talawa-admin/blob/df259fc/src/screens/UserPortal/Chat/Chat.tsx#L30)
+[src/screens/UserPortal/Chat/Chat.tsx:30](https://github.com/void-hr/talawa-admin/blob/0b408e7/src/screens/UserPortal/Chat/Chat.tsx#L30)

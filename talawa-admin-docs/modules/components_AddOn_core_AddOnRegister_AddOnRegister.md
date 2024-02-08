@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/AddOn/core/AddOnRegister/AddOnRegister.tsx:24](https://github.com/void-hr/talawa-admin/blob/df259fc/src/components/AddOn/core/AddOnRegister/AddOnRegister.tsx#L24)
+[src/components/AddOn/core/AddOnRegister/AddOnRegister.tsx:24](https://github.com/void-hr/talawa-admin/blob/0b408e7/src/components/AddOn/core/AddOnRegister/AddOnRegister.tsx#L24)
