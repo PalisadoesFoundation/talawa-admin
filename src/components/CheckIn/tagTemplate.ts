@@ -1,4 +1,4 @@
-import { Template } from '@pdfme/generator';
+import type { Template } from '@pdfme/common';
 
 export const tagTemplate: Template = {
   schemas: [
