@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[src/components/UserPortal/OrgScreen/OrgScreen.tsx:8](https://github.com/pateldivyesh1323/talawa-admin/blob/cd0a761/src/components/UserPortal/OrgScreen/OrgScreen.tsx#L8)
+[src/components/UserPortal/OrgScreen/OrgScreen.tsx:8](https://github.com/pateldivyesh1323/talawa-admin/blob/477e50c/src/components/UserPortal/OrgScreen/OrgScreen.tsx#L8)
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[src/components/UserPortal/OrgScreen/OrgScreen.tsx:7](https://github.com/pateldivyesh1323/talawa-admin/blob/cd0a761/src/components/UserPortal/OrgScreen/OrgScreen.tsx#L7)
+[src/components/UserPortal/OrgScreen/OrgScreen.tsx:7](https://github.com/pateldivyesh1323/talawa-admin/blob/477e50c/src/components/UserPortal/OrgScreen/OrgScreen.tsx#L7)

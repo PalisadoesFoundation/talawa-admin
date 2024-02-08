@@ -30,4 +30,4 @@
 
 #### Defined in
 
-[src/components/UserPortal/UserScreen/UserScreen.tsx:11](https://github.com/pateldivyesh1323/talawa-admin/blob/cd0a761/src/components/UserPortal/UserScreen/UserScreen.tsx#L11)
+[src/components/UserPortal/UserScreen/UserScreen.tsx:11](https://github.com/pateldivyesh1323/talawa-admin/blob/477e50c/src/components/UserPortal/UserScreen/UserScreen.tsx#L11)
