@@ -65,15 +65,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          fetch-depth: 1
-
-      - name: Set up Python
+          fetch-depth: 2
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v2
+      - name: Run Python script
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
-
       - name: Run Python script
         run: |
+         echo "The following files have changed: ${{ steps.changed-files.outputs.all_changed_files }}"
+         chmod +x .github/workflows/check_files.py
          python .github/workflows/check_files.py --base_branch "${{ github.base_ref }}" --pr_branch "${{ github.head_ref }}" --sensitive_files .github/workflows/sensitive_files.txt
 
   Test-Application:
@@ -153,4 +156,3 @@ jobs:
         run: |
           echo "Error: Pull request target branch must be 'develop'. Please refer PR_GUIDELINES.md"
           exit 1
-
