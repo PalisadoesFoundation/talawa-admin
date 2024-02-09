@@ -75,8 +75,8 @@ describe('Testing the Super Dash List', () => {
       </MockedProvider>
     );
     expect(screen.getByAltText(/Dogs Care image/i)).toBeInTheDocument();
-    expect(screen.getByText('Admins:')).toBeInTheDocument();
-    expect(screen.getByText('Members:')).toBeInTheDocument();
+    expect(screen.getByText('Admins: ')).toBeInTheDocument();
+    expect(screen.getByText('Members: ')).toBeInTheDocument();
     expect(screen.getByText('Dogs Care')).toBeInTheDocument();
     expect(screen.getByText(/Sample City/i)).toBeInTheDocument();
     userEvent.click(screen.getByTestId(/manageBtn/i));

@@ -223,7 +223,7 @@ export const MOCKS = [
               sortingCode: 'ABC-123',
               state: 'Kingston Parish',
             },
-            desccription: 'this is a sample description',
+            description: 'this is a sample description',
           },
         ],
       },
