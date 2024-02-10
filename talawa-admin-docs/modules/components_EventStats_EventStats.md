@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/EventStats/EventStats.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/EventStats/EventStats.tsx#L17)
+[src/components/EventStats/EventStats.tsx:17](https://github.com/AmitSharma512/talawa-admin/blob/82b22ab/src/components/EventStats/EventStats.tsx#L17)
