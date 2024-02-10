@@ -15,6 +15,7 @@ import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import styles from './LeftDrawerOrg.module.css';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
+import '../../assets/css/scroll-styles.css';
 
 export interface InterfaceLeftDrawerProps {
   orgId: string;
@@ -76,7 +77,7 @@ const leftDrawerOrg = ({
   return (
     <>
       <div
-        className={`${styles.leftDrawer} ${
+        className={`${styles.leftDrawer} custom-scroll ${
           hideDrawer === null
             ? styles.hideElemByDefault
             : hideDrawer
