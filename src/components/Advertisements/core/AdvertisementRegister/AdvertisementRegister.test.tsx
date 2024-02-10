@@ -23,6 +23,9 @@ import { toast } from 'react-toastify';
 import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { getItem } = useLocalStorage();
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -60,7 +63,7 @@ const link = new StaticMockLink(MOCKS, true);
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
   headers: {
-    authorization: 'Bearer ' + localStorage.getItem('token') || '',
+    authorization: 'Bearer ' + getItem('token') || '',
   },
 });
 

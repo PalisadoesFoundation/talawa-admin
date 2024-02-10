@@ -11,6 +11,9 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import CommentCard from './CommentCard';
 import userEvent from '@testing-library/user-event';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { getItem, setItem } = useLocalStorage();
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -80,8 +83,8 @@ describe('Testing CommentCard Component [User Portal]', () => {
       text: 'testComment',
     };
 
-    const beforeUserId = localStorage.getItem('userId');
-    localStorage.setItem('userId', '2');
+    const beforeUserId = getItem('userId');
+    setItem('userId', '2');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -97,7 +100,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
 
     await wait();
     if (beforeUserId) {
-      localStorage.setItem('userId', beforeUserId);
+      setItem('userId', beforeUserId);
     }
   });
 
@@ -119,8 +122,8 @@ describe('Testing CommentCard Component [User Portal]', () => {
       text: 'testComment',
     };
 
-    const beforeUserId = localStorage.getItem('userId');
-    localStorage.setItem('userId', '1');
+    const beforeUserId = getItem('userId');
+    setItem('userId', '1');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -136,7 +139,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
 
     await wait();
     if (beforeUserId) {
-      localStorage.setItem('userId', beforeUserId);
+      setItem('userId', beforeUserId);
     }
   });
 
@@ -158,8 +161,8 @@ describe('Testing CommentCard Component [User Portal]', () => {
       text: 'testComment',
     };
 
-    const beforeUserId = localStorage.getItem('userId');
-    localStorage.setItem('userId', '2');
+    const beforeUserId = getItem('userId');
+    setItem('userId', '2');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -180,7 +183,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await wait();
 
     if (beforeUserId) {
-      localStorage.setItem('userId', beforeUserId);
+      setItem('userId', beforeUserId);
     }
   });
 
@@ -202,8 +205,8 @@ describe('Testing CommentCard Component [User Portal]', () => {
       text: 'testComment',
     };
 
-    const beforeUserId = localStorage.getItem('userId');
-    localStorage.setItem('userId', '1');
+    const beforeUserId = getItem('userId');
+    setItem('userId', '1');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -222,7 +225,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     userEvent.click(screen.getByTestId('likeCommentBtn'));
 
     if (beforeUserId) {
-      localStorage.setItem('userId', beforeUserId);
+      setItem('userId', beforeUserId);
     }
   });
 });

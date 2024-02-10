@@ -19,11 +19,14 @@ import { BACKEND_URL } from 'Constant/constant';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
 import { toast } from 'react-toastify';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { getItem } = useLocalStorage();
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
   headers: {
-    authorization: 'Bearer ' + localStorage.getItem('token') || '',
+    authorization: 'Bearer ' + getItem('token') || '',
   },
 });
 

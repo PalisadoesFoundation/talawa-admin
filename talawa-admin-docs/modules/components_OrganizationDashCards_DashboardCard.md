@@ -29,4 +29,4 @@
 
 #### Defined in
 
-[src/components/OrganizationDashCards/DashboardCard.tsx:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/21489da/src/components/OrganizationDashCards/DashboardCard.tsx#L6)
+[src/components/OrganizationDashCards/DashboardCard.tsx:6](https://github.com/chandel-aman/talawa-admin/blob/fa2649b/src/components/OrganizationDashCards/DashboardCard.tsx#L6)
