@@ -1,7 +1,7 @@
 .orgCard {
   background-color: var(--bs-white);
   margin: 0.5rem;
-  height: calc(120px + 2rem);
+  height: calc(140px + 2rem);
   padding: 1rem;
   border-radius: 8px;
   outline: 1px solid var(--bs-gray-200);
