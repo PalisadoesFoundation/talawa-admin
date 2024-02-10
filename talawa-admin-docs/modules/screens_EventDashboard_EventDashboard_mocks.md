@@ -17,7 +17,7 @@
 
 #### Defined in
 
-[src/screens/EventDashboard/EventDashboard.mocks.ts:69](https://github.com/duplixx/talawa-admin/blob/2ed1c15/src/screens/EventDashboard/EventDashboard.mocks.ts#L69)
+[src/screens/EventDashboard/EventDashboard.mocks.ts:69](https://github.com/duplixx/talawa-admin/blob/cab80a8/src/screens/EventDashboard/EventDashboard.mocks.ts#L69)
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 #### Defined in
 
-[src/screens/EventDashboard/EventDashboard.mocks.ts:102](https://github.com/duplixx/talawa-admin/blob/2ed1c15/src/screens/EventDashboard/EventDashboard.mocks.ts#L102)
+[src/screens/EventDashboard/EventDashboard.mocks.ts:102](https://github.com/duplixx/talawa-admin/blob/cab80a8/src/screens/EventDashboard/EventDashboard.mocks.ts#L102)

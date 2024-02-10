@@ -30,4 +30,4 @@
 
 #### Defined in
 
-[src/components/CollapsibleDropdown/CollapsibleDropdown.tsx:13](https://github.com/duplixx/talawa-admin/blob/2ed1c15/src/components/CollapsibleDropdown/CollapsibleDropdown.tsx#L13)
+[src/components/CollapsibleDropdown/CollapsibleDropdown.tsx:13](https://github.com/duplixx/talawa-admin/blob/cab80a8/src/components/CollapsibleDropdown/CollapsibleDropdown.tsx#L13)

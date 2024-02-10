@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/UserPortal/EventCard/EventCard.tsx:36](https://github.com/duplixx/talawa-admin/blob/2ed1c15/src/components/UserPortal/EventCard/EventCard.tsx#L36)
+[src/components/UserPortal/EventCard/EventCard.tsx:36](https://github.com/duplixx/talawa-admin/blob/cab80a8/src/components/UserPortal/EventCard/EventCard.tsx#L36)
