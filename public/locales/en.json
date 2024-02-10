@@ -231,7 +231,10 @@
     "users": "Users",
     "searchName": "Enter Name",
     "searchevent": "Enter Event",
-    "searchFullName": "Enter Full Name"
+    "searchFullName": "Enter Full Name",
+    "people": "People",
+    "sort": "Search by Role",
+    "actions": "Actions"
   },
   "userListCard": {
     "joined": "Joined",

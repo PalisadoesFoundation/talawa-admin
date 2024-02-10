@@ -19,41 +19,19 @@ on:
 env:
     CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
   
-jobs:
+jobs:      
   Code-Coverage:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20.x]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-
-      - name: Cache node modules
-        id: cache-npm
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: |
-            ~/.npm
-            node_modules
-          key: ${{ runner.os }}-code-coverage-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-code-coverage-${{ env.cache-name }}-
-            ${{ runner.os }}-code-coverage-
-            ${{ runner.os }}-
-      
-      - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
-        name: List the state of node modules
-        run: npm install
+      - run: npm install --legacy-peer-deps
       - run: npm run test -- --watchAll=false --coverage
       - name: Present and upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
         uses: codecov/codecov-action@v3
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
           fail_ci_if_error: false
           name: '${{env.CODECOV_UNIQUE_NAME}}'
@@ -64,29 +42,9 @@ jobs:
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v3
-
-      - name: Node.js Version
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Restore node_modules from cache
-        id: cache-npm
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: |
-            ~/.npm
-            node_modules
-          key: ${{ runner.os }}-generate-docs-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-generate-docs-${{ env.cache-name }}-
-            ${{ runner.os }}-generate-docs-
-            ${{ runner.os }}-
-
-      - name: Install dependencies
-        run: npm install
+        
+      - name: Install Dependencies
+        run: yarn install --legacy-peer-deps
 
       - name: Install TypeScript Globally and add GraphQL tag
         run: yarn global add typescript
@@ -97,14 +55,9 @@ jobs:
 
       - name: Generate Documentation of Markdown pages
         run: |
-          npm install --global typedoc
-          npm install typedoc-plugin-markdown
-          npm install --save-dev @types/node
-          npx typedoc --entryPoints src/components src/screens --out talawa-admin-docs --plugin typedoc-plugin-markdown --theme markdown --entryPointStrategy expand --exclude "**/*.test.ts" --exclude "**/*.css"
-          
-      - name: Make Markdown Files MDX Compatible
-        run: python ./.github/workflows/md_mdx_format_adjuster.py --directory talawa-admin-docs
-        
+          yarn global add typedoc
+          yarn add typedoc-plugin-markdown
+          yarn typedoc --entryPoints src/components src/screens --out talawa-admin-docs --plugin typedoc-plugin-markdown --theme markdown --entryPointStrategy expand --exclude "**/*.test.ts" --exclude "**/*.css"
           
       - name: Checking doc updated
         id: DocUpdated
@@ -143,13 +96,12 @@ jobs:
           path: talawa-admin-docs
 
   Copy-docs-to-talawa-docs:
-    needs: Generate-Documentation
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - uses: dmnemec/copy_file_to_another_repo_action@v1.1.1
       env:
-        API_TOKEN_GITHUB: ${{ secrets.TALAWA_DOCS_SYNC }}    
+        API_TOKEN_GITHUB: ${{ secrets.TALAWA_DOCS_SYNC_NEW }}    
       with:
         source_file: 'talawa-admin-docs/'
         destination_repo: 'PalisadoesFoundation/talawa-docs'
@@ -158,3 +110,5 @@ jobs:
         user_email: '${{env.email}}'
         user_name: '${{github.actor}}'
         commit_message: 'Talawa Admin docs updated'
+      
+       

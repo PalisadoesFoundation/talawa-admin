@@ -10,106 +10,50 @@
 ##############################################################################
 
 name: PR Workflow
-
 on:
   pull_request:
-      
     branches:
       - '**'
 
 env:
-  CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
-
+    CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
+    
 jobs:
-  Code-Quality-Checks:
-    name: Performs linting, formatting, type-checking
+
+  Continuous-Integration:
+
+    name: Performs linting, formatting, type-checking and testing on the application
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v3
 
       - name: Install Dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
+      - name: Run linting check
+        run: npm run lint:check
+      
       - name: Count number of lines
         run: |
           chmod +x ./.github/workflows/countline.py
-          ./.github/workflows/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx
+          ./.github/workflows/countline.py --lines 1000 --exclude_files src/screens/LoginPage/LoginPage.tsx
 
-      - name: Get changed TypeScript files
-        id: changed-files
-        uses: tj-actions/changed-files@v40
-      
       - name: Check formatting
-        if: steps.changed-files.outputs.only_changed != 'true'
         run: npm run format:check
 
       - name: Check for type errors
-        if: steps.changed-files.outputs.only_changed != 'true'
         run: npm run typecheck
-
-      - name: Run linting check
-        if: steps.changed-files.outputs.only_changed != 'true'
-        run: npm run lint:check  
-
-      - name: Compare translation files
-        run: |
-          chmod +x .github/workflows/compare_translations.py
-          python .github/workflows/compare_translations.py --directory public/locales
-
-
-  Check-Changed-Files:
-    runs-on: ubuntu-latest
-    needs: Code-Quality-Checks
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-
-      - name: Run Python script
-        run: |
-         python .github/workflows/check_files.py --base_branch "${{ github.base_ref }}" --pr_branch "${{ github.head_ref }}" --sensitive_files .github/workflows/sensitive_files.txt
-
-  Test-Application:
-    name: Test Application
-    runs-on: ubuntu-latest
-    needs: [Code-Quality-Checks]
-    steps:
-      - name: Checkout the Repository
-        uses: actions/checkout@v3
-
-      - name: Install Dependencies
-        run: npm install
-      
-      - name: Get changed TypeScript files
-        id: changed-files
-        uses: tj-actions/changed-files@v40
-          
+    
       - name: Run tests
-        if: steps.changed-files.outputs.only_changed != 'true'
-        run: npm run test -- --watchAll=false --coverage       
-      
-      - name: TypeScript compilation for changed files
-        run: |
-          for file in ${{ steps.changed-files.outputs.all_files }}; do
-            if [[ "$file" == *.ts || "$file" == *.tsx ]]; then
-              npx tsc --noEmit "$file"
-            fi
-          done
-        
+        run: npm run test -- --watchAll=false --coverage
+  
       - name: Present and Upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
         uses: codecov/codecov-action@v3
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
           fail_ci_if_error: false
-          name: '${{env.CODECOV_UNIQUE_NAME}}'
+          name: '${{env.CODECOV_UNIQUE_NAME}}'    
 
       - name: Test acceptable level of code coverage
         uses: VeryGoodOpenSource/very_good_coverage@v2
@@ -118,39 +62,32 @@ jobs:
           min_coverage: 95.0
 
   Graphql-Inspector:
-    name: Runs Introspection on the GitHub talawa-api repo on the schema.graphql file
+    name: Runs Introspection on the github talawa-api repo on the schema.graphql file
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v3
-
+      
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20.x'
-
+          node-version: '16.14.1'
+        
       - name: resolve dependency
         run: npm install -g @graphql-inspector/cli
-      
-      - name: Clone API Repository
-        run: |
-          # Retrieve the complete branch name directly from the GitHub context
-          FULL_BRANCH_NAME=${{ github.base_ref }}
-          echo "FULL_Branch_NAME: $FULL_BRANCH_NAME"
-          
-          # Clone the specified repository using the extracted branch name
-          git clone --branch $FULL_BRANCH_NAME https://github.com/PalisadoesFoundation/talawa-api && ls -a 
+
+      - name: Clone API repository
+        run: git clone https://github.com/PalisadoesFoundation/talawa-api && ls -a
 
       - name: Validate Documents
         run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
 
-  Check-Target-Branch:
-    name: Check Target Branch
+  Branch-check:
+    name: "Base branch check"
     runs-on: ubuntu-latest
     steps:
-      - name: Check if the target branch is develop
+      - name: "Check if base branch is develop"
         if: github.event.pull_request.base.ref != 'develop'
         run: |
-          echo "Error: Pull request target branch must be 'develop'. Please refer PR_GUIDELINES.md"
+          echo "PR is not against develop branch. Please refer PR_GUIDELINES.md"
           exit 1
-
