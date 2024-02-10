@@ -20,4 +20,4 @@
 
 #### Defined in
 
-[src/components/CurrentHourIndicator/CurrentHourIndicator.tsx:4](https://github.com/AmitSharma512/talawa-admin/blob/82b22ab/src/components/CurrentHourIndicator/CurrentHourIndicator.tsx#L4)
+[src/components/CurrentHourIndicator/CurrentHourIndicator.tsx:4](https://github.com/AmitSharma512/talawa-admin/blob/859e5bd/src/components/CurrentHourIndicator/CurrentHourIndicator.tsx#L4)
