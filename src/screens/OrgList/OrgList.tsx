@@ -467,50 +467,49 @@ function orgList(): JSX.Element {
                 </div>
               }
             >
-              {isLoading ? (
-                <>
-                  {[...Array(perPageResult)].map((_, index) => (
-                    <div key={index} className={styles.itemCard}>
-                      <div className={styles.loadingWrapper}>
-                        <div className={styles.innerContainer}>
-                          <div
-                            className={`${styles.orgImgContainer} shimmer`}
-                          ></div>
-                          <div className={styles.content}>
-                            <h5 className="shimmer" title="Org name"></h5>
-                            <h6 className="shimmer" title="Location"></h6>
-                            <h6 className="shimmer" title="Admins"></h6>
-                            <h6 className="shimmer" title="Members"></h6>
-                          </div>
-                        </div>
-                        <div className={`shimmer ${styles.button}`} />
-                      </div>
-                    </div>
-                  ))}
-                </>
-              ) : userData && userData.user.userType == 'SUPERADMIN' ? (
-                orgsData?.organizationsConnection.map((item) => {
-                  return (
-                    <div key={item._id} className={styles.itemCard}>
-                      <OrgListCard data={item} />
-                    </div>
-                  );
-                })
-              ) : (
-                userData &&
-                userData.user.userType == 'ADMIN' &&
-                userData.user.adminFor.length > 0 &&
-                orgsData?.organizationsConnection.map((item) => {
-                  if (isAdminForCurrentOrg(item)) {
+              {userData && userData.user.userType == 'SUPERADMIN'
+                ? orgsData?.organizationsConnection.map((item) => {
                     return (
                       <div key={item._id} className={styles.itemCard}>
                         <OrgListCard data={item} />
                       </div>
                     );
-                  }
-                })
-              )}
+                  })
+                : userData &&
+                  userData.user.userType == 'ADMIN' &&
+                  userData.user.adminFor.length > 0 &&
+                  orgsData?.organizationsConnection.map((item) => {
+                    if (isAdminForCurrentOrg(item)) {
+                      return (
+                        <div key={item._id} className={styles.itemCard}>
+                          <OrgListCard data={item} />
+                        </div>
+                      );
+                    }
+                  })}
             </InfiniteScroll>
+            {isLoading && (
+              <>
+                {[...Array(perPageResult)].map((_, index) => (
+                  <div key={index} className={styles.itemCard}>
+                    <div className={styles.loadingWrapper}>
+                      <div className={styles.innerContainer}>
+                        <div
+                          className={`${styles.orgImgContainer} shimmer`}
+                        ></div>
+                        <div className={styles.content}>
+                          <h5 className="shimmer" title="Org name"></h5>
+                          <h6 className="shimmer" title="Location"></h6>
+                          <h6 className="shimmer" title="Admins"></h6>
+                          <h6 className="shimmer" title="Members"></h6>
+                        </div>
+                      </div>
+                      <div className={`shimmer ${styles.button}`} />
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
           </>
         )}
         {/* Create Organization Modal */}
