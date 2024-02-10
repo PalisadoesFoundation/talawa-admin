@@ -54,7 +54,7 @@ const OrgProfileFieldSettings = (): any => {
       setCustomFieldData({ type: '', name: '' });
       refetch();
     } catch (error) {
-      toast.success((error as Error).message);
+      toast.error((error as Error).message);
     }
   };
 
@@ -132,6 +132,12 @@ const OrgProfileFieldSettings = (): any => {
                       ...customFieldData,
                       name: event.target.value,
                     });
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      event.preventDefault();
+                      handleSave();
+                    }
                   }}
                 />
               </div>

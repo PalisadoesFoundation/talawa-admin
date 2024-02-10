@@ -44,6 +44,8 @@
 - [components/CollapsibleDropdown/CollapsibleDropdown.test](modules/components_CollapsibleDropdown_CollapsibleDropdown_test.md)
 - [components/ContriStats/ContriStats](modules/components_ContriStats_ContriStats.md)
 - [components/ContriStats/ContriStats.test](modules/components_ContriStats_ContriStats_test.md)
+- [components/CurrentHourIndicator/CurrentHourIndicator](modules/components_CurrentHourIndicator_CurrentHourIndicator.md)
+- [components/CurrentHourIndicator/CurrentHourIndicator.test](modules/components_CurrentHourIndicator_CurrentHourIndicator_test.md)
 - [components/DeleteOrg/DeleteOrg](modules/components_DeleteOrg_DeleteOrg.md)
 - [components/DeleteOrg/DeleteOrg.test](modules/components_DeleteOrg_DeleteOrg_test.md)
 - [components/EditCustomFieldDropDown/EditCustomFieldDropDown](modules/components_EditCustomFieldDropDown_EditCustomFieldDropDown.md)
