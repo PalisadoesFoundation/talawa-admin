@@ -1,3 +1,4 @@
+// SKIP_LOCALSTORAGE_CHECK
 import { refreshToken } from './getRefreshToken';
 
 jest.mock('@apollo/client', () => {
@@ -28,6 +29,7 @@ describe('refreshToken', () => {
   global.window.location = { ...location, reload: jest.fn() };
 
   // Mock localStorage.setItem() and localStorage.clear()
+
   Storage.prototype.setItem = jest.fn();
   Storage.prototype.clear = jest.fn();
 
@@ -39,12 +41,12 @@ describe('refreshToken', () => {
     const result = await refreshToken();
 
     expect(localStorage.setItem).toHaveBeenCalledWith(
-      'token',
-      'newAccessToken'
+      'Talawa-admin_token',
+      JSON.stringify('newAccessToken')
     );
     expect(localStorage.setItem).toHaveBeenCalledWith(
-      'refreshToken',
-      'newRefreshToken'
+      'Talawa-admin_refreshToken',
+      JSON.stringify('newRefreshToken')
     );
     expect(result).toBe(true);
     expect(window.location.reload).toHaveBeenCalled();

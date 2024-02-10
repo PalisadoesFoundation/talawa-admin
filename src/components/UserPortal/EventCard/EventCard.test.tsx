@@ -12,6 +12,9 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import userEvent from '@testing-library/user-event';
 import { debug } from 'jest-preview';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem } = useLocalStorage();
 
 const MOCKS = [
   {
@@ -103,7 +106,7 @@ describe('Testing Event Card In User portal', () => {
   });
 
   test('When the user is already registered', async () => {
-    localStorage.setItem('userId', '234');
+    setItem('userId', '234');
     const { queryByText } = render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -122,7 +125,7 @@ describe('Testing Event Card In User portal', () => {
   });
 
   test('Handle register should work properly', async () => {
-    localStorage.setItem('userId', '456');
+    setItem('userId', '456');
     const { queryByText } = render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
