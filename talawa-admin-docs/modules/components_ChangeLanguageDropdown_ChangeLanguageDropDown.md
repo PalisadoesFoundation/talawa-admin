@@ -27,7 +27,7 @@
 
 #### Defined in
 
-[src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx:13](https://github.com/Anvita0305/talawa-admin/blob/cdb95af/src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx#L13)
+[src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/21489da/src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx#L13)
 
 ___
 
@@ -47,4 +47,4 @@ ___
 
 #### Defined in
 
-[src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx:17](https://github.com/Anvita0305/talawa-admin/blob/cdb95af/src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx#L17)
+[src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/21489da/src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx#L17)
