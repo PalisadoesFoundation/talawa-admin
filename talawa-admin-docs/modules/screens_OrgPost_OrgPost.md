@@ -20,4 +20,4 @@
 
 #### Defined in
 
-[src/screens/OrgPost/OrgPost.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/21489da/src/screens/OrgPost/OrgPost.tsx#L35)
+[src/screens/OrgPost/OrgPost.tsx:35](https://github.com/Anvita0305/talawa-admin/blob/6375d1b/src/screens/OrgPost/OrgPost.tsx#L35)
