@@ -24,6 +24,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
+import Loader from 'components/Loader/Loader';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -35,7 +36,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 14,
   },
 }));
-
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const StyledTableRow = styled(TableRow)(() => ({
   '&:last-child td, &:last-child th': {
@@ -231,7 +231,7 @@ function organizationPeople(): JSX.Element {
                         setState(2);
                       }}
                     >
-                      <label htmlFor="userslist">{t('users')}</label>
+                      <Form.Label htmlFor="userslist">{t('users')}</Form.Label>
                     </Dropdown.Item>
                     <Dropdown.Item
                       inline
@@ -282,7 +282,7 @@ function organizationPeople(): JSX.Element {
           <div className={styles.mainpageright}>
             {memberLoading || usersLoading || adminLoading ? (
               <>
-                <div className={styles.loader}></div>
+                <Loader />
               </>
             ) : (
               /* istanbul ignore next */
