@@ -37,8 +37,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  // hide last border
+const StyledTableRow = styled(TableRow)(() => ({
   '&:last-child td, &:last-child th': {
     border: 0,
   },
