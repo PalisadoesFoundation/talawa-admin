@@ -27,4 +27,4 @@
 
 #### Defined in
 
-[src/components/UserPasswordUpdate/UserPasswordUpdate.tsx:15](https://github.com/chandel-aman/talawa-admin/blob/fa2649b/src/components/UserPasswordUpdate/UserPasswordUpdate.tsx#L15)
+[src/components/UserPasswordUpdate/UserPasswordUpdate.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/UserPasswordUpdate/UserPasswordUpdate.tsx#L15)

@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[src/components/CheckIn/types.ts:27](https://github.com/chandel-aman/talawa-admin/blob/fa2649b/src/components/CheckIn/types.ts#L27)
+[src/components/CheckIn/types.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CheckIn/types.ts#L27)
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 #### Defined in
 
-[src/components/CheckIn/types.ts:28](https://github.com/chandel-aman/talawa-admin/blob/fa2649b/src/components/CheckIn/types.ts#L28)
+[src/components/CheckIn/types.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CheckIn/types.ts#L28)
 
 ___
 
@@ -48,4 +48,4 @@ ___
 
 #### Defined in
 
-[src/components/CheckIn/types.ts:26](https://github.com/chandel-aman/talawa-admin/blob/fa2649b/src/components/CheckIn/types.ts#L26)
+[src/components/CheckIn/types.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CheckIn/types.ts#L26)

@@ -38,7 +38,7 @@
 
 #### Defined in
 
-[src/components/AddOn/support/services/Plugin.helper.ts:7](https://github.com/chandel-aman/talawa-admin/blob/fa2649b/src/components/AddOn/support/services/Plugin.helper.ts#L7)
+[src/components/AddOn/support/services/Plugin.helper.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/AddOn/support/services/Plugin.helper.ts#L7)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[src/components/AddOn/support/services/Plugin.helper.ts:2](https://github.com/chandel-aman/talawa-admin/blob/fa2649b/src/components/AddOn/support/services/Plugin.helper.ts#L2)
+[src/components/AddOn/support/services/Plugin.helper.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/AddOn/support/services/Plugin.helper.ts#L2)
 
 ___
 
@@ -72,4 +72,4 @@ ___
 
 #### Defined in
 
-[src/components/AddOn/support/services/Plugin.helper.ts:12](https://github.com/chandel-aman/talawa-admin/blob/fa2649b/src/components/AddOn/support/services/Plugin.helper.ts#L12)
+[src/components/AddOn/support/services/Plugin.helper.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/AddOn/support/services/Plugin.helper.ts#L12)

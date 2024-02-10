@@ -20,4 +20,4 @@
 
 #### Defined in
 
-[src/screens/OrganizationEvents/OrganizationEvents.tsx:29](https://github.com/chandel-aman/talawa-admin/blob/fa2649b/src/screens/OrganizationEvents/OrganizationEvents.tsx#L29)
+[src/screens/OrganizationEvents/OrganizationEvents.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/screens/OrganizationEvents/OrganizationEvents.tsx#L29)

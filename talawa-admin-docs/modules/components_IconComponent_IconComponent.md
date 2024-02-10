@@ -30,4 +30,4 @@
 
 #### Defined in
 
-[src/components/IconComponent/IconComponent.tsx:22](https://github.com/chandel-aman/talawa-admin/blob/fa2649b/src/components/IconComponent/IconComponent.tsx#L22)
+[src/components/IconComponent/IconComponent.tsx:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/IconComponent/IconComponent.tsx#L22)
