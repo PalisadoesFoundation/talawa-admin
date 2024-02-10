@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import styles from './OrgListCard.module.css';
 import { useHistory } from 'react-router-dom';
 import type { InterfaceOrgConnectionInfoType } from 'utils/interfaces';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import { Tooltip } from '@mui/material';
@@ -15,7 +14,8 @@ export interface InterfaceOrgListCardProps {
 }
 
 function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
-  const { _id, admins, image, address, members, name } = props.data;
+  const { _id, admins, image, address, members, name, description } =
+    props.data;
 
   const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
     variables: {
@@ -60,23 +60,35 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
             <Tooltip title={name} placement="top-end">
               <h4 className={styles.orgName}>{name}</h4>
             </Tooltip>
+            {description && (
+              <div>
+                <h6>
+                  About Us:{' '}
+                  <span title={description}>
+                    {description.length > 55
+                      ? description.substring(0, 55) + '...'
+                      : description}
+                  </span>
+                </h6>
+              </div>
+            )}
             {address && address.city && (
               <div>
                 <h6 className="text-secondary">
-                  <LocationOnIcon fontSize="inherit" className="fs-5" />
-                  <span className="address-line">{address.city}, </span>
-                  <span className="address-line">{address.state}</span>
-                  <br />
-                  <LocationOnIcon fontSize="inherit" className="fs-5" />
-                  <span className="address-line">{address.postalCode}, </span>
+                <span className="address-line">
+                    {address.city}
+                    {address.postalCode ? ', ' + address.postalCode : ''}
+                  </span>
+                  <span className="address-line">
+                    {address.state ? ', ' + address.state : ''}
+                  </span>
+                  <br/>
                   <span className="address-line">{address.countryCode}</span>
                 </h6>
               </div>
             )}
             <h6>
               {t('admins')}: <span>{admins.length}</span>
-            </h6>
-            <h6>
               {t('members')}: <span>{members.length}</span>
             </h6>
           </div>
