@@ -60,6 +60,7 @@ const props: InterfaceOrgListCardProps = {
       firstName: 'John',
       lastName: 'Doe',
     },
+    description: 'this is a sample description',
   },
 };
 

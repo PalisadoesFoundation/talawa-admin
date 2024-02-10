@@ -30,6 +30,7 @@ export interface InterfaceOrgConnectionInfoType {
   }[];
   createdAt: string;
   address: InterfaceAddress;
+  description: string;
 }
 export interface InterfaceOrgConnectionType {
   organizationsConnection: InterfaceOrgConnectionInfoType[];

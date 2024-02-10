@@ -60,6 +60,7 @@ const organizations: InterfaceOrgConnectionInfoType[] = [
       sortingCode: 'ABC-123',
       state: 'Kingston Parish',
     },
+    description: 'this is a sample description',
   },
 ];
 
@@ -94,6 +95,7 @@ for (let x = 0; x < 100; x++) {
       sortingCode: 'ABC-123',
       state: 'Kingston Parish',
     },
+    description: 'this is a sample description',
   });
 }
 

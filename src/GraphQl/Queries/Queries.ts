@@ -86,6 +86,7 @@ export const ORGANIZATION_CONNECTION_LIST = gql`
         sortingCode
         state
       }
+      description
     }
   }
 `;
