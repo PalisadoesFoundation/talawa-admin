@@ -88,7 +88,7 @@ export const UPDATE_USER_MUTATION = gql`
     $firstName: String
     $lastName: String
     $email: EmailAddress
-    $applangcode: String
+    $appLanguageCode: String
     $file: String
   ) {
     updateUserProfile(
@@ -97,7 +97,7 @@ export const UPDATE_USER_MUTATION = gql`
         lastName: $lastName
         email: $email
         id: $id
-        applangcode: $applangcode
+        applangcode: $appLanguageCode
       }
       file: $file
     ) {

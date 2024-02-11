@@ -11,7 +11,7 @@ import { useLocation } from 'react-router-dom';
 import { languages } from 'utils/languages';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
-import { Form } from 'react-bootstrap';
+import { Dropdown, Form } from 'react-bootstrap';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -36,7 +36,7 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
     lastName: '',
     email: '',
     password: '',
-    applangcode: '',
+    appLanguageCode: '',
     file: '',
   });
 
@@ -56,7 +56,7 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
         firstName: data?.user?.firstName,
         lastName: data?.user?.lastName,
         email: data?.user?.email,
-        applangcode: data?.user?.applangcode,
+        appLanguageCode: data?.user?.appLanguageCode,
       });
     }
   }, [data]);
@@ -75,7 +75,7 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
       const firstName = formState.firstName;
       const lastName = formState.lastName;
       const email = formState.email;
-      const applangcode = formState.applangcode;
+      const appLanguageCode = formState.appLanguageCode;
       const file = formState.file;
       let toSubmit = true;
       if (firstName.trim().length == 0 || !firstName) {
@@ -98,7 +98,7 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
           firstName,
           lastName,
           email,
-          applangcode,
+          appLanguageCode,
           file,
         },
       });
@@ -109,7 +109,7 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
           lastName: '',
           email: '',
           password: '',
-          applangcode: '',
+          appLanguageCode: '',
           file: '',
         });
 
@@ -201,22 +201,38 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
             <div>
               <label>
                 {t('appLanguageCode')}
-                <select
-                  className="form-control"
-                  data-testid="applangcode"
-                  onChange={(e): void => {
+                <Dropdown
+                  onSelect={(eventKey): void => {
                     setFormState({
                       ...formState,
-                      applangcode: e.target.value,
+                      appLanguageCode: eventKey !== null ? eventKey : '',
                     });
                   }}
                 >
-                  {languages.map((language, index: number) => (
-                    <option key={index} value={language.code}>
-                      {language.name}
-                    </option>
-                  ))}
-                </select>
+                  <div role="applangcode">
+                    <Dropdown.Toggle>
+                      {
+                        languages.find(
+                          (lang) => lang.code == formState.appLanguageCode
+                        )?.name
+                      }
+                    </Dropdown.Toggle>
+                  </div>
+                  <Dropdown.Menu>
+                    {languages.map((language, index) => {
+                      return (
+                        <Dropdown.Item
+                          href=""
+                          key={index}
+                          eventKey={language.code}
+                          role={language.name}
+                        >
+                          {language.name}
+                        </Dropdown.Item>
+                      );
+                    })}
+                  </Dropdown.Menu>
+                </Dropdown>
               </label>
             </div>
           </div>
