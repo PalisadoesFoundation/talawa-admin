@@ -20,4 +20,4 @@
 
 #### Defined in
 
-[src/screens/UserPortal/Donate/Donate.tsx:27](https://github.com/duplixx/talawa-admin/blob/cab80a8/src/screens/UserPortal/Donate/Donate.tsx#L27)
+[src/screens/UserPortal/Donate/Donate.tsx:27](https://github.com/duplixx/talawa-admin/blob/2ed1c15/src/screens/UserPortal/Donate/Donate.tsx#L27)

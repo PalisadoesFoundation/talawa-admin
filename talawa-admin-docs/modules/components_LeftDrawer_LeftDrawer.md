@@ -30,4 +30,4 @@
 
 #### Defined in
 
-[src/components/LeftDrawer/LeftDrawer.tsx:20](https://github.com/duplixx/talawa-admin/blob/cab80a8/src/components/LeftDrawer/LeftDrawer.tsx#L20)
+[src/components/LeftDrawer/LeftDrawer.tsx:20](https://github.com/duplixx/talawa-admin/blob/2ed1c15/src/components/LeftDrawer/LeftDrawer.tsx#L20)
