@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/OrgContriCards/OrgContriCards.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/OrgContriCards/OrgContriCards.tsx#L17)
+[src/components/OrgContriCards/OrgContriCards.tsx:17](https://github.com/meetulr/talawa-admin/blob/f0d07a2/src/components/OrgContriCards/OrgContriCards.tsx#L17)

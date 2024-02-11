@@ -30,4 +30,4 @@
 
 #### Defined in
 
-[src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L29)
+[src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:29](https://github.com/meetulr/talawa-admin/blob/f0d07a2/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L29)

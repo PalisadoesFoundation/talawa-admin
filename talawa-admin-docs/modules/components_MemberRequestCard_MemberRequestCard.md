@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/MemberRequestCard/MemberRequestCard.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/MemberRequestCard/MemberRequestCard.tsx#L26)
+[src/components/MemberRequestCard/MemberRequestCard.tsx:26](https://github.com/meetulr/talawa-admin/blob/f0d07a2/src/components/MemberRequestCard/MemberRequestCard.tsx#L26)
