@@ -13,6 +13,16 @@ export interface InterfaceUserType {
   };
 }
 
+export interface InterfaceActionItemCategoryInfo {
+  _id: string;
+  name: string;
+  isDisabled: boolean;
+}
+
+export interface InterfaceActionItemCategoryList {
+  actionItemCategoriesByOrganization: InterfaceActionItemCategoryInfo[];
+}
+
 export interface InterfaceOrgConnectionInfoType {
   _id: string;
   image: string | null;

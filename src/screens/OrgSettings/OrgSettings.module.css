@@ -1,5 +1,10 @@
+.settingsContainer {
+  min-height: 100vh;
+}
+
 .settingsBody {
-  margin: 2.5rem 0;
+  min-height: 100vh;
+  margin: 2.5rem 1rem;
 }
 
 .cardHeader {
@@ -22,4 +27,26 @@
 .cardBody .textBox {
   margin: 0 0 3rem 0;
   color: var(--bs-secondary);
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background-color: var(--bs-gray-500);
+}
+
+.settingsTabs {
+  display: none;
+}
+
+@media (min-width: 577px) {
+  .settingsDropdown {
+    display: none;
+  }
+}
+
+@media (min-width: 577px) {
+  .settingsTabs {
+    display: block;
+  }
 }
