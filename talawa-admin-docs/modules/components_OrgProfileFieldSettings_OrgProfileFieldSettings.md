@@ -24,4 +24,4 @@
 
 #### Defined in
 
-[src/components/OrgProfileFieldSettings/OrgProfileFieldSettings.tsx:21](https://github.com/pateldivyesh1323/talawa-admin/blob/477e50c/src/components/OrgProfileFieldSettings/OrgProfileFieldSettings.tsx#L21)
+[src/components/OrgProfileFieldSettings/OrgProfileFieldSettings.tsx:21](https://github.com/pateldivyesh1323/talawa-admin/blob/926c168/src/components/OrgProfileFieldSettings/OrgProfileFieldSettings.tsx#L21)

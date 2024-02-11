@@ -20,4 +20,4 @@
 
 #### Defined in
 
-[src/screens/PageNotFound/PageNotFound.tsx:8](https://github.com/pateldivyesh1323/talawa-admin/blob/477e50c/src/screens/PageNotFound/PageNotFound.tsx#L8)
+[src/screens/PageNotFound/PageNotFound.tsx:8](https://github.com/pateldivyesh1323/talawa-admin/blob/926c168/src/screens/PageNotFound/PageNotFound.tsx#L8)

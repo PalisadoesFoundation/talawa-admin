@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/UserPortal/CommentCard/CommentCard.tsx:26](https://github.com/pateldivyesh1323/talawa-admin/blob/477e50c/src/components/UserPortal/CommentCard/CommentCard.tsx#L26)
+[src/components/UserPortal/CommentCard/CommentCard.tsx:27](https://github.com/pateldivyesh1323/talawa-admin/blob/926c168/src/components/UserPortal/CommentCard/CommentCard.tsx#L27)

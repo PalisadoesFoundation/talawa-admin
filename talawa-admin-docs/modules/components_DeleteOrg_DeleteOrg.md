@@ -20,4 +20,4 @@
 
 #### Defined in
 
-[src/components/DeleteOrg/DeleteOrg.tsx:14](https://github.com/pateldivyesh1323/talawa-admin/blob/477e50c/src/components/DeleteOrg/DeleteOrg.tsx#L14)
+[src/components/DeleteOrg/DeleteOrg.tsx:15](https://github.com/pateldivyesh1323/talawa-admin/blob/926c168/src/components/DeleteOrg/DeleteOrg.tsx#L15)

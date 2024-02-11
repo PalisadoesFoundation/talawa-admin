@@ -18,7 +18,7 @@
 
 #### Defined in
 
-[src/components/CheckIn/mocks.ts:48](https://github.com/pateldivyesh1323/talawa-admin/blob/477e50c/src/components/CheckIn/mocks.ts#L48)
+[src/components/CheckIn/mocks.ts:48](https://github.com/pateldivyesh1323/talawa-admin/blob/926c168/src/components/CheckIn/mocks.ts#L48)
 
 ___
 
@@ -28,7 +28,7 @@ ___
 
 #### Defined in
 
-[src/components/CheckIn/mocks.ts:69](https://github.com/pateldivyesh1323/talawa-admin/blob/477e50c/src/components/CheckIn/mocks.ts#L69)
+[src/components/CheckIn/mocks.ts:69](https://github.com/pateldivyesh1323/talawa-admin/blob/926c168/src/components/CheckIn/mocks.ts#L69)
 
 ___
 
@@ -38,4 +38,4 @@ ___
 
 #### Defined in
 
-[src/components/CheckIn/mocks.ts:36](https://github.com/pateldivyesh1323/talawa-admin/blob/477e50c/src/components/CheckIn/mocks.ts#L36)
+[src/components/CheckIn/mocks.ts:36](https://github.com/pateldivyesh1323/talawa-admin/blob/926c168/src/components/CheckIn/mocks.ts#L36)

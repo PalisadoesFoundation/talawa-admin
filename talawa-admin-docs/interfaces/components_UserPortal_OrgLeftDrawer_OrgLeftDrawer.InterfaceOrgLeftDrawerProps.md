@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[src/components/UserPortal/OrgLeftDrawer/OrgLeftDrawer.tsx:18](https://github.com/pateldivyesh1323/talawa-admin/blob/477e50c/src/components/UserPortal/OrgLeftDrawer/OrgLeftDrawer.tsx#L18)
+[src/components/UserPortal/OrgLeftDrawer/OrgLeftDrawer.tsx:18](https://github.com/pateldivyesh1323/talawa-admin/blob/926c168/src/components/UserPortal/OrgLeftDrawer/OrgLeftDrawer.tsx#L18)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[src/components/UserPortal/OrgLeftDrawer/OrgLeftDrawer.tsx:17](https://github.com/pateldivyesh1323/talawa-admin/blob/477e50c/src/components/UserPortal/OrgLeftDrawer/OrgLeftDrawer.tsx#L17)
+[src/components/UserPortal/OrgLeftDrawer/OrgLeftDrawer.tsx:17](https://github.com/pateldivyesh1323/talawa-admin/blob/926c168/src/components/UserPortal/OrgLeftDrawer/OrgLeftDrawer.tsx#L17)
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-[src/components/UserPortal/OrgLeftDrawer/OrgLeftDrawer.tsx:19](https://github.com/pateldivyesh1323/talawa-admin/blob/477e50c/src/components/UserPortal/OrgLeftDrawer/OrgLeftDrawer.tsx#L19)
+[src/components/UserPortal/OrgLeftDrawer/OrgLeftDrawer.tsx:19](https://github.com/pateldivyesh1323/talawa-admin/blob/926c168/src/components/UserPortal/OrgLeftDrawer/OrgLeftDrawer.tsx#L19)
