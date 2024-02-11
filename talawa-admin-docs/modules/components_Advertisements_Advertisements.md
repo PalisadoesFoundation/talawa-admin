@@ -20,4 +20,4 @@
 
 #### Defined in
 
-[src/components/Advertisements/Advertisements.tsx:18](https://github.com/duplixx/talawa-admin/blob/ae8bf62/src/components/Advertisements/Advertisements.tsx#L18)
+[src/components/Advertisements/Advertisements.tsx:18](https://github.com/duplixx/talawa-admin/blob/2ed1c15/src/components/Advertisements/Advertisements.tsx#L18)

@@ -30,7 +30,7 @@
 
 #### Defined in
 
-[src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:16](https://github.com/duplixx/talawa-admin/blob/ae8bf62/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L16)
+[src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:16](https://github.com/duplixx/talawa-admin/blob/2ed1c15/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L16)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:24](https://github.com/duplixx/talawa-admin/blob/ae8bf62/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L24)
+[src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:24](https://github.com/duplixx/talawa-admin/blob/2ed1c15/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L24)
 
 ___
 
@@ -50,4 +50,4 @@ ___
 
 #### Defined in
 
-[src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:25](https://github.com/duplixx/talawa-admin/blob/ae8bf62/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L25)
+[src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:25](https://github.com/duplixx/talawa-admin/blob/2ed1c15/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L25)

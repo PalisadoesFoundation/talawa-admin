@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[src/components/LeftDrawer/LeftDrawer.tsx:15](https://github.com/duplixx/talawa-admin/blob/ae8bf62/src/components/LeftDrawer/LeftDrawer.tsx#L15)
+[src/components/LeftDrawer/LeftDrawer.tsx:15](https://github.com/duplixx/talawa-admin/blob/2ed1c15/src/components/LeftDrawer/LeftDrawer.tsx#L15)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[src/components/LeftDrawer/LeftDrawer.tsx:17](https://github.com/duplixx/talawa-admin/blob/ae8bf62/src/components/LeftDrawer/LeftDrawer.tsx#L17)
+[src/components/LeftDrawer/LeftDrawer.tsx:17](https://github.com/duplixx/talawa-admin/blob/2ed1c15/src/components/LeftDrawer/LeftDrawer.tsx#L17)
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-[src/components/LeftDrawer/LeftDrawer.tsx:16](https://github.com/duplixx/talawa-admin/blob/ae8bf62/src/components/LeftDrawer/LeftDrawer.tsx#L16)
+[src/components/LeftDrawer/LeftDrawer.tsx:16](https://github.com/duplixx/talawa-admin/blob/2ed1c15/src/components/LeftDrawer/LeftDrawer.tsx#L16)

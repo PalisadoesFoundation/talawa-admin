@@ -30,4 +30,4 @@
 
 #### Defined in
 
-[src/components/OrganizationDashCards/CardItem.tsx:21](https://github.com/duplixx/talawa-admin/blob/ae8bf62/src/components/OrganizationDashCards/CardItem.tsx#L21)
+[src/components/OrganizationDashCards/CardItem.tsx:21](https://github.com/duplixx/talawa-admin/blob/2ed1c15/src/components/OrganizationDashCards/CardItem.tsx#L21)

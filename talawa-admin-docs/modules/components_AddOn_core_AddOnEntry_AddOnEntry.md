@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/AddOn/core/AddOnEntry/AddOnEntry.tsx:22](https://github.com/duplixx/talawa-admin/blob/ae8bf62/src/components/AddOn/core/AddOnEntry/AddOnEntry.tsx#L22)
+[src/components/AddOn/core/AddOnEntry/AddOnEntry.tsx:22](https://github.com/duplixx/talawa-admin/blob/2ed1c15/src/components/AddOn/core/AddOnEntry/AddOnEntry.tsx#L22)

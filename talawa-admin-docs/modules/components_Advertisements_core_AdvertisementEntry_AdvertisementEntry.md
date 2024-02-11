@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx:21](https://github.com/duplixx/talawa-admin/blob/ae8bf62/src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx#L21)
+[src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx:21](https://github.com/duplixx/talawa-admin/blob/2ed1c15/src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx#L21)
