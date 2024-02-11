@@ -90,6 +90,18 @@ export const ORGANIZATION_CONNECTION_LIST = gql`
   }
 `;
 
+// Query to get the action item category list
+
+export const ACTION_ITEM_CATEGORY_LIST = gql`
+  query ActionItemCategoriesByOrganization($organizationId: ID!) {
+    actionItemCategoriesByOrganization(organizationId: $organizationId) {
+      _id
+      name
+      isDisabled
+    }
+  }
+`;
+
 // Query to take the User list
 export const USER_LIST = gql`
   query Users(
@@ -580,9 +592,6 @@ export const MEMBERSHIP_REQUEST = gql`
     }
   }
 `;
-
-// get the list of action item categories for an organization
-export { ACTION_ITEM_CATEGORY_LIST } from './ActionItemCategoryQueries';
 
 // to take the list of the blocked users
 export { PLUGIN_GET } from './PlugInQueries';

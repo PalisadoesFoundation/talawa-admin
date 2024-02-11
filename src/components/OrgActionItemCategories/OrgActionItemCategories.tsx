@@ -11,7 +11,7 @@ import {
   CREATE_ACTION_ITEM_CATEGORY_MUTATION,
   UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
+import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/Queries';
 import type { InterfaceActionItemCategoryList } from 'utils/interfaces';
 import Loader from 'components/Loader/Loader';
 
@@ -22,7 +22,7 @@ const OrgActionItemCategories = (): any => {
     keyPrefix: 'orgActionItemCategories',
   });
 
-  const [addModalIsOpen, setAddModalIsOpen] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalType, setModalType] = useState<ModalType>('Create');
   const [categoryId, setCategoryId] = useState('');
 
@@ -71,7 +71,7 @@ const OrgActionItemCategories = (): any => {
       setName('');
       refetch();
 
-      setAddModalIsOpen(false);
+      setModalIsOpen(false);
 
       toast.success(t('successfulCreation'));
     } catch (error: any) {
@@ -97,7 +97,7 @@ const OrgActionItemCategories = (): any => {
         setCategoryId('');
         refetch();
 
-        setAddModalIsOpen(false);
+        setModalIsOpen(false);
 
         toast.success(t('successfulUpdation'));
       } catch (error: any) {
@@ -132,7 +132,7 @@ const OrgActionItemCategories = (): any => {
 
   const showCreateModal = (): void => {
     setModalType('Create');
-    setAddModalIsOpen(true);
+    setModalIsOpen(true);
   };
 
   const showUpdateModal = (name: string, id: string): void => {
@@ -140,13 +140,13 @@ const OrgActionItemCategories = (): any => {
     setName(name);
     setCategoryId(id);
     setModalType('Update');
-    setAddModalIsOpen(true);
+    setModalIsOpen(true);
   };
 
   const hideModal = (): void => {
     setName('');
     setCategoryId('');
-    setAddModalIsOpen(false);
+    setModalIsOpen(false);
   };
 
   if (loading) {
@@ -166,6 +166,8 @@ const OrgActionItemCategories = (): any => {
     );
   }
 
+  const actionItemCategories = data?.actionItemCategoriesByOrganization;
+
   return (
     <>
       <Button
@@ -180,7 +182,7 @@ const OrgActionItemCategories = (): any => {
       </Button>
 
       <div>
-        {data?.actionItemCategoriesByOrganization.map((category, index) => {
+        {actionItemCategories?.map((category, index) => {
           return (
             <div key={index}>
               <div className="my-3 d-flex justify-content-between align-items-center">
@@ -218,9 +220,7 @@ const OrgActionItemCategories = (): any => {
                 </div>
               </div>
 
-              {index !== data.actionItemCategoriesByOrganization.length - 1 && (
-                <hr />
-              )}
+              {index !== actionItemCategories.length - 1 && <hr />}
             </div>
           );
         })}
@@ -228,7 +228,7 @@ const OrgActionItemCategories = (): any => {
 
       <Modal
         className={styles.createModal}
-        show={addModalIsOpen}
+        show={modalIsOpen}
         onHide={hideModal}
       >
         <Modal.Header>
