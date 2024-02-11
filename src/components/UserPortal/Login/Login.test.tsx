@@ -13,13 +13,14 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Login from './Login';
 import { toast } from 'react-toastify';
+import { debug } from 'jest-preview';
 
 const MOCKS = [
   {
     request: {
       query: LOGIN_MUTATION,
       variables: {
-        email: 'johndoe@gmail.com',
+        email: 'johndoe1@gmail.com',
         password: 'johndoe',
       },
     },
@@ -41,7 +42,7 @@ const MOCKS = [
     request: {
       query: LOGIN_MUTATION,
       variables: {
-        email: 'johndoe@gmail.com',
+        email: 'johndoe2@gmail.com',
         password: 'jdoe',
       },
     },
@@ -156,7 +157,7 @@ describe('Testing Login Component [User Portal]', () => {
 
   test('toast.error is triggered if the password input is empty.', async () => {
     const formData = {
-      email: 'johndoe@gmail.com',
+      email: 'johndoe2@gmail.com',
       password: 'joe',
     };
 
@@ -224,7 +225,7 @@ describe('Testing Login Component [User Portal]', () => {
 
   test('Login details are entered correctly.', async () => {
     const formData = {
-      email: 'johndoe@gmail.com',
+      email: 'johndoe1@gmail.com',
       password: 'johndoe',
     };
 
@@ -259,7 +260,7 @@ describe('Testing Login Component [User Portal]', () => {
 
   test('Current user has not been approved by admin.', async () => {
     const formData = {
-      email: 'johndoe@gmail.com',
+      email: 'johndoe2@gmail.com',
       password: 'jdoe',
     };
 
