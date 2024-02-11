@@ -546,6 +546,7 @@
   "memberDetail": {
     "title": "उपयोगकर्ता विवरण",
     "addAdmin": "व्यवस्थापक जोड़ें",
+    "alreadyIsAdmin": "सदस्य पहले से ही एक व्यवस्थापक है",
     "organizations": "संगठन",
     "events": "घटनाएं",
     "role": "भूमिका",

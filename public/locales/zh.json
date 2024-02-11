@@ -546,6 +546,7 @@
   "memberDetail": {
     "title": "用户详细信息",
     "addAdmin": "添加管理员",
+    "alreadyIsAdmin": "会员已经是管理员",
     "organizations": "组织",
     "events": "事件",
     "role": "角色",

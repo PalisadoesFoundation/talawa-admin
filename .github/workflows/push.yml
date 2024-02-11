@@ -60,7 +60,7 @@ jobs:
 
   Generate-Documentation:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/automated-docs'
+    # if: github.ref == 'refs/heads/automated-docs'
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v3
@@ -102,8 +102,8 @@ jobs:
           npm install --save-dev @types/node
           npx typedoc --entryPoints src/components src/screens --out talawa-admin-docs --plugin typedoc-plugin-markdown --theme markdown --entryPointStrategy expand --exclude "**/*.test.ts" --exclude "**/*.css"
           
-      - name: Make Markdown Files MPX Compatible
-        run: python ./.github/workflows/md_mpx_format_adjuster.py --directory talawa-admin-docs
+      - name: Make Markdown Files MDX Compatible
+        run: python ./.github/workflows/md_mdx_format_adjuster.py --directory talawa-admin-docs
         
           
       - name: Checking doc updated
@@ -149,7 +149,7 @@ jobs:
     - uses: actions/checkout@v3
     - uses: dmnemec/copy_file_to_another_repo_action@v1.1.1
       env:
-        API_TOKEN_GITHUB: ${{ secrets.TALAWA_DOCS_SYNC_NEW }}    
+        API_TOKEN_GITHUB: ${{secrets.TALAWA_DOCS_SYNC}}    
       with:
         source_file: 'talawa-admin-docs/'
         destination_repo: 'PalisadoesFoundation/talawa-docs'
@@ -158,5 +158,3 @@ jobs:
         user_email: '${{env.email}}'
         user_name: '${{github.actor}}'
         commit_message: 'Talawa Admin docs updated'
-      
-       

@@ -13,6 +13,9 @@ import i18nForTest from 'utils/i18nForTest';
 import OrgSettings from './OrgSettings';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import userEvent from '@testing-library/user-event';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem } = useLocalStorage();
 
 const MOCKS = [
   {
@@ -101,7 +104,7 @@ describe('Organisation Settings Page', () => {
 
   test('should render props and text elements test for the screen', async () => {
     window.location.assign('/orgsetting/id=123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -126,7 +129,7 @@ describe('Organisation Settings Page', () => {
 
   test('should render appropriate settings based on the orgSetting state', async () => {
     window.location.assign('/orgsetting/id=123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
 
     const { queryByText } = render(
       <MockedProvider addTypename={false} link={link}>

@@ -29,6 +29,7 @@ import type {
 } from 'utils/interfaces';
 import styles from './OrgList.module.css';
 import OrganizationModal from './OrganizationModal';
+import useLocalStorage from 'utils/useLocalstorage';
 
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
@@ -40,6 +41,8 @@ function orgList(): JSX.Element {
     // console.log(redirectOrgId, dialogRedirectOrgId);
     setdialogModalIsOpen(true);
   }
+
+  const { getItem } = useLocalStorage();
 
   /* eslint-disable @typescript-eslint/explicit-function-return-type */
   function closeDialogModal() {
@@ -93,9 +96,9 @@ function orgList(): JSX.Element {
     loading: boolean;
     error?: Error | undefined;
   } = useQuery(USER_ORGANIZATION_LIST, {
-    variables: { id: localStorage.getItem('id') },
+    variables: { id: getItem('id') },
     context: {
-      headers: { authorization: `Bearer ${localStorage.getItem('token')}` },
+      headers: { authorization: `Bearer ${getItem('token')}` },
     },
   });
 
@@ -464,50 +467,49 @@ function orgList(): JSX.Element {
                 </div>
               }
             >
-              {isLoading ? (
-                <>
-                  {[...Array(perPageResult)].map((_, index) => (
-                    <div key={index} className={styles.itemCard}>
-                      <div className={styles.loadingWrapper}>
-                        <div className={styles.innerContainer}>
-                          <div
-                            className={`${styles.orgImgContainer} shimmer`}
-                          ></div>
-                          <div className={styles.content}>
-                            <h5 className="shimmer" title="Org name"></h5>
-                            <h6 className="shimmer" title="Location"></h6>
-                            <h6 className="shimmer" title="Admins"></h6>
-                            <h6 className="shimmer" title="Members"></h6>
-                          </div>
-                        </div>
-                        <div className={`shimmer ${styles.button}`} />
-                      </div>
-                    </div>
-                  ))}
-                </>
-              ) : userData && userData.user.userType == 'SUPERADMIN' ? (
-                orgsData?.organizationsConnection.map((item) => {
-                  return (
-                    <div key={item._id} className={styles.itemCard}>
-                      <OrgListCard data={item} />
-                    </div>
-                  );
-                })
-              ) : (
-                userData &&
-                userData.user.userType == 'ADMIN' &&
-                userData.user.adminFor.length > 0 &&
-                orgsData?.organizationsConnection.map((item) => {
-                  if (isAdminForCurrentOrg(item)) {
+              {userData && userData.user.userType == 'SUPERADMIN'
+                ? orgsData?.organizationsConnection.map((item) => {
                     return (
                       <div key={item._id} className={styles.itemCard}>
                         <OrgListCard data={item} />
                       </div>
                     );
-                  }
-                })
-              )}
+                  })
+                : userData &&
+                  userData.user.userType == 'ADMIN' &&
+                  userData.user.adminFor.length > 0 &&
+                  orgsData?.organizationsConnection.map((item) => {
+                    if (isAdminForCurrentOrg(item)) {
+                      return (
+                        <div key={item._id} className={styles.itemCard}>
+                          <OrgListCard data={item} />
+                        </div>
+                      );
+                    }
+                  })}
             </InfiniteScroll>
+            {isLoading && (
+              <>
+                {[...Array(perPageResult)].map((_, index) => (
+                  <div key={index} className={styles.itemCard}>
+                    <div className={styles.loadingWrapper}>
+                      <div className={styles.innerContainer}>
+                        <div
+                          className={`${styles.orgImgContainer} shimmer`}
+                        ></div>
+                        <div className={styles.content}>
+                          <h5 className="shimmer" title="Org name"></h5>
+                          <h6 className="shimmer" title="Location"></h6>
+                          <h6 className="shimmer" title="Admins"></h6>
+                          <h6 className="shimmer" title="Members"></h6>
+                        </div>
+                      </div>
+                      <div className={`shimmer ${styles.button}`} />
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
           </>
         )}
         {/* Create Organization Modal */}

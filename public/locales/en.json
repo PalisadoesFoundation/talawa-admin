@@ -550,6 +550,7 @@
   "memberDetail": {
     "title": "User Details",
     "addAdmin": "Add Admin",
+    "alreadyIsAdmin": "Member is already an Admin",
     "organizations": "Organizations",
     "events": "Events",
     "role": "Role",
