@@ -20,4 +20,4 @@
 
 #### Defined in
 
-[src/screens/OrgPost/OrgPost.tsx:35](https://github.com/duplixx/talawa-admin/blob/2ed1c15/src/screens/OrgPost/OrgPost.tsx#L35)
+[src/screens/OrgPost/OrgPost.tsx:35](https://github.com/duplixx/talawa-admin/blob/ae8bf62/src/screens/OrgPost/OrgPost.tsx#L35)

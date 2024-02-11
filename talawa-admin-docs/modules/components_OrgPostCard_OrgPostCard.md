@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/OrgPostCard/OrgPostCard.tsx:35](https://github.com/duplixx/talawa-admin/blob/2ed1c15/src/components/OrgPostCard/OrgPostCard.tsx#L35)
+[src/components/OrgPostCard/OrgPostCard.tsx:35](https://github.com/duplixx/talawa-admin/blob/ae8bf62/src/components/OrgPostCard/OrgPostCard.tsx#L35)

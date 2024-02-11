@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/UserPortal/PostCard/PostCard.tsx:70](https://github.com/duplixx/talawa-admin/blob/2ed1c15/src/components/UserPortal/PostCard/PostCard.tsx#L70)
+[src/components/UserPortal/PostCard/PostCard.tsx:70](https://github.com/duplixx/talawa-admin/blob/ae8bf62/src/components/UserPortal/PostCard/PostCard.tsx#L70)
