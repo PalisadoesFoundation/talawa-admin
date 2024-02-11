@@ -12,6 +12,9 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrgSettings from './OrgSettings';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem } = useLocalStorage();
 
 const MOCKS = [
   {
@@ -96,7 +99,7 @@ describe('Organisation Settings Page', () => {
 
   test('should render props and text elements test for the screen', async () => {
     window.location.assign('/orgsetting/id=123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>

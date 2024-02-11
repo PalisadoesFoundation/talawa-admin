@@ -10,6 +10,7 @@ import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import styles from './LeftDrawer.module.css';
 import { useMutation } from '@apollo/client';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import useLocalStorage from 'utils/useLocalstorage';
 
 export interface InterfaceLeftDrawerProps {
   hideDrawer: boolean | null;
@@ -23,11 +24,12 @@ const leftDrawer = ({
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
 
-  const userType = localStorage.getItem('UserType');
-  const firstName = localStorage.getItem('FirstName');
-  const lastName = localStorage.getItem('LastName');
-  const userImage = localStorage.getItem('UserImage');
-  const userId = localStorage.getItem('id');
+  const { getItem } = useLocalStorage();
+  const userType = getItem('UserType');
+  const firstName = getItem('FirstName');
+  const lastName = getItem('LastName');
+  const userImage = getItem('UserImage');
+  const userId = getItem('id');
   const history = useHistory();
 
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
