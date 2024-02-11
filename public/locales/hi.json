@@ -699,6 +699,8 @@
     "archievedAds": "संपन्न अभियान",
     "pMessage": "इस अभियान के लिए कोई विज्ञापन नहीं हैं।",
     "delete": "हटाएँ",
+    "validLink": "लिंक मान्य है",
+    "invalidLink": "लिंक अमान्य है",
     "close": "बंद करें",
     "deleteAdvertisement": "विज्ञापन हटाएं",
     "deleteAdvertisementMsg": "क्या आप इस विज्ञापन को हटाना चाहते हैं?",

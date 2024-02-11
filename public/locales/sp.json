@@ -698,6 +698,8 @@
     "archievedAds": "Campañas completadas",
     "pMessage": "No hay anuncios disponibles para esta campaña.",
     "delete": "Eliminar",
+    "validLink": "El enlace es válido.",
+    "invalidLink": "El enlace no es válido.",
     "close": "Cerrar",
     "deleteAdvertisement": "Eliminar anuncio",
     "deleteAdvertisementMsg": "¿Desea eliminar este anuncio?",
