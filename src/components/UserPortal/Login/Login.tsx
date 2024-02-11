@@ -7,7 +7,6 @@ import { LockOutlined } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
-
 import { LOGIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import styles from './Login.module.css';
 import { errorHandler } from 'utils/errorHandler';
