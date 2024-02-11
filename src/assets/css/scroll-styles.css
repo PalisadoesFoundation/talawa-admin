@@ -1,0 +1,18 @@
+.custom-scroll {
+  overflow-y: scroll;
+}
+.custom-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+.custom-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 6px;
+}
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: var(--bs-gray-500);
+  border-radius: 6px;
+}
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--bs-gray-600);
+  border-radius: 6px;
+}

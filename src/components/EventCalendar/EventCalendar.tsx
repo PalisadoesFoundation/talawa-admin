@@ -6,6 +6,7 @@ import styles from './EventCalendar.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { Dropdown } from 'react-bootstrap';
 import CurrentHourIndicator from 'components/CurrentHourIndicator/CurrentHourIndicator';
+import '../../assets/css/scroll-styles.css';
 
 interface InterfaceEvent {
   _id: string;
@@ -571,7 +572,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           </Dropdown>
         </div>
       </div>
-      <div style={{ height: '80vh', overflowY: 'scroll', padding: '10px' }}>
+      <div className={`${styles.calendar__scroll} custom-scroll`}>
         {viewType == ViewType.MONTH ? (
           <div>
             <div className={styles.calendar__weekdays}>
