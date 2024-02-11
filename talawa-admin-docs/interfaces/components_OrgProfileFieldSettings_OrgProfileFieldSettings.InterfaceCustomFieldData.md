@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[src/components/OrgProfileFieldSettings/OrgProfileFieldSettings.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/780d70f/src/components/OrgProfileFieldSettings/OrgProfileFieldSettings.tsx#L18)
+[src/components/OrgProfileFieldSettings/OrgProfileFieldSettings.tsx:18](https://github.com/Sauradip07/talawa-admin/blob/22ca820/src/components/OrgProfileFieldSettings/OrgProfileFieldSettings.tsx#L18)
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[src/components/OrgProfileFieldSettings/OrgProfileFieldSettings.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/780d70f/src/components/OrgProfileFieldSettings/OrgProfileFieldSettings.tsx#L17)
+[src/components/OrgProfileFieldSettings/OrgProfileFieldSettings.tsx:17](https://github.com/Sauradip07/talawa-admin/blob/22ca820/src/components/OrgProfileFieldSettings/OrgProfileFieldSettings.tsx#L17)
