@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[src/components/EventCalendar/EventCalendar.tsx:47](https://github.com/AmitSharma512/talawa-admin/blob/859e5bd/src/components/EventCalendar/EventCalendar.tsx#L47)
+[src/components/EventCalendar/EventCalendar.tsx:46](https://github.com/AmitSharma512/talawa-admin/blob/82b22ab/src/components/EventCalendar/EventCalendar.tsx#L46)
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[src/components/EventCalendar/EventCalendar.tsx:48](https://github.com/AmitSharma512/talawa-admin/blob/859e5bd/src/components/EventCalendar/EventCalendar.tsx#L48)
+[src/components/EventCalendar/EventCalendar.tsx:47](https://github.com/AmitSharma512/talawa-admin/blob/82b22ab/src/components/EventCalendar/EventCalendar.tsx#L47)

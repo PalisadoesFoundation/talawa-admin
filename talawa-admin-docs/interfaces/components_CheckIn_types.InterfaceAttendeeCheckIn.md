@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[src/components/CheckIn/types.ts:8](https://github.com/AmitSharma512/talawa-admin/blob/859e5bd/src/components/CheckIn/types.ts#L8)
+[src/components/CheckIn/types.ts:8](https://github.com/AmitSharma512/talawa-admin/blob/82b22ab/src/components/CheckIn/types.ts#L8)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[src/components/CheckIn/types.ts:10](https://github.com/AmitSharma512/talawa-admin/blob/859e5bd/src/components/CheckIn/types.ts#L10)
+[src/components/CheckIn/types.ts:10](https://github.com/AmitSharma512/talawa-admin/blob/82b22ab/src/components/CheckIn/types.ts#L10)
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-[src/components/CheckIn/types.ts:9](https://github.com/AmitSharma512/talawa-admin/blob/859e5bd/src/components/CheckIn/types.ts#L9)
+[src/components/CheckIn/types.ts:9](https://github.com/AmitSharma512/talawa-admin/blob/82b22ab/src/components/CheckIn/types.ts#L9)

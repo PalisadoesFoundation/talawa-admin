@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/UsersTableItem/UsersTableItem.tsx:25](https://github.com/AmitSharma512/talawa-admin/blob/859e5bd/src/components/UsersTableItem/UsersTableItem.tsx#L25)
+[src/components/UsersTableItem/UsersTableItem.tsx:25](https://github.com/AmitSharma512/talawa-admin/blob/82b22ab/src/components/UsersTableItem/UsersTableItem.tsx#L25)

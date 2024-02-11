@@ -20,4 +20,4 @@
 
 #### Defined in
 
-[src/components/LoginPortalToggle/LoginPortalToggle.tsx:8](https://github.com/AmitSharma512/talawa-admin/blob/859e5bd/src/components/LoginPortalToggle/LoginPortalToggle.tsx#L8)
+[src/components/LoginPortalToggle/LoginPortalToggle.tsx:8](https://github.com/AmitSharma512/talawa-admin/blob/82b22ab/src/components/LoginPortalToggle/LoginPortalToggle.tsx#L8)

@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/UserPortal/Login/Login.tsx:20](https://github.com/AmitSharma512/talawa-admin/blob/859e5bd/src/components/UserPortal/Login/Login.tsx#L20)
+[src/components/UserPortal/Login/Login.tsx:20](https://github.com/AmitSharma512/talawa-admin/blob/82b22ab/src/components/UserPortal/Login/Login.tsx#L20)
