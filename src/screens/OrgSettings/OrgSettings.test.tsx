@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -84,6 +84,14 @@ const MOCKS = [
 
 const link = new StaticMockLink(MOCKS, true);
 
+async function wait(ms = 100): Promise<void> {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+}
+
 const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.orgSettings)
 );
@@ -116,6 +124,9 @@ describe('Organisation Settings Page', () => {
         </BrowserRouter>
       </MockedProvider>
     );
+
+    await wait();
+
     expect(screen.getAllByText(/Delete Organization/i)).toHaveLength(3);
     expect(
       screen.getByText(
@@ -142,6 +153,8 @@ describe('Organisation Settings Page', () => {
         </BrowserRouter>
       </MockedProvider>
     );
+
+    await wait();
 
     await waitFor(() => {
       userEvent.click(screen.getByTestId('actionItemCategoriesSettings'));
