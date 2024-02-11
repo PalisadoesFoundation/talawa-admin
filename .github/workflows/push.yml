@@ -60,7 +60,7 @@ jobs:
 
   Generate-Documentation:
     runs-on: ubuntu-latest
-    # if: github.ref == 'refs/heads/automated-docs'
+    if: github.ref == 'refs/heads/automated-docs'
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v3
