@@ -13,6 +13,9 @@ import { SearchOutlined } from '@mui/icons-material';
 import styles from './Organizations.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { getItem } = useLocalStorage();
 
 interface InterfaceOrganizationCardProps {
   id: string;
@@ -37,7 +40,7 @@ export default function organizations(): JSX.Element {
     t('createdOrganizations'),
   ];
 
-  const userId: string | null = localStorage.getItem('userId');
+  const userId: string | null = getItem('userId');
 
   const {
     data,

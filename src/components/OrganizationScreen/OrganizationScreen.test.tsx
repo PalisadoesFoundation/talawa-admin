@@ -11,6 +11,9 @@ import type { InterfaceOrganizationScreenProps } from './OrganizationScreen';
 import OrganizationScreen from './OrganizationScreen';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem } = useLocalStorage();
 
 const props: InterfaceOrganizationScreenProps = {
   title: 'Dashboard',
@@ -53,7 +56,7 @@ const link = new StaticMockLink(MOCKS, true);
 
 describe('Testing LeftDrawer in OrganizationScreen', () => {
   test('Testing LeftDrawer in page functionality', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
 
     render(
       <MockedProvider addTypename={false} link={link}>

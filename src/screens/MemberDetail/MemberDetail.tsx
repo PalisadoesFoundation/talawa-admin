@@ -17,6 +17,9 @@ import {
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { getItem } = useLocalStorage();
 
 type MemberDetailProps = {
   id: string; // This is the userId
@@ -31,7 +34,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   const location = useLocation<MemberDetailProps>();
-  const currentUrl = location.state?.id || localStorage.getItem('id') || id;
+  const currentUrl = location.state?.id || getItem('id') || id;
   const orgId = window.location.href.split('=')[1];
   document.title = t('title');
 

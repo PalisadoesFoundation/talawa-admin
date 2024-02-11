@@ -21,6 +21,7 @@ import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import EventCalendar from 'components/EventCalendar/EventCalendar';
+import useLocalStorage from 'utils/useLocalstorage';
 
 interface InterfaceEventCardProps {
   id: string;
@@ -49,6 +50,8 @@ export default function events(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userEvents',
   });
+
+  const { getItem } = useLocalStorage();
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -84,8 +87,8 @@ export default function events(): JSX.Element {
 
   const [create] = useMutation(CREATE_EVENT_MUTATION);
 
-  const userId = localStorage.getItem('id') as string;
-  const userRole = localStorage.getItem('UserType') as string;
+  const userId = getItem('id') as string;
+  const userRole = getItem('UserType') as string;
 
   const createEvent = async (): Promise<void> => {
     try {

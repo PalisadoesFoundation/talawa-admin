@@ -7,6 +7,7 @@ import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import useLocalStorage from 'utils/useLocalstorage';
 
 interface InterfaceCommentCardProps {
   id: string;
@@ -26,7 +27,8 @@ interface InterfaceCommentCardProps {
 function commentCard(props: InterfaceCommentCardProps): JSX.Element {
   const creatorName = `${props.creator.firstName} ${props.creator.lastName}`;
 
-  const userId = localStorage.getItem('userId');
+  const { getItem } = useLocalStorage();
+  const userId = getItem('userId');
   const likedByUser = props.likedBy.some((likedBy) => likedBy.id === userId);
 
   const [likes, setLikes] = React.useState(props.likeCount);
