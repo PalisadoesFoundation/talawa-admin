@@ -9,13 +9,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import OrganizationDashboard from './OrganizationDashboard';
-import {
-  EMPTY_MOCKS,
-  ERROR_MOCKS,
-  MOCKS,
-  linkMocked,
-  mockEventData,
-} from './OrganizationDashboardMocks';
+import { EMPTY_MOCKS, ERROR_MOCKS, MOCKS } from './OrganizationDashboardMocks';
 import i18nForTest from 'utils/i18nForTest';
 import { toast } from 'react-toastify';
 import userEvent from '@testing-library/user-event';
@@ -155,10 +149,16 @@ describe('Organisation Dashboard Page', () => {
   });
 
   test('Testing useEffect hook and error redirection', async () => {
+    // eslint-disable-next-line jest/no-export
+    const mockEventData = {
+      eventsByOrganizationConnection: [
+        { startDate: new Date().toISOString() }, // Assuming an event is upcoming
+      ],
+    };
     // Render the component with mock data
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} link={linkMocked}>
+        <MockedProvider addTypename={false} link={link1}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
