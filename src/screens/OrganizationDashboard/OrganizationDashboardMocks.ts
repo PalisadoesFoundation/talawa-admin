@@ -76,6 +76,19 @@ export const MOCKS = [
   },
   {
     request: {
+      query: ORGANIZATION_EVENT_CONNECTION_LIST,
+      variables: { organization_id: 'your_organization_id' },
+    },
+    result: {
+      data: {
+        eventsByOrganizationConnection: [
+          { startDate: new Date().toISOString() }, // Assuming an event is upcoming
+        ],
+      },
+    },
+  },
+  {
+    request: {
       query: ORGANIZATION_POST_CONNECTION_LIST,
     },
     result: {
