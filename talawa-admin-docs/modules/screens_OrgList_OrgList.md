@@ -20,4 +20,4 @@
 
 #### Defined in
 
-[src/screens/OrgList/OrgList.tsx:34](https://github.com/AmitSharma512/talawa-admin/blob/82b22ab/src/screens/OrgList/OrgList.tsx#L34)
+[src/screens/OrgList/OrgList.tsx:34](https://github.com/AmitSharma512/talawa-admin/blob/859e5bd/src/screens/OrgList/OrgList.tsx#L34)

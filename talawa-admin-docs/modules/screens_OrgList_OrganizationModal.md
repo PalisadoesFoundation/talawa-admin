@@ -29,4 +29,4 @@ Represents the organization modal component.
 
 #### Defined in
 
-[src/screens/OrgList/OrganizationModal.tsx:58](https://github.com/AmitSharma512/talawa-admin/blob/82b22ab/src/screens/OrgList/OrganizationModal.tsx#L58)
+[src/screens/OrgList/OrganizationModal.tsx:58](https://github.com/AmitSharma512/talawa-admin/blob/859e5bd/src/screens/OrgList/OrganizationModal.tsx#L58)

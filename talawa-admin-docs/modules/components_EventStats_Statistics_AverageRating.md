@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/EventStats/Statistics/AverageRating.tsx:35](https://github.com/AmitSharma512/talawa-admin/blob/82b22ab/src/components/EventStats/Statistics/AverageRating.tsx#L35)
+[src/components/EventStats/Statistics/AverageRating.tsx:35](https://github.com/AmitSharma512/talawa-admin/blob/859e5bd/src/components/EventStats/Statistics/AverageRating.tsx#L35)

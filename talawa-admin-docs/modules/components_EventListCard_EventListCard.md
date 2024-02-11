@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/EventListCard/EventListCard.tsx:32](https://github.com/AmitSharma512/talawa-admin/blob/82b22ab/src/components/EventListCard/EventListCard.tsx#L32)
+[src/components/EventListCard/EventListCard.tsx:32](https://github.com/AmitSharma512/talawa-admin/blob/859e5bd/src/components/EventListCard/EventListCard.tsx#L32)
