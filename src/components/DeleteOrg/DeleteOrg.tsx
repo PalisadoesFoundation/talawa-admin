@@ -62,7 +62,7 @@ function deleteOrg(): JSX.Element {
   return (
     <>
       {canDelete && (
-        <Card className="rounded-4 shadow-sm mb-4 border border-light-subtle">
+        <Card border="0" className="rounded-4 mb-4">
           <div className={styles.cardHeader}>
             <div className={styles.cardTitle}>{t('deleteOrganization')}</div>
           </div>
