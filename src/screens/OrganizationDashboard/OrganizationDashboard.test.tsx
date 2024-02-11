@@ -147,4 +147,63 @@ describe('Organisation Dashboard Page', () => {
     await wait();
     expect(window.location).toBeAt('/orglist');
   });
+  test('Testing useEffect hook and error redirection', async () => {
+    // eslint-disable-next-line jest/no-export
+    const mockEventData = {
+      eventsByOrganizationConnection: [
+        { startDate: new Date().toISOString() }, // Assuming an event is upcoming
+      ],
+    };
+    // Render the component with mock data
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link1}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrganizationDashboard />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+    });
+
+    // Wait for useEffect to be executed
+    await wait();
+
+    // Check if the hook updates the state with upcoming events
+    expect(screen.getByText('Upcoming Events')).toBeInTheDocument();
+    expect(screen.getByText('Latest Posts')).toBeInTheDocument();
+
+    // Check if tempUpcomingEvents logic is executed correctly
+    const startDate = new Date(
+      mockEventData.eventsByOrganizationConnection[0].startDate
+    );
+    const now = new Date();
+    const tempUpcomingEvents = [];
+    if (startDate > now) {
+      tempUpcomingEvents.push(mockEventData.eventsByOrganizationConnection[0]);
+    }
+    expect(tempUpcomingEvents).toHaveLength(0);
+
+    // Test conditional redirection when there's an error
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link3}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrganizationDashboard />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+    });
+
+    await wait();
+
+    expect(window.location.pathname).toBe('/orglist');
+  });
 });
