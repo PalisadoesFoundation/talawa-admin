@@ -56,16 +56,16 @@ describe('Organisations Page testing as SuperAdmin', () => {
     name: 'Dummy Organization',
     description: 'This is a dummy organization',
     address: {
-      city: 'Delhi',
-      countryCode: 'IN',
-      dependentLocality: 'Some Dependent Locality',
-      line1: '123 Random Street',
+      city: 'Kingston',
+      countryCode: 'JM',
+      dependentLocality: 'Sample Dependent Locality',
+      line1: '123 Jamaica Street',
       line2: 'Apartment 456',
-      postalCode: '110001',
+      postalCode: 'JM12345',
       sortingCode: 'ABC-123',
-      state: 'Delhi',
+      state: 'Kingston Parish',
     },
-    image: new File(['hello'], 'hello.png', { type: 'image/png' }),
+    image: '',
   };
 
   test('Testing search functionality by pressing enter', async () => {
@@ -205,6 +205,11 @@ describe('Organisations Page testing as SuperAdmin', () => {
       screen.getByPlaceholderText(/Postal Code/i),
       formData.address.postalCode
     );
+    userEvent.type(
+      screen.getByPlaceholderText(/State \/ Province/i),
+      formData.address.state
+    );
+
     userEvent.selectOptions(
       screen.getByTestId('countrycode'),
       formData.address.countryCode
@@ -227,7 +232,6 @@ describe('Organisations Page testing as SuperAdmin', () => {
     );
     userEvent.click(screen.getByTestId(/userRegistrationRequired/i));
     userEvent.click(screen.getByTestId(/visibleInSearch/i));
-    userEvent.upload(screen.getByLabelText(/Display Image/i), formData.image);
 
     expect(screen.getByTestId(/modalOrganizationName/i)).toHaveValue(
       formData.name
@@ -238,6 +242,9 @@ describe('Organisations Page testing as SuperAdmin', () => {
     //Checking the fields for the address object in the formdata.
     const { address } = formData;
     expect(screen.getByPlaceholderText(/City/i)).toHaveValue(address.city);
+    expect(screen.getByPlaceholderText(/State \/ Province/i)).toHaveValue(
+      address.state
+    );
     expect(screen.getByPlaceholderText(/Dependent Locality/i)).toHaveValue(
       address.dependentLocality
     );
@@ -255,14 +262,11 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(screen.getByLabelText(/Display Image/i)).toBeTruthy();
 
     userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
-    // await act(async () => {
-    //   await new Promise((resolve) => setTimeout(resolve, 1000));
-    // });
-    // await waitFor(() =>
-    //   expect(
-    //     screen.queryByText(/Congratulation the Organization is created/i)
-    //   ).toBeInTheDocument()
-    // );
+    await waitFor(() => {
+      expect(
+        screen.queryByText(/Congratulation the Organization is created/i)
+      ).toBeInTheDocument();
+    });
   });
 
   test('Plugin Notification model should work properly', async () => {
@@ -298,6 +302,10 @@ describe('Organisations Page testing as SuperAdmin', () => {
     );
     userEvent.type(screen.getByPlaceholderText(/City/i), formData.address.city);
     userEvent.type(
+      screen.getByPlaceholderText(/State \/ Province/i),
+      formData.address.state
+    );
+    userEvent.type(
       screen.getByPlaceholderText(/Postal Code/i),
       formData.address.postalCode
     );
@@ -323,7 +331,6 @@ describe('Organisations Page testing as SuperAdmin', () => {
     );
     userEvent.click(screen.getByTestId(/userRegistrationRequired/i));
     userEvent.click(screen.getByTestId(/visibleInSearch/i));
-    userEvent.upload(screen.getByLabelText(/Display Image/i), formData.image);
 
     expect(screen.getByTestId(/modalOrganizationName/i)).toHaveValue(
       formData.name
@@ -334,6 +341,9 @@ describe('Organisations Page testing as SuperAdmin', () => {
     //Checking the fields for the address object in the formdata.
     const { address } = formData;
     expect(screen.getByPlaceholderText(/City/i)).toHaveValue(address.city);
+    expect(screen.getByPlaceholderText(/State \/ Province/i)).toHaveValue(
+      address.state
+    );
     expect(screen.getByPlaceholderText(/Dependent Locality/i)).toHaveValue(
       address.dependentLocality
     );
@@ -354,14 +364,16 @@ describe('Organisations Page testing as SuperAdmin', () => {
     // await act(async () => {
     //   await new Promise((resolve) => setTimeout(resolve, 1000));
     // });
-    // await waitFor(() =>
-    //   expect(
-    //     screen.queryByText(/Congratulation the Organization is created/i)
-    //   ).toBeInTheDocument()
-    // );
-    await screen.findByTestId(/pluginNotificationHeader/i);
+    await waitFor(() =>
+      expect(
+        screen.queryByText(/Congratulation the Organization is created/i)
+      ).toBeInTheDocument()
+    );
+    await waitFor(() => {
+      screen.findByTestId(/pluginNotificationHeader/i);
+    });
     // userEvent.click(screen.getByTestId(/enableEverythingForm/i));
-    userEvent.click(screen.getByTestId(/goToStore/i));
+    userEvent.click(screen.getByTestId(/enableEverythingForm/i));
   });
 
   test('Testing create sample organization working properly', async () => {
