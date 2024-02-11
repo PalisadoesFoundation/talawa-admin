@@ -11,6 +11,8 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
+import { Check, Clear } from '@mui/icons-material';
+import { isValidLink } from 'utils/linkValidator';
 
 interface InterfaceAddOnRegisterProps {
   id?: string; // OrgId
@@ -50,7 +52,7 @@ function advertisementRegister({
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
 
   const [show, setShow] = useState(false);
-
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const handleClose = (): void => setShow(false);
   const handleShow = (): void => setShow(true);
   const [create] = useMutation(ADD_ADVERTISEMENT_MUTATION);
@@ -93,6 +95,10 @@ function advertisementRegister({
 
   const handleRegister = async (): Promise<void> => {
     try {
+      if (!isValidLink(formState.link)) {
+        toast.warn('Link is invalid. Please enter a valid link');
+        return;
+      }
       console.log('At handle register', formState);
       if (formState.endDate < formState.startDate) {
         toast.error('End date must be greater than or equal to start date');
@@ -240,6 +246,8 @@ function advertisementRegister({
                 placeholder={t('EXlink')}
                 autoComplete="off"
                 required
+                onFocus={(): void => setIsInputFocused(true)}
+                onBlur={(): void => setIsInputFocused(false)}
                 value={formState.link}
                 onChange={(e): void => {
                   setFormState({
@@ -248,6 +256,21 @@ function advertisementRegister({
                   });
                 }}
               />
+              <div className="styles.link_check">
+                {isInputFocused && (
+                  <p className="pt-2">
+                    {isValidLink(formState.link) ? (
+                      <span className="form-text text-success">
+                        <Check /> {t('validLink')}
+                      </span>
+                    ) : (
+                      <span className="form-text text-danger">
+                        <Clear /> {t('invalidLink')}
+                      </span>
+                    )}
+                  </p>
+                )}
+              </div>
             </Form.Group>
             <Form.Group className="mb-3" controlId="registerForm.Rtype">
               <Form.Label>{t('Rtype')}</Form.Label>
