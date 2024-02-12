@@ -21,11 +21,7 @@ import {
   YoutubeLogo,
 } from 'assets/svgs/social-icons';
 
-import {
-  REACT_APP_USE_RECAPTCHA,
-  RECAPTCHA_SITE_KEY,
-  BACKEND_URL,
-} from 'Constant/constant';
+import { REACT_APP_USE_RECAPTCHA, RECAPTCHA_SITE_KEY } from 'Constant/constant';
 import {
   LOGIN_MUTATION,
   RECAPTCHA_MUTATION,
@@ -133,18 +129,18 @@ function loginPage(): JSX.Element {
   const [recaptcha, { loading: recaptchaLoading }] =
     useMutation(RECAPTCHA_MUTATION);
 
-  useEffect(() => {
-    async function loadResource(): Promise<void> {
-      try {
-        await fetch(BACKEND_URL as string);
-      } catch (error: any) {
-        /* istanbul ignore next */
-        errorHandler(t, error);
-      }
-    }
+  // useEffect(() => {
+  //   async function loadResource(): Promise<void> {
+  //     try {
+  //       await fetch(BACKEND_URL as string);
+  //     } catch (error: any) {
+  //       /* istanbul ignore next */
+  //       errorHandler(t, error);
+  //     }
+  //   }
 
-    loadResource();
-  }, []);
+  //   loadResource();
+  // }, []);
 
   const verifyRecaptcha = async (
     recaptchaToken: any
