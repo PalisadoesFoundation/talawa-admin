@@ -1,5 +1,11 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import { MockedProvider } from '@apollo/client/testing';
@@ -27,6 +33,14 @@ jest.mock('react-toastify', () => ({
   },
 }));
 
+async function wait(ms = 100): Promise<void> {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+}
+
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR_QUERY, true);
 const link3 = new StaticMockLink(MOCKS_ERROR_MUTATIONS, true);
@@ -52,6 +66,8 @@ describe('Testing Action Item Categories Component', () => {
       </MockedProvider>
     );
 
+    await wait();
+
     await waitFor(() => {
       expect(getByText(translations.createButton)).toBeInTheDocument();
     });
@@ -71,6 +87,8 @@ describe('Testing Action Item Categories Component', () => {
       </MockedProvider>
     );
 
+    await wait();
+
     await waitFor(() => {
       expect(queryByText(translations.createButton)).not.toBeInTheDocument();
     });
@@ -89,6 +107,8 @@ describe('Testing Action Item Categories Component', () => {
         </Provider>
       </MockedProvider>
     );
+
+    await wait();
 
     await waitFor(() => {
       userEvent.click(screen.getByTestId('actionItemCategoryModalOpenBtn'));
@@ -116,6 +136,8 @@ describe('Testing Action Item Categories Component', () => {
         </Provider>
       </MockedProvider>
     );
+
+    await wait();
 
     await waitFor(() => {
       userEvent.click(screen.getByTestId('actionItemCategoryModalOpenBtn'));
@@ -146,6 +168,8 @@ describe('Testing Action Item Categories Component', () => {
       </MockedProvider>
     );
 
+    await wait();
+
     await waitFor(() => {
       userEvent.click(screen.getByTestId('actionItemCategoryModalOpenBtn'));
       userEvent.type(
@@ -174,6 +198,8 @@ describe('Testing Action Item Categories Component', () => {
         </Provider>
       </MockedProvider>
     );
+
+    await wait();
 
     await waitFor(() => {
       userEvent.click(
@@ -210,6 +236,8 @@ describe('Testing Action Item Categories Component', () => {
       </MockedProvider>
     );
 
+    await wait();
+
     await waitFor(() => {
       userEvent.click(
         screen.getAllByTestId('actionItemCategoryUpdateModalOpenBtn')[0]
@@ -244,6 +272,8 @@ describe('Testing Action Item Categories Component', () => {
         </Provider>
       </MockedProvider>
     );
+
+    await wait();
 
     await waitFor(() => {
       userEvent.click(
@@ -280,6 +310,8 @@ describe('Testing Action Item Categories Component', () => {
       </MockedProvider>
     );
 
+    await wait();
+
     await waitFor(() => {
       userEvent.click(screen.getAllByTestId('disabilityStatusButton')[0]);
     });
@@ -310,6 +342,8 @@ describe('Testing Action Item Categories Component', () => {
         </Provider>
       </MockedProvider>
     );
+
+    await wait();
 
     await waitFor(() => {
       userEvent.click(screen.getAllByTestId('disabilityStatusButton')[0]);

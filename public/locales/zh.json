@@ -546,6 +546,7 @@
   "memberDetail": {
     "title": "用户详细信息",
     "addAdmin": "添加管理员",
+    "alreadyIsAdmin": "会员已经是管理员",
     "organizations": "组织",
     "events": "事件",
     "role": "角色",
@@ -698,6 +699,8 @@
     "archievedAds": "已完成的广告活动",
     "pMessage": "此广告活动没有相关广告。",
     "delete": "删除",
+    "validLink": "链接有效",
+    "invalidLink": "链接无效",
     "close": "关闭",
     "deleteAdvertisement": "删除广告",
     "deleteAdvertisementMsg": "您是否要删除此广告？",

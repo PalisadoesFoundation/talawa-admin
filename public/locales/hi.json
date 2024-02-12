@@ -546,6 +546,7 @@
   "memberDetail": {
     "title": "उपयोगकर्ता विवरण",
     "addAdmin": "व्यवस्थापक जोड़ें",
+    "alreadyIsAdmin": "सदस्य पहले से ही एक व्यवस्थापक है",
     "organizations": "संगठन",
     "events": "घटनाएं",
     "role": "भूमिका",
@@ -698,6 +699,8 @@
     "archievedAds": "संपन्न अभियान",
     "pMessage": "इस अभियान के लिए कोई विज्ञापन नहीं हैं।",
     "delete": "हटाएँ",
+    "validLink": "लिंक मान्य है",
+    "invalidLink": "लिंक अमान्य है",
     "close": "बंद करें",
     "deleteAdvertisement": "विज्ञापन हटाएं",
     "deleteAdvertisementMsg": "क्या आप इस विज्ञापन को हटाना चाहते हैं?",

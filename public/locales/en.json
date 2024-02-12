@@ -577,6 +577,7 @@
   "memberDetail": {
     "title": "User Details",
     "addAdmin": "Add Admin",
+    "alreadyIsAdmin": "Member is already an Admin",
     "organizations": "Organizations",
     "events": "Events",
     "role": "Role",
@@ -729,6 +730,8 @@
     "archievedAds": "Completed Campaigns",
     "pMessage": "Ads not present for this campaign.",
     "delete": "Delete",
+    "validLink": "Link is valid",
+    "invalidLink": "Link is invalid",
     "Rname": "Enter name of Advertisement",
     "Rtype": "Select type of Advertisement",
     "Rlink": "Provide a link for content to be displayed",

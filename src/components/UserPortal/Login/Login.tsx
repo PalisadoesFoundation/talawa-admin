@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import { LOGIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import styles from './Login.module.css';
 import { errorHandler } from 'utils/errorHandler';
+import useLocalStorage from 'utils/useLocalstorage';
 
 interface InterfaceLoginProps {
   setCurrentMode: React.Dispatch<SetStateAction<string>>;
@@ -20,6 +21,8 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userLogin' });
 
   const { setCurrentMode } = props;
+
+  const { setItem } = useLocalStorage();
 
   const handleModeChangeToRegister = (): void => {
     setCurrentMode('register');
@@ -45,8 +48,8 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
         });
 
         if (data) {
-          localStorage.setItem('token', data.login.accessToken);
-          localStorage.setItem('userId', data.login.user._id);
+          setItem('token', data.login.accessToken);
+          setItem('userId', data.login.user._id);
 
           navigator.clipboard.writeText('');
           /* istanbul ignore next */

@@ -4,7 +4,6 @@ import DeleteOrg from 'components/DeleteOrg/DeleteOrg';
 import OrgUpdate from 'components/OrgUpdate/OrgUpdate';
 import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 import { Button, Card, Dropdown, Form } from 'react-bootstrap';
-import type { DropDirection } from 'react-bootstrap/esm/DropdownContext';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
@@ -25,8 +24,6 @@ function orgSettings(): JSX.Element {
 
   document.title = t('title');
   const orgId = window.location.href.split('=')[1];
-
-  const dropDirection: DropDirection = 'down';
 
   return (
     <>
@@ -55,7 +52,7 @@ function orgSettings(): JSX.Element {
               <Dropdown
                 className={styles.settingsDropdown}
                 data-testid="settingsDropdownContainer"
-                drop={dropDirection}
+                drop="down"
               >
                 <Dropdown.Toggle
                   variant="success"

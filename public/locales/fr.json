@@ -545,6 +545,7 @@
   "memberDetail": {
     "title": "Détails de l'utilisateur",
     "addAdmin": "Ajouter un administrateur",
+    "alreadyIsAdmin": "Le membre est déjà un administrateur",
     "organizations": "Organisations",
     "events": "Événements",
     "role": "Rôle",
@@ -697,6 +698,8 @@
     "archievedAds": "Campagnes terminées",
     "pMessage": "Aucune publicité n'est présente pour cette campagne.",
     "delete": "Supprimer",
+    "validLink": "Le lien est valide",
+    "invalidLink": "Le lien n'est pas valide",
     "close": "Fermer",
     "deleteAdvertisement": "Supprimer l'annonce",
     "deleteAdvertisementMsg": "Voulez-vous supprimer cette annonce ?",
