@@ -18,7 +18,7 @@
 
 #### Defined in
 
-[src/components/OrgUpdate/OrgUpdateMocks.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/OrgUpdate/OrgUpdateMocks.ts#L4)
+[src/components/OrgUpdate/OrgUpdateMocks.ts:4](https://github.com/Shubh152/talawa-admin/blob/17e2e86/src/components/OrgUpdate/OrgUpdateMocks.ts#L4)
 
 ___
 
@@ -28,7 +28,7 @@ ___
 
 #### Defined in
 
-[src/components/OrgUpdate/OrgUpdateMocks.ts:109](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/OrgUpdate/OrgUpdateMocks.ts#L109)
+[src/components/OrgUpdate/OrgUpdateMocks.ts:109](https://github.com/Shubh152/talawa-admin/blob/17e2e86/src/components/OrgUpdate/OrgUpdateMocks.ts#L109)
 
 ___
 
@@ -38,4 +38,4 @@ ___
 
 #### Defined in
 
-[src/components/OrgUpdate/OrgUpdateMocks.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/OrgUpdate/OrgUpdateMocks.ts#L119)
+[src/components/OrgUpdate/OrgUpdateMocks.ts:119](https://github.com/Shubh152/talawa-admin/blob/17e2e86/src/components/OrgUpdate/OrgUpdateMocks.ts#L119)
