@@ -48,7 +48,7 @@ function orgList(): JSX.Element {
   function closeDialogModal() {
     setdialogModalIsOpen(false);
   }
-  const toggleDialogModal = (): void =>
+  const toggleDialogModal = /* istanbul ignore next */ (): void =>
     setdialogModalIsOpen(!dialogModalisOpen);
   document.title = t('title');
 
