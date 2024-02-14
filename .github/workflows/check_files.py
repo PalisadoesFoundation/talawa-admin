@@ -1,26 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 """Script to limit the number of file changes in a single PR.
-
 Methodology:
-
     Analyses the Pull request to find if the count of file changes in a PR
     exceeds a pre-defined number 20.
     Checks for unauthorized file changes based on a list of sensitive files.
-
 This script encourages contributors to align with project practices,
 reducing the likelihood of unintentional merges into incorrect branches.
-
 NOTE:
-
     This script complies with our Python3 coding and documentation standards.
     It complies with:
-
         1) Pylint
         2) Pydocstyle
         3) Pycodestyle
         4) Flake8
-
 """
 
 import sys
@@ -35,14 +28,11 @@ ScriptResult = namedtuple('ScriptResult', ['file_count', 'unauthorized_changes']
 def _count_changed_files(base_branch, pr_branch):
     """
     Count the number of changed files between two branches.
-
     Args:
         base_branch (str): The base branch.
         pr_branch (str): The PR branch.
-
     Returns:
         ScriptResult: Namedtuple containing file_count and unauthorized_changes.
-
     Raises:
         SystemExit: If an error occurs during execution.
     """
@@ -60,35 +50,32 @@ def _count_changed_files(base_branch, pr_branch):
     except Exception as e:
         print(f"Error: {e}")
         sys.exit(1)
-    
-    changed_files = [file.strip() for file in output.split('\n') if file.strip()]
-    print(f"Changed files: {changed_files}")
+
+    changed_files = [file.strip() for file in output.split(' ') if file.strip()]
     file_count = len(changed_files)
-    return ScriptResult(file_count=file_count, unauthorized_changes=output)
+    return ScriptResult(file_count=file_count, unauthorized_changes=changed_files)
 
 def _check_unauthorized_changes(changed_files, sensitive_files):
     """
     Check for unauthorized file changes.
-
     Args:
         changed_files (list): List of changed files.
         sensitive_files (list): List of sensitive files.
-
     Returns:
         list: Unauthorized changes.
+
     """
+
     unauthorized_changes = [file for file in changed_files if any(glob.fnmatch.fnmatch(file, sf) for sf in sensitive_files if sf)]
-    return unauthorized_changes
+    return ScriptResult(len(unauthorized_changes), unauthorized_changes)
+    
 
 def _arg_parser_resolver():
     """Resolve the CLI arguments provided by the user.
-
     Args:
         None
-
     Returns:
         result: Parsed argument object
-
     """
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -120,7 +107,6 @@ def _arg_parser_resolver():
 def main():
     """
     Execute the script's main functionality.
-
     This function serves as the entry point for the script. It performs
     the following tasks:
     1. Validates and retrieves the base branch and PR commit from
@@ -130,7 +116,6 @@ def main():
        limit (20).
     4. Checks for unauthorized file changes based on a list of sensitive files.
     5. Provides informative messages based on the analysis.
-
     Raises:
         SystemExit: If an error occurs during execution.
     """
@@ -150,7 +135,7 @@ def main():
     # Count changed files and check for unauthorized changes
     result = _count_changed_files(base_branch, pr_branch)
     print(f"Number of changed files: {result.file_count}")
-    
+
     unauthorized_changes = _check_unauthorized_changes(result.unauthorized_changes, sensitive_files)
     print(f"Unauthorized changes: {unauthorized_changes}")
 
@@ -170,5 +155,5 @@ def main():
     else:
         print("No unauthorized changes detected. Test passed.")
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     main()
