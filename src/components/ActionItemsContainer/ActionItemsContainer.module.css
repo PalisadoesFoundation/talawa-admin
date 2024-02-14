@@ -9,6 +9,12 @@
   width: 50%;
 }
 
+.completionStatus {
+  width: 50%;
+  text-align: center;
+  margin-left: -1.5rem;
+}
+
 .dispflex {
   display: flex;
   align-items: center;
@@ -56,6 +62,7 @@
   display: flex;
   justify-content: flex-end;
 }
+
 .icon {
   margin: 1px;
 }

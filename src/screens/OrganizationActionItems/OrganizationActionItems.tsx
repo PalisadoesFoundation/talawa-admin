@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
-import { Button, Dropdown, Form, Modal } from 'react-bootstrap';
+import { Button, Dropdown, Form } from 'react-bootstrap';
 import styles from './OrganizationActionItems.module.css';
 import SortIcon from '@mui/icons-material/Sort';
 
@@ -18,13 +18,12 @@ import {
 } from 'GraphQl/Queries/Queries';
 
 import { Search, WarningAmberRounded } from '@mui/icons-material';
-import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
-import type { Dayjs } from 'dayjs';
 import Loader from 'components/Loader/Loader';
 import ActionItemsContainer from 'components/ActionItemsContainer/ActionItemsContainer';
 import { CREATE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
+import ActionItemCreateModal from './ActionItemCreateModal';
 
 function organizationActionItems(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -125,7 +124,7 @@ function organizationActionItems(): JSX.Element {
   };
 
   if (actionItemCategoriesLoading || membersLoading || actionItemsLoading) {
-    return <Loader styles={styles.message} size="lg" />;
+    return <Loader size="lg" />;
   }
 
   if (actionItemCategoriesError || membersError || actionItemsError) {
@@ -273,107 +272,18 @@ function organizationActionItems(): JSX.Element {
       </OrganizationScreen>
 
       {/* Create Modal */}
-      <Modal show={actionItemCreateModalIsOpen} onHide={hideCreateModal}>
-        <Modal.Header>
-          <p className={styles.titlemodal}>{t('actionItemDetails')}</p>
-          <Button
-            variant="danger"
-            onClick={hideCreateModal}
-            data-testid="createActionItemModalCloseBtn"
-          >
-            <i className="fa fa-times"></i>
-          </Button>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmitCapture={createActionItemHandler}>
-            <Form.Group className="mb-3">
-              <Form.Label>Action Item Category</Form.Label>
-              <Form.Select
-                required
-                defaultValue=""
-                onChange={(e) =>
-                  setFormState({
-                    ...formState,
-                    actionItemCategoryId: e.target.value,
-                  })
-                }
-              >
-                <option value="" disabled>
-                  Select an action item category
-                </option>
-                {actionItemCategoriesData?.actionItemCategoriesByOrganization.map(
-                  (category: any, index: any) => (
-                    <option key={index} value={category._id}>
-                      {category.name}
-                    </option>
-                  )
-                )}
-              </Form.Select>
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Assignee</Form.Label>
-              <Form.Select
-                required
-                defaultValue=""
-                onChange={(e) =>
-                  setFormState({ ...formState, assigneeId: e.target.value })
-                }
-              >
-                <option value="" disabled>
-                  Select an assignee
-                </option>
-                {membersData?.organizations[0].members.map(
-                  (member: any, index: any) => (
-                    <option key={index} value={member._id}>
-                      {`${member.firstName} ${member.lastName}`}
-                    </option>
-                  )
-                )}
-              </Form.Select>
-            </Form.Group>
-
-            <label htmlFor="actionItemPreCompletionNotes">
-              {t('preCompletionNotes')}
-            </label>
-            <Form.Control
-              type="actionItemPreCompletionNotes"
-              id="actionItemPreCompletionNotes"
-              placeholder={t('preCompletionNotes')}
-              autoComplete="off"
-              value={formState.preCompletionNotes}
-              onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  preCompletionNotes: e.target.value,
-                });
-              }}
-            />
-
-            <div>
-              <DatePicker
-                label={t('dueDate')}
-                className="mb-3 w-100"
-                value={dayjs(dueDate)}
-                onChange={(date: Dayjs | null): void => {
-                  if (date) {
-                    setDueDate(date?.toDate());
-                  }
-                }}
-              />
-            </div>
-
-            <Button
-              type="submit"
-              className={styles.greenregbtn}
-              value="createActionItem"
-              data-testid="createActionItem"
-            >
-              {t('createActionItem')}
-            </Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
+      <ActionItemCreateModal
+        actionItemCreateModalIsOpen={actionItemCreateModalIsOpen}
+        hideCreateModal={hideCreateModal}
+        formState={formState}
+        setFormState={setFormState}
+        createActionItemHandler={createActionItemHandler}
+        t={t}
+        actionItemCategoriesData={actionItemCategoriesData}
+        membersData={membersData}
+        dueDate={dueDate}
+        setDueDate={setDueDate}
+      />
     </>
   );
 }

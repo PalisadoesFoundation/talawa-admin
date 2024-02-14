@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import dayjs from 'dayjs';
 import type { ChangeEvent } from 'react';
-import type { Dayjs } from 'dayjs';
-import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import type {
   InterfaceActionItemInfo,
   InterfaceActionItemList,
 } from 'utils/interfaces';
-import styles from './ActionItemsContainer.module.css';
-import { DatePicker } from '@mui/x-date-pickers';
 import { toast } from 'react-toastify';
 import {
   DELETE_ACTION_ITEM_MUTATION,
   UPDATE_ACTION_ITEM_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
+import ActionItemUpdateModal from '../../screens/OrganizationActionItems/ActionItemUpdateModal';
+import ActionItemPreviewModal from '../../screens/OrganizationActionItems/ActionItemPreviewModal';
+import ActionItemDeleteModal from '../../screens/OrganizationActionItems/ActionItemDeleteModal';
 
 function actionItemsContainer({
   actionItemsData,
@@ -39,14 +39,13 @@ function actionItemsContainer({
 
   const [assignmentDate, setAssignmentDate] = useState<Date | null>(new Date());
   const [dueDate, setDueDate] = useState<Date | null>(new Date());
-  const [completionDate, setCompletionDate] = useState<Date | null>();
+  const [completionDate, setCompletionDate] = useState<Date | null>(new Date());
   const [actionItemId, setActionItemId] = useState('');
 
   const [formState, setFormState] = useState({
     assignee: '',
     assigner: '',
     assigneeId: '',
-    assignmentDate: '',
     preCompletionNotes: '',
     postCompletionNotes: '',
     isCompleted: false,
@@ -244,251 +243,41 @@ function actionItemsContainer({
         </div>
       </div>
 
+      {/* preview modal */}
+      <ActionItemPreviewModal
+        actionItemPreviewModalIsOpen={actionItemPreviewModalIsOpen}
+        hidePreviewModal={hidePreviewModal}
+        showUpdateModal={showUpdateModal}
+        toggleDeleteModal={toggleDeleteModal}
+        formState={formState}
+        t={t}
+        dueDate={dueDate}
+        completionDate={completionDate}
+        assignmentDate={assignmentDate}
+      />
+
       {/* Update Modal */}
-      <Modal show={actionItemUpdateModalIsOpen} onHide={hideUpdateModal}>
-        <Modal.Header>
-          <p className={styles.titlemodal}>{t('actionItemDetails')}</p>
-          <Button
-            variant="danger"
-            onClick={hideUpdateModal}
-            data-testid="updateActionItemModalCloseBtn"
-          >
-            <i className="fa fa-times"></i>
-          </Button>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmitCapture={updateActionItemHandler}>
-            <Form.Group className="mb-3">
-              <Form.Label>Assignee</Form.Label>
-              <Form.Select
-                defaultValue=""
-                onChange={(e) =>
-                  setFormState({ ...formState, assigneeId: e.target.value })
-                }
-              >
-                <option value="" disabled>
-                  {formState.assignee}
-                </option>
-                {membersData?.map((member: any, index: any) => {
-                  const currMemberName = `${member.firstName} ${member.lastName}`;
-                  if (currMemberName !== formState.assignee) {
-                    return (
-                      <option key={index} value={member._id}>
-                        {`${member.firstName} ${member.lastName}`}
-                      </option>
-                    );
-                  }
-                })}
-              </Form.Select>
-            </Form.Group>
-
-            <label htmlFor="actionItemPreCompletionNotes">
-              {t('preCompletionNotes')}
-            </label>
-            <Form.Control
-              type="actionItemPreCompletionNotes"
-              id="actionItemPreCompletionNotes"
-              placeholder={t('preCompletionNotes')}
-              autoComplete="off"
-              value={formState.preCompletionNotes || ''}
-              onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  preCompletionNotes: e.target.value,
-                });
-              }}
-            />
-
-            <label htmlFor="actionItemPostCompletionNotes">
-              {t('postCompletionNotes')}
-            </label>
-            <Form.Control
-              type="actionItemPostCompletionNotes"
-              id="actionItemPostCompletionNotes"
-              placeholder={t('postCompletionNotes')}
-              autoComplete="off"
-              value={formState.postCompletionNotes || ''}
-              onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  postCompletionNotes: e.target.value,
-                });
-              }}
-            />
-
-            <div className={styles.datediv}>
-              <div>
-                <DatePicker
-                  label={t('dueDate')}
-                  className={styles.datebox}
-                  value={dayjs(dueDate)}
-                  onChange={(date: Dayjs | null): void => {
-                    if (date) {
-                      setDueDate(date?.toDate());
-                    }
-                  }}
-                />
-              </div>
-              <div>
-                <DatePicker
-                  label={t('completionDate')}
-                  className={styles.datebox}
-                  value={dayjs(completionDate)}
-                  onChange={(date: Dayjs | null): void => {
-                    if (date) {
-                      setCompletionDate(date?.toDate());
-                    }
-                  }}
-                />
-              </div>
-            </div>
-
-            <div className={styles.checkboxdiv}>
-              <div className={styles.dispflex}>
-                <label htmlFor="allday">{t('isCompleted')}?</label>
-                <Form.Switch
-                  className="ms-2"
-                  id="allday"
-                  type="checkbox"
-                  checked={formState.isCompleted}
-                  data-testid="alldayCheck"
-                  onChange={(): void =>
-                    setFormState({
-                      ...formState,
-                      isCompleted: !formState.isCompleted,
-                    })
-                  }
-                />
-              </div>
-            </div>
-
-            <Button
-              type="submit"
-              className={styles.greenregbtn}
-              value="editActionItem"
-              data-testid="editActionItemBtn"
-            >
-              {t('editActionItem')}
-            </Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
+      <ActionItemUpdateModal
+        actionItemUpdateModalIsOpen={actionItemUpdateModalIsOpen}
+        hideUpdateModal={hideUpdateModal}
+        formState={formState}
+        setFormState={setFormState}
+        updateActionItemHandler={updateActionItemHandler}
+        t={t}
+        membersData={membersData}
+        dueDate={dueDate}
+        setDueDate={setDueDate}
+        completionDate={completionDate}
+        setCompletionDate={setCompletionDate}
+      />
 
       {/* Delete Modal */}
-      <Modal
-        size="sm"
-        id={`deleteActionItemModal`}
-        show={actionItemDeleteModalIsOpen}
-        onHide={toggleDeleteModal}
-        backdrop="static"
-        keyboard={false}
-      >
-        <Modal.Header closeButton className="bg-primary">
-          <Modal.Title className="text-white" id={`deleteActionItem`}>
-            {t('deleteActionItem')}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{t('deleteActionItemMsg')}</Modal.Body>
-        <Modal.Footer>
-          <Button
-            type="button"
-            className="btn btn-danger"
-            data-dismiss="modal"
-            onClick={toggleDeleteModal}
-            data-testid="actionItemDeleteModalCloseBtn"
-          >
-            {t('no')}
-          </Button>
-          <Button
-            type="button"
-            className="btn btn-success"
-            onClick={deleteActionItemHandler}
-            data-testid="deleteActionItemBtn"
-          >
-            {t('yes')}
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      {/* preview modal */}
-      <Modal show={actionItemPreviewModalIsOpen}>
-        <Modal.Header>
-          <p className={styles.titlemodal}>{t('actionItemDetails')}</p>
-          <Button
-            onClick={hidePreviewModal}
-            data-testid="previewActionItemModalCloseBtn"
-          >
-            <i className="fa fa-times"></i>
-          </Button>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <div>
-              <p className={styles.preview}>
-                {t('assignee')}:{' '}
-                <span className={styles.view}>{formState.assignee}</span>
-              </p>
-              <p className={styles.preview}>
-                {t('assigner')}:{' '}
-                <span className={styles.view}>{formState.assigner}</span>
-              </p>
-              <p className={styles.preview}>
-                {t('preCompletionNotes')}:
-                <span className={styles.view}>
-                  {formState.preCompletionNotes}
-                </span>
-              </p>
-              <p className={styles.preview}>
-                {t('postCompletionNotes')}:
-                <span className={styles.view}>
-                  {formState.postCompletionNotes}
-                </span>
-              </p>
-              <p className={styles.preview}>
-                {t('assignmentDate')}:{' '}
-                <span className={styles.view}>{assignmentDate}</span>
-              </p>
-              <p className={styles.preview}>
-                {t('dueDate')}: <span className={styles.view}>{dueDate}</span>
-              </p>
-              <p className={styles.preview}>
-                {t('completionDate')}:{' '}
-                <span className={styles.view}>{completionDate}</span>
-              </p>
-              <p className={styles.preview}>
-                {t('status')}:{' '}
-                <span className={styles.view}>
-                  {formState.isCompleted ? 'Completed' : 'In Progress'}
-                </span>
-              </p>
-            </div>
-            <div className={styles.iconContainer}>
-              <Button
-                size="sm"
-                data-testid="editActionItemModalBtn"
-                className={styles.icon}
-                onClick={() => {
-                  hidePreviewModal();
-                  showUpdateModal();
-                }}
-              >
-                {' '}
-                <i className="fas fa-edit"></i>
-              </Button>
-              <Button
-                size="sm"
-                data-testid="deleteActionItemModalBtn"
-                className={`${styles.icon} ms-2`}
-                onClick={toggleDeleteModal}
-                variant="danger"
-              >
-                {' '}
-                <i className="fa fa-trash"></i>
-              </Button>
-            </div>
-          </Form>
-        </Modal.Body>
-      </Modal>
+      <ActionItemDeleteModal
+        actionItemDeleteModalIsOpen={actionItemDeleteModalIsOpen}
+        deleteActionItemHandler={deleteActionItemHandler}
+        toggleDeleteModal={toggleDeleteModal}
+        t={t}
+      />
     </>
   );
 }
