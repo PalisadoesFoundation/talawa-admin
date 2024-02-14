@@ -12,6 +12,7 @@ import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation, useQuery } from '@apollo/client';
 import { ORGANIZATIONS_LIST, USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { useTranslation } from 'react-i18next';
+import useLocalStorage from 'utils/useLocalstorage';
 
 export interface InterfaceOrgLeftDrawerProps {
   screenName: string;
@@ -27,10 +28,10 @@ function orgLeftDrawer({
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgLeftDrawer',
   });
-
+  const { getItem } = useLocalStorage();
   const history = useHistory();
 
-  const userId = localStorage.getItem('userId');
+  const userId = getItem('userId');
   const orgId = window.location.href.split('=')[1];
 
   const { data: orgData, loading: orgLoading } = useQuery(ORGANIZATIONS_LIST, {

@@ -11,12 +11,15 @@ import { ORGANIZATIONS_LIST, USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { act } from 'react-dom/test-utils';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
+import useLocalStorage from 'utils/useLocalstorage';
 
 const props = {
   hideDrawer: false,
   setHideDrawer: jest.fn(),
   screenName: 'Posts',
 };
+
+const { setItem } = useLocalStorage();
 
 const MOCKS = [
   {
@@ -234,7 +237,7 @@ beforeEach(() => {
     },
     writable: true,
   });
-  localStorage.setItem('userId', '1');
+  setItem('userId', '1');
 });
 
 describe('Testing OrgLeftDrawer component [User Portal]', () => {

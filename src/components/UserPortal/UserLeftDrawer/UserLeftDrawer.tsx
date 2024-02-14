@@ -11,6 +11,7 @@ import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation, useQuery } from '@apollo/client';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { useTranslation } from 'react-i18next';
+import useLocalStorage from 'utils/useLocalstorage';
 
 export interface InterfaceUserLeftDrawerProps {
   screenName: string;
@@ -26,10 +27,10 @@ function userLeftDrawer({
   const { t } = useTranslation('translation', {
     keyPrefix: 'userLeftDrawer',
   });
-
+  const { getItem } = useLocalStorage();
   const history = useHistory();
 
-  const userId = localStorage.getItem('userId');
+  const userId = getItem('userId');
 
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const { data: userData, loading } = useQuery(USER_DETAILS, {

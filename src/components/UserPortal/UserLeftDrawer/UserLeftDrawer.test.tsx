@@ -10,12 +10,15 @@ import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import 'jest-localstorage-mock';
 import { act } from 'react-dom/test-utils';
+import useLocalStorage from 'utils/useLocalstorage';
 
 const props = {
   hideDrawer: false,
   setHideDrawer: jest.fn(),
   screenName: 'Organizations',
 };
+
+const { setItem } = useLocalStorage();
 
 const MOCKS = [
   {
@@ -101,7 +104,7 @@ const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS2, true);
 
 beforeEach(() => {
-  localStorage.setItem('userId', '1');
+  setItem('userId', '1');
 });
 
 async function wait(ms = 100): Promise<void> {
