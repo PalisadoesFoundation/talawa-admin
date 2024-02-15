@@ -102,6 +102,51 @@ export const ACTION_ITEM_CATEGORY_LIST = gql`
   }
 `;
 
+// Query to get the action items list
+
+export const ACTION_ITEM_LIST = gql`
+  query ActionItemsByOrganization(
+    $organizationId: ID!
+    $orderBy: ActionItemsOrderByInput
+  ) {
+    actionItemsByOrganization(
+      organizationId: $organizationId
+      orderBy: $orderBy
+    ) {
+      _id
+      assignee {
+        _id
+        firstName
+        lastName
+      }
+      assigner {
+        _id
+        firstName
+        lastName
+      }
+      actionItemCategory {
+        _id
+        name
+      }
+      preCompletionNotes
+      postCompletionNotes
+      assignmentDate
+      dueDate
+      completionDate
+      isCompleted
+      event {
+        _id
+        title
+      }
+      creator {
+        _id
+        firstName
+        lastName
+      }
+    }
+  }
+`;
+
 // Query to take the User list
 export const USER_LIST = gql`
   query Users(
@@ -592,9 +637,6 @@ export const MEMBERSHIP_REQUEST = gql`
     }
   }
 `;
-
-// get the list of action items for an organization
-export { ACTION_ITEM_LIST } from './ActionItemQueries';
 
 // to take the list of the blocked users
 export { PLUGIN_GET } from './PlugInQueries';

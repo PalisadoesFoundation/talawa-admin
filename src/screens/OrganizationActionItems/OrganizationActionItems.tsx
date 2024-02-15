@@ -35,6 +35,9 @@ function organizationActionItems(): JSX.Element {
   const [actionItemCreateModalIsOpen, setActionItemCreateModalIsOpen] =
     useState(false);
   const [dueDate, setDueDate] = useState<Date | null>(new Date());
+  const [orderBy, setOrderBy] = useState<'createdAt_ASC' | 'createdAt_DESC'>(
+    'createdAt_DESC'
+  );
 
   const [formState, setFormState] = useState({
     actionItemCategoryId: '',
@@ -58,10 +61,18 @@ function organizationActionItems(): JSX.Element {
   });
 
   const {
+    data: membersData,
+    loading: membersLoading,
+    error: membersError,
+  } = useQuery(MEMBERS_LIST, {
+    variables: { id: currentUrl },
+  });
+
+  const {
     data: actionItemsData,
     loading: actionItemsLoading,
     error: actionItemsError,
-    refetch,
+    refetch: actionItemsRefetch,
   }: {
     data: InterfaceActionItemList | undefined;
     loading: boolean;
@@ -70,16 +81,9 @@ function organizationActionItems(): JSX.Element {
   } = useQuery(ACTION_ITEM_LIST, {
     variables: {
       organizationId: currentUrl,
+      orderBy,
     },
     notifyOnNetworkStatusChange: true,
-  });
-
-  const {
-    data: membersData,
-    loading: membersLoading,
-    error: membersError,
-  } = useQuery(MEMBERS_LIST, {
-    variables: { id: currentUrl },
   });
 
   const [createActionItem] = useMutation(CREATE_ACTION_ITEM_MUTATION);
@@ -106,7 +110,7 @@ function organizationActionItems(): JSX.Element {
 
       setDueDate(new Date());
 
-      refetch();
+      actionItemsRefetch();
       hideCreateModal();
       toast.success(t('successfulCreation'));
     } catch (error: any) {
@@ -123,30 +127,45 @@ function organizationActionItems(): JSX.Element {
     setActionItemCreateModalIsOpen(!actionItemCreateModalIsOpen);
   };
 
+  const handleSorting = (sort: string): void => {
+    if (sort === 'Latest') {
+      setOrderBy('createdAt_DESC');
+    } else {
+      setOrderBy('createdAt_ASC');
+    }
+  };
+
   if (actionItemCategoriesLoading || membersLoading || actionItemsLoading) {
-    return <Loader size="lg" />;
+    return <Loader size="xl" />;
   }
 
   if (actionItemCategoriesError || membersError || actionItemsError) {
     return (
-      <div className={styles.message}>
-        <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
-        <h6 className="fw-bold text-danger text-center">
-          Error occured while loading{' '}
-          {actionItemCategoriesError
-            ? 'Action Item Categories'
-            : membersError
-            ? 'Members List'
-            : 'Action Items List'}{' '}
-          Data
-          <br />
-          {actionItemCategoriesError
-            ? actionItemCategoriesError.message
-            : membersError
-            ? membersError.message
-            : actionItemsError?.message}
-        </h6>
-      </div>
+      <OrganizationScreen screenName="Action Items" title={t('title')}>
+        <div className={`${styles.container} bg-white rounded-4 my-3`}>
+          <div className={styles.message}>
+            <WarningAmberRounded
+              className={styles.errorIcon}
+              fontSize="large"
+            />
+            <h6 className="fw-bold text-danger text-center">
+              Error occured while loading{' '}
+              {actionItemCategoriesError
+                ? 'Action Item Categories'
+                : membersError
+                ? 'Members List'
+                : 'Action Items List'}{' '}
+              Data
+              <br />
+              {actionItemCategoriesError
+                ? actionItemCategoriesError.message
+                : membersError
+                ? membersError.message
+                : actionItemsError?.message}
+            </h6>
+          </div>
+        </div>
+      </OrganizationScreen>
     );
   }
 
@@ -197,14 +216,14 @@ function organizationActionItems(): JSX.Element {
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <Dropdown.Item
-                      // onClick={(): void => handleSorting('Latest')}
+                      onClick={(): void => handleSorting('Latest')}
                       data-testid="latest"
                     >
                       {t('latest')}
                     </Dropdown.Item>
                     <Dropdown.Item
-                      // onClick={(): void => handleSorting('Earliest')}
-                      data-testid="oldest"
+                      onClick={(): void => handleSorting('Earliest')}
+                      data-testid="earliest"
                     >
                       {t('earliest')}
                     </Dropdown.Item>
@@ -266,7 +285,7 @@ function organizationActionItems(): JSX.Element {
           <ActionItemsContainer
             actionItemsData={actionItemsData}
             membersData={membersData.organizations[0].members}
-            refetch={refetch}
+            actionItemsRefetch={actionItemsRefetch}
           />
         </div>
       </OrganizationScreen>

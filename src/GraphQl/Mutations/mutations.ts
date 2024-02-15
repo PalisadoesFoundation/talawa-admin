@@ -258,6 +258,67 @@ export const UPDATE_ACTION_ITEM_CATEGORY_MUTATION = gql`
   }
 `;
 
+// to create an action item
+
+export const CREATE_ACTION_ITEM_MUTATION = gql`
+  mutation CreateActionItem(
+    $actionItemCategoryId: ID!
+    $assigneeId: ID!
+    $preCompletionNotes: String
+    $dueDate: Date
+    $eventId: ID
+  ) {
+    createActionItem(
+      actionItemCategoryId: $actionItemCategoryId
+      data: {
+        assigneeId: $assigneeId
+        preCompletionNotes: $preCompletionNotes
+        dueDate: $dueDate
+        eventId: $eventId
+      }
+    ) {
+      _id
+    }
+  }
+`;
+
+// to update an action item
+
+export const UPDATE_ACTION_ITEM_MUTATION = gql`
+  mutation UpdateActionItem(
+    $actionItemId: ID!
+    $assigneeId: ID!
+    $preCompletionNotes: String
+    $postCompletionNotes: String
+    $dueDate: Date
+    $completionDate: Date
+    $isCompleted: Boolean
+  ) {
+    updateActionItem(
+      id: $actionItemId
+      data: {
+        assigneeId: $assigneeId
+        preCompletionNotes: $preCompletionNotes
+        postCompletionNotes: $postCompletionNotes
+        dueDate: $dueDate
+        completionDate: $completionDate
+        isCompleted: $isCompleted
+      }
+    ) {
+      _id
+    }
+  }
+`;
+
+// to delete an action item
+
+export const DELETE_ACTION_ITEM_MUTATION = gql`
+  mutation RemoveActionItem($actionItemId: ID!) {
+    removeActionItem(id: $actionItemId) {
+      _id
+    }
+  }
+`;
 // to create the event by any organization
 
 export const CREATE_EVENT_MUTATION = gql`
@@ -599,11 +660,6 @@ export const REGISTER_EVENT = gql`
     }
   }
 `;
-
-// Create, update and delete Action Items
-export { CREATE_ACTION_ITEM_MUTATION } from './ActionItemMutations';
-export { UPDATE_ACTION_ITEM_MUTATION } from './ActionItemMutations';
-export { DELETE_ACTION_ITEM_MUTATION } from './ActionItemMutations';
 
 // Changes the role of a event in an organization and add and remove the event from the organization
 export { ADD_EVENT_ATTENDEE } from './EventAttendeeMutations';

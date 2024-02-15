@@ -20,11 +20,11 @@ import ActionItemDeleteModal from '../../screens/OrganizationActionItems/ActionI
 function actionItemsContainer({
   actionItemsData,
   membersData,
-  refetch,
+  actionItemsRefetch,
 }: {
   actionItemsData: InterfaceActionItemList | undefined;
   membersData: any;
-  refetch: any;
+  actionItemsRefetch: any;
 }): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
@@ -104,7 +104,7 @@ function actionItemsContainer({
         },
       });
 
-      refetch();
+      actionItemsRefetch();
       hideUpdateModal();
       toast.success(t('successfulUpdation'));
     } catch (error: any) {
@@ -122,7 +122,7 @@ function actionItemsContainer({
         },
       });
 
-      refetch();
+      actionItemsRefetch();
       toggleDeleteModal();
       toast.success(t('successfulDeletion'));
     } catch (error: any) {
@@ -152,7 +152,7 @@ function actionItemsContainer({
         <div className="mx-4 shadow-sm rounded-top-4">
           <Row className="mx-0 border border-light-subtle rounded-top-4 py-3">
             <Col xs={7} sm={4} md={3} lg={3} className="ps-3 fs-5 fw-bold">
-              Assignee
+              <div className="ms-2">Assignee</div>
             </Col>
             <Col
               className="fs-5 fw-bold d-none d-sm-block"
@@ -163,7 +163,7 @@ function actionItemsContainer({
               Action Item Category
             </Col>
             <Col className="d-none d-lg-block fs-5 fw-bold" md={4} lg={3}>
-              Status
+              <div className="ms-3">Status</div>
             </Col>
             <Col xs={5} sm={3} lg={2} className="fs-5 fw-bold">
               Options
@@ -198,7 +198,15 @@ function actionItemsContainer({
                     md={4}
                     lg={3}
                   >
-                    {actionItem.isCompleted ? 'Completed' : 'In Progress'}
+                    <div
+                      className={`lh-base w-50 badge rounded-pill ${
+                        actionItem.isCompleted
+                          ? 'text-bg-success text-white'
+                          : 'text-bg-warning'
+                      }`}
+                    >
+                      {actionItem.isCompleted ? 'Completed' : 'Active'}
+                    </div>
                   </Col>
                   <Col xs={5} sm={3} lg={2} className="p-0">
                     <Button

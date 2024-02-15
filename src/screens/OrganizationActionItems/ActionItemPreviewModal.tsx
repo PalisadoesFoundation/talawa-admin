@@ -83,7 +83,7 @@ const ActionItemPreviewModal: React.FC<InterfaceActionItemCreateModalProps> = ({
               <p className={styles.preview}>
                 {t('status')}:{' '}
                 <span className={styles.view}>
-                  {formState.isCompleted ? 'Completed' : 'In Progress'}
+                  {formState.isCompleted ? 'Completed' : 'Active'}
                 </span>
               </p>
             </div>
