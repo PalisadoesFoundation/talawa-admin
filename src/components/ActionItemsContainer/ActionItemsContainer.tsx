@@ -22,7 +22,7 @@ function actionItemsContainer({
   membersData,
   actionItemsRefetch,
 }: {
-  actionItemsData: InterfaceActionItemList | undefined;
+  actionItemsData: InterfaceActionItemInfo[] | undefined;
   membersData: any;
   actionItemsRefetch: any;
 }): JSX.Element {
@@ -172,81 +172,82 @@ function actionItemsContainer({
         </div>
 
         <div className="mx-4 bg-light-subtle border border-light-subtle border-top-0 rounded-bottom-4 shadow-sm">
-          {actionItemsData?.actionItemsByOrganization.map(
-            (actionItem, index) => (
-              <div key={index}>
-                <Row className={`${index === 0 ? 'pt-3' : ''} mb-3 mx-2`}>
-                  <Col
-                    sm={4}
-                    xs={7}
-                    md={3}
-                    lg={3}
-                    className="align-self-center fw-semibold text-body-secondary"
+          {actionItemsData?.map((actionItem, index) => (
+            <div key={index}>
+              <Row className={`${index === 0 ? 'pt-3' : ''} mb-3 mx-2`}>
+                <Col
+                  sm={4}
+                  xs={7}
+                  md={3}
+                  lg={3}
+                  className="align-self-center fw-semibold text-body-secondary"
+                >
+                  {`${actionItem.assignee.firstName} ${actionItem.assignee.lastName}`}
+                </Col>
+                <Col
+                  sm={5}
+                  md={6}
+                  lg={4}
+                  className="d-none d-sm-block align-self-center fw-semibold text-body-secondary"
+                >
+                  {actionItem.actionItemCategory.name}
+                </Col>
+                <Col
+                  className="d-none d-lg-block align-self-center fw-semibold text-body-secondary"
+                  md={4}
+                  lg={3}
+                >
+                  <div
+                    className={`lh-base w-50 badge rounded-pill ${
+                      actionItem.isCompleted
+                        ? 'text-bg-success text-white'
+                        : 'text-bg-warning'
+                    }`}
                   >
-                    {`${actionItem.assignee.firstName} ${actionItem.assignee.lastName}`}
-                  </Col>
-                  <Col
-                    sm={5}
-                    md={6}
-                    lg={4}
-                    className="d-none d-sm-block align-self-center fw-semibold text-body-secondary"
+                    {actionItem.isCompleted ? 'Completed' : 'Active'}
+                  </div>
+                </Col>
+                <Col xs={5} sm={3} lg={2} className="p-0">
+                  <Button
+                    className="btn btn-sm me-2"
+                    variant="outline-secondary"
+                    onClick={() => showPreviewModal(actionItem)}
                   >
-                    {actionItem.actionItemCategory.name}
-                  </Col>
-                  <Col
-                    className="d-none d-lg-block align-self-center fw-semibold text-body-secondary"
-                    md={4}
-                    lg={3}
+                    Details
+                  </Button>
+                  <Button
+                    size="sm"
+                    data-testid="editActionItemModalBtn"
+                    onClick={() => handleEditClick(actionItem)}
+                    className="me-2 d-none d-xl-inline"
+                    variant="success"
                   >
-                    <div
-                      className={`lh-base w-50 badge rounded-pill ${
-                        actionItem.isCompleted
-                          ? 'text-bg-success text-white'
-                          : 'text-bg-warning'
-                      }`}
-                    >
-                      {actionItem.isCompleted ? 'Completed' : 'Active'}
-                    </div>
-                  </Col>
-                  <Col xs={5} sm={3} lg={2} className="p-0">
-                    <Button
-                      className="btn btn-sm me-2"
-                      variant="outline-secondary"
-                      onClick={() => showPreviewModal(actionItem)}
-                    >
-                      Details
-                    </Button>
-                    <Button
-                      size="sm"
-                      data-testid="editActionItemModalBtn"
-                      onClick={() => handleEditClick(actionItem)}
-                      className="me-2 d-none d-xl-inline"
-                      variant="success"
-                    >
-                      {' '}
-                      <i className="fas fa-edit"></i>
-                    </Button>
-                    <Button
-                      size="sm"
-                      data-testid="deleteActionItemModalBtn"
-                      variant="danger"
-                      onClick={() => {
-                        setActionItemId(actionItem._id);
-                        toggleDeleteModal();
-                      }}
-                    >
-                      {' '}
-                      <i className="fa fa-trash"></i>
-                    </Button>
-                  </Col>
-                </Row>
+                    {' '}
+                    <i className="fas fa-edit"></i>
+                  </Button>
+                  <Button
+                    size="sm"
+                    data-testid="deleteActionItemModalBtn"
+                    variant="danger"
+                    onClick={() => {
+                      setActionItemId(actionItem._id);
+                      toggleDeleteModal();
+                    }}
+                  >
+                    {' '}
+                    <i className="fa fa-trash"></i>
+                  </Button>
+                </Col>
+              </Row>
 
-                {index !==
-                  actionItemsData.actionItemsByOrganization.length - 1 && (
-                  <hr className="mx-3" />
-                )}
-              </div>
-            )
+              {index !== actionItemsData.length - 1 && <hr className="mx-3" />}
+            </div>
+          ))}
+
+          {actionItemsData?.length === 0 && (
+            <div className="lh-lg text-center fw-semibold text-body-tertiary">
+              No Action Items
+            </div>
           )}
         </div>
       </div>

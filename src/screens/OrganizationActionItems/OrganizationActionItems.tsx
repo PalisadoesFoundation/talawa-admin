@@ -35,9 +35,10 @@ function organizationActionItems(): JSX.Element {
   const [actionItemCreateModalIsOpen, setActionItemCreateModalIsOpen] =
     useState(false);
   const [dueDate, setDueDate] = useState<Date | null>(new Date());
-  const [orderBy, setOrderBy] = useState<'createdAt_ASC' | 'createdAt_DESC'>(
-    'createdAt_DESC'
-  );
+  const [orderBy, setOrderBy] = useState<'Latest' | 'Earliest'>('Latest');
+  const [actionItemStatus, setActionItemStatus] = useState('');
+  const [actionItemCategoryId, setActionItemCategoryId] = useState('');
+  const [actionItemCategoryName, setActionItemCategoryName] = useState('');
 
   const [formState, setFormState] = useState({
     actionItemCategoryId: '',
@@ -81,7 +82,10 @@ function organizationActionItems(): JSX.Element {
   } = useQuery(ACTION_ITEM_LIST, {
     variables: {
       organizationId: currentUrl,
-      orderBy,
+      actionItemCategoryId,
+      orderBy: orderBy === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC',
+      isActive: actionItemStatus === 'Active' ? true : false,
+      isCompleted: actionItemStatus === 'Completed' ? true : false,
     },
     notifyOnNetworkStatusChange: true,
   });
@@ -129,10 +133,25 @@ function organizationActionItems(): JSX.Element {
 
   const handleSorting = (sort: string): void => {
     if (sort === 'Latest') {
-      setOrderBy('createdAt_DESC');
+      setOrderBy('Latest');
     } else {
-      setOrderBy('createdAt_ASC');
+      setOrderBy('Earliest');
     }
+  };
+
+  const handleStatusFilter = (status: string): void => {
+    if (status === 'Active') {
+      setActionItemStatus('Active');
+    } else {
+      setActionItemStatus('Completed');
+    }
+  };
+
+  const handleClearFilters = (): void => {
+    setActionItemCategoryId('');
+    setActionItemCategoryName('');
+    setActionItemStatus('');
+    setOrderBy('Latest');
   };
 
   if (actionItemCategoriesLoading || membersLoading || actionItemsLoading) {
@@ -173,32 +192,21 @@ function organizationActionItems(): JSX.Element {
     <>
       <OrganizationScreen screenName="Action Items" title={t('title')}>
         <div className={`${styles.container} bg-white rounded-4 my-3`}>
-          <div className={`${styles.btnsContainer} mt-4 mx-4`}>
-            <div className={styles.input}>
-              <Form.Control
-                type="name"
-                id="searchOrgname"
-                className="bg-white"
-                placeholder={t('searchByName')}
-                data-testid="searchByName"
-                autoComplete="off"
-                required
-                // onKeyUp={handleSearchByEnter}
-              />
-              <Button
-                tabIndex={-1}
-                className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
-                // onClick={handleSearchByBtnClick}
-                data-testid="searchBtn"
-              >
-                <Search />
-              </Button>
-            </div>
-            <div className={styles.btnsBlock}>
-              <div className={`${styles.dropdownContainer} d-flex flex-wrap`}>
+          <div className={`mt-4 mx-4`}>
+            <div className={styles.btnsContainer}>
+              <div className={styles.btnsBlock}>
+                <Button
+                  variant="success"
+                  onClick={handleClearFilters}
+                  data-testid="clearFilters"
+                >
+                  <i className="fa fa-broom me-2"></i>
+                  {t('clearFilters')}
+                </Button>
+
                 <Dropdown
                   aria-expanded="false"
-                  title="Sort organizations"
+                  title="Sort Action Items"
                   data-testid="sort"
                   className={styles.dropdownToggle}
                 >
@@ -209,10 +217,10 @@ function organizationActionItems(): JSX.Element {
                     //     : 'success'
                     // }
                     variant="outline-success"
-                    data-testid="sortOrgs"
+                    data-testid="sortActionItems"
                   >
                     <SortIcon className={'me-1'} />
-                    Sort
+                    {orderBy === 'Latest' ? 'Latest' : 'Earliest'}
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <Dropdown.Item
@@ -237,30 +245,25 @@ function organizationActionItems(): JSX.Element {
                   className={styles.dropdownToggle}
                 >
                   <Dropdown.Toggle
-                    // variant={
-                    //   sortingState.option === ''
-                    //     ? 'outline-success'
-                    //     : 'success'
-                    // }
                     variant="outline-success"
                     data-testid="sortOrgs"
-                    className="me-0"
+                    className={
+                      actionItemCategoryId === '' ? '' : 'bg-success text-white'
+                    }
                   >
-                    Action Item Category
+                    {actionItemCategoryName === ''
+                      ? 'Action Item Category'
+                      : actionItemCategoryName}
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     {actionItemCategoriesData?.actionItemCategoriesByOrganization.map(
-                      (category: any, index: any) => (
+                      (category, index) => (
                         <Dropdown.Item
                           key={index}
-                          // onClick={
-                          //   /* istanbul ignore next */
-                          //   () => setOrgSetting(setting)
-                          // }
-                          // className={
-                          //   orgSetting === setting ? 'text-secondary' : ''
-                          // }
-                          className="my-1"
+                          onClick={() => {
+                            setActionItemCategoryId(category._id);
+                            setActionItemCategoryName(category.name);
+                          }}
                         >
                           {category.name}
                         </Dropdown.Item>
@@ -268,7 +271,39 @@ function organizationActionItems(): JSX.Element {
                     )}
                   </Dropdown.Menu>
                 </Dropdown>
+
+                <Dropdown
+                  aria-expanded="false"
+                  title="Action Item Status"
+                  data-testid="actionItemStatus"
+                  className={styles.dropdownToggle}
+                >
+                  <Dropdown.Toggle
+                    variant="outline-success"
+                    data-testid="actionItemStatus"
+                    className={
+                      actionItemStatus === '' ? '' : 'bg-success text-white'
+                    }
+                  >
+                    {actionItemStatus === '' ? 'Status' : actionItemStatus}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item
+                      onClick={(): void => handleStatusFilter('Active')}
+                      data-testid="activeActionItems"
+                    >
+                      {t('active')}
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={(): void => handleStatusFilter('Completed')}
+                      data-testid="completedActionItems"
+                    >
+                      {t('completed')}
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               </div>
+
               <Button
                 variant="success"
                 onClick={showCreateModal}
@@ -283,7 +318,7 @@ function organizationActionItems(): JSX.Element {
           <hr />
 
           <ActionItemsContainer
-            actionItemsData={actionItemsData}
+            actionItemsData={actionItemsData?.actionItemsByOrganization}
             membersData={membersData.organizations[0].members}
             actionItemsRefetch={actionItemsRefetch}
           />

@@ -57,7 +57,7 @@ const ActionItemUpdateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
         </Modal.Header>
         <Modal.Body>
           <Form onSubmitCapture={updateActionItemHandler}>
-            <Form.Group className="mb-3">
+            <Form.Group className="mb-2">
               <Form.Label>Assignee</Form.Label>
               <Form.Select
                 defaultValue=""
@@ -96,6 +96,7 @@ const ActionItemUpdateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
                   preCompletionNotes: e.target.value,
                 });
               }}
+              className="mb-2"
             />
 
             <label htmlFor="actionItemPostCompletionNotes">
@@ -113,9 +114,10 @@ const ActionItemUpdateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
                   postCompletionNotes: e.target.value,
                 });
               }}
+              className="mb-2"
             />
 
-            <div className={styles.datediv}>
+            <div className={`${styles.datediv} mt-3 mb-2`}>
               <div>
                 <DatePicker
                   label={t('dueDate')}

@@ -107,11 +107,21 @@ export const ACTION_ITEM_CATEGORY_LIST = gql`
 export const ACTION_ITEM_LIST = gql`
   query ActionItemsByOrganization(
     $organizationId: ID!
+    $actionItemCategoryId: ID
+    $eventId: ID
+    $isActive: Boolean
+    $isCompleted: Boolean
     $orderBy: ActionItemsOrderByInput
   ) {
     actionItemsByOrganization(
       organizationId: $organizationId
       orderBy: $orderBy
+      where: {
+        actionItemCategory_id: $actionItemCategoryId
+        event_id: $eventId
+        is_active: $isActive
+        is_completed: $isCompleted
+      }
     ) {
       _id
       assignee {

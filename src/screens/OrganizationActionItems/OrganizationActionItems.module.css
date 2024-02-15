@@ -4,30 +4,18 @@
 
 .btnsContainer {
   display: flex;
+  justify-content: space-between;
 }
 
 .btnsContainer .btnsBlock {
   display: flex;
+  gap: 10px;
 }
 
 .btnsContainer .btnsBlock button {
-  margin-left: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.btnsContainer .input {
-  flex: 1;
-  position: relative;
-}
-
-.btnsContainer input {
-  outline: 1px solid var(--bs-gray-400);
-}
-
-.btnsContainer .input button {
-  width: 52px;
 }
 
 .container {
@@ -37,9 +25,8 @@
 .datediv {
   display: flex;
   flex-direction: row;
-  margin-top: 30px;
-  margin-bottom: 20px;
 }
+
 .datebox {
   width: 90%;
   border-radius: 7px;
@@ -55,7 +42,7 @@
 }
 
 .dropdown {
-  display: inline;
+  display: block;
 }
 
 .dropdownToggle {
@@ -157,48 +144,10 @@ hr {
   color: #707070;
 }
 
-@media (max-width: 1020px) {
-  .btnsContainer {
-    flex-direction: column;
-    margin: 1.5rem 0;
-  }
-
-  .btnsContainer .btnsBlock {
-    margin: 1.5rem 0 0 0;
-    justify-content: space-between;
-  }
-
-  .btnsContainer .btnsBlock button {
-    margin: 0;
-  }
-
-  .btnsContainer .btnsBlock div button {
-    margin-right: 1.5rem;
-  }
-}
-
 @media (max-width: 767px) {
-  .btnsContainer .btnsBlock {
-    flex-direction: column;
-    margin: 1.5rem 0 0 0;
-    justify-content: space-between;
-  }
-
-  .dropdownToggle {
-    margin-bottom: 1rem;
-  }
-
-  .dropdownContainer {
-    margin-bottom: 0;
-    justify-content: space-between;
-  }
-}
-
-/* For mobile devices  */
-
-@media (max-width: 520px) {
   .btnsContainer {
     margin-bottom: 0;
+    flex-direction: column-reverse;
   }
 
   .btnsContainer .btnsBlock {
@@ -207,21 +156,12 @@ hr {
     margin-right: 0;
   }
 
-  .btnsContainer .btnsBlock div {
-    flex: 1;
-  }
-
-  .btnsContainer .btnsBlock div[title='Sort organizations'] {
-    margin-right: 0.5rem;
-  }
-
   .btnsContainer .btnsBlock button {
     margin-bottom: 1rem;
-    margin-right: 0;
     width: 100%;
   }
 
-  .dropdownToggle {
-    margin-bottom: 0;
+  .dropdown {
+    width: 100%;
   }
 }
