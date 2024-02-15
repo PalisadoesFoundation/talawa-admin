@@ -14,6 +14,7 @@ import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import styles from './UsersTableItem.module.css';
+import Avatar from 'components/Avatar/Avatar';
 
 type Props = {
   user: InterfaceQueryUserListItem;
@@ -306,14 +307,11 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             className="p-0"
                             onClick={() => goToOrg(org._id)}
                           >
-                            <img
-                              src={
-                                org.image
-                                  ? org.image
-                                  : `https://api.dicebear.com/5.x/initials/svg?seed=${org.name}`
-                              }
-                              alt="orgImage"
-                            />
+                            {org.image ? (
+                              <img src={org.image} alt="orgImage" />
+                            ) : (
+                              <Avatar name={org.name} alt="orgImage" />
+                            )}
                             {org.name}
                           </Button>
                         </td>
@@ -326,14 +324,14 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             onClick={() => handleCreator()}
                             data-testid={`creator${org._id}`}
                           >
-                            <img
-                              src={
-                                org.creator.image
-                                  ? org.creator.image
-                                  : `https://api.dicebear.com/5.x/initials/svg?seed=${org.creator.firstName} ${org.creator.lastName}`
-                              }
-                              alt="creator"
-                            />
+                            {org.creator.image ? (
+                              <img src={org.creator.image} alt="creator" />
+                            ) : (
+                              <Avatar
+                                name={`${org.creator.firstName} ${org.creator.lastName}`}
+                                alt="creator"
+                              />
+                            )}
                             {org.creator.firstName} {org.creator.lastName}
                           </Button>
                         </td>
@@ -483,14 +481,11 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             className="p-0"
                             onClick={() => goToOrg(org._id)}
                           >
-                            <img
-                              src={
-                                org.image
-                                  ? org.image
-                                  : `https://api.dicebear.com/5.x/initials/svg?seed=${org.name}`
-                              }
-                              alt="orgImage"
-                            />
+                            {org.image ? (
+                              <img src={org.image} alt="orgImage" />
+                            ) : (
+                              <Avatar name={org.name} alt="orgImage" />
+                            )}
                             {org.name}
                           </Button>
                         </td>
@@ -503,14 +498,14 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             onClick={() => handleCreator()}
                             data-testid={`creator${org._id}`}
                           >
-                            <img
-                              src={
-                                org.creator.image
-                                  ? org.creator.image
-                                  : `https://api.dicebear.com/5.x/initials/svg?seed=${org.creator.firstName} ${org.creator.lastName}`
-                              }
-                              alt="creator"
-                            />
+                            {org.creator.image ? (
+                              <img src={org.creator.image} alt="creator" />
+                            ) : (
+                              <Avatar
+                                name={`${org.creator.firstName} ${org.creator.lastName}`}
+                                alt="creator"
+                              />
+                            )}
                             {org.creator.firstName} {org.creator.lastName}
                           </Button>
                         </td>

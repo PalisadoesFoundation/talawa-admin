@@ -14,6 +14,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { toast } from 'react-toastify';
 import userEvent from '@testing-library/user-event';
 import useLocalStorage from 'utils/useLocalstorage';
+import Avatar from 'components/Avatar/Avatar';
 
 const { setItem } = useLocalStorage();
 
@@ -40,10 +41,7 @@ beforeEach(() => {
   setItem('FirstName', 'John');
   setItem('LastName', 'Doe');
   setItem('UserType', 'SUPERADMIN');
-  setItem(
-    'UserImage',
-    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe'
-  );
+  setItem('UserImage', <Avatar name="John Doe" alt="John Doe" />);
 });
 
 afterEach(() => {

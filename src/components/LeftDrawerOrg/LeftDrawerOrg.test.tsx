@@ -16,6 +16,7 @@ import { act } from 'react-dom/test-utils';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
+import Avatar from 'components/Avatar/Avatar';
 
 const { setItem } = useLocalStorage();
 
@@ -145,8 +146,7 @@ const MOCKS_WITH_IMAGE = [
         organizations: [
           {
             _id: '123',
-            image:
-              'https://api.dicebear.com/5.x/initials/svg?seed=Test%20Organization',
+            image: <Avatar name="Test Organization" alt="Test Organization" />,
             creator: {
               firstName: 'John',
               lastName: 'Doe',
@@ -239,10 +239,7 @@ async function wait(ms = 100): Promise<void> {
 beforeEach(() => {
   setItem('FirstName', 'John');
   setItem('LastName', 'Doe');
-  setItem(
-    'UserImage',
-    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe'
-  );
+  setItem('UserImage', <Avatar name="John Doe" alt="John Doe" />);
 });
 
 afterEach(() => {

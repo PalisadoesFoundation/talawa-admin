@@ -12,6 +12,7 @@ import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { MockedProvider } from '@apollo/react-testing';
 import useLocalStorage from 'utils/useLocalstorage';
+import Avatar from 'components/Avatar/Avatar';
 
 const { setItem } = useLocalStorage();
 
@@ -52,10 +53,7 @@ jest.mock('react-toastify', () => ({
 beforeEach(() => {
   setItem('FirstName', 'John');
   setItem('LastName', 'Doe');
-  setItem(
-    'UserImage',
-    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe'
-  );
+  setItem('UserImage', <Avatar name="John Doe" alt="John Doe" />);
 });
 
 afterEach(() => {
