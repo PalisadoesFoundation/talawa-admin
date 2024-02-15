@@ -5,6 +5,7 @@ import styles from './OrganizationActionItems.module.css';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
+
 import type { InterfaceActionItemCategoryList } from 'utils/interfaces';
 
 interface InterfaceFormStateType {
@@ -67,7 +68,7 @@ const ActionItemCreateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
                 }
               >
                 <option value="" disabled>
-                  Select an action item category
+                  {t('selectActionItemCategory')}
                 </option>
                 {actionItemCategoriesData?.actionItemCategoriesByOrganization.map(
                   (category: any, index: any) => (
@@ -89,7 +90,7 @@ const ActionItemCreateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
                 }
               >
                 <option value="" disabled>
-                  Select an assignee
+                  {t('selectAssignee')}
                 </option>
                 {membersData?.organizations[0].members.map(
                   (member: any, index: any) => (

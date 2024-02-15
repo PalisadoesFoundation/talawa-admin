@@ -1,29 +1,30 @@
 import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
-import { Button, Dropdown, Form } from 'react-bootstrap';
-import styles from './OrganizationActionItems.module.css';
+import { Button, Dropdown } from 'react-bootstrap';
+
 import SortIcon from '@mui/icons-material/Sort';
+import { WarningAmberRounded } from '@mui/icons-material';
+import dayjs from 'dayjs';
+import { toast } from 'react-toastify';
 
 import { useMutation, useQuery } from '@apollo/client';
-import type {
-  InterfaceActionItemCategoryList,
-  InterfaceActionItemList,
-} from 'utils/interfaces';
 import {
   ACTION_ITEM_CATEGORY_LIST,
   ACTION_ITEM_LIST,
   MEMBERS_LIST,
 } from 'GraphQl/Queries/Queries';
-
-import { Search, WarningAmberRounded } from '@mui/icons-material';
-import dayjs from 'dayjs';
-import Loader from 'components/Loader/Loader';
-import ActionItemsContainer from 'components/ActionItemsContainer/ActionItemsContainer';
 import { CREATE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/mutations';
-import { toast } from 'react-toastify';
+
+import type {
+  InterfaceActionItemCategoryList,
+  InterfaceActionItemList,
+} from 'utils/interfaces';
+import ActionItemsContainer from 'components/ActionItemsContainer/ActionItemsContainer';
+import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 import ActionItemCreateModal from './ActionItemCreateModal';
+import styles from './OrganizationActionItems.module.css';
+import Loader from 'components/Loader/Loader';
 
 function organizationActionItems(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -211,16 +212,11 @@ function organizationActionItems(): JSX.Element {
                   className={styles.dropdownToggle}
                 >
                   <Dropdown.Toggle
-                    // variant={
-                    //   sortingState.option === ''
-                    //     ? 'outline-success'
-                    //     : 'success'
-                    // }
                     variant="outline-success"
                     data-testid="sortActionItems"
                   >
                     <SortIcon className={'me-1'} />
-                    {orderBy === 'Latest' ? 'Latest' : 'Earliest'}
+                    {orderBy === 'Latest' ? t('latest') : t('earliest')}
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <Dropdown.Item
@@ -285,7 +281,11 @@ function organizationActionItems(): JSX.Element {
                       actionItemStatus === '' ? '' : 'bg-success text-white'
                     }
                   >
-                    {actionItemStatus === '' ? 'Status' : actionItemStatus}
+                    {actionItemStatus === ''
+                      ? t('status')
+                      : t(
+                          actionItemStatus === 'Active' ? 'active' : 'completed'
+                        )}
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <Dropdown.Item

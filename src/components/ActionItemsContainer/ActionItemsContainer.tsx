@@ -3,19 +3,18 @@ import dayjs from 'dayjs';
 import type { ChangeEvent } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import type {
-  InterfaceActionItemInfo,
-  InterfaceActionItemList,
-} from 'utils/interfaces';
 import { toast } from 'react-toastify';
+
 import {
   DELETE_ACTION_ITEM_MUTATION,
   UPDATE_ACTION_ITEM_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
+
 import ActionItemUpdateModal from '../../screens/OrganizationActionItems/ActionItemUpdateModal';
 import ActionItemPreviewModal from '../../screens/OrganizationActionItems/ActionItemPreviewModal';
 import ActionItemDeleteModal from '../../screens/OrganizationActionItems/ActionItemDeleteModal';
+import type { InterfaceActionItemInfo } from 'utils/interfaces';
 
 function actionItemsContainer({
   actionItemsData,
@@ -152,7 +151,7 @@ function actionItemsContainer({
         <div className="mx-4 shadow-sm rounded-top-4">
           <Row className="mx-0 border border-light-subtle rounded-top-4 py-3">
             <Col xs={7} sm={4} md={3} lg={3} className="ps-3 fs-5 fw-bold">
-              <div className="ms-2">Assignee</div>
+              <div className="ms-2">{t('assignee')}</div>
             </Col>
             <Col
               className="fs-5 fw-bold d-none d-sm-block"
@@ -160,13 +159,13 @@ function actionItemsContainer({
               md={6}
               lg={4}
             >
-              Action Item Category
+              {t('actionItemCategory')}
             </Col>
             <Col className="d-none d-lg-block fs-5 fw-bold" md={4} lg={3}>
-              <div className="ms-3">Status</div>
+              <div className="ms-3">{t('status')}</div>
             </Col>
             <Col xs={5} sm={3} lg={2} className="fs-5 fw-bold">
-              Options
+              {t('options')}
             </Col>
           </Row>
         </div>
@@ -204,7 +203,7 @@ function actionItemsContainer({
                         : 'text-bg-warning'
                     }`}
                   >
-                    {actionItem.isCompleted ? 'Completed' : 'Active'}
+                    {actionItem.isCompleted ? t('completed') : t('active')}
                   </div>
                 </Col>
                 <Col xs={5} sm={3} lg={2} className="p-0">
@@ -213,7 +212,7 @@ function actionItemsContainer({
                     variant="outline-secondary"
                     onClick={() => showPreviewModal(actionItem)}
                   >
-                    Details
+                    {t('details')}
                   </Button>
                   <Button
                     size="sm"
@@ -246,7 +245,7 @@ function actionItemsContainer({
 
           {actionItemsData?.length === 0 && (
             <div className="lh-lg text-center fw-semibold text-body-tertiary">
-              No Action Items
+              {t('noActionItems')}
             </div>
           )}
         </div>
