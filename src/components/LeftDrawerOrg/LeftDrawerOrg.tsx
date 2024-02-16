@@ -6,7 +6,7 @@ import IconComponent from 'components/IconComponent/IconComponent';
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
@@ -176,33 +176,43 @@ const leftDrawerOrg = ({
 
         {/* Profile Section & Logout Btn */}
         <div style={{ marginTop: 'auto' }}>
-          <button
-            className={styles.profileContainer}
-            data-testid="profileBtn"
-            onClick={(): void => {
-              history.push(`/member/id=${userId}`);
+          <Link
+            to={{
+              pathname: `/member/id=${userId}`,
+              state: { from: 'orgdash' },
             }}
           >
-            <div className={styles.imageContainer}>
-              {userImage && userImage !== 'null' ? (
-                <img src={userImage} alt={`profile picture`} />
-              ) : (
-                <img
-                  src={`https://api.dicebear.com/5.x/initials/svg?seed=${firstName}%20${lastName}`}
-                  alt={`dummy picture`}
-                />
-              )}
-            </div>
-            <div className={styles.profileText}>
-              <span className={styles.primaryText}>
-                {firstName} {lastName}
-              </span>
-              <span className={styles.secondaryText}>
-                {`${userType}`.toLowerCase()}
-              </span>
-            </div>
-            <AngleRightIcon fill={'var(--bs-secondary)'} />
-          </button>
+            <Button
+              key={'profileBtn'}
+              variant={screenName === 'Profile' ? 'success' : 'light'}
+              className={styles.profileContainer}
+              data-testid="profileBtn"
+            >
+              <div className={styles.imageContainer}>
+                {userImage && userImage !== 'null' ? (
+                  <img src={userImage} alt={`profile picture`} />
+                ) : (
+                  <img
+                    src={`https://api.dicebear.com/5.x/initials/svg?seed=${firstName}%20${lastName}`}
+                    alt={`dummy picture`}
+                  />
+                )}
+              </div>
+              <div className={styles.profileText}>
+                <span className={styles.primaryText}>
+                  {firstName} {lastName}
+                </span>
+                <span
+                  className={`${styles.secondaryText} ${
+                    screenName === 'Profile' && 'text-white'
+                  }`}
+                >
+                  {`${userType}`.toLowerCase()}
+                </span>
+              </div>
+              <AngleRightIcon fill={'var(--bs-secondary)'} />
+            </Button>
+          </Link>
           <Button
             variant="light"
             className={`mt-4 d-flex justify-content-start px-0 w-100 ${styles.logout}`}

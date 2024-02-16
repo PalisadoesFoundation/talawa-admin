@@ -215,6 +215,32 @@ describe('MemberDetail', () => {
     expect(getLangName('')).toBe('Unavailable');
   });
 
+  test('should render OrganizationScreen if called from Organization Dashboard', async () => {
+    const props = {
+      id: 'rishav-jha-mech',
+      from: 'orgdash',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <MemberDetail {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+    await wait();
+    expect(screen.getAllByText(/People/i)).toBeTruthy();
+    expect(screen.getAllByText(/Events/i)).toBeTruthy();
+    expect(screen.getAllByText(/Posts/i)).toBeTruthy();
+    expect(screen.getAllByText(/Advertisement/i)).toBeTruthy();
+  });
+
   test('Should display dicebear image if image is null', async () => {
     const props = {
       id: 'rishav-jha-mech',
