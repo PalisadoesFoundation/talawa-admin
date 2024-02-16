@@ -6,7 +6,10 @@ import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 
-import type { InterfaceActionItemCategoryList } from 'utils/interfaces';
+import type {
+  InterfaceActionItemCategoryInfo,
+  InterfaceActionItemCategoryList,
+} from 'utils/interfaces';
 
 interface InterfaceFormStateType {
   actionItemCategoryId: string;
@@ -22,7 +25,7 @@ interface InterfaceActionItemCreateModalProps {
   setFormState: (state: React.SetStateAction<InterfaceFormStateType>) => void;
   createActionItemHandler: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
   t: (key: string) => string;
-  actionItemCategoriesData: InterfaceActionItemCategoryList | undefined;
+  actionItemCategories: InterfaceActionItemCategoryInfo[] | undefined;
   membersData: any;
   dueDate: Date | null;
   setDueDate: (state: React.SetStateAction<Date | null>) => void;
@@ -35,7 +38,7 @@ const ActionItemCreateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
   setFormState,
   createActionItemHandler,
   t,
-  actionItemCategoriesData,
+  actionItemCategories,
   membersData,
   dueDate,
   setDueDate,
@@ -70,13 +73,11 @@ const ActionItemCreateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
                 <option value="" disabled>
                   {t('selectActionItemCategory')}
                 </option>
-                {actionItemCategoriesData?.actionItemCategoriesByOrganization.map(
-                  (category: any, index: any) => (
-                    <option key={index} value={category._id}>
-                      {category.name}
-                    </option>
-                  )
-                )}
+                {actionItemCategories?.map((category: any, index: any) => (
+                  <option key={index} value={category._id}>
+                    {category.name}
+                  </option>
+                ))}
               </Form.Select>
             </Form.Group>
 

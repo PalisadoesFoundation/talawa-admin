@@ -189,6 +189,11 @@ function organizationActionItems(): JSX.Element {
     );
   }
 
+  const actionItemCategories =
+    actionItemCategoriesData?.actionItemCategoriesByOrganization.filter(
+      (category) => !category.isDisabled
+    );
+
   return (
     <>
       <OrganizationScreen screenName="Action Items" title={t('title')}>
@@ -252,19 +257,17 @@ function organizationActionItems(): JSX.Element {
                       : actionItemCategoryName}
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    {actionItemCategoriesData?.actionItemCategoriesByOrganization.map(
-                      (category, index) => (
-                        <Dropdown.Item
-                          key={index}
-                          onClick={() => {
-                            setActionItemCategoryId(category._id);
-                            setActionItemCategoryName(category.name);
-                          }}
-                        >
-                          {category.name}
-                        </Dropdown.Item>
-                      )
-                    )}
+                    {actionItemCategories?.map((category, index) => (
+                      <Dropdown.Item
+                        key={index}
+                        onClick={() => {
+                          setActionItemCategoryId(category._id);
+                          setActionItemCategoryName(category.name);
+                        }}
+                      >
+                        {category.name}
+                      </Dropdown.Item>
+                    ))}
                   </Dropdown.Menu>
                 </Dropdown>
 
@@ -333,7 +336,7 @@ function organizationActionItems(): JSX.Element {
         setFormState={setFormState}
         createActionItemHandler={createActionItemHandler}
         t={t}
-        actionItemCategoriesData={actionItemCategoriesData}
+        actionItemCategories={actionItemCategories}
         membersData={membersData}
         dueDate={dueDate}
         setDueDate={setDueDate}
