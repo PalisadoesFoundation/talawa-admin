@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 
 import styles from './OrganizationActionItems.module.css';
+import dayjs from 'dayjs';
 
 interface InterfaceFormStateType {
   assigneeId: string;
@@ -72,14 +73,21 @@ const ActionItemPreviewModal: React.FC<InterfaceActionItemCreateModalProps> = ({
               </p>
               <p className={styles.preview}>
                 {t('assignmentDate')}:{' '}
-                <span className={styles.view}>{assignmentDate}</span>
+                <span className={styles.view}>
+                  {dayjs(assignmentDate).format('YYYY-MM-DD')}
+                </span>
               </p>
               <p className={styles.preview}>
-                {t('dueDate')}: <span className={styles.view}>{dueDate}</span>
+                {t('dueDate')}:{' '}
+                <span className={styles.view}>
+                  {dayjs(dueDate).format('YYYY-MM-DD')}
+                </span>
               </p>
               <p className={styles.preview}>
                 {t('completionDate')}:{' '}
-                <span className={styles.view}>{completionDate}</span>
+                <span className={styles.view}>
+                  {dayjs(completionDate).format('YYYY-MM-DD')}
+                </span>
               </p>
               <p className={styles.preview}>
                 {t('status')}:{' '}
@@ -91,7 +99,7 @@ const ActionItemPreviewModal: React.FC<InterfaceActionItemCreateModalProps> = ({
             <div className={styles.iconContainer}>
               <Button
                 size="sm"
-                data-testid="editActionItemModalBtn"
+                data-testid="editActionItemPreviewModalBtn"
                 className={styles.icon}
                 onClick={() => {
                   hidePreviewModal();
@@ -103,7 +111,7 @@ const ActionItemPreviewModal: React.FC<InterfaceActionItemCreateModalProps> = ({
               </Button>
               <Button
                 size="sm"
-                data-testid="deleteActionItemModalBtn"
+                data-testid="deleteActionItemPreviewModalBtn"
                 className={`${styles.icon} ms-2`}
                 onClick={toggleDeleteModal}
                 variant="danger"

@@ -107,7 +107,7 @@ function actionItemsContainer({
       hideUpdateModal();
       toast.success(t('successfulUpdation'));
     } catch (error: any) {
-      toast.success(error.message);
+      toast.error(error.message);
       console.log(error);
     }
   };
@@ -208,6 +208,7 @@ function actionItemsContainer({
                 </Col>
                 <Col xs={5} sm={3} lg={2} className="p-0">
                   <Button
+                    data-testid="previewActionItemModalBtn"
                     className="btn btn-sm me-2"
                     variant="outline-secondary"
                     onClick={() => showPreviewModal(actionItem)}

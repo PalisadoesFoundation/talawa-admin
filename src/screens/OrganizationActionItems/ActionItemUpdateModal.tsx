@@ -61,6 +61,7 @@ const ActionItemUpdateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
             <Form.Group className="mb-2">
               <Form.Label>Assignee</Form.Label>
               <Form.Select
+                data-testid="formUpdateAssignee"
                 defaultValue=""
                 onChange={(e) =>
                   setFormState({ ...formState, assigneeId: e.target.value })
