@@ -14,6 +14,7 @@ import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import styles from './LeftDrawerOrg.module.css';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import useLocalStorage from 'utils/useLocalstorage';
 
 export interface InterfaceLeftDrawerProps {
   orgId: string;
@@ -46,11 +47,13 @@ const leftDrawerOrg = ({
 
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
 
-  const userType = localStorage.getItem('UserType');
-  const firstName = localStorage.getItem('FirstName');
-  const lastName = localStorage.getItem('LastName');
-  const userImage = localStorage.getItem('UserImage');
-  const userId = localStorage.getItem('id');
+  const { getItem } = useLocalStorage();
+
+  const userType = getItem('UserType');
+  const firstName = getItem('FirstName');
+  const lastName = getItem('LastName');
+  const userImage = getItem('UserImage');
+  const userId = getItem('id');
   const history = useHistory();
 
   // Set organization data

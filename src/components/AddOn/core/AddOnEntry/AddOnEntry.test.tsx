@@ -21,13 +21,16 @@ import { MockedProvider, wait } from '@apollo/react-testing';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { ADD_ON_ENTRY_MOCK } from './AddOnEntryMocks';
 import { ToastContainer } from 'react-toastify';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { getItem } = useLocalStorage();
 
 const link = new StaticMockLink(ADD_ON_ENTRY_MOCK, true);
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
   headers: {
-    authorization: 'Bearer ' + localStorage.getItem('token') || '',
+    authorization: 'Bearer ' + getItem('token') || '',
   },
 });
 console.error = jest.fn();

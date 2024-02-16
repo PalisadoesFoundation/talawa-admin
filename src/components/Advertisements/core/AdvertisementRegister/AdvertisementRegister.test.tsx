@@ -23,10 +23,14 @@ import { toast } from 'react-toastify';
 import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { getItem } = useLocalStorage();
 
 jest.mock('react-toastify', () => ({
   toast: {
     success: jest.fn(),
+    warn: jest.fn(),
     error: jest.fn(),
   },
 }));
@@ -60,7 +64,7 @@ const link = new StaticMockLink(MOCKS, true);
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
   headers: {
-    authorization: 'Bearer ' + localStorage.getItem('token') || '',
+    authorization: 'Bearer ' + getItem('token') || '',
   },
 });
 
@@ -107,7 +111,7 @@ describe('Testing Advertisement Register Component', () => {
                   type="BANNER"
                   name="Advert1"
                   orgId="1"
-                  link="google.com"
+                  link="https://google.com"
                 />
               }
             </I18nextProvider>
@@ -133,7 +137,7 @@ describe('Testing Advertisement Register Component', () => {
                   type="BANNER"
                   name="Advert1"
                   orgId="1"
-                  link="google.com"
+                  link="https://google.com"
                   formStatus="edit"
                 />
               }
@@ -160,7 +164,7 @@ describe('Testing Advertisement Register Component', () => {
                   type="BANNER"
                   name="Advert1"
                   orgId="1"
-                  link="google.com"
+                  link="https://google.com"
                 />
               }
             </I18nextProvider>
@@ -192,7 +196,7 @@ describe('Testing Advertisement Register Component', () => {
                   type="BANNER"
                   name="Advert1"
                   orgId="1"
-                  link="google.com"
+                  link="https://google.com"
                 />
               }
             </I18nextProvider>
@@ -272,8 +276,130 @@ describe('Testing Advertisement Register Component', () => {
 
     fireEvent.click(getByText(translations.register));
     await waitFor(() => {
+      expect(toast.warn).toBeCalledWith(
+        'Link is invalid. Please enter a valid link'
+      );
+    });
+  });
+
+  test('Throws error when the end date is less than the start date', async () => {
+    const { getByText, getByLabelText, queryByText } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              {
+                <AdvertisementRegister
+                  endDate={new Date()}
+                  startDate={new Date()}
+                  type="BANNER"
+                  name="Advert1"
+                  orgId="1"
+                  link="google.com"
+                />
+              }
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>
+    );
+
+    fireEvent.click(getByText(translations.addNew));
+    expect(queryByText(translations.RClose)).toBeInTheDocument();
+    fireEvent.change(getByLabelText(translations.Rname), {
+      target: { value: 'Test Advertisement' },
+    });
+    expect(getByLabelText(translations.Rname)).toHaveValue(
+      'Test Advertisement'
+    );
+
+    fireEvent.change(getByLabelText(translations.Rlink), {
+      target: { value: 'http://example.com' },
+    });
+    expect(getByLabelText(translations.Rlink)).toHaveValue(
+      'http://example.com'
+    );
+
+    fireEvent.change(getByLabelText(translations.Rtype), {
+      target: { value: 'BANNER' },
+    });
+    expect(getByLabelText(translations.Rtype)).toHaveValue('BANNER');
+
+    fireEvent.change(getByLabelText(translations.RstartDate), {
+      target: { value: '2023-02-02' },
+    });
+    expect(getByLabelText(translations.RstartDate)).toHaveValue('2023-02-02');
+
+    fireEvent.change(getByLabelText(translations.RendDate), {
+      target: { value: '2023-01-01' },
+    });
+    expect(getByLabelText(translations.RendDate)).toHaveValue('2023-01-01');
+
+    fireEvent.click(getByText(translations.register));
+    await waitFor(() => {
       expect(toast.error).toBeCalledWith(
-        'An error occured, could not create new advertisement'
+        'End date must be greater than or equal to start date'
+      );
+    });
+  });
+  test('Throws error when the end date is less than the start date while editing the advertisement', async () => {
+    const { getByText, getByLabelText, queryByText } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              {
+                <AdvertisementRegister
+                  formStatus="edit"
+                  endDate={new Date()}
+                  startDate={new Date()}
+                  type="BANNER"
+                  name="Advert1"
+                  orgId="1"
+                  link="google.com"
+                />
+              }
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>
+    );
+
+    fireEvent.click(getByText(translations.edit));
+    expect(queryByText(translations.editAdvertisement)).toBeInTheDocument();
+    fireEvent.change(getByLabelText(translations.Rname), {
+      target: { value: 'Test Advertisement' },
+    });
+    expect(getByLabelText(translations.Rname)).toHaveValue(
+      'Test Advertisement'
+    );
+
+    fireEvent.change(getByLabelText(translations.Rlink), {
+      target: { value: 'http://example.com' },
+    });
+    expect(getByLabelText(translations.Rlink)).toHaveValue(
+      'http://example.com'
+    );
+
+    fireEvent.change(getByLabelText(translations.Rtype), {
+      target: { value: 'BANNER' },
+    });
+    expect(getByLabelText(translations.Rtype)).toHaveValue('BANNER');
+
+    fireEvent.change(getByLabelText(translations.RstartDate), {
+      target: { value: '2023-02-02' },
+    });
+    expect(getByLabelText(translations.RstartDate)).toHaveValue('2023-02-02');
+
+    fireEvent.change(getByLabelText(translations.RendDate), {
+      target: { value: '2023-01-01' },
+    });
+    expect(getByLabelText(translations.RendDate)).toHaveValue('2023-01-01');
+
+    fireEvent.click(getByText(translations.saveChanges));
+    await waitFor(() => {
+      expect(toast.error).toBeCalledWith(
+        'End date must be greater than or equal to start date'
       );
     });
   });

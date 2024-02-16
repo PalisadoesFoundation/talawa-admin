@@ -441,6 +441,8 @@
   "orgSettings": {
     "title": "तलावा सेटिंग",
     "pageName": "सेटिंग्स",
+    "general": "सामान्य",
+    "actionItemCategories": "कार्रवाई आइटम श्रेणियाँ",
     "updateYourDetails": "अपना विवरण अपडेट करें",
     "updateYourPassword": "अपना पासवर्ड अपडेट करें",
     "updateOrganization": "अद्यतन संगठन",
@@ -544,6 +546,7 @@
   "memberDetail": {
     "title": "उपयोगकर्ता विवरण",
     "addAdmin": "व्यवस्थापक जोड़ें",
+    "alreadyIsAdmin": "सदस्य पहले से ही एक व्यवस्थापक है",
     "organizations": "संगठन",
     "events": "घटनाएं",
     "role": "भूमिका",
@@ -696,6 +699,8 @@
     "archievedAds": "संपन्न अभियान",
     "pMessage": "इस अभियान के लिए कोई विज्ञापन नहीं हैं।",
     "delete": "हटाएँ",
+    "validLink": "लिंक मान्य है",
+    "invalidLink": "लिंक अमान्य है",
     "close": "बंद करें",
     "deleteAdvertisement": "विज्ञापन हटाएं",
     "deleteAdvertisementMsg": "क्या आप इस विज्ञापन को हटाना चाहते हैं?",
@@ -725,5 +730,20 @@
     "Remove Custom Field": "कस्टम फ़ील्ड हटाएँ",
     "fieldSuccessMessage": "फ़ील्ड सफलतापूर्वक जोड़ा गया",
     "fieldRemovalSuccess": "फ़ील्ड सफलतापूर्वक हटा दिया गया"
+  },
+  "orgActionItemCategories": {
+    "createButton": "बनाएं",
+    "editButton": "संपादित करें",
+    "enableButton": "सक्षम करें",
+    "disableButton": "अक्षम करें",
+    "updateActionItemCategory": "अद्यतन करें",
+    "actionItemCategoryName": "नाम",
+    "actionItemCategoryDetails": "कार्रवाई आइटम श्रेणी विवरण",
+    "enterName": "नाम दर्ज करें",
+    "successfulCreation": "कार्रवाई आइटम श्रेणी सफलतापूर्वक बनाई गई",
+    "successfulUpdation": "क्रिया आइटम श्रेणी सफलतापूर्वक अद्यतन की गई",
+    "sameNameConflict": "अपडेट करने के लिए कृपया नाम बदलें",
+    "categoryEnabled": "कार्रवाई आइटम श्रेणी सक्षम",
+    "categoryDisabled": "क्रिया आइटम श्रेणी अक्षम की गई"
   }
 }
