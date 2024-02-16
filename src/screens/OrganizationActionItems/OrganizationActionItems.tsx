@@ -119,7 +119,7 @@ function organizationActionItems(): JSX.Element {
       hideCreateModal();
       toast.success(t('successfulCreation'));
     } catch (error: any) {
-      toast.success(error.message);
+      toast.error(error.message);
       console.log(error);
     }
   };
@@ -241,25 +241,26 @@ function organizationActionItems(): JSX.Element {
 
                 <Dropdown
                   aria-expanded="false"
-                  title="Sort organizations"
-                  data-testid="sort"
+                  title="Action Item Categories"
+                  data-testid="actionItemCategories"
                   className={styles.dropdownToggle}
                 >
                   <Dropdown.Toggle
                     variant="outline-success"
-                    data-testid="sortOrgs"
+                    data-testid="selectActionItemCategory"
                     className={
                       actionItemCategoryId === '' ? '' : 'bg-success text-white'
                     }
                   >
                     {actionItemCategoryName === ''
-                      ? 'Action Item Category'
+                      ? t('actionItemCategory')
                       : actionItemCategoryName}
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     {actionItemCategories?.map((category, index) => (
                       <Dropdown.Item
                         key={index}
+                        data-testid="actionItemCategory"
                         onClick={() => {
                           setActionItemCategoryId(category._id);
                           setActionItemCategoryName(category.name);
@@ -279,7 +280,7 @@ function organizationActionItems(): JSX.Element {
                 >
                   <Dropdown.Toggle
                     variant="outline-success"
-                    data-testid="actionItemStatus"
+                    data-testid="selectActionItemStatus"
                     className={
                       actionItemStatus === '' ? '' : 'bg-success text-white'
                     }

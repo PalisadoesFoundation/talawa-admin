@@ -6,10 +6,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 
-import type {
-  InterfaceActionItemCategoryInfo,
-  InterfaceActionItemCategoryList,
-} from 'utils/interfaces';
+import type { InterfaceActionItemCategoryInfo } from 'utils/interfaces';
 
 interface InterfaceFormStateType {
   actionItemCategoryId: string;
@@ -59,8 +56,9 @@ const ActionItemCreateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
         <Modal.Body>
           <Form onSubmitCapture={createActionItemHandler}>
             <Form.Group className="mb-3">
-              <Form.Label>Action Item Category</Form.Label>
+              <Form.Label>{t('actionItemCategory')}</Form.Label>
               <Form.Select
+                data-testid="formSelectActionItemCategory"
                 required
                 defaultValue=""
                 onChange={(e) =>
@@ -84,6 +82,7 @@ const ActionItemCreateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
             <Form.Group className="mb-3">
               <Form.Label>Assignee</Form.Label>
               <Form.Select
+                data-testid="formSelectAssignee"
                 required
                 defaultValue=""
                 onChange={(e) =>
@@ -137,7 +136,7 @@ const ActionItemCreateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
               type="submit"
               className={styles.greenregbtn}
               value="createActionItem"
-              data-testid="createActionItem"
+              data-testid="createActionItemFormSubmitBtn"
             >
               {t('createActionItem')}
             </Button>
