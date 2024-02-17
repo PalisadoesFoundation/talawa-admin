@@ -1,6 +1,7 @@
 .github/**
 env.example
 .husky/**
+.node-version
 scripts/**
 package.json
 tsconfig.json
