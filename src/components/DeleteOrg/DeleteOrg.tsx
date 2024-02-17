@@ -24,7 +24,7 @@ function deleteOrg(): JSX.Element {
 
   const [del] = useMutation(DELETE_ORGANIZATION_MUTATION);
   const [removeSampleOrganization] = useMutation(
-    REMOVE_SAMPLE_ORGANIZATION_MUTATION
+    REMOVE_SAMPLE_ORGANIZATION_MUTATION,
   );
 
   const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {

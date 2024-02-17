@@ -47,8 +47,8 @@ const link3 = new StaticMockLink(MOCKS_ERROR_MUTATIONS, true);
 
 const translations = JSON.parse(
   JSON.stringify(
-    i18nForTest.getDataByLanguage('en')?.translation.orgActionItemCategories
-  )
+    i18nForTest.getDataByLanguage('en')?.translation.orgActionItemCategories,
+  ),
 );
 
 describe('Testing Action Item Categories Component', () => {
@@ -63,7 +63,7 @@ describe('Testing Action Item Categories Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -84,7 +84,7 @@ describe('Testing Action Item Categories Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -105,7 +105,7 @@ describe('Testing Action Item Categories Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -117,7 +117,7 @@ describe('Testing Action Item Categories Component', () => {
 
     await waitFor(() => {
       userEvent.click(
-        screen.getAllByTestId('actionItemCategoryUpdateModalOpenBtn')[0]
+        screen.getAllByTestId('actionItemCategoryUpdateModalOpenBtn')[0],
       );
       userEvent.click(screen.getByTestId('actionItemCategoryModalCloseBtn'));
     });
@@ -134,7 +134,7 @@ describe('Testing Action Item Categories Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -143,7 +143,7 @@ describe('Testing Action Item Categories Component', () => {
       userEvent.click(screen.getByTestId('actionItemCategoryModalOpenBtn'));
       userEvent.type(
         screen.getByPlaceholderText(translations.enterName),
-        'ActionItemCategory 4'
+        'ActionItemCategory 4',
       );
 
       userEvent.click(screen.getByTestId('formSubmitButton'));
@@ -165,7 +165,7 @@ describe('Testing Action Item Categories Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -174,7 +174,7 @@ describe('Testing Action Item Categories Component', () => {
       userEvent.click(screen.getByTestId('actionItemCategoryModalOpenBtn'));
       userEvent.type(
         screen.getByPlaceholderText(translations.enterName),
-        'ActionItemCategory 4'
+        'ActionItemCategory 4',
       );
 
       userEvent.click(screen.getByTestId('formSubmitButton'));
@@ -196,14 +196,14 @@ describe('Testing Action Item Categories Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     await waitFor(() => {
       userEvent.click(
-        screen.getAllByTestId('actionItemCategoryUpdateModalOpenBtn')[0]
+        screen.getAllByTestId('actionItemCategoryUpdateModalOpenBtn')[0],
       );
 
       const name = screen.getByPlaceholderText(translations.enterName);
@@ -211,7 +211,7 @@ describe('Testing Action Item Categories Component', () => {
 
       userEvent.type(
         screen.getByPlaceholderText(translations.enterName),
-        'ActionItemCategory 1 updated'
+        'ActionItemCategory 1 updated',
       );
 
       userEvent.click(screen.getByTestId('formSubmitButton'));
@@ -233,14 +233,14 @@ describe('Testing Action Item Categories Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     await waitFor(() => {
       userEvent.click(
-        screen.getAllByTestId('actionItemCategoryUpdateModalOpenBtn')[0]
+        screen.getAllByTestId('actionItemCategoryUpdateModalOpenBtn')[0],
       );
 
       const name = screen.getByPlaceholderText(translations.enterName);
@@ -248,7 +248,7 @@ describe('Testing Action Item Categories Component', () => {
 
       userEvent.type(
         screen.getByPlaceholderText(translations.enterName),
-        'ActionItemCategory 1 updated'
+        'ActionItemCategory 1 updated',
       );
 
       userEvent.click(screen.getByTestId('formSubmitButton'));
@@ -270,14 +270,14 @@ describe('Testing Action Item Categories Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     await waitFor(() => {
       userEvent.click(
-        screen.getAllByTestId('actionItemCategoryUpdateModalOpenBtn')[0]
+        screen.getAllByTestId('actionItemCategoryUpdateModalOpenBtn')[0],
       );
 
       const name = screen.getByPlaceholderText(translations.enterName);
@@ -285,7 +285,7 @@ describe('Testing Action Item Categories Component', () => {
 
       userEvent.type(
         screen.getByPlaceholderText(translations.enterName),
-        'ActionItemCategory 1'
+        'ActionItemCategory 1',
       );
 
       userEvent.click(screen.getByTestId('formSubmitButton'));
@@ -307,7 +307,7 @@ describe('Testing Action Item Categories Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -340,7 +340,7 @@ describe('Testing Action Item Categories Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();

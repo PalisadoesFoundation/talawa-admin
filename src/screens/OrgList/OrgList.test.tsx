@@ -79,7 +79,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
 
@@ -100,7 +100,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
 
@@ -123,13 +123,13 @@ describe('Organisations Page testing as SuperAdmin', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
     expect(screen.queryByText('Organizations Not Found')).toBeInTheDocument();
     expect(
-      screen.queryByText('Please create an organization through dashboard')
+      screen.queryByText('Please create an organization through dashboard'),
     ).toBeInTheDocument();
     expect(window.location).toBeAt('/');
   });
@@ -142,7 +142,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
             <OrgList />
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -160,7 +160,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -183,14 +183,14 @@ describe('Organisations Page testing as SuperAdmin', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait(500);
 
     expect(localStorage.setItem).toHaveBeenLastCalledWith(
       'Talawa-admin_UserType',
-      JSON.stringify('SUPERADMIN')
+      JSON.stringify('SUPERADMIN'),
     );
 
     userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
@@ -198,64 +198,64 @@ describe('Organisations Page testing as SuperAdmin', () => {
     userEvent.type(screen.getByTestId(/modalOrganizationName/i), formData.name);
     userEvent.type(
       screen.getByPlaceholderText(/Description/i),
-      formData.description
+      formData.description,
     );
     userEvent.type(screen.getByPlaceholderText(/City/i), formData.address.city);
     userEvent.type(
       screen.getByPlaceholderText(/Postal Code/i),
-      formData.address.postalCode
+      formData.address.postalCode,
     );
     userEvent.type(
       screen.getByPlaceholderText(/State \/ Province/i),
-      formData.address.state
+      formData.address.state,
     );
 
     userEvent.selectOptions(
       screen.getByTestId('countrycode'),
-      formData.address.countryCode
+      formData.address.countryCode,
     );
     userEvent.type(
       screen.getByPlaceholderText(/Line 1/i),
-      formData.address.line1
+      formData.address.line1,
     );
     userEvent.type(
       screen.getByPlaceholderText(/Line 2/i),
-      formData.address.line2
+      formData.address.line2,
     );
     userEvent.type(
       screen.getByPlaceholderText(/Sorting Code/i),
-      formData.address.sortingCode
+      formData.address.sortingCode,
     );
     userEvent.type(
       screen.getByPlaceholderText(/Dependent Locality/i),
-      formData.address.dependentLocality
+      formData.address.dependentLocality,
     );
     userEvent.click(screen.getByTestId(/userRegistrationRequired/i));
     userEvent.click(screen.getByTestId(/visibleInSearch/i));
 
     expect(screen.getByTestId(/modalOrganizationName/i)).toHaveValue(
-      formData.name
+      formData.name,
     );
     expect(screen.getByPlaceholderText(/Description/i)).toHaveValue(
-      formData.description
+      formData.description,
     );
     //Checking the fields for the address object in the formdata.
     const { address } = formData;
     expect(screen.getByPlaceholderText(/City/i)).toHaveValue(address.city);
     expect(screen.getByPlaceholderText(/State \/ Province/i)).toHaveValue(
-      address.state
+      address.state,
     );
     expect(screen.getByPlaceholderText(/Dependent Locality/i)).toHaveValue(
-      address.dependentLocality
+      address.dependentLocality,
     );
     expect(screen.getByPlaceholderText(/Line 1/i)).toHaveValue(address.line1);
     expect(screen.getByPlaceholderText(/Line 2/i)).toHaveValue(address.line2);
     expect(screen.getByPlaceholderText(/Postal Code/i)).toHaveValue(
-      address.postalCode
+      address.postalCode,
     );
     expect(screen.getByTestId(/countrycode/i)).toHaveValue(address.countryCode);
     expect(screen.getByPlaceholderText(/Sorting Code/i)).toHaveValue(
-      address.sortingCode
+      address.sortingCode,
     );
     expect(screen.getByTestId(/userRegistrationRequired/i)).not.toBeChecked();
     expect(screen.getByTestId(/visibleInSearch/i)).toBeChecked();
@@ -264,7 +264,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
     await waitFor(() => {
       expect(
-        screen.queryByText(/Congratulation the Organization is created/i)
+        screen.queryByText(/Congratulation the Organization is created/i),
       ).toBeInTheDocument();
     });
   });
@@ -283,14 +283,14 @@ describe('Organisations Page testing as SuperAdmin', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait(500);
 
     expect(localStorage.setItem).toHaveBeenLastCalledWith(
       'Talawa-admin_UserType',
-      JSON.stringify('SUPERADMIN')
+      JSON.stringify('SUPERADMIN'),
     );
 
     userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
@@ -298,63 +298,63 @@ describe('Organisations Page testing as SuperAdmin', () => {
     userEvent.type(screen.getByTestId(/modalOrganizationName/i), formData.name);
     userEvent.type(
       screen.getByPlaceholderText(/Description/i),
-      formData.description
+      formData.description,
     );
     userEvent.type(screen.getByPlaceholderText(/City/i), formData.address.city);
     userEvent.type(
       screen.getByPlaceholderText(/State \/ Province/i),
-      formData.address.state
+      formData.address.state,
     );
     userEvent.type(
       screen.getByPlaceholderText(/Postal Code/i),
-      formData.address.postalCode
+      formData.address.postalCode,
     );
     userEvent.selectOptions(
       screen.getByTestId('countrycode'),
-      formData.address.countryCode
+      formData.address.countryCode,
     );
     userEvent.type(
       screen.getByPlaceholderText(/Line 1/i),
-      formData.address.line1
+      formData.address.line1,
     );
     userEvent.type(
       screen.getByPlaceholderText(/Line 2/i),
-      formData.address.line2
+      formData.address.line2,
     );
     userEvent.type(
       screen.getByPlaceholderText(/Sorting Code/i),
-      formData.address.sortingCode
+      formData.address.sortingCode,
     );
     userEvent.type(
       screen.getByPlaceholderText(/Dependent Locality/i),
-      formData.address.dependentLocality
+      formData.address.dependentLocality,
     );
     userEvent.click(screen.getByTestId(/userRegistrationRequired/i));
     userEvent.click(screen.getByTestId(/visibleInSearch/i));
 
     expect(screen.getByTestId(/modalOrganizationName/i)).toHaveValue(
-      formData.name
+      formData.name,
     );
     expect(screen.getByPlaceholderText(/Description/i)).toHaveValue(
-      formData.description
+      formData.description,
     );
     //Checking the fields for the address object in the formdata.
     const { address } = formData;
     expect(screen.getByPlaceholderText(/City/i)).toHaveValue(address.city);
     expect(screen.getByPlaceholderText(/State \/ Province/i)).toHaveValue(
-      address.state
+      address.state,
     );
     expect(screen.getByPlaceholderText(/Dependent Locality/i)).toHaveValue(
-      address.dependentLocality
+      address.dependentLocality,
     );
     expect(screen.getByPlaceholderText(/Line 1/i)).toHaveValue(address.line1);
     expect(screen.getByPlaceholderText(/Line 2/i)).toHaveValue(address.line2);
     expect(screen.getByPlaceholderText(/Postal Code/i)).toHaveValue(
-      address.postalCode
+      address.postalCode,
     );
     expect(screen.getByTestId(/countrycode/i)).toHaveValue(address.countryCode);
     expect(screen.getByPlaceholderText(/Sorting Code/i)).toHaveValue(
-      address.sortingCode
+      address.sortingCode,
     );
     expect(screen.getByTestId(/userRegistrationRequired/i)).not.toBeChecked();
     expect(screen.getByTestId(/visibleInSearch/i)).toBeChecked();
@@ -366,8 +366,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
     // });
     await waitFor(() =>
       expect(
-        screen.queryByText(/Congratulation the Organization is created/i)
-      ).toBeInTheDocument()
+        screen.queryByText(/Congratulation the Organization is created/i),
+      ).toBeInTheDocument(),
     );
     await waitFor(() => {
       screen.findByTestId(/pluginNotificationHeader/i);
@@ -390,15 +390,15 @@ describe('Organisations Page testing as SuperAdmin', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
     userEvent.click(screen.getByTestId(/createSampleOrganizationBtn/i));
     await waitFor(() =>
       expect(
-        screen.queryByText(/Sample Organization Successfully created/i)
-      ).toBeInTheDocument()
+        screen.queryByText(/Sample Organization Successfully created/i),
+      ).toBeInTheDocument(),
     );
   });
   test('Testing error handling for CreateSampleOrg', async () => {
@@ -413,15 +413,15 @@ describe('Organisations Page testing as SuperAdmin', () => {
             <OrgList />
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
     userEvent.click(screen.getByTestId(/createSampleOrganizationBtn/i));
     await waitFor(() =>
       expect(
-        screen.queryByText(/Only one sample organization allowed/i)
-      ).toBeInTheDocument()
+        screen.queryByText(/Only one sample organization allowed/i),
+      ).toBeInTheDocument(),
     );
   });
 });
@@ -440,7 +440,7 @@ describe('Organisations Page testing as Admin', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await waitFor(() => {
       expect(screen.queryByText(/Create Organization/i)).toBeNull();
@@ -457,7 +457,7 @@ describe('Organisations Page testing as Admin', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
 
       await wait();

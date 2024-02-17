@@ -45,7 +45,7 @@ function addOnStore(): JSX.Element {
   const getStorePlugins = async () => {
     let plugins = await new PluginHelper().fetchStore();
     const installIds = (await new PluginHelper().fetchInstalled()).map(
-      (plugin: any) => plugin.id
+      (plugin: any) => plugin.id,
     );
     plugins = plugins.map((plugin: any) => {
       plugin.installed = installIds.includes(plugin.id);
@@ -187,8 +187,8 @@ function addOnStore(): JSX.Element {
                         ) {
                           return val;
                         }
-                      }
-                    )
+                      },
+                    ),
                   )}
                   {data.getPlugins.filter(
                     (val: {
@@ -208,7 +208,7 @@ function addOnStore(): JSX.Element {
                       ) {
                         return val;
                       }
-                    }
+                    },
                   ).length === 0 ? (
                     <h4> {t('pMessage')}</h4>
                   ) : (
@@ -231,7 +231,7 @@ function addOnStore(): JSX.Element {
                           ) {
                             return val;
                           }
-                        }
+                        },
                       )
                       .map(
                         (
@@ -243,7 +243,7 @@ function addOnStore(): JSX.Element {
                             uninstalledOrgs: string[];
                             getInstalledPlugins: () => any;
                           },
-                          i: React.Key | null | undefined
+                          i: React.Key | null | undefined,
                         ): JSX.Element => (
                           <AddOnEntry
                             id={plug._id}
@@ -260,7 +260,7 @@ function addOnStore(): JSX.Element {
                             getInstalledPlugins={getInstalledPlugins}
                             uninstalledOrgs={plug.uninstalledOrgs}
                           />
-                        )
+                        ),
                       )
                   )}
                 </Tab>
@@ -285,13 +285,13 @@ function addOnStore(): JSX.Element {
                         ) {
                           return val;
                         }
-                      }
+                      },
                     ).length === 0 ? (
                     <h4>{t('pMessage')} </h4> // eslint-disable-line
                   ) : (
                     data.getPlugins
                       .filter(
-                        (plugin: any) => plugin.pluginInstallStatus == true
+                        (plugin: any) => plugin.pluginInstallStatus == true,
                       )
                       .filter(
                         (val: {
@@ -311,7 +311,7 @@ function addOnStore(): JSX.Element {
                           ) {
                             return val;
                           }
-                        }
+                        },
                       )
                       .map(
                         (
@@ -323,7 +323,7 @@ function addOnStore(): JSX.Element {
                             uninstalledOrgs: string[];
                             getInstalledPlugins: () => any;
                           },
-                          i: React.Key | null | undefined
+                          i: React.Key | null | undefined,
                         ): JSX.Element => (
                           <AddOnEntry
                             id={plug._id}
@@ -340,7 +340,7 @@ function addOnStore(): JSX.Element {
                             getInstalledPlugins={getInstalledPlugins}
                             uninstalledOrgs={plug.uninstalledOrgs}
                           />
-                        )
+                        ),
                       )
                   )}
                 </Tab>

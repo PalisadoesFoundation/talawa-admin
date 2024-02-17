@@ -49,15 +49,15 @@ const OrgActionItemCategories = (): any => {
   });
 
   const [createActionItemCategory] = useMutation(
-    CREATE_ACTION_ITEM_CATEGORY_MUTATION
+    CREATE_ACTION_ITEM_CATEGORY_MUTATION,
   );
 
   const [updateActionItemCategory] = useMutation(
-    UPDATE_ACTION_ITEM_CATEGORY_MUTATION
+    UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
   );
 
   const handleCreate = async (
-    e: ChangeEvent<HTMLFormElement>
+    e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
     try {
@@ -109,7 +109,7 @@ const OrgActionItemCategories = (): any => {
 
   const handleStatusChange = async (
     id: string,
-    disabledStatus: boolean
+    disabledStatus: boolean,
   ): Promise<void> => {
     try {
       await updateActionItemCategory({
@@ -122,7 +122,7 @@ const OrgActionItemCategories = (): any => {
       refetch();
 
       toast.success(
-        disabledStatus ? t('categoryEnabled') : t('categoryDisabled')
+        disabledStatus ? t('categoryEnabled') : t('categoryDisabled'),
       );
     } catch (error: any) {
       toast.error(error.message);
