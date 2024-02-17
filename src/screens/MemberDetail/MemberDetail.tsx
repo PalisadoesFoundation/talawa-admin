@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -38,6 +38,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({
   const [state, setState] = useState(1);
   const [isAdmin, setIsAdmin] = useState(false);
 
+  let isMounted = true;
   const location = useLocation<MemberDetailProps>();
   const currentUrl = location.state?.id || getItem('id') || id;
   const orgId = window.location.href.split('=')[1];
@@ -106,13 +107,20 @@ const MemberDetail: React.FC<MemberDetailProps> = ({
         userData.user.userType === 'ADMIN' ||
         userData.user.userType === 'SUPERADMIN'
       ) {
-        setIsAdmin(true);
+        if (isMounted) setIsAdmin(true);
         toast.error(t('alreadyIsAdmin'));
       } else {
         errorHandler(t, error);
       }
     }
   };
+
+  useEffect(() => {
+    // check component is mounted or not
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const memberDetails = (
     <Row>
