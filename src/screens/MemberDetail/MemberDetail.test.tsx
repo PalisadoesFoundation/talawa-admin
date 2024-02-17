@@ -215,7 +215,7 @@ describe('MemberDetail', () => {
     expect(getLangName('')).toBe('Unavailable');
   });
 
-  test('should render OrganizationScreen if called from Organization Dashboard', async () => {
+  test('should render Organization LeftDrawer if called from Organization Dashboard', async () => {
     const props = {
       id: 'rishav-jha-mech',
       from: 'orgdash',
@@ -262,10 +262,10 @@ describe('MemberDetail', () => {
 
     const user = MOCKS1[0].result.data.user;
 
-    waitFor(() =>
+    await waitFor(() =>
       expect(screen.getByTestId('userImageAbsent')).toBeInTheDocument()
     );
-    waitFor(() =>
+    await waitFor(() =>
       expect(screen.getByTestId('userImageAbsent').getAttribute('src')).toBe(
         `https://api.dicebear.com/5.x/initials/svg?seed=${user?.firstName} ${user?.lastName}`
       )
@@ -293,10 +293,10 @@ describe('MemberDetail', () => {
 
     const user = MOCKS2[0].result.data.user;
 
-    waitFor(() =>
+    await waitFor(() =>
       expect(screen.getByTestId('userImagePresent')).toBeInTheDocument()
     );
-    waitFor(() =>
+    await waitFor(() =>
       expect(screen.getByTestId('userImagePresent').getAttribute('src')).toBe(
         user?.image
       )
