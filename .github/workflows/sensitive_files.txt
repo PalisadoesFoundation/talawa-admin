@@ -1,0 +1,16 @@
+.github/**
+env.example
+.husky/**
+.node-version
+scripts/**
+package.json
+tsconfig.json
+.gitignore
+.eslintrc.json
+.eslintignore
+vite.config.ts
+docker-compose.yaml
+Dockerfile
+CODEOWNERS
+LICENSE
+setup.ts
