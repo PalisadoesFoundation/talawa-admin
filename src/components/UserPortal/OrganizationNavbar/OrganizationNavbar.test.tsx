@@ -175,7 +175,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -203,7 +203,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </Provider>
           </Router>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     const peoplePlugin = screen.getByText('People');
@@ -225,7 +225,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -255,7 +255,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -279,7 +279,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -303,7 +303,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -327,7 +327,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -353,7 +353,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -377,7 +377,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -399,7 +399,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -419,7 +419,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();

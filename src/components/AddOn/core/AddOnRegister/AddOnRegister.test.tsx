@@ -111,7 +111,7 @@ describe('Testing AddOnRegister', () => {
               </I18nextProvider>
             </BrowserRouter>
           </Provider>
-        </ApolloProvider>
+        </ApolloProvider>,
       );
 
       await wait(100);
@@ -120,11 +120,11 @@ describe('Testing AddOnRegister', () => {
       userEvent.type(screen.getByPlaceholderText(/Ex: Donations/i), 'myplugin');
       userEvent.type(
         screen.getByPlaceholderText(/This Plugin enables UI for/i),
-        'test description'
+        'test description',
       );
       userEvent.type(
         screen.getByPlaceholderText(/Ex: john Doe/i),
-        'test creator'
+        'test creator',
       );
     });
   });
@@ -140,7 +140,7 @@ describe('Testing AddOnRegister', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
       await waitFor(() => new Promise((resolve) => setTimeout(resolve, 0)));
 
@@ -150,7 +150,7 @@ describe('Testing AddOnRegister', () => {
       userEvent.type(screen.getByTestId('pluginName'), pluginData.pluginName);
       userEvent.type(
         screen.getByTestId('pluginCreatedBy'),
-        pluginData.pluginCreatedBy
+        pluginData.pluginCreatedBy,
       );
       userEvent.type(screen.getByTestId('pluginDesc'), pluginData.pluginDesc);
       userEvent.click(screen.getByTestId('addonregisterBtn'));
@@ -171,7 +171,7 @@ describe('Testing AddOnRegister', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
       await waitFor(() => new Promise((resolve) => setTimeout(resolve, 0)));
 
@@ -181,7 +181,7 @@ describe('Testing AddOnRegister', () => {
       userEvent.type(screen.getByTestId('pluginName'), pluginData.pluginName);
       userEvent.type(
         screen.getByTestId('pluginCreatedBy'),
-        pluginData.pluginCreatedBy
+        pluginData.pluginCreatedBy,
       );
       userEvent.type(screen.getByTestId('pluginDesc'), pluginData.pluginDesc);
       userEvent.click(screen.getByTestId('addonregisterBtn'));

@@ -50,7 +50,7 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -70,7 +70,7 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -86,7 +86,7 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -102,7 +102,7 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -140,14 +140,14 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     const search = 'hello{enter}';
     await act(() =>
-      userEvent.type(screen.getByTestId(/searchByName/i), search)
+      userEvent.type(screen.getByTestId(/searchByName/i), search),
     );
   });
 
@@ -161,7 +161,7 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -179,12 +179,12 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait(200);
     expect(container.textContent).toMatch(
-      'Organizations not found, please create an organization through dashboard'
+      'Organizations not found, please create an organization through dashboard',
     );
   });
 
@@ -199,13 +199,13 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     expect(container.textContent).not.toMatch(
-      'Organizations not found, please create an organization through dashboard'
+      'Organizations not found, please create an organization through dashboard',
     );
   });
 
@@ -221,7 +221,7 @@ describe('Testing Users screen', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
 
       await wait();
@@ -257,7 +257,7 @@ describe('Testing Users screen', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
 
       await wait();
@@ -306,7 +306,7 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -320,7 +320,7 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
   });

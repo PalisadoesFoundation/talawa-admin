@@ -16,7 +16,7 @@ export interface InterfacePropType {
 }
 
 export const LeftDrawerEventWrapper = (
-  props: InterfacePropType
+  props: InterfacePropType,
 ): JSX.Element => {
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
   const handleResize = (): void => {
@@ -69,8 +69,8 @@ export const LeftDrawerEventWrapper = (
           hideDrawer === null
             ? ''
             : hideDrawer
-            ? styles.expand
-            : styles.contract
+              ? styles.expand
+              : styles.contract
         } `}
         data-testid="mainpageright"
       >

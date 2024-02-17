@@ -59,7 +59,7 @@ export const removeItem = (prefix: string, key: string): void => {
  * @returns - Functions to getItem, setItem, removeItem, and getStorageKey.
  */
 export const useLocalStorage = (
-  prefix: string = PREFIX
+  prefix: string = PREFIX,
 ): InterfaceStorageHelper => {
   return {
     getItem: (key: string) => getItem(prefix, key),

@@ -32,7 +32,7 @@ describe('Organisation Contribution Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     expect(container.textContent).not.toBe('Loading data...');
