@@ -24,7 +24,7 @@ interface InterfaceMemberRequestCardProps {
 }
 
 function memberRequestCard(
-  props: InterfaceMemberRequestCardProps
+  props: InterfaceMemberRequestCardProps,
 ): JSX.Element {
   const [acceptMutation] = useMutation(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
   const [rejectMutation] = useMutation(REJECT_ORGANIZATION_REQUEST_MUTATION);

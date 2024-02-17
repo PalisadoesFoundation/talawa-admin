@@ -26,7 +26,7 @@ describe('SecuredRouteForUser', () => {
             />
           )}
         />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     expect(screen.getByTestId('organizations-content')).toBeInTheDocument();
@@ -47,7 +47,7 @@ describe('SecuredRouteForUser', () => {
             </SecuredRouteForUser>
           )}
         />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     await waitFor(() => {

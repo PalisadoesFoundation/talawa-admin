@@ -40,7 +40,7 @@ const ForgotPassword = (): JSX.Element => {
 
   const [otp, { loading: otpLoading }] = useMutation(GENERATE_OTP_MUTATION);
   const [forgotPassword, { loading: forgotPasswordLoading }] = useMutation(
-    FORGOT_PASSWORD_MUTATION
+    FORGOT_PASSWORD_MUTATION,
   );
   const isLoggedIn = getItem('IsLoggedIn');
   useEffect(() => {
@@ -79,7 +79,7 @@ const ForgotPassword = (): JSX.Element => {
   };
 
   const submitForgotPassword = async (
-    e: ChangeEvent<HTMLFormElement>
+    e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
     const { userOtp, newPassword, confirmNewPassword } = forgotPassFormData;

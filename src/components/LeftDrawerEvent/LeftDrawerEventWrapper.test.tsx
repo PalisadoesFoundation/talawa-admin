@@ -67,7 +67,7 @@ beforeEach(() => {
   setItem('LastName', 'Doe');
   setItem(
     'UserImage',
-    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe'
+    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
   );
 });
 
@@ -85,13 +85,13 @@ describe('Testing Left Drawer Wrapper component for the Event Dashboard', () => 
             <LeftDrawerEventWrapper {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     const pageContainer = getByTestId('mainpageright');
     expect(pageContainer.className).toMatch(/pageContainer/i);
     await waitFor(() =>
-      expect(queryByText('Event Management')).toBeInTheDocument()
+      expect(queryByText('Event Management')).toBeInTheDocument(),
     );
     // Resize window to trigger handleResize
     window.innerWidth = 800; // Set a width less than or equal to 820
