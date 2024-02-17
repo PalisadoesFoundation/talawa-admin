@@ -11,10 +11,14 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 
+import type {
+  InterfaceActionItemInfo,
+  InterfaceMemberInfo,
+} from 'utils/interfaces';
+import styles from './ActionItemsContainer.module.css';
 import ActionItemUpdateModal from '../../screens/OrganizationActionItems/ActionItemUpdateModal';
 import ActionItemPreviewModal from '../../screens/OrganizationActionItems/ActionItemPreviewModal';
 import ActionItemDeleteModal from '../../screens/OrganizationActionItems/ActionItemDeleteModal';
-import type { InterfaceActionItemInfo } from 'utils/interfaces';
 
 function actionItemsContainer({
   actionItemsData,
@@ -22,7 +26,7 @@ function actionItemsContainer({
   actionItemsRefetch,
 }: {
   actionItemsData: InterfaceActionItemInfo[] | undefined;
-  membersData: any;
+  membersData: InterfaceMemberInfo[] | undefined;
   actionItemsRefetch: any;
 }): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -165,7 +169,7 @@ function actionItemsContainer({
               <div className="ms-3">{t('status')}</div>
             </Col>
             <Col xs={5} sm={3} lg={2} className="fs-5 fw-bold">
-              {t('options')}
+              <div className="ms-3">{t('options')}</div>
             </Col>
           </Row>
         </div>
@@ -197,10 +201,12 @@ function actionItemsContainer({
                   lg={3}
                 >
                   <div
-                    className={`lh-base w-50 badge rounded-pill ${
+                    className={`${
+                      styles.actionItemStatusBadge
+                    } lh-base badge rounded-pill ${
                       actionItem.isCompleted
                         ? 'text-bg-success text-white'
-                        : 'text-bg-warning'
+                        : 'text-bg-warning text-secondary-emphasis'
                     }`}
                   >
                     {actionItem.isCompleted ? t('completed') : t('active')}
@@ -219,7 +225,7 @@ function actionItemsContainer({
                     size="sm"
                     data-testid="editActionItemModalBtn"
                     onClick={() => handleEditClick(actionItem)}
-                    className="me-2 d-none d-xl-inline"
+                    className="me-2"
                     variant="success"
                   >
                     {' '}

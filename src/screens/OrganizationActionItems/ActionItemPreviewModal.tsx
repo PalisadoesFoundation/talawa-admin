@@ -38,7 +38,10 @@ const ActionItemPreviewModal: React.FC<InterfaceActionItemCreateModalProps> = ({
 }) => {
   return (
     <>
-      <Modal show={actionItemPreviewModalIsOpen}>
+      <Modal
+        className={styles.actionItemModal}
+        show={actionItemPreviewModalIsOpen}
+      >
         <Modal.Header>
           <p className={styles.titlemodal}>{t('actionItemDetails')}</p>
           <Button

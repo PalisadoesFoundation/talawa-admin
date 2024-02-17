@@ -60,6 +60,25 @@ export interface InterfaceActionItemList {
   actionItemsByOrganization: InterfaceActionItemInfo[];
 }
 
+export interface InterfaceMembersList {
+  organizations: {
+    _id: string;
+    members: InterfaceMemberInfo[];
+  }[];
+}
+
+export interface InterfaceMemberInfo {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  image: string;
+  createdAt: string;
+  organizationsBlockedBy: {
+    _id: string;
+  }[];
+}
+
 export interface InterfaceOrgConnectionInfoType {
   _id: string;
   image: string | null;

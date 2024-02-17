@@ -6,7 +6,10 @@ import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 
-import type { InterfaceActionItemCategoryInfo } from 'utils/interfaces';
+import type {
+  InterfaceActionItemCategoryInfo,
+  InterfaceMemberInfo,
+} from 'utils/interfaces';
 
 interface InterfaceFormStateType {
   actionItemCategoryId: string;
@@ -23,7 +26,7 @@ interface InterfaceActionItemCreateModalProps {
   createActionItemHandler: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
   t: (key: string) => string;
   actionItemCategories: InterfaceActionItemCategoryInfo[] | undefined;
-  membersData: any;
+  membersData: InterfaceMemberInfo[] | undefined;
   dueDate: Date | null;
   setDueDate: (state: React.SetStateAction<Date | null>) => void;
 }
@@ -42,7 +45,11 @@ const ActionItemCreateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
 }) => {
   return (
     <>
-      <Modal show={actionItemCreateModalIsOpen} onHide={hideCreateModal}>
+      <Modal
+        className={styles.actionItemModal}
+        show={actionItemCreateModalIsOpen}
+        onHide={hideCreateModal}
+      >
         <Modal.Header>
           <p className={styles.titlemodal}>{t('actionItemDetails')}</p>
           <Button
@@ -71,7 +78,7 @@ const ActionItemCreateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
                 <option value="" disabled>
                   {t('selectActionItemCategory')}
                 </option>
-                {actionItemCategories?.map((category: any, index: any) => (
+                {actionItemCategories?.map((category, index) => (
                   <option key={index} value={category._id}>
                     {category.name}
                   </option>
@@ -92,13 +99,11 @@ const ActionItemCreateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
                 <option value="" disabled>
                   {t('selectAssignee')}
                 </option>
-                {membersData?.organizations[0].members.map(
-                  (member: any, index: any) => (
-                    <option key={index} value={member._id}>
-                      {`${member.firstName} ${member.lastName}`}
-                    </option>
-                  )
-                )}
+                {membersData?.map((member, index) => (
+                  <option key={index} value={member._id}>
+                    {`${member.firstName} ${member.lastName}`}
+                  </option>
+                ))}
               </Form.Select>
             </Form.Group>
 

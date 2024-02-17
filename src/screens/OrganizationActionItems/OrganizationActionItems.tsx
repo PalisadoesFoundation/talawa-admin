@@ -19,6 +19,7 @@ import { CREATE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/mutations';
 import type {
   InterfaceActionItemCategoryList,
   InterfaceActionItemList,
+  InterfaceMembersList,
 } from 'utils/interfaces';
 import ActionItemsContainer from 'components/ActionItemsContainer/ActionItemsContainer';
 import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
@@ -66,6 +67,10 @@ function organizationActionItems(): JSX.Element {
     data: membersData,
     loading: membersLoading,
     error: membersError,
+  }: {
+    data: InterfaceMembersList | undefined;
+    loading: boolean;
+    error?: Error | undefined;
   } = useQuery(MEMBERS_LIST, {
     variables: { id: currentUrl },
   });
@@ -243,6 +248,45 @@ function organizationActionItems(): JSX.Element {
 
                 <Dropdown
                   aria-expanded="false"
+                  title="Action Item Categories"
+                  data-testid="actionItemCategories"
+                  className={styles.dropdownToggle}
+                >
+                  <Dropdown.Toggle
+                    variant={
+                      actionItemCategoryName === ''
+                        ? 'outline-success'
+                        : 'success'
+                    }
+                    data-testid="selectActionItemCategory"
+                  >
+                    <div className="d-lg-none">
+                      {actionItemCategoryName === ''
+                        ? t('actionItemCategory')
+                        : actionItemCategoryName}
+                    </div>
+                    <div className="d-none d-lg-inline">
+                      {t('actionItemCategory')}
+                    </div>
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    {actionItemCategories?.map((category, index) => (
+                      <Dropdown.Item
+                        key={index}
+                        data-testid="actionItemCategory"
+                        onClick={() => {
+                          setActionItemCategoryId(category._id);
+                          setActionItemCategoryName(category.name);
+                        }}
+                      >
+                        {category.name}
+                      </Dropdown.Item>
+                    ))}
+                  </Dropdown.Menu>
+                </Dropdown>
+
+                <Dropdown
+                  aria-expanded="false"
                   title="Action Item Status"
                   data-testid="actionItemStatus"
                   className={styles.dropdownToggle}
@@ -275,45 +319,6 @@ function organizationActionItems(): JSX.Element {
                 </Dropdown>
               </div>
 
-              <Dropdown
-                aria-expanded="false"
-                title="Action Item Categories"
-                data-testid="actionItemCategories"
-                className={styles.dropdownToggle}
-              >
-                <Dropdown.Toggle
-                  variant={
-                    actionItemCategoryName === ''
-                      ? 'outline-success'
-                      : 'success'
-                  }
-                  data-testid="selectActionItemCategory"
-                >
-                  <div className="d-lg-none">
-                    {actionItemCategoryName === ''
-                      ? t('actionItemCategory')
-                      : actionItemCategoryName}
-                  </div>
-                  <div className="d-none d-lg-inline">
-                    {t('actionItemCategory')}
-                  </div>
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  {actionItemCategories?.map((category, index) => (
-                    <Dropdown.Item
-                      key={index}
-                      data-testid="actionItemCategory"
-                      onClick={() => {
-                        setActionItemCategoryId(category._id);
-                        setActionItemCategoryName(category.name);
-                      }}
-                    >
-                      {category.name}
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown.Menu>
-              </Dropdown>
-
               <div className="d-none d-lg-inline flex-grow-1 d-flex align-items-center border bg-light-subtle rounded-3">
                 {!actionItemCategoryName && !actionItemStatus && (
                   <div className="lh-lg mt-2 text-center fw-semibold text-body-tertiary">
@@ -322,7 +327,7 @@ function organizationActionItems(): JSX.Element {
                 )}
 
                 {actionItemCategoryName !== '' && (
-                  <div className="badge text-bg-secondary bg-dark-subtle lh-lg mt-2 ms-2 text-secondary-emphasis">
+                  <div className="badge text-bg-secondary bg-dark-subtle bg-gradient lh-lg mt-2 ms-2 text-body-secondary">
                     {actionItemCategoryName}
                     <i
                       className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary pe-auto`}
@@ -336,7 +341,7 @@ function organizationActionItems(): JSX.Element {
                 )}
 
                 {actionItemStatus !== '' && (
-                  <div className="badge text-bg-secondary bg-dark-subtle lh-lg mt-2 ms-2 text-secondary-emphasis">
+                  <div className="badge text-bg-secondary bg-dark-subtle bg-gradient lh-lg mt-2 ms-2 text-secondary-emphasis">
                     {actionItemStatus}
                     <i
                       className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary pe-auto`}
@@ -362,7 +367,7 @@ function organizationActionItems(): JSX.Element {
 
           <ActionItemsContainer
             actionItemsData={actionItemsData?.actionItemsByOrganization}
-            membersData={membersData.organizations[0].members}
+            membersData={membersData?.organizations[0].members}
             actionItemsRefetch={actionItemsRefetch}
           />
         </div>
@@ -377,7 +382,7 @@ function organizationActionItems(): JSX.Element {
         createActionItemHandler={createActionItemHandler}
         t={t}
         actionItemCategories={actionItemCategories}
-        membersData={membersData}
+        membersData={membersData?.organizations[0].members}
         dueDate={dueDate}
         setDueDate={setDueDate}
       />

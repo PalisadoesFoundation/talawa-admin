@@ -2,6 +2,12 @@
   height: 90vh;
 }
 
+.actionItemModal {
+  max-width: 80vw;
+  margin-top: 2vh;
+  margin-left: 13vw;
+}
+
 .btnsContainer {
   display: flex;
   gap: 10px;

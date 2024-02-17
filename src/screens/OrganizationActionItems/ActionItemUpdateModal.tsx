@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 
 import styles from './OrganizationActionItems.module.css';
+import type { InterfaceMemberInfo } from 'utils/interfaces';
 
 interface InterfaceFormStateType {
   assigneeId: string;
@@ -23,7 +24,7 @@ interface InterfaceActionItemCreateModalProps {
   setFormState: (state: React.SetStateAction<InterfaceFormStateType>) => void;
   updateActionItemHandler: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
   t: (key: string) => string;
-  membersData: any;
+  membersData: InterfaceMemberInfo[] | undefined;
   dueDate: Date | null;
   setDueDate: (state: React.SetStateAction<Date | null>) => void;
   completionDate: Date | null;
@@ -45,7 +46,11 @@ const ActionItemUpdateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
 }) => {
   return (
     <>
-      <Modal show={actionItemUpdateModalIsOpen} onHide={hideUpdateModal}>
+      <Modal
+        className={styles.actionItemModal}
+        show={actionItemUpdateModalIsOpen}
+        onHide={hideUpdateModal}
+      >
         <Modal.Header>
           <p className={styles.titlemodal}>{t('actionItemDetails')}</p>
           <Button
@@ -70,7 +75,7 @@ const ActionItemUpdateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
                 <option value="" disabled>
                   {formState.assignee}
                 </option>
-                {membersData?.map((member: any, index: any) => {
+                {membersData?.map((member, index) => {
                   const currMemberName = `${member.firstName} ${member.lastName}`;
                   if (currMemberName !== formState.assignee) {
                     return (

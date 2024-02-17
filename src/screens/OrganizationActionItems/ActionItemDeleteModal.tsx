@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import styles from './OrganizationActionItems.module.css';
 
 interface InterfaceActionItemCreateModalProps {
   actionItemDeleteModalIsOpen: boolean;
@@ -23,6 +24,7 @@ const ActionItemPreviewModal: React.FC<InterfaceActionItemCreateModalProps> = ({
         onHide={toggleDeleteModal}
         backdrop="static"
         keyboard={false}
+        className={styles.actionItemModal}
       >
         <Modal.Header closeButton className="bg-primary">
           <Modal.Title className="text-white" id={`deleteActionItem`}>

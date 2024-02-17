@@ -1,6 +1,7 @@
 .checkboxdiv > label {
   margin-right: 50px;
 }
+
 .checkboxdiv > label > input {
   margin-left: 10px;
 }
@@ -73,6 +74,10 @@
   font-weight: 900;
   font-size: 16px;
   color: rgb(80, 80, 80);
+}
+
+.actionItemStatusBadge {
+  width: 8rem;
 }
 
 .titlemodal {
