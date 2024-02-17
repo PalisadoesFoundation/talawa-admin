@@ -1,26 +1,8 @@
-#!/usr/bin/env python3
-# -*- coding: UTF-8 -*-
-"""Script to limit the number of file changes in a single PR.
-Methodology:
-    Analyses the Pull request to find if the count of file changes in a PR
-    exceeds a pre-defined number 20.
-    Checks for unauthorized file changes based on a list of sensitive files.
-This script encourages contributors to align with project practices,
-reducing the likelihood of unintentional merges into incorrect branches.
-NOTE:
-    This script complies with our Python3 coding and documentation standards.
-    It complies with:
-        1) Pylint
-        2) Pydocstyle
-        3) Pycodestyle
-        4) Flake8
-"""
-
 import sys
 import argparse
 import subprocess
-from collections import namedtuple
 import glob
+from collections import namedtuple
 
 # Use namedtuple for clarity in return values
 ScriptResult = namedtuple('ScriptResult', ['file_count', 'unauthorized_changes'])
@@ -69,7 +51,6 @@ def _check_unauthorized_changes(changed_files, sensitive_files):
     unauthorized_changes = [file for file in changed_files if any(glob.fnmatch.fnmatch(file, sf) for sf in sensitive_files if sf)]
     return unauthorized_changes
 
-    
 def _arg_parser_resolver():
     """Resolve the CLI arguments provided by the user.
     Args:
@@ -130,16 +111,14 @@ def main():
 
     base_branch = args.base_branch
     pr_branch = args.pr_branch
+    errors = []
+
     if args.verbose:
         print(f"You are trying to merge on branch: {base_branch}")
         print(f"You are making a commit from your branch: {pr_branch}")
-    
+
     if base_branch != "develop":
-        print()
-        print(f"Error: You are trying to merge into '{base_branch}' branch.")
-        print("  - Source branch may be incorrect; please use 'develop' as the source branch.")
-        sys.exit(1)
-    
+        errors.append("Error: You are trying to merge into '{base_branch}' branch.\n  - Source branch may be incorrect; please use 'develop' as the source branch.")
 
     # Read sensitive files from the provided file
     with open(args.sensitive_files, 'r') as sensitive_file:
@@ -150,21 +129,20 @@ def main():
     print(f"Number of changed files: {changed_files.file_count}")
 
     unauthorized_changes = _check_unauthorized_changes(changed_files.unauthorized_changes, sensitive_files)
-    # print(f"Unauthorized changes: {unauthorized_changes}")
 
     # Check if the count exceeds the allowed limit
     if changed_files.file_count > args.file_count:
-        print()
-        print(f"Error: Too many files, {changed_files.file_count} changed in the pull request.")
-        print("  - Contributor may be merging into an incorrect branch.")
-        sys.exit(1)
+        errors.append(f"Error: Too many files, {changed_files.file_count} changed in the pull request.\n  - Contributor may be merging into an incorrect branch.")
 
-    
     if unauthorized_changes:
-        print()
-        print("Error: Unauthorized changes detected. Please review the list of modified files:")
+        errors.append("Error: Unauthorized changes detected. Please review the list of modified files:")
         for file in unauthorized_changes:
-            print(f" - {file}")
+            errors.append(f" - {file}")
+
+    # Print accumulated errors and exit if there are any
+    if errors:
+        for error in errors:
+            print(error)
         sys.exit(1)
     else:
         if args.verbose:
