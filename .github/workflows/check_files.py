@@ -67,9 +67,9 @@ def _check_unauthorized_changes(changed_files, sensitive_files):
     """
 
     unauthorized_changes = [file for file in changed_files if any(glob.fnmatch.fnmatch(file, sf) for sf in sensitive_files if sf)]
-    return ScriptResult(len(unauthorized_changes), unauthorized_changes)
-    
+    return unauthorized_changes
 
+    
 def _arg_parser_resolver():
     """Resolve the CLI arguments provided by the user.
     Args:
@@ -102,6 +102,12 @@ def _arg_parser_resolver():
         required=True,
         help="Path to a file containing a list of sensitive files and directories."
     )
+    parser.add_argument(
+        "--verbose",
+        action="store_true",
+        help="Print verbose output."
+    )
+
     return parser.parse_args()
 
 def main():
@@ -124,36 +130,45 @@ def main():
 
     base_branch = args.base_branch
     pr_branch = args.pr_branch
-
-    print(f"You are trying to merge on branch: {base_branch}")
-    print(f"You are making a commit from your branch: {pr_branch}")
+    if args.verbose:
+        print(f"You are trying to merge on branch: {base_branch}")
+        print(f"You are making a commit from your branch: {pr_branch}")
+    
+    if base_branch != "develop":
+        print()
+        print(f"Error: You are trying to merge into '{base_branch}' branch.")
+        print("  - Source branch may be incorrect; please use 'develop' as the source branch.")
+        sys.exit(1)
+    
 
     # Read sensitive files from the provided file
     with open(args.sensitive_files, 'r') as sensitive_file:
         sensitive_files = [line.strip() for line in sensitive_file]
 
     # Count changed files and check for unauthorized changes
-    result = _count_changed_files(base_branch, pr_branch)
-    print(f"Number of changed files: {result.file_count}")
+    changed_files = _count_changed_files(base_branch, pr_branch)
+    print(f"Number of changed files: {changed_files.file_count}")
 
-    unauthorized_changes = _check_unauthorized_changes(result.unauthorized_changes, sensitive_files)
-    print(f"Unauthorized changes: {unauthorized_changes}")
+    unauthorized_changes = _check_unauthorized_changes(changed_files.unauthorized_changes, sensitive_files)
+    # print(f"Unauthorized changes: {unauthorized_changes}")
 
     # Check if the count exceeds the allowed limit
-    if result.file_count > args.file_count:
-        print("Error: Too many files (greater than 20) changed in the pull request.")
-        print("Possible issues:")
-        print("- Contributor may be merging into an incorrect branch.")
-        print("- Source branch may be incorrect; please use 'develop' as the source branch.")
+    if changed_files.file_count > args.file_count:
+        print()
+        print(f"Error: Too many files, {changed_files.file_count} changed in the pull request.")
+        print("  - Contributor may be merging into an incorrect branch.")
         sys.exit(1)
 
+    
     if unauthorized_changes:
+        print()
         print("Error: Unauthorized changes detected. Please review the list of modified files:")
         for file in unauthorized_changes:
             print(f" - {file}")
         sys.exit(1)
     else:
-        print("No unauthorized changes detected. Test passed.")
+        if args.verbose:
+            print("No unauthorized changes detected. Test passed.")
 
 if __name__ == "__main__":
     main()
