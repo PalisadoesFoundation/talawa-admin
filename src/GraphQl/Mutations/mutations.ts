@@ -231,94 +231,6 @@ export const DELETE_ORGANIZATION_MUTATION = gql`
   }
 `;
 
-// to create an action item category
-
-export const CREATE_ACTION_ITEM_CATEGORY_MUTATION = gql`
-  mutation CreateActionItemCategory($name: String!, $organizationId: ID!) {
-    createActionItemCategory(name: $name, organizationId: $organizationId) {
-      _id
-    }
-  }
-`;
-
-// to update an action item category
-
-export const UPDATE_ACTION_ITEM_CATEGORY_MUTATION = gql`
-  mutation UpdateActionItemCategory(
-    $actionItemCategoryId: ID!
-    $name: String
-    $isDisabled: Boolean
-  ) {
-    updateActionItemCategory(
-      id: $actionItemCategoryId
-      data: { name: $name, isDisabled: $isDisabled }
-    ) {
-      _id
-    }
-  }
-`;
-
-// to create an action item
-
-export const CREATE_ACTION_ITEM_MUTATION = gql`
-  mutation CreateActionItem(
-    $actionItemCategoryId: ID!
-    $assigneeId: ID!
-    $preCompletionNotes: String
-    $dueDate: Date
-    $eventId: ID
-  ) {
-    createActionItem(
-      actionItemCategoryId: $actionItemCategoryId
-      data: {
-        assigneeId: $assigneeId
-        preCompletionNotes: $preCompletionNotes
-        dueDate: $dueDate
-        eventId: $eventId
-      }
-    ) {
-      _id
-    }
-  }
-`;
-
-// to update an action item
-
-export const UPDATE_ACTION_ITEM_MUTATION = gql`
-  mutation UpdateActionItem(
-    $actionItemId: ID!
-    $assigneeId: ID!
-    $preCompletionNotes: String
-    $postCompletionNotes: String
-    $dueDate: Date
-    $completionDate: Date
-    $isCompleted: Boolean
-  ) {
-    updateActionItem(
-      id: $actionItemId
-      data: {
-        assigneeId: $assigneeId
-        preCompletionNotes: $preCompletionNotes
-        postCompletionNotes: $postCompletionNotes
-        dueDate: $dueDate
-        completionDate: $completionDate
-        isCompleted: $isCompleted
-      }
-    ) {
-      _id
-    }
-  }
-`;
-
-// to delete an action item
-
-export const DELETE_ACTION_ITEM_MUTATION = gql`
-  mutation RemoveActionItem($actionItemId: ID!) {
-    removeActionItem(id: $actionItemId) {
-      _id
-    }
-  }
-`;
 // to create the event by any organization
 
 export const CREATE_EVENT_MUTATION = gql`
@@ -368,7 +280,6 @@ export const DELETE_EVENT_MUTATION = gql`
 `;
 
 // to remove an admin from an organization
-
 export const REMOVE_ADMIN_MUTATION = gql`
   mutation RemoveAdmin($orgid: ID!, $userid: ID!) {
     removeAdmin(data: { organizationId: $orgid, userId: $userid }) {
@@ -378,7 +289,6 @@ export const REMOVE_ADMIN_MUTATION = gql`
 `;
 
 // to Remove member from an organization
-
 export const REMOVE_MEMBER_MUTATION = gql`
   mutation RemoveMember($orgid: ID!, $userid: ID!) {
     removeMember(data: { organizationId: $orgid, userId: $userid }) {
@@ -388,7 +298,6 @@ export const REMOVE_MEMBER_MUTATION = gql`
 `;
 
 // to add the admin
-
 export const ADD_ADMIN_MUTATION = gql`
   mutation CreateAdmin($orgid: ID!, $userid: ID!) {
     createAdmin(data: { organizationId: $orgid, userId: $userid }) {
@@ -660,6 +569,15 @@ export const REGISTER_EVENT = gql`
     }
   }
 `;
+
+// Create and Update Action Item Categories
+export { CREATE_ACTION_ITEM_CATEGORY_MUTATION } from './ActionItemCategoryMutations';
+export { UPDATE_ACTION_ITEM_CATEGORY_MUTATION } from './ActionItemCategoryMutations';
+
+// Create, Update and Delete Action Items
+export { CREATE_ACTION_ITEM_MUTATION } from './ActionItemMutations';
+export { UPDATE_ACTION_ITEM_MUTATION } from './ActionItemMutations';
+export { DELETE_ACTION_ITEM_MUTATION } from './ActionItemMutations';
 
 // Changes the role of a event in an organization and add and remove the event from the organization
 export { ADD_EVENT_ATTENDEE } from './EventAttendeeMutations';

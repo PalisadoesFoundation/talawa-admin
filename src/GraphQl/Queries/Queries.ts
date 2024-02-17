@@ -2,7 +2,6 @@ import gql from 'graphql-tag';
 
 //Query List
 // Check Auth
-
 export const CHECK_AUTH = gql`
   query {
     checkAuth {
@@ -85,73 +84,6 @@ export const ORGANIZATION_CONNECTION_LIST = gql`
         postalCode
         sortingCode
         state
-      }
-    }
-  }
-`;
-
-// Query to get the action item category list
-
-export const ACTION_ITEM_CATEGORY_LIST = gql`
-  query ActionItemCategoriesByOrganization($organizationId: ID!) {
-    actionItemCategoriesByOrganization(organizationId: $organizationId) {
-      _id
-      name
-      isDisabled
-    }
-  }
-`;
-
-// Query to get the action items list
-
-export const ACTION_ITEM_LIST = gql`
-  query ActionItemsByOrganization(
-    $organizationId: ID!
-    $actionItemCategoryId: ID
-    $eventId: ID
-    $isActive: Boolean
-    $isCompleted: Boolean
-    $orderBy: ActionItemsOrderByInput
-  ) {
-    actionItemsByOrganization(
-      organizationId: $organizationId
-      orderBy: $orderBy
-      where: {
-        actionItemCategory_id: $actionItemCategoryId
-        event_id: $eventId
-        is_active: $isActive
-        is_completed: $isCompleted
-      }
-    ) {
-      _id
-      assignee {
-        _id
-        firstName
-        lastName
-      }
-      assigner {
-        _id
-        firstName
-        lastName
-      }
-      actionItemCategory {
-        _id
-        name
-      }
-      preCompletionNotes
-      postCompletionNotes
-      assignmentDate
-      dueDate
-      completionDate
-      isCompleted
-      event {
-        _id
-        title
-      }
-      creator {
-        _id
-        firstName
-        lastName
       }
     }
   }
@@ -398,7 +330,6 @@ export const ORGANIZATIONS_LIST = gql`
 `;
 
 // Query to take the Members of a particular organization
-
 export const MEMBERS_LIST = gql`
   query Organizations($id: ID!) {
     organizations(id: $id) {
@@ -612,7 +543,6 @@ export const ORGANIZATION_DONATION_CONNECTION_LIST = gql`
 `;
 
 // to take the list of the admins of a particular
-
 export const ADMIN_LIST = gql`
   query Organizations($id: ID!) {
     organizations(id: $id) {
@@ -630,7 +560,6 @@ export const ADMIN_LIST = gql`
 `;
 
 // to take the membership request
-
 export const MEMBERSHIP_REQUEST = gql`
   query Organizations($id: ID!) {
     organizations(id: $id) {
@@ -647,6 +576,12 @@ export const MEMBERSHIP_REQUEST = gql`
     }
   }
 `;
+
+// get the list of Action Item Categories
+export { ACTION_ITEM_CATEGORY_LIST } from './ActionItemCategoryQueries';
+
+// get the list of Action Items
+export { ACTION_ITEM_LIST } from './ActionItemQueries';
 
 // to take the list of the blocked users
 export { PLUGIN_GET } from './PlugInQueries';
