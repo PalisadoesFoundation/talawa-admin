@@ -20,8 +20,6 @@ import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 
-const { getItem } = useLocalStorage();
-
 type MemberDetailProps = {
   id: string; // This is the userId
   from?: string;
@@ -37,9 +35,10 @@ const MemberDetail: React.FC<MemberDetailProps> = ({
 
   const [state, setState] = useState(1);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isMounted, setIsMounted] = useState(true);
 
-  let isMounted = true;
   const location = useLocation<MemberDetailProps>();
+  const { getItem } = useLocalStorage();
   const currentUrl = location.state?.id || getItem('id') || id;
   const orgId = window.location.href.split('=')[1];
   const calledFrom = location.state?.from || from;
@@ -47,6 +46,13 @@ const MemberDetail: React.FC<MemberDetailProps> = ({
 
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
+
+  useEffect(() => {
+    // check component is mounted or not
+    return () => {
+      setIsMounted(false);
+    };
+  }, []);
 
   const {
     data: userData,
@@ -114,13 +120,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({
       }
     }
   };
-
-  useEffect(() => {
-    // check component is mounted or not
-    return () => {
-      isMounted = false;
-    };
-  }, []);
 
   const memberDetails = (
     <Row>
