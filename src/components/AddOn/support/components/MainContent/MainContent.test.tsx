@@ -17,7 +17,7 @@ describe('Testing MainContent component', () => {
         <Provider store={store}>
           <MainContent {...props} />
         </Provider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
     expect(getByTestId('mainContentCheck')).toBeInTheDocument();

@@ -192,7 +192,7 @@ describe('Testing User Table Item', () => {
         <I18nextProvider i18n={i18nForTest}>
           <UsersTableItem {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -201,11 +201,11 @@ describe('Testing User Table Item', () => {
     expect(screen.getByText(/john@example.com/i)).toBeInTheDocument();
     expect(screen.getByTestId(`changeRole${123}`)).toBeInTheDocument();
     expect(screen.getByTestId(`changeRole${123}`)).toHaveValue(
-      `SUPERADMIN?${123}`
+      `SUPERADMIN?${123}`,
     );
     expect(screen.getByTestId(`showJoinedOrgsBtn${123}`)).toBeInTheDocument();
     expect(
-      screen.getByTestId(`showBlockedByOrgsBtn${123}`)
+      screen.getByTestId(`showBlockedByOrgsBtn${123}`),
     ).toBeInTheDocument();
   });
 
@@ -242,32 +242,32 @@ describe('Testing User Table Item', () => {
         <I18nextProvider i18n={i18nForTest}>
           <UsersTableItem {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
     const showJoinedOrgsBtn = screen.getByTestId(`showJoinedOrgsBtn${123}`); // 123 is userId
     const showBlockedByOrgsBtn = screen.getByTestId(
-      `showBlockedByOrgsBtn${123}`
+      `showBlockedByOrgsBtn${123}`,
     ); // 123 is userId
 
     // Open JoinedOrgs Modal -> Expect modal to contain text and no search box -> Close Modal
     fireEvent.click(showJoinedOrgsBtn);
     expect(
-      screen.queryByTestId(`searchByNameJoinedOrgs`)
+      screen.queryByTestId(`searchByNameJoinedOrgs`),
     ).not.toBeInTheDocument();
     expect(
-      screen.getByText(/John Doe has not joined any organization/i)
+      screen.getByText(/John Doe has not joined any organization/i),
     ).toBeInTheDocument();
     fireEvent.click(screen.getByTestId(`closeJoinedOrgsBtn${123}`));
 
     // Open BlockedByOrgs Modal -> Expect modal to contain text and no search box -> Close Modal
     fireEvent.click(showBlockedByOrgsBtn);
     expect(
-      screen.queryByTestId(`searchByNameOrgsBlockedBy`)
+      screen.queryByTestId(`searchByNameOrgsBlockedBy`),
     ).not.toBeInTheDocument();
     expect(
-      screen.getByText(/John Doe is not blocked by any organization/i)
+      screen.getByText(/John Doe is not blocked by any organization/i),
     ).toBeInTheDocument();
     fireEvent.click(screen.getByTestId(`closeBlockedByOrgsBtn${123}`));
   });
@@ -402,7 +402,7 @@ describe('Testing User Table Item', () => {
         <I18nextProvider i18n={i18nForTest}>
           <UsersTableItem {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -419,13 +419,13 @@ describe('Testing User Table Item', () => {
       charCode: 27,
     });
     expect(
-      screen.queryByRole('dialog')?.className.includes('show')
+      screen.queryByRole('dialog')?.className.includes('show'),
     ).toBeFalsy();
     fireEvent.click(showJoinedOrgsBtn);
     // Close using close button and reopen
     fireEvent.click(screen.getByTestId(`closeJoinedOrgsBtn${123}`));
     expect(
-      screen.queryByRole('dialog')?.className.includes('show')
+      screen.queryByRole('dialog')?.className.includes('show'),
     ).toBeFalsy();
 
     fireEvent.click(showJoinedOrgsBtn);
@@ -454,7 +454,7 @@ describe('Testing User Table Item', () => {
     fireEvent.click(searchBtn);
     expect(screen.getByText(/Joined Organization 1/i)).toBeInTheDocument();
     expect(
-      screen.queryByText(/Joined Organization 2/i)
+      screen.queryByText(/Joined Organization 2/i),
     ).not.toBeInTheDocument();
 
     // Search for an Organization which does not exist
@@ -463,7 +463,7 @@ describe('Testing User Table Item', () => {
       target: { value: 'Joined Organization 3' },
     });
     expect(
-      screen.getByText(`No results found for "Joined Organization 3"`)
+      screen.getByText(`No results found for "Joined Organization 3"`),
     ).toBeInTheDocument();
 
     // Now clear the search box
@@ -614,12 +614,12 @@ describe('Testing User Table Item', () => {
         <I18nextProvider i18n={i18nForTest}>
           <UsersTableItem {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
     const showBlockedByOrgsBtn = screen.getByTestId(
-      `showBlockedByOrgsBtn${123}`
+      `showBlockedByOrgsBtn${123}`,
     );
     expect(showBlockedByOrgsBtn).toBeInTheDocument();
     fireEvent.click(showBlockedByOrgsBtn);
@@ -633,13 +633,13 @@ describe('Testing User Table Item', () => {
       charCode: 27,
     });
     expect(
-      screen.queryByRole('dialog')?.className.includes('show')
+      screen.queryByRole('dialog')?.className.includes('show'),
     ).toBeFalsy();
     fireEvent.click(showBlockedByOrgsBtn);
     // Close using close button and reopen
     fireEvent.click(screen.getByTestId(`closeBlockedByOrgsBtn${123}`));
     expect(
-      screen.queryByRole('dialog')?.className.includes('show')
+      screen.queryByRole('dialog')?.className.includes('show'),
     ).toBeFalsy();
 
     fireEvent.click(showBlockedByOrgsBtn);
@@ -672,7 +672,7 @@ describe('Testing User Table Item', () => {
     fireEvent.click(searchBtn);
     expect(screen.getByText(/Blocked Organization 1/i)).toBeInTheDocument();
     expect(
-      screen.queryByText(/Blocked Organization 2/i)
+      screen.queryByText(/Blocked Organization 2/i),
     ).not.toBeInTheDocument();
 
     // Search for an Organization which does not exist
@@ -681,7 +681,7 @@ describe('Testing User Table Item', () => {
       target: { value: 'Blocked Organization 3' },
     });
     expect(
-      screen.getByText(`No results found for "Blocked Organization 3"`)
+      screen.getByText(`No results found for "Blocked Organization 3"`),
     ).toBeInTheDocument();
 
     // Now clear the search box
@@ -829,7 +829,7 @@ describe('Testing User Table Item', () => {
         <I18nextProvider i18n={i18nForTest}>
           <UsersTableItem {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -851,7 +851,7 @@ describe('Testing User Table Item', () => {
     expect(
       screen
         .queryAllByRole('dialog')
-        .some((el) => el.className.includes('show'))
+        .some((el) => el.className.includes('show')),
     ).toBeTruthy();
     fireEvent.click(showJoinedOrgsBtn);
     // Close using close button and reopen
@@ -859,7 +859,7 @@ describe('Testing User Table Item', () => {
     expect(
       screen
         .queryAllByRole('dialog')
-        .some((el) => el.className.includes('show'))
+        .some((el) => el.className.includes('show')),
     ).toBeTruthy();
 
     fireEvent.click(showJoinedOrgsBtn);
@@ -1003,12 +1003,12 @@ describe('Testing User Table Item', () => {
         <I18nextProvider i18n={i18nForTest}>
           <UsersTableItem {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
     const showBlockedByOrgsBtn = screen.getByTestId(
-      `showBlockedByOrgsBtn${123}`
+      `showBlockedByOrgsBtn${123}`,
     );
     expect(showBlockedByOrgsBtn).toBeInTheDocument();
     fireEvent.click(showBlockedByOrgsBtn);
@@ -1027,7 +1027,7 @@ describe('Testing User Table Item', () => {
     expect(
       screen
         .queryAllByRole('dialog')
-        .some((el) => el.className.includes('show'))
+        .some((el) => el.className.includes('show')),
     ).toBeTruthy();
     fireEvent.click(showBlockedByOrgsBtn);
     // Close using close button and reopen
@@ -1035,7 +1035,7 @@ describe('Testing User Table Item', () => {
     expect(
       screen
         .queryAllByRole('dialog')
-        .some((el) => el.className.includes('show'))
+        .some((el) => el.className.includes('show')),
     ).toBeTruthy();
 
     fireEvent.click(showBlockedByOrgsBtn);
@@ -1179,7 +1179,7 @@ describe('Testing User Table Item', () => {
         <I18nextProvider i18n={i18nForTest}>
           <UsersTableItem {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -1321,7 +1321,7 @@ describe('Testing User Table Item', () => {
         <I18nextProvider i18n={i18nForTest}>
           <UsersTableItem {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();

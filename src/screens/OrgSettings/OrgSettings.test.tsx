@@ -93,7 +93,7 @@ async function wait(ms = 100): Promise<void> {
 }
 
 const translations = JSON.parse(
-  JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.orgSettings)
+  JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.orgSettings),
 );
 
 afterEach(() => {
@@ -122,7 +122,7 @@ describe('Organisation Settings Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -130,8 +130,8 @@ describe('Organisation Settings Page', () => {
     expect(screen.getAllByText(/Delete Organization/i)).toHaveLength(3);
     expect(
       screen.getByText(
-        /By clicking on Delete Organization button the organization will be permanently deleted along with its events, tags and all related data/i
-      )
+        /By clicking on Delete Organization button the organization will be permanently deleted along with its events, tags and all related data/i,
+      ),
     ).toBeInTheDocument();
     expect(screen.getByText(/Other Settings/i)).toBeInTheDocument();
     expect(screen.getByText(/Change Language/i)).toBeInTheDocument();
@@ -151,7 +151,7 @@ describe('Organisation Settings Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -159,7 +159,7 @@ describe('Organisation Settings Page', () => {
     await waitFor(() => {
       userEvent.click(screen.getByTestId('actionItemCategoriesSettings'));
       expect(
-        queryByText(translations.actionItemCategories)
+        queryByText(translations.actionItemCategories),
       ).toBeInTheDocument();
     });
 

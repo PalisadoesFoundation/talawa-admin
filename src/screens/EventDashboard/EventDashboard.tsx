@@ -22,7 +22,7 @@ const EventDashboard = (): JSX.Element => {
     EVENT_DETAILS,
     {
       variables: { id: eventId },
-    }
+    },
   );
 
   // Render the loading screen

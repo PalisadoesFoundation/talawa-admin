@@ -24,7 +24,7 @@ function contactCard(props: InterfaceContactCardProps): JSX.Element {
   };
 
   const [isSelected, setIsSelected] = React.useState(
-    props.selectedContact === props.id
+    props.selectedContact === props.id,
   );
 
   React.useEffect(() => {
