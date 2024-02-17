@@ -26,11 +26,14 @@ import {
 import userEvent from '@testing-library/user-event';
 import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { ToastContainer } from 'react-toastify';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { getItem } = useLocalStorage();
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
   headers: {
-    authorization: 'Bearer ' + localStorage.getItem('token') || '',
+    authorization: 'Bearer ' + getItem('token') || '',
   },
 });
 
@@ -210,10 +213,14 @@ describe('Testing Advertisement Component', () => {
       screen.getByLabelText('Enter name of Advertisement'),
       'Cookie Shop'
     );
+    userEvent.click(
+      screen.getByLabelText('Provide a link for content to be displayed')
+    );
     userEvent.type(
       screen.getByLabelText('Provide a link for content to be displayed'),
       'http://yourwebsite.com/photo'
     );
+    userEvent.click(screen.getByLabelText('Select type of Advertisement'));
     userEvent.selectOptions(
       screen.getByLabelText('Select type of Advertisement'),
       'POPUP'

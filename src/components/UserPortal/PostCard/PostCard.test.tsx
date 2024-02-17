@@ -15,6 +15,9 @@ import {
   LIKE_POST,
   UNLIKE_POST,
 } from 'GraphQl/Mutations/mutations';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem, getItem } = useLocalStorage();
 
 const MOCKS = [
   {
@@ -143,8 +146,8 @@ describe('Testing PostCard Component [User Portal]', () => {
   });
 
   test('Component should be rendered properly if user has liked the post', async () => {
-    const beforeUserId = localStorage.getItem('userId');
-    localStorage.setItem('userId', '2');
+    const beforeUserId = getItem('userId');
+    setItem('userId', '2');
 
     const cardProps = {
       id: '',
@@ -185,13 +188,13 @@ describe('Testing PostCard Component [User Portal]', () => {
     await wait();
 
     if (beforeUserId) {
-      localStorage.setItem('userId', beforeUserId);
+      setItem('userId', beforeUserId);
     }
   });
 
   test('Component should be rendered properly if user unlikes a post', async () => {
-    const beforeUserId = localStorage.getItem('userId');
-    localStorage.setItem('userId', '2');
+    const beforeUserId = getItem('userId');
+    setItem('userId', '2');
 
     const cardProps = {
       id: '',
@@ -234,13 +237,13 @@ describe('Testing PostCard Component [User Portal]', () => {
     userEvent.click(screen.getByTestId('likePostBtn'));
 
     if (beforeUserId) {
-      localStorage.setItem('userId', beforeUserId);
+      setItem('userId', beforeUserId);
     }
   });
 
   test('Component should be rendered properly if user likes a post', async () => {
-    const beforeUserId = localStorage.getItem('userId');
-    localStorage.setItem('userId', '2');
+    const beforeUserId = getItem('userId');
+    setItem('userId', '2');
 
     const cardProps = {
       id: '',
@@ -283,7 +286,7 @@ describe('Testing PostCard Component [User Portal]', () => {
     userEvent.click(screen.getByTestId('likePostBtn'));
 
     if (beforeUserId) {
-      localStorage.setItem('userId', beforeUserId);
+      setItem('userId', beforeUserId);
     }
   });
 

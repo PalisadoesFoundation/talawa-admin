@@ -23,10 +23,14 @@ import { toast } from 'react-toastify';
 import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { getItem } = useLocalStorage();
 
 jest.mock('react-toastify', () => ({
   toast: {
     success: jest.fn(),
+    warn: jest.fn(),
     error: jest.fn(),
   },
 }));
@@ -60,7 +64,7 @@ const link = new StaticMockLink(MOCKS, true);
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
   headers: {
-    authorization: 'Bearer ' + localStorage.getItem('token') || '',
+    authorization: 'Bearer ' + getItem('token') || '',
   },
 });
 
@@ -107,7 +111,7 @@ describe('Testing Advertisement Register Component', () => {
                   type="BANNER"
                   name="Advert1"
                   orgId="1"
-                  link="google.com"
+                  link="https://google.com"
                 />
               }
             </I18nextProvider>
@@ -133,7 +137,7 @@ describe('Testing Advertisement Register Component', () => {
                   type="BANNER"
                   name="Advert1"
                   orgId="1"
-                  link="google.com"
+                  link="https://google.com"
                   formStatus="edit"
                 />
               }
@@ -160,7 +164,7 @@ describe('Testing Advertisement Register Component', () => {
                   type="BANNER"
                   name="Advert1"
                   orgId="1"
-                  link="google.com"
+                  link="https://google.com"
                 />
               }
             </I18nextProvider>
@@ -192,7 +196,7 @@ describe('Testing Advertisement Register Component', () => {
                   type="BANNER"
                   name="Advert1"
                   orgId="1"
-                  link="google.com"
+                  link="https://google.com"
                 />
               }
             </I18nextProvider>
@@ -272,8 +276,8 @@ describe('Testing Advertisement Register Component', () => {
 
     fireEvent.click(getByText(translations.register));
     await waitFor(() => {
-      expect(toast.error).toBeCalledWith(
-        'An error occured, could not create new advertisement'
+      expect(toast.warn).toBeCalledWith(
+        'Link is invalid. Please enter a valid link'
       );
     });
   });
