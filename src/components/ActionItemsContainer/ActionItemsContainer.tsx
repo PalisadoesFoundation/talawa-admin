@@ -192,7 +192,7 @@ function actionItemsContainer({
                   {actionItem.actionItemCategory.name}
                 </Col>
                 <Col
-                  className="d-none d-lg-block align-self-center fw-semibold text-body-secondary"
+                  className="p-0 d-none d-lg-block align-self-center fw-semibold text-body-secondary"
                   md={4}
                   lg={3}
                 >

@@ -195,21 +195,21 @@ function organizationActionItems(): JSX.Element {
     );
 
   return (
-    <>
+    <div className={styles.organizationActionItemsContainer}>
       <OrganizationScreen screenName="Action Items" title={t('title')}>
+        <Button
+          variant="success"
+          onClick={showCreateModal}
+          data-testid="createActionItemBtn"
+          className={styles.createActionItemButton}
+        >
+          <i className={'fa fa-plus me-2'} />
+          {t('createActionItem')}
+        </Button>
         <div className={`${styles.container} bg-white rounded-4 my-3`}>
           <div className={`mt-4 mx-4`}>
             <div className={styles.btnsContainer}>
               <div className={styles.btnsBlock}>
-                <Button
-                  variant="success"
-                  onClick={handleClearFilters}
-                  data-testid="clearFilters"
-                >
-                  <i className="fa fa-broom me-2"></i>
-                  {t('clearFilters')}
-                </Button>
-
                 <Dropdown
                   aria-expanded="false"
                   title="Sort Action Items"
@@ -220,7 +220,9 @@ function organizationActionItems(): JSX.Element {
                     variant="outline-success"
                     data-testid="sortActionItems"
                   >
-                    <SortIcon className={'me-1'} />
+                    <div className="d-none d-md-inline">
+                      <SortIcon className={'me-1'} />
+                    </div>
                     {orderBy === 'Latest' ? t('latest') : t('earliest')}
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
@@ -241,55 +243,20 @@ function organizationActionItems(): JSX.Element {
 
                 <Dropdown
                   aria-expanded="false"
-                  title="Action Item Categories"
-                  data-testid="actionItemCategories"
-                  className={styles.dropdownToggle}
-                >
-                  <Dropdown.Toggle
-                    variant="outline-success"
-                    data-testid="selectActionItemCategory"
-                    className={
-                      actionItemCategoryId === '' ? '' : 'bg-success text-white'
-                    }
-                  >
-                    {actionItemCategoryName === ''
-                      ? t('actionItemCategory')
-                      : actionItemCategoryName}
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    {actionItemCategories?.map((category, index) => (
-                      <Dropdown.Item
-                        key={index}
-                        data-testid="actionItemCategory"
-                        onClick={() => {
-                          setActionItemCategoryId(category._id);
-                          setActionItemCategoryName(category.name);
-                        }}
-                      >
-                        {category.name}
-                      </Dropdown.Item>
-                    ))}
-                  </Dropdown.Menu>
-                </Dropdown>
-
-                <Dropdown
-                  aria-expanded="false"
                   title="Action Item Status"
                   data-testid="actionItemStatus"
                   className={styles.dropdownToggle}
                 >
                   <Dropdown.Toggle
-                    variant="outline-success"
-                    data-testid="selectActionItemStatus"
-                    className={
-                      actionItemStatus === '' ? '' : 'bg-success text-white'
+                    variant={
+                      actionItemStatus === '' ? 'outline-success' : 'success'
                     }
+                    data-testid="selectActionItemStatus"
                   >
-                    {actionItemStatus === ''
-                      ? t('status')
-                      : t(
-                          actionItemStatus === 'Active' ? 'active' : 'completed'
-                        )}
+                    <div className="d-lg-none">
+                      {actionItemStatus === '' ? t('status') : actionItemStatus}
+                    </div>
+                    <div className="d-none d-lg-inline">{t('status')}</div>
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <Dropdown.Item
@@ -308,13 +275,85 @@ function organizationActionItems(): JSX.Element {
                 </Dropdown>
               </div>
 
+              <Dropdown
+                aria-expanded="false"
+                title="Action Item Categories"
+                data-testid="actionItemCategories"
+                className={styles.dropdownToggle}
+              >
+                <Dropdown.Toggle
+                  variant={
+                    actionItemCategoryName === ''
+                      ? 'outline-success'
+                      : 'success'
+                  }
+                  data-testid="selectActionItemCategory"
+                >
+                  <div className="d-lg-none">
+                    {actionItemCategoryName === ''
+                      ? t('actionItemCategory')
+                      : actionItemCategoryName}
+                  </div>
+                  <div className="d-none d-lg-inline">
+                    {t('actionItemCategory')}
+                  </div>
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {actionItemCategories?.map((category, index) => (
+                    <Dropdown.Item
+                      key={index}
+                      data-testid="actionItemCategory"
+                      onClick={() => {
+                        setActionItemCategoryId(category._id);
+                        setActionItemCategoryName(category.name);
+                      }}
+                    >
+                      {category.name}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+
+              <div className="d-none d-lg-inline flex-grow-1 d-flex align-items-center border bg-light-subtle rounded-3">
+                {!actionItemCategoryName && !actionItemStatus && (
+                  <div className="lh-lg mt-2 text-center fw-semibold text-body-tertiary">
+                    No Filters
+                  </div>
+                )}
+
+                {actionItemCategoryName !== '' && (
+                  <div className="badge text-bg-secondary bg-dark-subtle lh-lg mt-2 ms-2 text-secondary-emphasis">
+                    {actionItemCategoryName}
+                    <i
+                      className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary pe-auto`}
+                      onClick={() => {
+                        setActionItemCategoryName('');
+                        setActionItemCategoryId('');
+                      }}
+                      data-testid="clearActionItemCategoryFilter"
+                    />
+                  </div>
+                )}
+
+                {actionItemStatus !== '' && (
+                  <div className="badge text-bg-secondary bg-dark-subtle lh-lg mt-2 ms-2 text-secondary-emphasis">
+                    {actionItemStatus}
+                    <i
+                      className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary pe-auto`}
+                      onClick={() => setActionItemStatus('')}
+                      data-testid="clearActionItemStatusFilter"
+                    />
+                  </div>
+                )}
+              </div>
+
               <Button
                 variant="success"
-                onClick={showCreateModal}
-                data-testid="createActionItemBtn"
+                onClick={handleClearFilters}
+                data-testid="clearFilters"
               >
-                <i className={'fa fa-plus me-2'} />
-                {t('createActionItem')}
+                <i className="fa fa-broom me-2"></i>
+                {t('clearFilters')}
               </Button>
             </div>
           </div>
@@ -342,7 +381,7 @@ function organizationActionItems(): JSX.Element {
         dueDate={dueDate}
         setDueDate={setDueDate}
       />
-    </>
+    </div>
   );
 }
 

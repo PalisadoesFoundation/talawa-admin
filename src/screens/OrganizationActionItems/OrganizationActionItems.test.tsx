@@ -216,6 +216,126 @@ describe('Testing Action Item Categories Component', () => {
     });
   });
 
+  test('applies and then clears filters one by one', async () => {
+    window.location.assign('/organizationActionItems/id=123');
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              {<OrganizationActionItems />}
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('sortActionItems')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('sortActionItems'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('earliest')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('earliest'));
+
+    // all the action items ordered by earliest first
+    await waitFor(() => {
+      expect(screen.getByTestId('sortActionItems')).toHaveTextContent(
+        translations.earliest
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('selectActionItemStatus')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('selectActionItemStatus'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('activeActionItems')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('activeActionItems'));
+
+    // all the action items that are active
+    await waitFor(() => {
+      expect(screen.getByTestId('selectActionItemStatus')).toHaveTextContent(
+        translations.active
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('selectActionItemStatus')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('selectActionItemStatus'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('completedActionItems')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('completedActionItems'));
+
+    // all the action items that are completed
+    await waitFor(() => {
+      expect(screen.getByTestId('selectActionItemStatus')).toHaveTextContent(
+        translations.completed
+      );
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('selectActionItemCategory')
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('selectActionItemCategory'));
+
+    await waitFor(() => {
+      expect(
+        screen.getAllByTestId('actionItemCategory')[0]
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getAllByTestId('actionItemCategory')[0]);
+
+    // action items belonging to this action item category
+    await waitFor(() => {
+      expect(screen.getByTestId('selectActionItemCategory')).toHaveTextContent(
+        'ActionItemCategory 1'
+      );
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('clearActionItemCategoryFilter')
+      ).toBeInTheDocument();
+    });
+    // remove the action item category filter
+    userEvent.click(screen.getByTestId('clearActionItemCategoryFilter'));
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('clearActionItemCategoryFilter')
+      ).not.toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('clearActionItemStatusFilter')
+      ).toBeInTheDocument();
+    });
+    // remove the action item status filter
+    userEvent.click(screen.getByTestId('clearActionItemStatusFilter'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('selectActionItemStatus')).toHaveTextContent(
+        translations.status
+      );
+      expect(screen.getByTestId('selectActionItemCategory')).toHaveTextContent(
+        translations.actionItemCategory
+      );
+    });
+  });
+
   test('applies and then clears all the filters', async () => {
     window.location.assign('/organizationActionItems/id=123');
     render(
@@ -297,7 +417,7 @@ describe('Testing Action Item Categories Component', () => {
     });
     userEvent.click(screen.getAllByTestId('actionItemCategory')[0]);
 
-    // action items belonging to this category
+    // action items belonging to this action item category
     await waitFor(() => {
       expect(screen.getByTestId('selectActionItemCategory')).toHaveTextContent(
         'ActionItemCategory 1'

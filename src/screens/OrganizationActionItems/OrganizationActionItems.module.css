@@ -4,7 +4,7 @@
 
 .btnsContainer {
   display: flex;
-  justify-content: space-between;
+  gap: 10px;
 }
 
 .btnsContainer .btnsBlock {
@@ -12,7 +12,7 @@
   gap: 10px;
 }
 
-.btnsContainer .btnsBlock button {
+.btnsContainer button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,6 +20,12 @@
 
 .container {
   min-height: 100vh;
+}
+
+.createActionItemButton {
+  position: absolute;
+  top: 1.3rem;
+  right: 2rem;
 }
 
 .datediv {
@@ -47,6 +53,7 @@
 
 .dropdownToggle {
   margin-bottom: 0;
+  display: flex;
 }
 
 .dropdownModalToggle {
@@ -115,12 +122,20 @@ hr {
   flex-direction: column;
 }
 
+.organizationActionItemsContainer h2 {
+  margin: 0.6rem 0;
+}
+
 .preview {
   display: flex;
   flex-direction: row;
   font-weight: 900;
   font-size: 16px;
   color: rgb(80, 80, 80);
+}
+
+.removeFilterIcon {
+  cursor: pointer;
 }
 
 .searchForm {
@@ -147,21 +162,21 @@ hr {
 @media (max-width: 767px) {
   .btnsContainer {
     margin-bottom: 0;
-    flex-direction: column-reverse;
+    display: flex;
+    flex-direction: column;
   }
 
-  .btnsContainer .btnsBlock {
-    display: block;
-    margin-top: 1rem;
-    margin-right: 0;
+  .btnsContainer .btnsBlock .dropdownToggle {
+    flex-grow: 1;
   }
 
-  .btnsContainer .btnsBlock button {
-    margin-bottom: 1rem;
+  .btnsContainer button {
     width: 100%;
   }
 
-  .dropdown {
-    width: 100%;
+  .createActionItemButton {
+    position: absolute;
+    top: 1rem;
+    right: 2rem;
   }
 }
