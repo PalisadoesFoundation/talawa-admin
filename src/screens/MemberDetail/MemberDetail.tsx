@@ -37,8 +37,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({
   const [isAdmin, setIsAdmin] = useState(false);
   const [isMounted, setIsMounted] = useState(true);
 
-  const location = useLocation<MemberDetailProps>();
   const { getItem } = useLocalStorage();
+  const location = useLocation<MemberDetailProps>();
   const currentUrl = location.state?.id || getItem('id') || id;
   const orgId = window.location.href.split('=')[1];
   const calledFrom = location.state?.from || from;
