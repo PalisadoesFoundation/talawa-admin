@@ -135,7 +135,7 @@ describe('Testing Organization Post Card', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
     expect(getByTestId('card-text')).toBeInTheDocument();
     expect(getByTestId('card-title')).toBeInTheDocument();
@@ -148,7 +148,7 @@ describe('Testing Organization Post Card', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
     userEvent.click(screen.getByAltText('image'));
     const toggleButton = getByTestId('toggleBtn');
@@ -165,7 +165,7 @@ describe('Testing Organization Post Card', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     userEvent.click(screen.getByAltText('image'));
@@ -184,7 +184,7 @@ describe('Testing Organization Post Card', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     userEvent.click(screen.getByAltText('image'));
@@ -196,7 +196,7 @@ describe('Testing Organization Post Card', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -256,7 +256,7 @@ describe('Testing Organization Post Card', () => {
       () => {
         expect(window.location.reload).toHaveBeenCalled();
       },
-      { timeout: 2500 }
+      { timeout: 2500 },
     );
   });
   test('Testing pin post functionality', async () => {
@@ -265,7 +265,7 @@ describe('Testing Organization Post Card', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -278,7 +278,7 @@ describe('Testing Organization Post Card', () => {
       () => {
         expect(window.location.reload).toHaveBeenCalled();
       },
-      { timeout: 3000 }
+      { timeout: 3000 },
     );
   });
   test('Testing pin post functionality fail case', async () => {
@@ -297,7 +297,7 @@ describe('Testing Organization Post Card', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props2} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -314,7 +314,7 @@ describe('Testing Organization Post Card', () => {
             <OrgPostCard {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -329,7 +329,7 @@ describe('Testing Organization Post Card', () => {
       () => {
         expect(window.location.reload).toHaveBeenCalled();
       },
-      { timeout: 3000 }
+      { timeout: 3000 },
     );
   });
   test('Testing post delete functionality fail case', async () => {
@@ -350,7 +350,7 @@ describe('Testing Organization Post Card', () => {
             <OrgPostCard {...props2} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -367,7 +367,7 @@ describe('Testing Organization Post Card', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -381,7 +381,7 @@ describe('Testing Organization Post Card', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -406,7 +406,7 @@ describe('Testing Organization Post Card', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props2} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
   });
   test('updates state variables correctly when handleEditModal is called', () => {
@@ -414,7 +414,7 @@ describe('Testing Organization Post Card', () => {
     render(
       <MockedProvider link={link2} addTypename={false}>
         <OrgPostCard {...props} />
-      </MockedProvider>
+      </MockedProvider>,
     );
     userEvent.click(screen.getByAltText('image'));
 
@@ -442,7 +442,7 @@ describe('Testing Organization Post Card', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     userEvent.click(screen.getByAltText('image'));
@@ -476,7 +476,7 @@ describe('Testing Organization Post Card', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     userEvent.click(screen.getByAltText('image'));
@@ -515,7 +515,7 @@ describe('Testing Organization Post Card', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -535,7 +535,7 @@ describe('Testing Organization Post Card', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
     userEvent.click(screen.getByAltText('image'));
 
@@ -554,7 +554,7 @@ describe('Testing Organization Post Card', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     const card = getByTestId('cardVid');
@@ -585,7 +585,7 @@ describe('Testing Organization Post Card', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard {...props2} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     expect(getByAltText('image not found')).toBeInTheDocument();

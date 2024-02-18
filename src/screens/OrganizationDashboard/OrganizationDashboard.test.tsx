@@ -61,7 +61,7 @@ describe('Organisation Dashboard Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
     });
 
@@ -109,7 +109,7 @@ describe('Organisation Dashboard Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
     });
 
@@ -124,7 +124,7 @@ describe('Organisation Dashboard Page', () => {
     expect(toast.success).toBeCalledWith('Coming soon!');
 
     expect(
-      screen.getByText(/No membership requests present/i)
+      screen.getByText(/No membership requests present/i),
     ).toBeInTheDocument();
     expect(screen.getByText(/No upcoming events/i)).toBeInTheDocument();
     expect(screen.getByText(/No posts present/i)).toBeInTheDocument();
@@ -141,7 +141,7 @@ describe('Organisation Dashboard Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
     });
 

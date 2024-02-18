@@ -72,7 +72,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
             <LeftDrawer {...propsOrg} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     expect(screen.getByText('My Organizations')).toBeInTheDocument();
@@ -87,10 +87,10 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     const rolesBtn = screen.getByTestId(/rolesBtn/i);
 
     expect(
-      orgsBtn.className.includes('text-white btn btn-success')
+      orgsBtn.className.includes('text-white btn btn-success'),
     ).toBeTruthy();
     expect(
-      rolesBtn.className.includes('text-secondary btn btn-light')
+      rolesBtn.className.includes('text-secondary btn btn-light'),
     ).toBeTruthy();
 
     // Coming soon
@@ -110,17 +110,17 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
             <LeftDrawer {...propsUsers} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     const orgsBtn = screen.getByTestId(/orgsBtn/i);
     const rolesBtn = screen.getByTestId(/rolesBtn/i);
 
     expect(
-      orgsBtn.className.includes('text-secondary btn btn-light')
+      orgsBtn.className.includes('text-secondary btn btn-light'),
     ).toBeTruthy();
     expect(
-      rolesBtn.className.includes('text-white btn btn-success')
+      rolesBtn.className.includes('text-white btn btn-success'),
     ).toBeTruthy();
   });
 
@@ -133,7 +133,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
             <LeftDrawer {...propsUsers} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
   });
 
@@ -146,7 +146,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
             <LeftDrawer {...propsOrg} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     userEvent.click(screen.getByTestId('logoutBtn'));
     expect(localStorage.clear).toHaveBeenCalled();
@@ -164,7 +164,7 @@ describe('Testing Left Drawer component for ADMIN', () => {
             <LeftDrawer {...propsOrg} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     expect(screen.getByText('My Organizations')).toBeInTheDocument();
@@ -177,7 +177,7 @@ describe('Testing Left Drawer component for ADMIN', () => {
     const orgsBtn = screen.getByTestId(/orgsBtn/i);
 
     expect(
-      orgsBtn.className.includes('text-white btn btn-success')
+      orgsBtn.className.includes('text-white btn btn-success'),
     ).toBeTruthy();
 
     // These screens arent meant for admins so they should not be present

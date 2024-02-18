@@ -264,7 +264,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     defaultScreens.map((screenName) => {
@@ -286,7 +286,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     expect(screen.getByTestId(/orgBtn/i)).toBeInTheDocument();
@@ -304,7 +304,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     userEvent.click(screen.getByText('Dashboard'));
@@ -322,7 +322,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
   });
@@ -338,11 +338,11 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     expect(
-      screen.getByText(/Error Occured while loading the Organization/i)
+      screen.getByText(/Error Occured while loading the Organization/i),
     ).toBeInTheDocument();
   });
 
@@ -357,7 +357,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
   });
 
@@ -372,7 +372,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
   });
 
@@ -387,7 +387,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     userEvent.click(screen.getByTestId('logoutBtn'));
     expect(localStorage.clear).toHaveBeenCalled();

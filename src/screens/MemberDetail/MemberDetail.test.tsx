@@ -156,7 +156,7 @@ describe('MemberDetail', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
@@ -166,7 +166,7 @@ describe('MemberDetail', () => {
 
     expect(screen.getByTestId('dashboardTitleBtn')).toBeInTheDocument();
     expect(screen.getByTestId('dashboardTitleBtn')).toHaveTextContent(
-      'User Details'
+      'User Details',
     );
     expect(screen.getAllByText(/Email/i)).toBeTruthy();
     expect(screen.getAllByText(/Main/i)).toBeTruthy();
@@ -192,7 +192,7 @@ describe('MemberDetail', () => {
     expect(screen.getByTestId('addAdminBtn').getAttribute('disabled')).toBe(
       addAdminBtn == 'ADMIN' || addAdminBtn == 'SUPERADMIN'
         ? expect.anything()
-        : null
+        : null,
     );
     expect(screen.getByTestId('stateBtn')).toBeInTheDocument();
     userEvent.click(screen.getByTestId('stateBtn'));
@@ -202,7 +202,7 @@ describe('MemberDetail', () => {
     // If the date is provided
     const datePretty = jest.fn(prettyDate);
     expect(datePretty('2023-02-18T09:22:27.969Z')).toBe(
-      prettyDate('2023-02-18T09:22:27.969Z')
+      prettyDate('2023-02-18T09:22:27.969Z'),
     );
     // If there's some error in formatting the date
     expect(datePretty('')).toBe('Unavailable');
@@ -230,7 +230,7 @@ describe('MemberDetail', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
@@ -238,15 +238,15 @@ describe('MemberDetail', () => {
     const user = MOCKS1[0].result.data.user;
 
     waitFor(() =>
-      expect(screen.getByTestId('userImageAbsent')).toBeInTheDocument()
+      expect(screen.getByTestId('userImageAbsent')).toBeInTheDocument(),
     );
     waitFor(() =>
       expect(screen.getByTestId('userImageAbsent').getAttribute('src')).toBe(
         <Avatar
           name={`${user?.firstName} ${user?.lastName}`}
           alt={`${user?.firstName} ${user?.lastName}`}
-        />
-      )
+        />,
+      ),
     );
   });
 
@@ -264,7 +264,7 @@ describe('MemberDetail', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
@@ -272,12 +272,12 @@ describe('MemberDetail', () => {
     const user = MOCKS2[0].result.data.user;
 
     waitFor(() =>
-      expect(screen.getByTestId('userImagePresent')).toBeInTheDocument()
+      expect(screen.getByTestId('userImagePresent')).toBeInTheDocument(),
     );
     waitFor(() =>
       expect(screen.getByTestId('userImagePresent').getAttribute('src')).toBe(
-        user?.image
-      )
+        user?.image,
+      ),
     );
   });
 
@@ -294,7 +294,7 @@ describe('MemberDetail', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
@@ -315,10 +315,10 @@ describe('MemberDetail', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     waitFor(() =>
-      expect(screen.getByTestId('adminApproved')).toHaveTextContent('Yes')
+      expect(screen.getByTestId('adminApproved')).toHaveTextContent('Yes'),
     );
   });
 
@@ -335,7 +335,7 @@ describe('MemberDetail', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     waitFor(() => {
