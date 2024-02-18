@@ -6,7 +6,6 @@ import styles from './EventCalendar.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { Dropdown } from 'react-bootstrap';
 import CurrentHourIndicator from 'components/CurrentHourIndicator/CurrentHourIndicator';
-import '../../assets/css/scroll-styles.css';
 
 interface InterfaceEvent {
   _id: string;
