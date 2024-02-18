@@ -13,15 +13,12 @@ import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useHistory } from 'react-router-dom';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 
-
 function userNavbar(): JSX.Element {
   const history = useHistory();
 
   const { t } = useTranslation('translation', {
     keyPrefix: 'userNavbar',
   });
-
-  const { getItem } = useLocalStorage();
 
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
 
