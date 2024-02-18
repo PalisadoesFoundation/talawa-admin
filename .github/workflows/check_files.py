@@ -4,9 +4,9 @@ import subprocess
 import glob
 
 
-def _count_changed_files(base_branch, pr_branch):
+def _get_changed_files(base_branch, pr_branch):
     """
-    Count the number of changed files between two branches.
+    Get changed files between two branches.
     Args:
         base_branch (str): The base branch.
         pr_branch (str): The PR branch.
@@ -18,7 +18,7 @@ def _count_changed_files(base_branch, pr_branch):
     base_branch = f"origin/{base_branch}"
     pr_branch = f"origin/{pr_branch}"
 
-    command = f"git diff --name-only {base_branch}...{pr_branch} --diff-filter=ACMRT | xargs"
+    command = f"git diff --name-only {base_branch}...{pr_branch}"
 
     try:
         # Run git command to get the list of changed files
@@ -117,14 +117,12 @@ def main():
         print(f"You are trying to merge on branch: {base_branch}")
         print(f"You are making a commit from your branch: {pr_branch}")
 
-    
-
     # Read sensitive files from the provided file
     with open(args.sensitive_files, "r") as sensitive_file:
         sensitive_files = [line.strip() for line in sensitive_file]
 
     # Count changed files
-    changed_files = _count_changed_files(base_branch, pr_branch)
+    changed_files = _get_changed_files(base_branch, pr_branch)
     if args.verbose:
         print(f"Number of changed files: {len(changed_files)}")
 
