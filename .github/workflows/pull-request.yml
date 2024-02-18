@@ -49,7 +49,6 @@ jobs:
 
       - name: Run linting check
         if: steps.changed-files.outputs.only_changed != 'true'
-        
         run: npm run lint:check
         
       - name: Check for localStorage Usage
@@ -77,8 +76,8 @@ jobs:
           python-version: 3.9
 
       - name: Run Python script
-        run: 
-          python .github/workflows/check_files.py --base_branch "${{ github.base_ref }}" --pr_branch "${{ github.head_ref }}" --sensitive_files .github/workflows/sensitive_files.txt
+        run: |
+          python .github/workflows/count_changed_files.py --base_branch "${{ github.base_ref }}" --pr_branch "${{ github.head_ref }}"
 
   Test-Application:
     name: Test Application
