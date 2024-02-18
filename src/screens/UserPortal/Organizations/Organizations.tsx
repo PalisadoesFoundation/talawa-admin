@@ -1,7 +1,6 @@
 import React from 'react';
-import UserNavbar from 'components/UserPortal/UserNavbar/UserNavbar';
 import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
-import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
+import UserScreen from 'components/UserPortal/UserScreen/UserScreen';
 import { Dropdown, Form, InputGroup } from 'react-bootstrap';
 import PaginationList from 'components/PaginationList/PaginationList';
 import {
@@ -123,112 +122,112 @@ export default function organizations(): JSX.Element {
 
   return (
     <>
-      <UserNavbar />
-      <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <UserSidebar />
-        <div className={`${styles.colorLight} ${styles.mainContainer}`}>
-          <h3>{t('selectOrganization')}</h3>
-          <div
-            className={`d-flex flex-row justify-content-between pt-3 flex-wrap ${styles.gap}`}
-          >
-            <InputGroup className={styles.maxWidth}>
-              <Form.Control
-                placeholder={t('search')}
-                id="searchUserOrgs"
-                type="text"
-                className={`${styles.borderNone} ${styles.backgroundWhite}`}
-                onKeyUp={handleSearchByEnter}
-                data-testid="searchInput"
-              />
-              <InputGroup.Text
-                className={`${styles.colorPrimary} ${styles.borderNone}`}
-                style={{ cursor: 'pointer' }}
-                onClick={handleSearchByBtnClick}
-                data-testid="searchBtn"
-              >
-                <SearchOutlined className={`${styles.colorWhite}`} />
-              </InputGroup.Text>
-            </InputGroup>
-            <Dropdown drop="down-centered">
-              <Dropdown.Toggle
-                className={`${styles.colorPrimary} ${styles.borderNone}`}
-                variant="success"
-                id="dropdown-basic"
-                data-testid={`modeChangeBtn`}
-              >
-                {modes[mode]}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {modes.map((value, index) => {
-                  return (
-                    <Dropdown.Item
-                      key={index}
-                      data-testid={`modeBtn${index}`}
-                      onClick={(): void => setMode(index)}
-                    >
-                      {value}
-                    </Dropdown.Item>
-                  );
-                })}
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-
-          <div
-            className={`d-flex flex-column justify-content-between ${styles.content}`}
-          >
+      <UserScreen screenName="Organizations">
+        <div className={`d-flex flex-row ${styles.containerHeight}`}>
+          <div className={`${styles.colorLight} ${styles.mainContainer}`}>
+            <h3>{t('selectOrganization')}</h3>
             <div
-              className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
+              className={`d-flex flex-row justify-content-between pt-3 flex-wrap ${styles.gap}`}
             >
-              {loadingOrganizations ? (
-                <div className={`d-flex flex-row justify-content-center`}>
-                  <HourglassBottomIcon /> <span>Loading...</span>
-                </div>
-              ) : (
-                <>
-                  {' '}
-                  {organizations && organizations.length > 0 ? (
-                    (rowsPerPage > 0
-                      ? organizations.slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage,
-                        )
-                      : /* istanbul ignore next */
-                        organizations
-                    ).map((organization: any, index) => {
-                      const cardProps: InterfaceOrganizationCardProps = {
-                        name: organization.name,
-                        image: organization.image,
-                        id: organization._id,
-                        description: organization.description,
-                      };
-                      return <OrganizationCard key={index} {...cardProps} />;
-                    })
-                  ) : (
-                    <span>{t('nothingToShow')}</span>
-                  )}
-                </>
-              )}
+              <InputGroup className={styles.maxWidth}>
+                <Form.Control
+                  placeholder={t('search')}
+                  id="searchUserOrgs"
+                  type="text"
+                  className={`${styles.borderNone} ${styles.backgroundWhite}`}
+                  onKeyUp={handleSearchByEnter}
+                  data-testid="searchInput"
+                />
+                <InputGroup.Text
+                  className={`${styles.colorPrimary} ${styles.borderNone}`}
+                  style={{ cursor: 'pointer' }}
+                  onClick={handleSearchByBtnClick}
+                  data-testid="searchBtn"
+                >
+                  <SearchOutlined className={`${styles.colorWhite}`} />
+                </InputGroup.Text>
+              </InputGroup>
+              <Dropdown drop="down-centered">
+                <Dropdown.Toggle
+                  className={`${styles.colorPrimary} ${styles.borderNone}`}
+                  variant="success"
+                  id="dropdown-basic"
+                  data-testid={`modeChangeBtn`}
+                >
+                  {modes[mode]}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {modes.map((value, index) => {
+                    return (
+                      <Dropdown.Item
+                        key={index}
+                        data-testid={`modeBtn${index}`}
+                        onClick={(): void => setMode(index)}
+                      >
+                        {value}
+                      </Dropdown.Item>
+                    );
+                  })}
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
-            <table>
-              <tbody>
-                <tr>
-                  <PaginationList
-                    count={
-                      /* istanbul ignore next */
-                      organizations ? organizations.length : 0
-                    }
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </tr>
-              </tbody>
-            </table>
+
+            <div
+              className={`d-flex flex-column justify-content-between ${styles.content}`}
+            >
+              <div
+                className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
+              >
+                {loadingOrganizations ? (
+                  <div className={`d-flex flex-row justify-content-center`}>
+                    <HourglassBottomIcon /> <span>Loading...</span>
+                  </div>
+                ) : (
+                  <>
+                    {' '}
+                    {organizations && organizations.length > 0 ? (
+                      (rowsPerPage > 0
+                        ? organizations.slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage,
+                          )
+                        : /* istanbul ignore next */
+                          organizations
+                      ).map((organization: any, index) => {
+                        const cardProps: InterfaceOrganizationCardProps = {
+                          name: organization.name,
+                          image: organization.image,
+                          id: organization._id,
+                          description: organization.description,
+                        };
+                        return <OrganizationCard key={index} {...cardProps} />;
+                      })
+                    ) : (
+                      <span>{t('nothingToShow')}</span>
+                    )}
+                  </>
+                )}
+              </div>
+              <table>
+                <tbody>
+                  <tr>
+                    <PaginationList
+                      count={
+                        /* istanbul ignore next */
+                        organizations ? organizations.length : 0
+                      }
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
+      </UserScreen>
     </>
   );
 }

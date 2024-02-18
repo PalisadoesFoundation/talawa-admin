@@ -599,18 +599,6 @@
     "invalidDetailsMessage": "請輸入有效的詳細信息。",
     "talawaApiUnavailable": "Talawa-API 服務不可用。 請檢查您的網絡連接並稍等片刻。"
   },
-  "userNavbar": {
-    "talawa": "塔拉瓦",
-    "home": "家",
-    "people": "人們",
-    "events": "活動",
-    "chat": "聊天",
-    "donate": "捐",
-    "settings": "設置",
-    "language": "語言",
-    "logout": "登出",
-    "close": "關閉"
-  },
   "userOrganizations": {
     "allOrganizations": "所有組織",
     "joinedOrganizations": "加入組織",
@@ -619,10 +607,20 @@
     "nothingToShow": "這裡沒有什麼可展示的。",
     "selectOrganization": "選擇組織"
   },
-  "userSidebar": {
-    "yourOrganizations": "您的組織",
-    "noOrganizations": "您還沒有加入任何組織。",
-    "viewAll": "查看全部"
+  "orgLeftDrawer": {
+    "talawaUserPortal": "塔拉瓦用户门户",
+    "menu": "菜单",
+    "posts": "帖子",
+    "events": "活动",
+    "donations": "捐款",
+    "signOut": "登出"
+  },
+  "userLeftDrawer": {
+    "talawaUserPortal": "塔拉瓦用户门户",
+    "menu": "菜单",
+    "myOrganizations": "我的组织",
+    "settings": "设置",
+    "signOut": "登出"
   },
   "organizationSidebar": {
     "viewAll": "查看全部",

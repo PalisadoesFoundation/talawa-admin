@@ -599,18 +599,6 @@
     "invalidDetailsMessage": "कृपया मान्य विवरण दर्ज करें।",
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। कृपया अपना नेटवर्क कनेक्शन जांचें और कुछ देर प्रतीक्षा करें।"
   },
-  "userNavbar": {
-    "talawa": "तलावा",
-    "home": "घर",
-    "people": "लोग",
-    "events": "आयोजन",
-    "chat": "बातचीत",
-    "donate": "दान देना",
-    "settings": "समायोजन",
-    "language": "भाषा",
-    "logout": "लॉग आउट",
-    "close": "बंद करना"
-  },
   "userOrganizations": {
     "allOrganizations": "सभी संगठन",
     "joinedOrganizations": "संगठन शामिल हुए",
@@ -619,10 +607,20 @@
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
     "selectOrganization": "संगठन का चयन करें"
   },
-  "userSidebar": {
-    "yourOrganizations": "आपके संगठन",
-    "noOrganizations": "आप अभी तक किसी संगठन में शामिल नहीं हुए हैं.",
-    "viewAll": "सभी को देखें"
+  "orgLeftDrawer": {
+    "talawaUserPortal": "तलावा उपयोगकर्ता पोर्टल",
+    "menu": "मेन्यू",
+    "posts": "पदों",
+    "events": "आयोजन",
+    "donations": "दान",
+    "signOut": "साइन आउट"
+  },
+  "userLeftDrawer": {
+    "talawaUserPortal": "तलावा उपयोगकर्ता पोर्टल",
+    "menu": "मेन्यू",
+    "myOrganizations": "मेरे संगठन",
+    "settings": "समायोजन",
+    "signOut": "साइन आउट"
   },
   "organizationSidebar": {
     "viewAll": "सभी को देखें",

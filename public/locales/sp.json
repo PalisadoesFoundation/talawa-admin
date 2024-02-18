@@ -598,18 +598,6 @@
     "invalidDetailsMessage": "Ingrese detalles válidos.",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. Compruebe amablemente su conexión de red y espere un momento."
   },
-  "userNavbar": {
-    "talawa": "Talawa",
-    "home": "Hogar",
-    "people": "Gente",
-    "events": "Eventos",
-    "chat": "Charlar",
-    "donate": "Donar",
-    "settings": "Ajustes",
-    "language": "Idioma",
-    "logout": "Cerrar sesión",
-    "close": "Cerca"
-  },
   "userOrganizations": {
     "allOrganizations": "Todas las organizaciones",
     "joinedOrganizations": "Organizaciones unidas",
@@ -618,10 +606,20 @@
     "nothingToShow": "Nada que mostrar aquí.",
     "selectOrganization": "Seleccionar organización"
   },
-  "userSidebar": {
-    "yourOrganizations": "Tus Organizaciones",
-    "noOrganizations": "Aún no te has unido a ninguna organización.",
-    "viewAll": "Ver todo"
+  "orgLeftDrawer": {
+    "talawaUserPortal": "Portal de usuario de Talawa",
+    "menu": "Menú",
+    "posts": "Publicaciones",
+    "events": "Eventos",
+    "donations": "Donaciones",
+    "signOut": "desconectar"
+  },
+  "userLeftDrawer": {
+    "talawaUserPortal": "Portal de usuario de Talawa",
+    "menu": "Menú",
+    "myOrganizations": "Mis Organizaciones",
+    "settings": "Ajustes",
+    "signOut": "desconectar"
   },
   "organizationSidebar": {
     "viewAll": "Ver todo",
