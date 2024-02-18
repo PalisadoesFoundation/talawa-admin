@@ -3,7 +3,7 @@ import { WarningAmberOutlined } from '@mui/icons-material';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
 import IconComponent from 'components/IconComponent/IconComponent';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { useHistory, Link } from 'react-router-dom';
@@ -31,8 +31,7 @@ const leftDrawerOrg = ({
   hideDrawer,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawerOrg' });
-  const [organization, setOrganization] =
-    useState<InterfaceQueryOrganizationsListObject>();
+
   const {
     data,
     loading,
@@ -45,6 +44,7 @@ const leftDrawerOrg = ({
     variables: { id: orgId },
   });
 
+  const organization = data?.organizations[0];
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
 
   const { getItem } = useLocalStorage();
@@ -55,17 +55,6 @@ const leftDrawerOrg = ({
   const userImage = getItem('UserImage');
   const userId = getItem('id');
   const history = useHistory();
-
-  // Set organization data
-  useEffect(() => {
-    let isMounted = true;
-    if (data && isMounted) {
-      setOrganization(data?.organizations[0]);
-    }
-    return () => {
-      isMounted = false;
-    };
-  }, [data]);
 
   const logout = (): void => {
     revokeRefreshToken();

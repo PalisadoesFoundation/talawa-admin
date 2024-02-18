@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -35,13 +35,13 @@ const MemberDetail: React.FC<MemberDetailProps> = ({
 
   const [state, setState] = useState(1);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [isMounted, setIsMounted] = useState(true);
+  const isMounted = useRef(true);
 
   const { getItem } = useLocalStorage();
   const location = useLocation<MemberDetailProps>();
   const currentUrl = location.state?.id || getItem('id') || id;
   const orgId = window.location.href.split('=')[1];
-  const calledFrom = location.state?.from || from;
+  const calledFrom = from || location.state?.from;
   document.title = t('title');
 
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
@@ -50,7 +50,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({
   useEffect(() => {
     // check component is mounted or not
     return () => {
-      setIsMounted(false);
+      isMounted.current = false;
     };
   }, []);
 
@@ -113,7 +113,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({
         userData.user.userType === 'ADMIN' ||
         userData.user.userType === 'SUPERADMIN'
       ) {
-        if (isMounted) setIsAdmin(true);
+        if (isMounted.current) setIsAdmin(true);
         toast.error(t('alreadyIsAdmin'));
       } else {
         errorHandler(t, error);
@@ -164,7 +164,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({
                   ) : (
                     <img
                       className={styles.userImage}
-                      src={`https://api.dicebear.com/5.x/initials/svg?seed=${userData?.user?.firstName} ${userData?.user?.lastName}`}
+                      src={`https://api.dicebear.com/5.x/initials/svg?seed=${userData?.user?.firstName}%20${userData?.user?.lastName}`}
                       data-testid="userImageAbsent"
                     />
                   )}
@@ -320,14 +320,14 @@ const MemberDetail: React.FC<MemberDetailProps> = ({
 
   return (
     <>
-      {calledFrom == 'orgdash' ? (
-        <OrganizationScreen screenName="Profile" title={t('title')}>
-          {memberDetails}
-        </OrganizationScreen>
-      ) : (
+      {calledFrom === 'orglist' ? (
         <SuperAdminScreen screenName="Profile" title={t('title')}>
           {memberDetails}
         </SuperAdminScreen>
+      ) : (
+        <OrganizationScreen screenName="Profile" title={t('title')}>
+          {memberDetails}
+        </OrganizationScreen>
       )}
     </>
   );

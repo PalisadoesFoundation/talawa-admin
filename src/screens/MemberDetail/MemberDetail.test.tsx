@@ -215,10 +215,10 @@ describe('MemberDetail', () => {
     expect(getLangName('')).toBe('Unavailable');
   });
 
-  test('should render Organization LeftDrawer if called from Organization Dashboard', async () => {
+  test('should render LeftDrawer from SuperAdminScreen when member details is called from home page', async () => {
     const props = {
       id: 'rishav-jha-mech',
-      from: 'orgdash',
+      from: 'orglist',
     };
 
     render(
@@ -234,16 +234,15 @@ describe('MemberDetail', () => {
     );
 
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
-    await wait();
-    expect(screen.getAllByText(/People/i)).toBeTruthy();
-    expect(screen.getAllByText(/Events/i)).toBeTruthy();
-    expect(screen.getAllByText(/Posts/i)).toBeTruthy();
-    expect(screen.getAllByText(/Advertisement/i)).toBeTruthy();
+    await waitFor(() => {
+      expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
+    });
   });
 
   test('Should display dicebear image if image is null', async () => {
     const props = {
       id: 'rishav-jha-mech',
+      from: 'orglist',
     };
 
     render(
@@ -261,15 +260,14 @@ describe('MemberDetail', () => {
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
 
     const user = MOCKS1[0].result.data.user;
+    const dicebearUrl = `https://api.dicebear.com/5.x/initials/svg?seed=${user?.firstName}%20${user?.lastName}`;
 
-    await waitFor(() =>
-      expect(screen.getByTestId('userImageAbsent')).toBeInTheDocument(),
-    );
-    await waitFor(() =>
+    await waitFor(() => {
+      expect(screen.getByTestId('userImageAbsent')).toBeInTheDocument();
       expect(screen.getByTestId('userImageAbsent').getAttribute('src')).toBe(
-        `https://api.dicebear.com/5.x/initials/svg?seed=${user?.firstName} ${user?.lastName}`,
-      ),
-    );
+        dicebearUrl,
+      );
+    });
   });
 
   test('Should display image if image is present', async () => {
