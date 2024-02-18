@@ -342,7 +342,7 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -365,7 +365,7 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await act(async () => {
@@ -398,7 +398,7 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await act(async () => {
       userEvent.click(screen.getByTestId('userFilter'));
@@ -431,7 +431,7 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await act(async () => {
       userEvent.click(screen.getByTestId('userFilter'));
@@ -472,7 +472,7 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await act(async () => {
@@ -513,7 +513,7 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -534,7 +534,7 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     await act(async () => {
@@ -564,7 +564,7 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await act(async () => {
@@ -592,7 +592,7 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await act(async () => {
       userEvent.click(screen.getByTestId('userFilter'));
@@ -618,7 +618,7 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     const input = screen.getByPlaceholderText('Search By First Name');
@@ -627,7 +627,7 @@ describe('Testing Block/Unblock user screen', () => {
     });
     await wait(700);
     expect(
-      screen.getByText(`No results found for "Peter"`)
+      screen.getByText(`No results found for "Peter"`),
     ).toBeInTheDocument();
     expect(window.location).toBeAt('/blockuser/id=orgid');
   });
@@ -645,7 +645,7 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     const searchBar = screen.getByTestId(/searchByName/i);

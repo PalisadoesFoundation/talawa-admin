@@ -79,14 +79,14 @@ function orgPost(): JSX.Element {
   const [create, { loading: createPostLoading }] =
     useMutation(CREATE_POST_MUTATION);
   const [displayedPosts, setDisplayedPosts] = useState(
-    orgPostListData?.postsByOrganizationConnection.edges || []
+    orgPostListData?.postsByOrganizationConnection.edges || [],
   );
 
   useEffect(() => {
     if (orgPostListData && orgPostListData.postsByOrganizationConnection) {
       const newDisplayedPosts = sortPosts(
         orgPostListData.postsByOrganizationConnection.edges,
-        sortingOption
+        sortingOption,
       );
       setDisplayedPosts(newDisplayedPosts);
     }
@@ -148,7 +148,7 @@ function orgPost(): JSX.Element {
     window.location.assign('/orglist');
   }
   const handleAddMediaChange = async (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
     setPostFormState((prevPostFormState) => ({
       ...prevPostFormState,
@@ -184,19 +184,19 @@ function orgPost(): JSX.Element {
 
   const sortPosts = (
     posts: InterfaceOrgPost[],
-    sortingOption: string
+    sortingOption: string,
   ): InterfaceOrgPost[] => {
     const sortedPosts = [...posts];
 
     if (sortingOption === 'latest') {
       sortedPosts.sort(
         (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       );
     } else if (sortingOption === 'oldest') {
       sortedPosts.sort(
         (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
       );
     }
 
@@ -338,7 +338,7 @@ function orgPost(): JSX.Element {
                       postVideo={datas.videoUrl}
                       pinned={datas.pinned}
                     />
-                  )
+                  ),
                 )
               ) : (
                 <NotFound title="post" keyPrefix="postNotFound" />
@@ -434,7 +434,7 @@ function orgPost(): JSX.Element {
                       addMedia: '',
                     });
                     const fileInput = document.getElementById(
-                      'addMedia'
+                      'addMedia',
                     ) as HTMLInputElement;
                     if (fileInput) {
                       fileInput.value = '';

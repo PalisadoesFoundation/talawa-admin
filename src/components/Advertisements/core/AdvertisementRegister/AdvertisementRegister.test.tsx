@@ -75,7 +75,7 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 
 const translations = JSON.parse(
   // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-  JSON.stringify(i18n.getDataByLanguage('en')?.translation.advertisement!)
+  JSON.stringify(i18n.getDataByLanguage('en')?.translation.advertisement!),
 );
 
 describe('Testing Advertisement Register Component', () => {
@@ -117,7 +117,7 @@ describe('Testing Advertisement Register Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>
+      </ApolloProvider>,
     );
     await waitFor(() => {
       expect(getByText(translations.addNew)).toBeInTheDocument();
@@ -144,7 +144,7 @@ describe('Testing Advertisement Register Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>
+      </ApolloProvider>,
     );
     await waitFor(() => {
       expect(screen.getByTestId('editBtn')).toBeInTheDocument();
@@ -170,7 +170,7 @@ describe('Testing Advertisement Register Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>
+      </ApolloProvider>,
     );
     await waitFor(() => {
       fireEvent.click(getByText(translations.addNew));
@@ -202,7 +202,7 @@ describe('Testing Advertisement Register Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     fireEvent.click(getByText(translations.addNew));
@@ -212,14 +212,14 @@ describe('Testing Advertisement Register Component', () => {
       target: { value: 'Test Advertisement' },
     });
     expect(getByLabelText(translations.Rname)).toHaveValue(
-      'Test Advertisement'
+      'Test Advertisement',
     );
 
     fireEvent.change(getByLabelText(translations.Rlink), {
       target: { value: 'http://example.com' },
     });
     expect(getByLabelText(translations.Rlink)).toHaveValue(
-      'http://example.com'
+      'http://example.com',
     );
 
     fireEvent.change(getByLabelText(translations.Rtype), {
@@ -241,7 +241,7 @@ describe('Testing Advertisement Register Component', () => {
     await waitFor(() => {
       // Assert the success toast and setTimeout
       expect(toast.success).toBeCalledWith(
-        'Advertisement created successfully'
+        'Advertisement created successfully',
       );
       expect(setTimeoutSpy).toHaveBeenCalled();
     });
@@ -268,7 +268,7 @@ describe('Testing Advertisement Register Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     fireEvent.click(getByText(translations.addNew));
@@ -277,7 +277,7 @@ describe('Testing Advertisement Register Component', () => {
     fireEvent.click(getByText(translations.register));
     await waitFor(() => {
       expect(toast.warn).toBeCalledWith(
-        'Link is invalid. Please enter a valid link'
+        'Link is invalid. Please enter a valid link',
       );
     });
   });
@@ -301,7 +301,7 @@ describe('Testing Advertisement Register Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     fireEvent.click(getByText(translations.addNew));
@@ -310,14 +310,14 @@ describe('Testing Advertisement Register Component', () => {
       target: { value: 'Test Advertisement' },
     });
     expect(getByLabelText(translations.Rname)).toHaveValue(
-      'Test Advertisement'
+      'Test Advertisement',
     );
 
     fireEvent.change(getByLabelText(translations.Rlink), {
       target: { value: 'http://example.com' },
     });
     expect(getByLabelText(translations.Rlink)).toHaveValue(
-      'http://example.com'
+      'http://example.com',
     );
 
     fireEvent.change(getByLabelText(translations.Rtype), {
@@ -338,7 +338,7 @@ describe('Testing Advertisement Register Component', () => {
     fireEvent.click(getByText(translations.register));
     await waitFor(() => {
       expect(toast.error).toBeCalledWith(
-        'End date must be greater than or equal to start date'
+        'End date must be greater than or equal to start date',
       );
     });
   });
@@ -362,7 +362,7 @@ describe('Testing Advertisement Register Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     fireEvent.click(getByText(translations.edit));
@@ -371,14 +371,14 @@ describe('Testing Advertisement Register Component', () => {
       target: { value: 'Test Advertisement' },
     });
     expect(getByLabelText(translations.Rname)).toHaveValue(
-      'Test Advertisement'
+      'Test Advertisement',
     );
 
     fireEvent.change(getByLabelText(translations.Rlink), {
       target: { value: 'http://example.com' },
     });
     expect(getByLabelText(translations.Rlink)).toHaveValue(
-      'http://example.com'
+      'http://example.com',
     );
 
     fireEvent.change(getByLabelText(translations.Rtype), {
@@ -399,7 +399,7 @@ describe('Testing Advertisement Register Component', () => {
     fireEvent.click(getByText(translations.saveChanges));
     await waitFor(() => {
       expect(toast.error).toBeCalledWith(
-        'End date must be greater than or equal to start date'
+        'End date must be greater than or equal to start date',
       );
     });
   });
