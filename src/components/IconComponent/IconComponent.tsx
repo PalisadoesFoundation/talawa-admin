@@ -89,7 +89,12 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
         />
       );
     case 'Advertisement':
-      return <PostsIcon stroke={props.fill} />;
+      return (
+        <PostsIcon
+          data-testid="Icon-Component-Advertisement"
+          stroke={props.fill}
+        />
+      );
     default:
       return (
         <QuestionMarkOutlined
