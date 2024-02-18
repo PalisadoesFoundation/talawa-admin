@@ -4,7 +4,7 @@ const currentOrg = window.location.href.split('=')[1];
 
 const reducer = (
   state = INITIAL_STATE,
-  action: InterfaceAction
+  action: InterfaceAction,
 ): typeof INITIAL_STATE => {
   switch (action.type) {
     case 'UPDATE_TARGETS': {
@@ -14,12 +14,12 @@ const reducer = (
     }
     case 'UPDATE_P_TARGETS': {
       const oldTargets: any = INITIAL_STATE.targets.filter(
-        (target: any) => target.name === 'Plugins'
+        (target: any) => target.name === 'Plugins',
       )[0].subTargets;
       return Object.assign({}, INITIAL_STATE, {
         targets: [
           ...INITIAL_STATE.targets.filter(
-            (target: any) => target.name !== 'Plugins'
+            (target: any) => target.name !== 'Plugins',
           ),
           Object.assign(
             {},
@@ -28,7 +28,7 @@ const reducer = (
               comp_id: null,
               component: null,
               subTargets: [...action.payload, ...oldTargets],
-            }
+            },
           ),
         ],
       });

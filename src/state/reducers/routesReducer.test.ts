@@ -7,7 +7,7 @@ describe('Testing Routes reducer', () => {
       reducer(undefined, {
         type: '',
         payload: undefined,
-      })
+      }),
     ).toEqual({
       targets: [
         { name: 'My Organizations', url: '/orglist/id=undefined' },
@@ -87,7 +87,7 @@ describe('Testing Routes reducer', () => {
       reducer(undefined, {
         type: 'UPDATE_TARGETS',
         payload: { test: 'testupdate' },
-      })
+      }),
     ).toEqual({
       targets: [
         { name: 'My Organizations', url: '/orglist/id=undefined' },
@@ -165,7 +165,7 @@ describe('Testing Routes reducer', () => {
       reducer(undefined, {
         type: 'UPDATE_P_TARGETS',
         payload: [{ name: 'test-target-plugin', content: 'plugin-new' }],
-      })
+      }),
     ).toEqual({
       targets: [
         { name: 'My Organizations', url: '/orglist/id=undefined' },

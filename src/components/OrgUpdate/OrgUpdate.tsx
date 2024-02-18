@@ -94,7 +94,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
         address: data.organizations[0].address,
       });
       setuserRegistrationRequiredChecked(
-        data.organizations[0].userRegistrationRequired
+        data.organizations[0].userRegistrationRequired,
       );
       setVisibleChecked(data.organizations[0].visibleInSearch);
     }
@@ -290,7 +290,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
                 checked={userRegistrationRequiredChecked}
                 onChange={(): void =>
                   setuserRegistrationRequiredChecked(
-                    !userRegistrationRequiredChecked
+                    !userRegistrationRequiredChecked,
                   )
                 }
               />
