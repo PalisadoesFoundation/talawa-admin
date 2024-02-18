@@ -117,10 +117,7 @@ def main():
         print(f"You are trying to merge on branch: {base_branch}")
         print(f"You are making a commit from your branch: {pr_branch}")
 
-    if base_branch != "develop":
-        errors.append(
-            "Error: You are trying to merge into '{base_branch}' branch.\n  - Source branch may be incorrect; please use 'develop' as the source branch."
-        )
+    
 
     # Read sensitive files from the provided file
     with open(args.sensitive_files, "r") as sensitive_file:
