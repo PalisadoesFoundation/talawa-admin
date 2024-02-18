@@ -6,7 +6,10 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
-import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  ADD_ADMIN_MUTATION,
+  UPDATE_USERTYPE_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -52,6 +55,20 @@ const MOCKS1 = [
       variables: {
         userid: '123',
         orgid: '456',
+      },
+    },
+    result: {
+      data: {
+        success: true,
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_USERTYPE_MUTATION,
+      variables: {
+        id: '123',
+        userType: 'Admin',
       },
     },
     result: {
@@ -138,7 +155,7 @@ describe('MemberDetail', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
@@ -148,7 +165,7 @@ describe('MemberDetail', () => {
 
     expect(screen.getByTestId('dashboardTitleBtn')).toBeInTheDocument();
     expect(screen.getByTestId('dashboardTitleBtn')).toHaveTextContent(
-      'User Details'
+      'User Details',
     );
     expect(screen.getAllByText(/Email/i)).toBeTruthy();
     expect(screen.getAllByText(/Main/i)).toBeTruthy();
@@ -168,6 +185,14 @@ describe('MemberDetail', () => {
     expect(screen.getAllByText(/Role/i)).toHaveLength(2);
     expect(screen.getAllByText(/Created/i)).toHaveLength(4);
     expect(screen.getAllByText(/Joined/i)).toHaveLength(2);
+    expect(screen.getByTestId('addAdminBtn')).toBeInTheDocument();
+    const addAdminBtn = MOCKS1[2].request.variables.userType;
+    // if the button is not disabled
+    expect(screen.getByTestId('addAdminBtn').getAttribute('disabled')).toBe(
+      addAdminBtn == 'ADMIN' || addAdminBtn == 'SUPERADMIN'
+        ? expect.anything()
+        : null,
+    );
     expect(screen.getByTestId('stateBtn')).toBeInTheDocument();
     userEvent.click(screen.getByTestId('stateBtn'));
   });
@@ -176,7 +201,7 @@ describe('MemberDetail', () => {
     // If the date is provided
     const datePretty = jest.fn(prettyDate);
     expect(datePretty('2023-02-18T09:22:27.969Z')).toBe(
-      prettyDate('2023-02-18T09:22:27.969Z')
+      prettyDate('2023-02-18T09:22:27.969Z'),
     );
     // If there's some error in formatting the date
     expect(datePretty('')).toBe('Unavailable');
@@ -204,7 +229,7 @@ describe('MemberDetail', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
@@ -212,12 +237,12 @@ describe('MemberDetail', () => {
     const user = MOCKS1[0].result.data.user;
 
     waitFor(() =>
-      expect(screen.getByTestId('userImageAbsent')).toBeInTheDocument()
+      expect(screen.getByTestId('userImageAbsent')).toBeInTheDocument(),
     );
     waitFor(() =>
       expect(screen.getByTestId('userImageAbsent').getAttribute('src')).toBe(
-        `https://api.dicebear.com/5.x/initials/svg?seed=${user?.firstName} ${user?.lastName}`
-      )
+        `https://api.dicebear.com/5.x/initials/svg?seed=${user?.firstName} ${user?.lastName}`,
+      ),
     );
   });
 
@@ -235,7 +260,7 @@ describe('MemberDetail', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
@@ -243,12 +268,12 @@ describe('MemberDetail', () => {
     const user = MOCKS2[0].result.data.user;
 
     waitFor(() =>
-      expect(screen.getByTestId('userImagePresent')).toBeInTheDocument()
+      expect(screen.getByTestId('userImagePresent')).toBeInTheDocument(),
     );
     waitFor(() =>
       expect(screen.getByTestId('userImagePresent').getAttribute('src')).toBe(
-        user?.image
-      )
+        user?.image,
+      ),
     );
   });
 
@@ -265,7 +290,7 @@ describe('MemberDetail', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
@@ -286,10 +311,10 @@ describe('MemberDetail', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     waitFor(() =>
-      expect(screen.getByTestId('adminApproved')).toHaveTextContent('Yes')
+      expect(screen.getByTestId('adminApproved')).toHaveTextContent('Yes'),
     );
   });
 
@@ -306,7 +331,7 @@ describe('MemberDetail', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     waitFor(() => {

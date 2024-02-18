@@ -19,6 +19,7 @@ import dayjs from 'dayjs';
 import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
 import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
+import useLocalStorage from 'utils/useLocalstorage';
 
 const timeToDayJs = (time: string): Dayjs => {
   const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
@@ -29,6 +30,8 @@ function organizationEvents(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationEvents',
   });
+
+  const { getItem } = useLocalStorage();
 
   document.title = t('title');
   const [eventmodalisOpen, setEventModalIsOpen] = useState(false);
@@ -68,20 +71,20 @@ function organizationEvents(): JSX.Element {
         description_contains: '',
         location_contains: '',
       },
-    }
+    },
   );
 
   const { data: orgData } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: currentUrl },
   });
 
-  const userId = localStorage.getItem('id') as string;
-  const userRole = localStorage.getItem('UserType') as string;
+  const userId = getItem('id') as string;
+  const userRole = getItem('UserType') as string;
 
   const [create, { loading: loading2 }] = useMutation(CREATE_EVENT_MUTATION);
 
   const createEvent = async (
-    e: ChangeEvent<HTMLFormElement>
+    e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
     if (
@@ -241,7 +244,7 @@ function organizationEvents(): JSX.Element {
                       setStartDate(date?.toDate());
                       setEndDate(
                         endDate &&
-                          (endDate < date?.toDate() ? date?.toDate() : endDate)
+                          (endDate < date?.toDate() ? date?.toDate() : endDate),
                       );
                     }
                   }}

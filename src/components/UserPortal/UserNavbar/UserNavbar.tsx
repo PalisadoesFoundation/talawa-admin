@@ -13,6 +13,7 @@ import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useHistory } from 'react-router-dom';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 
+
 function userNavbar(): JSX.Element {
   const history = useHistory();
 
@@ -20,11 +21,13 @@ function userNavbar(): JSX.Element {
     keyPrefix: 'userNavbar',
   });
 
+  const { getItem } = useLocalStorage();
+
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
 
   const [currentLanguageCode, setCurrentLanguageCode] = React.useState(
     /* istanbul ignore next */
-    cookies.get('i18next') || 'en'
+    cookies.get('i18next') || 'en',
   );
 
   const [userName, setUserName] = React.useState('');

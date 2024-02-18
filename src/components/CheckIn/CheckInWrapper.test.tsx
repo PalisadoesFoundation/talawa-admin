@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { CheckInWrapper } from './CheckInWrapper';
 import { BrowserRouter } from 'react-router-dom';
@@ -21,7 +21,7 @@ describe('Testing CheckIn Wrapper', () => {
   };
 
   test('The button to open and close the modal should work properly', async () => {
-    const { queryByText } = render(
+    render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -33,26 +33,23 @@ describe('Testing CheckIn Wrapper', () => {
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     // Open the modal
-    fireEvent.click(queryByText('Check In Registrants') as Element);
+    fireEvent.click(screen.getByLabelText('checkInRegistrants') as Element);
 
     await waitFor(() =>
-      expect(queryByText('Event Check In Management')).toBeInTheDocument()
+      expect(screen.queryByTestId('modal-title')).toBeInTheDocument(),
     );
 
-    /* 
-    TODO 
-    The following test of closing the modal should be uncommented when the memory leak issue of MUI Data Grid is fixed.
+    //  Close the modal
+    const closebtn = screen.getByLabelText('Close');
 
-    It will consequently ensure 100% coverage of the file. 
-    */
-    // Close the modal
-    // fireEvent.click(queryByRole('button', { name: /close/i }) as HTMLElement);
-    // await waitFor(() =>
-    //   expect(queryByText('Event Check In Management')).not.toBeInTheDocument()
-    // );
+    fireEvent.click(closebtn as Element);
+
+    await waitFor(() =>
+      expect(screen.queryByTestId('modal-title')).not.toBeInTheDocument(),
+    );
   });
 });

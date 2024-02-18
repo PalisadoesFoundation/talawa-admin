@@ -22,8 +22,8 @@ interface InterfaceEventListCardProps {
   eventDescription: string;
   regDate: string;
   regEndDate: string;
-  startTime: string;
-  endTime: string;
+  startTime: string | undefined;
+  endTime: string | undefined;
   allDay: boolean;
   recurring: boolean;
   isPublic: boolean;
@@ -103,7 +103,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   };
 
   const updateEventHandler = async (
-    e: ChangeEvent<HTMLFormElement>
+    e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
 

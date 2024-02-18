@@ -11,6 +11,7 @@ import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
 import { EventStatsWrapper } from 'components/EventStats/EventStatsWrapper';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
+import useLocalStorage from 'utils/useLocalstorage';
 
 export interface InterfaceLeftDrawerProps {
   event: {
@@ -30,11 +31,13 @@ const leftDrawerEvent = ({
   hideDrawer,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
-  const userType = localStorage.getItem('UserType');
-  const firstName = localStorage.getItem('FirstName');
-  const lastName = localStorage.getItem('LastName');
-  const userImage = localStorage.getItem('UserImage');
-  const userId = localStorage.getItem('id');
+
+  const { getItem } = useLocalStorage();
+  const userType = getItem('UserType');
+  const firstName = getItem('FirstName');
+  const lastName = getItem('LastName');
+  const userImage = getItem('UserImage');
+  const userId = getItem('id');
 
   const history = useHistory();
   const logout = (): void => {
@@ -50,8 +53,8 @@ const leftDrawerEvent = ({
           hideDrawer === null
             ? styles.hideElemByDefault
             : hideDrawer
-            ? styles.inactiveDrawer
-            : styles.activeDrawer
+              ? styles.inactiveDrawer
+              : styles.activeDrawer
         }`}
         data-testid="leftDrawerContainer"
       >

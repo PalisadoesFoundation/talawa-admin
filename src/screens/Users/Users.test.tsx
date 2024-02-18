@@ -13,6 +13,9 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import Users from './Users';
 import { EMPTY_MOCKS, MOCKS, MOCKS2 } from './UsersMocks';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem } = useLocalStorage();
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_MOCKS, true);
@@ -26,10 +29,10 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 beforeEach(() => {
-  localStorage.setItem('id', '123');
-  localStorage.setItem('UserType', 'SUPERADMIN');
-  localStorage.setItem('FirstName', 'John');
-  localStorage.setItem('LastName', 'Doe');
+  setItem('id', '123');
+  setItem('UserType', 'SUPERADMIN');
+  setItem('FirstName', 'John');
+  setItem('LastName', 'Doe');
 });
 
 afterEach(() => {
@@ -47,7 +50,7 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -56,8 +59,8 @@ describe('Testing Users screen', () => {
 
   test(`Component should be rendered properly when user is not superAdmin
   and or userId does not exists in localstorage`, async () => {
-    localStorage.setItem('UserType', 'ADMIN');
-    localStorage.setItem('id', '');
+    setItem('UserType', 'ADMIN');
+    setItem('id', '');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -67,7 +70,7 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -83,7 +86,7 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -99,7 +102,7 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -137,14 +140,14 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     const search = 'hello{enter}';
     await act(() =>
-      userEvent.type(screen.getByTestId(/searchByName/i), search)
+      userEvent.type(screen.getByTestId(/searchByName/i), search),
     );
   });
 
@@ -158,7 +161,7 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -176,12 +179,12 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait(200);
     expect(container.textContent).toMatch(
-      'Organizations not found, please create an organization through dashboard'
+      'Organizations not found, please create an organization through dashboard',
     );
   });
 
@@ -196,13 +199,13 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     expect(container.textContent).not.toMatch(
-      'Organizations not found, please create an organization through dashboard'
+      'Organizations not found, please create an organization through dashboard',
     );
   });
 
@@ -218,7 +221,7 @@ describe('Testing Users screen', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
 
       await wait();
@@ -254,7 +257,7 @@ describe('Testing Users screen', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
 
       await wait();
@@ -303,7 +306,7 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -317,7 +320,7 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
   });

@@ -171,12 +171,12 @@ describe('Testing Save Button', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgProfileFieldSettings />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
     expect(
-      screen.queryByText('Failed to fetch custom field')
+      screen.queryByText('Failed to fetch custom field'),
     ).toBeInTheDocument();
   });
   test('Saving Organization Custom Field', async () => {
@@ -186,7 +186,7 @@ describe('Testing Save Button', () => {
           <ToastContainer />
           <OrgProfileFieldSettings />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -202,13 +202,19 @@ describe('Testing Save Button', () => {
           <ToastContainer />
           <OrgProfileFieldSettings />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     userEvent.click(screen.getByTestId('saveChangesBtn'));
     await wait();
     expect(
-      screen.queryByText('Failed to add custom field')
+      screen.queryByText('Failed to add custom field'),
+    ).toBeInTheDocument();
+    await wait();
+    userEvent.type(screen.getByTestId('customFieldInput'), 'Age{enter}');
+    await wait();
+    expect(
+      screen.queryByText('Failed to add custom field'),
     ).toBeInTheDocument();
   });
 
@@ -218,7 +224,7 @@ describe('Testing Save Button', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgProfileFieldSettings />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -232,7 +238,7 @@ describe('Testing Save Button', () => {
         <I18nextProvider i18n={i18nForTest}>
           <OrgProfileFieldSettings />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -245,14 +251,14 @@ describe('Testing Save Button', () => {
           <ToastContainer />
           <OrgProfileFieldSettings />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
     userEvent.click(screen.getByTestId('removeCustomFieldBtn'));
     await wait();
     expect(
-      screen.queryByText('Field removed successfully')
+      screen.queryByText('Field removed successfully'),
     ).toBeInTheDocument();
   });
 
@@ -264,7 +270,7 @@ describe('Testing Save Button', () => {
           <ToastContainer />
           <OrgProfileFieldSettings />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     userEvent.click(screen.getByTestId('removeCustomFieldBtn'));

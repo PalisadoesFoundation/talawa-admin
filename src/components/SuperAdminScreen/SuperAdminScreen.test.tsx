@@ -9,6 +9,9 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceSuperAdminScreenProps } from './SuperAdminScreen';
 import SuperAdminScreen from './SuperAdminScreen';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem } = useLocalStorage();
 
 const props: InterfaceSuperAdminScreenProps = {
   title: 'Organizations',
@@ -18,7 +21,7 @@ const props: InterfaceSuperAdminScreenProps = {
 
 describe('Testing LeftDrawer in SuperAdminScreen', () => {
   test('Testing LeftDrawer in page functionality', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
 
     render(
       <MockedProvider addTypename={false}>
@@ -29,7 +32,7 @@ describe('Testing LeftDrawer in SuperAdminScreen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     // Resize window to trigger handleResize

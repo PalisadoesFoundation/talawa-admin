@@ -2,11 +2,14 @@ import React from 'react';
 import { MemoryRouter, Route } from 'react-router-dom';
 import { render, screen, waitFor } from '@testing-library/react';
 import SecuredRouteForUser from './SecuredRouteForUser';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem } = useLocalStorage();
 
 describe('SecuredRouteForUser', () => {
   test('renders the route when the user is logged in', () => {
     // Set the 'IsLoggedIn' value to 'TRUE' in localStorage to simulate a logged-in user
-    localStorage.setItem('IsLoggedIn', 'TRUE');
+    setItem('IsLoggedIn', 'TRUE');
 
     render(
       <MemoryRouter initialEntries={['/user/organizations']}>
@@ -23,7 +26,7 @@ describe('SecuredRouteForUser', () => {
             />
           )}
         />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     expect(screen.getByTestId('organizations-content')).toBeInTheDocument();
@@ -31,7 +34,7 @@ describe('SecuredRouteForUser', () => {
 
   test('redirects to /user when the user is not logged in', async () => {
     // Set the user as not logged in in local storage
-    localStorage.setItem('IsLoggedIn', 'FALSE');
+    setItem('IsLoggedIn', 'FALSE');
 
     render(
       <MemoryRouter initialEntries={['/secured']}>
@@ -44,7 +47,7 @@ describe('SecuredRouteForUser', () => {
             </SecuredRouteForUser>
           )}
         />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     await waitFor(() => {

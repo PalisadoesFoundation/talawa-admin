@@ -7,7 +7,7 @@ describe('Testing Plugin Reducer', () => {
       reducer(undefined, {
         type: '',
         payload: undefined,
-      })
+      }),
     ).toEqual({
       installed: [],
       addonStore: [],
@@ -21,8 +21,8 @@ describe('Testing Plugin Reducer', () => {
         {
           type: 'INSTALL_PLUGIN',
           payload: { name: 'testplug' },
-        }
-      )
+        },
+      ),
     ).toEqual({
       installed: [{ name: 'testplug' }],
       addonStore: [],
@@ -43,8 +43,8 @@ describe('Testing Plugin Reducer', () => {
         {
           type: 'REMOVE_PLUGIN',
           payload: { id: 3 },
-        }
-      )
+        },
+      ),
     ).toEqual({
       installed: [{ name: 'testplug3', id: 5 }],
       addonStore: [],
@@ -59,8 +59,8 @@ describe('Testing Plugin Reducer', () => {
           type: 'UPDATE_INSTALLED',
           //Here payload is expected to be as array
           payload: [{ name: 'testplug-updated' }],
-        }
-      )
+        },
+      ),
     ).toEqual({
       installed: [{ name: 'testplug-updated' }],
       addonStore: [],
@@ -75,8 +75,8 @@ describe('Testing Plugin Reducer', () => {
           type: 'UPDATE_STORE',
           //Here payload is expected to be as array
           payload: [{ name: 'sample-addon' }],
-        }
-      )
+        },
+      ),
     ).toEqual({
       installed: [],
       addonStore: [{ name: 'sample-addon' }],
@@ -91,8 +91,8 @@ describe('Testing Plugin Reducer', () => {
           type: 'UPDATE_EXTRAS',
           //Here payload is expected to be as array
           payload: [{ name: 'sample-addon-extra' }],
-        }
-      )
+        },
+      ),
     ).toEqual({
       installed: [],
       addonStore: [{ name: 'sample-addon-extra' }],

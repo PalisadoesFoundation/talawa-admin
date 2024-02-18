@@ -17,6 +17,9 @@ import { USER_ORGANIZATION_CONNECTION } from 'GraphQl/Queries/Queries';
 import { PLUGIN_SUBSCRIPTION } from 'GraphQl/Mutations/mutations';
 
 import { createMemoryHistory } from 'history';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem, removeItem } = useLocalStorage();
 
 const organizationId = 'org1234';
 
@@ -172,7 +175,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -200,7 +203,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </Provider>
           </Router>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     const peoplePlugin = screen.getByText('People');
@@ -222,7 +225,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -252,7 +255,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -276,7 +279,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -300,7 +303,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -324,7 +327,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -339,7 +342,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
   });
 
   test('Component should be rendered properly if plugins are present in localStorage', async () => {
-    localStorage.setItem('talawaPlugins', JSON.stringify(testPlugins));
+    setItem('talawaPlugins', JSON.stringify(testPlugins));
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -350,7 +353,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -359,11 +362,11 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
       expect(screen.queryByText(plugin.translated)).toBeInTheDocument();
     });
 
-    localStorage.removeItem('talawaPlugins');
+    removeItem('talawaPlugins');
   });
 
   test('should remove plugin if uninstalledOrgs contains organizationId', async () => {
-    localStorage.setItem('talawaPlugins', JSON.stringify(testPlugins));
+    setItem('talawaPlugins', JSON.stringify(testPlugins));
 
     render(
       <MockedProvider addTypename={false} link={link2}>
@@ -374,7 +377,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -385,7 +388,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
   });
 
   test('should render plugin if uninstalledOrgs does not contain organizationId', async () => {
-    localStorage.setItem('talawaPlugins', JSON.stringify(testPlugins));
+    setItem('talawaPlugins', JSON.stringify(testPlugins));
 
     render(
       <MockedProvider addTypename={false} link={link3}>
@@ -396,7 +399,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -416,7 +419,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();

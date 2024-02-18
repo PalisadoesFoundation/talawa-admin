@@ -26,11 +26,14 @@ import {
 import userEvent from '@testing-library/user-event';
 import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { ToastContainer } from 'react-toastify';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { getItem } = useLocalStorage();
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
   headers: {
-    authorization: 'Bearer ' + localStorage.getItem('token') || '',
+    authorization: 'Bearer ' + getItem('token') || '',
   },
 });
 
@@ -200,7 +203,7 @@ describe('Testing Advertisement Component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -208,22 +211,26 @@ describe('Testing Advertisement Component', () => {
     await userEvent.click(screen.getByText('Create new advertisement'));
     userEvent.type(
       screen.getByLabelText('Enter name of Advertisement'),
-      'Cookie Shop'
+      'Cookie Shop',
+    );
+    userEvent.click(
+      screen.getByLabelText('Provide a link for content to be displayed'),
     );
     userEvent.type(
       screen.getByLabelText('Provide a link for content to be displayed'),
-      'http://yourwebsite.com/photo'
+      'http://yourwebsite.com/photo',
     );
+    userEvent.click(screen.getByLabelText('Select type of Advertisement'));
     userEvent.selectOptions(
       screen.getByLabelText('Select type of Advertisement'),
-      'POPUP'
+      'POPUP',
     );
     userEvent.type(screen.getByLabelText('Select Start Date'), '2023-01-01');
     userEvent.type(screen.getByLabelText('Select End Date'), '2023-02-02');
 
     await userEvent.click(screen.getByTestId('addonregister'));
     expect(
-      await screen.findByText('Advertisement created successfully')
+      await screen.findByText('Advertisement created successfully'),
     ).toBeInTheDocument();
   });
 
@@ -266,7 +273,7 @@ describe('Testing Advertisement Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>
+      </ApolloProvider>,
     );
 
     await wait();
@@ -274,7 +281,7 @@ describe('Testing Advertisement Component', () => {
     const date = await screen.findAllByText(/Ends/i);
     const dateString = date[0].innerHTML;
     const dateMatch = dateString.match(
-      /\b(?:Sun|Mon|Tue|Wed|Thu|Fri|Sat)\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})\s+(\d{4})\b/
+      /\b(?:Sun|Mon|Tue|Wed|Thu|Fri|Sat)\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})\s+(\d{4})\b/,
     );
     let dateObject = new Date();
 
@@ -340,7 +347,7 @@ describe('Testing Advertisement Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>
+      </ApolloProvider>,
     );
 
     await wait();

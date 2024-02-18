@@ -198,7 +198,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -232,7 +232,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     async function debounceWait(ms = 200): Promise<void> {
       await act(() => {
@@ -259,7 +259,7 @@ describe('Organisation Post Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
 
       await wait();
@@ -293,7 +293,7 @@ describe('Organisation Post Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
 
       await wait();
@@ -328,7 +328,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -355,7 +355,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -384,7 +384,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -427,7 +427,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -458,7 +458,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -481,7 +481,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -511,7 +511,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -548,7 +548,7 @@ describe('Organisation Post Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
 
       await wait();
@@ -615,7 +615,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -625,13 +625,13 @@ describe('Organisation Post Page', () => {
     // Assert that the posts are sorted correctly
     expect(sortedPosts).toHaveLength(mockedPosts.length);
     expect(sortedPosts[0]).toHaveTextContent(
-      'postoneThis is the first po... Aditya Shelke'
+      'postoneThis is the first po... Aditya Shelke',
     );
     expect(sortedPosts[1]).toHaveTextContent(
-      'posttwoTis is the post two Aditya Shelke'
+      'posttwoTis is the post two Aditya Shelke',
     );
     expect(sortedPosts[2]).toHaveTextContent(
-      'posttwoTis is the post two Aditya Shelke'
+      'posttwoTis is the post two Aditya Shelke',
     );
   });
 });

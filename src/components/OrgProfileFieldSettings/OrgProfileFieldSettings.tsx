@@ -39,7 +39,7 @@ const OrgProfileFieldSettings = (): any => {
       variables: {
         customFieldsByOrganizationId: currentOrgId,
       },
-    }
+    },
   );
 
   const handleSave = async (): Promise<void> => {
@@ -54,7 +54,7 @@ const OrgProfileFieldSettings = (): any => {
       setCustomFieldData({ type: '', name: '' });
       refetch();
     } catch (error) {
-      toast.success((error as Error).message);
+      toast.error((error as Error).message);
     }
   };
 
@@ -91,7 +91,7 @@ const OrgProfileFieldSettings = (): any => {
                   name: string;
                   type: string;
                 },
-                index: number
+                index: number,
               ) => (
                 <tr key={index}>
                   <td>{field.name}</td>
@@ -108,7 +108,7 @@ const OrgProfileFieldSettings = (): any => {
                     </Button>
                   </td>
                 </tr>
-              )
+              ),
             )}
           </tbody>
         </table>
@@ -132,6 +132,12 @@ const OrgProfileFieldSettings = (): any => {
                       ...customFieldData,
                       name: event.target.value,
                     });
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      event.preventDefault();
+                      handleSave();
+                    }
                   }}
                 />
               </div>

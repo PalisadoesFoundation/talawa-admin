@@ -14,6 +14,9 @@ import { SearchOutlined } from '@mui/icons-material';
 import styles from './Organizations.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { getItem } = useLocalStorage();
 
 interface InterfaceOrganizationCardProps {
   id: string;
@@ -38,7 +41,7 @@ export default function organizations(): JSX.Element {
     t('createdOrganizations'),
   ];
 
-  const userId: string | null = localStorage.getItem('userId');
+  const userId: string | null = getItem('userId');
 
   const {
     data,
@@ -59,14 +62,14 @@ export default function organizations(): JSX.Element {
   /* istanbul ignore next */
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
+    newPage: number,
   ): void => {
     setPage(newPage);
   };
 
   /* istanbul ignore next */
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     const newRowsPerPage = event.target.value;
 
@@ -188,7 +191,7 @@ export default function organizations(): JSX.Element {
                     (rowsPerPage > 0
                       ? organizations.slice(
                           page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage
+                          page * rowsPerPage + rowsPerPage,
                         )
                       : /* istanbul ignore next */
                         organizations

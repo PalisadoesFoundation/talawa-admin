@@ -11,6 +11,9 @@ import LeftDrawer from './LeftDrawer';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { MockedProvider } from '@apollo/react-testing';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem } = useLocalStorage();
 
 const props = {
   hideDrawer: true,
@@ -47,11 +50,11 @@ jest.mock('react-toastify', () => ({
 }));
 
 beforeEach(() => {
-  localStorage.setItem('FirstName', 'John');
-  localStorage.setItem('LastName', 'Doe');
-  localStorage.setItem(
+  setItem('FirstName', 'John');
+  setItem('LastName', 'Doe');
+  setItem(
     'UserImage',
-    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe'
+    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
   );
 });
 
@@ -62,8 +65,8 @@ afterEach(() => {
 
 describe('Testing Left Drawer component for SUPERADMIN', () => {
   test('Component should be rendered properly', () => {
-    localStorage.setItem('UserImage', '');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserImage', '');
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -71,7 +74,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
             <LeftDrawer {...propsOrg} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     expect(screen.getByText('My Organizations')).toBeInTheDocument();
@@ -86,10 +89,10 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     const rolesBtn = screen.getByTestId(/rolesBtn/i);
 
     expect(
-      orgsBtn.className.includes('text-white btn btn-success')
+      orgsBtn.className.includes('text-white btn btn-success'),
     ).toBeTruthy();
     expect(
-      rolesBtn.className.includes('text-secondary btn btn-light')
+      rolesBtn.className.includes('text-secondary btn btn-light'),
     ).toBeTruthy();
 
     // Coming soon
@@ -101,7 +104,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing in roles screen', () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -109,22 +112,22 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
             <LeftDrawer {...propsUsers} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     const orgsBtn = screen.getByTestId(/orgsBtn/i);
     const rolesBtn = screen.getByTestId(/rolesBtn/i);
 
     expect(
-      orgsBtn.className.includes('text-secondary btn btn-light')
+      orgsBtn.className.includes('text-secondary btn btn-light'),
     ).toBeTruthy();
     expect(
-      rolesBtn.className.includes('text-white btn btn-success')
+      rolesBtn.className.includes('text-white btn btn-success'),
     ).toBeTruthy();
   });
 
   test('Testing Drawer when hideDrawer is null', () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -132,12 +135,12 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
             <LeftDrawer {...propsUsers} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
   });
 
   test('Testing logout functionality', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -145,7 +148,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
             <LeftDrawer {...propsOrg} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     userEvent.click(screen.getByTestId('logoutBtn'));
     expect(localStorage.clear).toHaveBeenCalled();
@@ -155,7 +158,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
 
 describe('Testing Left Drawer component for ADMIN', () => {
   test('Components should be rendered properly', () => {
-    localStorage.setItem('UserType', 'ADMIN');
+    setItem('UserType', 'ADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -163,7 +166,7 @@ describe('Testing Left Drawer component for ADMIN', () => {
             <LeftDrawer {...propsOrg} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     expect(screen.getByText('My Organizations')).toBeInTheDocument();
@@ -176,7 +179,7 @@ describe('Testing Left Drawer component for ADMIN', () => {
     const orgsBtn = screen.getByTestId(/orgsBtn/i);
 
     expect(
-      orgsBtn.className.includes('text-white btn btn-success')
+      orgsBtn.className.includes('text-white btn btn-success'),
     ).toBeTruthy();
 
     // These screens arent meant for admins so they should not be present
