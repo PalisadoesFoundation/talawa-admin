@@ -68,13 +68,13 @@ describe('Testing Event Dashboard Screen', () => {
             <EventDashboard />
           </LocalizationProvider>
         </MockedProvider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
     await waitFor(() => expect(queryAllByText('Event Title').length).toBe(2));
 
     await waitFor(() =>
-      expect(queryAllByText('Event Description').length).toBe(2)
+      expect(queryAllByText('Event Description').length).toBe(2),
     );
 
     await waitFor(() => expect(queryByText('India')).toBeInTheDocument());
@@ -95,7 +95,7 @@ describe('Testing Event Dashboard Screen', () => {
             <EventDashboard />
           </LocalizationProvider>
         </MockedProvider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
     await waitFor(() => expect(queryAllByText('Event Title').length).toBe(2));

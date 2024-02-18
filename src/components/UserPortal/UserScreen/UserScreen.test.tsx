@@ -24,7 +24,7 @@ describe('Testing UserScreen Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     // Check childrens are in the document

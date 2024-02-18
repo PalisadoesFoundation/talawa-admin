@@ -50,8 +50,8 @@ const userScreen = ({
           hideDrawer === null
             ? ''
             : hideDrawer
-            ? styles.expand
-            : styles.contract
+              ? styles.expand
+              : styles.contract
         } `}
         data-testid="childrenContainer"
       >

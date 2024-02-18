@@ -41,7 +41,7 @@ export default function donate(): JSX.Element {
     ORGANIZATION_DONATION_CONNECTION_LIST,
     {
       variables: { orgId: organizationId },
-    }
+    },
   );
 
   const { data } = useQuery(USER_ORGANIZATION_CONNECTION, {
@@ -51,14 +51,14 @@ export default function donate(): JSX.Element {
   /* istanbul ignore next */
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
+    newPage: number,
   ): void => {
     setPage(newPage);
   };
 
   /* istanbul ignore next */
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     const newRowsPerPage = event.target.value;
 
@@ -150,7 +150,7 @@ export default function donate(): JSX.Element {
                         (rowsPerPage > 0
                           ? donations.slice(
                               page * rowsPerPage,
-                              page * rowsPerPage + rowsPerPage
+                              page * rowsPerPage + rowsPerPage,
                             )
                           : /* istanbul ignore next */
                             donations

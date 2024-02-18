@@ -43,7 +43,7 @@ export default function people(): JSX.Element {
         orgId: organizationId,
         firstName_contains: '',
       },
-    }
+    },
   );
 
   const { data: data2 } = useQuery(ORGANIZATION_ADMINS_LIST, {
@@ -53,14 +53,14 @@ export default function people(): JSX.Element {
   /* istanbul ignore next */
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
+    newPage: number,
   ): void => {
     setPage(newPage);
   };
 
   /* istanbul ignore next */
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     const newRowsPerPage = event.target.value;
 
@@ -173,7 +173,7 @@ export default function people(): JSX.Element {
                       (rowsPerPage > 0
                         ? members.slice(
                             page * rowsPerPage,
-                            page * rowsPerPage + rowsPerPage
+                            page * rowsPerPage + rowsPerPage,
                           )
                         : /* istanbul ignore next */
                           members

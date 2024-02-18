@@ -56,8 +56,8 @@ function orgLeftDrawer({
         hideDrawer === null
           ? styles.hideElemByDefault
           : hideDrawer
-          ? styles.inactiveDrawer
-          : styles.activeDrawer
+            ? styles.inactiveDrawer
+            : styles.activeDrawer
       }`}
     >
       <div className={styles.brandingContainer}>

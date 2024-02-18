@@ -249,7 +249,7 @@ describe('Testing OrgLeftDrawer component [User Portal]', () => {
             <OrgLeftDrawer {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     expect(getByTestId('talawaLogo')).toBeInTheDocument();
@@ -273,7 +273,7 @@ describe('Testing OrgLeftDrawer component [User Portal]', () => {
             <OrgLeftDrawer {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -290,7 +290,7 @@ describe('Testing OrgLeftDrawer component [User Portal]', () => {
             <OrgLeftDrawer {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     fireEvent.click(getByText('Posts'));
@@ -308,7 +308,7 @@ describe('Testing OrgLeftDrawer component [User Portal]', () => {
             <OrgLeftDrawer {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
   });
@@ -321,7 +321,7 @@ describe('Testing OrgLeftDrawer component [User Portal]', () => {
             <OrgLeftDrawer {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     fireEvent.click(getByText('Sign out'));

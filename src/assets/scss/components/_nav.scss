@@ -4,8 +4,10 @@ $nav-link-font-size: null;
 $nav-link-font-weight: null;
 $nav-link-color: var(--#{$prefix}link-color);
 $nav-link-hover-color: var(--#{$prefix}link-hover-color);
-$nav-link-transition: color 0.15s ease-in-out,
-  background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+$nav-link-transition:
+  color 0.15s ease-in-out,
+  background-color 0.15s ease-in-out,
+  border-color 0.15s ease-in-out;
 $nav-link-disabled-color: var(--#{$prefix}secondary-color);
 $nav-link-focus-box-shadow: $focus-ring-box-shadow;
 

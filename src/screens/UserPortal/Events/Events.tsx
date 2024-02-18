@@ -131,7 +131,7 @@ export default function events(): JSX.Element {
   /* istanbul ignore next */
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
+    newPage: number,
   ): void => {
     setPage(newPage);
   };
@@ -141,7 +141,7 @@ export default function events(): JSX.Element {
 
   /* istanbul ignore next */
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     const newRowsPerPage = event.target.value;
 
@@ -169,19 +169,19 @@ export default function events(): JSX.Element {
   };
 
   const handleEventTitleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     setEventTitle(event.target.value);
   };
 
   const handleEventLocationChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     setEventLocation(event.target.value);
   };
 
   const handleEventDescriptionChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     setEventDescription(event.target.value);
   };
@@ -278,7 +278,7 @@ export default function events(): JSX.Element {
                         (rowsPerPage > 0
                           ? events.slice(
                               page * rowsPerPage,
-                              page * rowsPerPage + rowsPerPage
+                              page * rowsPerPage + rowsPerPage,
                             )
                           : /* istanbul ignore next */
                             events

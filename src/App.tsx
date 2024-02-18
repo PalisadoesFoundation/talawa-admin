@@ -88,7 +88,7 @@ function app(): JSX.Element {
           component={extraComponent}
         />
       );
-    }
+    },
   );
 
   if (loading) {

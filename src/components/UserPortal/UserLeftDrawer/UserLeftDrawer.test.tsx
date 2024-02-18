@@ -124,7 +124,7 @@ describe('Testing UserLeftDrawer Component [User Portal]', () => {
             <UserLeftDrawer {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -151,7 +151,7 @@ describe('Testing UserLeftDrawer Component [User Portal]', () => {
             <UserLeftDrawer {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -167,7 +167,7 @@ describe('Testing UserLeftDrawer Component [User Portal]', () => {
             <UserLeftDrawer {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -183,7 +183,7 @@ describe('Testing UserLeftDrawer Component [User Portal]', () => {
             <UserLeftDrawer {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
 
@@ -203,7 +203,7 @@ describe('Testing UserLeftDrawer Component [User Portal]', () => {
             <UserLeftDrawer {...{ ...props, screenName: 'Settings' }} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
 
@@ -220,7 +220,7 @@ describe('Testing UserLeftDrawer Component [User Portal]', () => {
             <UserLeftDrawer {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     fireEvent.click(getByText('Sign out'));
