@@ -55,7 +55,9 @@
   outline: none;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
   width: 100%;
 }
 
@@ -77,7 +79,8 @@
 }
 
 .actionItemStatusBadge {
-  width: 8rem;
+  width: 5.5rem;
+  margin-left: 1.1rem;
 }
 
 .titlemodal {

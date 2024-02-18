@@ -41,7 +41,7 @@ jest.mock('react-toastify', () => ({
 jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
   return {
     DateTimePicker: jest.requireActual(
-      '@mui/x-date-pickers/DesktopDateTimePicker'
+      '@mui/x-date-pickers/DesktopDateTimePicker',
     ).DesktopDateTimePicker,
   };
 });
@@ -57,7 +57,7 @@ async function wait(ms = 100): Promise<void> {
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(
   MOCKS_ERROR_ACTION_ITEM_CATEGORY_LIST_QUERY,
-  true
+  true,
 );
 const link3 = new StaticMockLink(MOCKS_ERROR_MEMBERS_LIST_QUERY, true);
 const link4 = new StaticMockLink(MOCKS_ERROR_ACTION_ITEM_LIST_QUERY, true);
@@ -65,8 +65,8 @@ const link5 = new StaticMockLink(MOCKS_ERROR_MUTATIONS, true);
 
 const translations = JSON.parse(
   JSON.stringify(
-    i18nForTest.getDataByLanguage('en')?.translation.organizationActionItems
-  )
+    i18nForTest.getDataByLanguage('en')?.translation.organizationActionItems,
+  ),
 );
 
 describe('Testing Action Item Categories Component', () => {
@@ -88,7 +88,7 @@ describe('Testing Action Item Categories Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -109,14 +109,14 @@ describe('Testing Action Item Categories Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     await waitFor(() => {
       expect(
-        queryByText(translations.createActionItem)
+        queryByText(translations.createActionItem),
       ).not.toBeInTheDocument();
     });
   });
@@ -132,14 +132,14 @@ describe('Testing Action Item Categories Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     await waitFor(() => {
       expect(
-        queryByText(translations.createActionItem)
+        queryByText(translations.createActionItem),
       ).not.toBeInTheDocument();
     });
   });
@@ -155,14 +155,14 @@ describe('Testing Action Item Categories Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     await waitFor(() => {
       expect(
-        queryByText(translations.createActionItem)
+        queryByText(translations.createActionItem),
       ).not.toBeInTheDocument();
     });
   });
@@ -178,7 +178,7 @@ describe('Testing Action Item Categories Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -195,7 +195,7 @@ describe('Testing Action Item Categories Component', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('sortActionItems')).toHaveTextContent(
-        translations.earliest
+        translations.earliest,
       );
     });
 
@@ -211,7 +211,7 @@ describe('Testing Action Item Categories Component', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('sortActionItems')).toHaveTextContent(
-        translations.latest
+        translations.latest,
       );
     });
   });
@@ -227,7 +227,7 @@ describe('Testing Action Item Categories Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -245,7 +245,7 @@ describe('Testing Action Item Categories Component', () => {
     // all the action items ordered by earliest first
     await waitFor(() => {
       expect(screen.getByTestId('sortActionItems')).toHaveTextContent(
-        translations.earliest
+        translations.earliest,
       );
     });
 
@@ -262,7 +262,7 @@ describe('Testing Action Item Categories Component', () => {
     // all the action items that are active
     await waitFor(() => {
       expect(screen.getByTestId('selectActionItemStatus')).toHaveTextContent(
-        translations.active
+        translations.active,
       );
     });
 
@@ -279,20 +279,20 @@ describe('Testing Action Item Categories Component', () => {
     // all the action items that are completed
     await waitFor(() => {
       expect(screen.getByTestId('selectActionItemStatus')).toHaveTextContent(
-        translations.completed
+        translations.completed,
       );
     });
 
     await waitFor(() => {
       expect(
-        screen.getByTestId('selectActionItemCategory')
+        screen.getByTestId('selectActionItemCategory'),
       ).toBeInTheDocument();
     });
     userEvent.click(screen.getByTestId('selectActionItemCategory'));
 
     await waitFor(() => {
       expect(
-        screen.getAllByTestId('actionItemCategory')[0]
+        screen.getAllByTestId('actionItemCategory')[0],
       ).toBeInTheDocument();
     });
     userEvent.click(screen.getAllByTestId('actionItemCategory')[0]);
@@ -300,13 +300,13 @@ describe('Testing Action Item Categories Component', () => {
     // action items belonging to this action item category
     await waitFor(() => {
       expect(screen.getByTestId('selectActionItemCategory')).toHaveTextContent(
-        'ActionItemCategory 1'
+        'ActionItemCategory 1',
       );
     });
 
     await waitFor(() => {
       expect(
-        screen.getByTestId('clearActionItemCategoryFilter')
+        screen.getByTestId('clearActionItemCategoryFilter'),
       ).toBeInTheDocument();
     });
     // remove the action item category filter
@@ -314,13 +314,13 @@ describe('Testing Action Item Categories Component', () => {
 
     await waitFor(() => {
       expect(
-        screen.queryByTestId('clearActionItemCategoryFilter')
+        screen.queryByTestId('clearActionItemCategoryFilter'),
       ).not.toBeInTheDocument();
     });
 
     await waitFor(() => {
       expect(
-        screen.getByTestId('clearActionItemStatusFilter')
+        screen.getByTestId('clearActionItemStatusFilter'),
       ).toBeInTheDocument();
     });
     // remove the action item status filter
@@ -328,10 +328,10 @@ describe('Testing Action Item Categories Component', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('selectActionItemStatus')).toHaveTextContent(
-        translations.status
+        translations.status,
       );
       expect(screen.getByTestId('selectActionItemCategory')).toHaveTextContent(
-        translations.actionItemCategory
+        translations.actionItemCategory,
       );
     });
   });
@@ -347,7 +347,7 @@ describe('Testing Action Item Categories Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -365,7 +365,7 @@ describe('Testing Action Item Categories Component', () => {
     // all the action items ordered by earliest first
     await waitFor(() => {
       expect(screen.getByTestId('sortActionItems')).toHaveTextContent(
-        translations.earliest
+        translations.earliest,
       );
     });
 
@@ -382,7 +382,7 @@ describe('Testing Action Item Categories Component', () => {
     // all the action items that are active
     await waitFor(() => {
       expect(screen.getByTestId('selectActionItemStatus')).toHaveTextContent(
-        translations.active
+        translations.active,
       );
     });
 
@@ -399,20 +399,20 @@ describe('Testing Action Item Categories Component', () => {
     // all the action items that are completed
     await waitFor(() => {
       expect(screen.getByTestId('selectActionItemStatus')).toHaveTextContent(
-        translations.completed
+        translations.completed,
       );
     });
 
     await waitFor(() => {
       expect(
-        screen.getByTestId('selectActionItemCategory')
+        screen.getByTestId('selectActionItemCategory'),
       ).toBeInTheDocument();
     });
     userEvent.click(screen.getByTestId('selectActionItemCategory'));
 
     await waitFor(() => {
       expect(
-        screen.getAllByTestId('actionItemCategory')[0]
+        screen.getAllByTestId('actionItemCategory')[0],
       ).toBeInTheDocument();
     });
     userEvent.click(screen.getAllByTestId('actionItemCategory')[0]);
@@ -420,7 +420,7 @@ describe('Testing Action Item Categories Component', () => {
     // action items belonging to this action item category
     await waitFor(() => {
       expect(screen.getByTestId('selectActionItemCategory')).toHaveTextContent(
-        'ActionItemCategory 1'
+        'ActionItemCategory 1',
       );
     });
 
@@ -432,13 +432,13 @@ describe('Testing Action Item Categories Component', () => {
     // filters cleared, all the action items belonging to the organization
     await waitFor(() => {
       expect(screen.getByTestId('sortActionItems')).toHaveTextContent(
-        translations.latest
+        translations.latest,
       );
       expect(screen.getByTestId('selectActionItemStatus')).toHaveTextContent(
-        translations.status
+        translations.status,
       );
       expect(screen.getByTestId('selectActionItemCategory')).toHaveTextContent(
-        translations.actionItemCategory
+        translations.actionItemCategory,
       );
     });
   });
@@ -457,7 +457,7 @@ describe('Testing Action Item Categories Component', () => {
             </LocalizationProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -469,13 +469,13 @@ describe('Testing Action Item Categories Component', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('createActionItemModalCloseBtn')
+        screen.findByTestId('createActionItemModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
     userEvent.click(screen.getByTestId('createActionItemModalCloseBtn'));
 
     await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('createActionItemModalCloseBtn')
+      screen.queryByTestId('createActionItemModalCloseBtn'),
     );
   });
 
@@ -493,7 +493,7 @@ describe('Testing Action Item Categories Component', () => {
             </LocalizationProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -505,29 +505,29 @@ describe('Testing Action Item Categories Component', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('createActionItemModalCloseBtn')
+        screen.findByTestId('createActionItemModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
 
     await waitFor(() => {
       expect(
-        screen.getByTestId('formSelectActionItemCategory')
+        screen.getByTestId('formSelectActionItemCategory'),
       ).toBeInTheDocument();
     });
 
     userEvent.selectOptions(
       screen.getByTestId('formSelectActionItemCategory'),
-      formData.actionItemCategory
+      formData.actionItemCategory,
     );
 
     userEvent.selectOptions(
       screen.getByTestId('formSelectAssignee'),
-      formData.assignee
+      formData.assignee,
     );
 
     userEvent.type(
       screen.getByPlaceholderText(translations.preCompletionNotes),
-      formData.preCompletionNotes
+      formData.preCompletionNotes,
     );
 
     const dueDatePicker = screen.getByLabelText(translations.dueDate);
@@ -556,7 +556,7 @@ describe('Testing Action Item Categories Component', () => {
             </LocalizationProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -568,29 +568,29 @@ describe('Testing Action Item Categories Component', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('createActionItemModalCloseBtn')
+        screen.findByTestId('createActionItemModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
 
     await waitFor(() => {
       expect(
-        screen.getByTestId('formSelectActionItemCategory')
+        screen.getByTestId('formSelectActionItemCategory'),
       ).toBeInTheDocument();
     });
 
     userEvent.selectOptions(
       screen.getByTestId('formSelectActionItemCategory'),
-      formData.actionItemCategory
+      formData.actionItemCategory,
     );
 
     userEvent.selectOptions(
       screen.getByTestId('formSelectAssignee'),
-      formData.assignee
+      formData.assignee,
     );
 
     userEvent.type(
       screen.getByPlaceholderText(translations.preCompletionNotes),
-      formData.preCompletionNotes
+      formData.preCompletionNotes,
     );
 
     const dueDatePicker = screen.getByLabelText(translations.dueDate);

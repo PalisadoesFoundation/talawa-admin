@@ -91,7 +91,7 @@ function actionItemsContainer({
   const [updateActionItem] = useMutation(UPDATE_ACTION_ITEM_MUTATION);
 
   const updateActionItemHandler = async (
-    e: ChangeEvent<HTMLFormElement>
+    e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
     try {
