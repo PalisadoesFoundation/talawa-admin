@@ -50,7 +50,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: 'Bearer ' + localStorage.getItem('token') || '',
+      authorization: 'Bearer ' + getItem('token') || '',
     },
   };
 });
