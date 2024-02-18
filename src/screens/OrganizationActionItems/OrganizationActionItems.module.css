@@ -42,7 +42,6 @@
 .datebox {
   width: 90%;
   border-radius: 7px;
-  border-color: #e8e5e5;
   outline: none;
   box-shadow: none;
   padding-top: 2px;
@@ -72,32 +71,17 @@
   margin-bottom: 1rem;
 }
 
-form > input {
-  display: block;
-  border: 1px solid #e8e5e5;
-  box-shadow: 2px 1px #e8e5e5;
-  padding: 10px 20px;
-  border-radius: 5px;
-  background: none;
-  width: 100%;
-  transition: all 0.3s ease-in-out;
-  -webkit-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-in-out;
-  -ms-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
-}
-
 .greenregbtn {
   margin: 1rem 0 0;
   margin-top: 15px;
-  border: 1px solid #e8e5e5;
-  box-shadow: 0 2px 2px #e8e5e5;
+  border: 1px solid var(--bs-gray-300);
+  box-shadow: 0 2px 2px var(--bs-gray-300);
   padding: 10px 10px;
   border-radius: 5px;
-  background-color: #31bb6b;
+  background-color: var(--bs-primary);
   width: 100%;
   font-size: 16px;
-  color: white;
+  color: var(--bs-white);
   outline: none;
   font-weight: 600;
   cursor: pointer;
@@ -151,12 +135,12 @@ hr {
 }
 
 .titlemodal {
-  color: #707070;
+  color: var(--bs-gray-600);
   font-weight: 600;
   font-size: 20px;
   margin-bottom: 20px;
   padding-bottom: 5px;
-  border-bottom: 3px solid #31bb6b;
+  border-bottom: 3px solid var(--bs-primary);
   width: 65%;
 }
 
@@ -164,7 +148,7 @@ hr {
   margin-left: 2%;
   font-weight: 600;
   font-size: 16px;
-  color: #707070;
+  color: var(--bs-gray-600);
 }
 
 @media (max-width: 767px) {
