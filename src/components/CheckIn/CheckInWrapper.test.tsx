@@ -33,14 +33,14 @@ describe('Testing CheckIn Wrapper', () => {
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     // Open the modal
     fireEvent.click(screen.getByLabelText('checkInRegistrants') as Element);
 
     await waitFor(() =>
-      expect(screen.queryByTestId('modal-title')).toBeInTheDocument()
+      expect(screen.queryByTestId('modal-title')).toBeInTheDocument(),
     );
 
     //  Close the modal
@@ -49,7 +49,7 @@ describe('Testing CheckIn Wrapper', () => {
     fireEvent.click(closebtn as Element);
 
     await waitFor(() =>
-      expect(screen.queryByTestId('modal-title')).not.toBeInTheDocument()
+      expect(screen.queryByTestId('modal-title')).not.toBeInTheDocument(),
     );
   });
 });
