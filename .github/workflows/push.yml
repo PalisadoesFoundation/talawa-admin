@@ -58,6 +58,24 @@ jobs:
           fail_ci_if_error: false
           name: '${{env.CODECOV_UNIQUE_NAME}}'
 
+  Empty-Commit:
+    name: Create Empty Commit
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+          token: ${{ secrets.TALAWA_DOCS_SYNC }}
+      - name: Empty Commit
+        run: |
+          git config --global user.name "${{github.actor}}"
+          git config --global user.email "${{env.email}}"
+          git config --global url.https://${{ secrets.TALAWA_DOCS_SYNC }}@github.com/.insteadOf https://github.com/
+          git commit --allow-empty -m "Trigger Documentation Workflow"
+          git push origin develop:automated-docs --force
+
   Generate-Documentation:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/automated-docs'
