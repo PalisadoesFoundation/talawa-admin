@@ -571,7 +571,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           </Dropdown>
         </div>
       </div>
-      <div className={`${styles.calendar__scroll} custom-scroll`}>
+      <div className={`${styles.calendar__scroll} customScroll`}>
         {viewType == ViewType.MONTH ? (
           <div>
             <div className={styles.calendar__weekdays}>

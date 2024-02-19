@@ -43,7 +43,7 @@ const leftDrawer = ({
   return (
     <>
       <div
-        className={`${styles.leftDrawer} custom-scroll ${
+        className={`${styles.leftDrawer} customScroll ${
           hideDrawer === null
             ? styles.hideElemByDefault
             : hideDrawer
