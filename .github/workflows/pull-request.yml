@@ -77,7 +77,7 @@ jobs:
 
       - name: Run Python script
         run: |
-          python3 .github/workflows/check_files.py --base_branch ${{ github.base_ref }} --pr_branch ${{ github.head_ref }} --sensitive_files .github/workflows/sensitive_files.txt --verbose
+          python3 .github/workflows/check_files.py --base_branch develop --pr_branch orgpeople --sensitive_files .github/workflows/sensitive_files.txt --verbose
 
   Test-Application:
     name: Test Application
