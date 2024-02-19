@@ -22,11 +22,14 @@ import { store } from 'state/store';
 import { BACKEND_URL } from 'Constant/constant';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { getItem } = useLocalStorage();
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
   headers: {
-    authorization: 'Bearer ' + localStorage.getItem('token') || '',
+    authorization: 'Bearer ' + getItem('token') || '',
   },
 });
 
@@ -46,7 +49,7 @@ describe('Testing AddOnStore Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>
+      </ApolloProvider>,
     );
     expect(getByTestId('AddOnEntryStore')).toBeInTheDocument();
   });

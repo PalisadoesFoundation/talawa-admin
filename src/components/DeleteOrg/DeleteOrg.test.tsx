@@ -17,6 +17,9 @@ import i18nForTest from 'utils/i18nForTest';
 import DeleteOrg from './DeleteOrg';
 import { ToastContainer, toast } from 'react-toastify';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem } = useLocalStorage();
 
 async function wait(ms = 1000): Promise<void> {
   await act(async () => {
@@ -106,7 +109,7 @@ afterEach(() => {
 describe('Delete Organization Component', () => {
   test('should be able to Toggle Delete Organization Modal', async () => {
     window.location.assign('/orgsetting/id=456');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -117,7 +120,7 @@ describe('Delete Organization Component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
@@ -131,7 +134,7 @@ describe('Delete Organization Component', () => {
 
   test('should be able to Toggle Delete Organization Modal When Organization is Sample Organization', async () => {
     window.location.assign('/orgsetting/id=123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -142,7 +145,7 @@ describe('Delete Organization Component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
@@ -156,7 +159,7 @@ describe('Delete Organization Component', () => {
 
   test('Delete organization functionality should work properly', async () => {
     window.location.assign('/orgsetting/id=456');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -166,7 +169,7 @@ describe('Delete Organization Component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
@@ -177,7 +180,7 @@ describe('Delete Organization Component', () => {
 
   test('Delete organization functionality should work properly for sample org', async () => {
     window.location.assign('/orgsetting/id=123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -187,7 +190,7 @@ describe('Delete Organization Component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
@@ -198,7 +201,7 @@ describe('Delete Organization Component', () => {
 
   test('Error handling for IS_SAMPLE_ORGANIZATION_QUERY mock', async () => {
     window.location.assign('/orgsetting/id=123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
     jest.spyOn(toast, 'error');
     render(
       <MockedProvider addTypename={false} link={link2}>
@@ -209,20 +212,20 @@ describe('Delete Organization Component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
     screen.getByTestId(/deleteOrganizationBtn/i).click();
     await wait();
     expect(toast.error).toHaveBeenCalledWith(
-      'Failed to delete sample organization'
+      'Failed to delete sample organization',
     );
   });
 
   test('Error handling for DELETE_ORGANIZATION_MUTATION mock', async () => {
     window.location.assign('/orgsetting/id=456');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
@@ -232,7 +235,7 @@ describe('Delete Organization Component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();

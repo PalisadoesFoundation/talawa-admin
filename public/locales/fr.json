@@ -441,6 +441,8 @@
   "orgSettings": {
     "title": "Paramètre Talawa",
     "pageName": "Paramètres",
+    "general": "Général",
+    "actionItemCategories": "Catégories d’éléments d’action",
     "updateYourDetails": "Mettre à jour vos informations",
     "updateYourPassword": "Mettez à jour votre mot de passe",
     "updateOrganization": "Mettre à jour l'organisation",
@@ -696,6 +698,8 @@
     "archievedAds": "Campagnes terminées",
     "pMessage": "Aucune publicité n'est présente pour cette campagne.",
     "delete": "Supprimer",
+    "validLink": "Le lien est valide",
+    "invalidLink": "Le lien n'est pas valide",
     "close": "Fermer",
     "deleteAdvertisement": "Supprimer l'annonce",
     "deleteAdvertisementMsg": "Voulez-vous supprimer cette annonce ?",
@@ -726,5 +730,20 @@
     "Supprimer le champ personnalisé": "Supprimer le champ personnalisé",
     "fieldSuccessMessage": "Champ ajouté avec succès",
     "fieldRemovalSuccess": "Champ supprimé avec succès"
+  },
+  "orgActionItemCategories": {
+    "createButton": "Créez",
+    "editButton": "Éditez",
+    "enableButton": "Activez",
+    "disableButton": "Désactivez",
+    "updateActionItemCategory": "Mettre à jour",
+    "actionItemCategoryName": "Nom",
+    "actionItemCategoryDetails": "Détails de la catégorie d’élément d’action",
+    "enterName": "Entrez le nom",
+    "successfulCreation": "Catégorie d’élément d’action créée avec succès",
+    "successfulUpdation": "La catégorie d’élément d’action a été mise à jour avec succès",
+    "sameNameConflict": "Veuillez modifier le nom pour effectuer une mise à jour",
+    "categoryEnabled": "Catégorie d’action activée",
+    "categoryDisabled": "Catégorie d’action désactivée"
   }
 }

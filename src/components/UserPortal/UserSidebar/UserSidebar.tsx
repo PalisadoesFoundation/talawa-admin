@@ -11,6 +11,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import useLocalStorage from 'utils/useLocalstorage';
 
 function userSidebar(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -20,13 +21,15 @@ function userSidebar(): JSX.Element {
   const [organizations, setOrganizations] = React.useState([]);
   const [details, setDetails] = React.useState({} as any);
 
-  const userId: string | null = localStorage.getItem('userId');
+  const { getItem } = useLocalStorage();
+
+  const userId: string | null = getItem('userId');
 
   const { data, loading: loadingJoinedOrganizations } = useQuery(
     USER_JOINED_ORGANIZATIONS,
     {
       variables: { id: userId },
-    }
+    },
   );
 
   const { data: data2, loading: loadingUserDetails } = useQuery(USER_DETAILS, {

@@ -15,13 +15,16 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Organizations from './Organizations';
 import userEvent from '@testing-library/user-event';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { getItem } = useLocalStorage();
 
 const MOCKS = [
   {
     request: {
       query: USER_CREATED_ORGANIZATIONS,
       variables: {
-        id: localStorage.getItem('userId'),
+        id: getItem('userId'),
       },
     },
     result: {
@@ -78,7 +81,7 @@ const MOCKS = [
     request: {
       query: USER_JOINED_ORGANIZATIONS,
       variables: {
-        id: localStorage.getItem('userId'),
+        id: getItem('userId'),
       },
     },
     result: {
@@ -145,7 +148,7 @@ describe('Testing Organizations Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -161,7 +164,7 @@ describe('Testing Organizations Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -187,7 +190,7 @@ describe('Testing Organizations Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -210,7 +213,7 @@ describe('Testing Organizations Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();

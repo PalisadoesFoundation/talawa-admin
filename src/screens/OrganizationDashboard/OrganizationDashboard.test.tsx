@@ -13,6 +13,9 @@ import { EMPTY_MOCKS, ERROR_MOCKS, MOCKS } from './OrganizationDashboardMocks';
 import i18nForTest from 'utils/i18nForTest';
 import { toast } from 'react-toastify';
 import userEvent from '@testing-library/user-event';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem } = useLocalStorage();
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -34,12 +37,12 @@ jest.mock('react-toastify', () => ({
 }));
 
 beforeEach(() => {
-  localStorage.setItem('FirstName', 'John');
-  localStorage.setItem('LastName', 'Doe');
-  localStorage.setItem('UserType', 'SUPERADMIN');
-  localStorage.setItem(
+  setItem('FirstName', 'John');
+  setItem('LastName', 'Doe');
+  setItem('UserType', 'SUPERADMIN');
+  setItem(
     'UserImage',
-    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe'
+    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
   );
 });
 
@@ -60,7 +63,7 @@ describe('Organisation Dashboard Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
     });
 
@@ -108,7 +111,7 @@ describe('Organisation Dashboard Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
     });
 
@@ -123,7 +126,7 @@ describe('Organisation Dashboard Page', () => {
     expect(toast.success).toBeCalledWith('Coming soon!');
 
     expect(
-      screen.getByText(/No membership requests present/i)
+      screen.getByText(/No membership requests present/i),
     ).toBeInTheDocument();
     expect(screen.getByText(/No upcoming events/i)).toBeInTheDocument();
     expect(screen.getByText(/No posts present/i)).toBeInTheDocument();
@@ -140,7 +143,7 @@ describe('Organisation Dashboard Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
     });
 

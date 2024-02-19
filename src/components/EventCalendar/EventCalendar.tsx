@@ -126,7 +126,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     eventData: InterfaceEvent[],
     orgData?: InterfaceIOrgList,
     userRole?: string,
-    userId?: string
+    userId?: string,
   ): InterfaceEvent[] => {
     const data: InterfaceEvent[] = [];
     if (userRole === Role.SUPERADMIN) return eventData;
@@ -137,7 +137,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         if (event.isPublic) data.push(event);
         if (!event.isPublic) {
           const filteredOrg: boolean | undefined = orgData?.admins?.some(
-            (data) => data._id === userId
+            (data) => data._id === userId,
           );
 
           if (filteredOrg) {
@@ -149,7 +149,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       eventData?.forEach((event) => {
         if (event.isPublic) data.push(event);
         const userAttending = event.registrants?.some(
-          (data) => data.userId === userId
+          (data) => data.userId === userId,
         );
         if (userAttending) {
           data.push(event);
@@ -194,7 +194,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         const lastDayOfPrevMonth = new Date(
           currentYear,
           currentMonth,
-          0
+          0,
         ).getDate();
         setCurrentDate(lastDayOfPrevMonth);
         setCurrentMonth(currentMonth - 1);
@@ -210,7 +210,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     const lastDayOfCurrentMonth = new Date(
       currentYear,
       currentMonth - 1,
-      0
+      0,
     ).getDate();
     if (currentDate < lastDayOfCurrentMonth) {
       setCurrentDate(currentDate + 1);
@@ -236,7 +236,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     new Date().getTimezoneOffset() > 0 ? '-' : '+'
   }${String(Math.floor(Math.abs(new Date().getTimezoneOffset()) / 60)).padStart(
     2,
-    '0'
+    '0',
   )}:${String(Math.abs(new Date().getTimezoneOffset()) % 60).padStart(2, '0')}`;
 
   const renderHours = (): JSX.Element => {
@@ -419,12 +419,12 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     const startDate = new Date(
       monthStart.getFullYear(),
       monthStart.getMonth(),
-      monthStart.getDate() - monthStart.getDay()
+      monthStart.getDate() - monthStart.getDay(),
     );
     const endDate = new Date(
       monthEnd.getFullYear(),
       monthEnd.getMonth(),
-      monthEnd.getDate() + (6 - monthEnd.getDay())
+      monthEnd.getDate() + (6 - monthEnd.getDay()),
     );
     const days = [];
     let currentDate = startDate;
@@ -433,7 +433,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       currentDate = new Date(
         currentDate.getFullYear(),
         currentDate.getMonth(),
-        currentDate.getDate() + 1
+        currentDate.getDate() + 1,
       );
     }
 

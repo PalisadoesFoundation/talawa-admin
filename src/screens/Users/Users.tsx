@@ -19,11 +19,14 @@ import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import styles from './Users.module.css';
+import useLocalStorage from 'utils/useLocalstorage';
 
 const Users = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
 
   document.title = t('title');
+
+  const { getItem } = useLocalStorage();
 
   const perPageResult = 12;
   const [isLoading, setIsLoading] = useState(true);
@@ -32,8 +35,8 @@ const Users = (): JSX.Element => {
   const [searchByName, setSearchByName] = useState('');
   const [sortingOption, setSortingOption] = useState('newest');
   const [filteringOption, setFilteringOption] = useState('cancel');
-  const userType = localStorage.getItem('UserType');
-  const loggedInUserId = localStorage.getItem('id');
+  const userType = getItem('UserType');
+  const loggedInUserId = getItem('id');
 
   const {
     data: usersData,
@@ -130,7 +133,7 @@ const Users = (): JSX.Element => {
 
   const handleSearchByBtnClick = (): void => {
     const inputElement = document.getElementById(
-      'searchUsers'
+      'searchUsers',
     ) as HTMLInputElement;
     const inputValue = inputElement?.value || '';
     handleSearch(inputValue);
@@ -160,7 +163,7 @@ const Users = (): JSX.Element => {
           fetchMoreResult,
         }: {
           fetchMoreResult: { users: InterfaceQueryUserListItem[] } | undefined;
-        }
+        },
       ): { users: InterfaceQueryUserListItem[] } | undefined => {
         setIsLoadingMore(false);
         if (!fetchMoreResult) return prev;
@@ -182,20 +185,20 @@ const Users = (): JSX.Element => {
 
   const sortUsers = (
     allUsers: InterfaceQueryUserListItem[],
-    sortingOption: string
+    sortingOption: string,
   ): InterfaceQueryUserListItem[] => {
     const sortedUsers = [...allUsers];
 
     if (sortingOption === 'newest') {
       sortedUsers.sort(
         (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       );
       return sortedUsers;
     } else {
       sortedUsers.sort(
         (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
       );
       return sortedUsers;
     }
@@ -207,7 +210,7 @@ const Users = (): JSX.Element => {
 
   const filterUsers = (
     allUsers: InterfaceQueryUserListItem[],
-    filteringOption: string
+    filteringOption: string,
   ): InterfaceQueryUserListItem[] => {
     const filteredUsers = [...allUsers];
 

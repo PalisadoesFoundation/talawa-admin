@@ -39,10 +39,13 @@ import Loader from 'components/Loader/Loader';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './LoginPage.module.css';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import useLocalStorage from 'utils/useLocalstorage';
 
 function loginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
   const history = useHistory();
+
+  const { getItem, setItem } = useLocalStorage();
 
   document.title = t('title');
 
@@ -111,7 +114,7 @@ function loginPage(): JSX.Element {
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem('IsLoggedIn');
+    const isLoggedIn = getItem('IsLoggedIn');
     if (isLoggedIn == 'TRUE') {
       history.push('/orglist');
     }
@@ -144,7 +147,7 @@ function loginPage(): JSX.Element {
   }, []);
 
   const verifyRecaptcha = async (
-    recaptchaToken: any
+    recaptchaToken: any,
   ): Promise<boolean | void> => {
     try {
       /* istanbul ignore next */
@@ -216,7 +219,7 @@ function loginPage(): JSX.Element {
           /* istanbul ignore next */
           if (signUpData) {
             toast.success(
-              'Successfully Registered. Please wait until you will be approved.'
+              'Successfully Registered. Please wait until you will be approved.',
             );
 
             setSignFormState({
@@ -278,12 +281,12 @@ function loginPage(): JSX.Element {
           (loginData.login.user.userType === 'ADMIN' &&
             loginData.login.user.adminApproved === true)
         ) {
-          localStorage.setItem('token', loginData.login.accessToken);
-          localStorage.setItem('refreshToken', loginData.login.refreshToken);
-          localStorage.setItem('id', loginData.login.user._id);
-          localStorage.setItem('IsLoggedIn', 'TRUE');
-          localStorage.setItem('UserType', loginData.login.user.userType);
-          if (localStorage.getItem('IsLoggedIn') == 'TRUE') {
+          setItem('token', loginData.login.accessToken);
+          setItem('refreshToken', loginData.login.refreshToken);
+          setItem('id', loginData.login.user._id);
+          setItem('IsLoggedIn', 'TRUE');
+          setItem('UserType', loginData.login.user.userType);
+          if (getItem('IsLoggedIn') == 'TRUE') {
             history.push('/orglist');
           }
         } else {

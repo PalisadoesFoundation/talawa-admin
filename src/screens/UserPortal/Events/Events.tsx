@@ -22,6 +22,7 @@ import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import EventCalendar from 'components/EventCalendar/EventCalendar';
+import useLocalStorage from 'utils/useLocalstorage';
 
 interface InterfaceEventCardProps {
   id: string;
@@ -50,6 +51,8 @@ export default function events(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userEvents',
   });
+
+  const { getItem } = useLocalStorage();
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -85,8 +88,8 @@ export default function events(): JSX.Element {
 
   const [create] = useMutation(CREATE_EVENT_MUTATION);
 
-  const userId = localStorage.getItem('id') as string;
-  const userRole = localStorage.getItem('UserType') as string;
+  const userId = getItem('id') as string;
+  const userRole = getItem('UserType') as string;
 
   const createEvent = async (): Promise<void> => {
     try {
@@ -129,7 +132,7 @@ export default function events(): JSX.Element {
   /* istanbul ignore next */
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
+    newPage: number,
   ): void => {
     setPage(newPage);
   };
@@ -139,7 +142,7 @@ export default function events(): JSX.Element {
 
   /* istanbul ignore next */
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     const newRowsPerPage = event.target.value;
 
@@ -167,19 +170,19 @@ export default function events(): JSX.Element {
   };
 
   const handleEventTitleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     setEventTitle(event.target.value);
   };
 
   const handleEventLocationChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     setEventLocation(event.target.value);
   };
 
   const handleEventDescriptionChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     setEventDescription(event.target.value);
   };
@@ -281,7 +284,7 @@ export default function events(): JSX.Element {
                       (rowsPerPage > 0
                         ? events.slice(
                             page * rowsPerPage,
-                            page * rowsPerPage + rowsPerPage
+                            page * rowsPerPage + rowsPerPage,
                           )
                         : /* istanbul ignore next */
                           events

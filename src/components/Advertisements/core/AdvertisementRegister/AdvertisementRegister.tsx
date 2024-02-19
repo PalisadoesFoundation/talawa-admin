@@ -12,6 +12,8 @@ import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import convertToBase64 from 'utils/convertToBase64';
 import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
+import { Check, Clear } from '@mui/icons-material';
+import { isValidLink } from 'utils/linkValidator';
 
 interface InterfaceAddOnRegisterProps {
   id?: string; // organizationId
@@ -45,7 +47,7 @@ function advertisementRegister({
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
 
   const [show, setShow] = useState(false);
-
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const handleClose = (): void => setShow(false);
   const handleShow = (): void => setShow(true);
   const [create] = useMutation(ADD_ADVERTISEMENT_MUTATION);
@@ -88,6 +90,10 @@ function advertisementRegister({
 
   const handleRegister = async (): Promise<void> => {
     try {
+      if (!isValidLink(formState.link)) {
+        toast.warn('Link is invalid. Please enter a valid link');
+        return;
+      }
       console.log('At handle register', formState);
       if (formState.endDate < formState.startDate) {
         toast.error('End date must be greater than or equal to start date');
@@ -141,15 +147,15 @@ function advertisementRegister({
         return;
       }
       const startDateFormattedString = dayjs(formState.startDate).format(
-        'YYYY-MM-DD'
+        'YYYY-MM-DD',
       );
       const endDateFormattedString = dayjs(formState.endDate).format(
-        'YYYY-MM-DD'
+        'YYYY-MM-DD',
       );
 
       const startDateDate = dayjs(
         startDateFormattedString,
-        'YYYY-MM-DD'
+        'YYYY-MM-DD',
       ).toDate();
       const endDateDate = dayjs(endDateFormattedString, 'YYYY-MM-DD').toDate();
 

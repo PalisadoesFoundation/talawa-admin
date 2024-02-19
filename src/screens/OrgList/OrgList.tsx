@@ -29,6 +29,7 @@ import type {
 } from 'utils/interfaces';
 import styles from './OrgList.module.css';
 import OrganizationModal from './OrganizationModal';
+import useLocalStorage from 'utils/useLocalstorage';
 
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
@@ -41,11 +42,13 @@ function orgList(): JSX.Element {
     setdialogModalIsOpen(true);
   }
 
+  const { getItem } = useLocalStorage();
+
   /* eslint-disable @typescript-eslint/explicit-function-return-type */
   function closeDialogModal() {
     setdialogModalIsOpen(false);
   }
-  const toggleDialogModal = (): void =>
+  const toggleDialogModal = /* istanbul ignore next */ (): void =>
     setdialogModalIsOpen(!dialogModalisOpen);
   document.title = t('title');
 
@@ -82,7 +85,7 @@ function orgList(): JSX.Element {
   const [create] = useMutation(CREATE_ORGANIZATION_MUTATION);
 
   const [createSampleOrganization] = useMutation(
-    CREATE_SAMPLE_ORGANIZATION_MUTATION
+    CREATE_SAMPLE_ORGANIZATION_MUTATION,
   );
 
   const {
@@ -93,9 +96,9 @@ function orgList(): JSX.Element {
     loading: boolean;
     error?: Error | undefined;
   } = useQuery(USER_ORGANIZATION_LIST, {
-    variables: { id: localStorage.getItem('id') },
+    variables: { id: getItem('id') },
     context: {
-      headers: { authorization: `Bearer ${localStorage.getItem('token')}` },
+      headers: { authorization: `Bearer ${getItem('token')}` },
     },
   });
 
@@ -152,7 +155,7 @@ function orgList(): JSX.Element {
 
   /* istanbul ignore next */
   const isAdminForCurrentOrg = (
-    currentOrg: InterfaceOrgConnectionInfoType
+    currentOrg: InterfaceOrgConnectionInfoType,
   ): boolean => {
     if (userData?.user?.adminFor.length === 1) {
       // If user is admin for one org only then check if that org is current org
@@ -162,7 +165,7 @@ function orgList(): JSX.Element {
       return (
         userData?.user?.adminFor.some(
           (org: { _id: string; name: string; image: string | null }) =>
-            org._id === currentOrg._id
+            org._id === currentOrg._id,
         ) ?? false
       );
     }
@@ -275,7 +278,7 @@ function orgList(): JSX.Element {
 
   const handleSearchByBtnClick = (): void => {
     const inputElement = document.getElementById(
-      'searchOrgname'
+      'searchOrgname',
     ) as HTMLInputElement;
     const inputValue = inputElement?.value || '';
     handleSearch(inputValue);
@@ -298,7 +301,7 @@ function orgList(): JSX.Element {
           fetchMoreResult:
             | { organizationsConnection: InterfaceOrgConnectionType[] }
             | undefined;
-        }
+        },
       ):
         | { organizationsConnection: InterfaceOrgConnectionType[] }
         | undefined => {

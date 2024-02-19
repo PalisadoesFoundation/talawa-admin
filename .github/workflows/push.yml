@@ -60,11 +60,16 @@ jobs:
 
   Generate-Documentation:
     runs-on: ubuntu-latest
-    # if: github.ref == 'refs/heads/automated-docs'
+    if: github.ref == 'refs/heads/develop'
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v3
+        # with:
+        #   ref: develop
 
+      # - name: Pull latest changes from develop
+      #   run: git pull origin develop
+      
       - name: Node.js Version
         uses: actions/setup-node@v4
         with:
@@ -133,7 +138,7 @@ jobs:
           git config --global user.email "${{env.email}}"
           git add .
           git commit -m "Update documentation"
-          git push
+          git push origin develop:automated-docs --force
           echo -e "🚀${Green} Hurrah! doc updated${NoColor}"
       
       - name: Create Documentation Artifact
@@ -142,8 +147,27 @@ jobs:
           name: documentation-admin
           path: talawa-admin-docs
 
-  Copy-docs-to-talawa-docs:
+  Empty-Commit:
+    name: Create Empty Commit
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
     needs: Generate-Documentation
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+          token: ${{ secrets.TALAWA_DOCS_SYNC }}
+      - name: Empty Commit
+        run: |
+          git config --global user.name "${{github.actor}}"
+          git config --global user.email "${{env.email}}"
+          git config --global url.https://${{ secrets.TALAWA_DOCS_SYNC }}@github.com/.insteadOf https://github.com/
+          git commit --allow-empty -m "Trigger Documentation Workflow"
+          git push origin develop:automated-docs --force
+
+  Copy-docs-to-talawa-docs:
+    if: github.ref == 'refs/heads/automated-docs'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
