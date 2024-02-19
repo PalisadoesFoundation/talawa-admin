@@ -47,6 +47,4 @@ ___
 
 #### Defined in
 
-[src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/21489da/src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx#L17)
-
 [src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx#L17)
