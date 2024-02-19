@@ -1,5 +1,5 @@
 .containerHeight {
-  height: calc(100vh - 66px);
+  height: 100vh;
 }
 
 .mainContainer {
@@ -28,10 +28,6 @@
   background-color: white;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
-}
-
-.colorLight {
-  background-color: #f5f5f5;
 }
 
 .addChatContainer {

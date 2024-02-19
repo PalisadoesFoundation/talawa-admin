@@ -111,7 +111,7 @@ export default function people(): JSX.Element {
     <>
       <OrgScreen screenName="People">
         <div className={`d-flex flex-row ${styles.containerHeight}`}>
-          <div className={`${styles.colorLight} ${styles.mainContainer}`}>
+          <div className={`${styles.mainContainer}`}>
             <div
               className={`d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}
             >

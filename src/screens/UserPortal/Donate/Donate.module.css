@@ -1,5 +1,5 @@
 .containerHeight {
-  height: calc(100vh - 66px);
+  height: 100vh;
 }
 
 .mainContainer {
@@ -44,10 +44,6 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-}
-
-.colorLight {
-  background-color: #f5f5f5;
 }
 
 .content {

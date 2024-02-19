@@ -198,7 +198,7 @@ export default function home(): JSX.Element {
     <>
       <OrgScreen screenName="Posts">
         <div className={`d-flex flex-row ${styles.containerHeight}`}>
-          <div className={`${styles.colorLight} ${styles.mainContainer}`}>
+          <div className={`${styles.mainContainer}`}>
             <Container className={styles.postContainer}>
               <Row className="d-flex align-items-center justify-content-center">
                 <Col xs={2} className={styles.userImage}>

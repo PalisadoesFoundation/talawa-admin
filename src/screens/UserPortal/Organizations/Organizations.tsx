@@ -124,7 +124,7 @@ export default function organizations(): JSX.Element {
     <>
       <UserScreen screenName="Organizations">
         <div className={`d-flex flex-row ${styles.containerHeight}`}>
-          <div className={`${styles.colorLight} ${styles.mainContainer}`}>
+          <div className={`${styles.mainContainer}`}>
             <h3>{t('selectOrganization')}</h3>
             <div
               className={`d-flex flex-row justify-content-between pt-3 flex-wrap ${styles.gap}`}

@@ -81,7 +81,7 @@ export default function chat(): JSX.Element {
     <>
       <OrgScreen screenName="Chat">
         <div className={`d-flex flex-row ${styles.containerHeight}`}>
-          <div className={`${styles.colorLight} ${styles.mainContainer}`}>
+          <div className={`${styles.mainContainer}`}>
             <div className={styles.contactContainer}>
               <div
                 className={`d-flex flex-column align-items-center justify-content-center ${styles.addChatContainer}`}

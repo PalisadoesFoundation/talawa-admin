@@ -82,7 +82,7 @@ export default function donate(): JSX.Element {
     <>
       <OrgScreen screenName="Donate">
         <div className={`d-flex flex-row ${styles.containerHeight}`}>
-          <div className={`${styles.colorLight} ${styles.mainContainer}`}>
+          <div className={`${styles.mainContainer}`}>
             <div className={`${styles.box}`}>
               <h4>
                 {t('donateTo')} {organizationDetails.name}
