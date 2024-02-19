@@ -14,7 +14,6 @@ import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import MemberDetail, { getLanguageName, prettyDate } from './MemberDetail';
-import Avatar from 'components/Avatar/Avatar';
 
 const MOCKS1 = [
   {
@@ -242,10 +241,7 @@ describe('MemberDetail', () => {
     );
     waitFor(() =>
       expect(screen.getByTestId('userImageAbsent').getAttribute('src')).toBe(
-        <Avatar
-          name={`${user?.firstName} ${user?.lastName}`}
-          alt={`${user?.firstName} ${user?.lastName}`}
-        />,
+        `https://api.dicebear.com/5.x/initials/svg?seed=${user?.firstName} ${user?.lastName}`,
       ),
     );
   });

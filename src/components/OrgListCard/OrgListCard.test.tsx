@@ -12,7 +12,6 @@ import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { MockedProvider } from '@apollo/react-testing';
 import useLocalStorage from 'utils/useLocalstorage';
-import Avatar from 'components/Avatar/Avatar';
 
 const { setItem } = useLocalStorage();
 
@@ -35,7 +34,7 @@ const props: InterfaceOrgListCardProps = {
   data: {
     _id: 'xyz',
     name: 'Dogs Care',
-    image: (<Avatar name="John Doe" alt="John Doe" />) as unknown as string,
+    image: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
     address: {
       city: 'Sample City',
       countryCode: 'US',

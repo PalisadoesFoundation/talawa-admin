@@ -11,7 +11,6 @@ import {
 import { MockedProvider } from '@apollo/react-testing';
 import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
-import Avatar from 'components/Avatar/Avatar';
 
 const { setItem } = useLocalStorage();
 
@@ -66,7 +65,10 @@ jest.mock('@mui/x-charts/PieChart', () => ({
 beforeEach(() => {
   setItem('FirstName', 'John');
   setItem('LastName', 'Doe');
-  setItem('UserImage', <Avatar name="John Doe" alt="John Doe" />);
+  setItem(
+    'UserImage',
+    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
+  );
 });
 
 afterEach(() => {

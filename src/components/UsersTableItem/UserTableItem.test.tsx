@@ -10,7 +10,6 @@ import { MOCKS } from './UserTableItemMocks';
 import UsersTableItem from './UsersTableItem';
 const link = new StaticMockLink(MOCKS, true);
 import useLocalStorage from 'utils/useLocalstorage';
-import Avatar from 'components/Avatar/Avatar';
 
 const { setItem } = useLocalStorage();
 
@@ -346,9 +345,8 @@ describe('Testing User Table Item', () => {
           {
             _id: 'abc',
             name: 'Joined Organization 1',
-            image: (
-              <Avatar name="Joined Organization 1" alt="Organization" />
-            ) as unknown as string,
+            image:
+              'https://api.dicebear.com/5.x/initials/svg?seed=Joined%20Organization%201',
             address: {
               city: 'Kingston',
               countryCode: 'JM',
@@ -364,9 +362,8 @@ describe('Testing User Table Item', () => {
               _id: '123',
               firstName: 'John',
               lastName: 'Doe',
-              image: (
-                <Avatar name="John Doe" alt="John Doe" />
-              ) as unknown as string,
+              image:
+                'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
               email: 'john@example.com',
             },
           },
@@ -495,7 +492,7 @@ describe('Testing User Table Item', () => {
         _id: '123',
         firstName: 'John',
         lastName: 'Doe',
-        image: (<Avatar name="John Doe" alt="John Doe" />) as unknown as string,
+        image: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
         email: 'john@example.com',
         userType: 'SUPERADMIN',
         adminApproved: true,
@@ -512,9 +509,8 @@ describe('Testing User Table Item', () => {
           {
             _id: 'xyz',
             name: 'Blocked Organization 1',
-            image: (
-              <Avatar name="Blocked Organization" alt="Blocked Organization" />
-            ) as unknown as string,
+            image:
+              'https://api.dicebear.com/5.x/initials/svg?seed=Blocked%20Organization%201',
             address: {
               city: 'Kingston',
               countryCode: 'JM',
@@ -530,9 +526,8 @@ describe('Testing User Table Item', () => {
               _id: '123',
               firstName: 'John',
               lastName: 'Doe',
-              image: (
-                <Avatar name="John Doe" alt="John Doe" />
-              ) as unknown as string,
+              image:
+                'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
               email: 'john@example.com',
             },
           },
@@ -712,7 +707,7 @@ describe('Testing User Table Item', () => {
         _id: '123',
         firstName: 'John',
         lastName: 'Doe',
-        image: (<Avatar name="John Doe" alt="John Doe" />) as unknown as string,
+        image: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
         email: 'john@example.com',
         userType: 'SUPERADMIN',
         adminApproved: true,
@@ -729,12 +724,8 @@ describe('Testing User Table Item', () => {
           {
             _id: 'xyz',
             name: 'Blocked Organization 1',
-            image: (
-              <Avatar
-                name="Blocked Organization 1"
-                alt="Blocked Organization 1"
-              />
-            ) as unknown as string,
+            image:
+              'https://api.dicebear.com/5.x/initials/svg?seed=Blocked%20Organization%201',
             address: {
               city: 'Kingston',
               countryCode: 'JM',
@@ -750,9 +741,8 @@ describe('Testing User Table Item', () => {
               _id: '123',
               firstName: 'John',
               lastName: 'Doe',
-              image: (
-                <Avatar name="John Doe" alt="John Doe" />
-              ) as unknown as string,
+              image:
+                'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
               email: 'john@example.com',
             },
           },
@@ -891,7 +881,7 @@ describe('Testing User Table Item', () => {
         _id: '123',
         firstName: 'John',
         lastName: 'Doe',
-        image: (<Avatar name="John Doe" alt="John Doe" />) as unknown as string,
+        image: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
         email: 'john@example.com',
         userType: 'SUPERADMIN',
         adminApproved: true,
@@ -908,12 +898,8 @@ describe('Testing User Table Item', () => {
           {
             _id: 'xyz',
             name: 'Blocked Organization 1',
-            image: (
-              <Avatar
-                name="Blocked Organization 1"
-                alt="Blocked Organization 1"
-              />
-            ) as unknown as string,
+            image:
+              'https://api.dicebear.com/5.x/initials/svg?seed=Blocked%20Organization%201',
             address: {
               city: 'Kingston',
               countryCode: 'JM',
@@ -929,9 +915,8 @@ describe('Testing User Table Item', () => {
               _id: '123',
               firstName: 'John',
               lastName: 'Doe',
-              image: (
-                <Avatar name="John Doe" alt="John Doe" />
-              ) as unknown as string,
+              image:
+                'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
               email: 'john@example.com',
             },
           },
@@ -1072,7 +1057,7 @@ describe('Testing User Table Item', () => {
         _id: '123',
         firstName: 'John',
         lastName: 'Doe',
-        image: (<Avatar name="John Doe" alt="John Doe" />) as unknown as string,
+        image: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
         email: 'john@example.com',
         userType: 'USER',
         adminApproved: true,
@@ -1089,12 +1074,8 @@ describe('Testing User Table Item', () => {
           {
             _id: 'xyz',
             name: 'Blocked Organization 1',
-            image: (
-              <Avatar
-                name="Blocked Organization 1"
-                alt="Blocked Organization 1"
-              />
-            ) as unknown as string,
+            image:
+              'https://api.dicebear.com/5.x/initials/svg?seed=Blocked%20Organization%201',
             address: {
               city: 'Kingston',
               countryCode: 'JM',
@@ -1110,9 +1091,8 @@ describe('Testing User Table Item', () => {
               _id: '123',
               firstName: 'John',
               lastName: 'Doe',
-              image: (
-                <Avatar name="John Doe" alt="John Doe" />
-              ) as unknown as string,
+              image:
+                'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
               email: 'john@example.com',
             },
           },
@@ -1219,7 +1199,7 @@ describe('Testing User Table Item', () => {
         _id: '123',
         firstName: 'John',
         lastName: 'Doe',
-        image: (<Avatar name="John Doe" alt="John Doe" />) as unknown as string,
+        image: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
         email: 'john@example.com',
         userType: 'ADMIN',
         adminApproved: true,
@@ -1236,12 +1216,8 @@ describe('Testing User Table Item', () => {
           {
             _id: 'xyz',
             name: 'Blocked Organization 1',
-            image: (
-              <Avatar
-                name="Blocked Organization 1"
-                alt="Blocked Organization 1"
-              />
-            ) as unknown as string,
+            image:
+              'https://api.dicebear.com/5.x/initials/svg?seed=Blocked%20Organization%201',
             address: {
               city: 'Kingston',
               countryCode: 'JM',
@@ -1257,9 +1233,8 @@ describe('Testing User Table Item', () => {
               _id: '123',
               firstName: 'John',
               lastName: 'Doe',
-              image: (
-                <Avatar name="John Doe" alt="John Doe" />
-              ) as unknown as string,
+              image:
+                'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
               email: 'john@example.com',
             },
           },
