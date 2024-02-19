@@ -214,9 +214,6 @@ describe('Testing Advertisement Component', () => {
       screen.getByLabelText('Enter name of Advertisement'),
       'Cookie Shop',
     );
-    userEvent.click(
-      screen.getByLabelText('Provide a link for content to be displayed'),
-    );
     const mediaFile = new File(['media content'], 'test.png', {
       type: 'image/png',
     });

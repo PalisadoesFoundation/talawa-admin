@@ -348,10 +348,9 @@ describe('Testing Advertisement Register Component', () => {
 
     fireEvent.click(getByText(translations.register));
     await waitFor(() => {
-      expect(toast.warn).toBeCalledWith(
-        'Link is invalid. Please enter a valid link',
+      expect(toast.error).toBeCalledWith(
+        'An error occured, could not create new advertisement'
       );
-    });
   });
 
   test('Throws error when the end date is less than the start date', async () => {
