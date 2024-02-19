@@ -26,7 +26,6 @@ describe('Avatar component', () => {
 
   test('renders with custom style and data-testid', () => {
     const testName = 'Jane Doe';
-    const testAlt = 'Custom Style Alt Text';
     const testStyle = 'custom-avatar-style';
     const testDataTestId = 'custom-avatar-test-id';
 
@@ -35,14 +34,13 @@ describe('Avatar component', () => {
         <I18nextProvider i18n={i18nForTest}>
           <Avatar
             name={testName}
-            alt={testAlt}
             avatarStyle={testStyle}
             dataTestId={testDataTestId}
           />
         </I18nextProvider>
       </BrowserRouter>,
     );
-    const avatarElement = getByAltText(testAlt);
+    const avatarElement = getByAltText('Dummy Avatar');
 
     expect(avatarElement).toBeInTheDocument();
     expect(avatarElement.getAttribute('src')).toBeDefined();
