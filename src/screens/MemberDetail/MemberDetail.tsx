@@ -155,16 +155,13 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                           data-testid="userImagePresent"
                         />
                       ) : (
-                        <span
-                          className={styles.userImage}
-                          data-testid="userImageAbsent"
-                        >
-                          <Avatar
-                            name={`${userData?.user?.firstName} ${userData?.user?.lastName}`}
-                            alt="User Image"
-                            size={180}
-                          />
-                        </span>
+                        <Avatar
+                          name={`${userData?.user?.firstName} ${userData?.user?.lastName}`}
+                          alt="User Image"
+                          size={180}
+                          avatarStyle={styles.userImage}
+                          dataTestId="userImageAbsent"
+                        />
                       )}
                     </div>
                   </Col>

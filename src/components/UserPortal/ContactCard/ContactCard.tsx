@@ -38,13 +38,19 @@ function contactCard(props: InterfaceContactCardProps): JSX.Element {
         onClick={handleSelectedContactChange}
         data-testid="contactContainer"
       >
-        <span className={styles.contactImage}>
-          {props.image ? (
-            <img src={props.image} alt={contactName} />
-          ) : (
-            <Avatar name={contactName} alt={contactName} />
-          )}
-        </span>
+        {props.image ? (
+          <img
+            src={props.image}
+            alt={contactName}
+            className={styles.contactImage}
+          />
+        ) : (
+          <Avatar
+            name={contactName}
+            alt={contactName}
+            avatarStyle={styles.contactImage}
+          />
+        )}
         <div className={styles.contactNameContainer}>
           <b>{contactName}</b>
           <small className={styles.grey}>{props.email}</small>

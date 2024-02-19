@@ -23,4 +23,30 @@ describe('Avatar component', () => {
     expect(avatarElement).toBeInTheDocument();
     expect(avatarElement.getAttribute('src')).toBeDefined();
   });
+
+  test('renders with custom style and data-testid', () => {
+    const testName = 'Jane Doe';
+    const testAlt = 'Custom Style Alt Text';
+    const testStyle = 'custom-avatar-style';
+    const testDataTestId = 'custom-avatar-test-id';
+
+    const { getByAltText } = render(
+      <BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <Avatar
+            name={testName}
+            alt={testAlt}
+            avatarStyle={testStyle}
+            dataTestId={testDataTestId}
+          />
+        </I18nextProvider>
+      </BrowserRouter>,
+    );
+    const avatarElement = getByAltText(testAlt);
+
+    expect(avatarElement).toBeInTheDocument();
+    expect(avatarElement.getAttribute('src')).toBeDefined();
+    expect(avatarElement.getAttribute('class')).toContain(testStyle);
+    expect(avatarElement.getAttribute('data-testid')).toBe(testDataTestId);
+  });
 });

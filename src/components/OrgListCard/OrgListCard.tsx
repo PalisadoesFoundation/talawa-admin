@@ -43,20 +43,19 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
       <div className={styles.orgCard}>
         <div className={styles.innerContainer}>
           <div className={styles.orgImgContainer}>
-            <span data-testid={image ? '' : 'emptyContainerForImage'}>
-              {image ? (
-                <img src={image} alt={`${name} image`} />
-              ) : (
-                <Avatar
-                  name={name
-                    .split(/\s+/)
-                    .map((word) => word.charAt(0))
-                    .slice(0, 2)
-                    .join('')}
-                  alt={`${name} image`}
-                />
-              )}
-            </span>
+            {image ? (
+              <img src={image} alt={`${name} image`} />
+            ) : (
+              <Avatar
+                name={name
+                  .split(/\s+/)
+                  .map((word) => word.charAt(0))
+                  .slice(0, 2)
+                  .join('')}
+                alt={`${name} image`}
+                dataTestId="emptyContainerForImage"
+              />
+            )}
           </div>
           <div className={styles.content}>
             <Tooltip title={name} placement="top-end">
