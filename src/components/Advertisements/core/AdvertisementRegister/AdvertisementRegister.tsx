@@ -90,10 +90,6 @@ function advertisementRegister({
 
   const handleRegister = async (): Promise<void> => {
     try {
-      if (!isValidLink(formState.link)) {
-        toast.warn('Link is invalid. Please enter a valid link');
-        return;
-      }
       console.log('At handle register', formState);
       if (formState.endDate < formState.startDate) {
         toast.error('End date must be greater than or equal to start date');
