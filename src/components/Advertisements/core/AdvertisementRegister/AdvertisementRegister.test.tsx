@@ -430,8 +430,8 @@ describe('Testing Advertisement Register Component', () => {
                   startDate={new Date()}
                   type="BANNER"
                   name="Advert1"
-                  orgId="1"
-                  link="google.com"
+                  organizationId="1"
+                  advertisementMedia="google.com"
                 />
               }
             </I18nextProvider>

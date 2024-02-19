@@ -456,7 +456,7 @@ type Mutation {
   ): Plugin!
   createPost(data: PostInput!, file: String): Post
   createUserTag(input: CreateUserTagInput!): UserTag
-  deleteAdvertisementById(id: ID!): DeletePayload!
+  deleteAdvertisement(id: ID!): DeletePayload!
   deleteDonationById(id: ID!): DeletePayload!
   forgotPassword(data: ForgotPasswordData!): Boolean!
   joinPublicOrganization(organizationId: ID!): User!

@@ -494,7 +494,7 @@ export const UPDATE_ADVERTISEMENT_MUTATION = gql`
 `;
 export const DELETE_ADVERTISEMENT_BY_ID = gql`
   mutation ($id: ID!) {
-    deleteAdvertisementById(id: $id) {
+    deleteAdvertisement(id: $id) {
       success
     }
   }
