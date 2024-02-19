@@ -207,7 +207,7 @@ describe('Testing Advertisement Register Component', () => {
         target: { value: 'Test Advertisement' },
       });
       expect(getByLabelText(translations.Rname)).toHaveValue(
-        'Test Advertisement'
+        'Test Advertisement',
       );
 
       const mediaFile = new File(['media content'], 'test.png', {
@@ -270,7 +270,7 @@ describe('Testing Advertisement Register Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await waitFor(async () => {
@@ -283,7 +283,7 @@ describe('Testing Advertisement Register Component', () => {
       });
 
       expect(getByLabelText(translations.Rname)).toHaveValue(
-        'Updated Advertisement'
+        'Updated Advertisement',
       );
 
       const mediaFile = new File(['media content'], 'test.png', {
@@ -502,7 +502,7 @@ describe('Testing Advertisement Register Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     fireEvent.click(screen.getByText(translations.addNew));

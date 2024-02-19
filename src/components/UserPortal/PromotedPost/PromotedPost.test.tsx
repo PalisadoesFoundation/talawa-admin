@@ -65,7 +65,7 @@ describe('Testing PromotedPost Test', () => {
       const image = queryByRole('img');
       expect(image).toHaveAttribute(
         'src',
-        'data:image/png;base64,bWVkaWEgY29udGVudA=='
+        'data:image/png;base64,bWVkaWEgY29udGVudA==',
       );
     });
   });
