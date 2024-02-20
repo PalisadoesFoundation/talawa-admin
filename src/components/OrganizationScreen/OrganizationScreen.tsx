@@ -1,7 +1,6 @@
 import LeftDrawerOrg from 'components/LeftDrawerOrg/LeftDrawerOrg';
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import styles from './OrganizationScreen.module.css';
 import { useSelector } from 'react-redux';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import type { RootState } from 'state/reducers';
@@ -38,10 +37,10 @@ const organizationScreen = ({
   }, []);
 
   return (
-    <>
+    <div className="adminScreenWrapper">
       {hideDrawer ? (
         <Button
-          className={styles.opendrawer}
+          className="openDrawerButton"
           onClick={(): void => {
             setHideDrawer(!hideDrawer);
           }}
@@ -51,7 +50,7 @@ const organizationScreen = ({
         </Button>
       ) : (
         <Button
-          className={styles.collapseSidebarButton}
+          className="collapseSidebarButton"
           onClick={(): void => {
             setHideDrawer(!hideDrawer);
           }}
@@ -60,7 +59,7 @@ const organizationScreen = ({
           <i className="fa fa-angle-double-left" aria-hidden="true"></i>
         </Button>
       )}
-      <div className={styles.drawer}>
+      <div className="drawer">
         <LeftDrawerOrg
           orgId={configUrl}
           targets={targets}
@@ -70,12 +69,8 @@ const organizationScreen = ({
         />
       </div>
       <div
-        className={`${styles.pageContainer} ${
-          hideDrawer === null
-            ? ''
-            : hideDrawer
-              ? styles.expand
-              : styles.contract
+        className={`pageContainer ${
+          hideDrawer === null ? '' : hideDrawer ? 'expand' : 'contract'
         } `}
         data-testid="mainpageright"
       >
@@ -86,7 +81,7 @@ const organizationScreen = ({
         </div>
         {children}
       </div>
-    </>
+    </div>
   );
 };
 

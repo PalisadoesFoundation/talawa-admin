@@ -12,7 +12,6 @@ import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
 import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
-import styles from './LeftDrawerOrg.module.css';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -76,34 +75,34 @@ const leftDrawerOrg = ({
   return (
     <>
       <div
-        className={`${styles.leftDrawer} ${
+        className={`leftDrawerOrg ${
           hideDrawer === null
-            ? styles.hideElemByDefault
+            ? 'hideElemByDefault'
             : hideDrawer
-              ? styles.inactiveDrawer
-              : styles.activeDrawer
+              ? 'inactiveDrawer'
+              : 'activeDrawer'
         }`}
         data-testid="leftDrawerContainer"
       >
         {/* Branding Section */}
-        <div className={styles.brandingContainer}>
-          <TalawaLogo className={styles.talawaLogo} />
-          <span className={styles.talawaText}>{t('talawaAdminPortal')}</span>
+        <div className="brandingContainer">
+          <TalawaLogo className="talawaLogo" />
+          <span className="talawaText">{t('talawaAdminPortal')}</span>
         </div>
 
         {/* Organization Section */}
-        <div className={styles.organizationContainer}>
+        <div className="organizationContainer">
           {loading ? (
             <>
               <button
-                className={`${styles.profileContainer} shimmer`}
+                className={`profileContainer shimmer`}
                 data-testid="orgBtn"
               />
             </>
           ) : organization == undefined ? (
             <>
               <button
-                className={`${styles.profileContainer} bg-danger text-start text-white`}
+                className={`profileContainer bg-danger text-start text-white`}
                 disabled
               >
                 <div className="px-3">
@@ -113,8 +112,8 @@ const leftDrawerOrg = ({
               </button>
             </>
           ) : (
-            <button className={styles.profileContainer} data-testid="OrgBtn">
-              <div className={styles.imageContainer}>
+            <button className="profileContainer" data-testid="OrgBtn">
+              <div className="imageContainer">
                 {organization.image ? (
                   <img src={organization.image} alt={`profile picture`} />
                 ) : (
@@ -124,9 +123,9 @@ const leftDrawerOrg = ({
                   />
                 )}
               </div>
-              <div className={styles.profileText}>
-                <span className={styles.primaryText}>{organization.name}</span>
-                <span className={styles.secondaryText}>
+              <div className="profileText">
+                <span className="primaryText">{organization.name}</span>
+                <span className="secondaryText">
                   {organization.address.city}, {organization.address.state}
                   <br />
                   {organization.address.postalCode},{' '}
@@ -138,8 +137,8 @@ const leftDrawerOrg = ({
         </div>
 
         {/* Options List */}
-        <div className={styles.optionList}>
-          <h5 className={styles.titleHeader}>{t('menu')}</h5>
+        <div className="optionList">
+          <h5 className="titleHeader">{t('menu')}</h5>
           {targets.map(({ name, url }, index) => {
             return url ? (
               <Button
@@ -152,7 +151,7 @@ const leftDrawerOrg = ({
                   history.push(url);
                 }}
               >
-                <div className={styles.iconWrapper}>
+                <div className="iconWrapper">
                   <IconComponent
                     name={name}
                     fill={
@@ -177,13 +176,13 @@ const leftDrawerOrg = ({
         {/* Profile Section & Logout Btn */}
         <div style={{ marginTop: 'auto' }}>
           <button
-            className={styles.profileContainer}
+            className="profileContainer"
             data-testid="profileBtn"
             onClick={(): void => {
               history.push(`/member/id=${userId}`);
             }}
           >
-            <div className={styles.imageContainer}>
+            <div className="imageContainer">
               {userImage && userImage !== 'null' ? (
                 <img src={userImage} alt={`profile picture`} />
               ) : (
@@ -193,11 +192,11 @@ const leftDrawerOrg = ({
                 />
               )}
             </div>
-            <div className={styles.profileText}>
-              <span className={styles.primaryText}>
+            <div className="profileText">
+              <span className="primaryText">
                 {firstName} {lastName}
               </span>
-              <span className={styles.secondaryText}>
+              <span className="secondaryText">
                 {`${userType}`.toLowerCase()}
               </span>
             </div>
@@ -205,12 +204,12 @@ const leftDrawerOrg = ({
           </button>
           <Button
             variant="light"
-            className={`mt-4 d-flex justify-content-start px-0 w-100 ${styles.logout}`}
+            className={`mt-4 d-flex justify-content-start px-0 w-100 logout bg-danger text-white`}
             onClick={(): void => logout()}
             data-testid="logoutBtn"
           >
-            <div className={styles.imageContainer}>
-              <LogoutIcon fill={'var(--bs-secondary)'} />
+            <div className="imageContainer">
+              <LogoutIcon fill="white" />
             </div>
             {t('logout')}
           </Button>

@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './OrgLeftDrawer.module.css';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import Button from 'react-bootstrap/Button';
 import { useHistory } from 'react-router-dom';
@@ -52,26 +51,26 @@ function orgLeftDrawer({
 
   return (
     <div
-      className={`${styles.OrgLeftDrawer} ${
+      className={`leftDrawerOrg ${
         hideDrawer === null
-          ? styles.hideElemByDefault
+          ? 'hideElemByDefault'
           : hideDrawer
-            ? styles.inactiveDrawer
-            : styles.activeDrawer
+            ? 'inactiveDrawer'
+            : 'activeDrawer'
       }`}
     >
-      <div className={styles.brandingContainer}>
-        <TalawaLogo className={styles.talawaLogo} data-testid="talawaLogo" />
-        <span className={styles.talawaText}>{t('talawaUserPortal')}</span>
+      <div className="brandingContainer">
+        <TalawaLogo className="talawaLogo" data-testid="talawaLogo" />
+        <span className="talawaText">{t('talawaUserPortal')}</span>
       </div>
       {!orgLoading && (
         <button
-          className={styles.orgContainer}
+          className="orgContainer"
           onClick={(): void => {
             history.push(`/user/organizations`);
           }}
         >
-          <div className={styles.imageContainer}>
+          <div className="imageContainer">
             {orgData?.organizations[0]?.image ? (
               <img
                 src={orgData?.organizations[0]?.image}
@@ -84,19 +83,17 @@ function orgLeftDrawer({
               />
             )}
           </div>
-          <div className={styles.orgDetails}>
-            <div className={styles.orgName}>
-              {orgData?.organizations[0]?.name}
-            </div>
-            <div className={styles.orgCity}>
+          <div className="orgDetails">
+            <div className="orgName">{orgData?.organizations[0]?.name}</div>
+            <div className="orgCity">
               {orgData?.organizations[0]?.address.city}
             </div>
           </div>
           <AngleRightIcon fill={'var(--bs-secondary)'} />
         </button>
       )}
-      <h5 className={styles.titleHeader}>{t('menu')}</h5>
-      <div className={styles.optionList}>
+      <h5 className="titleHeader">{t('menu')}</h5>
+      <div className="optionList">
         <Button
           variant={screenName === 'Posts' ? 'success' : 'light'}
           className={`${
@@ -106,7 +103,7 @@ function orgLeftDrawer({
             history.push(`/user/organization/id=${orgId}`);
           }}
         >
-          <div className={styles.iconWrapper}>
+          <div className="iconWrapper">
             <PostsIcon
               fill={`${
                 screenName === 'Posts'
@@ -126,7 +123,7 @@ function orgLeftDrawer({
             history.push(`/user/events/id=${orgId}`);
           }}
         >
-          <div className={styles.iconWrapper}>
+          <div className="iconWrapper">
             <EventsIcon
               fill={`${
                 screenName === 'Events'
@@ -146,7 +143,7 @@ function orgLeftDrawer({
             history.push(`/user/donate/id=${orgId}`);
           }}
         >
-          <div className={styles.iconWrapper}>
+          <div className="iconWrapper">
             <DonateIcon
               stroke={`${
                 screenName === 'Donate'
@@ -161,12 +158,12 @@ function orgLeftDrawer({
       <div className="mt-auto">
         {!loading && (
           <button
-            className={styles.profileContainer}
+            className="profileContainer"
             onClick={(): void => {
               history.push(`/user/settings`);
             }}
           >
-            <div className={styles.imageContainer}>
+            <div className="imageContainer">
               {userData?.user?.image ? (
                 <img src={userData?.user?.image} alt={`profile picture`} />
               ) : (
@@ -176,11 +173,11 @@ function orgLeftDrawer({
                 />
               )}
             </div>
-            <div className={styles.profileText}>
-              <span className={styles.primaryText}>
+            <div className="profileText">
+              <span className="primaryText">
                 {userData?.user?.firstName} {userData?.user?.lastName}
               </span>
-              <span className={styles.secondaryText}>
+              <span className="secondaryText">
                 {`${userData?.user?.userType}`.toLowerCase()}
               </span>
             </div>
@@ -190,17 +187,17 @@ function orgLeftDrawer({
 
         <Button
           variant="light"
-          className={`mt-4 d-flex justify-content-start px-0 w-100 bg-danger text-white  ${styles.logout}`}
+          className={`mt-4 d-flex justify-content-start px-0 w-100 bg-danger text-white logout`}
           onClick={(): void => logout()}
           data-testid="logoutBtn"
         >
-          <div className={styles.imageContainer}>
+          <div className="imageContainer">
             <LogoutIcon fill={'white'} />
           </div>
           {t('signOut')}
         </Button>
         <Button
-          className={styles.collapseSidebarButton}
+          className="collapseSidebarButton"
           onClick={(): void => {
             setHideDrawer(!hideDrawer);
           }}

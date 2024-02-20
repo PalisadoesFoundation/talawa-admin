@@ -1,7 +1,6 @@
 import OrgLeftDrawer from '../OrgLeftDrawer/OrgLeftDrawer';
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import styles from './OrgScreen.module.css';
 
 export interface InterfaceOrgScreenProps {
   screenName: string;
@@ -28,10 +27,10 @@ const orgScreen = ({
   }, []);
 
   return (
-    <>
+    <div className="userScreenWrapper">
       {hideDrawer && (
         <Button
-          className={styles.opendrawer}
+          className="openDrawerButton"
           onClick={(): void => {
             setHideDrawer(!hideDrawer);
           }}
@@ -46,18 +45,14 @@ const orgScreen = ({
         setHideDrawer={setHideDrawer}
       />
       <div
-        className={`${styles.pageContainer} ${
-          hideDrawer === null
-            ? ''
-            : hideDrawer
-              ? styles.expand
-              : styles.contract
+        className={`pageContainer ${
+          hideDrawer === null ? '' : hideDrawer ? 'expand' : 'contract'
         } `}
         data-testid="childrenContainer"
       >
         {children}
       </div>
-    </>
+    </div>
   );
 };
 

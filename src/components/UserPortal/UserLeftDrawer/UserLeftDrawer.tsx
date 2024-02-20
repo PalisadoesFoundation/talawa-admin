@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './UserLeftDrawer.module.css';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import Button from 'react-bootstrap/Button';
 import { useHistory } from 'react-router-dom';
@@ -45,19 +44,19 @@ function userLeftDrawer({
 
   return (
     <div
-      className={`${styles.UserLeftDrawer} ${
+      className={`leftDrawer ${
         hideDrawer === null
-          ? styles.hideElemByDefault
+          ? 'hideElemByDefault'
           : hideDrawer
-            ? styles.inactiveDrawer
-            : styles.activeDrawer
+            ? 'inactiveDrawer'
+            : 'activeDrawer'
       }`}
       data-testid="userLeftDrawer"
     >
-      <TalawaLogo className={styles.talawaLogo} data-testid="talawaLogo" />
-      <span className={styles.talawaText}>{t('talawaUserPortal')}</span>
-      <h5 className={styles.titleHeader}>{t('menu')}</h5>
-      <div className={styles.optionList}>
+      <TalawaLogo className="talawaLogo" data-testid="talawaLogo" />
+      <span className="talawaText">{t('talawaUserPortal')}</span>
+      <h5 className="titleHeader">{t('menu')}</h5>
+      <div className="optionList">
         <Button
           variant={screenName === 'Organizations' ? 'success' : 'light'}
           className={`${
@@ -68,7 +67,7 @@ function userLeftDrawer({
           }}
           data-testid="orgButton"
         >
-          <div className={styles.iconWrapper}>
+          <div className="iconWrapper">
             <OrganizationsIcon
               stroke={`${
                 screenName === 'Organizations'
@@ -89,7 +88,7 @@ function userLeftDrawer({
           }}
           data-testid="settingsButton"
         >
-          <div className={styles.iconWrapper}>
+          <div className="iconWrapper">
             <SettingsIcon
               stroke={`${
                 screenName === 'Settings'
@@ -104,13 +103,13 @@ function userLeftDrawer({
       <div className="mt-auto">
         {!loading && (
           <button
-            className={styles.profileContainer}
+            className="profileContainer"
             onClick={(): void => {
               history.push(`/user/settings`);
             }}
             data-testid="profileButton"
           >
-            <div className={styles.imageContainer}>
+            <div className="imageContainer">
               {userData?.user?.image ? (
                 <img
                   src={userData.image}
@@ -125,11 +124,11 @@ function userLeftDrawer({
                 />
               )}
             </div>
-            <div className={styles.profileText}>
-              <span className={styles.primaryText}>
+            <div className="profileText">
+              <span className="primaryText">
                 {userData?.user?.firstName} {userData?.user?.lastName}
               </span>
-              <span className={styles.secondaryText}>
+              <span className="secondaryText">
                 {`${userData?.user?.userType}`.toLowerCase()}
               </span>
             </div>
@@ -139,17 +138,17 @@ function userLeftDrawer({
 
         <Button
           variant="light"
-          className={`mt-4 d-flex justify-content-start px-0 w-100 bg-danger text-white  ${styles.logout}`}
+          className={`mt-4 d-flex justify-content-start px-0 w-100 bg-danger text-white logout`}
           onClick={(): void => logout()}
           data-testid="logoutBtn"
         >
-          <div className={styles.imageContainer}>
+          <div className="imageContainer">
             <LogoutIcon fill={'white'} />
           </div>
           {t('signOut')}
         </Button>
         <Button
-          className={styles.collapseSidebarButton}
+          className="collapseSidebarButton"
           onClick={(): void => {
             setHideDrawer(!hideDrawer);
           }}

@@ -1,7 +1,6 @@
 import LeftDrawer from 'components/LeftDrawer/LeftDrawer';
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import styles from './SuperAdminScreen.module.css';
 
 export interface InterfaceSuperAdminScreenProps {
   title: string; // Multilingual Page title
@@ -29,10 +28,10 @@ const superAdminScreen = ({
   }, []);
 
   return (
-    <>
+    <div className="adminScreenWrapper">
       {hideDrawer ? (
         <Button
-          className={styles.opendrawer}
+          className="openDrawerButton"
           onClick={(): void => {
             setHideDrawer(!hideDrawer);
           }}
@@ -42,7 +41,7 @@ const superAdminScreen = ({
         </Button>
       ) : (
         <Button
-          className={styles.collapseSidebarButton}
+          className="collapseSidebarButton"
           onClick={(): void => {
             setHideDrawer(!hideDrawer);
           }}
@@ -57,12 +56,8 @@ const superAdminScreen = ({
         setHideDrawer={setHideDrawer}
       />
       <div
-        className={`${styles.pageContainer} ${
-          hideDrawer === null
-            ? ''
-            : hideDrawer
-              ? styles.expand
-              : styles.contract
+        className={`pageContainer ${
+          hideDrawer === null ? '' : hideDrawer ? 'expand' : 'contract'
         } `}
         data-testid="mainpageright"
       >
@@ -73,7 +68,7 @@ const superAdminScreen = ({
         </div>
         {children}
       </div>
-    </>
+    </div>
   );
 };
 

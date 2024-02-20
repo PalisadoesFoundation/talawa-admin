@@ -14,6 +14,7 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { onError } from '@apollo/link-error';
 import './assets/css/app.css';
+import './assets/css/index.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'flag-icons/css/flag-icons.min.css';

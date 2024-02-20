@@ -7,7 +7,6 @@ import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
 import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
 import { ReactComponent as RolesIcon } from 'assets/svgs/roles.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
-import styles from './LeftDrawer.module.css';
 import { useMutation } from '@apollo/client';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -43,19 +42,19 @@ const leftDrawer = ({
   return (
     <>
       <div
-        className={`${styles.leftDrawer} ${
+        className={`leftDrawer ${
           hideDrawer === null
-            ? styles.hideElemByDefault
+            ? 'hideElemByDefault'
             : hideDrawer
-              ? styles.inactiveDrawer
-              : styles.activeDrawer
+              ? 'inactiveDrawer'
+              : 'activeDrawer'
         }`}
         data-testid="leftDrawerContainer"
       >
-        <TalawaLogo className={styles.talawaLogo} />
-        <p className={styles.talawaText}>{t('talawaAdminPortal')}</p>
-        <h5 className={styles.titleHeader}>{t('menu')}</h5>
-        <div className={styles.optionList}>
+        <TalawaLogo className="talawaLogo" />
+        <p className="talawaText">{t('talawaAdminPortal')}</p>
+        <h5 className="titleHeader">{t('menu')}</h5>
+        <div className="optionList">
           <Button
             variant={screenName === 'My Organizations' ? 'success' : 'light'}
             className={`${
@@ -68,7 +67,7 @@ const leftDrawer = ({
               history.push('/orglist');
             }}
           >
-            <div className={styles.iconWrapper}>
+            <div className="iconWrapper">
               <OrganizationsIcon
                 stroke={`${
                   screenName === 'My Organizations'
@@ -90,7 +89,7 @@ const leftDrawer = ({
               }}
               data-testid="rolesBtn"
             >
-              <div className={styles.iconWrapper}>
+              <div className="iconWrapper">
                 <RolesIcon
                   fill={`${
                     screenName === 'Users'
@@ -105,13 +104,13 @@ const leftDrawer = ({
         </div>
         <div style={{ marginTop: 'auto' }}>
           <button
-            className={styles.profileContainer}
+            className="profileContainer"
             data-testid="profileBtn"
             onClick={(): void => {
               history.push(`/member/id=${userId}`);
             }}
           >
-            <div className={styles.imageContainer}>
+            <div className="imageContainer">
               {userImage && userImage !== 'null' ? (
                 <img src={userImage} alt={`profile picture`} />
               ) : (
@@ -121,11 +120,11 @@ const leftDrawer = ({
                 />
               )}
             </div>
-            <div className={styles.profileText}>
-              <span className={styles.primaryText}>
+            <div className="profileText">
+              <span className="primaryText">
                 {firstName} {lastName}
               </span>
-              <span className={styles.secondaryText}>
+              <span className="secondaryText">
                 {`${userType}`.toLowerCase()}
               </span>
             </div>
@@ -134,11 +133,11 @@ const leftDrawer = ({
 
           <Button
             variant="light"
-            className={`mt-4 d-flex justify-content-start px-0 w-100 bg-danger text-white  ${styles.logout}`}
+            className={`mt-4 d-flex justify-content-start px-0 w-100 bg-danger text-white logout`}
             onClick={(): void => logout()}
             data-testid="logoutBtn"
           >
-            <div className={styles.imageContainer}>
+            <div className="imageContainer">
               <LogoutIcon fill={'white'} />
             </div>
             {t('logout')}
