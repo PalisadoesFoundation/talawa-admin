@@ -36,7 +36,9 @@
     "lowercase_check": "至少一個小寫字母",
     "uppercase_check": "至少有一個大寫字母",
     "numeric_value_check": "至少一個數值",
-    "special_char_check": "至少一個特殊字符"
+    "special_char_check": "至少一個特殊字符",
+    "loading": "载入中...",
+    "selectOrg": "选择一个组织"
   },
   "userLoginPage": {
     "title": "塔拉瓦管理員",
@@ -66,7 +68,9 @@
     "successfullyRegistered": "註冊成功，請等待審核通過。",
     "userLogin": "用户登录",
     "afterRegister": "註冊成功。 請等待管理員批准您的請求。",
-    "OR": "或者"
+    "OR": "或者",
+    "loading": "载入中...",
+    "selectOrg": "选择一个组织"
   },
   "latestEvents": {
     "eventCardTitle": "即将举行的活动",

@@ -1,4 +1,4 @@
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Form } from 'react-bootstrap';
@@ -39,6 +39,7 @@ import Loader from 'components/Loader/Loader';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './LoginPage.module.css';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 
 function loginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -61,6 +62,7 @@ function loginPage(): JSX.Element {
     signEmail: '',
     signPassword: '',
     cPassword: '',
+    signOrg: '',
   });
   const [formState, setFormState] = useState({
     email: '',
@@ -75,6 +77,7 @@ function loginPage(): JSX.Element {
     numericValue: true,
     specialChar: true,
   });
+  const [organizations, setOrganizations] = React.useState([]);
 
   const passwordValidationRegExp = {
     lowercaseCharRegExp: new RegExp('[a-z]'),
@@ -130,6 +133,12 @@ function loginPage(): JSX.Element {
   const [recaptcha, { loading: recaptchaLoading }] =
     useMutation(RECAPTCHA_MUTATION);
 
+  const { data, loading } = useQuery(ORGANIZATION_LIST);
+
+  useEffect(() => {
+    if (data) setOrganizations(data.organizations);
+  }, [data]);
+
   useEffect(() => {
     async function loadResource(): Promise<void> {
       try {
@@ -167,8 +176,16 @@ function loginPage(): JSX.Element {
   const signupLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
-    const { signfirstName, signlastName, signEmail, signPassword, cPassword } =
-      signformState;
+    const {
+      signfirstName,
+      signlastName,
+      signEmail,
+      signPassword,
+      cPassword,
+      signOrg,
+    } = signformState;
+
+    console.log(signOrg);
 
     const recaptchaToken = recaptchaRef.current?.getValue();
     recaptchaRef.current?.reset();
@@ -225,6 +242,7 @@ function loginPage(): JSX.Element {
               signEmail: '',
               signPassword: '',
               cPassword: '',
+              signOrg: '',
             });
           }
         } catch (error: any) {
@@ -763,6 +781,47 @@ function loginPage(): JSX.Element {
                           <i className="fas fa-eye-slash"></i>
                         )}
                       </Button>
+                    </div>
+                    {signformState.cPassword.length > 0 &&
+                      signformState.signPassword !==
+                        signformState.cPassword && (
+                        <div
+                          className="form-text text-danger"
+                          data-testid="passwordCheck"
+                        >
+                          {t('Password_and_Confirm_password_mismatches.')}
+                        </div>
+                      )}
+                  </div>
+                  <div className="position-relative  my-2">
+                    <Form.Label>{t('selectOrg')}</Form.Label>
+                    <div className="position-relative">
+                      <select
+                        className="form-select text-muted "
+                        aria-label="Default select example"
+                        onChange={(e) => {
+                          setSignFormState({
+                            ...signformState,
+                            signOrg: e.target.value,
+                          });
+                          e.target.classList.remove('text-muted');
+                        }}
+                        value={signformState.signOrg}
+                        defaultValue=""
+                      >
+                        <option value="" disabled>
+                          {loading ? t('loading') : t('selectOrg')}
+                        </option>
+                        {organizations.map((org: any, idx: number) => {
+                          return (
+                            <>
+                              <option key={idx} value={org.id}>
+                                {org.name}
+                              </option>
+                            </>
+                          );
+                        })}
+                      </select>
                     </div>
                     {signformState.cPassword.length > 0 &&
                       signformState.signPassword !==

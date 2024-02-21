@@ -36,7 +36,9 @@
     "lowercase_check": "Atleast one lowercase letter",
     "uppercase_check": "Atleast one uppercase letter",
     "numeric_value_check": "Atleaset one numeric value",
-    "special_char_check": "Atleast one special character"
+    "special_char_check": "Atleast one special character",
+    "loading": "Loading...",
+    "selectOrg": "Select an organization"
   },
   "userLoginPage": {
     "title": "Talawa Admin",
@@ -66,7 +68,9 @@
     "successfullyRegistered": "Successfully Registered. Please wait until you will be approved.",
     "userLogin": "User Login",
     "afterRegister": "Successfully registered. Please wait for admin to approve your request.",
-    "OR": "OR"
+    "OR": "OR",
+    "loading": "Loading...",
+    "selectOrg": "Select an organization"
   },
   "latestEvents": {
     "eventCardTitle": "Upcoming Events",

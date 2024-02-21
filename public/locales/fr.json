@@ -36,7 +36,9 @@
     "lowercase_check": "Au moins une lettre minuscule",
     "uppercase_check": "Au moins une lettre majuscule",
     "special_char_check": "Au moins un caractère spécial",
-    "numeric_value_check": "Au moins une valeur numérique"
+    "numeric_value_check": "Au moins une valeur numérique",
+    "loading": "Chargement...",
+    "selectOrg": "Sélectionnez une organisation"
   },
   "userLoginPage": {
     "title": "Administrateur Talawa",
@@ -66,7 +68,9 @@
     "successfullyRegistered": "Enregistré avec succès. Veuillez patienter jusqu'à ce que vous soyez approuvé.",
     "userLogin": "Utilisateur en ligne",
     "afterRegister": "Enregistré avec succès. Veuillez attendre que l'administrateur approuve votre demande.",
-    "OR": "OU"
+    "OR": "OU",
+    "loading": "Chargement...",
+    "selectOrg": "Sélectionnez une organisation"
   },
   "latestEvents": {
     "eventCardTitle": "Événements à venir",
