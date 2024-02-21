@@ -47,7 +47,7 @@ function loginPage(): JSX.Element {
   document.title = t('title');
 
   const { getItem, setItem } = useLocalStorage();
-
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
   const [componentLoader, setComponentLoader] = useState(true);
   const [isInputFocused, setIsInputFocused] = useState(false);
@@ -127,9 +127,7 @@ function loginPage(): JSX.Element {
     const { signfirstName, signlastName, signEmail, signPassword, cPassword } =
       signformState;
 
-    const recaptchaToken = recaptchaRef.current?.getValue();
     recaptchaRef.current?.reset();
-
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
@@ -183,9 +181,7 @@ function loginPage(): JSX.Element {
   const loginLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
-    const recaptchaToken = recaptchaRef.current?.getValue();
     recaptchaRef.current?.reset();
-
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
@@ -379,6 +375,9 @@ function loginPage(): JSX.Element {
                         sitekey={
                           /* istanbul ignore next */
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
+                        }
+                        onChange={(token: string | null): void =>
+                          setRecaptchaToken(token)
                         }
                       />
                     </div>
@@ -587,6 +586,9 @@ function loginPage(): JSX.Element {
                         sitekey={
                           /* istanbul ignore next */
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
+                        }
+                        onChange={(token: string | null): void =>
+                          setRecaptchaToken(token)
                         }
                       />
                     </div>
