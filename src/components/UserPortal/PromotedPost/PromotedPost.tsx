@@ -30,6 +30,7 @@ export default function promotedPost(
               loop={true}
               playsInline
               data-testid="media"
+              crossOrigin="anonymous"
             >
               <source src={props.media} type="video/mp4" />
             </video>
