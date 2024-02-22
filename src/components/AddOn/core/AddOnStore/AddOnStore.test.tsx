@@ -206,7 +206,7 @@ describe('Testing AddOnStore Component', () => {
   test('check the working search bar when on Available tab', async () => {
     const mocks = [ORGANIZATIONS_LIST_MOCK, PLUGIN_GET_MOCK];
 
-    const { container } = render(
+    render(
       <ApolloProvider client={client}>
         <Provider store={store}>
           <BrowserRouter>
@@ -250,7 +250,7 @@ describe('Testing AddOnStore Component', () => {
 
   test('check filters enabled and disabled under Installed tab', async () => {
     const mocks = [ORGANIZATIONS_LIST_MOCK, PLUGIN_GET_MOCK];
-    const { container } = render(
+    render(
       <ApolloProvider client={client}>
         <Provider store={store}>
           <BrowserRouter>
@@ -278,8 +278,6 @@ describe('Testing AddOnStore Component', () => {
   });
 
   test('check the working search bar when on Installed tab', async () => {
-    const orgId = '6537904485008f171cf29924';
-
     const mocks = [ORGANIZATIONS_LIST_MOCK, PLUGIN_GET_MOCK];
 
     const { container } = render(
