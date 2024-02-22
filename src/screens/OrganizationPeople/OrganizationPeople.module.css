@@ -349,8 +349,8 @@
   }
 }
 .list_box {
-  height: 70vh;
+  height: auto;
   overflow-y: auto;
-  width: auto;
-  padding-right: 50px;
+  width: 100%;
+  /* padding-right: 50px; */
 }

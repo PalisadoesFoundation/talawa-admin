@@ -13,7 +13,7 @@ import defaultImg from 'assets/images/blank.png';
 import { errorHandler } from 'utils/errorHandler';
 
 interface InterfaceOrgPeopleListCardProps {
-  key: string;
+  key: number;
   id: string;
   memberName: string;
   joinDate: string;
@@ -58,41 +58,13 @@ function orgPeopleListCard(
   };
   return (
     <div>
-      <div className={styles.peoplelistdiv} data-testid="peoplelistitem">
-        <Row className={styles.memberlist}>
-          {props.memberImage ? (
-            <img src={props.memberImage} className={styles.memberimg} />
-          ) : (
-            <img src={defaultImg} className={styles.memberimg} />
-          )}
-          <Col className={styles.singledetails}>
-            <div className={styles.singledetails_data_left}>
-              <Link
-                className={styles.membername}
-                to={{
-                  pathname: `/member/id=${currentUrl}`,
-                  state: { id: props.id },
-                }}
-              >
-                {props.memberName ? <>{props.memberName}</> : <>Dogs Care</>}
-              </Link>
-              <p className={styles.memberfontcreated}>{props.memberEmail}</p>
-            </div>
-            <div className={styles.singledetails_data_right}>
-              <p className={styles.memberfont}>
-                {t('joined')}: <span>{props.joinDate}</span>
-              </p>
-              <Button
-                className={styles.memberfontcreatedbtn}
-                data-testid="removeMemberModalBtn"
-                onClick={toggleRemoveAdminModal}
-              >
-                {t('remove')}
-              </Button>
-            </div>
-          </Col>
-        </Row>
-      </div>
+      <Button
+        className={styles.memberfontcreatedbtn}
+        data-testid="removeMemberModalBtn"
+        onClick={toggleRemoveAdminModal}
+      >
+        {t('remove')}
+      </Button>
       <hr></hr>
       <Modal show={showRemoveAdminModal} onHide={toggleRemoveAdminModal}>
         <Modal.Header>

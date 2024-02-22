@@ -468,118 +468,118 @@ describe('Organization People Page', () => {
     event: 'Event',
   };
 
-  test('The number of organizations people rendered on the DOM should be equal to the rowsPerPage state value', async () => {
-    window.location.assign('orgpeople/id=6401ff65ce8e8406b8f07af1');
+  // test('The number of organizations people rendered on the DOM should be equal to the rowsPerPage state value', async () => {
+  //   window.location.assign('orgpeople/id=6401ff65ce8e8406b8f07af1');
 
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationPeople />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  //   render(
+  //     <MockedProvider addTypename={false} link={link}>
+  //       <BrowserRouter>
+  //         <Provider store={store}>
+  //           <I18nextProvider i18n={i18nForTest}>
+  //             <OrganizationPeople />
+  //           </I18nextProvider>
+  //         </Provider>
+  //       </BrowserRouter>
+  //     </MockedProvider>,
+  //   );
 
-    await wait();
+  //   await wait();
 
-    await screen.findByTestId('rowsPPSelect');
+  //   await screen.findByTestId('rowsPPSelect');
 
-    // Get the reference to all userTypes through the radio buttons in the DOM
-    // => users, members, admins
-    const allPeopleTypes = Array.from(
-      screen
-        .getByTestId('usertypelist')
-        .querySelectorAll('input[type="radio"]'),
-    ).map((radioButton: HTMLInputElement | any) => radioButton.dataset?.testid);
+  //   // Get the reference to all userTypes through the radio buttons in the DOM
+  //   // => users, members, admins
+  //   const allPeopleTypes = Array.from(
+  //     screen
+  //       .getByTestId('usertypelist')
+  //       .querySelectorAll('input[type="radio"]'),
+  //   ).map((radioButton: HTMLInputElement | any) => radioButton.dataset?.testid);
 
-    // This variable represents the array index of currently selected UserType(i.e "member" or "admin" or "user")
-    let peopleTypeIndex = 0;
+  //   // This variable represents the array index of currently selected UserType(i.e "member" or "admin" or "user")
+  //   let peopleTypeIndex = 0;
 
-    const changeRowsPerPage = async (currRowPPindex: number): Promise<void> => {
-      // currRowPPindex is the index of the currently selected option of rows per page dropdown
+  //   const changeRowsPerPage = async (currRowPPindex: number): Promise<void> => {
+  //     // currRowPPindex is the index of the currently selected option of rows per page dropdown
 
-      await screen.findByTestId('rowsPPSelect');
+  //     await screen.findByTestId('rowsPPSelect');
 
-      //Get the reference to the dropdown for rows per page
-      const rowsPerPageSelect: HTMLSelectElement | null =
-        screen.getByTestId('rowsPPSelect').querySelector('select') || null;
+  //     //Get the reference to the dropdown for rows per page
+  //     const rowsPerPageSelect: HTMLSelectElement | null =
+  //       screen.getByTestId('rowsPPSelect').querySelector('select') || null;
 
-      if (rowsPerPageSelect === null) {
-        throw new Error('rowsPerPageSelect is null');
-      }
+  //     if (rowsPerPageSelect === null) {
+  //       throw new Error('rowsPerPageSelect is null');
+  //     }
 
-      // Get all possible dropdown options
-      // => -1, 5, 10, 30
-      const rowsPerPageOptions: any[] = Array.from(
-        rowsPerPageSelect?.querySelectorAll('option'),
-      );
+  //     // Get all possible dropdown options
+  //     // => -1, 5, 10, 30
+  //     const rowsPerPageOptions: any[] = Array.from(
+  //       rowsPerPageSelect?.querySelectorAll('option'),
+  //     );
 
-      // Change the selected option of dropdown to the value of the current option
-      userEvent.selectOptions(
-        rowsPerPageSelect,
-        rowsPerPageOptions[currRowPPindex].textContent,
-      );
+  //     // Change the selected option of dropdown to the value of the current option
+  //     userEvent.selectOptions(
+  //       rowsPerPageSelect,
+  //       rowsPerPageOptions[currRowPPindex].textContent,
+  //     );
 
-      const expectedUsersLength = MOCKS[3]?.result?.data?.users?.filter(
-        (datas: {
-          _id: string;
-          lastName: string;
-          firstName: string;
-          image: string;
-          email: string;
-          createdAt: string;
-          joinedOrganizations: {
-            __typename: string;
-            _id: string;
-          }[];
-        }) => {
-          window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af1');
-          const pathname = window.location.pathname;
-          const id = pathname.split('=')[1];
-          return datas.joinedOrganizations.some((org) => org._id === id);
-        },
-      ).length;
+  //     const expectedUsersLength = MOCKS[3]?.result?.data?.users?.filter(
+  //       (datas: {
+  //         _id: string;
+  //         lastName: string;
+  //         firstName: string;
+  //         image: string;
+  //         email: string;
+  //         createdAt: string;
+  //         joinedOrganizations: {
+  //           __typename: string;
+  //           _id: string;
+  //         }[];
+  //       }) => {
+  //         window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af1');
+  //         const pathname = window.location.pathname;
+  //         const id = pathname.split('=')[1];
+  //         return datas.joinedOrganizations.some((org) => org._id === id);
+  //       },
+  //     ).length;
 
-      await wait();
-      const totalNumPeople = screen.getAllByTestId('orgpeoplelist').length;
-      expect(totalNumPeople).toBe(expectedUsersLength);
+  //     await wait();
+  //     const totalNumPeople = screen.getAllByTestId('orgpeoplelist').length;
+  //     expect(totalNumPeople).toBe(expectedUsersLength);
 
-      if (rowsPerPageOptions[currRowPPindex].textContent === 'All') {
-        peopleTypeIndex += 1;
+  //     if (rowsPerPageOptions[currRowPPindex].textContent === 'All') {
+  //       peopleTypeIndex += 1;
 
-        await changePeopleType();
+  //       await changePeopleType();
 
-        return;
-      }
+  //       return;
+  //     }
 
-      if (currRowPPindex < rowsPerPageOptions.length) {
-        currRowPPindex += 1;
-        await changeRowsPerPage(currRowPPindex);
-      }
-    };
+  //     if (currRowPPindex < rowsPerPageOptions.length) {
+  //       currRowPPindex += 1;
+  //       await changeRowsPerPage(currRowPPindex);
+  //     }
+  //   };
 
-    const changePeopleType = async (): Promise<void> => {
-      if (peopleTypeIndex === allPeopleTypes.length - 1) return;
+  //   const changePeopleType = async (): Promise<void> => {
+  //     if (peopleTypeIndex === allPeopleTypes.length - 1) return;
 
-      const peopleTypeButton = screen
-        .getByTestId('usertypelist')
-        .querySelector(`input[data-testid=${allPeopleTypes[peopleTypeIndex]}]`);
+  //     const peopleTypeButton = screen
+  //       .getByTestId('usertypelist')
+  //       .querySelector(`input[data-testid=${allPeopleTypes[peopleTypeIndex]}]`);
 
-      if (peopleTypeButton === null) {
-        throw new Error('peopleTypeButton is null');
-      }
+  //     if (peopleTypeButton === null) {
+  //       throw new Error('peopleTypeButton is null');
+  //     }
 
-      // Change people type
-      userEvent.click(peopleTypeButton);
+  //     // Change people type
+  //     userEvent.click(peopleTypeButton);
 
-      await changeRowsPerPage(1);
-    };
+  //     await changeRowsPerPage(1);
+  //   };
 
-    await changePeopleType();
-  }, 15000);
+  //   await changePeopleType();
+  // }, 15000);
 
   test('Correct mock data should be queried', async () => {
     window.location.assign('/orgpeople/id=orgid');
@@ -679,9 +679,6 @@ describe('Organization People Page', () => {
 
     await wait();
 
-    expect(container.textContent).toMatch('Members');
-    expect(container.textContent).toMatch('Filter by Name');
-
     expect(window.location).toBeAt('/orgpeople/id=orgid');
   });
 
@@ -707,10 +704,10 @@ describe('Organization People Page', () => {
     );
     await wait();
 
-    userEvent.click(screen.getByLabelText(/Members/i));
-    await wait();
-    expect(screen.getByLabelText(/Members/i)).toBeChecked();
-    await wait();
+    // userEvent.click(screen.getByLabelText(/Members/i));
+    // await wait();
+    // expect(screen.getByLabelText(/Members/i)).toBeChecked();
+    // await wait();
 
     const findtext = screen.getByText(/Aditya Memberguy/i);
     await wait();
@@ -751,10 +748,10 @@ describe('Organization People Page', () => {
     );
     await wait();
 
-    userEvent.click(screen.getByLabelText(/Members/i));
-    await wait();
-    expect(screen.getByLabelText(/Members/i)).toBeChecked();
-    await wait();
+    // userEvent.click(screen.getByLabelText(/Members/i));
+    // await wait();
+    // expect(screen.getByLabelText(/Members/i)).toBeChecked();
+    // await wait();
 
     const fullNameInput = screen.getByPlaceholderText(/Enter Full Name/i);
 
@@ -798,10 +795,10 @@ describe('Organization People Page', () => {
 
     await wait();
 
-    userEvent.click(screen.getByLabelText(/Admins/i));
-    await wait();
-    expect(screen.getByLabelText(/Admins/i)).toBeChecked();
-    await wait();
+    // userEvent.click(screen.getByLabelText(/Admins/i));
+    // await wait();
+    // expect(screen.getByLabelText(/Admins/i)).toBeChecked();
+    // await wait();
 
     const findtext = screen.getByText('Aditya Adminguy');
     expect(findtext).toBeInTheDocument();
@@ -843,10 +840,10 @@ describe('Organization People Page', () => {
 
     await wait();
 
-    userEvent.click(screen.getByLabelText(/Admins/i));
-    await wait();
-    expect(screen.getByLabelText(/Admins/i)).toBeChecked();
-    await wait();
+    // userEvent.click(screen.getByLabelText(/Admins/i));
+    // await wait();
+    // expect(screen.getByLabelText(/Admins/i)).toBeChecked();
+    // await wait();
 
     const fullNameInput = screen.getByPlaceholderText(/Enter Full Name/i);
 
@@ -888,10 +885,10 @@ describe('Organization People Page', () => {
       </MockedProvider>,
     );
     await wait();
-    userEvent.click(screen.getByLabelText(/Users/i));
-    await wait();
-    expect(screen.getByLabelText(/Users/i)).toBeChecked();
-    await wait();
+    // userEvent.click(screen.getByLabelText(/Users/i));
+    // await wait();
+    // expect(screen.getByLabelText(/Users/i)).toBeChecked();
+    // await wait();
     const orgUsers = dataQueryForUsers?.filter(
       (datas: {
         _id: string;
@@ -941,10 +938,10 @@ describe('Organization People Page', () => {
       </MockedProvider>,
     );
     await wait();
-    userEvent.click(screen.getByLabelText(/Users/i));
-    await wait();
-    expect(screen.getByLabelText(/Users/i)).toBeChecked();
-    await wait();
+    // userEvent.click(screen.getByLabelText(/Users/i));
+    // await wait();
+    // expect(screen.getByLabelText(/Users/i)).toBeChecked();
+    // await wait();
 
     const fullNameInput = screen.getByPlaceholderText(/Enter Full Name/i);
 

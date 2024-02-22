@@ -1,4 +1,4 @@
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
@@ -25,6 +25,16 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import Loader from 'components/Loader/Loader';
+import {
+  REMOVE_ADMIN_MUTATION,
+  REMOVE_MEMBER_MUTATION,
+  ADD_ADMIN_MUTATION,
+} from 'GraphQl/Mutations/mutations';
+import { errorHandler } from 'utils/errorHandler';
+import UserListCard from 'components/UserListCard/UserListCard';
+import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
+import OrgAdminListCard from 'components/OrgAdminListCard/OrgAdminListCard';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -163,21 +173,6 @@ function organizationPeople(): JSX.Element {
       }
     }
   };
-  /* istanbul ignore next */
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
-  ): void => {
-    setPage(newPage);
-  };
-
-  /* istanbul ignore next */
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ): void => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
 
   return (
     <>
@@ -303,6 +298,9 @@ function organizationPeople(): JSX.Element {
                           <StyledTableCell align="center">
                             Joined
                           </StyledTableCell>
+                          <StyledTableCell align="center">
+                            Actions
+                          </StyledTableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -315,7 +313,7 @@ function organizationPeople(): JSX.Element {
                             (rowsPerPage > 0
                               ? memberData.organizationsMemberConnection.edges.slice(
                                   page * rowsPerPage,
-                                  page * rowsPerPage + rowsPerPage
+                                  page * rowsPerPage + rowsPerPage,
                                 )
                               : memberData.organizationsMemberConnection.edges
                             ).map((datas: any, index: number) => (
@@ -355,6 +353,20 @@ function organizationPeople(): JSX.Element {
                                 <StyledTableCell align="center">
                                   {dayjs(datas.createdAt).format('DD/MM/YYYY')}
                                 </StyledTableCell>
+                                <StyledTableCell align="center">
+                                  <OrgPeopleListCard
+                                    key={index}
+                                    id={datas._id}
+                                    memberName={
+                                      datas.firstName + ' ' + datas.lastName
+                                    }
+                                    joinDate={dayjs(datas.createdAt).format(
+                                      'DD/MM/YYYY',
+                                    )}
+                                    memberImage={datas.image}
+                                    memberEmail={datas.email}
+                                  />
+                                </StyledTableCell>
                               </StyledTableRow>
                             ))
                           ) : state === 1 &&
@@ -364,7 +376,7 @@ function organizationPeople(): JSX.Element {
                             (rowsPerPage > 0
                               ? adminData.organizationsMemberConnection.edges.slice(
                                   page * rowsPerPage,
-                                  page * rowsPerPage + rowsPerPage
+                                  page * rowsPerPage + rowsPerPage,
                                 )
                               : adminData.organizationsMemberConnection.edges
                             ).map((datas: any, index: number) => (
@@ -404,6 +416,20 @@ function organizationPeople(): JSX.Element {
                                 <StyledTableCell align="center">
                                   {dayjs(datas.createdAt).format('DD/MM/YYYY')}
                                 </StyledTableCell>
+                                <StyledTableCell align="center">
+                                  <OrgAdminListCard
+                                    key={index}
+                                    id={datas._id}
+                                    memberName={
+                                      datas.firstName + ' ' + datas.lastName
+                                    }
+                                    joinDate={dayjs(datas.createdAt).format(
+                                      'DD/MM/YYYY',
+                                    )}
+                                    memberImage={datas.image}
+                                    memberEmail={datas.email}
+                                  />
+                                </StyledTableCell>
                               </StyledTableRow>
                             ))
                           ) : state === 2 &&
@@ -412,7 +438,7 @@ function organizationPeople(): JSX.Element {
                             (rowsPerPage > 0
                               ? usersData.users.slice(
                                   page * rowsPerPage,
-                                  page * rowsPerPage + rowsPerPage
+                                  page * rowsPerPage + rowsPerPage,
                                 )
                               : usersData.users
                             ).map((datas: any, index: number) => (
@@ -452,6 +478,20 @@ function organizationPeople(): JSX.Element {
                                 <StyledTableCell align="center">
                                   {dayjs(datas.createdAt).format('DD/MM/YYYY')}
                                 </StyledTableCell>
+                                <StyledTableCell align="center">
+                                  <UserListCard
+                                    key={index}
+                                    id={datas._id}
+                                    memberName={
+                                      datas.firstName + ' ' + datas.lastName
+                                    }
+                                    joinDate={dayjs(datas.createdAt).format(
+                                      'DD/MM/YYYY',
+                                    )}
+                                    memberImage={datas.image}
+                                    memberEmail={datas.email}
+                                  />
+                                </StyledTableCell>
                               </StyledTableRow>
                             ))
                           ) : (
@@ -461,8 +501,8 @@ function organizationPeople(): JSX.Element {
                                 state === 0
                                   ? 'member'
                                   : state === 1
-                                  ? 'admin'
-                                  : 'user'
+                                    ? 'admin'
+                                    : 'user'
                               }
                               keyPrefix="userNotFound"
                             />
@@ -474,37 +514,6 @@ function organizationPeople(): JSX.Element {
                 </Col>
               </div>
             )}
-          </div>
-          <div>
-            <table
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <tbody>
-                <tr data-testid="rowsPPSelect">
-                  <>
-                    <PaginationList
-                      count={
-                        state === 0
-                          ? memberData?.organizationsMemberConnection.edges
-                              .length ?? 0
-                          : state === 1
-                          ? adminData?.organizationsMemberConnection.edges
-                              .length ?? 0
-                          : usersData?.users.length ?? 0
-                      }
-                      rowsPerPage={rowsPerPage}
-                      page={page}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                  </>
-                </tr>
-              </tbody>
-            </table>
           </div>
         </Col>
       </OrganizationScreen>

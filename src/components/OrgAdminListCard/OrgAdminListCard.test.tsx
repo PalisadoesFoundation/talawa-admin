@@ -41,7 +41,7 @@ describe('Testing Organization Admin List Card', () => {
 
   test('should render props and text elements test for the page component', async () => {
     const props = {
-      key: '123',
+      key: 123,
       id: '456',
       memberName: 'John Doe',
       joinDate: '05/05/2022',
@@ -70,7 +70,7 @@ describe('Testing Organization Admin List Card', () => {
 
   test('Should render text elements when props value is not passed', async () => {
     const props = {
-      key: '123',
+      key: 123,
       id: '456',
       memberName: '',
       joinDate: '05/05/2022',
