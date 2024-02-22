@@ -4,15 +4,8 @@ import React, { useEffect, useState } from 'react';
 import styles from './AddOnStore.module.css';
 import AddOnEntry from '../AddOnEntry/AddOnEntry';
 import Action from '../../support/components/Action/Action';
-import SidePanel from 'components/AddOn/support/components/SidePanel/SidePanel';
-import MainContent from 'components/AddOn/support/components/MainContent/MainContent';
 import { useQuery } from '@apollo/client';
-import {
-  ADMIN_LIST,
-  MEMBERS_LIST,
-  PLUGIN_GET,
-  USER_LIST,
-} from 'GraphQl/Queries/Queries'; // PLUGIN_LIST
+import { PLUGIN_GET } from 'GraphQl/Queries/Queries'; // PLUGIN_LIST
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../../state/reducers';
 import { Col, Form, Row, Tab, Tabs } from 'react-bootstrap';
@@ -40,12 +33,15 @@ function addOnStore(): JSX.Element {
   const { installed, addonStore } = plugins;
   // type plugData = { pluginName: String, plug };
   const { data, loading, error } = useQuery(PLUGIN_GET);
+
+  const orgId = window.location.href.split('=')[1];
+
   /* istanbul ignore next */
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const getStorePlugins = async () => {
     let plugins = await new PluginHelper().fetchStore();
     const installIds = (await new PluginHelper().fetchInstalled()).map(
-      (plugin: any) => plugin.id,
+      (plugin: any) => plugin.id
     );
     plugins = plugins.map((plugin: any) => {
       plugin.installed = installIds.includes(plugin.id);
@@ -76,13 +72,13 @@ function addOnStore(): JSX.Element {
     store.dispatch({ type: 'UPDATE_P_TARGETS', payload: links });
   };
   // /* istanbul ignore next */
-  const pluginModified = (): void => {
-    return getInstalledPlugins();
-    // .then((installedPlugins) => {
-    //   getStorePlugins();
-    //   return installedPlugins;
-    // });
-  };
+  // const pluginModified = (): void => {
+  //   return getInstalledPlugins();
+  // .then((installedPlugins) => {
+  //   getStorePlugins();
+  //   return installedPlugins;
+  // });
+  // };
 
   // useEffect(() => {
   //   pluginModified();
@@ -187,8 +183,8 @@ function addOnStore(): JSX.Element {
                         ) {
                           return val;
                         }
-                      },
-                    ),
+                      }
+                    )
                   )}
                   {data.getPlugins.filter(
                     (val: {
@@ -208,7 +204,7 @@ function addOnStore(): JSX.Element {
                       ) {
                         return val;
                       }
-                    },
+                    }
                   ).length === 0 ? (
                     <h4> {t('pMessage')}</h4>
                   ) : (
@@ -231,7 +227,7 @@ function addOnStore(): JSX.Element {
                           ) {
                             return val;
                           }
-                        },
+                        }
                       )
                       .map(
                         (
@@ -243,7 +239,7 @@ function addOnStore(): JSX.Element {
                             uninstalledOrgs: string[];
                             getInstalledPlugins: () => any;
                           },
-                          i: React.Key | null | undefined,
+                          i: React.Key | null | undefined
                         ): JSX.Element => (
                           <AddOnEntry
                             id={plug._id}
@@ -254,19 +250,19 @@ function addOnStore(): JSX.Element {
                             // isInstalled={plug.pluginInstallStatus}
                             // configurable={plug.pluginInstallStatus}
                             component={'Special  Component'}
-                            modified={(): void => {
-                              console.log('Plugin is modified');
-                            }}
+                            modified={true}
                             getInstalledPlugins={getInstalledPlugins}
                             uninstalledOrgs={plug.uninstalledOrgs}
                           />
-                        ),
+                        )
                       )
                   )}
                 </Tab>
                 <Tab eventKey="installed" title={t('install')}>
                   {data.getPlugins
-                    .filter((plugin: any) => plugin.pluginInstallStatus == true)
+                    .filter(
+                      (plugin: any) => !plugin.uninstalledOrgs.includes(orgId)
+                    )
                     .filter(
                       (val: {
                         _id: string;
@@ -285,13 +281,13 @@ function addOnStore(): JSX.Element {
                         ) {
                           return val;
                         }
-                      },
+                      }
                     ).length === 0 ? (
                     <h4>{t('pMessage')} </h4> // eslint-disable-line
                   ) : (
                     data.getPlugins
                       .filter(
-                        (plugin: any) => plugin.pluginInstallStatus == true,
+                        (plugin: any) => !plugin.uninstalledOrgs.includes(orgId)
                       )
                       .filter(
                         (val: {
@@ -311,7 +307,7 @@ function addOnStore(): JSX.Element {
                           ) {
                             return val;
                           }
-                        },
+                        }
                       )
                       .map(
                         (
@@ -321,9 +317,10 @@ function addOnStore(): JSX.Element {
                             pluginDesc: string | undefined;
                             pluginCreatedBy: string;
                             uninstalledOrgs: string[];
+                            pluginInstallStatus: boolean | undefined;
                             getInstalledPlugins: () => any;
                           },
-                          i: React.Key | null | undefined,
+                          i: React.Key | null | undefined
                         ): JSX.Element => (
                           <AddOnEntry
                             id={plug._id}
@@ -334,13 +331,11 @@ function addOnStore(): JSX.Element {
                             // isInstalled={plug.pluginInstallStatus}
                             // configurable={plug.pluginInstallStatus}
                             component={'Special  Component'}
-                            modified={(): void => {
-                              console.log('Plugin is modified');
-                            }}
+                            modified={true}
                             getInstalledPlugins={getInstalledPlugins}
                             uninstalledOrgs={plug.uninstalledOrgs}
                           />
-                        ),
+                        )
                       )
                   )}
                 </Tab>
