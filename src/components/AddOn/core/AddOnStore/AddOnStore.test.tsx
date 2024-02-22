@@ -193,7 +193,7 @@ describe('Testing AddOnStore Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>
+      </ApolloProvider>,
     );
 
     await wait();
@@ -217,7 +217,7 @@ describe('Testing AddOnStore Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>
+      </ApolloProvider>,
     );
 
     await wait();
@@ -261,7 +261,7 @@ describe('Testing AddOnStore Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>
+      </ApolloProvider>,
     );
 
     await wait();
@@ -293,7 +293,7 @@ describe('Testing AddOnStore Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>
+      </ApolloProvider>,
     );
     await wait();
     userEvent.click(screen.getByText('Installed'));
@@ -335,7 +335,7 @@ describe('Testing AddOnStore Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>
+      </ApolloProvider>,
     );
 
     expect(screen.getByTestId('AddOnEntryStore')).toBeInTheDocument();
