@@ -14,7 +14,7 @@ name: PR Workflow
 on:
   pull_request:
     branches:
-      - ''
+      - '**'
 
 env:
   CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Dependencies
         run: npm install
@@ -49,7 +49,13 @@ jobs:
 
       - name: Run linting check
         if: steps.changed-files.outputs.only_changed != 'true'
-        run: npm run lint:check  
+        
+        run: npm run lint:check
+        
+      - name: Check for localStorage Usage
+        run: |
+          chmod +x scripts/githooks/check-localstorage-usage.js
+          node scripts/githooks/check-localstorage-usage.js --scan-entire-repo
 
       - name: Compare translation files
         run: |
@@ -58,18 +64,23 @@ jobs:
 
 
   Check-Changed-Files:
+    name: File count, sensitive files and branch check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v1
-
+        uses: actions/checkout@v4
+      - name: lists
+        uses: jitterbit/get-changed-files@v1
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: 3.11
 
       - name: Run Python script
         run: |
+          for changed_file in ${{ steps.files.outputs.all }}; do
+            echo "Do something with this ${changed_file}."
+          done
           python3 .github/workflows/check_files.py --base_branch "${{ github.base_ref }}" --pr_branch "${{ github.head_ref }}" --sensitive_files .github/workflows/sensitive_files.txt --verbose
 
   Test-Application:
@@ -78,7 +89,7 @@ jobs:
     needs: [Code-Quality-Checks]
     steps:
       - name: Checkout the Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Dependencies
         run: npm install
@@ -100,7 +111,7 @@ jobs:
           done
         
       - name: Present and Upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
@@ -118,10 +129,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20.x'
 
@@ -149,3 +160,4 @@ jobs:
         run: |
           echo "Error: Pull request target branch must be 'develop'. Please refer PR_GUIDELINES.md"
           exit 1
+
