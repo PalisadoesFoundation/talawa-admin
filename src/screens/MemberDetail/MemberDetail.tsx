@@ -41,7 +41,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({
   const location = useLocation<MemberDetailProps>();
   const currentUrl = location.state?.id || getItem('id') || id;
   const orgId = window.location.href.split('=')[1];
-  const calledFrom = from || location.state?.from;
+  const calledFrom = location.state?.from || from;
   document.title = t('title');
 
   const [adda] = useMutation(ADD_ADMIN_MUTATION);

@@ -144,6 +144,7 @@ describe('MemberDetail', () => {
   test('should render the elements', async () => {
     const props = {
       id: 'rishav-jha-mech',
+      from: 'orglist',
     };
 
     render(
@@ -215,6 +216,59 @@ describe('MemberDetail', () => {
     expect(getLangName('')).toBe('Unavailable');
   });
 
+  test('Should display dicebear image if image is null', async () => {
+    const props = {
+      id: 'rishav-jha-mech',
+      from: 'orglist',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <MemberDetail {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+
+    const user = MOCKS1[0].result.data.user;
+    const dicebearUrl = `https://api.dicebear.com/5.x/initials/svg?seed=${user?.firstName}%20${user?.lastName}`;
+
+    const userImage = await screen.findByTestId('userImageAbsent');
+    expect(userImage).toBeInTheDocument();
+    expect(userImage.getAttribute('src')).toBe(dicebearUrl);
+  });
+
+  test('Should display image if image is present', async () => {
+    const props = {
+      id: 'rishav-jha-mech',
+      from: 'orglist',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <MemberDetail {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+
+    const user = MOCKS2[0].result.data.user;
+    const userImage = await screen.findByTestId('userImagePresent');
+    expect(userImage).toBeInTheDocument();
+    expect(userImage.getAttribute('src')).toBe(user?.image);
+  });
+
   test('should render LeftDrawer from SuperAdminScreen when member details is called from home page', async () => {
     const props = {
       id: 'rishav-jha-mech',
@@ -237,68 +291,6 @@ describe('MemberDetail', () => {
     await waitFor(() => {
       expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
     });
-  });
-
-  test('Should display dicebear image if image is null', async () => {
-    const props = {
-      id: 'rishav-jha-mech',
-      from: 'orglist',
-    };
-
-    render(
-      <MockedProvider addTypename={false} link={link1}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <MemberDetail {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
-
-    const user = MOCKS1[0].result.data.user;
-    const dicebearUrl = `https://api.dicebear.com/5.x/initials/svg?seed=${user?.firstName}%20${user?.lastName}`;
-
-    await waitFor(() => {
-      expect(screen.getByTestId('userImageAbsent')).toBeInTheDocument();
-      expect(screen.getByTestId('userImageAbsent').getAttribute('src')).toBe(
-        dicebearUrl,
-      );
-    });
-  });
-
-  test('Should display image if image is present', async () => {
-    const props = {
-      id: 'rishav-jha-mech',
-    };
-
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <MemberDetail {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
-
-    const user = MOCKS2[0].result.data.user;
-
-    await waitFor(() =>
-      expect(screen.getByTestId('userImagePresent')).toBeInTheDocument(),
-    );
-    await waitFor(() =>
-      expect(screen.getByTestId('userImagePresent').getAttribute('src')).toBe(
-        user?.image,
-      ),
-    );
   });
 
   test('should call setState with 2 when button is clicked', async () => {
