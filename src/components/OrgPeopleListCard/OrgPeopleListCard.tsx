@@ -1,15 +1,11 @@
 import React from 'react';
 import styles from './OrgPeopleListCard.module.css';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
-import { Link } from 'react-router-dom';
-import defaultImg from 'assets/images/blank.png';
 import { errorHandler } from 'utils/errorHandler';
 
 interface InterfaceOrgPeopleListCardProps {

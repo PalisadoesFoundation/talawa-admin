@@ -1,6 +1,4 @@
 import React from 'react';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useMutation } from '@apollo/client';
@@ -12,8 +10,6 @@ import {
   UPDATE_USERTYPE_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
-import defaultImg from 'assets/images/blank.png';
 import { errorHandler } from 'utils/errorHandler';
 
 interface InterfaceOrgPeopleListCardProps {

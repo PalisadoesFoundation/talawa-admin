@@ -1,4 +1,4 @@
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
@@ -11,7 +11,6 @@ import {
 } from 'GraphQl/Queries/Queries';
 import NotFound from 'components/NotFound/NotFound';
 import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
-import PaginationList from 'components/PaginationList/PaginationList';
 import { useTranslation } from 'react-i18next';
 import styles from './OrganizationPeople.module.css';
 import { toast } from 'react-toastify';
@@ -25,16 +24,9 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import Loader from 'components/Loader/Loader';
-import {
-  REMOVE_ADMIN_MUTATION,
-  REMOVE_MEMBER_MUTATION,
-  ADD_ADMIN_MUTATION,
-} from 'GraphQl/Mutations/mutations';
-import { errorHandler } from 'utils/errorHandler';
 import UserListCard from 'components/UserListCard/UserListCard';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 import OrgAdminListCard from 'components/OrgAdminListCard/OrgAdminListCard';
-import InfiniteScroll from 'react-infinite-scroll-component';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -69,8 +61,8 @@ function organizationPeople(): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
 
   const [state, setState] = useState(role?.role || 0);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const page = 0;
+  const rowsPerPage = 5;
 
   const [filterData, setFilterData] = useState({
     firstName_contains: '',
