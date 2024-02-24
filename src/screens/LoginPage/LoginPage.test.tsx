@@ -116,7 +116,7 @@ describe('Talawa-API server fetch check', () => {
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
-                <LoginPage />
+                <LoginPage role="admin" />
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
@@ -137,7 +137,7 @@ describe('Talawa-API server fetch check', () => {
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
-                <LoginPage />
+                <LoginPage role="admin" />
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
@@ -158,7 +158,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -185,7 +185,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -230,7 +230,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -274,7 +274,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -317,7 +317,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -360,7 +360,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -400,7 +400,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -427,7 +427,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -453,7 +453,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -482,7 +482,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -513,7 +513,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -544,7 +544,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -565,7 +565,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -594,7 +594,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -623,7 +623,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -652,7 +652,7 @@ describe('Testing Login Page Screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
+              <LoginPage role="admin" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -671,5 +671,25 @@ describe('Testing Login Page Screen', () => {
     expect(password.password.length).toBeGreaterThanOrEqual(8);
 
     expect(screen.queryByTestId('passwordCheck')).toBeNull();
+  });
+
+  test('Component Should be rendered properly for user login', async () => {
+    window.location.assign('/user/organizations');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    expect(screen.getByText(/User Login/i)).toBeInTheDocument();
+    expect(window.location).toBeAt('/user/organizations');
   });
 });
