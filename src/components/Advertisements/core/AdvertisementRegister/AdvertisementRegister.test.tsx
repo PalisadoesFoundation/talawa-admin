@@ -74,8 +74,9 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 });
 
 const translations = JSON.parse(
-  // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-  JSON.stringify(i18n.getDataByLanguage('en')?.translation.advertisement!),
+  JSON.stringify(
+    i18n.getDataByLanguage('en')?.translation?.advertisement ?? null,
+  ),
 );
 
 describe('Testing Advertisement Register Component', () => {

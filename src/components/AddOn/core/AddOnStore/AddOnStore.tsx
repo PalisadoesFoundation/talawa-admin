@@ -1,26 +1,14 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 // import PropTypes from 'react';
 import styles from './AddOnStore.module.css';
 import AddOnEntry from '../AddOnEntry/AddOnEntry';
 import Action from '../../support/components/Action/Action';
-import SidePanel from 'components/AddOn/support/components/SidePanel/SidePanel';
-import MainContent from 'components/AddOn/support/components/MainContent/MainContent';
 import { useQuery } from '@apollo/client';
-import {
-  ADMIN_LIST,
-  MEMBERS_LIST,
-  PLUGIN_GET,
-  USER_LIST,
-} from 'GraphQl/Queries/Queries'; // PLUGIN_LIST
-import { useSelector } from 'react-redux';
-import type { RootState } from '../../../../state/reducers';
+import { PLUGIN_GET } from 'GraphQl/Queries/Queries'; // PLUGIN_LIST
 import { Col, Form, Row, Tab, Tabs } from 'react-bootstrap';
-import AddOnRegister from '../AddOnRegister/AddOnRegister';
 import PluginHelper from 'components/AddOn/support/services/Plugin.helper';
 import { store } from './../../../../state/store';
 import { useTranslation } from 'react-i18next';
-import Loader from 'components/Loader/Loader';
 import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 
 function addOnStore(): JSX.Element {
@@ -30,19 +18,12 @@ function addOnStore(): JSX.Element {
   const [isStore, setIsStore] = useState(true);
   const [showEnabled, setShowEnabled] = useState(true);
   const [searchText, setSearchText] = useState('');
-  const [dataList, setDataList] = useState([]);
+  const [, setDataList] = useState([]);
 
-  const [render, setRender] = useState(true);
-  const appRoutes = useSelector((state: RootState) => state.appRoutes);
-  const { targets, configUrl } = appRoutes;
-
-  const plugins = useSelector((state: RootState) => state.plugins);
-  const { installed, addonStore } = plugins;
   // type plugData = { pluginName: String, plug };
-  const { data, loading, error } = useQuery(PLUGIN_GET);
+  const { data, loading } = useQuery(PLUGIN_GET);
   /* istanbul ignore next */
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const getStorePlugins = async () => {
+  const getStorePlugins = async (): Promise<void> => {
     let plugins = await new PluginHelper().fetchStore();
     const installIds = (await new PluginHelper().fetchInstalled()).map(
       (plugin: any) => plugin.id,
@@ -69,19 +50,6 @@ function addOnStore(): JSX.Element {
     // const plugins = await new PluginHelper().fetchInstalled();
     // store.dispatch({ type: 'UPDATE_INSTALLED', payload: plugins });
     // return plugins;
-  };
-
-  /* istanbul ignore next */
-  const updateLinks = async (links: any[]): Promise<void> => {
-    store.dispatch({ type: 'UPDATE_P_TARGETS', payload: links });
-  };
-  // /* istanbul ignore next */
-  const pluginModified = (): void => {
-    return getInstalledPlugins();
-    // .then((installedPlugins) => {
-    //   getStorePlugins();
-    //   return installedPlugins;
-    // });
   };
 
   // useEffect(() => {
@@ -287,7 +255,7 @@ function addOnStore(): JSX.Element {
                         }
                       },
                     ).length === 0 ? (
-                    <h4>{t('pMessage')} </h4> // eslint-disable-line
+                    <h4>{t('pMessage')} </h4>
                   ) : (
                     data.getPlugins
                       .filter(

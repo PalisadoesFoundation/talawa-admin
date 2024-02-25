@@ -94,13 +94,7 @@ export default function home(): JSX.Element {
   const navbarProps = {
     currentPage: 'home',
   };
-  const {
-    data: promotedPostsData,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    refetch: _promotedPostsRefetch,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    loading: promotedPostsLoading,
-  } = useQuery(ADVERTISEMENTS_GET);
+  const { data: promotedPostsData } = useQuery(ADVERTISEMENTS_GET);
   const {
     data,
     refetch,

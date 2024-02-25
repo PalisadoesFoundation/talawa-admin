@@ -1,10 +1,9 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/jsx-filename-extension */
 import { MockedProvider } from '@apollo/react-testing';
 import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
+import React from 'react';
 
 import { store } from 'state/store';
 import DummyPlugin from './DummyPlugin';
