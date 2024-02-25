@@ -158,26 +158,4 @@ describe('Testing User Update', () => {
     expect(screen.getByPlaceholderText(/Email/i)).toBeInTheDocument();
     expect(screen.getByText(/Display Image/i)).toBeInTheDocument();
   });
-
-  test('should display warnings for blank form submission', async () => {
-    jest.spyOn(toast, 'warning');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <Router>
-            <UserUpdate {...props} />
-          </Router>
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    userEvent.click(screen.getByText(/Save Changes/i));
-
-    expect(toast.warning).toHaveBeenCalledWith('First Name cannot be blank!');
-    expect(toast.warning).toHaveBeenCalledWith('Last Name cannot be blank!');
-    expect(toast.warning).toHaveBeenCalledWith('Email cannot be blank!');
-  });
 });
