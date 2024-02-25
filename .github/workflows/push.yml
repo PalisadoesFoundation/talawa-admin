@@ -60,7 +60,7 @@ jobs:
 
   Generate-Documentation:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/automated-docs'
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
@@ -168,6 +168,7 @@ jobs:
 
   Copy-docs-to-talawa-docs:
     if: github.ref == 'refs/heads/automated-docs'
+    needs: Generate-Documentation
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
