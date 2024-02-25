@@ -93,7 +93,7 @@ jobs:
 
       - name: Run Python script
         run: |
-          python .github/workflows/check_eslint_disable.py"
+          python .github/workflows/check_eslint_disable.py
 
   Test-Application:
     name: Test Application
