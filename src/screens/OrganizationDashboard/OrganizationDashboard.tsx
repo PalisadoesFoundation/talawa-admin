@@ -248,7 +248,7 @@ function organizationDashboard(): JSX.Element {
                               location={event.location}
                             />
                           );
-                        }
+                        },
                       )
                     )}
                   </Card.Body>

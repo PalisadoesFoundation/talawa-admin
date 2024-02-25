@@ -120,7 +120,7 @@ describe('Talawa-API server fetch check', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
     });
 
@@ -141,7 +141,7 @@ describe('Talawa-API server fetch check', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
     });
 
@@ -162,7 +162,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -189,7 +189,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -200,17 +200,17 @@ describe('Testing Login Page Screen', () => {
 
     userEvent.type(
       screen.getByPlaceholderText(/First Name/i),
-      formData.firstName
+      formData.firstName,
     );
     userEvent.type(
       screen.getByPlaceholderText(/Last name/i),
-      formData.lastName
+      formData.lastName,
     );
     userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
     userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
     userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
-      formData.confirmPassword
+      formData.confirmPassword,
     );
 
     userEvent.click(screen.getByTestId('registrationBtn'));
@@ -234,7 +234,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -243,17 +243,17 @@ describe('Testing Login Page Screen', () => {
 
     userEvent.type(
       screen.getByPlaceholderText(/First Name/i),
-      formData.firstName
+      formData.firstName,
     );
     userEvent.type(
       screen.getByPlaceholderText(/Last Name/i),
-      formData.lastName
+      formData.lastName,
     );
     userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
     userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
     userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
-      formData.confirmPassword
+      formData.confirmPassword,
     );
 
     userEvent.click(screen.getByTestId('registrationBtn'));
@@ -277,7 +277,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -286,17 +286,17 @@ describe('Testing Login Page Screen', () => {
 
     userEvent.type(
       screen.getByPlaceholderText(/First Name/i),
-      formData.firstName
+      formData.firstName,
     );
     userEvent.type(
       screen.getByPlaceholderText(/Last Name/i),
-      formData.lastName
+      formData.lastName,
     );
     userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
     userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
     userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
-      formData.confirmPassword
+      formData.confirmPassword,
     );
 
     userEvent.click(screen.getByTestId('registrationBtn'));
@@ -320,7 +320,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -328,17 +328,17 @@ describe('Testing Login Page Screen', () => {
     userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
     userEvent.type(
       screen.getByPlaceholderText(/First Name/i),
-      formData.firstName
+      formData.firstName,
     );
     userEvent.type(
       screen.getByPlaceholderText(/Last name/i),
-      formData.lastName
+      formData.lastName,
     );
     userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
     userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
     userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
-      formData.confirmPassword
+      formData.confirmPassword,
     );
 
     userEvent.click(screen.getByTestId('registrationBtn'));
@@ -360,7 +360,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -387,7 +387,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -395,7 +395,7 @@ describe('Testing Login Page Screen', () => {
     userEvent.type(screen.getByTestId(/loginEmail/i), formData.email);
     userEvent.type(
       screen.getByPlaceholderText(/Enter Password/i),
-      formData.password
+      formData.password,
     );
 
     userEvent.click(screen.getByTestId('loginBtn'));
@@ -413,7 +413,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -442,7 +442,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -473,7 +473,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -504,7 +504,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
 
@@ -525,7 +525,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
 
@@ -554,7 +554,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
 
@@ -583,7 +583,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
 
@@ -612,7 +612,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
 

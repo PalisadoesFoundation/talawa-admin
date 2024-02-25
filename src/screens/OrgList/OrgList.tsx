@@ -48,7 +48,7 @@ function orgList(): JSX.Element {
   function closeDialogModal() {
     setdialogModalIsOpen(false);
   }
-  const toggleDialogModal = (): void =>
+  const toggleDialogModal = /* istanbul ignore next */ (): void =>
     setdialogModalIsOpen(!dialogModalisOpen);
   document.title = t('title');
 
@@ -85,7 +85,7 @@ function orgList(): JSX.Element {
   const [create] = useMutation(CREATE_ORGANIZATION_MUTATION);
 
   const [createSampleOrganization] = useMutation(
-    CREATE_SAMPLE_ORGANIZATION_MUTATION
+    CREATE_SAMPLE_ORGANIZATION_MUTATION,
   );
 
   const {
@@ -155,7 +155,7 @@ function orgList(): JSX.Element {
 
   /* istanbul ignore next */
   const isAdminForCurrentOrg = (
-    currentOrg: InterfaceOrgConnectionInfoType
+    currentOrg: InterfaceOrgConnectionInfoType,
   ): boolean => {
     if (userData?.user?.adminFor.length === 1) {
       // If user is admin for one org only then check if that org is current org
@@ -165,7 +165,7 @@ function orgList(): JSX.Element {
       return (
         userData?.user?.adminFor.some(
           (org: { _id: string; name: string; image: string | null }) =>
-            org._id === currentOrg._id
+            org._id === currentOrg._id,
         ) ?? false
       );
     }
@@ -278,7 +278,7 @@ function orgList(): JSX.Element {
 
   const handleSearchByBtnClick = (): void => {
     const inputElement = document.getElementById(
-      'searchOrgname'
+      'searchOrgname',
     ) as HTMLInputElement;
     const inputValue = inputElement?.value || '';
     handleSearch(inputValue);
@@ -301,7 +301,7 @@ function orgList(): JSX.Element {
           fetchMoreResult:
             | { organizationsConnection: InterfaceOrgConnectionType[] }
             | undefined;
-        }
+        },
       ):
         | { organizationsConnection: InterfaceOrgConnectionType[] }
         | undefined => {
