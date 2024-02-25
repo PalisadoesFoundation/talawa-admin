@@ -47,11 +47,7 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
               <img src={image} alt={`${name} image`} />
             ) : (
               <Avatar
-                name={name
-                  .split(/\s+/)
-                  .map((word) => word.charAt(0))
-                  .slice(0, 2)
-                  .join('')}
+                name={name}
                 alt={`${name} image`}
                 dataTestId="emptyContainerForImage"
               />
