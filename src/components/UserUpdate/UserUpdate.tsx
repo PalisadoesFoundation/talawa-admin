@@ -138,7 +138,6 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
     <>
       <div id="userupdate" className={styles.userupdatediv}>
         <form>
-          {/* <h3 className={styles.settingstitle}>Update Your Details</h3> */}
           <div className={styles.dispflex}>
             <div>
               <label>{t('firstName')}</label>
@@ -213,7 +212,7 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
                     <Dropdown.Toggle>
                       {
                         languages.find(
-                          (lang) => lang.code == formState.appLanguageCode
+                          (lang) => lang.code == formState.appLanguageCode,
                         )?.name
                       }
                     </Dropdown.Toggle>
