@@ -61,8 +61,6 @@ function organizationPeople(): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
 
   const [state, setState] = useState(role?.role || 0);
-  const page = 0;
-  const rowsPerPage = 5;
 
   const [filterData, setFilterData] = useState({
     firstName_contains: '',
@@ -184,7 +182,7 @@ function organizationPeople(): JSX.Element {
                   onChange={(e): void => {
                     const { value } = e.target;
                     setFullName(value);
-                    // handleFullNameSearchChange(value);
+                    handleFullNameSearchChange(value);
                   }}
                   onKeyUp={handleFullNameSearchChange}
                 />
@@ -202,6 +200,7 @@ function organizationPeople(): JSX.Element {
                     variant="success"
                     id="dropdown-basic"
                     className={styles.dropdown}
+                    data-testid="role"
                   >
                     <Sort />
                     {t('sort')}
@@ -248,19 +247,6 @@ function organizationPeople(): JSX.Element {
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
-                {/* <Dropdown>
-                  <Dropdown.Toggle
-                    variant="success"
-                    id="dropdown-basic"
-                    className={styles.dropdown}
-                  >
-                    {t('actions')}
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item>{t('sortByName')}</Dropdown.Item>
-                    <Dropdown.Item>{t('sortByDate')}</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown> */}
               </div>
             </div>
           </div>
@@ -302,138 +288,128 @@ function organizationPeople(): JSX.Element {
                           memberData &&
                           memberData.organizationsMemberConnection.edges
                             .length > 0 ? (
-                            (rowsPerPage > 0
-                              ? memberData.organizationsMemberConnection.edges.slice(
-                                  page * rowsPerPage,
-                                  page * rowsPerPage + rowsPerPage,
-                                )
-                              : memberData.organizationsMemberConnection.edges
-                            ).map((datas: any, index: number) => (
-                              <StyledTableRow key={datas._id}>
-                                <StyledTableCell component="th" scope="row">
-                                  {index + 1}
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  {datas.image ? (
-                                    <img
-                                      src={datas.image}
-                                      alt="memberImage"
-                                      className="TableImage"
-                                    />
-                                  ) : (
-                                    <img
-                                      src="/images/svg/profiledefault.svg"
-                                      alt="memberImage"
-                                      className="TableImage"
-                                    />
-                                  )}
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  <Link
-                                    className={styles.membername}
-                                    to={{
-                                      pathname: `/member/id=${currentUrl}`,
-                                      state: { id: datas._id },
-                                    }}
-                                  >
-                                    {datas.firstName + ' ' + datas.lastName}
-                                  </Link>
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  {datas.email}
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  {dayjs(datas.createdAt).format('DD/MM/YYYY')}
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  <OrgPeopleListCard
-                                    key={index}
-                                    id={datas._id}
-                                    memberName={
-                                      datas.firstName + ' ' + datas.lastName
-                                    }
-                                    joinDate={dayjs(datas.createdAt).format(
+                            memberData.organizationsMemberConnection.edges.map(
+                              (datas: any, index: number) => (
+                                <StyledTableRow key={datas._id}>
+                                  <StyledTableCell component="th" scope="row">
+                                    {index + 1}
+                                  </StyledTableCell>
+                                  <StyledTableCell align="center">
+                                    {datas.image ? (
+                                      <img
+                                        src={datas.image}
+                                        alt="memberImage"
+                                        className="TableImage"
+                                      />
+                                    ) : (
+                                      <img
+                                        src="/images/svg/profiledefault.svg"
+                                        alt="memberImage"
+                                        className="TableImage"
+                                      />
+                                    )}
+                                  </StyledTableCell>
+                                  <StyledTableCell align="center">
+                                    <Link
+                                      className={styles.membername}
+                                      to={{
+                                        pathname: `/member/id=${currentUrl}`,
+                                        state: { id: datas._id },
+                                      }}
+                                    >
+                                      {datas.firstName + ' ' + datas.lastName}
+                                    </Link>
+                                  </StyledTableCell>
+                                  <StyledTableCell align="center">
+                                    {datas.email}
+                                  </StyledTableCell>
+                                  <StyledTableCell align="center">
+                                    {dayjs(datas.createdAt).format(
                                       'DD/MM/YYYY',
                                     )}
-                                    memberImage={datas.image}
-                                    memberEmail={datas.email}
-                                  />
-                                </StyledTableCell>
-                              </StyledTableRow>
-                            ))
+                                  </StyledTableCell>
+                                  <StyledTableCell align="center">
+                                    <OrgPeopleListCard
+                                      key={index}
+                                      id={datas._id}
+                                      memberName={
+                                        datas.firstName + ' ' + datas.lastName
+                                      }
+                                      joinDate={dayjs(datas.createdAt).format(
+                                        'DD/MM/YYYY',
+                                      )}
+                                      memberImage={datas.image}
+                                      memberEmail={datas.email}
+                                    />
+                                  </StyledTableCell>
+                                </StyledTableRow>
+                              ),
+                            )
                           ) : state === 1 &&
                             adminData &&
                             adminData.organizationsMemberConnection.edges
                               .length > 0 ? (
-                            (rowsPerPage > 0
-                              ? adminData.organizationsMemberConnection.edges.slice(
-                                  page * rowsPerPage,
-                                  page * rowsPerPage + rowsPerPage,
-                                )
-                              : adminData.organizationsMemberConnection.edges
-                            ).map((datas: any, index: number) => (
-                              <StyledTableRow key={datas._id}>
-                                <StyledTableCell component="th" scope="row">
-                                  {index + 1}
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  {datas.image ? (
-                                    <img
-                                      src={datas.image}
-                                      alt="memberImage"
-                                      className="TableImage"
-                                    />
-                                  ) : (
-                                    <img
-                                      src="/images/svg/profiledefault.svg"
-                                      alt="memberImage"
-                                      className="TableImage"
-                                    />
-                                  )}
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  <Link
-                                    className={styles.membername}
-                                    to={{
-                                      pathname: `/member/id=${currentUrl}`,
-                                      state: { id: datas._id },
-                                    }}
-                                  >
-                                    {datas.firstName + ' ' + datas.lastName}
-                                  </Link>
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  {datas.email}
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  {dayjs(datas.createdAt).format('DD/MM/YYYY')}
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  <OrgAdminListCard
-                                    key={index}
-                                    id={datas._id}
-                                    memberName={
-                                      datas.firstName + ' ' + datas.lastName
-                                    }
-                                    joinDate={dayjs(datas.createdAt).format(
+                            adminData.organizationsMemberConnection.edges.map(
+                              (datas: any, index: number) => (
+                                <StyledTableRow key={datas._id}>
+                                  <StyledTableCell component="th" scope="row">
+                                    {index + 1}
+                                  </StyledTableCell>
+                                  <StyledTableCell align="center">
+                                    {datas.image ? (
+                                      <img
+                                        src={datas.image}
+                                        alt="memberImage"
+                                        className="TableImage"
+                                      />
+                                    ) : (
+                                      <img
+                                        src="/images/svg/profiledefault.svg"
+                                        alt="memberImage"
+                                        className="TableImage"
+                                      />
+                                    )}
+                                  </StyledTableCell>
+                                  <StyledTableCell align="center">
+                                    <Link
+                                      className={styles.membername}
+                                      to={{
+                                        pathname: `/member/id=${currentUrl}`,
+                                        state: { id: datas._id },
+                                      }}
+                                    >
+                                      {datas.firstName + ' ' + datas.lastName}
+                                    </Link>
+                                  </StyledTableCell>
+                                  <StyledTableCell align="center">
+                                    {datas.email}
+                                  </StyledTableCell>
+                                  <StyledTableCell align="center">
+                                    {dayjs(datas.createdAt).format(
                                       'DD/MM/YYYY',
                                     )}
-                                    memberImage={datas.image}
-                                    memberEmail={datas.email}
-                                  />
-                                </StyledTableCell>
-                              </StyledTableRow>
-                            ))
+                                  </StyledTableCell>
+                                  <StyledTableCell align="center">
+                                    <OrgAdminListCard
+                                      key={index}
+                                      id={datas._id}
+                                      memberName={
+                                        datas.firstName + ' ' + datas.lastName
+                                      }
+                                      joinDate={dayjs(datas.createdAt).format(
+                                        'DD/MM/YYYY',
+                                      )}
+                                      memberImage={datas.image}
+                                      memberEmail={datas.email}
+                                    />
+                                  </StyledTableCell>
+                                </StyledTableRow>
+                              ),
+                            )
                           ) : state === 2 &&
                             usersData &&
                             usersData.users.length > 0 ? (
-                            (rowsPerPage > 0
-                              ? usersData.users.slice(
-                                  page * rowsPerPage,
-                                  page * rowsPerPage + rowsPerPage,
-                                )
-                              : usersData.users
-                            ).map((datas: any, index: number) => (
+                            usersData.users.map((datas: any, index: number) => (
                               <StyledTableRow key={datas._id}>
                                 <StyledTableCell component="th" scope="row">
                                   {index + 1}

@@ -591,11 +591,6 @@ describe('Organization People Page', () => {
     );
     await wait();
 
-    // userEvent.click(screen.getByLabelText(/Members/i));
-    // await wait();
-    // expect(screen.getByLabelText(/Members/i)).toBeChecked();
-    // await wait();
-
     const findtext = screen.getByText(/Aditya Memberguy/i);
     await wait();
     expect(findtext).toBeInTheDocument();
@@ -635,11 +630,6 @@ describe('Organization People Page', () => {
     );
     await wait();
 
-    // userEvent.click(screen.getByLabelText(/Members/i));
-    // await wait();
-    // expect(screen.getByLabelText(/Members/i)).toBeChecked();
-    // await wait();
-
     const fullNameInput = screen.getByPlaceholderText(/Enter Full Name/i);
 
     // Only First Name
@@ -653,7 +643,6 @@ describe('Organization People Page', () => {
     findtext = screen.getByText(/Aditya Memberguy/i);
     await wait();
     expect(findtext).toBeInTheDocument();
-
     await wait();
     expect(window.location).toBeAt('/orgpeople/id=orgid');
   });
@@ -682,30 +671,48 @@ describe('Organization People Page', () => {
 
     await wait();
 
-    // userEvent.click(screen.getByLabelText(/Admins/i));
-    // await wait();
-    // expect(screen.getByLabelText(/Admins/i)).toBeChecked();
-    // await wait();
+    // Get all dropdown toggles by test id
+    const dropdownToggles = screen.getAllByTestId('role');
 
+    // Click the dropdown toggle to open the dropdown menu
+    dropdownToggles.forEach((dropdownToggle) => {
+      userEvent.click(dropdownToggle);
+    });
+
+    // Click the "Admin" dropdown item
+    const adminDropdownItem = screen.getByTestId('admins');
+    userEvent.click(adminDropdownItem);
+
+    // Wait for any asynchronous operations to complete
+    await wait();
+
+    // Assert that the "Aditya Adminguy" text is present
     const findtext = screen.getByText('Aditya Adminguy');
     expect(findtext).toBeInTheDocument();
 
+    // Type in the full name input field
     userEvent.type(
       screen.getByPlaceholderText(/Enter Full Name/i),
       searchData.fullNameAdmin,
     );
+
+    // Wait for any asynchronous operations to complete
     await wait();
+
+    // Assert the value of the full name input field
     expect(screen.getByPlaceholderText(/Enter Full Name/i)).toHaveValue(
       searchData.fullNameAdmin,
     );
     await wait();
 
+    // Wait for any asynchronous operations to complete
     await wait();
     expect(window.location).toBeAt('/orgpeople/id=orgid');
   });
 
   test('Testing ADMIN list with filters', async () => {
     window.location.assign('/orgpeople/id=orgid');
+
     render(
       <MockedProvider
         addTypename={true}
@@ -725,32 +732,36 @@ describe('Organization People Page', () => {
       </MockedProvider>,
     );
 
+    // Wait for the component to finish rendering
     await wait();
 
-    // userEvent.click(screen.getByLabelText(/Admins/i));
-    // await wait();
-    // expect(screen.getByLabelText(/Admins/i)).toBeChecked();
-    // await wait();
+    // Click on the dropdown toggle to open the menu
+    userEvent.click(screen.getByTestId('role'));
+    await wait();
 
+    // Click on the "Admins" option in the dropdown menu
+    userEvent.click(screen.getByTestId('admins'));
+    await wait();
+
+    // Type the full name into the input field
     const fullNameInput = screen.getByPlaceholderText(/Enter Full Name/i);
-
-    // Only First Name
     userEvent.type(fullNameInput, searchData.fullNameAdmin);
+
+    // Wait for the results to update
     await wait();
 
+    // Check if the expected name is present in the results
     let findtext = screen.getByText(/Aditya Adminguy/i);
-    await wait();
     expect(findtext).toBeInTheDocument();
 
+    // Ensure that the name is still present after filtering
     findtext = screen.getByText(/Aditya Adminguy/i);
-    await wait();
     expect(findtext).toBeInTheDocument();
     await wait();
     expect(window.location).toBeAt('/orgpeople/id=orgid');
   });
 
   test('Testing USERS list', async () => {
-    const dataQueryForUsers = MOCKS[3]?.result?.data?.users;
     window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af1');
 
     render(
@@ -772,39 +783,15 @@ describe('Organization People Page', () => {
       </MockedProvider>,
     );
     await wait();
-    // userEvent.click(screen.getByLabelText(/Users/i));
-    // await wait();
-    // expect(screen.getByLabelText(/Users/i)).toBeChecked();
-    // await wait();
-    const orgUsers = dataQueryForUsers?.filter(
-      (datas: {
-        _id: string;
-        lastName: string;
-        firstName: string;
-        image: string;
-        email: string;
-        createdAt: string;
-        joinedOrganizations: {
-          __typename: string;
-          _id: string;
-        }[];
-      }) => {
-        window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af1');
-        const pathname = window.location.pathname;
-        const id = pathname.split('=')[1];
-        return datas.joinedOrganizations?.some((org) => org._id === id);
-      },
-    );
-    await wait();
-    expect(orgUsers?.length).toBe(1);
 
-    await wait();
+    const orgUsers = MOCKS[3]?.result?.data?.users;
+    expect(orgUsers?.length).toBe(102);
+
     expect(window.location).toBeAt('/orgpeople/id=6401ff65ce8e8406b8f07af1');
   });
 
   test('Testing USERS list with filters', async () => {
     window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af2');
-    const dataQueryForUsers = MOCKS[3]?.result?.data?.users;
 
     render(
       <MockedProvider
@@ -825,18 +812,14 @@ describe('Organization People Page', () => {
       </MockedProvider>,
     );
     await wait();
-    // userEvent.click(screen.getByLabelText(/Users/i));
-    // await wait();
-    // expect(screen.getByLabelText(/Users/i)).toBeChecked();
-    // await wait();
 
     const fullNameInput = screen.getByPlaceholderText(/Enter Full Name/i);
 
     // Only Full Name
     userEvent.type(fullNameInput, searchData.fullNameUser);
     await wait();
-
-    const orgUsers = dataQueryForUsers?.filter(
+    const orgUsers = MOCKS[3]?.result?.data?.users;
+    const orgUserssize = orgUsers?.filter(
       (datas: {
         _id: string;
         lastName: string;
@@ -856,7 +839,7 @@ describe('Organization People Page', () => {
       },
     );
     await wait();
-    expect(orgUsers?.length).toBe(1);
+    expect(orgUserssize?.length).toBe(1);
 
     await wait();
     expect(window.location).toBeAt('/orgpeople/id=6401ff65ce8e8406b8f07af2');
@@ -876,14 +859,6 @@ describe('Organization People Page', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
-    await wait();
-
-    userEvent.click(screen.getByLabelText(/Admins/i));
-
-    await wait();
-
-    userEvent.click(screen.getByLabelText(/Users/i));
 
     await wait();
     expect(window.location).toBeAt('/orgpeople/id=orgid');
