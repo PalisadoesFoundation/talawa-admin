@@ -55,6 +55,8 @@ const leftDrawerOrg = ({
   const userImage = getItem('UserImage');
   const userId = getItem('id');
   const history = useHistory();
+  const userDicebearUrl = `https://api.dicebear.com/5.x/initials/svg?seed=${firstName}%20${lastName}`;
+  const orgDicebearUrl = `https://api.dicebear.com/5.x/initials/svg?seed=${organization?.name}`;
 
   const logout = (): void => {
     revokeRefreshToken();
@@ -108,7 +110,7 @@ const leftDrawerOrg = ({
                   <img src={organization.image} alt={`profile picture`} />
                 ) : (
                   <img
-                    src={`https://api.dicebear.com/5.x/initials/svg?seed=${organization.name}`}
+                    src={orgDicebearUrl}
                     alt={`Dummy Organization Picture`}
                   />
                 )}
@@ -181,10 +183,7 @@ const leftDrawerOrg = ({
                 {userImage && userImage !== 'null' ? (
                   <img src={userImage} alt={`profile picture`} />
                 ) : (
-                  <img
-                    src={`https://api.dicebear.com/5.x/initials/svg?seed=${firstName}%20${lastName}`}
-                    alt={`dummy picture`}
-                  />
+                  <img src={userDicebearUrl} alt={`dummy picture`} />
                 )}
               </div>
               <div className={styles.profileText}>

@@ -31,6 +31,7 @@ const leftDrawer = ({
   const userImage = getItem('UserImage');
   const userId = getItem('id');
   const history = useHistory();
+  const userDicebearUrl = `https://api.dicebear.com/5.x/initials/svg?seed=${firstName}%20${lastName}`;
 
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
 
@@ -120,10 +121,7 @@ const leftDrawer = ({
                 {userImage && userImage !== 'null' ? (
                   <img src={userImage} alt={`profile picture`} />
                 ) : (
-                  <img
-                    src={`https://api.dicebear.com/5.x/initials/svg?seed=${firstName}%20${lastName}`}
-                    alt={`dummy picture`}
-                  />
+                  <img src={userDicebearUrl} alt={`dummy picture`} />
                 )}
               </div>
               <div className={styles.profileText}>
