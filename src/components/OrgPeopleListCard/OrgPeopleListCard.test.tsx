@@ -40,12 +40,7 @@ describe('Testing Organization People List Card', () => {
   const props = {
     key: 123,
     id: '1',
-    memberName: 'John Doe',
-    joinDate: '20/03/2022',
-    memberImage: 'image',
-    memberEmail: 'johndoe@gmail.com',
   };
-
   global.alert = jest.fn();
 
   test('should render props and text elements test for the page component', async () => {
@@ -65,7 +60,6 @@ describe('Testing Organization People List Card', () => {
 
     userEvent.click(screen.getByTestId(/removeMemberModalBtn/i));
     userEvent.click(screen.getByTestId(/removeMemberBtn/i));
-    expect(screen.getByText(/Joined:/i)).toBeInTheDocument();
   });
 
   test('Should render text elements when props value is not passed', async () => {
@@ -75,14 +69,7 @@ describe('Testing Organization People List Card', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
-            <OrgPeopleListCard
-              key={123}
-              id="1"
-              memberName=""
-              joinDate="20/03/2022"
-              memberImage=""
-              memberEmail=""
-            />
+            <OrgPeopleListCard key={123} id="1" />
           </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,

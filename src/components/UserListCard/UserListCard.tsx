@@ -11,10 +11,6 @@ import { errorHandler } from 'utils/errorHandler';
 interface InterfaceUserListCardProps {
   key: number;
   id: string;
-  memberName: string;
-  joinDate: string;
-  memberImage: string;
-  memberEmail: string;
 }
 
 function userListCard(props: InterfaceUserListCardProps): JSX.Element {

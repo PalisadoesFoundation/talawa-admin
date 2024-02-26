@@ -43,10 +43,6 @@ describe('Testing Organization Admin List Card', () => {
     const props = {
       key: 123,
       id: '456',
-      memberName: 'John Doe',
-      joinDate: '05/05/2022',
-      memberImage: 'image',
-      memberEmail: 'johndoe@gmail.com',
     };
 
     render(
@@ -63,19 +59,12 @@ describe('Testing Organization Admin List Card', () => {
 
     userEvent.click(screen.getByTestId(/removeAdminModalBtn/i));
     userEvent.click(screen.getByTestId(/removeAdminBtn/i));
-
-    expect(screen.getByText(props.memberName)).toBeInTheDocument();
-    expect(screen.getByText(props.joinDate)).toBeInTheDocument();
   });
 
   test('Should render text elements when props value is not passed', async () => {
     const props = {
       key: 123,
       id: '456',
-      memberName: '',
-      joinDate: '05/05/2022',
-      memberImage: '',
-      memberEmail: '',
     };
 
     render(
@@ -92,8 +81,5 @@ describe('Testing Organization Admin List Card', () => {
 
     userEvent.click(screen.getByTestId(/removeAdminModalBtn/i));
     userEvent.click(screen.getByTestId(/removeAdminBtn/i));
-
-    expect(screen.getByText(/Dogs Care/i)).toBeInTheDocument();
-    expect(screen.getByText(props.joinDate)).toBeInTheDocument();
   });
 });

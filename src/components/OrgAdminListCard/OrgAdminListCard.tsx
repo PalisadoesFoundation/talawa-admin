@@ -15,10 +15,6 @@ import { errorHandler } from 'utils/errorHandler';
 interface InterfaceOrgPeopleListCardProps {
   key: number;
   id: string;
-  memberName: string;
-  joinDate: string;
-  memberImage: string;
-  memberEmail: string;
 }
 const currentUrl = window.location.href.split('=')[1];
 

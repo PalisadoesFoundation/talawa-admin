@@ -43,10 +43,6 @@ describe('Testing User List Card', () => {
     const props = {
       key: 123,
       id: '456',
-      memberName: 'John Doe',
-      joinDate: '07/05/2022',
-      memberImage: 'image',
-      memberEmail: 'johndoe@gmail.com',
     };
 
     render(
@@ -68,10 +64,6 @@ describe('Testing User List Card', () => {
     const props = {
       key: 123,
       id: '456',
-      memberName: '',
-      joinDate: '09/05/2022',
-      memberImage: '',
-      memberEmail: '',
     };
 
     render(

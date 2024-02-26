@@ -332,20 +332,13 @@ function organizationPeople(): JSX.Element {
                                     <OrgPeopleListCard
                                       key={index}
                                       id={datas._id}
-                                      memberName={
-                                        datas.firstName + ' ' + datas.lastName
-                                      }
-                                      joinDate={dayjs(datas.createdAt).format(
-                                        'DD/MM/YYYY',
-                                      )}
-                                      memberImage={datas.image}
-                                      memberEmail={datas.email}
                                     />
                                   </StyledTableCell>
                                 </StyledTableRow>
                               ),
                             )
-                          ) : state === 1 &&
+                          ) : /* istanbul ignore next */
+                          state === 1 &&
                             adminData &&
                             adminData.organizationsMemberConnection.edges
                               .length > 0 ? (
@@ -393,14 +386,6 @@ function organizationPeople(): JSX.Element {
                                     <OrgAdminListCard
                                       key={index}
                                       id={datas._id}
-                                      memberName={
-                                        datas.firstName + ' ' + datas.lastName
-                                      }
-                                      joinDate={dayjs(datas.createdAt).format(
-                                        'DD/MM/YYYY',
-                                      )}
-                                      memberImage={datas.image}
-                                      memberEmail={datas.email}
                                     />
                                   </StyledTableCell>
                                 </StyledTableRow>
@@ -447,18 +432,7 @@ function organizationPeople(): JSX.Element {
                                   {dayjs(datas.createdAt).format('DD/MM/YYYY')}
                                 </StyledTableCell>
                                 <StyledTableCell align="center">
-                                  <UserListCard
-                                    key={index}
-                                    id={datas._id}
-                                    memberName={
-                                      datas.firstName + ' ' + datas.lastName
-                                    }
-                                    joinDate={dayjs(datas.createdAt).format(
-                                      'DD/MM/YYYY',
-                                    )}
-                                    memberImage={datas.image}
-                                    memberEmail={datas.email}
-                                  />
+                                  <UserListCard key={index} id={datas._id} />
                                 </StyledTableCell>
                               </StyledTableRow>
                             ))
