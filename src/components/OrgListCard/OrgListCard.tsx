@@ -4,9 +4,14 @@ import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import styles from './OrgListCard.module.css';
 import { useHistory } from 'react-router-dom';
-import type { InterfaceOrgConnectionInfoType } from 'utils/interfaces';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
+import type {
+  InterfaceOrgConnectionInfoType,
+  InterfaceQueryOrganizationsListObject,
+} from 'utils/interfaces';
+import {
+  IS_SAMPLE_ORGANIZATION_QUERY,
+  ORGANIZATIONS_LIST,
+} from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import { Tooltip } from '@mui/material';
 
@@ -15,12 +20,22 @@ export interface InterfaceOrgListCardProps {
 }
 
 function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
-  const { _id, admins, image, address, members, name } = props.data;
+  const { _id } = props.data;
 
   const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
     variables: {
       isSampleOrganizationId: _id,
     },
+  });
+
+  const {
+    data: userData,
+  }: {
+    data?: {
+      organizations: InterfaceQueryOrganizationsListObject[];
+    };
+  } = useQuery(ORGANIZATIONS_LIST, {
+    variables: { id: _id },
   });
 
   const history = useHistory();
@@ -44,40 +59,39 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
           <div className={styles.orgImgContainer}>
             <img
               src={
-                image
-                  ? image
-                  : `https://api.dicebear.com/5.x/initials/svg?seed=${name
+                userData?.organizations[0].image
+                  ? userData?.organizations[0].image
+                  : `https://api.dicebear.com/5.x/initials/svg?seed=${userData?.organizations[0].name
                       .split(/\s+/)
                       .map((word) => word.charAt(0))
                       .slice(0, 2)
                       .join('')}`
               }
-              alt={`${name} image`}
-              data-testid={image ? '' : 'emptyContainerForImage'}
+              alt={`${userData?.organizations[0].name} image`}
+              data-testid={
+                userData?.organizations[0].image ? '' : 'emptyContainerForImage'
+              }
             />
           </div>
           <div className={styles.content}>
-            <Tooltip title={name} placement="top-end">
-              <h4 className={styles.orgName}>{name}</h4>
+            <Tooltip
+              title={userData?.organizations[0].name}
+              placement="top-end"
+            >
+              <h4 className={`${styles.orgName} fw-semibold`}>
+                {userData?.organizations[0].name}
+              </h4>
             </Tooltip>
-            {address && address.city && (
-              <div>
-                <h6 className="text-secondary">
-                  <LocationOnIcon fontSize="inherit" className="fs-5" />
-                  <span className="address-line">{address.city}, </span>
-                  <span className="address-line">{address.state}</span>
-                  <br />
-                  <LocationOnIcon fontSize="inherit" className="fs-5" />
-                  <span className="address-line">{address.postalCode}, </span>
-                  <span className="address-line">{address.countryCode}</span>
-                </h6>
-              </div>
-            )}
-            <h6>
-              {t('admins')}: <span>{admins.length}</span>
+            <h6 className={`${styles.orgdesc} fw-semibold`}>
+              <span>{userData?.organizations[0].description}</span>
             </h6>
-            <h6>
-              {t('members')}: <span>{members.length}</span>
+            <h6 className={styles.orgadmin}>
+              {t('admins')}:{' '}
+              <span>{userData?.organizations[0].admins.length}</span>
+            </h6>
+            <h6 className={styles.orgmember}>
+              {t('members')}:{' '}
+              <span>{userData?.organizations[0].members.length}</span>
             </h6>
           </div>
         </div>
