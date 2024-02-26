@@ -32,6 +32,7 @@ import {
 } from 'Constant/constant';
 import { refreshToken } from 'utils/getRefreshToken';
 import { ThemeProvider, createTheme } from '@mui/material';
+import '../src/assets/css/scrollStyles.css';
 
 const theme = createTheme({
   palette: {
