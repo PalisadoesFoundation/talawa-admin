@@ -71,18 +71,6 @@ function addOnStore(): JSX.Element {
   const updateLinks = async (links: any[]): Promise<void> => {
     store.dispatch({ type: 'UPDATE_P_TARGETS', payload: links });
   };
-  // /* istanbul ignore next */
-  // const pluginModified = (): void => {
-  //   return getInstalledPlugins();
-  // .then((installedPlugins) => {
-  //   getStorePlugins();
-  //   return installedPlugins;
-  // });
-  // };
-
-  // useEffect(() => {
-  //   pluginModified();
-  // }, []);
 
   const updateSelectedTab = (tab: any): void => {
     setIsStore(tab === 'available');
