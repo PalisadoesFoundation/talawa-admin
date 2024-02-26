@@ -25,6 +25,10 @@
   background-color: black;
   height: 60px;
 }
+.calendar__scroll {
+  height: 80vh;
+  padding: 10px;
+}
 .weekday {
   display: flex;
   justify-content: center;
