@@ -402,12 +402,18 @@ type MinimumValueError implements FieldError {
   path: [String!]!
 }
 
+enum AdvertisementType {
+  BANNER
+  MENU
+  POPUP
+}
+
 input CreateAdvertisementInput {
   endDate: Date!
   name: String!
   organizationId: ID!
   startDate: Date!
-  type: String!
+  type: AdvertisementType!
   mediaFile: String!
 }
 
@@ -774,7 +780,7 @@ type Query {
     skip: Int
     where: EventWhereInput
   ): [Event!]!
-  advertisements: [Advertisement]
+  advertisementsConnection: [Advertisement]
   getDonationById(id: ID!): Donation!
   getDonationByOrgId(orgId: ID!): [Donation]
   getDonationByOrgIdConnection(

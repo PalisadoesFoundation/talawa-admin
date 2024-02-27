@@ -473,7 +473,7 @@ export const ADD_ADVERTISEMENT_MUTATION = gql`
   mutation (
     $organizationId: ID!
     $name: String!
-    $type: String!
+    $type: AdvertisementType!
     $startDate: Date!
     $endDate: Date!
     $file: String!
@@ -522,7 +522,9 @@ export const UPDATE_ADVERTISEMENT_MUTATION = gql`
 export const DELETE_ADVERTISEMENT_BY_ID = gql`
   mutation ($id: ID!) {
     deleteAdvertisement(id: $id) {
-      success
+      advertisement {
+        _id
+      }
     }
   }
 `;

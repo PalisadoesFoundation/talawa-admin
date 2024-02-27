@@ -26,7 +26,7 @@ export const PLUGIN_GET = gql`
 
 export const ADVERTISEMENTS_GET = gql`
   query getAdvertisements {
-    advertisements {
+    advertisementsConnection {
       _id
       name
       type
