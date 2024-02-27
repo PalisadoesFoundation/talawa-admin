@@ -20,7 +20,7 @@ export interface InterfaceOrgListCardProps {
 }
 
 function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
-  const { _id } = props.data;
+  const { _id, admins, image, members, name } = props.data;
 
   const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
     variables: {
@@ -59,39 +59,30 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
           <div className={styles.orgImgContainer}>
             <img
               src={
-                userData?.organizations[0].image
-                  ? userData?.organizations[0].image
-                  : `https://api.dicebear.com/5.x/initials/svg?seed=${userData?.organizations[0].name
+                image
+                  ? image
+                  : `https://api.dicebear.com/5.x/initials/svg?seed=${name
                       .split(/\s+/)
                       .map((word) => word.charAt(0))
                       .slice(0, 2)
                       .join('')}`
               }
-              alt={`${userData?.organizations[0].name} image`}
-              data-testid={
-                userData?.organizations[0].image ? '' : 'emptyContainerForImage'
-              }
+              alt={`${name} image`}
+              data-testid={image ? '' : 'emptyContainerForImage'}
             />
           </div>
           <div className={styles.content}>
-            <Tooltip
-              title={userData?.organizations[0].name}
-              placement="top-end"
-            >
-              <h4 className={`${styles.orgName} fw-semibold`}>
-                {userData?.organizations[0].name}
-              </h4>
+            <Tooltip title={name} placement="top-end">
+              <h4 className={`${styles.orgName} fw-semibold`}>{name}</h4>
             </Tooltip>
             <h6 className={`${styles.orgdesc} fw-semibold`}>
               <span>{userData?.organizations[0].description}</span>
             </h6>
             <h6 className={styles.orgadmin}>
-              {t('admins')}:{' '}
-              <span>{userData?.organizations[0].admins.length}</span>
+              {t('admins')}: <span>{admins.length}</span>
             </h6>
             <h6 className={styles.orgmember}>
-              {t('members')}:{' '}
-              <span>{userData?.organizations[0].members.length}</span>
+              {t('members')}: <span>{members.length}</span>
             </h6>
           </div>
         </div>

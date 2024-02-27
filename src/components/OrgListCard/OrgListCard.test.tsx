@@ -11,6 +11,9 @@ import { BrowserRouter } from 'react-router-dom';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { MockedProvider } from '@apollo/react-testing';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem } = useLocalStorage();
 
 const MOCKS = [
   {
@@ -61,6 +64,25 @@ const props: InterfaceOrgListCardProps = {
 };
 
 describe('Testing the Super Dash List', () => {
+  test('should render props and text elements test for the page component', () => {
+    setItem('id', '123'); // Means the user is an admin
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgListCard {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    expect(screen.getByAltText(/Dogs Care image/i)).toBeInTheDocument();
+    expect(screen.getByText('Admins:')).toBeInTheDocument();
+    expect(screen.getByText('Members:')).toBeInTheDocument();
+    expect(screen.getByText('Dogs Care')).toBeInTheDocument();
+    userEvent.click(screen.getByTestId(/manageBtn/i));
+  });
+
   test('Testing if the props data is not provided', () => {
     window.location.assign('/orgdash');
 
