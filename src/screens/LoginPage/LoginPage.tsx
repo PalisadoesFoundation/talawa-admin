@@ -218,6 +218,7 @@ function loginPage(): JSX.Element {
 
           /* istanbul ignore next */
           if (signUpData) {
+            console.log(signUpData);
             toast.success(
               'Successfully Registered. Please wait until you will be approved.'
             );
@@ -277,15 +278,16 @@ function loginPage(): JSX.Element {
       /* istanbul ignore next */
       if (loginData) {
         if (
-          loginData.login.user.userType === 'SUPERADMIN' ||
-          (loginData.login.user.userType === 'ADMIN' &&
+          loginData.login.appUserProfile.isSuperAdmin ||
+          (loginData.login.appUserProfile.adminFor.length !== 0 &&
             loginData.login.user.adminApproved === true)
         ) {
           setItem('token', loginData.login.accessToken);
           setItem('refreshToken', loginData.login.refreshToken);
           setItem('id', loginData.login.user._id);
           setItem('IsLoggedIn', 'TRUE');
-          setItem('UserType', loginData.login.user.userType);
+          setItem('SuperAdmin', loginData.login.appUserProfile.isSuperAdmin);
+          setItem('AdminFor', loginData.login.appUserProfile.adminFor);
           if (getItem('IsLoggedIn') == 'TRUE') {
             history.push('/orglist');
           }

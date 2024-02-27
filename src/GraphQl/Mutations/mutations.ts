@@ -159,8 +159,13 @@ export const LOGIN_MUTATION = gql`
     login(data: { email: $email, password: $password }) {
       user {
         _id
-        userType
         adminApproved
+      }
+      appUserProfile {
+        isSuperAdmin
+        adminFor {
+          _id
+        }
       }
       accessToken
       refreshToken
