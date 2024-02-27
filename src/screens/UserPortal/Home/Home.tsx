@@ -70,7 +70,9 @@ interface InterfaceAdContent {
   _id: string;
   name: string;
   type: string;
-  orgId: string;
+  organization: {
+    _id: string;
+  };
   link: string;
   endDate: string;
   startDate: string;
@@ -155,9 +157,9 @@ export default function home(): JSX.Element {
 
   React.useEffect(() => {
     if (promotedPostsData) {
-      setAdContent(promotedPostsData.getAdvertisements);
+      setAdContent(promotedPostsData.advertisementsConnection);
     }
-  }, [data]);
+  }, [promotedPostsData]);
 
   useEffect(() => {
     setFilteredAd(filterAdContent(adContent, currentOrgId));
@@ -170,7 +172,8 @@ export default function home(): JSX.Element {
   ): InterfaceAdContent[] => {
     return adCont.filter(
       (ad: InterfaceAdContent) =>
-        ad.orgId === currentOrgId && new Date(ad.endDate) > currentDate,
+        ad.organization._id === currentOrgId &&
+        new Date(ad.endDate) > currentDate,
     );
   };
 
@@ -313,7 +316,7 @@ export default function home(): JSX.Element {
                 <PromotedPost
                   key={post._id}
                   id={post._id}
-                  image={post.link}
+                  media={post.mediaUrl}
                   title={post.name}
                   data-testid="postid"
                 />
