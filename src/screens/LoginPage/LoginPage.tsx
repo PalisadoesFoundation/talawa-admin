@@ -218,7 +218,6 @@ function loginPage(): JSX.Element {
 
           /* istanbul ignore next */
           if (signUpData) {
-            console.log(signUpData);
             toast.success(
               'Successfully Registered. Please wait until you will be approved.'
             );
