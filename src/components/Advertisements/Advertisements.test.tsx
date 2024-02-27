@@ -187,7 +187,7 @@ describe('Testing Advertisement Component', () => {
         },
         result: {
           data: {
-            advertisements: [],
+            advertisementsConnection: [],
           },
           loading: false,
         },
@@ -250,7 +250,7 @@ describe('Testing Advertisement Component', () => {
         },
         result: {
           data: {
-            advertisements: [
+            advertisementsConnection: [
               {
                 _id: '1',
                 name: 'Advertisement1',
@@ -328,7 +328,7 @@ describe('Testing Advertisement Component', () => {
         },
         result: {
           data: {
-            advertisements: [
+            advertisementsConnection: [
               {
                 _id: '1',
                 name: 'Advertisement1',
