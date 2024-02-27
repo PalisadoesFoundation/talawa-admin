@@ -14,6 +14,7 @@ export const PLUGIN_GET = gql`
       pluginCreatedBy
       pluginDesc
       uninstalledOrgs
+      pluginInstallStatus
     }
   }
 `;

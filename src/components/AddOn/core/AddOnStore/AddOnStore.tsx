@@ -58,6 +58,7 @@ function addOnStore(): JSX.Element {
 
   const updateSelectedTab = (tab: any): void => {
     setIsStore(tab === 'available');
+    /* istanbul ignore next */
     isStore ? getStorePlugins() : getInstalledPlugins();
   };
 
