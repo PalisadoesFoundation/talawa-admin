@@ -1,7 +1,6 @@
 import React from 'react';
 import 'jest-location-mock';
 import { act, fireEvent, render, screen } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
 import {
   ApolloClient,
   ApolloProvider,
@@ -11,7 +10,6 @@ import {
 } from '@apollo/client';
 import type { NormalizedCacheObject } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
-import React from 'react';
 import AddOnStore from './AddOnStore';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
@@ -21,10 +19,7 @@ import { I18nextProvider } from 'react-i18next';
 import { ORGANIZATIONS_LIST, PLUGIN_GET } from 'GraphQl/Queries/Queries';
 import userEvent from '@testing-library/user-event';
 import useLocalStorage from 'utils/useLocalstorage';
-import { PLUGIN_GET } from 'GraphQl/Queries/PlugInQueries';
 import { MockedProvider } from '@apollo/react-testing';
-import userEvent from '@testing-library/user-event';
-import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 
 const { getItem } = useLocalStorage();
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 // import PropTypes from 'react';
 import styles from './Advertisements.module.css';
 import { useQuery } from '@apollo/client';
@@ -9,11 +9,8 @@ import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen
 import AdvertisementEntry from './core/AdvertisementEntry/AdvertisementEntry';
 import AdvertisementRegister from './core/AdvertisementRegister/AdvertisementRegister';
 export default function advertisements(): JSX.Element {
-  const {
-    data: advertisementsData,
-    loading: loadingAdvertisements,
-    error: errorAdvertisement,
-  } = useQuery(ADVERTISEMENTS_GET);
+  const { data: advertisementsData, loading: loadingAdvertisements } =
+    useQuery(ADVERTISEMENTS_GET);
 
   const currentOrgId = window.location.href.split('/id=')[1] + '';
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });

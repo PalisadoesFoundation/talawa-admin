@@ -5,8 +5,6 @@ import AddOnEntry from '../AddOnEntry/AddOnEntry';
 import Action from '../../support/components/Action/Action';
 import { useQuery } from '@apollo/client';
 import { PLUGIN_GET } from 'GraphQl/Queries/Queries'; // PLUGIN_LIST
-import { useSelector } from 'react-redux';
-import type { RootState } from '../../../../state/reducers';
 import { Col, Form, Row, Tab, Tabs } from 'react-bootstrap';
 import PluginHelper from 'components/AddOn/support/services/Plugin.helper';
 import { store } from './../../../../state/store';
@@ -23,7 +21,7 @@ function addOnStore(): JSX.Element {
   const [, setDataList] = useState([]);
 
   // type plugData = { pluginName: String, plug };
-  const { data, loading, error } = useQuery(PLUGIN_GET);
+  const { data, loading } = useQuery(PLUGIN_GET);
 
   const orgId = window.location.href.split('=')[1];
 
@@ -55,11 +53,6 @@ function addOnStore(): JSX.Element {
     // const plugins = await new PluginHelper().fetchInstalled();
     // store.dispatch({ type: 'UPDATE_INSTALLED', payload: plugins });
     // return plugins;
-  };
-
-  /* istanbul ignore next */
-  const updateLinks = async (links: any[]): Promise<void> => {
-    store.dispatch({ type: 'UPDATE_P_TARGETS', payload: links });
   };
 
   const updateSelectedTab = (tab: any): void => {
