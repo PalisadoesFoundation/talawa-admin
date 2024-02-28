@@ -9,7 +9,6 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import { Tooltip } from '@mui/material';
-import Avatar from 'components/Avatar/Avatar';
 
 export interface InterfaceOrgListCardProps {
   data: InterfaceOrgConnectionInfoType;
@@ -43,15 +42,19 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
       <div className={styles.orgCard}>
         <div className={styles.innerContainer}>
           <div className={styles.orgImgContainer}>
-            {image ? (
-              <img src={image} alt={`${name} image`} />
-            ) : (
-              <Avatar
-                name={name}
-                alt={`${name} image`}
-                dataTestId="emptyContainerForImage"
-              />
-            )}
+            <img
+              src={
+                image
+                  ? image
+                  : `https://api.dicebear.com/5.x/initials/svg?seed=${name
+                      .split(/\s+/)
+                      .map((word) => word.charAt(0))
+                      .slice(0, 2)
+                      .join('')}`
+              }
+              alt={`${name} image`}
+              data-testid={image ? '' : 'emptyContainerForImage'}
+            />
           </div>
           <div className={styles.content}>
             <Tooltip title={name} placement="top-end">
