@@ -43,11 +43,6 @@ jest.mock('@mui/x-date-pickers/TimePicker', () => {
   };
 });
 
-const timeToDayJs = (time: string): Dayjs => {
-  const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
-  return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
-};
-
 const theme = createTheme({
   palette: {
     primary: {
@@ -444,10 +439,6 @@ describe('Testing Events Screen [User Portal]', () => {
     const randomEventTitle = 'testEventTitle';
     const randomEventDescription = 'testEventDescription';
     const randomEventLocation = 'testEventLocation';
-    const startDate = '03/23/2024';
-    const endDate = '04/23/2024';
-    const startTime = '02:00:00';
-    const endTime = '06:00:00';
 
     userEvent.type(screen.getByTestId('eventTitleInput'), randomEventTitle);
     userEvent.type(
