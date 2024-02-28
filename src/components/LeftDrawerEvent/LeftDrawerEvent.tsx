@@ -12,7 +12,6 @@ import { EventStatsWrapper } from 'components/EventStats/EventStatsWrapper';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
-import Avatar from 'components/Avatar/Avatar';
 
 export interface InterfaceLeftDrawerProps {
   event: {
@@ -69,8 +68,10 @@ const leftDrawerEvent = ({
         <div className={styles.organizationContainer}>
           <button className={styles.profileContainer} data-testid="OrgBtn">
             <div className={styles.imageContainer}>
-              <Avatar
-                name={event.title.split(' ').join('%20')}
+              <img
+                src={`https://api.dicebear.com/5.x/initials/svg?seed=${event.title
+                  .split(' ')
+                  .join('%20')}`}
                 alt="Dummy Event Picture"
               />
             </div>
@@ -134,8 +135,8 @@ const leftDrawerEvent = ({
               {userImage && userImage !== 'null' ? (
                 <img src={userImage} alt={`Profile Picture`} />
               ) : (
-                <Avatar
-                  name={`${firstName} ${lastName}`}
+                <img
+                  src={`https://api.dicebear.com/5.x/initials/svg?seed=${firstName}%20${lastName}`}
                   alt={`Dummy User Picture`}
                 />
               )}

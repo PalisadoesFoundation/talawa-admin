@@ -8,8 +8,6 @@
     "@apollo/client": "^3.4.0-beta.19",
     "@apollo/link-error": "^2.0.0-beta.3",
     "@apollo/react-testing": "^4.0.0",
-    "@dicebear/collection": "^7.0.4",
-    "@dicebear/core": "^7.0.4",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.8.3",
