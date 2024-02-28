@@ -678,7 +678,7 @@
     "invalidLink": "Link is invalid",
     "Rname": "Enter name of Advertisement",
     "Rtype": "Select type of Advertisement",
-    "Rlink": "Provide a link for content to be displayed",
+    "Rmedia": "Provide media content to be displayed",
     "RstartDate": "Select Start Date",
     "RendDate": "Select End Date",
     "RClose": "Close the window",
