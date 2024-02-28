@@ -15,6 +15,7 @@ import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import styles from './LeftDrawerOrg.module.css';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
+import Avatar from 'components/Avatar/Avatar';
 
 export interface InterfaceLeftDrawerProps {
   orgId: string;
@@ -55,8 +56,6 @@ const leftDrawerOrg = ({
   const userImage = getItem('UserImage');
   const userId = getItem('id');
   const history = useHistory();
-  const userDicebearUrl = `https://api.dicebear.com/5.x/initials/svg?seed=${firstName}%20${lastName}`;
-  const orgDicebearUrl = `https://api.dicebear.com/5.x/initials/svg?seed=${organization?.name}`;
 
   const logout = (): void => {
     revokeRefreshToken();
@@ -109,9 +108,9 @@ const leftDrawerOrg = ({
                 {organization.image ? (
                   <img src={organization.image} alt={`profile picture`} />
                 ) : (
-                  <img
-                    src={orgDicebearUrl}
-                    alt={`Dummy Organization Picture`}
+                  <Avatar
+                    name={organization.name}
+                    alt={'Dummy Organization Picture'}
                   />
                 )}
               </div>
@@ -183,7 +182,10 @@ const leftDrawerOrg = ({
                 {userImage && userImage !== 'null' ? (
                   <img src={userImage} alt={`profile picture`} />
                 ) : (
-                  <img src={userDicebearUrl} alt={`dummy picture`} />
+                  <Avatar
+                    name={`${firstName} ${lastName}`}
+                    alt={`dummy picture`}
+                  />
                 )}
               </div>
               <div className={styles.profileText}>

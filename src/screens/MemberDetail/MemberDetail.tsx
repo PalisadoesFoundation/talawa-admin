@@ -19,6 +19,7 @@ import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
+import Avatar from 'components/Avatar/Avatar';
 
 type MemberDetailProps = {
   id: string; // This is the userId
@@ -162,10 +163,12 @@ const MemberDetail: React.FC<MemberDetailProps> = ({
                       data-testid="userImagePresent"
                     />
                   ) : (
-                    <img
-                      className={styles.userImage}
-                      src={`https://api.dicebear.com/5.x/initials/svg?seed=${userData?.user?.firstName}%20${userData?.user?.lastName}`}
-                      data-testid="userImageAbsent"
+                    <Avatar
+                      name={`${userData?.user?.firstName} ${userData?.user?.lastName}`}
+                      alt="User Image"
+                      size={180}
+                      avatarStyle={styles.userImage}
+                      dataTestId="userImageAbsent"
                     />
                   )}
                 </div>
