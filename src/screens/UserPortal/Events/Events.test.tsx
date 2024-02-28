@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
@@ -15,6 +15,11 @@ import * as getOrganizationId from 'utils/getOrganizationId';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { ThemeProvider } from 'react-bootstrap';
+import { createTheme } from '@mui/material';
+import type { Dayjs } from 'dayjs';
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -23,6 +28,33 @@ jest.mock('react-toastify', () => ({
     success: jest.fn(),
   },
 }));
+
+jest.mock('@mui/x-date-pickers/DatePicker', () => {
+  return {
+    DatePicker: jest.requireActual('@mui/x-date-pickers/DesktopDatePicker')
+      .DesktopDatePicker,
+  };
+});
+
+jest.mock('@mui/x-date-pickers/TimePicker', () => {
+  return {
+    TimePicker: jest.requireActual('@mui/x-date-pickers/DesktopTimePicker')
+      .DesktopTimePicker,
+  };
+});
+
+const timeToDayJs = (time: string): Dayjs => {
+  const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
+  return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
+};
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#31bb6b',
+    },
+  },
+});
 
 const MOCKS = [
   {
@@ -392,9 +424,13 @@ describe('Testing Events Screen [User Portal]', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Events />
-            </I18nextProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
@@ -408,6 +444,10 @@ describe('Testing Events Screen [User Portal]', () => {
     const randomEventTitle = 'testEventTitle';
     const randomEventDescription = 'testEventDescription';
     const randomEventLocation = 'testEventLocation';
+    const startDate = '03/23/2024';
+    const endDate = '04/23/2024';
+    const startTime = '02:00:00';
+    const endTime = '06:00:00';
 
     userEvent.type(screen.getByTestId('eventTitleInput'), randomEventTitle);
     userEvent.type(
@@ -453,14 +493,17 @@ describe('Testing Events Screen [User Portal]', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Events />
-            </I18nextProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
     );
-
     await wait();
 
     expect(getOrganizationIdSpy).toHaveBeenCalled();
@@ -500,9 +543,13 @@ describe('Testing Events Screen [User Portal]', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Events />
-            </I18nextProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
@@ -519,5 +566,66 @@ describe('Testing Events Screen [User Portal]', () => {
 
     expect(screen.queryAllByText(calenderView)).not.toBeNull();
     expect(screen.getByText('Sun')).toBeInTheDocument();
+  });
+
+  test('Testing DatePicker and TimePicker', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    const startDate = '03/23/2024';
+    const endDate = '04/23/2024';
+    const startTime = '02:00 AM';
+    const endTime = '06:00 AM';
+
+    userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    expect(endDate).not.toBeNull();
+    const endDateDatePicker = screen.getByLabelText('End Date');
+    expect(startDate).not.toBeNull();
+    const startDateDatePicker = screen.getByLabelText('Start Date');
+
+    fireEvent.change(endDateDatePicker, {
+      target: { value: endDate },
+    });
+    fireEvent.change(startDateDatePicker, {
+      target: { value: startDate },
+    });
+
+    await wait();
+
+    expect(endDateDatePicker).toHaveValue(endDate);
+    expect(startDateDatePicker).toHaveValue(startDate);
+
+    userEvent.click(screen.getByTestId('allDayEventCheck'));
+
+    expect(endTime).not.toBeNull();
+    const endTimePicker = screen.getByLabelText('End Time');
+    expect(startTime).not.toBeNull();
+    const startTimePicker = screen.getByLabelText('Start Time');
+
+    fireEvent.change(endTimePicker, {
+      target: { value: endTime },
+    });
+    fireEvent.change(startTimePicker, {
+      target: { value: startTime },
+    });
+
+    await wait();
+    expect(endTimePicker).toHaveValue(endTime);
+    expect(startTimePicker).toHaveValue(startTime);
   });
 });
