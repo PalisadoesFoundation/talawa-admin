@@ -192,7 +192,12 @@
     "roleUpdated": "Rol actualizado.",
     "noResultsFoundFor": "No se encontraron resultados para ",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "admins": "Administradores",
+    "members": "Miembros",
+    "join": "unirse",
+    "joined": "Unido",
+    "withdraw": "retirar"
   },
   "dashboard": {
     "title": "Panel de",
@@ -616,7 +621,9 @@
     "createdOrganizations": "Organizaciones creadas",
     "search": "Buscar",
     "nothingToShow": "Nada que mostrar aquí.",
-    "selectOrganization": "Seleccionar organización"
+    "selectOrganization": "Seleccionar organización",
+    "organizations": "Organizaciones",
+    "searchByName": "Buscar por nombre"
   },
   "userSidebar": {
     "yourOrganizations": "Tus Organizaciones",

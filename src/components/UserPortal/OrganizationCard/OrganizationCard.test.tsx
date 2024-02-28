@@ -25,6 +25,28 @@ let props = {
   name: 'organizationName',
   image: '',
   description: 'organizationDescription',
+  admins: [
+    {
+      id: '123',
+    },
+  ],
+  members: [],
+  address: {
+    city: '',
+    countryCode: '',
+    postalCode: '',
+    state: '',
+  },
+  membershipRequestStatus: 'accepted',
+  userRegistrationRequired: true,
+  membershipRequests: [
+    {
+      _id: '',
+      user: {
+        _id: '',
+      },
+    },
+  ],
 };
 
 describe('Testing OrganizationCard Component [User Portal]', () => {

@@ -121,6 +121,29 @@ export const USER_ORGANIZATION_CONNECTION = gql`
         firstName
         lastName
       }
+      members {
+        _id
+      }
+      admins {
+        _id
+      }
+      createdAt
+      address {
+        city
+        countryCode
+        dependentLocality
+        line1
+        line2
+        postalCode
+        sortingCode
+        state
+      }
+      membershipRequests {
+        _id
+        user {
+          _id
+        }
+      }
     }
   }
 `;
