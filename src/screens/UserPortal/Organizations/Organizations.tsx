@@ -171,6 +171,7 @@ export default function organizations(): JSX.Element {
         setOrganizations(organizations);
       }
     } else if (mode == 1) {
+      console.log(joinedOrganizationsData, 'joined', userId);
       if (joinedOrganizationsData) {
         const membershipRequestStatus = 'accepted';
         const organizations =

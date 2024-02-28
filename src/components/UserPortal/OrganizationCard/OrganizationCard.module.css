@@ -42,13 +42,15 @@
 .joinBtn {
   display: flex;
   justify-content: space-around;
-  width: 118px;
+  width: 120px;
+  align-items: center;
 }
 
 .joinedBtn {
   display: flex;
   justify-content: space-around;
-  width: 118px;
+  width: 120px;
+  align-items: center;
   background-color: var(--bs-success-border-subtle);
 }
 
@@ -66,7 +68,8 @@
 .withdrawBtn {
   display: flex;
   justify-content: space-around;
-  width: 118px;
+  width: 130px;
+  align-items: center;
   background-color: var(--bs-danger-border-subtle);
 }
 

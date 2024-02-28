@@ -5,6 +5,7 @@ import { Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 import {
   CANCEL_MEMBERSHIP_REQUEST,
   JOIN_PUBLIC_ORGANIZATION,
@@ -160,6 +161,7 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
             data-testid="manageBtn"
             className={styles.withdrawBtn}
           >
+            <CloseIcon fontSize="inherit" className="fs-5" />
             {t('withdraw')}
           </Button>
         )}
