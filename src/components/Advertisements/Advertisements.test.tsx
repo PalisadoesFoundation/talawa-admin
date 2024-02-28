@@ -1,6 +1,6 @@
 import React from 'react';
 import 'jest-location-mock';
-import { act, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import {
   ApolloClient,
@@ -91,9 +91,9 @@ const ADD_ADVERTISEMENT_MUTATION_MOCK = {
   request: {
     query: ADD_ADVERTISEMENT_MUTATION,
     variables: {
-      orgId: 'undefined',
+      organizationId: 'undefined',
       name: 'Cookie Shop',
-      link: 'http://yourwebsite.com/photo',
+      file: 'data:image/png;base64,bWVkaWEgY29udGVudA==',
       type: 'POPUP',
       startDate: '2023-01-01',
       endDate: '2023-02-02',
@@ -103,6 +103,7 @@ const ADD_ADVERTISEMENT_MUTATION_MOCK = {
     data: {
       createAdvertisement: {
         _id: '65844efc814dd4003db811c4',
+        advertisement: null,
         __typename: 'Advertisement',
       },
     },
@@ -186,7 +187,7 @@ describe('Testing Advertisement Component', () => {
         },
         result: {
           data: {
-            getAdvertisements: [],
+            advertisementsConnection: [],
           },
           loading: false,
         },
@@ -213,14 +214,18 @@ describe('Testing Advertisement Component', () => {
       screen.getByLabelText('Enter name of Advertisement'),
       'Cookie Shop',
     );
-    userEvent.click(
-      screen.getByLabelText('Provide a link for content to be displayed'),
-    );
-    userEvent.type(
-      screen.getByLabelText('Provide a link for content to be displayed'),
-      'http://yourwebsite.com/photo',
-    );
-    userEvent.click(screen.getByLabelText('Select type of Advertisement'));
+    const mediaFile = new File(['media content'], 'test.png', {
+      type: 'image/png',
+    });
+
+    const mediaInput = screen.getByTestId('advertisementMedia');
+    fireEvent.change(mediaInput, {
+      target: {
+        files: [mediaFile],
+      },
+    });
+    const mediaPreview = await screen.findByTestId('mediaPreview');
+    expect(mediaPreview).toBeInTheDocument();
     userEvent.selectOptions(
       screen.getByLabelText('Select type of Advertisement'),
       'POPUP',
@@ -228,7 +233,7 @@ describe('Testing Advertisement Component', () => {
     userEvent.type(screen.getByLabelText('Select Start Date'), '2023-01-01');
     userEvent.type(screen.getByLabelText('Select End Date'), '2023-02-02');
 
-    await userEvent.click(screen.getByTestId('addonregister'));
+    userEvent.click(screen.getByTestId('addonregister'));
     expect(
       await screen.findByText('Advertisement created successfully'),
     ).toBeInTheDocument();
@@ -245,15 +250,28 @@ describe('Testing Advertisement Component', () => {
         },
         result: {
           data: {
-            getAdvertisements: [
+            advertisementsConnection: [
               {
                 _id: '1',
                 name: 'Advertisement1',
                 type: 'POPUP',
-                orgId: 'undefined',
-                link: 'http://example1.com',
+                organization: {
+                  _id: 'undefined',
+                },
+                mediaUrl: 'http://example1.com',
                 endDate: '2023-01-01',
                 startDate: '2022-01-01',
+              },
+              {
+                _id: '2',
+                name: 'Advertisement2',
+                type: 'POPUP',
+                organization: {
+                  _id: 'undefined',
+                },
+                mediaUrl: 'http://example2.com',
+                endDate: '2025-02-01',
+                startDate: '2024-02-01',
               },
             ],
           },
@@ -278,8 +296,8 @@ describe('Testing Advertisement Component', () => {
 
     await wait();
 
-    const date = await screen.findAllByText(/Ends/i);
-    const dateString = date[0].innerHTML;
+    const date = await screen.findAllByTestId('Ad_end_date');
+    const dateString = date[1].innerHTML;
     const dateMatch = dateString.match(
       /\b(?:Sun|Mon|Tue|Wed|Thu|Fri|Sat)\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})\s+(\d{4})\b/,
     );
@@ -310,13 +328,15 @@ describe('Testing Advertisement Component', () => {
         },
         result: {
           data: {
-            getAdvertisements: [
+            advertisementsConnection: [
               {
                 _id: '1',
                 name: 'Advertisement1',
                 type: 'POPUP',
-                orgId: 'undefined',
-                link: 'http://example1.com',
+                organization: {
+                  _id: '65844efc814dd4003db811c4',
+                },
+                mediaUrl: 'http://example1.com',
                 endDate: '2023-01-01',
                 startDate: '2022-01-01',
               },
@@ -324,8 +344,10 @@ describe('Testing Advertisement Component', () => {
                 _id: '2',
                 name: 'Advertisement2',
                 type: 'BANNER',
-                orgId: 'undefined',
-                link: 'http://example2.com',
+                organization: {
+                  _id: '65844efc814dd4003db811c4',
+                },
+                mediaUrl: 'http://example2.com',
                 endDate: tomorrow,
                 startDate: today,
               },
