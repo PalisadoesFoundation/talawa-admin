@@ -11,16 +11,6 @@ import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import {
-  FacebookLogo,
-  LinkedInLogo,
-  GithubLogo,
-  InstagramLogo,
-  SlackLogo,
-  TwitterLogo,
-  YoutubeLogo,
-} from 'assets/svgs/social-icons';
-
-import {
   REACT_APP_USE_RECAPTCHA,
   RECAPTCHA_SITE_KEY,
   BACKEND_URL,
@@ -39,19 +29,7 @@ import { errorHandler } from 'utils/errorHandler';
 import styles from './UserLoginPage.module.css';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import useLocalStorage from 'utils/useLocalstorage';
-
-const socialMediaLinks = [
-  { href: 'https://www.facebook.com/palisadoesproject', logo: FacebookLogo },
-  { href: 'https://twitter.com/palisadoesorg?lang=en', logo: TwitterLogo },
-  { href: 'https://www.linkedin.com/company/palisadoes/', logo: LinkedInLogo },
-  { href: 'https://github.com/PalisadoesFoundation', logo: GithubLogo },
-  {
-    href: 'https://www.youtube.com/@PalisadoesOrganization',
-    logo: YoutubeLogo,
-  },
-  { href: 'https://www.palisadoes.org/slack', logo: SlackLogo },
-  { href: 'https://www.instagram.com/palisadoes/', logo: InstagramLogo },
-];
+import { socialMediaLinks } from '../../../constants';
 
 function loginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userLoginPage' });
