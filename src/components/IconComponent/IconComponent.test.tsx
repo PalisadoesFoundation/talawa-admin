@@ -15,10 +15,6 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
     name: 'Events',
     testId: 'Icon-Component-EventsIcon',
   },
-  ActionItems: {
-    name: 'Action Items',
-    testId: 'Icon-Component-ActionItemIcon',
-  },
   Posts: {
     name: 'Posts',
     testId: 'Icon-Component-PostsIcon',
@@ -50,10 +46,6 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
   EventStats: {
     name: 'Event Stats',
     testId: 'Icon-Component-Event-Stats',
-  },
-  Advertisement: {
-    name: 'Advertisement',
-    testId: 'Icon-Component-Advertisement',
   },
   default: {
     name: 'default',
