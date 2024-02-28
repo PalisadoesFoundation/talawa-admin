@@ -19,7 +19,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ThemeProvider } from 'react-bootstrap';
 import { createTheme } from '@mui/material';
-import type { Dayjs } from 'dayjs';
 
 jest.mock('react-toastify', () => ({
   toast: {
