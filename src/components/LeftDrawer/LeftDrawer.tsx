@@ -11,6 +11,7 @@ import styles from './LeftDrawer.module.css';
 import { useMutation } from '@apollo/client';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
+import Avatar from 'components/Avatar/Avatar';
 
 export interface InterfaceLeftDrawerProps {
   hideDrawer: boolean | null;
@@ -115,8 +116,8 @@ const leftDrawer = ({
               {userImage && userImage !== 'null' ? (
                 <img src={userImage} alt={`profile picture`} />
               ) : (
-                <img
-                  src={`https://api.dicebear.com/5.x/initials/svg?seed=${firstName}%20${lastName}`}
+                <Avatar
+                  name={`${firstName} ${lastName}`}
                   alt={`dummy picture`}
                 />
               )}
