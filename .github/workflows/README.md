@@ -21,7 +21,7 @@ Follow these guidelines when creating new YAML defined GitHub actions. This is d
    1. Place all actions related to issues in the `issues.yml` file.
 1. `Pull Request` workflows to be run by:
    1. Workflows to run **First Time** repo contributors:
-      1. Place all actions related to to this in the `pull-request-target.yml` file.
+      1. Place all actions related to this in the `pull-request-target.yml` file.
    1. Workflows to be run by **ALL** repo contributors:
       1. Place all actions related to pull requests in the `pull-request.yml` file.
 1. `Push` workflows:
