@@ -23,6 +23,62 @@ export interface InterfaceActionItemCategoryList {
   actionItemCategoriesByOrganization: InterfaceActionItemCategoryInfo[];
 }
 
+export interface InterfaceActionItemInfo {
+  _id: string;
+  assignee: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  };
+  assigner: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  };
+  actionItemCategory: {
+    _id: string;
+    name: string;
+  };
+  preCompletionNotes: string;
+  postCompletionNotes: string;
+  assignmentDate: Date;
+  dueDate: Date;
+  completionDate: Date;
+  isCompleted: boolean;
+  event: {
+    _id: string;
+    title: string;
+  };
+  creator: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  };
+}
+
+export interface InterfaceActionItemList {
+  actionItemsByOrganization: InterfaceActionItemInfo[];
+}
+
+export interface InterfaceMembersList {
+  organizations: {
+    _id: string;
+    members: InterfaceMemberInfo[];
+  }[];
+}
+
+export interface InterfaceMemberInfo {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  image: string;
+  createdAt: string;
+  organizationsBlockedBy: {
+    _id: string;
+  }[];
+}
+
 export interface InterfaceOrgConnectionInfoType {
   _id: string;
   image: string | null;

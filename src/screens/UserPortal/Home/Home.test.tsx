@@ -34,7 +34,7 @@ const EMPTY_MOCKS = [
     },
     result: {
       data: {
-        getAdvertisements: [],
+        advertisementsConnection: [],
       },
     },
   },
@@ -184,13 +184,15 @@ const MOCKS = [
     },
     result: {
       data: {
-        getAdvertisements: [
+        advertisementsConnection: [
           {
             _id: '1234',
             name: 'Ad 1',
             type: 'Type 1',
-            orgId: 'orgId',
-            link: 'Link 1',
+            organization: {
+              _id: 'orgId',
+            },
+            mediaUrl: 'Link 1',
             endDate: '2024-12-31',
             startDate: '2022-01-01',
           },
@@ -198,8 +200,10 @@ const MOCKS = [
             _id: '2345',
             name: 'Ad 2',
             type: 'Type 1',
-            orgId: 'orgId',
-            link: 'Link 2',
+            organization: {
+              _id: 'orgId',
+            },
+            mediaUrl: 'Link 2',
             endDate: '2024-09-31',
             startDate: '2023-04-01',
           },
@@ -207,8 +211,10 @@ const MOCKS = [
             _id: '3456',
             name: 'name3',
             type: 'Type 2',
-            orgId: 'orgId',
-            link: 'link3',
+            organization: {
+              _id: 'orgId',
+            },
+            mediaUrl: 'link3',
             startDate: '2023-01-30',
             endDate: '2023-12-31',
           },
@@ -216,8 +222,10 @@ const MOCKS = [
             _id: '4567',
             name: 'name4',
             type: 'Type 2',
-            orgId: 'org1',
-            link: 'link4',
+            organization: {
+              _id: 'orgId',
+            },
+            mediaUrl: 'link4',
             startDate: '2023-01-30',
             endDate: '2023-12-01',
           },
@@ -291,7 +299,7 @@ describe('Testing Home Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -315,7 +323,7 @@ describe('Testing Home Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -342,7 +350,7 @@ describe('Testing Home Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -363,7 +371,7 @@ describe('Testing Home Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -390,7 +398,7 @@ describe('Testing Home Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -410,7 +418,7 @@ describe('Testing Home Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -422,7 +430,7 @@ describe('Testing Home Screen [User Portal]', () => {
     userEvent.type(screen.getByTestId('postInput'), 'some content');
     userEvent.upload(
       screen.getByTestId('postImageInput'),
-      new File(['image content'], 'image.png', { type: 'image/png' })
+      new File(['image content'], 'image.png', { type: 'image/png' }),
     );
 
     // Check that the content and image have been added
@@ -454,7 +462,7 @@ describe('Testing Home Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     userEvent.click(screen.getByTestId('startPostBtn'));
@@ -483,7 +491,7 @@ describe('Testing Home Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     expect(screen.queryByText('Ad 1')).not.toBeInTheDocument();
