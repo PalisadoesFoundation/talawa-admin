@@ -223,33 +223,6 @@ export const DELETE_ORGANIZATION_MUTATION = gql`
   }
 `;
 
-// to create an action item category
-
-export const CREATE_ACTION_ITEM_CATEGORY_MUTATION = gql`
-  mutation CreateActionItemCategory($name: String!, $organizationId: ID!) {
-    createActionItemCategory(name: $name, organizationId: $organizationId) {
-      _id
-    }
-  }
-`;
-
-// to update an action item category
-
-export const UPDATE_ACTION_ITEM_CATEGORY_MUTATION = gql`
-  mutation UpdateActionItemCategory(
-    $actionItemCategoryId: ID!
-    $name: String
-    $isDisabled: Boolean
-  ) {
-    updateActionItemCategory(
-      id: $actionItemCategoryId
-      data: { name: $name, isDisabled: $isDisabled }
-    ) {
-      _id
-    }
-  }
-`;
-
 // to create the event by any organization
 
 export const CREATE_EVENT_MUTATION = gql`
@@ -299,7 +272,6 @@ export const DELETE_EVENT_MUTATION = gql`
 `;
 
 // to remove an admin from an organization
-
 export const REMOVE_ADMIN_MUTATION = gql`
   mutation RemoveAdmin($orgid: ID!, $userid: ID!) {
     removeAdmin(data: { organizationId: $orgid, userId: $userid }) {
@@ -309,7 +281,6 @@ export const REMOVE_ADMIN_MUTATION = gql`
 `;
 
 // to Remove member from an organization
-
 export const REMOVE_MEMBER_MUTATION = gql`
   mutation RemoveMember($orgid: ID!, $userid: ID!) {
     removeMember(data: { organizationId: $orgid, userId: $userid }) {
@@ -319,7 +290,6 @@ export const REMOVE_MEMBER_MUTATION = gql`
 `;
 
 // to add the admin
-
 export const ADD_ADMIN_MUTATION = gql`
   mutation CreateAdmin($orgid: ID!, $userid: ID!) {
     createAdmin(data: { organizationId: $orgid, userId: $userid }) {
@@ -463,22 +433,26 @@ export const ADD_PLUGIN_MUTATION = gql`
 `;
 export const ADD_ADVERTISEMENT_MUTATION = gql`
   mutation (
-    $orgId: ID!
+    $organizationId: ID!
     $name: String!
-    $link: String!
-    $type: String!
+    $type: AdvertisementType!
     $startDate: Date!
     $endDate: Date!
+    $file: String!
   ) {
     createAdvertisement(
-      orgId: $orgId
-      name: $name
-      link: $link
-      type: $type
-      startDate: $startDate
-      endDate: $endDate
+      input: {
+        organizationId: $organizationId
+        name: $name
+        type: $type
+        startDate: $startDate
+        endDate: $endDate
+        mediaFile: $file
+      }
     ) {
-      _id
+      advertisement {
+        _id
+      }
     }
   }
 `;
@@ -486,7 +460,7 @@ export const UPDATE_ADVERTISEMENT_MUTATION = gql`
   mutation UpdateAdvertisement(
     $id: ID!
     $name: String
-    $link: String
+    $file: String
     $type: AdvertisementType
     $startDate: Date
     $endDate: Date
@@ -495,7 +469,7 @@ export const UPDATE_ADVERTISEMENT_MUTATION = gql`
       input: {
         _id: $id
         name: $name
-        link: $link
+        mediaFile: $file
         type: $type
         startDate: $startDate
         endDate: $endDate
@@ -509,8 +483,10 @@ export const UPDATE_ADVERTISEMENT_MUTATION = gql`
 `;
 export const DELETE_ADVERTISEMENT_BY_ID = gql`
   mutation ($id: ID!) {
-    deleteAdvertisementById(id: $id) {
-      success
+    deleteAdvertisement(id: $id) {
+      advertisement {
+        _id
+      }
     }
   }
 `;
@@ -591,6 +567,15 @@ export const REGISTER_EVENT = gql`
     }
   }
 `;
+
+// Create and Update Action Item Categories
+export { CREATE_ACTION_ITEM_CATEGORY_MUTATION } from './ActionItemCategoryMutations';
+export { UPDATE_ACTION_ITEM_CATEGORY_MUTATION } from './ActionItemCategoryMutations';
+
+// Create, Update and Delete Action Items
+export { CREATE_ACTION_ITEM_MUTATION } from './ActionItemMutations';
+export { UPDATE_ACTION_ITEM_MUTATION } from './ActionItemMutations';
+export { DELETE_ACTION_ITEM_MUTATION } from './ActionItemMutations';
 
 // Changes the role of a event in an organization and add and remove the event from the organization
 export { ADD_EVENT_ATTENDEE } from './EventAttendeeMutations';

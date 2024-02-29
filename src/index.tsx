@@ -34,6 +34,7 @@ import { refreshToken } from 'utils/getRefreshToken';
 import { ThemeProvider, createTheme } from '@mui/material';
 import { ApolloLink } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
+import '../src/assets/css/scrollStyles.css';
 
 const theme = createTheme({
   palette: {
