@@ -64,159 +64,155 @@ const leftDrawerOrg = ({
   };
 
   return (
-    <>
-      <div
-        className={`${styles.leftDrawer} customScroll ${
-          hideDrawer === null
-            ? styles.hideElemByDefault
-            : hideDrawer
-              ? styles.inactiveDrawer
-              : styles.activeDrawer
-        }`}
-        data-testid="leftDrawerContainer"
-      >
-        {/* Branding Section */}
-        <div className={styles.brandingContainer}>
-          <TalawaLogo className={styles.talawaLogo} />
-          <span className={styles.talawaText}>{t('talawaAdminPortal')}</span>
-        </div>
+    <div
+      className={`${styles.leftDrawer} customScroll ${
+        hideDrawer === null
+          ? styles.hideElemByDefault
+          : hideDrawer
+            ? styles.inactiveDrawer
+            : styles.activeDrawer
+      }`}
+      data-testid="leftDrawerContainer"
+    >
+      {/* Branding Section */}
+      <div className={styles.brandingContainer}>
+        <TalawaLogo className={styles.talawaLogo} />
+        <span className={styles.talawaText}>{t('talawaAdminPortal')}</span>
+      </div>
 
-        {/* Organization Section */}
-        <div className={styles.organizationContainer}>
-          {loading ? (
-            <>
-              <button
-                className={`${styles.profileContainer} shimmer`}
-                data-testid="orgBtn"
-              />
-            </>
-          ) : organization == undefined ? (
-            <>
-              <button
-                className={`${styles.profileContainer} bg-danger text-start text-white`}
-                disabled
-              >
-                <div className="px-3">
-                  <WarningAmberOutlined />
-                </div>
-                Error Occured while loading the Organization
-              </button>
-            </>
-          ) : (
-            <button className={styles.profileContainer} data-testid="OrgBtn">
-              <div className={styles.imageContainer}>
-                {organization.image ? (
-                  <img src={organization.image} alt={`profile picture`} />
-                ) : (
-                  <Avatar
-                    name={organization.name}
-                    alt={'Dummy Organization Picture'}
-                  />
-                )}
-              </div>
-              <div className={styles.profileText}>
-                <span className={styles.primaryText}>{organization.name}</span>
-                <span className={styles.secondaryText}>
-                  {organization.address.city}, {organization.address.state}
-                  <br />
-                  {organization.address.postalCode},{' '}
-                  {organization.address.countryCode}
-                </span>
-              </div>
-            </button>
-          )}
-        </div>
-
-        {/* Options List */}
-        <div className={styles.optionList}>
-          <h5 className={styles.titleHeader}>{t('menu')}</h5>
-          {targets.map(({ name, url }, index) => {
-            return url ? (
-              <Button
-                key={name}
-                variant={screenName === name ? 'success' : 'light'}
-                className={`${
-                  screenName === name ? 'text-white' : 'text-secondary'
-                }`}
-                onClick={(): void => {
-                  history.push(url);
-                }}
-              >
-                <div className={styles.iconWrapper}>
-                  <IconComponent
-                    name={name}
-                    fill={
-                      screenName === name
-                        ? 'var(--bs-white)'
-                        : 'var(--bs-secondary)'
-                    }
-                  />
-                </div>
-                {name}
-              </Button>
-            ) : (
-              <CollapsibleDropdown
-                key={name}
-                screenName={screenName}
-                target={targets[index]}
-              />
-            );
-          })}
-        </div>
-
-        {/* Profile Section & Logout Btn */}
-        <div style={{ marginTop: 'auto' }}>
-          <Link
-            to={{
-              pathname: `/member/id=${userId}`,
-              state: { from: 'orgdash' },
-            }}
-          >
-            <Button
-              key={'profileBtn'}
-              variant={screenName === 'Profile' ? 'success' : 'light'}
-              className={styles.profileContainer}
-              data-testid="profileBtn"
+      {/* Organization Section */}
+      <div className={styles.organizationContainer}>
+        {loading ? (
+          <button
+            className={`${styles.profileContainer} shimmer`}
+            data-testid="orgBtn"
+          />
+        ) : organization == undefined ? (
+          <>
+            <button
+              className={`${styles.profileContainer} bg-danger text-start text-white`}
+              disabled
             >
-              <div className={styles.imageContainer}>
-                {userImage && userImage !== 'null' ? (
-                  <img src={userImage} alt={`profile picture`} />
-                ) : (
-                  <Avatar
-                    name={`${firstName} ${lastName}`}
-                    alt={`dummy picture`}
-                  />
-                )}
+              <div className="px-3">
+                <WarningAmberOutlined />
               </div>
-              <div className={styles.profileText}>
-                <span className={styles.primaryText}>
-                  {firstName} {lastName}
-                </span>
-                <span
-                  className={`${styles.secondaryText} ${
-                    screenName === 'Profile' && 'text-white'
-                  }`}
-                >
-                  {`${userType}`.toLowerCase()}
-                </span>
+              Error Occured while loading the Organization
+            </button>
+          </>
+        ) : (
+          <button className={styles.profileContainer} data-testid="OrgBtn">
+            <div className={styles.imageContainer}>
+              {organization.image ? (
+                <img src={organization.image} alt={`profile picture`} />
+              ) : (
+                <Avatar
+                  name={organization.name}
+                  alt={'Dummy Organization Picture'}
+                />
+              )}
+            </div>
+            <div className={styles.profileText}>
+              <span className={styles.primaryText}>{organization.name}</span>
+              <span className={styles.secondaryText}>
+                {organization.address.city}, {organization.address.state}
+                <br />
+                {organization.address.postalCode},{' '}
+                {organization.address.countryCode}
+              </span>
+            </div>
+          </button>
+        )}
+      </div>
+
+      {/* Options List */}
+      <div className={styles.optionList}>
+        <h5 className={styles.titleHeader}>{t('menu')}</h5>
+        {targets.map(({ name, url }, index) => {
+          return url ? (
+            <Button
+              key={name}
+              variant={screenName === name ? 'success' : 'light'}
+              className={`${
+                screenName === name ? 'text-white' : 'text-secondary'
+              }`}
+              onClick={(): void => {
+                history.push(url);
+              }}
+            >
+              <div className={styles.iconWrapper}>
+                <IconComponent
+                  name={name}
+                  fill={
+                    screenName === name
+                      ? 'var(--bs-white)'
+                      : 'var(--bs-secondary)'
+                  }
+                />
               </div>
-              <AngleRightIcon fill={'var(--bs-secondary)'} />
+              {name}
             </Button>
-          </Link>
+          ) : (
+            <CollapsibleDropdown
+              key={name}
+              screenName={screenName}
+              target={targets[index]}
+            />
+          );
+        })}
+      </div>
+
+      {/* Profile Section & Logout Btn */}
+      <div style={{ marginTop: 'auto' }}>
+        <Link
+          to={{
+            pathname: `/member/id=${userId}`,
+            state: { from: 'orgdash' },
+          }}
+        >
           <Button
-            variant="light"
-            className={`mt-4 d-flex justify-content-start px-0 w-100 ${styles.logout}`}
-            onClick={(): void => logout()}
-            data-testid="logoutBtn"
+            key={'profileBtn'}
+            variant={screenName === 'Profile' ? 'success' : 'light'}
+            className={styles.profileContainer}
+            data-testid="profileBtn"
           >
             <div className={styles.imageContainer}>
-              <LogoutIcon fill={'var(--bs-secondary)'} />
+              {userImage && userImage !== 'null' ? (
+                <img src={userImage} alt={`profile picture`} />
+              ) : (
+                <Avatar
+                  name={`${firstName} ${lastName}`}
+                  alt={`dummy picture`}
+                />
+              )}
             </div>
-            {t('logout')}
+            <div className={styles.profileText}>
+              <span className={styles.primaryText}>
+                {firstName} {lastName}
+              </span>
+              <span
+                className={`${styles.secondaryText} ${
+                  screenName === 'Profile' && 'text-white'
+                }`}
+              >
+                {`${userType}`.toLowerCase()}
+              </span>
+            </div>
+            <AngleRightIcon fill={'var(--bs-secondary)'} />
           </Button>
-        </div>
+        </Link>
+        <Button
+          variant="light"
+          className={`mt-4 d-flex justify-content-start px-0 w-100 ${styles.logout}`}
+          onClick={(): void => logout()}
+          data-testid="logoutBtn"
+        >
+          <div className={styles.imageContainer}>
+            <LogoutIcon fill={'var(--bs-secondary)'} />
+          </div>
+          {t('logout')}
+        </Button>
       </div>
-    </>
+    </div>
   );
 };
 

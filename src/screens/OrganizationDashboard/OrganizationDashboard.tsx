@@ -96,7 +96,7 @@ function organizationDashboard(): JSX.Element {
   }, [eventData?.eventsByOrganizationConnection]);
 
   if (errorOrg || errorPost || errorEvent) {
-    window.location.replace('/orglist');
+    // window.location.replace('/orglist');
   }
 
   return (

@@ -42,121 +42,117 @@ const leftDrawer = ({
   };
 
   return (
-    <>
-      <div
-        className={`${styles.leftDrawer} customScroll ${
-          hideDrawer === null
-            ? styles.hideElemByDefault
-            : hideDrawer
-              ? styles.inactiveDrawer
-              : styles.activeDrawer
-        }`}
-        data-testid="leftDrawerContainer"
-      >
-        <TalawaLogo className={styles.talawaLogo} />
-        <p className={styles.talawaText}>{t('talawaAdminPortal')}</p>
-        <h5 className={styles.titleHeader}>{t('menu')}</h5>
-        <div className={styles.optionList}>
+    <div
+      className={`${styles.leftDrawer} customScroll ${
+        hideDrawer === null
+          ? styles.hideElemByDefault
+          : hideDrawer
+            ? styles.inactiveDrawer
+            : styles.activeDrawer
+      }`}
+      data-testid="leftDrawerContainer"
+    >
+      <TalawaLogo className={styles.talawaLogo} />
+      <p className={styles.talawaText}>{t('talawaAdminPortal')}</p>
+      <h5 className={styles.titleHeader}>{t('menu')}</h5>
+      <div className={styles.optionList}>
+        <Button
+          variant={screenName === 'My Organizations' ? 'success' : 'light'}
+          className={`${
+            screenName === 'My Organizations' ? 'text-white' : 'text-secondary'
+          }`}
+          data-testid="orgsBtn"
+          onClick={(): void => {
+            history.push('/orglist');
+          }}
+        >
+          <div className={styles.iconWrapper}>
+            <OrganizationsIcon
+              stroke={`${
+                screenName === 'My Organizations'
+                  ? 'var(--bs-white)'
+                  : 'var(--bs-secondary)'
+              }`}
+            />
+          </div>
+          {t('my organizations')}
+        </Button>
+        {userType === 'SUPERADMIN' && (
           <Button
-            variant={screenName === 'My Organizations' ? 'success' : 'light'}
+            variant={screenName === 'Users' ? 'success' : 'light'}
             className={`${
-              screenName === 'My Organizations'
-                ? 'text-white'
-                : 'text-secondary'
+              screenName === 'Users' ? 'text-white' : 'text-secondary'
             }`}
-            data-testid="orgsBtn"
             onClick={(): void => {
-              history.push('/orglist');
+              history.push('/users');
             }}
+            data-testid="rolesBtn"
           >
             <div className={styles.iconWrapper}>
-              <OrganizationsIcon
-                stroke={`${
-                  screenName === 'My Organizations'
+              <RolesIcon
+                fill={`${
+                  screenName === 'Users'
                     ? 'var(--bs-white)'
                     : 'var(--bs-secondary)'
                 }`}
               />
             </div>
-            {t('my organizations')}
+            {t('users')}
           </Button>
-          {userType === 'SUPERADMIN' && (
-            <Button
-              variant={screenName === 'Users' ? 'success' : 'light'}
-              className={`${
-                screenName === 'Users' ? 'text-white' : 'text-secondary'
-              }`}
-              onClick={(): void => {
-                history.push('/users');
-              }}
-              data-testid="rolesBtn"
-            >
-              <div className={styles.iconWrapper}>
-                <RolesIcon
-                  fill={`${
-                    screenName === 'Users'
-                      ? 'var(--bs-white)'
-                      : 'var(--bs-secondary)'
-                  }`}
-                />
-              </div>
-              {t('users')}
-            </Button>
-          )}
-        </div>
-        <div style={{ marginTop: 'auto' }}>
-          <Link
-            to={{
-              pathname: `/member/id=${userId}`,
-              state: { from: 'orglist' },
-            }}
-          >
-            <Button
-              key={'profileBtn'}
-              className={styles.profileContainer}
-              variant={screenName === 'Profile' ? 'success' : 'light'}
-              data-testid="profileBtn"
-            >
-              <div className={styles.imageContainer}>
-                {userImage && userImage !== 'null' ? (
-                  <img src={userImage} alt={`profile picture`} />
-                ) : (
-                  <Avatar
-                    name={`${firstName} ${lastName}`}
-                    alt={`dummy picture`}
-                  />
-                )}
-              </div>
-              <div className={styles.profileText}>
-                <span className={styles.primaryText}>
-                  {firstName} {lastName}
-                </span>
-                <span
-                  className={`${styles.secondaryText} ${
-                    screenName === 'Profile' && 'text-white'
-                  }`}
-                >
-                  {`${userType}`.toLowerCase()}
-                </span>
-              </div>
-              <AngleRightIcon fill={'var(--bs-secondary)'} />
-            </Button>
-          </Link>
-
+        )}
+      </div>
+      <div style={{ marginTop: 'auto' }}>
+        <Link
+          to={{
+            pathname: `/member/id=${userId}`,
+            state: { from: 'orglist' },
+          }}
+        >
           <Button
-            variant="light"
-            className={`mt-4 d-flex justify-content-start px-0 w-100 bg-danger text-white  ${styles.logout}`}
-            onClick={(): void => logout()}
-            data-testid="logoutBtn"
+            key={'profileBtn'}
+            className={styles.profileContainer}
+            variant={screenName === 'Profile' ? 'success' : 'light'}
+            data-testid="profileBtn"
           >
             <div className={styles.imageContainer}>
-              <LogoutIcon fill={'white'} />
+              {userImage && userImage !== 'null' ? (
+                <img src={userImage} alt={`profile picture`} />
+              ) : (
+                <Avatar
+                  name={`${firstName} ${lastName}`}
+                  alt={`dummy picture`}
+                />
+              )}
             </div>
-            {t('logout')}
+            <div className={styles.profileText}>
+              <span className={styles.primaryText}>
+                {firstName} {lastName}
+              </span>
+              <span
+                className={`${styles.secondaryText} ${
+                  screenName === 'Profile' && 'text-white'
+                }`}
+              >
+                {`${userType}`.toLowerCase()}
+              </span>
+            </div>
+            <AngleRightIcon fill={'var(--bs-secondary)'} />
           </Button>
-        </div>
+        </Link>
+
+        <Button
+          variant="light"
+          className={`mt-4 d-flex justify-content-start px-0 w-100 bg-danger text-white  ${styles.logout}`}
+          onClick={(): void => logout()}
+          data-testid="logoutBtn"
+        >
+          <div className={styles.imageContainer}>
+            <LogoutIcon fill={'white'} />
+          </div>
+          {t('logout')}
+        </Button>
       </div>
-    </>
+    </div>
   );
 };
 

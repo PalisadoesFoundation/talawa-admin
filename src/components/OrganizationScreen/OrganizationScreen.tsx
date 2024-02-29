@@ -25,41 +25,39 @@ const organizationScreen = ({
   const { targets, configUrl } = appRoutes;
 
   const handleResize = (): void => {
-    if (window.innerWidth <= 820) {
-      setHideDrawer(!hideDrawer);
+    if (window.innerWidth <= 820 && !hideDrawer) {
+      setHideDrawer(true);
     }
   };
+
+  const toggleDrawer = (): void => {
+    setHideDrawer(!hideDrawer);
+  };
+
   useEffect(() => {
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [hideDrawer]);
 
   return (
     <>
-      {hideDrawer ? (
-        <Button
-          className={styles.opendrawer}
-          onClick={(): void => {
-            setHideDrawer(!hideDrawer);
-          }}
-          data-testid="openMenu"
-        >
-          <i className="fa fa-angle-double-right" aria-hidden="true"></i>
-        </Button>
-      ) : (
-        <Button
-          className={styles.collapseSidebarButton}
-          onClick={(): void => {
-            setHideDrawer(!hideDrawer);
-          }}
-          data-testid="menuBtn"
-        >
-          <i className="fa fa-angle-double-left" aria-hidden="true"></i>
-        </Button>
-      )}
+      <Button
+        className={
+          hideDrawer ? styles.opendrawer : styles.collapseSidebarButton
+        }
+        onClick={toggleDrawer}
+        data-testid="toggleMenuBtn"
+      >
+        <i
+          className={
+            hideDrawer ? 'fa fa-angle-double-right' : 'fa fa-angle-double-left'
+          }
+          aria-hidden="true"
+        ></i>
+      </Button>
       <div className={styles.drawer}>
         <LeftDrawerOrg
           orgId={configUrl}

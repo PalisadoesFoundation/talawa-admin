@@ -26,7 +26,7 @@ const propsOrg: InterfaceLeftDrawerProps = {
 };
 const propsUsers: InterfaceLeftDrawerProps = {
   ...props,
-  hideDrawer: null,
+  hideDrawer: false,
   screenName: 'Users',
 };
 
@@ -64,9 +64,11 @@ afterEach(() => {
 });
 
 describe('Testing Left Drawer component for SUPERADMIN', () => {
+  beforeEach(() => {
+    setItem('UserType', 'SUPERADMIN');
+  });
   test('Component should be rendered properly', () => {
     setItem('UserImage', '');
-    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -104,7 +106,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing in roles screen', () => {
-    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -127,7 +128,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing Drawer when hideDrawer is null', () => {
-    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -140,7 +140,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing logout functionality', async () => {
-    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -157,8 +156,10 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
 });
 
 describe('Testing Left Drawer component for ADMIN', () => {
-  test('Components should be rendered properly', () => {
+  beforeEach(() => {
     setItem('UserType', 'ADMIN');
+  });
+  test('Components should be rendered properly', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import 'jest-location-mock';
 import { Provider } from 'react-redux';
@@ -54,6 +54,15 @@ const MOCKS = [
 ];
 const link = new StaticMockLink(MOCKS, true);
 
+const resizeWindow = (width: number): void => {
+  window.innerWidth = width;
+  fireEvent(window, new Event('resize'));
+};
+
+const clickToggleMenuBtn = (): void => {
+  fireEvent.click(screen.getByTestId('toggleMenuBtn') as HTMLElement);
+};
+
 describe('Testing LeftDrawer in OrganizationScreen', () => {
   test('Testing LeftDrawer in page functionality', async () => {
     setItem('UserType', 'SUPERADMIN');
@@ -69,31 +78,13 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    // Resize window to trigger handleResize
-    window.innerWidth = 800; // Set a width less than or equal to 820
-    fireEvent(window, new Event('resize'));
-
-    await waitFor(() => {
-      fireEvent.click(screen.getByTestId('openMenu') as HTMLElement);
-    });
-
-    // sets hideDrawer to true
-    await waitFor(() => {
-      fireEvent.click(screen.getByTestId('menuBtn') as HTMLElement);
-    });
-
+    // Resize window to a smaller width
+    resizeWindow(800);
+    clickToggleMenuBtn();
     // Resize window back to a larger width
-    window.innerWidth = 1000; // Set a larger width
-    fireEvent(window, new Event('resize'));
+    resizeWindow(1000);
+    clickToggleMenuBtn();
 
-    // sets hideDrawer to false
-    await waitFor(() => {
-      fireEvent.click(screen.getByTestId('openMenu') as HTMLElement);
-    });
-
-    // sets hideDrawer to true
-    await waitFor(() => {
-      fireEvent.click(screen.getByTestId('menuBtn') as HTMLElement);
-    });
+    clickToggleMenuBtn();
   });
 });

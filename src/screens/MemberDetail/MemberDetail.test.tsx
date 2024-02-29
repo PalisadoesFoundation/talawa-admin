@@ -235,7 +235,6 @@ describe('MemberDetail', () => {
     );
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
 
-    const user = MOCKS1[0].result.data.user;
     const dicebearUrl = `mocked-data-uri`;
 
     const userImage = await screen.findByTestId('userImageAbsent');
