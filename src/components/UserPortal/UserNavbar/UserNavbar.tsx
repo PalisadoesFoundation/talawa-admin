@@ -8,12 +8,13 @@ import cookies from 'js-cookie';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useHistory } from 'react-router-dom';
-import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
+import useLocalStorage from 'utils/useLocalstorage';
 
 function userNavbar(): JSX.Element {
+  const { getItem } = useLocalStorage();
   const history = useHistory();
 
   const { t } = useTranslation('translation', {
@@ -27,21 +28,13 @@ function userNavbar(): JSX.Element {
     cookies.get('i18next') || 'en',
   );
 
-  const [userName, setUserName] = React.useState('');
-
-  const { data } = useQuery(CHECK_AUTH);
-
-  React.useEffect(() => {
-    if (data) {
-      setUserName(`${data.checkAuth.firstName} ${data.checkAuth.lastName}`);
-    }
-  }, [data]);
+  const userName = getItem('name');
 
   /* istanbul ignore next */
   const handleLogout = (): void => {
     revokeRefreshToken();
     localStorage.clear();
-    window.location.replace('/user');
+    history.push('/user');
   };
 
   return (
