@@ -11,7 +11,8 @@
     "eslint:recommended",
     "plugin:jest/recommended",
     "plugin:prettier/recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
   ],
   "globals": {
     "Atomics": "readonly",
@@ -124,8 +125,6 @@
     // All tests must need not have an assertion
     "jest/expect-expect": 0,
 
-    // Ensures that components are always indented by 2 spaces
-    "react/jsx-indent": ["warn", 2],
     "react/jsx-tag-spacing": [
       "warn",
       {

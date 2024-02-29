@@ -1,7 +1,6 @@
 import React from 'react';
 import 'jest-location-mock';
 import { act, fireEvent, render, screen } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
 import {
   ApolloClient,
   ApolloProvider,
@@ -20,8 +19,59 @@ import { I18nextProvider } from 'react-i18next';
 import { ORGANIZATIONS_LIST, PLUGIN_GET } from 'GraphQl/Queries/Queries';
 import userEvent from '@testing-library/user-event';
 import useLocalStorage from 'utils/useLocalstorage';
+import { MockedProvider } from '@apollo/react-testing';
 
 const { getItem } = useLocalStorage();
+
+jest.mock('components/AddOn/support/services/Plugin.helper', () => ({
+  __esModule: true,
+  default: jest.fn().mockImplementation(() => ({
+    fetchStore: jest.fn().mockResolvedValue([
+      {
+        _id: '1',
+        pluginName: 'Plugin 1',
+        pluginDesc: 'Description 1',
+        pluginCreatedBy: 'User 1',
+        pluginInstallStatus: true,
+      },
+      {
+        _id: '2',
+        pluginName: 'Plugin 2',
+        pluginDesc: 'Description 2',
+        pluginCreatedBy: 'User 2',
+        pluginInstallStatus: false,
+      },
+      // Add more mock data as needed
+    ]),
+    fetchInstalled: jest.fn().mockResolvedValue([
+      {
+        _id: '1',
+        pluginName: 'Installed Plugin 1',
+        pluginDesc: 'Installed Description 1',
+        pluginCreatedBy: 'User 3',
+        pluginInstallStatus: true,
+      },
+      {
+        _id: '3',
+        pluginName: 'Installed Plugin 3',
+        pluginDesc: 'Installed Description 3',
+        pluginCreatedBy: 'User 4',
+        pluginInstallStatus: true,
+      },
+      // Add more mock data as needed
+    ]),
+    generateLinks: jest.fn().mockImplementation((plugins) => {
+      return plugins
+        .filter((plugin: { enabled: any }) => plugin.enabled)
+        .map((installedPlugin: { pluginName: any; component: string }) => {
+          return {
+            name: installedPlugin.pluginName,
+            url: `/plugin/${installedPlugin.component.toLowerCase()}`,
+          };
+        });
+    }),
+  })),
+}));
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
