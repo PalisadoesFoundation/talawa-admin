@@ -69,8 +69,8 @@ export default function events(): JSX.Element {
   const [eventTitle, setEventTitle] = React.useState('');
   const [eventDescription, setEventDescription] = React.useState('');
   const [eventLocation, setEventLocation] = React.useState('');
-  const [startDate, setStartDate] = React.useState(new Date());
-  const [endDate, setEndDate] = React.useState(new Date());
+  const [startDate, setStartDate] = React.useState<Date | null>(new Date());
+  const [endDate, setEndDate] = React.useState<Date | null>(new Date());
   const [isPublic, setIsPublic] = React.useState(true);
   const [isRegisterable, setIsRegisterable] = React.useState(true);
   const [isRecurring, setIsRecurring] = React.useState(false);
@@ -413,12 +413,7 @@ export default function events(): JSX.Element {
                     onChange={(date: Dayjs | null): void => {
                       if (date) {
                         setStartDate(date?.toDate());
-                        setEndDate(
-                          endDate &&
-                            (endDate < date?.toDate()
-                              ? date?.toDate()
-                              : endDate),
-                        );
+                        setEndDate(date?.toDate());
                       }
                     }}
                     data-testid="eventStartDate"
@@ -449,11 +444,7 @@ export default function events(): JSX.Element {
                     onChange={(time): void => {
                       if (time) {
                         setStartTime(time?.format('HH:mm:ss'));
-                        setEndTime(
-                          timeToDayJs(endTime) < time
-                            ? time?.format('HH:mm:ss')
-                            : endTime,
-                        );
+                        setEndTime(time?.format('HH:mm:ss'));
                       }
                     }}
                     disabled={isAllDay}

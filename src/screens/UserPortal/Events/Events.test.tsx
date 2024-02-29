@@ -559,6 +559,12 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   test('Testing DatePicker and TimePicker', async () => {
+    const getOrganizationIdSpy = jest
+      .spyOn(getOrganizationId, 'default')
+      .mockImplementation(() => {
+        return '';
+      });
+
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -576,10 +582,12 @@ describe('Testing Events Screen [User Portal]', () => {
     );
 
     await wait();
+    expect(getOrganizationIdSpy).toHaveBeenCalled();
+
     const startDate = '03/23/2024';
     const endDate = '04/23/2024';
-    const startTime = '02:00 AM';
-    const endTime = '06:00 AM';
+    const startTime = '02:00 PM';
+    const endTime = '06:00 PM';
 
     userEvent.click(screen.getByTestId('createEventModalBtn'));
 
@@ -588,11 +596,11 @@ describe('Testing Events Screen [User Portal]', () => {
     expect(startDate).not.toBeNull();
     const startDateDatePicker = screen.getByLabelText('Start Date');
 
-    fireEvent.change(endDateDatePicker, {
-      target: { value: endDate },
-    });
     fireEvent.change(startDateDatePicker, {
       target: { value: startDate },
+    });
+    fireEvent.change(endDateDatePicker, {
+      target: { value: endDate },
     });
 
     await wait();
@@ -607,15 +615,59 @@ describe('Testing Events Screen [User Portal]', () => {
     expect(startTime).not.toBeNull();
     const startTimePicker = screen.getByLabelText('Start Time');
 
-    fireEvent.change(endTimePicker, {
-      target: { value: endTime },
-    });
     fireEvent.change(startTimePicker, {
       target: { value: startTime },
+    });
+    fireEvent.change(endTimePicker, {
+      target: { value: endTime },
     });
 
     await wait();
     expect(endTimePicker).toHaveValue(endTime);
     expect(startTimePicker).toHaveValue(startTime);
+  });
+
+  test('EndDate null', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    const endDateDatePicker = screen.getByLabelText('End Date');
+    const startDateDatePicker = screen.getByLabelText('Start Date');
+
+    fireEvent.change(startDateDatePicker, {
+      target: { value: null },
+    });
+    fireEvent.change(endDateDatePicker, {
+      target: { value: null },
+    });
+
+    userEvent.click(screen.getByTestId('allDayEventCheck'));
+
+    const endTimePicker = screen.getByLabelText('End Time');
+    const startTimePicker = screen.getByLabelText('Start Time');
+
+    fireEvent.change(startTimePicker, {
+      target: { value: null },
+    });
+    fireEvent.change(endTimePicker, {
+      target: { value: null },
+    });
   });
 });
