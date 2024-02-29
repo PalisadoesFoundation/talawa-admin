@@ -85,21 +85,45 @@ export interface InterfaceQueryOrganizationsListObject {
     email: string;
   }[];
 }
-
-export interface InterfaceQueryOrganizationPostListItem {
-  _id: string;
-  title: string;
-  text: string;
-  imageUrl: null;
-  videoUrl: null;
-  createdAt: string;
-  creator: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-  }[];
+export interface InterfacePostForm {
+  posttitle: string;
+  postinfo: string;
+  postphoto: string | null;
+  postvideo: string | null;
+  pinned: boolean;
 }
+export interface InterfaceQueryOrganizationPostListItem {
+  posts: {
+    edges: {
+      node: {
+        _id: string;
+        title: string;
+        text: string;
+        imageUrl: string | null;
+        videoUrl: string | null;
+        creator: {
+          _id: string;
+          firstName: string;
+          lastName: string;
+          email: string;
+        };
+        createdAt: string;
+        likeCount: number;
+        commentCount: number;
+        pinned: boolean;
+      };
+      cursor: string;
+    }[];
+    pageInfo: {
+      startCursor: string;
+      endCursor: string;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+    totalCount: number;
+  };
+}
+
 export interface InterfaceQueryOrganizationEventListItem {
   _id: string;
   title: string;

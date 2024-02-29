@@ -1,24 +1,23 @@
-import React from 'react';
-import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 
-import {
-  ORGANIZATION_POST_CONNECTION_LIST,
-  ADVERTISEMENTS_GET,
-} from 'GraphQl/Queries/Queries';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { store } from 'state/store';
-import i18nForTest from 'utils/i18nForTest';
-import { StaticMockLink } from 'utils/StaticMockLink';
-import Home from './Home';
 import userEvent from '@testing-library/user-event';
-import * as getOrganizationId from 'utils/getOrganizationId';
-import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
-import { toast } from 'react-toastify';
-import dayjs from 'dayjs';
 import { REACT_APP_CUSTOM_PORT } from 'Constant/constant';
+import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  ADVERTISEMENTS_GET,
+  ORGANIZATION_POST_LIST,
+} from 'GraphQl/Queries/Queries';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { store } from 'state/store';
+import { StaticMockLink } from 'utils/StaticMockLink';
+import * as getOrganizationId from 'utils/getOrganizationId';
+import i18nForTest from 'utils/i18nForTest';
+import Home from './Home';
+import React from 'react';
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -44,96 +43,120 @@ const EMPTY_MOCKS = [
 const MOCKS = [
   {
     request: {
-      query: ORGANIZATION_POST_CONNECTION_LIST,
+      query: ORGANIZATION_POST_LIST,
       variables: {
         id: '',
+        first: 10,
+        after: null,
+        before: null,
+        last: null,
       },
     },
     result: {
       data: {
-        postsByOrganizationConnection: {
-          edges: [
-            {
-              _id: '6411e53835d7ba2344a78e21',
-              title: 'postone',
-              text: 'THis is the frist post',
-              imageUrl: null,
-              videoUrl: null,
-              creator: {
-                _id: '640d98d9eb6a743d75341067',
-                firstName: 'Aditya',
-                lastName: 'Shelke',
-                email: 'adidacreator1@gmail.com',
-              },
-              createdAt: dayjs(new Date()).add(1, 'day'),
-              likeCount: 0,
-              commentCount: 0,
-              comments: [],
-              likedBy: [],
-              pinned: false,
-            },
-            {
-              _id: '6411e54835d7ba2344a78e29',
-              title: 'posttwo',
-              text: 'THis is the post two',
-              imageUrl: null,
-              videoUrl: null,
-              creator: {
-                _id: '640d98d9eb6a743d75341067',
-                firstName: 'Aditya',
-                lastName: 'Shelke',
-                email: 'adidacreator1@gmail.com',
-              },
-              createdAt: dayjs(new Date()).add(1, 'day'),
-              likeCount: 0,
-              commentCount: 2,
-              comments: [
+        organizations: [
+          {
+            posts: {
+              edges: [
                 {
-                  _id: '64eb13beca85de60ebe0ed0e',
-                  creator: {
-                    _id: '63d6064458fce20ee25c3bf7',
-                    firstName: 'Noble',
-                    lastName: 'Mittal',
-                    email: 'test@gmail.com',
-                    __typename: 'User',
-                  },
-                  likeCount: 1,
-                  likedBy: [
-                    {
-                      _id: 1,
+                  node: {
+                    _id: '6411e53835d7ba2344a78e21',
+                    title: 'postone',
+                    text: 'This is the first post',
+                    imageUrl: null,
+                    videoUrl: null,
+                    createdAt: '2023-08-24T09:26:56.524+00:00',
+                    creator: {
+                      _id: '640d98d9eb6a743d75341067',
+                      firstName: 'Aditya',
+                      lastName: 'Shelke',
+                      email: 'adidacreator1@gmail.com',
                     },
-                  ],
-                  text: 'First comment from Talawa user portal.',
-                  __typename: 'Comment',
-                },
-                {
-                  _id: '64eb483aca85de60ebe0ef99',
-                  creator: {
-                    _id: '63d6064458fce20ee25c3bf7',
-                    firstName: 'Noble',
-                    lastName: 'Mittal',
-                    email: 'test@gmail.com',
-                    createdAt: '2023-02-18T09:22:27.969Z',
-
-                    __typename: 'User',
+                    likeCount: 0,
+                    commentCount: 0,
+                    comments: [],
+                    pinned: true,
+                    likedBy: [],
                   },
-                  likeCount: 0,
-                  likedBy: [],
-                  text: 'Great View',
-                  __typename: 'Comment',
+                  cursor: '6411e53835d7ba2344a78e21',
                 },
-              ],
-              likedBy: [
                 {
-                  _id: '63d6064458fce20ee25c3bf7',
-                  firstName: 'test',
-                  lastName: 'abc',
+                  node: {
+                    _id: '6411e54835d7ba2344a78e29',
+                    title: 'posttwo',
+                    text: 'Tis is the post two',
+                    imageUrl: null,
+                    videoUrl: null,
+                    createdAt: '2023-08-24T09:26:56.524+00:00',
+                    creator: {
+                      _id: '640d98d9eb6a743d75341067',
+                      firstName: 'Aditya',
+                      lastName: 'Shelke',
+                      email: 'adidacreator1@gmail.com',
+                    },
+                    likeCount: 0,
+                    commentCount: 0,
+                    pinned: false,
+                    likedBy: [],
+                    comments: [],
+                  },
+                  cursor: '6411e54835d7ba2344a78e29',
+                },
+                {
+                  node: {
+                    _id: '6411e54835d7ba2344a78e30',
+                    title: 'posttwo',
+                    text: 'Tis is the post two',
+                    imageUrl: null,
+                    videoUrl: null,
+                    createdAt: '2023-08-24T09:26:56.524+00:00',
+                    creator: {
+                      _id: '640d98d9eb6a743d75341067',
+                      firstName: 'Aditya',
+                      lastName: 'Shelke',
+                      email: 'adidacreator1@gmail.com',
+                    },
+                    likeCount: 0,
+                    commentCount: 0,
+                    pinned: true,
+                    likedBy: [],
+                    comments: [],
+                  },
+                  cursor: '6411e54835d7ba2344a78e30',
+                },
+                {
+                  node: {
+                    _id: '6411e54835d7ba2344a78e31',
+                    title: 'posttwo',
+                    text: 'Tis is the post two',
+                    imageUrl: null,
+                    videoUrl: null,
+                    createdAt: '2023-08-24T09:26:56.524+00:00',
+                    creator: {
+                      _id: '640d98d9eb6a743d75341067',
+                      firstName: 'Aditya',
+                      lastName: 'Shelke',
+                      email: 'adidacreator1@gmail.com',
+                    },
+                    likeCount: 0,
+                    commentCount: 0,
+                    pinned: false,
+                    likedBy: [],
+                    comments: [],
+                  },
+                  cursor: '6411e54835d7ba2344a78e31',
                 },
               ],
-              pinned: false,
+              pageInfo: {
+                startCursor: '6411e53835d7ba2344a78e21',
+                endCursor: '6411e54835d7ba2344a78e31',
+                hasNextPage: false,
+                hasPreviousPage: false,
+              },
+              totalCount: 4,
             },
-          ],
-        },
+          },
+        ],
       },
     },
   },
@@ -268,7 +291,7 @@ describe('Testing Home Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -292,7 +315,7 @@ describe('Testing Home Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -319,7 +342,7 @@ describe('Testing Home Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -340,7 +363,7 @@ describe('Testing Home Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -367,7 +390,7 @@ describe('Testing Home Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -387,7 +410,7 @@ describe('Testing Home Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
@@ -399,7 +422,7 @@ describe('Testing Home Screen [User Portal]', () => {
     userEvent.type(screen.getByTestId('postInput'), 'some content');
     userEvent.upload(
       screen.getByTestId('postImageInput'),
-      new File(['image content'], 'image.png', { type: 'image/png' }),
+      new File(['image content'], 'image.png', { type: 'image/png' })
     );
 
     // Check that the content and image have been added
@@ -431,7 +454,7 @@ describe('Testing Home Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     userEvent.click(screen.getByTestId('startPostBtn'));
@@ -460,7 +483,7 @@ describe('Testing Home Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     expect(screen.queryByText('Ad 1')).not.toBeInTheDocument();

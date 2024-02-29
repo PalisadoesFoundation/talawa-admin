@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import {
   ORGANIZATIONS_LIST,
-  ORGANIZATION_POST_CONNECTION_LIST,
+  ORGANIZATION_POST_LIST,
   ORGANIZATION_EVENT_CONNECTION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { ReactComponent as AdminsIcon } from 'assets/svgs/admin.svg';
@@ -22,6 +22,7 @@ import CardItem from 'components/OrganizationDashCards/CardItem';
 import type { ApolloError } from '@apollo/client';
 import type {
   InterfaceQueryOrganizationEventListItem,
+  InterfaceQueryOrganizationPostListItem,
   InterfaceQueryOrganizationsListObject,
 } from 'utils/interfaces';
 import { toast } from 'react-toastify';
@@ -62,8 +63,14 @@ function organizationDashboard(): JSX.Element {
     data: postData,
     loading: loadingPost,
     error: errorPost,
-  } = useQuery(ORGANIZATION_POST_CONNECTION_LIST, {
-    variables: { id: currentUrl },
+  }: {
+    data?: {
+      organizations: InterfaceQueryOrganizationPostListItem[];
+    };
+    loading: boolean;
+    error?: ApolloError;
+  } = useQuery(ORGANIZATION_POST_LIST, {
+    variables: { id: currentUrl, first: 10 },
   });
 
   const {
@@ -156,9 +163,7 @@ function organizationDashboard(): JSX.Element {
                   }}
                 >
                   <DashBoardCard
-                    count={
-                      postData?.postsByOrganizationConnection?.edges.length
-                    }
+                    count={postData?.organizations[0].posts.totalCount}
                     title={t('posts')}
                     icon={<PostsIcon fill="var(--bs-primary)" />}
                   />
@@ -248,7 +253,7 @@ function organizationDashboard(): JSX.Element {
                               location={event.location}
                             />
                           );
-                        },
+                        }
                       )
                     )}
                   </Card.Body>
@@ -272,17 +277,17 @@ function organizationDashboard(): JSX.Element {
                       [...Array(4)].map((_, index) => {
                         return <CardItemLoading key={index} />;
                       })
-                    ) : postData?.postsByOrganizationConnection.edges.length ==
-                      0 ? (
+                    ) : postData?.organizations[0].posts.totalCount == 0 ? (
                       /* eslint-disable */
                       <div className={styles.emptyContainer}>
                         <h6>{t('noPostsPresent')}</h6>
                       </div>
                     ) : (
                       /* eslint-enable */
-                      postData?.postsByOrganizationConnection.edges
+                      postData?.organizations[0].posts.edges
                         .slice(0, 5)
-                        .map((post: any) => {
+                        .map((edge: any) => {
+                          const post = edge.node;
                           return (
                             <CardItem
                               type="Post"

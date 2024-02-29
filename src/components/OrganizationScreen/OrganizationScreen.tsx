@@ -1,10 +1,10 @@
 import LeftDrawerOrg from 'components/LeftDrawerOrg/LeftDrawerOrg';
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import styles from './OrganizationScreen.module.css';
 import { useSelector } from 'react-redux';
-import type { TargetsType } from 'state/reducers/routesReducer';
 import type { RootState } from 'state/reducers';
+import type { TargetsType } from 'state/reducers/routesReducer';
+import styles from './OrganizationScreen.module.css';
 
 export interface InterfaceOrganizationScreenProps {
   title: string; // Multilingual Page title
@@ -74,8 +74,8 @@ const organizationScreen = ({
           hideDrawer === null
             ? ''
             : hideDrawer
-              ? styles.expand
-              : styles.contract
+            ? styles.expand
+            : styles.contract
         } `}
         data-testid="mainpageright"
       >
