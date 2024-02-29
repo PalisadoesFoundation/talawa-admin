@@ -4,7 +4,6 @@ import Rating from '@mui/material/Rating';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Typography from '@mui/material/Typography';
-import { styled } from '@mui/material/styles';
 
 type ModalPropType = {
   data: {
@@ -22,16 +21,6 @@ type FeedbackType = {
   review: string | null;
 };
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-const StyledRating = styled(Rating)({
-  '& .MuiRating-iconFilled': {
-    color: '#ff6d75',
-  },
-  '& .MuiRating-iconHover': {
-    color: '#ff3d47',
-  },
-});
-
 export const AverageRating = ({ data }: ModalPropType): JSX.Element => {
   return (
     <>
@@ -43,7 +32,7 @@ export const AverageRating = ({ data }: ModalPropType): JSX.Element => {
           <Typography component="legend">
             Rated {data.event.averageFeedbackScore.toFixed(2)} / 5
           </Typography>
-          <StyledRating
+          <Rating
             name="customized-color"
             precision={0.5}
             max={5}
@@ -52,6 +41,14 @@ export const AverageRating = ({ data }: ModalPropType): JSX.Element => {
             icon={<FavoriteIcon fontSize="inherit" />}
             size="medium"
             emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+            sx={{
+              '& .MuiRating-iconFilled': {
+                color: '#ff6d75',
+              },
+              '& .MuiRating-iconHover': {
+                color: '#ff3d47',
+              },
+            }}
           />
         </Card.Body>
       </Card>

@@ -7,10 +7,6 @@ import { ADD_PLUGIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
-interface InterfaceAddOnRegisterProps {
-  id?: string; // OrgId
-  createdBy?: string; // User
-}
 interface InterfaceFormStateTypes {
   pluginName: string;
   pluginCreatedBy: string;
@@ -20,11 +16,7 @@ interface InterfaceFormStateTypes {
 }
 
 const currentUrl = window.location.href.split('=')[1];
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function addOnRegister({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  createdBy,
-}: InterfaceAddOnRegisterProps): JSX.Element {
+function addOnRegister(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'addOnRegister' });
 
   const [show, setShow] = useState(false);

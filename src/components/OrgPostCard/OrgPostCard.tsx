@@ -32,9 +32,9 @@ interface InterfaceOrgPostCardProps {
   pinned: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export default function OrgPostCard(
-  props: InterfaceOrgPostCardProps
+
+export default function orgPostCard(
+  props: InterfaceOrgPostCardProps,
 ): JSX.Element {
   const [postformState, setPostFormState] = useState<InterfacePostForm>({
     posttitle: '',

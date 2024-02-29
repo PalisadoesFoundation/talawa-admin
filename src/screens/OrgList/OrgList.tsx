@@ -35,8 +35,7 @@ function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
   const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
   const [dialogRedirectOrgId, setDialogRedirectOrgId] = useState('<ORG_ID>');
-  /* eslint-disable @typescript-eslint/explicit-function-return-type */
-  function openDialogModal(redirectOrgId: string) {
+  function openDialogModal(redirectOrgId: string): void {
     setDialogRedirectOrgId(redirectOrgId);
     // console.log(redirectOrgId, dialogRedirectOrgId);
     setdialogModalIsOpen(true);
@@ -44,8 +43,7 @@ function orgList(): JSX.Element {
 
   const { getItem } = useLocalStorage();
 
-  /* eslint-disable @typescript-eslint/explicit-function-return-type */
-  function closeDialogModal() {
+  function closeDialogModal(): void {
     setdialogModalIsOpen(false);
   }
   const toggleDialogModal = /* istanbul ignore next */ (): void =>
@@ -171,7 +169,7 @@ function orgList(): JSX.Element {
     }
   };
 
-  const triggerCreateSampleOrg = () => {
+  const triggerCreateSampleOrg = (): void => {
     createSampleOrganization()
       .then(() => {
         toast.success(t('sampleOrgSuccess'));
@@ -415,7 +413,6 @@ function orgList(): JSX.Element {
           (userData &&
             userData.user.userType === 'ADMIN' &&
             userData.user.adminFor.length === 0)) ? (
-          // eslint-disable-next-line
           <div className={styles.notFound}>
             <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
             <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
@@ -425,7 +422,6 @@ function orgList(): JSX.Element {
           /* istanbul ignore next */
           searchByName.length > 0 ? (
           /* istanbul ignore next */
-          // eslint-disable-next-line
           <div className={styles.notFound} data-testid="noResultFound">
             <h4 className="m-0">
               {t('noResultsFoundFor')} &quot;{searchByName}&quot;

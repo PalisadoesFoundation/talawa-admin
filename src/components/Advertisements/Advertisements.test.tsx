@@ -79,6 +79,7 @@ const PLUGIN_GET_MOCK = {
             '62ccfccd3eb7fd2a30f41601',
             '62ccfccd3eb7fd2a30f41601',
           ],
+          pluginInstallStatus: true,
           __typename: 'Plugin',
         },
       ],
