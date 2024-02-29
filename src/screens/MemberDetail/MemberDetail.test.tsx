@@ -236,7 +236,7 @@ describe('MemberDetail', () => {
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
 
     const user = MOCKS1[0].result.data.user;
-    const dicebearUrl = `https://api.dicebear.com/5.x/initials/svg?seed=${user?.firstName}%20${user?.lastName}`;
+    const dicebearUrl = `mocked-data-uri`;
 
     const userImage = await screen.findByTestId('userImageAbsent');
     expect(userImage).toBeInTheDocument();
@@ -290,6 +290,30 @@ describe('MemberDetail', () => {
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
     await waitFor(() => {
       expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
+    });
+  });
+
+  test('should not render LeftDrawer from SuperAdminScreen when member details is called from Organization Dashboard', async () => {
+    const props = {
+      id: 'rishav-jha-mech',
+      from: 'orgdash',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <MemberDetail {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByTestId('orgsBtn')).not.toBeInTheDocument();
     });
   });
 
