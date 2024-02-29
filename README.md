@@ -1,4 +1,5 @@
 # Talawa Admin
+
 💬 Join the community on Slack. The link can be found in the `Talawa` [README.md](https://github.com/PalisadoesFoundation/talawa) file.
 
 ![talawa-logo-lite-200x200](https://github.com/PalisadoesFoundation/talawa-admin/assets/16875803/26291ec5-d3c1-4135-8bc7-80885dff613d)
@@ -25,7 +26,7 @@ Core features include:
 <!-- toc -->
 
 - [Talawa Components](#talawa-components)
-- [Documentation -](#documentation--)
+- [Documentation](#documentation)
 - [Installation](#installation)
 
 <!-- tocstop -->
@@ -39,7 +40,7 @@ Core features include:
 1. **talawa-admin**: [A web based administrative portal](https://github.com/PalisadoesFoundation/talawa-admin)
 1. **talawa-docs**: [The online documentation website](https://github.com/PalisadoesFoundation/talawa-docs)
 
-# Documentation -
+# Documentation
 
 - The `talawa` documentation can be found [here](https://docs.talawa.io).
 - Want to contribute? Look at [CONTRIBUTING.md](https://github.com/PalisadoesFoundation/talawa-admin/blob/develop/CONTRIBUTING.md) to get started.

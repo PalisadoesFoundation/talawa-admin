@@ -75,8 +75,9 @@ async function wait(ms = 100): Promise<void> {
 }
 
 const translations = JSON.parse(
-  // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-  JSON.stringify(i18n.getDataByLanguage('en')?.translation.forgotPassword!),
+  JSON.stringify(
+    i18n.getDataByLanguage('en')?.translation.forgotPassword ?? {},
+  ),
 );
 
 beforeEach(() => {

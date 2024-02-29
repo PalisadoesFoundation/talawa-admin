@@ -32,6 +32,8 @@ import {
 } from 'Constant/constant';
 import { refreshToken } from 'utils/getRefreshToken';
 import { ThemeProvider, createTheme } from '@mui/material';
+import { ApolloLink } from '@apollo/client/core';
+import { setContext } from '@apollo/client/link/context';
 import '../src/assets/css/scrollStyles.css';
 
 const theme = createTheme({
@@ -44,6 +46,15 @@ const theme = createTheme({
 import useLocalStorage from 'utils/useLocalstorage';
 
 const { getItem } = useLocalStorage();
+
+const authLink = setContext((_, { headers }) => {
+  return {
+    headers: {
+      ...headers,
+      authorization: 'Bearer ' + getItem('token') || '',
+    },
+  };
+});
 
 const errorLink = onError(
   ({ graphQLErrors, networkError, operation, forward }) => {
@@ -80,9 +91,6 @@ const errorLink = onError(
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
-  headers: {
-    authorization: 'Bearer ' + getItem('token') || '',
-  },
 });
 
 // if didnt work use /subscriptions
@@ -107,9 +115,12 @@ const splitLink = split(
   wsLink,
   httpLink,
 );
+
+const combinedLink = ApolloLink.from([errorLink, authLink, splitLink]);
+
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
-  link: errorLink.concat(splitLink),
+  link: combinedLink,
 });
 const fallbackLoader = <div className="loader"></div>;
 

@@ -274,12 +274,10 @@ function organizationDashboard(): JSX.Element {
                       })
                     ) : postData?.postsByOrganizationConnection.edges.length ==
                       0 ? (
-                      /* eslint-disable */
                       <div className={styles.emptyContainer}>
                         <h6>{t('noPostsPresent')}</h6>
                       </div>
                     ) : (
-                      /* eslint-enable */
                       postData?.postsByOrganizationConnection.edges
                         .slice(0, 5)
                         .map((post: any) => {

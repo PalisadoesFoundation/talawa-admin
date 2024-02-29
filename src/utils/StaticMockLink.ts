@@ -143,8 +143,7 @@ export class StaticMockLink extends ApolloLink {
       newMockedResponse.request.query,
     );
     invariant(queryWithoutConnection, 'query is required');
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    newMockedResponse.request.query = queryWithoutConnection!;
+    newMockedResponse.request.query = queryWithoutConnection;
     const query = removeClientSetsFromDocument(newMockedResponse.request.query);
     if (query) {
       newMockedResponse.request.query = query;

@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 // import PropTypes from 'react';
 import styles from './Advertisements.module.css';
 import { useQuery } from '@apollo/client';
@@ -10,11 +9,9 @@ import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen
 import AdvertisementEntry from './core/AdvertisementEntry/AdvertisementEntry';
 import AdvertisementRegister from './core/AdvertisementRegister/AdvertisementRegister';
 export default function advertisements(): JSX.Element {
-  const {
-    data: advertisementsData,
-    loading: loadingAdvertisements,
-    error: errorAdvertisement,
-  } = useQuery(ADVERTISEMENTS_GET);
+  const { data: advertisementsData, loading: loadingAdvertisements } =
+    useQuery(ADVERTISEMENTS_GET);
+
   const currentOrgId = window.location.href.split('/id=')[1] + '';
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   document.title = t('title');
@@ -49,7 +46,7 @@ export default function advertisements(): JSX.Element {
                     .filter((ad: any) => ad.organization._id == currentOrgId)
                     .filter((ad: any) => new Date(ad.endDate) > new Date())
                     .length == 0 ? (
-                    <h4>{t('pMessage')} </h4> // eslint-disable-line
+                    <h4>{t('pMessage')} </h4>
                   ) : (
                     advertisementsData?.advertisementsConnection
                       .filter((ad: any) => ad.organization._id == currentOrgId)
@@ -86,7 +83,7 @@ export default function advertisements(): JSX.Element {
                     .filter((ad: any) => ad.organization._id == currentOrgId)
                     .filter((ad: any) => new Date(ad.endDate) < new Date())
                     .length == 0 ? (
-                    <h4>{t('pMessage')} </h4> // eslint-disable-line
+                    <h4>{t('pMessage')} </h4>
                   ) : (
                     advertisementsData?.advertisementsConnection
                       .filter((ad: any) => ad.organization._id == currentOrgId)
