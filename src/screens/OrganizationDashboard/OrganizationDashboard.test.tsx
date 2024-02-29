@@ -14,7 +14,6 @@ import useLocalStorage from 'utils/useLocalstorage';
 import OrganizationDashboard from './OrganizationDashboard';
 import { EMPTY_MOCKS, ERROR_MOCKS, MOCKS } from './OrganizationDashboardMocks';
 import React from 'react';
-
 const { setItem } = useLocalStorage();
 
 async function wait(ms = 100): Promise<void> {
@@ -42,7 +41,7 @@ beforeEach(() => {
   setItem('UserType', 'SUPERADMIN');
   setItem(
     'UserImage',
-    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe'
+    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
   );
 });
 
@@ -63,7 +62,7 @@ describe('Organisation Dashboard Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
     });
 
@@ -111,7 +110,7 @@ describe('Organisation Dashboard Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
     });
 
@@ -126,7 +125,7 @@ describe('Organisation Dashboard Page', () => {
     expect(toast.success).toBeCalledWith('Coming soon!');
 
     expect(
-      screen.getByText(/No membership requests present/i)
+      screen.getByText(/No membership requests present/i),
     ).toBeInTheDocument();
     expect(screen.getByText(/No upcoming events/i)).toBeInTheDocument();
   });
@@ -142,7 +141,7 @@ describe('Organisation Dashboard Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
     });
 

@@ -1,34 +1,34 @@
-import React, { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
+import React, { useEffect, useState } from 'react';
 import { Button, Card } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 
+import type { ApolloError } from '@apollo/client';
 import {
   ORGANIZATIONS_LIST,
-  ORGANIZATION_POST_LIST,
   ORGANIZATION_EVENT_CONNECTION_LIST,
+  ORGANIZATION_POST_LIST,
 } from 'GraphQl/Queries/Queries';
 import { ReactComponent as AdminsIcon } from 'assets/svgs/admin.svg';
 import { ReactComponent as BlockedUsersIcon } from 'assets/svgs/blockedUser.svg';
 import { ReactComponent as EventsIcon } from 'assets/svgs/events.svg';
 import { ReactComponent as PostsIcon } from 'assets/svgs/post.svg';
 import { ReactComponent as UsersIcon } from 'assets/svgs/users.svg';
-import DashBoardCard from 'components/OrganizationDashCards/DashboardCard';
-import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
-import styles from './OrganizationDashboard.module.css';
 import CardItem from 'components/OrganizationDashCards/CardItem';
-import type { ApolloError } from '@apollo/client';
+import CardItemLoading from 'components/OrganizationDashCards/CardItemLoading';
+import DashBoardCard from 'components/OrganizationDashCards/DashboardCard';
+import DashboardCardLoading from 'components/OrganizationDashCards/DashboardCardLoading';
+import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
+import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import type {
   InterfaceQueryOrganizationEventListItem,
   InterfaceQueryOrganizationPostListItem,
   InterfaceQueryOrganizationsListObject,
 } from 'utils/interfaces';
-import { toast } from 'react-toastify';
-import { useHistory } from 'react-router-dom';
-import CardItemLoading from 'components/OrganizationDashCards/CardItemLoading';
-import DashboardCardLoading from 'components/OrganizationDashCards/DashboardCardLoading';
+import styles from './OrganizationDashboard.module.css';
 
 function organizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
@@ -253,7 +253,7 @@ function organizationDashboard(): JSX.Element {
                               location={event.location}
                             />
                           );
-                        }
+                        },
                       )
                     )}
                   </Card.Body>

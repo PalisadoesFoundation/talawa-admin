@@ -99,7 +99,8 @@ function orgPost(): JSX.Element {
   const [create, { loading: createPostLoading }] =
     useMutation(CREATE_POST_MUTATION);
   const [displayedPosts, setDisplayedPosts] = useState(
-    orgPostListData?.organizations[0].posts.edges.map((edge) => edge.node) || []
+    orgPostListData?.organizations[0].posts.edges.map((edge) => edge.node) ||
+      [],
   );
 
   // ...
@@ -108,7 +109,7 @@ function orgPost(): JSX.Element {
     if (orgPostListData && orgPostListData.organizations) {
       const newDisplayedPosts: InterfaceOrgPost[] = sortPosts(
         orgPostListData.organizations[0].posts.edges.map((edge) => edge.node),
-        sortingOption
+        sortingOption,
       );
       setDisplayedPosts(newDisplayedPosts);
     }
@@ -170,7 +171,7 @@ function orgPost(): JSX.Element {
     window.location.assign('/orglist');
   }
   const handleAddMediaChange = async (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
     setPostFormState((prevPostFormState) => ({
       ...prevPostFormState,
@@ -218,19 +219,19 @@ function orgPost(): JSX.Element {
   // console.log(orgPostListData?.organizations[0].posts);
   const sortPosts = (
     posts: InterfaceOrgPost[],
-    sortingOption: string
+    sortingOption: string,
   ): InterfaceOrgPost[] => {
     const sortedPosts = [...posts];
 
     if (sortingOption === 'latest') {
       sortedPosts.sort(
         (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       );
     } else if (sortingOption === 'oldest') {
       sortedPosts.sort(
         (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
       );
     }
 
@@ -372,7 +373,7 @@ function orgPost(): JSX.Element {
                       postVideo={datas?.videoUrl}
                       pinned={datas.pinned}
                     />
-                  )
+                  ),
                 )
               ) : (
                 <NotFound title="post" keyPrefix="postNotFound" />
@@ -493,7 +494,7 @@ function orgPost(): JSX.Element {
                       addMedia: '',
                     });
                     const fileInput = document.getElementById(
-                      'addMedia'
+                      'addMedia',
                     ) as HTMLInputElement;
                     if (fileInput) {
                       fileInput.value = '';
