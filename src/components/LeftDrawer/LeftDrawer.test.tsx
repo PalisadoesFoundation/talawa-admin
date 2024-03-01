@@ -26,7 +26,7 @@ const propsOrg: InterfaceLeftDrawerProps = {
 };
 const propsUsers: InterfaceLeftDrawerProps = {
   ...props,
-  hideDrawer: false,
+  hideDrawer: null,
   screenName: 'Users',
 };
 
