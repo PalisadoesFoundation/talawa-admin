@@ -17,6 +17,7 @@ import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import AddOnStore from 'components/AddOn/core/AddOnStore/AddOnStore';
 import ForgotPassword from 'screens/ForgotPassword/ForgotPassword';
 import Users from 'screens/Users/Users';
+import CommunityProfile from 'screens/CommunityProfile/CommunityProfile';
 import BlockUser from 'screens/BlockUser/BlockUser';
 import EventDashboard from 'screens/EventDashboard/EventDashboard';
 import MemberDetail from 'screens/MemberDetail/MemberDetail';
@@ -109,6 +110,7 @@ function app(): JSX.Element {
         <SecuredRoute path="/orgstore" component={AddOnStore} />
         <SecuredRoute path="/orgads" component={Advertisements} />
         <SecuredRoute path="/users" component={Users} />
+        <SecuredRoute path="/communityProfile" component={CommunityProfile} />
         <SecuredRoute path="/blockuser" component={BlockUser} />
         <SecuredRoute path="/event/:eventId" component={EventDashboard} />
         {extraRoutes}

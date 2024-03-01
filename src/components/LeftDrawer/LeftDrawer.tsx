@@ -6,6 +6,7 @@ import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
 import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
 import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
 import { ReactComponent as RolesIcon } from 'assets/svgs/roles.svg';
+import { ReactComponent as SettingsIcon } from 'assets/svgs/settings.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import styles from './LeftDrawer.module.css';
 import { useMutation } from '@apollo/client';
@@ -78,27 +79,54 @@ const leftDrawer = ({
             {t('my organizations')}
           </Button>
           {userType === 'SUPERADMIN' && (
-            <Button
-              variant={screenName === 'Users' ? 'success' : 'light'}
-              className={`${
-                screenName === 'Users' ? 'text-white' : 'text-secondary'
-              }`}
-              onClick={(): void => {
-                history.push('/users');
-              }}
-              data-testid="rolesBtn"
-            >
-              <div className={styles.iconWrapper}>
-                <RolesIcon
-                  fill={`${
-                    screenName === 'Users'
-                      ? 'var(--bs-white)'
-                      : 'var(--bs-secondary)'
-                  }`}
-                />
-              </div>
-              {t('users')}
-            </Button>
+            <>
+              <Button
+                variant={screenName === 'Users' ? 'success' : 'light'}
+                className={`${
+                  screenName === 'Users' ? 'text-white' : 'text-secondary'
+                }`}
+                onClick={(): void => {
+                  history.push('/users');
+                }}
+                data-testid="rolesBtn"
+              >
+                <div className={styles.iconWrapper}>
+                  <RolesIcon
+                    fill={`${
+                      screenName === 'Users'
+                        ? 'var(--bs-white)'
+                        : 'var(--bs-secondary)'
+                    }`}
+                  />
+                </div>
+                {t('users')}
+              </Button>
+              <Button
+                variant={
+                  screenName === 'Community Profile' ? 'success' : 'light'
+                }
+                className={`${
+                  screenName === 'Community Profile'
+                    ? 'text-white'
+                    : 'text-secondary'
+                }`}
+                onClick={(): void => {
+                  history.push('/communityProfile');
+                }}
+                data-testid="profileBtn"
+              >
+                <div className={styles.iconWrapper}>
+                  <SettingsIcon
+                    stroke={`${
+                      screenName === 'Community Profile'
+                        ? 'var(--bs-white)'
+                        : 'var(--bs-secondary)'
+                    }`}
+                  />
+                </div>
+                {t('communityProfile')}
+              </Button>
+            </>
           )}
         </div>
         <div style={{ marginTop: 'auto' }}>

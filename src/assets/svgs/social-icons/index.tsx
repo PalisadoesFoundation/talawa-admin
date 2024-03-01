@@ -5,6 +5,7 @@ import LinkedInLogo from './Linkedin-Logo.svg';
 import SlackLogo from './Slack-Logo.svg';
 import TwitterLogo from './Twitter-Logo.svg';
 import YoutubeLogo from './Youtube-Logo.svg';
+import RedditLogo from './Reddit-Logo.svg';
 
 export {
   FacebookLogo,
@@ -14,4 +15,5 @@ export {
   SlackLogo,
   TwitterLogo,
   YoutubeLogo,
+  RedditLogo,
 };
