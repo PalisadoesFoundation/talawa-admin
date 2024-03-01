@@ -95,7 +95,6 @@ function orgPost(): JSX.Element {
       last: last,
     },
   });
-  // console.log(orgPostListData?.organizations[0].posts.edges);
   const [create, { loading: createPostLoading }] =
     useMutation(CREATE_POST_MUTATION);
   const [displayedPosts, setDisplayedPosts] = useState(
