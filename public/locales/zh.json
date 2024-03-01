@@ -365,7 +365,9 @@
     "sortPost": "排序帖子",
     "tag": "您的浏览器不支持视频标签",
     "postCreatedSuccess": "恭喜！您已经发布了一些内容。",
-    "pinPost": "针柱"
+    "pinPost": "针柱",
+    "Next": "下一页",
+    "Previous": "上一页"
   },
   "postNotFound": {
     "post": "郵政",
