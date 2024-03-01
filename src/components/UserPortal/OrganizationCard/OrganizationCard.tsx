@@ -4,8 +4,6 @@ import { Button } from 'react-bootstrap';
 import { Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
 import {
   CANCEL_MEMBERSHIP_REQUEST,
   JOIN_PUBLIC_ORGANIZATION,
@@ -54,13 +52,19 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
     keyPrefix: 'users',
   });
   const [sendMembershipRequest] = useMutation(SEND_MEMBERSHIP_REQUEST, {
-    refetchQueries: [USER_ORGANIZATION_CONNECTION],
+    refetchQueries: [
+      { query: USER_ORGANIZATION_CONNECTION, variables: { id: userId } },
+    ],
   });
   const [joinPublicOrganization] = useMutation(JOIN_PUBLIC_ORGANIZATION, {
-    refetchQueries: [USER_ORGANIZATION_CONNECTION],
+    refetchQueries: [
+      { query: USER_ORGANIZATION_CONNECTION, variables: { id: userId } },
+    ],
   });
   const [cancelMembershipRequest] = useMutation(CANCEL_MEMBERSHIP_REQUEST, {
-    refetchQueries: [USER_ORGANIZATION_CONNECTION],
+    refetchQueries: [
+      { query: USER_ORGANIZATION_CONNECTION, variables: { id: userId } },
+    ],
   });
   const { refetch } = useQuery(USER_JOINED_ORGANIZATIONS, {
     variables: { id: userId },
@@ -145,33 +149,32 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
         </div>
         {props.membershipRequestStatus === 'accepted' && (
           <Button
-            variant="outline-success"
+            variant="success"
             data-testid="manageBtn"
             className={styles.joinedBtn}
           >
-            <CheckIcon fontSize="inherit" className="fs-5" />
             {t('joined')}
           </Button>
         )}
 
         {props.membershipRequestStatus === 'pending' && (
           <Button
-            variant="outline-danger"
+            variant="danger"
             onClick={withdrawMembershipRequest}
-            data-testid="manageBtn"
+            data-testid="withdrawBtn"
             className={styles.withdrawBtn}
           >
-            <CloseIcon fontSize="inherit" className="fs-5" />
             {t('withdraw')}
           </Button>
         )}
         {props.membershipRequestStatus === '' && (
           <Button
             onClick={joinOrganization}
-            data-testid="manageBtn"
+            data-testid="joinBtn"
             className={styles.joinBtn}
+            variant="outline-success"
           >
-            {t('join')}
+            {t('joinNow')}
           </Button>
         )}
       </div>

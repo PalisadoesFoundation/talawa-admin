@@ -43,34 +43,19 @@
   display: flex;
   justify-content: space-around;
   width: 120px;
-  align-items: center;
+  border-width: medium;
 }
 
 .joinedBtn {
   display: flex;
   justify-content: space-around;
   width: 120px;
-  align-items: center;
-  background-color: var(--bs-success-border-subtle);
 }
 
-.joinedBtn:hover,
-.joinedBtn:active::after {
-  background-color: var(--bs-success-border-subtle) !important;
-  color: var(--bs-btn-color) !important;
-}
-
-.withdrawBtn:hover,
-.withdrawBtn:active::after {
-  background-color: var(--bs-danger-border-subtle) !important;
-  color: var(--bs-btn-color) !important;
-}
 .withdrawBtn {
   display: flex;
   justify-content: space-around;
-  width: 130px;
-  align-items: center;
-  background-color: var(--bs-danger-border-subtle);
+  width: 120px;
 }
 
 .orgName {
