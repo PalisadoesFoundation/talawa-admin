@@ -7,6 +7,7 @@ import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
 import LoginPage from 'screens/LoginPage/LoginPage';
 import OrganizationEvents from 'screens/OrganizationEvents/OrganizationEvents';
+import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
 import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
 import OrganizationDashboard from 'screens/OrganizationDashboard/OrganizationDashboard';
 import OrgContribution from 'screens/OrgContribution/OrgContribution';
@@ -33,6 +34,9 @@ import Donate from 'screens/UserPortal/Donate/Donate';
 import Events from 'screens/UserPortal/Events/Events';
 // import Chat from 'screens/UserPortal/Chat/Chat';
 import Advertisements from 'components/Advertisements/Advertisements';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem } = useLocalStorage();
 
 function app(): JSX.Element {
   /*const { updatePluginLinks, updateInstalled } = bindActionCreators(
@@ -64,18 +68,15 @@ function app(): JSX.Element {
 
   useEffect(() => {
     if (data) {
-      localStorage.setItem(
-        'name',
-        `${data.checkAuth.firstName} ${data.checkAuth.lastName}`
-      );
-      localStorage.setItem('id', data.checkAuth._id);
-      localStorage.setItem('email', data.checkAuth.email);
-      localStorage.setItem('IsLoggedIn', 'TRUE');
-      localStorage.setItem('UserType', data.checkAuth.userType);
-      localStorage.setItem('FirstName', data.checkAuth.firstName);
-      localStorage.setItem('LastName', data.checkAuth.lastName);
-      localStorage.setItem('UserImage', data.checkAuth.image);
-      localStorage.setItem('Email', data.checkAuth.email);
+      setItem('name', `${data.checkAuth.firstName} ${data.checkAuth.lastName}`);
+      setItem('id', data.checkAuth._id);
+      setItem('email', data.checkAuth.email);
+      setItem('IsLoggedIn', 'TRUE');
+      setItem('UserType', data.checkAuth.userType);
+      setItem('FirstName', data.checkAuth.firstName);
+      setItem('LastName', data.checkAuth.lastName);
+      setItem('UserImage', data.checkAuth.image);
+      setItem('Email', data.checkAuth.email);
     }
   }, [data, loading]);
 
@@ -104,6 +105,10 @@ function app(): JSX.Element {
         <SecuredRoute path="/orglist" component={OrgList} />
         <SecuredRoute path="/member" component={MemberDetail} />
         <SecuredRoute path="/orgevents" component={OrganizationEvents} />
+        <SecuredRoute
+          path="/orgactionitems"
+          component={OrganizationActionItems}
+        />
         <SecuredRoute path="/orgcontribution" component={OrgContribution} />
         <SecuredRoute path="/orgpost" component={OrgPost} />
         <SecuredRoute path="/orgsetting" component={OrgSettings} />

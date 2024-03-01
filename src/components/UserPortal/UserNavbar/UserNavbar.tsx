@@ -11,8 +11,10 @@ import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useHistory } from 'react-router-dom';
+import useLocalStorage from 'utils/useLocalstorage';
 
 function userNavbar(): JSX.Element {
+  const { getItem } = useLocalStorage();
   const history = useHistory();
 
   const { t } = useTranslation('translation', {
@@ -26,14 +28,14 @@ function userNavbar(): JSX.Element {
     cookies.get('i18next') || 'en'
   );
 
+  const userName = getItem('name');
+
   /* istanbul ignore next */
   const handleLogout = (): void => {
     revokeRefreshToken();
     localStorage.clear();
-    window.location.replace('/user');
+    history.push('/user');
   };
-
-  const userName = localStorage.getItem('name');
 
   return (
     <Navbar variant="dark" className={`${styles.colorPrimary}`}>

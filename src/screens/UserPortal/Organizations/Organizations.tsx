@@ -5,6 +5,7 @@ import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import { Dropdown, Form, InputGroup } from 'react-bootstrap';
 import PaginationList from 'components/PaginationList/PaginationList';
 import {
+  CHECK_AUTH,
   USER_CREATED_ORGANIZATIONS,
   USER_JOINED_ORGANIZATIONS,
   USER_ORGANIZATION_CONNECTION,
@@ -14,6 +15,9 @@ import { SearchOutlined } from '@mui/icons-material';
 import styles from './Organizations.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { getItem, setItem } = useLocalStorage();
 
 interface InterfaceOrganizationCardProps {
   id: string;
@@ -38,7 +42,7 @@ export default function organizations(): JSX.Element {
     t('createdOrganizations'),
   ];
 
-  const userId: string | null = localStorage.getItem('userId');
+  const userId: string | null = getItem('userId');
 
   const {
     data,
@@ -54,6 +58,10 @@ export default function organizations(): JSX.Element {
 
   const { data: data3 } = useQuery(USER_CREATED_ORGANIZATIONS, {
     variables: { id: userId },
+  });
+
+  const { data: userData, loading } = useQuery(CHECK_AUTH, {
+    fetchPolicy: 'network-only',
   });
 
   /* istanbul ignore next */
@@ -117,6 +125,24 @@ export default function organizations(): JSX.Element {
       }
     }
   }, [mode]);
+
+  /* istanbul ignore next */
+  React.useEffect(() => {
+    if (userData) {
+      setItem(
+        'name',
+        `${userData.checkAuth.firstName} ${userData.checkAuth.lastName}`
+      );
+      setItem('id', userData.checkAuth._id);
+      setItem('email', userData.checkAuth.email);
+      setItem('IsLoggedIn', 'TRUE');
+      setItem('UserType', userData.checkAuth.userType);
+      setItem('FirstName', userData.checkAuth.firstName);
+      setItem('LastName', userData.checkAuth.lastName);
+      setItem('UserImage', userData.checkAuth.image);
+      setItem('Email', userData.checkAuth.email);
+    }
+  }, [userData, loading]);
 
   return (
     <>

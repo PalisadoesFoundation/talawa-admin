@@ -6,15 +6,21 @@ import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import UserUpdate from 'components/UserUpdate/UserUpdate';
-
 import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import styles from './MemberDetail.module.css';
 import { languages } from 'utils/languages';
-import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  ADD_ADMIN_MUTATION,
+  UPDATE_USERTYPE_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
+import useLocalStorage from 'utils/useLocalstorage';
+import Avatar from 'components/Avatar/Avatar';
+
+const { getItem } = useLocalStorage();
 
 type MemberDetailProps = {
   id: string; // This is the userId
@@ -26,12 +32,16 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   });
 
   const [state, setState] = useState(1);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const location = useLocation<MemberDetailProps>();
-  const currentUrl = location.state?.id || localStorage.getItem('id') || id;
+  const currentUrl = location.state?.id || getItem('id') || id;
+  const orgId = window.location.href.split('=')[1];
   document.title = t('title');
 
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
+  const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
+
   const {
     data: userData,
     loading: loading,
@@ -62,20 +72,40 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       const { data } = await adda({
         variables: {
           userid: location.state?.id,
-          orgid: currentUrl,
+          orgid: orgId,
         },
       });
 
       /* istanbul ignore next */
       if (data) {
-        toast.success(t('addedAsAdmin'));
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        try {
+          const { data } = await updateUserType({
+            variables: {
+              id: location.state?.id,
+              userType: 'ADMIN',
+            },
+          });
+          if (data) {
+            toast.success(t('addedAsAdmin'));
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          }
+        } catch (error: any) {
+          errorHandler(t, error);
+        }
       }
     } catch (error: any) {
       /* istanbul ignore next */
-      errorHandler(t, error);
+      if (
+        userData.user.userType === 'ADMIN' ||
+        userData.user.userType === 'SUPERADMIN'
+      ) {
+        setIsAdmin(true);
+        toast.error(t('alreadyIsAdmin'));
+      } else {
+        errorHandler(t, error);
+      }
     }
   };
 
@@ -96,10 +126,13 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   <div className={styles.btngroup}>
                     <Button
                       className={styles.memberfontcreatedbtn}
+                      data-testid="addAdminBtn"
                       onClick={addAdmin}
+                      disabled={isAdmin}
                     >
                       {t('addAdmin')}
                     </Button>
+
                     <Button
                       className={styles.memberfontcreatedbtn}
                       role="stateBtn"
@@ -122,10 +155,12 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                           data-testid="userImagePresent"
                         />
                       ) : (
-                        <img
-                          className={styles.userImage}
-                          src={`https://api.dicebear.com/5.x/initials/svg?seed=${userData?.user?.firstName} ${userData?.user?.lastName}`}
-                          data-testid="userImageAbsent"
+                        <Avatar
+                          name={`${userData?.user?.firstName} ${userData?.user?.lastName}`}
+                          alt="User Image"
+                          size={180}
+                          avatarStyle={styles.userImage}
+                          dataTestId="userImageAbsent"
                         />
                       )}
                     </div>

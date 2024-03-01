@@ -30,6 +30,7 @@ import { toast } from 'react-toastify';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
 import UserDefault from '../../../assets/images/defaultImg.png';
+import useLocalStorage from 'utils/useLocalstorage';
 
 interface InterfacePostCardProps {
   id: string;
@@ -69,7 +70,9 @@ interface InterfaceAdContent {
   _id: string;
   name: string;
   type: string;
-  orgId: string;
+  organization: {
+    _id: string;
+  };
   link: string;
   endDate: string;
   startDate: string;
@@ -77,6 +80,8 @@ interface InterfaceAdContent {
 
 export default function home(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'home' });
+
+  const { getItem } = useLocalStorage();
 
   const organizationId = getOrganizationId(window.location.href);
   const [posts, setPosts] = React.useState([]);
@@ -91,13 +96,7 @@ export default function home(): JSX.Element {
   const navbarProps = {
     currentPage: 'home',
   };
-  const {
-    data: promotedPostsData,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    refetch: _promotedPostsRefetch,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    loading: promotedPostsLoading,
-  } = useQuery(ADVERTISEMENTS_GET);
+  const { data: promotedPostsData } = useQuery(ADVERTISEMENTS_GET);
   const {
     data,
     refetch,
@@ -106,7 +105,7 @@ export default function home(): JSX.Element {
     variables: { id: organizationId },
   });
 
-  const userId: string | null = localStorage.getItem('userId');
+  const userId: string | null = getItem('userId');
 
   const { data: userData } = useQuery(USER_DETAILS, {
     variables: { id: userId },
@@ -158,9 +157,9 @@ export default function home(): JSX.Element {
 
   React.useEffect(() => {
     if (promotedPostsData) {
-      setAdContent(promotedPostsData.getAdvertisements);
+      setAdContent(promotedPostsData.advertisementsConnection);
     }
-  }, [data]);
+  }, [promotedPostsData]);
 
   useEffect(() => {
     setFilteredAd(filterAdContent(adContent, currentOrgId));
@@ -173,7 +172,8 @@ export default function home(): JSX.Element {
   ): InterfaceAdContent[] => {
     return adCont.filter(
       (ad: InterfaceAdContent) =>
-        ad.orgId === currentOrgId && new Date(ad.endDate) > currentDate
+        ad.organization._id === currentOrgId &&
+        new Date(ad.endDate) > currentDate
     );
   };
 
@@ -316,7 +316,7 @@ export default function home(): JSX.Element {
                 <PromotedPost
                   key={post._id}
                   id={post._id}
-                  image={post.link}
+                  media={post.mediaUrl}
                   title={post.name}
                   data-testid="postid"
                 />

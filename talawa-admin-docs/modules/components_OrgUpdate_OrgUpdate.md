@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/components/OrgUpdate/OrgUpdate.tsx:22](https://github.com/palisadoes/talawa-admin/blob/5828937/src/components/OrgUpdate/OrgUpdate.tsx#L22)
+[src/components/OrgUpdate/OrgUpdate.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/OrgUpdate/OrgUpdate.tsx#L26)

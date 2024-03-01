@@ -18,6 +18,11 @@
   margin-right: 8px;
 }
 
+.admedia {
+  object-fit: cover;
+  height: 20rem;
+}
+
 .buttons {
   display: flex;
   justify-content: flex-end;

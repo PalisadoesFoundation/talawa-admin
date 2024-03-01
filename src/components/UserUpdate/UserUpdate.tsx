@@ -13,22 +13,20 @@ import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import { Form } from 'react-bootstrap';
 import Loader from 'components/Loader/Loader';
-// import useLocalStorage from 'utils/useLocalStorage';
-
-// const { getItem, setItem } = useLocalStorage();
+import useLocalStorage from 'utils/useLocalstorage';
 
 interface InterfaceUserUpdateProps {
   id: string;
   toggleStateValue: () => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
   id,
   toggleStateValue,
 }): JSX.Element => {
   const location = useLocation<InterfaceUserUpdateProps>();
-  const currentUrl = location.state?.id || localStorage.getItem('id') || id;
+  const { getItem, setItem } = useLocalStorage();
+  const currentUrl = location.state?.id || getItem('id') || id;
   const { t } = useTranslation('translation', {
     keyPrefix: 'userUpdate',
   });
@@ -114,11 +112,11 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
           file: '',
         });
 
-        if (localStorage.getItem('id') === currentUrl) {
-          localStorage.setItem('FirstName', firstName);
-          localStorage.setItem('LastName', lastName);
-          localStorage.setItem('Email', email);
-          localStorage.setItem('UserImage', file);
+        if (getItem('id') === currentUrl) {
+          setItem('FirstName', firstName);
+          setItem('LastName', lastName);
+          setItem('Email', email);
+          setItem('UserImage', file);
         }
         toast.success('Successful updated');
 

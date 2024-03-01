@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 """
-Script to make Markdown files MPX compatible.
+Script to make Markdown files MDX compatible.
 
 This script scans Markdown files and escapes special characters (<, >, {, })
-to make them compatible with the MPX standard used in Docusaurus v3.
+to make them compatible with the MDX standard used in Docusaurus v3.
 
 This script complies with:
     1) Pylint
@@ -17,9 +17,9 @@ import os
 import argparse
 import re
 
-def escape_mpx_characters(text):
+def escape_mdx_characters(text):
     """
-    Escape special characters in a text string for MPX compatibility.
+    Escape special characters in a text string for MDX compatibility.
     Avoids escaping already escaped characters.
 
     Args:
@@ -45,7 +45,7 @@ def escape_mpx_characters(text):
 
 def process_file(filepath):
     """
-    Process a single Markdown file for MPX compatibility.
+    Process a single Markdown file for MDX compatibility.
 
     Args:
         filepath: The path to the Markdown file to process.
@@ -56,8 +56,8 @@ def process_file(filepath):
     with open(filepath, 'r', encoding='utf-8') as file:
         content = file.read()
 
-    # Escape MPX characters
-    new_content = escape_mpx_characters(content)
+    # Escape MDX characters
+    new_content = escape_mdx_characters(content)
 
     # Write the processed content back to the file only if there is a change
     if new_content != content:
@@ -69,7 +69,7 @@ def main():
     Main function to process all Markdown files in a given directory.
 
     Scans for all Markdown files in the specified directory and processes each
-    one for MPX compatibility.
+    one for MDX compatibility.
 
     Args:
         None
@@ -77,7 +77,7 @@ def main():
     Returns:
         None
     """
-    parser = argparse.ArgumentParser(description="Make Markdown files MPX compatible.")
+    parser = argparse.ArgumentParser(description="Make Markdown files MDX compatible.")
     parser.add_argument(
         "--directory",
         type=str,

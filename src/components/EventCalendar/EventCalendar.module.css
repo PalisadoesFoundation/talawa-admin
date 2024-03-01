@@ -25,6 +25,10 @@
   background-color: black;
   height: 60px;
 }
+.calendar__scroll {
+  height: 80vh;
+  padding: 10px;
+}
 .weekday {
   display: flex;
   justify-content: center;
@@ -38,6 +42,47 @@
   grid-template-columns: repeat(7, minmax(0, 1fr));
   grid-template-rows: repeat(6, 1fr);
 }
+.calendar_hour_text_container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  border-right: 1px solid #8d8d8d55;
+  width: 40px;
+}
+.calendar_hour_text {
+  top: -10px;
+  left: -5px;
+  position: relative;
+  color: #707070;
+  font-size: 12px;
+}
+.calendar_timezone_text {
+  top: -10px;
+  left: -11px;
+  position: relative;
+  color: #707070;
+  font-size: 9px;
+}
+.calendar_hour_block {
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid #8d8d8d55;
+  position: relative;
+  height: 50px;
+  border-bottom-right-radius: 5px;
+}
+.event_list_parent {
+  position: relative;
+  width: 100%;
+}
+.event_list_parent_current {
+  background-color: #def6e1;
+  position: relative;
+  width: 100%;
+}
+.dummyWidth {
+  width: 1px;
+}
 .day {
   background-color: #ffffff;
   padding-left: 0.3rem;
@@ -47,6 +92,7 @@
   color: #4b4b4b;
   font-weight: 600;
   height: 8rem;
+  position: relative;
 }
 .day__outside {
   background-color: #eeeded;
@@ -75,6 +121,11 @@
   margin-left: 20px;
   border: none;
 }
+.selectType {
+  padding: 16px 10px 16px 10px;
+  border-radius: 10px;
+  margin: 0px 5px 0px 5px;
+}
 .btn__more {
   border: 0px;
   font-size: 14px;
@@ -84,6 +135,7 @@
   transition: all 200ms;
   position: relative;
   display: block;
+  margin: 2px;
 }
 .btn__more:hover {
   color: #3ce080;
@@ -92,12 +144,21 @@
 .expand_event_list {
   display: block;
 }
-
+.list_container {
+  padding: 5px;
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+}
+.event_list_hour {
+  display: flex;
+  flex-direction: row;
+}
 .expand_list_container {
   width: 200px;
   max-height: 250px;
   z-index: 10;
-  position: relative;
+  position: absolute;
   left: auto;
   right: auto;
   overflow: auto;
@@ -105,6 +166,10 @@
   background-color: rgb(241, 241, 241);
   border: 1px solid rgb(201, 201, 201);
   border-radius: 5px;
+  margin: 5px;
+}
+.flex_grow {
+  flex-grow: 1;
 }
 
 @media only screen and (max-width: 700px) {

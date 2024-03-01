@@ -19,11 +19,14 @@ import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import styles from './Users.module.css';
+import useLocalStorage from 'utils/useLocalstorage';
 
 const Users = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
 
   document.title = t('title');
+
+  const { getItem } = useLocalStorage();
 
   const perPageResult = 12;
   const [isLoading, setIsLoading] = useState(true);
@@ -32,8 +35,8 @@ const Users = (): JSX.Element => {
   const [searchByName, setSearchByName] = useState('');
   const [sortingOption, setSortingOption] = useState('newest');
   const [filteringOption, setFilteringOption] = useState('cancel');
-  const userType = localStorage.getItem('UserType');
-  const loggedInUserId = localStorage.getItem('id');
+  const userType = getItem('UserType');
+  const loggedInUserId = getItem('id');
 
   const {
     data: usersData,
@@ -351,7 +354,6 @@ const Users = (): JSX.Element => {
             </h4>
           </div>
         ) : isLoading == false && usersData && displayedUsers.length === 0 ? (
-          // eslint-disable-next-line react/jsx-indent
           <div className={styles.notFound}>
             <h4>{t('noUserFound')}</h4>
           </div>

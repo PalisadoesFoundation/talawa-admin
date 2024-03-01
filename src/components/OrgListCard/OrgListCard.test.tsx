@@ -11,6 +11,9 @@ import { BrowserRouter } from 'react-router-dom';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { MockedProvider } from '@apollo/react-testing';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem, removeItem } = useLocalStorage();
 
 const MOCKS = [
   {
@@ -62,7 +65,8 @@ const props: InterfaceOrgListCardProps = {
 
 describe('Testing the Super Dash List', () => {
   test('should render props and text elements test for the page component', () => {
-    localStorage.setItem('id', '123'); // Means the user is an admin
+    removeItem('id');
+    setItem('id', '123'); // Means the user is an admin
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -79,6 +83,7 @@ describe('Testing the Super Dash List', () => {
     expect(screen.getByText('Dogs Care')).toBeInTheDocument();
     expect(screen.getByText(/Sample City/i)).toBeInTheDocument();
     userEvent.click(screen.getByTestId(/manageBtn/i));
+    removeItem('id');
   });
 
   test('Testing if the props data is not provided', () => {

@@ -14,6 +14,8 @@ import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import styles from './LeftDrawerOrg.module.css';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import useLocalStorage from 'utils/useLocalstorage';
+import Avatar from 'components/Avatar/Avatar';
 
 export interface InterfaceLeftDrawerProps {
   orgId: string;
@@ -46,11 +48,13 @@ const leftDrawerOrg = ({
 
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
 
-  const userType = localStorage.getItem('UserType');
-  const firstName = localStorage.getItem('FirstName');
-  const lastName = localStorage.getItem('LastName');
-  const userImage = localStorage.getItem('UserImage');
-  const userId = localStorage.getItem('id');
+  const { getItem } = useLocalStorage();
+
+  const userType = getItem('UserType');
+  const firstName = getItem('FirstName');
+  const lastName = getItem('LastName');
+  const userImage = getItem('UserImage');
+  const userId = getItem('id');
   const history = useHistory();
 
   // Set organization data
@@ -73,7 +77,7 @@ const leftDrawerOrg = ({
   return (
     <>
       <div
-        className={`${styles.leftDrawer} ${
+        className={`${styles.leftDrawer} customScroll ${
           hideDrawer === null
             ? styles.hideElemByDefault
             : hideDrawer
@@ -115,9 +119,9 @@ const leftDrawerOrg = ({
                 {organization.image ? (
                   <img src={organization.image} alt={`profile picture`} />
                 ) : (
-                  <img
-                    src={`https://api.dicebear.com/5.x/initials/svg?seed=${organization.name}`}
-                    alt={`Dummy Organization Picture`}
+                  <Avatar
+                    name={organization.name}
+                    alt={'Dummy Organization Picture'}
                   />
                 )}
               </div>
@@ -184,8 +188,8 @@ const leftDrawerOrg = ({
               {userImage && userImage !== 'null' ? (
                 <img src={userImage} alt={`profile picture`} />
               ) : (
-                <img
-                  src={`https://api.dicebear.com/5.x/initials/svg?seed=${firstName}%20${lastName}`}
+                <Avatar
+                  name={`${firstName} ${lastName}`}
                   alt={`dummy picture`}
                 />
               )}

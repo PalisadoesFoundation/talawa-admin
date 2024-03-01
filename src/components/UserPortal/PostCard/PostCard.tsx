@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import SendIcon from '@mui/icons-material/Send';
 import { errorHandler } from 'utils/errorHandler';
 import CommentCard from '../CommentCard/CommentCard';
+import useLocalStorage from 'utils/useLocalstorage';
 
 interface InterfacePostCardProps {
   id: string;
@@ -72,7 +73,9 @@ export default function postCard(props: InterfacePostCardProps): JSX.Element {
     keyPrefix: 'postCard',
   });
 
-  const userId = localStorage.getItem('userId');
+  const { getItem } = useLocalStorage();
+
+  const userId = getItem('userId');
   const likedByUser = props.likedBy.some((likedBy) => likedBy.id === userId);
   const [comments, setComments] = React.useState(props.comments);
   const [numComments, setNumComments] = React.useState(props.commentCount);
