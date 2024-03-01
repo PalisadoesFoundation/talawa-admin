@@ -89,9 +89,12 @@ const CommunityProfile = (): JSX.Element => {
             <Form.Group>
               <Form.Label className={styles.formLabel}>{t('logo')}</Form.Label>
               <Form.Control
+                accept="image/*"
+                multiple={false}
                 type="file"
                 id="logo"
                 name="logo"
+                data-testid="fileInput"
                 onChange={async (
                   e: React.ChangeEvent<HTMLInputElement>
                 ): Promise<void> => {
@@ -121,6 +124,7 @@ const CommunityProfile = (): JSX.Element => {
                   type="url"
                   id="facebook"
                   name="facebookUrl"
+                  data-testid="facebook"
                   className={styles.socialInput}
                   value={profileVariable.facebookUrl}
                   onChange={handleOnChange}
@@ -135,6 +139,7 @@ const CommunityProfile = (): JSX.Element => {
                   type="url"
                   id="instagram"
                   name="instagramUrl"
+                  data-testid="instagram"
                   className={styles.socialInput}
                   value={profileVariable.instagramUrl}
                   onChange={handleOnChange}
@@ -149,6 +154,7 @@ const CommunityProfile = (): JSX.Element => {
                   type="url"
                   id="twitter"
                   name="twitterUrl"
+                  data-testid="twitter"
                   className={styles.socialInput}
                   value={profileVariable.twitterUrl}
                   onChange={handleOnChange}
@@ -163,6 +169,7 @@ const CommunityProfile = (): JSX.Element => {
                   type="url"
                   id="linkedIn"
                   name="linkedInUrl"
+                  data-testid="linkedIn"
                   className={styles.socialInput}
                   value={profileVariable.linkedInUrl}
                   onChange={handleOnChange}
@@ -177,6 +184,7 @@ const CommunityProfile = (): JSX.Element => {
                   type="url"
                   id="github"
                   name="githubUrl"
+                  data-testid="github"
                   className={styles.socialInput}
                   value={profileVariable.githubUrl}
                   onChange={handleOnChange}
@@ -191,6 +199,7 @@ const CommunityProfile = (): JSX.Element => {
                   type="url"
                   id="youtube"
                   name="youtubeUrl"
+                  data-testid="youtube"
                   className={styles.socialInput}
                   value={profileVariable.youtubeUrl}
                   onChange={handleOnChange}
@@ -205,6 +214,7 @@ const CommunityProfile = (): JSX.Element => {
                   type="url"
                   id="reddit"
                   name="redditUrl"
+                  data-testid="reddit"
                   className={styles.socialInput}
                   value={profileVariable.redditUrl}
                   onChange={handleOnChange}
@@ -219,6 +229,7 @@ const CommunityProfile = (): JSX.Element => {
                   type="url"
                   id="slack"
                   name="slackUrl"
+                  data-testid="slack"
                   className={styles.socialInput}
                   value={profileVariable.slackUrl}
                   onChange={handleOnChange}

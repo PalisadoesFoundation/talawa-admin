@@ -116,7 +116,7 @@ const leftDrawer = ({
                 onClick={(): void => {
                   history.push('/communityProfile');
                 }}
-                data-testid="profileBtn"
+                data-testid="communityProfileBtn"
               >
                 <div className={styles.iconWrapper}>
                   <SettingsIcon

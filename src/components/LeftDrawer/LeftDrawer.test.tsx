@@ -79,6 +79,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
 
     expect(screen.getByText('My Organizations')).toBeInTheDocument();
     expect(screen.getByText('Users')).toBeInTheDocument();
+    expect(screen.getByText('Community Profile')).toBeInTheDocument();
     expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
 
     expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
@@ -87,12 +88,16 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
 
     const orgsBtn = screen.getByTestId(/orgsBtn/i);
     const rolesBtn = screen.getByTestId(/rolesBtn/i);
+    const communityProfileBtn = screen.getByTestId(/communityProfileBtn/i);
 
     expect(
       orgsBtn.className.includes('text-white btn btn-success')
     ).toBeTruthy();
     expect(
       rolesBtn.className.includes('text-secondary btn btn-light')
+    ).toBeTruthy();
+    expect(
+      communityProfileBtn.className.includes('text-secondary btn btn-light')
     ).toBeTruthy();
 
     // Coming soon
