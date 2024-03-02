@@ -98,6 +98,7 @@ export default function people(): JSX.Element {
   React.useEffect(() => {
     if (data) {
       setMembers(data.organizationsMemberConnection.edges);
+      console.log(data);
     }
   }, [data]);
 
@@ -209,7 +210,7 @@ export default function people(): JSX.Element {
                         image: member.image,
                         id: member._id,
                         email: member.email,
-                        role: member.role,
+                        role: member.userType,
                         sno: (index + 1).toString(),
                       };
                       return <PeopleCard key={index} {...cardProps} />;

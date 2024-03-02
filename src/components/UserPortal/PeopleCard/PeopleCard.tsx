@@ -20,13 +20,14 @@ function peopleCard(props: InterfaceOrganizationCardProps): JSX.Element {
         <span style={{ flex: '1' }} className="align-self-center">
           {props.sno}
         </span>
-        <img
-          src={imageUrl}
-          width="80px"
-          height="auto"
-          className={`${styles.personImage}`}
-          style={{ flex: '1' }}
-        />
+        <span style={{ flex: '1' }}>
+          <img
+            src={imageUrl}
+            width="80px"
+            height="auto"
+            className={`${styles.personImage}`}
+          />
+        </span>
       </span>
       <b style={{ flex: '2' }} className="align-self-center">
         {props.name}
@@ -36,7 +37,7 @@ function peopleCard(props: InterfaceOrganizationCardProps): JSX.Element {
       </span>
       <div style={{ flex: '2' }} className="align-self-center">
         <div className={`w-75 border py-2 px-3 ${styles.borderBox}`}>
-          <span className={`${styles.greenText}`}>none</span>
+          <span className={`${styles.greenText}`}>{props.role}</span>
         </div>
       </div>
     </div>
