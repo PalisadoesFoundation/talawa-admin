@@ -152,3 +152,18 @@ export const ORGANIZATION_ADMINS_LIST = gql`
     }
   }
 `;
+export const ORGANIZATION_FUNDS = gql`
+  query Organizations($id: ID!) {
+    organizations(id: $id) {
+      funds {
+        _id
+        name
+        refrenceNumber
+        taxDeductible
+        isArchived
+        isDefault
+        createdAt
+      }
+    }
+  }
+`;

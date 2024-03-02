@@ -179,6 +179,17 @@ export interface InterfaceQueryOrganizationPostListItem {
     totalCount: number;
   };
 }
+export interface InterfaceQueryOrganizationFunds {
+  funds: {
+    _id: string;
+    name: string;
+    refrenceNumber: string;
+    taxDeductible: boolean;
+    isArchived: boolean;
+    isDefault: boolean;
+    createdAt: string;
+  }[];
+}
 
 export interface InterfaceQueryOrganizationEventListItem {
   _id: string;
@@ -265,4 +276,8 @@ export interface InterfaceAddress {
   postalCode: string;
   sortingCode: string;
   state: string;
+}
+export interface InterfaceCreateFund {
+  fundName: string;
+  fundRef: string;
 }
