@@ -17,11 +17,12 @@ async function wait(ms = 100): Promise<void> {
 
 describe('Testing LoginPortalToggle component', () => {
   test('Component Should be rendered properly', async () => {
+    const mockOnToggle = jest.fn();
     render(
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
-            <LoginPortalToggle />
+            <LoginPortalToggle onToggle={mockOnToggle} />
           </I18nextProvider>
         </Provider>
       </BrowserRouter>,

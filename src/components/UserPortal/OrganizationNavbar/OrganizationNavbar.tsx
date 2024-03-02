@@ -54,7 +54,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   /* istanbul ignore next */
   const handleLogout = (): void => {
     localStorage.clear();
-    window.location.replace('/user');
+    window.location.replace('/');
   };
 
   const userName = getItem('name');
