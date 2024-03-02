@@ -140,15 +140,15 @@ function advertisementRegister({
         return;
       }
       const startDateFormattedString = dayjs(formState.startDate).format(
-        'YYYY-MM-DD'
+        'YYYY-MM-DD',
       );
       const endDateFormattedString = dayjs(formState.endDate).format(
-        'YYYY-MM-DD'
+        'YYYY-MM-DD',
       );
 
       const startDateDate = dayjs(
         startDateFormattedString,
-        'YYYY-MM-DD'
+        'YYYY-MM-DD',
       ).toDate();
       const endDateDate = dayjs(endDateFormattedString, 'YYYY-MM-DD').toDate();
 
@@ -241,7 +241,7 @@ function advertisementRegister({
                 id="advertisementMedia"
                 multiple={false}
                 onChange={async (
-                  e: React.ChangeEvent<HTMLInputElement>
+                  e: React.ChangeEvent<HTMLInputElement>,
                 ): Promise<void> => {
                   const target = e.target as HTMLInputElement;
                   const file = target.files && target.files[0];
@@ -281,7 +281,7 @@ function advertisementRegister({
                         advertisementMedia: '',
                       });
                       const fileInput = document.getElementById(
-                        'advertisementMedia'
+                        'advertisementMedia',
                       ) as HTMLInputElement;
                       if (fileInput) {
                         fileInput.value = '';

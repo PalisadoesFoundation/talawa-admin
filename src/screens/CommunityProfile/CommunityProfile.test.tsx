@@ -27,7 +27,7 @@ describe('Testing Community Profile Screen', () => {
         <I18nextProvider i18n={i18n}>
           <CommunityProfile />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     expect(screen.getByText(/Community Profile/i)).toBeInTheDocument();
@@ -59,7 +59,7 @@ describe('Testing Community Profile Screen', () => {
           <I18nextProvider i18n={i18n}>
             <CommunityProfile />
           </I18nextProvider>
-        </MockedProvider>
+        </MockedProvider>,
       );
       await wait();
 

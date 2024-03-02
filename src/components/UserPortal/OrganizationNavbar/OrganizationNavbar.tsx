@@ -46,7 +46,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
 
   const [currentLanguageCode, setCurrentLanguageCode] = React.useState(
     /* istanbul ignore next */
-    cookies.get('i18next') || 'en'
+    cookies.get('i18next') || 'en',
   );
 
   const { getItem, setItem } = useLocalStorage();
@@ -101,7 +101,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   }
 
   const { data: updatedPluginData } = useSubscription(
-    PLUGIN_SUBSCRIPTION
+    PLUGIN_SUBSCRIPTION,
     // { variables: {  } }
   );
   function getPluginIndex(pluginName: string, pluginsArray: Plugin[]): number {
@@ -169,7 +169,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                     >
                       {plugin.translated}
                     </Nav.Link>
-                  )
+                  ),
               )}
             </Nav>
             <Navbar.Collapse className="justify-content-end">

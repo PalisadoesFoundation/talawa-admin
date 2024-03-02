@@ -63,7 +63,7 @@ const link = new StaticMockLink(MOCKS, true);
 const notWorkingLink = new StaticMockLink([], true);
 const talawaApiUnavailableLink = new StaticMockLink(
   MOCKS_INTERNET_UNAVAILABLE,
-  true
+  true,
 );
 
 async function wait(ms = 100): Promise<void> {
@@ -75,7 +75,9 @@ async function wait(ms = 100): Promise<void> {
 }
 
 const translations = JSON.parse(
-  JSON.stringify(i18n.getDataByLanguage('en')?.translation.forgotPassword ?? {})
+  JSON.stringify(
+    i18n.getDataByLanguage('en')?.translation.forgotPassword ?? {},
+  ),
 );
 
 beforeEach(() => {
@@ -98,7 +100,7 @@ describe('Testing Forgot Password screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -122,7 +124,7 @@ describe('Testing Forgot Password screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -142,14 +144,14 @@ describe('Testing Forgot Password screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Registered email/i),
-      formData.email
+      formData.email,
     );
 
     userEvent.click(screen.getByText('Get OTP'));
@@ -173,14 +175,14 @@ describe('Testing Forgot Password screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Registered email/i),
-      formData.email
+      formData.email,
     );
 
     userEvent.click(screen.getByText('Get OTP'));
@@ -190,7 +192,7 @@ describe('Testing Forgot Password screen', () => {
     userEvent.type(screen.getByTestId('newPassword'), formData.newPassword);
     userEvent.type(
       screen.getByTestId('confirmNewPassword'),
-      formData.confirmNewPassword
+      formData.confirmNewPassword,
     );
     setItem('otpToken', 'lorem ipsum');
     userEvent.click(screen.getByText('Change Password'));
@@ -214,14 +216,14 @@ describe('Testing Forgot Password screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Registered email/i),
-      formData.email
+      formData.email,
     );
 
     userEvent.click(screen.getByText('Get OTP'));
@@ -231,7 +233,7 @@ describe('Testing Forgot Password screen', () => {
     userEvent.type(screen.getByTestId('newPassword'), formData.newPassword);
     userEvent.type(
       screen.getByTestId('confirmNewPassword'),
-      formData.confirmNewPassword
+      formData.confirmNewPassword,
     );
     removeItem('otpToken');
     userEvent.click(screen.getByText('Change Password'));
@@ -255,14 +257,14 @@ describe('Testing Forgot Password screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Registered email/i),
-      formData.email
+      formData.email,
     );
 
     userEvent.click(screen.getByText('Get OTP'));
@@ -272,7 +274,7 @@ describe('Testing Forgot Password screen', () => {
     userEvent.type(screen.getByTestId('newPassword'), formData.newPassword);
     userEvent.type(
       screen.getByTestId('confirmNewPassword'),
-      formData.confirmNewPassword
+      formData.confirmNewPassword,
     );
 
     userEvent.click(screen.getByText('Change Password'));
@@ -293,21 +295,21 @@ describe('Testing Forgot Password screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Registered email/i),
-      formData.email
+      formData.email,
     );
 
     userEvent.click(screen.getByText('Get OTP'));
     await wait();
 
     expect(
-      await screen.findByText(translations.emailNotRegistered)
+      await screen.findByText(translations.emailNotRegistered),
     ).toBeInTheDocument();
   });
 
@@ -322,13 +324,13 @@ describe('Testing Forgot Password screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     userEvent.click(screen.getByText('Get OTP'));
     await wait();
 
     expect(
-      await screen.findByText(translations.errorSendingMail)
+      await screen.findByText(translations.errorSendingMail),
     ).toBeInTheDocument();
   });
 
@@ -346,20 +348,20 @@ describe('Testing Forgot Password screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Registered email/i),
-      formData.email
+      formData.email,
     );
     userEvent.click(screen.getByText('Get OTP'));
     await wait();
 
     expect(
-      await screen.findByText(translations.talawaApiUnavailable)
+      await screen.findByText(translations.talawaApiUnavailable),
     ).toBeInTheDocument();
   });
 
@@ -382,14 +384,14 @@ describe('Testing Forgot Password screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Registered email/i),
-      formData.email
+      formData.email,
     );
 
     userEvent.click(screen.getByText('Get OTP'));
@@ -399,7 +401,7 @@ describe('Testing Forgot Password screen', () => {
     userEvent.type(screen.getByTestId('newPassword'), formData.newPassword);
     userEvent.type(
       screen.getByTestId('confirmNewPassword'),
-      formData.confirmNewPassword
+      formData.confirmNewPassword,
     );
     userEvent.click(screen.getByText('Change Password'));
   });

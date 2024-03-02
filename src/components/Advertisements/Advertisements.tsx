@@ -62,7 +62,7 @@ export default function advertisements(): JSX.Element {
                             endDate: Date;
                             startDate: Date;
                           },
-                          i: React.Key | null | undefined
+                          i: React.Key | null | undefined,
                         ): JSX.Element => (
                           <AdvertisementEntry
                             id={ad._id}
@@ -74,7 +74,7 @@ export default function advertisements(): JSX.Element {
                             endDate={new Date(ad.endDate)}
                             mediaUrl={ad.mediaUrl}
                           />
-                        )
+                        ),
                       )
                   )}
                 </Tab>
@@ -99,7 +99,7 @@ export default function advertisements(): JSX.Element {
                             endDate: Date;
                             startDate: Date;
                           },
-                          i: React.Key | null | undefined
+                          i: React.Key | null | undefined,
                         ): JSX.Element => (
                           <AdvertisementEntry
                             id={ad._id}
@@ -111,7 +111,7 @@ export default function advertisements(): JSX.Element {
                             endDate={new Date(ad.endDate)}
                             mediaUrl={ad.mediaUrl}
                           />
-                        )
+                        ),
                       )
                   )}
                 </Tab>

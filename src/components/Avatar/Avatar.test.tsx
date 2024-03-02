@@ -16,7 +16,7 @@ describe('Avatar component', () => {
         <I18nextProvider i18n={i18nForTest}>
           <Avatar name={testName} alt={testAlt} size={testSize} />
         </I18nextProvider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
     const avatarElement = getByAltText(testAlt);
 
@@ -38,7 +38,7 @@ describe('Avatar component', () => {
             dataTestId={testDataTestId}
           />
         </I18nextProvider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
     const avatarElement = getByAltText('Dummy Avatar');
 

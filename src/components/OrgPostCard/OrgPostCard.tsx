@@ -32,7 +32,7 @@ interface InterfaceOrgPostCardProps {
 }
 
 export default function orgPostCard(
-  props: InterfaceOrgPostCardProps
+  props: InterfaceOrgPostCardProps,
 ): JSX.Element {
   const [postformState, setPostFormState] = useState({
     posttitle: '',
@@ -109,7 +109,7 @@ export default function orgPostCard(
     });
     setPostPhotoUpdated(true);
     const fileInput = document.getElementById(
-      'postImageUrl'
+      'postImageUrl',
     ) as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
@@ -123,7 +123,7 @@ export default function orgPostCard(
     });
     setPostVideoUpdated(true);
     const fileInput = document.getElementById(
-      'postVideoUrl'
+      'postVideoUrl',
     ) as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
@@ -191,7 +191,7 @@ export default function orgPostCard(
     }
   };
   const handleInputEvent = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     const { name, value } = e.target;
     setPostFormState((prevPostFormState) => ({
@@ -201,7 +201,7 @@ export default function orgPostCard(
   };
 
   const updatePostHandler = async (
-    e: ChangeEvent<HTMLFormElement>
+    e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
 
@@ -523,7 +523,7 @@ export default function orgPostCard(
                   placeholder={t('image')}
                   multiple={false}
                   onChange={async (
-                    e: React.ChangeEvent<HTMLInputElement>
+                    e: React.ChangeEvent<HTMLInputElement>,
                   ): Promise<void> => {
                     setPostFormState((prevPostFormState) => ({
                       ...prevPostFormState,
@@ -572,7 +572,7 @@ export default function orgPostCard(
                   placeholder={t('video')}
                   multiple={false}
                   onChange={async (
-                    e: React.ChangeEvent<HTMLInputElement>
+                    e: React.ChangeEvent<HTMLInputElement>,
                   ): Promise<void> => {
                     setPostFormState((prevPostFormState) => ({
                       ...prevPostFormState,

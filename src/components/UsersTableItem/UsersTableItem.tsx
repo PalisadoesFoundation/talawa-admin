@@ -42,7 +42,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
   });
   const [joinedOrgs, setJoinedOrgs] = useState(user.joinedOrganizations);
   const [orgsBlockedBy, setOrgsBlockedBy] = useState(
-    user.organizationsBlockedBy
+    user.organizationsBlockedBy,
   );
   const [searchByNameJoinedOrgs, setSearchByNameJoinedOrgs] = useState('');
   const [searchByNameOrgsBlockedBy, setSearchByNameOrgsBlockedBy] =
@@ -134,7 +134,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
       setJoinedOrgs(user.joinedOrganizations);
     } else {
       const filteredOrgs = user.joinedOrganizations.filter((org) =>
-        org.name.toLowerCase().includes(value.toLowerCase())
+        org.name.toLowerCase().includes(value.toLowerCase()),
       );
       setJoinedOrgs(filteredOrgs);
     }
@@ -145,7 +145,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
       setOrgsBlockedBy(user.organizationsBlockedBy);
     } else {
       const filteredOrgs = user.organizationsBlockedBy.filter((org) =>
-        org.name.toLowerCase().includes(value.toLowerCase())
+        org.name.toLowerCase().includes(value.toLowerCase()),
       );
       setOrgsBlockedBy(filteredOrgs);
     }

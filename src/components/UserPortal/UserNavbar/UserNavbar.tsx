@@ -25,7 +25,7 @@ function userNavbar(): JSX.Element {
 
   const [currentLanguageCode, setCurrentLanguageCode] = React.useState(
     /* istanbul ignore next */
-    cookies.get('i18next') || 'en'
+    cookies.get('i18next') || 'en',
   );
 
   const userName = getItem('name');

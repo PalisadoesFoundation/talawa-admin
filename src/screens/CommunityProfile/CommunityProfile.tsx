@@ -96,7 +96,7 @@ const CommunityProfile = (): JSX.Element => {
                 name="logo"
                 data-testid="fileInput"
                 onChange={async (
-                  e: React.ChangeEvent<HTMLInputElement>
+                  e: React.ChangeEvent<HTMLInputElement>,
                 ): Promise<void> => {
                   setProfileVariable((prevInput) => ({
                     ...prevInput,

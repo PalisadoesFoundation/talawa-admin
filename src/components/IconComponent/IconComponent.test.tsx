@@ -66,7 +66,7 @@ describe('Testing Collapsible Dropdown component', () => {
     for (const component in screenTestIdMap) {
       render(<IconComponent name={screenTestIdMap[component].name} />);
       expect(
-        screen.getByTestId(screenTestIdMap[component].testId)
+        screen.getByTestId(screenTestIdMap[component].testId),
       ).toBeInTheDocument();
     }
   });

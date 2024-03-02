@@ -133,7 +133,7 @@ const Users = (): JSX.Element => {
 
   const handleSearchByBtnClick = (): void => {
     const inputElement = document.getElementById(
-      'searchUsers'
+      'searchUsers',
     ) as HTMLInputElement;
     const inputValue = inputElement?.value || '';
     handleSearch(inputValue);
@@ -163,7 +163,7 @@ const Users = (): JSX.Element => {
           fetchMoreResult,
         }: {
           fetchMoreResult: { users: InterfaceQueryUserListItem[] } | undefined;
-        }
+        },
       ): { users: InterfaceQueryUserListItem[] } | undefined => {
         setIsLoadingMore(false);
         if (!fetchMoreResult) return prev;
@@ -185,20 +185,20 @@ const Users = (): JSX.Element => {
 
   const sortUsers = (
     allUsers: InterfaceQueryUserListItem[],
-    sortingOption: string
+    sortingOption: string,
   ): InterfaceQueryUserListItem[] => {
     const sortedUsers = [...allUsers];
 
     if (sortingOption === 'newest') {
       sortedUsers.sort(
         (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       );
       return sortedUsers;
     } else {
       sortedUsers.sort(
         (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
       );
       return sortedUsers;
     }
@@ -210,7 +210,7 @@ const Users = (): JSX.Element => {
 
   const filterUsers = (
     allUsers: InterfaceQueryUserListItem[],
-    filteringOption: string
+    filteringOption: string,
   ): InterfaceQueryUserListItem[] => {
     const filteredUsers = [...allUsers];
 

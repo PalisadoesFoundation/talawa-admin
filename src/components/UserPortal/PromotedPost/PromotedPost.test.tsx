@@ -37,7 +37,7 @@ describe('Testing PromotedPost Test', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -58,14 +58,14 @@ describe('Testing PromotedPost Test', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await waitFor(() => {
       const image = queryByRole('img');
       expect(image).toHaveAttribute(
         'src',
-        'data:image/png;base64,bWVkaWEgY29udGVudA=='
+        'data:image/png;base64,bWVkaWEgY29udGVudA==',
       );
     });
   });
@@ -81,7 +81,7 @@ test('Component should display the icon correctly', async () => {
           </I18nextProvider>
         </Provider>
       </BrowserRouter>
-    </MockedProvider>
+    </MockedProvider>,
   );
 
   await waitFor(() => {
@@ -100,7 +100,7 @@ test('Component should display the text correctly', async () => {
           </I18nextProvider>
         </Provider>
       </BrowserRouter>
-    </MockedProvider>
+    </MockedProvider>,
   );
 
   await waitFor(() => {
@@ -123,7 +123,7 @@ test('Component should display the media correctly', async () => {
           </I18nextProvider>
         </Provider>
       </BrowserRouter>
-    </MockedProvider>
+    </MockedProvider>,
   );
 
   await waitFor(async () => {

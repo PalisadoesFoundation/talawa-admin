@@ -47,7 +47,7 @@ export class StaticMockLink extends ApolloLink {
       this._normalizeMockedResponse(mockedResponse);
     const key = requestToKey(
       normalizedMockedResponse.request,
-      this.addTypename
+      this.addTypename,
     );
     let mockedResponses = this._mockedResponsesByKey[key];
     if (!mockedResponses) {
@@ -70,7 +70,7 @@ export class StaticMockLink extends ApolloLink {
           return true;
         }
         return false;
-      }
+      },
     );
 
     let configError: Error;
@@ -78,8 +78,8 @@ export class StaticMockLink extends ApolloLink {
     if (!response || typeof responseIndex === 'undefined') {
       configError = new Error(
         `No more mocked responses for the query: ${print(
-          operation.query
-        )}, variables: ${JSON.stringify(operation.variables)}`
+          operation.query,
+        )}, variables: ${JSON.stringify(operation.variables)}`,
       );
     } else {
       const { newData } = response;
@@ -90,7 +90,7 @@ export class StaticMockLink extends ApolloLink {
 
       if (!response.result && !response.error) {
         configError = new Error(
-          `Mocked response should contain either result or error: ${key}`
+          `Mocked response should contain either result or error: ${key}`,
         );
       }
     }
@@ -118,7 +118,7 @@ export class StaticMockLink extends ApolloLink {
               observer.next(
                 typeof response.result === 'function'
                   ? (response.result as ResultFunction<FetchResult>)()
-                  : response.result
+                  : response.result,
               );
             }
             observer.complete();
@@ -133,11 +133,11 @@ export class StaticMockLink extends ApolloLink {
   }
 
   private _normalizeMockedResponse(
-    mockedResponse: MockedResponse
+    mockedResponse: MockedResponse,
   ): MockedResponse {
     const newMockedResponse = cloneDeep(mockedResponse);
     const queryWithoutConnection = removeConnectionDirectiveFromDocument(
-      newMockedResponse.request.query
+      newMockedResponse.request.query,
     );
     invariant(queryWithoutConnection, 'query is required');
     newMockedResponse.request.query = queryWithoutConnection;

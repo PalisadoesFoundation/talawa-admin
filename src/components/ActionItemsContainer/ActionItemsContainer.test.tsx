@@ -39,7 +39,7 @@ jest.mock('react-toastify', () => ({
 jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
   return {
     DateTimePicker: jest.requireActual(
-      '@mui/x-date-pickers/DesktopDateTimePicker'
+      '@mui/x-date-pickers/DesktopDateTimePicker',
     ).DesktopDateTimePicker,
   };
 });
@@ -54,8 +54,8 @@ async function wait(ms = 100): Promise<void> {
 
 const translations = JSON.parse(
   JSON.stringify(
-    i18nForTest.getDataByLanguage('en')?.translation.organizationActionItems
-  )
+    i18nForTest.getDataByLanguage('en')?.translation.organizationActionItems,
+  ),
 );
 
 describe('Testing Action Item Categories Component', () => {
@@ -77,14 +77,14 @@ describe('Testing Action Item Categories Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     await waitFor(() => {
       expect(
-        screen.queryByText(translations.noActionItems)
+        screen.queryByText(translations.noActionItems),
       ).not.toBeInTheDocument();
     });
   });
@@ -99,14 +99,14 @@ describe('Testing Action Item Categories Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     await waitFor(() => {
       expect(
-        screen.queryByText(translations.noActionItems)
+        screen.queryByText(translations.noActionItems),
       ).toBeInTheDocument();
     });
   });
@@ -123,27 +123,27 @@ describe('Testing Action Item Categories Component', () => {
             </LocalizationProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     await waitFor(() => {
       expect(
-        screen.getAllByTestId('editActionItemModalBtn')[0]
+        screen.getAllByTestId('editActionItemModalBtn')[0],
       ).toBeInTheDocument();
     });
     userEvent.click(screen.getAllByTestId('editActionItemModalBtn')[0]);
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('updateActionItemModalCloseBtn')
+        screen.findByTestId('updateActionItemModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
     userEvent.click(screen.getByTestId('updateActionItemModalCloseBtn'));
 
     await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('updateActionItemModalCloseBtn')
+      screen.queryByTestId('updateActionItemModalCloseBtn'),
     );
   });
 
@@ -159,27 +159,27 @@ describe('Testing Action Item Categories Component', () => {
             </LocalizationProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     await waitFor(() => {
       expect(
-        screen.getAllByTestId('deleteActionItemModalBtn')[0]
+        screen.getAllByTestId('deleteActionItemModalBtn')[0],
       ).toBeInTheDocument();
     });
     userEvent.click(screen.getAllByTestId('deleteActionItemModalBtn')[0]);
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('actionItemDeleteModalCloseBtn')
+        screen.findByTestId('actionItemDeleteModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
     userEvent.click(screen.getByTestId('actionItemDeleteModalCloseBtn'));
 
     await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('actionItemDeleteModalCloseBtn')
+      screen.queryByTestId('actionItemDeleteModalCloseBtn'),
     );
   });
 
@@ -195,27 +195,27 @@ describe('Testing Action Item Categories Component', () => {
             </LocalizationProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     await waitFor(() => {
       expect(
-        screen.getAllByTestId('previewActionItemModalBtn')[0]
+        screen.getAllByTestId('previewActionItemModalBtn')[0],
       ).toBeInTheDocument();
     });
     userEvent.click(screen.getAllByTestId('previewActionItemModalBtn')[0]);
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('previewActionItemModalCloseBtn')
+        screen.findByTestId('previewActionItemModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
     userEvent.click(screen.getByTestId('previewActionItemModalCloseBtn'));
 
     await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('previewActionItemModalCloseBtn')
+      screen.queryByTestId('previewActionItemModalCloseBtn'),
     );
   });
 
@@ -231,58 +231,58 @@ describe('Testing Action Item Categories Component', () => {
             </LocalizationProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     await waitFor(() => {
       expect(
-        screen.getAllByTestId('previewActionItemModalBtn')[0]
+        screen.getAllByTestId('previewActionItemModalBtn')[0],
       ).toBeInTheDocument();
     });
     userEvent.click(screen.getAllByTestId('previewActionItemModalBtn')[0]);
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('previewActionItemModalCloseBtn')
+        screen.findByTestId('previewActionItemModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
 
     await waitFor(() => {
       expect(
-        screen.getByTestId('deleteActionItemPreviewModalBtn')
+        screen.getByTestId('deleteActionItemPreviewModalBtn'),
       ).toBeInTheDocument();
     });
     userEvent.click(screen.getByTestId('deleteActionItemPreviewModalBtn'));
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('actionItemDeleteModalCloseBtn')
+        screen.findByTestId('actionItemDeleteModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
     userEvent.click(screen.getByTestId('actionItemDeleteModalCloseBtn'));
 
     await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('actionItemDeleteModalCloseBtn')
+      screen.queryByTestId('actionItemDeleteModalCloseBtn'),
     );
 
     await waitFor(() => {
       expect(
-        screen.getByTestId('editActionItemPreviewModalBtn')
+        screen.getByTestId('editActionItemPreviewModalBtn'),
       ).toBeInTheDocument();
     });
     userEvent.click(screen.getByTestId('editActionItemPreviewModalBtn'));
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('updateActionItemModalCloseBtn')
+        screen.findByTestId('updateActionItemModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
     userEvent.click(screen.getByTestId('updateActionItemModalCloseBtn'));
 
     await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('updateActionItemModalCloseBtn')
+      screen.queryByTestId('updateActionItemModalCloseBtn'),
     );
   });
 
@@ -298,14 +298,14 @@ describe('Testing Action Item Categories Component', () => {
             </LocalizationProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     await waitFor(() => {
       expect(
-        screen.getAllByTestId('editActionItemModalBtn')[0]
+        screen.getAllByTestId('editActionItemModalBtn')[0],
       ).toBeInTheDocument();
     });
     userEvent.click(screen.getAllByTestId('editActionItemModalBtn')[0]);
@@ -316,17 +316,17 @@ describe('Testing Action Item Categories Component', () => {
 
     userEvent.selectOptions(
       screen.getByTestId('formUpdateAssignee'),
-      formData.assignee
+      formData.assignee,
     );
 
     const preCompletionNotes = screen.getByPlaceholderText(
-      translations.preCompletionNotes
+      translations.preCompletionNotes,
     );
     fireEvent.change(preCompletionNotes, { target: { value: '' } });
     userEvent.type(preCompletionNotes, formData.preCompletionNotes);
 
     const postCompletionNotes = screen.getByPlaceholderText(
-      translations.postCompletionNotes
+      translations.postCompletionNotes,
     );
     fireEvent.change(postCompletionNotes, { target: { value: '' } });
     userEvent.type(postCompletionNotes, formData.postCompletionNotes);
@@ -337,7 +337,7 @@ describe('Testing Action Item Categories Component', () => {
     });
 
     const completionDatePicker = screen.getByLabelText(
-      translations.completionDate
+      translations.completionDate,
     );
     fireEvent.change(completionDatePicker, {
       target: { value: formData.completionDate },
@@ -370,14 +370,14 @@ describe('Testing Action Item Categories Component', () => {
             </LocalizationProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     await waitFor(() => {
       expect(
-        screen.getAllByTestId('editActionItemModalBtn')[0]
+        screen.getAllByTestId('editActionItemModalBtn')[0],
       ).toBeInTheDocument();
     });
     userEvent.click(screen.getAllByTestId('editActionItemModalBtn')[0]);
@@ -388,17 +388,17 @@ describe('Testing Action Item Categories Component', () => {
 
     userEvent.selectOptions(
       screen.getByTestId('formUpdateAssignee'),
-      formData.assignee
+      formData.assignee,
     );
 
     const preCompletionNotes = screen.getByPlaceholderText(
-      translations.preCompletionNotes
+      translations.preCompletionNotes,
     );
     fireEvent.change(preCompletionNotes, { target: { value: '' } });
     userEvent.type(preCompletionNotes, formData.preCompletionNotes);
 
     const postCompletionNotes = screen.getByPlaceholderText(
-      translations.postCompletionNotes
+      translations.postCompletionNotes,
     );
     fireEvent.change(postCompletionNotes, { target: { value: '' } });
     userEvent.type(postCompletionNotes, formData.postCompletionNotes);
@@ -409,7 +409,7 @@ describe('Testing Action Item Categories Component', () => {
     });
 
     const completionDatePicker = screen.getByLabelText(
-      translations.completionDate
+      translations.completionDate,
     );
     fireEvent.change(completionDatePicker, {
       target: { value: formData.completionDate },
@@ -442,21 +442,21 @@ describe('Testing Action Item Categories Component', () => {
             </LocalizationProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     await waitFor(() => {
       expect(
-        screen.getAllByTestId('deleteActionItemModalBtn')[0]
+        screen.getAllByTestId('deleteActionItemModalBtn')[0],
       ).toBeInTheDocument();
     });
     userEvent.click(screen.getAllByTestId('deleteActionItemModalBtn')[0]);
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('actionItemDeleteModalCloseBtn')
+        screen.findByTestId('actionItemDeleteModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
     userEvent.click(screen.getByTestId('deleteActionItemBtn'));
@@ -478,21 +478,21 @@ describe('Testing Action Item Categories Component', () => {
             </LocalizationProvider>
           </BrowserRouter>
         </Provider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     await waitFor(() => {
       expect(
-        screen.getAllByTestId('deleteActionItemModalBtn')[0]
+        screen.getAllByTestId('deleteActionItemModalBtn')[0],
       ).toBeInTheDocument();
     });
     userEvent.click(screen.getAllByTestId('deleteActionItemModalBtn')[0]);
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('actionItemDeleteModalCloseBtn')
+        screen.findByTestId('actionItemDeleteModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
     userEvent.click(screen.getByTestId('deleteActionItemBtn'));

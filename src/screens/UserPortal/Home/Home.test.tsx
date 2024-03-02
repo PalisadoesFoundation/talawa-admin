@@ -276,7 +276,7 @@ describe('Testing Home Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -300,7 +300,7 @@ describe('Testing Home Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -327,7 +327,7 @@ describe('Testing Home Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -348,7 +348,7 @@ describe('Testing Home Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -375,7 +375,7 @@ describe('Testing Home Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -395,7 +395,7 @@ describe('Testing Home Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -407,7 +407,7 @@ describe('Testing Home Screen [User Portal]', () => {
     userEvent.type(screen.getByTestId('postInput'), 'some content');
     userEvent.upload(
       screen.getByTestId('postImageInput'),
-      new File(['image content'], 'image.png', { type: 'image/png' })
+      new File(['image content'], 'image.png', { type: 'image/png' }),
     );
 
     // Check that the content and image have been added
@@ -439,7 +439,7 @@ describe('Testing Home Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     userEvent.click(screen.getByTestId('startPostBtn'));
@@ -468,7 +468,7 @@ describe('Testing Home Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     expect(screen.queryByText('Ad 1')).not.toBeInTheDocument();

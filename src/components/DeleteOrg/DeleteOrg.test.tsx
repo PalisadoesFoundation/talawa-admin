@@ -120,7 +120,7 @@ describe('Delete Organization Component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
@@ -145,7 +145,7 @@ describe('Delete Organization Component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
@@ -169,7 +169,7 @@ describe('Delete Organization Component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
@@ -190,7 +190,7 @@ describe('Delete Organization Component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
@@ -212,14 +212,14 @@ describe('Delete Organization Component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
     screen.getByTestId(/deleteOrganizationBtn/i).click();
     await wait();
     expect(toast.error).toHaveBeenCalledWith(
-      'Failed to delete sample organization'
+      'Failed to delete sample organization',
     );
   });
 
@@ -235,7 +235,7 @@ describe('Delete Organization Component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();

@@ -168,12 +168,12 @@ export default function home(): JSX.Element {
   const filterAdContent = (
     adCont: InterfaceAdContent[],
     currentOrgId: string,
-    currentDate: Date = new Date()
+    currentDate: Date = new Date(),
   ): InterfaceAdContent[] => {
     return adCont.filter(
       (ad: InterfaceAdContent) =>
         ad.organization._id === currentOrgId &&
-        new Date(ad.endDate) > currentDate
+        new Date(ad.endDate) > currentDate,
     );
   };
 
@@ -442,7 +442,7 @@ export default function home(): JSX.Element {
                 multiple={false}
                 data-testid="postImageInput"
                 onChange={async (
-                  e: React.ChangeEvent<HTMLInputElement>
+                  e: React.ChangeEvent<HTMLInputElement>,
                 ): Promise<void> => {
                   const file = e.target.files && e.target.files[0];
                   if (file) {

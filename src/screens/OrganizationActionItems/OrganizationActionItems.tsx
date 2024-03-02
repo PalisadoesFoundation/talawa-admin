@@ -99,7 +99,7 @@ function organizationActionItems(): JSX.Element {
   const [createActionItem] = useMutation(CREATE_ACTION_ITEM_MUTATION);
 
   const createActionItemHandler = async (
-    e: ChangeEvent<HTMLFormElement>
+    e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
     try {
@@ -196,7 +196,7 @@ function organizationActionItems(): JSX.Element {
 
   const actionItemCategories =
     actionItemCategoriesData?.actionItemCategoriesByOrganization.filter(
-      (category) => !category.isDisabled
+      (category) => !category.isDisabled,
     );
 
   return (

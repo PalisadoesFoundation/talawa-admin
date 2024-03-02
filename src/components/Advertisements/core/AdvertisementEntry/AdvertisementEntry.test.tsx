@@ -30,8 +30,8 @@ const httpLink = new HttpLink({
 
 const translations = JSON.parse(
   JSON.stringify(
-    i18nForTest.getDataByLanguage('en')?.translation?.advertisement ?? null
-  )
+    i18nForTest.getDataByLanguage('en')?.translation?.advertisement ?? null,
+  ),
 );
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
@@ -70,7 +70,7 @@ describe('Testing Advertisement Entry Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>
+      </ApolloProvider>,
     );
 
     //Testing rendering
@@ -142,7 +142,7 @@ describe('Testing Advertisement Entry Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>
+      </ApolloProvider>,
     );
 
     // Test initial rendering
@@ -204,7 +204,7 @@ describe('Testing Advertisement Entry Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>
+      </ApolloProvider>,
     );
 
     const optionsButton = screen.getByTestId('moreiconbtn');
@@ -216,7 +216,7 @@ describe('Testing Advertisement Entry Component', () => {
     });
 
     expect(screen.getByLabelText('Enter name of Advertisement')).toHaveValue(
-      'Updated Advertisement'
+      'Updated Advertisement',
     );
 
     fireEvent.change(screen.getByLabelText(translations.Rtype), {
@@ -273,7 +273,7 @@ describe('Testing Advertisement Entry Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>
+      </ApolloProvider>,
     );
 
     const optionsButton = screen.getByTestId('moreiconbtn');
@@ -285,7 +285,7 @@ describe('Testing Advertisement Entry Component', () => {
     });
 
     expect(screen.getByLabelText('Enter name of Advertisement')).toHaveValue(
-      'Updated Advertisement'
+      'Updated Advertisement',
     );
 
     fireEvent.change(screen.getByLabelText(translations.Rtype), {
@@ -327,7 +327,7 @@ describe('Testing Advertisement Entry Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>
+      </ApolloProvider>,
     );
 
     fireEvent.click(screen.getByTestId('editBtn'));
@@ -368,7 +368,7 @@ describe('Testing Advertisement Entry Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
-      </ApolloProvider>
+      </ApolloProvider>,
     );
 
     fireEvent.click(screen.getByTestId('createAdvertisement'));
@@ -378,7 +378,7 @@ describe('Testing Advertisement Entry Component', () => {
     });
 
     expect(screen.getByLabelText('Enter name of Advertisement')).toHaveValue(
-      'Updated Advertisement'
+      'Updated Advertisement',
     );
 
     fireEvent.change(screen.getByLabelText(translations.Rtype), {
@@ -390,14 +390,14 @@ describe('Testing Advertisement Entry Component', () => {
       target: { value: '2023-01-01' },
     });
     expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
-      '2023-01-01'
+      '2023-01-01',
     );
 
     fireEvent.change(screen.getByLabelText(translations.RendDate), {
       target: { value: '2023-02-01' },
     });
     expect(screen.getByLabelText(translations.RendDate)).toHaveValue(
-      '2023-02-01'
+      '2023-02-01',
     );
 
     fireEvent.click(screen.getByTestId('addonregister'));
