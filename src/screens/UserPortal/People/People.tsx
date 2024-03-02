@@ -19,7 +19,6 @@ import styles from './People.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import getOrganizationId from 'utils/getOrganizationId';
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 interface InterfaceOrganizationCardProps {
   id: string;
@@ -39,15 +38,6 @@ export default function people(): JSX.Element {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [members, setMembers] = React.useState([]);
   const [mode, setMode] = React.useState(0);
-  const [open, setOpen] = React.useState(false);
-
-  const handleClose = (): void => {
-    setOpen(false);
-  };
-
-  const handleOpen = (): void => {
-    setOpen(true);
-  };
 
   const organizationId = getOrganizationId(window.location.href);
 
