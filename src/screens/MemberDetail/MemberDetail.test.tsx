@@ -144,6 +144,7 @@ describe('MemberDetail', () => {
   test('should render the elements', async () => {
     const props = {
       id: 'rishav-jha-mech',
+      from: 'orglist',
     };
 
     render(
@@ -218,6 +219,7 @@ describe('MemberDetail', () => {
   test('Should display dicebear image if image is null', async () => {
     const props = {
       id: 'rishav-jha-mech',
+      from: 'orglist',
     };
 
     render(
@@ -231,24 +233,19 @@ describe('MemberDetail', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
 
-    const user = MOCKS1[0].result.data.user;
+    const dicebearUrl = `mocked-data-uri`;
 
-    waitFor(() =>
-      expect(screen.getByTestId('userImageAbsent')).toBeInTheDocument(),
-    );
-    waitFor(() =>
-      expect(screen.getByTestId('userImageAbsent').getAttribute('src')).toBe(
-        `https://api.dicebear.com/5.x/initials/svg?seed=${user?.firstName} ${user?.lastName}`,
-      ),
-    );
+    const userImage = await screen.findByTestId('userImageAbsent');
+    expect(userImage).toBeInTheDocument();
+    expect(userImage.getAttribute('src')).toBe(dicebearUrl);
   });
 
   test('Should display image if image is present', async () => {
     const props = {
       id: 'rishav-jha-mech',
+      from: 'orglist',
     };
 
     render(
@@ -266,15 +263,57 @@ describe('MemberDetail', () => {
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
 
     const user = MOCKS2[0].result.data.user;
+    const userImage = await screen.findByTestId('userImagePresent');
+    expect(userImage).toBeInTheDocument();
+    expect(userImage.getAttribute('src')).toBe(user?.image);
+  });
 
-    waitFor(() =>
-      expect(screen.getByTestId('userImagePresent')).toBeInTheDocument(),
+  test('should render LeftDrawer from SuperAdminScreen when member details is called from home page', async () => {
+    const props = {
+      id: 'rishav-jha-mech',
+      from: 'orglist',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <MemberDetail {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
     );
-    waitFor(() =>
-      expect(screen.getByTestId('userImagePresent').getAttribute('src')).toBe(
-        user?.image,
-      ),
+
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
+    });
+  });
+
+  test('should not render LeftDrawer from SuperAdminScreen when member details is called from Organization Dashboard', async () => {
+    const props = {
+      id: 'rishav-jha-mech',
+      from: 'orgdash',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <MemberDetail {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
     );
+
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByTestId('orgsBtn')).not.toBeInTheDocument();
+    });
   });
 
   test('should call setState with 2 when button is clicked', async () => {
