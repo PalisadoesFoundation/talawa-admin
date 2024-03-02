@@ -202,7 +202,10 @@
     "searchName": "Entrez le nom",
     "searchevent": "Entrez l'événement",
     "searchFirstName": "Entrez votre prénom",
-    "searchLastName": "Entrer le nom de famille"
+    "searchLastName": "Entrer le nom de famille",
+    "people": "Personnes",
+    "sort": "Trier par rôle",
+    "actions": "Actions"
   },
   "userListCard": {
     "joined": "Inscrit",
