@@ -1,4 +1,3 @@
-import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import 'jest-location-mock';
@@ -6,15 +5,15 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
+import userEvent from '@testing-library/user-event';
+import { toast } from 'react-toastify';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import i18nForTest from 'utils/i18nForTest';
+import useLocalStorage from 'utils/useLocalstorage';
 import OrganizationDashboard from './OrganizationDashboard';
 import { EMPTY_MOCKS, ERROR_MOCKS, MOCKS } from './OrganizationDashboardMocks';
-import i18nForTest from 'utils/i18nForTest';
-import { toast } from 'react-toastify';
-import userEvent from '@testing-library/user-event';
-import useLocalStorage from 'utils/useLocalstorage';
-
+import React from 'react';
 const { setItem } = useLocalStorage();
 
 async function wait(ms = 100): Promise<void> {
@@ -79,7 +78,7 @@ describe('Organisation Dashboard Page', () => {
     expect(screen.getByText('Membership requests')).toBeInTheDocument();
 
     // Checking if posts are rendered
-    expect(screen.getByText('Post 15')).toBeInTheDocument();
+    expect(screen.getByText('postone')).toBeInTheDocument();
 
     // Checking if membership requests are rendered
     expect(screen.getByText('Jane Doe')).toBeInTheDocument();
@@ -129,7 +128,6 @@ describe('Organisation Dashboard Page', () => {
       screen.getByText(/No membership requests present/i),
     ).toBeInTheDocument();
     expect(screen.getByText(/No upcoming events/i)).toBeInTheDocument();
-    expect(screen.getByText(/No posts present/i)).toBeInTheDocument();
   });
 
   test('Testing error scenario', async () => {

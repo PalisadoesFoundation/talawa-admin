@@ -365,7 +365,9 @@
     "sortPost": "排序帖子",
     "tag": "您的浏览器不支持视频标签",
     "postCreatedSuccess": "恭喜！您已经发布了一些内容。",
-    "pinPost": "针柱"
+    "pinPost": "针柱",
+    "Next": "下一页",
+    "Previous": "上一页"
   },
   "postNotFound": {
     "post": "郵政",
@@ -702,13 +704,6 @@
     "nothingToShow": "這裡沒有什麼可顯示的。",
     "search": "搜索",
     "createEvent": "創建事件",
-    "eventTitle": "活動標題",
-    "eventDescription": "活動說明",
-    "eventLocation": "活動地點",
-    "startDate": "選擇開始日期",
-    "endDate": "選擇結束日期",
-    "publicEvent": "公共活動",
-    "registerable": "可註冊",
     "recurring": "再次發生的",
     "startTime": "開始時間",
     "endTime": "時間結束",
@@ -717,7 +712,18 @@
     "listView": "列表顯示",
     "calendarView": "日曆視圖",
     "allDay": "整天",
-    "eventCreated": "活動已成功創建並發布。"
+    "eventCreated": "活动创建并发布成功。",
+    "eventDetails": "活动详情",
+    "eventTitle": "标题",
+    "enterTitle": "输入标题",
+    "eventDescription": "描述",
+    "enterDescription": "输入描述",
+    "eventLocation": "地点",
+    "enterLocation": "输入位置",
+    "startDate": "开始日期",
+    "endDate": "结束日期",
+    "publicEvent": "公开",
+    "registerable": "可注册"
   },
   "userEventCard": {
     "location": "地點",
