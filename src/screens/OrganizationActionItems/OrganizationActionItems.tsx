@@ -178,15 +178,15 @@ function organizationActionItems(): JSX.Element {
               {actionItemCategoriesError
                 ? 'Action Item Categories'
                 : membersError
-                ? 'Members List'
-                : 'Action Items List'}{' '}
+                  ? 'Members List'
+                  : 'Action Items List'}{' '}
               Data
               <br />
               {actionItemCategoriesError
                 ? actionItemCategoriesError.message
                 : membersError
-                ? membersError.message
-                : actionItemsError?.message}
+                  ? membersError.message
+                  : actionItemsError?.message}
             </h6>
           </div>
         </div>

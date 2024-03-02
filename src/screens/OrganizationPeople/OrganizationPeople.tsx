@@ -242,8 +242,8 @@ function organizationPeople(): JSX.Element {
                     {state == 0
                       ? t('members')
                       : state == 1
-                      ? t('admins')
-                      : t('users')}
+                        ? t('admins')
+                        : t('users')}
                   </p>
                 </Row>
                 {memberLoading || usersLoading || adminLoading ? (
@@ -391,9 +391,9 @@ function organizationPeople(): JSX.Element {
                               ? memberData?.organizationsMemberConnection.edges
                                   .length ?? 0
                               : state === 1
-                              ? adminData?.organizationsMemberConnection.edges
-                                  .length ?? 0
-                              : usersData?.users.length ?? 0
+                                ? adminData?.organizationsMemberConnection.edges
+                                    .length ?? 0
+                                : usersData?.users.length ?? 0
                           }
                           rowsPerPage={rowsPerPage}
                           page={page}
