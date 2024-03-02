@@ -190,6 +190,15 @@ export interface InterfaceQueryOrganizationFunds {
     createdAt: string;
   }[];
 }
+export interface InterfaceFundInfo {
+  _id: string;
+  name: string;
+  refrenceNumber: string;
+  taxDeductible: boolean;
+  isArchived: boolean;
+  isDefault: boolean;
+  createdAt: string;
+}
 
 export interface InterfaceQueryOrganizationEventListItem {
   _id: string;

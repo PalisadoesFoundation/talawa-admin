@@ -1,6 +1,9 @@
 /* eslint-disable */
 import { useMutation, useQuery } from '@apollo/client';
-import { CREATE_FUND_MUTATION } from 'GraphQl/Mutations/FundMutation';
+import {
+  CREATE_FUND_MUTATION,
+  UPDATE_FUND_MUTATION,
+} from 'GraphQl/Mutations/FundMutation';
 import { ORGANIZATION_FUNDS } from 'GraphQl/Queries/OrganizationQueries';
 import Loader from 'components/Loader/Loader';
 import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
@@ -9,9 +12,11 @@ import { Button, Col, Row } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import {
   InterfaceCreateFund,
+  InterfaceFundInfo,
   InterfaceQueryOrganizationFunds,
 } from 'utils/interfaces';
 import FundCreateModal from './FundCreateModal';
+import FundUpdateModal from './FundUpdateModal';
 import styles from './OrganizationFunds.module.css';
 
 const organizationFunds = (): JSX.Element => {
@@ -19,13 +24,18 @@ const organizationFunds = (): JSX.Element => {
 
   const [fundCreateModalIsOpen, setFundCreateModalIsOpen] =
     useState<boolean>(false);
+  const [fundUpdateModalIsOpen, setFundUpdateModalIsOpen] =
+    useState<boolean>(false);
+
   const [taxDeductible, setTaxDeductible] = useState<boolean>(true);
   const [isArchived, setIsArchived] = useState<boolean>(false);
   const [isDefault, setIsDefault] = useState<boolean>(false);
+  const [fund, setFund] = useState<InterfaceFundInfo | null>(null);
   const [formState, setFormState] = useState<InterfaceCreateFund>({
     fundName: '',
     fundRef: '',
   });
+
   const {
     data: fundData,
     loading: fundLoading,
@@ -45,6 +55,7 @@ const organizationFunds = (): JSX.Element => {
   });
 
   const [createFund] = useMutation(CREATE_FUND_MUTATION);
+  const [updateFund] = useMutation(UPDATE_FUND_MUTATION);
 
   const createFundHandler = async (
     e: ChangeEvent<HTMLFormElement>,
@@ -55,7 +66,6 @@ const organizationFunds = (): JSX.Element => {
         variables: {
           name: formState.fundName,
           organizationId: currentUrl,
-          refrenceNumber: formState.fundRef,
           taxDeductible: taxDeductible,
           isArchived: isArchived,
           isDefault: isDefault,
@@ -68,8 +78,44 @@ const organizationFunds = (): JSX.Element => {
       });
       refetchFunds();
       hideCreateModal();
-
       toast.success('Fund Created Successfully');
+    } catch (error: unknown) {
+      console.error(error);
+      toast.error((error as Error).message);
+    }
+  };
+  const updateFundHandler = async (
+    e: ChangeEvent<HTMLFormElement>,
+  ): Promise<void> => {
+    e.preventDefault();
+    try {
+      const updatedFields: { [key: string]: any } = {};
+      if (formState.fundName != fund?.name) {
+        updatedFields.name = formState.fundName;
+      }
+      if (taxDeductible != fund?.taxDeductible) {
+        updatedFields.taxDeductible = taxDeductible;
+      }
+      if (isArchived != fund?.isArchived) {
+        updatedFields.isArchived = isArchived;
+      }
+      if (isDefault != fund?.isDefault) {
+        updatedFields.isDefault = isDefault;
+      }
+
+      await updateFund({
+        variables: {
+          id: fund?._id,
+          ...updatedFields,
+        },
+      });
+      setFormState({
+        fundName: '',
+        fundRef: '',
+      });
+      refetchFunds();
+      hideUpdateModal();
+      toast.success('Fund Updated Successfully');
     } catch (error: unknown) {
       console.error(error);
       toast.error((error as Error).message);
@@ -81,6 +127,23 @@ const organizationFunds = (): JSX.Element => {
   };
   const hideCreateModal = (): void => {
     setFundCreateModalIsOpen(!fundCreateModalIsOpen);
+  };
+  const showUpdateModal = (): void => {
+    setFundUpdateModalIsOpen(!fundUpdateModalIsOpen);
+  };
+  const hideUpdateModal = (): void => {
+    setFundUpdateModalIsOpen(!fundUpdateModalIsOpen);
+  };
+  const handleEditClick = (fund: InterfaceFundInfo) => {
+    setFormState({
+      fundName: fund.name,
+      fundRef: fund.refrenceNumber,
+    });
+    setTaxDeductible(fund.taxDeductible);
+    setIsArchived(fund.isArchived);
+    setIsDefault(fund.isDefault);
+    setFund(fund);
+    showUpdateModal();
   };
 
   if (fundLoading) {
@@ -143,7 +206,7 @@ const organizationFunds = (): JSX.Element => {
                         <Button
                           size="sm"
                           data-testid="editActionItemModalBtn"
-                          // onClick={() => handleEditClick(actionItem)}
+                          onClick={() => handleEditClick(fund)}
                           className="me-2"
                           variant="success"
                         >
@@ -181,12 +244,29 @@ const organizationFunds = (): JSX.Element => {
           </div>
         </div>
       </OrganizationScreen>
+
+      {/* <FundCreateModal*/}
       <FundCreateModal
         fundCreateModalIsOpen={fundCreateModalIsOpen}
         hideCreateModal={hideCreateModal}
         formState={formState}
         setFormState={setFormState}
         createFundHandler={createFundHandler}
+        taxDeductible={taxDeductible}
+        setTaxDeductible={setTaxDeductible}
+        isArchived={isArchived}
+        setIsArchived={setIsArchived}
+        isDefault={isDefault}
+        setIsDefault={setIsDefault}
+      />
+
+      {/* <FundUpdateModal*/}
+      <FundUpdateModal
+        fundUpdateModalIsOpen={fundUpdateModalIsOpen}
+        hideUpdateModal={hideUpdateModal}
+        formState={formState}
+        setFormState={setFormState}
+        updateFundHandler={updateFundHandler}
         taxDeductible={taxDeductible}
         setTaxDeductible={setTaxDeductible}
         isArchived={isArchived}
