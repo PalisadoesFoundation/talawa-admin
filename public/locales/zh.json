@@ -192,7 +192,12 @@
     "roleUpdated": "角色已更新。",
     "noResultsFoundFor": "未找到结果 ",
     "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。",
-    "cancel": "取消"
+    "cancel": "取消",
+    "admins": "管理員",
+    "members": "成員",
+    "joinNow": "现在加入",
+    "joined": "加入",
+    "withdraw": "提取"
   },
   "dashboard": {
     "title": "儀表板",
@@ -654,7 +659,9 @@
     "createdOrganizations": "創建的組織",
     "search": "搜索",
     "nothingToShow": "這裡沒有什麼可展示的。",
-    "selectOrganization": "選擇組織"
+    "selectOrganization": "選擇組織",
+    "organizations": "组织",
+    "searchByName": "按名稱搜索"
   },
   "userSidebar": {
     "yourOrganizations": "您的組織",

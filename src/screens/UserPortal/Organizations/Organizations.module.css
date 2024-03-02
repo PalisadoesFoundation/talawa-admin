@@ -6,18 +6,13 @@
   color: white;
 }
 
-.maxWidth {
-  max-width: 300px;
-}
-
 .colorLight {
   background-color: #f5f5f5;
 }
 
 .mainContainer {
-  width: 50%;
-  flex-grow: 3;
-  padding: 40px;
+  width: 75%;
+  padding: 20px;
   max-height: 100%;
   overflow: auto;
 }
@@ -25,10 +20,6 @@
 .content {
   height: fit-content;
   min-height: calc(100% - 40px);
-}
-
-.gap {
-  gap: 20px;
 }
 
 .paddingY {
@@ -45,4 +36,20 @@
 
 .backgroundWhite {
   background-color: white;
+}
+
+.input {
+  flex: 1;
+  position: relative;
+  margin-right: 10px;
+}
+
+.btnsContainer input {
+  outline: 1px solid var(--bs-gray-400);
+}
+
+@media screen and (max-width: 700px) {
+  .mainContainer {
+    width: 100%;
+  }
 }
