@@ -27,10 +27,10 @@ const httpLink = new HttpLink({
     authorization: 'Bearer ' + getItem('token') || '',
   },
 });
+
 const translations = JSON.parse(
   JSON.stringify(
-    // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-    i18nForTest.getDataByLanguage('en')?.translation.advertisement!,
+    i18nForTest.getDataByLanguage('en')?.translation?.advertisement ?? null,
   ),
 );
 

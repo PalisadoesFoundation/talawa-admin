@@ -7,6 +7,7 @@ import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
 import LoginPage from 'screens/LoginPage/LoginPage';
 import OrganizationEvents from 'screens/OrganizationEvents/OrganizationEvents';
+import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
 import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
 import OrganizationDashboard from 'screens/OrganizationDashboard/OrganizationDashboard';
 import OrgContribution from 'screens/OrgContribution/OrgContribution';
@@ -102,6 +103,10 @@ function app(): JSX.Element {
         <SecuredRoute path="/orglist" component={OrgList} />
         <SecuredRoute path="/member" component={MemberDetail} />
         <SecuredRoute path="/orgevents" component={OrganizationEvents} />
+        <SecuredRoute
+          path="/orgactionitems"
+          component={OrganizationActionItems}
+        />
         <SecuredRoute path="/orgcontribution" component={OrgContribution} />
         <SecuredRoute path="/orgpost" component={OrgPost} />
         <SecuredRoute path="/orgsetting" component={OrgSettings} />

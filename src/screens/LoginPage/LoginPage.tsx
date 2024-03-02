@@ -129,11 +129,8 @@ const loginPage = ({ role = 'user' }: InterfaceLoginPage): JSX.Element => {
   const toggleConfirmPassword = (): void =>
     setShowConfirmPassword(!showConfirmPassword);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [login, { loading: loginLoading }] = useMutation(LOGIN_MUTATION);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [recaptcha, { loading: recaptchaLoading }] =
     useMutation(RECAPTCHA_MUTATION);
 

@@ -1,9 +1,9 @@
-/* eslint-disable react/react-in-jsx-scope */
 import Calendar from './EventCalendar';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { debug } from 'jest-preview';
+import React from 'react';
 
 import {
   DELETE_EVENT_MUTATION,
