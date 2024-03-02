@@ -67,14 +67,6 @@ jobs:
     name: File count, sensitive files, and branch check
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-    
-      - name: Set up Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: 3.x
-        
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v42
@@ -116,18 +108,15 @@ jobs:
             echo "$file was deleted"
           done
                 
-              - name: Run step if all listed files above have been deleted
-                if: steps.changed-files.outputs.only_deleted == 'true'
-                env:
-                  DELETED_FILES: ${{ steps.changed-files.outputs.deleted_files }}
-                run: |
-                  for file in ${DELETED_FILES}; do
-                    echo "$file was deleted"
-                  done
-                
-              - name: Run Python script
-                run: |
-                  python .github/workflows/count_changed_files.py --base_branch "${{ github.base_ref }}" --pr_branch "${{ github.head_ref }}"   
+      - name: Run step if all listed files above have been deleted
+        if: steps.changed-files.outputs.only_deleted == 'true'
+        env:
+          DELETED_FILES: ${{ steps.changed-files.outputs.deleted_files }}
+        run: |
+          for file in ${DELETED_FILES}; do
+            echo "$file was deleted"
+          done
+              
 
   Test-Application:
     name: Test Application
