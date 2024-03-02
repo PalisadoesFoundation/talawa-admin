@@ -192,7 +192,12 @@
     "roleUpdated": "भूमिका अपडेट की गई।",
     "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला ",
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।",
-    "cancel": "रद्द करें"
+    "cancel": "रद्द करें",
+    "admins": "व्यवस्थापक",
+    "members": "सदस्य",
+    "joinNow": "अब शामिल हों",
+    "joined": "शामिल हुए",
+    "withdraw": "अनुरोध वापस लें"
   },
   "dashboard": {
     "title": "डैशबोर्ड",
@@ -654,7 +659,9 @@
     "createdOrganizations": "संगठन बनाये गये",
     "search": "खोज",
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
-    "selectOrganization": "संगठन का चयन करें"
+    "selectOrganization": "संगठन का चयन करें",
+    "organizations": "संगठन",
+    "searchByName": "नाम से खोजें"
   },
   "userSidebar": {
     "yourOrganizations": "आपके संगठन",
