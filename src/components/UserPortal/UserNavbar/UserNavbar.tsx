@@ -34,7 +34,7 @@ function userNavbar(): JSX.Element {
   const handleLogout = (): void => {
     revokeRefreshToken();
     localStorage.clear();
-    history.push('/user');
+    history.push('/');
   };
 
   return (

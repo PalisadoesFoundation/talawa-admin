@@ -4,86 +4,52 @@ import gql from 'graphql-tag';
 // display posts
 
 /**
- * GraphQL query to retrieve posts by organization.
+ * GraphQL query to retrieve the list of organizations.
  *
- * @param id - The ID of the organization for which posts are being retrieved.
- * @returns The list of posts associated with the organization.
+ * @param first - Optional. Number of organizations to retrieve in the first batch.
+ * @param skip - Optional. Number of organizations to skip before starting to collect the result set.
+ * @param filter - Optional. Filter organizations by a specified string.
+ * @param id - Optional. The ID of a specific organization to retrieve.
+ * @returns The list of organizations based on the applied filters.
  */
-
 export const ORGANIZATION_POST_LIST = gql`
-  query PostsByOrganization($id: ID!) {
-    postsByOrganization(id: $id) {
-      _id
-      title
-      text
-      imageUrl
-      videoUrl
-      creator {
-        _id
-        firstName
-        lastName
-        email
-      }
-      createdAt
-    }
-  }
-`;
-
-/**
- * GraphQL query to retrieve posts by organization with additional filtering options.
- *
- * @param id - The ID of the organization for which posts are being retrieved.
- * @param title_contains - Optional. Filter posts by title containing a specified string.
- * @param text_contains - Optional. Filter posts by text containing a specified string.
- * @returns The list of posts associated with the organization based on the applied filters.
- */
-
-export const ORGANIZATION_POST_CONNECTION_LIST = gql`
-  query PostsByOrganizationConnection(
+  query Organizations(
     $id: ID!
-    $title_contains: String
-    $text_contains: String
+    $after: String
+    $before: String
+    $first: PositiveInt
+    $last: PositiveInt
   ) {
-    postsByOrganizationConnection(
-      id: $id
-      where: { title_contains: $title_contains, text_contains: $text_contains }
-      orderBy: createdAt_DESC
-    ) {
-      edges {
-        _id
-        title
-        text
-        imageUrl
-        videoUrl
-        creator {
-          _id
-          firstName
-          lastName
-          email
-        }
-        createdAt
-        likeCount
-        commentCount
-        comments {
-          _id
-          creator {
+    organizations(id: $id) {
+      posts(after: $after, before: $before, first: $first, last: $last) {
+        edges {
+          node {
             _id
-            firstName
-            lastName
-            email
+            title
+            text
+            imageUrl
+            videoUrl
+            creator {
+              _id
+              firstName
+              lastName
+              email
+            }
+            createdAt
+            likeCount
+            commentCount
+
+            pinned
           }
-          likeCount
-          likedBy {
-            _id
-          }
-          text
+          cursor
         }
-        likedBy {
-          _id
-          firstName
-          lastName
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
         }
-        pinned
+        totalCount
       }
     }
   }
@@ -121,6 +87,29 @@ export const USER_ORGANIZATION_CONNECTION = gql`
         firstName
         lastName
       }
+      members {
+        _id
+      }
+      admins {
+        _id
+      }
+      createdAt
+      address {
+        city
+        countryCode
+        dependentLocality
+        line1
+        line2
+        postalCode
+        sortingCode
+        state
+      }
+      membershipRequests {
+        _id
+        user {
+          _id
+        }
+      }
     }
   }
 `;
@@ -153,7 +142,7 @@ export const USER_JOINED_ORGANIZATIONS = gql`
  */
 
 export const USER_CREATED_ORGANIZATIONS = gql`
-  query UserJoinedOrganizations($id: ID!) {
+  query UserCreatedOrganizations($id: ID!) {
     users(where: { id: $id }) {
       createdOrganizations {
         _id

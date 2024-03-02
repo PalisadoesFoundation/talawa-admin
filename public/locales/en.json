@@ -4,6 +4,7 @@
     "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
     "talawa_portal": "Talawa Admin Portal",
     "login": "Login",
+    "userLogin": "User Login",
     "register": "Register",
     "firstName": "First Name",
     "lastName": "Last Name",
@@ -37,36 +38,6 @@
     "uppercase_check": "Atleast one uppercase letter",
     "numeric_value_check": "Atleaset one numeric value",
     "special_char_check": "Atleast one special character"
-  },
-  "userLoginPage": {
-    "title": "Talawa Admin",
-    "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
-    "talawa_portal": "Talawa Admin Portal",
-    "login": "Login",
-    "register": "Register",
-    "firstName": "First Name",
-    "lastName": "Last Name",
-    "email": "Email",
-    "password": "Password",
-    "atleast_8_char_long": "Atleast 8 Character long",
-    "Password_and_Confirm_password_mismatches.": "Password and Confirm password mismatches.",
-    "confirmPassword": "Confirm Password",
-    "forgotPassword": "Forgot Password ?",
-    "enterEmail": "Enter Email",
-    "enterPassword": "Enter Password",
-    "doNotOwnAnAccount": "Do not own an account?",
-    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
-    "captchaError": "Captcha Error!",
-    "Please_check_the_captcha": "Please, check the captcha.",
-    "Something_went_wrong": "Something went wrong, Please try after sometime.",
-    "passwordMismatches": "Password and Confirm password mismatches.",
-    "fillCorrectly": "Fill all the Details Correctly.",
-    "notAuthorised": "Sorry! you are not Authorised!",
-    "notFound": "User not found!",
-    "successfullyRegistered": "Successfully Registered. Please wait until you will be approved.",
-    "userLogin": "User Login",
-    "afterRegister": "Successfully registered. Please wait for admin to approve your request.",
-    "OR": "OR"
   },
   "latestEvents": {
     "eventCardTitle": "Upcoming Events",
@@ -199,7 +170,12 @@
     "roleUpdated": "Role Updated.",
     "noResultsFoundFor": "No results found for ",
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "admins": "Admins",
+    "members": "Members",
+    "joinNow": "Join Now",
+    "joined": "Joined",
+    "withdraw": "Widthdraw"
   },
   "communityProfile": {
     "communityProfile": "Community Profile",
@@ -380,7 +356,9 @@
     "sortPost": "Sort Post",
     "tag": " Your browser does not support the video tag",
     "postCreatedSuccess": "Congratulations! You have Posted Something.",
-    "pinPost": "Pin post"
+    "pinPost": "Pin post",
+    "Next": "Next Page",
+    "Previous": "Previous Page"
   },
   "postNotFound": {
     "post": "Post",
@@ -666,7 +644,8 @@
     "createdOrganizations": "Created Organizations",
     "search": "Search",
     "nothingToShow": "Nothing to show here.",
-    "selectOrganization": "Select Organization"
+    "organizations": "Organizations",
+    "searchByName": "Search By Name"
   },
   "userSidebar": {
     "yourOrganizations": "Your Organizations",
@@ -716,14 +695,7 @@
     "nothingToShow": "Nothing to show here.",
     "search": "Search",
     "createEvent": "Create Event",
-    "eventTitle": "Event Title",
-    "eventDescription": "Event Description",
-    "eventLocation": "Event Location",
-    "startDate": "Select Start Date",
-    "endDate": "Select End Date",
-    "publicEvent": "Public Event",
-    "registerable": "Registerable",
-    "recurring": "Recurring",
+    "recurring": "Recurring Event",
     "startTime": "Start Time",
     "endTime": "End Time",
     "cancel": "Cancel",
@@ -731,7 +703,18 @@
     "listView": "List View",
     "calendarView": "Calendar View",
     "allDay": "All Day",
-    "eventCreated": "Event created and posted successfully."
+    "eventCreated": "Event created and posted successfully.",
+    "eventDetails": "Event Details",
+    "eventTitle": "Title",
+    "enterTitle": "Enter Title",
+    "eventDescription": "Description",
+    "enterDescription": "Enter Description",
+    "eventLocation": "Location",
+    "enterLocation": "Enter Location",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "publicEvent": "Is Public",
+    "registerable": "Is Registerable"
   },
   "userEventCard": {
     "location": "Location",

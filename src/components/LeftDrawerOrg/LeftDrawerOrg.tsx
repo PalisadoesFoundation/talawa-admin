@@ -14,8 +14,6 @@ import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import styles from './LeftDrawerOrg.module.css';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
-import useLocalStorage from 'utils/useLocalstorage';
-import Avatar from 'components/Avatar/Avatar';
 
 export interface InterfaceLeftDrawerProps {
   orgId: string;
@@ -30,6 +28,7 @@ const leftDrawerOrg = ({
   targets,
   orgId,
   hideDrawer,
+  setHideDrawer,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawerOrg' });
   const [organization, setOrganization] =
@@ -48,13 +47,11 @@ const leftDrawerOrg = ({
 
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
 
-  const { getItem } = useLocalStorage();
-
-  const userType = getItem('UserType');
-  const firstName = getItem('FirstName');
-  const lastName = getItem('LastName');
-  const userImage = getItem('UserImage');
-  const userId = getItem('id');
+  const userType = localStorage.getItem('UserType');
+  const firstName = localStorage.getItem('FirstName');
+  const lastName = localStorage.getItem('LastName');
+  const userImage = localStorage.getItem('UserImage');
+  const userId = localStorage.getItem('id');
   const history = useHistory();
 
   // Set organization data
@@ -77,15 +74,27 @@ const leftDrawerOrg = ({
   return (
     <>
       <div
-        className={`${styles.leftDrawer} customScroll ${
+        className={`${styles.leftDrawer} ${
           hideDrawer === null
             ? styles.hideElemByDefault
             : hideDrawer
-            ? styles.inactiveDrawer
-            : styles.activeDrawer
+              ? styles.inactiveDrawer
+              : styles.activeDrawer
         }`}
         data-testid="leftDrawerContainer"
       >
+        {/* Close Drawer Btn for small devices */}
+        <Button
+          variant="danger"
+          className={styles.closeModalBtn}
+          onClick={(): void => {
+            setHideDrawer(false);
+          }}
+          data-testid="closeModalBtn"
+        >
+          <i className="fa fa-times"></i>
+        </Button>
+
         {/* Branding Section */}
         <div className={styles.brandingContainer}>
           <TalawaLogo className={styles.talawaLogo} />
@@ -119,19 +128,16 @@ const leftDrawerOrg = ({
                 {organization.image ? (
                   <img src={organization.image} alt={`profile picture`} />
                 ) : (
-                  <Avatar
-                    name={organization.name}
-                    alt={'Dummy Organization Picture'}
+                  <img
+                    src={`https://api.dicebear.com/5.x/initials/svg?seed=${organization.name}`}
+                    alt={`Dummy Organization Picture`}
                   />
                 )}
               </div>
               <div className={styles.profileText}>
                 <span className={styles.primaryText}>{organization.name}</span>
                 <span className={styles.secondaryText}>
-                  {organization.address.city}, {organization.address.state}
-                  <br />
-                  {organization.address.postalCode},{' '}
-                  {organization.address.countryCode}
+                  {organization.location}
                 </span>
               </div>
             </button>
@@ -188,8 +194,8 @@ const leftDrawerOrg = ({
               {userImage && userImage !== 'null' ? (
                 <img src={userImage} alt={`profile picture`} />
               ) : (
-                <Avatar
-                  name={`${firstName} ${lastName}`}
+                <img
+                  src={`https://api.dicebear.com/5.x/initials/svg?seed=${firstName}%20${lastName}`}
                   alt={`dummy picture`}
                 />
               )}
@@ -206,7 +212,7 @@ const leftDrawerOrg = ({
           </button>
           <Button
             variant="light"
-            className={`mt-4 d-flex justify-content-start px-0 w-100 ${styles.logout}`}
+            className="mt-4 d-flex justify-content-start px-0 mb-2 w-100"
             onClick={(): void => logout()}
             data-testid="logoutBtn"
           >

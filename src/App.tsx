@@ -25,7 +25,6 @@ import MemberDetail from 'screens/MemberDetail/MemberDetail';
 import Loader from 'components/Loader/Loader';
 
 // User Portal Components
-import UserLoginPage from 'screens/UserPortal/UserLoginPage/UserLoginPage';
 import Organizations from 'screens/UserPortal/Organizations/Organizations';
 import Home from 'screens/UserPortal/Home/Home';
 import People from 'screens/UserPortal/People/People';
@@ -122,7 +121,6 @@ function app(): JSX.Element {
         <Route exact path="/forgotPassword" component={ForgotPassword} />
 
         {/* User Portal Routes */}
-        <Route exact path="/user" component={UserLoginPage} />
         <SecuredRouteForUser
           path="/user/organizations"
           component={Organizations}

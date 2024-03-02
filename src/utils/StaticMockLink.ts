@@ -96,35 +96,38 @@ export class StaticMockLink extends ApolloLink {
     }
 
     return new Observable((observer) => {
-      const timer = setTimeout(() => {
-        if (configError) {
-          try {
-            // The onError function can return false to indicate that
-            // configError need not be passed to observer.error. For
-            // example, the default implementation of onError calls
-            // observer.error(configError) and then returns false to
-            // prevent this extra (harmless) observer.error call.
-            if (this.onError(configError, observer) !== false) {
-              throw configError;
+      const timer = setTimeout(
+        () => {
+          if (configError) {
+            try {
+              // The onError function can return false to indicate that
+              // configError need not be passed to observer.error. For
+              // example, the default implementation of onError calls
+              // observer.error(configError) and then returns false to
+              // prevent this extra (harmless) observer.error call.
+              if (this.onError(configError, observer) !== false) {
+                throw configError;
+              }
+            } catch (error) {
+              observer.error(error);
             }
-          } catch (error) {
-            observer.error(error);
-          }
-        } else if (response) {
-          if (response.error) {
-            observer.error(response.error);
-          } else {
-            if (response.result) {
-              observer.next(
-                typeof response.result === 'function'
-                  ? (response.result as ResultFunction<FetchResult>)()
-                  : response.result,
-              );
+          } else if (response) {
+            if (response.error) {
+              observer.error(response.error);
+            } else {
+              if (response.result) {
+                observer.next(
+                  typeof response.result === 'function'
+                    ? (response.result as ResultFunction<FetchResult>)()
+                    : response.result,
+                );
+              }
+              observer.complete();
             }
-            observer.complete();
           }
-        }
-      }, (response && response.delay) || 0);
+        },
+        (response && response.delay) || 0,
+      );
 
       return () => {
         clearTimeout(timer);
