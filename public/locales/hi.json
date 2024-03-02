@@ -652,7 +652,8 @@
     "createdOrganizations": "संगठन बनाये गये",
     "search": "खोज",
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
-    "selectOrganization": "संगठन का चयन करें"
+    "selectOrganization": "संगठन का चयन करें",
+    "filter": "फिल्टर"
   },
   "userSidebar": {
     "yourOrganizations": "आपके संगठन",

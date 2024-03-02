@@ -653,9 +653,10 @@
     "allOrganizations": "All Organizations",
     "joinedOrganizations": "Joined Organizations",
     "createdOrganizations": "Created Organizations",
-    "search": "Search",
+    "search": "Search users",
     "nothingToShow": "Nothing to show here.",
-    "selectOrganization": "Select Organization"
+    "selectOrganization": "Select Organization",
+    "filter": "Filter"
   },
   "userSidebar": {
     "yourOrganizations": "Your Organizations",

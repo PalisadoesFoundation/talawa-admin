@@ -652,7 +652,8 @@
     "createdOrganizations": "創建的組織",
     "search": "搜索",
     "nothingToShow": "這裡沒有什麼可展示的。",
-    "selectOrganization": "選擇組織"
+    "selectOrganization": "選擇組織",
+    "filter": "過濾"
   },
   "userSidebar": {
     "yourOrganizations": "您的組織",

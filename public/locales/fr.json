@@ -650,7 +650,8 @@
     "createdOrganizations": "Organisations créées",
     "search": "Recherche",
     "nothingToShow": "Rien à montrer ici.",
-    "selectOrganization": "Sélectionnez une organisation"
+    "selectOrganization": "Sélectionnez une organisation",
+    "filter": "Filtre"
   },
   "userSidebar": {
     "yourOrganizations": "Vos organisations",

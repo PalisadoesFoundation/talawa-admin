@@ -10,17 +10,24 @@ import {
   ORGANIZATION_ADMINS_LIST,
 } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
-import { SearchOutlined } from '@mui/icons-material';
+import {
+  FilterAlt,
+  FilterAltOutlined,
+  SearchOutlined,
+} from '@mui/icons-material';
 import styles from './People.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import getOrganizationId from 'utils/getOrganizationId';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 interface InterfaceOrganizationCardProps {
   id: string;
   name: string;
   image: string;
   email: string;
+  role: string;
+  sno: string;
 }
 
 export default function people(): JSX.Element {
@@ -32,6 +39,15 @@ export default function people(): JSX.Element {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [members, setMembers] = React.useState([]);
   const [mode, setMode] = React.useState(0);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = (): void => {
+    setOpen(false);
+  };
+
+  const handleOpen = (): void => {
+    setOpen(true);
+  };
 
   const organizationId = getOrganizationId(window.location.href);
 
@@ -118,20 +134,21 @@ export default function people(): JSX.Element {
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
         <UserSidebar />
         <div className={`${styles.colorLight} ${styles.mainContainer}`}>
+          <h1>People</h1>
           <div
-            className={`d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}
+            className={`mt-4 d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}
           >
-            <InputGroup className={styles.maxWidth}>
+            <InputGroup className={`${styles.maxWidth} ${styles.shadow}`}>
               <Form.Control
                 placeholder={t('search')}
                 id="searchPeople"
                 type="text"
-                className={`${styles.borderNone} ${styles.backgroundWhite}`}
+                className={`${styles.borderBox} ${styles.backgroundWhite} ${styles.placeholderColor}`}
                 onKeyUp={handleSearchByEnter}
                 data-testid="searchInput"
               />
               <InputGroup.Text
-                className={`${styles.colorPrimary} ${styles.borderNone}`}
+                className={`${styles.colorPrimary} ${styles.borderRounded5}`}
                 style={{ cursor: 'pointer' }}
                 onClick={handleSearchByBtnClick}
                 data-testid="searchBtn"
@@ -141,12 +158,12 @@ export default function people(): JSX.Element {
             </InputGroup>
             <Dropdown drop="down-centered">
               <Dropdown.Toggle
-                className={`${styles.colorPrimary} ${styles.borderNone}`}
-                variant="success"
+                className={`${styles.greenBorder} ${styles.backgroundWhite} ${styles.colorGreen} ${styles.semiBold} ${styles.shadow} ${styles.borderRounded8}`}
                 id="dropdown-basic"
                 data-testid={`modeChangeBtn`}
               >
-                {modes[mode]}
+                <FilterAltOutlined />
+                {t('filter').toUpperCase()}
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 {modes.map((value, index) => {
@@ -163,11 +180,22 @@ export default function people(): JSX.Element {
               </Dropdown.Menu>
             </Dropdown>
           </div>
-          <div
-            className={`d-flex flex-column justify-content-between ${styles.content}`}
-          >
+          <div className={`d-flex flex-column ${styles.content}`}>
             <div
-              className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
+              className={`d-flex border py-3 px-4 mt-4 bg-white ${styles.topRadius}`}
+            >
+              <span style={{ flex: '1' }} className="d-flex">
+                <span style={{ flex: '1' }}>S.No</span>
+                <span style={{ flex: '1' }}>Avatar</span>
+              </span>
+              {/* <span style={{ flex: '1' }}>Avatar</span> */}
+              <span style={{ flex: '2' }}>Name</span>
+              <span style={{ flex: '2' }}>Email</span>
+              <span style={{ flex: '2' }}>Role</span>
+            </div>
+
+            <div
+              className={`d-flex flex-column border px-4 p-3 mt-0 ${styles.gap} ${styles.bottomRadius} ${styles.backgroundWhite}`}
             >
               {loading ? (
                 <div className={`d-flex flex-row justify-content-center`}>
@@ -191,6 +219,8 @@ export default function people(): JSX.Element {
                         image: member.image,
                         id: member._id,
                         email: member.email,
+                        role: member.role,
+                        sno: (index + 1).toString(),
                       };
                       return <PeopleCard key={index} {...cardProps} />;
                     })
@@ -218,7 +248,7 @@ export default function people(): JSX.Element {
             </table>
           </div>
         </div>
-        <OrganizationSidebar />
+        {/* <OrganizationSidebar /> */}
       </div>
     </>
   );
