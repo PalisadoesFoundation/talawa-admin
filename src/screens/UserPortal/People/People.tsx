@@ -1,6 +1,5 @@
 import React from 'react';
 import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
-import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/OrganizationSidebar';
 import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import { Dropdown, Form, InputGroup } from 'react-bootstrap';
@@ -10,11 +9,7 @@ import {
   ORGANIZATION_ADMINS_LIST,
 } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
-import {
-  FilterAlt,
-  FilterAltOutlined,
-  SearchOutlined,
-} from '@mui/icons-material';
+import { FilterAltOutlined, SearchOutlined } from '@mui/icons-material';
 import styles from './People.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
