@@ -369,7 +369,9 @@
     "sortPost": "Sort Post",
     "tag": " Your browser does not support the video tag",
     "postCreatedSuccess": "Congratulations! You have Posted Something.",
-    "pinPost": "Pin post"
+    "pinPost": "Pin post",
+    "Next": "Next Page",
+    "Previous": "Previous Page"
   },
   "postNotFound": {
     "post": "Post",
@@ -705,14 +707,7 @@
     "nothingToShow": "Nothing to show here.",
     "search": "Search",
     "createEvent": "Create Event",
-    "eventTitle": "Event Title",
-    "eventDescription": "Event Description",
-    "eventLocation": "Event Location",
-    "startDate": "Select Start Date",
-    "endDate": "Select End Date",
-    "publicEvent": "Public Event",
-    "registerable": "Registerable",
-    "recurring": "Recurring",
+    "recurring": "Recurring Event",
     "startTime": "Start Time",
     "endTime": "End Time",
     "cancel": "Cancel",
@@ -720,7 +715,18 @@
     "listView": "List View",
     "calendarView": "Calendar View",
     "allDay": "All Day",
-    "eventCreated": "Event created and posted successfully."
+    "eventCreated": "Event created and posted successfully.",
+    "eventDetails": "Event Details",
+    "eventTitle": "Title",
+    "enterTitle": "Enter Title",
+    "eventDescription": "Description",
+    "enterDescription": "Enter Description",
+    "eventLocation": "Location",
+    "enterLocation": "Enter Location",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "publicEvent": "Is Public",
+    "registerable": "Is Registerable"
   },
   "userEventCard": {
     "location": "Location",

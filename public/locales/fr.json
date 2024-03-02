@@ -364,7 +364,9 @@
     "sortPost": "Trier les publications",
     "tag": "Votre navigateur ne prend pas en charge la balise vidéo",
     "postCreatedSuccess": "Félicitations ! Vous avez publié quelque chose.",
-    "pinPost": "Épingler le message"
+    "pinPost": "Épingler le message",
+    "Next": "Suivant ",
+    "Previous": "Précédent"
   },
   "postNotFound": {
     "post": "Poste",
@@ -700,13 +702,6 @@
     "nothingToShow": "Rien à montrer ici.",
     "search": "Recherche",
     "createEvent": "Créer un évènement",
-    "eventTitle": "Titre de l'événement",
-    "eventDescription": "Description de l'évenement",
-    "eventLocation": "Lieu de l'événement",
-    "startDate": "Sélectionnez la date de début",
-    "endDate": "Sélectionnez la date de fin",
-    "publicEvent": "Évennement publique",
-    "registerable": "Enregistrable",
     "recurring": "Récurrente",
     "startTime": "Heure de début",
     "endTime": "Heure de fin",
@@ -715,7 +710,18 @@
     "listView": "Vue en liste",
     "calendarView": "Vue du calendrier",
     "allDay": "Toute la journée",
-    "eventCreated": "Événement créé et publié avec succès."
+    "eventCreated": "Événement créé et publié avec succès.",
+    "eventDetails": "Détails de l'événement",
+    "eventTitle": "Titre",
+    "enterTitle": "Entrez le titre",
+    "eventDescription": "Description",
+    "enterDescription": "Entrez la description",
+    "eventLocation": "Emplacement",
+    "enterLocation": "Entrez l'emplacement",
+    "startDate": "Date de début",
+    "endDate": "Date de fin",
+    "publicEvent": "Est public",
+    "registerable": "Est enregistrable"
   },
   "userEventCard": {
     "location": "Emplacement",
