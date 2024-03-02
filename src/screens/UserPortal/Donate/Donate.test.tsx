@@ -55,8 +55,40 @@ const MOCKS = [
             image: '',
             name: 'anyOrganization2',
             description: 'desc',
+            address: {
+              city: 'abc',
+              countryCode: '123',
+              postalCode: '456',
+              state: 'def',
+              dependentLocality: 'ghi',
+              line1: 'asdfg',
+              line2: 'dfghj',
+              sortingCode: '4567',
+            },
             userRegistrationRequired: true,
+            createdAt: '12345678900',
             creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
+            members: [
+              {
+                _id: '56gheqyr7deyfuiwfewifruy8',
+                user: {
+                  _id: '45ydeg2yet721rtgdu32ry',
+                },
+              },
+            ],
+            admins: [
+              {
+                _id: '45gj5678jk45678fvgbhnr4rtgh',
+              },
+            ],
+            membershipRequests: [
+              {
+                _id: '56gheqyr7deyfuiwfewifruy8',
+                user: {
+                  _id: '45ydeg2yet721rtgdu32ry',
+                },
+              },
+            ],
           },
         ],
       },
