@@ -1,72 +1,13 @@
 import dotenv from 'dotenv';
 import fs from 'fs';
 import inquirer from 'inquirer';
-import fetch from 'node-fetch';
+import { checkConnection } from './src/setup/checkConnection/checkConnection';
+import { askForTalawaApiUrl } from './src/setup/askForTalawaApiUrl/askForTalawaApiUrl';
+import { checkEnvFile } from './src/setup/checkEnvFile/checkEnvFile';
+import { validateRecaptcha } from './src/setup/validateRecaptcha/validateRecaptcha';
+import { askForCustomPort } from './src/setup/askForCustomPort/askForCustomPort';
 
-dotenv.config();
-
-// Check Talawa API Connection
-async function checkConnection(url: string): Promise<any> {
-  console.log('\nChecking Talawa-API connection....');
-  let isConnected = false;
-  await fetch(url)
-    .then(() => {
-      isConnected = true;
-      console.log('\nConnection to Talawa-API successful! 🎉');
-    })
-    .catch(() => {
-      console.log(
-        '\nTalawa-API service is unavailable. Is it running? Check your network connectivity too.',
-      );
-    });
-  return isConnected;
-}
-
-async function askForTalawaApiUrl(): Promise<string> {
-  const { endpoint } = await inquirer.prompt([
-    {
-      type: 'input',
-      name: 'endpoint',
-      message: 'Enter your talawa-api endpoint:',
-      default: 'http://localhost:4000/graphql/',
-    },
-  ]);
-  return endpoint;
-}
-
-async function askForCustomPort(): Promise<number> {
-  const { customPort } = await inquirer.prompt([
-    {
-      type: 'input',
-      name: 'customPort',
-      message:
-        'Enter custom port for development server (leave blank for default 4321):',
-      default: 4321,
-    },
-  ]);
-  return customPort;
-}
-
-// Check if all the fields in .env.example are present in .env
-function checkEnvFile(): void {
-  const env = dotenv.parse(fs.readFileSync('.env'));
-  const envSample = dotenv.parse(fs.readFileSync('.env.example'));
-  const misplaced = Object.keys(envSample).filter((key) => !(key in env));
-  if (misplaced.length > 0) {
-    const config = dotenv.parse(fs.readFileSync('.env.example'));
-    misplaced.map((key) =>
-      fs.appendFileSync('.env', `${key}=${config[key]}\n`),
-    );
-  }
-}
-
-// Validate ReCaptcha
-function validateRecaptcha(string: string): boolean {
-  const pattern = /^[a-zA-Z0-9_-]{40}$/;
-  return pattern.test(string);
-}
-
-async function main(): Promise<void> {
+export async function main(): Promise<void> {
   console.log('Welcome to the Talawa Admin setup! 🚀');
 
   if (!fs.existsSync('.env')) {

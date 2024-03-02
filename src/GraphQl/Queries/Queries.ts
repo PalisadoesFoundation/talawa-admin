@@ -585,17 +585,21 @@ export { ACTION_ITEM_CATEGORY_LIST } from './ActionItemCategoryQueries';
 export { ACTION_ITEM_LIST } from './ActionItemQueries';
 
 // to take the list of the blocked users
-export { PLUGIN_GET } from './PlugInQueries';
-export { ADVERTISEMENTS_GET } from './PlugInQueries';
-export { ORGANIZATION_EVENTS_CONNECTION } from './PlugInQueries';
-export { DIRECT_CHATS_LIST } from './PlugInQueries';
-export { IS_SAMPLE_ORGANIZATION_QUERY } from './PlugInQueries';
-export { ORGANIZATION_CUSTOM_FIELDS } from './PlugInQueries';
+export {
+  ADVERTISEMENTS_GET,
+  DIRECT_CHATS_LIST,
+  IS_SAMPLE_ORGANIZATION_QUERY,
+  ORGANIZATION_CUSTOM_FIELDS,
+  ORGANIZATION_EVENTS_CONNECTION,
+  PLUGIN_GET,
+} from './PlugInQueries';
 
 // display posts
 export { ORGANIZATION_POST_LIST } from './OrganizationQueries';
-export { ORGANIZATION_POST_CONNECTION_LIST } from './OrganizationQueries';
-export { USER_ORGANIZATION_CONNECTION } from './OrganizationQueries';
-export { USER_JOINED_ORGANIZATIONS } from './OrganizationQueries';
-export { USER_CREATED_ORGANIZATIONS } from './OrganizationQueries';
-export { ORGANIZATION_ADMINS_LIST } from './OrganizationQueries';
+
+export {
+  ORGANIZATION_ADMINS_LIST,
+  USER_CREATED_ORGANIZATIONS,
+  USER_JOINED_ORGANIZATIONS,
+  USER_ORGANIZATION_CONNECTION,
+} from './OrganizationQueries';

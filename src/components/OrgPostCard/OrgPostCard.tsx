@@ -1,24 +1,25 @@
-import type { ChangeEvent } from 'react';
-import React, { useEffect, useState, useRef } from 'react';
 import { useMutation } from '@apollo/client';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import Card from 'react-bootstrap/Card';
-import { toast } from 'react-toastify';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CloseIcon from '@mui/icons-material/Close';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PushPinIcon from '@mui/icons-material/PushPin';
-import AboutImg from 'assets/images/defaultImg.png';
 import {
   DELETE_POST_MUTATION,
-  UPDATE_POST_MUTATION,
   TOGGLE_PINNED_POST,
+  UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { useTranslation } from 'react-i18next';
-import { errorHandler } from 'utils/errorHandler';
-import styles from './OrgPostCard.module.css';
+import AboutImg from 'assets/images/defaultImg.png';
+import type { ChangeEvent } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Form } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import Modal from 'react-bootstrap/Modal';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
+import { errorHandler } from 'utils/errorHandler';
+import type { InterfacePostForm } from 'utils/interfaces';
+import styles from './OrgPostCard.module.css';
 
 interface InterfaceOrgPostCardProps {
   key: string;
@@ -26,21 +27,22 @@ interface InterfaceOrgPostCardProps {
   postTitle: string;
   postInfo: string;
   postAuthor: string;
-  postPhoto: string;
-  postVideo: string;
+  postPhoto: string | null;
+  postVideo: string | null;
   pinned: boolean;
 }
 
 export default function orgPostCard(
   props: InterfaceOrgPostCardProps,
 ): JSX.Element {
-  const [postformState, setPostFormState] = useState({
+  const [postformState, setPostFormState] = useState<InterfacePostForm>({
     posttitle: '',
     postinfo: '',
     postphoto: '',
     postvideo: '',
     pinned: false,
   });
+  // console.log('postformState', postformState);
   const [postPhotoUpdated, setPostPhotoUpdated] = useState(false);
   const [postVideoUpdated, setPostVideoUpdated] = useState(false);
   const [togglePost, setPostToggle] = useState('Read more');
@@ -155,6 +157,7 @@ export default function orgPostCard(
   }
 
   useEffect(() => {
+    // console.log(props.postPhoto);
     setPostFormState({
       posttitle: props.postTitle,
       postinfo: props.postInfo,

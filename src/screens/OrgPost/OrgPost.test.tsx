@@ -1,112 +1,135 @@
-import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { BrowserRouter } from 'react-router-dom';
-import { act, render, screen, fireEvent } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Provider } from 'react-redux';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
-
-import OrgPost from './OrgPost';
-import { store } from 'state/store';
-import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import React from 'react';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
-import i18nForTest from 'utils/i18nForTest';
-import { StaticMockLink } from 'utils/StaticMockLink';
+import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
 import { ToastContainer } from 'react-toastify';
-
+import { store } from 'state/store';
+import { StaticMockLink } from 'utils/StaticMockLink';
+import i18nForTest from 'utils/i18nForTest';
+import OrgPost from './OrgPost';
 const MOCKS = [
   {
     request: {
-      query: ORGANIZATION_POST_CONNECTION_LIST,
+      query: ORGANIZATION_POST_LIST,
       variables: {
         id: undefined,
-        title_contains: '',
-        text_contains: '',
+        after: null,
+        before: null,
+        first: 6,
+        last: null,
       },
     },
     result: {
       data: {
-        postsByOrganizationConnection: {
-          edges: [
-            {
-              _id: '6411e53835d7ba2344a78e21',
-              title: 'postone',
-              text: 'This is the first post',
-              imageUrl: null,
-              videoUrl: null,
-              createdAt: '2023-08-24T09:26:56.524+00:00',
-              creator: {
-                _id: '640d98d9eb6a743d75341067',
-                firstName: 'Aditya',
-                lastName: 'Shelke',
-                email: 'adidacreator1@gmail.com',
+        organizations: [
+          {
+            posts: {
+              edges: [
+                {
+                  node: {
+                    _id: '6411e53835d7ba2344a78e21',
+                    title: 'postone',
+                    text: 'This is the first post',
+                    imageUrl: null,
+                    videoUrl: null,
+                    createdAt: '2023-08-24T09:26:56.524+00:00',
+                    creator: {
+                      _id: '640d98d9eb6a743d75341067',
+                      firstName: 'Aditya',
+                      lastName: 'Shelke',
+                      email: 'adidacreator1@gmail.com',
+                    },
+                    likeCount: 0,
+                    commentCount: 0,
+                    comments: [],
+                    pinned: true,
+                    likedBy: [],
+                  },
+                  cursor: '6411e53835d7ba2344a78e21',
+                },
+                {
+                  node: {
+                    _id: '6411e54835d7ba2344a78e29',
+                    title: 'posttwo',
+                    text: 'Tis is the post two',
+                    imageUrl: null,
+                    videoUrl: null,
+                    createdAt: '2023-08-24T09:26:56.524+00:00',
+                    creator: {
+                      _id: '640d98d9eb6a743d75341067',
+                      firstName: 'Aditya',
+                      lastName: 'Shelke',
+                      email: 'adidacreator1@gmail.com',
+                    },
+                    likeCount: 0,
+                    commentCount: 0,
+                    pinned: false,
+                    likedBy: [],
+                    comments: [],
+                  },
+                  cursor: '6411e54835d7ba2344a78e29',
+                },
+                {
+                  node: {
+                    _id: '6411e54835d7ba2344a78e30',
+                    title: 'posttwo',
+                    text: 'Tis is the post two',
+                    imageUrl: null,
+                    videoUrl: null,
+                    createdAt: '2023-08-24T09:26:56.524+00:00',
+                    creator: {
+                      _id: '640d98d9eb6a743d75341067',
+                      firstName: 'Aditya',
+                      lastName: 'Shelke',
+                      email: 'adidacreator1@gmail.com',
+                    },
+                    likeCount: 0,
+                    commentCount: 0,
+                    pinned: true,
+                    likedBy: [],
+                    comments: [],
+                  },
+                  cursor: '6411e54835d7ba2344a78e30',
+                },
+                {
+                  node: {
+                    _id: '6411e54835d7ba2344a78e31',
+                    title: 'posttwo',
+                    text: 'Tis is the post two',
+                    imageUrl: null,
+                    videoUrl: null,
+                    createdAt: '2023-08-24T09:26:56.524+00:00',
+                    creator: {
+                      _id: '640d98d9eb6a743d75341067',
+                      firstName: 'Aditya',
+                      lastName: 'Shelke',
+                      email: 'adidacreator1@gmail.com',
+                    },
+                    likeCount: 0,
+                    commentCount: 0,
+                    pinned: false,
+                    likedBy: [],
+                    comments: [],
+                  },
+                  cursor: '6411e54835d7ba2344a78e31',
+                },
+              ],
+              pageInfo: {
+                startCursor: '6411e53835d7ba2344a78e21',
+                endCursor: '6411e54835d7ba2344a78e31',
+                hasNextPage: false,
+                hasPreviousPage: false,
               },
-              likeCount: 0,
-              commentCount: 0,
-              comments: [],
-              pinned: true,
-              likedBy: [],
+              totalCount: 4,
             },
-            {
-              _id: '6411e54835d7ba2344a78e29',
-              title: 'posttwo',
-              text: 'Tis is the post two',
-              imageUrl: null,
-              videoUrl: null,
-              createdAt: '2023-08-24T09:26:56.524+00:00',
-              creator: {
-                _id: '640d98d9eb6a743d75341067',
-                firstName: 'Aditya',
-                lastName: 'Shelke',
-                email: 'adidacreator1@gmail.com',
-              },
-              likeCount: 0,
-              commentCount: 0,
-              pinned: false,
-              likedBy: [],
-              comments: [],
-            },
-            {
-              _id: '6411e54835d7ba2344a78e30',
-              title: 'posttwo',
-              text: 'Tis is the post two',
-              imageUrl: null,
-              videoUrl: null,
-              createdAt: '2023-08-24T09:26:56.524+00:00',
-              creator: {
-                _id: '640d98d9eb6a743d75341067',
-                firstName: 'Aditya',
-                lastName: 'Shelke',
-                email: 'adidacreator1@gmail.com',
-              },
-              likeCount: 0,
-              commentCount: 0,
-              pinned: true,
-              likedBy: [],
-              comments: [],
-            },
-            {
-              _id: '6411e54835d7ba2344a78e31',
-              title: 'posttwo',
-              text: 'Tis is the post two',
-              imageUrl: null,
-              videoUrl: null,
-              createdAt: '2023-08-24T09:26:56.524+00:00',
-              creator: {
-                _id: '640d98d9eb6a743d75341067',
-                firstName: 'Aditya',
-                lastName: 'Shelke',
-                email: 'adidacreator1@gmail.com',
-              },
-              likeCount: 0,
-              commentCount: 0,
-              pinned: false,
-              likedBy: [],
-              comments: [],
-            },
-          ],
-        },
+          },
+        ],
       },
     },
   },
@@ -164,27 +187,29 @@ describe('Organisation Post Page', () => {
   };
 
   test('correct mock data should be queried', async () => {
-    const dataQuery1 =
-      MOCKS[0]?.result?.data?.postsByOrganizationConnection.edges[0];
+    const dataQuery1 = MOCKS[0]?.result?.data?.organizations[0].posts.edges[0];
 
     expect(dataQuery1).toEqual({
-      _id: '6411e53835d7ba2344a78e21',
-      title: 'postone',
-      text: 'This is the first post',
-      imageUrl: null,
-      videoUrl: null,
-      createdAt: '2023-08-24T09:26:56.524+00:00',
-      creator: {
-        _id: '640d98d9eb6a743d75341067',
-        firstName: 'Aditya',
-        lastName: 'Shelke',
-        email: 'adidacreator1@gmail.com',
+      node: {
+        _id: '6411e53835d7ba2344a78e21',
+        title: 'postone',
+        text: 'This is the first post',
+        imageUrl: null,
+        videoUrl: null,
+        createdAt: '2023-08-24T09:26:56.524+00:00',
+        creator: {
+          _id: '640d98d9eb6a743d75341067',
+          firstName: 'Aditya',
+          lastName: 'Shelke',
+          email: 'adidacreator1@gmail.com',
+        },
+        likeCount: 0,
+        commentCount: 0,
+        pinned: true,
+        likedBy: [],
+        comments: [],
       },
-      likeCount: 0,
-      commentCount: 0,
-      pinned: true,
-      likedBy: [],
-      comments: [],
+      cursor: '6411e53835d7ba2344a78e21',
     });
   });
 

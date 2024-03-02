@@ -4,6 +4,7 @@
     "fromPalisadoes": "柵欄 基金会志愿者的开源应用程序",
     "talawa_portal": "塔拉瓦管理門戶",
     "login": "登錄",
+    "userLogin": "用户登录",
     "register": "登記",
     "firstName": "名",
     "lastName": "姓",
@@ -37,36 +38,6 @@
     "uppercase_check": "至少有一個大寫字母",
     "numeric_value_check": "至少一個數值",
     "special_char_check": "至少一個特殊字符"
-  },
-  "userLoginPage": {
-    "title": "塔拉瓦管理員",
-    "fromPalisadoes": "柵欄 基金会志愿者的开源应用程序",
-    "talawa_portal": "塔拉瓦管理門戶",
-    "login": "登錄",
-    "register": "登記",
-    "firstName": "名",
-    "lastName": "姓",
-    "email": "電子郵件",
-    "password": "密碼",
-    "atleast_8_char_long": "至少 8 個字符長",
-    "Password_and_Confirm_password_mismatches.": "密碼和確認密碼不匹配。",
-    "confirmPassword": "確認密碼",
-    "forgotPassword": "忘記密碼 ？",
-    "enterEmail": "输入电子邮件",
-    "enterPassword": "输入密码",
-    "doNotOwnAnAccount": "沒有帳戶嗎？",
-    "talawaApiUnavailable": "服務不可用。它正在運行嗎？還要檢查您的網絡連接。",
-    "captchaError": "驗證碼錯誤！",
-    "Please_check_the_captcha": "請檢查驗證碼。",
-    "Something_went_wrong": "出了點問題，請稍後再試。",
-    "passwordMismatches": "密碼和確認密碼不匹配。",
-    "fillCorrectly": "正確填寫所有細節。",
-    "notAuthorised": "抱歉！你沒有被授權！",
-    "notFound": "找不到用戶！",
-    "successfullyRegistered": "註冊成功，請等待審核通過。",
-    "userLogin": "用户登录",
-    "afterRegister": "註冊成功。 請等待管理員批准您的請求。",
-    "OR": "或者"
   },
   "latestEvents": {
     "eventCardTitle": "即将举行的活动",
@@ -192,7 +163,12 @@
     "roleUpdated": "角色已更新。",
     "noResultsFoundFor": "未找到结果 ",
     "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。",
-    "cancel": "取消"
+    "cancel": "取消",
+    "admins": "管理員",
+    "members": "成員",
+    "joinNow": "现在加入",
+    "joined": "加入",
+    "withdraw": "提取"
   },
   "dashboard": {
     "title": "儀表板",
@@ -226,7 +202,10 @@
     "searchName": "輸入名字",
     "searchevent": "輸入事件",
     "searchFirstName": "输入名字",
-    "searchLastName": "输入姓氏"
+    "searchLastName": "输入姓氏",
+    "people": "人",
+    "sort": "按角色搜索",
+    "actions": "操作"
   },
   "userListCard": {
     "joined": "加入",
@@ -365,7 +344,9 @@
     "sortPost": "排序帖子",
     "tag": "您的浏览器不支持视频标签",
     "postCreatedSuccess": "恭喜！您已经发布了一些内容。",
-    "pinPost": "针柱"
+    "pinPost": "针柱",
+    "Next": "下一页",
+    "Previous": "上一页"
   },
   "postNotFound": {
     "post": "郵政",
@@ -653,7 +634,9 @@
     "search": "搜索",
     "nothingToShow": "這裡沒有什麼可展示的。",
     "selectOrganization": "選擇組織",
-    "filter": "過濾"
+    "filter": "過濾",
+    "organizations": "组织",
+    "searchByName": "按名稱搜索"
   },
   "userSidebar": {
     "yourOrganizations": "您的組織",
@@ -703,13 +686,6 @@
     "nothingToShow": "這裡沒有什麼可顯示的。",
     "search": "搜索",
     "createEvent": "創建事件",
-    "eventTitle": "活動標題",
-    "eventDescription": "活動說明",
-    "eventLocation": "活動地點",
-    "startDate": "選擇開始日期",
-    "endDate": "選擇結束日期",
-    "publicEvent": "公共活動",
-    "registerable": "可註冊",
     "recurring": "再次發生的",
     "startTime": "開始時間",
     "endTime": "時間結束",
@@ -718,7 +694,18 @@
     "listView": "列表顯示",
     "calendarView": "日曆視圖",
     "allDay": "整天",
-    "eventCreated": "活動已成功創建並發布。"
+    "eventCreated": "活动创建并发布成功。",
+    "eventDetails": "活动详情",
+    "eventTitle": "标题",
+    "enterTitle": "输入标题",
+    "eventDescription": "描述",
+    "enterDescription": "输入描述",
+    "eventLocation": "地点",
+    "enterLocation": "输入位置",
+    "startDate": "开始日期",
+    "endDate": "结束日期",
+    "publicEvent": "公开",
+    "registerable": "可注册"
   },
   "userEventCard": {
     "location": "地點",
