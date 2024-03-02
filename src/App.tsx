@@ -97,7 +97,7 @@ function app(): JSX.Element {
   return (
     <>
       <Switch>
-        <Route exact path="/" component={() => <LoginPage role="admin" />} />
+        <Route exact path="/" component={LoginPage} />
         <SecuredRoute path="/orgdash" component={OrganizationDashboard} />
         <SecuredRoute path="/orgpeople" component={OrganizationPeople} />
         <SecuredRoute path="/orglist" component={OrgList} />
@@ -119,7 +119,6 @@ function app(): JSX.Element {
         <Route exact path="/forgotPassword" component={ForgotPassword} />
 
         {/* User Portal Routes */}
-        <Route exact path="/user" component={LoginPage} />
         <SecuredRouteForUser
           path="/user/organizations"
           component={Organizations}

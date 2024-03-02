@@ -41,11 +41,7 @@ import styles from './LoginPage.module.css';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import useLocalStorage from 'utils/useLocalstorage';
 
-interface InterfaceLoginPage {
-  role?: string;
-}
-
-const loginPage = ({ role = 'user' }: InterfaceLoginPage): JSX.Element => {
+const loginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
   const history = useHistory();
 
@@ -60,6 +56,7 @@ const loginPage = ({ role = 'user' }: InterfaceLoginPage): JSX.Element => {
     specialChar: boolean;
   };
   const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
+  const [role, setRole] = useState<'admin' | 'user'>('admin');
   const [componentLoader, setComponentLoader] = useState(true);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [signformState, setSignFormState] = useState({
@@ -113,6 +110,10 @@ const loginPage = ({ role = 'user' }: InterfaceLoginPage): JSX.Element => {
       ...prevAlert,
       specialChar: !passwordValidationRegExp.specialCharRegExp.test(pass),
     }));
+  };
+
+  const handleRoleToggle = (role: 'admin' | 'user'): void => {
+    setRole(role);
   };
 
   const recaptchaRef = useRef<ReCAPTCHA>(null);
@@ -396,7 +397,7 @@ const loginPage = ({ role = 'user' }: InterfaceLoginPage): JSX.Element => {
                 }`}
               />
 
-              <LoginPortalToggle />
+              <LoginPortalToggle onToggle={handleRoleToggle} />
 
               {/* LOGIN FORM */}
               <div
