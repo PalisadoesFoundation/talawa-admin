@@ -192,7 +192,12 @@
     "roleUpdated": "भूमिका अपडेट की गई।",
     "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला ",
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।",
-    "cancel": "रद्द करें"
+    "cancel": "रद्द करें",
+    "admins": "व्यवस्थापक",
+    "members": "सदस्य",
+    "joinNow": "अब शामिल हों",
+    "joined": "शामिल हुए",
+    "withdraw": "अनुरोध वापस लें"
   },
   "dashboard": {
     "title": "डैशबोर्ड",
@@ -281,6 +286,41 @@
     "eventCreated": "बधाई हो! इवेंट बनाया गया है।",
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।"
   },
+  "organizationActionItems": {
+    "actionItemCategory": "कार्य आइटम श्रेणी",
+    "actionItemDetails": "कार्य आइटम विवरण",
+    "assignee": "सौंपने वाला",
+    "assigner": "निर्धारक",
+    "assignmentDate": "सौंपने की तारीख",
+    "active": "सक्रिय",
+    "clearFilters": "फ़िल्टर हटाएं",
+    "close": "बंद करें",
+    "completed": "पूरा हुआ",
+    "completionDate": "समापन तिथि",
+    "createActionItem": "बनाएं",
+    "deleteActionItem": "कार्य आइटम हटाएं",
+    "deleteActionItemMsg": "क्या आप इस कार्य आइटम को हटाना चाहते हैं?",
+    "details": "विवरण",
+    "dueDate": "नियत तारीख",
+    "earliest": "सबसे पहले",
+    "editActionItem": "कार्य आइटम संपादित करें",
+    "isCompleted": "पूरा हुआ",
+    "latest": "नवीनतम",
+    "no": "नहीं",
+    "noActionItems": "कोई कार्य आइटम नहीं",
+    "options": "विकल्प",
+    "preCompletionNotes": "समापन से पहले के नोट्स",
+    "postCompletionNotes": "समापन के बाद के नोट्स",
+    "searchByName": "नाम से खोजें",
+    "selectActionItemCategory": "कार्य आइटम श्रेणी का चयन करें",
+    "selectAssignee": "सौंपने वाला चुनें",
+    "status": "स्थिति",
+    "successfulCreation": "कार्य आइटम सफलतापूर्वक बनाया गया",
+    "successfulUpdation": "कार्य आइटम सफलतापूर्वक अपडेट किया गया",
+    "successfulDeletion": "कार्य आइटम सफलतापूर्वक हटाया गया",
+    "title": "कार्य आइटम",
+    "yes": "हाँ"
+  },
   "eventListCard": {
     "location": "स्थान",
     "on": "पर",
@@ -330,7 +370,9 @@
     "sortPost": "पोस्ट को क्रमित करें",
     "tag": "आपका ब्राउज़र वीडियो टैग का समर्थन नहीं करता",
     "postCreatedSuccess": "बधाई हो! आपने कुछ पोस्ट किया है।",
-    "pinPost": "पोस्ट को पिन करें"
+    "pinPost": "पोस्ट को पिन करें",
+    "Next": "अगला पृष्ठ",
+    "Previous": "पिछला पृष्ठ"
   },
   "postNotFound": {
     "post": "पोस्ट",
@@ -617,7 +659,9 @@
     "createdOrganizations": "संगठन बनाये गये",
     "search": "खोज",
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
-    "selectOrganization": "संगठन का चयन करें"
+    "selectOrganization": "संगठन का चयन करें",
+    "organizations": "संगठन",
+    "searchByName": "नाम से खोजें"
   },
   "userSidebar": {
     "yourOrganizations": "आपके संगठन",
@@ -667,13 +711,6 @@
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
     "search": "खोज",
     "createEvent": "कार्यक्रम बनाएँ",
-    "eventTitle": "कार्यक्रम का शीर्षक",
-    "eventDescription": "घटना विवरण",
-    "eventLocation": "घटना स्थान",
-    "startDate": "आरंभ तिथि चुनें",
-    "endDate": "अंतिम तिथि चुनें",
-    "publicEvent": "सार्वजनिक समारोह",
-    "registerable": "पंजीकरण योग्य",
     "recurring": "पुनरावर्ती",
     "startTime": "समय शुरू",
     "endTime": "अंत समय",
@@ -682,7 +719,18 @@
     "listView": "लिस्ट व्यू",
     "calendarView": "कैलेंडर दृश्य",
     "allDay": "पूरे दिन",
-    "eventCreated": "ईवेंट सफलतापूर्वक बनाया और पोस्ट किया गया."
+    "eventCreated": "इवेंट सफलतापूर्वक बनाया और पोस्ट किया गया।",
+    "eventDetails": "घटना विवरण",
+    "eventTitle": "शीर्षक",
+    "enterTitle": "शीर्षक दर्ज करें",
+    "eventDescription": "विवरण",
+    "enterDescription": "विवरण दर्ज करें",
+    "eventLocation": "स्थान",
+    "enterLocation": "स्थान दर्ज करें",
+    "startDate": "प्रारंभ तिथि",
+    "endDate": "अंतिम तिथि",
+    "publicEvent": "सार्वजनिक है",
+    "registerable": "पंजीकृत करने योग्य है"
   },
   "userEventCard": {
     "location": "जगह",

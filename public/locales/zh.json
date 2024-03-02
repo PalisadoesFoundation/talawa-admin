@@ -192,7 +192,12 @@
     "roleUpdated": "角色已更新。",
     "noResultsFoundFor": "未找到结果 ",
     "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。",
-    "cancel": "取消"
+    "cancel": "取消",
+    "admins": "管理員",
+    "members": "成員",
+    "joinNow": "现在加入",
+    "joined": "加入",
+    "withdraw": "提取"
   },
   "dashboard": {
     "title": "儀表板",
@@ -281,6 +286,41 @@
     "eventCreated": "恭喜！事件已創建。",
     "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
+  "organizationActionItems": {
+    "actionItemCategory": "行动项目类别",
+    "actionItemDetails": "行动项目详情",
+    "assignee": "受让人",
+    "assigner": "分配者",
+    "assignmentDate": "分配日期",
+    "active": "活跃",
+    "clearFilters": "清除筛选器",
+    "close": "关闭",
+    "completed": "已完成",
+    "completionDate": "完成日期",
+    "createActionItem": "创建",
+    "deleteActionItem": "删除行动项目",
+    "deleteActionItemMsg": "您是否要删除此行动项目？",
+    "details": "详情",
+    "dueDate": "到期日",
+    "earliest": "最早",
+    "editActionItem": "编辑行动项目",
+    "isCompleted": "已完成",
+    "latest": "最新",
+    "no": "否",
+    "noActionItems": "无行动项目",
+    "options": "选项",
+    "preCompletionNotes": "完成前的笔记",
+    "postCompletionNotes": "完成后的笔记",
+    "searchByName": "按名称搜索",
+    "selectActionItemCategory": "选择行动项目类别",
+    "selectAssignee": "选择受让人",
+    "status": "状态",
+    "successfulCreation": "行动项目创建成功",
+    "successfulUpdation": "行动项目更新成功",
+    "successfulDeletion": "行动项目删除成功",
+    "title": "行动项目",
+    "yes": "是"
+  },
   "eventListCard": {
     "location": "地點",
     "on": "上",
@@ -330,7 +370,9 @@
     "sortPost": "排序帖子",
     "tag": "您的浏览器不支持视频标签",
     "postCreatedSuccess": "恭喜！您已经发布了一些内容。",
-    "pinPost": "针柱"
+    "pinPost": "针柱",
+    "Next": "下一页",
+    "Previous": "上一页"
   },
   "postNotFound": {
     "post": "郵政",
@@ -617,7 +659,9 @@
     "createdOrganizations": "創建的組織",
     "search": "搜索",
     "nothingToShow": "這裡沒有什麼可展示的。",
-    "selectOrganization": "選擇組織"
+    "selectOrganization": "選擇組織",
+    "organizations": "组织",
+    "searchByName": "按名稱搜索"
   },
   "userSidebar": {
     "yourOrganizations": "您的組織",
@@ -667,13 +711,6 @@
     "nothingToShow": "這裡沒有什麼可顯示的。",
     "search": "搜索",
     "createEvent": "創建事件",
-    "eventTitle": "活動標題",
-    "eventDescription": "活動說明",
-    "eventLocation": "活動地點",
-    "startDate": "選擇開始日期",
-    "endDate": "選擇結束日期",
-    "publicEvent": "公共活動",
-    "registerable": "可註冊",
     "recurring": "再次發生的",
     "startTime": "開始時間",
     "endTime": "時間結束",
@@ -682,7 +719,18 @@
     "listView": "列表顯示",
     "calendarView": "日曆視圖",
     "allDay": "整天",
-    "eventCreated": "活動已成功創建並發布。"
+    "eventCreated": "活动创建并发布成功。",
+    "eventDetails": "活动详情",
+    "eventTitle": "标题",
+    "enterTitle": "输入标题",
+    "eventDescription": "描述",
+    "enterDescription": "输入描述",
+    "eventLocation": "地点",
+    "enterLocation": "输入位置",
+    "startDate": "开始日期",
+    "endDate": "结束日期",
+    "publicEvent": "公开",
+    "registerable": "可注册"
   },
   "userEventCard": {
     "location": "地點",

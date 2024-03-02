@@ -37,10 +37,42 @@ const MOCK_ORGANIZATION_CONNECTION = {
           __typename: 'Organization',
           _id: '6401ff65ce8e8406b8f07af2',
           image: '',
+          address: {
+            city: 'abc',
+            countryCode: '123',
+            postalCode: '456',
+            state: 'def',
+            dependentLocality: 'ghi',
+            line1: 'asdfg',
+            line2: 'dfghj',
+            sortingCode: '4567',
+          },
           name: 'anyOrganization1',
           description: 'desc',
           userRegistrationRequired: true,
+          createdAt: '12345678900',
           creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
+          members: [
+            {
+              _id: '56gheqyr7deyfuiwfewifruy8',
+              user: {
+                _id: '45ydeg2yet721rtgdu32ry',
+              },
+            },
+          ],
+          admins: [
+            {
+              _id: '45gj5678jk45678fvgbhnr4rtgh',
+            },
+          ],
+          membershipRequests: [
+            {
+              _id: '56gheqyr7deyfuiwfewifruy8',
+              user: {
+                _id: '45ydeg2yet721rtgdu32ry',
+              },
+            },
+          ],
         },
       ],
     },
