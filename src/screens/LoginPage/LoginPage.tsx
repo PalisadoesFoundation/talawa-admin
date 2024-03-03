@@ -32,7 +32,7 @@ import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../constants';
 
-function loginPage(): JSX.Element {
+const loginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
   const history = useHistory();
 
@@ -48,6 +48,7 @@ function loginPage(): JSX.Element {
   };
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
+  const [role, setRole] = useState<'admin' | 'user'>('admin');
   const [componentLoader, setComponentLoader] = useState(true);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [signformState, setSignFormState] = useState({
@@ -87,10 +88,14 @@ function loginPage(): JSX.Element {
     });
   };
 
+  const handleRoleToggle = (role: 'admin' | 'user'): void => {
+    setRole(role);
+  };
+
   useEffect(() => {
     const isLoggedIn = getItem('IsLoggedIn');
     if (isLoggedIn == 'TRUE') {
-      history.push('/orglist');
+      history.push(role === 'admin' ? '/orglist' : '/user/organizations');
     }
     setComponentLoader(false);
   }, []);
@@ -191,9 +196,11 @@ function loginPage(): JSX.Element {
           /* istanbul ignore next */
           if (signUpData) {
             toast.success(
-              'Successfully Registered. Please wait until you will be approved.',
+              role === 'admin'
+                ? 'Successfully Registered. Please wait until you will be approved.'
+                : 'Successfully registered. Please wait for admin to approve your request.',
             );
-
+            setShowTab('LOGIN');
             setSignFormState({
               signfirstName: '',
               signlastName: '',
@@ -244,21 +251,29 @@ function loginPage(): JSX.Element {
 
       /* istanbul ignore next */
       if (loginData) {
-        if (
-          loginData.login.user.userType === 'SUPERADMIN' ||
-          (loginData.login.user.userType === 'ADMIN' &&
-            loginData.login.user.adminApproved === true)
-        ) {
-          setItem('token', loginData.login.accessToken);
-          setItem('refreshToken', loginData.login.refreshToken);
-          setItem('id', loginData.login.user._id);
-          setItem('IsLoggedIn', 'TRUE');
-          setItem('UserType', loginData.login.user.userType);
-          if (getItem('IsLoggedIn') == 'TRUE') {
-            history.push('/orglist');
+        if (role === 'admin') {
+          if (
+            loginData.login.user.userType === 'SUPERADMIN' ||
+            (loginData.login.user.userType === 'ADMIN' &&
+              loginData.login.user.adminApproved === true)
+          ) {
+            setItem('token', loginData.login.accessToken);
+            setItem('refreshToken', loginData.login.refreshToken);
+            setItem('id', loginData.login.user._id);
+            setItem('IsLoggedIn', 'TRUE');
+            setItem('UserType', loginData.login.user.userType);
+          } else {
+            toast.warn(t('notAuthorised'));
           }
         } else {
-          toast.warn(t('notAuthorised'));
+          setItem('token', loginData.login.accessToken);
+          setItem('refreshToken', loginData.login.refreshToken);
+          setItem('userId', loginData.login.user._id);
+          setItem('IsLoggedIn', 'TRUE');
+          setItem('UserType', loginData.login.user.userType);
+        }
+        if (getItem('IsLoggedIn') == 'TRUE') {
+          history.push(role === 'admin' ? '/orglist' : '/user/organizations');
         }
       } else {
         toast.warn(t('notFound'));
@@ -308,7 +323,7 @@ function loginPage(): JSX.Element {
                 }`}
               />
 
-              <LoginPortalToggle />
+              <LoginPortalToggle onToggle={handleRoleToggle} />
 
               {/* LOGIN FORM */}
               <div
@@ -316,13 +331,14 @@ function loginPage(): JSX.Element {
                   showTab === 'LOGIN' ? styles.active_tab : 'd-none'
                 }`}
               >
-                <Form onSubmit={loginLink} className="gap-0">
-                  <h1 className="fs-2 fw-bold text-dark mb-3">{t('login')}</h1>
-                  <Form.Label className="mb-1">{t('email')}</Form.Label>
+                <form onSubmit={loginLink}>
+                  <h1 className="fs-2 fw-bold text-dark mb-3">
+                    {role === 'admin' ? t('login') : t('userLogin')}
+                  </h1>
+                  <Form.Label>{t('email')}</Form.Label>
                   <div className="position-relative">
                     <Form.Control
                       type="email"
-                      className="lh-1"
                       placeholder={t('enterEmail')}
                       required
                       value={formState.email}
@@ -342,7 +358,7 @@ function loginPage(): JSX.Element {
                       <EmailOutlinedIcon />
                     </Button>
                   </div>
-                  <Form.Label className="mt-2 mb-1">{t('password')}</Form.Label>
+                  <Form.Label className="mt-3">{t('password')}</Form.Label>
                   <div className="position-relative">
                     <Form.Control
                       type={showPassword ? 'text' : 'password'}
@@ -371,7 +387,7 @@ function loginPage(): JSX.Element {
                       )}
                     </Button>
                   </div>
-                  <div className="text-end mt-2 mb-3">
+                  <div className="text-end mt-3">
                     <Link
                       to="/forgotPassword"
                       className="text-secondary"
@@ -397,7 +413,7 @@ function loginPage(): JSX.Element {
                   )}
                   <Button
                     type="submit"
-                    className="mb-0 w-100 lh-1"
+                    className="mt-3 mb-3 w-100"
                     value="Login"
                     data-testid="loginBtn"
                   >
@@ -410,7 +426,7 @@ function loginPage(): JSX.Element {
                   <Button
                     variant="outline-secondary"
                     value="Register"
-                    className="w-100 lh-1"
+                    className="mt-3 mb-3 w-100"
                     data-testid="goToRegisterPortion"
                     onClick={(): void => {
                       setShowTab('REGISTER');
@@ -419,7 +435,7 @@ function loginPage(): JSX.Element {
                   >
                     {t('register')}
                   </Button>
-                </Form>
+                </form>
               </div>
               {/* REGISTER FORM */}
               <div
@@ -427,20 +443,18 @@ function loginPage(): JSX.Element {
                   showTab === 'REGISTER' ? styles.active_tab : 'd-none'
                 }`}
               >
-                <Form onSubmit={signupLink} className="gap-0">
+                <Form onSubmit={signupLink}>
                   <h1 className="fs-2 fw-bold text-dark mb-3">
                     {t('register')}
                   </h1>
                   <Row>
                     <Col sm={6}>
                       <div>
-                        <Form.Label className="mb-1">
-                          {t('firstName')}
-                        </Form.Label>
+                        <Form.Label>{t('firstName')}</Form.Label>
                         <Form.Control
                           type="text"
                           id="signfirstname"
-                          className="lh-1"
+                          className="mb-3"
                           placeholder={t('firstName')}
                           required
                           value={signformState.signfirstName}
@@ -455,13 +469,11 @@ function loginPage(): JSX.Element {
                     </Col>
                     <Col sm={6}>
                       <div>
-                        <Form.Label className="mb-1">
-                          {t('lastName')}
-                        </Form.Label>
+                        <Form.Label>{t('lastName')}</Form.Label>
                         <Form.Control
                           type="text"
                           id="signlastname"
-                          className="lh-1"
+                          className="mb-3"
                           placeholder={t('lastName')}
                           required
                           value={signformState.signlastName}
@@ -475,13 +487,13 @@ function loginPage(): JSX.Element {
                       </div>
                     </Col>
                   </Row>
-                  <div className="position-relative mt-2">
-                    <Form.Label className="mb-1">{t('email')}</Form.Label>
+                  <div className="position-relative">
+                    <Form.Label>{t('email')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
                         type="email"
                         data-testid="signInEmail"
-                        className="lh-1"
+                        className="mb-3"
                         placeholder={t('email')}
                         autoComplete="username"
                         required
@@ -502,12 +514,11 @@ function loginPage(): JSX.Element {
                     </div>
                   </div>
 
-                  <div className="position-relative my-2">
-                    <Form.Label className="mb-1">{t('password')}</Form.Label>
+                  <div className="position-relative mb-3">
+                    <Form.Label>{t('password')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
                         type={showPassword ? 'text' : 'password'}
-                        className="lh-1"
                         data-testid="passwordField"
                         placeholder={t('password')}
                         autoComplete="new-password"
@@ -657,12 +668,11 @@ function loginPage(): JSX.Element {
                       )}
                     </div>
                   </div>
-                  <div className="position-relative  my-2">
+                  <div className="position-relative">
                     <Form.Label>{t('confirmPassword')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
                         type={showConfirmPassword ? 'text' : 'password'}
-                        className="lh-1"
                         placeholder={t('confirmPassword')}
                         required
                         value={signformState.cPassword}
@@ -714,7 +724,7 @@ function loginPage(): JSX.Element {
                   )}
                   <Button
                     type="submit"
-                    className="mt-4 w-100 mb-2"
+                    className="mt-4 w-100 mb-3"
                     value="Register"
                     data-testid="registrationBtn"
                   >
@@ -727,7 +737,7 @@ function loginPage(): JSX.Element {
                   <Button
                     variant="outline-secondary"
                     value="Register"
-                    className="mt-2 mb-1 w-100 lh-1"
+                    className="mt-3 mb-5 w-100"
                     data-testid="goToLoginPortion"
                     onClick={(): void => {
                       setShowTab('LOGIN');
@@ -744,6 +754,6 @@ function loginPage(): JSX.Element {
       </section>
     </>
   );
-}
+};
 
 export default loginPage;
