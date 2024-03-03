@@ -36,7 +36,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Unauthorized file modification in PR
-        run: |
-          chmod +x ./.github/workflows/authorized-change.py
-          python ./.github/workflows/authorized-change.py
-    
+        run: exit 1
