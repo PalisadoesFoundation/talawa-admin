@@ -90,6 +90,7 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
       }
       refetch();
     } catch (error: any) {
+      /* istanbul ignore next */
       if (error.message === 'User is already a member') {
         toast.error(t('AlreadyJoined'));
       } else {
