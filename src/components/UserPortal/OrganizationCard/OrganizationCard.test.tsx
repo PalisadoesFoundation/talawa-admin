@@ -250,7 +250,7 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
     await wait();
 
     expect(toast.success).toHaveBeenCalledWith(
-      'Membership request sent successfully.',
+      'Membership request sent successfully',
     );
   });
 
@@ -282,7 +282,7 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
     await wait();
 
     expect(toast.success).toHaveBeenCalledWith(
-      'You have joined the organization successfully.',
+      'Joined organization successfully',
     );
   });
 
