@@ -22,6 +22,13 @@ import { toast } from 'react-toastify';
 
 const { getItem } = useLocalStorage();
 
+jest.mock('react-toastify', () => ({
+  toast: {
+    success: jest.fn(),
+    error: jest.fn(),
+  },
+}));
+
 const MOCKS = [
   {
     request: {
