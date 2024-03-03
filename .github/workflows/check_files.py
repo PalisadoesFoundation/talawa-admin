@@ -18,7 +18,7 @@ def _get_changed_files(base_branch, pr_branch):
     base_branch = f"origin/{base_branch}"
     pr_branch = f"origin/{pr_branch}"
 
-    command = f"git diff --name-only {base_branch}...{pr_branch} HEAD --diff-filter=ACMRT | xargs"
+    command = f"git diff --name-only {base_branch}...{pr_branch} --diff-filter=ACMRT | xargs"
 
     try:
         # Run git command to get the list of changed files
