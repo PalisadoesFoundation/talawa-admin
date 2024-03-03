@@ -15,7 +15,7 @@ export const CREATE_FUND_MUTATION = gql`
   mutation CreateFund(
     $name: String!
     $organizationId: ID!
-    $refrenceNumber: String!
+    $refrenceNumber: String
     $taxDeductible: Boolean!
     $isArchived: Boolean!
     $isDefault: Boolean!
@@ -62,6 +62,13 @@ export const UPDATE_FUND_MUTATION = gql`
         isDefault: $isDefault
       }
     ) {
+      _id
+    }
+  }
+`;
+export const REMOVE_FUND_MUTATION = gql`
+  mutation RemoveFund($id: ID!) {
+    removeFund(id: $id) {
       _id
     }
   }

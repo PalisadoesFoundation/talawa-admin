@@ -115,6 +115,28 @@
     "noNotifications": "沒有通知",
     "close": "關"
   },
+  "funds": {
+    "title": "塔拉瓦基金",
+    "createFund": "创建",
+    "fundName": "基金名称",
+    "fundId": "基金ID",
+    "fundOptions": "选项",
+    "noFunds": "未找到基金",
+    "fundDetails": "基金详情",
+    "taxDeductible": "允许税收扣除",
+    "default": "默认基金",
+    "archived": "已归档",
+    "nonArchive": "未归档",
+    "fundCreate": "创建基金",
+    "fundUpdate": "更新基金",
+    "fundDelete": "删除基金",
+    "no": "否",
+    "yes": "是",
+    "fundCreated": "基金创建成功",
+    "fundUpdated": "基金更新成功",
+    "fundDeleted": "基金删除成功"
+  },
+
   "orgList": {
     "title": "塔拉瓦組織",
     "you": "你",

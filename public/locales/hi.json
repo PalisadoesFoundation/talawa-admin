@@ -340,6 +340,27 @@
     "eventUpdated": "इवेंट सफलतापूर्वक अपडेट किया गया।",
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।"
   },
+  "funds": {
+    "title": "तलवा फंड्स",
+    "createFund": "फंड बनाएँ",
+    "fundName": "फंड का नाम",
+    "fundId": "फंड आईडी",
+    "fundOptions": "फंड विकल्प",
+    "noFunds": "कोई फंड नहीं",
+    "fundDetails": "फंड विवरण",
+    "taxDeductible": "कर कटौती",
+    "default": "डिफ़ॉल्ट",
+    "archived": "संग्रहीत",
+    "nonArchive": "गैर संग्रहीत",
+    "fundCreate": "फंड बनाएँ",
+    "fundUpdate": "फंड अपडेट करें",
+    "fundDelete": "फंड हटाएं",
+    "no": "नहीं",
+    "yes": "हाँ",
+    "fundCreated": "फंड सफलतापूर्वक बनाया गया",
+    "fundUpdated": "फंड सफलतापूर्वक अपडेट किया गया",
+    "fundDeleted": "फंड सफलतापूर्वक हटाया गया"
+  },
   "orgPost": {
     "title": "तलवा पोस्ट्स",
     "searchPost": "पोस्ट खोजें",

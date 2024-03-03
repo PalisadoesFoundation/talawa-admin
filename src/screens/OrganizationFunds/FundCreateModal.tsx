@@ -78,7 +78,7 @@ const FundCreateModal: React.FC<InterfaceFundCreateModal> = ({
                 }
               />
             </Form.Group>
-            <div className="d-flex justify-content-between">
+            <div className="d-flex-col ">
               <Form.Group className="mb-3">
                 <div className="d-flex justify-content-end">
                   <label>Tax Deductible</label>
@@ -90,30 +90,18 @@ const FundCreateModal: React.FC<InterfaceFundCreateModal> = ({
                   />
                 </div>
               </Form.Group>
-
-              <Form.Group className="mb-3 ">
+              <Form.Group className="mb-3">
                 <div className="d-flex justify-content-end">
-                  <label>Archived</label>
+                  <label>Default Fund</label>
                   <Form.Switch
                     type="checkbox"
                     className="ms-2"
-                    checked={isArchived}
-                    onChange={() => setIsArchived(!isArchived)}
+                    checked={isDefault}
+                    onChange={() => setIsDefault(!isDefault)}
                   />
                 </div>
               </Form.Group>
             </div>
-            <Form.Group className="mb-3">
-              <div className="d-flex justify-content-end">
-                <label>Default</label>
-                <Form.Switch
-                  type="checkbox"
-                  className="ms-2"
-                  checked={isDefault}
-                  onChange={() => setIsDefault(!isDefault)}
-                />
-              </div>
-            </Form.Group>
             <Button type="submit" className={styles.greenregbtn}>
               Create Fund
             </Button>

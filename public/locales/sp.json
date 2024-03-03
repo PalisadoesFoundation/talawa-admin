@@ -339,6 +339,28 @@
     "eventUpdated": "Evento actualizado con éxito.",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
+  "funds": {
+    "title": "Fondos de Talawa",
+    "createFund": "Crear",
+    "fundName": "Nombre del Fondo",
+    "fundId": "ID del Fondo",
+    "fundOptions": "Opciones",
+    "noFunds": "No se encontraron fondos",
+    "fundDetails": "Detalles del Fondo",
+    "taxDeductible": "Deducible de impuestos",
+    "default": "Fondo predeterminado",
+    "archived": "Archivado",
+    "nonArchive": "No archivado",
+    "fundCreate": "Crear Fondo",
+    "fundUpdate": "Actualizar Fondo",
+    "fundDelete": "Eliminar Fondo",
+    "no": "No",
+    "yes": "Sí",
+    "fundCreated": "Fondo creado exitosamente",
+    "fundUpdated": "Fondo actualizado exitosamente",
+    "fundDeleted": "Fondo eliminado exitosamente"
+  },
+
   "orgPost": {
     "title": "Publicaciones de Talawa",
     "searchPost": "Buscar Publicación",

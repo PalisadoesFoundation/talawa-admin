@@ -344,6 +344,27 @@
     "eventUpdated": "Event updated successfully.",
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
+  "funds": {
+    "title": "Talawa Funds",
+    "createFund": "Create",
+    "fundName": "Fund Name",
+    "fundId": "Fund ID",
+    "fundOptions": "Opitons",
+    "noFunds": "No Funds Found",
+    "fundDetails": "Fund Details",
+    "taxDeductible": "Tax Deductible",
+    "default": "Default Fund",
+    "archived": "Archived",
+    "nonArchive": "Non-Archived",
+    "fundCreate": "Create Fund",
+    "fundUpdate": "Update Fund",
+    "fundDelete": "Delete Fund",
+    "no": "No",
+    "yes": "Yes",
+    "fundCreated": "Fund created successfully",
+    "fundUpdated": "Fund updated successfully",
+    "fundDeleted": "Fund deleted successfully"
+  },
   "orgPost": {
     "title": "Talawa Posts",
     "searchPost": "Search Post",
