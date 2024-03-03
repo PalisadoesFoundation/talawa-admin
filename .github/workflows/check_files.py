@@ -26,12 +26,9 @@ def _get_changed_files(base_branch, pr_branch):
             command,
             shell=True,
             stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
+            stderr=subprocess.PIPE
         )
         output, error = process.communicate()
-        if error:
-            raise Exception(error)
     except Exception as e:
         print(f"Error: {e}")
         sys.exit(1)
