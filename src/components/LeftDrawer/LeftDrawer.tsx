@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
 import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
 import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
@@ -11,6 +11,7 @@ import styles from './LeftDrawer.module.css';
 import { useMutation } from '@apollo/client';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
+import Avatar from 'components/Avatar/Avatar';
 
 export interface InterfaceLeftDrawerProps {
   hideDrawer: boolean | null;
@@ -41,82 +42,84 @@ const leftDrawer = ({
   };
 
   return (
-    <>
-      <div
-        className={`${styles.leftDrawer} ${
-          hideDrawer === null
-            ? styles.hideElemByDefault
-            : hideDrawer
-              ? styles.inactiveDrawer
-              : styles.activeDrawer
-        }`}
-        data-testid="leftDrawerContainer"
-      >
-        <TalawaLogo className={styles.talawaLogo} />
-        <p className={styles.talawaText}>{t('talawaAdminPortal')}</p>
-        <h5 className={styles.titleHeader}>{t('menu')}</h5>
-        <div className={styles.optionList}>
+    <div
+      className={`${styles.leftDrawer} customScroll ${
+        hideDrawer === null
+          ? styles.hideElemByDefault
+          : hideDrawer
+            ? styles.inactiveDrawer
+            : styles.activeDrawer
+      }`}
+      data-testid="leftDrawerContainer"
+    >
+      <TalawaLogo className={styles.talawaLogo} />
+      <p className={styles.talawaText}>{t('talawaAdminPortal')}</p>
+      <h5 className={styles.titleHeader}>{t('menu')}</h5>
+      <div className={styles.optionList}>
+        <Button
+          variant={screenName === 'My Organizations' ? 'success' : 'light'}
+          className={`${
+            screenName === 'My Organizations' ? 'text-white' : 'text-secondary'
+          }`}
+          data-testid="orgsBtn"
+          onClick={(): void => {
+            history.push('/orglist');
+          }}
+        >
+          <div className={styles.iconWrapper}>
+            <OrganizationsIcon
+              stroke={`${
+                screenName === 'My Organizations'
+                  ? 'var(--bs-white)'
+                  : 'var(--bs-secondary)'
+              }`}
+            />
+          </div>
+          {t('my organizations')}
+        </Button>
+        {userType === 'SUPERADMIN' && (
           <Button
-            variant={screenName === 'My Organizations' ? 'success' : 'light'}
+            variant={screenName === 'Users' ? 'success' : 'light'}
             className={`${
-              screenName === 'My Organizations'
-                ? 'text-white'
-                : 'text-secondary'
+              screenName === 'Users' ? 'text-white' : 'text-secondary'
             }`}
-            data-testid="orgsBtn"
             onClick={(): void => {
-              history.push('/orglist');
+              history.push('/users');
             }}
+            data-testid="rolesBtn"
           >
             <div className={styles.iconWrapper}>
-              <OrganizationsIcon
-                stroke={`${
-                  screenName === 'My Organizations'
+              <RolesIcon
+                fill={`${
+                  screenName === 'Users'
                     ? 'var(--bs-white)'
                     : 'var(--bs-secondary)'
                 }`}
               />
             </div>
-            {t('my organizations')}
+            {t('users')}
           </Button>
-          {userType === 'SUPERADMIN' && (
-            <Button
-              variant={screenName === 'Users' ? 'success' : 'light'}
-              className={`${
-                screenName === 'Users' ? 'text-white' : 'text-secondary'
-              }`}
-              onClick={(): void => {
-                history.push('/users');
-              }}
-              data-testid="rolesBtn"
-            >
-              <div className={styles.iconWrapper}>
-                <RolesIcon
-                  fill={`${
-                    screenName === 'Users'
-                      ? 'var(--bs-white)'
-                      : 'var(--bs-secondary)'
-                  }`}
-                />
-              </div>
-              {t('users')}
-            </Button>
-          )}
-        </div>
-        <div style={{ marginTop: 'auto' }}>
-          <button
+        )}
+      </div>
+      <div style={{ marginTop: 'auto' }}>
+        <Link
+          to={{
+            pathname: `/member/id=${userId}`,
+            state: { from: 'orglist' },
+          }}
+        >
+          <Button
+            key={'profileBtn'}
             className={styles.profileContainer}
+            variant={screenName === 'Profile' ? 'success' : 'light'}
             data-testid="profileBtn"
-            onClick={(): void => {
-              history.push(`/member/id=${userId}`);
-            }}
           >
             <div className={styles.imageContainer}>
               {userImage && userImage !== 'null' ? (
                 <img src={userImage} alt={`profile picture`} />
               ) : (
-                <img
-                  src={`https://api.dicebear.com/5.x/initials/svg?seed=${firstName}%20${lastName}`}
+                <Avatar
+                  name={`${firstName} ${lastName}`}
                   alt={`dummy picture`}
                 />
               )}
@@ -125,27 +128,31 @@ const leftDrawer = ({
               <span className={styles.primaryText}>
                 {firstName} {lastName}
               </span>
-              <span className={styles.secondaryText}>
+              <span
+                className={`${styles.secondaryText} ${
+                  screenName === 'Profile' && 'text-white'
+                }`}
+              >
                 {`${userType}`.toLowerCase()}
               </span>
             </div>
             <AngleRightIcon fill={'var(--bs-secondary)'} />
-          </button>
-
-          <Button
-            variant="light"
-            className={`mt-4 d-flex justify-content-start px-0 w-100 bg-danger text-white  ${styles.logout}`}
-            onClick={(): void => logout()}
-            data-testid="logoutBtn"
-          >
-            <div className={styles.imageContainer}>
-              <LogoutIcon fill={'white'} />
-            </div>
-            {t('logout')}
           </Button>
-        </div>
+        </Link>
+
+        <Button
+          variant="light"
+          className={`mt-4 d-flex justify-content-start px-0 w-100 bg-danger text-white  ${styles.logout}`}
+          onClick={(): void => logout()}
+          data-testid="logoutBtn"
+        >
+          <div className={styles.imageContainer}>
+            <LogoutIcon fill={'white'} />
+          </div>
+          {t('logout')}
+        </Button>
       </div>
-    </>
+    </div>
   );
 };
 

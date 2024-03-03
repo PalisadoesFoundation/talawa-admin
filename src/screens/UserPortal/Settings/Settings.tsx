@@ -20,7 +20,7 @@ export default function settings(): JSX.Element {
 
   const { setItem } = useLocalStorage();
 
-  const { data } = useQuery(CHECK_AUTH);
+  const { data } = useQuery(CHECK_AUTH, { fetchPolicy: 'network-only' });
   const [image, setImage] = React.useState('');
   const [updateUserDetails] = useMutation(UPDATE_USER_MUTATION);
   const [firstName, setFirstName] = React.useState('');

@@ -166,7 +166,9 @@ describe('Testing Login Page Screen', () => {
     );
 
     await wait();
-
+    const adminLink = screen.getByText(/Admin/i);
+    userEvent.click(adminLink);
+    await wait();
     expect(screen.getByText(/Admin/i)).toBeInTheDocument();
     expect(window.location).toBeAt('/orglist');
   });
@@ -671,5 +673,28 @@ describe('Testing Login Page Screen', () => {
     expect(password.password.length).toBeGreaterThanOrEqual(8);
 
     expect(screen.queryByTestId('passwordCheck')).toBeNull();
+  });
+
+  test('Component Should be rendered properly for user login', async () => {
+    window.location.assign('/user/organizations');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    const userLink = screen.getByText(/User/i);
+    userEvent.click(userLink);
+    await wait();
+    expect(screen.getByText(/User Login/i)).toBeInTheDocument();
+    expect(window.location).toBeAt('/user/organizations');
   });
 });

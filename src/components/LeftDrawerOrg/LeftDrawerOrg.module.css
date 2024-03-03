@@ -9,23 +9,6 @@
   padding: 0.8rem 1rem 0 1rem;
   background-color: var(--bs-white);
   transition: 0.5s;
-  overflow-y: scroll;
-}
-
-.leftDrawer::-webkit-scrollbar {
-  width: 6px;
-}
-
-.leftDrawer::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-.leftDrawer::-webkit-scrollbar-thumb {
-  background: var(--bs-gray-500);
-}
-
-.leftDrawer::-webkit-scrollbar-thumb:hover {
-  background: var(--bs-gray-600);
 }
 
 .activeDrawer {
@@ -104,9 +87,9 @@
   border: none;
   width: 100%;
   margin-top: 5rem;
+  padding: 2.1rem 0.5rem;
   height: 52px;
   border-radius: 8px;
-  background-color: var(--bs-white);
   display: flex;
   align-items: center;
 }

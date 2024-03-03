@@ -20,7 +20,6 @@ interface InterfaceUserUpdateProps {
   toggleStateValue: () => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
   id,
   toggleStateValue,

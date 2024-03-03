@@ -54,7 +54,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   /* istanbul ignore next */
   const handleLogout = (): void => {
     localStorage.clear();
-    window.location.replace('/user');
+    window.location.replace('/');
   };
 
   const userName = getItem('name');
@@ -99,8 +99,8 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     const talawaPlugins: string = getItem('talawaPlugins') || '{}';
     plugins = JSON.parse(talawaPlugins);
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data: updatedPluginData, loading: _loadingSub } = useSubscription(
+
+  const { data: updatedPluginData } = useSubscription(
     PLUGIN_SUBSCRIPTION,
     // { variables: {  } }
   );

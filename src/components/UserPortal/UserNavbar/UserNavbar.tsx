@@ -14,13 +14,12 @@ import { useHistory } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 
 function userNavbar(): JSX.Element {
+  const { getItem } = useLocalStorage();
   const history = useHistory();
 
   const { t } = useTranslation('translation', {
     keyPrefix: 'userNavbar',
   });
-
-  const { getItem } = useLocalStorage();
 
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
 
@@ -29,14 +28,14 @@ function userNavbar(): JSX.Element {
     cookies.get('i18next') || 'en',
   );
 
+  const userName = getItem('name');
+
   /* istanbul ignore next */
   const handleLogout = (): void => {
     revokeRefreshToken();
     localStorage.clear();
-    window.location.replace('/user');
+    history.push('/');
   };
-
-  const userName = getItem('name');
 
   return (
     <Navbar variant="dark" className={`${styles.colorPrimary}`}>

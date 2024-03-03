@@ -10,7 +10,7 @@ const SecuredRouteForUser = (props: any): JSX.Element => {
       <Route {...props} />
     </>
   ) : (
-    <Redirect to="/user" />
+    <Redirect to="/" />
   );
 };
 

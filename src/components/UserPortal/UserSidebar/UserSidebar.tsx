@@ -47,6 +47,7 @@ function userSidebar(): JSX.Element {
   React.useEffect(() => {
     if (data2) {
       setDetails(data2.user);
+      console.log(data2, 'user details');
     }
   }, [data2]);
 

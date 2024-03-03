@@ -1,36 +1,36 @@
-import React, { useEffect, useRef, useState } from 'react';
-import type { ChangeEvent } from 'react';
-import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
-import styles from './Home.module.css';
-import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import {
-  Button,
-  Form,
-  Col,
-  Container,
-  Image,
-  Row,
-  Modal,
-} from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import getOrganizationId from 'utils/getOrganizationId';
-import PostCard from 'components/UserPortal/PostCard/PostCard';
 import { useMutation, useQuery } from '@apollo/client';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   ADVERTISEMENTS_GET,
-  ORGANIZATION_POST_CONNECTION_LIST,
+  ORGANIZATION_POST_LIST,
   USER_DETAILS,
 } from 'GraphQl/Queries/Queries';
-import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
-import { errorHandler } from 'utils/errorHandler';
-import { useTranslation } from 'react-i18next';
-import convertToBase64 from 'utils/convertToBase64';
-import { toast } from 'react-toastify';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
+import PostCard from 'components/UserPortal/PostCard/PostCard';
 import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
-import UserDefault from '../../../assets/images/defaultImg.png';
+import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
+import type { ChangeEvent } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  Button,
+  Col,
+  Container,
+  Form,
+  Image,
+  Modal,
+  Row,
+} from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import convertToBase64 from 'utils/convertToBase64';
+import { errorHandler } from 'utils/errorHandler';
+import getOrganizationId from 'utils/getOrganizationId';
 import useLocalStorage from 'utils/useLocalstorage';
+import UserDefault from '../../../assets/images/defaultImg.png';
+import styles from './Home.module.css';
 
 interface InterfacePostCardProps {
   id: string;
@@ -70,7 +70,9 @@ interface InterfaceAdContent {
   _id: string;
   name: string;
   type: string;
-  orgId: string;
+  organization: {
+    _id: string;
+  };
   link: string;
   endDate: string;
   startDate: string;
@@ -94,19 +96,13 @@ export default function home(): JSX.Element {
   const navbarProps = {
     currentPage: 'home',
   };
-  const {
-    data: promotedPostsData,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    refetch: _promotedPostsRefetch,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    loading: promotedPostsLoading,
-  } = useQuery(ADVERTISEMENTS_GET);
+  const { data: promotedPostsData } = useQuery(ADVERTISEMENTS_GET);
   const {
     data,
     refetch,
     loading: loadingPosts,
-  } = useQuery(ORGANIZATION_POST_CONNECTION_LIST, {
-    variables: { id: organizationId },
+  } = useQuery(ORGANIZATION_POST_LIST, {
+    variables: { id: organizationId, first: 10 },
   });
 
   const userId: string | null = getItem('userId');
@@ -155,15 +151,15 @@ export default function home(): JSX.Element {
 
   React.useEffect(() => {
     if (data) {
-      setPosts(data.postsByOrganizationConnection.edges);
+      setPosts(data.organizaitons[0].posts.edges);
     }
   }, [data]);
 
   React.useEffect(() => {
     if (promotedPostsData) {
-      setAdContent(promotedPostsData.getAdvertisements);
+      setAdContent(promotedPostsData.advertisementsConnection);
     }
-  }, [data]);
+  }, [promotedPostsData]);
 
   useEffect(() => {
     setFilteredAd(filterAdContent(adContent, currentOrgId));
@@ -176,7 +172,8 @@ export default function home(): JSX.Element {
   ): InterfaceAdContent[] => {
     return adCont.filter(
       (ad: InterfaceAdContent) =>
-        ad.orgId === currentOrgId && new Date(ad.endDate) > currentDate,
+        ad.organization._id === currentOrgId &&
+        new Date(ad.endDate) > currentDate,
     );
   };
 
@@ -319,7 +316,7 @@ export default function home(): JSX.Element {
                 <PromotedPost
                   key={post._id}
                   id={post._id}
-                  image={post.link}
+                  media={post.mediaUrl}
                   title={post.name}
                   data-testid="postid"
                 />
