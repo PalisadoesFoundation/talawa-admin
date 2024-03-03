@@ -18,7 +18,7 @@ def _get_changed_files(base_branch, pr_branch):
     base_branch = f"origin/{base_branch}"
     pr_branch = f"origin/{pr_branch}"
 
-    command = f"git diff --name-only {base_branch}...{pr_branch} --diff-filter=ACMRT | xargs"
+    command = f"git diff --name-only {base_branch}...{pr_branch}"
 
     try:
         # Run git command to get the list of changed files
@@ -29,6 +29,7 @@ def _get_changed_files(base_branch, pr_branch):
             stderr=subprocess.PIPE
         )
         output, error = process.communicate()
+        print(output)
     except Exception as e:
         print(f"Error: {e}")
         sys.exit(1)
