@@ -28,7 +28,6 @@ import UserListCard from 'components/UserListCard/UserListCard';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 import OrgAdminListCard from 'components/OrgAdminListCard/OrgAdminListCard';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: ['#31bb6b', '!important'],
@@ -38,7 +37,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 14,
   },
 }));
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
 const StyledTableRow = styled(TableRow)(() => ({
   '&:last-child td, &:last-child th': {
     border: 0,
