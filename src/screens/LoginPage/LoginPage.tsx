@@ -386,7 +386,7 @@ function loginPage(): JSX.Element {
               />
 
               <LoginPortalToggle
-                onToggle={function (role: 'admin' | 'user'): void {
+                onToggle={function (): void {
                   throw new Error('Function not implemented.');
                 }}
               />
