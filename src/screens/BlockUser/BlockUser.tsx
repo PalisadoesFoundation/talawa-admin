@@ -115,7 +115,10 @@ const Requests = (): JSX.Element => {
 
   /* istanbul ignore next */
   if (memberError) {
-    toast.error(memberError.message);
+    const regex = /\{ _id: 'undefined' \}/;
+    const isIdNotFound = regex.test(memberError?.message);
+    if (isIdNotFound) toast.error('Id not found');
+    else toast.error(memberError?.message);
   }
 
   const handleSearch = (e: any): void => {

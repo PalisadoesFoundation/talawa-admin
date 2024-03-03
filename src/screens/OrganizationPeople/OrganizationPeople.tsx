@@ -100,7 +100,12 @@ function organizationPeople(): JSX.Element {
   /* istanbul ignore next */
   if (memberError || usersError || adminError) {
     const error = memberError ?? usersError ?? adminError;
-    toast.error(error?.message);
+    // toast.error(error?.message);
+    const errorMessage = error?.message || '';
+    const regex = /\{ _id: 'undefined' \}/;
+    const isIdNotFound = regex.test(errorMessage);
+    if (isIdNotFound) toast.error('Id not found');
+    else toast.error(memberError?.message);
   }
 
   /* istanbul ignore next */
