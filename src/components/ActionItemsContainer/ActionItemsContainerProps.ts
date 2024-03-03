@@ -1,4 +1,7 @@
+type ActionItemsConnectionType = 'Organization' | 'Event';
+
 export const props = {
+  actionItemsConnection: 'Organization' as ActionItemsConnectionType,
   actionItemsData: [
     {
       _id: 'actionItem1',
@@ -89,6 +92,7 @@ export const props = {
 };
 
 export const props2 = {
+  actionItemsConnection: 'Organization' as ActionItemsConnectionType,
   actionItemsData: [],
   membersData: [],
   actionItemsRefetch: jest.fn(),

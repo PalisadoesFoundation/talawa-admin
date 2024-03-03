@@ -366,6 +366,7 @@ function organizationActionItems(): JSX.Element {
           <hr />
 
           <ActionItemsContainer
+            actionItemsConnection={`Organization`}
             actionItemsData={actionItemsData?.actionItemsByOrganization}
             membersData={membersData?.organizations[0].members}
             actionItemsRefetch={actionItemsRefetch}

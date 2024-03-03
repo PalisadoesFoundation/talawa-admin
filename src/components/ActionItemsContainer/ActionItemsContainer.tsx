@@ -21,10 +21,12 @@ import ActionItemPreviewModal from '../../screens/OrganizationActionItems/Action
 import ActionItemDeleteModal from '../../screens/OrganizationActionItems/ActionItemDeleteModal';
 
 function actionItemsContainer({
+  actionItemsConnection,
   actionItemsData,
   membersData,
   actionItemsRefetch,
 }: {
+  actionItemsConnection: 'Organization' | 'Event';
   actionItemsData: InterfaceActionItemInfo[] | undefined;
   membersData: InterfaceMemberInfo[] | undefined;
   actionItemsRefetch: any;
@@ -151,9 +153,15 @@ function actionItemsContainer({
 
   return (
     <>
-      <div className="mx-1 my-4">
-        <div className="mx-4 shadow-sm rounded-top-4">
-          <Row className="mx-0 border border-light-subtle rounded-top-4 py-3">
+      <div
+        className={`mx-1 ${actionItemsConnection === 'Organization' ? 'my-4' : 'my-0'}`}
+      >
+        <div
+          className={`shadow-sm ${actionItemsConnection === 'Organization' ? 'rounded-top-4 mx-4' : 'rounded-top-2 mx-0'}`}
+        >
+          <Row
+            className={`mx-0 border border-light-subtle py-3 ${actionItemsConnection === 'Organization' ? 'rounded-top-4' : 'rounded-top-2'}`}
+          >
             <Col xs={7} sm={4} md={3} lg={3} className="ps-3 fs-5 fw-bold">
               <div className="ms-2">{t('assignee')}</div>
             </Col>
@@ -174,7 +182,9 @@ function actionItemsContainer({
           </Row>
         </div>
 
-        <div className="mx-4 bg-light-subtle border border-light-subtle border-top-0 rounded-bottom-4 shadow-sm">
+        <div
+          className={`bg-light-subtle border border-light-subtle border-top-0 shadow-sm ${actionItemsConnection === 'Organization' ? 'rounded-bottom-4 mx-4' : 'rounded-bottom-2 mx-0'}`}
+        >
           {actionItemsData?.map((actionItem, index) => (
             <div key={index}>
               <Row className={`${index === 0 ? 'pt-3' : ''} mb-3 mx-2`}>
