@@ -71,6 +71,7 @@
         "allowTypedFunctionExpressions": true
       }
     ],
+    "camelcase": "off",
     "@typescript-eslint/naming-convention": [
       "error",
       // Interfaces must begin with Interface or TestInterface followed by a PascalCase name
@@ -91,7 +92,7 @@
       },
       {
         "selector": "variable",
-        "format": ["camelCase", "UPPER_CASE"],
+        "format": ["camelCase", "UPPER_CASE", "PascalCase"],
         "leadingUnderscore": "allow"
       },
       {
@@ -101,7 +102,7 @@
       },
       {
         "selector": "function",
-        "format": ["camelCase"]
+        "format": ["camelCase", "PascalCase"]
       },
       {
         "selector": "memberLike",
