@@ -41,7 +41,7 @@ import styles from './LoginPage.module.css';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import useLocalStorage from 'utils/useLocalstorage';
 
-const loginPage = (): JSX.Element => {
+function loginPage(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
   const history = useHistory();
 
@@ -56,7 +56,6 @@ const loginPage = (): JSX.Element => {
     specialChar: boolean;
   };
   const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
-  const [role, setRole] = useState<'admin' | 'user'>('admin');
   const [componentLoader, setComponentLoader] = useState(true);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [signformState, setSignFormState] = useState({
@@ -112,16 +111,12 @@ const loginPage = (): JSX.Element => {
     }));
   };
 
-  const handleRoleToggle = (role: 'admin' | 'user'): void => {
-    setRole(role);
-  };
-
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   useEffect(() => {
     const isLoggedIn = getItem('IsLoggedIn');
     if (isLoggedIn == 'TRUE') {
-      history.push(role === 'admin' ? '/orglist' : '/user/organizations');
+      history.push('/orglist');
     }
     setComponentLoader(false);
   }, []);
@@ -130,8 +125,11 @@ const loginPage = (): JSX.Element => {
   const toggleConfirmPassword = (): void =>
     setShowConfirmPassword(!showConfirmPassword);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [login, { loading: loginLoading }] = useMutation(LOGIN_MUTATION);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [recaptcha, { loading: recaptchaLoading }] =
     useMutation(RECAPTCHA_MUTATION);
 
@@ -221,11 +219,9 @@ const loginPage = (): JSX.Element => {
           /* istanbul ignore next */
           if (signUpData) {
             toast.success(
-              role === 'admin'
-                ? 'Successfully Registered. Please wait until you will be approved.'
-                : 'Successfully registered. Please wait for admin to approve your request.',
+              'Successfully Registered. Please wait until you will be approved.',
             );
-            setShowTab('LOGIN');
+
             setSignFormState({
               signfirstName: '',
               signlastName: '',
@@ -280,29 +276,21 @@ const loginPage = (): JSX.Element => {
 
       /* istanbul ignore next */
       if (loginData) {
-        if (role === 'admin') {
-          if (
-            loginData.login.user.userType === 'SUPERADMIN' ||
-            (loginData.login.user.userType === 'ADMIN' &&
-              loginData.login.user.adminApproved === true)
-          ) {
-            setItem('token', loginData.login.accessToken);
-            setItem('refreshToken', loginData.login.refreshToken);
-            setItem('id', loginData.login.user._id);
-            setItem('IsLoggedIn', 'TRUE');
-            setItem('UserType', loginData.login.user.userType);
-          } else {
-            toast.warn(t('notAuthorised'));
-          }
-        } else {
+        if (
+          loginData.login.user.userType === 'SUPERADMIN' ||
+          (loginData.login.user.userType === 'ADMIN' &&
+            loginData.login.user.adminApproved === true)
+        ) {
           setItem('token', loginData.login.accessToken);
           setItem('refreshToken', loginData.login.refreshToken);
-          setItem('userId', loginData.login.user._id);
+          setItem('id', loginData.login.user._id);
           setItem('IsLoggedIn', 'TRUE');
           setItem('UserType', loginData.login.user.userType);
-        }
-        if (getItem('IsLoggedIn') == 'TRUE') {
-          history.push(role === 'admin' ? '/orglist' : '/user/organizations');
+          if (getItem('IsLoggedIn') == 'TRUE') {
+            history.push('/orglist');
+          }
+        } else {
+          toast.warn(t('notAuthorised'));
         }
       } else {
         toast.warn(t('notFound'));
@@ -397,7 +385,11 @@ const loginPage = (): JSX.Element => {
                 }`}
               />
 
-              <LoginPortalToggle onToggle={handleRoleToggle} />
+              <LoginPortalToggle
+                onToggle={function (role: 'admin' | 'user'): void {
+                  throw new Error('Function not implemented.');
+                }}
+              />
 
               {/* LOGIN FORM */}
               <div
@@ -405,14 +397,13 @@ const loginPage = (): JSX.Element => {
                   showTab === 'LOGIN' ? styles.active_tab : 'd-none'
                 }`}
               >
-                <form onSubmit={loginLink}>
-                  <h1 className="fs-2 fw-bold text-dark mb-3">
-                    {role === 'admin' ? t('login') : t('userLogin')}
-                  </h1>
-                  <Form.Label>{t('email')}</Form.Label>
+                <form onSubmit={loginLink} className="gap-0">
+                  <h1 className="fs-2 fw-bold text-dark mb-3">{t('login')}</h1>
+                  <Form.Label className="mb-1">{t('email')}</Form.Label>
                   <div className="position-relative">
                     <Form.Control
                       type="email"
+                      className="lh-1"
                       placeholder={t('enterEmail')}
                       required
                       value={formState.email}
@@ -422,6 +413,14 @@ const loginPage = (): JSX.Element => {
                           email: e.target.value,
                         });
                       }}
+                      onInvalid={(e) =>
+                        (e.target as HTMLInputElement).setCustomValidity(
+                          t('invalidEmail'),
+                        )
+                      }
+                      onInput={(e) =>
+                        (e.target as HTMLInputElement).setCustomValidity('')
+                      }
                       autoComplete="username"
                       data-testid="loginEmail"
                     />
@@ -432,7 +431,7 @@ const loginPage = (): JSX.Element => {
                       <EmailOutlinedIcon />
                     </Button>
                   </div>
-                  <Form.Label className="mt-3">{t('password')}</Form.Label>
+                  <Form.Label className="mt-2 mb-1">{t('password')}</Form.Label>
                   <div className="position-relative">
                     <Form.Control
                       type={showPassword ? 'text' : 'password'}
@@ -447,6 +446,14 @@ const loginPage = (): JSX.Element => {
                           password: e.target.value,
                         });
                       }}
+                      onInvalid={(e) =>
+                        (e.target as HTMLInputElement).setCustomValidity(
+                          t('noFill'),
+                        )
+                      }
+                      onInput={(e) =>
+                        (e.target as HTMLInputElement).setCustomValidity('')
+                      }
                       autoComplete="current-password"
                     />
                     <Button
@@ -461,7 +468,7 @@ const loginPage = (): JSX.Element => {
                       )}
                     </Button>
                   </div>
-                  <div className="text-end mt-3">
+                  <div className="text-end mt-2 mb-3">
                     <Link
                       to="/forgotPassword"
                       className="text-secondary"
@@ -487,7 +494,7 @@ const loginPage = (): JSX.Element => {
                   )}
                   <Button
                     type="submit"
-                    className="mt-3 mb-3 w-100"
+                    className="mb-0 w-100 lh-1"
                     value="Login"
                     data-testid="loginBtn"
                   >
@@ -500,7 +507,7 @@ const loginPage = (): JSX.Element => {
                   <Button
                     variant="outline-secondary"
                     value="Register"
-                    className="mt-3 mb-3 w-100"
+                    className="w-100 lh-1"
                     data-testid="goToRegisterPortion"
                     onClick={(): void => {
                       setShowTab('REGISTER');
@@ -517,18 +524,20 @@ const loginPage = (): JSX.Element => {
                   showTab === 'REGISTER' ? styles.active_tab : 'd-none'
                 }`}
               >
-                <Form onSubmit={signupLink}>
+                <Form onSubmit={signupLink} className="gap-0">
                   <h1 className="fs-2 fw-bold text-dark mb-3">
                     {t('register')}
                   </h1>
                   <Row>
                     <Col sm={6}>
                       <div>
-                        <Form.Label>{t('firstName')}</Form.Label>
+                        <Form.Label className="mb-1">
+                          {t('firstName')}
+                        </Form.Label>
                         <Form.Control
                           type="text"
                           id="signfirstname"
-                          className="mb-3"
+                          className="lh-1"
                           placeholder={t('firstName')}
                           required
                           value={signformState.signfirstName}
@@ -538,16 +547,26 @@ const loginPage = (): JSX.Element => {
                               signfirstName: e.target.value,
                             });
                           }}
+                          onInvalid={(e) =>
+                            (e.target as HTMLInputElement).setCustomValidity(
+                              t('noFill'),
+                            )
+                          }
+                          onInput={(e) =>
+                            (e.target as HTMLInputElement).setCustomValidity('')
+                          }
                         />
                       </div>
                     </Col>
                     <Col sm={6}>
                       <div>
-                        <Form.Label>{t('lastName')}</Form.Label>
+                        <Form.Label className="mb-1">
+                          {t('lastName')}
+                        </Form.Label>
                         <Form.Control
                           type="text"
                           id="signlastname"
-                          className="mb-3"
+                          className="lh-1"
                           placeholder={t('lastName')}
                           required
                           value={signformState.signlastName}
@@ -557,17 +576,25 @@ const loginPage = (): JSX.Element => {
                               signlastName: e.target.value,
                             });
                           }}
+                          onInvalid={(e) =>
+                            (e.target as HTMLInputElement).setCustomValidity(
+                              t('noFill'),
+                            )
+                          }
+                          onInput={(e) =>
+                            (e.target as HTMLInputElement).setCustomValidity('')
+                          }
                         />
                       </div>
                     </Col>
                   </Row>
-                  <div className="position-relative">
-                    <Form.Label>{t('email')}</Form.Label>
+                  <div className="position-relative mt-2">
+                    <Form.Label className="mb-1">{t('email')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
                         type="email"
                         data-testid="signInEmail"
-                        className="mb-3"
+                        className="lh-1"
                         placeholder={t('email')}
                         autoComplete="username"
                         required
@@ -578,6 +605,14 @@ const loginPage = (): JSX.Element => {
                             signEmail: e.target.value.toLowerCase(),
                           });
                         }}
+                        onInvalid={(e) =>
+                          (e.target as HTMLInputElement).setCustomValidity(
+                            t('invalidEmail'),
+                          )
+                        }
+                        onInput={(e) =>
+                          (e.target as HTMLInputElement).setCustomValidity('')
+                        }
                       />
                       <Button
                         tabIndex={-1}
@@ -588,11 +623,12 @@ const loginPage = (): JSX.Element => {
                     </div>
                   </div>
 
-                  <div className="position-relative mb-3">
-                    <Form.Label>{t('password')}</Form.Label>
+                  <div className="position-relative my-2">
+                    <Form.Label className="mb-1">{t('password')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
                         type={showPassword ? 'text' : 'password'}
+                        className="lh-1"
                         data-testid="passwordField"
                         placeholder={t('password')}
                         autoComplete="new-password"
@@ -610,6 +646,14 @@ const loginPage = (): JSX.Element => {
                           handleNumericalValuePassCheck(e.target.value);
                           handleSpecialCharPassCheck(e.target.value);
                         }}
+                        onInvalid={(e) =>
+                          (e.target as HTMLInputElement).setCustomValidity(
+                            t('noFill'),
+                          )
+                        }
+                        onInput={(e) =>
+                          (e.target as HTMLInputElement).setCustomValidity('')
+                        }
                       />
                       <Button
                         onClick={togglePassword}
@@ -745,11 +789,12 @@ const loginPage = (): JSX.Element => {
                       )}
                     </div>
                   </div>
-                  <div className="position-relative">
+                  <div className="position-relative  my-2">
                     <Form.Label>{t('confirmPassword')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
                         type={showConfirmPassword ? 'text' : 'password'}
+                        className="lh-1"
                         placeholder={t('confirmPassword')}
                         required
                         value={signformState.cPassword}
@@ -759,6 +804,14 @@ const loginPage = (): JSX.Element => {
                             cPassword: e.target.value,
                           });
                         }}
+                        onInvalid={(e) =>
+                          (e.target as HTMLInputElement).setCustomValidity(
+                            t('noFill'),
+                          )
+                        }
+                        onInput={(e) =>
+                          (e.target as HTMLInputElement).setCustomValidity('')
+                        }
                         data-testid="cpassword"
                         autoComplete="new-password"
                       />
@@ -801,7 +854,7 @@ const loginPage = (): JSX.Element => {
                   )}
                   <Button
                     type="submit"
-                    className="mt-4 w-100 mb-3"
+                    className="mt-4 w-100 mb-2"
                     value="Register"
                     data-testid="registrationBtn"
                   >
@@ -814,7 +867,7 @@ const loginPage = (): JSX.Element => {
                   <Button
                     variant="outline-secondary"
                     value="Register"
-                    className="mt-3 mb-5 w-100"
+                    className="mt-2 mb-1 w-100 lh-1"
                     data-testid="goToLoginPortion"
                     onClick={(): void => {
                       setShowTab('LOGIN');
@@ -831,6 +884,6 @@ const loginPage = (): JSX.Element => {
       </section>
     </>
   );
-};
+}
 
 export default loginPage;

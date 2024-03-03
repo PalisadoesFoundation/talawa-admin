@@ -11,7 +11,12 @@ export const errorHandler = (
 ): void => {
   if (error?.message === 'Failed to fetch') {
     toast.error(t('talawaApiUnavailable'));
+  } else if (error?.message === 'User not found') {
+    console.log('User Not Found In else if ');
+    toast.error(t('notFound'));
   } else {
+    console.log('User Not Found In only else');
+    console.log('error?.message', error?.message);
     toast.error(error?.message);
   }
 };

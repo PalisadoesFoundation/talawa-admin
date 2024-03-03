@@ -25,6 +25,20 @@ describe('Test if errorHandler is working properly', () => {
     expect(toast.error).toHaveBeenCalledWith(error.message);
   });
 
+  it('should call toast.error with the correct message if error message is "User not Found"', () => {
+    const error = { message: 'User not found' };
+    errorHandler(t, error);
+
+    expect(toast.error).toHaveBeenCalledWith(t('talawaApiUnavailable'));
+  });
+
+  it('should call toast.error with the error message if it is not "User not Found"', () => {
+    const error = { message: 'Some other error message' };
+    errorHandler(t, error);
+
+    expect(toast.error).toHaveBeenCalledWith(error.message);
+  });
+
   it('should call toast.error with the error message if error object is falsy', () => {
     const error = null;
     errorHandler(t, error);

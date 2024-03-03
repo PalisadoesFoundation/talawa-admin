@@ -4,7 +4,6 @@
     "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
     "talawa_portal": "Talawa Admin Portal",
     "login": "Login",
-    "userLogin": "User Login",
     "register": "Register",
     "firstName": "First Name",
     "lastName": "Last Name",
@@ -37,7 +36,41 @@
     "lowercase_check": "Atleast one lowercase letter",
     "uppercase_check": "Atleast one uppercase letter",
     "numeric_value_check": "Atleaset one numeric value",
-    "special_char_check": "Atleast one special character"
+    "special_char_check": "Atleast one special character",
+    "invalidEmail": "Invalid input, please enter a valid email address",
+    "noFill": "Please fill out this field"
+  },
+  "userLoginPage": {
+    "title": "Talawa Admin",
+    "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
+    "talawa_portal": "Talawa Admin Portal",
+    "login": "Login",
+    "register": "Register",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "password": "Password",
+    "atleast_8_char_long": "Atleast 8 Character long",
+    "Password_and_Confirm_password_mismatches.": "Password and Confirm password mismatches.",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot Password ?",
+    "enterEmail": "Enter Email",
+    "enterPassword": "Enter Password",
+    "doNotOwnAnAccount": "Do not own an account?",
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
+    "captchaError": "Captcha Error!",
+    "Please_check_the_captcha": "Please, check the captcha.",
+    "Something_went_wrong": "Something went wrong, Please try after sometime.",
+    "passwordMismatches": "Password and Confirm password mismatches.",
+    "fillCorrectly": "Fill all the Details Correctly.",
+    "notAuthorised": "Sorry! you are not Authorised!",
+    "notFound": "User not found!",
+    "successfullyRegistered": "Successfully Registered. Please wait until you will be approved.",
+    "userLogin": "User Login",
+    "afterRegister": "Successfully registered. Please wait for admin to approve your request.",
+    "OR": "OR",
+    "invalidEmail": "Invalid input, please enter a valid email address",
+    "noFill": "Please fill out this field"
   },
   "latestEvents": {
     "eventCardTitle": "Upcoming Events",
@@ -169,12 +202,7 @@
     "roleUpdated": "Role Updated.",
     "noResultsFoundFor": "No results found for ",
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
-    "cancel": "Cancel",
-    "admins": "Admins",
-    "members": "Members",
-    "joinNow": "Join Now",
-    "joined": "Joined",
-    "withdraw": "Widthdraw"
+    "cancel": "Cancel"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -207,10 +235,7 @@
     "users": "Users",
     "searchName": "Enter Name",
     "searchevent": "Enter Event",
-    "searchFullName": "Enter Full Name",
-    "people": "People",
-    "sort": "Search by Role",
-    "actions": "Actions"
+    "searchFullName": "Enter Full Name"
   },
   "userListCard": {
     "joined": "Joined",
@@ -265,40 +290,6 @@
     "eventCreated": "Congratulations! The Event is created.",
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
-  "organizationActionItems": {
-    "actionItemCategory": "Action Item Category",
-    "actionItemDetails": "Action Item Details",
-    "assignee": "Assignee",
-    "assigner": "Assigner",
-    "assignmentDate": "Assignment Date",
-    "active": "Active",
-    "clearFilters": "Clear Filters",
-    "close": "Close",
-    "completed": "Completed",
-    "completionDate": "Completion Date",
-    "createActionItem": "Create",
-    "deleteActionItem": "Delete Action Item",
-    "deleteActionItemMsg": "Do you want to remove this action item?",
-    "details": "Details",
-    "dueDate": "Due Date",
-    "earliest": "Earliest",
-    "editActionItem": "Edit Action Item",
-    "isCompleted": "Completed",
-    "latest": "Latest",
-    "no": "No",
-    "noActionItems": "No Action Items",
-    "options": "Options",
-    "preCompletionNotes": "Pre Completion Notes",
-    "postCompletionNotes": "Post Completion Notes",
-    "selectActionItemCategory": "Select an action item category",
-    "selectAssignee": "Select an assignee",
-    "status": "Status",
-    "successfulCreation": "Action Item created successfully",
-    "successfulUpdation": "Action Item updated successfully",
-    "successfulDeletion": "Action Item deleted successfully",
-    "title": "Action Items",
-    "yes": "Yes"
-  },
   "eventListCard": {
     "location": "Location",
     "on": "On",
@@ -348,9 +339,7 @@
     "sortPost": "Sort Post",
     "tag": " Your browser does not support the video tag",
     "postCreatedSuccess": "Congratulations! You have Posted Something.",
-    "pinPost": "Pin post",
-    "Next": "Next Page",
-    "Previous": "Previous Page"
+    "pinPost": "Pin post"
   },
   "postNotFound": {
     "post": "Post",
@@ -636,8 +625,7 @@
     "createdOrganizations": "Created Organizations",
     "search": "Search",
     "nothingToShow": "Nothing to show here.",
-    "organizations": "Organizations",
-    "searchByName": "Search By Name"
+    "selectOrganization": "Select Organization"
   },
   "userSidebar": {
     "yourOrganizations": "Your Organizations",
@@ -687,7 +675,14 @@
     "nothingToShow": "Nothing to show here.",
     "search": "Search",
     "createEvent": "Create Event",
-    "recurring": "Recurring Event",
+    "eventTitle": "Event Title",
+    "eventDescription": "Event Description",
+    "eventLocation": "Event Location",
+    "startDate": "Select Start Date",
+    "endDate": "Select End Date",
+    "publicEvent": "Public Event",
+    "registerable": "Registerable",
+    "recurring": "Recurring",
     "startTime": "Start Time",
     "endTime": "End Time",
     "cancel": "Cancel",
@@ -695,18 +690,7 @@
     "listView": "List View",
     "calendarView": "Calendar View",
     "allDay": "All Day",
-    "eventCreated": "Event created and posted successfully.",
-    "eventDetails": "Event Details",
-    "eventTitle": "Title",
-    "enterTitle": "Enter Title",
-    "eventDescription": "Description",
-    "enterDescription": "Enter Description",
-    "eventLocation": "Location",
-    "enterLocation": "Enter Location",
-    "startDate": "Start Date",
-    "endDate": "End Date",
-    "publicEvent": "Is Public",
-    "registerable": "Is Registerable"
+    "eventCreated": "Event created and posted successfully."
   },
   "userEventCard": {
     "location": "Location",
@@ -727,7 +711,7 @@
     "invalidLink": "Link is invalid",
     "Rname": "Enter name of Advertisement",
     "Rtype": "Select type of Advertisement",
-    "Rmedia": "Provide media content to be displayed",
+    "Rlink": "Provide a link for content to be displayed",
     "RstartDate": "Select Start Date",
     "RendDate": "Select End Date",
     "RClose": "Close the window",
@@ -779,5 +763,8 @@
     "sameNameConflict": "Please change the name to make an update",
     "categoryEnabled": "Action Item Category Enabled",
     "categoryDisabled": "Action Item Category Disabled"
+  },
+  "errorMessages": {
+    "errorMessageDefult": "User Not Found"
   }
 }

@@ -4,7 +4,6 @@
     "fromPalisadoes": "Una aplicación de código abierto de los voluntarios de la Fundación palisados",
     "talawa_portal": "Portal De Administración Talawa",
     "login": "Acceso",
-    "userLogin": "Inicio de sesión de usuario",
     "register": "Registro",
     "firstName": "Primer nombre",
     "lastName": "Apellido",
@@ -37,7 +36,41 @@
     "lowercase_check": "Al menos una letra mayuscula",
     "uppercase_check": "Al menos una letra minúscula",
     "numeric_value_check": "Al menos un valor numérico",
-    "special_char_check": "Al menos un carácter especial"
+    "special_char_check": "Al menos un carácter especial",
+    "invalidEmail": "Nevalida enigo, bonvolu enigi validan retadreson",
+    "noFill": "Por favor rellene este campo"
+  },
+  "userLoginPage": {
+    "title": "Administrador Talawa",
+    "fromPalisadoes": "Una aplicación de código abierto de los voluntarios de la Fundación palisados",
+    "talawa_portal": "Portal De Administración Talawa",
+    "login": "Acceso",
+    "register": "Registro",
+    "firstName": "Primer nombre",
+    "lastName": "Apellido",
+    "email": "Correo electrónico",
+    "password": "Clave",
+    "atleast_8_char_long": "Al menos 8 caracteres de largo",
+    "Password_and_Confirm_password_mismatches.": "Contraseña y Confirmar contraseña no coinciden.",
+    "confirmPassword": "Confirmar contraseña",
+    "forgotPassword": "Has olvidado tu contraseña ?",
+    "enterEmail": "ingrese correo electrónico",
+    "enterPassword": "introducir la contraseña",
+    "doNotOwnAnAccount": "¿No tienes una cuenta?",
+    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Verifica también la conectividad de tu red.",
+    "captchaError": "¡Error de captcha!",
+    "Please_check_the_captcha": "Por favor, revisa el captcha.",
+    "Something_went_wrong": "Algo salió mal. Inténtalo después de un tiempo",
+    "passwordMismatches": "Contraseña y Confirmar contraseña no coinciden.",
+    "fillCorrectly": "Complete todos los detalles correctamente.",
+    "notAuthorised": "¡Lo siento! ¡No estás autorizado!",
+    "notFound": "¡Usuario no encontrado!",
+    "successfullyRegistered": "Registrado con éxito. Espere hasta que sea aprobado",
+    "userLogin": "Inicio de sesión de usuario",
+    "afterRegister": "Registrado exitosamente. Espere a que el administrador apruebe su solicitud.",
+    "OR": "O",
+    "invalidEmail": "Entrada no válida, introduzca una dirección de correo electrónico válida",
+    "noFill": "Por favor rellene este campo"
   },
   "latestEvents": {
     "eventCardTitle": "Próximos Eventos",
@@ -163,12 +196,7 @@
     "roleUpdated": "Rol actualizado.",
     "noResultsFoundFor": "No se encontraron resultados para ",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
-    "cancel": "Cancelar",
-    "admins": "Administradores",
-    "members": "Miembros",
-    "joinNow": "Únete ahora",
-    "joined": "Unido",
-    "withdraw": "retirar"
+    "cancel": "Cancelar"
   },
   "dashboard": {
     "title": "Panel de",
@@ -202,10 +230,7 @@
     "searchName": "Ingrese su nombre",
     "searchevent": "Ingresar evento",
     "searchFirstName": "Ingrese el nombre",
-    "searchLastName": "Introduzca el apellido",
-    "people": "Personas",
-    "sort": "Ordenar por Rol",
-    "actions": "Acciones"
+    "searchLastName": "Introduzca el apellido"
   },
   "userListCard": {
     "joined": "Unido",
@@ -260,40 +285,6 @@
     "eventCreated": "¡Felicidades! Se crea el Evento.",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
-  "organizationActionItems": {
-    "actionItemCategory": "Categoría del ítem de acción",
-    "actionItemDetails": "Detalles del ítem de acción",
-    "assignee": "Asignado",
-    "assigner": "Asignador",
-    "assignmentDate": "Fecha de asignación",
-    "active": "Activo",
-    "clearFilters": "Borrar filtros",
-    "close": "Cerrar",
-    "completed": "Completado",
-    "completionDate": "Fecha de finalización",
-    "createActionItem": "Crear",
-    "deleteActionItem": "Eliminar ítem de acción",
-    "deleteActionItemMsg": "¿Desea eliminar este ítem de acción?",
-    "details": "Detalles",
-    "dueDate": "Fecha de vencimiento",
-    "earliest": "Lo más temprano",
-    "editActionItem": "Editar ítem de acción",
-    "isCompleted": "Completado",
-    "latest": "Lo más reciente",
-    "no": "No",
-    "noActionItems": "No hay ítems de acción",
-    "options": "Opciones",
-    "preCompletionNotes": "Notas previas a la finalización",
-    "postCompletionNotes": "Notas posteriores a la finalización",
-    "selectActionItemCategory": "Seleccione una categoría de ítem de acción",
-    "selectAssignee": "Seleccione un asignado",
-    "status": "Estado",
-    "successfulCreation": "Ítem de acción creado con éxito",
-    "successfulUpdation": "Ítem de acción actualizado con éxito",
-    "successfulDeletion": "Ítem de acción eliminado con éxito",
-    "title": "Ítems de acción",
-    "yes": "Sí"
-  },
   "eventListCard": {
     "location": "Ubicación",
     "on": "En",
@@ -343,9 +334,7 @@
     "sortPost": "Ordenar Publicaciones",
     "tag": "Su navegador no admite la etiqueta de video",
     "postCreatedSuccess": "¡Felicidades! Has publicado algo.",
-    "pinPost": "Fijar publicación",
-    "Next": "Siguiente página",
-    "Previous": "Página anterior"
+    "pinPost": "Fijar publicación"
   },
   "postNotFound": {
     "post": "Publicaciones",
@@ -631,9 +620,7 @@
     "createdOrganizations": "Organizaciones creadas",
     "search": "Buscar",
     "nothingToShow": "Nada que mostrar aquí.",
-    "selectOrganization": "Seleccionar organización",
-    "organizations": "Organizaciones",
-    "searchByName": "Buscar por nombre"
+    "selectOrganization": "Seleccionar organización"
   },
   "userSidebar": {
     "yourOrganizations": "Tus Organizaciones",
@@ -683,6 +670,13 @@
     "nothingToShow": "No hay nada que mostrar aquí.",
     "search": "Buscar",
     "createEvent": "Crear evento",
+    "eventTitle": "Título del evento",
+    "eventDescription": "Descripción del evento",
+    "eventLocation": "Lugar del evento",
+    "startDate": "Seleccione la fecha de inicio",
+    "endDate": "Seleccionar fecha de finalización",
+    "publicEvent": "Evento público",
+    "registerable": "Registrable",
     "recurring": "Periódica",
     "startTime": "Hora de inicio",
     "endTime": "Hora de finalización",
@@ -691,18 +685,7 @@
     "listView": "Vista de la lista",
     "calendarView": "Vista de calendario",
     "allDay": "Todo el dia",
-    "eventCreated": "Evento creado y publicado exitosamente.",
-    "eventDetails": "Detalles del evento",
-    "eventTitle": "Título",
-    "enterTitle": "Ingrese el título",
-    "eventDescription": "Descripción",
-    "enterDescription": "Ingresar descripción",
-    "eventLocation": "Ubicación",
-    "enterLocation": "Ingresar Ubicación",
-    "startDate": "Fecha de inicio",
-    "endDate": "Fecha de finalización",
-    "publicEvent": "Es público",
-    "registerable": "Es registrable"
+    "eventCreated": "Evento creado y publicado exitosamente."
   },
   "userEventCard": {
     "location": "Ubicación",
@@ -726,7 +709,6 @@
     "deleteAdvertisementMsg": "¿Desea eliminar este anuncio?",
     "no": "No",
     "yes": "Sí",
-    "Rmedia": "Proporcionar contenido multimedia para mostrar",
     "view": "Ver",
     "edit": "Editar",
     "editAdvertisement": "Editar Anuncio",
@@ -766,5 +748,8 @@
     "sameNameConflict": "Cambie el nombre para realizar una actualización",
     "categoryEnabled": "Categoría de elemento de acción habilitada",
     "categoryDisabled": "Categoría de elemento de acción deshabilitada"
+  },
+  "errorMessages": {
+    "errorMessageDefult": "¡Usuario no encontrado"
   }
 }

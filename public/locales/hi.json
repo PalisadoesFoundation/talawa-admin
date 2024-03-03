@@ -4,7 +4,6 @@
     "fromPalisadoes": "पलिसाडो के स्वयंसेवकों द्वारा एक खुला स्रोत अनुप्रयोग",
     "talawa_portal": "तलावा प्रशासन पोर्टल",
     "login": "लॉग इन करें",
-    "userLogin": "उपयोगकर्ता लॉगिन",
     "register": "पंजीकरण करवाना",
     "firstName": "पहला नाम",
     "lastName": "उपनाम",
@@ -37,7 +36,41 @@
     "lowercase_check": "कम से कम एक छोटा अक्षर",
     "uppercase_check": "कम से कम एक बड़ा अक्षर",
     "numeric_value_check": "कम से कम एक संख्यात्मक मान",
-    "special_char_check": "कम से कम एक विशेष पात्र"
+    "special_char_check": "कम से कम एक विशेष पात्र",
+    "invalidEmail": "अमान्य इनपुट, कृपया एक वैध ईमेल पता दर्ज करें",
+    "noFill": "कृपया इस क्षेत्र को भरें"
+  },
+  "userLoginPage": {
+    "title": "तलवा व्यवस्थापक",
+    "fromPalisadoes": "पलिसाडो के स्वयंसेवकों द्वारा एक खुला स्रोत अनुप्रयोग",
+    "talawa_portal": "तलावा प्रशासन पोर्टल",
+    "login": "लॉग इन करें",
+    "register": "पंजीकरण करवाना",
+    "firstName": "पहला नाम",
+    "lastName": "उपनाम",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "atleast_8_char_long": "कम से कम 8 कैरेक्टर लंबा",
+    "Password_and_Confirm_password_mismatches.": "पासवर्ड और पुष्टि पासवर्ड बेमेल।",
+    "confirmPassword": "पासवर्ड की पुष्टि कीजिये",
+    "forgotPassword": "पासवर्ड भूल गए ?",
+    "enterEmail": "ईमेल दर्ज करें",
+    "enterPassword": "पास वर्ड दर्ज करें",
+    "doNotOwnAnAccount": "क्या आपके पास खाता नहीं है?",
+    "talawaApiUnavailable": "तलावा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रही है? अपनी नेटवर्क कनेक्टिविटी की भी जाँच करें।",
+    "captchaError": "कैप्चा त्रुटि!",
+    "Please_check_the_captcha": "कृपया, कैप्चा जांचें।",
+    "Something_went_wrong": "कुछ गलत हुआ, कृपया कुछ समय बाद प्रयास करें।",
+    "passwordMismatches": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",
+    "fillCorrectly": "सभी विवरण सही ढंग से भरें।",
+    "notAuthorised": "क्षमा करें! आप अधिकृत नहीं हैं!",
+    "notFound": "उपयोगकर्ता नहीं मिला!",
+    "successfullyRegistered": "सफलतापूर्वक पंजीकृत। कृपया स्वीकृत होने तक प्रतीक्षा करें।",
+    "afterRegister": "पंजीकरण सफलतापूर्वक हो गया है। कृपया आपके अनुरोध को स्वीकार करने के लिए व्यवस्थापक की प्रतीक्षा करें।",
+    "userLogin": "उपयोगकर्ता लॉगिन",
+    "OR": "या",
+    "invalidEmail": "अमान्य इनपुट, कृपया एक वैध ईमेल पता दर्ज करें",
+    "noFill": "कृपया इस क्षेत्र को भरें"
   },
   "latestEvents": {
     "eventCardTitle": "आगामी घटनाएँ",
@@ -163,12 +196,7 @@
     "roleUpdated": "भूमिका अपडेट की गई।",
     "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला ",
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।",
-    "cancel": "रद्द करें",
-    "admins": "व्यवस्थापक",
-    "members": "सदस्य",
-    "joinNow": "अब शामिल हों",
-    "joined": "शामिल हुए",
-    "withdraw": "अनुरोध वापस लें"
+    "cancel": "रद्द करें"
   },
   "dashboard": {
     "title": "डैशबोर्ड",
@@ -202,10 +230,7 @@
     "searchName": "नाम दर्ज करें",
     "searchevent": "घटना दर्ज करें",
     "searchFirstName": "प्रथम नाम दर्ज करें",
-    "searchLastName": "अंतिम नाम दर्ज करो",
-    "people": "लोग",
-    "sort": "भूमिका के आधार पर खोजें",
-    "actions": "क्रियाएँ"
+    "searchLastName": "अंतिम नाम दर्ज करो"
   },
   "userListCard": {
     "joined": "में शामिल हो गए",
@@ -260,41 +285,6 @@
     "eventCreated": "बधाई हो! इवेंट बनाया गया है।",
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।"
   },
-  "organizationActionItems": {
-    "actionItemCategory": "कार्य आइटम श्रेणी",
-    "actionItemDetails": "कार्य आइटम विवरण",
-    "assignee": "सौंपने वाला",
-    "assigner": "निर्धारक",
-    "assignmentDate": "सौंपने की तारीख",
-    "active": "सक्रिय",
-    "clearFilters": "फ़िल्टर हटाएं",
-    "close": "बंद करें",
-    "completed": "पूरा हुआ",
-    "completionDate": "समापन तिथि",
-    "createActionItem": "बनाएं",
-    "deleteActionItem": "कार्य आइटम हटाएं",
-    "deleteActionItemMsg": "क्या आप इस कार्य आइटम को हटाना चाहते हैं?",
-    "details": "विवरण",
-    "dueDate": "नियत तारीख",
-    "earliest": "सबसे पहले",
-    "editActionItem": "कार्य आइटम संपादित करें",
-    "isCompleted": "पूरा हुआ",
-    "latest": "नवीनतम",
-    "no": "नहीं",
-    "noActionItems": "कोई कार्य आइटम नहीं",
-    "options": "विकल्प",
-    "preCompletionNotes": "समापन से पहले के नोट्स",
-    "postCompletionNotes": "समापन के बाद के नोट्स",
-    "searchByName": "नाम से खोजें",
-    "selectActionItemCategory": "कार्य आइटम श्रेणी का चयन करें",
-    "selectAssignee": "सौंपने वाला चुनें",
-    "status": "स्थिति",
-    "successfulCreation": "कार्य आइटम सफलतापूर्वक बनाया गया",
-    "successfulUpdation": "कार्य आइटम सफलतापूर्वक अपडेट किया गया",
-    "successfulDeletion": "कार्य आइटम सफलतापूर्वक हटाया गया",
-    "title": "कार्य आइटम",
-    "yes": "हाँ"
-  },
   "eventListCard": {
     "location": "स्थान",
     "on": "पर",
@@ -344,9 +334,7 @@
     "sortPost": "पोस्ट को क्रमित करें",
     "tag": "आपका ब्राउज़र वीडियो टैग का समर्थन नहीं करता",
     "postCreatedSuccess": "बधाई हो! आपने कुछ पोस्ट किया है।",
-    "pinPost": "पोस्ट को पिन करें",
-    "Next": "अगला पृष्ठ",
-    "Previous": "पिछला पृष्ठ"
+    "pinPost": "पोस्ट को पिन करें"
   },
   "postNotFound": {
     "post": "पोस्ट",
@@ -633,9 +621,7 @@
     "createdOrganizations": "संगठन बनाये गये",
     "search": "खोज",
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
-    "selectOrganization": "संगठन का चयन करें",
-    "organizations": "संगठन",
-    "searchByName": "नाम से खोजें"
+    "selectOrganization": "संगठन का चयन करें"
   },
   "userSidebar": {
     "yourOrganizations": "आपके संगठन",
@@ -685,6 +671,13 @@
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
     "search": "खोज",
     "createEvent": "कार्यक्रम बनाएँ",
+    "eventTitle": "कार्यक्रम का शीर्षक",
+    "eventDescription": "घटना विवरण",
+    "eventLocation": "घटना स्थान",
+    "startDate": "आरंभ तिथि चुनें",
+    "endDate": "अंतिम तिथि चुनें",
+    "publicEvent": "सार्वजनिक समारोह",
+    "registerable": "पंजीकरण योग्य",
     "recurring": "पुनरावर्ती",
     "startTime": "समय शुरू",
     "endTime": "अंत समय",
@@ -693,18 +686,7 @@
     "listView": "लिस्ट व्यू",
     "calendarView": "कैलेंडर दृश्य",
     "allDay": "पूरे दिन",
-    "eventCreated": "इवेंट सफलतापूर्वक बनाया और पोस्ट किया गया।",
-    "eventDetails": "घटना विवरण",
-    "eventTitle": "शीर्षक",
-    "enterTitle": "शीर्षक दर्ज करें",
-    "eventDescription": "विवरण",
-    "enterDescription": "विवरण दर्ज करें",
-    "eventLocation": "स्थान",
-    "enterLocation": "स्थान दर्ज करें",
-    "startDate": "प्रारंभ तिथि",
-    "endDate": "अंतिम तिथि",
-    "publicEvent": "सार्वजनिक है",
-    "registerable": "पंजीकृत करने योग्य है"
+    "eventCreated": "ईवेंट सफलतापूर्वक बनाया और पोस्ट किया गया."
   },
   "userEventCard": {
     "location": "जगह",
@@ -728,7 +710,6 @@
     "deleteAdvertisementMsg": "क्या आप इस विज्ञापन को हटाना चाहते हैं?",
     "no": "नहीं",
     "yes": "हाँ",
-    "Rmedia": "प्रदर्शित करने के लिए मीडिया सामग्री प्रदान करें",
     "view": "देखें",
     "edit": "संपादित करें",
     "editAdvertisement": "विज्ञापन संपादित करें",
@@ -768,5 +749,8 @@
     "sameNameConflict": "अपडेट करने के लिए कृपया नाम बदलें",
     "categoryEnabled": "कार्रवाई आइटम श्रेणी सक्षम",
     "categoryDisabled": "क्रिया आइटम श्रेणी अक्षम की गई"
+  },
+  "errorMessages": {
+    "errorMessageDefult": "उपयोगकर्ता नहीं मिला"
   }
 }
