@@ -63,71 +63,21 @@ jobs:
           python .github/workflows/compare_translations.py --directory public/locales
 
 
-  File-Count-Sensitive-Files-Branch-Check:
-    name: File count, sensitive files, and branch check
+  Check-Changed-Files:
+    name: File count, sensitive files and branch check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-    
+
       - name: Set up Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.x
-        
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v42
-        with:
-          files: |
-            .github/**
-            env.example
-            .husky/**
-            .node-version
-            scripts/**
-            package.json
-            tsconfig.json
-            .gitignore
-            .eslintrc.json
-            .eslintignore
-            vite.config.ts
-            docker-compose.yaml
-            Dockerfile
-            CODEOWNERS
-            LICENSE
-            setup.ts
-        
-      - name: Run step if any of the listed files above change
-        if: steps.changed-files.outputs.any_changed == 'true'
+          python-version: 3.11
+
+      - name: Run Python script
         run: |
-          echo "One or more files listed above has changed."
-        
-      - name: Run step if only the files listed above change
-        if: steps.changed-files.outputs.only_changed == 'true'
-        run: |
-          echo "Only files listed above have changed."
-        
-      - name: Run step if any of the listed files above is deleted
-        if: steps.changed-files.outputs.any_deleted == 'true'
-        env:
-          DELETED_FILES: ${{ steps.changed-files.outputs.deleted_files }}
-        run: |
-          for file in ${DELETED_FILES}; do
-            echo "$file was deleted"
-          done
-                
-              - name: Run step if all listed files above have been deleted
-                if: steps.changed-files.outputs.only_deleted == 'true'
-                env:
-                  DELETED_FILES: ${{ steps.changed-files.outputs.deleted_files }}
-                run: |
-                  for file in ${DELETED_FILES}; do
-                    echo "$file was deleted"
-                  done
-                
-              - name: Run Python script
-                run: |
-                  python .github/workflows/count_changed_files.py --base_branch "${{ github.base_ref }}" --pr_branch "${{ github.head_ref }}"   
+          python3 .github/workflows/check_files.py --base_branch "${{ github.base_ref }}" --pr_branch "${{ github.head_ref }}" --sensitive_files .github/workflows/sensitive_files.txt --verbose
 
   Test-Application:
     name: Test Application
