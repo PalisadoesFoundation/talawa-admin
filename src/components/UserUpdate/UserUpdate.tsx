@@ -200,15 +200,15 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
             <div>
               <label>
                 {t('appLanguageCode')}
-                <Dropdown
-                  onSelect={(eventKey): void => {
-                    setFormState({
-                      ...formState,
-                      appLanguageCode: eventKey !== null ? eventKey : '',
-                    });
-                  }}
-                >
-                  <div role="applangcode">
+                <div role="applangcode">
+                  <Dropdown
+                    onSelect={(eventKey): void => {
+                      setFormState({
+                        ...formState,
+                        appLanguageCode: eventKey !== null ? eventKey : '',
+                      });
+                    }}
+                  >
                     <Dropdown.Toggle>
                       {
                         languages.find(
@@ -216,22 +216,22 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
                         )?.name
                       }
                     </Dropdown.Toggle>
-                  </div>
-                  <Dropdown.Menu>
-                    {languages.map((language, index) => {
-                      return (
-                        <Dropdown.Item
-                          href=""
-                          key={index}
-                          eventKey={language.code}
-                          role={language.name}
-                        >
-                          {language.name}
-                        </Dropdown.Item>
-                      );
-                    })}
-                  </Dropdown.Menu>
-                </Dropdown>
+                    <Dropdown.Menu>
+                      {languages.map((language, index) => {
+                        return (
+                          <Dropdown.Item
+                            href=""
+                            key={index}
+                            eventKey={language.code}
+                            role={language.name}
+                          >
+                            {language.name}
+                          </Dropdown.Item>
+                        );
+                      })}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </div>
               </label>
             </div>
           </div>
