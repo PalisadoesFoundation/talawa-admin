@@ -41,7 +41,7 @@ const FundCreateModal: React.FC<InterfaceFundCreateModal> = ({
         onHide={hideCreateModal}
       >
         <Modal.Header>
-          <p className={styles.titlemodal}></p>
+          <p className={styles.titlemodal}> {t('fundCreate')}</p>
           <Button
             variant="danger"
             onClick={hideCreateModal}
