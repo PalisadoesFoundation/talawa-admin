@@ -10,9 +10,8 @@ import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useSubscription } from '@apollo/client';
 import { USER_ORGANIZATION_CONNECTION } from 'GraphQl/Queries/Queries';
-import getOrganizationId from 'utils/getOrganizationId';
 import type { DropDirection } from 'react-bootstrap/esm/DropdownContext';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { PLUGIN_SUBSCRIPTION } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 interface InterfaceNavbarProps {
@@ -32,13 +31,13 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     keyPrefix: 'userNavbar',
   });
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [organizationDetails, setOrganizationDetails]: any = React.useState({});
   // const dropDirection: DropDirection = screen.width > 767 ? 'start' : 'down';
   const dropDirection: DropDirection = 'start';
 
-  const organizationId = getOrganizationId(window.location.href);
+  const { orgId: organizationId } = useParams();
 
   const { data } = useQuery(USER_ORGANIZATION_CONNECTION, {
     variables: { id: organizationId },
@@ -64,26 +63,26 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     }
   }, [data]);
 
-  const homeLink = `/user/organization/id=${organizationId}`;
+  const homeLink = `/user/organization/${organizationId}`;
   let plugins: Plugin[] = [
     {
       pluginName: 'People',
       alias: 'people',
-      link: `/user/people/id=${organizationId}`,
+      link: `/user/people/${organizationId}`,
       translated: t('people'),
       view: true,
     },
     {
       pluginName: 'Events',
       alias: 'events',
-      link: `/user/events/id=${organizationId}`,
+      link: `/user/events/${organizationId}`,
       translated: t('events'),
       view: true,
     },
     {
       pluginName: 'Donation',
       alias: 'donate',
-      link: `/user/donate/id=${organizationId}`,
+      link: `/user/donate/${organizationId}`,
       translated: t('donate'),
       view: true,
     },
@@ -154,7 +153,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                 active={props.currentPage === 'home'}
                 onClick={
                   /* istanbul ignore next */
-                  (): void => history.push(homeLink)
+                  (): void => navigate(homeLink)
                 }
               >
                 {t('home')}
@@ -164,7 +163,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                   plugin.view && (
                     <Nav.Link
                       active={props.currentPage == plugin.alias}
-                      onClick={(): void => history.push(plugin.link)}
+                      onClick={(): void => navigate(plugin.link)}
                       key={idx}
                     >
                       {plugin.translated}

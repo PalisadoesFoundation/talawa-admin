@@ -22,7 +22,10 @@ const cardItem = (props: InterfaceCardItem): JSX.Element => {
   const { creator, type, title, startdate, time, enddate, location } = props;
   return (
     <>
-      <div className={`${styles.cardItem} border-bottom py-3 pe-5 ps-4`}>
+      <div
+        className={`${styles.cardItem} border-bottom py-3 pe-5 ps-4`}
+        data-testid="cardItem"
+      >
         <div className={`${styles.iconWrapper} me-3`}>
           <div className={styles.themeOverlay} />
           {type == 'Event' ? (

@@ -14,7 +14,7 @@ import { SearchOutlined } from '@mui/icons-material';
 import styles from './People.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import getOrganizationId from 'utils/getOrganizationId';
+import { useParams } from 'react-router-dom';
 
 interface InterfaceOrganizationCardProps {
   id: string;
@@ -33,7 +33,7 @@ export default function people(): JSX.Element {
   const [members, setMembers] = React.useState([]);
   const [mode, setMode] = React.useState(0);
 
-  const organizationId = getOrganizationId(window.location.href);
+  const { orgId: organizationId } = useParams();
 
   const modes = ['All Members', 'Admins'];
 

@@ -454,6 +454,11 @@ async function wait(ms = 2): Promise<void> {
     });
   });
 }
+const linkURL = 'orgid';
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: linkURL }),
+}));
 
 // TODO - REMOVE THE NEXT LINE IT IS TO SUPPRESS THE ERROR
 // FOR THE FIRST TEST WHICH CAME OUT OF NOWHERE
@@ -469,7 +474,7 @@ describe('Organization People Page', () => {
   };
 
   test('Correct mock data should be queried', async () => {
-    window.location.assign('/orgpeople/id=orgid');
+    window.location.assign('/orgpeople/orgid');
 
     const dataQuery1 =
       MOCKS[1]?.result?.data?.organizationsMemberConnection?.edges;
@@ -544,11 +549,11 @@ describe('Organization People Page', () => {
       ...users,
     ]);
 
-    expect(window.location).toBeAt('/orgpeople/id=orgid');
+    expect(window.location).toBeAt('/orgpeople/orgid');
   });
 
   test('It is necessary to query the correct mock data.', async () => {
-    window.location.assign('/orgpeople/id=orgid');
+    window.location.assign('/orgpeople/orgid');
 
     const { container } = render(
       <MockedProvider addTypename={false} link={link}>
@@ -566,11 +571,11 @@ describe('Organization People Page', () => {
 
     await wait();
 
-    expect(window.location).toBeAt('/orgpeople/id=orgid');
+    expect(window.location).toBeAt('/orgpeople/orgid');
   });
 
   test('Testing MEMBERS list', async () => {
-    window.location.assign('/orgpeople/id=orgid');
+    window.location.assign('/orgpeople/orgid');
     render(
       <MockedProvider
         addTypename={true}
@@ -605,11 +610,11 @@ describe('Organization People Page', () => {
     );
 
     await wait();
-    expect(window.location).toBeAt('/orgpeople/id=orgid');
+    expect(window.location).toBeAt('/orgpeople/orgid');
   });
 
   test('Testing MEMBERS list with filters', async () => {
-    window.location.assign('/orgpeople/id=orgid');
+    window.location.assign('/orgpeople/orgid');
     render(
       <MockedProvider
         addTypename={true}
@@ -644,11 +649,11 @@ describe('Organization People Page', () => {
     await wait();
     expect(findtext).toBeInTheDocument();
     await wait();
-    expect(window.location).toBeAt('/orgpeople/id=orgid');
+    expect(window.location).toBeAt('/orgpeople/orgid');
   });
 
   test('Testing ADMIN LIST', async () => {
-    window.location.assign('/orgpeople/id=orgid');
+    window.location.assign('/orgpeople/orgid');
 
     render(
       <MockedProvider
@@ -707,12 +712,11 @@ describe('Organization People Page', () => {
 
     // Wait for any asynchronous operations to complete
     await wait();
-    expect(window.location).toBeAt('/orgpeople/id=orgid');
+    expect(window.location).toBeAt('/orgpeople/orgid');
   });
 
   test('Testing ADMIN list with filters', async () => {
-    window.location.assign('/orgpeople/id=orgid');
-
+    window.location.assign('/orgpeople/orgid');
     render(
       <MockedProvider
         addTypename={true}
@@ -758,11 +762,11 @@ describe('Organization People Page', () => {
     findtext = screen.getByText(/Aditya Adminguy/i);
     expect(findtext).toBeInTheDocument();
     await wait();
-    expect(window.location).toBeAt('/orgpeople/id=orgid');
+    expect(window.location).toBeAt('/orgpeople/orgid');
   });
 
   test('Testing USERS list', async () => {
-    window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af1');
+    window.location.assign('/orgpeople/6401ff65ce8e8406b8f07af1');
 
     render(
       <MockedProvider
@@ -787,11 +791,12 @@ describe('Organization People Page', () => {
     const orgUsers = MOCKS[3]?.result?.data?.users;
     expect(orgUsers?.length).toBe(102);
 
-    expect(window.location).toBeAt('/orgpeople/id=6401ff65ce8e8406b8f07af1');
+    await wait();
+    expect(window.location).toBeAt('/orgpeople/6401ff65ce8e8406b8f07af1');
   });
 
   test('Testing USERS list with filters', async () => {
-    window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af2');
+    window.location.assign('/orgpeople/6401ff65ce8e8406b8f07af2');
 
     render(
       <MockedProvider
@@ -832,21 +837,20 @@ describe('Organization People Page', () => {
           _id: string;
         }[];
       }) => {
-        window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af2');
-        const pathname = window.location.pathname;
-        const id = pathname.split('=')[1];
-        return datas.joinedOrganizations?.some((org) => org._id === id);
+        return datas.joinedOrganizations?.some(
+          (org) => org._id === '6401ff65ce8e8406b8f07af2',
+        );
       },
     );
     await wait();
     expect(orgUserssize?.length).toBe(1);
 
     await wait();
-    expect(window.location).toBeAt('/orgpeople/id=6401ff65ce8e8406b8f07af2');
+    expect(window.location).toBeAt('/orgpeople/6401ff65ce8e8406b8f07af2');
   });
 
   test('No Mock Data test', async () => {
-    window.location.assign('/orgpeople/id=orgid');
+    window.location.assign('/orgpeople/orgid');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -861,6 +865,6 @@ describe('Organization People Page', () => {
     );
 
     await wait();
-    expect(window.location).toBeAt('/orgpeople/id=orgid');
+    expect(window.location).toBeAt('/orgpeople/orgid');
   });
 });

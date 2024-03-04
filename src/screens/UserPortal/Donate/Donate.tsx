@@ -11,10 +11,10 @@ import {
 import { useQuery } from '@apollo/client';
 import styles from './Donate.module.css';
 import SendIcon from '@mui/icons-material/Send';
-import getOrganizationId from 'utils/getOrganizationId';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import DonationCard from 'components/UserPortal/DonationCard/DonationCard';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 interface InterfaceDonationCardProps {
   id: string;
@@ -29,7 +29,7 @@ export default function donate(): JSX.Element {
     keyPrefix: 'donate',
   });
 
-  const organizationId = getOrganizationId(location.href);
+  const { orgId: organizationId } = useParams();
   const [organizationDetails, setOrganizationDetails]: any = React.useState({});
   const [donations, setDonations] = React.useState([]);
   const [selectedCurrency, setSelectedCurrency] = React.useState(0);

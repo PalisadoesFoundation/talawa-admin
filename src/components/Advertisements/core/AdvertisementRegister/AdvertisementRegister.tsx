@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import convertToBase64 from 'utils/convertToBase64';
 import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
+import { useParams } from 'react-router-dom';
 interface InterfaceAddOnRegisterProps {
   id?: string; // organizationId
   createdBy?: string; // User
@@ -30,7 +31,7 @@ interface InterfaceFormStateTypes {
   type: string;
   startDate: Date;
   endDate: Date;
-  organizationId: string;
+  organizationId: string | undefined;
 }
 
 function advertisementRegister({
@@ -52,7 +53,7 @@ function advertisementRegister({
   const { refetch } = useQuery(ADVERTISEMENTS_GET);
 
   //getting organizationId from URL
-  const currentOrg = window.location.href.split('/id=')[1] + '';
+  const { orgId: currentOrg } = useParams();
   const [formState, setFormState] = useState<InterfaceFormStateTypes>({
     name: '',
     advertisementMedia: '',
