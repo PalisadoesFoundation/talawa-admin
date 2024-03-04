@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
@@ -110,6 +110,40 @@ jest.mock('react-router-dom', () => ({
     push: mockHistoryPush,
   }),
 }));
+jest.mock('react-google-recaptcha', () => {
+  const react = jest.requireActual('react');
+  const recaptcha = react.forwardRef(
+    (
+      props: {
+        onChange: (value: string) => void;
+      } & React.InputHTMLAttributes<HTMLInputElement>,
+      ref: React.LegacyRef<HTMLInputElement> | undefined,
+    ): JSX.Element => {
+      const { onChange, ...otherProps } = props;
+
+      const handleChange = (
+        event: React.ChangeEvent<HTMLInputElement>,
+      ): void => {
+        if (onChange) {
+          onChange(event.target.value);
+        }
+      };
+
+      return (
+        <>
+          <input
+            type="text"
+            data-testid="mock-recaptcha"
+            {...otherProps}
+            onChange={handleChange}
+            ref={ref}
+          />
+        </>
+      );
+    },
+  );
+  return recaptcha;
+});
 
 describe('Talawa-API server fetch check', () => {
   beforeEach(() => {
@@ -705,6 +739,36 @@ describe('Testing Login Page Screen', () => {
     await wait();
     expect(screen.getByText(/User Login/i)).toBeInTheDocument();
     expect(window.location).toBeAt('/user/organizations');
+  });
+
+  test('on value change of ReCAPTCHA onChange event should be triggered in both the captcha', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const recaptchaElements = screen.getAllByTestId('mock-recaptcha');
+
+    for (const recaptchaElement of recaptchaElements) {
+      const inputElement = recaptchaElement as HTMLInputElement;
+
+      fireEvent.input(inputElement, {
+        target: { value: 'test-token' },
+      });
+
+      fireEvent.change(inputElement, {
+        target: { value: 'test-token2' },
+      });
+
+      expect(recaptchaElement).toHaveValue('test-token2');
+    }
   });
 });
 
