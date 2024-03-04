@@ -1,7 +1,6 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import IconComponent from './IconComponent';
-
+import React from 'react';
 const screenTestIdMap: Record<string, Record<string, string>> = {
   Dashboard: {
     name: 'Dashboard',
@@ -22,6 +21,10 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
   Posts: {
     name: 'Posts',
     testId: 'Icon-Component-PostsIcon',
+  },
+  Funds: {
+    name: 'Funds',
+    testId: 'Icon-Component-Funds',
   },
   BlockUnblock: {
     name: 'Block/Unblock',

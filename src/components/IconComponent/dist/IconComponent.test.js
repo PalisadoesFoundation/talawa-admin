@@ -1,0 +1,75 @@
+"use strict";
+exports.__esModule = true;
+var react_1 = require("@testing-library/react");
+var IconComponent_1 = require("./IconComponent");
+var react_2 = require("react");
+var screenTestIdMap = {
+    Dashboard: {
+        name: 'Dashboard',
+        testId: 'Icon-Component-DashboardIcon'
+    },
+    People: {
+        name: 'People',
+        testId: 'Icon-Component-PeopleIcon'
+    },
+    Events: {
+        name: 'Events',
+        testId: 'Icon-Component-EventsIcon'
+    },
+    ActionItems: {
+        name: 'Action Items',
+        testId: 'Icon-Component-ActionItemIcon'
+    },
+    Posts: {
+        name: 'Posts',
+        testId: 'Icon-Component-PostsIcon'
+    },
+    Funds: {
+        name: 'Funds',
+        testId: 'Icon-Component-Funds'
+    },
+    BlockUnblock: {
+        name: 'Block/Unblock',
+        testId: 'Block/Icon-Component-UnblockIcon'
+    },
+    Plugins: {
+        name: 'Plugins',
+        testId: 'Icon-Component-PluginsIcon'
+    },
+    Settings: {
+        name: 'Settings',
+        testId: 'Icon-Component-SettingsIcon'
+    },
+    AllOrganizations: {
+        name: 'My Organizations',
+        testId: 'Icon-Component-MyOrganizationsIcon'
+    },
+    ListEventRegistrant: {
+        name: 'List Event Registrants',
+        testId: 'Icon-Component-List-Event-Registrants'
+    },
+    CheckInRegistrants: {
+        name: 'Check In Registrants',
+        testId: 'Icon-Component-Check-In-Registrants'
+    },
+    EventStats: {
+        name: 'Event Stats',
+        testId: 'Icon-Component-Event-Stats'
+    },
+    Advertisement: {
+        name: 'Advertisement',
+        testId: 'Icon-Component-Advertisement'
+    },
+    "default": {
+        name: 'default',
+        testId: 'Icon-Component-DefaultIcon'
+    }
+};
+describe('Testing Collapsible Dropdown component', function () {
+    it('Renders the correct icon according to the component', function () {
+        for (var component in screenTestIdMap) {
+            react_1.render(react_2["default"].createElement(IconComponent_1["default"], { name: screenTestIdMap[component].name }));
+            expect(react_1.screen.getByTestId(screenTestIdMap[component].testId)).toBeInTheDocument();
+        }
+    });
+});
