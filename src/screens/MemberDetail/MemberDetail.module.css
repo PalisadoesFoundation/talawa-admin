@@ -448,3 +448,24 @@
 .inactiveBtn:hover i {
   color: #31bb6b;
 }
+
+.topRadius {
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.inputColor {
+  background: #f1f3f6;
+}
+
+.width60 {
+  width: 60%;
+}
+
+.maxWidth40 {
+  max-width: 40%;
+}
+
+.allRound {
+  border-radius: 16px;
+}

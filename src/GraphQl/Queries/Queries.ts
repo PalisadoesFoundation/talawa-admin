@@ -440,6 +440,20 @@ export const USER_DETAILS = gql`
       pluginCreationAllowed
       adminApproved
       createdAt
+      gender
+      birthDate
+      educationGrade
+      employmentStatus
+      maritalStatus
+      address {
+        line1
+        countryCode
+        city
+        state
+      }
+      phone {
+        home
+      }
       adminFor {
         _id
       }
