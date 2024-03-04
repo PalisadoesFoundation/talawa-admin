@@ -168,7 +168,11 @@
     "members": "Miembros",
     "joinNow": "Únete ahora",
     "joined": "Unido",
-    "withdraw": "retirar"
+    "withdraw": "retirar",
+    "orgJoined": "Unido a la organización exitosamente",
+    "MembershipRequestSent": "Solicitud de membresía enviada exitosamente",
+    "AlreadyJoined": "Ya eres miembro de esta organización.",
+    "errorOccured": "Se produjo un error. Por favor, inténtalo de nuevo más tarde."
   },
   "dashboard": {
     "title": "Panel de",

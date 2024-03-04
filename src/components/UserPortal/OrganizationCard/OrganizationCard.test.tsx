@@ -18,8 +18,16 @@ import {
   SEND_MEMBERSHIP_REQUEST,
   JOIN_PUBLIC_ORGANIZATION,
 } from 'GraphQl/Mutations/OrganizationMutations';
+import { toast } from 'react-toastify';
 
 const { getItem } = useLocalStorage();
+
+jest.mock('react-toastify', () => ({
+  toast: {
+    success: jest.fn(),
+    error: jest.fn(),
+  },
+}));
 
 const MOCKS = [
   {
@@ -239,6 +247,11 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
     expect(screen.getByTestId('joinBtn')).toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId('joinBtn'));
+    await wait();
+
+    expect(toast.success).toHaveBeenCalledWith(
+      'Membership request sent successfully',
+    );
   });
 
   test('send membership request to public org', async () => {
@@ -266,6 +279,11 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
     expect(screen.getByTestId('joinBtn')).toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId('joinBtn'));
+    await wait();
+
+    expect(toast.success).toHaveBeenCalledWith(
+      'Joined organization successfully',
+    );
   });
 
   test('withdraw membership request', async () => {
