@@ -28,6 +28,7 @@ import Users from 'screens/Users/Users';
 // User Portal Components
 import Donate from 'screens/UserPortal/Donate/Donate';
 import Events from 'screens/UserPortal/Events/Events';
+import Organizations from 'screens/UserPortal/Organizations/Organizations';
 import Home from 'screens/UserPortal/Home/Home';
 import Organizations from 'screens/UserPortal/Organizations/Organizations';
 import People from 'screens/UserPortal/People/People';

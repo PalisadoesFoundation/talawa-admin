@@ -200,6 +200,9 @@ export interface InterfaceFundInfo {
   createdAt: string;
 }
 
+
+
+
 export interface InterfaceQueryOrganizationEventListItem {
   _id: string;
   title: string;
