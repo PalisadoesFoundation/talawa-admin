@@ -72,6 +72,7 @@
   -webkit-line-clamp: 1;
   line-clamp: 1;
   -webkit-box-orient: vertical;
+  max-width: 20rem;
 }
 
 .orgadmin {
@@ -82,7 +83,22 @@
   font-size: 0.9rem;
 }
 
-@media (max-width: 450px) {
+.address {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  align-items: center;
+  margin-left: -5px;
+}
+
+.address h6 {
+  font-size: 0.9rem;
+  color: var(--bs-gray-600);
+}
+
+@media (max-width: 580px) {
   .orgCard {
     height: unset;
     margin: 0.5rem 0;
