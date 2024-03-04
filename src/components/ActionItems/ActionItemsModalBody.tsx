@@ -172,16 +172,9 @@ export const ActionItemsModalBody = ({
 
   return (
     <>
-      <ActionItemsContainer
-        actionItemsConnection={`Event`}
-        actionItemsData={actionItemsData?.actionItemsByOrganization}
-        membersData={membersData?.organizations[0].members}
-        actionItemsRefetch={actionItemsRefetch}
-      />
-
-      <div className="mt-3 d-flex justify-content-between align-items-center">
+      <div className="mb-3 d-flex justify-content-between align-items-center">
         <span className="fw-bold text-secondary ms-2">
-          <span className="d-none d-md-inline fw-bold text-dark">Report: </span>
+          <span className="d-none d-md-inline fw-bold text-dark">Status: </span>
           {actionItemsData?.actionItemsByOrganization.length} action items
           assigned, {completedActionItemsCount} completed
         </span>
@@ -196,6 +189,13 @@ export const ActionItemsModalBody = ({
           {t('createActionItem')}
         </Button>
       </div>
+
+      <ActionItemsContainer
+        actionItemsConnection={`Event`}
+        actionItemsData={actionItemsData?.actionItemsByOrganization}
+        membersData={membersData?.organizations[0].members}
+        actionItemsRefetch={actionItemsRefetch}
+      />
 
       {/* Create Modal */}
       <ActionItemCreateModal

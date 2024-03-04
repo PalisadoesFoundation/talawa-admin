@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import dayjs from 'dayjs';
 import type { ChangeEvent } from 'react';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
@@ -41,6 +41,7 @@ function actionItemsContainer({
     useState(false);
   const [actionItemDeleteModalIsOpen, setActionItemDeleteModalIsOpen] =
     useState(false);
+  const [actionItemStatusModal, setActionItemStatusModal] = useState(false);
 
   const [assignmentDate, setAssignmentDate] = useState<Date | null>(new Date());
   const [dueDate, setDueDate] = useState<Date | null>(new Date());
@@ -137,6 +138,25 @@ function actionItemsContainer({
   };
 
   const handleEditClick = (actionItem: InterfaceActionItemInfo): void => {
+    setActionItemState(actionItem);
+    showUpdateModal();
+  };
+
+  const handleActionItemStatusChange = (
+    actionItem: InterfaceActionItemInfo,
+  ): void => {
+    setActionItemState(actionItem);
+    // if (actionItem.isCompleted) {
+    // } else {
+    // }
+    setActionItemStatusModal(true);
+  };
+
+  const hideActionItemStatusModal = (): void => {
+    setActionItemStatusModal(false);
+  };
+
+  const setActionItemState = (actionItem: InterfaceActionItemInfo): void => {
     setFormState({
       ...formState,
       assignee: `${actionItem.assignee.firstName} ${actionItem.assignee.lastName}`,
@@ -148,7 +168,6 @@ function actionItemsContainer({
     setActionItemId(actionItem._id);
     setDueDate(actionItem.dueDate);
     setCompletionDate(actionItem.completionDate);
-    showUpdateModal();
   };
 
   return (
@@ -162,21 +181,39 @@ function actionItemsContainer({
           <Row
             className={`mx-0 border border-light-subtle py-3 ${actionItemsConnection === 'Organization' ? 'rounded-top-4' : 'rounded-top-2'}`}
           >
-            <Col xs={7} sm={4} md={3} lg={3} className="ps-3 fs-5 fw-bold">
+            <Col
+              xs={7}
+              sm={4}
+              md={3}
+              lg={2}
+              className="align-self-center ps-3 fw-bold"
+            >
               <div className="ms-2">{t('assignee')}</div>
             </Col>
-            <Col
-              className="fs-5 fw-bold d-none d-sm-block"
-              sm={5}
-              md={6}
-              lg={4}
-            >
+            <Col className="fw-bold d-none d-sm-block" sm={5} md={6} lg={3}>
               {t('actionItemCategory')}
             </Col>
-            <Col className="d-none d-lg-block fs-5 fw-bold" md={4} lg={3}>
-              <div className="ms-3">{t('status')}</div>
+            <Col
+              className="d-none d-lg-block fw-bold align-self-center"
+              md={4}
+              lg={2}
+            >
+              <div className="ms-3">
+                {/* {t('status')} */}
+                Notes
+              </div>
             </Col>
-            <Col xs={5} sm={3} lg={2} className="fs-5 fw-bold">
+            <Col
+              className="d-none d-lg-block fw-bold align-self-center"
+              md={4}
+              lg={3}
+            >
+              <div className="ms-3">
+                {/* {t('status')} */}
+                Notes (Completion)
+              </div>
+            </Col>
+            <Col xs={5} sm={3} lg={2} className="fw-bold align-self-center">
               <div className="ms-3">{t('options')}</div>
             </Col>
           </Row>
@@ -192,67 +229,72 @@ function actionItemsContainer({
                   sm={4}
                   xs={7}
                   md={3}
-                  lg={3}
-                  className="align-self-center fw-semibold text-body-secondary"
+                  lg={2}
+                  className="align-self-center text-body-secondary"
                 >
                   {`${actionItem.assignee.firstName} ${actionItem.assignee.lastName}`}
                 </Col>
                 <Col
                   sm={5}
                   md={6}
-                  lg={4}
-                  className="d-none d-sm-block align-self-center fw-semibold text-body-secondary"
+                  lg={2}
+                  className="p-1 d-none d-sm-block align-self-center text-body-secondary"
                 >
                   {actionItem.actionItemCategory.name}
                 </Col>
                 <Col
-                  className="p-0 d-none d-lg-block align-self-center fw-semibold text-body-secondary"
+                  className="p-0 d-none d-lg-block align-self-center text-body-secondary"
                   md={4}
                   lg={3}
                 >
-                  <div
-                    className={`${
-                      styles.actionItemStatusBadge
-                    } lh-base badge rounded-pill ${
-                      actionItem.isCompleted
-                        ? 'text-bg-success text-white'
-                        : 'text-bg-warning text-secondary-emphasis'
-                    }`}
-                  >
-                    {actionItem.isCompleted ? t('completed') : t('active')}
+                  <div className="ms-5">{actionItem.preCompletionNotes}</div>
+                </Col>
+                <Col
+                  className="p-0 d-none d-lg-block align-self-center text-body-secondary"
+                  md={4}
+                  lg={3}
+                >
+                  <div className="ms-3">
+                    {actionItem.isCompleted ? (
+                      actionItem.postCompletionNotes
+                    ) : (
+                      <span className="text-body-tertiary ms-3 fst-italic">
+                        Action Item Active
+                      </span>
+                    )}
                   </div>
                 </Col>
-                <Col xs={5} sm={3} lg={2} className="p-0">
-                  <Button
-                    data-testid="previewActionItemModalBtn"
-                    className="btn btn-sm me-2"
-                    variant="outline-secondary"
-                    onClick={() => showPreviewModal(actionItem)}
-                  >
-                    {t('details')}
-                  </Button>
-                  <Button
-                    size="sm"
-                    data-testid="editActionItemModalBtn"
-                    onClick={() => handleEditClick(actionItem)}
-                    className="me-2"
-                    variant="success"
-                  >
-                    {' '}
-                    <i className="fas fa-edit"></i>
-                  </Button>
-                  <Button
-                    size="sm"
-                    data-testid="deleteActionItemModalBtn"
-                    variant="danger"
-                    onClick={() => {
-                      setActionItemId(actionItem._id);
-                      toggleDeleteModal();
-                    }}
-                  >
-                    {' '}
-                    <i className="fa fa-trash"></i>
-                  </Button>
+                <Col xs={5} sm={3} lg={2} className="p-0 align-self-center">
+                  <div className="d-flex align-items-center ms-4 gap-2">
+                    <input
+                      type="checkbox"
+                      id="actionItemCompletionStatusCheckbox"
+                      className="form-check-input d-inline mt-0 me-1"
+                      checked={actionItem.isCompleted}
+                      onClick={() => handleActionItemStatusChange(actionItem)}
+                    />
+                    <Button
+                      data-testid="previewActionItemModalBtn"
+                      className="d-flex align-items-center justify-content-center"
+                      variant="outline-secondary"
+                      size="sm"
+                      onClick={() => showPreviewModal(actionItem)}
+                      style={{ width: '24px', height: '24px' }}
+                    >
+                      <i className="fas fa-info fa-sm"></i>
+                    </Button>
+                    <Button
+                      size="sm"
+                      data-testid="editActionItemModalBtn"
+                      onClick={() => handleEditClick(actionItem)}
+                      className="d-flex align-items-center justify-content-center"
+                      variant="outline-secondary"
+                      style={{ width: '24px', height: '24px' }}
+                    >
+                      {' '}
+                      <i className="fas fa-edit fa-sm"></i>
+                    </Button>
+                  </div>
                 </Col>
               </Row>
 
@@ -267,6 +309,58 @@ function actionItemsContainer({
           )}
         </div>
       </div>
+
+      {/* mark completion modal */}
+      <Modal
+        className={styles.createModal}
+        show={actionItemStatusModal}
+        // onHide={hideModal}
+      >
+        <Modal.Header>
+          <p className={`${styles.titlemodal}`}>
+            {/* {t('actionItemCategoryDetails')} */}
+            Action Item Status
+          </p>
+          <Button
+            variant="danger"
+            onClick={hideActionItemStatusModal}
+            data-testid="actionItemCategoryModalCloseBtn"
+          >
+            <i className="fa fa-times"></i>
+          </Button>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmitCapture={updateActionItemHandler}>
+            <Form.Label
+              className="ms-1 fs-6 mt-2 mb-0"
+              htmlFor="actionItemCategoryName"
+            >
+              {/* {t('actionItemCategoryName')} */}
+              Completion Notes
+            </Form.Label>
+            <Form.Control
+              type="title"
+              id="actionItemCategoryName"
+              // placeholder={t('enterName')}
+              placeholder="Action Item Completed"
+              autoComplete="off"
+              required
+              // value={name}
+              // onChange={(e): void => {
+              //   setName(e.target.value);
+              // }}
+            />
+            <Button
+              type="submit"
+              className={styles.greenregbtn}
+              value="creatActionItemCategory"
+              data-testid="formSubmitButton"
+            >
+              Mark Completion
+            </Button>
+          </Form>
+        </Modal.Body>
+      </Modal>
 
       {/* preview modal */}
       <ActionItemPreviewModal
