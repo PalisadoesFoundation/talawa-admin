@@ -324,7 +324,7 @@ function organizationPeople(): JSX.Element {
                                   </StyledTableCell>
                                   <StyledTableCell align="center">
                                     {dayjs(datas.createdAt).format(
-                                      'DD/MM/YYYY'
+                                      'DD/MM/YYYY',
                                     )}
                                   </StyledTableCell>
                                   <StyledTableCell align="center">
@@ -334,7 +334,7 @@ function organizationPeople(): JSX.Element {
                                     />
                                   </StyledTableCell>
                                 </StyledTableRow>
-                              )
+                              ),
                             )
                           ) : /* istanbul ignore next */
                           state === 1 &&
@@ -378,7 +378,7 @@ function organizationPeople(): JSX.Element {
                                   </StyledTableCell>
                                   <StyledTableCell align="center">
                                     {dayjs(datas.createdAt).format(
-                                      'DD/MM/YYYY'
+                                      'DD/MM/YYYY',
                                     )}
                                   </StyledTableCell>
                                   <StyledTableCell align="center">
@@ -388,7 +388,7 @@ function organizationPeople(): JSX.Element {
                                     />
                                   </StyledTableCell>
                                 </StyledTableRow>
-                              )
+                              ),
                             )
                           ) : state === 2 &&
                             usersData &&
@@ -442,8 +442,8 @@ function organizationPeople(): JSX.Element {
                                 state === 0
                                   ? 'member'
                                   : state === 1
-                                  ? 'admin'
-                                  : 'user'
+                                    ? 'admin'
+                                    : 'user'
                               }
                               keyPrefix="userNotFound"
                             />

@@ -69,8 +69,8 @@ const leftDrawerOrg = ({
         hideDrawer === null
           ? styles.hideElemByDefault
           : hideDrawer
-          ? styles.inactiveDrawer
-          : styles.activeDrawer
+            ? styles.inactiveDrawer
+            : styles.activeDrawer
       }`}
       data-testid="leftDrawerContainer"
     >
