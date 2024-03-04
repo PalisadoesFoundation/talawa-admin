@@ -27,7 +27,7 @@ const FundDeleteModal: React.FC<InterfaceFundDeleteModal> = ({
       >
         <Modal.Header closeButton className="bg-primary">
           <Modal.Title className="text-white" id={`deleteFund`}>
-            t
+            {t('fundDelete')}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>{t('deleteFundMsg')} </Modal.Body>

@@ -347,7 +347,7 @@ const organizationFunds = (): JSX.Element => {
                           data-testid="deleteFundBtn"
                           variant="danger"
                           onClick={() => {
-                            setFund(fund);
+                            setFund(fundd);
                             toggleDeleteModal();
                           }}
                         >
