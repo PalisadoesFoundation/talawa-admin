@@ -11,6 +11,7 @@ import Loader from 'components/Loader/Loader';
 import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Button, Col, Dropdown, Row } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import {
   InterfaceCreateFund,
@@ -24,6 +25,10 @@ import FundUpdateModal from './FundUpdateModal';
 import styles from './OrganizationFunds.module.css';
 
 const organizationFunds = (): JSX.Element => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'funds',
+  });
+
   const currentUrl = window.location.href.split('=')[1];
 
   const [fundCreateModalIsOpen, setFundCreateModalIsOpen] =
@@ -109,6 +114,7 @@ const organizationFunds = (): JSX.Element => {
       await createFund({
         variables: {
           name: formState.fundName,
+          refrenceNumber: formState.fundRef,
           organizationId: currentUrl,
           taxDeductible: taxDeductible,
           isArchived: isArchived,
@@ -120,12 +126,12 @@ const organizationFunds = (): JSX.Element => {
         fundName: '',
         fundRef: '',
       });
+      toast.success(t('fundCreated'));
       refetchFunds();
       hideCreateModal();
-      toast.success('Fund Created Successfully');
     } catch (error: unknown) {
-      console.error(error);
       toast.error((error as Error).message);
+      console.log(error);
     }
   };
   const updateFundHandler = async (
@@ -159,15 +165,15 @@ const organizationFunds = (): JSX.Element => {
       });
       refetchFunds();
       hideUpdateModal();
-      toast.success('Fund Updated Successfully');
+      toast.success(t('fundUpdated'));
     } catch (error: unknown) {
-      console.error(error);
       toast.error((error as Error).message);
+      console.log(error);
     }
   };
   const archiveFundHandler = async () => {
     try {
-      console.log(fund);
+      console.log('herere');
       await updateFund({
         variables: {
           id: fund?._id,
@@ -177,11 +183,11 @@ const organizationFunds = (): JSX.Element => {
       if (fundType == 'Non-Archived') toggleArchivedModal();
       refetchFunds();
       fund?.isArchived
-        ? toast.success('Fund UnArchived Successfully')
-        : toast.success('Fund Archived Successfully');
+        ? toast.success(t('fundUnarchived'))
+        : toast.success(t('fundArchived'));
     } catch (error: unknown) {
-      console.error(error);
       toast.error((error as Error).message);
+      console.log(error);
     }
   };
   const deleteFundHandler = async () => {
@@ -193,17 +199,16 @@ const organizationFunds = (): JSX.Element => {
       });
       refetchFunds();
       toggleDeleteModal();
-      toast.success('Fund Deleted Successfully');
+      toast.success(t('fundDeleted'));
     } catch (error: unknown) {
-      console.error(error);
       toast.error((error as Error).message);
+      console.log(error);
     }
   };
   //it is used to rerender the component to use updated Fund in setState
   useEffect(() => {
     //do not execute it on initial render
     if (!initialRender) {
-      console.log('click', click);
       archiveFundHandler();
     } else {
       setInitialRender(false);
@@ -215,9 +220,9 @@ const organizationFunds = (): JSX.Element => {
   }
   if (fundError) {
     return (
-      <OrganizationScreen screenName="OrganizationFunds" title="Funds">
+      <OrganizationScreen screenName="OrganizationFunds" title={t('title')}>
         <div className={`${styles.container} bg-white rounded-4 my-3`}>
-          <div className={styles.message}>
+          <div className={styles.message} data-testid="errorMsg">
             <WarningAmberRounded
               className={styles.errorIcon}
               fontSize="large"
@@ -234,42 +239,39 @@ const organizationFunds = (): JSX.Element => {
   }
   return (
     <div className={styles.organizationFundContainer}>
-      <OrganizationScreen screenName="OrganizationFunds" title="Funds">
+      <OrganizationScreen screenName="OrganizationFunds" title={t('title')}>
         <Button
           variant="success"
           className={styles.createFundButton}
           onClick={showCreateModal}
+          data-testid="createFundBtn"
         >
           <i className={'fa fa-plus me-2'} />
-          Create
+          {t('createFund')}
         </Button>
 
         <div className={`${styles.container}  bg-white rounded-4 my-3`}>
           <div className="mx-4 mt-4">
             <Dropdown
               aria-expanded="false"
-              title="Sort Action Items"
-              data-testid="sort"
+              data-testid="type"
               className="d-flex mb-0"
             >
-              <Dropdown.Toggle
-                variant="outline-success"
-                data-testid="sortActionItems"
-              >
+              <Dropdown.Toggle variant="outline-success" data-testid="fundtype">
                 {fundType == 'Archived' ? 'Archived' : 'Non-Archived'}
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item
                   onClick={(): void => handleFundType('Archived')}
-                  data-testid="latest"
+                  data-testid="Archived"
                 >
-                  Archived
+                  {t('archived')}
                 </Dropdown.Item>
                 <Dropdown.Item
                   onClick={(): void => handleFundType('Non-Archived')}
-                  data-testid="earliest"
+                  data-testid="Non-Archived"
                 >
-                  Non-Archived
+                  {t('nonArchive')}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
@@ -278,11 +280,11 @@ const organizationFunds = (): JSX.Element => {
             <div className="mx-4 shadow-sm rounded-top-4">
               <Row className="mx-0 border border-light-subtle rounded-top-4 py-3 justify-content-between">
                 <Col xs={7} sm={4} md={3} lg={3} className=" fs-5 fw-bold">
-                  <div className="ms-2">Name</div>
+                  <div className="ms-2">{t('fundName')}</div>
                 </Col>
 
                 <Col xs={5} sm={3} lg={2} className="fs-5 fw-bold">
-                  <div className="ms-3">Options</div>
+                  <div className="ms-3">{t('fundOptions')}</div>
                 </Col>
               </Row>
             </div>
@@ -311,14 +313,11 @@ const organizationFunds = (): JSX.Element => {
 
                       <Col xs={5} sm={3} lg={2} className="p-0">
                         <Button
-                          data-testid="previewActionItemModalBtn"
+                          data-testid="archiveFundBtn"
                           className="btn btn-sm me-2"
                           variant="outline-secondary"
                           onClick={async () => {
-                            console.log(fundd);
-
                             setFund(fundd);
-
                             if (fundType === 'Non-Archived') {
                               toggleArchivedModal();
                             } else {
@@ -330,19 +329,22 @@ const organizationFunds = (): JSX.Element => {
                             className={`${fundType == 'Archived' ? 'fa fa-undo' : 'fa fa-archive'}`}
                           ></i>
                         </Button>
+
+                        {fundType === 'Non-Archived' ? (
+                          <Button
+                            size="sm"
+                            data-testid="editFundBtn"
+                            onClick={() => handleEditClick(fundd)}
+                            className="me-2"
+                            variant="success"
+                          >
+                            {' '}
+                            <i className="fas fa-edit"></i>
+                          </Button>
+                        ) : null}
                         <Button
                           size="sm"
-                          data-testid="editActionItemModalBtn"
-                          onClick={() => handleEditClick(fundd)}
-                          className="me-2"
-                          variant="success"
-                        >
-                          {' '}
-                          <i className="fas fa-edit"></i>
-                        </Button>
-                        <Button
-                          size="sm"
-                          data-testid="deleteActionItemModalBtn"
+                          data-testid="deleteFundBtn"
                           variant="danger"
                           onClick={() => {
                             setFund(fund);
@@ -364,7 +366,7 @@ const organizationFunds = (): JSX.Element => {
 
               {fundData?.organizations[0].funds?.length === 0 && (
                 <div className="lh-lg text-center fw-semibold text-body-tertiary">
-                  No funds found
+                  {t('noFunds')}
                 </div>
               )}
             </div>
@@ -385,6 +387,7 @@ const organizationFunds = (): JSX.Element => {
         setIsArchived={setIsArchived}
         isDefault={isDefault}
         setIsDefault={setIsDefault}
+        t={t}
       />
 
       {/* <FundUpdateModal*/}
@@ -400,6 +403,7 @@ const organizationFunds = (): JSX.Element => {
         setIsArchived={setIsArchived}
         isDefault={isDefault}
         setIsDefault={setIsDefault}
+        t={t}
       />
 
       {/* <FundDeleteModal*/}
@@ -407,6 +411,7 @@ const organizationFunds = (): JSX.Element => {
         fundDeleteModalIsOpen={fundDeleteModalIsOpen}
         deleteFundHandler={deleteFundHandler}
         toggleDeleteModal={toggleDeleteModal}
+        t={t}
       />
 
       {/* <FundArchiveModal*/}
@@ -414,6 +419,7 @@ const organizationFunds = (): JSX.Element => {
         fundArchiveModalIsOpen={fundArchivedModalIsOpen}
         archiveFundHandler={archiveFundHandler}
         toggleArchiveModal={toggleArchivedModal}
+        t={t}
       />
     </div>
   );

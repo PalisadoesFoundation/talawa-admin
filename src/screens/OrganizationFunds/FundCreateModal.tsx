@@ -16,6 +16,7 @@ interface InterfaceFundCreateModal {
   setIsArchived: (state: React.SetStateAction<boolean>) => void;
   isDefault: boolean;
   setIsDefault: (state: React.SetStateAction<boolean>) => void;
+  t: (key: string) => string;
 }
 
 const FundCreateModal: React.FC<InterfaceFundCreateModal> = ({
@@ -30,6 +31,7 @@ const FundCreateModal: React.FC<InterfaceFundCreateModal> = ({
   setIsArchived,
   isDefault,
   setIsDefault,
+  t,
 }) => {
   return (
     <>
@@ -39,7 +41,7 @@ const FundCreateModal: React.FC<InterfaceFundCreateModal> = ({
         onHide={hideCreateModal}
       >
         <Modal.Header>
-          <p className={styles.titlemodal}>Funds detail</p>
+          <p className={styles.titlemodal}></p>
           <Button
             variant="danger"
             onClick={hideCreateModal}
@@ -51,10 +53,10 @@ const FundCreateModal: React.FC<InterfaceFundCreateModal> = ({
         <Modal.Body>
           <Form onSubmitCapture={createFundHandler}>
             <Form.Group className="mb-3">
-              <Form.Label>Fund Name</Form.Label>
+              <Form.Label>{t('fundName')} </Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Enter Fund Name"
+                placeholder={t('enterfundName')}
                 value={formState.fundName}
                 onChange={(e) =>
                   setFormState({
@@ -65,10 +67,10 @@ const FundCreateModal: React.FC<InterfaceFundCreateModal> = ({
               />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Fund Id</Form.Label>
+              <Form.Label> {t('fundId')} </Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Enter Fund Id"
+                placeholder={t('enterfundId')}
                 value={formState.fundRef}
                 onChange={(e) =>
                   setFormState({
@@ -81,7 +83,7 @@ const FundCreateModal: React.FC<InterfaceFundCreateModal> = ({
             <div className="d-flex-col ">
               <Form.Group className="mb-3">
                 <div className="d-flex justify-content-end">
-                  <label>Tax Deductible</label>
+                  <label>{t('taxDeductible')} </label>
                   <Form.Switch
                     type="checkbox"
                     checked={taxDeductible}
@@ -92,7 +94,7 @@ const FundCreateModal: React.FC<InterfaceFundCreateModal> = ({
               </Form.Group>
               <Form.Group className="mb-3">
                 <div className="d-flex justify-content-end">
-                  <label>Default Fund</label>
+                  <label>{t('default')} </label>
                   <Form.Switch
                     type="checkbox"
                     className="ms-2"
@@ -102,8 +104,12 @@ const FundCreateModal: React.FC<InterfaceFundCreateModal> = ({
                 </div>
               </Form.Group>
             </div>
-            <Button type="submit" className={styles.greenregbtn}>
-              Create Fund
+            <Button
+              type="submit"
+              className={styles.greenregbtn}
+              data-testid="createFundFormSubmitBtn"
+            >
+              {t('fundCreate')}
             </Button>
           </Form>
         </Modal.Body>

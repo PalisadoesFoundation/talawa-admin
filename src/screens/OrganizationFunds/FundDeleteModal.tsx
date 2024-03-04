@@ -6,11 +6,13 @@ interface InterfaceFundDeleteModal {
   fundDeleteModalIsOpen: boolean;
   deleteFundHandler: () => Promise<void>;
   toggleDeleteModal: () => void;
+  t: (key: string) => string;
 }
 const FundDeleteModal: React.FC<InterfaceFundDeleteModal> = ({
   fundDeleteModalIsOpen,
   deleteFundHandler,
   toggleDeleteModal,
+  t,
 }) => {
   return (
     <>
@@ -25,10 +27,10 @@ const FundDeleteModal: React.FC<InterfaceFundDeleteModal> = ({
       >
         <Modal.Header closeButton className="bg-primary">
           <Modal.Title className="text-white" id={`deleteFund`}>
-            Delete Fund
+            t
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>Do you want to remove this Fund?</Modal.Body>
+        <Modal.Body>{t('deleteFundMsg')} </Modal.Body>
         <Modal.Footer>
           <Button
             type="button"
@@ -37,15 +39,15 @@ const FundDeleteModal: React.FC<InterfaceFundDeleteModal> = ({
             onClick={toggleDeleteModal}
             data-testid="fundDeleteModalCloseBtn"
           >
-            No
+            {t('no')}
           </Button>
           <Button
             type="button"
             className="btn btn-success"
             onClick={deleteFundHandler}
-            data-testid="deleteFundBtn"
+            data-testid="fundDeleteModalDeleteBtn"
           >
-            Yes
+            {t('yes')}
           </Button>
         </Modal.Footer>
       </Modal>

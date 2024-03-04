@@ -348,6 +348,8 @@
     "noFunds": "No se encontraron fondos",
     "fundDetails": "Detalles del Fondo",
     "taxDeductible": "Deducible de impuestos",
+    "enterfundName": "Ingrese el nombre del fondo",
+    "enterfundId": "Ingrese el ID del fondo",
     "default": "Fondo predeterminado",
     "archived": "Archivado",
     "nonArchive": "No archivado",
@@ -356,9 +358,14 @@
     "fundDelete": "Eliminar Fondo",
     "no": "No",
     "yes": "Sí",
+    "archiveFund": "Archivar Fondo",
+    "archiveFundMsg": "¿Desea archivar este fondo?",
     "fundCreated": "Fondo creado exitosamente",
     "fundUpdated": "Fondo actualizado exitosamente",
-    "fundDeleted": "Fondo eliminado exitosamente"
+    "fundDeleted": "Fondo eliminado exitosamente",
+    "fundArchived": "Fondo archivado exitosamente",
+    "fundUnarchived": "Fondo no archivado exitosamente",
+    "deleteFundMsg": "¿Desea eliminar este fondo?"
   },
 
   "orgPost": {

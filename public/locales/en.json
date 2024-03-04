@@ -353,6 +353,8 @@
     "noFunds": "No Funds Found",
     "fundDetails": "Fund Details",
     "taxDeductible": "Tax Deductible",
+    "enterfundName": "Enter Fund Name",
+    "enterfundId": "Enter Fund ID",
     "default": "Default Fund",
     "archived": "Archived",
     "nonArchive": "Non-Archived",
@@ -361,9 +363,14 @@
     "fundDelete": "Delete Fund",
     "no": "No",
     "yes": "Yes",
+    "archiveFund": "Archive Fund",
+    "archiveFundMsg": "On Archiving this fund will remove it from the fund listing.Thisaction can be undone",
     "fundCreated": "Fund created successfully",
     "fundUpdated": "Fund updated successfully",
-    "fundDeleted": "Fund deleted successfully"
+    "fundDeleted": "Fund deleted successfully",
+    "fundArchived": "Fund archived successfully",
+    "fundUnarchived": "Fund unarchived successfully",
+    "deleteFundMsg": "Do you want to remove this fund?"
   },
   "orgPost": {
     "title": "Talawa Posts",

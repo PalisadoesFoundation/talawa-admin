@@ -6,11 +6,13 @@ interface InterfaceArchiveFund {
   fundArchiveModalIsOpen: boolean;
   toggleArchiveModal: () => void;
   archiveFundHandler: () => Promise<void>;
+  t: (key: string) => string;
 }
 const FundArchiveModal: React.FC<InterfaceArchiveFund> = ({
   fundArchiveModalIsOpen,
   toggleArchiveModal,
   archiveFundHandler,
+  t,
 }) => {
   return (
     <>
@@ -25,13 +27,10 @@ const FundArchiveModal: React.FC<InterfaceArchiveFund> = ({
       >
         <Modal.Header closeButton className="bg-primary">
           <Modal.Title className="text-white" id={`archiveFund`}>
-            Archive Fund
+            {t('archiveFund')}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          On Archiving this fund will remove it from the fund listing.This
-          action can be undone
-        </Modal.Body>
+        <Modal.Body>{t('archiveFundMsg')}</Modal.Body>
         <Modal.Footer>
           <Button
             type="button"
@@ -40,15 +39,15 @@ const FundArchiveModal: React.FC<InterfaceArchiveFund> = ({
             onClick={toggleArchiveModal}
             data-testid="fundArchiveModalCloseBtn"
           >
-            No
+            {t('no')}
           </Button>
           <Button
             type="button"
             className="btn btn-success"
             onClick={archiveFundHandler}
-            data-testid="archiveFundBtn"
+            data-testid="fundArchiveModalArchiveBtn"
           >
-            Yes
+            {t('yes')}
           </Button>
         </Modal.Footer>
       </Modal>

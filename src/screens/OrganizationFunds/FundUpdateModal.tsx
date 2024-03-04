@@ -16,6 +16,7 @@ interface InterfaceFundUpdateModal {
   setIsArchived: (state: React.SetStateAction<boolean>) => void;
   isDefault: boolean;
   setIsDefault: (state: React.SetStateAction<boolean>) => void;
+  t: (key: string) => string;
 }
 
 const FundUpdateModal: React.FC<InterfaceFundUpdateModal> = ({
@@ -30,6 +31,7 @@ const FundUpdateModal: React.FC<InterfaceFundUpdateModal> = ({
   setIsArchived,
   isDefault,
   setIsDefault,
+  t,
 }) => {
   return (
     <>
@@ -39,11 +41,11 @@ const FundUpdateModal: React.FC<InterfaceFundUpdateModal> = ({
         onHide={hideUpdateModal}
       >
         <Modal.Header>
-          <p className={styles.titlemodal}>Funds detail</p>
+          <p className={styles.titlemodal}>{t('fundDetails')} </p>
           <Button
             variant="danger"
             onClick={hideUpdateModal}
-            data-testid="createFundModalCloseBtn"
+            data-testid="editFundModalCloseBtn"
           >
             <i className="fa fa-times"></i>
           </Button>
@@ -51,10 +53,10 @@ const FundUpdateModal: React.FC<InterfaceFundUpdateModal> = ({
         <Modal.Body>
           <Form onSubmitCapture={updateFundHandler}>
             <Form.Group className="mb-3">
-              <Form.Label>Fund Name</Form.Label>
+              <Form.Label>{t('fundName')} </Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Enter Fund Name"
+                placeholder={t('enterfundName')}
                 value={formState.fundName}
                 onChange={(e) =>
                   setFormState({
@@ -68,7 +70,7 @@ const FundUpdateModal: React.FC<InterfaceFundUpdateModal> = ({
             <div className="d-flex justify-content-between">
               <Form.Group className="mb-3">
                 <div className="d-flex justify-content-end">
-                  <label>Tax Deductible</label>
+                  <label>{t('taxDeductible')} </label>
                   <Form.Switch
                     type="checkbox"
                     checked={taxDeductible}
@@ -80,7 +82,7 @@ const FundUpdateModal: React.FC<InterfaceFundUpdateModal> = ({
 
               <Form.Group className="mb-3 ">
                 <div className="d-flex justify-content-end">
-                  <label>Archived</label>
+                  <label>{t('archived')} </label>
                   <Form.Switch
                     type="checkbox"
                     className="ms-2"
@@ -92,7 +94,7 @@ const FundUpdateModal: React.FC<InterfaceFundUpdateModal> = ({
             </div>
             <Form.Group className="mb-3">
               <div className="d-flex justify-content-end">
-                <label>Default</label>
+                <label>{t('default')} </label>
                 <Form.Switch
                   type="checkbox"
                   className="ms-2"
@@ -101,8 +103,12 @@ const FundUpdateModal: React.FC<InterfaceFundUpdateModal> = ({
                 />
               </div>
             </Form.Group>
-            <Button type="submit" className={styles.greenregbtn}>
-              Update Fund
+            <Button
+              type="submit"
+              className={styles.greenregbtn}
+              data-testid="editFundFormSubmitBtn"
+            >
+              {t('fundUpdate')}
             </Button>
           </Form>
         </Modal.Body>
