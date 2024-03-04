@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import type { ChangeEvent } from 'react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -10,16 +10,6 @@ import { useTranslation } from 'react-i18next';
 import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Check, Clear } from '@mui/icons-material';
-
-import {
-  FacebookLogo,
-  LinkedInLogo,
-  GithubLogo,
-  InstagramLogo,
-  SlackLogo,
-  TwitterLogo,
-  YoutubeLogo,
-} from 'assets/svgs/social-icons';
 
 import {
   REACT_APP_USE_RECAPTCHA,
@@ -40,6 +30,7 @@ import { errorHandler } from 'utils/errorHandler';
 import styles from './LoginPage.module.css';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import useLocalStorage from 'utils/useLocalstorage';
+import { socialMediaLinks } from '../../constants';
 
 const loginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -55,6 +46,7 @@ const loginPage = (): JSX.Element => {
     numericValue: boolean;
     specialChar: boolean;
   };
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
   const [role, setRole] = useState<'admin' | 'user'>('admin');
   const [componentLoader, setComponentLoader] = useState(true);
@@ -86,37 +78,19 @@ const loginPage = (): JSX.Element => {
     numericalValueRegExp: new RegExp('\\d'),
     specialCharRegExp: new RegExp('[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\/-]'),
   };
-  const handleLowercasePassCheck = (pass: string): void => {
-    setShowAlert((prevAlert) => ({
-      ...prevAlert,
-      lowercaseChar: !passwordValidationRegExp.lowercaseCharRegExp.test(pass),
-    }));
-  };
 
-  const handleUppercasePassCheck = (pass: string): void => {
-    setShowAlert((prevAlert) => ({
-      ...prevAlert,
+  const handlePasswordCheck = (pass: string): void => {
+    setShowAlert({
+      lowercaseChar: !passwordValidationRegExp.lowercaseCharRegExp.test(pass),
       uppercaseChar: !passwordValidationRegExp.uppercaseCharRegExp.test(pass),
-    }));
-  };
-  const handleNumericalValuePassCheck = (pass: string): void => {
-    setShowAlert((prevAlert) => ({
-      ...prevAlert,
       numericValue: !passwordValidationRegExp.numericalValueRegExp.test(pass),
-    }));
-  };
-  const handleSpecialCharPassCheck = (pass: string): void => {
-    setShowAlert((prevAlert) => ({
-      ...prevAlert,
       specialChar: !passwordValidationRegExp.specialCharRegExp.test(pass),
-    }));
+    });
   };
 
   const handleRoleToggle = (role: 'admin' | 'user'): void => {
     setRole(role);
   };
-
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   useEffect(() => {
     const isLoggedIn = getItem('IsLoggedIn');
@@ -169,14 +143,15 @@ const loginPage = (): JSX.Element => {
     }
   };
 
+  const handleCaptcha = (token: string | null): void => {
+    setRecaptchaToken(token);
+  };
+
   const signupLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
     const { signfirstName, signlastName, signEmail, signPassword, cPassword } =
       signformState;
-
-    const recaptchaToken = recaptchaRef.current?.getValue();
-    recaptchaRef.current?.reset();
 
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
@@ -259,10 +234,6 @@ const loginPage = (): JSX.Element => {
 
   const loginLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-
-    const recaptchaToken = recaptchaRef.current?.getValue();
-    recaptchaRef.current?.reset();
-
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
@@ -317,6 +288,12 @@ const loginPage = (): JSX.Element => {
     return <Loader />;
   }
 
+  const socialIconsList = socialMediaLinks.map(({ href, logo }, index) => (
+    <a key={index} href={href} target="_blank" rel="noopener noreferrer">
+      <img src={logo} />
+    </a>
+  ));
+
   return (
     <>
       <section className={styles.login_background}>
@@ -332,58 +309,7 @@ const loginPage = (): JSX.Element => {
                 <p className="text-center">{t('fromPalisadoes')}</p>
               </a>
             </div>
-
-            <div className={styles.socialIcons}>
-              <a
-                href="https://www.facebook.com/palisadoesproject"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src={FacebookLogo} />
-              </a>
-              <a
-                href="https://twitter.com/palisadoesorg?lang=en"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src={TwitterLogo} className={styles.socialIcon} />
-              </a>
-              <a
-                href="https://www.linkedin.com/company/palisadoes/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src={LinkedInLogo} />
-              </a>
-              <a
-                href="https://github.com/PalisadoesFoundation"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src={GithubLogo} />
-              </a>
-              <a
-                href="https://www.youtube.com/@PalisadoesOrganization"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src={YoutubeLogo} />
-              </a>
-              <a
-                href="https://www.palisadoes.org/slack"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src={SlackLogo} />
-              </a>
-              <a
-                href="https://www.instagram.com/palisadoes/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src={InstagramLogo} />
-              </a>
-            </div>
+            <div className={styles.socialIcons}>{socialIconsList}</div>
           </Col>
           <Col sm={12} md={6} lg={5}>
             <div className={styles.right_portion}>
@@ -473,12 +399,12 @@ const loginPage = (): JSX.Element => {
                   {REACT_APP_USE_RECAPTCHA === 'yes' ? (
                     <div className="googleRecaptcha">
                       <ReCAPTCHA
-                        ref={recaptchaRef}
                         className="mt-2"
                         sitekey={
                           /* istanbul ignore next */
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
                         }
+                        onChange={handleCaptcha}
                       />
                     </div>
                   ) : (
@@ -605,10 +531,7 @@ const loginPage = (): JSX.Element => {
                             ...signformState,
                             signPassword: e.target.value,
                           });
-                          handleLowercasePassCheck(e.target.value);
-                          handleUppercasePassCheck(e.target.value);
-                          handleNumericalValuePassCheck(e.target.value);
-                          handleSpecialCharPassCheck(e.target.value);
+                          handlePasswordCheck(e.target.value);
                         }}
                       />
                       <Button
@@ -788,11 +711,11 @@ const loginPage = (): JSX.Element => {
                   {REACT_APP_USE_RECAPTCHA === 'yes' ? (
                     <div className="mt-3">
                       <ReCAPTCHA
-                        ref={recaptchaRef}
                         sitekey={
                           /* istanbul ignore next */
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
                         }
+                        onChange={handleCaptcha}
                       />
                     </div>
                   ) : (
