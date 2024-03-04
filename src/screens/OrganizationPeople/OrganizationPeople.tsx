@@ -1,6 +1,5 @@
 import { useLazyQuery } from '@apollo/client';
 import dayjs from 'dayjs';
-/*eslint-disable*/
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button, Dropdown, Form } from 'react-bootstrap';
