@@ -82,7 +82,7 @@ export const MOCKS = [
     request: {
       query: REMOVE_FUND_MUTATION,
       variables: {
-        id: undefined,
+        id: '1',
       },
     },
     result: {
