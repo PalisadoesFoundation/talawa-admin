@@ -2,8 +2,10 @@ import React from 'react';
 import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Form } from 'react-bootstrap';
+import { useMutation, useQuery } from '@apollo/client';
+import { toast } from 'react-toastify';
 
-import styles from './CommunityProfile.module.css';
+import { UPLOAD_PRELOGIN_IMAGERY } from 'GraphQl/Mutations/mutations';
 import {
   FacebookLogo,
   InstagramLogo,
@@ -15,6 +17,7 @@ import {
   SlackLogo,
 } from 'assets/svgs/social-icons';
 import convertToBase64 from 'utils/convertToBase64';
+import styles from './CommunityProfile.module.css';
 
 const CommunityProfile = (): JSX.Element => {
   const { t } = useTranslation('translation', {
@@ -35,10 +38,33 @@ const CommunityProfile = (): JSX.Element => {
     slackUrl: '',
   });
 
+  const [upload] = useMutation(UPLOAD_PRELOGIN_IMAGERY);
+
   const handleOnChange = (e: any): void => {
     setProfileVariable({
       ...profileVariable,
       [e.target.name]: e.target.value,
+    });
+  };
+  const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    upload({
+      variables: {
+        data: {
+          id: '2',
+          name: profileVariable.name,
+          websiteLink: profileVariable.websiteLink,
+          logo: profileVariable.logo,
+          facebookUrl: profileVariable.facebookUrl,
+          instagramUrl: profileVariable.instagramUrl,
+          twitterUrl: profileVariable.twitterUrl,
+          linkedInUrl: profileVariable.linkedInUrl,
+          githubUrl: profileVariable.githubUrl,
+          youtubeUrl: profileVariable.youtubeUrl,
+          redditUrl: profileVariable.redditUrl,
+          slackUrl: profileVariable.slackUrl,
+        },
+      },
     });
   };
 
@@ -53,7 +79,7 @@ const CommunityProfile = (): JSX.Element => {
         </div>
         <Card.Body>
           <div className="mb-3">{t('communityProfileInfo')}</div>
-          <Form>
+          <Form onSubmit={handleOnSubmit}>
             <Form.Group>
               <Form.Label className={styles.formLabel}>
                 {t('communityName')}
@@ -96,7 +122,7 @@ const CommunityProfile = (): JSX.Element => {
                 name="logo"
                 data-testid="fileInput"
                 onChange={async (
-                  e: React.ChangeEvent<HTMLInputElement>,
+                  e: React.ChangeEvent<HTMLInputElement>
                 ): Promise<void> => {
                   setProfileVariable((prevInput) => ({
                     ...prevInput,
@@ -240,7 +266,26 @@ const CommunityProfile = (): JSX.Element => {
               </div>
             </Form.Group>
             <div className="d-flex justify-content-end gap-sm-3 my-3">
-              <Button variant="outline-success">Reset Changes</Button>
+              <Button
+                variant="outline-success"
+                onClick={() =>
+                  setProfileVariable({
+                    name: '',
+                    websiteLink: '',
+                    logo: '',
+                    facebookUrl: '',
+                    instagramUrl: '',
+                    twitterUrl: '',
+                    linkedInUrl: '',
+                    githubUrl: '',
+                    youtubeUrl: '',
+                    redditUrl: '',
+                    slackUrl: '',
+                  })
+                }
+              >
+                Reset Changes
+              </Button>
               <Button type="submit">Save Changes</Button>
             </div>
           </Form>

@@ -4,9 +4,14 @@ import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import styles from './OrgListCard.module.css';
 import { useHistory } from 'react-router-dom';
-import type { InterfaceOrgConnectionInfoType } from 'utils/interfaces';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
+import type {
+  InterfaceOrgConnectionInfoType,
+  InterfaceQueryOrganizationsListObject,
+} from 'utils/interfaces';
+import {
+  IS_SAMPLE_ORGANIZATION_QUERY,
+  ORGANIZATIONS_LIST,
+} from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import { Tooltip } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
@@ -16,12 +21,22 @@ export interface InterfaceOrgListCardProps {
 }
 
 function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
-  const { _id, admins, image, address, members, name } = props.data;
+  const { _id, admins, image, members, name } = props.data;
 
   const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
     variables: {
       isSampleOrganizationId: _id,
     },
+  });
+
+  const {
+    data: userData,
+  }: {
+    data?: {
+      organizations: InterfaceQueryOrganizationsListObject[];
+    };
+  } = useQuery(ORGANIZATIONS_LIST, {
+    variables: { id: _id },
   });
 
   const history = useHistory();
@@ -55,25 +70,15 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
           </div>
           <div className={styles.content}>
             <Tooltip title={name} placement="top-end">
-              <h4 className={styles.orgName}>{name}</h4>
+              <h4 className={`${styles.orgName} fw-semibold`}>{name}</h4>
             </Tooltip>
-            {address && address.city && (
-              <div>
-                <h6 className="text-secondary">
-                  <LocationOnIcon fontSize="inherit" className="fs-5" />
-                  <span className="address-line">{address.city}, </span>
-                  <span className="address-line">{address.state}</span>
-                  <br />
-                  <LocationOnIcon fontSize="inherit" className="fs-5" />
-                  <span className="address-line">{address.postalCode}, </span>
-                  <span className="address-line">{address.countryCode}</span>
-                </h6>
-              </div>
-            )}
-            <h6>
+            <h6 className={`${styles.orgdesc} fw-semibold`}>
+              <span>{userData?.organizations[0].description}</span>
+            </h6>
+            <h6 className={styles.orgadmin}>
               {t('admins')}: <span>{admins.length}</span>
             </h6>
-            <h6>
+            <h6 className={styles.orgmember}>
               {t('members')}: <span>{members.length}</span>
             </h6>
           </div>

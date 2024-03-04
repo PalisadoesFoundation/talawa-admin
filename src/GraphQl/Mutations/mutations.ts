@@ -568,6 +568,12 @@ export const REGISTER_EVENT = gql`
   }
 `;
 
+export const UPLOAD_PRELOGIN_IMAGERY = gql`
+  mutation uploadPreLoginImagery($data: PreLoginImageryInput!) {
+    uploadPreLoginImagery(data: $data)
+  }
+`;
+
 // Create and Update Action Item Categories
 export { CREATE_ACTION_ITEM_CATEGORY_MUTATION } from './ActionItemCategoryMutations';
 export { UPDATE_ACTION_ITEM_CATEGORY_MUTATION } from './ActionItemCategoryMutations';

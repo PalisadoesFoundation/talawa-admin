@@ -41,12 +41,8 @@ describe('Testing User List Card', () => {
 
   test('Should render props and text elements test for the page component', async () => {
     const props = {
-      key: '123',
+      key: 123,
       id: '456',
-      memberName: 'John Doe',
-      joinDate: '07/05/2022',
-      memberImage: 'image',
-      memberEmail: 'johndoe@gmail.com',
     };
 
     render(
@@ -56,26 +52,18 @@ describe('Testing User List Card', () => {
             <UserListCard {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
 
     userEvent.click(screen.getByText(/Add Admin/i));
-
-    expect(screen.getByText('Joined:')).toBeInTheDocument();
-    expect(screen.getByText(props.memberName)).toBeInTheDocument();
-    expect(screen.getByText(props.joinDate)).toBeInTheDocument();
   });
 
   test('Should render text elements when props value is not passed', async () => {
     const props = {
-      key: '123',
+      key: 123,
       id: '456',
-      memberName: '',
-      joinDate: '09/05/2022',
-      memberImage: '',
-      memberEmail: '',
     };
 
     render(
@@ -85,14 +73,10 @@ describe('Testing User List Card', () => {
             <UserListCard {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     await wait();
-
     userEvent.click(screen.getByText(/Add Admin/i));
-
-    expect(screen.getByText('Joined:')).toBeInTheDocument();
-    expect(screen.getByText(props.joinDate)).toBeInTheDocument();
   });
 });

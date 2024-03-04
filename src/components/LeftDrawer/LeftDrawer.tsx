@@ -128,45 +128,56 @@ const leftDrawer = ({
         )}
       </div>
       <div style={{ marginTop: 'auto' }}>
+        <Link
+          to={{
+            pathname: `/member/id=${userId}`,
+            state: { from: 'orglist' },
+          }}
+        >
+          <Button
+            key={'profileBtn'}
+            className={styles.profileContainer}
+            variant={screenName === 'Profile' ? 'success' : 'light'}
+            data-testid="profileBtn"
+          >
+            <div className={styles.imageContainer}>
+              {userImage && userImage !== 'null' ? (
+                <img src={userImage} alt={`profile picture`} />
+              ) : (
+                <Avatar
+                  name={`${firstName} ${lastName}`}
+                  alt={`dummy picture`}
+                />
+              )}
+            </div>
+            <div className={styles.profileText}>
+              <span className={styles.primaryText}>
+                {firstName} {lastName}
+              </span>
+              <span
+                className={`${styles.secondaryText} ${
+                  screenName === 'Profile' && 'text-white'
+                }`}
+              >
+                {`${userType}`.toLowerCase()}
+              </span>
+            </div>
+            <AngleRightIcon fill={'var(--bs-secondary)'} />
+          </Button>
+        </Link>
+
         <Button
-          className={styles.profileContainer}
-          variant={screenName === 'Profile' ? 'success' : 'light'}
-          data-testid="profileBtn"
+          variant="light"
+          className={`mt-4 d-flex justify-content-start px-0 w-100 bg-danger text-white  ${styles.logout}`}
+          onClick={(): void => logout()}
+          data-testid="logoutBtn"
         >
           <div className={styles.imageContainer}>
-            {userImage && userImage !== 'null' ? (
-              <img src={userImage} alt={`profile picture`} />
-            ) : (
-              <Avatar name={`${firstName} ${lastName}`} alt={`dummy picture`} />
-            )}
+            <LogoutIcon fill={'white'} />
           </div>
-          <div className={styles.profileText}>
-            <span className={styles.primaryText}>
-              {firstName} {lastName}
-            </span>
-            <span
-              className={`${styles.secondaryText} ${
-                screenName === 'Profile' && 'text-white'
-              }`}
-            >
-              {`${userType}`.toLowerCase()}
-            </span>
-          </div>
-          <AngleRightIcon fill={'var(--bs-secondary)'} />
+          {t('logout')}
         </Button>
       </div>
-
-      <Button
-        variant="light"
-        className={`mt-4 d-flex justify-content-start px-0 w-100 bg-danger text-white  ${styles.logout}`}
-        onClick={(): void => logout()}
-        data-testid="logoutBtn"
-      >
-        <div className={styles.imageContainer}>
-          <LogoutIcon fill={'white'} />
-        </div>
-        {t('logout')}
-      </Button>
     </div>
   );
 };

@@ -202,7 +202,10 @@
     "searchName": "輸入名字",
     "searchevent": "輸入事件",
     "searchFirstName": "输入名字",
-    "searchLastName": "输入姓氏"
+    "searchLastName": "输入姓氏",
+    "people": "人",
+    "sort": "按角色搜索",
+    "actions": "操作"
   },
   "userListCard": {
     "joined": "加入",

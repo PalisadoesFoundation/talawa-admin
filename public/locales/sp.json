@@ -202,7 +202,10 @@
     "searchName": "Ingrese su nombre",
     "searchevent": "Ingresar evento",
     "searchFirstName": "Ingrese el nombre",
-    "searchLastName": "Introduzca el apellido"
+    "searchLastName": "Introduzca el apellido",
+    "people": "Personas",
+    "sort": "Ordenar por Rol",
+    "actions": "Acciones"
   },
   "userListCard": {
     "joined": "Unido",
