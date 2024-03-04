@@ -79,7 +79,7 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
             organizationId: props.id,
           },
         });
-        toast.success(t('MembershipRequests'));
+        toast.success(t('MembershipRequestSent'));
       } else {
         await joinPublicOrganization({
           variables: {
