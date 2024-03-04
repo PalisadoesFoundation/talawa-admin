@@ -168,7 +168,11 @@
     "members": "成員",
     "joinNow": "现在加入",
     "joined": "加入",
-    "withdraw": "提取"
+    "withdraw": "提取",
+    "orgJoined": "成功加入组织",
+    "MembershipRequestSent": "会员申请已成功发送",
+    "AlreadyJoined": "您已经是该组织的成员。",
+    "errorOccured": "发生错误，请稍后重试。"
   },
   "dashboard": {
     "title": "儀表板",
