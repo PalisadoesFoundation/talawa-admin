@@ -1,4 +1,4 @@
-/*eslint-disable */
+import React from 'react';
 import type { ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import type { InterfaceCreateFund } from 'utils/interfaces';

@@ -1,4 +1,4 @@
-/*eslint-disable */
+import React from 'react';
 import type { ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import type { InterfaceCreateFund } from 'utils/interfaces';
@@ -12,8 +12,6 @@ interface InterfaceFundCreateModal {
   createFundHandler: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
   taxDeductible: boolean;
   setTaxDeductible: (state: React.SetStateAction<boolean>) => void;
-  isArchived: boolean;
-  setIsArchived: (state: React.SetStateAction<boolean>) => void;
   isDefault: boolean;
   setIsDefault: (state: React.SetStateAction<boolean>) => void;
   t: (key: string) => string;
@@ -27,8 +25,6 @@ const FundCreateModal: React.FC<InterfaceFundCreateModal> = ({
   createFundHandler,
   taxDeductible,
   setTaxDeductible,
-  isArchived,
-  setIsArchived,
   isDefault,
   setIsDefault,
   t,

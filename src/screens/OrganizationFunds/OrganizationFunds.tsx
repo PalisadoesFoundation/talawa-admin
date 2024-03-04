@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import {
@@ -9,11 +8,11 @@ import {
 import { ORGANIZATION_FUNDS } from 'GraphQl/Queries/OrganizationQueries';
 import Loader from 'components/Loader/Loader';
 import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
-import { ChangeEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState, type ChangeEvent } from 'react';
 import { Button, Col, Dropdown, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import {
+import type {
   InterfaceCreateFund,
   InterfaceFundInfo,
   InterfaceQueryOrganizationFunds,
@@ -95,7 +94,7 @@ const organizationFunds = (): JSX.Element => {
   const handleFundType = (type: string): void => {
     setFundType(type);
   };
-  const handleEditClick = (fund: InterfaceFundInfo) => {
+  const handleEditClick = (fund: InterfaceFundInfo): void => {
     setFormState({
       fundName: fund.name,
       fundRef: fund.refrenceNumber,
@@ -171,7 +170,7 @@ const organizationFunds = (): JSX.Element => {
       console.log(error);
     }
   };
-  const archiveFundHandler = async () => {
+  const archiveFundHandler = async (): Promise<void> => {
     try {
       console.log('herere');
       await updateFund({
@@ -190,7 +189,7 @@ const organizationFunds = (): JSX.Element => {
       console.log(error);
     }
   };
-  const deleteFundHandler = async () => {
+  const deleteFundHandler = async (): Promise<void> => {
     try {
       await deleteFund({
         variables: {
@@ -383,8 +382,6 @@ const organizationFunds = (): JSX.Element => {
         createFundHandler={createFundHandler}
         taxDeductible={taxDeductible}
         setTaxDeductible={setTaxDeductible}
-        isArchived={isArchived}
-        setIsArchived={setIsArchived}
         isDefault={isDefault}
         setIsDefault={setIsDefault}
         t={t}

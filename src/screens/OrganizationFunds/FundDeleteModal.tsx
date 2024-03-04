@@ -1,4 +1,4 @@
-/*eslint-disable */
+import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import styles from './OrganizationFunds.module.css';
 
