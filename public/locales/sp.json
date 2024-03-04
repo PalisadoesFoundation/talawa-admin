@@ -170,7 +170,7 @@
     "joined": "Unido",
     "withdraw": "retirar",
     "orgJoined": "Unido a la organización exitosamente",
-    "MembershipRequests": "Solicitud de membresía enviada exitosamente",
+    "MembershipRequestSent": "Solicitud de membresía enviada exitosamente",
     "AlreadyJoined": "Ya eres miembro de esta organización.",
     "errorOccured": "Se produjo un error. Por favor, inténtalo de nuevo más tarde."
   },
