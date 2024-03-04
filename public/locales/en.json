@@ -174,7 +174,11 @@
     "members": "Members",
     "joinNow": "Join Now",
     "joined": "Joined",
-    "withdraw": "Widthdraw"
+    "withdraw": "Widthdraw",
+    "orgJoined": "Joined organization successfully",
+    "MembershipRequestSent": "Membership request sent successfully",
+    "AlreadyJoined": "You are already a member of this organization.",
+    "errorOccured": "An error occurred. Please try again later."
   },
   "dashboard": {
     "title": "Dashboard",

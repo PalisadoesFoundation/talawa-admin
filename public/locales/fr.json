@@ -168,7 +168,11 @@
     "members": "Membres",
     "joinNow": "Adhérer maintenant",
     "joined": "Rejointes",
-    "withdraw": "Retirer"
+    "withdraw": "Retirer",
+    "orgJoined": "Organisation rejointe avec succès",
+    "MembershipRequestSent": "Demande d'adhésion envoyée avec succès",
+    "AlreadyJoined": "Vous êtes déjà membre de cette organisation.",
+    "errorOccured": "Une erreur s'est produite. Veuillez réessayer plus tard."
   },
   "dashboard": {
     "title": "Tableau de bord",
