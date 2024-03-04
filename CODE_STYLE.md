@@ -1,3 +1,4 @@
+
 # Talawa Admin Code Style
 
 For Talawa Admin, most of the rules for the code style have been enforced with ESLint, but this document serves to provide an overview of the Code style used in Talawa Admin and the Rationale behind it.
@@ -6,26 +7,11 @@ The code style must be strictly adhered to, to ensure that there is consistency 
 
 code style should not be changed and must be followed.
 
-# Table of Contents
-
-<!-- toc -->
-
-- [Tech Stack](#tech-stack)
-- [Component Structure](#component-structure)
-- [Code Style and Naming Conventions](#code-style-and-naming-conventions)
-- [Test and Code Linting](#test-and-code-linting)
-- [Folder/Directory Structure](#folderdirectory-structure)
-  - [Sub Directories of `src`](#sub-directories-of-src)
-- [Imports](#imports)
-- [Customising Bootstrap](#customising-bootstrap)
-
-<!-- tocstop -->
-
 ## Tech Stack
 
 - Typescript
 
-- React.js
+- React.js 
 
 - CSS module
 
@@ -35,7 +21,7 @@ code style should not be changed and must be followed.
 
 - GraphQL
 
-- Jest & React Testing Library for testing
+- Jest & Enzyme for testing
 
 ## Component Structure
 
@@ -43,9 +29,10 @@ code style should not be changed and must be followed.
 
 - Should make use of React hooks where appropriate
 
+
 ## Code Style and Naming Conventions
 
-- All React components _must_ be written in PascalCase, with their file names, and associated CSS modules being written in PascalCase
+- All React components *must* be written in PascalCase, with their file names, and associated CSS modules being written in PascalCase
 
 - All other files may follow the camelCase naming convention
 
@@ -54,15 +41,13 @@ code style should not be changed and must be followed.
 - Use of custom classes directly are refrained, use of modular css is encouraged along with bootstrap classes
 
 **Wrong way ❌**
-
 ```
 <div className="myCustomClass">...</div>
 <div className={`${styles.myCustomClass1} myCustomClass2`}>...</div> // No using personal custom classes directly, here you should  not use myCustomClass2
 .container{...} // No changing the property of already existing classes reserved by boostrap directly in css files
 ```
 
-**Correct ways ✅**
-
+**Correct ways ✅** 
 ```
 <div className={styles.myCustomClass}>...</div> // Use custom class defined in modular css file
 <div className={`${styles.myCustomClass} relative bg-danger`}>...</div> // Use classes already defined in Bootstrap
@@ -75,8 +60,7 @@ code style should not be changed and must be followed.
 
 **Wrong way ❌**
 
-Using plain Bootstrap classes and attributes without leveraging the React-Bootstrap library should be refrained. While it may work for basic functionality, it doesn't fully integrate with React and may cause issues when dealing with more complex state management or component interactions.
-
+Using plain Bootstrap classes and attributes without leveraging the React-Bootstrap library should be refrained. While it may work for basic functionality, it doesn't fully integrate with React and may cause issues when dealing with more complex state management or component interactions. 
 ```
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -89,11 +73,11 @@ Using plain Bootstrap classes and attributes without leveraging the React-Bootst
         </ul>
     </div>
 ```
+    
 
 **Correct way ✅**
 
 It's recommended to use the React-Bootstrap library for seamless integration of Bootstrap components in a React application.
-
 ```
 import Dropdown from 'react-bootstrap/Dropdown';
 
@@ -116,9 +100,10 @@ function BasicExample() {
 export default BasicExample;
 ```
 
-## Test and Code Linting
 
-Unit tests must be written for _all_ code submissions to the repository,
+## Test and Code Linting 
+
+Unit tests must be written for *all* code submissions to the repository, 
 the code submitted must also be linted ESLint and formatted with Prettier.
 
 ## Folder/Directory Structure
@@ -126,19 +111,18 @@ the code submitted must also be linted ESLint and formatted with Prettier.
 ### Sub Directories of `src`
 
 `assets` - This houses all of the static assets used in the project
+  - `css` - This houses all of the css files used in the project
+  - `images` - This houses all of the images used in the project
+  - `scss` - This houses all of the scss files used in the project
+    - `components -` All Sass files for components
+    - `content -` All Sass files for content
+    - `forms -` All Sass files for forms
+    - `_talawa.scss` - Partial Sass file for Talawa
+    - `_utilities.scss` - Partial Sass file for utilities
+    - `_variables.scss` - Partial Sass file for variables
+    - `app.scss` - Main Sass file for the app, imports all other partial Sass files
 
-- `css` - This houses all of the css files used in the project
-- `images` - This houses all of the images used in the project
-- `scss` - This houses all of the scss files used in the project
-  - `components -` All Sass files for components
-  - `content -` All Sass files for content
-  - `forms -` All Sass files for forms
-  - `_talawa.scss` - Partial Sass file for Talawa
-  - `_utilities.scss` - Partial Sass file for utilities
-  - `_variables.scss` - Partial Sass file for variables
-  - `app.scss` - Main Sass file for the app, imports all other partial Sass files
-
-`components` - The directory for base components that will be used in the various views/screens
+`components`  - The directory for base components that will be used in the various views/screens
 
 `Constant` - This houses all of the constants used in the project
 
@@ -149,6 +133,7 @@ the code submitted must also be linted ESLint and formatted with Prettier.
 `state` - This houses all of the state management code for the project
 
 `utils` - This holds the utility functions that do not fall into any of the other categories
+
 
 ## Imports
 
@@ -162,12 +147,13 @@ import Navbar from 'components/Navbar/Navbar';
 
 Imports should be grouped in the following order:
 
-- React imports
-- Third party imports
-- Local imports
+  - React imports
+  - Third party imports
+  - Local imports
+
 
 If there is more than one import from a single library, they should be grouped together
-
+  
 Example - If there is single import from a library, both ways will work
 
 ```
@@ -189,41 +175,39 @@ Follow this [link](https://getbootstrap.com/docs/5.3/customize/sass/) to learn h
 
 **File Structure**
 
-- `src/assets/scss/components/{'{partialFile}'}.scss` - where the {'{partialFile}'} are the following files
+- `src/assets/scss/components/{partialFile}.scss` - where the {partialFile} are the following files
+  - **_accordion.scss**
+  - **_alert.scss**
+  - **_badge.scss**
+  - **_breadcrumb.scss**
+  - **_buttons.scss**
+  - **_card.scss**
+  - **_carousel.scss**
+  - **_close.scss**
+  - **_dropdown.scss**
+  - **_list-group.scss**
+  - **_modal.scss**
+  - **_nav.scss**
+  - **_navbar.scss**
+  - **_offcanvas.scss**
+  - **_pagination.scss**
+  - **_placeholder.scss**
+  - **_progress.scss**
+  - **_spinners.scss**
 
-  - **\_accordion.scss**
-  - **\_alert.scss**
-  - **\_badge.scss**
-  - **\_breadcrumb.scss**
-  - **\_buttons.scss**
-  - **\_card.scss**
-  - **\_carousel.scss**
-  - **\_close.scss**
-  - **\_dropdown.scss**
-  - **\_list-group.scss**
-  - **\_modal.scss**
-  - **\_nav.scss**
-  - **\_navbar.scss**
-  - **\_offcanvas.scss**
-  - **\_pagination.scss**
-  - **\_placeholder.scss**
-  - **\_progress.scss**
-  - **\_spinners.scss**
+- `src/assets/scss/content/{partialFile}.scss` - where the {partialFile} are the following files
+  - **_table.scss**
+  - **_typography.scss**
 
-- `src/assets/scss/content/{'{partialFile}'}.scss` - where the {'{partialFile}'} are the following files
 
-  - **\_table.scss**
-  - **\_typography.scss**
-
-- `src/assets/scss/forms/{'{partialFile}'}.scss` - where the {'{partialFile}'} are the following files
-
-  - **\_check-radios.scss**
-  - **\_floating-label.scss**
-  - **\_form-control.scss**
-  - **\_input-group.scss**
-  - **\_range.scss**
-  - **\_select.scss**
-  - **\_validation.scss**
+- `src/assets/scss/forms/{partialFile}.scss` - where the {partialFile} are the following files
+  - **_check-radios.scss**
+  - **_floating-label.scss**
+  - **_form-control.scss**
+  - **_input-group.scss**
+  - **_range.scss**
+  - **_select.scss**
+  - **_validation.scss**
 
 - `src/assets/scss/_utilities.scss` - The utility API is a Sass-based tool to generate utility classes.
 - `src/assets/scss/_variables.scss` - This file contains all the Sass variables used in the project
