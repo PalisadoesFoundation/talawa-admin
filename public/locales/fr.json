@@ -4,6 +4,7 @@
     "talawa_portal": "Portail D'Administrateur Talawa",
     "fromPalisadoes": "Une application open source par les volontaires de la Fondation Palissades",
     "login": "Connexion",
+    "userLogin": "Utilisateur en ligne",
     "register": "S'inscrire",
     "firstName": "Prénom",
     "lastName": "Nom de famille",
@@ -37,36 +38,6 @@
     "uppercase_check": "Au moins une lettre majuscule",
     "special_char_check": "Au moins un caractère spécial",
     "numeric_value_check": "Au moins une valeur numérique"
-  },
-  "userLoginPage": {
-    "title": "Administrateur Talawa",
-    "talawa_portal": "Portail D'Administrateur Talawa",
-    "fromPalisadoes": "Une application open source par les volontaires de la Fondation Palissades",
-    "login": "Connexion",
-    "register": "S'inscrire",
-    "firstName": "Prénom",
-    "lastName": "Nom de famille",
-    "email": "E-mail",
-    "password": "Mot de passe",
-    "atleast_8_char_long": "Au moins 8 caractères",
-    "Password_and_Confirm_password_mismatches.": "Le mot de passe et la confirmation du mot de passe ne correspondent pas.",
-    "confirmPassword": "Confirmez le mot de passe",
-    "forgotPassword": "Mot de passe oublié ?",
-    "enterEmail": "entrez l'e-mail",
-    "enterPassword": "Entrer le mot de passe",
-    "doNotOwnAnAccount": "Vous n'avez pas de compte ?",
-    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau.",
-    "captchaError": "Erreur de captcha !",
-    "Please_check_the_captcha": "Veuillez vérifier le captcha.",
-    "Something_went_wrong": "Quelque chose s'est mal passé, veuillez réessayer plus tard.",
-    "passwordMismatches": "Le mot de passe et la confirmation du mot de passe ne correspondent pas.",
-    "fillCorrectly": "Remplissez tous les détails correctement.",
-    "notAuthorised": "Désolé ! vous n'êtes pas autorisé !",
-    "notFound": "Utilisateur introuvable !",
-    "successfullyRegistered": "Enregistré avec succès. Veuillez patienter jusqu'à ce que vous soyez approuvé.",
-    "userLogin": "Utilisateur en ligne",
-    "afterRegister": "Enregistré avec succès. Veuillez attendre que l'administrateur approuve votre demande.",
-    "OR": "OU"
   },
   "latestEvents": {
     "eventCardTitle": "Événements à venir",
@@ -192,7 +163,12 @@
     "roleUpdated": "Rôle mis à jour.",
     "noResultsFoundFor": "Aucun résultat trouvé pour ",
     "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau.",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "admins": "Administrateurs",
+    "members": "Membres",
+    "joinNow": "Adhérer maintenant",
+    "joined": "Rejointes",
+    "withdraw": "Retirer"
   },
   "dashboard": {
     "title": "Tableau de bord",
@@ -226,7 +202,10 @@
     "searchName": "Entrez le nom",
     "searchevent": "Entrez l'événement",
     "searchFirstName": "Entrez votre prénom",
-    "searchLastName": "Entrer le nom de famille"
+    "searchLastName": "Entrer le nom de famille",
+    "people": "Personnes",
+    "sort": "Trier par rôle",
+    "actions": "Actions"
   },
   "userListCard": {
     "joined": "Inscrit",
@@ -680,7 +659,9 @@
     "createdOrganizations": "Organisations créées",
     "search": "Recherche",
     "nothingToShow": "Rien à montrer ici.",
-    "selectOrganization": "Sélectionnez une organisation"
+    "selectOrganization": "Sélectionnez une organisation",
+    "organizations": "Organizations",
+    "searchByName": "Recherche par nom"
   },
   "userSidebar": {
     "yourOrganizations": "Vos organisations",
@@ -730,13 +711,6 @@
     "nothingToShow": "Rien à montrer ici.",
     "search": "Recherche",
     "createEvent": "Créer un évènement",
-    "eventTitle": "Titre de l'événement",
-    "eventDescription": "Description de l'évenement",
-    "eventLocation": "Lieu de l'événement",
-    "startDate": "Sélectionnez la date de début",
-    "endDate": "Sélectionnez la date de fin",
-    "publicEvent": "Évennement publique",
-    "registerable": "Enregistrable",
     "recurring": "Récurrente",
     "startTime": "Heure de début",
     "endTime": "Heure de fin",
@@ -745,7 +719,18 @@
     "listView": "Vue en liste",
     "calendarView": "Vue du calendrier",
     "allDay": "Toute la journée",
-    "eventCreated": "Événement créé et publié avec succès."
+    "eventCreated": "Événement créé et publié avec succès.",
+    "eventDetails": "Détails de l'événement",
+    "eventTitle": "Titre",
+    "enterTitle": "Entrez le titre",
+    "eventDescription": "Description",
+    "enterDescription": "Entrez la description",
+    "eventLocation": "Emplacement",
+    "enterLocation": "Entrez l'emplacement",
+    "startDate": "Date de début",
+    "endDate": "Date de fin",
+    "publicEvent": "Est public",
+    "registerable": "Est enregistrable"
   },
   "userEventCard": {
     "location": "Emplacement",

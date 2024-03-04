@@ -87,6 +87,29 @@ export const USER_ORGANIZATION_CONNECTION = gql`
         firstName
         lastName
       }
+      members {
+        _id
+      }
+      admins {
+        _id
+      }
+      createdAt
+      address {
+        city
+        countryCode
+        dependentLocality
+        line1
+        line2
+        postalCode
+        sortingCode
+        state
+      }
+      membershipRequests {
+        _id
+        user {
+          _id
+        }
+      }
     }
   }
 `;
@@ -119,7 +142,7 @@ export const USER_JOINED_ORGANIZATIONS = gql`
  */
 
 export const USER_CREATED_ORGANIZATIONS = gql`
-  query UserJoinedOrganizations($id: ID!) {
+  query UserCreatedOrganizations($id: ID!) {
     users(where: { id: $id }) {
       createdOrganizations {
         _id

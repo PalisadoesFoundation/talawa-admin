@@ -32,7 +32,7 @@ import Home from 'screens/UserPortal/Home/Home';
 import Organizations from 'screens/UserPortal/Organizations/Organizations';
 import People from 'screens/UserPortal/People/People';
 import Settings from 'screens/UserPortal/Settings/Settings';
-import UserLoginPage from 'screens/UserPortal/UserLoginPage/UserLoginPage';
+// import UserLoginPage from 'screens/UserPortal/UserLoginPage/UserLoginPage';
 // import Chat from 'screens/UserPortal/Chat/Chat';
 import Advertisements from 'components/Advertisements/Advertisements';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -123,7 +123,6 @@ function app(): JSX.Element {
         <Route exact path="/forgotPassword" component={ForgotPassword} />
 
         {/* User Portal Routes */}
-        <Route exact path="/user" component={UserLoginPage} />
         <SecuredRouteForUser
           path="/user/organizations"
           component={Organizations}
