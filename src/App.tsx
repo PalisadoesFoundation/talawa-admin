@@ -1,35 +1,38 @@
-import React, { useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
+/* eslint-disable */
 import { useQuery } from '@apollo/client';
-import * as installedPlugins from 'components/plugins/index';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
+import AddOnStore from 'components/AddOn/core/AddOnStore/AddOnStore';
+import Loader from 'components/Loader/Loader';
 import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
+import * as installedPlugins from 'components/plugins/index';
+import React, { useEffect } from 'react';
+import { Route, Switch } from 'react-router-dom';
+import BlockUser from 'screens/BlockUser/BlockUser';
+import EventDashboard from 'screens/EventDashboard/EventDashboard';
+import ForgotPassword from 'screens/ForgotPassword/ForgotPassword';
 import LoginPage from 'screens/LoginPage/LoginPage';
-import OrganizationEvents from 'screens/OrganizationEvents/OrganizationEvents';
-import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
-import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
-import OrganizationDashboard from 'screens/OrganizationDashboard/OrganizationDashboard';
+import MemberDetail from 'screens/MemberDetail/MemberDetail';
 import OrgContribution from 'screens/OrgContribution/OrgContribution';
 import OrgList from 'screens/OrgList/OrgList';
 import OrgPost from 'screens/OrgPost/OrgPost';
 import OrgSettings from 'screens/OrgSettings/OrgSettings';
+import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
+import OrganizationDashboard from 'screens/OrganizationDashboard/OrganizationDashboard';
+import OrganizationEvents from 'screens/OrganizationEvents/OrganizationEvents';
+import OrganizationFunds from 'screens/OrganizationFunds/OrganizationFunds';
+import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
-import AddOnStore from 'components/AddOn/core/AddOnStore/AddOnStore';
-import ForgotPassword from 'screens/ForgotPassword/ForgotPassword';
 import Users from 'screens/Users/Users';
-import BlockUser from 'screens/BlockUser/BlockUser';
-import EventDashboard from 'screens/EventDashboard/EventDashboard';
-import MemberDetail from 'screens/MemberDetail/MemberDetail';
-import Loader from 'components/Loader/Loader';
 
 // User Portal Components
-import Organizations from 'screens/UserPortal/Organizations/Organizations';
-import Home from 'screens/UserPortal/Home/Home';
-import People from 'screens/UserPortal/People/People';
-import Settings from 'screens/UserPortal/Settings/Settings';
 import Donate from 'screens/UserPortal/Donate/Donate';
 import Events from 'screens/UserPortal/Events/Events';
+import Home from 'screens/UserPortal/Home/Home';
+import Organizations from 'screens/UserPortal/Organizations/Organizations';
+import People from 'screens/UserPortal/People/People';
+import Settings from 'screens/UserPortal/Settings/Settings';
+// import UserLoginPage from 'screens/UserPortal/UserLoginPage/UserLoginPage';
 // import Chat from 'screens/UserPortal/Chat/Chat';
 import Advertisements from 'components/Advertisements/Advertisements';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -107,6 +110,7 @@ function app(): JSX.Element {
           path="/orgactionitems"
           component={OrganizationActionItems}
         />
+        <SecuredRoute path="/orgfunds" component={OrganizationFunds} />
         <SecuredRoute path="/orgcontribution" component={OrgContribution} />
         <SecuredRoute path="/orgpost" component={OrgPost} />
         <SecuredRoute path="/orgsetting" component={OrgSettings} />

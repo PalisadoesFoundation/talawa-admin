@@ -1,5 +1,5 @@
-import reducer from './routesReducer';
 import expect from 'expect';
+import reducer from './routesReducer';
 
 describe('Testing Routes reducer', () => {
   it('should return the initial state', () => {
@@ -21,6 +21,7 @@ describe('Testing Routes reducer', () => {
           url: '/blockuser/id=undefined',
         },
         { name: 'Advertisement', url: '/orgads/id=undefined' },
+        { name: 'Funds', url: '/orgfunds/id=undefined' },
         {
           name: 'Plugins',
           subTargets: [
@@ -64,6 +65,11 @@ describe('Testing Routes reducer', () => {
           component: 'Advertisements',
         },
         {
+          name: 'Funds',
+          comp_id: 'orgfunds',
+          component: 'OrganizationFunds',
+        },
+        {
           name: 'Plugins',
           comp_id: null,
           component: 'AddOnStore',
@@ -98,6 +104,7 @@ describe('Testing Routes reducer', () => {
         { name: 'Posts', url: '/orgpost/id=undefined' },
         { name: 'Block/Unblock', url: '/blockuser/id=undefined' },
         { name: 'Advertisement', url: '/orgads/id=undefined' },
+        { name: 'Funds', url: '/orgfunds/id=undefined' },
         {
           name: 'Plugins',
           subTargets: [
@@ -141,6 +148,7 @@ describe('Testing Routes reducer', () => {
           comp_id: 'orgads',
           component: 'Advertisements',
         },
+        { name: 'Funds', comp_id: 'orgfunds', component: 'OrganizationFunds' },
         {
           name: 'Plugins',
           comp_id: null,
@@ -179,6 +187,7 @@ describe('Testing Routes reducer', () => {
           url: '/blockuser/id=undefined',
         },
         { name: 'Advertisement', url: '/orgads/id=undefined' },
+        { name: 'Funds', url: '/orgfunds/id=undefined' },
         { name: 'Settings', url: '/orgsetting/id=undefined' },
         {
           comp_id: null,
@@ -223,6 +232,11 @@ describe('Testing Routes reducer', () => {
           name: 'Advertisement',
           comp_id: 'orgads',
           component: 'Advertisements',
+        },
+        {
+          name: 'Funds',
+          comp_id: 'orgfunds',
+          component: 'OrganizationFunds',
         },
         {
           name: 'Plugins',
