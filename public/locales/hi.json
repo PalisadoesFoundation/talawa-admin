@@ -60,6 +60,7 @@
     "menu": "मेन्यू",
     "my organizations": "मेरे संगठन",
     "users": "उपयोगकर्ता",
+    "communityProfile": "सामुदायिक प्रोफ़ाइल",
     "logout": "लॉग आउट"
   },
   "leftDrawerOrg": {
@@ -173,6 +174,16 @@
     "MembershipRequestSent": "सदस्यता अनुरोध सफलतापूर्वक भेजा गया",
     "AlreadyJoined": "आप इस संगठन के पहले से ही सदस्य हैं।",
     "errorOccured": "कुछ गड़बड़ हो गई है। कृपया बाद में पुन: प्रयास करें।"
+  },
+  "communityProfile": {
+    "communityProfile": "सामुदायिक प्रोफ़ाइल",
+    "editProfile": "प्रोफ़ाइल संपादित करें",
+    "communityProfileInfo": "ये विवरण आपके और आपके समुदाय के सदस्यों के लिए लॉगिन/साइनअप स्क्रीन पर दिखाई देंगे",
+    "communityName": "समुदाय का नाम",
+    "wesiteLink": "वेबसाइट की लिंक",
+    "logo": "प्रतीक चिन्ह",
+    "social": "सोशल मीडिया लिंक",
+    "url": "यू आर एल दर्ज करो"
   },
   "dashboard": {
     "title": "डैशबोर्ड",

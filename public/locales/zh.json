@@ -60,6 +60,7 @@
     "menu": "菜单",
     "my organizations": "我的组织",
     "users": "用户",
+    "communityProfile": "社区简介",
     "logout": "退出登录"
   },
   "leftDrawerOrg": {
@@ -202,6 +203,16 @@
     "MembershipRequestSent": "会员申请已成功发送",
     "AlreadyJoined": "您已经是该组织的成员。",
     "errorOccured": "发生错误，请稍后重试。"
+  },
+  "communityProfile": {
+    "communityProfile": "社区简介",
+    "editProfile": "编辑个人资料",
+    "communityProfileInfo": "这些详细信息将显示在您和您的社区成员的登录/注册屏幕上",
+    "communityName": "社区名字",
+    "wesiteLink": "网站链接",
+    "logo": "标识",
+    "social": "社交媒体链接",
+    "url": "输入网址"
   },
   "dashboard": {
     "title": "儀表板",
