@@ -285,18 +285,12 @@ function actionItemsContainer({
                           data-testid="actionItemPostCompletionNotesOverlay"
                           onMouseEnter={() => {
                             setActionItemId(actionItem._id);
-                            setActionItemNotes(
-                              actionItem.postCompletionNotes
-                                ? actionItem.postCompletionNotes
-                                : t('actionItemCompleted'),
-                            );
+                            setActionItemNotes(actionItem.postCompletionNotes);
                           }}
                         >
                           {actionItem.postCompletionNotes?.length > 25
                             ? `${actionItem.postCompletionNotes.substring(0, 25)}...`
-                            : actionItem.postCompletionNotes
-                              ? actionItem.postCompletionNotes
-                              : t('actionItemCompleted')}
+                            : actionItem.postCompletionNotes}
                         </span>
                       </OverlayTrigger>
                     ) : (
@@ -383,6 +377,7 @@ function actionItemsContainer({
               data-testid="actionItemsStatusChangeNotes"
               placeholder={t('actionItemCompleted')}
               autoComplete="off"
+              required
               value={
                 isActionItemCompleted
                   ? formState.preCompletionNotes
