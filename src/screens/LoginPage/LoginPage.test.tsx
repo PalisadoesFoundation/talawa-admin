@@ -110,7 +110,7 @@ jest.mock('react-router-dom', () => ({
     push: mockHistoryPush,
   }),
 }));
-
+  
 jest.mock('react-google-recaptcha', () => {
   const react = jest.requireActual('react');
   const recaptcha = react.forwardRef(
