@@ -425,17 +425,13 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
 
 // To take the list of the oranization joined by a user
 export const USER_ORGANIZATION_LIST = gql`
-  query User($id: ID!) {
-    user(id: $id) {
-      firstName
-      lastName
-      image
-      email
-      userType
-      adminFor {
-        _id
-        name
+  query User($userId: ID!) {
+    user(id: $userId) {
+      user {
+        firstName
+        email
         image
+        lastName
       }
     }
   }

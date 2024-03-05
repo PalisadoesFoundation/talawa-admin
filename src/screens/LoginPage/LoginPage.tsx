@@ -281,6 +281,8 @@ function loginPage(): JSX.Element {
           (loginData.login.appUserProfile.adminFor.length !== 0 &&
             loginData.login.user.adminApproved === true)
         ) {
+          setItem('FirstName', loginData.login.user.firstName);
+          setItem('LastName', loginData.login.user.lastName);
           setItem('token', loginData.login.accessToken);
           setItem('refreshToken', loginData.login.refreshToken);
           setItem('id', loginData.login.user._id);
