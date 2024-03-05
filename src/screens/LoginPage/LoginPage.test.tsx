@@ -145,6 +145,12 @@ jest.mock('react-google-recaptcha', () => {
   );
   return recaptcha;
 });
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useHistory: () => ({
+    push: mockHistoryPush,
+  }),
+}));
 
 describe('Talawa-API server fetch check', () => {
   beforeEach(() => {
