@@ -169,7 +169,10 @@ function actionItemsContainer({
   };
 
   const popover = (
-    <Popover id={`popover-${actionItemId}`}>
+    <Popover
+      id={`popover-${actionItemId}`}
+      data-testid={`popover-${actionItemId}`}
+    >
       <Popover.Body>{actionItemNotes}</Popover.Body>
     </Popover>
   );
@@ -258,6 +261,7 @@ function actionItemsContainer({
                       overlay={popover}
                     >
                       <span
+                        data-testid="actionItemPreCompletionNotesOverlay"
                         onMouseEnter={() => {
                           setActionItemId(actionItem._id);
                           setActionItemNotes(actionItem.preCompletionNotes);
@@ -283,6 +287,7 @@ function actionItemsContainer({
                         overlay={popover}
                       >
                         <span
+                          data-testid="actionItemPostCompletionNotesOverlay"
                           onMouseEnter={() => {
                             setActionItemId(actionItem._id);
                             setActionItemNotes(
@@ -310,7 +315,8 @@ function actionItemsContainer({
                   <div className="d-flex align-items-center ms-4 gap-2">
                     <input
                       type="checkbox"
-                      id="actionItemCompletionStatusCheckbox"
+                      id="actionItemStatusChangeCheckbox"
+                      data-testid="actionItemStatusChangeCheckbox"
                       className="form-check-input d-inline mt-0 me-1"
                       checked={actionItem.isCompleted}
                       onChange={() => handleActionItemStatusChange(actionItem)}
@@ -364,7 +370,7 @@ function actionItemsContainer({
           <Button
             variant="danger"
             onClick={hideActionItemStatusModal}
-            data-testid="actionItemCategoryModalCloseBtn"
+            data-testid="actionItemStatusChangeModalCloseBtn"
           >
             <i className="fa fa-times"></i>
           </Button>
@@ -380,7 +386,8 @@ function actionItemsContainer({
             </Form.Label>
             <Form.Control
               type="title"
-              id="actionItemCategoryName"
+              id="actionItemsStatusChangeNotes"
+              data-testid="actionItemsStatusChangeNotes"
               // placeholder={t('enterName')}
               placeholder="Action Item Completed"
               autoComplete="off"
@@ -407,8 +414,8 @@ function actionItemsContainer({
             <Button
               type="submit"
               className={styles.greenregbtn}
-              value="creatActionItemCategory"
-              data-testid="formSubmitButton"
+              value="actionItemStatusChange"
+              data-testid="actionItemStatusChangeSubmitBtn"
             >
               {isActionItemCompleted ? 'Make Active' : 'Mark Completion'}
             </Button>

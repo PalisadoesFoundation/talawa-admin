@@ -21,7 +21,7 @@ import type {
   InterfaceActionItemList,
   InterfaceMembersList,
 } from 'utils/interfaces';
-import ActionItemsContainer from 'components/ActionItemsContainer/ActionItemsContainer';
+import ActionItemsContainer from 'components/ActionItems/ActionItemsContainer';
 import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 import ActionItemCreateModal from './ActionItemCreateModal';
 import styles from './OrganizationActionItems.module.css';

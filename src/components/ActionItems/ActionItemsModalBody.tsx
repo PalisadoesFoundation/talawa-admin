@@ -14,7 +14,7 @@ import type {
   InterfaceMembersList,
 } from 'utils/interfaces';
 
-import ActionItemsContainer from 'components/ActionItemsContainer/ActionItemsContainer';
+import ActionItemsContainer from 'components/ActionItems/ActionItemsContainer';
 import Loader from 'components/Loader/Loader';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { CREATE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/ActionItemMutations';
