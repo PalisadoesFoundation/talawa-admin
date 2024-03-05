@@ -18,3 +18,8 @@
   border-bottom: 3px solid var(--bs-primary);
   width: 65%;
 }
+
+.actionItemsOptionsButton {
+  width: 24px;
+  height: 24px;
+}

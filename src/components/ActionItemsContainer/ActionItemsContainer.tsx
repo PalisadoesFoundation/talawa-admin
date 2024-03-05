@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import dayjs from 'dayjs';
 import type { ChangeEvent } from 'react';
-import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
+import {
+  Button,
+  Col,
+  Form,
+  Modal,
+  OverlayTrigger,
+  Popover,
+  Row,
+} from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
@@ -42,11 +50,13 @@ function actionItemsContainer({
   const [actionItemDeleteModalIsOpen, setActionItemDeleteModalIsOpen] =
     useState(false);
   const [actionItemStatusModal, setActionItemStatusModal] = useState(false);
+  const [isActionItemCompleted, setIsActionItemCompleted] = useState(false);
 
   const [assignmentDate, setAssignmentDate] = useState<Date | null>(new Date());
   const [dueDate, setDueDate] = useState<Date | null>(new Date());
   const [completionDate, setCompletionDate] = useState<Date | null>(new Date());
   const [actionItemId, setActionItemId] = useState('');
+  const [actionItemNotes, setActionItemNotes] = useState('');
 
   const [formState, setFormState] = useState({
     assignee: '',
@@ -58,19 +68,7 @@ function actionItemsContainer({
   });
 
   const showPreviewModal = (actionItem: InterfaceActionItemInfo): void => {
-    setFormState({
-      ...formState,
-      assignee: `${actionItem.assignee.firstName} ${actionItem.assignee.lastName}`,
-      assigner: `${actionItem.assigner.firstName} ${actionItem.assigner.lastName}`,
-      assigneeId: actionItem.assignee._id,
-      preCompletionNotes: actionItem.preCompletionNotes,
-      postCompletionNotes: actionItem.postCompletionNotes,
-      isCompleted: actionItem.isCompleted,
-    });
-    setActionItemId(actionItem._id);
-    setAssignmentDate(actionItem.assignmentDate);
-    setDueDate(actionItem.dueDate);
-    setCompletionDate(actionItem.completionDate);
+    setActionItemState(actionItem);
     setActionItemPreviewModalIsOpen(true);
   };
 
@@ -145,10 +143,9 @@ function actionItemsContainer({
   const handleActionItemStatusChange = (
     actionItem: InterfaceActionItemInfo,
   ): void => {
+    actionItem = { ...actionItem, isCompleted: !actionItem.isCompleted };
+    setIsActionItemCompleted(!actionItem.isCompleted);
     setActionItemState(actionItem);
-    // if (actionItem.isCompleted) {
-    // } else {
-    // }
     setActionItemStatusModal(true);
   };
 
@@ -167,8 +164,15 @@ function actionItemsContainer({
     });
     setActionItemId(actionItem._id);
     setDueDate(actionItem.dueDate);
+    setAssignmentDate(actionItem.assignmentDate);
     setCompletionDate(actionItem.completionDate);
   };
+
+  const popover = (
+    <Popover id={`popover-${actionItemId}`}>
+      <Popover.Body>{actionItemNotes}</Popover.Body>
+    </Popover>
+  );
 
   return (
     <>
@@ -220,7 +224,7 @@ function actionItemsContainer({
         </div>
 
         <div
-          className={`bg-light-subtle border border-light-subtle border-top-0 shadow-sm ${actionItemsConnection === 'Organization' ? 'rounded-bottom-4 mx-4' : 'rounded-bottom-2 mx-0'}`}
+          className={`bg-light-subtle border border-light-subtle border-top-0 shadow-sm ${actionItemsConnection === 'Organization' ? 'rounded-bottom-4 mx-4' : 'rounded-bottom-2 mb-2 mx-0'}`}
         >
           {actionItemsData?.map((actionItem, index) => (
             <div key={index}>
@@ -247,7 +251,24 @@ function actionItemsContainer({
                   md={4}
                   lg={3}
                 >
-                  <div className="ms-5">{actionItem.preCompletionNotes}</div>
+                  <div className="ms-5">
+                    <OverlayTrigger
+                      trigger={['hover', 'focus']}
+                      placement="right"
+                      overlay={popover}
+                    >
+                      <span
+                        onMouseEnter={() => {
+                          setActionItemId(actionItem._id);
+                          setActionItemNotes(actionItem.preCompletionNotes);
+                        }}
+                      >
+                        {actionItem.preCompletionNotes.length > 25
+                          ? `${actionItem.preCompletionNotes.substring(0, 25)}...`
+                          : actionItem.preCompletionNotes}
+                      </span>
+                    </OverlayTrigger>
+                  </div>
                 </Col>
                 <Col
                   className="p-0 d-none d-lg-block align-self-center text-body-secondary"
@@ -256,7 +277,28 @@ function actionItemsContainer({
                 >
                   <div className="ms-3">
                     {actionItem.isCompleted ? (
-                      actionItem.postCompletionNotes
+                      <OverlayTrigger
+                        trigger={['hover', 'focus']}
+                        placement="right"
+                        overlay={popover}
+                      >
+                        <span
+                          onMouseEnter={() => {
+                            setActionItemId(actionItem._id);
+                            setActionItemNotes(
+                              actionItem.postCompletionNotes
+                                ? actionItem.postCompletionNotes
+                                : 'Action Item Completed',
+                            );
+                          }}
+                        >
+                          {actionItem.postCompletionNotes?.length > 25
+                            ? `${actionItem.postCompletionNotes.substring(0, 25)}...`
+                            : actionItem.postCompletionNotes
+                              ? actionItem.postCompletionNotes
+                              : 'Action Item Completed'}
+                        </span>
+                      </OverlayTrigger>
                     ) : (
                       <span className="text-body-tertiary ms-3 fst-italic">
                         Action Item Active
@@ -271,15 +313,14 @@ function actionItemsContainer({
                       id="actionItemCompletionStatusCheckbox"
                       className="form-check-input d-inline mt-0 me-1"
                       checked={actionItem.isCompleted}
-                      onClick={() => handleActionItemStatusChange(actionItem)}
+                      onChange={() => handleActionItemStatusChange(actionItem)}
                     />
                     <Button
                       data-testid="previewActionItemModalBtn"
-                      className="d-flex align-items-center justify-content-center"
+                      className={`${styles.actionItemsOptionsButton} d-flex align-items-center justify-content-center`}
                       variant="outline-secondary"
                       size="sm"
                       onClick={() => showPreviewModal(actionItem)}
-                      style={{ width: '24px', height: '24px' }}
                     >
                       <i className="fas fa-info fa-sm"></i>
                     </Button>
@@ -287,9 +328,8 @@ function actionItemsContainer({
                       size="sm"
                       data-testid="editActionItemModalBtn"
                       onClick={() => handleEditClick(actionItem)}
-                      className="d-flex align-items-center justify-content-center"
+                      className={`${styles.actionItemsOptionsButton} d-flex align-items-center justify-content-center`}
                       variant="outline-secondary"
-                      style={{ width: '24px', height: '24px' }}
                     >
                       {' '}
                       <i className="fas fa-edit fa-sm"></i>
@@ -310,7 +350,7 @@ function actionItemsContainer({
         </div>
       </div>
 
-      {/* mark completion modal */}
+      {/* action item status change modal */}
       <Modal
         className={styles.createModal}
         show={actionItemStatusModal}
@@ -336,7 +376,7 @@ function actionItemsContainer({
               htmlFor="actionItemCategoryName"
             >
               {/* {t('actionItemCategoryName')} */}
-              Completion Notes
+              {isActionItemCompleted ? 'Notes' : 'Completion Notes'}
             </Form.Label>
             <Form.Control
               type="title"
@@ -345,10 +385,24 @@ function actionItemsContainer({
               placeholder="Action Item Completed"
               autoComplete="off"
               required
-              // value={name}
-              // onChange={(e): void => {
-              //   setName(e.target.value);
-              // }}
+              value={
+                isActionItemCompleted
+                  ? formState.preCompletionNotes
+                  : formState.postCompletionNotes ?? ''
+              }
+              onChange={(e): void => {
+                if (isActionItemCompleted) {
+                  setFormState({
+                    ...formState,
+                    preCompletionNotes: e.target.value,
+                  });
+                } else {
+                  setFormState({
+                    ...formState,
+                    postCompletionNotes: e.target.value,
+                  });
+                }
+              }}
             />
             <Button
               type="submit"
@@ -356,7 +410,7 @@ function actionItemsContainer({
               value="creatActionItemCategory"
               data-testid="formSubmitButton"
             >
-              Mark Completion
+              {isActionItemCompleted ? 'Make Active' : 'Mark Completion'}
             </Button>
           </Form>
         </Modal.Body>
