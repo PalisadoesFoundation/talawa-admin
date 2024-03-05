@@ -4,6 +4,7 @@ import { Button } from 'react-bootstrap';
 import { Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { toast } from 'react-toastify';
 import {
   CANCEL_MEMBERSHIP_REQUEST,
   JOIN_PUBLIC_ORGANIZATION,
@@ -53,17 +54,17 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
   });
   const [sendMembershipRequest] = useMutation(SEND_MEMBERSHIP_REQUEST, {
     refetchQueries: [
-      { query: USER_ORGANIZATION_CONNECTION, variables: { id: userId } },
+      { query: USER_ORGANIZATION_CONNECTION, variables: { id: props.id } },
     ],
   });
   const [joinPublicOrganization] = useMutation(JOIN_PUBLIC_ORGANIZATION, {
     refetchQueries: [
-      { query: USER_ORGANIZATION_CONNECTION, variables: { id: userId } },
+      { query: USER_ORGANIZATION_CONNECTION, variables: { id: props.id } },
     ],
   });
   const [cancelMembershipRequest] = useMutation(CANCEL_MEMBERSHIP_REQUEST, {
     refetchQueries: [
-      { query: USER_ORGANIZATION_CONNECTION, variables: { id: userId } },
+      { query: USER_ORGANIZATION_CONNECTION, variables: { id: props.id } },
     ],
   });
   const { refetch } = useQuery(USER_JOINED_ORGANIZATIONS, {
@@ -71,20 +72,31 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
   });
 
   async function joinOrganization(): Promise<void> {
-    if (props.userRegistrationRequired) {
-      await sendMembershipRequest({
-        variables: {
-          organizationId: props.id,
-        },
-      });
-    } else {
-      await joinPublicOrganization({
-        variables: {
-          organizationId: props.id,
-        },
-      });
+    try {
+      if (props.userRegistrationRequired) {
+        await sendMembershipRequest({
+          variables: {
+            organizationId: props.id,
+          },
+        });
+        toast.success(t('MembershipRequestSent'));
+      } else {
+        await joinPublicOrganization({
+          variables: {
+            organizationId: props.id,
+          },
+        });
+        toast.success(t('orgJoined'));
+      }
+      refetch();
+    } catch (error: any) {
+      /* istanbul ignore next */
+      if (error.message === 'User is already a member') {
+        toast.error(t('AlreadyJoined'));
+      } else {
+        toast.error(t('errorOccured'));
+      }
     }
-    refetch();
   }
 
   async function withdrawMembershipRequest(): Promise<void> {
