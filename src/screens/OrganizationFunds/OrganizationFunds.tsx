@@ -7,7 +7,6 @@ import {
 } from 'GraphQl/Mutations/FundMutation';
 import { ORGANIZATION_FUNDS } from 'GraphQl/Queries/OrganizationQueries';
 import Loader from 'components/Loader/Loader';
-import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 import React, { useEffect, useState, type ChangeEvent } from 'react';
 import { Button, Col, Dropdown, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
