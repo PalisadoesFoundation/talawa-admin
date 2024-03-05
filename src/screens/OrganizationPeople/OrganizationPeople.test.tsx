@@ -65,7 +65,7 @@ for (let i = 0; i < 100; i++) {
 const createMemberMock = (
   orgId = '',
   firstNameContains = '',
-  lastNameContains = ''
+  lastNameContains = '',
 ): any => ({
   request: {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
@@ -117,7 +117,7 @@ const createAdminMock = (
   orgId = '',
   firstNameContains = '',
   lastNameContains = '',
-  adminFor = ''
+  adminFor = '',
 ): any => ({
   request: {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
@@ -170,7 +170,7 @@ const createAdminMock = (
 
 const createUserMock = (
   firstNameContains = '',
-  lastNameContains = ''
+  lastNameContains = '',
 ): any => ({
   request: {
     query: USER_LIST,
@@ -559,7 +559,7 @@ describe('Organization People Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     expect(container.textContent).not.toBe('Loading data...');
@@ -587,7 +587,7 @@ describe('Organization People Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
 
@@ -597,11 +597,11 @@ describe('Organization People Page', () => {
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter Full Name/i),
-      searchData.fullNameMember
+      searchData.fullNameMember,
     );
     await wait();
     expect(screen.getByPlaceholderText(/Enter Full Name/i)).toHaveValue(
-      searchData.fullNameMember
+      searchData.fullNameMember,
     );
 
     await wait();
@@ -626,7 +626,7 @@ describe('Organization People Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
 
@@ -666,7 +666,7 @@ describe('Organization People Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -693,7 +693,7 @@ describe('Organization People Page', () => {
     // Type in the full name input field
     userEvent.type(
       screen.getByPlaceholderText(/Enter Full Name/i),
-      searchData.fullNameAdmin
+      searchData.fullNameAdmin,
     );
 
     // Wait for any asynchronous operations to complete
@@ -701,7 +701,7 @@ describe('Organization People Page', () => {
 
     // Assert the value of the full name input field
     expect(screen.getByPlaceholderText(/Enter Full Name/i)).toHaveValue(
-      searchData.fullNameAdmin
+      searchData.fullNameAdmin,
     );
     await wait();
 
@@ -729,7 +729,7 @@ describe('Organization People Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     // Wait for the component to finish rendering
@@ -780,7 +780,7 @@ describe('Organization People Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
 
@@ -809,7 +809,7 @@ describe('Organization People Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
 
@@ -836,7 +836,7 @@ describe('Organization People Page', () => {
         const pathname = window.location.pathname;
         const id = pathname.split('=')[1];
         return datas.joinedOrganizations?.some((org) => org._id === id);
-      }
+      },
     );
     await wait();
     expect(orgUserssize?.length).toBe(1);
@@ -857,7 +857,7 @@ describe('Organization People Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();

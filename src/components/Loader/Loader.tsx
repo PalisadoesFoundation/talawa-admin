@@ -20,8 +20,8 @@ const Loader = (props: InterfaceLoaderProps): JSX.Element => {
              props?.size == 'sm'
                ? styles.spinnerSm
                : props?.size == 'lg'
-                ? styles.spinnerLg
-                : styles.spinnerXl
+                 ? styles.spinnerLg
+                 : styles.spinnerXl
            }
           `}
           animation="border"

@@ -53,7 +53,7 @@ describe('Testing Organization People List Card', () => {
             <OrgPeopleListCard {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -72,7 +72,7 @@ describe('Testing Organization People List Card', () => {
             <OrgPeopleListCard key={123} id="1" />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();

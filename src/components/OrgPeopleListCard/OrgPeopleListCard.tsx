@@ -14,7 +14,7 @@ interface InterfaceOrgPeopleListCardProps {
 }
 
 function orgPeopleListCard(
-  props: InterfaceOrgPeopleListCardProps
+  props: InterfaceOrgPeopleListCardProps,
 ): JSX.Element {
   const currentUrl = window.location.href.split('=')[1];
   const [remove] = useMutation(REMOVE_MEMBER_MUTATION);

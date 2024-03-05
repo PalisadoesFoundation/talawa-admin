@@ -52,7 +52,7 @@ describe('Testing Organization Admin List Card', () => {
             <OrgAdminListCard {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -74,7 +74,7 @@ describe('Testing Organization Admin List Card', () => {
             <OrgAdminListCard {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
