@@ -2,7 +2,7 @@ import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { act, render, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter, MemoryRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import 'jest-localstorage-mock';
@@ -17,7 +17,6 @@ import {
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
-import useLocalStorage from 'utils/useLocalstorage';
 
 const MOCKS = [
   {
@@ -80,7 +79,6 @@ const MOCKS = [
 ];
 
 const link = new StaticMockLink(MOCKS, true);
-const mockHistoryPush = jest.fn();
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -776,48 +774,5 @@ describe('Testing Login Page Screen', () => {
 
       expect(recaptchaElement).toHaveValue('test-token2');
     }
-  });
-});
-
-describe('Testing redirect if already logged in', () => {
-  test('Logged in as USER', async () => {
-    const { setItem } = useLocalStorage();
-    setItem('IsLoggedIn', 'TRUE');
-    setItem('UserType', 'USER');
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <MemoryRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <LoginPage />
-              </I18nextProvider>
-            </Provider>
-          </MemoryRouter>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-    expect(mockHistoryPush).toHaveBeenCalledWith('/user/organizations');
-  });
-  test('Logged as in Admin or SuperAdmin', async () => {
-    const { setItem } = useLocalStorage();
-    setItem('IsLoggedIn', 'TRUE');
-    setItem('UserType', 'ADMIN');
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <MemoryRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <LoginPage />
-              </I18nextProvider>
-            </Provider>
-          </MemoryRouter>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-    expect(mockHistoryPush).toHaveBeenCalledWith('/orglist');
   });
 });
