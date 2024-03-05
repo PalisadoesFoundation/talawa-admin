@@ -30,7 +30,7 @@ export const ActionItemsWrapper = (props: PropType): JSX.Element => {
         <div className={styles.iconWrapper}>
           <IconComponent name="Action Items" fill="var(--bs-secondary)" />
         </div>
-        {t('title')}
+        {t('eventActionItems')}
       </Button>
       {showModal && (
         <ActionItemsModal
