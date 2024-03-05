@@ -7,7 +7,6 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import type { InterfaceOrganizationScreenProps } from './OrganizationScreen';
 import OrganizationScreen from './OrganizationScreen';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -15,11 +14,11 @@ import useLocalStorage from 'utils/useLocalstorage';
 
 const { setItem } = useLocalStorage();
 
-const props: InterfaceOrganizationScreenProps = {
-  title: 'Dashboard',
-  screenName: 'Dashboard',
-  children: <div>Testing ...</div>,
-};
+let mockID: string | undefined = '123';
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: mockID }),
+}));
 const MOCKS = [
   {
     request: {
@@ -39,8 +38,17 @@ const MOCKS = [
             },
             name: 'Test Organization',
             description: 'Testing this organization',
-            location: 'Lucknow, India',
-            isPublic: true,
+            address: {
+              city: 'Mountain View',
+              countryCode: 'US',
+              dependentLocality: 'Some Dependent Locality',
+              line1: '123 Main Street',
+              line2: 'Apt 456',
+              postalCode: '94040',
+              sortingCode: 'XYZ-789',
+              state: 'CA',
+            },
+            userRegistrationRequired: true,
             visibleInSearch: true,
             members: [],
             admins: [],
@@ -72,7 +80,7 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <OrganizationScreen {...props} />
+              <OrganizationScreen />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -93,5 +101,20 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
 
     clickToggleMenuBtn(toggleButton);
     expect(icon).toHaveClass('fa fa-angle-double-right');
+  });
+  test('should be redirected to / if orgId is undefined', async () => {
+    mockID = undefined;
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationScreen />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    expect(window.location.pathname).toEqual('/');
   });
 });

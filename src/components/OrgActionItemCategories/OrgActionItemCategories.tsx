@@ -14,6 +14,7 @@ import {
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/Queries';
 import type { InterfaceActionItemCategoryList } from 'utils/interfaces';
 import Loader from 'components/Loader/Loader';
+import { useParams } from 'react-router-dom';
 
 type ModalType = 'Create' | 'Update';
 
@@ -29,7 +30,7 @@ const OrgActionItemCategories = (): any => {
   const [name, setName] = useState('');
   const [currName, setCurrName] = useState('');
 
-  const currentUrl = window.location.href.split('=')[1];
+  const { orgId: currentUrl } = useParams();
 
   const {
     data,

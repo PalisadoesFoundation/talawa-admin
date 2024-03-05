@@ -23,11 +23,10 @@ import {
   Row,
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
-import getOrganizationId from 'utils/getOrganizationId';
 import useLocalStorage from 'utils/useLocalstorage';
 import UserDefault from '../../../assets/images/defaultImg.png';
 import styles from './Home.module.css';
@@ -83,7 +82,10 @@ export default function home(): JSX.Element {
 
   const { getItem } = useLocalStorage();
 
-  const organizationId = getOrganizationId(window.location.href);
+  const { orgId: organizationId } = useParams();
+  if (!organizationId) {
+    return <Navigate to={'/user'} />;
+  }
   const [posts, setPosts] = React.useState([]);
   const [postContent, setPostContent] = React.useState<string>('');
   const [postImage, setPostImage] = React.useState<string>('');
@@ -91,7 +93,6 @@ export default function home(): JSX.Element {
   const [filteredAd, setFilteredAd] = useState<InterfaceAdContent[]>([]);
   const [showStartPost, setShowStartPost] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const currentOrgId = window.location.href.split('/id=')[1] + '';
 
   const navbarProps = {
     currentPage: 'home',
@@ -162,7 +163,7 @@ export default function home(): JSX.Element {
   }, [promotedPostsData]);
 
   useEffect(() => {
-    setFilteredAd(filterAdContent(adContent, currentOrgId));
+    setFilteredAd(filterAdContent(adContent, organizationId));
   }, [adContent]);
 
   const filterAdContent = (
@@ -172,7 +173,7 @@ export default function home(): JSX.Element {
   ): InterfaceAdContent[] => {
     return adCont.filter(
       (ad: InterfaceAdContent) =>
-        ad.organization._id === currentOrgId &&
+        ad.organization._id === organizationId &&
         new Date(ad.endDate) > currentDate,
     );
   };

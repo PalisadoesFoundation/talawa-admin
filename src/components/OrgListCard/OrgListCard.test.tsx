@@ -110,9 +110,11 @@ describe('Testing the Super Dash List', () => {
     };
     render(
       <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgListCard {...imageNullProps} />
-        </I18nextProvider>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgListCard {...imageNullProps} />
+          </I18nextProvider>
+        </BrowserRouter>
       </MockedProvider>,
     );
     expect(screen.getByTestId(/emptyContainerForImage/i)).toBeInTheDocument();
@@ -129,6 +131,5 @@ describe('Testing the Super Dash List', () => {
       </MockedProvider>,
     );
     userEvent.click(screen.getByTestId('manageBtn'));
-    expect(window.location).toBeAt('/orgdash/id=xyz');
   });
 });

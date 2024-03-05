@@ -25,7 +25,6 @@ function loginPortalToggle({
       <Col>
         <NavLink
           className={`${styles.navLinkClass} ${activeRole === 'admin' && styles.activeLink}`}
-          exact
           to="/"
           onClick={() => handleNavLinkClick('admin')}
         >
@@ -35,7 +34,6 @@ function loginPortalToggle({
       <Col>
         <NavLink
           className={`${styles.navLinkClass} ${activeRole === 'user' && styles.activeLink}`}
-          exact
           to="/"
           onClick={() => handleNavLinkClick('user')}
         >

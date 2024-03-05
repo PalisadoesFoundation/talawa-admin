@@ -10,31 +10,30 @@ describe('Testing Routes reducer', () => {
       }),
     ).toEqual({
       targets: [
-        { name: 'My Organizations', url: '/orglist/id=undefined' },
-        { name: 'Dashboard', url: '/orgdash/id=undefined' },
-        { name: 'People', url: '/orgpeople/id=undefined' },
-        { name: 'Events', url: '/orgevents/id=undefined' },
-        { name: 'Action Items', url: '/orgactionitems/id=undefined' },
-        { name: 'Posts', url: '/orgpost/id=undefined' },
+        { name: 'My Organizations', url: '/orglist' },
+        { name: 'Dashboard', url: '/orgdash/undefined' },
+        { name: 'People', url: '/orgpeople/undefined' },
+        { name: 'Events', url: '/orgevents/undefined' },
+        { name: 'Action Items', url: '/orgactionitems/undefined' },
+        { name: 'Posts', url: '/orgpost/undefined' },
         {
           name: 'Block/Unblock',
-          url: '/blockuser/id=undefined',
+          url: '/blockuser/undefined',
         },
-        { name: 'Advertisement', url: '/orgads/id=undefined' },
-        { name: 'Funds', url: '/orgfunds/id=undefined' },
+        { name: 'Advertisement', url: '/orgads/undefined' },
+        { name: 'Funds', url: '/orgfunds/undefined' },
         {
           name: 'Plugins',
           subTargets: [
             {
               icon: 'fa-store',
               name: 'Plugin Store',
-              url: '/orgstore/id=undefined',
+              url: '/orgstore/undefined',
             },
           ],
         },
-        { name: 'Settings', url: '/orgsetting/id=undefined' },
+        { name: 'Settings', url: '/orgsetting/undefined' },
       ],
-      configUrl: 'undefined',
       components: [
         { name: 'My Organizations', comp_id: 'orglist', component: 'OrgList' },
         {
@@ -92,33 +91,31 @@ describe('Testing Routes reducer', () => {
     expect(
       reducer(undefined, {
         type: 'UPDATE_TARGETS',
-        payload: { test: 'testupdate' },
+        payload: 'orgId',
       }),
     ).toEqual({
       targets: [
-        { name: 'My Organizations', url: '/orglist/id=undefined' },
-        { name: 'Dashboard', url: '/orgdash/id=undefined' },
-        { name: 'People', url: '/orgpeople/id=undefined' },
-        { name: 'Events', url: '/orgevents/id=undefined' },
-        { name: 'Action Items', url: '/orgactionitems/id=undefined' },
-        { name: 'Posts', url: '/orgpost/id=undefined' },
-        { name: 'Block/Unblock', url: '/blockuser/id=undefined' },
-        { name: 'Advertisement', url: '/orgads/id=undefined' },
-        { name: 'Funds', url: '/orgfunds/id=undefined' },
+        { name: 'My Organizations', url: '/orglist' },
+        { name: 'Dashboard', url: '/orgdash/orgId' },
+        { name: 'People', url: '/orgpeople/orgId' },
+        { name: 'Events', url: '/orgevents/orgId' },
+        { name: 'Action Items', url: '/orgactionitems/orgId' },
+        { name: 'Posts', url: '/orgpost/orgId' },
+        { name: 'Block/Unblock', url: '/blockuser/orgId' },
+        { name: 'Advertisement', url: '/orgads/orgId' },
+        { name: 'Funds', url: '/orgfunds/orgId' },
         {
           name: 'Plugins',
           subTargets: [
             {
               icon: 'fa-store',
               name: 'Plugin Store',
-              url: '/orgstore/id=undefined',
+              url: '/orgstore/orgId',
             },
           ],
         },
-        { name: 'Settings', url: '/orgsetting/id=undefined' },
-        { test: 'testupdate' },
+        { name: 'Settings', url: '/orgsetting/orgId' },
       ],
-      configUrl: 'undefined',
       components: [
         { name: 'My Organizations', comp_id: 'orglist', component: 'OrgList' },
         {
@@ -176,19 +173,19 @@ describe('Testing Routes reducer', () => {
       }),
     ).toEqual({
       targets: [
-        { name: 'My Organizations', url: '/orglist/id=undefined' },
-        { name: 'Dashboard', url: '/orgdash/id=undefined' },
-        { name: 'People', url: '/orgpeople/id=undefined' },
-        { name: 'Events', url: '/orgevents/id=undefined' },
-        { name: 'Action Items', url: '/orgactionitems/id=undefined' },
-        { name: 'Posts', url: '/orgpost/id=undefined' },
+        { name: 'My Organizations', url: '/orglist' },
+        { name: 'Dashboard', url: '/orgdash/undefined' },
+        { name: 'People', url: '/orgpeople/undefined' },
+        { name: 'Events', url: '/orgevents/undefined' },
+        { name: 'Action Items', url: '/orgactionitems/undefined' },
+        { name: 'Posts', url: '/orgpost/undefined' },
         {
           name: 'Block/Unblock',
-          url: '/blockuser/id=undefined',
+          url: '/blockuser/undefined',
         },
-        { name: 'Advertisement', url: '/orgads/id=undefined' },
-        { name: 'Funds', url: '/orgfunds/id=undefined' },
-        { name: 'Settings', url: '/orgsetting/id=undefined' },
+        { name: 'Advertisement', url: '/orgads/undefined' },
+        { name: 'Funds', url: '/orgfunds/undefined' },
+        { name: 'Settings', url: '/orgsetting/undefined' },
         {
           comp_id: null,
           component: null,
@@ -198,12 +195,11 @@ describe('Testing Routes reducer', () => {
             {
               icon: 'fa-store',
               name: 'Plugin Store',
-              url: '/orgstore/id=undefined',
+              url: '/orgstore/undefined',
             },
           ],
         },
       ],
-      configUrl: 'undefined',
       components: [
         { name: 'My Organizations', comp_id: 'orglist', component: 'OrgList' },
         {
