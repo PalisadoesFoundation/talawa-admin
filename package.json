@@ -120,8 +120,10 @@
     "jest-localstorage-mock": "^2.4.19",
     "jest-location-mock": "^1.0.9",
     "jest-preview": "^0.3.1",
-    "postcss-modules": "^6.0.0",
-    "tsx": "^3.11.0"
+    "tsx": "^3.11.0",
+    "jquery": "^3.2.1",
+    "lint-staged": "^15.2.2",
+    "postcss-modules": "^6.0.0"
   },
   "resolutions": {
     "@apollo/client": "^3.4.0-beta.19",
@@ -129,7 +131,10 @@
     "@types/react-dom": "17.0.2",
     "graphql": "^16.5.0"
   },
-  "engines": {
-    "node": ">=20.x"
+  "lint-staged": {
+    "**/*.{ts, tsx, json, scss, css}": [
+      "prettier --write"
+    ],
+    "**/*.{ts, tsx, json}": "eslint --fix"
   }
 }

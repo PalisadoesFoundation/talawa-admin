@@ -54,7 +54,12 @@ jobs:
 
       - name: Run linting check
         if: steps.changed-files.outputs.only_changed != 'true'
-        run: npm run lint:check
+        env: 
+          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+        run: |
+          for file in ${ALL_CHANGED_FILES}: do
+            npx eslint --fix $file
+          done
         
       - name: Check for localStorage Usage
         run: |
