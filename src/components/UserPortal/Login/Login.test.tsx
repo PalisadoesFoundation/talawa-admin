@@ -30,6 +30,10 @@ const MOCKS = [
             _id: '1',
             userType: 'ADMIN',
             adminApproved: true,
+            firstName: 'firstname',
+            lastName: 'secondname',
+            email: 'tempemail@example.com',
+            image: 'image',
           },
           accessToken: 'accessToken',
           refreshToken: 'refreshToken',
@@ -52,6 +56,10 @@ const MOCKS = [
             _id: '1',
             userType: 'ADMIN',
             adminApproved: false,
+            firstName: 'firstname',
+            lastName: 'secondname',
+            email: 'tempemail@example.com',
+            image: 'image',
           },
           accessToken: 'accessToken',
           refreshToken: 'refreshToken',
@@ -87,6 +95,11 @@ jest.mock('react-toastify', () => ({
     warn: jest.fn(),
     error: jest.fn(),
   },
+}));
+const mockNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
 }));
 
 const setCurrentMode: React.Dispatch<SetStateAction<string>> = jest.fn();
@@ -255,6 +268,7 @@ describe('Testing Login Component [User Portal]', () => {
     userEvent.click(screen.getByTestId('loginBtn'));
 
     await wait();
+    expect(mockNavigate).toHaveBeenCalledWith('/user/organizations');
   });
 
   test('Current user has not been approved by admin.', async () => {

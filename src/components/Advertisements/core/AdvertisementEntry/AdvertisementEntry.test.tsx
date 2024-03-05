@@ -47,6 +47,10 @@ jest.mock('@apollo/client', () => {
     useMutation: () => mockUseMutation(),
   };
 });
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: '1' }),
+}));
 
 describe('Testing Advertisement Entry Component', () => {
   test('Testing rendering and deleting of advertisement', async () => {
@@ -321,7 +325,7 @@ describe('Testing Advertisement Entry Component', () => {
                 endDateEdit={new Date()}
                 startDateEdit={new Date()}
                 typeEdit="POPUP"
-                organizationId="1"
+                orgIdEdit="1"
                 advertisementMediaEdit=""
               />
             </I18nextProvider>

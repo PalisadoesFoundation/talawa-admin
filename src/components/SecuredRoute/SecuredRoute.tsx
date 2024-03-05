@@ -1,18 +1,12 @@
 import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import useLocalStorage from 'utils/useLocalstorage';
 const { getItem, setItem } = useLocalStorage();
 
-const SecuredRoute = (props: any): JSX.Element => {
+const SecuredRoute = (): JSX.Element => {
   const isLoggedIn = getItem('IsLoggedIn');
-  return isLoggedIn === 'TRUE' ? (
-    <>
-      <Route {...props} />
-    </>
-  ) : (
-    <Redirect to="/" />
-  );
+  return isLoggedIn === 'TRUE' ? <Outlet /> : <Navigate to="/" replace />;
 };
 
 const timeoutMinutes = 15;
