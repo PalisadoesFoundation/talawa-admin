@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal } from 'react-bootstrap';
 import styles from 'components/ActionItems/ActionItemsWrapper.module.css';
 import { ActionItemsModalBody } from './ActionItemsModalBody';
+import { useTranslation } from 'react-i18next';
 
 export interface InterfaceModalProp {
   show: boolean;
@@ -11,6 +12,10 @@ export interface InterfaceModalProp {
 }
 
 export const ActionItemsModal = (props: InterfaceModalProp): JSX.Element => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'organizationActionItems',
+  });
+
   return (
     <>
       <Modal
@@ -22,7 +27,7 @@ export const ActionItemsModal = (props: InterfaceModalProp): JSX.Element => {
       >
         <Modal.Header closeButton className="bg-primary">
           <Modal.Title className="text-white" data-testid="modal-title">
-            Event Action Items
+            {t('eventActionItems')}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>

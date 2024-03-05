@@ -314,8 +314,8 @@
     "no": "No",
     "noActionItems": "No Action Items",
     "options": "Options",
-    "preCompletionNotes": "Pre Completion Notes",
-    "postCompletionNotes": "Post Completion Notes",
+    "preCompletionNotes": "Notes",
+    "postCompletionNotes": "Completion Notes",
     "selectActionItemCategory": "Select an action item category",
     "selectAssignee": "Select an assignee",
     "status": "Status",
@@ -323,7 +323,13 @@
     "successfulUpdation": "Action Item updated successfully",
     "successfulDeletion": "Action Item deleted successfully",
     "title": "Action Items",
-    "yes": "Yes"
+    "yes": "Yes",
+    "eventActionItems": "Event Action Items",
+    "actionItemStatus": "Action Item Status",
+    "actionItemActive": "Action Item Active",
+    "actionItemCompleted": "Action Item Completed",
+    "makeActive": "Make Active",
+    "markCompletion": "Mark Completion"
   },
   "eventListCard": {
     "location": "Location",

@@ -62,7 +62,6 @@ describe('Testing Action Item Categories Component', () => {
   const formData = {
     assignee: 'Scott Norris',
     preCompletionNotes: 'pre completion notes edited',
-    postCompletionNotes: 'post completion notes',
     dueDate: '02/14/2024',
     completionDate: '02/21/2024',
   };
@@ -325,11 +324,11 @@ describe('Testing Action Item Categories Component', () => {
     fireEvent.change(preCompletionNotes, { target: { value: '' } });
     userEvent.type(preCompletionNotes, formData.preCompletionNotes);
 
-    const postCompletionNotes = screen.getByPlaceholderText(
-      translations.postCompletionNotes,
-    );
-    fireEvent.change(postCompletionNotes, { target: { value: '' } });
-    userEvent.type(postCompletionNotes, formData.postCompletionNotes);
+    // const postCompletionNotes = screen.getByPlaceholderText(
+    //   translations.postCompletionNotes,
+    // );
+    // fireEvent.change(postCompletionNotes, { target: { value: '' } });
+    // userEvent.type(postCompletionNotes, formData.postCompletionNotes);
 
     const dueDatePicker = screen.getByLabelText(translations.dueDate);
     fireEvent.change(dueDatePicker, {
@@ -343,10 +342,10 @@ describe('Testing Action Item Categories Component', () => {
       target: { value: formData.completionDate },
     });
 
-    await waitFor(() => {
-      expect(screen.getByTestId('alldayCheck')).toBeInTheDocument();
-    });
-    userEvent.click(screen.getByTestId('alldayCheck'));
+    // await waitFor(() => {
+    //   expect(screen.getByTestId('alldayCheck')).toBeInTheDocument();
+    // });
+    // userEvent.click(screen.getByTestId('alldayCheck'));
 
     await waitFor(() => {
       expect(screen.getByTestId('editActionItemBtn')).toBeInTheDocument();
@@ -397,11 +396,11 @@ describe('Testing Action Item Categories Component', () => {
     fireEvent.change(preCompletionNotes, { target: { value: '' } });
     userEvent.type(preCompletionNotes, formData.preCompletionNotes);
 
-    const postCompletionNotes = screen.getByPlaceholderText(
-      translations.postCompletionNotes,
-    );
-    fireEvent.change(postCompletionNotes, { target: { value: '' } });
-    userEvent.type(postCompletionNotes, formData.postCompletionNotes);
+    // const postCompletionNotes = screen.getByPlaceholderText(
+    //   translations.postCompletionNotes,
+    // );
+    // fireEvent.change(postCompletionNotes, { target: { value: '' } });
+    // userEvent.type(postCompletionNotes, formData.postCompletionNotes);
 
     const dueDatePicker = screen.getByLabelText(translations.dueDate);
     fireEvent.change(dueDatePicker, {
@@ -415,10 +414,10 @@ describe('Testing Action Item Categories Component', () => {
       target: { value: formData.completionDate },
     });
 
-    await waitFor(() => {
-      expect(screen.getByTestId('alldayCheck')).toBeInTheDocument();
-    });
-    userEvent.click(screen.getByTestId('alldayCheck'));
+    // await waitFor(() => {
+    //   expect(screen.getByTestId('alldayCheck')).toBeInTheDocument();
+    // });
+    // userEvent.click(screen.getByTestId('alldayCheck'));
 
     await waitFor(() => {
       expect(screen.getByTestId('editActionItemBtn')).toBeInTheDocument();

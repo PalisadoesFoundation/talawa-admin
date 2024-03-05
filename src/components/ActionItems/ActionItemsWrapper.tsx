@@ -3,6 +3,7 @@ import { ActionItemsModal } from './ActionItemsModal';
 import { Button } from 'react-bootstrap';
 import IconComponent from 'components/IconComponent/IconComponent';
 import styles from './ActionItemsWrapper.module.css';
+import { useTranslation } from 'react-i18next';
 
 type PropType = {
   orgId: string;
@@ -10,6 +11,10 @@ type PropType = {
 };
 
 export const ActionItemsWrapper = (props: PropType): JSX.Element => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'organizationActionItems',
+  });
+
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -25,7 +30,7 @@ export const ActionItemsWrapper = (props: PropType): JSX.Element => {
         <div className={styles.iconWrapper}>
           <IconComponent name="Action Items" fill="var(--bs-secondary)" />
         </div>
-        Action Items
+        {t('title')}
       </Button>
       {showModal && (
         <ActionItemsModal

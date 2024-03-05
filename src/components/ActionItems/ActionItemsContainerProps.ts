@@ -18,7 +18,7 @@ export const props = {
       postCompletionNotes: 'Post Completion Notes',
       assignmentDate: new Date('2024-02-14'),
       dueDate: new Date('2024-02-21'),
-      completionDate: new Date('2024-20-21'),
+      completionDate: new Date('2024-02-21'),
       isCompleted: false,
       assigner: {
         _id: 'user0',
@@ -50,7 +50,7 @@ export const props = {
       postCompletionNotes: 'Post Completion Notes',
       assignmentDate: new Date('2024-02-14'),
       dueDate: new Date('2024-02-21'),
-      completionDate: new Date('2024-20-21'),
+      completionDate: new Date('2024-02-21'),
       isCompleted: true,
       assigner: {
         _id: 'user0',

@@ -205,20 +205,14 @@ function actionItemsContainer({
               md={4}
               lg={2}
             >
-              <div className="ms-3">
-                {/* {t('status')} */}
-                Notes
-              </div>
+              <div className="ms-3">{t('preCompletionNotes')}</div>
             </Col>
             <Col
               className="d-none d-lg-block fw-bold align-self-center"
               md={4}
               lg={3}
             >
-              <div className="ms-3">
-                {/* {t('status')} */}
-                Notes (Completion)
-              </div>
+              <div className="ms-3">{t('postCompletionNotes')}</div>
             </Col>
             <Col xs={5} sm={3} lg={2} className="fw-bold align-self-center">
               <div className="ms-3">{t('options')}</div>
@@ -293,7 +287,7 @@ function actionItemsContainer({
                             setActionItemNotes(
                               actionItem.postCompletionNotes
                                 ? actionItem.postCompletionNotes
-                                : 'Action Item Completed',
+                                : t('actionItemCompleted'),
                             );
                           }}
                         >
@@ -301,12 +295,12 @@ function actionItemsContainer({
                             ? `${actionItem.postCompletionNotes.substring(0, 25)}...`
                             : actionItem.postCompletionNotes
                               ? actionItem.postCompletionNotes
-                              : 'Action Item Completed'}
+                              : t('actionItemCompleted')}
                         </span>
                       </OverlayTrigger>
                     ) : (
                       <span className="text-body-tertiary ms-3 fst-italic">
-                        Action Item Active
+                        {t('actionItemActive')}
                       </span>
                     )}
                   </div>
@@ -360,13 +354,10 @@ function actionItemsContainer({
       <Modal
         className={styles.createModal}
         show={actionItemStatusModal}
-        // onHide={hideModal}
+        onHide={hideActionItemStatusModal}
       >
         <Modal.Header>
-          <p className={`${styles.titlemodal}`}>
-            {/* {t('actionItemCategoryDetails')} */}
-            Action Item Status
-          </p>
+          <p className={`${styles.titlemodal}`}>{t('actionItemStatus')}</p>
           <Button
             variant="danger"
             onClick={hideActionItemStatusModal}
@@ -381,17 +372,16 @@ function actionItemsContainer({
               className="ms-1 fs-6 mt-2 mb-0"
               htmlFor="actionItemCategoryName"
             >
-              {/* {t('actionItemCategoryName')} */}
-              {isActionItemCompleted ? 'Notes' : 'Completion Notes'}
+              {isActionItemCompleted
+                ? t('preCompletionNotes')
+                : t('postCompletionNotes')}
             </Form.Label>
             <Form.Control
               type="title"
               id="actionItemsStatusChangeNotes"
               data-testid="actionItemsStatusChangeNotes"
-              // placeholder={t('enterName')}
-              placeholder="Action Item Completed"
+              placeholder={t('actionItemCompleted')}
               autoComplete="off"
-              required
               value={
                 isActionItemCompleted
                   ? formState.preCompletionNotes
@@ -417,7 +407,7 @@ function actionItemsContainer({
               value="actionItemStatusChange"
               data-testid="actionItemStatusChangeSubmitBtn"
             >
-              {isActionItemCompleted ? 'Make Active' : 'Mark Completion'}
+              {isActionItemCompleted ? t('makeActive') : t('markCompletion')}
             </Button>
           </Form>
         </Modal.Body>

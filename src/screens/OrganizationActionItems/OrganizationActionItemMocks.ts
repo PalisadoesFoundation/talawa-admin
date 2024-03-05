@@ -79,7 +79,7 @@ export const MOCKS = [
             postCompletionNotes: 'Post Completion Notes',
             assignmentDate: '2024-02-14',
             dueDate: '2024-02-21',
-            completionDate: '2024-20-21',
+            completionDate: '2024-02-21',
             isCompleted: false,
             assigner: {
               _id: 'user0',
@@ -127,7 +127,7 @@ export const MOCKS = [
             postCompletionNotes: 'Post Completion Notes',
             assignmentDate: '2024-02-14',
             dueDate: '2024-02-21',
-            completionDate: '2024-20-21',
+            completionDate: '2024-02-21',
             isCompleted: false,
             assigner: {
               _id: 'user0',
@@ -177,7 +177,7 @@ export const MOCKS = [
             postCompletionNotes: 'Post Completion Notes',
             assignmentDate: '2024-02-14',
             dueDate: '2024-02-21',
-            completionDate: '2024-20-21',
+            completionDate: '2024-02-21',
             isCompleted: false,
             assigner: {
               _id: 'user0',
@@ -227,7 +227,7 @@ export const MOCKS = [
             postCompletionNotes: 'Post Completion Notes',
             assignmentDate: '2024-02-14',
             dueDate: '2024-02-21',
-            completionDate: '2024-20-21',
+            completionDate: '2024-02-21',
             isCompleted: true,
             assigner: {
               _id: 'user0',
@@ -277,7 +277,7 @@ export const MOCKS = [
             postCompletionNotes: 'Post Completion Notes',
             assignmentDate: '2024-02-14',
             dueDate: '2024-02-21',
-            completionDate: '2024-20-21',
+            completionDate: '2024-02-21',
             isCompleted: true,
             assigner: {
               _id: 'user0',
@@ -327,7 +327,7 @@ export const MOCKS = [
             postCompletionNotes: 'Post Completion Notes',
             assignmentDate: '2024-02-14',
             dueDate: '2024-02-21',
-            completionDate: '2024-20-21',
+            completionDate: '2024-02-21',
             isCompleted: true,
             assigner: {
               _id: 'user0',
@@ -550,7 +550,7 @@ export const MOCKS_ERROR_MUTATIONS = [
             postCompletionNotes: 'Post Completion Notes',
             assignmentDate: '2024-02-14',
             dueDate: '2024-02-21',
-            completionDate: '2024-20-21',
+            completionDate: '2024-02-21',
             isCompleted: false,
             assigner: {
               _id: 'user0',
@@ -598,7 +598,7 @@ export const MOCKS_ERROR_MUTATIONS = [
             postCompletionNotes: 'Post Completion Notes',
             assignmentDate: '2024-02-14',
             dueDate: '2024-02-21',
-            completionDate: '2024-20-21',
+            completionDate: '2024-02-21',
             isCompleted: false,
             assigner: {
               _id: 'user0',
