@@ -3,8 +3,7 @@ import { ListGroup } from 'react-bootstrap';
 import AboutImg from 'assets/images/defaultImg.png';
 import styles from './OrganizationSidebar.module.css';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { Link } from 'react-router-dom';
-import getOrganizationId from 'utils/getOrganizationId';
+import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
@@ -20,7 +19,7 @@ export default function organizationSidebar(): JSX.Element {
     keyPrefix: 'organizationSidebar',
   });
 
-  const organizationId = getOrganizationId(window.location.href);
+  const { orgId: organizationId } = useParams();
   const [members, setMembers]: any = React.useState([]);
   const [events, setEvents]: any = React.useState([]);
   const eventsLink = `/user/events/id=${organizationId}`;

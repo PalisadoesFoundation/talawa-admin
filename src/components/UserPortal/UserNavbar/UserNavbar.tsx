@@ -10,12 +10,12 @@ import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 
 function userNavbar(): JSX.Element {
   const { getItem } = useLocalStorage();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const { t } = useTranslation('translation', {
     keyPrefix: 'userNavbar',
@@ -34,7 +34,7 @@ function userNavbar(): JSX.Element {
   const handleLogout = (): void => {
     revokeRefreshToken();
     localStorage.clear();
-    history.push('/');
+    navigate('/');
   };
 
   return (
@@ -100,7 +100,7 @@ function userNavbar(): JSX.Element {
                 <b>{userName}</b>
               </Dropdown.ItemText>
               <Dropdown.Item
-                onClick={() => history.push('/user/settings')}
+                onClick={() => navigate('/user/settings')}
                 className={styles.link}
               >
                 {t('settings')}

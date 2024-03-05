@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
 import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
@@ -41,11 +41,11 @@ const leftDrawerEvent = ({
   const userImage = getItem('UserImage');
   const userId = getItem('id');
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const logout = (): void => {
     revokeRefreshToken();
     localStorage.clear();
-    history.push('/');
+    navigate('/');
   };
 
   return (
@@ -117,7 +117,7 @@ const leftDrawerEvent = ({
             className="text-secondary"
             aria-label="allEvents"
             onClick={(): void => {
-              history.push(`/orgevents/id=${event.organization._id}`);
+              navigate(`/orgevents/id=${event.organization._id}`);
             }}
           >
             <div className={styles.iconWrapper}>
@@ -133,7 +133,7 @@ const leftDrawerEvent = ({
             className={styles.profileContainer}
             data-testid="profileBtn"
             onClick={(): void => {
-              history.push(`/member/id=${userId}`);
+              navigate(`/member/id=${userId}`);
             }}
           >
             <div className={styles.imageContainer}>

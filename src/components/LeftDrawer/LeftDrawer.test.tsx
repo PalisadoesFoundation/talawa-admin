@@ -22,12 +22,10 @@ const props = {
 
 const propsOrg: InterfaceLeftDrawerProps = {
   ...props,
-  screenName: 'My Organizations',
 };
 const propsUsers: InterfaceLeftDrawerProps = {
   ...props,
   hideDrawer: null,
-  screenName: 'Users',
 };
 
 const MOCKS = [
@@ -89,7 +87,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
 
     const orgsBtn = screen.getByTestId(/orgsBtn/i);
     const rolesBtn = screen.getByTestId(/rolesBtn/i);
-
+    orgsBtn.click();
     expect(
       orgsBtn.className.includes('text-white btn btn-success'),
     ).toBeTruthy();
@@ -178,7 +176,7 @@ describe('Testing Left Drawer component for ADMIN', () => {
     expect(screen.getByAltText(/profile picture/i)).toBeInTheDocument();
 
     const orgsBtn = screen.getByTestId(/orgsBtn/i);
-
+    orgsBtn.click();
     expect(
       orgsBtn.className.includes('text-white btn btn-success'),
     ).toBeTruthy();

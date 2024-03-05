@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Dropdown } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
 
 import SortIcon from '@mui/icons-material/Sort';
 import { WarningAmberRounded } from '@mui/icons-material';
@@ -22,7 +23,6 @@ import type {
   InterfaceMembersList,
 } from 'utils/interfaces';
 import ActionItemsContainer from 'components/ActionItems/ActionItemsContainer';
-import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 import ActionItemCreateModal from './ActionItemCreateModal';
 import styles from './OrganizationActionItems.module.css';
 import Loader from 'components/Loader/Loader';
@@ -32,7 +32,7 @@ function organizationActionItems(): JSX.Element {
     keyPrefix: 'organizationActionItems',
   });
 
-  const currentUrl = window.location.href.split('=')[1];
+  const { orgId: currentUrl } = useParams();
 
   const [actionItemCreateModalIsOpen, setActionItemCreateModalIsOpen] =
     useState(false);
@@ -166,31 +166,26 @@ function organizationActionItems(): JSX.Element {
 
   if (actionItemCategoriesError || membersError || actionItemsError) {
     return (
-      <OrganizationScreen screenName="Action Items" title={t('title')}>
-        <div className={`${styles.container} bg-white rounded-4 my-3`}>
-          <div className={styles.message}>
-            <WarningAmberRounded
-              className={styles.errorIcon}
-              fontSize="large"
-            />
-            <h6 className="fw-bold text-danger text-center">
-              Error occured while loading{' '}
-              {actionItemCategoriesError
-                ? 'Action Item Categories'
-                : membersError
-                  ? 'Members List'
-                  : 'Action Items List'}{' '}
-              Data
-              <br />
-              {actionItemCategoriesError
-                ? actionItemCategoriesError.message
-                : membersError
-                  ? membersError.message
-                  : actionItemsError?.message}
-            </h6>
-          </div>
+      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+        <div className={styles.message}>
+          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <h6 className="fw-bold text-danger text-center">
+            Error occured while loading{' '}
+            {actionItemCategoriesError
+              ? 'Action Item Categories'
+              : membersError
+                ? 'Members List'
+                : 'Action Items List'}{' '}
+            Data
+            <br />
+            {actionItemCategoriesError
+              ? actionItemCategoriesError.message
+              : membersError
+                ? membersError.message
+                : actionItemsError?.message}
+          </h6>
         </div>
-      </OrganizationScreen>
+      </div>
     );
   }
 
@@ -201,166 +196,164 @@ function organizationActionItems(): JSX.Element {
 
   return (
     <div className={styles.organizationActionItemsContainer}>
-      <OrganizationScreen screenName="Action Items" title={t('title')}>
-        <Button
-          variant="success"
-          onClick={showCreateModal}
-          data-testid="createActionItemBtn"
-          className={styles.createActionItemButton}
-        >
-          <i className={'fa fa-plus me-2'} />
-          {t('createActionItem')}
-        </Button>
-        <div className={`${styles.container} bg-white rounded-4 my-3`}>
-          <div className={`mt-4 mx-4`}>
-            <div className={styles.btnsContainer}>
-              <div className={styles.btnsBlock}>
-                <Dropdown
-                  aria-expanded="false"
-                  title="Sort Action Items"
-                  data-testid="sort"
-                  className={styles.dropdownToggle}
-                >
-                  <Dropdown.Toggle
-                    variant="outline-success"
-                    data-testid="sortActionItems"
-                  >
-                    <div className="d-none d-md-inline">
-                      <SortIcon className={'me-1'} />
-                    </div>
-                    {orderBy === 'Latest' ? t('latest') : t('earliest')}
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item
-                      onClick={(): void => handleSorting('Latest')}
-                      data-testid="latest"
-                    >
-                      {t('latest')}
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      onClick={(): void => handleSorting('Earliest')}
-                      data-testid="earliest"
-                    >
-                      {t('earliest')}
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-
-                <Dropdown
-                  aria-expanded="false"
-                  title="Action Item Categories"
-                  data-testid="actionItemCategories"
-                  className={styles.dropdownToggle}
-                >
-                  <Dropdown.Toggle
-                    variant={
-                      actionItemCategoryName === ''
-                        ? 'outline-success'
-                        : 'success'
-                    }
-                    data-testid="selectActionItemCategory"
-                  >
-                    <div className="d-lg-none">
-                      {actionItemCategoryName === ''
-                        ? t('actionItemCategory')
-                        : actionItemCategoryName}
-                    </div>
-                    <div className="d-none d-lg-inline">
-                      {t('actionItemCategory')}
-                    </div>
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    {actionItemCategories?.map((category, index) => (
-                      <Dropdown.Item
-                        key={index}
-                        data-testid="actionItemCategory"
-                        onClick={() => {
-                          setActionItemCategoryId(category._id);
-                          setActionItemCategoryName(category.name);
-                        }}
-                      >
-                        {category.name}
-                      </Dropdown.Item>
-                    ))}
-                  </Dropdown.Menu>
-                </Dropdown>
-
-                <Dropdown
-                  aria-expanded="false"
-                  title="Action Item Status"
-                  data-testid="actionItemStatus"
-                  className={styles.dropdownToggle}
-                >
-                  <Dropdown.Toggle
-                    variant={
-                      actionItemStatus === '' ? 'outline-success' : 'success'
-                    }
-                    data-testid="selectActionItemStatus"
-                  >
-                    <div className="d-lg-none">
-                      {actionItemStatus === '' ? t('status') : actionItemStatus}
-                    </div>
-                    <div className="d-none d-lg-inline">{t('status')}</div>
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item
-                      onClick={(): void => handleStatusFilter('Active')}
-                      data-testid="activeActionItems"
-                    >
-                      {t('active')}
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      onClick={(): void => handleStatusFilter('Completed')}
-                      data-testid="completedActionItems"
-                    >
-                      {t('completed')}
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </div>
-
-              <div className="d-none d-lg-inline flex-grow-1 d-flex align-items-center border bg-light-subtle rounded-3">
-                {!actionItemCategoryName && !actionItemStatus && (
-                  <div className="lh-lg mt-2 text-center fw-semibold text-body-tertiary">
-                    No Filters
-                  </div>
-                )}
-
-                {actionItemCategoryName !== '' && (
-                  <div className="badge text-bg-secondary bg-dark-subtle bg-gradient lh-lg mt-2 ms-2 text-body-secondary">
-                    {actionItemCategoryName}
-                    <i
-                      className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary pe-auto`}
-                      onClick={() => {
-                        setActionItemCategoryName('');
-                        setActionItemCategoryId('');
-                      }}
-                      data-testid="clearActionItemCategoryFilter"
-                    />
-                  </div>
-                )}
-
-                {actionItemStatus !== '' && (
-                  <div className="badge text-bg-secondary bg-dark-subtle bg-gradient lh-lg mt-2 ms-2 text-secondary-emphasis">
-                    {actionItemStatus}
-                    <i
-                      className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary pe-auto`}
-                      onClick={() => setActionItemStatus('')}
-                      data-testid="clearActionItemStatusFilter"
-                    />
-                  </div>
-                )}
-              </div>
-
-              <Button
-                variant="success"
-                onClick={handleClearFilters}
-                data-testid="clearFilters"
+      <Button
+        variant="success"
+        onClick={showCreateModal}
+        data-testid="createActionItemBtn"
+        className={styles.createActionItemButton}
+      >
+        <i className={'fa fa-plus me-2'} />
+        {t('createActionItem')}
+      </Button>
+      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+        <div className={`mt-4 mx-4`}>
+          <div className={styles.btnsContainer}>
+            <div className={styles.btnsBlock}>
+              <Dropdown
+                aria-expanded="false"
+                title="Sort Action Items"
+                data-testid="sort"
+                className={styles.dropdownToggle}
               >
-                <i className="fa fa-broom me-2"></i>
-                {t('clearFilters')}
-              </Button>
+                <Dropdown.Toggle
+                  variant="outline-success"
+                  data-testid="sortActionItems"
+                >
+                  <div className="d-none d-md-inline">
+                    <SortIcon className={'me-1'} />
+                  </div>
+                  {orderBy === 'Latest' ? t('latest') : t('earliest')}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    onClick={(): void => handleSorting('Latest')}
+                    data-testid="latest"
+                  >
+                    {t('latest')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={(): void => handleSorting('Earliest')}
+                    data-testid="earliest"
+                  >
+                    {t('earliest')}
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+
+              <Dropdown
+                aria-expanded="false"
+                title="Action Item Categories"
+                data-testid="actionItemCategories"
+                className={styles.dropdownToggle}
+              >
+                <Dropdown.Toggle
+                  variant={
+                    actionItemCategoryName === ''
+                      ? 'outline-success'
+                      : 'success'
+                  }
+                  data-testid="selectActionItemCategory"
+                >
+                  <div className="d-lg-none">
+                    {actionItemCategoryName === ''
+                      ? t('actionItemCategory')
+                      : actionItemCategoryName}
+                  </div>
+                  <div className="d-none d-lg-inline">
+                    {t('actionItemCategory')}
+                  </div>
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {actionItemCategories?.map((category, index) => (
+                    <Dropdown.Item
+                      key={index}
+                      data-testid="actionItemCategory"
+                      onClick={() => {
+                        setActionItemCategoryId(category._id);
+                        setActionItemCategoryName(category.name);
+                      }}
+                    >
+                      {category.name}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+
+              <Dropdown
+                aria-expanded="false"
+                title="Action Item Status"
+                data-testid="actionItemStatus"
+                className={styles.dropdownToggle}
+              >
+                <Dropdown.Toggle
+                  variant={
+                    actionItemStatus === '' ? 'outline-success' : 'success'
+                  }
+                  data-testid="selectActionItemStatus"
+                >
+                  <div className="d-lg-none">
+                    {actionItemStatus === '' ? t('status') : actionItemStatus}
+                  </div>
+                  <div className="d-none d-lg-inline">{t('status')}</div>
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    onClick={(): void => handleStatusFilter('Active')}
+                    data-testid="activeActionItems"
+                  >
+                    {t('active')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={(): void => handleStatusFilter('Completed')}
+                    data-testid="completedActionItems"
+                  >
+                    {t('completed')}
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
+
+            <div className="d-none d-lg-inline flex-grow-1 d-flex align-items-center border bg-light-subtle rounded-3">
+              {!actionItemCategoryName && !actionItemStatus && (
+                <div className="lh-lg mt-2 text-center fw-semibold text-body-tertiary">
+                  No Filters
+                </div>
+              )}
+
+              {actionItemCategoryName !== '' && (
+                <div className="badge text-bg-secondary bg-dark-subtle bg-gradient lh-lg mt-2 ms-2 text-body-secondary">
+                  {actionItemCategoryName}
+                  <i
+                    className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary pe-auto`}
+                    onClick={() => {
+                      setActionItemCategoryName('');
+                      setActionItemCategoryId('');
+                    }}
+                    data-testid="clearActionItemCategoryFilter"
+                  />
+                </div>
+              )}
+
+              {actionItemStatus !== '' && (
+                <div className="badge text-bg-secondary bg-dark-subtle bg-gradient lh-lg mt-2 ms-2 text-secondary-emphasis">
+                  {actionItemStatus}
+                  <i
+                    className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary pe-auto`}
+                    onClick={() => setActionItemStatus('')}
+                    data-testid="clearActionItemStatusFilter"
+                  />
+                </div>
+              )}
+            </div>
+
+            <Button
+              variant="success"
+              onClick={handleClearFilters}
+              data-testid="clearFilters"
+            >
+              <i className="fa fa-broom me-2"></i>
+              {t('clearFilters')}
+            </Button>
           </div>
 
           <hr />
@@ -372,7 +365,7 @@ function organizationActionItems(): JSX.Element {
             actionItemsRefetch={actionItemsRefetch}
           />
         </div>
-      </OrganizationScreen>
+      </div>
 
       {/* Create Modal */}
       <ActionItemCreateModal

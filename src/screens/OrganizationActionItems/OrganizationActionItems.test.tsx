@@ -46,6 +46,11 @@ jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
   };
 });
 
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: '123' }),
+}));
+
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -78,7 +83,6 @@ describe('Testing Action Item Categories Component', () => {
   };
 
   test('Component loads correctly', async () => {
-    window.location.assign('/organizationActionItems/id=123');
     const { getByText } = render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -99,7 +103,6 @@ describe('Testing Action Item Categories Component', () => {
   });
 
   test('render error component on unsuccessful action item category list query', async () => {
-    window.location.assign('/organizationActionItems/id=123');
     const { queryByText } = render(
       <MockedProvider addTypename={false} link={link2}>
         <Provider store={store}>
@@ -122,7 +125,6 @@ describe('Testing Action Item Categories Component', () => {
   });
 
   test('render error component on unsuccessful members list query', async () => {
-    window.location.assign('/organizationActionItems/id=123');
     const { queryByText } = render(
       <MockedProvider addTypename={false} link={link3}>
         <Provider store={store}>
@@ -145,7 +147,6 @@ describe('Testing Action Item Categories Component', () => {
   });
 
   test('render error component on unsuccessful action item list query', async () => {
-    window.location.assign('/organizationActionItems/id=123');
     const { queryByText } = render(
       <MockedProvider addTypename={false} link={link4}>
         <Provider store={store}>
@@ -168,7 +169,6 @@ describe('Testing Action Item Categories Component', () => {
   });
 
   test('sorts action items in earliest or latest first order based on orderBy', async () => {
-    window.location.assign('/organizationActionItems/id=123');
     render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -217,7 +217,6 @@ describe('Testing Action Item Categories Component', () => {
   });
 
   test('applies and then clears filters one by one', async () => {
-    window.location.assign('/organizationActionItems/id=123');
     render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -337,7 +336,6 @@ describe('Testing Action Item Categories Component', () => {
   });
 
   test('applies and then clears all the filters', async () => {
-    window.location.assign('/organizationActionItems/id=123');
     render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -444,8 +442,6 @@ describe('Testing Action Item Categories Component', () => {
   });
 
   test('opens and closes the create action item modal', async () => {
-    window.location.assign('/organizationActionItems/id=123');
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -480,8 +476,6 @@ describe('Testing Action Item Categories Component', () => {
   });
 
   test('creates new action item', async () => {
-    window.location.assign('/organizationActionItems/id=123');
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -543,8 +537,6 @@ describe('Testing Action Item Categories Component', () => {
   });
 
   test('toasts error on unsuccessful creation', async () => {
-    window.location.assign('/organizationActionItems/id=123');
-
     render(
       <MockedProvider addTypename={false} link={link5}>
         <Provider store={store}>
