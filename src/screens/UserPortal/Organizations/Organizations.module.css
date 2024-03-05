@@ -48,7 +48,7 @@
   outline: 1px solid var(--bs-gray-400);
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 850px) {
   .mainContainer {
     width: 100%;
   }
