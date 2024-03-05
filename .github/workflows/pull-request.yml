@@ -52,14 +52,11 @@ jobs:
         if: steps.changed-files.outputs.only_changed != 'true'
         run: npm run typecheck
 
-      - name: Run linting check
+      - name: Check for linting errors in modified files
         if: steps.changed-files.outputs.only_changed != 'true'
-        env: 
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        run: |
-          for file in ${ALL_CHANGED_FILES}: do
-            npx eslint --fix $file
-          done
+        env:
+          CHANGED_FILES: ${{ steps.changed_files.outputs.all_changed_files }}
+        run: npx eslint ${CHANGED_FILES} 
         
       - name: Check for localStorage Usage
         run: |
