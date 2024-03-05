@@ -101,6 +101,7 @@ const map: any = {
   orgads: 'advertisement',
   member: 'memberDetail',
   orgevents: 'organizationEvents',
+  orgactionitems: 'organizationActionItems',
   orgcontribution: 'orgContribution',
   orgpost: 'orgPost',
   orgsetting: 'orgSettings',
