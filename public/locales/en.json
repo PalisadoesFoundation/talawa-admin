@@ -293,7 +293,10 @@
   },
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",
+    "actionItemActive": "Action Item Active",
+    "actionItemCompleted": "Action Item Completed",
     "actionItemDetails": "Action Item Details",
+    "actionItemStatus": "Action Item Status",
     "assignee": "Assignee",
     "assigner": "Assigner",
     "assignmentDate": "Assignment Date",
@@ -309,8 +312,11 @@
     "dueDate": "Due Date",
     "earliest": "Earliest",
     "editActionItem": "Edit Action Item",
+    "eventActionItems": "Event Action Items",
     "isCompleted": "Completed",
     "latest": "Latest",
+    "makeActive": "Make Active",
+    "markCompletion": "Mark Completion",
     "no": "No",
     "noActionItems": "No Action Items",
     "options": "Options",
@@ -323,13 +329,7 @@
     "successfulUpdation": "Action Item updated successfully",
     "successfulDeletion": "Action Item deleted successfully",
     "title": "Action Items",
-    "yes": "Yes",
-    "eventActionItems": "Event Action Items",
-    "actionItemStatus": "Action Item Status",
-    "actionItemActive": "Action Item Active",
-    "actionItemCompleted": "Action Item Completed",
-    "makeActive": "Make Active",
-    "markCompletion": "Mark Completion"
+    "yes": "Yes"
   },
   "eventListCard": {
     "location": "Location",
