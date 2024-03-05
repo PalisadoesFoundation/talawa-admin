@@ -17,13 +17,14 @@ import i18nForTest from 'utils/i18nForTest';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { toast } from 'react-toastify';
+
 import {
-  MOCKS,
   MOCKS_ERROR_ACTION_ITEM_CATEGORY_LIST_QUERY,
   MOCKS_ERROR_ACTION_ITEM_LIST_QUERY,
   MOCKS_ERROR_MEMBERS_LIST_QUERY,
   MOCKS_ERROR_MUTATIONS,
-} from '../../screens/OrganizationActionItems/OrganizationActionItemMocks';
+} from '../../screens/OrganizationActionItems/OrganizationActionItemsErrorMocks';
+import { MOCKS } from '../../screens/OrganizationActionItems/OrganizationActionItemMocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
 jest.mock('react-toastify', () => ({
