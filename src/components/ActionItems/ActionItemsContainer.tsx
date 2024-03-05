@@ -157,6 +157,7 @@ function actionItemsContainer({
     setFormState({
       ...formState,
       assignee: `${actionItem.assignee.firstName} ${actionItem.assignee.lastName}`,
+      assigner: `${actionItem.assigner.firstName} ${actionItem.assigner.lastName}`,
       assigneeId: actionItem.assignee._id,
       preCompletionNotes: actionItem.preCompletionNotes,
       postCompletionNotes: actionItem.postCompletionNotes,
