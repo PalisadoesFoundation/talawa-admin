@@ -1,4 +1,7 @@
+type ActionItemsConnectionType = 'Organization' | 'Event';
+
 export const props = {
+  actionItemsConnection: 'Organization' as ActionItemsConnectionType,
   actionItemsData: [
     {
       _id: 'actionItem1',
@@ -15,7 +18,7 @@ export const props = {
       postCompletionNotes: 'Post Completion Notes',
       assignmentDate: new Date('2024-02-14'),
       dueDate: new Date('2024-02-21'),
-      completionDate: new Date('2024-20-21'),
+      completionDate: new Date('2024-02-21'),
       isCompleted: false,
       assigner: {
         _id: 'user0',
@@ -47,7 +50,39 @@ export const props = {
       postCompletionNotes: 'Post Completion Notes',
       assignmentDate: new Date('2024-02-14'),
       dueDate: new Date('2024-02-21'),
-      completionDate: new Date('2024-20-21'),
+      completionDate: new Date('2024-02-21'),
+      isCompleted: true,
+      assigner: {
+        _id: 'user0',
+        firstName: 'Wilt',
+        lastName: 'Shepherd',
+      },
+      event: {
+        _id: 'event1',
+        title: 'event 1',
+      },
+      creator: {
+        _id: 'user0',
+        firstName: 'Wilt',
+        lastName: 'Shepherd',
+      },
+    },
+    {
+      _id: 'actionItem3',
+      assignee: {
+        _id: 'user1',
+        firstName: 'Harve',
+        lastName: 'Lance',
+      },
+      actionItemCategory: {
+        _id: 'actionItemCategory1',
+        name: 'ActionItemCategory 1',
+      },
+      preCompletionNotes: 'Pre Completion Notes more than 25 characters',
+      postCompletionNotes: 'Post Completion Notes more than 25 characters',
+      assignmentDate: new Date('2024-02-14'),
+      dueDate: new Date('2024-02-21'),
+      completionDate: new Date('2024-02-21'),
       isCompleted: true,
       assigner: {
         _id: 'user0',
@@ -89,6 +124,7 @@ export const props = {
 };
 
 export const props2 = {
+  actionItemsConnection: 'Organization' as ActionItemsConnectionType,
   actionItemsData: [],
   membersData: [],
   actionItemsRefetch: jest.fn(),
