@@ -15,7 +15,6 @@ import {
 import { useQuery } from '@apollo/client';
 import { Tooltip } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 export interface InterfaceOrgListCardProps {
   data: InterfaceOrgConnectionInfoType;
@@ -76,34 +75,19 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
             <h6 className={`${styles.orgdesc} fw-semibold`}>
               <span>{userData?.organizations[0].description}</span>
             </h6>
-            <h6 className={styles.orgadmin}>
-              {t('admins')}: <span>{admins.length}</span> &nbsp; &nbsp; &nbsp;{' '}
-              {t('members')}: <span>{members.length}</span>
-            </h6>
-            {/* {address && address.city && (
-              <div className={styles.address}>
-                <h6 className="text-secondary">
-                  <LocationOnIcon fontSize="inherit" className="fs-5" />
-                  {address.line1 ? (
-                    <span className="address-line">{address.line1}, </span>
-                  ) : (
-                    <span className="address-line">{''}</span>
-                  )}
-                  <span className="address-line">{address.city}, </span>
-                  <span className="address-line">{address.countryCode}</span>
-                </h6>
-              </div>
-            )} */}
             {address && address.city && (
               <div className={styles.address}>
                 <h6 className="text-secondary">
-                  <LocationOnIcon fontSize="inherit" className="fs-5" />
                   <span className="address-line">{address.line1}, </span>
                   <span className="address-line">{address.city}, </span>
                   <span className="address-line">{address.countryCode}</span>
                 </h6>
               </div>
             )}
+            <h6 className={styles.orgadmin}>
+              {t('admins')}: <span>{admins.length}</span> &nbsp; &nbsp; &nbsp;{' '}
+              {t('members')}: <span>{members.length}</span>
+            </h6>
           </div>
         </div>
         <Button
