@@ -168,7 +168,11 @@
     "members": "Membres",
     "joinNow": "Adhérer maintenant",
     "joined": "Rejointes",
-    "withdraw": "Retirer"
+    "withdraw": "Retirer",
+    "orgJoined": "Organisation rejointe avec succès",
+    "MembershipRequestSent": "Demande d'adhésion envoyée avec succès",
+    "AlreadyJoined": "Vous êtes déjà membre de cette organisation.",
+    "errorOccured": "Une erreur s'est produite. Veuillez réessayer plus tard."
   },
   "dashboard": {
     "title": "Tableau de bord",
@@ -317,6 +321,34 @@
     "eventDeleted": "Événement supprimé avec succès.",
     "eventUpdated": "Événement mis à jour avec succès.",
     "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
+  },
+  "funds": {
+    "title": "Fonds Talawa",
+    "createFund": "Créer un fonds",
+    "fundName": "Nom du fonds",
+    "fundId": "Identifiant du fonds",
+    "fundOptions": "Options de fonds",
+    "noFunds": "Pas de fonds",
+    "fundDetails": "Détails du fonds",
+    "taxDeductible": "Déductible d'impôt",
+    "enterfundName": "Entrez le nom du fonds",
+    "enterfundId": "Entrez l'identifiant du fonds",
+    "default": "Défaut",
+    "archived": "Archivé",
+    "nonArchive": "Non archivé",
+    "fundCreate": "Créer un fonds",
+    "fundUpdate": "Mettre à jour le fonds",
+    "fundDelete": "Supprimer le fonds",
+    "no": "Non",
+    "yes": "Oui",
+    "archiveFund": "Archiver le fonds",
+    "archiveFundMsg": "Voulez-vous archiver ce fonds ?",
+    "fundCreated": "Fonds créé avec succès",
+    "fundUpdated": "Fonds mis à jour avec succès",
+    "fundDeleted": "Fonds supprimé avec succès",
+    "fundArchived": "Fonds archivé avec succès",
+    "fundUnarchived": "Fonds désarchivé avec succès",
+    "deleteFundMsg": "Voulez-vous supprimer ce fonds ?"
   },
   "orgPost": {
     "title": "Talawa Publications",

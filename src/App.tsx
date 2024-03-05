@@ -6,6 +6,7 @@ import LoginPage from 'screens/LoginPage/LoginPage';
 import OrganizationEvents from 'screens/OrganizationEvents/OrganizationEvents';
 import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
 import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
+import OrganizationFunds from 'screens/OrganizationFunds/OrganizationFunds';
 import OrganizationDashboard from 'screens/OrganizationDashboard/OrganizationDashboard';
 import OrgContribution from 'screens/OrgContribution/OrgContribution';
 import OrgList from 'screens/OrgList/OrgList';
@@ -22,12 +23,13 @@ import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen
 import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 
 // User Portal Components
-import Organizations from 'screens/UserPortal/Organizations/Organizations';
-import Home from 'screens/UserPortal/Home/Home';
-import People from 'screens/UserPortal/People/People';
-import Settings from 'screens/UserPortal/Settings/Settings';
 import Donate from 'screens/UserPortal/Donate/Donate';
 import Events from 'screens/UserPortal/Events/Events';
+import Home from 'screens/UserPortal/Home/Home';
+import Organizations from 'screens/UserPortal/Organizations/Organizations';
+import People from 'screens/UserPortal/People/People';
+import Settings from 'screens/UserPortal/Settings/Settings';
+// import UserLoginPage from 'screens/UserPortal/UserLoginPage/UserLoginPage';
 // import Chat from 'screens/UserPortal/Chat/Chat';
 import Advertisements from 'components/Advertisements/Advertisements';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
@@ -90,6 +92,7 @@ function app(): JSX.Element {
               path="/orgactionitems/:orgId"
               element={<OrganizationActionItems />}
             />
+            <Route path="/orgfunds/:orgId" element={<OrganizationFunds />} />
             <Route path="/orgcontribution" element={<OrgContribution />} />
             <Route path="/orgpost/:orgId" element={<OrgPost />} />
             <Route path="/orgsetting/:orgId" element={<OrgSettings />} />
