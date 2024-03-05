@@ -339,7 +339,6 @@ function orgList(): JSX.Element {
     });
   };
 
-  console.log(userData);
   return (
     <>
       <SuperAdminScreen

@@ -58,7 +58,6 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
   setFormState,
   createOrg,
   t,
-  userData,
   triggerCreateSampleOrg,
 }) => {
   // function to update the state of the parameters inside address.
