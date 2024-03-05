@@ -2,8 +2,7 @@ import React from 'react';
 import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Form } from 'react-bootstrap';
-import { useMutation, useQuery } from '@apollo/client';
-import { toast } from 'react-toastify';
+import { useMutation } from '@apollo/client';
 
 import { UPLOAD_PRELOGIN_IMAGERY } from 'GraphQl/Mutations/mutations';
 import {
@@ -46,7 +45,7 @@ const CommunityProfile = (): JSX.Element => {
       [e.target.name]: e.target.value,
     });
   };
-  const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     upload({
       variables: {

@@ -25,10 +25,6 @@ import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import Users from 'screens/Users/Users';
 import CommunityProfile from 'screens/CommunityProfile/CommunityProfile';
-import BlockUser from 'screens/BlockUser/BlockUser';
-import EventDashboard from 'screens/EventDashboard/EventDashboard';
-import MemberDetail from 'screens/MemberDetail/MemberDetail';
-import Loader from 'components/Loader/Loader';
 
 // User Portal Components
 import Donate from 'screens/UserPortal/Donate/Donate';
