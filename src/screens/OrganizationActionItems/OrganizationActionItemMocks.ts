@@ -105,6 +105,54 @@ export const MOCKS = [
       query: ACTION_ITEM_LIST,
       variables: {
         organizationId: '123',
+        eventId: 'event1',
+        orderBy: 'createdAt_DESC',
+      },
+    },
+    result: {
+      data: {
+        actionItemsByOrganization: [
+          {
+            _id: 'actionItem1',
+            assignee: {
+              _id: 'user1',
+              firstName: 'Harve',
+              lastName: 'Lance',
+            },
+            actionItemCategory: {
+              _id: 'actionItemCategory1',
+              name: 'ActionItemCategory 1',
+            },
+            preCompletionNotes: 'Pre Completion Notes',
+            postCompletionNotes: 'Post Completion Notes',
+            assignmentDate: '2024-02-14',
+            dueDate: '2024-02-21',
+            completionDate: '2024-20-21',
+            isCompleted: false,
+            assigner: {
+              _id: 'user0',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+            },
+            event: {
+              _id: 'event1',
+              title: 'event 1',
+            },
+            creator: {
+              _id: 'user0',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: ACTION_ITEM_LIST,
+      variables: {
+        organizationId: '123',
         orderBy: 'createdAt_ASC',
         actionItemCategoryId: '',
         isActive: false,
@@ -318,6 +366,25 @@ export const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: CREATE_ACTION_ITEM_MUTATION,
+      variables: {
+        eventId: 'event1',
+        actionItemCategoryId: 'actionItemCategory1',
+        assigneeId: 'user1',
+        preCompletionNotes: 'pre completion notes',
+        dueDate: '2024-02-14',
+      },
+    },
+    result: {
+      data: {
+        createActionItem: {
+          _id: 'actionItem2',
+        },
+      },
+    },
+  },
 ];
 
 export const MOCKS_ERROR_ACTION_ITEM_CATEGORY_LIST_QUERY = [
@@ -506,8 +573,69 @@ export const MOCKS_ERROR_MUTATIONS = [
   },
   {
     request: {
+      query: ACTION_ITEM_LIST,
+      variables: {
+        organizationId: '123',
+        eventId: 'event1',
+        orderBy: 'createdAt_DESC',
+      },
+    },
+    result: {
+      data: {
+        actionItemsByOrganization: [
+          {
+            _id: 'actionItem1',
+            assignee: {
+              _id: 'user1',
+              firstName: 'Harve',
+              lastName: 'Lance',
+            },
+            actionItemCategory: {
+              _id: 'actionItemCategory1',
+              name: 'ActionItemCategory 1',
+            },
+            preCompletionNotes: 'Pre Completion Notes',
+            postCompletionNotes: 'Post Completion Notes',
+            assignmentDate: '2024-02-14',
+            dueDate: '2024-02-21',
+            completionDate: '2024-20-21',
+            isCompleted: false,
+            assigner: {
+              _id: 'user0',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+            },
+            event: {
+              _id: 'event1',
+              title: 'event 1',
+            },
+            creator: {
+              _id: 'user0',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
       query: CREATE_ACTION_ITEM_MUTATION,
       variables: {
+        actionItemCategoryId: 'actionItemCategory1',
+        assigneeId: 'user1',
+        preCompletionNotes: 'pre completion notes',
+        dueDate: '2024-02-14',
+      },
+    },
+    error: new Error('Mock Graphql Error'),
+  },
+  {
+    request: {
+      query: CREATE_ACTION_ITEM_MUTATION,
+      variables: {
+        eventId: 'event1',
         actionItemCategoryId: 'actionItemCategory1',
         assigneeId: 'user1',
         preCompletionNotes: 'pre completion notes',

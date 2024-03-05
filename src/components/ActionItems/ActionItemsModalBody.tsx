@@ -183,7 +183,7 @@ export const ActionItemsModalBody = ({
           type="submit"
           className={styles.greenregbtn}
           value="createEventActionItem"
-          data-testid="createEventActionItemFormSubmitBtn"
+          data-testid="createEventActionItemBtn"
           onClick={showCreateModal}
         >
           {t('createActionItem')}
