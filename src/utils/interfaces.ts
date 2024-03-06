@@ -290,3 +290,37 @@ export interface InterfaceCreateFund {
   fundName: string;
   fundRef: string;
 }
+
+export interface InterfacePostCard {
+  id: string;
+  creator: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    id: string;
+  };
+  image: string;
+  video: string;
+  text: string;
+  title: string;
+  likeCount: number;
+  commentCount: number;
+  comments: {
+    creator: {
+      _id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+    };
+    likeCount: number;
+    likedBy: {
+      id: string;
+    }[];
+    text: string;
+  }[];
+  likedBy: {
+    firstName: string;
+    lastName: string;
+    id: string;
+  }[];
+}

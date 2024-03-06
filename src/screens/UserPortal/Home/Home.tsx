@@ -8,6 +8,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
 import PostCard from 'components/UserPortal/PostCard/PostCard';
+import type { InterfacePostCard } from 'utils/interfaces';
 import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import StartPostModal from 'components/UserPortal/StartPostModal/StartPostModal';
@@ -22,40 +23,6 @@ import { ReactComponent as MediaIcon } from 'assets/svgs/media.svg';
 import { ReactComponent as ArticleIcon } from 'assets/svgs/article.svg';
 import { ReactComponent as EventIcon } from 'assets/svgs/userEvent.svg';
 import styles from './Home.module.css';
-
-interface InterfacePostCardProps {
-  id: string;
-  creator: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    id: string;
-  };
-  image: string;
-  video: string;
-  text: string;
-  title: string;
-  likeCount: number;
-  commentCount: number;
-  comments: {
-    creator: {
-      _id: string;
-      firstName: string;
-      lastName: string;
-      email: string;
-    };
-    likeCount: number;
-    likedBy: {
-      id: string;
-    }[];
-    text: string;
-  }[];
-  likedBy: {
-    firstName: string;
-    lastName: string;
-    id: string;
-  }[];
-}
 
 interface InterfaceAdContent {
   _id: string;
@@ -77,10 +44,10 @@ export default function home(): JSX.Element {
   const [filteredAd, setFilteredAd] = useState<InterfaceAdContent[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const { orgId } = useParams();
-  const organizationId = orgId?.split('=')[1];
-  if (!organizationId) {
+  if (!orgId) {
     return <Navigate to={'/user'} />;
   }
+  const organizationId = orgId?.split('=')[1];
 
   const navbarProps = {
     currentPage: 'home',
@@ -93,7 +60,6 @@ export default function home(): JSX.Element {
   } = useQuery(ORGANIZATION_POST_LIST, {
     variables: { id: organizationId, first: 10 },
   });
-
   const userId: string | null = getItem('userId');
 
   const { data: userData } = useQuery(USER_DETAILS, {
@@ -101,13 +67,9 @@ export default function home(): JSX.Element {
   });
 
   useEffect(() => {
-    if (
-      data &&
-      data.organizaitons &&
-      data.organizaitons[0] &&
-      data.organizaitons[0].posts.edges
-    ) {
-      setPosts(data.organizaitons[0].posts.edges);
+    if (data) {
+      setPosts(data.organizations[0].posts.edges);
+      console.log(posts, 'posts');
     }
   }, [data]);
 
@@ -151,7 +113,7 @@ export default function home(): JSX.Element {
             <Row className="d-flex align-items-center justify-content-center">
               <Col xs={2} className={styles.userImage}>
                 <Image
-                  src={userData?.image ? userData?.image : UserDefault}
+                  src={userData?.image || UserDefault}
                   roundedCircle
                   className="mt-2"
                 />
@@ -213,9 +175,8 @@ export default function home(): JSX.Element {
               </Link>
             </div>
           </div>
-          {filteredAd.length === 0 ? (
-            ''
-          ) : (
+
+          {filteredAd.length > 0 && (
             <div data-testid="promotedPostsContainer">
               {filteredAd.map((post: any) => (
                 <PromotedPost
@@ -228,69 +189,76 @@ export default function home(): JSX.Element {
               ))}
             </div>
           )}
+
           {loadingPosts ? (
             <div className={`d-flex flex-row justify-content-center`}>
               <HourglassBottomIcon /> <span>Loading...</span>
             </div>
           ) : (
             <>
-              {posts.map((post: any) => {
-                const allLikes: any = [];
-                post.likedBy.forEach((value: any) => {
-                  const singleLike = {
-                    firstName: value.firstName,
-                    lastName: value.lastName,
-                    id: value._id,
-                  };
-                  allLikes.push(singleLike);
-                });
+              {posts.map(({ node }: any) => {
+                const {
+                  likedBy,
+                  comments,
+                  creator,
+                  _id,
+                  imageUrl,
+                  videoUrl,
+                  title,
+                  text,
+                  likeCount,
+                  commentCount,
+                } = node;
 
-                const postComments: any = [];
-                post.comments.forEach((value: any) => {
-                  const commentLikes: any = [];
+                const allLikes: any =
+                  likedBy && Array.isArray(likedBy)
+                    ? likedBy.map((value: any) => ({
+                        firstName: value.firstName,
+                        lastName: value.lastName,
+                        id: value._id,
+                      }))
+                    : [];
 
-                  value.likedBy.forEach((commentLike: any) => {
-                    const singleLike = {
-                      id: commentLike._id,
-                    };
-                    commentLikes.push(singleLike);
-                  });
+                const postComments: any =
+                  comments && Array.isArray(comments)
+                    ? comments.map((value: any) => {
+                        const commentLikes = value.likedBy.map(
+                          (commentLike: any) => ({ id: commentLike._id }),
+                        );
+                        return {
+                          id: value._id,
+                          creator: {
+                            firstName: value.creator.firstName,
+                            lastName: value.creator.lastName,
+                            id: value.creator._id,
+                            email: value.creator.email,
+                          },
+                          likeCount: value.likeCount,
+                          likedBy: commentLikes,
+                          text: value.text,
+                        };
+                      })
+                    : [];
 
-                  const singleCommnet: any = {
-                    id: value._id,
-                    creator: {
-                      firstName: value.creator.firstName,
-                      lastName: value.creator.lastName,
-                      id: value.creator._id,
-                      email: value.creator.email,
-                    },
-                    likeCount: value.likeCount,
-                    likedBy: commentLikes,
-                    text: value.text,
-                  };
-
-                  postComments.push(singleCommnet);
-                });
-
-                const cardProps: InterfacePostCardProps = {
-                  id: post._id,
+                const cardProps: InterfacePostCard = {
+                  id: _id,
                   creator: {
-                    id: post.creator._id,
-                    firstName: post.creator.firstName,
-                    lastName: post.creator.lastName,
-                    email: post.creator.email,
+                    id: creator._id,
+                    firstName: creator.firstName,
+                    lastName: creator.lastName,
+                    email: creator.email,
                   },
-                  image: post.imageUrl,
-                  video: post.videoUrl,
-                  title: post.title,
-                  text: post.text,
-                  likeCount: post.likeCount,
-                  commentCount: post.commentCount,
+                  image: imageUrl,
+                  video: videoUrl,
+                  title,
+                  text,
+                  likeCount,
+                  commentCount,
                   comments: postComments,
                   likedBy: allLikes,
                 };
 
-                return <PostCard key={post._id} {...cardProps} />;
+                return <PostCard key={_id} {...cardProps} />;
               })}
             </>
           )}
