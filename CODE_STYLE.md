@@ -245,3 +245,9 @@ To watch the Sass file for changes and compile it automatically, run the followi
 ```
 npx sass src/assets/scss/app.scss src/assets/css/app.css --watch
 ```
+The `src/assets/css/app.css.map` file associates the generated CSS code with the original SCSS code. It allows you to see your SCSS code in the browser's developer tools for debugging.
+
+To skip generating the map file, run
+```
+npx sass --no-source-map src/assets/scss/app.scss src/assets/css/app.css
+```
