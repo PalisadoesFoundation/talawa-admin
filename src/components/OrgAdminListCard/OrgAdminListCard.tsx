@@ -10,15 +10,16 @@ import {
   UPDATE_USERTYPE_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { errorHandler } from 'utils/errorHandler';
 
 interface InterfaceOrgPeopleListCardProps {
   key: number;
   id: string;
 }
-const currentUrl = window.location.href.split('=')[1];
 
 function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
+  const { orgId: currentUrl } = useParams();
   const [remove] = useMutation(REMOVE_ADMIN_MUTATION);
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
 

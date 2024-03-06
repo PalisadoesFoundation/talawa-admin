@@ -162,7 +162,10 @@ const PLUGIN_LOADING_MOCK = {
     loading: true,
   },
 };
-
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: 'undefined' }),
+}));
 const ORGANIZATIONS_LIST_MOCK = {
   request: {
     query: ORGANIZATIONS_LIST,

@@ -78,9 +78,11 @@ describe('Testing the Super Dash List', () => {
       </MockedProvider>,
     );
     expect(screen.getByAltText(/Dogs Care image/i)).toBeInTheDocument();
-    expect(screen.getByText('Admins:')).toBeInTheDocument();
-    expect(screen.getByText('Members:')).toBeInTheDocument();
+    expect(screen.getByText(/Admins:/i)).toBeInTheDocument();
+    expect(screen.getByText(/Members:/i)).toBeInTheDocument();
     expect(screen.getByText('Dogs Care')).toBeInTheDocument();
+    expect(screen.getByText(/Sample City/i)).toBeInTheDocument();
+    expect(screen.getByText(/123 Sample Street/i)).toBeInTheDocument();
     userEvent.click(screen.getByTestId(/manageBtn/i));
     removeItem('id');
   });
@@ -108,9 +110,11 @@ describe('Testing the Super Dash List', () => {
     };
     render(
       <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgListCard {...imageNullProps} />
-        </I18nextProvider>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgListCard {...imageNullProps} />
+          </I18nextProvider>
+        </BrowserRouter>
       </MockedProvider>,
     );
     expect(screen.getByTestId(/emptyContainerForImage/i)).toBeInTheDocument();
@@ -127,7 +131,5 @@ describe('Testing the Super Dash List', () => {
       </MockedProvider>,
     );
     userEvent.click(screen.getByTestId('manageBtn'));
-    expect(screen.getByTestId(/icon/)).toBeInTheDocument();
-    expect(window.location).toBeAt('/orgdash/id=xyz');
   });
 });

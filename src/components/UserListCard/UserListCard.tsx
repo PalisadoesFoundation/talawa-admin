@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import styles from './UserListCard.module.css';
+import { useParams } from 'react-router-dom';
 import { errorHandler } from 'utils/errorHandler';
 
 interface InterfaceUserListCardProps {
@@ -14,7 +15,7 @@ interface InterfaceUserListCardProps {
 }
 
 function userListCard(props: InterfaceUserListCardProps): JSX.Element {
-  const currentUrl = window.location.href.split('=')[1];
+  const { orgId: currentUrl } = useParams();
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
 
   const { t } = useTranslation('translation', {

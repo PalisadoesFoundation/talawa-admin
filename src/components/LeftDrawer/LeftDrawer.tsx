@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { useHistory, Link } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
 import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
 import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
@@ -17,13 +17,9 @@ import Avatar from 'components/Avatar/Avatar';
 export interface InterfaceLeftDrawerProps {
   hideDrawer: boolean | null;
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
-  screenName: string;
 }
 
-const leftDrawer = ({
-  screenName,
-  hideDrawer,
-}: InterfaceLeftDrawerProps): JSX.Element => {
+const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
 
   const { getItem } = useLocalStorage();
@@ -31,114 +27,110 @@ const leftDrawer = ({
   const firstName = getItem('FirstName');
   const lastName = getItem('LastName');
   const userImage = getItem('UserImage');
-  const userId = getItem('id');
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
 
   const logout = (): void => {
     revokeRefreshToken();
     localStorage.clear();
-    history.push('/');
+    navigate('/');
   };
 
   return (
-    <div
-      className={`${styles.leftDrawer} customScroll ${
-        hideDrawer === null
-          ? styles.hideElemByDefault
-          : hideDrawer
-            ? styles.inactiveDrawer
-            : styles.activeDrawer
-      }`}
-      data-testid="leftDrawerContainer"
-    >
-      <TalawaLogo className={styles.talawaLogo} />
-      <p className={styles.talawaText}>{t('talawaAdminPortal')}</p>
-      <h5 className={styles.titleHeader}>{t('menu')}</h5>
-      <div className={styles.optionList}>
-        <Button
-          variant={screenName === 'My Organizations' ? 'success' : 'light'}
-          className={`${
-            screenName === 'My Organizations' ? 'text-white' : 'text-secondary'
-          }`}
-          data-testid="orgsBtn"
-          onClick={(): void => {
-            history.push('/orglist');
-          }}
-        >
-          <div className={styles.iconWrapper}>
-            <OrganizationsIcon
-              stroke={`${
-                screenName === 'My Organizations'
-                  ? 'var(--bs-white)'
-                  : 'var(--bs-secondary)'
-              }`}
-            />
-          </div>
-          {t('my organizations')}
-        </Button>
-        {userType === 'SUPERADMIN' && (
-          <>
-            <Button
-              variant={screenName === 'Users' ? 'success' : 'light'}
-              className={`${
-                screenName === 'Users' ? 'text-white' : 'text-secondary'
-              }`}
-              onClick={(): void => {
-                history.push('/users');
-              }}
-              data-testid="rolesBtn"
-            >
-              <div className={styles.iconWrapper}>
-                <RolesIcon
-                  fill={`${
-                    screenName === 'Users'
-                      ? 'var(--bs-white)'
-                      : 'var(--bs-secondary)'
-                  }`}
-                />
-              </div>
-              {t('users')}
-            </Button>
-            <Button
-              variant={screenName === 'Community Profile' ? 'success' : 'light'}
-              className={`${
-                screenName === 'Community Profile'
-                  ? 'text-white'
-                  : 'text-secondary'
-              }`}
-              onClick={(): void => {
-                history.push('/communityProfile');
-              }}
-              data-testid="communityProfileBtn"
-            >
-              <div className={styles.iconWrapper}>
-                <SettingsIcon
-                  stroke={`${
-                    screenName === 'Community Profile'
-                      ? 'var(--bs-white)'
-                      : 'var(--bs-secondary)'
-                  }`}
-                />
-              </div>
-              {t('communityProfile')}
-            </Button>
-          </>
-        )}
-      </div>
-      <div style={{ marginTop: 'auto' }}>
-        <Link
-          to={{
-            pathname: `/member/id=${userId}`,
-            state: { from: 'orglist' },
-          }}
-        >
-          <Button
-            key={'profileBtn'}
+    <>
+      <div
+        className={`${styles.leftDrawer} customScroll ${
+          hideDrawer === null
+            ? styles.hideElemByDefault
+            : hideDrawer
+              ? styles.inactiveDrawer
+              : styles.activeDrawer
+        }`}
+        data-testid="leftDrawerContainer"
+      >
+        <TalawaLogo className={styles.talawaLogo} />
+        <p className={styles.talawaText}>{t('talawaAdminPortal')}</p>
+        <h5 className={styles.titleHeader}>{t('menu')}</h5>
+        <div className={styles.optionList}>
+          <NavLink to={'/orglist'}>
+            {({ isActive }) => (
+              <Button
+                variant={isActive === true ? 'success' : 'light'}
+                className={`${
+                  isActive === true ? 'text-white' : 'text-secondary'
+                }`}
+                data-testid="orgsBtn"
+              >
+                <div className={styles.iconWrapper}>
+                  <OrganizationsIcon
+                    stroke={`${
+                      isActive === true
+                        ? 'var(--bs-white)'
+                        : 'var(--bs-secondary)'
+                    }`}
+                  />
+                </div>
+                {t('my organizations')}
+              </Button>
+            )}
+          </NavLink>
+          {userType === 'SUPERADMIN' && (
+            <>
+              <NavLink to={'/users'}>
+                {({ isActive }) => (
+                  <Button
+                    variant={isActive === true ? 'success' : 'light'}
+                    className={`${
+                      isActive === true ? 'text-white' : 'text-secondary'
+                    }`}
+                    data-testid="rolesBtn"
+                  >
+                    <div className={styles.iconWrapper}>
+                      <RolesIcon
+                        fill={`${
+                          isActive === true
+                            ? 'var(--bs-white)'
+                            : 'var(--bs-secondary)'
+                        }`}
+                      />
+                    </div>
+                    {t('users')}
+                  </Button>
+                )}
+              </NavLink>
+              <NavLink to={'/communityProfile'}>
+                {({ isActive }) => (
+                  <Button
+                    variant={isActive === true ? 'success' : 'light'}
+                    className={`${
+                      isActive === true ? 'text-white' : 'text-secondary'
+                    }`}
+                    data-testid="communityProfileBtn"
+                  >
+                    <div className={styles.iconWrapper}>
+                      <SettingsIcon
+                        stroke={`${
+                          isActive === true
+                            ? 'var(--bs-white)'
+                            : 'var(--bs-secondary)'
+                        }`}
+                      />
+                    </div>
+                    {t('communityProfile')}
+                  </Button>
+                )}
+              </NavLink>
+            </>
+          )}
+        </div>
+        <div style={{ marginTop: 'auto' }}>
+          <button
             className={styles.profileContainer}
-            variant={screenName === 'Profile' ? 'success' : 'light'}
             data-testid="profileBtn"
+            onClick={(): void => {
+              navigate(`/member`);
+            }}
           >
             <div className={styles.imageContainer}>
               {userImage && userImage !== 'null' ? (
@@ -154,31 +146,27 @@ const leftDrawer = ({
               <span className={styles.primaryText}>
                 {firstName} {lastName}
               </span>
-              <span
-                className={`${styles.secondaryText} ${
-                  screenName === 'Profile' && 'text-white'
-                }`}
-              >
+              <span className={styles.secondaryText}>
                 {`${userType}`.toLowerCase()}
               </span>
             </div>
             <AngleRightIcon fill={'var(--bs-secondary)'} />
-          </Button>
-        </Link>
+          </button>
 
-        <Button
-          variant="light"
-          className={`mt-4 d-flex justify-content-start px-0 w-100 bg-danger text-white  ${styles.logout}`}
-          onClick={(): void => logout()}
-          data-testid="logoutBtn"
-        >
-          <div className={styles.imageContainer}>
-            <LogoutIcon fill={'white'} />
-          </div>
-          {t('logout')}
-        </Button>
+          <Button
+            variant="light"
+            className={`mt-4 d-flex justify-content-start px-0 w-100 bg-danger text-white  ${styles.logout}`}
+            onClick={(): void => logout()}
+            data-testid="logoutBtn"
+          >
+            <div className={styles.imageContainer}>
+              <LogoutIcon fill={'white'} />
+            </div>
+            {t('logout')}
+          </Button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

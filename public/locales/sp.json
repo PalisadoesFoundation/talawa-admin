@@ -176,7 +176,7 @@
     "errorOccured": "Se produjo un error. Por favor, inténtalo de nuevo más tarde."
   },
   "communityProfile": {
-    "communityProfile": "Perfil de la comunidad",
+    "title": "Perfil de la comunidad",
     "editProfile": "Editar perfil",
     "communityProfileInfo": "Estos detalles aparecerán en la pantalla de inicio de sesión/registro para usted y los miembros de su comunidad.",
     "communityName": "Nombre de la comunidad",
@@ -277,7 +277,10 @@
   },
   "organizationActionItems": {
     "actionItemCategory": "Categoría del ítem de acción",
+    "actionItemActive": "Elemento de acción activo",
+    "actionItemCompleted": "Elemento de acción completado",
     "actionItemDetails": "Detalles del ítem de acción",
+    "actionItemStatus": "Estado del elemento de acción",
     "assignee": "Asignado",
     "assigner": "Asignador",
     "assignmentDate": "Fecha de asignación",
@@ -293,8 +296,11 @@
     "dueDate": "Fecha de vencimiento",
     "earliest": "Lo más temprano",
     "editActionItem": "Editar ítem de acción",
+    "eventActionItems": "Elementos de acción del evento",
     "isCompleted": "Completado",
     "latest": "Lo más reciente",
+    "makeActive": "Activar",
+    "markCompletion": "Marcar finalización",
     "no": "No",
     "noActionItems": "No hay ítems de acción",
     "options": "Opciones",

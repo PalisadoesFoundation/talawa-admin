@@ -7,7 +7,6 @@ import {
 } from 'GraphQl/Mutations/FundMutation';
 import { ORGANIZATION_FUNDS } from 'GraphQl/Queries/OrganizationQueries';
 import Loader from 'components/Loader/Loader';
-import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 import React, { useEffect, useState, type ChangeEvent } from 'react';
 import { Button, Col, Dropdown, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -22,13 +21,14 @@ import FundCreateModal from './FundCreateModal';
 import FundDeleteModal from './FundDeleteModal';
 import FundUpdateModal from './FundUpdateModal';
 import styles from './OrganizationFunds.module.css';
+import { useParams } from 'react-router-dom';
 
 const organizationFunds = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'funds',
   });
 
-  const currentUrl = window.location.href.split('=')[1];
+  const { orgId: currentUrl } = useParams();
 
   const [fundCreateModalIsOpen, setFundCreateModalIsOpen] =
     useState<boolean>(false);
@@ -219,159 +219,150 @@ const organizationFunds = (): JSX.Element => {
   }
   if (fundError) {
     return (
-      <OrganizationScreen screenName="OrganizationFunds" title={t('title')}>
-        <div className={`${styles.container} bg-white rounded-4 my-3`}>
-          <div className={styles.message} data-testid="errorMsg">
-            <WarningAmberRounded
-              className={styles.errorIcon}
-              fontSize="large"
-            />
-            <h6 className="fw-bold text-danger text-center">
-              Error occured while loading Funds
-              <br />
-              {fundError.message}
-            </h6>
-          </div>
+      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+        <div className={styles.message} data-testid="errorMsg">
+          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <h6 className="fw-bold text-danger text-center">
+            Error occured while loading Funds
+            <br />
+            {fundError.message}
+          </h6>
         </div>
-      </OrganizationScreen>
+      </div>
     );
   }
   return (
     <div className={styles.organizationFundContainer}>
-      <OrganizationScreen screenName="OrganizationFunds" title={t('title')}>
-        <Button
-          variant="success"
-          className={styles.createFundButton}
-          onClick={showCreateModal}
-          data-testid="createFundBtn"
-        >
-          <i className={'fa fa-plus me-2'} />
-          {t('createFund')}
-        </Button>
+      <Button
+        variant="success"
+        className={styles.createFundButton}
+        onClick={showCreateModal}
+        data-testid="createFundBtn"
+      >
+        <i className={'fa fa-plus me-2'} />
+        {t('createFund')}
+      </Button>
 
-        <div className={`${styles.container}  bg-white rounded-4 my-3`}>
-          <div className="mx-4 mt-4">
-            <Dropdown
-              aria-expanded="false"
-              data-testid="type"
-              className="d-flex mb-0"
-            >
-              <Dropdown.Toggle variant="outline-success" data-testid="fundtype">
-                {fundType == 'Archived' ? 'Archived' : 'Non-Archived'}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={(): void => handleFundType('Archived')}
-                  data-testid="Archived"
-                >
-                  {t('archived')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={(): void => handleFundType('Non-Archived')}
-                  data-testid="Non-Archived"
-                >
-                  {t('nonArchive')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+      <div className={`${styles.container}  bg-white rounded-4 my-3`}>
+        <div className="mx-4 mt-4">
+          <Dropdown
+            aria-expanded="false"
+            data-testid="type"
+            className="d-flex mb-0"
+          >
+            <Dropdown.Toggle variant="outline-success" data-testid="fundtype">
+              {fundType == 'Archived' ? 'Archived' : 'Non-Archived'}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item
+                onClick={(): void => handleFundType('Archived')}
+                data-testid="Archived"
+              >
+                {t('archived')}
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={(): void => handleFundType('Non-Archived')}
+                data-testid="Non-Archived"
+              >
+                {t('nonArchive')}
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+        <div className="mx-1 my-4">
+          <div className="mx-4 shadow-sm rounded-top-4">
+            <Row className="mx-0 border border-light-subtle rounded-top-4 py-3 justify-content-between">
+              <Col xs={7} sm={4} md={3} lg={3} className=" fs-5 fw-bold">
+                <div className="ms-2">{t('fundName')}</div>
+              </Col>
+
+              <Col xs={5} sm={3} lg={2} className="fs-5 fw-bold">
+                <div className="ms-3">{t('fundOptions')}</div>
+              </Col>
+            </Row>
           </div>
-          <div className="mx-1 my-4">
-            <div className="mx-4 shadow-sm rounded-top-4">
-              <Row className="mx-0 border border-light-subtle rounded-top-4 py-3 justify-content-between">
-                <Col xs={7} sm={4} md={3} lg={3} className=" fs-5 fw-bold">
-                  <div className="ms-2">{t('fundName')}</div>
-                </Col>
 
-                <Col xs={5} sm={3} lg={2} className="fs-5 fw-bold">
-                  <div className="ms-3">{t('fundOptions')}</div>
-                </Col>
-              </Row>
-            </div>
-
-            <div className="mx-4 bg-light-subtle border border-light-subtle border-top-0 rounded-bottom-4 shadow-sm">
-              {fundData?.organizations[0].funds
-                ?.filter((fund) =>
-                  fundType === 'Archived' ? fund.isArchived : !fund.isArchived,
-                )
-                .map((fundd, index) => (
-                  <div key={index}>
-                    <Row
-                      className={`${index === 0 ? 'pt-3' : ''} mb-3 ms-2 justify-content-between `}
+          <div className="mx-4 bg-light-subtle border border-light-subtle border-top-0 rounded-bottom-4 shadow-sm">
+            {fundData?.organizations[0].funds
+              ?.filter((fund) =>
+                fundType === 'Archived' ? fund.isArchived : !fund.isArchived,
+              )
+              .map((fundd, index) => (
+                <div key={index}>
+                  <Row
+                    className={`${index === 0 ? 'pt-3' : ''} mb-3 ms-2 justify-content-between `}
+                  >
+                    <Col
+                      sm={4}
+                      xs={7}
+                      md={3}
+                      lg={3}
+                      className={`align-self-center fw-bold ${styles.fundName}`}
                     >
-                      <Col
-                        sm={4}
-                        xs={7}
-                        md={3}
-                        lg={3}
-                        className={`align-self-center fw-bold ${styles.fundName}`}
+                      <div className="fw-bold cursor-pointer">{fundd.name}</div>
+                    </Col>
+
+                    <Col xs={5} sm={3} lg={2} className="p-0">
+                      <Button
+                        data-testid="archiveFundBtn"
+                        className="btn btn-sm me-2"
+                        variant="outline-secondary"
+                        onClick={async () => {
+                          setFund(fundd);
+                          if (fundType === 'Non-Archived') {
+                            toggleArchivedModal();
+                          } else {
+                            setClick(!click);
+                          }
+                        }}
                       >
-                        <div className="fw-bold cursor-pointer">
-                          {fundd.name}
-                        </div>
-                      </Col>
+                        <i
+                          className={`${fundType == 'Archived' ? 'fa fa-undo' : 'fa fa-archive'}`}
+                        ></i>
+                      </Button>
 
-                      <Col xs={5} sm={3} lg={2} className="p-0">
-                        <Button
-                          data-testid="archiveFundBtn"
-                          className="btn btn-sm me-2"
-                          variant="outline-secondary"
-                          onClick={async () => {
-                            setFund(fundd);
-                            if (fundType === 'Non-Archived') {
-                              toggleArchivedModal();
-                            } else {
-                              setClick(!click);
-                            }
-                          }}
-                        >
-                          <i
-                            className={`${fundType == 'Archived' ? 'fa fa-undo' : 'fa fa-archive'}`}
-                          ></i>
-                        </Button>
-
-                        {fundType === 'Non-Archived' ? (
-                          <Button
-                            size="sm"
-                            data-testid="editFundBtn"
-                            onClick={() => handleEditClick(fundd)}
-                            className="me-2"
-                            variant="success"
-                          >
-                            {' '}
-                            <i className="fas fa-edit"></i>
-                          </Button>
-                        ) : null}
+                      {fundType === 'Non-Archived' ? (
                         <Button
                           size="sm"
-                          data-testid="deleteFundBtn"
-                          variant="danger"
-                          onClick={() => {
-                            setFund(fundd);
-                            toggleDeleteModal();
-                          }}
+                          data-testid="editFundBtn"
+                          onClick={() => handleEditClick(fundd)}
+                          className="me-2"
+                          variant="success"
                         >
                           {' '}
-                          <i className="fa fa-trash"></i>
+                          <i className="fas fa-edit"></i>
                         </Button>
-                      </Col>
-                    </Row>
+                      ) : null}
+                      <Button
+                        size="sm"
+                        data-testid="deleteFundBtn"
+                        variant="danger"
+                        onClick={() => {
+                          setFund(fundd);
+                          toggleDeleteModal();
+                        }}
+                      >
+                        {' '}
+                        <i className="fa fa-trash"></i>
+                      </Button>
+                    </Col>
+                  </Row>
 
-                    {fundData?.organizations[0]?.funds &&
-                      index !== fundData.organizations[0].funds.length - 1 && (
-                        <hr className="mx-3" />
-                      )}
-                  </div>
-                ))}
-
-              {fundData?.organizations[0].funds?.length === 0 && (
-                <div className="lh-lg text-center fw-semibold text-body-tertiary">
-                  {t('noFunds')}
+                  {fundData?.organizations[0]?.funds &&
+                    index !== fundData.organizations[0].funds.length - 1 && (
+                      <hr className="mx-3" />
+                    )}
                 </div>
-              )}
-            </div>
+              ))}
+
+            {fundData?.organizations[0].funds?.length === 0 && (
+              <div className="lh-lg text-center fw-semibold text-body-tertiary">
+                {t('noFunds')}
+              </div>
+            )}
           </div>
         </div>
-      </OrganizationScreen>
+      </div>
 
       {/* <FundCreateModal*/}
       <FundCreateModal

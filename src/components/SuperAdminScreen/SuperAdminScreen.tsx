@@ -1,18 +1,14 @@
 import LeftDrawer from 'components/LeftDrawer/LeftDrawer';
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
+import { useTranslation } from 'react-i18next';
+import { Outlet, useLocation } from 'react-router-dom';
 import styles from './SuperAdminScreen.module.css';
 
-export interface InterfaceSuperAdminScreenProps {
-  title: string; // Multilingual Page title
-  screenName: string; // Internal Screen name for developers
-  children: React.ReactNode;
-}
-const superAdminScreen = ({
-  title,
-  screenName,
-  children,
-}: InterfaceSuperAdminScreenProps): JSX.Element => {
+const superAdminScreen = (): JSX.Element => {
+  const location = useLocation();
+  const titleKey = map[location.pathname.split('/')[1]];
+  const { t } = useTranslation('translation', { keyPrefix: titleKey });
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
 
   const handleResize = (): void => {
@@ -49,11 +45,7 @@ const superAdminScreen = ({
           aria-hidden="true"
         ></i>
       </Button>
-      <LeftDrawer
-        screenName={screenName}
-        hideDrawer={hideDrawer}
-        setHideDrawer={setHideDrawer}
-      />
+      <LeftDrawer hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
         className={`${styles.pageContainer} ${
           hideDrawer === null
@@ -66,13 +58,20 @@ const superAdminScreen = ({
       >
         <div className="d-flex justify-content-between align-items-center">
           <div style={{ flex: 1 }}>
-            <h2>{title}</h2>
+            <h2>{t('title')}</h2>
           </div>
         </div>
-        {children}
+        <Outlet />
       </div>
     </>
   );
 };
 
 export default superAdminScreen;
+
+const map: any = {
+  orglist: 'orgList',
+  users: 'users',
+  member: 'memberDetail',
+  communityProfile: 'communityProfile',
+};
