@@ -95,7 +95,7 @@ const loginPage = (): JSX.Element => {
   useEffect(() => {
     const isLoggedIn = getItem('IsLoggedIn');
     if (isLoggedIn == 'TRUE') {
-      history.push(
+      navigate(
         getItem('UserType') === 'USER' ? '/user/organizations' : '/orglist',
       );
     }
