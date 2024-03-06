@@ -1,5 +1,5 @@
 .card {
-  width: max-content;
+  width: fit-content;
 }
 
 .cardHeader {
@@ -31,4 +31,11 @@
 
 .socialInput {
   height: 2.5rem;
+}
+
+@media (max-width: 520px) {
+  .btn {
+    flex-direction: column;
+    justify-content: center;
+  }
 }

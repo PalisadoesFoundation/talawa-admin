@@ -1,5 +1,4 @@
 import React from 'react';
-import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Form } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
@@ -70,10 +69,6 @@ const CommunityProfile = (): JSX.Element => {
   };
 
   return (
-    // <SuperAdminScreen
-    //   title={t('communityProfile')}
-    //   screenName="Community Profile"
-    // >
     <Card border="0" className={`${styles.card} "rounded-4 my-4 shadow-sm"`}>
       <div className={styles.cardHeader}>
         <div className={styles.cardTitle}>{t('editProfile')}</div>
@@ -143,7 +138,7 @@ const CommunityProfile = (): JSX.Element => {
           </Form.Group>
           <Form.Group>
             <Form.Label className={styles.formLabel}>{t('social')}</Form.Label>
-            <div className="mb-3 d-flex align-items-center gap-sm-3">
+            <div className="mb-3 d-flex align-items-center gap-3">
               <img src={FacebookLogo} alt="Facebook Logo" />
               <Form.Control
                 type="url"
@@ -158,7 +153,7 @@ const CommunityProfile = (): JSX.Element => {
                 required
               />
             </div>
-            <div className="mb-3 d-flex align-items-center gap-sm-3">
+            <div className="mb-3 d-flex align-items-center gap-3">
               <img src={InstagramLogo} alt="Instagram Logo" />
               <Form.Control
                 type="url"
@@ -173,7 +168,7 @@ const CommunityProfile = (): JSX.Element => {
                 required
               />
             </div>
-            <div className="mb-3 d-flex align-items-center gap-sm-3">
+            <div className="mb-3 d-flex align-items-center gap-3">
               <img src={TwitterLogo} alt="Twitter Logo" />
               <Form.Control
                 type="url"
@@ -188,7 +183,7 @@ const CommunityProfile = (): JSX.Element => {
                 required
               />
             </div>
-            <div className="mb-3 d-flex align-items-center gap-sm-3">
+            <div className="mb-3 d-flex align-items-center gap-3">
               <img src={LinkedInLogo} alt="LinkedIn Logo" />
               <Form.Control
                 type="url"
@@ -203,7 +198,7 @@ const CommunityProfile = (): JSX.Element => {
                 required
               />
             </div>
-            <div className="mb-3 d-flex align-items-center gap-sm-3">
+            <div className="mb-3 d-flex align-items-center gap-3">
               <img src={GithubLogo} alt="Github Logo" />
               <Form.Control
                 type="url"
@@ -218,7 +213,7 @@ const CommunityProfile = (): JSX.Element => {
                 required
               />
             </div>
-            <div className="mb-3 d-flex align-items-center gap-sm-3">
+            <div className="mb-3 d-flex align-items-center gap-3">
               <img src={YoutubeLogo} alt="Youtube Logo" />
               <Form.Control
                 type="url"
@@ -233,7 +228,7 @@ const CommunityProfile = (): JSX.Element => {
                 required
               />
             </div>
-            <div className="mb-3 d-flex align-items-center gap-sm-3">
+            <div className="mb-3 d-flex align-items-center gap-3">
               <img src={RedditLogo} alt="Reddit Logo" />
               <Form.Control
                 type="url"
@@ -248,7 +243,7 @@ const CommunityProfile = (): JSX.Element => {
                 required
               />
             </div>
-            <div className="mb-3 d-flex align-items-center gap-sm-3">
+            <div className="mb-3 d-flex align-items-center gap-3">
               <img src={SlackLogo} alt="Slack Logo" />
               <Form.Control
                 type="url"
@@ -264,7 +259,9 @@ const CommunityProfile = (): JSX.Element => {
               />
             </div>
           </Form.Group>
-          <div className="d-flex justify-content-end gap-sm-3 my-3">
+          <div
+            className={`${styles.btn} d-flex justify-content-end gap-3 my-3`}
+          >
             <Button
               variant="outline-success"
               onClick={() =>
@@ -290,7 +287,6 @@ const CommunityProfile = (): JSX.Element => {
         </Form>
       </Card.Body>
     </Card>
-    // </SuperAdminScreen>
   );
 };
 
