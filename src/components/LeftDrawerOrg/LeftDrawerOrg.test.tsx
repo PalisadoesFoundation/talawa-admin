@@ -257,7 +257,9 @@ const linkEmpty = new StaticMockLink(MOCKS_EMPTY, true);
 describe('Testing Left Drawer component for SUPERADMIN', () => {
   test('Component should be rendered properly', async () => {
     setItem('UserImage', '');
-    setItem('UserType', 'SUPERADMIN');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -279,7 +281,10 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing Profile Page & Organization Detail Modal', async () => {
-    setItem('UserType', 'SUPERADMIN');
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -297,7 +302,10 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing Menu Buttons', async () => {
-    setItem('UserType', 'SUPERADMIN');
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -315,7 +323,10 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing when image is present for Organization', async () => {
-    setItem('UserType', 'SUPERADMIN');
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
     render(
       <MockedProvider addTypename={false} link={linkImage}>
         <BrowserRouter>
@@ -331,7 +342,10 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing when Organization does not exists', async () => {
-    setItem('UserType', 'SUPERADMIN');
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
     render(
       <MockedProvider addTypename={false} link={linkEmpty}>
         <BrowserRouter>
@@ -350,7 +364,10 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing Drawer when hideDrawer is null', () => {
-    setItem('UserType', 'SUPERADMIN');
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -365,7 +382,10 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing Drawer when hideDrawer is true', () => {
-    setItem('UserType', 'SUPERADMIN');
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -380,7 +400,10 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing logout functionality', async () => {
-    setItem('UserType', 'SUPERADMIN');
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
