@@ -32,6 +32,10 @@ jest.mock('react-toastify', () => ({
     error: jest.fn(),
   },
 }));
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: '123' }),
+}));
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {

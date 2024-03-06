@@ -18,6 +18,7 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
+const { setItem } = useLocalStorage();
 
 const MOCKS = [
   {
@@ -109,6 +110,12 @@ jest.mock('Constant/constant.ts', () => ({
   ...jest.requireActual('Constant/constant.ts'),
   REACT_APP_USE_RECAPTCHA: 'yes',
   RECAPTCHA_SITE_KEY: 'xxx',
+}));
+
+const mockNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
 }));
 
 jest.mock('react-google-recaptcha', () => {
@@ -770,6 +777,24 @@ describe('Testing Login Page Screen', () => {
 
       expect(recaptchaElement).toHaveValue('test-token2');
     }
+  });
+
+  test('should be redirected to orglist if already loggedIn', async () => {
+    setItem('IsLoggedIn', 'TRUE');
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    expect(mockNavigate).toHaveBeenCalledWith('/orglist');
+    localStorage.clear();
   });
 });
 

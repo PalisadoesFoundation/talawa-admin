@@ -9,7 +9,7 @@ import { Col, Form, Row, Tab, Tabs } from 'react-bootstrap';
 import PluginHelper from 'components/AddOn/support/services/Plugin.helper';
 import { store } from './../../../../state/store';
 import { useTranslation } from 'react-i18next';
-import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
+import { useParams } from 'react-router-dom';
 
 function addOnStore(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'addOnStore' });
@@ -23,7 +23,7 @@ function addOnStore(): JSX.Element {
   // type plugData = { pluginName: String, plug };
   const { data, loading } = useQuery(PLUGIN_GET);
 
-  const orgId = window.location.href.split('=')[1];
+  const { orgId } = useParams();
 
   /* istanbul ignore next */
   const getStorePlugins = async (): Promise<void> => {
@@ -75,69 +75,112 @@ function addOnStore(): JSX.Element {
   }
   return (
     <>
-      <OrganizationScreen screenName="Plugin Store" title={t('title')}>
-        <Row>
-          <Col col={3}>
-            <Action label={t('search')}>
-              <Form.Control
-                type="name"
-                id="searchname"
-                className={styles.actioninput}
-                placeholder={t('searchName')}
-                autoComplete="off"
-                required
-                onChange={(e): void => setSearchText(e.target.value)}
-              />
+      <Row>
+        <Col col={3}>
+          <Action label={t('search')}>
+            <Form.Control
+              type="name"
+              id="searchname"
+              className={styles.actioninput}
+              placeholder={t('searchName')}
+              autoComplete="off"
+              required
+              onChange={(e): void => setSearchText(e.target.value)}
+            />
+          </Action>
+          {!isStore && (
+            <Action label={t('filter')}>
+              <Form>
+                <div key={`inline-radio`} className="mb-3">
+                  <Form.Check
+                    inline
+                    label={t('enable')}
+                    name="radio-group"
+                    type="radio"
+                    value="enabled"
+                    onChange={filterChange}
+                    checked={showEnabled}
+                    className={styles.actionradio}
+                    id={`inline-radio-1`}
+                  />
+                  <Form.Check
+                    inline
+                    label={t('disable')}
+                    name="radio-group"
+                    type="radio"
+                    value="disabled"
+                    onChange={filterChange}
+                    checked={!showEnabled}
+                    className={styles.actionradio}
+                    id={`inline-radio-2`}
+                  />
+                </div>
+              </Form>
             </Action>
-            {!isStore && (
-              <Action label={t('filter')}>
-                <Form>
-                  <div key={`inline-radio`} className="mb-3">
-                    <Form.Check
-                      inline
-                      label={t('enable')}
-                      name="radio-group"
-                      type="radio"
-                      value="enabled"
-                      onChange={filterChange}
-                      checked={showEnabled}
-                      className={styles.actionradio}
-                      id={`inline-radio-1`}
-                    />
-                    <Form.Check
-                      inline
-                      label={t('disable')}
-                      name="radio-group"
-                      type="radio"
-                      value="disabled"
-                      onChange={filterChange}
-                      checked={!showEnabled}
-                      className={styles.actionradio}
-                      id={`inline-radio-2`}
-                    />
-                  </div>
-                </Form>
-              </Action>
-            )}
-          </Col>
-          <Col col={8}>
-            <div className={styles.justifysp}>
-              <p className={styles.logintitle}>{t('pHeading')}</p>
-              {searchText ? (
-                <p className="mb-2 text-muted author">
-                  Search results for <b>{searchText}</b>
-                </p>
-              ) : null}
+          )}
+        </Col>
+        <Col col={8}>
+          <div className={styles.justifysp}>
+            <p className={styles.logintitle}>{t('pHeading')}</p>
+            {searchText ? (
+              <p className="mb-2 text-muted author">
+                Search results for <b>{searchText}</b>
+              </p>
+            ) : null}
 
-              <Tabs
-                defaultActiveKey="available"
-                id="uncontrolled-tab-example"
-                className="mb-3"
-                onSelect={updateSelectedTab}
-              >
-                <Tab eventKey="available" title={t('available')}>
-                  {console.log(
-                    data.getPlugins.filter(
+            <Tabs
+              defaultActiveKey="available"
+              id="uncontrolled-tab-example"
+              className="mb-3"
+              onSelect={updateSelectedTab}
+            >
+              <Tab eventKey="available" title={t('available')}>
+                {console.log(
+                  data.getPlugins.filter(
+                    (val: {
+                      _id: string;
+                      pluginName: string | undefined;
+                      pluginDesc: string | undefined;
+                      pluginCreatedBy: string;
+                      pluginInstallStatus: boolean | undefined;
+                      getInstalledPlugins: () => any;
+                    }) => {
+                      if (searchText == '') {
+                        return val;
+                      } else if (
+                        val.pluginName
+                          ?.toLowerCase()
+                          .includes(searchText.toLowerCase())
+                      ) {
+                        return val;
+                      }
+                    },
+                  ),
+                )}
+                {data.getPlugins.filter(
+                  (val: {
+                    _id: string;
+                    pluginName: string | undefined;
+                    pluginDesc: string | undefined;
+                    pluginCreatedBy: string;
+                    pluginInstallStatus: boolean | undefined;
+                    getInstalledPlugins: () => any;
+                  }) => {
+                    if (searchText == '') {
+                      return val;
+                    } else if (
+                      val.pluginName
+                        ?.toLowerCase()
+                        .includes(searchText.toLowerCase())
+                    ) {
+                      return val;
+                    }
+                  },
+                ).length === 0 ? (
+                  <h4> {t('pMessage')}</h4>
+                ) : (
+                  data.getPlugins
+                    .filter(
                       (val: {
                         _id: string;
                         pluginName: string | undefined;
@@ -156,9 +199,42 @@ function addOnStore(): JSX.Element {
                           return val;
                         }
                       },
-                    ),
-                  )}
-                  {data.getPlugins.filter(
+                    )
+                    .map(
+                      (
+                        plug: {
+                          _id: string;
+                          pluginName: string | undefined;
+                          pluginDesc: string | undefined;
+                          pluginCreatedBy: string;
+                          uninstalledOrgs: string[];
+                          getInstalledPlugins: () => any;
+                        },
+                        i: React.Key | null | undefined,
+                      ): JSX.Element => (
+                        <AddOnEntry
+                          id={plug._id}
+                          key={i}
+                          title={plug.pluginName}
+                          description={plug.pluginDesc}
+                          createdBy={plug.pluginCreatedBy}
+                          // isInstalled={plug.pluginInstallStatus}
+                          // configurable={plug.pluginInstallStatus}
+                          component={'Special  Component'}
+                          modified={true}
+                          getInstalledPlugins={getInstalledPlugins}
+                          uninstalledOrgs={plug.uninstalledOrgs}
+                        />
+                      ),
+                    )
+                )}
+              </Tab>
+              <Tab eventKey="installed" title={t('install')}>
+                {data.getPlugins
+                  .filter(
+                    (plugin: any) => !plugin.uninstalledOrgs.includes(orgId),
+                  )
+                  .filter(
                     (val: {
                       _id: string;
                       pluginName: string | undefined;
@@ -178,60 +254,9 @@ function addOnStore(): JSX.Element {
                       }
                     },
                   ).length === 0 ? (
-                    <h4> {t('pMessage')}</h4>
-                  ) : (
-                    data.getPlugins
-                      .filter(
-                        (val: {
-                          _id: string;
-                          pluginName: string | undefined;
-                          pluginDesc: string | undefined;
-                          pluginCreatedBy: string;
-                          pluginInstallStatus: boolean | undefined;
-                          getInstalledPlugins: () => any;
-                        }) => {
-                          if (searchText == '') {
-                            return val;
-                          } else if (
-                            val.pluginName
-                              ?.toLowerCase()
-                              .includes(searchText.toLowerCase())
-                          ) {
-                            return val;
-                          }
-                        },
-                      )
-                      .map(
-                        (
-                          plug: {
-                            _id: string;
-                            pluginName: string | undefined;
-                            pluginDesc: string | undefined;
-                            pluginCreatedBy: string;
-                            uninstalledOrgs: string[];
-                            getInstalledPlugins: () => any;
-                          },
-                          i: React.Key | null | undefined,
-                        ): JSX.Element => (
-                          <AddOnEntry
-                            id={plug._id}
-                            key={i}
-                            title={plug.pluginName}
-                            description={plug.pluginDesc}
-                            createdBy={plug.pluginCreatedBy}
-                            // isInstalled={plug.pluginInstallStatus}
-                            // configurable={plug.pluginInstallStatus}
-                            component={'Special  Component'}
-                            modified={true}
-                            getInstalledPlugins={getInstalledPlugins}
-                            uninstalledOrgs={plug.uninstalledOrgs}
-                          />
-                        ),
-                      )
-                  )}
-                </Tab>
-                <Tab eventKey="installed" title={t('install')}>
-                  {data.getPlugins
+                  <h4>{t('pMessage')} </h4>
+                ) : (
+                  data.getPlugins
                     .filter(
                       (plugin: any) => !plugin.uninstalledOrgs.includes(orgId),
                     )
@@ -254,69 +279,41 @@ function addOnStore(): JSX.Element {
                           return val;
                         }
                       },
-                    ).length === 0 ? (
-                    <h4>{t('pMessage')} </h4>
-                  ) : (
-                    data.getPlugins
-                      .filter(
-                        (plugin: any) =>
-                          !plugin.uninstalledOrgs.includes(orgId),
-                      )
-                      .filter(
-                        (val: {
+                    )
+                    .map(
+                      (
+                        plug: {
                           _id: string;
                           pluginName: string | undefined;
                           pluginDesc: string | undefined;
                           pluginCreatedBy: string;
+                          uninstalledOrgs: string[];
                           pluginInstallStatus: boolean | undefined;
                           getInstalledPlugins: () => any;
-                        }) => {
-                          if (searchText == '') {
-                            return val;
-                          } else if (
-                            val.pluginName
-                              ?.toLowerCase()
-                              .includes(searchText.toLowerCase())
-                          ) {
-                            return val;
-                          }
                         },
-                      )
-                      .map(
-                        (
-                          plug: {
-                            _id: string;
-                            pluginName: string | undefined;
-                            pluginDesc: string | undefined;
-                            pluginCreatedBy: string;
-                            uninstalledOrgs: string[];
-                            pluginInstallStatus: boolean | undefined;
-                            getInstalledPlugins: () => any;
-                          },
-                          i: React.Key | null | undefined,
-                        ): JSX.Element => (
-                          <AddOnEntry
-                            id={plug._id}
-                            key={i}
-                            title={plug.pluginName}
-                            description={plug.pluginDesc}
-                            createdBy={plug.pluginCreatedBy}
-                            // isInstalled={plug.pluginInstallStatus}
-                            // configurable={plug.pluginInstallStatus}
-                            component={'Special  Component'}
-                            modified={true}
-                            getInstalledPlugins={getInstalledPlugins}
-                            uninstalledOrgs={plug.uninstalledOrgs}
-                          />
-                        ),
-                      )
-                  )}
-                </Tab>
-              </Tabs>
-            </div>
-          </Col>
-        </Row>
-      </OrganizationScreen>
+                        i: React.Key | null | undefined,
+                      ): JSX.Element => (
+                        <AddOnEntry
+                          id={plug._id}
+                          key={i}
+                          title={plug.pluginName}
+                          description={plug.pluginDesc}
+                          createdBy={plug.pluginCreatedBy}
+                          // isInstalled={plug.pluginInstallStatus}
+                          // configurable={plug.pluginInstallStatus}
+                          component={'Special  Component'}
+                          modified={true}
+                          getInstalledPlugins={getInstalledPlugins}
+                          uninstalledOrgs={plug.uninstalledOrgs}
+                        />
+                      ),
+                    )
+                )}
+              </Tab>
+            </Tabs>
+          </div>
+        </Col>
+      </Row>
     </>
   );
 }

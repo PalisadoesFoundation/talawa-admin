@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Check, Clear } from '@mui/icons-material';
 
@@ -34,7 +34,7 @@ import { socialMediaLinks } from '../../constants';
 
 const loginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const { getItem, setItem } = useLocalStorage();
 
@@ -274,8 +274,16 @@ const loginPage = (): JSX.Element => {
           setItem('IsLoggedIn', 'TRUE');
           setItem('UserType', loginData.login.user.userType);
         }
+        setItem(
+          'name',
+          `${loginData.login.user.firstName} ${loginData.login.user.lastName}`,
+        );
+        setItem('email', loginData.login.user.email);
+        setItem('FirstName', loginData.login.user.firstName);
+        setItem('LastName', loginData.login.user.lastName);
+        setItem('UserImage', loginData.login.user.image);
         if (getItem('IsLoggedIn') == 'TRUE') {
-          history.push(role === 'admin' ? '/orglist' : '/user/organizations');
+          navigate(role === 'admin' ? '/orglist' : '/user/organizations');
         }
       } else {
         toast.warn(t('notFound'));

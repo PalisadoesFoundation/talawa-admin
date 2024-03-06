@@ -148,7 +148,7 @@ describe('MemberDetail', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -182,7 +182,7 @@ describe('MemberDetail', () => {
     expect(screen.getAllByText(/Admin for events/i)).toBeTruthy();
 
     expect(screen.getAllByText(/Created On/i)).toHaveLength(2);
-    expect(screen.getAllByText(/User Details/i)).toHaveLength(2);
+    expect(screen.getAllByText(/User Details/i)).toHaveLength(1);
     expect(screen.getAllByText(/Role/i)).toHaveLength(2);
     expect(screen.getAllByText(/Created/i)).toHaveLength(4);
     expect(screen.getAllByText(/Joined/i)).toHaveLength(2);
@@ -268,54 +268,6 @@ describe('MemberDetail', () => {
     expect(userImage.getAttribute('src')).toBe(user?.image);
   });
 
-  test('should render LeftDrawer from SuperAdminScreen when member details is called from home page', async () => {
-    const props = {
-      id: 'rishav-jha-mech',
-      from: 'orglist',
-    };
-
-    render(
-      <MockedProvider addTypename={false} link={link1}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <MemberDetail {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
-    await waitFor(() => {
-      expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
-    });
-  });
-
-  test('should not render LeftDrawer from SuperAdminScreen when member details is called from Organization Dashboard', async () => {
-    const props = {
-      id: 'rishav-jha-mech',
-      from: 'orgdash',
-    };
-
-    render(
-      <MockedProvider addTypename={false} link={link1}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <MemberDetail {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
-    await waitFor(() => {
-      expect(screen.queryByTestId('orgsBtn')).not.toBeInTheDocument();
-    });
-  });
-
   test('should call setState with 2 when button is clicked', async () => {
     const props = {
       id: 'rishav-jha-mech',
@@ -376,5 +328,19 @@ describe('MemberDetail', () => {
     waitFor(() => {
       expect(screen.getByTestId('adminApproved')).toHaveTextContent('No');
     });
+  });
+  test('should be redirected to / if member id is undefined', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <MemberDetail />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    expect(window.location.pathname).toEqual('/');
   });
 });

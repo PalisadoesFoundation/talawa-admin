@@ -15,7 +15,6 @@ import { SearchOutlined } from '@mui/icons-material';
 import styles from './Events.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import getOrganizationId from 'utils/getOrganizationId';
 import Modal from 'react-bootstrap/Modal';
 import { TimePicker, DatePicker } from '@mui/x-date-pickers';
 import type { Dayjs } from 'dayjs';
@@ -25,6 +24,7 @@ import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import EventCalendar from 'components/EventCalendar/EventCalendar';
 import useLocalStorage from 'utils/useLocalstorage';
+import { useParams } from 'react-router-dom';
 
 interface InterfaceEventCardProps {
   id: string;
@@ -78,7 +78,7 @@ export default function events(): JSX.Element {
   const [startTime, setStartTime] = React.useState('08:00:00');
   const [endTime, setEndTime] = React.useState('10:00:00');
 
-  const organizationId = getOrganizationId(window.location.href);
+  const { orgId: organizationId } = useParams();
 
   const modes = [t('listView'), t('calendarView')];
 

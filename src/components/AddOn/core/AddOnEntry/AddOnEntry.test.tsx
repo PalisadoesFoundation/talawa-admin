@@ -38,6 +38,11 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
   link: ApolloLink.from([httpLink]),
 });
+let mockID: string | undefined = '1';
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: mockID }),
+}));
 
 describe('Testing AddOnEntry', () => {
   const props = {
@@ -122,7 +127,7 @@ describe('Testing AddOnEntry', () => {
         return { sample: 'sample' };
       },
     };
-
+    mockID = 'undefined';
     const { findByText, getByTestId } = render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -184,5 +189,21 @@ describe('Testing AddOnEntry', () => {
     await wait(100);
     const btn = getByTestId('AddOnEntry_btn_install');
     expect(btn.innerHTML).toMatch(/install/i);
+  });
+  test('should be redirected to /orglist if orgId is undefined', async () => {
+    mockID = undefined;
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              {<AddOnEntry uninstalledOrgs={[]} {...props} />}
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+    await wait(100);
+    expect(window.location.pathname).toEqual('/orglist');
   });
 });
