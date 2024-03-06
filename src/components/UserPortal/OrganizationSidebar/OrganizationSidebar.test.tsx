@@ -13,7 +13,6 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import OrganizationSidebar from './OrganizationSidebar';
-import * as getOrganizationId from 'utils/getOrganizationId';
 
 const MOCKS = [
   {
@@ -91,17 +90,14 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
+let mockId = '';
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: mockId }),
+}));
 
 describe('Testing OrganizationSidebar Component [User Portal]', () => {
-  jest.mock('utils/getOrganizationId');
-
   test('Component should be rendered properly when members and events list is empty', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -116,18 +112,12 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
 
     await wait();
 
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
     expect(screen.queryByText('No Members to show')).toBeInTheDocument();
     expect(screen.queryByText('No Events to show')).toBeInTheDocument();
   });
 
   test('Component should be rendered properly when events list is not empty', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return 'events';
-      });
-
+    mockId = 'events';
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -141,19 +131,13 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
     );
 
     await wait();
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
     expect(screen.queryByText('No Members to show')).toBeInTheDocument();
     expect(screen.queryByText('No Events to show')).not.toBeInTheDocument();
     expect(screen.queryByText('Event')).toBeInTheDocument();
   });
 
   test('Component should be rendered properly when members list is not empty', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return 'members';
-      });
-
+    mockId = 'members';
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -167,7 +151,6 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
     );
 
     await wait();
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
     expect(screen.queryByText('No Members to show')).not.toBeInTheDocument();
     expect(screen.queryByText('No Events to show')).toBeInTheDocument();
   });

@@ -11,7 +11,6 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Events from './Events';
 import userEvent from '@testing-library/user-event';
-import * as getOrganizationId from 'utils/getOrganizationId';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
@@ -41,6 +40,11 @@ jest.mock('@mui/x-date-pickers/TimePicker', () => {
       .DesktopTimePicker,
   };
 });
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: '' }),
+}));
 
 const theme = createTheme({
   palette: {
@@ -243,8 +247,6 @@ async function wait(ms = 100): Promise<void> {
 }
 
 describe('Testing Events Screen [User Portal]', () => {
-  jest.mock('utils/getOrganizationId');
-
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: jest.fn().mockImplementation((query) => ({
@@ -260,12 +262,6 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   test('Screen should be rendered properly', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -279,17 +275,9 @@ describe('Testing Events Screen [User Portal]', () => {
     );
 
     await wait();
-
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
   });
 
   test('Events are visible as expected without search query', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -310,17 +298,10 @@ describe('Testing Events Screen [User Portal]', () => {
         MOCKS[0].result?.data.eventsByOrganizationConnection[0].title;
     }
 
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
     expect(screen.queryByText(mockEventTitle)).toBeInTheDocument();
   });
 
   test('Search works as expected when user types in search input and press enter key', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -334,8 +315,6 @@ describe('Testing Events Screen [User Portal]', () => {
     );
 
     await wait();
-
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
 
     const randomSearchInput = 'test{enter}';
     userEvent.type(screen.getByTestId('searchInput'), randomSearchInput);
@@ -359,12 +338,6 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   test('Search works as expected when user types in search input and clicks search Btn', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -379,7 +352,6 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await wait();
 
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
     const searchInput = screen.getByTestId('searchInput');
     const searchBtn = screen.getByTestId('searchBtn');
     userEvent.type(searchInput, '');
@@ -408,12 +380,6 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   test('Create event works as expected when event is not an all day event.', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -432,7 +398,6 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await wait();
 
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
     userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     const randomEventTitle = 'testEventTitle';
@@ -473,12 +438,6 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   test('Create event works as expected when event is an all day event.', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -496,7 +455,6 @@ describe('Testing Events Screen [User Portal]', () => {
     );
     await wait();
 
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
     userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     const randomEventTitle = 'testEventTitle';
@@ -523,12 +481,6 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   test('Switch to calendar view works as expected.', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -546,7 +498,6 @@ describe('Testing Events Screen [User Portal]', () => {
     );
 
     await wait();
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
 
     userEvent.click(screen.getByTestId('modeChangeBtn'));
     userEvent.click(screen.getByTestId('modeBtn1'));
@@ -559,12 +510,6 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   test('Testing DatePicker and TimePicker', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -582,7 +527,6 @@ describe('Testing Events Screen [User Portal]', () => {
     );
 
     await wait();
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
 
     const startDate = '03/23/2024';
     const endDate = '04/23/2024';

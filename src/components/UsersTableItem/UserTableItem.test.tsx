@@ -8,6 +8,7 @@ import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import { MOCKS } from './UserTableItemMocks';
 import UsersTableItem from './UsersTableItem';
+import { BrowserRouter } from 'react-router-dom';
 const link = new StaticMockLink(MOCKS, true);
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -37,13 +38,11 @@ Object.defineProperty(window, 'location', {
   writable: true,
 });
 
-const mockHistoryPush = jest.fn();
+const mockNavgatePush = jest.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useHistory: () => ({
-    push: mockHistoryPush,
-  }),
+  useNavigate: () => mockNavgatePush,
 }));
 
 beforeEach(() => {
@@ -189,9 +188,11 @@ describe('Testing User Table Item', () => {
 
     render(
       <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <UsersTableItem {...props} />
-        </I18nextProvider>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersTableItem {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
       </MockedProvider>,
     );
 
@@ -476,8 +477,8 @@ describe('Testing User Table Item', () => {
 
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Joined Organization 1/i));
-    expect(window.location.replace).toBeCalledWith('/orgdash/id=abc');
-    expect(mockHistoryPush).toBeCalledWith('/orgdash/id=abc');
+    expect(window.location.replace).toBeCalledWith('/orgdash/abc');
+    expect(mockNavgatePush).toBeCalledWith('/orgdash/abc');
     fireEvent.click(screen.getByTestId(`closeJoinedOrgsBtn${123}`));
   });
 
@@ -611,9 +612,11 @@ describe('Testing User Table Item', () => {
 
     render(
       <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <UsersTableItem {...props} />
-        </I18nextProvider>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersTableItem {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
       </MockedProvider>,
     );
 
@@ -691,8 +694,8 @@ describe('Testing User Table Item', () => {
 
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Blocked Organization 1/i));
-    expect(window.location.replace).toBeCalledWith('/orgdash/id=xyz');
-    expect(mockHistoryPush).toBeCalledWith('/orgdash/id=xyz');
+    expect(window.location.replace).toBeCalledWith('/orgdash/xyz');
+    expect(mockNavgatePush).toBeCalledWith('/orgdash/xyz');
     fireEvent.click(screen.getByTestId(`closeBlockedByOrgsBtn${123}`));
   });
 
@@ -826,9 +829,11 @@ describe('Testing User Table Item', () => {
 
     render(
       <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <UsersTableItem {...props} />
-        </I18nextProvider>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersTableItem {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
       </MockedProvider>,
     );
 
@@ -1000,9 +1005,11 @@ describe('Testing User Table Item', () => {
 
     render(
       <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <UsersTableItem {...props} />
-        </I18nextProvider>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersTableItem {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
       </MockedProvider>,
     );
 
@@ -1176,9 +1183,11 @@ describe('Testing User Table Item', () => {
 
     render(
       <MockedProvider addTypename={false} mocks={MOCKS}>
-        <I18nextProvider i18n={i18nForTest}>
-          <UsersTableItem {...props} />
-        </I18nextProvider>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersTableItem {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
       </MockedProvider>,
     );
 
@@ -1318,9 +1327,11 @@ describe('Testing User Table Item', () => {
 
     render(
       <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <UsersTableItem {...props} />
-        </I18nextProvider>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersTableItem {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
       </MockedProvider>,
     );
 

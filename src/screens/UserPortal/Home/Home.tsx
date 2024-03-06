@@ -14,9 +14,8 @@ import StartPostModal from 'components/UserPortal/StartPostModal/StartPostModal'
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Container, Image, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 
-import getOrganizationId from 'utils/getOrganizationId';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 import UserDefault from '../../../assets/images/defaultImg.png';
 import { ReactComponent as MediaIcon } from 'assets/svgs/media.svg';
@@ -77,7 +76,11 @@ export default function home(): JSX.Element {
   const [adContent, setAdContent] = useState<InterfaceAdContent[]>([]);
   const [filteredAd, setFilteredAd] = useState<InterfaceAdContent[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const organizationId = getOrganizationId(window.location.href);
+  const { orgId } = useParams();
+  const organizationId = orgId?.split('=')[1];
+  if (!organizationId) {
+    return <Navigate to={'/user'} />;
+  }
 
   const navbarProps = {
     currentPage: 'home',
@@ -125,7 +128,7 @@ export default function home(): JSX.Element {
   ): InterfaceAdContent[] => {
     return adCont.filter(
       (ad: InterfaceAdContent) =>
-        ad.organization._id === currentOrgId &&
+        ad.organization._id === organizationId &&
         new Date(ad.endDate) > currentDate,
     );
   };

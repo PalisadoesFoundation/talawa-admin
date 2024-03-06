@@ -29,6 +29,7 @@ interface InterfaceOrganizationCardProps {
   address: {
     city: string;
     countryCode: string;
+    line1: string;
     postalCode: string;
     state: string;
   };

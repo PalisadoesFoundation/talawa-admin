@@ -193,6 +193,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               <Form.Control
                 placeholder={t('line1')}
                 autoComplete="off"
+                required
                 value={formState.address.line1}
                 onChange={(e) => handleInputChange('line1', e.target.value)}
               />

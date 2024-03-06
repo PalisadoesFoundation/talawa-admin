@@ -1,28 +1,34 @@
 import LeftDrawerOrg from 'components/LeftDrawerOrg/LeftDrawerOrg';
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './OrganizationScreen.module.css';
+import { updateTargets } from 'state/action-creators';
+import { Navigate, useParams, useLocation, Outlet } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
-export interface InterfaceOrganizationScreenProps {
-  title: string; // Multilingual Page title
-  screenName: string; // Internal Screen name for developers
-  children: React.ReactNode;
-}
-const organizationScreen = ({
-  title,
-  screenName,
-  children,
-}: InterfaceOrganizationScreenProps): JSX.Element => {
+const organizationScreen = (): JSX.Element => {
+  const location = useLocation();
+  const titleKey = map[location.pathname.split('/')[1]];
+  const { t } = useTranslation('translation', { keyPrefix: titleKey });
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
+
+  const { orgId } = useParams();
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
 
   const appRoutes: {
     targets: TargetsType[];
-    configUrl: string;
   } = useSelector((state: RootState) => state.appRoutes);
-  const { targets, configUrl } = appRoutes;
+  const { targets } = appRoutes;
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(updateTargets(orgId));
+  }, []);
 
   const handleResize = (): void => {
     if (window.innerWidth <= 820 && !hideDrawer) {
@@ -60,9 +66,8 @@ const organizationScreen = ({
       </Button>
       <div className={styles.drawer}>
         <LeftDrawerOrg
-          orgId={configUrl}
+          orgId={orgId}
           targets={targets}
-          screenName={screenName}
           hideDrawer={hideDrawer}
           setHideDrawer={setHideDrawer}
         />
@@ -79,13 +84,28 @@ const organizationScreen = ({
       >
         <div className="d-flex justify-content-between align-items-center">
           <div style={{ flex: 1 }}>
-            <h2>{title}</h2>
+            <h2>{t('title')}</h2>
           </div>
         </div>
-        {children}
+        <Outlet />
       </div>
     </>
   );
 };
 
 export default organizationScreen;
+
+const map: any = {
+  orgdash: 'dashboard',
+  orgpeople: 'organizationPeople',
+  orgads: 'advertisement',
+  member: 'memberDetail',
+  orgevents: 'organizationEvents',
+  orgactionitems: 'organizationActionItems',
+  orgcontribution: 'orgContribution',
+  orgpost: 'orgPost',
+  orgsetting: 'orgSettings',
+  orgstore: 'addOnStore',
+  blockuser: 'blockUnblockUser',
+  event: 'blockUnblockUser',
+};

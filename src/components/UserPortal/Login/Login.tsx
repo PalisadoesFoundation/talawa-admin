@@ -4,7 +4,7 @@ import { Button, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import { LockOutlined } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 
@@ -19,6 +19,8 @@ interface InterfaceLoginProps {
 
 export default function login(props: InterfaceLoginProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userLogin' });
+
+  const navigate = useNavigate();
 
   const { setCurrentMode } = props;
 
@@ -47,17 +49,9 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
           },
         });
 
-        if (data) {
-          setItem('token', data.login.accessToken);
-          setItem('userId', data.login.user._id);
-
-          navigator.clipboard.writeText('');
-          /* istanbul ignore next */
-          window.location.assign('/user/organizations');
-        } else {
-          /* istanbul ignore next */
-          toast.warn(t('notAuthorised'));
-        }
+        setItem('token', data.login.accessToken);
+        setItem('userId', data.login.user._id);
+        navigate('/user/organizations');
       } catch (error: any) {
         errorHandler(t, error);
       }
