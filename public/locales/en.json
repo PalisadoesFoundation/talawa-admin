@@ -210,7 +210,10 @@
     "searchFullName": "Enter Full Name",
     "people": "People",
     "sort": "Search by Role",
-    "actions": "Actions"
+    "actions": "Actions",
+    "addMembers": "Add Members",
+    "existingUser": "Existing User",
+    "newUser": "New User"
   },
   "userListCard": {
     "joined": "Joined",

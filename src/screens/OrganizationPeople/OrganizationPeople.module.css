@@ -241,7 +241,7 @@
   position: relative;
 }
 
-.btnsContainer input {
+input {
   outline: 1px solid var(--bs-gray-400);
 }
 

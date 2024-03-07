@@ -1,12 +1,13 @@
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Button, Dropdown, Form } from 'react-bootstrap';
+import { Modal, Button, Dropdown, Form } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+  USERS_CONNECTION_LIST,
   USER_LIST,
 } from 'GraphQl/Queries/Queries';
 import NotFound from 'components/NotFound/NotFound';
@@ -27,6 +28,8 @@ import Loader from 'components/Loader/Loader';
 import UserListCard from 'components/UserListCard/UserListCard';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 import OrgAdminListCard from 'components/OrgAdminListCard/OrgAdminListCard';
+import AddUserModal from './AddUserModal';
+import { ADD_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -47,12 +50,25 @@ const StyledTableRow = styled(TableRow)(() => ({
 interface InterfaceLocationState {
   role: number;
 }
+
 function organizationPeople(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
   });
 
   document.title = t('title');
+
+  const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
+  function openDialogModal(): void {
+    // console.log(redirectOrgId, dialogRedirectOrgId);
+    setdialogModalIsOpen(true);
+  }
+
+  // function closeDialogModal(): void {
+  //   setdialogModalIsOpen(false);
+  // }
+  const toggleDialogModal = /* istanbul ignore next */ (): void =>
+    setdialogModalIsOpen(!dialogModalisOpen);
 
   const location = useLocation<InterfaceLocationState>();
   const role = location?.state;
@@ -65,6 +81,34 @@ function organizationPeople(): JSX.Element {
     firstName_contains: '',
     lastName_contains: '',
   });
+
+  const [addMember] = useMutation(ADD_MEMBER_MUTATION);
+
+  // const createMember = async (userId: string): Promise<void> => {
+  //   try {
+  //     await addMember({
+  //       variables: {
+  //         userid: userId,
+  //         orgid: currentUrl
+  //       },
+  //     });
+  //   } catch (error: any) {
+  //     toast.error(error.message);
+  //     console.log(error);
+  //   }
+  // };
+
+  const getMembersId = (): any => {
+    console.log(memberData);
+    if (memberData) {
+      const ids = memberData?.organizationsMemberConnection.edges.map(
+        (member: { _id: string }) => member._id,
+      );
+      console.log('ids', ids);
+      return ids;
+    }
+    return [];
+  };
 
   const [fullName, setFullName] = useState('');
 
@@ -106,6 +150,18 @@ function organizationPeople(): JSX.Element {
       lastName_contains: '',
     },
   })[1];
+
+  const {
+    data: allUsersData,
+    loading: allUsersLoading,
+    error: allUsersError,
+    refetch: allUsersRefetch,
+  } = useQuery(USERS_CONNECTION_LIST, {
+    variables: {
+      first: 10,
+      id_not_in: getMembersId(),
+    },
+  });
 
   useEffect(() => {
     if (state === 0) {
@@ -243,6 +299,41 @@ function organizationPeople(): JSX.Element {
                       }}
                     >
                       <label htmlFor="adminslist">{t('admins')}</label>
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+                <Dropdown>
+                  <Dropdown.Toggle
+                    variant="success"
+                    id="dropdown-basic"
+                    className={styles.dropdown}
+                    data-testid="role"
+                  >
+                    {t('addMembers')}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item
+                      inline
+                      id="existingUser"
+                      value="existingUser"
+                      name="existingUser"
+                      data-testid="existingUser"
+                    >
+                      <Form.Label htmlFor="existingUser">
+                        {t('existingUser')}
+                      </Form.Label>
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      inline
+                      id="newUser"
+                      value="newUser"
+                      name="newUser"
+                      data-testid="newUser"
+                      onClick={(): void => {
+                        openDialogModal();
+                      }}
+                    >
+                      <label htmlFor="memberslist">{t('newUser')}</label>
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
@@ -457,6 +548,84 @@ function organizationPeople(): JSX.Element {
             )}
           </div>
         </Col>
+        {/* <AddUserModal
+          showModal={showModal}
+          toggleModal={toggleModal}
+          formState={formState}
+          setFormState={setFormState}
+          createOrg={createOrg}
+          t={t}
+          userData={userData}
+          triggerCreateSampleOrg={triggerCreateSampleOrg}
+        /> */}
+
+        <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
+          <Modal.Header closeButton data-testid="pluginNotificationHeader">
+            <Modal.Title>{t('addMembers')}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className={styles.input}>
+              <Form.Control
+                type="name"
+                id="searchLastName"
+                placeholder={t('searchFullName')}
+                autoComplete="off"
+                required
+                className={styles.inputField}
+                value={fullName}
+                onChange={(e): void => {
+                  const { value } = e.target;
+                  setFullName(value);
+                  handleFullNameSearchChange(value);
+                }}
+                onKeyUp={handleFullNameSearchChange}
+              />
+              <Button
+                className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center `}
+                onClick={handleFullNameSearchChange}
+              >
+                <Search />
+              </Button>
+            </div>
+
+            <TableContainer component={Paper}>
+              <Table aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell>#</StyledTableCell>
+                    <StyledTableCell align="center">User Name</StyledTableCell>
+                    <StyledTableCell align="center">Add Member</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {allUsersData &&
+                    allUsersData.users.length > 0 &&
+                    allUsersData.users.map((user: any, index: number) => (
+                      <StyledTableRow key={user._id}>
+                        <StyledTableCell component="th" scope="row">
+                          {index + 1}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          <Link
+                            className={styles.membername}
+                            to={{
+                              pathname: `/member/id=${currentUrl}`,
+                              state: { id: user._id },
+                            }}
+                          >
+                            {user.firstName + ' ' + user.lastName}
+                          </Link>
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          <Button>Add</Button>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Modal.Body>
+        </Modal>
       </OrganizationScreen>
     </>
   );
