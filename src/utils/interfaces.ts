@@ -4,12 +4,6 @@ export interface InterfaceUserType {
     lastName: string;
     image: string | null;
     email: string;
-    userType: string;
-    adminFor: {
-      _id: string;
-      name: string;
-      image: string | null;
-    }[];
   };
 }
 

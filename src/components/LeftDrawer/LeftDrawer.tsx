@@ -25,12 +25,14 @@ const leftDrawer = ({
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
 
   const { getItem } = useLocalStorage();
-  const userType = getItem('UserType');
+  const superAdmin = getItem('SuperAdmin');
   const firstName = getItem('FirstName');
   const lastName = getItem('LastName');
   const userImage = getItem('UserImage');
   const userId = getItem('id');
   const history = useHistory();
+
+  const role = superAdmin ? 'SuperAdmin' : 'Admin';
 
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
 
@@ -79,7 +81,7 @@ const leftDrawer = ({
             </div>
             {t('my organizations')}
           </Button>
-          {userType === 'SUPERADMIN' && (
+          {superAdmin && (
             <Button
               variant={screenName === 'Users' ? 'success' : 'light'}
               className={`${
@@ -126,7 +128,7 @@ const leftDrawer = ({
                 {firstName} {lastName}
               </span>
               <span className={styles.secondaryText}>
-                {`${userType}`.toLowerCase()}
+                {`${role}`.toLowerCase()}
               </span>
             </div>
             <AngleRightIcon fill={'var(--bs-secondary)'} />

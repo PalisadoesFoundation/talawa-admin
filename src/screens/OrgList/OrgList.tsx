@@ -35,6 +35,7 @@ function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
   const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
   const [dialogRedirectOrgId, setDialogRedirectOrgId] = useState('<ORG_ID>');
+
   /* eslint-disable @typescript-eslint/explicit-function-return-type */
   function openDialogModal(redirectOrgId: string) {
     setDialogRedirectOrgId(redirectOrgId);
@@ -43,6 +44,8 @@ function orgList(): JSX.Element {
   }
 
   const { getItem } = useLocalStorage();
+  const superAdmin = getItem('SuperAdmin');
+  const adminFor = getItem('AdminFor');
 
   /* eslint-disable @typescript-eslint/explicit-function-return-type */
   function closeDialogModal() {
@@ -96,7 +99,7 @@ function orgList(): JSX.Element {
     loading: boolean;
     error?: Error | undefined;
   } = useQuery(USER_ORGANIZATION_LIST, {
-    variables: { id: getItem('id') },
+    variables: { userId: getItem('id') },
     context: {
       headers: { authorization: `Bearer ${getItem('token')}` },
     },
@@ -157,13 +160,13 @@ function orgList(): JSX.Element {
   const isAdminForCurrentOrg = (
     currentOrg: InterfaceOrgConnectionInfoType
   ): boolean => {
-    if (userData?.user?.adminFor.length === 1) {
+    if (adminFor.length === 1) {
       // If user is admin for one org only then check if that org is current org
-      return userData?.user?.adminFor[0]._id === currentOrg._id;
+      return adminFor[0]._id === currentOrg._id;
     } else {
       // If user is admin for more than one org then check if current org is present in adminFor array
       return (
-        userData?.user?.adminFor.some(
+        adminFor.some(
           (org: { _id: string; name: string; image: string | null }) =>
             org._id === currentOrg._id
         ) ?? false
@@ -396,7 +399,7 @@ function orgList(): JSX.Element {
                 </Dropdown.Menu>
               </Dropdown>
             </div>
-            {userData && userData.user.userType === 'SUPERADMIN' && (
+            {superAdmin && (
               <Button
                 variant="success"
                 onClick={toggleModal}
@@ -412,9 +415,7 @@ function orgList(): JSX.Element {
         {!isLoading &&
         ((orgsData?.organizationsConnection.length === 0 &&
           searchByName.length == 0) ||
-          (userData &&
-            userData.user.userType === 'ADMIN' &&
-            userData.user.adminFor.length === 0)) ? (
+          (userData && adminFor.length === 0)) ? (
           // eslint-disable-next-line
           <div className={styles.notFound}>
             <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
@@ -467,7 +468,7 @@ function orgList(): JSX.Element {
                 </div>
               }
             >
-              {userData && userData.user.userType == 'SUPERADMIN'
+              {userData && superAdmin
                 ? orgsData?.organizationsConnection.map((item) => {
                     return (
                       <div key={item._id} className={styles.itemCard}>
@@ -476,8 +477,7 @@ function orgList(): JSX.Element {
                     );
                   })
                 : userData &&
-                  userData.user.userType == 'ADMIN' &&
-                  userData.user.adminFor.length > 0 &&
+                  adminFor.length > 0 &&
                   orgsData?.organizationsConnection.map((item) => {
                     if (isAdminForCurrentOrg(item)) {
                       return (
