@@ -34,6 +34,13 @@ jest.mock('react-toastify', () => ({
     error: jest.fn(),
   },
 }));
+const mockNavgate = jest.fn();
+let mockId: string | undefined = undefined;
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavgate,
+  useParams: () => ({ orgId: mockId }),
+}));
 
 beforeEach(() => {
   setItem('FirstName', 'John');
@@ -69,8 +76,8 @@ describe('Organisation Dashboard Page', () => {
     await wait();
     expect(screen.getByText('Members')).toBeInTheDocument();
     expect(screen.getByText('Admins')).toBeInTheDocument();
-    expect(screen.getAllByText('Posts')).toHaveLength(2);
-    expect(screen.getAllByText('Events')).toHaveLength(2);
+    expect(screen.getAllByText('Posts')).toHaveLength(1);
+    expect(screen.getAllByText('Events')).toHaveLength(1);
     expect(screen.getByText('Blocked Users')).toBeInTheDocument();
     expect(screen.getByText('Requests')).toBeInTheDocument();
     expect(screen.getByText('Upcoming Events')).toBeInTheDocument();
@@ -93,8 +100,8 @@ describe('Organisation Dashboard Page', () => {
     userEvent.click(adminBtn);
     userEvent.click(postBtn[0]);
     userEvent.click(eventBtn[0]);
-    userEvent.click(postBtn[1]);
-    userEvent.click(eventBtn[1]);
+    userEvent.click(postBtn[0]);
+    userEvent.click(eventBtn[0]);
     userEvent.click(blockUserBtn);
     userEvent.click(requestBtn);
   });
@@ -146,6 +153,46 @@ describe('Organisation Dashboard Page', () => {
     });
 
     await wait();
-    expect(window.location).toBeAt('/orglist');
+    expect(mockNavgate).toHaveBeenCalledWith('/orglist');
+  });
+  test('upcomingEvents cardItem component should render when length>0', async () => {
+    mockId = '123';
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link1}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrganizationDashboard />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    screen.getByTestId('cardItem');
+  });
+
+  test('event data should get updated using useState function', async () => {
+    mockId = '123';
+    const mockSetState = jest.spyOn(React, 'useState');
+    jest.doMock('react', () => ({
+      ...jest.requireActual('react'),
+      useState: (initial: any) => [initial, mockSetState],
+    }));
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link1}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrganizationDashboard />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    expect(mockSetState).toHaveBeenCalled();
   });
 });

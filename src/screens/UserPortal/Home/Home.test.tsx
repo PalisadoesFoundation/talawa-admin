@@ -1,9 +1,9 @@
+import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 
 import userEvent from '@testing-library/user-event';
-import { REACT_APP_CUSTOM_PORT } from 'Constant/constant';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   ADVERTISEMENTS_GET,
@@ -14,10 +14,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import * as getOrganizationId from 'utils/getOrganizationId';
 import i18nForTest from 'utils/i18nForTest';
 import Home from './Home';
-import React from 'react';
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -25,6 +23,11 @@ jest.mock('react-toastify', () => ({
     info: jest.fn(),
     success: jest.fn(),
   },
+}));
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: 'orgId' }),
 }));
 
 const EMPTY_MOCKS = [
@@ -246,29 +249,7 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-beforeEach(() => {
-  const url = `http://localhost:${REACT_APP_CUSTOM_PORT}/user/organization/id=orgId`;
-  Object.defineProperty(window, 'location', {
-    value: {
-      href: url,
-    },
-    writable: true,
-  });
-});
-
-let originalLocation: Location;
-
-beforeAll(() => {
-  originalLocation = window.location;
-});
-
-afterAll(() => {
-  window.location = originalLocation;
-});
-
 describe('Testing Home Screen [User Portal]', () => {
-  jest.mock('utils/getOrganizationId');
-
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: jest.fn().mockImplementation((query) => ({
@@ -284,12 +265,6 @@ describe('Testing Home Screen [User Portal]', () => {
   });
 
   test('Screen should be rendered properly', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -303,17 +278,9 @@ describe('Testing Home Screen [User Portal]', () => {
     );
 
     await wait();
-
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
   });
 
   test('Screen should be rendered properly when user types on the Post Input', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -327,8 +294,6 @@ describe('Testing Home Screen [User Portal]', () => {
     );
 
     await wait();
-
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
 
     userEvent.click(screen.getByTestId('startPostBtn'));
 

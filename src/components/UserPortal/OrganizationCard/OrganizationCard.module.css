@@ -30,6 +30,7 @@
   flex: 1;
   margin-left: 1rem;
   width: 70%;
+  margin-top: 0.7rem;
 }
 
 .orgCard button {
@@ -42,35 +43,69 @@
 .joinBtn {
   display: flex;
   justify-content: space-around;
-  width: 120px;
+  width: 8rem;
   border-width: medium;
 }
 
 .joinedBtn {
   display: flex;
   justify-content: space-around;
-  width: 120px;
+  width: 8rem;
 }
 
 .withdrawBtn {
   display: flex;
   justify-content: space-around;
-  width: 120px;
+  width: 8rem;
 }
 
 .orgName {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  font-size: 1rem;
 }
 
-@media (max-width: 1170px) {
+.orgdesc {
+  font-size: 0.9rem;
+  color: var(--bs-gray-600);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  max-width: 20rem;
+}
+
+.orgadmin {
+  font-size: 0.9rem;
+}
+
+.orgmember {
+  font-size: 0.9rem;
+}
+
+.address {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  align-items: center;
+}
+
+.address h6 {
+  font-size: 0.9rem;
+  color: var(--bs-gray-600);
+}
+
+@media (max-width: 1420px) {
   .orgCard {
     width: 100%;
   }
 }
 
-@media (max-width: 450px) {
+@media (max-width: 550px) {
   .orgCard {
     width: 100%;
   }

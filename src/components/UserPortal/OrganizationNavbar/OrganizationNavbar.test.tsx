@@ -9,7 +9,6 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import cookies from 'js-cookie';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import * as getOrganizationId from 'utils/getOrganizationId';
 
 import OrganizationNavbar from './OrganizationNavbar';
 import userEvent from '@testing-library/user-event';
@@ -168,9 +167,12 @@ const navbarProps = {
   currentPage: 'home',
 };
 
-describe('Testing OrganizationNavbar Component [User Portal]', () => {
-  jest.mock('utils/getOrganizationId');
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: organizationId }),
+}));
 
+describe('Testing OrganizationNavbar Component [User Portal]', () => {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: jest.fn().mockImplementation((query) => ({
@@ -184,12 +186,6 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
       dispatchEvent: jest.fn(),
     })),
   });
-
-  const getOrganizationIdSpy = jest
-    .spyOn(getOrganizationId, 'default')
-    .mockImplementation(() => {
-      return organizationId;
-    });
 
   afterEach(async () => {
     await act(async () => {
@@ -212,7 +208,6 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
     expect(screen.queryByText('anyOrganization1')).toBeInTheDocument();
     // Check if navigation links are rendered
     expect(screen.getByText('Home')).toBeInTheDocument();
@@ -226,15 +221,13 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     const history = createMemoryHistory();
     render(
       <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Router history={history}>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <OrganizationNavbar {...navbarProps} />
-              </I18nextProvider>
-            </Provider>
-          </Router>
-        </BrowserRouter>
+        <Router location={history.location} navigator={history}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationNavbar {...navbarProps} />
+            </I18nextProvider>
+          </Provider>
+        </Router>
       </MockedProvider>,
     );
 
@@ -244,7 +237,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     userEvent.click(peoplePlugin);
 
     await wait();
-    expect(history.location.pathname).toBe(`/user/people/id=${organizationId}`);
+    expect(history.location.pathname).toBe(`/user/people/${organizationId}`);
   });
 
   test('The language is switched to English', async () => {

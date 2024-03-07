@@ -3,7 +3,7 @@ import styles from './OrganizationCard.module.css';
 import { Button } from 'react-bootstrap';
 import { Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { toast } from 'react-toastify';
 import {
   CANCEL_MEMBERSHIP_REQUEST,
   JOIN_PUBLIC_ORGANIZATION,
@@ -15,6 +15,7 @@ import {
   USER_ORGANIZATION_CONNECTION,
 } from 'GraphQl/Queries/OrganizationQueries';
 import useLocalStorage from 'utils/useLocalstorage';
+import Avatar from 'components/Avatar/Avatar';
 
 const { getItem } = useLocalStorage();
 
@@ -32,6 +33,7 @@ interface InterfaceOrganizationCardProps {
   address: {
     city: string;
     countryCode: string;
+    line1: string;
     postalCode: string;
     state: string;
   };
@@ -53,17 +55,17 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
   });
   const [sendMembershipRequest] = useMutation(SEND_MEMBERSHIP_REQUEST, {
     refetchQueries: [
-      { query: USER_ORGANIZATION_CONNECTION, variables: { id: userId } },
+      { query: USER_ORGANIZATION_CONNECTION, variables: { id: props.id } },
     ],
   });
   const [joinPublicOrganization] = useMutation(JOIN_PUBLIC_ORGANIZATION, {
     refetchQueries: [
-      { query: USER_ORGANIZATION_CONNECTION, variables: { id: userId } },
+      { query: USER_ORGANIZATION_CONNECTION, variables: { id: props.id } },
     ],
   });
   const [cancelMembershipRequest] = useMutation(CANCEL_MEMBERSHIP_REQUEST, {
     refetchQueries: [
-      { query: USER_ORGANIZATION_CONNECTION, variables: { id: userId } },
+      { query: USER_ORGANIZATION_CONNECTION, variables: { id: props.id } },
     ],
   });
   const { refetch } = useQuery(USER_JOINED_ORGANIZATIONS, {
@@ -71,20 +73,31 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
   });
 
   async function joinOrganization(): Promise<void> {
-    if (props.userRegistrationRequired) {
-      await sendMembershipRequest({
-        variables: {
-          organizationId: props.id,
-        },
-      });
-    } else {
-      await joinPublicOrganization({
-        variables: {
-          organizationId: props.id,
-        },
-      });
+    try {
+      if (props.userRegistrationRequired) {
+        await sendMembershipRequest({
+          variables: {
+            organizationId: props.id,
+          },
+        });
+        toast.success(t('MembershipRequestSent'));
+      } else {
+        await joinPublicOrganization({
+          variables: {
+            organizationId: props.id,
+          },
+        });
+        toast.success(t('orgJoined'));
+      }
+      refetch();
+    } catch (error: any) {
+      /* istanbul ignore next */
+      if (error.message === 'User is already a member') {
+        toast.error(t('AlreadyJoined'));
+      } else {
+        toast.error(t('errorOccured'));
+      }
     }
-    refetch();
   }
 
   async function withdrawMembershipRequest(): Promise<void> {
@@ -104,46 +117,37 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
       <div className={styles.orgCard}>
         <div className={styles.innerContainer}>
           <div className={styles.orgImgContainer}>
-            <img
-              src={
-                props.image
-                  ? props.image
-                  : `https://api.dicebear.com/5.x/initials/svg?seed=${props.name
-                      .split(/\s+/)
-                      .map((word) => word.charAt(0))
-                      .slice(0, 2)
-                      .join('')}`
-              }
-              alt={`${props.name} image`}
-              data-testid={props.image ? '' : 'emptyContainerForImage'}
-            />
+            {props.image ? (
+              <img src={props.image} alt={`${props.name} image`} />
+            ) : (
+              <Avatar
+                name={props.name}
+                alt={`${props.name} image`}
+                dataTestId="emptyContainerForImage"
+              />
+            )}
           </div>
           <div className={styles.content}>
             <Tooltip title={props.name} placement="top-end">
-              <h4 className={styles.orgName}>{props.name}</h4>
+              <h4 className={`${styles.orgName} fw-semibold`}>{props.name}</h4>
             </Tooltip>
+            <h6 className={`${styles.orgdesc} fw-semibold`}>
+              <span>{props.description}</span>
+            </h6>
             {props.address && props.address.city && (
-              <div>
+              <div className={styles.address}>
                 <h6 className="text-secondary">
-                  <LocationOnIcon fontSize="inherit" className="fs-5" />
+                  <span className="address-line">{props.address.line1}, </span>
                   <span className="address-line">{props.address.city}, </span>
-                  <span className="address-line">{props.address.state}</span>
-                  <br />
-                  <LocationOnIcon fontSize="inherit" className="fs-5" />
-                  <span className="address-line">
-                    {props.address.postalCode},{' '}
-                  </span>
                   <span className="address-line">
                     {props.address.countryCode}
                   </span>
                 </h6>
               </div>
             )}
-            <h6>
-              {t('admins')}: <span>{props.admins?.length}</span>
-            </h6>
-            <h6>
-              {t('members')}: <span>{props.members?.length}</span>
+            <h6 className={styles.orgadmin}>
+              {t('admins')}: <span>{props.admins?.length}</span> &nbsp; &nbsp;
+              &nbsp; {t('members')}: <span>{props.members?.length}</span>
             </h6>
           </div>
         </div>

@@ -6,6 +6,7 @@ import { useMutation } from '@apollo/client';
 import { ADD_PLUGIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
 interface InterfaceFormStateTypes {
   pluginName: string;
@@ -15,9 +16,14 @@ interface InterfaceFormStateTypes {
   installedOrgs: [string] | [];
 }
 
-const currentUrl = window.location.href.split('=')[1];
 function addOnRegister(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'addOnRegister' });
+
+  const { orgId: currentUrl } = useParams();
+  const navigate = useNavigate();
+  if (!currentUrl) {
+    return <Navigate to={'/orglist'} />;
+  }
 
   const [show, setShow] = useState(false);
 
@@ -47,7 +53,7 @@ function addOnRegister(): JSX.Element {
     if (data) {
       toast.success('Plugin Added Successfully');
       setTimeout(() => {
-        window.location.reload();
+        navigate(0);
       }, 2000);
     }
   };

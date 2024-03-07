@@ -6,6 +6,7 @@ import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
+import { useParams } from 'react-router-dom';
 import { errorHandler } from 'utils/errorHandler';
 
 interface InterfaceOrgPeopleListCardProps {
@@ -16,7 +17,7 @@ interface InterfaceOrgPeopleListCardProps {
 function orgPeopleListCard(
   props: InterfaceOrgPeopleListCardProps,
 ): JSX.Element {
-  const currentUrl = window.location.href.split('=')[1];
+  const { orgId: currentUrl } = useParams();
   const [remove] = useMutation(REMOVE_MEMBER_MUTATION);
   const [showRemoveAdminModal, setShowRemoveAdminModal] = React.useState(false);
 
