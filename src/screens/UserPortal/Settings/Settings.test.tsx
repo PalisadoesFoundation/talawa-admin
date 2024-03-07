@@ -137,8 +137,17 @@ describe('Testing Settings Screen [User Portal]', () => {
     });
     expect(screen.getByLabelText('Birth Date')).toHaveValue('2024-03-01');
     await wait();
+    const fileInp = screen.getByTestId('fileInput');
+    fileInp.style.display = 'block';
     userEvent.click(screen.getByTestId('uploadImageBtn'));
     await wait();
+    const imageFile = new File(['(⌐□_□)'], 'profile-image.jpg', {
+      type: 'image/jpeg',
+    });
+    const files = [imageFile];
+    userEvent.upload(fileInp, files);
+    await wait();
+    expect(screen.getByAltText('profile picture')).toBeInTheDocument();
   });
 
   test('resetChangesBtn works properly', async () => {

@@ -271,10 +271,11 @@ export default function settings(): JSX.Element {
                       </Button>
                       <Form.Control
                         accept="image/*"
-                        id="displayImage"
+                        id="postphoto"
                         name="photo"
                         type="file"
                         className={styles.cardControl}
+                        data-testid="fileInput"
                         multiple={false}
                         ref={fileInputRef}
                         onChange={
