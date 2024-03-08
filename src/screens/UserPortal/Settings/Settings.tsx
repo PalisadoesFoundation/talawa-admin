@@ -14,6 +14,7 @@ import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLang
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
+import countryOptions from 'utils/countryList';
 
 export default function settings(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -165,6 +166,45 @@ export default function settings(): JSX.Element {
         <div className={`${styles.mainContainer}`}>
           <h3>{t('settings')}</h3>
           <Row>
+            <Col lg={5} className="d-lg-none">
+              <Card border="0" className="rounded-4 mb-4">
+                <div className={styles.cardHeader}>
+                  <div className={styles.cardTitle}>{t('profileDetails')}</div>
+                </div>
+                <Card.Body className={styles.cardBody}>
+                  <div className={`d-flex mb-2 ${styles.profileContainer}`}>
+                    <div className={styles.imgContianer}>
+                      {image && image !== 'null' ? (
+                        <img src={image} alt={`profile picture`} />
+                      ) : (
+                        <Avatar
+                          name={`${firstName} ${lastName}`}
+                          alt={`dummy picture`}
+                        />
+                      )}
+                    </div>
+                    <div className={styles.profileDetails}>
+                      <span style={{ fontWeight: '700', fontSize: '28px' }}>
+                        {`${firstName}`.charAt(0).toUpperCase() +
+                          `${firstName}`.slice(1)}
+                      </span>
+                      <span data-testid="userEmail">{email}</span>
+                      <span className="d-flex">
+                        <CalendarMonthOutlinedIcon />
+                        <span className="d-flex align-end">
+                          {t('joined')} 1st May, 2021
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                  <div className="mb-1 d-flex justify-content-center">
+                    <Button data-testid="copyProfileLink">
+                      {t('copyLink')}
+                    </Button>
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
             <Col lg={7}>
               <Card border="0" className="rounded-4 mb-4">
                 <div className={`${styles.cardHeader}`}>
@@ -214,13 +254,20 @@ export default function settings(): JSX.Element {
                         {t('gender')}
                       </Form.Label>
                       <Form.Control
-                        type="text"
+                        as="select"
                         id="gender"
                         value={gender}
                         onChange={handleGenderChange}
                         className={`${styles.cardControl}`}
                         data-testid="inputGender"
-                      />
+                      >
+                        <option value="" disabled>
+                          {t('sgender')}
+                        </option>
+                        <option value="Male">{t('male')}</option>
+                        <option value="Female">{t('female')}</option>
+                        <option value="Other">{t('other')}</option>
+                      </Form.Control>
                     </Col>
                   </Row>
                   <Row className="mb-1">
@@ -249,6 +296,7 @@ export default function settings(): JSX.Element {
                       <Form.Control
                         type="tel"
                         id="phoneNo"
+                        placeholder="1234567890"
                         value={phoneNumber}
                         onChange={handlePhoneNumberChange}
                         className={`${styles.cardControl}`}
@@ -319,6 +367,7 @@ export default function settings(): JSX.Element {
                       <Form.Control
                         type="text"
                         id="grade"
+                        placeholder={t('gradePlaceholder')}
                         value={grade}
                         onChange={handleGradeChange}
                         className={`${styles.cardControl}`}
@@ -335,13 +384,19 @@ export default function settings(): JSX.Element {
                         {t('empStatus')}
                       </Form.Label>
                       <Form.Control
-                        type="text"
+                        as="select"
                         id="empStatus"
                         value={empStatus}
                         onChange={handleEmpStatusChange}
                         className={`${styles.cardControl}`}
                         data-testid="inputEmpStatus"
-                      />
+                      >
+                        <option value="" disabled>
+                          {t('sEmpStatus')}
+                        </option>
+                        <option value="Employed">{t('employed')}</option>
+                        <option value="Unemployed">{t('unemployed')}</option>
+                      </Form.Control>
                     </Col>
                     <Col lg={4}>
                       <Form.Label
@@ -351,13 +406,21 @@ export default function settings(): JSX.Element {
                         {t('maritalStatus')}
                       </Form.Label>
                       <Form.Control
-                        type="text"
+                        as="select"
                         id="maritalStatus"
                         value={martitalStatus}
                         onChange={handleMartitalStatusChange}
                         className={`${styles.cardControl}`}
                         data-testid="inputMaritalStatus"
-                      />
+                      >
+                        <option value="" disabled>
+                          {t('sMaritalStatus')}
+                        </option>
+                        <option value="Single">{t('single')}</option>
+                        <option value="Married">{t('married')}</option>
+                        <option value="Divorced">{t('divorced')}</option>
+                        <option value="Widowed">{t('widowed')}</option>
+                      </Form.Control>
                     </Col>
                   </Row>
                   <Row className="mb-1">
@@ -370,6 +433,7 @@ export default function settings(): JSX.Element {
                       </Form.Label>
                       <Form.Control
                         type="text"
+                        placeholder="Eg: lane 123, Main Street"
                         id="address"
                         value={address}
                         onChange={handleAdressChange}
@@ -387,6 +451,7 @@ export default function settings(): JSX.Element {
                       <Form.Control
                         type="text"
                         id="inputState"
+                        placeholder={t('enterState')}
                         value={state}
                         onChange={handleStateChange}
                         className={`${styles.cardControl}`}
@@ -401,13 +466,25 @@ export default function settings(): JSX.Element {
                         {t('country')}
                       </Form.Label>
                       <Form.Control
-                        type="text"
+                        as="select"
                         id="country"
                         value={country}
                         onChange={handleCountryChange}
                         className={`${styles.cardControl}`}
                         data-testid="inputCountry"
-                      />
+                      >
+                        <option value="" disabled>
+                          {t('selectCountry')}
+                        </option>
+                        {countryOptions.map((country) => (
+                          <option
+                            key={country.value.toUpperCase()}
+                            value={country.value.toUpperCase()}
+                          >
+                            {country.label}
+                          </option>
+                        ))}
+                      </Form.Control>
                     </Col>
                   </Row>
                   <div
@@ -435,7 +512,7 @@ export default function settings(): JSX.Element {
                 </Card.Body>
               </Card>
             </Col>
-            <Col lg={5}>
+            <Col lg={5} className="d-none d-lg-block">
               <Card border="0" className="rounded-4 mb-4">
                 <div className={styles.cardHeader}>
                   <div className={styles.cardTitle}>{t('profileDetails')}</div>
@@ -458,12 +535,12 @@ export default function settings(): JSX.Element {
                           `${firstName}`.slice(1)}
                       </span>
                       <span data-testid="userEmail">{email}</span>
-                      {birthDate && (
-                        <span className="d-flex">
-                          <CalendarMonthOutlinedIcon />
-                          <span className="d-flex align-end">{birthDate}</span>
+                      <span className="d-flex">
+                        <CalendarMonthOutlinedIcon />
+                        <span className="d-flex align-end">
+                          {t('joined')} 1st May, 2021
                         </span>
-                      )}
+                      </span>
                     </div>
                   </div>
                   <div className="mb-1 d-flex justify-content-center">
@@ -473,6 +550,30 @@ export default function settings(): JSX.Element {
                   </div>
                 </Card.Body>
               </Card>
+              <Card border="0" className="rounded-4 mb-4">
+                <div className={styles.cardHeader}>
+                  <div className={styles.cardTitle}>{t('deleteUser')}</div>
+                </div>
+                <Card.Body className={styles.cardBody}>
+                  <p style={{ margin: '1rem 0' }}>{t('deleteUserMessage')}</p>
+                  <Button variant="danger">{t('deleteUser')}</Button>
+                </Card.Body>
+              </Card>
+              <Card border="0" className="rounded-4 mb-4">
+                <div className={styles.cardHeader}>
+                  <div className={styles.cardTitle}>{t('otherSettings')}</div>
+                </div>
+                <Card.Body className={styles.cardBody}>
+                  <Form.Label
+                    className={`text-secondary fw-bold ${styles.cardLabel}`}
+                  >
+                    {t('changeLanguage')}
+                  </Form.Label>
+                  <ChangeLanguageDropDown />
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col lg={5} className="d-lg-none">
               <Card border="0" className="rounded-4 mb-4">
                 <div className={styles.cardHeader}>
                   <div className={styles.cardTitle}>{t('deleteUser')}</div>

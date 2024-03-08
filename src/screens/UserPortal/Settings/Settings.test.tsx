@@ -114,21 +114,21 @@ describe('Testing Settings Screen [User Portal]', () => {
     await wait();
     userEvent.type(screen.getByTestId('inputLastName'), 'Mittal');
     await wait();
-    userEvent.type(screen.getByTestId('inputGender'), 'random');
+    userEvent.selectOptions(screen.getByTestId('inputGender'), 'Male');
     await wait();
     userEvent.type(screen.getByTestId('inputPhoneNumber'), '1234567890');
     await wait();
     userEvent.type(screen.getByTestId('inputGrade'), 'A');
     await wait();
-    userEvent.type(screen.getByTestId('inputEmpStatus'), 'Employed');
+    userEvent.selectOptions(screen.getByTestId('inputEmpStatus'), 'Employed');
     await wait();
-    userEvent.type(screen.getByTestId('inputMaritalStatus'), 'Married');
+    userEvent.selectOptions(screen.getByTestId('inputMaritalStatus'), 'Single');
     await wait();
     userEvent.type(screen.getByTestId('inputAddress'), 'random');
     await wait();
     userEvent.type(screen.getByTestId('inputState'), 'random');
     await wait();
-    userEvent.type(screen.getByTestId('inputCountry'), 'random');
+    userEvent.selectOptions(screen.getByTestId('inputCountry'), 'IN');
     await wait();
     expect(screen.getByTestId('resetChangesBtn')).toBeInTheDocument();
     await wait();
@@ -147,7 +147,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     const files = [imageFile];
     userEvent.upload(fileInp, files);
     await wait();
-    expect(screen.getByAltText('profile picture')).toBeInTheDocument();
+    expect(screen.getAllByAltText('profile picture')[0]).toBeInTheDocument();
   });
 
   test('resetChangesBtn works properly', async () => {
@@ -219,10 +219,9 @@ describe('Testing Settings Screen [User Portal]', () => {
     );
 
     await wait();
-
-    expect(screen.getByText('Profile Details')).toBeInTheDocument();
-    expect(screen.getByTestId('copyProfileLink')).toBeInTheDocument();
-    expect(screen.getByTestId('userEmail')).toBeInTheDocument();
+    expect(screen.getAllByText('Profile Details')[0]).toBeInTheDocument();
+    expect(screen.getAllByTestId('copyProfileLink')[0]).toBeInTheDocument();
+    expect(screen.getAllByTestId('userEmail')[0]).toBeInTheDocument();
   });
 
   test('Other settings card is rendered properly', async () => {
@@ -240,7 +239,7 @@ describe('Testing Settings Screen [User Portal]', () => {
 
     await wait();
 
-    expect(screen.getByText('Other Settings')).toBeInTheDocument();
-    expect(screen.getByText('Change Language')).toBeInTheDocument();
+    expect(screen.getAllByText('Other Settings')[0]).toBeInTheDocument();
+    expect(screen.getAllByText('Change Language')[0]).toBeInTheDocument();
   });
 });
