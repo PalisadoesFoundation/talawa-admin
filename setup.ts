@@ -6,6 +6,7 @@ import { askForTalawaApiUrl } from './src/setup/askForTalawaApiUrl/askForTalawaA
 import { checkEnvFile } from './src/setup/checkEnvFile/checkEnvFile';
 import { validateRecaptcha } from './src/setup/validateRecaptcha/validateRecaptcha';
 import { askForCustomPort } from './src/setup/askForCustomPort/askForCustomPort';
+import { askForRemoteUrl } from 'setup/askForRemoteUrl/askForRemoteUrl';
 
 export async function main(): Promise<void> {
   console.log('Welcome to the Talawa Admin setup! 🚀');
@@ -44,6 +45,39 @@ export async function main(): Promise<void> {
 
     fs.readFile('.env', 'utf8', (err, data) => {
       const result = data.replace(`PORT=${port}`, `PORT=${customPort}`);
+      fs.writeFileSync('.env', result, 'utf8');
+    });
+  }
+
+  let shouldSetRemoteHost: boolean;
+
+  if (process.env.REACT_APP_REMOTE_HOST) {
+    console.log(
+      `\nEndpoint for the remote url already exists with the value:\n${process.env.REACT_APP_REMOTE_HOST}`,
+    );
+    shouldSetRemoteHost = true;
+  } else {
+    const { shouldSetRemoteHostResponse } = await inquirer.prompt({
+      type: 'confirm',
+      name: 'shouldSetRemoteHostResponse',
+      message: 'Would you like to set up a remote host?',
+      default: true,
+    });
+    shouldSetRemoteHost = shouldSetRemoteHostResponse;
+  }
+
+  if (shouldSetRemoteHost) {
+    const endpoint = await askForRemoteUrl();
+
+    const existingUrl = dotenv.parse(
+      fs.readFileSync('.env'),
+    ).REACT_APP_REMOTE_HOST;
+
+    fs.readFile('.env', 'utf8', (err, data) => {
+      const result = data.replace(
+        `REACT_APP_REMOTE_HOST=${existingUrl}`,
+        `REACT_APP_REMOTE_HOST=${endpoint}`,
+      );
       fs.writeFileSync('.env', result, 'utf8');
     });
   }
