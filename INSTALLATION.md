@@ -194,6 +194,14 @@ http://localhost:${{customPort}}/
 
 Replace `${{customPort}}` with the actual custom port number you have configured in your `.env` file.
 
+
+If you are trying to run the localhost from a remote host and your api is also running on the localhost, you will have to change the 'REACT_APP_REMOTE_HOST' env variable.
+
+```
+REACT_APP_REMOTE_HOST=your_url
+# example:  REACT_APP_REMOTE_HOST=http://192.168.1.5
+```
+
 ## Talawa-Admin Registration
 
 The first time you navigate to the running talawa-admin's website you'll land at talawa-admin registration page. Sign up using whatever credentials you want and create the account. Make sure to remember the email and password you entered because they'll be used to sign you in later on.
