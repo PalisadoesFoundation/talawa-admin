@@ -22,6 +22,7 @@ import Avatar from 'components/Avatar/Avatar';
 import { CalendarIcon } from '@mui/x-date-pickers';
 import { Form } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
+import sanitizeHtml from 'sanitize-html';
 
 type MemberDetailProps = {
   id?: string; // This is the userId
@@ -224,6 +225,13 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   if (error) {
     navigate(`/orgpeople/${currentUrl}`);
   }
+
+  const sanitizedSrc = sanitizeHtml(formState.file, {
+    allowedTags: ['img'],
+    allowedAttributes: {
+      img: ['src', 'alt'],
+    },
+  });
 
   return (
     <Row>
@@ -439,7 +447,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         <img
                           className={`rounded-circle mx-auto`}
                           style={{ width: '80px', aspectRatio: '1/1' }}
-                          src={formState.file || userData?.user?.image}
+                          src={sanitizedSrc || userData?.user?.image}
                           data-testid="userImagePresent"
                         />
                       ) : (
