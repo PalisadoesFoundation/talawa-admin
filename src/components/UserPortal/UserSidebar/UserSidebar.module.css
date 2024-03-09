@@ -9,7 +9,7 @@
   background-color: var(--bs-white);
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 850px) {
   .mainContainer {
     display: none;
   }

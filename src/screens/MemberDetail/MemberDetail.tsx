@@ -4,10 +4,8 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import UserUpdate from 'components/UserUpdate/UserUpdate';
-import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
-import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import styles from './MemberDetail.module.css';
 import { languages } from 'utils/languages';
@@ -26,27 +24,24 @@ import { Form } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
 
 type MemberDetailProps = {
-  id: string; // This is the userId
-  from?: string;
+  id?: string; // This is the userId
 };
 
-const MemberDetail: React.FC<MemberDetailProps> = ({
-  id,
-  from,
-}): JSX.Element => {
+const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'memberDetail',
   });
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const [state, setState] = useState(1);
   const [isAdmin, setIsAdmin] = useState(false);
   const isMounted = useRef(true);
 
   const { getItem, setItem } = useLocalStorage();
-  const location = useLocation<MemberDetailProps>();
+
   const currentUrl = location.state?.id || getItem('id') || id;
-  const orgId = window.location.href.split('=')[1];
-  const calledFrom = location.state?.from || from;
+  const { orgId } = useParams();
   document.title = t('title');
 
   const [formState, setFormState] = useState({
@@ -227,7 +222,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({
 
   /* istanbul ignore next */
   if (error) {
-    window.location.assign(`/orgpeople/id=${currentUrl}`);
+    navigate(`/orgpeople/${currentUrl}`);
   }
 
   const addAdmin = async (): Promise<void> => {
@@ -271,6 +266,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({
       }
     }
   };
+
 
   const memberDetails = (
     <Row>

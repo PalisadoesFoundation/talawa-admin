@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useQuery } from '@apollo/client';
@@ -6,16 +6,16 @@ import styles from './EventDashboard.module.css';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import { LeftDrawerEventWrapper } from 'components/LeftDrawerEvent/LeftDrawerEventWrapper';
+import { Navigate, useParams } from 'react-router-dom';
 
 const EventDashboard = (): JSX.Element => {
   // Get the Event ID from the URL
   document.title = 'Event Dashboard';
 
-  const [eventId, setEventId] = useState('');
-
-  useEffect(() => {
-    setEventId(window.location.href.split('/')[4]);
-  }, [window.location.href]);
+  const { eventId } = useParams();
+  if (!eventId) {
+    return <Navigate to={'/orglist'} />;
+  }
 
   // Data fetching
   const { data: eventData, loading: eventInfoLoading } = useQuery(

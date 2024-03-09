@@ -20,7 +20,6 @@ import useLocalStorage from 'utils/useLocalstorage';
 const { setItem } = useLocalStorage();
 
 const props: InterfaceLeftDrawerProps = {
-  screenName: 'Dashboard',
   orgId: '123',
   targets: [
     {
@@ -262,32 +261,6 @@ const linkEmpty = new StaticMockLink(MOCKS_EMPTY, true);
 describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   beforeEach(() => {
     setItem('UserType', 'SUPERADMIN');
-  });
-
-  test('Testing Profile button & its styling when screenName is Profile', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LeftDrawerOrg
-                {...props}
-                screenName="Profile"
-                hideDrawer={false}
-              />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-
-    const profileButton = screen.getByTestId('profileBtn');
-    const userTypeSpan = screen.getByText(/Superadmin/i);
-
-    expect(profileButton).toHaveClass('btn-success');
-    expect(profileButton).not.toHaveClass('btn-light');
-    expect(userTypeSpan).toHaveClass('text-white');
   });
 
   test('Component should be rendered properly', async () => {

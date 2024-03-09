@@ -169,8 +169,9 @@ let props = {
   ],
   members: [],
   address: {
-    city: '',
-    countryCode: '',
+    city: 'Sample City',
+    countryCode: 'US',
+    line1: '123 Sample Street',
     postalCode: '',
     state: '',
   },
