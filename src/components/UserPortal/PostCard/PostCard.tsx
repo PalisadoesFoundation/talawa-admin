@@ -140,7 +140,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   };
 
   return (
-    <>
+    <div data-testid="postCardContainer">
       <Card className="my-3">
         <Card.Header>
           <div className={`${styles.cardHeader}`}>
@@ -170,8 +170,10 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
                 <ThumbUpOffAltIcon fontSize="small" />
               )}
             </Button>
-            {likes}
-            {` ${t('likes')}`}
+            <div data-testid="likeCount">
+              {likes}
+              {` ${t('likes')}`}
+            </div>
             <Button
               className={`${styles.cardActionBtn}`}
               onClick={toggleCommentsModal}
@@ -256,6 +258,6 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
           </InputGroup>
         </Modal.Body>
       </Modal>
-    </>
+    </div>
   );
 }

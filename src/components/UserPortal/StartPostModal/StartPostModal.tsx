@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 
 import { errorHandler } from 'utils/errorHandler';
 import convertToBase64 from 'utils/convertToBase64';
-import getOrganizationId from 'utils/getOrganizationId';
 import UserDefault from '../../../assets/images/defaultImg.png';
 import styles from './StartPostModal.module.css';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -16,7 +15,8 @@ interface InterfaceStartPostModalProps {
   show: boolean;
   onHide: () => void;
   fetchPosts: () => void;
-  userData: any; // Replace 'any' with the actual type for userData
+  userData: any;
+  organizationId: string;
 }
 
 const startPostModal = ({
@@ -24,12 +24,12 @@ const startPostModal = ({
   onHide,
   fetchPosts,
   userData,
+  organizationId,
 }: InterfaceStartPostModalProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'home' });
   const [postContent, setPostContent] = useState<string>('');
   const [postImage, setPostImage] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const organizationId = getOrganizationId(window.location.href);
 
   const [createPost] = useMutation(CREATE_POST_MUTATION);
 
@@ -45,9 +45,7 @@ const startPostModal = ({
 
   const uploadMedia = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
+    fileInputRef.current?.click();
   };
 
   const handlePost = async (): Promise<void> => {
@@ -97,9 +95,10 @@ const startPostModal = ({
           <span className="d-flex gap-2 align-items-center">
             <span className={styles.userImage}>
               <Image
-                src={userData?.image ? userData?.image : UserDefault}
+                src={userData?.user?.image || UserDefault}
                 roundedCircle
                 className="mt-2"
+                data-testid="userImage"
               />
             </span>
             <span>{`${userData?.user?.firstName} ${userData?.user?.lastName}`}</span>
@@ -137,6 +136,8 @@ const startPostModal = ({
               if (file) {
                 const image = await convertToBase64(file);
                 setPostImage(image);
+              } else {
+                toast.info('Error uploading image. Please try again.');
               }
             }}
           />

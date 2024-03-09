@@ -44,10 +44,10 @@ export default function home(): JSX.Element {
   const [filteredAd, setFilteredAd] = useState<InterfaceAdContent[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const { orgId } = useParams();
-  if (!orgId) {
+  const organizationId = orgId?.split('=')[1] || null;
+  if (!organizationId) {
     return <Navigate to={'/user'} />;
   }
-  const organizationId = orgId?.split('=')[1];
 
   const navbarProps = {
     currentPage: 'home',
@@ -69,7 +69,6 @@ export default function home(): JSX.Element {
   useEffect(() => {
     if (data) {
       setPosts(data.organizations[0].posts.edges);
-      console.log(posts, 'posts');
     }
   }, [data]);
 
@@ -90,7 +89,7 @@ export default function home(): JSX.Element {
   ): InterfaceAdContent[] => {
     return adCont.filter(
       (ad: InterfaceAdContent) =>
-        ad.organization._id === organizationId &&
+        ad.organization._id === currentOrgId &&
         new Date(ad.endDate) > currentDate,
     );
   };
@@ -198,8 +197,8 @@ export default function home(): JSX.Element {
             <>
               {posts.map(({ node }: any) => {
                 const {
-                  likedBy,
-                  comments,
+                  // likedBy,
+                  // comments,
                   creator,
                   _id,
                   imageUrl,
@@ -210,35 +209,39 @@ export default function home(): JSX.Element {
                   commentCount,
                 } = node;
 
-                const allLikes: any =
-                  likedBy && Array.isArray(likedBy)
-                    ? likedBy.map((value: any) => ({
-                        firstName: value.firstName,
-                        lastName: value.lastName,
-                        id: value._id,
-                      }))
-                    : [];
+                // const allLikes: any =
+                //   likedBy && Array.isArray(likedBy)
+                //     ? likedBy.map((value: any) => ({
+                //         firstName: value.firstName,
+                //         lastName: value.lastName,
+                //         id: value._id,
+                //       }))
+                //     : [];
 
-                const postComments: any =
-                  comments && Array.isArray(comments)
-                    ? comments.map((value: any) => {
-                        const commentLikes = value.likedBy.map(
-                          (commentLike: any) => ({ id: commentLike._id }),
-                        );
-                        return {
-                          id: value._id,
-                          creator: {
-                            firstName: value.creator.firstName,
-                            lastName: value.creator.lastName,
-                            id: value.creator._id,
-                            email: value.creator.email,
-                          },
-                          likeCount: value.likeCount,
-                          likedBy: commentLikes,
-                          text: value.text,
-                        };
-                      })
-                    : [];
+                const allLikes: any = [];
+
+                // const postComments: any =
+                //   comments && Array.isArray(comments)
+                //     ? comments.map((value: any) => {
+                //         const commentLikes = value.likedBy.map(
+                //           (commentLike: any) => ({ id: commentLike._id }),
+                //         );
+                //         return {
+                //           id: value._id,
+                //           creator: {
+                //             firstName: value.creator.firstName,
+                //             lastName: value.creator.lastName,
+                //             id: value.creator._id,
+                //             email: value.creator.email,
+                //           },
+                //           likeCount: value.likeCount,
+                //           likedBy: commentLikes,
+                //           text: value.text,
+                //         };
+                //       })
+                //     : [];
+
+                const postComments: any = [];
 
                 const cardProps: InterfacePostCard = {
                   id: _id,
@@ -268,6 +271,7 @@ export default function home(): JSX.Element {
           onHide={handleModalClose}
           fetchPosts={refetch}
           userData={userData}
+          organizationId={organizationId}
         />
       </div>
     </>
