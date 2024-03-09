@@ -332,7 +332,7 @@ export const prettyDate = (param: string): string => {
 };
 
 export const getLanguageName = (code: string): string => {
-  let language = 'Unavailable.';
+  let language = 'Unavailable';
   languages.map((data) => {
     if (data.code == code) {
       language = data.name;
