@@ -1,9 +1,42 @@
 .borderNone {
   border: none;
 }
+.borderBox {
+  border: 1px solid #dddddd;
+}
+
+.borderRounded5 {
+  border-radius: 5px;
+}
+
+.borderRounded8 {
+  border-radius: 8px;
+}
+
+.borderRounded24 {
+  border-radius: 24px;
+}
+
+.topRadius {
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+}
+
+.bottomRadius {
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+}
+
+.shadow {
+  box-shadow: 5px 5px 4px 0px #31bb6b1f;
+}
 
 .colorWhite {
   color: white;
+}
+
+.colorGreen {
+  color: #31bb6b;
 }
 
 .backgroundWhite {
@@ -11,7 +44,7 @@
 }
 
 .maxWidth {
-  max-width: 300px;
+  max-width: 600px;
 }
 
 .colorLight {
@@ -35,14 +68,22 @@
   gap: 20px;
 }
 
-.paddingY {
-  padding: 30px 0px;
-}
-
 .containerHeight {
   height: calc(100vh - 66px);
 }
 
 .colorPrimary {
   background: #31bb6b;
+}
+
+.greenBorder {
+  border: 1px solid #31bb6b;
+}
+
+.semiBold {
+  font-weight: 500;
+}
+
+.placeholderColor::placeholder {
+  color: #737373;
 }
