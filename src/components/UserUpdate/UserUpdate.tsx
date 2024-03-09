@@ -199,38 +199,22 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
             <div>
               <label>
                 {t('appLanguageCode')}
-                <div role="applangcode">
-                  <Dropdown
-                    onSelect={(eventKey): void => {
-                      setFormState({
-                        ...formState,
-                        appLanguageCode: eventKey !== null ? eventKey : '',
-                      });
-                    }}
-                  >
-                    <Dropdown.Toggle>
-                      {
-                        languages.find(
-                          (lang) => lang.code == formState.appLanguageCode,
-                        )?.name
-                      }
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      {languages.map((language, index) => {
-                        return (
-                          <Dropdown.Item
-                            href=""
-                            key={index}
-                            eventKey={language.code}
-                            role={language.name}
-                          >
-                            {language.name}
-                          </Dropdown.Item>
-                        );
-                      })}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
+                <select
+                  className="form-control"
+                  data-testid="applangcode"
+                  onChange={(e): void => {
+                    setFormState({
+                      ...formState,
+                      appLanguageCode: e.target.value,
+                    });
+                  }}
+                >
+                  {languages.map((language, index: number) => (
+                    <option key={index} value={language.code}>
+                      {language.name}
+                    </option>
+                  ))}
+                </select>
               </label>
             </div>
           </div>

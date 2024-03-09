@@ -136,8 +136,7 @@ describe('Testing User Update', () => {
       formData.lastName,
     );
     userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
-    expect(screen.getByRole('applangcode')).toBeInTheDocument();
-    expect(screen.getByText('English')).toBeInTheDocument();
+    userEvent.selectOptions(screen.getByTestId('applangcode'), 'Français');
 
     userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
     await wait();
