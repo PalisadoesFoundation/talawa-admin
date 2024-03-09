@@ -225,50 +225,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     navigate(`/orgpeople/${currentUrl}`);
   }
 
-  const addAdmin = async (): Promise<void> => {
-    try {
-      const { data } = await adda({
-        variables: {
-          userid: location.state?.id,
-          orgid: orgId,
-        },
-      });
-
-      /* istanbul ignore next */
-      if (data) {
-        try {
-          const { data } = await updateUserType({
-            variables: {
-              id: location.state?.id,
-              userType: 'ADMIN',
-            },
-          });
-          if (data) {
-            toast.success(t('addedAsAdmin'));
-            setTimeout(() => {
-              window.location.reload();
-            }, 2000);
-          }
-        } catch (error: any) {
-          errorHandler(t, error);
-        }
-      }
-    } catch (error: any) {
-      /* istanbul ignore next */
-      if (
-        userData.user.userType === 'ADMIN' ||
-        userData.user.userType === 'SUPERADMIN'
-      ) {
-        if (isMounted.current) setIsAdmin(true);
-        toast.error(t('alreadyIsAdmin'));
-      } else {
-        errorHandler(t, error);
-      }
-    }
-  };
-
-
-  const memberDetails = (
+  return (
     <Row>
       <Col>
         {state == 1 ? (
@@ -614,21 +571,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         )}
       </Col>
     </Row>
-  );
-
-  console.log(userData);
-  return (
-    <>
-      {calledFrom === 'orglist' ? (
-        <SuperAdminScreen screenName="Profile" title={t('title')}>
-          {memberDetails}
-        </SuperAdminScreen>
-      ) : (
-        <OrganizationScreen screenName="Profile" title={t('title')}>
-          {memberDetails}
-        </OrganizationScreen>
-      )}
-    </>
   );
 };
 
