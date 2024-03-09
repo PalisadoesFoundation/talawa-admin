@@ -4,16 +4,12 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import UserUpdate from 'components/UserUpdate/UserUpdate';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import styles from './MemberDetail.module.css';
 import { languages } from 'utils/languages';
-import {
-  ADD_ADMIN_MUTATION,
-  UPDATE_USERTYPE_MUTATION,
-  UPDATE_USER_MUTATION,
-} from 'GraphQl/Mutations/mutations';
+import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
@@ -36,13 +32,13 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const location = useLocation();
 
   const [state, setState] = useState(1);
-  const [isAdmin, setIsAdmin] = useState(false);
+
   const isMounted = useRef(true);
 
   const { getItem, setItem } = useLocalStorage();
 
   const currentUrl = location.state?.id || getItem('id') || id;
-  const { orgId } = useParams();
+
   document.title = t('title');
 
   const [formState, setFormState] = useState({
@@ -69,8 +65,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     adminApproved: false,
   });
 
-  const [adda] = useMutation(ADD_ADMIN_MUTATION);
-  const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
   const [updateUser] = useMutation(UPDATE_USER_MUTATION);
 
   const {
@@ -166,9 +160,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       const firstName = formState.firstName;
       const lastName = formState.lastName;
       const email = formState.email;
-      const applangcode = formState.applangcode;
+      // const applangcode = formState.applangcode;
       const file = formState.file;
-      const gender = formState.gender;
+      // const gender = formState.gender;
       let toSubmit = true;
       if (firstName.trim().length == 0 || !firstName) {
         toast.warning('First Name cannot be blank!');
