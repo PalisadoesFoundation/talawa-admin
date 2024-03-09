@@ -453,14 +453,18 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                           />
                         </>
                       )}
-                      <div className="p-1 bg-success text-white text-center rounded mt-1">
-                        <p className="p-0 m-0">{userData?.user?.userType}</p>
-                      </div>
                     </div>
                     <div className="d-flex flex-column mx-2">
                       <p className="fs-2 my-0 fw-medium">
                         {formState?.firstName}
                       </p>
+                      <div
+                        className={`p-1 bg-white border border-success text-success text-center rounded mt-1 ${styles.WidthFit}`}
+                      >
+                        <p className="p-0 m-0 fs-6">
+                          {userData?.user?.userType}
+                        </p>
+                      </div>
                       <p className="my-0">{userData?.user?.email}</p>
                       <p className="my-0">
                         <CalendarIcon />
