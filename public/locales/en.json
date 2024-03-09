@@ -257,16 +257,16 @@
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "eventListCard": {
-    "location": "Location",
-    "on": "On",
-    "end": "End",
+    "location": "Event Location",
+    "on": "Start Date",
+    "end": "End Date",
     "deleteEvent": "Delete Event",
     "deleteEventMsg": "Do you want to remove this event?",
     "no": "No",
     "yes": "Yes",
-    "editEvent": "Edit Event",
-    "eventTitle": "Title",
-    "description": "Description",
+    "editEvent": "Update Event",
+    "eventTitle": "Event Title",
+    "description": "Event Description",
     "startTime": "Start Time",
     "endTime": "End Time",
     "allDay": "All Day",
@@ -636,12 +636,17 @@
     "eventCreated": "Event created and posted successfully."
   },
   "userEventCard": {
+    "eventDetails": "Event Details",
+    "eventDescription": "Event Description",
+    "eventTitle": "Event Title",
     "location": "Location",
     "starts": "Starts",
     "ends": "Ends",
     "creator": "Creator",
     "alreadyRegistered": "Already registered",
-    "register": "Register"
+    "register": "Register",
+    "on": "Start Date",
+    "end": "End Date"
   },
   "userTasks": {
     "yourAssignedTasks": "Your assigned tasks",

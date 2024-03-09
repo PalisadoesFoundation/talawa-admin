@@ -12,7 +12,6 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { Form } from 'react-bootstrap';
 import { errorHandler } from 'utils/errorHandler';
-import { useHistory } from 'react-router-dom';
 
 interface InterfaceEventListCardProps {
   key: string;
@@ -40,7 +39,6 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   const [registrablechecked, setRegistrableChecked] = React.useState(false);
   const [eventDeleteModalIsOpen, setEventDeleteModalIsOpen] = useState(false);
   const [eventUpdateModalIsOpen, setEventUpdateModalIsOpen] = useState(false);
-  const history = useHistory();
   const [formState, setFormState] = useState({
     title: '',
     eventdescrip: '',
@@ -136,9 +134,9 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
     }
   };
 
-  const openEventDashboard = (): void => {
-    history.push(`/event/${props.id}`);
-  };
+  // const openEventDashboard = (): void => {
+  //   history.push(`/event/${props.id}`);
+  // };
 
   return (
     <>
@@ -170,6 +168,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
         <Modal.Header>
           <p className={styles.titlemodal}>{t('eventDetails')}</p>
           <Button
+            style={{ background: '#DC3545' }}
             onClick={hideViewModal}
             data-testid="createEventModalCloseBtn"
           >
@@ -179,57 +178,81 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
         <Modal.Body>
           <Form>
             <div>
-              <p className={styles.preview}>
-                {t('eventTitle')}:{' '}
-                <span className={styles.view}>
-                  {props.eventName ? (
-                    <>
-                      {props.eventName.length > 100 ? (
-                        <>{props.eventName.substring(0, 100)}...</>
-                      ) : (
-                        <>{props.eventName}</>
-                      )}
-                    </>
-                  ) : (
-                    <>Dogs Care</>
-                  )}
-                </span>
-              </p>
-              <p className={styles.preview}>
-                {t('location')}:
-                <span className={styles.view}>
-                  {props.eventLocation ? (
-                    <>{props.eventLocation}</>
-                  ) : (
-                    <>India</>
-                  )}
-                </span>
-              </p>
-              <p className={styles.preview}>
+              <div className={styles.divStyle}>
+                {t('eventTitle')}:
+                <input
+                  className={styles.instyle}
+                  value={
+                    props.eventName && props.eventName.length > 100
+                      ? props.eventName.substring(0, 100) + '...'
+                      : props.eventName
+                  }
+                />
+              </div>
+              <div className={styles.divStyle}>
                 {t('description')}:{' '}
-                <span className={styles.view}>
-                  {props.eventDescription && props.eventDescription.length > 256
-                    ? props.eventDescription.substring(0, 256) + '...'
-                    : props.eventDescription}
-                </span>
-              </p>
-              <p className={styles.preview}>
-                {t('on')}: <span className={styles.view}>{props.regDate}</span>
-              </p>
-              <p className={styles.preview}>
-                {t('end')}:{' '}
-                <span className={styles.view}>{props.regEndDate}</span>
-              </p>
-              <Button
+                <textarea
+                  className={styles.instyle}
+                  value={props.eventDescription}
+                />
+              </div>
+              <div className={styles.divStyle}>
+                {t('location')}
+                <input className={styles.instyle} value={props.eventLocation} />
+              </div>
+              <div className={styles.divStyle2}>
+                <div className={styles.divStyle}>
+                  {t('on')}
+                  <input className={styles.instyle} value={props.regDate} />
+                </div>
+                <div className={styles.divStyle}>
+                  {t('end')}:{' '}
+                  <input className={styles.instyle} value={props.regEndDate} />
+                </div>
+              </div>
+              <div className={styles.divStyle2}>
+                <div className={styles.divStyle}>
+                  {t('startTime')}
+                  <input
+                    className={styles.instyle}
+                    id="startTime"
+                    value={formState.startTime}
+                    data-testid="updateStartTime"
+                    onChange={(e): void =>
+                      setFormState({
+                        ...formState,
+                        startTime: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className={styles.divStyle}>
+                  {t('endTime')}
+                  <input
+                    className={styles.instyle}
+                    id="endTime"
+                    value={formState.endTime}
+                    data-testid="updateEndTime"
+                    onChange={(e): void =>
+                      setFormState({
+                        ...formState,
+                        endTime: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+              {/* <Button
                 className={styles.customButton}
                 variant="success"
                 onClick={openEventDashboard}
               >
                 {' '}
                 Show Event Dashboard{' '}
-              </Button>
+              </Button> */}
             </div>
-            <div className={styles.iconContainer}>
+            <br />
+            <div className={styles.divStyle2}>
               <Button
                 size="sm"
                 data-testid="editEventModalBtn"
@@ -237,16 +260,17 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                 onClick={toggleUpdateModel}
               >
                 {' '}
-                <i className="fas fa-edit"></i>
+                {t('editEvent')}
               </Button>
               <Button
                 size="sm"
+                style={{ backgroundColor: '#DC3545' }}
                 data-testid="deleteEventModalBtn"
                 className={styles.icon}
                 onClick={toggleDeleteModal}
               >
                 {' '}
-                <i className="fa fa-trash"></i>
+                {t('deleteEvent')}
               </Button>
             </div>
           </Form>
