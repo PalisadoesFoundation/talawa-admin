@@ -310,9 +310,10 @@ describe('Testing OrganizationFunds screen', () => {
     const taxSwitch = screen.getByTestId('taxDeductibleSwitch');
     const archiveSwitch = screen.getByTestId('archivedSwitch');
     const defaultSwitch = screen.getByTestId('defaultSwitch');
-    fireEvent.change(taxSwitch, { target: { checked: false } });
-    fireEvent.change(archiveSwitch, { target: { value: true } });
-    fireEvent.change(defaultSwitch, { target: { checked: true } });
+
+    fireEvent.click(taxSwitch);
+    fireEvent.click(archiveSwitch);
+    fireEvent.click(defaultSwitch);
 
     userEvent.click(screen.getByTestId('editFundFormSubmitBtn'));
 

@@ -68,6 +68,9 @@ export const MOCKS = [
       variables: {
         id: '1',
         name: 'Fund 4',
+        taxDeductible: false,
+        isArchived: true,
+        isDefault: true,
       },
     },
     result: {
