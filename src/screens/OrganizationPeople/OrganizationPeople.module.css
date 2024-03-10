@@ -263,11 +263,10 @@
   padding-bottom: 10px;
 }
 .TableImage {
-  background-color: #31bb6b !important;
+  object-fit: cover;
   width: 50px !important;
   height: 50px !important;
   border-radius: 100% !important;
-  margin-right: 10px !important;
 }
 .tableHead {
   background-color: #31bb6b !important;
@@ -327,6 +326,14 @@
   margin-left: 5px;
   margin-right: 15px;
 }
+.rowBackground {
+  background-color: var(--bs-white);
+}
+.tableHeader {
+  background-color: var(--bs-primary);
+  color: var(--bs-white);
+  font-size: 16px;
+}
 
 @-webkit-keyframes load8 {
   0% {
@@ -352,5 +359,5 @@
   height: auto;
   overflow-y: auto;
   width: 100%;
-  /* padding-right: 50px; */
+  padding-right: 50px;
 }

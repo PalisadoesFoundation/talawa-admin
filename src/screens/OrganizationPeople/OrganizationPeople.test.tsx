@@ -445,8 +445,80 @@ const MOCKS: any[] = [
   createUserMock('', 'Userguytwo'),
   createUserMock('Aditya', 'Userguytwo'),
 ];
+const EMPTYMOCKS: any[] = [
+  {
+    request: {
+      query: ORGANIZATIONS_LIST,
+      variables: {
+        id: 'orgid',
+      },
+    },
+    result: {
+      data: {
+        organizations: [],
+      },
+    },
+  },
+
+  {
+    //These are mocks for 1st query (member list)
+    request: {
+      query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+      variables: {
+        orgId: 'orgid',
+        firstName_contains: '',
+        lastName_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organizationsMemberConnection: {
+          __typename: 'UserConnection',
+          edges: [],
+        },
+      },
+    },
+  },
+
+  {
+    request: {
+      query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+      variables: {
+        orgId: 'orgid',
+        firstName_contains: '',
+        lastName_contains: '',
+        admin_for: 'orgid',
+      },
+    },
+    result: {
+      data: {
+        organizationsMemberConnection: {
+          __typename: 'UserConnection',
+          edges: [],
+        },
+      },
+    },
+  },
+
+  {
+    //This is mock for user list
+    request: {
+      query: USER_LIST,
+      variables: {
+        firstName_contains: '',
+        lastName_contains: '',
+      },
+    },
+    result: {
+      data: {
+        users: [],
+      },
+    },
+  },
+];
 
 const link = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(EMPTYMOCKS, true);
 async function wait(ms = 2): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -594,6 +666,15 @@ describe('Organization People Page', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
+    await wait();
+    const dropdownToggles = screen.getAllByTestId('role');
+
+    dropdownToggles.forEach((dropdownToggle) => {
+      userEvent.click(dropdownToggle);
+    });
+
+    const memebersDropdownItem = screen.getByTestId('members');
+    userEvent.click(memebersDropdownItem);
     await wait();
 
     const findtext = screen.getByText(/Aditya Memberguy/i);
@@ -791,6 +872,16 @@ describe('Organization People Page', () => {
     const orgUsers = MOCKS[3]?.result?.data?.users;
     expect(orgUsers?.length).toBe(102);
 
+    const dropdownToggles = screen.getAllByTestId('role');
+
+    dropdownToggles.forEach((dropdownToggle) => {
+      userEvent.click(dropdownToggle);
+    });
+
+    const memebersDropdownItem = screen.getByTestId('users');
+    userEvent.click(memebersDropdownItem);
+    await wait();
+
     await wait();
     expect(window.location).toBeAt('/orgpeople/6401ff65ce8e8406b8f07af1');
   });
@@ -849,11 +940,29 @@ describe('Organization People Page', () => {
     expect(window.location).toBeAt('/orgpeople/6401ff65ce8e8406b8f07af2');
   });
 
+  test('datagrid', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrganizationPeople />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    const dataGrid = screen.getByRole('grid');
+    expect(dataGrid).toBeInTheDocument();
+    const removeButtons = screen.getAllByTestId('removeMemberModalBtn');
+    userEvent.click(removeButtons[0]);
+  });
+
   test('No Mock Data test', async () => {
     window.location.assign('/orgpeople/orgid');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -866,5 +975,6 @@ describe('Organization People Page', () => {
 
     await wait();
     expect(window.location).toBeAt('/orgpeople/orgid');
+    expect(screen.queryByText(/Nothing Found !!/i)).toBeInTheDocument();
   });
 });
