@@ -104,9 +104,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   ];
 
   const today = new Date();
-  const [currentDate, setCurrentDate] = useState(today.getDate());
-  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
-  const [currentYear, setCurrentYear] = useState(today.getFullYear());
+  const currentDate = today.getDate();
+  const currentMonth = today.getMonth();
+  const currentYear = today.getFullYear();
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
   const [expanded, setExpanded] = useState<number>(-1);
   const [windowWidth, setWindowWidth] = useState<number>(window.screen.width);
@@ -160,70 +160,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     const data = filterData(eventData, orgData, userRole, userId);
     setEvents(data);
   }, [eventData, orgData, userRole, userId]);
-  // eslint-disable-next-line
-  const handlePrevMonth = (): void => {
-    if (currentMonth === 0) {
-      setCurrentMonth(11);
-      setCurrentYear(currentYear - 1);
-    } else {
-      setCurrentMonth(currentMonth - 1);
-    }
-  };
-  // eslint-disable-next-line
-  const handleNextMonth = (): void => {
-    if (currentMonth === 11) {
-      setCurrentMonth(0);
-      setCurrentYear(currentYear + 1);
-    } else {
-      setCurrentMonth(currentMonth + 1);
-    }
-  };
-  // eslint-disable-next-line
-  const handlePrevDate = (): void => {
-    if (currentDate > 1) {
-      setCurrentDate(currentDate - 1);
-    } else {
-      if (currentMonth > 0) {
-        const lastDayOfPrevMonth = new Date(
-          currentYear,
-          currentMonth,
-          0,
-        ).getDate();
-        setCurrentDate(lastDayOfPrevMonth);
-        setCurrentMonth(currentMonth - 1);
-      } else {
-        setCurrentDate(31);
-        setCurrentMonth(11);
-        setCurrentYear(currentYear - 1);
-      }
-    }
-  };
-  // eslint-disable-next-line
-  const handleNextDate = (): void => {
-    const lastDayOfCurrentMonth = new Date(
-      currentYear,
-      currentMonth - 1,
-      0,
-    ).getDate();
-    if (currentDate < lastDayOfCurrentMonth) {
-      setCurrentDate(currentDate + 1);
-    } else {
-      if (currentMonth < 12) {
-        setCurrentDate(1);
-        setCurrentMonth(currentMonth + 1);
-      } else {
-        setCurrentDate(1);
-        setCurrentMonth(1);
-        setCurrentYear(currentYear + 1);
-      }
-    }
-  };
-  // eslint-disable-next-line
-  const handleTodayButton = (): void => {
-    setCurrentYear(today.getFullYear());
-    setCurrentMonth(today.getMonth());
-    setCurrentDate(today.getDate());
-  };
 
   const timezoneString = `UTC${
     new Date().getTimezoneOffset() > 0 ? '-' : '+'
