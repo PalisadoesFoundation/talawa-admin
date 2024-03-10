@@ -173,6 +173,16 @@ jobs:
       - name: Validate Documents
         run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
 
+  Check-Source-Target-Branch:
+    name: Check Source and Target Branches
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if source and target branches are different
+        if: ${{ github.event.pull_request.base.ref == github.event.pull_request.head.ref }}
+        run: |
+          echo "Error: Source and target branches are the same. Please ensure you're not merging the same branch."
+          exit 1
+  
   Check-Target-Branch:
     name: Check Target Branch
     runs-on: ubuntu-latest
