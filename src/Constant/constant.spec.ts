@@ -3,7 +3,6 @@ import {
   BACKEND_URL,
   RECAPTCHA_SITE_KEY,
   REACT_APP_USE_RECAPTCHA,
-  REMOTE_HOST,
 } from './constant';
 
 describe('constants', () => {
@@ -26,9 +25,5 @@ describe('constants', () => {
     expect(REACT_APP_USE_RECAPTCHA).toEqual(
       process.env.REACT_APP_USE_RECAPTCHA,
     );
-  });
-
-  it('REMOTE_HOST should be equal to REMOTE_HOST environment variable', () => {
-    expect(REMOTE_HOST).toEqual(process.env.REACT_APP_REMOTE_HOST);
   });
 });

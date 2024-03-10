@@ -29,7 +29,6 @@ import './utils/i18n';
 import {
   BACKEND_URL,
   REACT_APP_BACKEND_WEBSOCKET_URL,
-  REMOTE_HOST,
 } from 'Constant/constant';
 import { refreshToken } from 'utils/getRefreshToken';
 import { ThemeProvider, createTheme } from '@mui/material';
@@ -56,24 +55,6 @@ const authLink = setContext((_, { headers }) => {
     },
   };
 });
-
-const changeBackendUrl = (url: string | undefined): string => {
-  if (
-    window.location.hostname != 'localhost' &&
-    BACKEND_URL?.includes('localhost')
-  ) {
-    const right = BACKEND_URL.replace('http://localhost:', ':');
-    let left = REMOTE_HOST || '';
-    if (left.endsWith('/')) {
-      left = left.slice(0, -1);
-    }
-    console.error(left + right);
-    console.log(left + right);
-    return left + right;
-  } else {
-    return url || '';
-  }
-};
 
 const errorLink = onError(
   ({ graphQLErrors, networkError, operation, forward }) => {
@@ -109,7 +90,7 @@ const errorLink = onError(
 );
 
 const httpLink = new HttpLink({
-  uri: changeBackendUrl(BACKEND_URL),
+  uri: BACKEND_URL,
 });
 
 // if didnt work use /subscriptions
