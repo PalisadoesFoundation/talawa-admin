@@ -61,21 +61,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
 }) => {
   const [selectedDate] = useState<Date | null>(null);
   const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  // eslint-disable-next-line
-  const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
+
   const hours = [
     '12 AM',
     '01 AM',
