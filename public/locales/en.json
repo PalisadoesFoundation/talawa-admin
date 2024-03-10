@@ -362,7 +362,25 @@
     "deleteFundMsg": "Do you want to remove this fund?"
   },
   "fundCampaign": {
-    "title": "Fundraising Campaigns"
+    "title": "Fundraising Campaigns",
+    "campaignName": "Campaign Name",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "campaignOptions": "Options",
+    "fundingGoal": "Funding Goal",
+    "addCampaign": "Add Campaign",
+    "createdCampaign": "Campaign created successfully",
+    "updatedCampaign": "Campaign updated successfully",
+    "deletedCampaign": "Campaign deleted successfully",
+    "deleteCampaignMsg": "Are you sure you want to delete this campaign?",
+    "noCampaigns": "No Campaigns Found",
+    "createCampaign": "Create Fund Campaign",
+    "updateCampaign": "Update Fund Campaign",
+    "deleteCampaign": "Delete Fund Campaign",
+    "no": "No",
+    "yes": "Yes",
+    "currency": "Currency",
+    "selectCurrency": "Select Currency"
   },
   "orgPost": {
     "title": "Talawa Posts",

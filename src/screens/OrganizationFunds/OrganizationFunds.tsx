@@ -250,7 +250,7 @@ const organizationFunds = (): JSX.Element => {
       </Button>
 
       <div className={`${styles.container}  bg-white rounded-4 my-3`}>
-        <div className="mx-4 mt-4">
+        <div className="mx-4 pt-4">
           <Dropdown
             aria-expanded="false"
             data-testid="type"

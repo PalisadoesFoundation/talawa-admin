@@ -1,10 +1,11 @@
-/*eslint-disable */
 import { DatePicker } from '@mui/x-date-pickers';
-import dayjs, { Dayjs } from 'dayjs';
-import { ChangeEvent } from 'react';
+import type { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
+import type { ChangeEvent } from 'react';
 import { Button, Col, Form, Modal } from 'react-bootstrap';
 import { currencyOptions } from 'utils/currency';
-import { InterfaceCreateCampaign } from 'utils/interfaces';
+import type { InterfaceCreateCampaign } from 'utils/interfaces';
+import React from 'react';
 import styles from './OrganizationFundCampaign.module.css';
 
 interface InterfaceCampaignCreateModal {
@@ -13,6 +14,7 @@ interface InterfaceCampaignCreateModal {
   formState: InterfaceCreateCampaign;
   setFormState: (state: React.SetStateAction<InterfaceCreateCampaign>) => void;
   createCampaignHandler: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
+  t: (key: string) => string;
 }
 
 const CampaignCreateModal: React.FC<InterfaceCampaignCreateModal> = ({
@@ -21,6 +23,7 @@ const CampaignCreateModal: React.FC<InterfaceCampaignCreateModal> = ({
   formState,
   setFormState,
   createCampaignHandler,
+  t,
 }) => {
   return (
     <>
@@ -30,8 +33,12 @@ const CampaignCreateModal: React.FC<InterfaceCampaignCreateModal> = ({
         onHide={hideCreateCampaignModal}
       >
         <Modal.Header>
-          <p className={styles.titlemodal}> Create Fund Campaign</p>
-          <Button variant="danger" onClick={hideCreateCampaignModal}>
+          <p className={styles.titlemodal}> {t('createCampaign')} </p>
+          <Button
+            variant="danger"
+            onClick={hideCreateCampaignModal}
+            data-testid="createCampaignCloseBtn"
+          >
             {' '}
             <i className="fa fa-times"></i>
           </Button>
@@ -39,7 +46,7 @@ const CampaignCreateModal: React.FC<InterfaceCampaignCreateModal> = ({
         <Modal.Body>
           <Form onSubmitCapture={createCampaignHandler}>
             <Form.Group className="mb-3">
-              <Form.Label> Campaign Name </Form.Label>
+              <Form.Label> {t('campaignName')} </Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Enter Campaign Name"
@@ -92,7 +99,7 @@ const CampaignCreateModal: React.FC<InterfaceCampaignCreateModal> = ({
             </Form.Group>
             <Form.Group className="d-flex ">
               <Form.Group className="  ">
-                <Form.Label>Currency</Form.Label>
+                <Form.Label>{t('currency')}</Form.Label>
                 <Col md={6}>
                   <Form.Control
                     as="select"
@@ -106,7 +113,7 @@ const CampaignCreateModal: React.FC<InterfaceCampaignCreateModal> = ({
                     }}
                   >
                     <option value="" disabled>
-                      Select a currency
+                      {t('selectCurrency')}
                     </option>
                     {currencyOptions.map((currency) => (
                       <option key={currency.value} value={currency.value}>
@@ -117,7 +124,7 @@ const CampaignCreateModal: React.FC<InterfaceCampaignCreateModal> = ({
                 </Col>
               </Form.Group>
               <Form.Group className="me-10 pe-5">
-                <Form.Label> Funding Goal </Form.Label>
+                <Form.Label> {t('fundingGoal')} </Form.Label>
                 <Form.Control
                   type="number"
                   placeholder="Enter Funding Goal"
@@ -134,8 +141,12 @@ const CampaignCreateModal: React.FC<InterfaceCampaignCreateModal> = ({
                 />
               </Form.Group>
             </Form.Group>
-            <Button type="submit" className={styles.greenregbtn}>
-              Create Fund Campagin
+            <Button
+              type="submit"
+              className={styles.greenregbtn}
+              data-testid="createCampaignBtn"
+            >
+              {t('createCampaign')}
             </Button>
           </Form>
         </Modal.Body>

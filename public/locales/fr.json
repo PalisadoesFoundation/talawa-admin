@@ -356,6 +356,27 @@
     "fundUnarchived": "Fonds désarchivé avec succès",
     "deleteFundMsg": "Voulez-vous supprimer ce fonds ?"
   },
+  "fundCampaign": {
+    "title": "Campagne de fonds",
+    "campaignName": "Nom de la campagne",
+    "startDate": "Date de début",
+    "endDate": "Date de fin",
+    "campaignOptions": " Options de campagne",
+    "fundingGoal": "Objectif de financement",
+    "addCampaign": "Ajouter une campagne",
+    "createdCampaign": "Campagne créée avec succès",
+    "updatedCampaign": "Campagne mise à jour avec succès",
+    "deletedCampaign": "Campagne supprimée avec succès",
+    "deleteCampaignMsg": "Voulez-vous supprimer cette campagne?",
+    "noCampaigns": "Pas de campagnes",
+    "createCampaign": "Créer une campagne de fonds",
+    "updateCampaign": "Mettre à jour la campagne de fonds",
+    "deleteCampaign": "Supprimer la campagne de fonds",
+    "no": "Non",
+    "yes": "Oui",
+    "currency": "Devise",
+    "selectCurrency": "Sélectionnez la devise"
+  },
   "orgPost": {
     "title": "Talawa Publications",
     "searchPost": "Rechercher une publication",

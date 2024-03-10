@@ -1,10 +1,11 @@
-/*eslint-disable */
 import { DatePicker } from '@mui/x-date-pickers';
-import dayjs, { Dayjs } from 'dayjs';
-import { ChangeEvent } from 'react';
+import type { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
+import type { ChangeEvent } from 'react';
+import React from 'react';
 import { Button, Col, Form, Modal } from 'react-bootstrap';
 import { currencyOptions } from 'utils/currency';
-import { InterfaceCreateCampaign } from 'utils/interfaces';
+import type { InterfaceCreateCampaign } from 'utils/interfaces';
 import styles from './OrganizationFundCampaign.module.css';
 
 interface InterfaceCampaignUpdateModal {
@@ -13,6 +14,7 @@ interface InterfaceCampaignUpdateModal {
   formState: InterfaceCreateCampaign;
   setFormState: (state: React.SetStateAction<InterfaceCreateCampaign>) => void;
   updateCampaignHandler: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
+  t: (key: string) => string;
 }
 
 const CampaignUpdateModal: React.FC<InterfaceCampaignUpdateModal> = ({
@@ -21,20 +23,25 @@ const CampaignUpdateModal: React.FC<InterfaceCampaignUpdateModal> = ({
   formState,
   setFormState,
   updateCampaignHandler,
+  t,
 }) => {
   return (
     <>
       <Modal show={campaignUpdateModalIsOpen} onHide={hideUpdateCampaignModal}>
         <Modal.Header>
-          <p className={styles.titlemodal}> Update Fund Campaign</p>
-          <Button variant="danger" onClick={hideUpdateCampaignModal}>
+          <p className={styles.titlemodal}> {t('updateCampaign')}</p>
+          <Button
+            variant="danger"
+            onClick={hideUpdateCampaignModal}
+            data-testid="editCampaignCloseBtn"
+          >
             <i className="fa fa-times"></i>
           </Button>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmitCapture={updateCampaignHandler}>
             <Form.Group className="mb-3">
-              <Form.Label> Campaign Name </Form.Label>
+              <Form.Label> {t('campaignName')}</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Enter Campaign Name"
@@ -87,7 +94,7 @@ const CampaignUpdateModal: React.FC<InterfaceCampaignUpdateModal> = ({
             </Form.Group>
             <Form.Group className="d-flex ">
               <Form.Group className="  ">
-                <Form.Label>Currency</Form.Label>
+                <Form.Label>{t('currency')}</Form.Label>
                 <Col md={6}>
                   <Form.Control
                     as="select"
@@ -101,7 +108,7 @@ const CampaignUpdateModal: React.FC<InterfaceCampaignUpdateModal> = ({
                     }}
                   >
                     <option value="" disabled>
-                      Select a currency
+                      {t('seslectCurrency')}
                     </option>
                     {currencyOptions.map((currency) => (
                       <option key={currency.value} value={currency.value}>
@@ -112,7 +119,7 @@ const CampaignUpdateModal: React.FC<InterfaceCampaignUpdateModal> = ({
                 </Col>
               </Form.Group>
               <Form.Group className="me-10 pe-5">
-                <Form.Label> Funding Goal </Form.Label>
+                <Form.Label> {t('fundingGoal')} </Form.Label>
                 <Form.Control
                   type="number"
                   placeholder="Enter Funding Goal"
@@ -129,8 +136,12 @@ const CampaignUpdateModal: React.FC<InterfaceCampaignUpdateModal> = ({
                 />
               </Form.Group>
             </Form.Group>
-            <Button type="submit" className={styles.greenregbtn}>
-              Update Fund Campagin
+            <Button
+              type="submit"
+              className={styles.greenregbtn}
+              data-testid="editCampaignSubmitBtn"
+            >
+              {t('updateCampaign')}
             </Button>
           </Form>
         </Modal.Body>

@@ -6,7 +6,6 @@ export const FUND_CAMPAIGN = gql`
     getFundById(id: $id) {
       campaigns {
         _id
-        createdAt
         endDate
         fundingGoal
         name

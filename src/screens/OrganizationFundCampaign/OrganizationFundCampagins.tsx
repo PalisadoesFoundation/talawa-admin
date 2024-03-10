@@ -1,5 +1,5 @@
-/*eslint-disable*/
 import { useMutation, useQuery } from '@apollo/client';
+import { WarningAmberRounded } from '@mui/icons-material';
 import {
   CREATE_CAMPAIGN_MUTATION,
   DELETE_CAMPAIGN_MUTATION,
@@ -8,12 +8,13 @@ import {
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
 import dayjs from 'dayjs';
-import { ChangeEvent, useState } from 'react';
+import React, { type ChangeEvent, useState } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { currencySymbols } from 'utils/currency';
-import {
+import type {
   InterfaceCampaignInfo,
   InterfaceCreateCampaign,
   InterfaceQueryOrganizationFundCampaigns,
@@ -22,9 +23,12 @@ import CampaignCreateModal from './CampaignCreateModal';
 import CampaignDeleteModal from './CampaignDeleteModal';
 import CampaignUpdateModal from './CampaignUpdateModal';
 import styles from './OrganizationFundCampaign.module.css';
-import { WarningAmberRounded } from '@mui/icons-material';
 
 const orgFundCampaign = (): JSX.Element => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'fundCampaign',
+  });
+
   const { fundId: currentUrl } = useParams();
   const [campaignCreateModalIsOpen, setcampaignCreateModalIsOpen] =
     useState<boolean>(false);
@@ -58,32 +62,31 @@ const orgFundCampaign = (): JSX.Element => {
       id: currentUrl,
     },
   });
-  console.log(fundCampaignData?.getFundById);
 
   const [createCampaign] = useMutation(CREATE_CAMPAIGN_MUTATION);
   const [updateCampaign] = useMutation(UPDATE_CAMPAIGN_MUTATION);
   const [deleteCampaign] = useMutation(DELETE_CAMPAIGN_MUTATION);
 
-  const showCreateCampaignModal = () => {
+  const showCreateCampaignModal = (): void => {
     setcampaignCreateModalIsOpen(!campaignCreateModalIsOpen);
   };
-  const hideCreateCampaignModal = () => {
+  const hideCreateCampaignModal = (): void => {
     setcampaignCreateModalIsOpen(!campaignCreateModalIsOpen);
   };
-  const showUpdateCampaignModal = () => {
+  const showUpdateCampaignModal = (): void => {
     setcampaignUpdateModalIsOpen(!campaignUpdateModalIsOpen);
   };
-  const hideUpdateCampaignModal = () => {
+  const hideUpdateCampaignModal = (): void => {
     setcampaignUpdateModalIsOpen(!campaignUpdateModalIsOpen);
   };
-  const showDeleteCampaignModal = () => {
+  const showDeleteCampaignModal = (): void => {
     setcampaignDeleteModalIsOpen(!campaignDeleteModalIsOpen);
   };
-  const hideDeleteCampaignModal = () => {
+  const hideDeleteCampaignModal = (): void => {
     setcampaignDeleteModalIsOpen(!campaignDeleteModalIsOpen);
   };
 
-  const handleEditClick = (campaign: InterfaceCampaignInfo) => {
+  const handleEditClick = (campaign: InterfaceCampaignInfo): void => {
     setFormState({
       campaignName: campaign.name,
       campaignCurrency: campaign.currency,
@@ -110,7 +113,7 @@ const orgFundCampaign = (): JSX.Element => {
           fundId: currentUrl,
         },
       });
-      toast.success('Campaign Created Successfully');
+      toast.success(t('createdCampaign'));
       setFormState({
         campaignName: '',
         campaignCurrency: 'USD',
@@ -166,7 +169,7 @@ const orgFundCampaign = (): JSX.Element => {
       });
       refetchFundCampaign();
       hideUpdateCampaignModal();
-      toast.success('Campaign Updated Successfully');
+      toast.success(t('updatedCampaign'));
     } catch (error: unknown) {
       toast.error((error as Error).message);
       console.log(error);
@@ -180,7 +183,7 @@ const orgFundCampaign = (): JSX.Element => {
           id: campaign?._id,
         },
       });
-      toast.success('Campaign Deleted Successfully');
+      toast.success(t('deletedCampaign'));
       refetchFundCampaign();
       hideDeleteCampaignModal();
     } catch (error: unknown) {
@@ -212,32 +215,33 @@ const orgFundCampaign = (): JSX.Element => {
         variant="success"
         className={styles.orgFundCampaignButton}
         onClick={showCreateCampaignModal}
+        data-testid="addCampaignBtn"
       >
         <i className={'fa fa-plus me-2'} />
-        Add Campaign
+        {t('addCampaign')}
       </Button>
       <div className={`${styles.container} bg-white rounded-4 `}>
         <div className="mx-1 my-4 py-4">
           <div className="mx-4 shadow-sm rounded-top-4">
-            <Row className="mx-0 border border-light-subtle rounded-top-4 py-3 justify-content-between">
+            <Row className="mx-0 border border-light-subtle rounded-top-4 py-3 justify-content-between shadow-sm">
               <Col xs={7} sm={2} md={3} lg={3} className=" fs-5 fw-bold">
-                <div className="ms-2">Campaign Name</div>
+                <div className="ms-2">{t('campaignName')} </div>
               </Col>
               <Col className="fs-5 fw-bold " md={2} sm={2}>
-                <div className="ms-3">StartDate</div>
+                <div className="ms-3">{t('startDate')} </div>
               </Col>
               <Col className="fs-5 fw-bold " sm={2} md={2}>
-                <div className="ms-3">EndDate</div>
+                <div className="ms-3">{t('endDate')}</div>
               </Col>
               <Col className="fs-5 fw-bold" md={2} sm={2}>
-                <div className="ms-3">Funding Goal</div>
+                <div className="ms-3">{t('fundingGoal')}</div>
               </Col>
               <Col xs={5} md={2} sm={2} lg={2} className="fs-5 fw-bold">
-                <div className="ms-3">Options</div>
+                <div className="ms-3">{t('campaignOptions')}</div>
               </Col>
             </Row>
           </div>
-          <div className="mx-4 bg-light-subtle border border-light-subtle border-top-0 rounded-bottom-4 shadow-sm">
+          <div className="mx-4 bg-light-subtle border border-light-subtle border-top-0 rounded-bottom-4 shadow-sm ">
             {fundCampaignData?.getFundById.campaigns.map((campaign, index) => (
               <div key={index}>
                 <Row
@@ -273,16 +277,8 @@ const orgFundCampaign = (): JSX.Element => {
                   </Col>
                   <Col md={2} sm={2}>
                     <Button
-                      data-testid="archiveFundBtn"
-                      className="btn btn-sm me-2"
-                      variant="outline-secondary"
-                    >
-                      <i className={`fa fa-undo`}></i>
-                    </Button>
-
-                    <Button
                       size="sm"
-                      data-testid="editFundBtn"
+                      data-testid="editCampaignBtn"
                       className="me-2"
                       variant="success"
                       onClick={() => {
@@ -295,7 +291,7 @@ const orgFundCampaign = (): JSX.Element => {
 
                     <Button
                       size="sm"
-                      data-testid="deleteFundBtn"
+                      data-testid="deleteCampaignBtn"
                       variant="danger"
                       onClick={() => {
                         setCampaign(campaign);
@@ -317,7 +313,7 @@ const orgFundCampaign = (): JSX.Element => {
 
             {fundCampaignData?.getFundById.campaigns.length === 0 && (
               <div className="pt-2 text-center fw-semibold text-body-tertiary">
-                <h5>No Campaigns Found</h5>
+                <h5>{t('noCampaigns')}</h5>
               </div>
             )}
           </div>
@@ -331,6 +327,7 @@ const orgFundCampaign = (): JSX.Element => {
         createCampaignHandler={createCampaignHandler}
         formState={formState}
         setFormState={setFormState}
+        t={t}
       />
 
       {/* Update Campaign Modal */}
@@ -340,6 +337,7 @@ const orgFundCampaign = (): JSX.Element => {
         formState={formState}
         setFormState={setFormState}
         updateCampaignHandler={updateCampaignHandler}
+        t={t}
       />
 
       {/* Delete Campaign Modal */}
@@ -347,6 +345,7 @@ const orgFundCampaign = (): JSX.Element => {
         campaignDeleteModalIsOpen={campaignDeleteModalIsOpen}
         hideDeleteCampaignModal={hideDeleteCampaignModal}
         deleteCampaignHandler={deleteCampaignHandler}
+        t={t}
       />
     </div>
   );

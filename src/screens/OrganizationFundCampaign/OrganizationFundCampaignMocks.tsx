@@ -4,6 +4,7 @@ import {
   UPDATE_CAMPAIGN_MUTATION,
 } from 'GraphQl/Mutations/CampaignMutation';
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
+import dayjs from 'dayjs';
 
 export const MOCKS = [
   {
@@ -42,11 +43,11 @@ export const MOCKS = [
     request: {
       query: CREATE_CAMPAIGN_MUTATION,
       variables: {
-        fundId: '1',
-        name: 'Campaign 3',
-        fundingGoal: 300,
-        startDate: '2021-01-01',
-        endDate: '2021-01-01',
+        fundId: undefined,
+        name: 'Campaign 1',
+        fundingGoal: 100,
+        startDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        endDate: dayjs(new Date()).format('YYYY-MM-DD'),
         currency: 'USD',
       },
     },
@@ -63,11 +64,9 @@ export const MOCKS = [
       query: UPDATE_CAMPAIGN_MUTATION,
       variables: {
         id: '1',
-        name: 'Campaign 1',
-        fundingGoal: 100,
+        name: 'Campaign 1Campaign 1',
         startDate: '2021-01-01',
         endDate: '2021-01-01',
-        currency: 'USD',
       },
     },
     result: {
@@ -87,14 +86,15 @@ export const MOCKS = [
     },
     result: {
       data: {
-        deleteFundraisingCampaign: {
+        removeFundraisingCampaign: {
           _id: '1',
         },
       },
     },
   },
 ];
-export const MOCKS_ERROR = [
+
+export const MOCK_FUND_CAMPAIGN_ERROR = [
   {
     request: {
       query: FUND_CAMPAIGN,
@@ -102,35 +102,138 @@ export const MOCKS_ERROR = [
         id: undefined,
       },
     },
-    error: new Error('Error fetching campaigns'),
+    error: new Error('An error occurred'),
   },
+];
+export const MOCKS_ERROR_CREATE_CAMPAIGN = [
+  {
+    request: {
+      query: FUND_CAMPAIGN,
+      variables: {
+        id: undefined,
+      },
+    },
+    result: {
+      data: {
+        getFundById: {
+          campaigns: [
+            {
+              _id: '1',
+              name: 'Campaign 1',
+              fundingGoal: 100,
+              startDate: '2021-01-01',
+              endDate: '2021-01-01',
+              currency: 'USD',
+            },
+            {
+              _id: '2',
+              name: 'Campaign 2',
+              fundingGoal: 200,
+              startDate: '2021-01-01',
+              endDate: '2021-01-01',
+              currency: 'USD',
+            },
+          ],
+        },
+      },
+    },
+  },
+
   {
     request: {
       query: CREATE_CAMPAIGN_MUTATION,
       variables: {
-        fundId: '1',
-        name: 'Campaign 3',
-        fundingGoal: 300,
-        startDate: '2021-01-01',
-        endDate: '2021-01-01',
+        fundId: undefined,
+        name: 'Campaign 1',
+        fundingGoal: 100,
+        startDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        endDate: dayjs(new Date()).format('YYYY-MM-DD'),
         currency: 'USD',
       },
     },
-    error: new Error('Error creating campaign'),
+    error: new Error('An error occurred'),
+  },
+];
+export const MOCKS_ERROR_UPDATE_CAMPAIGN = [
+  {
+    request: {
+      query: FUND_CAMPAIGN,
+      variables: {
+        id: undefined,
+      },
+    },
+    result: {
+      data: {
+        getFundById: {
+          campaigns: [
+            {
+              _id: '1',
+              name: 'Campaign 1',
+              fundingGoal: 100,
+              startDate: '2021-01-01',
+              endDate: '2021-01-01',
+              currency: 'USD',
+            },
+            {
+              _id: '2',
+              name: 'Campaign 2',
+              fundingGoal: 200,
+              startDate: '2021-01-01',
+              endDate: '2021-01-01',
+              currency: 'USD',
+            },
+          ],
+        },
+      },
+    },
   },
   {
     request: {
       query: UPDATE_CAMPAIGN_MUTATION,
       variables: {
-        id: '1',
+        id: undefined,
         name: 'Campaign 1',
         fundingGoal: 100,
-        startDate: '2021-01-01',
-        endDate: '2021-01-01',
+        startDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        endDate: dayjs(new Date()).format('YYYY-MM-DD'),
         currency: 'USD',
       },
     },
-    error: new Error('Error updating campaign'),
+    error: new Error('An error occurred'),
+  },
+];
+export const MOCKS_ERROR_DELETE_CAMPAIGN = [
+  {
+    request: {
+      query: FUND_CAMPAIGN,
+      variables: {
+        id: undefined,
+      },
+    },
+    result: {
+      data: {
+        getFundById: {
+          campaigns: [
+            {
+              _id: '1',
+              name: 'Campaign 1',
+              fundingGoal: 100,
+              startDate: '2021-01-01',
+              endDate: '2021-01-01',
+              currency: 'USD',
+            },
+            {
+              _id: '2',
+              name: 'Campaign 2',
+              fundingGoal: 200,
+              startDate: '2021-01-01',
+              endDate: '2021-01-01',
+              currency: 'USD',
+            },
+          ],
+        },
+      },
+    },
   },
   {
     request: {
@@ -139,6 +242,6 @@ export const MOCKS_ERROR = [
         id: '1',
       },
     },
-    error: new Error('Error deleting campaign'),
+    error: new Error('An error occurred'),
   },
 ];
