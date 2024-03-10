@@ -27,7 +27,7 @@ for (let i = 0; i < 100; i++) {
     _id: i + '1',
     firstName: 'firstName',
     lastName: 'lastName',
-    image: null,
+    image: 'dummyURL',
     email: 'email',
     createdAt: new Date().toISOString(),
   });
