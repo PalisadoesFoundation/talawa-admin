@@ -19,11 +19,17 @@ import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams, useNavigate } from 'react-router-dom';
+import EventHeader from 'components/EventCalendar/EventHeader';
 
 const timeToDayJs = (time: string): Dayjs => {
   const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
   return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
 };
+
+export enum ViewType {
+  DAY = 'Day',
+  MONTH = 'Month View',
+}
 
 function organizationEvents(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -37,7 +43,7 @@ function organizationEvents(): JSX.Element {
 
   const [startDate, setStartDate] = React.useState<Date | null>(new Date());
   const [endDate, setEndDate] = React.useState<Date | null>(new Date());
-
+  const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
   const [alldaychecked, setAllDayChecked] = React.useState(true);
   const [recurringchecked, setRecurringChecked] = React.useState(false);
 
@@ -60,6 +66,9 @@ function organizationEvents(): JSX.Element {
   };
   const hideInviteModal = (): void => {
     setEventModalIsOpen(false);
+  };
+  const handleChangeView = (item: any): void => {
+    setViewType(item);
   };
 
   const { data, loading, error, refetch } = useQuery(
@@ -154,15 +163,11 @@ function organizationEvents(): JSX.Element {
     <>
       <div className={styles.mainpageright}>
         <div className={styles.justifysp}>
-          <p className={styles.logintitle}>{t('events')}</p>
-          <Button
-            variant="success"
-            className={styles.addbtn}
-            onClick={showInviteModal}
-            data-testid="createEventModalBtn"
-          >
-            <i className="fa fa-plus"></i> {t('addEvent')}
-          </Button>
+          <EventHeader
+            viewType={viewType}
+            handleChangeView={handleChangeView}
+            showInviteModal={showInviteModal}
+          />
         </div>
       </div>
       <EventCalendar
@@ -170,6 +175,7 @@ function organizationEvents(): JSX.Element {
         orgData={orgData}
         userRole={userRole}
         userId={userId}
+        viewType={viewType}
       />
 
       <Modal show={eventmodalisOpen} onHide={hideInviteModal}>

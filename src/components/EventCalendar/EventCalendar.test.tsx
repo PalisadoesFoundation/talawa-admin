@@ -4,6 +4,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { debug } from 'jest-preview';
 import React from 'react';
+import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 
 import {
   DELETE_EVENT_MUTATION,
@@ -12,7 +13,6 @@ import {
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import styles from './EventCalendar.module.css';
-import { BrowserRouter } from 'react-router-dom';
 
 const eventData = [
   {
@@ -28,6 +28,7 @@ const eventData = [
     recurring: false,
     isPublic: true,
     isRegisterable: true,
+    viewType: ViewType.DAY,
   },
   {
     _id: '2',
@@ -132,11 +133,9 @@ describe('Calendar', () => {
     //testing previous month button
     render(
       <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={eventData} />
-          </I18nextProvider>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={eventData} />
+        </I18nextProvider>
       </MockedProvider>,
     );
     const prevButton = screen.getByTestId('prevmonthordate');
@@ -199,33 +198,27 @@ describe('Calendar', () => {
     ];
     render(
       <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={currentDayEventMock} />
-          </I18nextProvider>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={currentDayEventMock} />
+        </I18nextProvider>
       </MockedProvider>,
     );
   });
   it('Test for superadmin case', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
-          </I18nextProvider>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
+        </I18nextProvider>
       </MockedProvider>,
     );
   });
   it('Today Cell is having correct styles', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
-          </I18nextProvider>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
+        </I18nextProvider>
       </MockedProvider>,
     );
     // const todayDate = new Date().getDate();
@@ -235,11 +228,9 @@ describe('Calendar', () => {
   it('Today button should show today cell', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
-          </I18nextProvider>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
+        </I18nextProvider>
       </MockedProvider>,
     );
     //Changing the month
@@ -314,11 +305,9 @@ describe('Calendar', () => {
 
     render(
       <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={multipleEventData} />
-          </I18nextProvider>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={multipleEventData} />
+        </I18nextProvider>
       </MockedProvider>,
     );
     const moreButton = screen.getByText('View all');
@@ -403,11 +392,9 @@ describe('Calendar', () => {
     ];
     render(
       <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={multipleEventData} />
-          </I18nextProvider>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={multipleEventData} />
+        </I18nextProvider>
       </MockedProvider>,
     );
     expect(screen.getByText('Month')).toBeInTheDocument();
@@ -446,11 +433,9 @@ describe('Calendar', () => {
     ];
     render(
       <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={multipleEventData} />
-          </I18nextProvider>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={multipleEventData} />
+        </I18nextProvider>
       </MockedProvider>,
     );
     expect(screen.getByText('Month')).toBeInTheDocument();
@@ -540,11 +525,9 @@ describe('Calendar', () => {
     ];
     render(
       <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={multipleEventData} />
-          </I18nextProvider>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={multipleEventData} />
+        </I18nextProvider>
       </MockedProvider>,
     );
     await act(async () => {
@@ -561,11 +544,9 @@ describe('Calendar', () => {
   test('Handles window resize', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={eventData} />
-          </I18nextProvider>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={eventData} />
+        </I18nextProvider>
       </MockedProvider>,
     );
 
