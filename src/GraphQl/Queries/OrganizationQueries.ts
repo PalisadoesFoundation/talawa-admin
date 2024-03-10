@@ -1,5 +1,4 @@
 // OrganizationQueries.js
-/*eslint-disable*/
 import gql from 'graphql-tag';
 
 // display posts

@@ -1,4 +1,3 @@
-/*eslint-disable */
 import gql from 'graphql-tag';
 
 export const FUND_CAMPAIGN = gql`
