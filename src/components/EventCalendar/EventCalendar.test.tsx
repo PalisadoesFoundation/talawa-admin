@@ -390,6 +390,7 @@ describe('Calendar', () => {
         isRegisterable: true,
       },
     ];
+
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -397,6 +398,7 @@ describe('Calendar', () => {
         </I18nextProvider>
       </MockedProvider>,
     );
+
     expect(screen.getByText('Month')).toBeInTheDocument();
     await act(async () => {
       fireEvent.click(screen.getByText('Month'));

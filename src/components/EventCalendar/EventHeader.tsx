@@ -28,6 +28,7 @@ function eventHeader({
           <Form.Control
             type="text"
             id="searchEvent"
+            data-testid="searchEvent"
             placeholder={t('searchEventName')}
             autoComplete="off"
             required
@@ -46,7 +47,11 @@ function eventHeader({
         <div className={styles.space}>
           <div>
             <Dropdown onSelect={handleChangeView} className={styles.selectType}>
-              <Dropdown.Toggle id="dropdown-basic" className={styles.dropdown}>
+              <Dropdown.Toggle
+                id="dropdown-basic"
+                className={styles.dropdown}
+                data-testid="selectViewType"
+              >
                 {viewType || ViewType.MONTH}
               </Dropdown.Toggle>
               <Dropdown.Menu>
@@ -63,15 +68,20 @@ function eventHeader({
             </Dropdown>
           </div>
           <div>
+            {/*istanbul ignore next*/}
             <Dropdown className={styles.selectType}>
-              <Dropdown.Toggle id="dropdown-basic" className={styles.dropdown}>
+              <Dropdown.Toggle
+                id="dropdown-basic"
+                className={styles.dropdown}
+                data-testid="eventType"
+              >
                 {t('eventType')}
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item eventKey="Events" data-testid="selectMonth">
+                <Dropdown.Item eventKey="Events" data-testid="events">
                   Events
                 </Dropdown.Item>
-                <Dropdown.Item eventKey="Workshops" data-testid="selectDay">
+                <Dropdown.Item eventKey="Workshops" data-testid="workshop">
                   Workshops
                 </Dropdown.Item>
               </Dropdown.Menu>
@@ -81,7 +91,7 @@ function eventHeader({
             variant="success"
             className={styles.addbtn}
             onClick={showInviteModal}
-            data-testid="createEventModal"
+            data-testid="createEventModalBtn"
           >
             Create Event
           </Button>

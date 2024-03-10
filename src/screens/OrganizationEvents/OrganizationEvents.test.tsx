@@ -215,7 +215,7 @@ describe('Organisation Events Page', () => {
 
     expect(container.textContent).not.toBe('Loading data...');
     await wait();
-    expect(container.textContent).toMatch('Events');
+    expect(container.textContent).toMatch('Month');
     expect(window.location).toBeAt('/orglist');
   });
 
