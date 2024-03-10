@@ -2,10 +2,10 @@ import { DatePicker } from '@mui/x-date-pickers';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import type { ChangeEvent } from 'react';
+import React from 'react';
 import { Button, Col, Form, Modal } from 'react-bootstrap';
 import { currencyOptions } from 'utils/currency';
 import type { InterfaceCreateCampaign } from 'utils/interfaces';
-import React from 'react';
 import styles from './OrganizationFundCampaign.module.css';
 
 interface InterfaceCampaignCreateModal {
@@ -104,6 +104,7 @@ const CampaignCreateModal: React.FC<InterfaceCampaignCreateModal> = ({
                   <Form.Control
                     as="select"
                     value={formState.campaignCurrency}
+                    data-testid="currencySelect"
                     size="sm"
                     onChange={(e) => {
                       setFormState({

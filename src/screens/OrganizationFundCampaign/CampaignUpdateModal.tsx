@@ -100,6 +100,7 @@ const CampaignUpdateModal: React.FC<InterfaceCampaignUpdateModal> = ({
                     as="select"
                     value={formState.campaignCurrency}
                     size="sm"
+                    data-testid="currencySelect"
                     onChange={(e) => {
                       setFormState({
                         ...formState,

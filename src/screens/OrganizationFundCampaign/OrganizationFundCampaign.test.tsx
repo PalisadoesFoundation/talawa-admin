@@ -2,6 +2,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {
+  fireEvent,
   render,
   screen,
   waitFor,
@@ -9,23 +10,24 @@ import {
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import dayjs from 'dayjs';
-import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import OrganizaitionFundCampiagn from './OrganizationFundCampagins';
 import { store } from '../../state/store';
 import { StaticMockLink } from '../../utils/StaticMockLink';
 import i18nForTest from '../../utils/i18nForTest';
+import OrganizaitionFundCampiagn from './OrganizationFundCampagins';
 import {
+  EMPTY_MOCKS,
   MOCKS,
   MOCKS_ERROR_CREATE_CAMPAIGN,
   MOCKS_ERROR_DELETE_CAMPAIGN,
   MOCKS_ERROR_UPDATE_CAMPAIGN,
   MOCK_FUND_CAMPAIGN_ERROR,
 } from './OrganizationFundCampaignMocks';
+import React from 'react';
 jest.mock('react-toastify', () => ({
   toast: {
     success: jest.fn(),
@@ -51,6 +53,7 @@ const link2 = new StaticMockLink(MOCK_FUND_CAMPAIGN_ERROR, true);
 const link3 = new StaticMockLink(MOCKS_ERROR_CREATE_CAMPAIGN, true);
 const link4 = new StaticMockLink(MOCKS_ERROR_UPDATE_CAMPAIGN, true);
 const link5 = new StaticMockLink(MOCKS_ERROR_DELETE_CAMPAIGN, true);
+const link6 = new StaticMockLink(EMPTY_MOCKS, true);
 
 const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.fundCampaign),
@@ -217,8 +220,16 @@ describe('Testing FundCampaigns Screen', () => {
       screen.getByPlaceholderText('Enter Funding Goal'),
       formData.campaignGoal.toString(),
     );
-    userEvent.click(screen.getByLabelText('Start Date'));
-    userEvent.click(screen.getByLabelText('End Date'));
+    const endDateDatePicker = screen.getByLabelText('End Date');
+    const startDateDatePicker = screen.getByLabelText('Start Date');
+
+    fireEvent.change(endDateDatePicker, {
+      target: { value: formData.campaignEndDate },
+    });
+    fireEvent.change(startDateDatePicker, {
+      target: { value: formData.campaignStartDate },
+    });
+
     userEvent.click(screen.getByTestId('createCampaignBtn'));
 
     await waitFor(() => {
@@ -278,10 +289,27 @@ describe('Testing FundCampaigns Screen', () => {
         screen.findByTestId('editCampaignCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    userEvent.type(
-      screen.getByPlaceholderText('Enter Campaign Name'),
-      formData.campaignName,
-    );
+    const campaignName = screen.getByPlaceholderText('Enter Campaign Name');
+    fireEvent.change(campaignName, {
+      target: { value: 'Campaign 4' },
+    });
+    const fundingGoal = screen.getByPlaceholderText('Enter Funding Goal');
+    fireEvent.change(fundingGoal, {
+      target: { value: 1000 },
+    });
+    const currency = screen.getByTestId('currencySelect');
+    fireEvent.change(currency, {
+      target: { value: 'INR' },
+    });
+    const endDateDatePicker = screen.getByLabelText('End Date');
+    const startDateDatePicker = screen.getByLabelText('Start Date');
+
+    fireEvent.change(endDateDatePicker, {
+      target: { value: formData.campaignEndDate },
+    });
+    fireEvent.change(startDateDatePicker, {
+      target: { value: formData.campaignStartDate },
+    });
 
     userEvent.click(screen.getByTestId('editCampaignSubmitBtn'));
 
@@ -409,6 +437,25 @@ describe('Testing FundCampaigns Screen', () => {
     userEvent.click(screen.getByTestId('deleteyesbtn'));
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
+    });
+  });
+  it('renders the Empty Campaigns Component', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link6}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18nForTest}>
+                {<OrganizaitionFundCampiagn />}
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    await wait();
+    await waitFor(() => {
+      expect(screen.getByText(translations.noCampaigns)).toBeInTheDocument();
     });
   });
 });

@@ -64,9 +64,11 @@ export const MOCKS = [
       query: UPDATE_CAMPAIGN_MUTATION,
       variables: {
         id: '1',
-        name: 'Campaign 1Campaign 1',
+        name: 'Campaign 4',
         startDate: '2021-01-01',
         endDate: '2021-01-01',
+        fundingGoal: 1000,
+        currency: 'INR',
       },
     },
     result: {
@@ -243,5 +245,22 @@ export const MOCKS_ERROR_DELETE_CAMPAIGN = [
       },
     },
     error: new Error('An error occurred'),
+  },
+];
+export const EMPTY_MOCKS = [
+  {
+    request: {
+      query: FUND_CAMPAIGN,
+      variables: {
+        id: undefined,
+      },
+    },
+    result: {
+      data: {
+        getFundById: {
+          campaigns: [],
+        },
+      },
+    },
   },
 ];

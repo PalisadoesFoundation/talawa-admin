@@ -1,12 +1,12 @@
 import { MockedProvider } from '@apollo/client/testing';
 import {
   act,
+  fireEvent,
   render,
   screen,
   waitFor,
   waitForElementToBeRemoved,
 } from '@testing-library/react';
-import React from 'react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -27,6 +27,7 @@ import {
   MOCKS_ERROR_UPDATE_FUND,
   MOCKS_UNARCHIVED_FUND,
 } from './OrganizationFundsMocks';
+import React from 'react';
 jest.mock('react-toastify', () => ({
   toast: {
     success: jest.fn(),
@@ -303,10 +304,16 @@ describe('Testing OrganizationFunds screen', () => {
         screen.findByTestId('editFundModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    userEvent.type(
-      screen.getByPlaceholderText(translations.enterfundName),
-      'Test Fund Updated',
-    );
+
+    const fundName = screen.getByPlaceholderText(translations.enterfundName);
+    fireEvent.change(fundName, { target: { value: 'Fund 4' } });
+    const taxSwitch = screen.getByTestId('taxDeductibleSwitch');
+    const archiveSwitch = screen.getByTestId('archivedSwitch');
+    const defaultSwitch = screen.getByTestId('defaultSwitch');
+    fireEvent.change(taxSwitch, { target: { checked: false } });
+    fireEvent.change(archiveSwitch, { target: { value: true } });
+    fireEvent.change(defaultSwitch, { target: { checked: true } });
+
     userEvent.click(screen.getByTestId('editFundFormSubmitBtn'));
 
     await waitFor(() => {
