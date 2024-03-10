@@ -14,7 +14,6 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Donate from './Donate';
 import userEvent from '@testing-library/user-event';
-import * as getOrganizationId from 'utils/getOrganizationId';
 
 const MOCKS = [
   {
@@ -55,8 +54,40 @@ const MOCKS = [
             image: '',
             name: 'anyOrganization2',
             description: 'desc',
+            address: {
+              city: 'abc',
+              countryCode: '123',
+              postalCode: '456',
+              state: 'def',
+              dependentLocality: 'ghi',
+              line1: 'asdfg',
+              line2: 'dfghj',
+              sortingCode: '4567',
+            },
             userRegistrationRequired: true,
+            createdAt: '12345678900',
             creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
+            members: [
+              {
+                _id: '56gheqyr7deyfuiwfewifruy8',
+                user: {
+                  _id: '45ydeg2yet721rtgdu32ry',
+                },
+              },
+            ],
+            admins: [
+              {
+                _id: '45gj5678jk45678fvgbhnr4rtgh',
+              },
+            ],
+            membershipRequests: [
+              {
+                _id: '56gheqyr7deyfuiwfewifruy8',
+                user: {
+                  _id: '45ydeg2yet721rtgdu32ry',
+                },
+              },
+            ],
           },
         ],
       },
@@ -74,9 +105,12 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-describe('Testing Donate Screen [User Portal]', () => {
-  jest.mock('utils/getOrganizationId');
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: '' }),
+}));
 
+describe('Testing Donate Screen [User Portal]', () => {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: jest.fn().mockImplementation((query) => ({
@@ -90,12 +124,6 @@ describe('Testing Donate Screen [User Portal]', () => {
       dispatchEvent: jest.fn(),
     })),
   });
-
-  const getOrganizationIdSpy = jest
-    .spyOn(getOrganizationId, 'default')
-    .mockImplementation(() => {
-      return '';
-    });
 
   test('Screen should be rendered properly', async () => {
     render(
@@ -111,8 +139,6 @@ describe('Testing Donate Screen [User Portal]', () => {
     );
 
     await wait();
-
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
   });
 
   test('Currency is swtiched to USD', async () => {

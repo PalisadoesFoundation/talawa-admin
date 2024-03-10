@@ -1,35 +1,37 @@
-import type { ChangeEvent } from 'react';
-import React, { useState, useEffect } from 'react';
-import SortIcon from '@mui/icons-material/Sort';
+import { useMutation, useQuery, type ApolloError } from '@apollo/client';
 import { Search } from '@mui/icons-material';
-import Row from 'react-bootstrap/Row';
-import Modal from 'react-bootstrap/Modal';
-import { Form } from 'react-bootstrap';
-import { useMutation, useQuery } from '@apollo/client';
-import Button from 'react-bootstrap/Button';
-import { toast } from 'react-toastify';
-import { useTranslation } from 'react-i18next';
-import Dropdown from 'react-bootstrap/Dropdown';
-import styles from './OrgPost.module.css';
-import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
-import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
+import SortIcon from '@mui/icons-material/Sort';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
-import convertToBase64 from 'utils/convertToBase64';
-import NotFound from 'components/NotFound/NotFound';
-import { errorHandler } from 'utils/errorHandler';
+import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
-import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
+import NotFound from 'components/NotFound/NotFound';
+import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
+import { useNavigate, useParams } from 'react-router-dom';
+import type { ChangeEvent } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Form } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Dropdown from 'react-bootstrap/Dropdown';
+import Modal from 'react-bootstrap/Modal';
+import Row from 'react-bootstrap/Row';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import convertToBase64 from 'utils/convertToBase64';
+import { errorHandler } from 'utils/errorHandler';
+import type { InterfaceQueryOrganizationPostListItem } from 'utils/interfaces';
+import styles from './OrgPost.module.css';
 
 interface InterfaceOrgPost {
   _id: string;
   title: string;
   text: string;
-  imageUrl: string;
-  videoUrl: string;
-  organizationId: string;
-  creator: { firstName: string; lastName: string };
+  imageUrl: string | null;
+  videoUrl: string | null;
+  creator: { _id: string; firstName: string; lastName: string; email: string };
   pinned: boolean;
   createdAt: string;
+  likeCount: number;
+  commentCount: number;
 }
 
 function orgPost(): JSX.Element {
@@ -49,8 +51,13 @@ function orgPost(): JSX.Element {
   });
   const [sortingOption, setSortingOption] = useState('latest');
   const [file, setFile] = useState<File | null>(null);
-  const currentUrl = window.location.href.split('=')[1];
+  const { orgId: currentUrl } = useParams();
+  const navigate = useNavigate();
   const [showTitle, setShowTitle] = useState(true);
+  const [after, setAfter] = useState<string | null | undefined>(null);
+  const [before, setBefore] = useState<string | null | undefined>(null);
+  const [first, setFirst] = useState<number | null>(6);
+  const [last, setLast] = useState<number | null>(null);
 
   const showInviteModal = (): void => {
     setPostModalIsOpen(true);
@@ -73,19 +80,35 @@ function orgPost(): JSX.Element {
     loading: orgPostListLoading,
     error: orgPostListError,
     refetch,
-  } = useQuery(ORGANIZATION_POST_CONNECTION_LIST, {
-    variables: { id: currentUrl, title_contains: '', text_contains: '' },
+  }: {
+    data?: {
+      organizations: InterfaceQueryOrganizationPostListItem[];
+    };
+    loading: boolean;
+    error?: ApolloError;
+    refetch: any;
+  } = useQuery(ORGANIZATION_POST_LIST, {
+    variables: {
+      id: currentUrl,
+      after: after,
+      before: before,
+      first: first,
+      last: last,
+    },
   });
   const [create, { loading: createPostLoading }] =
     useMutation(CREATE_POST_MUTATION);
   const [displayedPosts, setDisplayedPosts] = useState(
-    orgPostListData?.postsByOrganizationConnection.edges || [],
+    orgPostListData?.organizations[0].posts.edges.map((edge) => edge.node) ||
+      [],
   );
 
+  // ...
+
   useEffect(() => {
-    if (orgPostListData && orgPostListData.postsByOrganizationConnection) {
-      const newDisplayedPosts = sortPosts(
-        orgPostListData.postsByOrganizationConnection.edges,
+    if (orgPostListData && orgPostListData.organizations) {
+      const newDisplayedPosts: InterfaceOrgPost[] = sortPosts(
+        orgPostListData.organizations[0].posts.edges.map((edge) => edge.node),
         sortingOption,
       );
       setDisplayedPosts(newDisplayedPosts);
@@ -140,13 +163,16 @@ function orgPost(): JSX.Element {
     }
   };
 
+  useEffect(() => {
+    if (orgPostListError) {
+      navigate('/orglist');
+    }
+  }, [orgPostListError]);
+
   if (createPostLoading || orgPostListLoading) {
     return <Loader />;
   }
-  /* istanbul ignore next */
-  if (orgPostListError) {
-    window.location.assign('/orglist');
-  }
+
   const handleAddMediaChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
@@ -181,7 +207,19 @@ function orgPost(): JSX.Element {
   const handleSorting = (option: string): void => {
     setSortingOption(option);
   };
-
+  const handleNextPage = (): void => {
+    setAfter(orgPostListData?.organizations[0].posts.pageInfo.endCursor);
+    setBefore(null);
+    setFirst(6);
+    setLast(null);
+  };
+  const handlePreviousPage = (): void => {
+    setBefore(orgPostListData?.organizations[0].posts.pageInfo.startCursor);
+    setAfter(null);
+    setFirst(null);
+    setLast(6);
+  };
+  // console.log(orgPostListData?.organizations[0].posts);
   const sortPosts = (
     posts: InterfaceOrgPost[],
     sortingOption: string,
@@ -217,136 +255,159 @@ function orgPost(): JSX.Element {
 
   return (
     <>
-      <OrganizationScreen screenName="Posts" title={t('title')}>
-        <Row className={styles.head}>
-          <div className={styles.mainpageright}>
-            <div className={styles.btnsContainer}>
-              <div className={styles.input}>
-                <Form.Control
-                  type="text"
-                  id="posttitle"
-                  className="bg-white"
-                  placeholder={showTitle ? t('searchTitle') : t('searchText')}
-                  data-testid="searchByName"
-                  autoComplete="off"
-                  onChange={debouncedHandleSearch}
-                  required
-                />
-                <Button
-                  tabIndex={-1}
-                  className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
-                >
-                  <Search />
-                </Button>
-              </div>
-              <div className={styles.btnsBlock}>
-                <div className="d-flex">
-                  <Dropdown
-                    aria-expanded="false"
-                    title="SearchBy"
-                    data-tesid="sea"
-                  >
-                    <Dropdown.Toggle
-                      data-testid="searchBy"
-                      variant="outline-success"
-                    >
-                      <SortIcon className={'me-1'} />
-                      {t('searchBy')}
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      <Dropdown.Item
-                        id="searchText"
-                        onClick={(e): void => {
-                          setShowTitle(false);
-                          e.preventDefault();
-                        }}
-                        data-testid="Text"
-                      >
-                        {t('Text')}
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        id="searchTitle"
-                        onClick={(e): void => {
-                          setShowTitle(true);
-                          e.preventDefault();
-                        }}
-                        data-testid="searchTitle"
-                      >
-                        {t('Title')}
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                  <Dropdown
-                    aria-expanded="false"
-                    title="Sort Post"
-                    data-testid="sort"
-                  >
-                    <Dropdown.Toggle
-                      variant="outline-success"
-                      data-testid="sortpost"
-                    >
-                      <SortIcon className={'me-1'} />
-                      {t('sortPost')}
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      <Dropdown.Item
-                        onClick={(): void => handleSorting('latest')}
-                        data-testid="latest"
-                      >
-                        {t('Latest')}
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        onClick={(): void => handleSorting('oldest')}
-                        data-testid="oldest"
-                      >
-                        {t('Oldest')}
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-
-                <Button
-                  variant="success"
-                  onClick={showInviteModal}
-                  data-testid="createPostModalBtn"
-                >
-                  <i className={'fa fa-plus me-2'} />
-                  {t('createPost')}
-                </Button>
-              </div>
+      <Row className={styles.head}>
+        <div className={styles.mainpageright}>
+          <div className={styles.btnsContainer}>
+            <div className={styles.input}>
+              <Form.Control
+                type="text"
+                id="posttitle"
+                className="bg-white"
+                placeholder={showTitle ? t('searchTitle') : t('searchText')}
+                data-testid="searchByName"
+                autoComplete="off"
+                onChange={debouncedHandleSearch}
+                required
+              />
+              <Button
+                tabIndex={-1}
+                className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+              >
+                <Search />
+              </Button>
             </div>
-            <div className={`row ${styles.list_box}`}>
-              {sortedPostsList && sortedPostsList.length > 0 ? (
-                sortedPostsList.map(
-                  (datas: {
-                    _id: string;
-                    title: string;
-                    text: string;
-                    imageUrl: string;
-                    videoUrl: string;
-                    organizationId: string;
-                    creator: { firstName: string; lastName: string };
-                    pinned: boolean;
-                  }) => (
-                    <OrgPostCard
-                      key={datas._id}
-                      id={datas._id}
-                      postTitle={datas.title}
-                      postInfo={datas.text}
-                      postAuthor={`${datas.creator.firstName} ${datas.creator.lastName}`}
-                      postPhoto={datas.imageUrl}
-                      postVideo={datas.videoUrl}
-                      pinned={datas.pinned}
-                    />
-                  ),
-                )
-              ) : (
-                <NotFound title="post" keyPrefix="postNotFound" />
-              )}
+            <div className={styles.btnsBlock}>
+              <div className="d-flex">
+                <Dropdown
+                  aria-expanded="false"
+                  title="SearchBy"
+                  data-tesid="sea"
+                >
+                  <Dropdown.Toggle
+                    data-testid="searchBy"
+                    variant="outline-success"
+                  >
+                    <SortIcon className={'me-1'} />
+                    {t('searchBy')}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item
+                      id="searchText"
+                      onClick={(e): void => {
+                        setShowTitle(false);
+                        e.preventDefault();
+                      }}
+                      data-testid="Text"
+                    >
+                      {t('Text')}
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      id="searchTitle"
+                      onClick={(e): void => {
+                        setShowTitle(true);
+                        e.preventDefault();
+                      }}
+                      data-testid="searchTitle"
+                    >
+                      {t('Title')}
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+                <Dropdown
+                  aria-expanded="false"
+                  title="Sort Post"
+                  data-testid="sort"
+                >
+                  <Dropdown.Toggle
+                    variant="outline-success"
+                    data-testid="sortpost"
+                  >
+                    <SortIcon className={'me-1'} />
+                    {t('sortPost')}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item
+                      onClick={(): void => handleSorting('latest')}
+                      data-testid="latest"
+                    >
+                      {t('Latest')}
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={(): void => handleSorting('oldest')}
+                      data-testid="oldest"
+                    >
+                      {t('Oldest')}
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+
+              <Button
+                variant="success"
+                onClick={showInviteModal}
+                data-testid="createPostModalBtn"
+              >
+                <i className={'fa fa-plus me-2'} />
+                {t('createPost')}
+              </Button>
             </div>
           </div>
-        </Row>
-      </OrganizationScreen>
+          <div className={`row ${styles.list_box}`}>
+            {sortedPostsList && sortedPostsList.length > 0 ? (
+              sortedPostsList.map(
+                (datas: {
+                  _id: string;
+                  title: string;
+                  text: string;
+                  imageUrl: string | null;
+                  videoUrl: string | null;
+
+                  creator: { firstName: string; lastName: string };
+                  pinned: boolean;
+                }) => (
+                  <OrgPostCard
+                    key={datas._id}
+                    id={datas._id}
+                    postTitle={datas.title}
+                    postInfo={datas.text}
+                    postAuthor={`${datas.creator.firstName} ${datas.creator.lastName}`}
+                    postPhoto={datas?.imageUrl}
+                    postVideo={datas?.videoUrl}
+                    pinned={datas.pinned}
+                  />
+                ),
+              )
+            ) : (
+              <NotFound title="post" keyPrefix="postNotFound" />
+            )}
+          </div>
+        </div>
+        <div className="row m-lg-1 d-flex justify-content-center w-100">
+          <div className="col-auto">
+            <Button
+              onClick={handlePreviousPage}
+              className="btn-sm"
+              disabled={
+                !orgPostListData?.organizations[0].posts.pageInfo
+                  .hasPreviousPage
+              }
+            >
+              {t('Previous')}
+            </Button>
+          </div>
+          <div className="col-auto">
+            <Button
+              onClick={handleNextPage}
+              className="btn-sm "
+              disabled={
+                !orgPostListData?.organizations[0].posts.pageInfo.hasNextPage
+              }
+            >
+              {t('Next')}
+            </Button>
+          </div>
+        </div>
+      </Row>
       <Modal
         show={postmodalisOpen}
         onHide={hideInviteModal}

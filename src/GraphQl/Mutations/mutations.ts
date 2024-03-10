@@ -159,6 +159,10 @@ export const LOGIN_MUTATION = gql`
         _id
         userType
         adminApproved
+        firstName
+        lastName
+        email
+        image
       }
       accessToken
       refreshToken
@@ -602,3 +606,5 @@ export { PLUGIN_SUBSCRIPTION } from './OrganizationMutations';
 export { TOGGLE_PINNED_POST } from './OrganizationMutations';
 export { ADD_CUSTOM_FIELD } from './OrganizationMutations';
 export { REMOVE_CUSTOM_FIELD } from './OrganizationMutations';
+export { SEND_MEMBERSHIP_REQUEST } from './OrganizationMutations';
+export { JOIN_PUBLIC_ORGANIZATION } from './OrganizationMutations';

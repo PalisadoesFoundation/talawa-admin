@@ -9,7 +9,6 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import cookies from 'js-cookie';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import * as getOrganizationId from 'utils/getOrganizationId';
 
 import OrganizationNavbar from './OrganizationNavbar';
 import userEvent from '@testing-library/user-event';
@@ -37,10 +36,42 @@ const MOCK_ORGANIZATION_CONNECTION = {
           __typename: 'Organization',
           _id: '6401ff65ce8e8406b8f07af2',
           image: '',
+          address: {
+            city: 'abc',
+            countryCode: '123',
+            postalCode: '456',
+            state: 'def',
+            dependentLocality: 'ghi',
+            line1: 'asdfg',
+            line2: 'dfghj',
+            sortingCode: '4567',
+          },
           name: 'anyOrganization1',
           description: 'desc',
           userRegistrationRequired: true,
+          createdAt: '12345678900',
           creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
+          members: [
+            {
+              _id: '56gheqyr7deyfuiwfewifruy8',
+              user: {
+                _id: '45ydeg2yet721rtgdu32ry',
+              },
+            },
+          ],
+          admins: [
+            {
+              _id: '45gj5678jk45678fvgbhnr4rtgh',
+            },
+          ],
+          membershipRequests: [
+            {
+              _id: '56gheqyr7deyfuiwfewifruy8',
+              user: {
+                _id: '45ydeg2yet721rtgdu32ry',
+              },
+            },
+          ],
         },
       ],
     },
@@ -136,9 +167,12 @@ const navbarProps = {
   currentPage: 'home',
 };
 
-describe('Testing OrganizationNavbar Component [User Portal]', () => {
-  jest.mock('utils/getOrganizationId');
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: organizationId }),
+}));
 
+describe('Testing OrganizationNavbar Component [User Portal]', () => {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: jest.fn().mockImplementation((query) => ({
@@ -152,12 +186,6 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
       dispatchEvent: jest.fn(),
     })),
   });
-
-  const getOrganizationIdSpy = jest
-    .spyOn(getOrganizationId, 'default')
-    .mockImplementation(() => {
-      return organizationId;
-    });
 
   afterEach(async () => {
     await act(async () => {
@@ -180,7 +208,6 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
     expect(screen.queryByText('anyOrganization1')).toBeInTheDocument();
     // Check if navigation links are rendered
     expect(screen.getByText('Home')).toBeInTheDocument();
@@ -194,15 +221,13 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     const history = createMemoryHistory();
     render(
       <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Router history={history}>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <OrganizationNavbar {...navbarProps} />
-              </I18nextProvider>
-            </Provider>
-          </Router>
-        </BrowserRouter>
+        <Router location={history.location} navigator={history}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationNavbar {...navbarProps} />
+            </I18nextProvider>
+          </Provider>
+        </Router>
       </MockedProvider>,
     );
 
@@ -212,7 +237,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     userEvent.click(peoplePlugin);
 
     await wait();
-    expect(history.location.pathname).toBe(`/user/people/id=${organizationId}`);
+    expect(history.location.pathname).toBe(`/user/people/${organizationId}`);
   });
 
   test('The language is switched to English', async () => {

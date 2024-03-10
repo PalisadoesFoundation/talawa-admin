@@ -11,7 +11,6 @@ import {
 } from 'GraphQl/Queries/Queries';
 
 import OrgListCard from 'components/OrgListCard/OrgListCard';
-import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Dropdown, Form } from 'react-bootstrap';
@@ -19,7 +18,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useTranslation } from 'react-i18next';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type {
@@ -33,10 +32,10 @@ import useLocalStorage from 'utils/useLocalstorage';
 
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
+  const navigate = useNavigate();
   const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
   const [dialogRedirectOrgId, setDialogRedirectOrgId] = useState('<ORG_ID>');
-  /* eslint-disable @typescript-eslint/explicit-function-return-type */
-  function openDialogModal(redirectOrgId: string) {
+  function openDialogModal(redirectOrgId: string): void {
     setDialogRedirectOrgId(redirectOrgId);
     // console.log(redirectOrgId, dialogRedirectOrgId);
     setdialogModalIsOpen(true);
@@ -44,8 +43,7 @@ function orgList(): JSX.Element {
 
   const { getItem } = useLocalStorage();
 
-  /* eslint-disable @typescript-eslint/explicit-function-return-type */
-  function closeDialogModal() {
+  function closeDialogModal(): void {
     setdialogModalIsOpen(false);
   }
   const toggleDialogModal = /* istanbul ignore next */ (): void =>
@@ -171,11 +169,11 @@ function orgList(): JSX.Element {
     }
   };
 
-  const triggerCreateSampleOrg = () => {
+  const triggerCreateSampleOrg = (): void => {
     createSampleOrganization()
       .then(() => {
         toast.success(t('sampleOrgSuccess'));
-        window.location.reload();
+        navigate(0);
       })
       .catch(() => {
         toast.error(t('sampleOrgDuplicate'));
@@ -241,9 +239,11 @@ function orgList(): JSX.Element {
   };
 
   /* istanbul ignore next */
-  if (errorList || errorUser) {
-    window.location.assign('/');
-  }
+  useEffect(() => {
+    if (errorList || errorUser) {
+      navigate('/');
+    }
+  }, [errorList, errorUser]);
 
   /* istanbul ignore next */
   const resetAllParams = (): void => {
@@ -338,157 +338,99 @@ function orgList(): JSX.Element {
 
   return (
     <>
-      <SuperAdminScreen
-        title={t('my organizations')}
-        screenName="My Organizations"
-      >
-        {/* Buttons Container */}
-        <div className={styles.btnsContainer}>
-          <div className={styles.input}>
-            <Form.Control
-              type="name"
-              id="searchOrgname"
-              className="bg-white"
-              placeholder={t('searchByName')}
-              data-testid="searchByName"
-              autoComplete="off"
-              required
-              onKeyUp={handleSearchByEnter}
-            />
-            <Button
-              tabIndex={-1}
-              className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
-              onClick={handleSearchByBtnClick}
-              data-testid="searchBtn"
-            >
-              <Search />
-            </Button>
-          </div>
-          <div className={styles.btnsBlock}>
-            <div className="d-flex">
-              <Dropdown
-                aria-expanded="false"
-                title="Sort organizations"
-                data-testid="sort"
-              >
-                <Dropdown.Toggle
-                  variant={
-                    sortingState.option === '' ? 'outline-success' : 'success'
-                  }
-                  data-testid="sortOrgs"
-                >
-                  <SortIcon className={'me-1'} />
-                  {sortingState.selectedOption}
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item
-                    onClick={(): void => handleSorting('Latest')}
-                    data-testid="latest"
-                  >
-                    {t('Latest')}
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={(): void => handleSorting('Earliest')}
-                    data-testid="oldest"
-                  >
-                    {t('Earliest')}
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
-            {userData && userData.user.userType === 'SUPERADMIN' && (
-              <Button
-                variant="success"
-                onClick={toggleModal}
-                data-testid="createOrganizationBtn"
-              >
-                <i className={'fa fa-plus me-2'} />
-                {t('createOrganization')}
-              </Button>
-            )}
-          </div>
+      {/* Buttons Container */}
+      <div className={styles.btnsContainer}>
+        <div className={styles.input}>
+          <Form.Control
+            type="name"
+            id="searchOrgname"
+            className="bg-white"
+            placeholder={t('searchByName')}
+            data-testid="searchByName"
+            autoComplete="off"
+            required
+            onKeyUp={handleSearchByEnter}
+          />
+          <Button
+            tabIndex={-1}
+            className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+            onClick={handleSearchByBtnClick}
+            data-testid="searchBtn"
+          >
+            <Search />
+          </Button>
         </div>
-        {/* Text Infos for list */}
-        {!isLoading &&
-        ((orgsData?.organizationsConnection.length === 0 &&
-          searchByName.length == 0) ||
-          (userData &&
-            userData.user.userType === 'ADMIN' &&
-            userData.user.adminFor.length === 0)) ? (
-          // eslint-disable-next-line
-          <div className={styles.notFound}>
-            <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
-            <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
-          </div>
-        ) : !isLoading &&
-          orgsData?.organizationsConnection.length == 0 &&
-          /* istanbul ignore next */
-          searchByName.length > 0 ? (
-          /* istanbul ignore next */
-          // eslint-disable-next-line
-          <div className={styles.notFound} data-testid="noResultFound">
-            <h4 className="m-0">
-              {t('noResultsFoundFor')} &quot;{searchByName}&quot;
-            </h4>
-          </div>
-        ) : (
-          <>
-            <InfiniteScroll
-              dataLength={orgsData?.organizationsConnection?.length ?? 0}
-              next={loadMoreOrganizations}
-              loader={
-                <>
-                  {[...Array(perPageResult)].map((_, index) => (
-                    <div key={index} className={styles.itemCard}>
-                      <div className={styles.loadingWrapper}>
-                        <div className={styles.innerContainer}>
-                          <div
-                            className={`${styles.orgImgContainer} shimmer`}
-                          ></div>
-                          <div className={styles.content}>
-                            <h5 className="shimmer" title="Org name"></h5>
-                            <h6 className="shimmer" title="Location"></h6>
-                            <h6 className="shimmer" title="Admins"></h6>
-                            <h6 className="shimmer" title="Members"></h6>
-                          </div>
-                        </div>
-                        <div className={`shimmer ${styles.button}`} />
-                      </div>
-                    </div>
-                  ))}
-                </>
-              }
-              hasMore={hasMore}
-              className={styles.listBox}
-              data-testid="organizations-list"
-              endMessage={
-                <div className={'w-100 text-center my-4'}>
-                  <h5 className="m-0 ">{t('endOfResults')}</h5>
-                </div>
-              }
+        <div className={styles.btnsBlock}>
+          <div className="d-flex">
+            <Dropdown
+              aria-expanded="false"
+              title="Sort organizations"
+              data-testid="sort"
             >
-              {userData && userData.user.userType == 'SUPERADMIN'
-                ? orgsData?.organizationsConnection.map((item) => {
-                    return (
-                      <div key={item._id} className={styles.itemCard}>
-                        <OrgListCard data={item} />
-                      </div>
-                    );
-                  })
-                : userData &&
-                  userData.user.userType == 'ADMIN' &&
-                  userData.user.adminFor.length > 0 &&
-                  orgsData?.organizationsConnection.map((item) => {
-                    if (isAdminForCurrentOrg(item)) {
-                      return (
-                        <div key={item._id} className={styles.itemCard}>
-                          <OrgListCard data={item} />
-                        </div>
-                      );
-                    }
-                  })}
-            </InfiniteScroll>
-            {isLoading && (
+              <Dropdown.Toggle
+                variant={
+                  sortingState.option === '' ? 'outline-success' : 'success'
+                }
+                data-testid="sortOrgs"
+              >
+                <SortIcon className={'me-1'} />
+                {sortingState.selectedOption}
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  onClick={(): void => handleSorting('Latest')}
+                  data-testid="latest"
+                >
+                  {t('Latest')}
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={(): void => handleSorting('Earliest')}
+                  data-testid="oldest"
+                >
+                  {t('Earliest')}
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
+          {userData && userData.user.userType === 'SUPERADMIN' && (
+            <Button
+              variant="success"
+              onClick={toggleModal}
+              data-testid="createOrganizationBtn"
+            >
+              <i className={'fa fa-plus me-2'} />
+              {t('createOrganization')}
+            </Button>
+          )}
+        </div>
+      </div>
+      {/* Text Infos for list */}
+      {!isLoading &&
+      ((orgsData?.organizationsConnection.length === 0 &&
+        searchByName.length == 0) ||
+        (userData &&
+          userData.user.userType === 'ADMIN' &&
+          userData.user.adminFor.length === 0)) ? (
+        <div className={styles.notFound}>
+          <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
+          <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
+        </div>
+      ) : !isLoading &&
+        orgsData?.organizationsConnection.length == 0 &&
+        /* istanbul ignore next */
+        searchByName.length > 0 ? (
+        /* istanbul ignore next */
+        <div className={styles.notFound} data-testid="noResultFound">
+          <h4 className="m-0">
+            {t('noResultsFoundFor')} &quot;{searchByName}&quot;
+          </h4>
+        </div>
+      ) : (
+        <>
+          <InfiniteScroll
+            dataLength={orgsData?.organizationsConnection?.length ?? 0}
+            next={loadMoreOrganizations}
+            loader={
               <>
                 {[...Array(perPageResult)].map((_, index) => (
                   <div key={index} className={styles.itemCard}>
@@ -509,75 +451,126 @@ function orgList(): JSX.Element {
                   </div>
                 ))}
               </>
-            )}
-          </>
-        )}
-        {/* Create Organization Modal */}
-        {/**
-         * Renders the `OrganizationModal` component.
-         *
-         * @param showModal - A boolean indicating whether the modal should be displayed.
-         * @param toggleModal - A function to toggle the visibility of the modal.
-         * @param formState - The state of the form in the organization modal.
-         * @param setFormState - A function to update the state of the form in the organization modal.
-         * @param createOrg - A function to handle the submission of the organization creation form.
-         * @param t - A translation function for localization.
-         * @param userData - Information about the current user.
-         * @param triggerCreateSampleOrg - A function to trigger the creation of a sample organization.
-         * @returns JSX element representing the `OrganizationModal`.
-         */}
-        <OrganizationModal
-          showModal={showModal}
-          toggleModal={toggleModal}
-          formState={formState}
-          setFormState={setFormState}
-          createOrg={createOrg}
-          t={t}
-          userData={userData}
-          triggerCreateSampleOrg={triggerCreateSampleOrg}
-        />
-        {/* Plugin Notification Modal after Org is Created */}
-        <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
-          <Modal.Header
-            className="bg-primary"
-            closeButton
-            data-testid="pluginNotificationHeader"
-          >
-            <Modal.Title className="text-white">
-              {t('manageFeatures')}
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <section id={styles.grid_wrapper}>
-              <div>
-                <h4 className={styles.titlemodaldialog}>
-                  {t('manageFeaturesInfo')}
-                </h4>
-
-                <div className={styles.pluginStoreBtnContainer}>
-                  <Link
-                    className={`btn btn-primary ${styles.pluginStoreBtn}`}
-                    data-testid="goToStore"
-                    to={`orgstore/id=${dialogRedirectOrgId}`}
-                  >
-                    {t('goToStore')}
-                  </Link>
-                  {/* </button> */}
-                  <Button
-                    type="submit"
-                    className={styles.enableEverythingBtn}
-                    onClick={closeDialogModal}
-                    value="invite"
-                    data-testid="enableEverythingForm"
-                  >
-                    {t('enableEverything')}
-                  </Button>
-                </div>
+            }
+            hasMore={hasMore}
+            className={styles.listBox}
+            data-testid="organizations-list"
+            endMessage={
+              <div className={'w-100 text-center my-4'}>
+                <h5 className="m-0 ">{t('endOfResults')}</h5>
               </div>
-            </section>
-          </Modal.Body>
-        </Modal>
-      </SuperAdminScreen>
+            }
+          >
+            {userData && userData.user.userType == 'SUPERADMIN'
+              ? orgsData?.organizationsConnection.map((item) => {
+                  return (
+                    <div key={item._id} className={styles.itemCard}>
+                      <OrgListCard data={item} />
+                    </div>
+                  );
+                })
+              : userData &&
+                userData.user.userType == 'ADMIN' &&
+                userData.user.adminFor.length > 0 &&
+                orgsData?.organizationsConnection.map((item) => {
+                  if (isAdminForCurrentOrg(item)) {
+                    return (
+                      <div key={item._id} className={styles.itemCard}>
+                        <OrgListCard data={item} />
+                      </div>
+                    );
+                  }
+                })}
+          </InfiniteScroll>
+          {isLoading && (
+            <>
+              {[...Array(perPageResult)].map((_, index) => (
+                <div key={index} className={styles.itemCard}>
+                  <div className={styles.loadingWrapper}>
+                    <div className={styles.innerContainer}>
+                      <div
+                        className={`${styles.orgImgContainer} shimmer`}
+                      ></div>
+                      <div className={styles.content}>
+                        <h5 className="shimmer" title="Org name"></h5>
+                        <h6 className="shimmer" title="Location"></h6>
+                        <h6 className="shimmer" title="Admins"></h6>
+                        <h6 className="shimmer" title="Members"></h6>
+                      </div>
+                    </div>
+                    <div className={`shimmer ${styles.button}`} />
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
+        </>
+      )}
+      {/* Create Organization Modal */}
+      {/**
+       * Renders the `OrganizationModal` component.
+       *
+       * @param showModal - A boolean indicating whether the modal should be displayed.
+       * @param toggleModal - A function to toggle the visibility of the modal.
+       * @param formState - The state of the form in the organization modal.
+       * @param setFormState - A function to update the state of the form in the organization modal.
+       * @param createOrg - A function to handle the submission of the organization creation form.
+       * @param t - A translation function for localization.
+       * @param userData - Information about the current user.
+       * @param triggerCreateSampleOrg - A function to trigger the creation of a sample organization.
+       * @returns JSX element representing the `OrganizationModal`.
+       */}
+      <OrganizationModal
+        showModal={showModal}
+        toggleModal={toggleModal}
+        formState={formState}
+        setFormState={setFormState}
+        createOrg={createOrg}
+        t={t}
+        userData={userData}
+        triggerCreateSampleOrg={triggerCreateSampleOrg}
+      />
+      {/* Plugin Notification Modal after Org is Created */}
+      <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
+        <Modal.Header
+          className="bg-primary"
+          closeButton
+          data-testid="pluginNotificationHeader"
+        >
+          <Modal.Title className="text-white">
+            {t('manageFeatures')}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <section id={styles.grid_wrapper}>
+            <div>
+              <h4 className={styles.titlemodaldialog}>
+                {t('manageFeaturesInfo')}
+              </h4>
+
+              <div className={styles.pluginStoreBtnContainer}>
+                <Link
+                  className={`btn btn-primary ${styles.pluginStoreBtn}`}
+                  data-testid="goToStore"
+                  to={`orgstore/id=${dialogRedirectOrgId}`}
+                >
+                  {t('goToStore')}
+                </Link>
+                {/* </button> */}
+                <Button
+                  type="submit"
+                  className={styles.enableEverythingBtn}
+                  onClick={closeDialogModal}
+                  value="invite"
+                  data-testid="enableEverythingForm"
+                >
+                  {t('enableEverything')}
+                </Button>
+              </div>
+            </div>
+          </section>
+        </Modal.Body>
+      </Modal>
     </>
   );
 }

@@ -3,10 +3,15 @@ import { ReactComponent as FlaskIcon } from 'assets/svgs/flask.svg';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import styles from './OrgListCard.module.css';
-import { useHistory } from 'react-router-dom';
-import type { InterfaceOrgConnectionInfoType } from 'utils/interfaces';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
+import { useNavigate } from 'react-router-dom';
+import type {
+  InterfaceOrgConnectionInfoType,
+  InterfaceQueryOrganizationsListObject,
+} from 'utils/interfaces';
+import {
+  IS_SAMPLE_ORGANIZATION_QUERY,
+  ORGANIZATIONS_LIST,
+} from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import { Tooltip } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
@@ -24,14 +29,22 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
     },
   });
 
-  const history = useHistory();
+  const navigate = useNavigate();
+  const {
+    data: userData,
+  }: {
+    data?: {
+      organizations: InterfaceQueryOrganizationsListObject[];
+    };
+  } = useQuery(ORGANIZATIONS_LIST, {
+    variables: { id: _id },
+  });
 
   function handleClick(): void {
-    const url = '/orgdash/id=' + _id;
+    const url = '/orgdash/' + _id;
 
     // Dont change the below two lines
-    window.location.replace(url);
-    history.push(url);
+    navigate(url);
   }
 
   const { t } = useTranslation('translation', {
@@ -55,25 +68,22 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
           </div>
           <div className={styles.content}>
             <Tooltip title={name} placement="top-end">
-              <h4 className={styles.orgName}>{name}</h4>
+              <h4 className={`${styles.orgName} fw-semibold`}>{name}</h4>
             </Tooltip>
+            <h6 className={`${styles.orgdesc} fw-semibold`}>
+              <span>{userData?.organizations[0].description}</span>
+            </h6>
             {address && address.city && (
-              <div>
+              <div className={styles.address}>
                 <h6 className="text-secondary">
-                  <LocationOnIcon fontSize="inherit" className="fs-5" />
+                  <span className="address-line">{address.line1}, </span>
                   <span className="address-line">{address.city}, </span>
-                  <span className="address-line">{address.state}</span>
-                  <br />
-                  <LocationOnIcon fontSize="inherit" className="fs-5" />
-                  <span className="address-line">{address.postalCode}, </span>
                   <span className="address-line">{address.countryCode}</span>
                 </h6>
               </div>
             )}
-            <h6>
-              {t('admins')}: <span>{admins.length}</span>
-            </h6>
-            <h6>
+            <h6 className={styles.orgadmin}>
+              {t('admins')}: <span>{admins.length}</span> &nbsp; &nbsp; &nbsp;{' '}
               {t('members')}: <span>{members.length}</span>
             </h6>
           </div>

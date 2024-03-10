@@ -13,7 +13,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { MockedProvider } from '@apollo/react-testing';
 import useLocalStorage from 'utils/useLocalstorage';
 
-const { setItem } = useLocalStorage();
+const { setItem, removeItem } = useLocalStorage();
 
 const MOCKS = [
   {
@@ -65,6 +65,7 @@ const props: InterfaceOrgListCardProps = {
 
 describe('Testing the Super Dash List', () => {
   test('should render props and text elements test for the page component', () => {
+    removeItem('id');
     setItem('id', '123'); // Means the user is an admin
 
     render(
@@ -77,11 +78,13 @@ describe('Testing the Super Dash List', () => {
       </MockedProvider>,
     );
     expect(screen.getByAltText(/Dogs Care image/i)).toBeInTheDocument();
-    expect(screen.getByText('Admins:')).toBeInTheDocument();
-    expect(screen.getByText('Members:')).toBeInTheDocument();
+    expect(screen.getByText(/Admins:/i)).toBeInTheDocument();
+    expect(screen.getByText(/Members:/i)).toBeInTheDocument();
     expect(screen.getByText('Dogs Care')).toBeInTheDocument();
     expect(screen.getByText(/Sample City/i)).toBeInTheDocument();
+    expect(screen.getByText(/123 Sample Street/i)).toBeInTheDocument();
     userEvent.click(screen.getByTestId(/manageBtn/i));
+    removeItem('id');
   });
 
   test('Testing if the props data is not provided', () => {
@@ -107,9 +110,11 @@ describe('Testing the Super Dash List', () => {
     };
     render(
       <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgListCard {...imageNullProps} />
-        </I18nextProvider>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgListCard {...imageNullProps} />
+          </I18nextProvider>
+        </BrowserRouter>
       </MockedProvider>,
     );
     expect(screen.getByTestId(/emptyContainerForImage/i)).toBeInTheDocument();
@@ -126,6 +131,5 @@ describe('Testing the Super Dash List', () => {
       </MockedProvider>,
     );
     userEvent.click(screen.getByTestId('manageBtn'));
-    expect(window.location).toBeAt('/orgdash/id=xyz');
   });
 });

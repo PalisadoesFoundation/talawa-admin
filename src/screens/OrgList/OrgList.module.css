@@ -138,7 +138,7 @@
   flex-direction: column;
 }
 
-@media (max-width: 1120px) {
+@media (max-width: 1440px) {
   .contract {
     padding-left: calc(250px + 2rem + 1.5rem);
   }

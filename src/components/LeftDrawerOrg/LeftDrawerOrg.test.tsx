@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import { I18nextProvider } from 'react-i18next';
@@ -20,7 +20,6 @@ import useLocalStorage from 'utils/useLocalstorage';
 const { setItem } = useLocalStorage();
 
 const props: InterfaceLeftDrawerProps = {
-  screenName: 'Dashboard',
   orgId: '123',
   targets: [
     {
@@ -71,7 +70,11 @@ const MOCKS = [
     request: {
       query: REVOKE_REFRESH_TOKEN,
     },
-    result: {},
+    result: {
+      data: {
+        revokeRefreshTokenForUser: true,
+      },
+    },
   },
   {
     request: {
@@ -196,6 +199,7 @@ const MOCKS_WITH_IMAGE = [
     },
   },
 ];
+
 const MOCKS_EMPTY = [
   {
     request: {
@@ -254,10 +258,13 @@ const link = new StaticMockLink(MOCKS, true);
 const linkImage = new StaticMockLink(MOCKS_WITH_IMAGE, true);
 const linkEmpty = new StaticMockLink(MOCKS_EMPTY, true);
 
-describe('Testing Left Drawer component for SUPERADMIN', () => {
+describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
+  beforeEach(() => {
+    setItem('UserType', 'SUPERADMIN');
+  });
+
   test('Component should be rendered properly', async () => {
     setItem('UserImage', '');
-    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -279,7 +286,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing Profile Page & Organization Detail Modal', async () => {
-    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -297,7 +303,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing Menu Buttons', async () => {
-    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -315,7 +320,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing when image is present for Organization', async () => {
-    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={linkImage}>
         <BrowserRouter>
@@ -331,7 +335,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing when Organization does not exists', async () => {
-    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={linkEmpty}>
         <BrowserRouter>
@@ -350,7 +353,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing Drawer when hideDrawer is null', () => {
-    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -365,7 +367,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing Drawer when hideDrawer is true', () => {
-    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -380,7 +381,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing logout functionality', async () => {
-    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -393,7 +393,9 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
       </MockedProvider>,
     );
     userEvent.click(screen.getByTestId('logoutBtn'));
-    expect(localStorage.clear).toHaveBeenCalled();
-    expect(global.window.location.pathname).toBe('/');
+    await waitFor(() => {
+      expect(localStorage.clear).toHaveBeenCalled();
+      expect(global.window.location.pathname).toBe('/');
+    });
   });
 });

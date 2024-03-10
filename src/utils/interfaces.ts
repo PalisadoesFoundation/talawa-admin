@@ -141,21 +141,65 @@ export interface InterfaceQueryOrganizationsListObject {
     email: string;
   }[];
 }
-
+export interface InterfacePostForm {
+  posttitle: string;
+  postinfo: string;
+  postphoto: string | null;
+  postvideo: string | null;
+  pinned: boolean;
+}
 export interface InterfaceQueryOrganizationPostListItem {
-  _id: string;
-  title: string;
-  text: string;
-  imageUrl: null;
-  videoUrl: null;
-  createdAt: string;
-  creator: {
+  posts: {
+    edges: {
+      node: {
+        _id: string;
+        title: string;
+        text: string;
+        imageUrl: string | null;
+        videoUrl: string | null;
+        creator: {
+          _id: string;
+          firstName: string;
+          lastName: string;
+          email: string;
+        };
+        createdAt: string;
+        likeCount: number;
+        commentCount: number;
+        pinned: boolean;
+      };
+      cursor: string;
+    }[];
+    pageInfo: {
+      startCursor: string;
+      endCursor: string;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+    totalCount: number;
+  };
+}
+export interface InterfaceQueryOrganizationFunds {
+  funds: {
     _id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
+    name: string;
+    refrenceNumber: string;
+    taxDeductible: boolean;
+    isArchived: boolean;
+    isDefault: boolean;
+    createdAt: string;
   }[];
 }
+export interface InterfaceFundInfo {
+  _id: string;
+  name: string;
+  refrenceNumber: string;
+  taxDeductible: boolean;
+  isArchived: boolean;
+  isDefault: boolean;
+  createdAt: string;
+}
+
 export interface InterfaceQueryOrganizationEventListItem {
   _id: string;
   title: string;
@@ -241,4 +285,8 @@ export interface InterfaceAddress {
   postalCode: string;
   sortingCode: string;
   state: string;
+}
+export interface InterfaceCreateFund {
+  fundName: string;
+  fundRef: string;
 }

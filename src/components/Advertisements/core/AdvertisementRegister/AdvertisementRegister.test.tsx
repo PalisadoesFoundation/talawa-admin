@@ -76,30 +76,16 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 });
 
 const translations = JSON.parse(
-  // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-  JSON.stringify(i18n.getDataByLanguage('en')?.translation.advertisement!),
+  JSON.stringify(
+    i18n.getDataByLanguage('en')?.translation?.advertisement ?? null,
+  ),
 );
 
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: '1' }),
+}));
 describe('Testing Advertisement Register Component', () => {
-  const originalLocation = window.location;
-
-  beforeAll(() => {
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        reload: jest.fn(),
-        href: 'https://example.com/page/id=1',
-      },
-    });
-  });
-
-  afterAll(() => {
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: originalLocation,
-    });
-  });
-
   test('AdvertismentRegister component loads correctly in register mode', async () => {
     const { getByText } = render(
       <ApolloProvider client={client}>

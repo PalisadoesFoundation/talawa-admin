@@ -57,6 +57,11 @@ jest.mock('components/AddOn/support/services/Plugin.helper', () => ({
     fetchStore: jest.fn().mockResolvedValue([]),
   })),
 }));
+let mockID: any = undefined;
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: mockID }),
+}));
 
 const today = new Date();
 const tomorrow = today;
@@ -79,6 +84,7 @@ const PLUGIN_GET_MOCK = {
             '62ccfccd3eb7fd2a30f41601',
             '62ccfccd3eb7fd2a30f41601',
           ],
+          pluginInstallStatus: true,
           __typename: 'Plugin',
         },
       ],
@@ -91,7 +97,7 @@ const ADD_ADVERTISEMENT_MUTATION_MOCK = {
   request: {
     query: ADD_ADVERTISEMENT_MUTATION,
     variables: {
-      organizationId: 'undefined',
+      organizationId: undefined,
       name: 'Cookie Shop',
       file: 'data:image/png;base64,bWVkaWEgY29udGVudA==',
       type: 'POPUP',
@@ -240,6 +246,7 @@ describe('Testing Advertisement Component', () => {
   });
 
   test('if the component renders correctly and ads are correctly categorized date wise', async () => {
+    mockID = 'undefined';
     const mocks = [
       ORGANIZATIONS_LIST_MOCK,
       PLUGIN_GET_MOCK,

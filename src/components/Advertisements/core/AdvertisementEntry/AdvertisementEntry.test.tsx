@@ -27,10 +27,10 @@ const httpLink = new HttpLink({
     authorization: 'Bearer ' + getItem('token') || '',
   },
 });
+
 const translations = JSON.parse(
   JSON.stringify(
-    // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-    i18nForTest.getDataByLanguage('en')?.translation.advertisement!,
+    i18nForTest.getDataByLanguage('en')?.translation?.advertisement ?? null,
   ),
 );
 
@@ -47,6 +47,10 @@ jest.mock('@apollo/client', () => {
     useMutation: () => mockUseMutation(),
   };
 });
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: '1' }),
+}));
 
 describe('Testing Advertisement Entry Component', () => {
   test('Testing rendering and deleting of advertisement', async () => {
@@ -321,7 +325,7 @@ describe('Testing Advertisement Entry Component', () => {
                 endDateEdit={new Date()}
                 startDateEdit={new Date()}
                 typeEdit="POPUP"
-                organizationId="1"
+                orgIdEdit="1"
                 advertisementMediaEdit=""
               />
             </I18nextProvider>

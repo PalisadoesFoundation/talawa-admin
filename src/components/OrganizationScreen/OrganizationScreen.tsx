@@ -1,70 +1,73 @@
 import LeftDrawerOrg from 'components/LeftDrawerOrg/LeftDrawerOrg';
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import styles from './OrganizationScreen.module.css';
-import { useSelector } from 'react-redux';
-import type { TargetsType } from 'state/reducers/routesReducer';
+import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from 'state/reducers';
+import type { TargetsType } from 'state/reducers/routesReducer';
+import styles from './OrganizationScreen.module.css';
+import { updateTargets } from 'state/action-creators';
+import { Navigate, useParams, useLocation, Outlet } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
-export interface InterfaceOrganizationScreenProps {
-  title: string; // Multilingual Page title
-  screenName: string; // Internal Screen name for developers
-  children: React.ReactNode;
-}
-const organizationScreen = ({
-  title,
-  screenName,
-  children,
-}: InterfaceOrganizationScreenProps): JSX.Element => {
+const organizationScreen = (): JSX.Element => {
+  const location = useLocation();
+  const titleKey = map[location.pathname.split('/')[1]];
+  const { t } = useTranslation('translation', { keyPrefix: titleKey });
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
+
+  const { orgId } = useParams();
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
 
   const appRoutes: {
     targets: TargetsType[];
-    configUrl: string;
   } = useSelector((state: RootState) => state.appRoutes);
-  const { targets, configUrl } = appRoutes;
+  const { targets } = appRoutes;
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(updateTargets(orgId));
+  }, []);
 
   const handleResize = (): void => {
-    if (window.innerWidth <= 820) {
-      setHideDrawer(!hideDrawer);
+    if (window.innerWidth <= 820 && !hideDrawer) {
+      setHideDrawer(true);
     }
   };
+
+  const toggleDrawer = (): void => {
+    setHideDrawer(!hideDrawer);
+  };
+
   useEffect(() => {
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [hideDrawer]);
 
   return (
     <>
-      {hideDrawer ? (
-        <Button
-          className={styles.opendrawer}
-          onClick={(): void => {
-            setHideDrawer(!hideDrawer);
-          }}
-          data-testid="openMenu"
-        >
-          <i className="fa fa-angle-double-right" aria-hidden="true"></i>
-        </Button>
-      ) : (
-        <Button
-          className={styles.collapseSidebarButton}
-          onClick={(): void => {
-            setHideDrawer(!hideDrawer);
-          }}
-          data-testid="menuBtn"
-        >
-          <i className="fa fa-angle-double-left" aria-hidden="true"></i>
-        </Button>
-      )}
+      <Button
+        className={
+          hideDrawer ? styles.opendrawer : styles.collapseSidebarButton
+        }
+        onClick={toggleDrawer}
+        data-testid="toggleMenuBtn"
+      >
+        <i
+          className={
+            hideDrawer ? 'fa fa-angle-double-right' : 'fa fa-angle-double-left'
+          }
+          aria-hidden="true"
+        ></i>
+      </Button>
       <div className={styles.drawer}>
         <LeftDrawerOrg
-          orgId={configUrl}
+          orgId={orgId}
           targets={targets}
-          screenName={screenName}
           hideDrawer={hideDrawer}
           setHideDrawer={setHideDrawer}
         />
@@ -81,13 +84,28 @@ const organizationScreen = ({
       >
         <div className="d-flex justify-content-between align-items-center">
           <div style={{ flex: 1 }}>
-            <h2>{title}</h2>
+            <h2>{t('title')}</h2>
           </div>
         </div>
-        {children}
+        <Outlet />
       </div>
     </>
   );
 };
 
 export default organizationScreen;
+
+const map: any = {
+  orgdash: 'dashboard',
+  orgpeople: 'organizationPeople',
+  orgads: 'advertisement',
+  member: 'memberDetail',
+  orgevents: 'organizationEvents',
+  orgactionitems: 'organizationActionItems',
+  orgcontribution: 'orgContribution',
+  orgpost: 'orgPost',
+  orgsetting: 'orgSettings',
+  orgstore: 'addOnStore',
+  blockuser: 'blockUnblockUser',
+  event: 'blockUnblockUser',
+};

@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
@@ -17,6 +17,8 @@ import {
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
+import useLocalStorage from 'utils/useLocalstorage';
+const { setItem } = useLocalStorage();
 
 const MOCKS = [
   {
@@ -102,6 +104,47 @@ jest.mock('Constant/constant.ts', () => ({
   RECAPTCHA_SITE_KEY: 'xxx',
 }));
 
+const mockNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+}));
+
+jest.mock('react-google-recaptcha', () => {
+  const react = jest.requireActual('react');
+  const recaptcha = react.forwardRef(
+    (
+      props: {
+        onChange: (value: string) => void;
+      } & React.InputHTMLAttributes<HTMLInputElement>,
+      ref: React.LegacyRef<HTMLInputElement> | undefined,
+    ): JSX.Element => {
+      const { onChange, ...otherProps } = props;
+
+      const handleChange = (
+        event: React.ChangeEvent<HTMLInputElement>,
+      ): void => {
+        if (onChange) {
+          onChange(event.target.value);
+        }
+      };
+
+      return (
+        <>
+          <input
+            type="text"
+            data-testid="mock-recaptcha"
+            {...otherProps}
+            onChange={handleChange}
+            ref={ref}
+          />
+        </>
+      );
+    },
+  );
+  return recaptcha;
+});
+
 describe('Talawa-API server fetch check', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -166,7 +209,9 @@ describe('Testing Login Page Screen', () => {
     );
 
     await wait();
-
+    const adminLink = screen.getByText(/Admin/i);
+    userEvent.click(adminLink);
+    await wait();
     expect(screen.getByText(/Admin/i)).toBeInTheDocument();
     expect(window.location).toBeAt('/orglist');
   });
@@ -671,5 +716,76 @@ describe('Testing Login Page Screen', () => {
     expect(password.password.length).toBeGreaterThanOrEqual(8);
 
     expect(screen.queryByTestId('passwordCheck')).toBeNull();
+  });
+
+  test('Component Should be rendered properly for user login', async () => {
+    window.location.assign('/user/organizations');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    const userLink = screen.getByText(/User/i);
+    userEvent.click(userLink);
+    await wait();
+    expect(screen.getByText(/User Login/i)).toBeInTheDocument();
+    expect(window.location).toBeAt('/user/organizations');
+  });
+
+  test('on value change of ReCAPTCHA onChange event should be triggered in both the captcha', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const recaptchaElements = screen.getAllByTestId('mock-recaptcha');
+
+    for (const recaptchaElement of recaptchaElements) {
+      const inputElement = recaptchaElement as HTMLInputElement;
+
+      fireEvent.input(inputElement, {
+        target: { value: 'test-token' },
+      });
+
+      fireEvent.change(inputElement, {
+        target: { value: 'test-token2' },
+      });
+
+      expect(recaptchaElement).toHaveValue('test-token2');
+    }
+  });
+
+  test('should be redirected to orglist if already loggedIn', async () => {
+    setItem('IsLoggedIn', 'TRUE');
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    expect(mockNavigate).toHaveBeenCalledWith('/orglist');
+    localStorage.clear();
   });
 });

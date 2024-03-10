@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import styles from './UserUpdate.module.css';
 import convertToBase64 from 'utils/convertToBase64';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { languages } from 'utils/languages';
 import { toast } from 'react-toastify';
@@ -20,12 +20,12 @@ interface InterfaceUserUpdateProps {
   toggleStateValue: () => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
   id,
   toggleStateValue,
 }): JSX.Element => {
-  const location = useLocation<InterfaceUserUpdateProps>();
+  const location = useLocation();
+  const navigate = useNavigate();
   const { getItem, setItem } = useLocalStorage();
   const currentUrl = location.state?.id || getItem('id') || id;
   const { t } = useTranslation('translation', {
@@ -67,7 +67,7 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
 
   /* istanbul ignore next */
   if (error) {
-    window.location.assign(`/orgsettings/id=${currentUrl}`);
+    navigate(`/orgsettings/${currentUrl}`);
   }
 
   const loginLink = async (): Promise<void> => {
@@ -121,7 +121,7 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
         }
         toast.success('Successful updated');
 
-        toggleStateValue();
+        navigate(0);
       }
     } catch (error: any) {
       /* istanbul ignore next */
