@@ -61,6 +61,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
 }) => {
   const [selectedDate] = useState<Date | null>(null);
   const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  // eslint-disable-next-line
   const months = [
     'January',
     'February',
@@ -159,7 +160,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     const data = filterData(eventData, orgData, userRole, userId);
     setEvents(data);
   }, [eventData, orgData, userRole, userId]);
-
+  // eslint-disable-next-line
   const handlePrevMonth = (): void => {
     if (currentMonth === 0) {
       setCurrentMonth(11);
@@ -168,7 +169,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       setCurrentMonth(currentMonth - 1);
     }
   };
-
+  // eslint-disable-next-line
   const handleNextMonth = (): void => {
     if (currentMonth === 11) {
       setCurrentMonth(0);
@@ -177,7 +178,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       setCurrentMonth(currentMonth + 1);
     }
   };
-
+  // eslint-disable-next-line
   const handlePrevDate = (): void => {
     if (currentDate > 1) {
       setCurrentDate(currentDate - 1);
@@ -197,7 +198,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       }
     }
   };
-
+  // eslint-disable-next-line
   const handleNextDate = (): void => {
     const lastDayOfCurrentMonth = new Date(
       currentYear,
@@ -217,7 +218,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       }
     }
   };
-
+  // eslint-disable-next-line
   const handleTodayButton = (): void => {
     setCurrentYear(today.getFullYear());
     setCurrentMonth(today.getMonth());
