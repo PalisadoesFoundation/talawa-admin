@@ -170,10 +170,8 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
                 <ThumbUpOffAltIcon fontSize="small" />
               )}
             </Button>
-            <div data-testid="likeCount">
-              {likes}
-              {` ${t('likes')}`}
-            </div>
+            {likes}
+            {` ${t('likes')}`}
             <Button
               className={`${styles.cardActionBtn}`}
               onClick={toggleCommentsModal}

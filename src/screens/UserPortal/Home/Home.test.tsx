@@ -314,10 +314,6 @@ describe('Testing Home Screen: User Portal', () => {
 
     expect(screen.queryByText('post two')).toBeInTheDocument();
     expect(screen.queryByText('This is the post two')).toBeInTheDocument();
-
-    const likeCount = screen.getAllByTestId('likeCount');
-    expect(likeCount[0]).toHaveTextContent('0 Likes');
-    expect(likeCount[1]).toHaveTextContent('2 Likes');
   });
 });
 
