@@ -361,6 +361,9 @@
     "fundUnarchived": "Fund unarchived successfully",
     "deleteFundMsg": "Do you want to remove this fund?"
   },
+  "fundCampaign": {
+    "title": "Fundraising Campaigns"
+  },
   "orgPost": {
     "title": "Talawa Posts",
     "searchPost": "Search Post",
