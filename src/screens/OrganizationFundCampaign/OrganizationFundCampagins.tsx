@@ -8,7 +8,7 @@ import {
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
 import dayjs from 'dayjs';
-import React, { type ChangeEvent, useState } from 'react';
+import { useState, type ChangeEvent } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -23,6 +23,7 @@ import CampaignCreateModal from './CampaignCreateModal';
 import CampaignDeleteModal from './CampaignDeleteModal';
 import CampaignUpdateModal from './CampaignUpdateModal';
 import styles from './OrganizationFundCampaign.module.css';
+import React from 'react';
 
 const orgFundCampaign = (): JSX.Element => {
   const { t } = useTranslation('translation', {

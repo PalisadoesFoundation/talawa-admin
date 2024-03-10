@@ -22,8 +22,8 @@ export const MOCKS = [
               _id: '1',
               name: 'Campaign 1',
               fundingGoal: 100,
-              startDate: '2021-01-01',
-              endDate: '2021-01-01',
+              startDate: '2024-01-01',
+              endDate: '2024-01-01',
               currency: 'USD',
             },
             {
@@ -65,8 +65,8 @@ export const MOCKS = [
       variables: {
         id: '1',
         name: 'Campaign 4',
-        startDate: '2021-01-01',
-        endDate: '2021-01-01',
+        startDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        endDate: dayjs(new Date()).format('YYYY-MM-DD'),
         fundingGoal: 1000,
         currency: 'INR',
       },

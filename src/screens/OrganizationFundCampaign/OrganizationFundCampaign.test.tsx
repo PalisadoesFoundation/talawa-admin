@@ -9,7 +9,6 @@ import {
   waitForElementToBeRemoved,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import dayjs from 'dayjs';
 import { act } from 'react-dom/test-utils';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -41,6 +40,7 @@ jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
     ).DesktopDateTimePicker,
   };
 });
+
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -64,8 +64,8 @@ describe('Testing FundCampaigns Screen', () => {
     campaignName: 'Campaign 1',
     campaignCurrency: 'USD',
     campaignGoal: 100,
-    campaignStartDate: dayjs(new Date()).format('YYYY-MM-DD'),
-    campaignEndDate: dayjs(new Date()).format('YYYY-MM-DD'),
+    campaignStartDate: '03/10/2024',
+    campaignEndDate: '03/10/2024',
   };
 
   it('loads the Fund Campaigns screen', async () => {
@@ -180,8 +180,14 @@ describe('Testing FundCampaigns Screen', () => {
       screen.getByPlaceholderText('Enter Funding Goal'),
       formData.campaignGoal.toString(),
     );
-    userEvent.click(screen.getByLabelText('Start Date'));
-    userEvent.click(screen.getByLabelText('End Date'));
+    const startDate = screen.getByLabelText('Start Date');
+    const endDate = screen.getByLabelText('End Date');
+    fireEvent.change(startDate, {
+      target: { value: formData.campaignStartDate },
+    });
+    fireEvent.change(endDate, {
+      target: { value: formData.campaignEndDate },
+    });
     userEvent.click(screen.getByTestId('createCampaignBtn'));
 
     await waitFor(() => {
@@ -304,11 +310,12 @@ describe('Testing FundCampaigns Screen', () => {
     const endDateDatePicker = screen.getByLabelText('End Date');
     const startDateDatePicker = screen.getByLabelText('Start Date');
 
-    fireEvent.change(endDateDatePicker, {
-      target: { value: formData.campaignEndDate },
-    });
     fireEvent.change(startDateDatePicker, {
       target: { value: formData.campaignStartDate },
+    });
+
+    fireEvent.change(endDateDatePicker, {
+      target: { value: formData.campaignEndDate },
     });
 
     userEvent.click(screen.getByTestId('editCampaignSubmitBtn'));
