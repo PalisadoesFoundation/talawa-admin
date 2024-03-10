@@ -1,0 +1,11 @@
+.dropwdownToggle {
+  background-color: #f1f3f6;
+  color: black;
+  border: none;
+  padding: 0.5rem;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 8rem;
+}

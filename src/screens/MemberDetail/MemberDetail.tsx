@@ -15,10 +15,19 @@ import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
-import { CalendarIcon } from '@mui/x-date-pickers';
+import { CalendarIcon, DatePicker } from '@mui/x-date-pickers';
 import { Form } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
 import sanitizeHtml from 'sanitize-html';
+import type { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
+import {
+  educationGradeEnum,
+  maritalStatusEnum,
+  genderEnum,
+  employmentStatusEnum,
+} from 'utils/memberFields';
+import DynamicDropDown from 'components/DynamicDropDown/DynamicDropDown';
 
 type MemberDetailProps = {
   id?: string; // This is the userId
@@ -64,6 +73,21 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     pluginCreationAllowed: false,
     adminApproved: false,
   });
+
+  // Handle date change
+  const handleDateChange = (date: Dayjs | null): void => {
+    if (date) {
+      setFormState((prevState) => ({
+        ...prevState,
+        birthDate: dayjs(date).format('YYYY-MM-DD'), // Convert Dayjs object to JavaScript Date object
+      }));
+    } else {
+      setFormState((prevState) => ({
+        ...prevState,
+        birthDate: '', // Set birthDate to null if no date is selected
+      }));
+    }
+  };
 
   const [updateUser] = useMutation(UPDATE_USER_MUTATION);
 
@@ -252,6 +276,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         id=""
                         onChange={handleChange}
                         required
+                        placeholder="John"
                       />
                     </div>
                     <div>
@@ -264,61 +289,59 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         id=""
                         onChange={handleChange}
                         required
+                        placeholder="Doe"
                       />
                     </div>
                     <div>
                       <p className="my-0 mx-2">{t('gender')}</p>
-                      <input
-                        value={formState.gender}
-                        className={`rounded border-0 p-2 m-2 w-75 ${styles.inputColor}`}
-                        type="text"
-                        name="gender"
-                        id=""
-                        onChange={handleChange}
-                      />
+                      <div className="w-100">
+                        {/* <ChangeGenderDropDown
+                          formState={formState}
+                          setFormState={setFormState}
+                        /> */}
+                        <DynamicDropDown
+                          formState={formState}
+                          setFormState={setFormState}
+                          fieldOptions={genderEnum} // Pass your options array here
+                          fieldName="gender" // Label for the field
+                        />
+                      </div>
                     </div>
                     <div>
                       <p className="my-0 mx-2">{t('birthDate')}</p>
-                      <input
-                        value={formState.birthDate}
-                        className={`rounded border-0 p-2 m-2 ${styles.inputColor}`}
-                        type="text"
-                        name="birthDate"
-                        id=""
-                        onChange={handleChange}
-                      />
+                      <div>
+                        <DatePicker
+                          className={styles.datebox}
+                          value={dayjs(formState.birthDate)}
+                          onChange={handleDateChange}
+                        />
+                      </div>
                     </div>
                     <div>
                       <p className="my-0 mx-2">{t('educationGrade')}</p>
-                      <input
-                        value={formState.educationGrade}
-                        className={`rounded border-0 p-2 m-2 ${styles.inputColor}`}
-                        type="text"
-                        name="educationGrade"
-                        id=""
-                        onChange={handleChange}
+                      <DynamicDropDown
+                        formState={formState}
+                        setFormState={setFormState}
+                        fieldOptions={educationGradeEnum} // Pass your options array here
+                        fieldName="educationGrade" // Label for the field
                       />
                     </div>
                     <div>
                       <p className="my-0 mx-2">{t('employmentStatus')}</p>
-                      <input
-                        value={formState.employmentStatus}
-                        className={`rounded border-0 p-2 m-2 ${styles.inputColor}`}
-                        type="text"
-                        name="employmentStatus"
-                        id=""
-                        onChange={handleChange}
+                      <DynamicDropDown
+                        formState={formState}
+                        setFormState={setFormState}
+                        fieldOptions={employmentStatusEnum} // Pass your options array here
+                        fieldName="employmentStatus" // Label for the field
                       />
                     </div>
                     <div>
                       <p className="my-0 mx-2">{t('maritalStatus')}</p>
-                      <input
-                        value={formState.maritalStatus}
-                        className={`rounded border-0 p-2 m-2 ${styles.inputColor}`}
-                        type="text"
-                        name="maritalStatus"
-                        id=""
-                        onChange={handleChange}
+                      <DynamicDropDown
+                        formState={formState}
+                        setFormState={setFormState}
+                        fieldOptions={maritalStatusEnum} // Pass your options array here
+                        fieldName="maritalStatus" // Label for the field
                       />
                     </div>
                     <p className="my-0 mx-2 w-100">
@@ -376,6 +399,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         name="email"
                         id=""
                         onChange={handleChange}
+                        required
+                        placeholder="john@example.com"
                       />
                     </div>
                     <div className="p-2" style={{ width: `82%` }}>
@@ -387,6 +412,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         name="line1"
                         id=""
                         onChange={handleAddressChange}
+                        placeholder="123 Random Street"
                       />
                     </div>
                     <div className="w-25 p-2">
@@ -398,6 +424,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         name="countryCode"
                         id=""
                         onChange={handleAddressChange}
+                        placeholder="eg. US or IN"
                       />
                     </div>
                     <div className="w-25 p-2">
@@ -409,6 +436,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         name="city"
                         id=""
                         onChange={handleAddressChange}
+                        placeholder="Queens"
                       />
                     </div>
                     <div className="w-25 p-2">
@@ -420,6 +448,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         name="state"
                         id=""
                         onChange={handleAddressChange}
+                        placeholder="NYC"
                       />
                     </div>
                   </div>

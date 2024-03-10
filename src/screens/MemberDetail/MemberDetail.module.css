@@ -473,3 +473,43 @@
 .WidthFit {
   width: fit-content;
 }
+
+.datebox {
+  border-radius: 7px;
+  border-color: #e8e5e5;
+  outline: none;
+  box-shadow: none;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-right: 5px;
+  padding-left: 5px;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.datebox > div > input {
+  padding: 0.5rem 0 0.5rem 0.5rem !important; /* top, right, bottom, left */
+  background-color: #f1f3f6;
+  border-radius: var(--bs-border-radius) !important;
+  border: none !important;
+}
+
+.datebox > div > div {
+  margin-left: 0px !important;
+}
+
+.datebox > div > fieldset {
+  border: none !important;
+  /* background-color: #f1f3f6; */
+  border-radius: var(--bs-border-radius) !important;
+}
+
+.datebox > div {
+  margin: 0.5rem !important;
+  background-color: #f1f3f6;
+}
+
+input::file-selector-button {
+  background-color: black;
+  color: white;
+}
