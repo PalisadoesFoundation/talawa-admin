@@ -470,6 +470,7 @@
   "pageNotFound": {
     "title": "404 未找到",
     "talawaAdmin": "塔拉瓦管理員",
+    "talawaUser": "塔拉瓦用戶",
     "404": "404",
     "notFoundMsg": "糟糕！找不到您請求的頁面！",
     "backToHome": "回到家"

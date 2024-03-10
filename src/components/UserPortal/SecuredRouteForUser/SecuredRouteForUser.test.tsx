@@ -10,6 +10,7 @@ describe('SecuredRouteForUser', () => {
   test('renders the route when the user is logged in', () => {
     // Set the 'IsLoggedIn' value to 'TRUE' in localStorage to simulate a logged-in user
     setItem('IsLoggedIn', 'TRUE');
+    setItem('UserType', 'USER');
 
     render(
       <MemoryRouter initialEntries={['/user/organizations']}>
@@ -59,5 +60,36 @@ describe('SecuredRouteForUser', () => {
     await waitFor(() => {
       expect(screen.getByText('User Login Page')).toBeInTheDocument();
     });
+  });
+
+  test('renders the route when the user is logged in and userType is ADMIN', () => {
+    // Set the 'IsLoggedIn' value to 'TRUE' in localStorage to simulate a logged-in user
+    setItem('IsLoggedIn', 'TRUE');
+    setItem('UserType', 'ADMIN');
+
+    render(
+      <MemoryRouter initialEntries={['/user/organizations']}>
+        <Routes>
+          <Route
+            path="/user/organizations"
+            element={<div>Oops! The Page you requested was not found!</div>}
+          />
+          <Route element={<SecuredRouteForUser />}>
+            <Route
+              path="/user/organizations"
+              element={
+                <div data-testid="organizations-content">
+                  Organizations Component
+                </div>
+              }
+            />
+          </Route>
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    expect(
+      screen.getByText(/Oops! The Page you requested was not found!/i),
+    ).toBeTruthy();
   });
 });

@@ -1,12 +1,24 @@
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import useLocalStorage from 'utils/useLocalstorage';
 const { getItem, setItem } = useLocalStorage();
 
 const SecuredRoute = (): JSX.Element => {
   const isLoggedIn = getItem('IsLoggedIn');
-  return isLoggedIn === 'TRUE' ? <Outlet /> : <Navigate to="/" replace />;
+  const userType = getItem('UserType');
+  return isLoggedIn === 'TRUE' ? (
+    <>
+      {userType == 'ADMIN' || userType == 'SUPERADMIN' ? (
+        <Outlet />
+      ) : (
+        <PageNotFound />
+      )}
+    </>
+  ) : (
+    <Navigate to="/" replace />
+  );
 };
 
 const timeoutMinutes = 15;

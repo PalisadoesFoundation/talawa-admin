@@ -468,6 +468,7 @@
   "pageNotFound": {
     "title": "404 introuvable",
     "talawaAdmin": "Administrateur Talawa",
+    "talawaUser": "Utilisateur Talawa",
     "404": "404",
     "notFoundMsg": "Oups ! La page demandée est introuvable !",
     "backToHome": "De retour à la maison"
