@@ -11,7 +11,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { languages } from 'utils/languages';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
-import { Dropdown, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -200,38 +200,22 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
             <div>
               <label>
                 {t('appLanguageCode')}
-                <Dropdown
-                  onSelect={(eventKey): void => {
+                <select
+                  className="form-control"
+                  data-testid="applangcode"
+                  onChange={(e): void => {
                     setFormState({
                       ...formState,
-                      appLanguageCode: eventKey !== null ? eventKey : '',
+                      appLanguageCode: e.target.value,
                     });
                   }}
                 >
-                  <div role="applangcode">
-                    <Dropdown.Toggle>
-                      {
-                        languages.find(
-                          (lang) => lang.code == formState.appLanguageCode,
-                        )?.name
-                      }
-                    </Dropdown.Toggle>
-                  </div>
-                  <Dropdown.Menu>
-                    {languages.map((language, index) => {
-                      return (
-                        <Dropdown.Item
-                          href=""
-                          key={index}
-                          eventKey={language.code}
-                          role={language.name}
-                        >
-                          {language.name}
-                        </Dropdown.Item>
-                      );
-                    })}
-                  </Dropdown.Menu>
-                </Dropdown>
+                  {languages.map((language, index: number) => (
+                    <option key={index} value={language.code}>
+                      {language.name}
+                    </option>
+                  ))}
+                </select>
               </label>
             </div>
           </div>
