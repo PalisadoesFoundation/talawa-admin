@@ -265,6 +265,14 @@ export interface InterfaceQueryUserListItem {
   createdAt: string;
 }
 
+export interface InterfaceQueryVenueListItem {
+  _id: string;
+  name: string;
+  description: string;
+  image: string | null;
+  capacity: string;
+}
+
 export interface InterfaceQueryRequestListItem {
   _id: string;
   firstName: string;

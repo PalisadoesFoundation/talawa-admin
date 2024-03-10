@@ -65,6 +65,7 @@ const components: ComponentType[] = [
   { name: 'Dashboard', comp_id: 'orgdash', component: 'OrganizationDashboard' },
   { name: 'People', comp_id: 'orgpeople', component: 'OrganizationPeople' },
   { name: 'Events', comp_id: 'orgevents', component: 'OrganizationEvents' },
+  { name: 'Venues', comp_id: 'orgvenues', component: 'OrganizationVenues' },
   {
     name: 'Action Items',
     comp_id: 'orgactionitems',

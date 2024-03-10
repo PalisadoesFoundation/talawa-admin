@@ -197,3 +197,26 @@ export const ORGANIZATION_FUNDS = gql`
     }
   }
 `;
+
+/**
+ * GraphQL query to retrieve the list of venues for a specific organization.
+ *
+ * @param id - The ID of the organization for which venues are being retrieved.
+ * @returns The list of venues associated with the organization.
+ */
+export const VENUE_LIST = gql`
+  query Venue {
+    organizations {
+      venues {
+        _id
+        capacity
+        imageUrl
+        name
+        description
+        organization {
+          _id
+        }
+      }
+    }
+  }
+`;

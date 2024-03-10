@@ -21,6 +21,7 @@ import EventDashboard from 'screens/EventDashboard/EventDashboard';
 import MemberDetail from 'screens/MemberDetail/MemberDetail';
 import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
+import OrganizationVenues from 'screens/OrganizationVenues/OrganizationVenues';
 
 // User Portal Components
 import Donate from 'screens/UserPortal/Donate/Donate';
@@ -99,6 +100,7 @@ function app(): JSX.Element {
             <Route path="/orgstore/:orgId" element={<AddOnStore />} />
             <Route path="/orgads/:orgId" element={<Advertisements />} />
             <Route path="/blockuser/:orgId" element={<BlockUser />} />
+            <Route path="/orgvenues/:orgId" element={<OrganizationVenues />} />
             {extraRoutes}
           </Route>
         </Route>
