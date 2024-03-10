@@ -28,6 +28,11 @@ import {
   MOCKS_UNARCHIVED_FUND,
 } from './OrganizationFundsMocks';
 import React from 'react';
+const mockNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+}));
 jest.mock('react-toastify', () => ({
   toast: {
     success: jest.fn(),
@@ -590,6 +595,27 @@ describe('Testing OrganizationFunds screen', () => {
     userEvent.click(screen.getAllByTestId('archiveFundBtn')[0]);
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
+    });
+  });
+  it('redirects to campaign screen when clicked on fund name', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              {<OrganizationFunds />}
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    await wait();
+    await waitFor(() => {
+      expect(screen.getAllByTestId('fundName')[0]).toBeInTheDocument();
+    });
+    userEvent.click(screen.getAllByTestId('fundName')[0]);
+    await waitFor(() => {
+      expect(mockNavigate).toBeCalledWith('/orgfundcampaign/undefined/1');
     });
   });
 });

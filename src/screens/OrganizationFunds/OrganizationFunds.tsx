@@ -307,6 +307,7 @@ const organizationFunds = (): JSX.Element => {
                     >
                       <div
                         className="fw-bold cursor-pointer"
+                        data-testid="fundName"
                         onClick={() => {
                           handleClick(fundd._id);
                         }}
