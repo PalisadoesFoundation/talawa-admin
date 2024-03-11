@@ -4,7 +4,6 @@ import Button from 'react-bootstrap/Button';
 import React, { useState, useEffect } from 'react';
 import styles from './EventCalendar.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
-import { Dropdown } from 'react-bootstrap';
 import CurrentHourIndicator from 'components/CurrentHourIndicator/CurrentHourIndicator';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 
@@ -110,7 +109,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
   const [expanded, setExpanded] = useState<number>(-1);
   const [windowWidth, setWindowWidth] = useState<number>(window.screen.width);
-  const [viewType, setViewType] = useState<string>(ViewType.MONTH);
+  const viewType = useState<string>(ViewType.MONTH);
 
   useEffect(() => {
     function handleResize(): void {
@@ -516,7 +515,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       <div className={styles.calendar__header}>
         <Button
           className={styles.button}
-          onClick={viewType == ViewType.DAY ? handlePrevDate : handlePrevMonth}
+          onClick={ViewType.DAY ? handlePrevDate : handlePrevMonth}
           data-testid="prevmonthordate"
         >
           <ChevronLeft />
@@ -526,12 +525,12 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           className={styles.calendar__header_month}
           data-testid="current-date"
         >
-          {viewType == ViewType.DAY ? `${currentDate}` : ``}{' '}
+          {ViewType.DAY ? `${currentDate}` : ``}{' '}
           {months[currentMonth]} {currentYear}
         </div>
         <Button
           className={styles.button}
-          onClick={viewType == ViewType.DAY ? handleNextDate : handleNextMonth}
+          onClick={ViewType.DAY ? handleNextDate : handleNextMonth}
           data-testid="nextmonthordate"
         >
           <ChevronRight />
@@ -547,7 +546,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         </div>
       </div>
       <div className={`${styles.calendar__scroll} customScroll`}>
-        {viewType == ViewType.MONTH ? (
+        {ViewType.MONTH ? (
           <div>
             <div className={styles.calendar__weekdays}>
               {weekdays.map((weekday, index) => (
