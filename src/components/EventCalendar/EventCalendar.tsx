@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import styles from './EventCalendar.module.css';
 import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
+import Button from 'react-bootstrap/Button';
+import React, { useState, useEffect } from 'react';
+import styles from './EventCalendar.module.css';
+import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+import { Dropdown } from 'react-bootstrap';
 import CurrentHourIndicator from 'components/CurrentHourIndicator/CurrentHourIndicator';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 
@@ -51,17 +54,28 @@ interface InterfaceIEventAttendees {
 interface InterfaceIOrgList {
   admins: { _id: string }[];
 }
-
 const Calendar: React.FC<InterfaceCalendarProps> = ({
   eventData,
   orgData,
   userRole,
   userId,
-  viewType,
 }) => {
   const [selectedDate] = useState<Date | null>(null);
   const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
   const hours = [
     '12 AM',
     '01 AM',
@@ -90,12 +104,13 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   ];
 
   const today = new Date();
-  const currentDate = today.getDate();
-  const currentMonth = today.getMonth();
-  const currentYear = today.getFullYear();
+  const [currentDate, setCurrentDate] = useState(today.getDate());
+  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
+  const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
   const [expanded, setExpanded] = useState<number>(-1);
   const [windowWidth, setWindowWidth] = useState<number>(window.screen.width);
+  const [viewType, setViewType] = useState<string>(ViewType.MONTH);
 
   useEffect(() => {
     function handleResize(): void {
@@ -146,6 +161,70 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     const data = filterData(eventData, orgData, userRole, userId);
     setEvents(data);
   }, [eventData, orgData, userRole, userId]);
+
+  const handlePrevMonth = (): void => {
+    if (currentMonth === 0) {
+      setCurrentMonth(11);
+      setCurrentYear(currentYear - 1);
+    } else {
+      setCurrentMonth(currentMonth - 1);
+    }
+  };
+
+  const handleNextMonth = (): void => {
+    if (currentMonth === 11) {
+      setCurrentMonth(0);
+      setCurrentYear(currentYear + 1);
+    } else {
+      setCurrentMonth(currentMonth + 1);
+    }
+  };
+
+  const handlePrevDate = (): void => {
+    if (currentDate > 1) {
+      setCurrentDate(currentDate - 1);
+    } else {
+      if (currentMonth > 0) {
+        const lastDayOfPrevMonth = new Date(
+          currentYear,
+          currentMonth,
+          0,
+        ).getDate();
+        setCurrentDate(lastDayOfPrevMonth);
+        setCurrentMonth(currentMonth - 1);
+      } else {
+        setCurrentDate(31);
+        setCurrentMonth(11);
+        setCurrentYear(currentYear - 1);
+      }
+    }
+  };
+
+  const handleNextDate = (): void => {
+    const lastDayOfCurrentMonth = new Date(
+      currentYear,
+      currentMonth - 1,
+      0,
+    ).getDate();
+    if (currentDate < lastDayOfCurrentMonth) {
+      setCurrentDate(currentDate + 1);
+    } else {
+      if (currentMonth < 12) {
+        setCurrentDate(1);
+        setCurrentMonth(currentMonth + 1);
+      } else {
+        setCurrentDate(1);
+        setCurrentMonth(1);
+        setCurrentYear(currentYear + 1);
+      }
+    }
+  };
+
+  const handleTodayButton = (): void => {
+    setCurrentYear(today.getFullYear());
+    setCurrentMonth(today.getMonth());
+    setCurrentDate(today.getDate());
+  };
 
   const timezoneString = `UTC${
     new Date().getTimezoneOffset() > 0 ? '-' : '+'
@@ -431,11 +510,44 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       );
     });
   };
-  /*istanbul ignore next*/
+
   return (
-    <>
+    <div className={styles.calendar}>
+      <div className={styles.calendar__header}>
+        <Button
+          className={styles.button}
+          onClick={viewType == ViewType.DAY ? handlePrevDate : handlePrevMonth}
+          data-testid="prevmonthordate"
+        >
+          <ChevronLeft />
+        </Button>
+
+        <div
+          className={styles.calendar__header_month}
+          data-testid="current-date"
+        >
+          {viewType == ViewType.DAY ? `${currentDate}` : ``}{' '}
+          {months[currentMonth]} {currentYear}
+        </div>
+        <Button
+          className={styles.button}
+          onClick={viewType == ViewType.DAY ? handleNextDate : handleNextMonth}
+          data-testid="nextmonthordate"
+        >
+          <ChevronRight />
+        </Button>
+        <div>
+          <Button
+            className={styles.btn__today}
+            onClick={handleTodayButton}
+            data-testid="today"
+          >
+            Today
+          </Button>
+        </div>
+      </div>
       <div className={`${styles.calendar__scroll} customScroll`}>
-        {viewType === ViewType.MONTH ? (
+        {viewType == ViewType.MONTH ? (
           <div>
             <div className={styles.calendar__weekdays}>
               {weekdays.map((weekday, index) => (
@@ -450,7 +562,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           <div className={styles.clendar__hours}>{renderHours()}</div>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
