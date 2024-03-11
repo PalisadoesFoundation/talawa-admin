@@ -43,20 +43,8 @@ export const REMOVE_EVENT_ATTENDEE = gql`
  */
 
 export const MARK_CHECKIN = gql`
-  mutation checkIn(
-    $userId: ID!
-    $eventId: ID!
-    $allotedRoom: String
-    $allotedSeat: String
-  ) {
-    checkIn(
-      data: {
-        userId: $userId
-        eventId: $eventId
-        allotedRoom: $allotedRoom
-        allotedSeat: $allotedSeat
-      }
-    ) {
+  mutation checkIn($userId: ID!, $eventId: ID!) {
+    checkIn(data: { userId: $userId, eventId: $eventId }) {
       _id
     }
   }
