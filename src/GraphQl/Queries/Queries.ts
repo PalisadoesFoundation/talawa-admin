@@ -578,8 +578,18 @@ export const MEMBERSHIP_REQUEST = gql`
 `;
 
 export const USERS_CONNECTION_LIST = gql`
-  query usersConnection($id_not_in: [ID!], $first: Int) {
-    users(where: { id_not_in: $id_not_in }, first: $first) {
+  query usersConnection(
+    $id_not_in: [ID!]
+    $firstName_contains: String
+    $lastName_contains: String
+  ) {
+    users(
+      where: {
+        id_not_in: $id_not_in
+        firstName_contains: $firstName_contains
+        lastName_contains: $lastName_contains
+      }
+    ) {
       firstName
       lastName
       image

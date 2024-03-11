@@ -1,16 +1,14 @@
+import type { ApolloError } from '@apollo/client';
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import dayjs from 'dayjs';
+import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-<<<<<<< HEAD
-import { Link, useLocation } from 'react-router-dom';
-import { Modal, Button, Dropdown, Form } from 'react-bootstrap';
-=======
 import { Link, useLocation, useParams } from 'react-router-dom';
-import { Button, Dropdown, Form } from 'react-bootstrap';
->>>>>>> e04abf34a2924c4680d4bc81d59fe85afa618ed6
+import { Button, Dropdown, Form, InputGroup, Modal } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import {
+  ORGANIZATIONS_LIST,
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USERS_CONNECTION_LIST,
   USER_LIST,
@@ -32,8 +30,13 @@ import Loader from 'components/Loader/Loader';
 import UserListCard from 'components/UserListCard/UserListCard';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 import OrgAdminListCard from 'components/OrgAdminListCard/OrgAdminListCard';
-import AddUserModal from './AddUserModal';
-import { ADD_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  ADD_MEMBER_MUTATION,
+  SIGNUP_MUTATION,
+} from 'GraphQl/Mutations/mutations';
+import { errorHandler } from 'utils/errorHandler';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -51,13 +54,6 @@ const StyledTableRow = styled(TableRow)(() => ({
   },
 }));
 
-<<<<<<< HEAD
-interface InterfaceLocationState {
-  role: number;
-}
-
-=======
->>>>>>> e04abf34a2924c4680d4bc81d59fe85afa618ed6
 function organizationPeople(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
@@ -65,63 +61,95 @@ function organizationPeople(): JSX.Element {
 
   document.title = t('title');
 
-<<<<<<< HEAD
-  const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
-  function openDialogModal(): void {
-    // console.log(redirectOrgId, dialogRedirectOrgId);
-    setdialogModalIsOpen(true);
+  const [addUserModalisOpen, setAddUserModalIsOpen] = useState(false);
+  function openAddUserModal(): void {
+    setAddUserModalIsOpen(true);
   }
 
   // function closeDialogModal(): void {
-  //   setdialogModalIsOpen(false);
+  //   setAddUserModalIsOpen(false);
   // }
   const toggleDialogModal = /* istanbul ignore next */ (): void =>
-    setdialogModalIsOpen(!dialogModalisOpen);
+    setAddUserModalIsOpen(!addUserModalisOpen);
 
-  const location = useLocation<InterfaceLocationState>();
-=======
+  const [createNewUserModalisOpen, setCreateNewUserModalIsOpen] =
+    useState(false);
+  function openCreateNewUserModal(): void {
+    setCreateNewUserModalIsOpen(true);
+  }
+
+  function closeCreateNewUserModal(): void {
+    setCreateNewUserModalIsOpen(false);
+  }
+  const toggleCreateNewUserModal = /* istanbul ignore next */ (): void =>
+    setCreateNewUserModalIsOpen(!addUserModalisOpen);
+
+  const [addMember] = useMutation(ADD_MEMBER_MUTATION);
+
+  const createMember = async (userId: string): Promise<void> => {
+    try {
+      await addMember({
+        variables: {
+          userid: userId,
+          orgid: currentUrl,
+        },
+      });
+      toast.success('Member added to the organization.');
+      memberRefetch({
+        orgId: currentUrl,
+      });
+    } catch (error: any) {
+      toast.error(error.message);
+      console.log(error);
+    }
+  };
+
   const location = useLocation();
->>>>>>> e04abf34a2924c4680d4bc81d59fe85afa618ed6
   const role = location?.state;
 
   const { orgId: currentUrl } = useParams();
 
   const [state, setState] = useState(role?.role || 0);
 
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
+
+  const togglePassword = (): void => setShowPassword(!showPassword);
+  const toggleConfirmPassword = (): void =>
+    setShowConfirmPassword(!showConfirmPassword);
+
   const [filterData, setFilterData] = useState({
     firstName_contains: '',
     lastName_contains: '',
   });
 
-  const [addMember] = useMutation(ADD_MEMBER_MUTATION);
+  const [fullName, setFullName] = useState('');
+  const [userName, setUserName] = useState('');
 
-  // const createMember = async (userId: string): Promise<void> => {
-  //   try {
-  //     await addMember({
-  //       variables: {
-  //         userid: userId,
-  //         orgid: currentUrl
-  //       },
-  //     });
-  //   } catch (error: any) {
-  //     toast.error(error.message);
-  //     console.log(error);
-  //   }
-  // };
+  const {
+    data: organizationData,
+    loading: loadingOrgData,
+    error: errorOrg,
+  }: {
+    data?: {
+      organizations: InterfaceQueryOrganizationsListObject[];
+    };
+    loading: boolean;
+    error?: ApolloError;
+  } = useQuery(ORGANIZATIONS_LIST, {
+    variables: { id: currentUrl },
+  });
 
   const getMembersId = (): any => {
-    console.log(memberData);
     if (memberData) {
       const ids = memberData?.organizationsMemberConnection.edges.map(
         (member: { _id: string }) => member._id,
       );
-      console.log('ids', ids);
       return ids;
     }
     return [];
   };
-
-  const [fullName, setFullName] = useState('');
 
   const {
     data: memberData,
@@ -169,10 +197,103 @@ function organizationPeople(): JSX.Element {
     refetch: allUsersRefetch,
   } = useQuery(USERS_CONNECTION_LIST, {
     variables: {
-      first: 10,
       id_not_in: getMembersId(),
+      firstName_contains: '',
+      lastName_contains: '',
     },
   });
+
+  const [registerMutation] = useMutation(SIGNUP_MUTATION);
+
+  const [createUserVariables, setCreateUserVariables] = React.useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+
+  const handleCreateUser = async (): Promise<void> => {
+    if (
+      !(
+        createUserVariables.email &&
+        createUserVariables.password &&
+        createUserVariables.firstName &&
+        createUserVariables.lastName
+      )
+    ) {
+      toast.error(t('invalidDetailsMessage'));
+    } else if (
+      createUserVariables.password !== createUserVariables.confirmPassword
+    ) {
+      toast.error(t('passwordNotMatch'));
+    } else {
+      try {
+        const registeredUser = await registerMutation({
+          variables: {
+            firstName: createUserVariables.firstName,
+            lastName: createUserVariables.lastName,
+            email: createUserVariables.email,
+            password: createUserVariables.password,
+          },
+        });
+        const createdUserId = registeredUser?.data.signUp.user._id;
+
+        await createMember(createdUserId);
+
+        closeCreateNewUserModal();
+
+        /* istanbul ignore next */
+        setCreateUserVariables({
+          firstName: '',
+          lastName: '',
+          email: '',
+          password: '',
+          confirmPassword: '',
+        });
+      } catch (error: any) {
+        /* istanbul ignore next */
+        errorHandler(t, error);
+      }
+    }
+  };
+
+  /* istanbul ignore next */
+  const handleFirstName = (e: ChangeEvent<HTMLInputElement>): void => {
+    const firstName = e.target.value;
+
+    setCreateUserVariables({ ...createUserVariables, firstName });
+  };
+
+  /* istanbul ignore next */
+  const handleLastName = (e: ChangeEvent<HTMLInputElement>): void => {
+    const lastName = e.target.value;
+
+    setCreateUserVariables({ ...createUserVariables, lastName });
+  };
+
+  /* istanbul ignore next */
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    const email = e.target.value;
+
+    setCreateUserVariables({ ...createUserVariables, email });
+  };
+
+  /* istanbul ignore next */
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    const password = e.target.value;
+
+    setCreateUserVariables({ ...createUserVariables, password });
+  };
+
+  /* istanbul ignore next */
+  const handleConfirmPasswordChange = (
+    e: ChangeEvent<HTMLInputElement>,
+  ): void => {
+    const confirmPassword = e.target.value;
+
+    setCreateUserVariables({ ...createUserVariables, confirmPassword });
+  };
 
   useEffect(() => {
     if (state === 0) {
@@ -230,6 +351,22 @@ function organizationPeople(): JSX.Element {
     }
   };
 
+  const handleUserModalSearchChange = (e: any): void => {
+    /* istanbul ignore next */
+    if (e.key === 'Enter') {
+      const [firstName, lastName] = userName.split(' ');
+
+      const newFilterData = {
+        firstName_contains: firstName ?? '',
+        lastName_contains: lastName ?? '',
+      };
+
+      allUsersRefetch({
+        ...newFilterData,
+      });
+    }
+  };
+
   return (
     <>
       <Row className={styles.head}>
@@ -282,89 +419,6 @@ function organizationPeople(): JSX.Element {
                       setState(2);
                     }}
                   >
-<<<<<<< HEAD
-                    <Sort />
-                    {t('sort')}
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item
-                      inline
-                      id="userslist"
-                      value="userslist"
-                      name="displaylist"
-                      data-testid="users"
-                      defaultChecked={state == 2 ? true : false}
-                      onClick={(): void => {
-                        setState(2);
-                      }}
-                    >
-                      <Form.Label htmlFor="userslist">{t('users')}</Form.Label>
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      inline
-                      id="memberslist"
-                      value="memberslist"
-                      name="displaylist"
-                      data-testid="members"
-                      defaultChecked={state == 0 ? true : false}
-                      onClick={(): void => {
-                        setState(0);
-                      }}
-                    >
-                      <label htmlFor="memberslist">{t('members')}</label>
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      inline
-                      id="adminslist"
-                      value="adminslist"
-                      name="displaylist"
-                      data-testid="admins"
-                      defaultChecked={state == 1 ? true : false}
-                      onClick={(): void => {
-                        setState(1);
-                      }}
-                    >
-                      <label htmlFor="adminslist">{t('admins')}</label>
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-                <Dropdown>
-                  <Dropdown.Toggle
-                    variant="success"
-                    id="dropdown-basic"
-                    className={styles.dropdown}
-                    data-testid="role"
-                  >
-                    {t('addMembers')}
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item
-                      inline
-                      id="existingUser"
-                      value="existingUser"
-                      name="existingUser"
-                      data-testid="existingUser"
-                    >
-                      <Form.Label htmlFor="existingUser">
-                        {t('existingUser')}
-                      </Form.Label>
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      inline
-                      id="newUser"
-                      value="newUser"
-                      name="newUser"
-                      data-testid="newUser"
-                      onClick={(): void => {
-                        openDialogModal();
-                      }}
-                    >
-                      <label htmlFor="memberslist">{t('newUser')}</label>
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </div>
-=======
                     <Form.Label htmlFor="userslist">{t('users')}</Form.Label>
                   </Dropdown.Item>
                   <Dropdown.Item
@@ -395,7 +449,46 @@ function organizationPeople(): JSX.Element {
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
->>>>>>> e04abf34a2924c4680d4bc81d59fe85afa618ed6
+            </div>
+            <div className={styles.btnsBlock}>
+              <Dropdown>
+                <Dropdown.Toggle
+                  variant="success"
+                  id="dropdown-basic"
+                  className={styles.dropdown}
+                  data-testid="addMembers"
+                >
+                  {t('addMembers')}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    inline
+                    id="existingUser"
+                    value="existingUser"
+                    name="existingUser"
+                    data-testid="existingUser"
+                    onClick={(): void => {
+                      openAddUserModal();
+                    }}
+                  >
+                    <Form.Label htmlFor="existingUser">
+                      {t('existingUser')}
+                    </Form.Label>
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    inline
+                    id="newUser"
+                    value="newUser"
+                    name="newUser"
+                    data-testid="newUser"
+                    onClick={(): void => {
+                      openCreateNewUserModal();
+                    }}
+                  >
+                    <label htmlFor="memberslist">{t('newUser')}</label>
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
           </div>
         </div>
@@ -478,96 +571,6 @@ function organizationPeople(): JSX.Element {
                               </StyledTableRow>
                             ),
                           )
-<<<<<<< HEAD
-                        }
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </Col>
-              </div>
-            )}
-          </div>
-        </Col>
-        {/* <AddUserModal
-          showModal={showModal}
-          toggleModal={toggleModal}
-          formState={formState}
-          setFormState={setFormState}
-          createOrg={createOrg}
-          t={t}
-          userData={userData}
-          triggerCreateSampleOrg={triggerCreateSampleOrg}
-        /> */}
-
-        <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
-          <Modal.Header closeButton data-testid="pluginNotificationHeader">
-            <Modal.Title>{t('addMembers')}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <div className={styles.input}>
-              <Form.Control
-                type="name"
-                id="searchLastName"
-                placeholder={t('searchFullName')}
-                autoComplete="off"
-                required
-                className={styles.inputField}
-                value={fullName}
-                onChange={(e): void => {
-                  const { value } = e.target;
-                  setFullName(value);
-                  handleFullNameSearchChange(value);
-                }}
-                onKeyUp={handleFullNameSearchChange}
-              />
-              <Button
-                className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center `}
-                onClick={handleFullNameSearchChange}
-              >
-                <Search />
-              </Button>
-            </div>
-
-            <TableContainer component={Paper}>
-              <Table aria-label="customized table">
-                <TableHead>
-                  <TableRow>
-                    <StyledTableCell>#</StyledTableCell>
-                    <StyledTableCell align="center">User Name</StyledTableCell>
-                    <StyledTableCell align="center">Add Member</StyledTableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {allUsersData &&
-                    allUsersData.users.length > 0 &&
-                    allUsersData.users.map((user: any, index: number) => (
-                      <StyledTableRow key={user._id}>
-                        <StyledTableCell component="th" scope="row">
-                          {index + 1}
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          <Link
-                            className={styles.membername}
-                            to={{
-                              pathname: `/member/id=${currentUrl}`,
-                              state: { id: user._id },
-                            }}
-                          >
-                            {user.firstName + ' ' + user.lastName}
-                          </Link>
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          <Button>Add</Button>
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Modal.Body>
-        </Modal>
-      </OrganizationScreen>
-=======
                         ) : /* istanbul ignore next */
                         state === 1 &&
                           adminData &&
@@ -683,7 +686,216 @@ function organizationPeople(): JSX.Element {
           )}
         </div>
       </Col>
->>>>>>> e04abf34a2924c4680d4bc81d59fe85afa618ed6
+      <Modal show={addUserModalisOpen} onHide={toggleDialogModal}>
+        <Modal.Header closeButton data-testid="pluginNotificationHeader">
+          <Modal.Title>{t('addMembers')}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {allUsersLoading ? (
+            <>
+              <Loader />
+            </>
+          ) : (
+            <>
+              <div className={styles.input}>
+                <Form.Control
+                  type="name"
+                  id="searchLastName"
+                  placeholder={t('searchFullName')}
+                  autoComplete="off"
+                  required
+                  className={styles.inputField}
+                  value={userName}
+                  onChange={(e): void => {
+                    const { value } = e.target;
+                    setUserName(value);
+                    handleUserModalSearchChange(value);
+                  }}
+                  onKeyUp={handleUserModalSearchChange}
+                />
+                <Button
+                  className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center `}
+                  onClick={handleUserModalSearchChange}
+                >
+                  <Search />
+                </Button>
+              </div>
+              <TableContainer component={Paper}>
+                <Table aria-label="customized table">
+                  <TableHead>
+                    <TableRow>
+                      <StyledTableCell>#</StyledTableCell>
+                      <StyledTableCell align="center">
+                        User Name
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        Add Member
+                      </StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {allUsersData &&
+                      allUsersData.users.length > 0 &&
+                      allUsersData.users.map((user: any, index: number) => (
+                        <StyledTableRow key={user._id}>
+                          <StyledTableCell component="th" scope="row">
+                            {index + 1}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            <Link
+                              className={styles.membername}
+                              to={{
+                                pathname: `/member/id=${currentUrl}`,
+                              }}
+                            >
+                              {user.firstName + ' ' + user.lastName}
+                            </Link>
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            <Button
+                              onClick={() => {
+                                createMember(user._id);
+                              }}
+                            >
+                              Add
+                            </Button>
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </>
+          )}
+        </Modal.Body>
+      </Modal>
+
+      <Modal show={createNewUserModalisOpen} onHide={toggleCreateNewUserModal}>
+        <Modal.Header
+          className={styles.createUserModalHeader}
+          data-testid="pluginNotificationHeader"
+        >
+          <Modal.Title>Create User</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="my-3">
+            <div className="row">
+              <div className="col-sm-6">
+                <h6>{t('firstName')}</h6>
+                <InputGroup className="mt-2 mb-4">
+                  <Form.Control
+                    placeholder={t('enterFirstName')}
+                    className={styles.borderNone}
+                    value={createUserVariables.firstName}
+                    onChange={handleFirstName}
+                    data-testid="firstNameInput"
+                  />
+                </InputGroup>
+              </div>
+              <div className="col-sm-6">
+                <h6>{t('lastName')}</h6>
+                <InputGroup className="mt-2 mb-4">
+                  <Form.Control
+                    placeholder={t('enterLastName')}
+                    className={styles.borderNone}
+                    value={createUserVariables.lastName}
+                    onChange={handleLastName}
+                    data-testid="lastNameInput"
+                  />
+                </InputGroup>
+              </div>
+            </div>
+            <h6>{t('emailAddress')}</h6>
+            <InputGroup className="mt-2 mb-4">
+              <Form.Control
+                placeholder={t('enterEmail')}
+                type="email"
+                className={styles.borderNone}
+                value={createUserVariables.email}
+                onChange={handleEmailChange}
+                data-testid="emailInput"
+              />
+              <InputGroup.Text
+                className={`${styles.colorPrimary} ${styles.borderNone}`}
+              >
+                <EmailOutlinedIcon className={`${styles.colorWhite}`} />
+              </InputGroup.Text>
+            </InputGroup>
+            <h6>{t('password')}</h6>
+            <InputGroup className="mt-2 mb-4">
+              <Form.Control
+                placeholder={t('enterPassword')}
+                type={showPassword ? 'text' : 'password'}
+                className={styles.borderNone}
+                value={createUserVariables.password}
+                onChange={handlePasswordChange}
+                data-testid="passwordInput"
+              />
+              <InputGroup.Text
+                className={`${styles.colorPrimary} ${styles.borderNone} ${styles.colorWhite}`}
+                onClick={togglePassword}
+                data-testid="showPassword"
+              >
+                {showPassword ? (
+                  <i className="fas fa-eye"></i>
+                ) : (
+                  <i className="fas fa-eye-slash"></i>
+                )}
+              </InputGroup.Text>
+            </InputGroup>
+            <h6>{t('confirmPassword')}</h6>
+            <InputGroup className="mt-2 mb-4">
+              <Form.Control
+                placeholder={t('enterConfirmPassword')}
+                type={showConfirmPassword ? 'text' : 'password'}
+                className={styles.borderNone}
+                value={createUserVariables.confirmPassword}
+                onChange={handleConfirmPasswordChange}
+                data-testid="confirmPasswordInput"
+              />
+              <InputGroup.Text
+                className={`${styles.colorPrimary} ${styles.borderNone} ${styles.colorWhite}`}
+                onClick={toggleConfirmPassword}
+                data-testid="showPassword"
+              >
+                {showConfirmPassword ? (
+                  <i className="fas fa-eye"></i>
+                ) : (
+                  <i className="fas fa-eye-slash"></i>
+                )}
+              </InputGroup.Text>
+            </InputGroup>
+            <h6>{t('organization')}</h6>
+            <InputGroup className="mt-2 mb-4">
+              <Form.Control
+                className={styles.borderNone}
+                value={organizationData?.organizations[0].name}
+                onChange={handlePasswordChange}
+                data-testid="passwordInput"
+                disabled
+              />
+            </InputGroup>
+          </div>
+          <div className={styles.createUserActionBtns}>
+            <Button
+              className={`${styles.borderNone}`}
+              variant="danger"
+              onClick={closeCreateNewUserModal}
+              data-testid="registerBtn"
+            >
+              {t('cancel')}
+            </Button>
+            <Button
+              className={`${styles.colorPrimary} ${styles.borderNone}`}
+              variant="success"
+              onClick={handleCreateUser}
+              data-testid="registerBtn"
+            >
+              {t('create')}
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
     </>
   );
 }
