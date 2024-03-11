@@ -180,6 +180,10 @@ describe('Testing FundCampaigns Screen', () => {
       screen.getByPlaceholderText('Enter Funding Goal'),
       formData.campaignGoal.toString(),
     );
+    const currency = screen.getByTestId('currencySelect');
+    fireEvent.change(currency, {
+      target: { value: formData.campaignCurrency },
+    });
     const startDate = screen.getByLabelText('Start Date');
     const endDate = screen.getByLabelText('End Date');
     fireEvent.change(startDate, {
