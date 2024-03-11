@@ -525,8 +525,8 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           className={styles.calendar__header_month}
           data-testid="current-date"
         >
-          {ViewType.DAY ? `${currentDate}` : ``}{' '}
-          {months[currentMonth]} {currentYear}
+          {ViewType.DAY ? `${currentDate}` : ``} {months[currentMonth]}{' '}
+          {currentYear}
         </div>
         <Button
           className={styles.button}
