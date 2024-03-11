@@ -4,7 +4,6 @@ import {
   UPDATE_CAMPAIGN_MUTATION,
 } from 'GraphQl/Mutations/CampaignMutation';
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
-import dayjs from 'dayjs';
 
 export const MOCKS = [
   {
@@ -46,8 +45,8 @@ export const MOCKS = [
         fundId: undefined,
         name: 'Campaign 1',
         fundingGoal: 100,
-        startDate: dayjs(new Date()).format('YYYY-MM-DD'),
-        endDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        startDate: '2024-03-10',
+        endDate: '2024-03-10',
         currency: 'USD',
       },
     },
@@ -65,8 +64,8 @@ export const MOCKS = [
       variables: {
         id: '1',
         name: 'Campaign 4',
-        startDate: dayjs(new Date()).format('YYYY-MM-DD'),
-        endDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        startDate: '2024-03-10',
+        endDate: '2024-03-10',
         fundingGoal: 1000,
         currency: 'INR',
       },
@@ -148,8 +147,8 @@ export const MOCKS_ERROR_CREATE_CAMPAIGN = [
         fundId: undefined,
         name: 'Campaign 1',
         fundingGoal: 100,
-        startDate: dayjs(new Date()).format('YYYY-MM-DD'),
-        endDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        startDate: '2024-03-10',
+        endDate: '2024-03-10',
         currency: 'USD',
       },
     },
@@ -196,8 +195,8 @@ export const MOCKS_ERROR_UPDATE_CAMPAIGN = [
         id: undefined,
         name: 'Campaign 1',
         fundingGoal: 100,
-        startDate: dayjs(new Date()).format('YYYY-MM-DD'),
-        endDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        startDate: '2024-03-10',
+        endDate: '2024-03-10',
         currency: 'USD',
       },
     },
