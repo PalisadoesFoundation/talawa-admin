@@ -15,7 +15,12 @@ import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
-import { CalendarIcon, DatePicker } from '@mui/x-date-pickers';
+import {
+  CalendarIcon,
+  DatePicker,
+  LocalizationProvider,
+} from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Form } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
 import sanitizeHtml from 'sanitize-html';
@@ -252,360 +257,366 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   });
 
   return (
-    <Row>
-      <Col>
-        {state == 1 ? (
-          <div className={`my-4 ${styles.mainpageright}`}>
-            <div className="d-flex flex-row">
-              <div className={`left d-flex flex-column ${styles.width60}`}>
-                {/* Personal */}
-                <div className={`personal bg-white border ${styles.allRound}`}>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Row>
+        <Col>
+          {state == 1 ? (
+            <div className={`my-4 ${styles.mainpageright}`}>
+              <div className="d-flex flex-row">
+                <div className={`left d-flex flex-column ${styles.width60}`}>
+                  {/* Personal */}
                   <div
-                    className={`d-flex border-bottom py-3 px-4 ${styles.topRadius}`}
+                    className={`personal bg-white border ${styles.allRound}`}
                   >
-                    <h3>{t('personalInfoHeading')}</h3>
-                  </div>
-                  <div className="d-flex flex-row flex-wrap py-3 px-3">
-                    <div>
-                      <p className="my-0 mx-2">{t('firstName')}</p>
-                      <input
-                        value={formState.firstName}
-                        className={`rounded border-0 p-2 m-2 ${styles.inputColor}`}
-                        type="text"
-                        name="firstName"
-                        id=""
-                        onChange={handleChange}
-                        required
-                        placeholder="John"
-                      />
+                    <div
+                      className={`d-flex border-bottom py-3 px-4 ${styles.topRadius}`}
+                    >
+                      <h3>{t('personalInfoHeading')}</h3>
                     </div>
-                    <div>
-                      <p className="my-0 mx-2">{t('lastName')}</p>
-                      <input
-                        value={formState.lastName}
-                        className={`rounded border-0 p-2 m-2 ${styles.inputColor}`}
-                        type="text"
-                        name="lastName"
-                        id=""
-                        onChange={handleChange}
-                        required
-                        placeholder="Doe"
-                      />
-                    </div>
-                    <div>
-                      <p className="my-0 mx-2">{t('gender')}</p>
-                      <div className="w-100">
-                        {/* <ChangeGenderDropDown
+                    <div className="d-flex flex-row flex-wrap py-3 px-3">
+                      <div>
+                        <p className="my-0 mx-2">{t('firstName')}</p>
+                        <input
+                          value={formState.firstName}
+                          className={`rounded border-0 p-2 m-2 ${styles.inputColor}`}
+                          type="text"
+                          name="firstName"
+                          id=""
+                          onChange={handleChange}
+                          required
+                          placeholder="John"
+                        />
+                      </div>
+                      <div>
+                        <p className="my-0 mx-2">{t('lastName')}</p>
+                        <input
+                          value={formState.lastName}
+                          className={`rounded border-0 p-2 m-2 ${styles.inputColor}`}
+                          type="text"
+                          name="lastName"
+                          id=""
+                          onChange={handleChange}
+                          required
+                          placeholder="Doe"
+                        />
+                      </div>
+                      <div>
+                        <p className="my-0 mx-2">{t('gender')}</p>
+                        <div className="w-100">
+                          {/* <ChangeGenderDropDown
                           formState={formState}
                           setFormState={setFormState}
                         /> */}
+                          <DynamicDropDown
+                            formState={formState}
+                            setFormState={setFormState}
+                            fieldOptions={genderEnum} // Pass your options array here
+                            fieldName="gender" // Label for the field
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <p className="my-0 mx-2">{t('birthDate')}</p>
+                        <div>
+                          <DatePicker
+                            className={styles.datebox}
+                            value={dayjs(formState.birthDate)}
+                            onChange={handleDateChange}
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <p className="my-0 mx-2">{t('educationGrade')}</p>
                         <DynamicDropDown
                           formState={formState}
                           setFormState={setFormState}
-                          fieldOptions={genderEnum} // Pass your options array here
-                          fieldName="gender" // Label for the field
+                          fieldOptions={educationGradeEnum} // Pass your options array here
+                          fieldName="educationGrade" // Label for the field
                         />
                       </div>
-                    </div>
-                    <div>
-                      <p className="my-0 mx-2">{t('birthDate')}</p>
                       <div>
-                        <DatePicker
-                          className={styles.datebox}
-                          value={dayjs(formState.birthDate)}
-                          onChange={handleDateChange}
+                        <p className="my-0 mx-2">{t('employmentStatus')}</p>
+                        <DynamicDropDown
+                          formState={formState}
+                          setFormState={setFormState}
+                          fieldOptions={employmentStatusEnum} // Pass your options array here
+                          fieldName="employmentStatus" // Label for the field
+                        />
+                      </div>
+                      <div>
+                        <p className="my-0 mx-2">{t('maritalStatus')}</p>
+                        <DynamicDropDown
+                          formState={formState}
+                          setFormState={setFormState}
+                          fieldOptions={maritalStatusEnum} // Pass your options array here
+                          fieldName="maritalStatus" // Label for the field
+                        />
+                      </div>
+                      <p className="my-0 mx-2 w-100">
+                        {t('displayImage')}:
+                        <Form.Control
+                          className="w-75"
+                          accept="image/*"
+                          id="orgphoto"
+                          name="photo"
+                          type="file"
+                          multiple={false}
+                          onChange={async (
+                            e: React.ChangeEvent,
+                          ): Promise<void> => {
+                            const target = e.target as HTMLInputElement;
+                            const file = target.files && target.files[0];
+                            if (file)
+                              setFormState({
+                                ...formState,
+                                file: await convertToBase64(file),
+                              });
+                          }}
+                          data-testid="organisationImage"
+                        />
+                      </p>
+                    </div>
+                  </div>
+                  {/* Contact Info */}
+                  <div
+                    className={`contact mt-5 bg-white border ${styles.allRound}`}
+                  >
+                    <div
+                      className={`d-flex border-bottom py-3 px-4 ${styles.topRadius}`}
+                    >
+                      <h3>{t('contactInfoHeading')}</h3>
+                    </div>
+                    <div className="d-flex flex-row flex-wrap py-3 px-3">
+                      <div>
+                        <p className="my-0 mx-2">{t('phone')}</p>
+                        <input
+                          value={formState.phone.home}
+                          className={`rounded border-0 p-2 m-2 ${styles.inputColor}`}
+                          type="number"
+                          name="home"
+                          id=""
+                          onChange={handlePhoneChange}
+                        />
+                      </div>
+                      <div className="w-50 p-2">
+                        <p className="my-0">{t('email')}</p>
+                        <input
+                          value={formState.email}
+                          className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
+                          type="email"
+                          name="email"
+                          id=""
+                          onChange={handleChange}
+                          required
+                          placeholder="john@example.com"
+                        />
+                      </div>
+                      <div className="p-2" style={{ width: `82%` }}>
+                        <p className="my-0">{t('address')}</p>
+                        <input
+                          value={formState.address.line1}
+                          className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
+                          type="email"
+                          name="line1"
+                          id=""
+                          onChange={handleAddressChange}
+                          placeholder="123 Random Street"
+                        />
+                      </div>
+                      <div className="w-25 p-2">
+                        <p className="my-0">{t('countryCode')}</p>
+                        <input
+                          value={formState.address.countryCode}
+                          className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
+                          type="text"
+                          name="countryCode"
+                          id=""
+                          onChange={handleAddressChange}
+                          placeholder="eg. US or IN"
+                        />
+                      </div>
+                      <div className="w-25 p-2">
+                        <p className="my-0">{t('city')}</p>
+                        <input
+                          value={formState.address.city}
+                          className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
+                          type="text"
+                          name="city"
+                          id=""
+                          onChange={handleAddressChange}
+                          placeholder="Queens"
+                        />
+                      </div>
+                      <div className="w-25 p-2">
+                        <p className="my-0">{t('state')}</p>
+                        <input
+                          value={formState.address.state}
+                          className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
+                          type="text"
+                          name="state"
+                          id=""
+                          onChange={handleAddressChange}
+                          placeholder="NYC"
                         />
                       </div>
                     </div>
-                    <div>
-                      <p className="my-0 mx-2">{t('educationGrade')}</p>
-                      <DynamicDropDown
-                        formState={formState}
-                        setFormState={setFormState}
-                        fieldOptions={educationGradeEnum} // Pass your options array here
-                        fieldName="educationGrade" // Label for the field
-                      />
-                    </div>
-                    <div>
-                      <p className="my-0 mx-2">{t('employmentStatus')}</p>
-                      <DynamicDropDown
-                        formState={formState}
-                        setFormState={setFormState}
-                        fieldOptions={employmentStatusEnum} // Pass your options array here
-                        fieldName="employmentStatus" // Label for the field
-                      />
-                    </div>
-                    <div>
-                      <p className="my-0 mx-2">{t('maritalStatus')}</p>
-                      <DynamicDropDown
-                        formState={formState}
-                        setFormState={setFormState}
-                        fieldOptions={maritalStatusEnum} // Pass your options array here
-                        fieldName="maritalStatus" // Label for the field
-                      />
-                    </div>
-                    <p className="my-0 mx-2 w-100">
-                      {t('displayImage')}:
-                      <Form.Control
-                        className="w-75"
-                        accept="image/*"
-                        id="orgphoto"
-                        name="photo"
-                        type="file"
-                        multiple={false}
-                        onChange={async (
-                          e: React.ChangeEvent,
-                        ): Promise<void> => {
-                          const target = e.target as HTMLInputElement;
-                          const file = target.files && target.files[0];
-                          if (file)
-                            setFormState({
-                              ...formState,
-                              file: await convertToBase64(file),
-                            });
-                        }}
-                        data-testid="organisationImage"
-                      />
-                    </p>
                   </div>
                 </div>
-                {/* Contact Info */}
                 <div
-                  className={`contact mt-5 bg-white border ${styles.allRound}`}
+                  className={`right d-flex flex-column mx-auto px-3 ${styles.maxWidth40}`}
                 >
+                  {/* Personal */}
                   <div
-                    className={`d-flex border-bottom py-3 px-4 ${styles.topRadius}`}
+                    className={`personal bg-white border ${styles.allRound}`}
                   >
-                    <h3>{t('contactInfoHeading')}</h3>
-                  </div>
-                  <div className="d-flex flex-row flex-wrap py-3 px-3">
-                    <div>
-                      <p className="my-0 mx-2">{t('phone')}</p>
-                      <input
-                        value={formState.phone.home}
-                        className={`rounded border-0 p-2 m-2 ${styles.inputColor}`}
-                        type="number"
-                        name="home"
-                        id=""
-                        onChange={handlePhoneChange}
-                      />
+                    <div
+                      className={`d-flex flex-column border-bottom py-3 px-4 ${styles.topRadius}`}
+                    >
+                      <h3>{t('personalDetailsHeading')}</h3>
                     </div>
-                    <div className="w-50 p-2">
-                      <p className="my-0">{t('email')}</p>
-                      <input
-                        value={formState.email}
-                        className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
-                        type="email"
-                        name="email"
-                        id=""
-                        onChange={handleChange}
-                        required
-                        placeholder="john@example.com"
-                      />
-                    </div>
-                    <div className="p-2" style={{ width: `82%` }}>
-                      <p className="my-0">{t('address')}</p>
-                      <input
-                        value={formState.address.line1}
-                        className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
-                        type="email"
-                        name="line1"
-                        id=""
-                        onChange={handleAddressChange}
-                        placeholder="123 Random Street"
-                      />
-                    </div>
-                    <div className="w-25 p-2">
-                      <p className="my-0">{t('countryCode')}</p>
-                      <input
-                        value={formState.address.countryCode}
-                        className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
-                        type="text"
-                        name="countryCode"
-                        id=""
-                        onChange={handleAddressChange}
-                        placeholder="eg. US or IN"
-                      />
-                    </div>
-                    <div className="w-25 p-2">
-                      <p className="my-0">{t('city')}</p>
-                      <input
-                        value={formState.address.city}
-                        className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
-                        type="text"
-                        name="city"
-                        id=""
-                        onChange={handleAddressChange}
-                        placeholder="Queens"
-                      />
-                    </div>
-                    <div className="w-25 p-2">
-                      <p className="my-0">{t('state')}</p>
-                      <input
-                        value={formState.address.state}
-                        className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
-                        type="text"
-                        name="state"
-                        id=""
-                        onChange={handleAddressChange}
-                        placeholder="NYC"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className={`right d-flex flex-column mx-auto px-3 ${styles.maxWidth40}`}
-              >
-                {/* Personal */}
-                <div className={`personal bg-white border ${styles.allRound}`}>
-                  <div
-                    className={`d-flex flex-column border-bottom py-3 px-4 ${styles.topRadius}`}
-                  >
-                    <h3>{t('personalDetailsHeading')}</h3>
-                  </div>
-                  <div className="d-flex flex-row p-4">
-                    <div className="d-flex flex-column">
-                      {userData?.user?.image ? (
-                        <img
-                          className={`rounded-circle mx-auto`}
-                          style={{ width: '80px', aspectRatio: '1/1' }}
-                          src={sanitizedSrc || userData?.user?.image}
-                          data-testid="userImagePresent"
-                        />
-                      ) : (
-                        <>
-                          <Avatar
-                            name={`${userData?.user?.firstName} ${userData?.user?.lastName}`}
-                            alt="User Image"
-                            size={100}
-                            dataTestId="userImageAbsent"
-                            radius={50}
+                    <div className="d-flex flex-row p-4">
+                      <div className="d-flex flex-column">
+                        {userData?.user?.image ? (
+                          <img
+                            className={`rounded-circle mx-auto`}
+                            style={{ width: '80px', aspectRatio: '1/1' }}
+                            src={sanitizedSrc || userData?.user?.image}
+                            data-testid="userImagePresent"
                           />
-                        </>
-                      )}
-                    </div>
-                    <div className="d-flex flex-column mx-2">
-                      <p className="fs-2 my-0 fw-medium">
-                        {formState?.firstName}
-                      </p>
-                      <div
-                        className={`p-1 bg-white border border-success text-success text-center rounded mt-1 ${styles.WidthFit}`}
-                      >
-                        <p className="p-0 m-0 fs-6">
-                          {userData?.user?.userType}
+                        ) : (
+                          <>
+                            <Avatar
+                              name={`${userData?.user?.firstName} ${userData?.user?.lastName}`}
+                              alt="User Image"
+                              size={100}
+                              dataTestId="userImageAbsent"
+                              radius={50}
+                            />
+                          </>
+                        )}
+                      </div>
+                      <div className="d-flex flex-column mx-2">
+                        <p className="fs-2 my-0 fw-medium">
+                          {formState?.firstName}
+                        </p>
+                        <div
+                          className={`p-1 bg-white border border-success text-success text-center rounded mt-1 ${styles.WidthFit}`}
+                        >
+                          <p className="p-0 m-0 fs-6">
+                            {userData?.user?.userType}
+                          </p>
+                        </div>
+                        <p className="my-0">{userData?.user?.email}</p>
+                        <p className="my-0">
+                          <CalendarIcon />
+                          Joined on {prettyDate(userData?.user?.createdAt)}
                         </p>
                       </div>
-                      <p className="my-0">{userData?.user?.email}</p>
-                      <p className="my-0">
-                        <CalendarIcon />
-                        Joined on {prettyDate(userData?.user?.createdAt)}
-                      </p>
                     </div>
                   </div>
-                </div>
 
-                {/* Actions */}
-                <div
-                  className={`personal mt-4 bg-white border ${styles.allRound}`}
-                >
+                  {/* Actions */}
                   <div
-                    className={`d-flex flex-column border-bottom py-3 px-4 ${styles.topRadius}`}
+                    className={`personal mt-4 bg-white border ${styles.allRound}`}
                   >
-                    <h3>{t('actionsHeading')}</h3>
-                  </div>
-                  <div className="p-3">
-                    <div className="toggles">
-                      <div className="d-flex flex-row">
-                        <input
-                          type="checkbox"
-                          name="adminApproved"
-                          id=""
-                          className="mx-2"
-                          checked={formState.adminApproved}
-                          onChange={handleToggleChange}
-                          disabled // API not supporting this feature
-                        />
-                        <p className="p-0 m-0">
-                          {`${t('adminApproved')} (API not supported yet)`}
-                        </p>
-                      </div>
-                      <div className="d-flex flex-row">
-                        <input
-                          type="checkbox"
-                          name="pluginCreationAllowed"
-                          id=""
-                          className="mx-2"
-                          checked={formState.pluginCreationAllowed}
-                          onChange={handleToggleChange}
-                          disabled // API not supporting this feature
-                        />
-                        <p className="p-0 m-0">
-                          {`${t('pluginCreationAllowed')} (API not supported yet)`}
-                        </p>
-                      </div>
+                    <div
+                      className={`d-flex flex-column border-bottom py-3 px-4 ${styles.topRadius}`}
+                    >
+                      <h3>{t('actionsHeading')}</h3>
                     </div>
-                    <div className="buttons d-flex flex-row gap-3 mt-2">
-                      <div className={styles.dispflex}>
-                        <div>
-                          <label>
-                            {t('appLanguageCode')} <br />
-                            {`(API not supported yet)`}
-                            <select
-                              disabled
-                              className="form-control"
-                              data-testid="applangcode"
-                              onChange={(e): void => {
-                                setFormState({
-                                  ...formState,
-                                  applangcode: e.target.value,
-                                });
-                              }}
-                            >
-                              {languages.map((language, index: number) => (
-                                <option key={index} value={language.code}>
-                                  {language.name}
-                                </option>
-                              ))}
-                            </select>
-                          </label>
+                    <div className="p-3">
+                      <div className="toggles">
+                        <div className="d-flex flex-row">
+                          <input
+                            type="checkbox"
+                            name="adminApproved"
+                            id=""
+                            className="mx-2"
+                            checked={formState.adminApproved}
+                            onChange={handleToggleChange}
+                            disabled // API not supporting this feature
+                          />
+                          <p className="p-0 m-0">
+                            {`${t('adminApproved')} (API not supported yet)`}
+                          </p>
+                        </div>
+                        <div className="d-flex flex-row">
+                          <input
+                            type="checkbox"
+                            name="pluginCreationAllowed"
+                            id=""
+                            className="mx-2"
+                            checked={formState.pluginCreationAllowed}
+                            onChange={handleToggleChange}
+                            disabled // API not supporting this feature
+                          />
+                          <p className="p-0 m-0">
+                            {`${t('pluginCreationAllowed')} (API not supported yet)`}
+                          </p>
                         </div>
                       </div>
-                      <div className="d-flex flex-column">
-                        <label htmlFor="">
-                          {t('delete')}
-                          <br />
-                          {`(API not supported yet)`}
-                        </label>
-                        <Button
-                          className="btn btn-danger"
-                          data-testid="deleteBtn"
-                        >
-                          {t('delete')}
-                        </Button>
+                      <div className="buttons d-flex flex-row gap-3 mt-2">
+                        <div className={styles.dispflex}>
+                          <div>
+                            <label>
+                              {t('appLanguageCode')} <br />
+                              {`(API not supported yet)`}
+                              <select
+                                disabled
+                                className="form-control"
+                                data-testid="applangcode"
+                                onChange={(e): void => {
+                                  setFormState({
+                                    ...formState,
+                                    applangcode: e.target.value,
+                                  });
+                                }}
+                              >
+                                {languages.map((language, index: number) => (
+                                  <option key={index} value={language.code}>
+                                    {language.name}
+                                  </option>
+                                ))}
+                              </select>
+                            </label>
+                          </div>
+                        </div>
+                        <div className="d-flex flex-column">
+                          <label htmlFor="">
+                            {t('delete')}
+                            <br />
+                            {`(API not supported yet)`}
+                          </label>
+                          <Button
+                            className="btn btn-danger"
+                            data-testid="deleteBtn"
+                          >
+                            {t('delete')}
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="buttons mt-4">
-                  <Button
-                    type="button"
-                    className={styles.greenregbtn}
-                    value="savechanges"
-                    onClick={loginLink}
-                  >
-                    {t('saveChanges')}
-                  </Button>
+                  <div className="buttons mt-4">
+                    <Button
+                      type="button"
+                      className={styles.greenregbtn}
+                      value="savechanges"
+                      onClick={loginLink}
+                    >
+                      {t('saveChanges')}
+                    </Button>
+                  </div>
                 </div>
               </div>
+              {/* Main Section And Activity section */}
             </div>
-            {/* Main Section And Activity section */}
-          </div>
-        ) : (
-          <UserUpdate id={currentUrl} toggleStateValue={toggleStateValue} />
-        )}
-      </Col>
-    </Row>
+          ) : (
+            <UserUpdate id={currentUrl} toggleStateValue={toggleStateValue} />
+          )}
+        </Col>
+      </Row>
+    </LocalizationProvider>
   );
 };
 
