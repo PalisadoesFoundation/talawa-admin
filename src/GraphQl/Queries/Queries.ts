@@ -439,40 +439,44 @@ export const USER_ORGANIZATION_LIST = gql`
 
 // To take the details of a user
 export const USER_DETAILS = gql`
-  query User($id: ID!) {
-    user(id: $id) {
-      image
-      firstName
-      lastName
-      email
-      appLanguageCode
-      userType
-      pluginCreationAllowed
-      adminApproved
-      createdAt
-      adminFor {
-        _id
+  query Query($userId: ID!) {
+    user(id: $userId) {
+      appUserProfile {
+        adminFor {
+          _id
+        }
+        createdEvents {
+          _id
+        }
+        eventAdmin {
+          _id
+        }
+        createdOrganizations {
+          _id
+        }
+        pluginCreationAllowed
+        appLanguageCode
+        isSuperAdmin
       }
-      createdOrganizations {
-        _id
-      }
-      joinedOrganizations {
-        _id
-      }
-      organizationsBlockedBy {
-        _id
-      }
-      createdEvents {
-        _id
-      }
-      registeredEvents {
-        _id
-      }
-      eventAdmin {
-        _id
-      }
-      membershipRequests {
-        _id
+      user {
+        firstName
+        lastName
+        createdAt
+        image
+        email
+        adminApproved
+        joinedOrganizations {
+          _id
+        }
+        membershipRequests {
+          _id
+        }
+        registeredEvents {
+          _id
+        }
+        organizationsBlockedBy {
+          _id
+        }
       }
     }
   }
