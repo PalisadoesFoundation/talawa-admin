@@ -356,7 +356,27 @@
     "fundUnarchived": "Fondo no archivado exitosamente",
     "deleteFundMsg": "¿Desea eliminar este fondo?"
   },
-
+  "fundCampaign": {
+    "title": "Campañas de recaudación de fondos",
+    "campaignName": "Nombre de la campaña",
+    "startDate": "Fecha de inicio",
+    "endDate": "Fecha de finalización",
+    "campaignOptions": "Opciones de la campaña",
+    "fundingGoal": "Meta de financiamiento",
+    "addCampaign": "Agregar campaña",
+    "createdCampaign": "Campaña creada exitosamente",
+    "updatedCampaign": "Campaña actualizada exitosamente",
+    "deletedCampaign": "Campaña eliminada exitosamente",
+    "deleteCampaignMsg": "¿Desea eliminar esta campaña?",
+    "noCampaigns": "No se encontraron campañas",
+    "createCampaign": "Crear campaña de recaudación de fondos",
+    "updateCampaign": "Actualizar campaña de recaudación de fondos",
+    "deleteCampaign": "Eliminar campaña de recaudación de fondos",
+    "no": "No",
+    "yes": "Sí",
+    "currency": "Moneda",
+    "selectCurrency": "Seleccionar moneda"
+  },
   "orgPost": {
     "title": "Publicaciones de Talawa",
     "searchPost": "Buscar Publicación",

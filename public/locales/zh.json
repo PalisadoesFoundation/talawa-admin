@@ -114,6 +114,27 @@
     "fundUnarchived": "基金未归档",
     "deleteFundMsg": "您是否要删除此基金？"
   },
+  "fundCampaign": {
+    "title": "筹款活动",
+    "campaignName": "活动名称",
+    "startDate": "开始日期",
+    "endDate": "结束日期",
+    "campaignOptions": "活动选项",
+    "fundingGoal": "筹款目标",
+    "addCampaign": "添加活动",
+    "createdCampaign": "活动创建成功",
+    "updatedCampaign": "活动更新成功",
+    "deletedCampaign": "活动删除成功",
+    "deleteCampaignMsg": "您确定要删除此活动吗",
+    "noCampaigns": "未找到活动",
+    "createCampaign": "创建筹款活动",
+    "updateCampaign": "更新筹款活动",
+    "deleteCampaign": "删除筹款活动",
+    "no": "没有",
+    "yes": "是",
+    "currency": "货币",
+    "selectCurrency": "选择货币"
+  },
 
   "orgList": {
     "title": "塔拉瓦組織",
