@@ -80,17 +80,19 @@ export default function events(): JSX.Element {
 
   const { orgId: organizationId } = useParams();
 
+  const id = organizationId?.split('=')[1];
+
   const modes = [t('listView'), t('calendarView')];
 
   const { data, loading, refetch } = useQuery(ORGANIZATION_EVENTS_CONNECTION, {
     variables: {
-      organization_id: organizationId,
+      organization_id: id,
       title_contains: '',
     },
   });
 
   const { data: orgData } = useQuery(ORGANIZATIONS_LIST, {
-    variables: { id: organizationId },
+    variables: { id: id },
   });
 
   const [create] = useMutation(CREATE_EVENT_MUTATION);
