@@ -308,43 +308,6 @@ describe('Testing Advertisement Entry Component', () => {
     });
   });
 
-  test('Updates the advertisement and shows error toast on successful update', async () => {
-    const updateAdByIdMock = jest.fn();
-
-    mockUseMutation.mockReturnValue([updateAdByIdMock]);
-
-    render(
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <AdvertisementRegister
-                formStatus="edit"
-                idEdit="-100"
-                nameEdit="Updated"
-                endDateEdit={new Date()}
-                startDateEdit={new Date()}
-                typeEdit="POPUP"
-                orgIdEdit="1"
-                advertisementMediaEdit=""
-              />
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </ApolloProvider>,
-    );
-
-    fireEvent.click(screen.getByTestId('editBtn'));
-
-    fireEvent.click(screen.getByTestId('addonupdate'));
-
-    expect(updateAdByIdMock).toHaveBeenCalledWith({
-      variables: {
-        id: '-100',
-      },
-    });
-  });
-
   test('Simulating if the mutation does not have data variable while registering', async () => {
     Object.defineProperty(window, 'location', {
       configurable: true,

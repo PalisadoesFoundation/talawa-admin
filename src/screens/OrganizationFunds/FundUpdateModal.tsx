@@ -1,5 +1,5 @@
-import React from 'react';
 import type { ChangeEvent } from 'react';
+import React from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import type { InterfaceCreateFund } from 'utils/interfaces';
 import styles from './OrganizationFunds.module.css';
@@ -74,6 +74,7 @@ const FundUpdateModal: React.FC<InterfaceFundUpdateModal> = ({
                   <Form.Switch
                     type="checkbox"
                     checked={taxDeductible}
+                    data-testid="taxDeductibleSwitch"
                     className="ms-2"
                     onChange={() => setTaxDeductible(!taxDeductible)}
                   />
@@ -86,6 +87,7 @@ const FundUpdateModal: React.FC<InterfaceFundUpdateModal> = ({
                   <Form.Switch
                     type="checkbox"
                     className="ms-2"
+                    data-testid="archivedSwitch"
                     checked={isArchived}
                     onChange={() => setIsArchived(!isArchived)}
                   />
@@ -98,6 +100,7 @@ const FundUpdateModal: React.FC<InterfaceFundUpdateModal> = ({
                 <Form.Switch
                   type="checkbox"
                   className="ms-2"
+                  data-testid="defaultSwitch"
                   checked={isDefault}
                   onChange={() => setIsDefault(!isDefault)}
                 />
