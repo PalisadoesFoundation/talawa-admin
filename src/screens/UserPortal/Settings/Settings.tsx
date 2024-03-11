@@ -197,7 +197,7 @@ export default function settings(): JSX.Element {
                       </span>
                     </div>
                   </div>
-                  <div className="mb-1 d-flex justify-content-center">
+                  <div className="mt-2 mb-1 d-flex justify-content-center">
                     <Button data-testid="copyProfileLink">
                       {t('copyLink')}
                     </Button>
@@ -310,35 +310,37 @@ export default function settings(): JSX.Element {
                       >
                         {t('displayImage')}
                       </Form.Label>
-                      <Button
-                        className={`${styles.cardButton}`}
-                        onClick={handleImageUpload}
-                        data-testid="uploadImageBtn"
-                      >
-                        {t('chooseFile')}
-                      </Button>
-                      <Form.Control
-                        accept="image/*"
-                        id="postphoto"
-                        name="photo"
-                        type="file"
-                        className={styles.cardControl}
-                        data-testid="fileInput"
-                        multiple={false}
-                        ref={fileInputRef}
-                        onChange={
-                          /* istanbul ignore next */
-                          async (e: React.ChangeEvent): Promise<void> => {
-                            const target = e.target as HTMLInputElement;
-                            const file = target.files && target.files[0];
-                            if (file) {
-                              const image = await convertToBase64(file);
-                              setImage(image);
+                      <div>
+                        <Button
+                          className={`${styles.cardButton}`}
+                          onClick={handleImageUpload}
+                          data-testid="uploadImageBtn"
+                        >
+                          {t('chooseFile')}
+                        </Button>
+                        <Form.Control
+                          accept="image/*"
+                          id="postphoto"
+                          name="photo"
+                          type="file"
+                          className={styles.cardControl}
+                          data-testid="fileInput"
+                          multiple={false}
+                          ref={fileInputRef}
+                          onChange={
+                            /* istanbul ignore next */
+                            async (e: React.ChangeEvent): Promise<void> => {
+                              const target = e.target as HTMLInputElement;
+                              const file = target.files && target.files[0];
+                              if (file) {
+                                const image = await convertToBase64(file);
+                                setImage(image);
+                              }
                             }
                           }
-                        }
-                        style={{ display: 'none' }}
-                      />
+                          style={{ display: 'none' }}
+                        />
+                      </div>
                     </Col>
                   </Row>
                   <Row className="mb-1">
@@ -543,7 +545,7 @@ export default function settings(): JSX.Element {
                       </span>
                     </div>
                   </div>
-                  <div className="mb-1 d-flex justify-content-center">
+                  <div className="mt-2 mb-1 d-flex justify-content-center">
                     <Button data-testid="copyProfileLink">
                       {t('copyLink')}
                     </Button>
