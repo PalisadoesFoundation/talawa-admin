@@ -197,7 +197,7 @@ describe('Calendar', () => {
       <Router>
         <MockedProvider addTypename={false} link={link}>
           <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
+            <Calendar eventData={currentDayEventMock} userRole={'SUPERADMIN'} />
           </I18nextProvider>
         </MockedProvider>
         ,
