@@ -22,6 +22,7 @@
     "bootstrap": "^5.3.0",
     "customize-cra": "^1.0.0",
     "dayjs": "^1.10.7",
+    "dotenv": "^16.3.1",
     "flag-icons": "^6.6.6",
     "graphql": "^15.5.1",
     "graphql-tag": "^2.12.6",
@@ -30,7 +31,7 @@
     "i18next": "^21.8.14",
     "i18next-browser-languagedetector": "^6.1.4",
     "i18next-http-backend": "^1.4.1",
-    "inquirer": "^8.0.0",
+    "inquirer": "^8.2.6",
     "js-cookie": "^3.0.1",
     "lint-staged": "^15.2.0",
     "markdown-toc": "^1.2.0",
@@ -69,7 +70,8 @@
     "update:toc": "node scripts/githooks/update-toc.js",
     "lint-staged": "lint-staged --concurrent false",
     "setup": "tsx setup.ts",
-    "check-localstorage": "node scripts/githooks/check-localstorage-usage.js"
+    "check-localstorage": "node scripts/githooks/check-localstorage-usage.js",
+    "dx-prod": "docker compose -f docker-compose.yml up -d --build"
   },
   "eslintConfig": {
     "extends": [

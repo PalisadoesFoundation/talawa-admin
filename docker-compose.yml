@@ -1,0 +1,11 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - REACT_APP_TALAWA_URL=${REACT_APP_TALAWA_URL}
+    # volumes:
+    # - .:/usr/src/app
+    ports:
+      - 4321:4321
