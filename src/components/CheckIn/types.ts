@@ -10,6 +10,8 @@ export interface InterfaceAttendeeCheckIn {
   checkIn: null | {
     _id: string;
     time: string;
+    allotedRoom: string;
+    allotedSeat: string;
   };
 }
 
