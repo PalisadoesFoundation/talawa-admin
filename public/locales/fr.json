@@ -804,5 +804,23 @@
     "sameNameConflict": "Veuillez modifier le nom pour effectuer une mise à jour",
     "categoryEnabled": "Catégorie d’action activée",
     "categoryDisabled": "Catégorie d’action désactivée"
+  },
+  "organisationVenues": {
+    "venueTitle": "Lieux",
+    "addVenue": "Ajouter un lieu",
+    "venueDetails": "Détails du lieu",
+    "venueName": "Nom du lieu",
+    "enterVenueName": "Entrez le nom du lieu",
+    "description": "Description du lieu",
+    "enterVenueDesc": "Entrer la description du lieu",
+    "capacity": "Capacité",
+    "enterVenueCapacity": "Entrez la capacité du site",
+    "image": "Image du lieu",
+    "uploadVenueImage": "Télécharger l'image du lieu",
+    "createVenue": "Créer un lieu",
+    "venueAdded": "Lieu ajouté avec succès",
+    "update": "Mettre à jour les détails du lieu",
+    "editVenue": "Mettre à jour le lieu",
+    "venueUpdated": "Les détails du lieu ont été mis à jour avec succès"
   }
 }

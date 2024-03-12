@@ -33,6 +33,7 @@ describe('Testing Routes reducer', () => {
           ],
         },
         { name: 'Settings', url: '/orgsetting/undefined' },
+        { name: 'Venues', url: '/orgvenues/undefined' },
       ],
       components: [
         { name: 'My Organizations', comp_id: 'orglist', component: 'OrgList' },
@@ -67,6 +68,11 @@ describe('Testing Routes reducer', () => {
           name: 'Funds',
           comp_id: 'orgfunds',
           component: 'OrganizationFunds',
+        },
+        {
+          name: 'Venues',
+          comp_id: 'orgvenues',
+          component: 'OrganizationVenues',
         },
         {
           name: 'Plugins',
@@ -104,6 +110,7 @@ describe('Testing Routes reducer', () => {
         { name: 'Block/Unblock', url: '/blockuser/orgId' },
         { name: 'Advertisement', url: '/orgads/orgId' },
         { name: 'Funds', url: '/orgfunds/orgId' },
+        { name: 'Venues', url: '/orgvenues/orgId' },
         {
           name: 'Plugins',
           subTargets: [
@@ -147,6 +154,11 @@ describe('Testing Routes reducer', () => {
         },
         { name: 'Funds', comp_id: 'orgfunds', component: 'OrganizationFunds' },
         {
+          name: 'Venues',
+          comp_id: 'orgvenues',
+          component: 'OrganizationVenues',
+        },
+        {
           name: 'Plugins',
           comp_id: null,
           component: 'AddOnStore',
@@ -186,6 +198,7 @@ describe('Testing Routes reducer', () => {
         { name: 'Advertisement', url: '/orgads/undefined' },
         { name: 'Funds', url: '/orgfunds/undefined' },
         { name: 'Settings', url: '/orgsetting/undefined' },
+        { name: 'Venues', url: '/orgvenues/undefined' },
         {
           comp_id: null,
           component: null,
@@ -233,6 +246,11 @@ describe('Testing Routes reducer', () => {
           name: 'Funds',
           comp_id: 'orgfunds',
           component: 'OrganizationFunds',
+        },
+        {
+          name: 'Venues',
+          comp_id: 'orgvenues',
+          component: 'OrganizationVenues',
         },
         {
           name: 'Plugins',

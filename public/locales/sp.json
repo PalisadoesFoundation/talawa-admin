@@ -805,5 +805,23 @@
     "sameNameConflict": "Cambie el nombre para realizar una actualización",
     "categoryEnabled": "Categoría de elemento de acción habilitada",
     "categoryDisabled": "Categoría de elemento de acción deshabilitada"
+  },
+  "organizationVenues": {
+    "venueTitle": "Lugares",
+    "addVenue": "Agregar Lugar",
+    "venueDetails": "Detalles del lugar",
+    "venueName": "Nombre del lugar",
+    "enterVenueName": "Ingrese el nombre del lugar",
+    "description": "Descripción del Lugar",
+    "enterVenueDesc": "Ingrese la descripción del lugar",
+    "capacity": "Capacidad",
+    "enterVenueCapacity": "Ingrese la capacidad del lugar",
+    "image": "Imagen del lugar",
+    "uploadVenueImage": "Subir imagen del lugar",
+    "createVenue": "Crear lugar",
+    "venueAdded": "Lugar agregado exitosamente",
+    "update": "Actualizar detalles del lugar",
+    "editVenue": "Actualizar lugar",
+    "venueUpdated": "Detalles del lugar actualizados exitosamente"
   }
 }

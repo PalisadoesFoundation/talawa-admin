@@ -817,5 +817,23 @@
     "sameNameConflict": "Please change the name to make an update",
     "categoryEnabled": "Action Item Category Enabled",
     "categoryDisabled": "Action Item Category Disabled"
+  },
+  "organizationVenues": {
+    "venueTitle": "Venues",
+    "addVenue": "Add Venue",
+    "venueDetails": "Venue Details",
+    "venueName": "Name of the Venue",
+    "enterVenueName": "Enter Venue Name",
+    "description": "Description of the Venue",
+    "enterVenueDesc": "Enter Venue Description",
+    "capacity": "Capacity",
+    "enterVenueCapacity": "Enter Venue Capacity",
+    "image": "Venue Image",
+    "uploadVenueImage": "Upload Venue Image",
+    "createVenue": "Create Venue",
+    "venueAdded": "Venue added Successfully",
+    "update": "Update Venue Details",
+    "editVenue": "Update Venue",
+    "venueUpdated": "Venue details updated successfully"
   }
 }

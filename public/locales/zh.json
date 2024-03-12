@@ -807,5 +807,23 @@
     "sameNameConflict": "请更改名称以进行更新",
     "categoryEnabled": "已启用措施项类别",
     "categoryDisabled": "措施项类别已禁用"
+  },
+  "organizationVenues": {
+    "venueTitle": "场地",
+    "addVenue": "添加场地",
+    "venueDetails": "场地详情",
+    "venueName": "场地名称",
+    "enterVenueName": "请输入场地名称",
+    "description": "场地描述",
+    "enterVenueDesc": "输入场地描述",
+    "capacity": "容量",
+    "enterVenueCapacity": "输入场地容量",
+    "image": "场地图片",
+    "uploadVenueImage": "上传场地图片",
+    "createVenue": "创建场地",
+    "venueAdded": "场地添加成功",
+    "update": "更新场地详情",
+    "editVenue": "更新地点",
+    "venueUpdated": "场地详细信息更新成功"
   }
 }
