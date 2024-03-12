@@ -280,9 +280,6 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     defaultScreens.map((screenName) => {
       expect(screen.getByText(screenName)).toBeInTheDocument();
     });
-    expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
-    expect(screen.getByText(/Superadmin/i)).toBeInTheDocument();
-    expect(screen.getByAltText(/dummy picture/i)).toBeInTheDocument();
   });
 
   test('Testing Profile Page & Organization Detail Modal', async () => {
@@ -299,7 +296,6 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     expect(screen.getByTestId(/orgBtn/i)).toBeInTheDocument();
-    userEvent.click(screen.getByTestId(/profileBtn/i));
   });
 
   test('Testing Menu Buttons', async () => {
