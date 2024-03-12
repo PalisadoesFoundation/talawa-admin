@@ -47,7 +47,7 @@ jest.mock('react-router-dom', () => ({
 }));
 
 beforeEach(() => {
-  setItem('UserType', 'SUPERADMIN');
+  setItem('SuperAdmin', true);
   setItem('id', '123');
 });
 
@@ -72,115 +72,125 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: () => void;
     } = {
       user: {
-        _id: '123',
-        firstName: 'John',
-        lastName: 'Doe',
-        image: null,
-        email: 'john@example.com',
-        userType: 'SUPERADMIN',
-        adminApproved: true,
-        adminFor: [
-          {
-            _id: 'abc',
-          },
-        ],
-        createdAt: '2023-09-29T15:39:36.355Z',
-        organizationsBlockedBy: [
-          {
-            _id: 'xyz',
-            name: 'XYZ',
-            image: null,
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-01-29T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
+        user: {
+          _id: '123',
+          firstName: 'John',
+          lastName: 'Doe',
+          image: null,
+          email: 'john@example.com',
+          adminApproved: true,
+          createdAt: '2023-09-29T15:39:36.355Z',
+          organizationsBlockedBy: [
+            {
+              _id: 'xyz',
+              name: 'XYZ',
               image: null,
-              email: 'john@example.com',
+              address: {
+                city: 'Kingston',
+                countryCode: 'JM',
+                dependentLocality: 'Sample Dependent Locality',
+                line1: '123 Jamaica Street',
+                line2: 'Apartment 456',
+                postalCode: 'JM12345',
+                sortingCode: 'ABC-123',
+                state: 'Kingston Parish',
+              },
+              createdAt: '2023-01-29T15:39:36.355Z',
+              creator: {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image: null,
+                email: 'john@example.com',
+              },
             },
-          },
-          {
-            _id: 'mno',
-            name: 'MNO',
-            image: null,
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-01-29T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
+            {
+              _id: 'mno',
+              name: 'MNO',
               image: null,
-              email: 'john@example.com',
+              address: {
+                city: 'Kingston',
+                countryCode: 'JM',
+                dependentLocality: 'Sample Dependent Locality',
+                line1: '123 Jamaica Street',
+                line2: 'Apartment 456',
+                postalCode: 'JM12345',
+                sortingCode: 'ABC-123',
+                state: 'Kingston Parish',
+              },
+              createdAt: '2023-01-29T15:39:36.355Z',
+              creator: {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image: null,
+                email: 'john@example.com',
+              },
             },
-          },
-        ],
-        joinedOrganizations: [
-          {
-            _id: 'abc',
-            name: 'Joined Organization 1',
-            image: null,
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-06-29T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
+          ],
+          joinedOrganizations: [
+            {
+              _id: 'abc',
+              name: 'Joined Organization 1',
               image: null,
-              email: 'john@example.com',
+              address: {
+                city: 'Kingston',
+                countryCode: 'JM',
+                dependentLocality: 'Sample Dependent Locality',
+                line1: '123 Jamaica Street',
+                line2: 'Apartment 456',
+                postalCode: 'JM12345',
+                sortingCode: 'ABC-123',
+                state: 'Kingston Parish',
+              },
+              createdAt: '2023-06-29T15:39:36.355Z',
+              creator: {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image: null,
+                email: 'john@example.com',
+              },
             },
-          },
-          {
-            _id: 'def',
-            name: 'Joined Organization 2',
-            image: null,
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-07-29T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
+            {
+              _id: 'def',
+              name: 'Joined Organization 2',
               image: null,
-              email: 'john@example.com',
+              address: {
+                city: 'Kingston',
+                countryCode: 'JM',
+                dependentLocality: 'Sample Dependent Locality',
+                line1: '123 Jamaica Street',
+                line2: 'Apartment 456',
+                postalCode: 'JM12345',
+                sortingCode: 'ABC-123',
+                state: 'Kingston Parish',
+              },
+              createdAt: '2023-07-29T15:39:36.355Z',
+              creator: {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image: null,
+                email: 'john@example.com',
+              },
             },
-          },
-        ],
+          ],
+          registeredEvents: [],
+          membershipRequests: [],
+        },
+        appUserProfile: {
+          _id: '123',
+          isSuperAdmin: true,
+          createdOrganizations: [],
+          createdEvents: [],
+          eventAdmin: [],
+          adminFor: [
+            {
+              _id: 'abc',
+            },
+          ],
+        },
       },
       index: 0,
       loggedInUserId: '123',
@@ -217,21 +227,31 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: () => void;
     } = {
       user: {
-        _id: '123',
-        firstName: 'John',
-        lastName: 'Doe',
-        image: null,
-        email: 'john@example.com',
-        userType: 'SUPERADMIN',
-        adminApproved: true,
-        adminFor: [
-          {
-            _id: 'abc',
-          },
-        ],
-        createdAt: '2023-09-29T15:39:36.355Z',
-        organizationsBlockedBy: [],
-        joinedOrganizations: [],
+        user: {
+          _id: '123',
+          firstName: 'John',
+          lastName: 'Doe',
+          image: null,
+          email: 'john@example.com',
+          adminApproved: true,
+          createdAt: '2023-09-29T15:39:36.355Z',
+          organizationsBlockedBy: [],
+          joinedOrganizations: [],
+          registeredEvents: [],
+          membershipRequests: [],
+        },
+        appUserProfile: {
+          _id: '123',
+          isSuperAdmin: true,
+          createdOrganizations: [],
+          createdEvents: [],
+          eventAdmin: [],
+          adminFor: [
+            {
+              _id: 'abc',
+            },
+          ],
+        },
       },
       index: 0,
       loggedInUserId: '123',
@@ -280,117 +300,125 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: () => void;
     } = {
       user: {
-        _id: '123',
-        firstName: 'John',
-        lastName: 'Doe',
-        image: null,
-        email: 'john@example.com',
-        userType: 'SUPERADMIN',
-        adminApproved: true,
-        adminFor: [
-          {
-            _id: 'abc',
-          },
-        ],
-        createdAt: '2022-09-29T15:39:36.355Z',
-        organizationsBlockedBy: [
-          {
-            _id: 'xyz',
-            name: 'Blocked Organization 1',
-            image: null,
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-08-29T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
+        user: {
+          _id: '123',
+          firstName: 'John',
+          lastName: 'Doe',
+          image: null,
+          email: 'john@example.com',
+          adminApproved: true,
+          createdAt: '2023-09-29T15:39:36.355Z',
+          organizationsBlockedBy: [
+            {
+              _id: 'xyz',
+              name: 'XYZ',
               image: null,
-              email: 'john@example.com',
+              address: {
+                city: 'Kingston',
+                countryCode: 'JM',
+                dependentLocality: 'Sample Dependent Locality',
+                line1: '123 Jamaica Street',
+                line2: 'Apartment 456',
+                postalCode: 'JM12345',
+                sortingCode: 'ABC-123',
+                state: 'Kingston Parish',
+              },
+              createdAt: '2023-01-29T15:39:36.355Z',
+              creator: {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image: null,
+                email: 'john@example.com',
+              },
             },
-          },
-          {
-            _id: 'mno',
-            name: 'Blocked Organization 2',
-            image: null,
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-09-29T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
+            {
+              _id: 'mno',
+              name: 'MNO',
               image: null,
-              email: 'john@example.com',
+              address: {
+                city: 'Kingston',
+                countryCode: 'JM',
+                dependentLocality: 'Sample Dependent Locality',
+                line1: '123 Jamaica Street',
+                line2: 'Apartment 456',
+                postalCode: 'JM12345',
+                sortingCode: 'ABC-123',
+                state: 'Kingston Parish',
+              },
+              createdAt: '2023-01-29T15:39:36.355Z',
+              creator: {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image: null,
+                email: 'john@example.com',
+              },
             },
-          },
-        ],
-        joinedOrganizations: [
-          {
-            _id: 'abc',
-            name: 'Joined Organization 1',
-            image:
-              'https://api.dicebear.com/5.x/initials/svg?seed=Joined%20Organization%201',
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-08-29T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
-              image:
-                'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
-              email: 'john@example.com',
-            },
-          },
-          {
-            _id: 'def',
-            name: 'Joined Organization 2',
-            image: null,
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-09-19T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
+          ],
+          joinedOrganizations: [
+            {
+              _id: 'abc',
+              name: 'Joined Organization 1',
               image: null,
-              email: 'john@example.com',
+              address: {
+                city: 'Kingston',
+                countryCode: 'JM',
+                dependentLocality: 'Sample Dependent Locality',
+                line1: '123 Jamaica Street',
+                line2: 'Apartment 456',
+                postalCode: 'JM12345',
+                sortingCode: 'ABC-123',
+                state: 'Kingston Parish',
+              },
+              createdAt: '2023-06-29T15:39:36.355Z',
+              creator: {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image: null,
+                email: 'john@example.com',
+              },
             },
-          },
-        ],
+            {
+              _id: 'def',
+              name: 'Joined Organization 2',
+              image: null,
+              address: {
+                city: 'Kingston',
+                countryCode: 'JM',
+                dependentLocality: 'Sample Dependent Locality',
+                line1: '123 Jamaica Street',
+                line2: 'Apartment 456',
+                postalCode: 'JM12345',
+                sortingCode: 'ABC-123',
+                state: 'Kingston Parish',
+              },
+              createdAt: '2023-07-29T15:39:36.355Z',
+              creator: {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image: null,
+                email: 'john@example.com',
+              },
+            },
+          ],
+          registeredEvents: [],
+          membershipRequests: [],
+        },
+        appUserProfile: {
+          _id: '123',
+          isSuperAdmin: true,
+          createdOrganizations: [],
+          createdEvents: [],
+          eventAdmin: [],
+          adminFor: [
+            {
+              _id: 'abc',
+            },
+          ],
+        },
       },
       index: 0,
       loggedInUserId: '123',
@@ -439,8 +467,8 @@ describe('Testing User Table Item', () => {
     elementsWithKingston.forEach((element) => {
       expect(element).toBeInTheDocument();
     });
-    expect(screen.getByText(/29-08-2023/i)).toBeInTheDocument();
-    expect(screen.getByText(/19-09-2023/i)).toBeInTheDocument();
+    expect(screen.getByText(/29-06-2023/i)).toBeInTheDocument();
+    expect(screen.getByText(/29-07-2023/i)).toBeInTheDocument();
     expect(screen.getByTestId('removeUserFromOrgBtnabc')).toBeInTheDocument();
     expect(screen.getByTestId('removeUserFromOrgBtndef')).toBeInTheDocument();
     expect(screen.getByTestId(`changeRoleInOrgabc`)).toHaveValue('ADMIN?abc');
@@ -489,120 +517,125 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: () => void;
     } = {
       user: {
-        _id: '123',
-        firstName: 'John',
-        lastName: 'Doe',
-        image: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
-        email: 'john@example.com',
-        userType: 'SUPERADMIN',
-        adminApproved: true,
-        adminFor: [
-          {
-            _id: 'abc',
-          },
-          {
-            _id: 'xyz',
-          },
-        ],
-        createdAt: '2022-09-29T15:39:36.355Z',
-        organizationsBlockedBy: [
-          {
-            _id: 'xyz',
-            name: 'Blocked Organization 1',
-            image:
-              'https://api.dicebear.com/5.x/initials/svg?seed=Blocked%20Organization%201',
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-08-29T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
-              image:
-                'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
-              email: 'john@example.com',
-            },
-          },
-          {
-            _id: 'mno',
-            name: 'Blocked Organization 2',
-            image: null,
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-09-29T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
+        user: {
+          _id: '123',
+          firstName: 'John',
+          lastName: 'Doe',
+          image: null,
+          email: 'john@example.com',
+          adminApproved: true,
+          createdAt: '2023-09-29T15:39:36.355Z',
+          organizationsBlockedBy: [
+            {
+              _id: 'xyz',
+              name: 'XYZ',
               image: null,
-              email: 'john@example.com',
+              address: {
+                city: 'Kingston',
+                countryCode: 'JM',
+                dependentLocality: 'Sample Dependent Locality',
+                line1: '123 Jamaica Street',
+                line2: 'Apartment 456',
+                postalCode: 'JM12345',
+                sortingCode: 'ABC-123',
+                state: 'Kingston Parish',
+              },
+              createdAt: '2023-01-29T15:39:36.355Z',
+              creator: {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image: null,
+                email: 'john@example.com',
+              },
             },
-          },
-        ],
-        joinedOrganizations: [
-          {
-            _id: 'abc',
-            name: 'Joined Organization 1',
-            image: null,
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-08-29T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
+            {
+              _id: 'mno',
+              name: 'MNO',
               image: null,
-              email: 'john@example.com',
+              address: {
+                city: 'Kingston',
+                countryCode: 'JM',
+                dependentLocality: 'Sample Dependent Locality',
+                line1: '123 Jamaica Street',
+                line2: 'Apartment 456',
+                postalCode: 'JM12345',
+                sortingCode: 'ABC-123',
+                state: 'Kingston Parish',
+              },
+              createdAt: '2023-03-29T15:39:36.355Z',
+              creator: {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image: null,
+                email: 'john@example.com',
+              },
             },
-          },
-          {
-            _id: 'def',
-            name: 'Joined Organization 2',
-            image: null,
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-09-19T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
+          ],
+          joinedOrganizations: [
+            {
+              _id: 'abc',
+              name: 'Joined Organization 1',
               image: null,
-              email: 'john@example.com',
+              address: {
+                city: 'Kingston',
+                countryCode: 'JM',
+                dependentLocality: 'Sample Dependent Locality',
+                line1: '123 Jamaica Street',
+                line2: 'Apartment 456',
+                postalCode: 'JM12345',
+                sortingCode: 'ABC-123',
+                state: 'Kingston Parish',
+              },
+              createdAt: '2023-06-29T15:39:36.355Z',
+              creator: {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image: null,
+                email: 'john@example.com',
+              },
             },
-          },
-        ],
+            {
+              _id: 'def',
+              name: 'Joined Organization 2',
+              image: null,
+              address: {
+                city: 'Kingston',
+                countryCode: 'JM',
+                dependentLocality: 'Sample Dependent Locality',
+                line1: '123 Jamaica Street',
+                line2: 'Apartment 456',
+                postalCode: 'JM12345',
+                sortingCode: 'ABC-123',
+                state: 'Kingston Parish',
+              },
+              createdAt: '2023-07-29T15:39:36.355Z',
+              creator: {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image: null,
+                email: 'john@example.com',
+              },
+            },
+          ],
+          registeredEvents: [],
+          membershipRequests: [],
+        },
+        appUserProfile: {
+          _id: '123',
+          isSuperAdmin: true,
+          createdOrganizations: [],
+          createdEvents: [],
+          eventAdmin: [],
+          adminFor: [
+            {
+              _id: 'xyz',
+            },
+          ],
+        },
       },
       index: 0,
       loggedInUserId: '123',
@@ -648,14 +681,14 @@ describe('Testing User Table Item', () => {
 
     const inputBox = screen.getByTestId(`searchByNameOrgsBlockedBy`);
     expect(inputBox).toBeInTheDocument();
-    expect(screen.getByText(/Blocked Organization 1/i)).toBeInTheDocument();
-    expect(screen.getByText(/Blocked Organization 2/i)).toBeInTheDocument();
+    expect(screen.getByText(/XYZ/i)).toBeInTheDocument();
+    expect(screen.getByText(/MNO/i)).toBeInTheDocument();
     const elementsWithKingston = screen.getAllByText(/Kingston/i);
     elementsWithKingston.forEach((element) => {
       expect(element).toBeInTheDocument();
     });
-    expect(screen.getByText(/29-08-2023/i)).toBeInTheDocument();
-    expect(screen.getByText(/29-09-2023/i)).toBeInTheDocument();
+    expect(screen.getByText(/29-01-2023/i)).toBeInTheDocument();
+    expect(screen.getByText(/29-03-2023/i)).toBeInTheDocument();
     expect(screen.getByTestId('removeUserFromOrgBtnxyz')).toBeInTheDocument();
     expect(screen.getByTestId('removeUserFromOrgBtnmno')).toBeInTheDocument();
     expect(screen.getByTestId(`changeRoleInOrgxyz`)).toHaveValue('ADMIN?xyz');
@@ -667,13 +700,11 @@ describe('Testing User Table Item', () => {
     // Search for Blocked Organization 1
     const searchBtn = screen.getByTestId(`searchBtnOrgsBlockedBy`);
     fireEvent.keyUp(inputBox, {
-      target: { value: 'Blocked Organization 1' },
+      target: { value: 'XYZ' },
     });
     fireEvent.click(searchBtn);
-    expect(screen.getByText(/Blocked Organization 1/i)).toBeInTheDocument();
-    expect(
-      screen.queryByText(/Blocked Organization 2/i)
-    ).not.toBeInTheDocument();
+    expect(screen.getByText(/XYZ/i)).toBeInTheDocument();
+    expect(screen.queryByText(/MNO/i)).not.toBeInTheDocument();
 
     // Search for an Organization which does not exist
     fireEvent.keyUp(inputBox, {
@@ -690,7 +721,7 @@ describe('Testing User Table Item', () => {
     fireEvent.click(searchBtn);
 
     // Click on Organization Link
-    fireEvent.click(screen.getByText(/Blocked Organization 1/i));
+    fireEvent.click(screen.getByText(/XYZ/i));
     expect(window.location.replace).toBeCalledWith('/orgdash/id=xyz');
     expect(mockHistoryPush).toBeCalledWith('/orgdash/id=xyz');
     fireEvent.click(screen.getByTestId(`closeBlockedByOrgsBtn${123}`));
@@ -704,120 +735,125 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: () => void;
     } = {
       user: {
-        _id: '123',
-        firstName: 'John',
-        lastName: 'Doe',
-        image: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
-        email: 'john@example.com',
-        userType: 'SUPERADMIN',
-        adminApproved: true,
-        adminFor: [
-          {
-            _id: 'abc',
-          },
-          {
-            _id: 'xyz',
-          },
-        ],
-        createdAt: '2022-09-29T15:39:36.355Z',
-        organizationsBlockedBy: [
-          {
-            _id: 'xyz',
-            name: 'Blocked Organization 1',
-            image:
-              'https://api.dicebear.com/5.x/initials/svg?seed=Blocked%20Organization%201',
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-08-29T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
-              image:
-                'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
-              email: 'john@example.com',
-            },
-          },
-          {
-            _id: 'mno',
-            name: 'Blocked Organization 2',
-            image: null,
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-09-29T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
+        user: {
+          _id: '123',
+          firstName: 'John',
+          lastName: 'Doe',
+          image: null,
+          email: 'john@example.com',
+          adminApproved: true,
+          createdAt: '2023-09-29T15:39:36.355Z',
+          organizationsBlockedBy: [
+            {
+              _id: 'xyz',
+              name: 'XYZ',
               image: null,
-              email: 'john@example.com',
+              address: {
+                city: 'Kingston',
+                countryCode: 'JM',
+                dependentLocality: 'Sample Dependent Locality',
+                line1: '123 Jamaica Street',
+                line2: 'Apartment 456',
+                postalCode: 'JM12345',
+                sortingCode: 'ABC-123',
+                state: 'Kingston Parish',
+              },
+              createdAt: '2023-01-29T15:39:36.355Z',
+              creator: {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image: null,
+                email: 'john@example.com',
+              },
             },
-          },
-        ],
-        joinedOrganizations: [
-          {
-            _id: 'abc',
-            name: 'Joined Organization 1',
-            image: null,
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-08-29T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
+            {
+              _id: 'mno',
+              name: 'MNO',
               image: null,
-              email: 'john@example.com',
+              address: {
+                city: 'Kingston',
+                countryCode: 'JM',
+                dependentLocality: 'Sample Dependent Locality',
+                line1: '123 Jamaica Street',
+                line2: 'Apartment 456',
+                postalCode: 'JM12345',
+                sortingCode: 'ABC-123',
+                state: 'Kingston Parish',
+              },
+              createdAt: '2023-01-29T15:39:36.355Z',
+              creator: {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image: null,
+                email: 'john@example.com',
+              },
             },
-          },
-          {
-            _id: 'def',
-            name: 'Joined Organization 2',
-            image: null,
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-09-19T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
+          ],
+          joinedOrganizations: [
+            {
+              _id: 'abc',
+              name: 'Joined Organization 1',
               image: null,
-              email: 'john@example.com',
+              address: {
+                city: 'Kingston',
+                countryCode: 'JM',
+                dependentLocality: 'Sample Dependent Locality',
+                line1: '123 Jamaica Street',
+                line2: 'Apartment 456',
+                postalCode: 'JM12345',
+                sortingCode: 'ABC-123',
+                state: 'Kingston Parish',
+              },
+              createdAt: '2023-06-29T15:39:36.355Z',
+              creator: {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image: null,
+                email: 'john@example.com',
+              },
             },
-          },
-        ],
+            {
+              _id: 'def',
+              name: 'Joined Organization 2',
+              image: null,
+              address: {
+                city: 'Kingston',
+                countryCode: 'JM',
+                dependentLocality: 'Sample Dependent Locality',
+                line1: '123 Jamaica Street',
+                line2: 'Apartment 456',
+                postalCode: 'JM12345',
+                sortingCode: 'ABC-123',
+                state: 'Kingston Parish',
+              },
+              createdAt: '2023-07-29T15:39:36.355Z',
+              creator: {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image: null,
+                email: 'john@example.com',
+              },
+            },
+          ],
+          registeredEvents: [],
+          membershipRequests: [],
+        },
+        appUserProfile: {
+          _id: '123',
+          isSuperAdmin: true,
+          createdOrganizations: [],
+          createdEvents: [],
+          eventAdmin: [],
+          adminFor: [
+            {
+              _id: 'abc',
+            },
+          ],
+        },
       },
       index: 0,
       loggedInUserId: '123',
@@ -878,120 +914,130 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: () => void;
     } = {
       user: {
-        _id: '123',
-        firstName: 'John',
-        lastName: 'Doe',
-        image: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
-        email: 'john@example.com',
-        userType: 'SUPERADMIN',
-        adminApproved: true,
-        adminFor: [
-          {
-            _id: 'abc',
-          },
-          {
-            _id: 'xyz',
-          },
-        ],
-        createdAt: '2022-09-29T15:39:36.355Z',
-        organizationsBlockedBy: [
-          {
-            _id: 'xyz',
-            name: 'Blocked Organization 1',
-            image:
-              'https://api.dicebear.com/5.x/initials/svg?seed=Blocked%20Organization%201',
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-08-29T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
+        user: {
+          _id: '123',
+          firstName: 'John',
+          lastName: 'Doe',
+          image: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
+          email: 'john@example.com',
+          adminApproved: true,
+          createdAt: '2022-09-29T15:39:36.355Z',
+          organizationsBlockedBy: [
+            {
+              _id: 'xyz',
+              name: 'Blocked Organization 1',
               image:
-                'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
-              email: 'john@example.com',
+                'https://api.dicebear.com/5.x/initials/svg?seed=Blocked%20Organization%201',
+              address: {
+                city: 'Kingston',
+                countryCode: 'JM',
+                dependentLocality: 'Sample Dependent Locality',
+                line1: '123 Jamaica Street',
+                line2: 'Apartment 456',
+                postalCode: 'JM12345',
+                sortingCode: 'ABC-123',
+                state: 'Kingston Parish',
+              },
+              createdAt: '2023-08-29T15:39:36.355Z',
+              creator: {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image:
+                  'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
+                email: 'john@example.com',
+              },
             },
-          },
-          {
-            _id: 'mno',
-            name: 'Blocked Organization 2',
-            image: null,
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-09-29T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
+            {
+              _id: 'mno',
+              name: 'Blocked Organization 2',
               image: null,
-              email: 'john@example.com',
+              address: {
+                city: 'Kingston',
+                countryCode: 'JM',
+                dependentLocality: 'Sample Dependent Locality',
+                line1: '123 Jamaica Street',
+                line2: 'Apartment 456',
+                postalCode: 'JM12345',
+                sortingCode: 'ABC-123',
+                state: 'Kingston Parish',
+              },
+              createdAt: '2023-09-29T15:39:36.355Z',
+              creator: {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image: null,
+                email: 'john@example.com',
+              },
             },
-          },
-        ],
-        joinedOrganizations: [
-          {
-            _id: 'abc',
-            name: 'Joined Organization 1',
-            image: null,
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-08-29T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
+          ],
+          joinedOrganizations: [
+            {
+              _id: 'abc',
+              name: 'Joined Organization 1',
               image: null,
-              email: 'john@example.com',
+              address: {
+                city: 'Kingston',
+                countryCode: 'JM',
+                dependentLocality: 'Sample Dependent Locality',
+                line1: '123 Jamaica Street',
+                line2: 'Apartment 456',
+                postalCode: 'JM12345',
+                sortingCode: 'ABC-123',
+                state: 'Kingston Parish',
+              },
+              createdAt: '2023-08-29T15:39:36.355Z',
+              creator: {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image: null,
+                email: 'john@example.com',
+              },
             },
-          },
-          {
-            _id: 'def',
-            name: 'Joined Organization 2',
-            image: null,
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-09-19T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
+            {
+              _id: 'def',
+              name: 'Joined Organization 2',
               image: null,
-              email: 'john@example.com',
+              address: {
+                city: 'Kingston',
+                countryCode: 'JM',
+                dependentLocality: 'Sample Dependent Locality',
+                line1: '123 Jamaica Street',
+                line2: 'Apartment 456',
+                postalCode: 'JM12345',
+                sortingCode: 'ABC-123',
+                state: 'Kingston Parish',
+              },
+              createdAt: '2023-09-19T15:39:36.355Z',
+              creator: {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image: null,
+                email: 'john@example.com',
+              },
             },
-          },
-        ],
+          ],
+          registeredEvents: [],
+          membershipRequests: [],
+        },
+        appUserProfile: {
+          _id: '123',
+          isSuperAdmin: true,
+          createdOrganizations: [],
+          createdEvents: [],
+          eventAdmin: [],
+          adminFor: [
+            {
+              _id: 'abc',
+            },
+            {
+              _id: 'xyz',
+            },
+          ],
+        },
       },
       index: 0,
       loggedInUserId: '123',
@@ -1044,288 +1090,5 @@ describe('Testing User Table Item', () => {
     expect(confirmRemoveBtn).toBeInTheDocument();
 
     fireEvent.click(confirmRemoveBtn);
-  });
-
-  test('Should be able to change userType of a user if not self', async () => {
-    const props: {
-      user: InterfaceQueryUserListItem;
-      index: number;
-      loggedInUserId: string;
-      resetAndRefetch: () => void;
-    } = {
-      user: {
-        _id: '123',
-        firstName: 'John',
-        lastName: 'Doe',
-        image: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
-        email: 'john@example.com',
-        userType: 'USER',
-        adminApproved: true,
-        adminFor: [
-          {
-            _id: 'abc',
-          },
-          {
-            _id: 'xyz',
-          },
-        ],
-        createdAt: '2022-09-29T15:39:36.355Z',
-        organizationsBlockedBy: [
-          {
-            _id: 'xyz',
-            name: 'Blocked Organization 1',
-            image:
-              'https://api.dicebear.com/5.x/initials/svg?seed=Blocked%20Organization%201',
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-08-29T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
-              image:
-                'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
-              email: 'john@example.com',
-            },
-          },
-          {
-            _id: 'mno',
-            name: 'Blocked Organization 2',
-            image: null,
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-09-29T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
-              image: null,
-              email: 'john@example.com',
-            },
-          },
-        ],
-        joinedOrganizations: [
-          {
-            _id: 'abc',
-            name: 'Joined Organization 1',
-            image: null,
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-08-29T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
-              image: null,
-              email: 'john@example.com',
-            },
-          },
-          {
-            _id: 'def',
-            name: 'Joined Organization 2',
-            image: null,
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-09-19T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
-              image: null,
-              email: 'john@example.com',
-            },
-          },
-        ],
-      },
-      index: 0,
-      loggedInUserId: '456',
-      resetAndRefetch: resetAndRefetchMock,
-    };
-
-    render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
-        <I18nextProvider i18n={i18nForTest}>
-          <UsersTableItem {...props} />
-        </I18nextProvider>
-      </MockedProvider>
-    );
-
-    await wait();
-    fireEvent.select(screen.getByTestId(`changeRole123`), {
-      target: { value: 'ADMIN?123' },
-    });
-  });
-
-  test('Should be not able to change userType of self', async () => {
-    const props: {
-      user: InterfaceQueryUserListItem;
-      index: number;
-      loggedInUserId: string;
-      resetAndRefetch: () => void;
-    } = {
-      user: {
-        _id: '123',
-        firstName: 'John',
-        lastName: 'Doe',
-        image: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
-        email: 'john@example.com',
-        userType: 'ADMIN',
-        adminApproved: true,
-        adminFor: [
-          {
-            _id: 'abc',
-          },
-          {
-            _id: 'xyz',
-          },
-        ],
-        createdAt: '2022-09-29T15:39:36.355Z',
-        organizationsBlockedBy: [
-          {
-            _id: 'xyz',
-            name: 'Blocked Organization 1',
-            image:
-              'https://api.dicebear.com/5.x/initials/svg?seed=Blocked%20Organization%201',
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-08-29T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
-              image:
-                'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
-              email: 'john@example.com',
-            },
-          },
-          {
-            _id: 'mno',
-            name: 'Blocked Organization 2',
-            image: null,
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-09-29T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
-              image: null,
-              email: 'john@example.com',
-            },
-          },
-        ],
-        joinedOrganizations: [
-          {
-            _id: 'abc',
-            name: 'Joined Organization 1',
-            image: null,
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-08-29T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
-              image: null,
-              email: 'john@example.com',
-            },
-          },
-          {
-            _id: 'def',
-            name: 'Joined Organization 2',
-            image: null,
-            address: {
-              city: 'Kingston',
-              countryCode: 'JM',
-              dependentLocality: 'Sample Dependent Locality',
-              line1: '123 Jamaica Street',
-              line2: 'Apartment 456',
-              postalCode: 'JM12345',
-              sortingCode: 'ABC-123',
-              state: 'Kingston Parish',
-            },
-            createdAt: '2023-09-19T15:39:36.355Z',
-            creator: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
-              image: null,
-              email: 'john@example.com',
-            },
-          },
-        ],
-      },
-      index: 0,
-      loggedInUserId: '123',
-      resetAndRefetch: resetAndRefetchMock,
-    };
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <UsersTableItem {...props} />
-        </I18nextProvider>
-      </MockedProvider>
-    );
-
-    await wait();
-    expect(screen.getByTestId(`changeRole123`)).toBeDisabled();
-    expect(screen.getByTestId(`changeRole123`)).toHaveValue('ADMIN?123');
   });
 });
