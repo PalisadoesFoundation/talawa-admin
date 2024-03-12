@@ -872,6 +872,46 @@ describe('Organization People Page', () => {
     userEvent.click(screen.getByTestId('addBtn'));
   });
 
+  test('Open and search existing user', async () => {
+    window.location.assign('/orgpeople/orgid');
+    render(
+      <MockedProvider
+        addTypename={true}
+        link={link}
+        defaultOptions={{
+          watchQuery: { fetchPolicy: 'no-cache' },
+          query: { fetchPolicy: 'no-cache' },
+        }}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationPeople />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for the component to finish rendering
+    await wait();
+
+    // Click on the dropdown toggle to open the menu
+    userEvent.click(screen.getByTestId('addMembers'));
+    await wait();
+
+    // Click on the "Admins" option in the dropdown menu
+    userEvent.click(screen.getByTestId('existingUser'));
+    await wait();
+
+    expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
+ 
+    fireEvent.change(screen.getByTestId('searchUser'), {
+      target: { value: 'Disha' },
+    });
+    
+  });
+
   test('Open and close add new user modal', async () => {
     window.location.assign('/orgpeople/orgid');
     render(
