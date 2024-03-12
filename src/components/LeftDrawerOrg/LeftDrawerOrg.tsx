@@ -9,12 +9,10 @@ import { useTranslation } from 'react-i18next';
 import { NavLink, useNavigate } from 'react-router-dom';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
-import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
 import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import styles from './LeftDrawerOrg.module.css';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
-import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 
 export interface InterfaceLeftDrawerProps {
@@ -47,15 +45,12 @@ const leftDrawerOrg = ({
   });
 
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
-
-  const { getItem } = useLocalStorage();
-
-  const userType = getItem('UserType');
-  const firstName = getItem('FirstName');
-  const lastName = getItem('LastName');
-  const userImage = getItem('UserImage');
   const navigate = useNavigate();
-
+  const logout = (): void => {
+    revokeRefreshToken();
+    localStorage.clear();
+    navigate('/');
+  };
   // Set organization data
   useEffect(() => {
     let isMounted = true;
@@ -66,12 +61,6 @@ const leftDrawerOrg = ({
       isMounted = false;
     };
   }, [data]);
-
-  const logout = (): void => {
-    revokeRefreshToken();
-    localStorage.clear();
-    navigate('/');
-  };
 
   return (
     <>
@@ -178,33 +167,6 @@ const leftDrawerOrg = ({
 
         {/* Profile Section & Logout Btn */}
         <div style={{ marginTop: 'auto' }}>
-          <button
-            className={styles.profileContainer}
-            data-testid="profileBtn"
-            onClick={(): void => {
-              navigate(`/member/${orgId}`);
-            }}
-          >
-            <div className={styles.imageContainer}>
-              {userImage && userImage !== 'null' ? (
-                <img src={userImage} alt={`profile picture`} />
-              ) : (
-                <Avatar
-                  name={`${firstName} ${lastName}`}
-                  alt={`dummy picture`}
-                />
-              )}
-            </div>
-            <div className={styles.profileText}>
-              <span className={styles.primaryText}>
-                {firstName} {lastName}
-              </span>
-              <span className={styles.secondaryText}>
-                {`${userType}`.toLowerCase()}
-              </span>
-            </div>
-            <AngleRightIcon fill={'var(--bs-secondary)'} />
-          </button>
           <Button
             variant="light"
             className={`mt-4 d-flex justify-content-start px-0 w-100 ${styles.logout}`}

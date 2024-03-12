@@ -9,6 +9,54 @@
   padding-left: 4rem;
   animation: moveLeft 0.5s ease-in-out;
 }
+.avatarStyle {
+  border-radius: 100%;
+}
+.profileContainer {
+  border: none;
+  padding: 2.1rem 0.5rem;
+  height: 52px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  background-color: white !important;
+  box-shadow:
+    0 4px 4px 0 rgba(177, 177, 177, 0.2),
+    0 6px 20px 0 rgba(151, 151, 151, 0.19);
+}
+.profileContainer:focus {
+  outline: none;
+  background-color: var(--bs-gray-100);
+}
+.imageContainer {
+  width: 56px;
+}
+.profileContainer .profileText {
+  flex: 1;
+  text-align: start;
+  overflow: hidden;
+  margin-right: 4px;
+}
+.angleDown {
+  margin-left: 4px;
+}
+.profileContainer .profileText .primaryText {
+  font-size: 1rem;
+  font-weight: 600;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+  white-space: normal;
+}
+.profileContainer .profileText .secondaryText {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--bs-secondary);
+  display: block;
+  text-transform: capitalize;
+}
 
 .contract {
   padding-left: calc(300px + 2rem + 1.5rem);
