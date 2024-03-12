@@ -62,13 +62,11 @@ function organizationPeople(): JSX.Element {
   document.title = t('title');
 
   const [addUserModalisOpen, setAddUserModalIsOpen] = useState(false);
+
   function openAddUserModal(): void {
     setAddUserModalIsOpen(true);
   }
 
-  // function closeDialogModal(): void {
-  //   setAddUserModalIsOpen(false);
-  // }
   const toggleDialogModal = /* istanbul ignore next */ (): void =>
     setAddUserModalIsOpen(!addUserModalisOpen);
 
@@ -686,7 +684,11 @@ function organizationPeople(): JSX.Element {
           )}
         </div>
       </Col>
-      <Modal show={addUserModalisOpen} onHide={toggleDialogModal}>
+      <Modal
+        data-testid="addExistingUserModal"
+        show={addUserModalisOpen}
+        onHide={toggleDialogModal}
+      >
         <Modal.Header closeButton data-testid="pluginNotificationHeader">
           <Modal.Title>{t('addMembers')}</Modal.Title>
         </Modal.Header>
@@ -737,7 +739,7 @@ function organizationPeople(): JSX.Element {
                     {allUsersData &&
                       allUsersData.users.length > 0 &&
                       allUsersData.users.map((user: any, index: number) => (
-                        <StyledTableRow key={user._id}>
+                        <StyledTableRow data-testid="user" key={user._id}>
                           <StyledTableCell component="th" scope="row">
                             {index + 1}
                           </StyledTableCell>
@@ -756,6 +758,7 @@ function organizationPeople(): JSX.Element {
                               onClick={() => {
                                 createMember(user._id);
                               }}
+                              data-testid="addBtn"
                             >
                               Add
                             </Button>
@@ -770,11 +773,12 @@ function organizationPeople(): JSX.Element {
         </Modal.Body>
       </Modal>
 
-      <Modal show={createNewUserModalisOpen} onHide={toggleCreateNewUserModal}>
-        <Modal.Header
-          className={styles.createUserModalHeader}
-          data-testid="pluginNotificationHeader"
-        >
+      <Modal
+        data-testid="addNewUserModal"
+        show={createNewUserModalisOpen}
+        onHide={toggleCreateNewUserModal}
+      >
+        <Modal.Header className={styles.createUserModalHeader}>
           <Modal.Title>Create User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -856,7 +860,7 @@ function organizationPeople(): JSX.Element {
               <InputGroup.Text
                 className={`${styles.colorPrimary} ${styles.borderNone} ${styles.colorWhite}`}
                 onClick={toggleConfirmPassword}
-                data-testid="showPassword"
+                data-testid="showConfirmPassword"
               >
                 {showConfirmPassword ? (
                   <i className="fas fa-eye"></i>
@@ -871,7 +875,7 @@ function organizationPeople(): JSX.Element {
                 className={styles.borderNone}
                 value={organizationData?.organizations[0].name}
                 onChange={handlePasswordChange}
-                data-testid="passwordInput"
+                data-testid=""
                 disabled
               />
             </InputGroup>
@@ -881,7 +885,7 @@ function organizationPeople(): JSX.Element {
               className={`${styles.borderNone}`}
               variant="danger"
               onClick={closeCreateNewUserModal}
-              data-testid="registerBtn"
+              data-testid="closeBtn"
             >
               {t('cancel')}
             </Button>
@@ -889,7 +893,7 @@ function organizationPeople(): JSX.Element {
               className={`${styles.colorPrimary} ${styles.borderNone}`}
               variant="success"
               onClick={handleCreateUser}
-              data-testid="registerBtn"
+              data-testid="createBtn"
             >
               {t('create')}
             </Button>
