@@ -2,7 +2,6 @@ import { useMutation } from '@apollo/client';
 import { Search } from '@mui/icons-material';
 import {
   REMOVE_MEMBER_MUTATION,
-  UPDATE_USERTYPE_MUTATION,
   UPDATE_USER_ROLE_IN_ORG_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
@@ -46,33 +45,9 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const [searchByNameJoinedOrgs, setSearchByNameJoinedOrgs] = useState('');
   const [searchByNameOrgsBlockedBy, setSearchByNameOrgsBlockedBy] =
     useState('');
-  const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
   const [removeUser] = useMutation(REMOVE_MEMBER_MUTATION);
   const [updateUserInOrgType] = useMutation(UPDATE_USER_ROLE_IN_ORG_MUTATION);
   const history = useHistory();
-
-  /* istanbul ignore next */
-  const changeRole = async (e: any): Promise<void> => {
-    const { value } = e.target;
-
-    const inputData = value.split('?');
-
-    try {
-      const { data } = await updateUserType({
-        variables: {
-          id: inputData[1],
-          userType: inputData[0],
-        },
-      });
-      if (data) {
-        toast.success(t('roleUpdated'));
-        resetAndRefetch();
-      }
-    } catch (error: any) {
-      /* istanbul ignore next */
-      errorHandler(t, error);
-    }
-  };
 
   const confirmRemoveUser = async (): Promise<void> => {
     try {
@@ -195,7 +170,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
           <Form.Select
             name={`role${user.user._id}`}
             data-testid={`changeRole${user.user._id}`}
-            onChange={changeRole}
             disabled={user.user._id === loggedInUserId}
             defaultValue={
               user.appUserProfile.isSuperAdmin
