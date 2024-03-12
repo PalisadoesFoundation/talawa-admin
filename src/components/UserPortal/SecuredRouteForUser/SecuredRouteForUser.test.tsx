@@ -39,13 +39,10 @@ describe('SecuredRouteForUser', () => {
     render(
       <MemoryRouter initialEntries={['/user/organizations']}>
         <Routes>
-          <Route
-            path="/user/organizations"
-            element={<div>User Login Page</div>}
-          />
+          <Route path="/" element={<div>User Login Page</div>} />
           <Route element={<SecuredRouteForUser />}>
             <Route
-              path="/organizations"
+              path="/user/organizations"
               element={
                 <div data-testid="organizations-content">
                   Organizations Component
