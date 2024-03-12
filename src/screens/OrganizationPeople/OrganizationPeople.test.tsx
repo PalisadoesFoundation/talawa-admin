@@ -905,11 +905,10 @@ describe('Organization People Page', () => {
     await wait();
 
     expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
- 
+
     fireEvent.change(screen.getByTestId('searchUser'), {
       target: { value: 'Disha' },
     });
-    
   });
 
   test('Open and close add new user modal', async () => {
