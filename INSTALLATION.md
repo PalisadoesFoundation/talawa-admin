@@ -142,6 +142,12 @@ If you are a software developer working on your local system, then the URL would
 REACT_APP_TALAWA_URL="http://localhost:4000/graphql/"
 ```
 
+If you are trying to access Talawa Admin from a remote host with the API URL containing "localhost", You will have to change the API URL to
+
+```
+REACT_APP_TALAWA_URL="http://YOUR-REMOTE-ADDRESS:4000/graphql/"
+```
+
 For additional details, please refer  the `How to Access the Talawa-API URL` section in the INSTALLATION.md file found in the [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api).
 
 ## Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file
