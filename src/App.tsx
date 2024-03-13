@@ -1,26 +1,26 @@
-import React from 'react';
-import { Route, Routes } from 'react-router-dom';
-import * as installedPlugins from 'components/plugins/index';
+import AddOnStore from 'components/AddOn/core/AddOnStore/AddOnStore';
+import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
+import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
+import * as installedPlugins from 'components/plugins/index';
+import { Route, Routes } from 'react-router-dom';
+import BlockUser from 'screens/BlockUser/BlockUser';
+import EventDashboard from 'screens/EventDashboard/EventDashboard';
+import ForgotPassword from 'screens/ForgotPassword/ForgotPassword';
 import LoginPage from 'screens/LoginPage/LoginPage';
-import OrganizationEvents from 'screens/OrganizationEvents/OrganizationEvents';
-import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
-import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
-import OrganizationFunds from 'screens/OrganizationFunds/OrganizationFunds';
-import OrganizationDashboard from 'screens/OrganizationDashboard/OrganizationDashboard';
+import MemberDetail from 'screens/MemberDetail/MemberDetail';
 import OrgContribution from 'screens/OrgContribution/OrgContribution';
 import OrgList from 'screens/OrgList/OrgList';
 import OrgPost from 'screens/OrgPost/OrgPost';
 import OrgSettings from 'screens/OrgSettings/OrgSettings';
+import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
+import OrganizationDashboard from 'screens/OrganizationDashboard/OrganizationDashboard';
+import OrganizationEvents from 'screens/OrganizationEvents/OrganizationEvents';
+import OrganizaitionFundCampiagn from 'screens/OrganizationFundCampaign/OrganizationFundCampagins';
+import OrganizationFunds from 'screens/OrganizationFunds/OrganizationFunds';
+import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
-import AddOnStore from 'components/AddOn/core/AddOnStore/AddOnStore';
-import ForgotPassword from 'screens/ForgotPassword/ForgotPassword';
 import Users from 'screens/Users/Users';
-import BlockUser from 'screens/BlockUser/BlockUser';
-import EventDashboard from 'screens/EventDashboard/EventDashboard';
-import MemberDetail from 'screens/MemberDetail/MemberDetail';
-import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
-import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 import OrganizationVenues from 'screens/OrganizationVenues/OrganizationVenues';
 
 // User Portal Components
@@ -34,6 +34,7 @@ import Settings from 'screens/UserPortal/Settings/Settings';
 // import Chat from 'screens/UserPortal/Chat/Chat';
 import Advertisements from 'components/Advertisements/Advertisements';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
+import React from 'react';
 
 function app(): JSX.Element {
   /*const { updatePluginLinks, updateInstalled } = bindActionCreators(
@@ -94,6 +95,10 @@ function app(): JSX.Element {
               element={<OrganizationActionItems />}
             />
             <Route path="/orgfunds/:orgId" element={<OrganizationFunds />} />
+            <Route
+              path="/orgfundcampaign/:orgId/:fundId"
+              element={<OrganizaitionFundCampiagn />}
+            />
             <Route path="/orgcontribution" element={<OrgContribution />} />
             <Route path="/orgpost/:orgId" element={<OrgPost />} />
             <Route path="/orgsetting/:orgId" element={<OrgSettings />} />

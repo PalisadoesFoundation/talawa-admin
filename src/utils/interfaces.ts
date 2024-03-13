@@ -190,6 +190,17 @@ export interface InterfaceQueryOrganizationFunds {
     createdAt: string;
   }[];
 }
+export interface InterfaceQueryOrganizationFundCampaigns {
+  campaigns: {
+    _id: string;
+    name: string;
+    fundingGoal: number;
+    startDate: Date;
+    endDate: Date;
+    createdAt: string;
+    currency: string;
+  }[];
+}
 export interface InterfaceFundInfo {
   _id: string;
   name: string;
@@ -199,7 +210,15 @@ export interface InterfaceFundInfo {
   isDefault: boolean;
   createdAt: string;
 }
-
+export interface InterfaceCampaignInfo {
+  _id: string;
+  name: string;
+  fundingGoal: number;
+  startDate: Date;
+  endDate: Date;
+  createdAt: string;
+  currency: string;
+}
 export interface InterfaceQueryOrganizationEventListItem {
   _id: string;
   title: string;
@@ -297,4 +316,11 @@ export interface InterfaceAddress {
 export interface InterfaceCreateFund {
   fundName: string;
   fundRef: string;
+}
+export interface InterfaceCreateCampaign {
+  campaignName: string;
+  campaignCurrency: string;
+  campaignGoal: number;
+  campaignStartDate: Date;
+  campaignEndDate: Date;
 }

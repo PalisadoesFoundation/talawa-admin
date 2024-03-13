@@ -346,6 +346,14 @@ export const ADD_ADMIN_MUTATION = gql`
   }
 `;
 
+export const ADD_MEMBER_MUTATION = gql`
+  mutation CreateMember($orgid: ID!, $userid: ID!) {
+    createMember(input: { organizationId: $orgid, userId: $userid }) {
+      _id
+    }
+  }
+`;
+
 export const CREATE_POST_MUTATION = gql`
   mutation CreatePost(
     $text: String!
