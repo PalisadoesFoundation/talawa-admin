@@ -11,7 +11,6 @@ export const CHECK_AUTH = gql`
       lastName
       image
       email
-      userType
     }
   }
 `;
@@ -118,63 +117,81 @@ export const USER_LIST = gql`
       skip: $skip
       first: $first
     ) {
-      firstName
-      lastName
-      image
-      _id
-      email
-      userType
-      adminApproved
-      adminFor {
+      user {
         _id
-      }
-      createdAt
-      organizationsBlockedBy {
-        _id
-        name
-        image
-        address {
-          city
-          countryCode
-          dependentLocality
-          line1
-          line2
-          postalCode
-          sortingCode
-          state
-        }
-        createdAt
-        creator {
+        adminApproved
+        joinedOrganizations {
           _id
-          firstName
-          lastName
+          name
           image
-          email
+          createdAt
+          address {
+            city
+            countryCode
+            dependentLocality
+            line1
+            line2
+            postalCode
+            sortingCode
+            state
+          }
+          creator {
+            _id
+            firstName
+            lastName
+            image
+            email
+          }
+        }
+        firstName
+        lastName
+        email
+        image
+        createdAt
+        registeredEvents {
+          _id
+        }
+        organizationsBlockedBy {
+          _id
+          name
+          image
+          address {
+            city
+            countryCode
+            dependentLocality
+            line1
+            line2
+            postalCode
+            sortingCode
+            state
+          }
+          creator {
+            _id
+            firstName
+            lastName
+            image
+            email
+          }
           createdAt
         }
-      }
-      joinedOrganizations {
-        _id
-        name
-        image
-        address {
-          city
-          countryCode
-          dependentLocality
-          line1
-          line2
-          postalCode
-          sortingCode
-          state
-        }
-        createdAt
-        creator {
+        membershipRequests {
           _id
-          firstName
-          lastName
-          image
-          email
-          createdAt
+        }
+      }
+      appUserProfile {
+        _id
+        adminFor {
+          _id
+        }
+        isSuperAdmin
+        createdOrganizations {
+          _id
+        }
+        createdEvents {
+          _id
+        }
+        eventAdmin {
+          _id
         }
       }
     }
