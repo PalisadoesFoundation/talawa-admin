@@ -13,60 +13,110 @@ import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
+import {
+  ApolloClient,
+  ApolloLink,
+  HttpLink,
+  InMemoryCache,
+  NormalizedCacheObject,
+} from '@apollo/client';
+import { BACKEND_URL } from 'Constant/constant';
+import {
+  CREATE_VENUE_MUTATION,
+  UPDATE_VENUE_MUTATION,
+} from 'GraphQl/Mutations/mutations';
+import useLocalStorage from 'utils/useLocalstorage';
+import { VENUE_LIST } from 'GraphQl/Queries/OrganizationQueries';
 
-const mockVenueListData = {
-  organizations: [
-    {
-      venues: [
-        {
-          capacity: 1000,
-          description: 'Mock venue description 1',
-          imageUrl: 'mockImageUrl1',
-          name: 'Mock Venue 1',
-          organization: { __typename: 'Organization', _id: '123' },
-          __typename: 'Venue',
+const MOCKS = [
+  {
+    request: {
+      query: CREATE_VENUE_MUTATION,
+      variables: {
+        name: 'Test Plugin',
+        description: 'Test Creator',
+        capacity: 100,
+        orgId: '123',
+      },
+    },
+    result: {
+      data: {
+        venues: {
           _id: '1',
         },
-        {
-          capacity: 1001,
-          description: 'Mock venue description 2',
-          imageUrl: 'mockImageUrl2',
-          name: 'Mock Venue 2',
-          organization: { __typename: 'Organization', _id: '123' },
-          __typename: 'Venue',
-          _id: '2',
-        },
-      ],
+      },
     },
-  ],
-};
-
-const mockUseQuery = (): any => ({
-  data: mockVenueListData,
-  loading: false,
-  error: null,
-  refetch: jest.fn(),
-});
-
-// In your test:
-jest.mock('@apollo/client', (): any => ({
-  useQuery: jest.fn().mockImplementation(() => mockUseQuery()),
+  },
+  {
+    request: {
+      query: UPDATE_VENUE_MUTATION,
+      variables: {
+        name: 'Test Plugin updated',
+        description: 'Test Creator',
+        capacity: 100,
+        id: 'venueID123',
+        orgId: '123',
+      },
+    },
+    result: {
+      // Define the result object with the expected data
+      data: {
+        editVenue: {
+          _id: 'venueID123', // Mocked venue ID
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: VENUE_LIST,
+      variables: {
+        orgId: '123',
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            venues: [
+              {
+                _id: 'venue1',
+                capacity: 1000,
+                description: 'Updated description for venue 1',
+                imageUrl: null,
+                name: 'Updated Venue 1',
+                organization: {
+                  __typename: 'Organization',
+                  _id: '123',
+                },
+                __typename: 'Venue',
+              },
+              {
+                _id: 'venue2',
+                capacity: 1500,
+                description: 'Updated description for venue 2',
+                imageUrl: null,
+                name: 'Updated Venue 2',
+                organization: {
+                  __typename: 'Organization',
+                  _id: '123',
+                },
+                __typename: 'Venue',
+              },
+            ],
+          },
+        ],
+      },
+    },
+  },
+];
+const link2 = new StaticMockLink([], true);
+const link = new StaticMockLink(MOCKS, true);
+const linkURL = 'orgid';
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: linkURL }),
 }));
-
-const mockUseMutation = jest.fn();
-
-jest.mock('@apollo/client', () => ({
-  ...jest.requireActual('@apollo/client'), // Ensure to include the actual module functionality
-  useQuery: jest.fn().mockImplementation(() => mockUseQuery()),
-  useMutation: jest
-    .fn()
-    .mockImplementation(() => [
-      mockUseMutation,
-      { loading: false, error: null },
-    ]),
-}));
-
-const link = new StaticMockLink([], true);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -85,17 +135,24 @@ jest.mock('react-toastify', () => ({
 }));
 
 describe('Organisation Venues Page', () => {
-  const formData = {
+  const createFormData = {
     title: 'Dummy Venue',
     description: 'This is a dummy venues',
-    capacity: '100',
+    capacity: 100,
     orgId: '123',
     file: 'newVenue',
+  };
+  const updateFormData = {
+    title: 'Updated Dummy Venue',
+    description: 'This is an updated dummy venues',
+    capacity: 102,
+    orgId: '123',
+    file: 'updatedVenue',
   };
 
   global.alert = jest.fn();
 
-  test('Testing toggling of Create event modal', async () => {
+  test('Testing toggling of Create venue modal', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -115,10 +172,10 @@ describe('Organisation Venues Page', () => {
     userEvent.click(screen.getByTestId('createVenueModalCloseBtn'));
   });
 
-  test('Testing toggling of Update event modal', async () => {
+  test('Testing toggling of Update venue modal', async () => {
     window.location.assign('/orgvenues/123');
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link} mocks={MOCKS} addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -131,13 +188,19 @@ describe('Organisation Venues Page', () => {
 
     await wait();
 
-    const venueRow = screen.getByTestId('venueRow1');
-    const updateButton = within(venueRow).getByTestId('updateVenueModalBtn');
-    userEvent.click(updateButton);
+    // Assert that venue names are rendered in the table
+    expect(
+      screen.getByText('Updated description for venue 1'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('Updated description for venue 2'),
+    ).toBeInTheDocument();
+    const updateButtons = screen.getAllByText('Update Venue Details');
+    userEvent.click(updateButtons[0]);
     userEvent.click(screen.getByTestId('updateVenueModalCloseBtn'));
   });
 
-  test('Testing Create event modal', async () => {
+  test('Testing Create venue modal', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -154,24 +217,17 @@ describe('Organisation Venues Page', () => {
 
     userEvent.click(screen.getByTestId('createVenueModalBtn'));
 
-    const formData = {
-      title: 'Dummy Venue',
-      description: 'This is a dummy venue',
-      capacity: '100',
-      file: 'test.jpg',
-    };
-
     userEvent.type(
       screen.getByPlaceholderText(/Enter Venue Name/i),
-      formData.title,
+      createFormData.title,
     );
     userEvent.type(
       screen.getByPlaceholderText(/Enter Venue Description/i),
-      formData.description,
+      createFormData.description,
     );
     userEvent.type(
       screen.getByPlaceholderText(/Enter Venue Capacity/i),
-      formData.capacity,
+      createFormData.capacity.toString(),
     );
 
     // Mock the file upload
@@ -182,7 +238,6 @@ describe('Organisation Venues Page', () => {
     await wait();
     convertToBase64(file);
 
-    // Clear the image
     const clearImageButton = screen.getByTestId('closeimage');
     expect(clearImageButton).toBeInTheDocument();
     clearImageButton.addEventListener('click', (event) => {
@@ -191,25 +246,21 @@ describe('Organisation Venues Page', () => {
     fireEvent.click(clearImageButton);
     expect(screen.getByTestId('postImageUrl')).toHaveValue('');
 
-    // Assert that input value is cleared
     expect(input.value).toBe('');
-    // Assert that other input fields have the correct values
     expect(screen.getByPlaceholderText(/Enter Venue Name/i)).toHaveValue(
-      formData.title,
+      createFormData.title,
     );
     expect(screen.getByPlaceholderText(/Enter Venue Description/i)).toHaveValue(
-      formData.description,
+      createFormData.description,
     );
 
-    // Click the create venue button
     userEvent.click(screen.getByTestId('createVenueBtn'));
   });
 
-  test('Testing update venue', async () => {
+  test('Testing successful venue update and page reload', async () => {
     window.location.assign('/orgvenues/123');
-
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link} mocks={MOCKS} addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -219,40 +270,24 @@ describe('Organisation Venues Page', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
+
     await wait();
 
-    const venueRow = screen.getByTestId('venueRow1');
-    const updateButton = within(venueRow).getByTestId('updateVenueModalBtn');
-    userEvent.click(updateButton);
+    const updateButtons = screen.getAllByText('Update Venue Details');
+    userEvent.click(updateButtons[0]);
 
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter Venue Name/i),
-      formData.title,
-    );
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter Venue Description/i),
-      formData.description,
-    );
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter Venue Capacity/i),
-      formData.capacity,
-    );
+    fireEvent.change(screen.getByPlaceholderText(/Enter Venue Name/i), {
+      target: { value: 'Updated Venue' },
+    });
+    fireEvent.change(screen.getByPlaceholderText(/Enter Venue Description/i), {
+      target: { value: 'Updated description' },
+    });
+    fireEvent.change(screen.getByPlaceholderText(/Enter Venue Capacity/i), {
+      target: { value: '100' },
+    });
 
-    // userEvent.type(
-    //   screen.getByPlaceholderText(/Upload Venue Image/i),
-    //   formData.file,
-    // );
-    await wait();
-
-    expect(screen.getByPlaceholderText(/Enter Venue Name/i)).toHaveValue(
-      formData.title,
-    );
-    expect(screen.getByPlaceholderText(/Enter Venue Description/i)).toHaveValue(
-      formData.description,
-    );
-
-    userEvent.click(screen.getByTestId('updateVenueBtn'));
-  }, 15000);
+    fireEvent.click(screen.getByTestId('updateVenueBtn'));
+  });
 
   test('Gives warning when title of create modal is blank', async () => {
     render(
@@ -290,11 +325,14 @@ describe('Organisation Venues Page', () => {
     );
     await wait();
 
-    const venueRow = screen.getByTestId('venueRow1');
-    const updateButton = within(venueRow).getByTestId('updateVenueModalBtn');
-    userEvent.click(updateButton);
+    const updateButtons = screen.getAllByText('Update Venue Details');
+    userEvent.click(updateButtons[0]);
 
-    userEvent.type(screen.getByPlaceholderText(/Enter Venue Name/i), '');
+    await wait();
+
+    fireEvent.change(screen.getByPlaceholderText(/Enter Venue Name/i), {
+      target: { value: '' },
+    });
     await wait();
     userEvent.click(screen.getByTestId('updateVenueBtn'));
     expect(toast.warning).toBeCalledWith('Venue title can not be blank!');

@@ -98,13 +98,6 @@ function organizationVenues(): JSX.Element {
 
         if (addVenue) {
           toast.success(t('venueAdded'));
-          hideInviteModal();
-          setCreateFormState({
-            name: '',
-            description: '',
-            imageURL: '',
-            capacity: '',
-          });
           setTimeout(() => {
             window.location.reload();
           }, 2000);
@@ -130,7 +123,7 @@ function organizationVenues(): JSX.Element {
   useEffect(() => {
     memberRefetch({
       ...filterData,
-      venueId: currentUrl,
+      orgId: currentUrl,
     });
   }, []);
 
@@ -165,13 +158,6 @@ function organizationVenues(): JSX.Element {
 
         if (editVenue) {
           toast.success(t('venueUpdated'));
-          toggleUpdateAdminModal('');
-          setFormState({
-            name: '',
-            description: '',
-            imageURL: '',
-            capacity: '',
-          });
           setTimeout(() => {
             window.location.reload();
           }, 2000);
@@ -185,7 +171,6 @@ function organizationVenues(): JSX.Element {
     }
   };
 
-  console.log(memberData);
   const filteredVenues = [];
   const organizationsLength = memberData?.organizations.length;
   for (let i = 0; i < organizationsLength; i++) {
