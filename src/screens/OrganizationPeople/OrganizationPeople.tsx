@@ -26,6 +26,7 @@ import Loader from 'components/Loader/Loader';
 import UserListCard from 'components/UserListCard/UserListCard';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 import OrgAdminListCard from 'components/OrgAdminListCard/OrgAdminListCard';
+import AddMember from './AddMember';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -241,6 +242,9 @@ function organizationPeople(): JSX.Element {
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
+            </div>
+            <div className={styles.btnsBlock}>
+              <AddMember></AddMember>
             </div>
           </div>
         </div>
