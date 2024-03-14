@@ -84,23 +84,6 @@ jobs:
         run: |
           python .github/workflows/count_changed_files.py --base_branch "${{ github.base_ref }}" --pr_branch "${{ github.head_ref }}"
 
-  Check-Source-Target-Branch:
-    name: Checks for same source and target branch 
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.9
-
-      - name: Run Python script
-        run: |
-          python .github/workflows/check_branch.py "${{ github.event.pull_request.head.ref }}" "${{ github.event.pull_request.base.ref }}"
-
   Check-ESlint-Disable:
     name: Check for eslint-disable
     runs-on: ubuntu-latest
@@ -198,5 +181,17 @@ jobs:
         if: github.event.pull_request.base.ref != 'develop'
         run: |
           echo "Error: Pull request target branch must be 'develop'. Please refer PR_GUIDELINES.md"
+          exit 1
+
+  Check-Source-Target-Branch:
+    name: Check Source and Target Branches
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if the source and target branches are different
+        if: ${{ github.event.pull_request.base.ref == github.event.pull_request.head.ref }}
+        run: |
+          echo "Source Branch ${{ github.event.pull_request.head.ref }}"
+          echo "Target Branch ${{ github.event.pull_request.base.ref }}"
+          echo "Error: Source and Target Branches are the same. Please ensure they are different."
           exit 1
 
