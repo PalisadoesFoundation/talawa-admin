@@ -32,9 +32,16 @@ function userSidebar(): JSX.Element {
     }
   );
 
-  const { data: data2, loading: loadingUserDetails } = useQuery(USER_DETAILS, {
-    variables: { id: userId },
+  const {
+    data: data2,
+    loading: loadingUserDetails,
+    error,
+  } = useQuery(USER_DETAILS, {
+    variables: { userId: userId },
   });
+
+  console.log(data2);
+  console.log(error);
 
   /* istanbul ignore next */
   React.useEffect(() => {
@@ -66,9 +73,9 @@ function userSidebar(): JSX.Element {
           />
           <div className={styles.userDetails}>
             <h6>
-              <b>{`${details.firstName} ${details.lastName}`}</b>
+              <b>{`${details.user?.firstName} ${details.user?.lastName}`}</b>
             </h6>
-            <h6>{details.email}</h6>
+            <h6>{details.user?.email}</h6>
           </div>
           <div className={styles.organizationsConatiner}>
             <div className={styles.heading}>
