@@ -19,6 +19,18 @@ import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams, useNavigate } from 'react-router-dom';
+import RecurrenceRuleModal from './RecurrenceRuleModal';
+import { Frequency, WeekDays } from 'utils/enums';
+
+const Days = [
+  WeekDays.SU,
+  WeekDays.MO,
+  WeekDays.TU,
+  WeekDays.WE,
+  WeekDays.TH,
+  WeekDays.FR,
+  WeekDays.SA,
+];
 
 const timeToDayJs = (time: string): Dayjs => {
   const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
@@ -34,6 +46,8 @@ function organizationEvents(): JSX.Element {
 
   document.title = t('title');
   const [eventmodalisOpen, setEventModalIsOpen] = useState(false);
+  const [recurrenceRuleModalIsOpen, setRecurrenceRuleModalIsOpen] =
+    useState<boolean>(false);
 
   const [startDate, setStartDate] = React.useState<Date | null>(new Date());
   const [endDate, setEndDate] = React.useState<Date | null>(new Date());
@@ -43,6 +57,13 @@ function organizationEvents(): JSX.Element {
 
   const [publicchecked, setPublicChecked] = React.useState(true);
   const [registrablechecked, setRegistrableChecked] = React.useState(false);
+
+  const currentDay = new Date().getDay();
+  const [frequency, setFrequency] = React.useState<Frequency>(Frequency.WEEKLY);
+  const [weekDays, setWeekDays] = React.useState<WeekDays[]>([
+    Days[currentDay],
+  ]);
+  const [count, setCount] = React.useState<number | undefined>(undefined);
 
   const [formState, setFormState] = useState({
     title: '',
@@ -60,6 +81,14 @@ function organizationEvents(): JSX.Element {
   };
   const hideInviteModal = (): void => {
     setEventModalIsOpen(false);
+  };
+
+  const showRecurrenceRuleModal = (): void => {
+    setRecurrenceRuleModalIsOpen(true);
+  };
+
+  const hideRecurrenceRuleModal = (): void => {
+    setRecurrenceRuleModalIsOpen(false);
   };
 
   const { data, loading, error, refetch } = useQuery(
@@ -107,6 +136,9 @@ function organizationEvents(): JSX.Element {
             location: formState.location,
             startTime: !alldaychecked ? formState.startTime + 'Z' : null,
             endTime: !alldaychecked ? formState.endTime + 'Z' : null,
+            frequency,
+            weekDays,
+            count,
           },
         });
 
@@ -172,6 +204,7 @@ function organizationEvents(): JSX.Element {
         userId={userId}
       />
 
+      {/* Create Event Modal */}
       <Modal show={eventmodalisOpen} onHide={hideInviteModal}>
         <Modal.Header>
           <p className={styles.titlemodal}>{t('eventDetails')}</p>
@@ -306,7 +339,7 @@ function organizationEvents(): JSX.Element {
               <div className={styles.dispflex}>
                 <label htmlFor="allday">{t('allDay')}?</label>
                 <Form.Switch
-                  className="ms-2 mt-3"
+                  className="me-4"
                   id="allday"
                   type="checkbox"
                   checked={alldaychecked}
@@ -315,22 +348,9 @@ function organizationEvents(): JSX.Element {
                 />
               </div>
               <div className={styles.dispflex}>
-                <label htmlFor="recurring">{t('recurringEvent')}:</label>
-                <Form.Switch
-                  className="ms-2 mt-3"
-                  id="recurring"
-                  type="checkbox"
-                  data-testid="recurringCheck"
-                  checked={recurringchecked}
-                  onChange={(): void => setRecurringChecked(!recurringchecked)}
-                />
-              </div>
-            </div>
-            <div className={styles.checkboxdiv}>
-              <div className={styles.dispflex}>
                 <label htmlFor="ispublic">{t('isPublic')}?</label>
                 <Form.Switch
-                  className="ms-2 mt-3"
+                  className="me-4"
                   id="ispublic"
                   type="checkbox"
                   data-testid="ispublicCheck"
@@ -338,10 +358,26 @@ function organizationEvents(): JSX.Element {
                   onChange={(): void => setPublicChecked(!publicchecked)}
                 />
               </div>
+            </div>
+            <div className={styles.checkboxdiv}>
+              <div className={styles.dispflex}>
+                <label htmlFor="recurring">{t('recurringEvent')}?</label>
+                <Form.Switch
+                  className="me-4"
+                  id="recurring"
+                  type="checkbox"
+                  data-testid="recurringCheck"
+                  checked={recurringchecked}
+                  onChange={(): void => {
+                    setRecurringChecked(!recurringchecked);
+                    setRecurrenceRuleModalIsOpen(!recurringchecked);
+                  }}
+                />
+              </div>
               <div className={styles.dispflex}>
                 <label htmlFor="registrable">{t('isRegistrable')}?</label>
                 <Form.Switch
-                  className="ms-2 mt-3"
+                  className="me-4"
                   id="registrable"
                   type="checkbox"
                   data-testid="registrableCheck"
@@ -363,6 +399,15 @@ function organizationEvents(): JSX.Element {
           </Form>
         </Modal.Body>
       </Modal>
+
+      {/* Recurrence Rule Modal */}
+      <RecurrenceRuleModal
+        recurringchecked={recurringchecked}
+        recurrenceRuleModalIsOpen={recurrenceRuleModalIsOpen}
+        hideRecurrenceRuleModal={hideRecurrenceRuleModal}
+        setRecurrenceRuleModalIsOpen={setRecurrenceRuleModalIsOpen}
+        t={t}
+      />
     </>
   );
 }

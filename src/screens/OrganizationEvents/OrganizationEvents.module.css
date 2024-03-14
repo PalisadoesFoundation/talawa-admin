@@ -256,6 +256,7 @@
 .dispflex {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 .dispflex > input {
   border: none;
@@ -267,6 +268,56 @@
 }
 .checkboxdiv > div {
   width: 50%;
+}
+
+.recurrenceRuleNumberInput {
+  width: 70px;
+}
+
+.recurrenceRuleDateBox {
+  width: 70%;
+}
+
+.recurrenceDayButton {
+  width: 33px;
+  height: 33px;
+  border: 1px solid #6c757d;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 0.5rem;
+  border-radius: 50%;
+}
+
+.recurrenceDayButton:hover {
+  background-color: #6c757d;
+}
+
+.recurrenceDayButton.selected {
+  background-color: #19b347;
+  border-color: #19b347;
+  color: white;
+}
+
+.recurrenceDayButton span {
+  color: #6c757d;
+  padding: 0.25rem;
+  text-align: center;
+}
+
+.recurrenceDayButton:hover span {
+  color: white;
+}
+
+.recurrenceDayButton.selected span {
+  color: white;
+}
+
+.recurrenceRuleSubmitBtn {
+  margin-left: 82%;
+  padding: 7px 15px;
 }
 
 @media only screen and (max-width: 600px) {
