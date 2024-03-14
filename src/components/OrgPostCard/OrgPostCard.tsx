@@ -89,15 +89,33 @@ export default function orgPostCard(
   const toggleShowDeleteModal = (): void => setShowDeleteModal((prev) => !prev);
 
   const handleVideoPlay = (): void => {
-    setPlaying(true);
-    videoRef.current?.play();
+    const playPromise = videoRef.current?.play();
+
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          // setModalVisible(true);
+          setPlaying(true);
+        })
+        .catch((error: any) => {
+          console.log(error);
+        });
+    }
   };
 
   const handleVideoPause = (): void => {
-    setPlaying(false);
-    videoRef.current?.pause();
+    // setPlaying(false);
+    // videoRef.current?.pause();
+    // setModalVisible(false);
+    if (playing) {
+      console.log('IIIII');
+      setPlaying(false);
+      videoRef.current?.pause();
+      setModalVisible(false);
+    }
   };
   const handleCardClick = (): void => {
+    setPlaying(false);
     setModalVisible(true);
   };
 
@@ -243,12 +261,7 @@ export default function orgPostCard(
           data-testid="cardStructure"
         >
           {props.postVideo && (
-            <Card
-              className={styles.card}
-              data-testid="cardVid"
-              onMouseEnter={handleVideoPlay}
-              onMouseLeave={handleVideoPause}
-            >
+            <Card className={styles.card} data-testid="cardVid">
               <video
                 ref={videoRef}
                 muted
@@ -256,6 +269,9 @@ export default function orgPostCard(
                 autoPlay={playing}
                 loop={true}
                 playsInline
+                crossOrigin="anonymous"
+                onMouseEnter={handleVideoPlay}
+                onMouseLeave={handleVideoPause}
               >
                 <source src={props?.postVideo} type="video/mp4" />
               </video>
@@ -348,7 +364,7 @@ export default function orgPostCard(
               )}
               {props.postVideo && (
                 <div className={styles.modalImage}>
-                  <video controls autoPlay loop muted>
+                  <video controls autoPlay loop muted crossOrigin="anonymous">
                     <source src={props?.postVideo} type="video/mp4" />
                   </video>
                 </div>
@@ -397,7 +413,9 @@ export default function orgPostCard(
               </button>
               <button
                 className={styles.closeButton}
-                onClick={(): void => setModalVisible(false)}
+                onClick={(): void => {
+                  setModalVisible(false);
+                }}
                 data-testid="closeiconbtn"
               >
                 <CloseIcon />
