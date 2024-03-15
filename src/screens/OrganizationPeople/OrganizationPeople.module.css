@@ -141,6 +141,29 @@
   border: none;
 }
 
+.createUserModalHeader {
+  background-color: #31bb6b;
+  color: white;
+}
+
+.createUserActionBtns {
+  display: flex;
+  justify-content: flex-end;
+  column-gap: 10px;
+}
+
+.borderNone {
+  border: none;
+}
+
+.colorWhite {
+  color: white;
+}
+
+.colorPrimary {
+  background: #31bb6b;
+}
+
 .form_wrapper {
   margin-top: 27px;
   top: 50%;
@@ -241,7 +264,7 @@
   position: relative;
 }
 
-.btnsContainer input {
+input {
   outline: 1px solid var(--bs-gray-400);
 }
 

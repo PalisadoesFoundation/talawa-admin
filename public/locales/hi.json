@@ -220,7 +220,23 @@
     "searchLastName": "अंतिम नाम दर्ज करो",
     "people": "लोग",
     "sort": "भूमिका के आधार पर खोजें",
-    "actions": "क्रियाएँ"
+    "actions": "क्रियाएँ",
+    "existingUser": "मौजूदा उपयोगकर्ता",
+    "newUser": "नए उपयोगकर्ता",
+    "firstName": "पहला नाम",
+    "enterFirstName": "अपना पहला नाम दर्ज करें",
+    "lastName": "अंतिम नाम",
+    "enterLastName": "अपना अंतिम नाम दर्ज करें",
+    "emailAddress": "ईमेल एड्रेस",
+    "enterEmail": "अपना ईमेल पता दर्ज करें",
+    "password": "पासवर्ड",
+    "enterPassword": "अपना पासवर्ड डालें",
+    "confirmPassword": "पासवर्ड की पुष्टि कीजिये",
+    "enterConfirmPassword": "पुष्टि करने के लिए अपना पासवर्ड दर्ज करें",
+    "organization": "संगठन",
+    "create": "बनाएं",
+    "cancel": "रद्द करना",
+    "invalidDetailsMessage": "कृपया मान्य विवरण दर्ज करें।"
   },
   "userListCard": {
     "joined": "में शामिल हो गए",
@@ -367,6 +383,28 @@
     "fundArchived": "फंड सफलतापूर्वक संग्रहीत किया गया",
     "fundUnarchived": "फंड सफलतापूर्वक गैर संग्रहीत किया गया",
     "deleteFundMsg": "क्या आप इस फंड को हटाना चाहते हैं?"
+  },
+
+  "fundCampaign": {
+    "title": "तलवा फंड अभियान",
+    "campaignName": "अभियान का नाम",
+    "startDate": "प्रारंभ तिथि",
+    "endDate": "समाप्ति तिथि",
+    "campaignOptions": "अभियान विकल्प",
+    "fundingGoal": "वित्तीय लक्ष्य",
+    "addCampaign": "अभियान जोड़ें",
+    "createdCampaign": "अभियान सफलतापूर्वक बनाया गया",
+    "updatedCampaign": "अभियान सफलतापूर्वक अपडेट किया गया",
+    "deletedCampaign": "अभियान सफलतापूर्वक हटाया गया",
+    "deleteCampaignMsg": "क्या आप इस अभियान को हटाना चाहते हैं?",
+    "noCampaigns": "कोई अभियान नहीं",
+    "createCampaign": "अभियान बनाएँ",
+    "updateCampaign": "अभियान अपडेट करें",
+    "deleteCampaign": "अभियान हटाएं",
+    "no": "नहीं",
+    "yes": "हाँ",
+    "currency": "मुद्रा",
+    "selectCurrency": "मुद्रा चुनें"
   },
   "orgPost": {
     "title": "तलवा पोस्ट्स",
