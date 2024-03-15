@@ -281,7 +281,7 @@
 .recurrenceDayButton {
   width: 33px;
   height: 33px;
-  border: 1px solid #6c757d;
+  border: 1px solid var(--bs-gray);
   cursor: pointer;
   transition: background-color 0.3s;
   display: inline-flex;
@@ -292,27 +292,27 @@
 }
 
 .recurrenceDayButton:hover {
-  background-color: #6c757d;
+  background-color: var(--bs-gray);
 }
 
 .recurrenceDayButton.selected {
-  background-color: #19b347;
-  border-color: #19b347;
-  color: white;
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+  color: var(--bs-white);
 }
 
 .recurrenceDayButton span {
-  color: #6c757d;
+  color: var(--bs-gray);
   padding: 0.25rem;
   text-align: center;
 }
 
 .recurrenceDayButton:hover span {
-  color: white;
+  color: var(--bs-white);
 }
 
 .recurrenceDayButton.selected span {
-  color: white;
+  color: var(--bs-white);
 }
 
 .recurrenceRuleSubmitBtn {
