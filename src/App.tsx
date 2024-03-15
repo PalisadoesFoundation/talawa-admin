@@ -33,8 +33,8 @@ import Settings from 'screens/UserPortal/Settings/Settings';
 // import Chat from 'screens/UserPortal/Chat/Chat';
 import Advertisements from 'components/Advertisements/Advertisements';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
+import FundCampaignPledge from 'screens/FundCampaignPledge/FundCampaignPledge';
 import React from 'react';
-
 function app(): JSX.Element {
   /*const { updatePluginLinks, updateInstalled } = bindActionCreators(
     actionCreators,
@@ -97,6 +97,10 @@ function app(): JSX.Element {
             <Route
               path="/orgfundcampaign/:orgId/:fundId"
               element={<OrganizaitionFundCampiagn />}
+            />
+            <Route
+              path="/fundCampaignPledge/:orgId/:fundCampaignId"
+              element={<FundCampaignPledge />}
             />
             <Route path="/orgcontribution" element={<OrgContribution />} />
             <Route path="/orgpost/:orgId" element={<OrgPost />} />
