@@ -1,43 +1,54 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import type { ChangeEvent } from 'react';
-import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
+import { Button, Card } from 'react-bootstrap';
 import styles from './Home.module.css';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
-import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/OrganizationSidebar';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { Button, FloatingLabel, Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
+import convertToBase64 from 'utils/convertToBase64';
 import getOrganizationId from 'utils/getOrganizationId';
-import SendIcon from '@mui/icons-material/Send';
-import PostCard from 'components/UserPortal/PostCard/PostCard';
 import { useMutation, useQuery } from '@apollo/client';
-import {
-  ADVERTISEMENTS_GET,
-  ORGANIZATION_POST_CONNECTION_LIST,
-} from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
+import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import { useTranslation } from 'react-i18next';
-import convertToBase64 from 'utils/convertToBase64';
-import { toast } from 'react-toastify';
+import PostCard from 'components/UserPortal/PostCard/PostCard';
+import { ReactComponent as PostIcon } from 'assets/svgs/postUser.svg';
+import { ReactComponent as RightScrollIcon } from 'assets/svgs/rightScroll.svg';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
 
 interface InterfacePostCardProps {
   id: string;
   creator: {
     firstName: string;
     lastName: string;
-    email: string;
+    image: string;
     id: string;
   };
   image: string;
   video: string;
   text: string;
   title: string;
-  likeCount: number;
+  createdAt: number;
+}
+
+interface InterfacePost {
+  _id: string;
+  title: string;
+  text: string;
+  imageUrl: string;
+  videoUrl: string;
+  creator: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    image: string;
+  };
+  createdAt: number;
+  likeCount: string;
   commentCount: number;
   comments: {
+    _id: string;
     creator: {
       _id: string;
       firstName: string;
@@ -46,37 +57,51 @@ interface InterfacePostCardProps {
     };
     likeCount: number;
     likedBy: {
-      id: string;
-    }[];
+      _id: string;
+    };
     text: string;
-  }[];
+  };
   likedBy: {
+    _id: string;
     firstName: string;
     lastName: string;
-    id: string;
-  }[];
+  };
+  pinned: boolean;
 }
 
 export default function home(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'home' });
-
   const organizationId = getOrganizationId(window.location.href);
-  const [posts, setPosts] = React.useState([]);
+  const [posts, setPosts] = React.useState<InterfacePost[]>([]);
   const [postContent, setPostContent] = React.useState('');
   const [postImage, setPostImage] = React.useState('');
-  const currentOrgId = window.location.href.split('/id=')[1] + '';
-  const [adContent, setAdContent] = React.useState([]);
+  const [hasPinnedPost, setHasPinnedPost] = React.useState(false);
+
+  useEffect(() => {
+    const hasPinned = posts.some((post) => post.pinned === true);
+    setHasPinnedPost(hasPinned);
+  });
+
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  const handleScrollRight = (): void => {
+    if (carouselRef.current) {
+      (carouselRef.current as any).scrollBy({
+        left: 300, // Adjust this value to change the scroll amount
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  const handlePostInput = (e: ChangeEvent<HTMLInputElement>): void => {
+    const content = e.target.value;
+    setPostContent(content);
+  };
 
   const navbarProps = {
     currentPage: 'home',
   };
-  const {
-    data: promotedPostsData,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    refetch: _promotedPostsRefetch,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    loading: promotedPostsLoading,
-  } = useQuery(ADVERTISEMENTS_GET);
+
   const {
     data,
     refetch,
@@ -116,114 +141,146 @@ export default function home(): JSX.Element {
     }
   };
 
-  const handlePostInput = (e: ChangeEvent<HTMLInputElement>): void => {
-    const content = e.target.value;
-
-    setPostContent(content);
-  };
-
   React.useEffect(() => {
     if (data) {
       setPosts(data.postsByOrganizationConnection.edges);
     }
   }, [data]);
 
-  React.useEffect(() => {
-    if (promotedPostsData) {
-      setAdContent(promotedPostsData.getAdvertisements);
-    }
-  }, [data]);
-
   return (
     <>
       <OrganizationNavbar {...navbarProps} />
-      <div className={`d-flex flex-row ${styles.containerHeight}`}>
+      <div className={`${styles.mainContainer}`}>
         <UserSidebar />
-        <div className={`${styles.colorLight} ${styles.mainContainer}`}>
-          <div className={`${styles.postInputContainer}`}>
-            <FloatingLabel
-              controlId="post-input"
-              label={t('somethingOnYourMind')}
-            >
-              <Form.Control
-                as="textarea"
-                placeholder={t('somethingOnYourMind')}
-                value={postContent}
-                className={styles.postInput}
-                onChange={handlePostInput}
-                data-testid={'postInput'}
-              />
-            </FloatingLabel>
-            <div className={`${styles.postActionContainer}`}>
-              <Form.Control
-                accept="image/*"
-                id="postphoto"
-                name="photo"
-                type="file"
-                className={styles.imageInput}
-                multiple={false}
-                onChange={
-                  /* istanbul ignore next */
-                  async (e: React.ChangeEvent): Promise<void> => {
-                    const target = e.target as HTMLInputElement;
-                    const file = target.files && target.files[0];
-                    if (file) {
-                      const image = await convertToBase64(file);
-                      setPostImage(image);
+        <div className={`${styles.postPageContainer}`}>
+          <div className={`${styles.mainHeading}`}>POSTS</div>
+          <Card className={`${styles.cardStyle}`}>
+            <div className={`${styles.startPostAndBrowse}`}>
+              <div className={`${styles.startPostText}`}>Start a Post</div>
+              <div className={`${styles.browseAndPostInput}`}>
+                <label className={`bold-text ${styles.browseButton}`}>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={
+                      /* istanbul ignore next */
+                      async (e: React.ChangeEvent): Promise<void> => {
+                        const target = e.target as HTMLInputElement;
+                        const file = target.files && target.files[0];
+                        if (file) {
+                          const image = await convertToBase64(file);
+                          console.log(image);
+                          setPostImage(image);
+                        }
+                      }
                     }
-                  }
-                }
-              />
-              <Button
-                className={`${styles.postActionBtn}`}
-                onClick={handlePost}
-                data-testid={'postAction'}
-              >
-                <SendIcon />
-              </Button>
-            </div>
-          </div>
-          <div
-            style={{
-              display: `flex`,
-              flexDirection: `row`,
-              justifyContent: `space-between`,
-              alignItems: `center`,
-            }}
-          >
-            <h3>{t('feed')}</h3>
-            <div>
-              <Link to="/user/organizations" className={styles.link}>
-                {t('pinnedPosts')}
-                <ChevronRightIcon
-                  fontSize="small"
-                  className={styles.marginTop}
-                />
-              </Link>
-            </div>
-          </div>
-          {adContent
-            .filter((ad: any) => ad.orgId == currentOrgId)
-            .filter((ad: any) => new Date(ad.endDate) > new Date()).length == 0
-            ? ''
-            : adContent
-                .filter((ad: any) => ad.orgId == currentOrgId)
-                .filter((ad: any) => new Date(ad.endDate) > new Date())
-                .map((post: any) => (
-                  <PromotedPost
-                    key={post.id}
-                    id={post.id}
-                    image={post.link}
-                    title={post.name}
+                    style={{ display: 'none' }}
                   />
-                ))}
+                  Browse Files
+                </label>
+                <input
+                  className={`${styles.yourPostInput}`}
+                  placeholder="Start Your Post"
+                  data-testid="postInput"
+                  onChange={handlePostInput}
+                />
+              </div>
+              <div className={`${styles.postButtonDiv}`}>
+                <Button className={`${styles.postButton}`} onClick={handlePost}>
+                  Post
+                  <div className={`${styles.postButtonIcon}`}>
+                    <PostIcon />
+                  </div>
+                </Button>
+              </div>
+            </div>
+          </Card>
+          <span className={`${styles.feedText}`}>Feed</span>
+          <span className={`${styles.secondaryHeading}`}>Pinned post</span>
           {loadingPosts ? (
             <div className={`d-flex flex-row justify-content-center`}>
               <HourglassBottomIcon /> <span>Loading...</span>
             </div>
           ) : (
-            <>
-              {posts.map((post: any) => {
+            <div
+              className={`${styles.pinnedPosts}`}
+              ref={carouselRef}
+              data-testid="carousel"
+            >
+              {posts
+                .filter((post) => post.pinned === true)
+                .map((post: any) => {
+                  const allLikes: any = [];
+                  post.likedBy.forEach((value: any) => {
+                    const singleLike = {
+                      firstName: value.firstName,
+                      lastName: value.lastName,
+                      id: value._id,
+                    };
+                    allLikes.push(singleLike);
+                  });
+
+                  const postComments: any = [];
+                  post.comments.forEach((value: any) => {
+                    const commentLikes: any = [];
+
+                    value.likedBy.forEach((commentLike: any) => {
+                      const singleLike = {
+                        id: commentLike._id,
+                      };
+                      commentLikes.push(singleLike);
+                    });
+
+                    const singleCommnet: any = {
+                      id: value._id,
+                      creator: {
+                        firstName: value.creator.firstName,
+                        lastName: value.creator.lastName,
+                        id: value.creator._id,
+                        image: value.creator.image,
+                      },
+                      likeCount: value.likeCount,
+                      likedBy: commentLikes,
+                      text: value.text,
+                    };
+
+                    postComments.push(singleCommnet);
+                  });
+
+                  const cardProps: InterfacePostCardProps = {
+                    id: post._id,
+                    creator: {
+                      id: post.creator._id,
+                      firstName: post.creator.firstName,
+                      lastName: post.creator.lastName,
+                      image: post.creator.image,
+                    },
+                    image: post.imageUrl,
+                    video: post.videoUrl,
+                    title: post.title,
+                    text: post.text,
+                    createdAt: post.createdAt,
+                  };
+
+                  return <PostCard key={post._id} {...cardProps} />;
+                })}
+              {hasPinnedPost && (
+                <Button
+                  className={`${styles.rightScrollButton}`}
+                  onClick={handleScrollRight}
+                  data-testid="scrollRightButton"
+                >
+                  <RightScrollIcon />
+                </Button>
+              )}
+            </div>
+          )}
+
+          <span className={`${styles.secondaryHeading}`}>Your Feed</span>
+          <div className={`${styles.feedPosts}`}>
+            {posts
+              .filter((post) => post.pinned === false)
+              .map((post: any) => {
                 const allLikes: any = [];
                 post.likedBy.forEach((value: any) => {
                   const singleLike = {
@@ -251,7 +308,7 @@ export default function home(): JSX.Element {
                       firstName: value.creator.firstName,
                       lastName: value.creator.lastName,
                       id: value.creator._id,
-                      email: value.creator.email,
+                      image: value.creator.image,
                     },
                     likeCount: value.likeCount,
                     likedBy: commentLikes,
@@ -267,24 +324,19 @@ export default function home(): JSX.Element {
                     id: post.creator._id,
                     firstName: post.creator.firstName,
                     lastName: post.creator.lastName,
-                    email: post.creator.email,
+                    image: post.creator.image,
                   },
                   image: post.imageUrl,
                   video: post.videoUrl,
                   title: post.title,
                   text: post.text,
-                  likeCount: post.likeCount,
-                  commentCount: post.commentCount,
-                  comments: postComments,
-                  likedBy: allLikes,
+                  createdAt: post.createdAt,
                 };
 
                 return <PostCard key={post._id} {...cardProps} />;
               })}
-            </>
-          )}
+          </div>
         </div>
-        <OrganizationSidebar />
       </div>
     </>
   );

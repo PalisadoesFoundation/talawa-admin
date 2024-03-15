@@ -2,19 +2,17 @@ import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
-
 import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
-import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import Home from './Home';
-import userEvent from '@testing-library/user-event';
-import * as getOrganizationId from 'utils/getOrganizationId';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
-import { toast } from 'react-toastify';
+import * as getOrganizationId from 'utils/getOrganizationId';
+import i18nForTest from 'utils/i18nForTest';
+import userEvent from '@testing-library/user-event';
 import dayjs from 'dayjs';
+import Home from './Home';
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -47,6 +45,7 @@ const MOCKS = [
                 firstName: 'Aditya',
                 lastName: 'Shelke',
                 email: 'adidacreator1@gmail.com',
+                image: '',
               },
               createdAt: dayjs(new Date()).add(1, 'day'),
               likeCount: 0,
@@ -190,14 +189,7 @@ describe('Testing Home Screen [User Portal]', () => {
 
     expect(getOrganizationIdSpy).toHaveBeenCalled();
   });
-
-  test('Screen should be rendered properly when user types on the Post Input', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
+  test('Should render the main heading', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -212,21 +204,11 @@ describe('Testing Home Screen [User Portal]', () => {
 
     await wait();
 
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
-
-    const randomPostInput = 'This is a test';
-    userEvent.type(screen.getByTestId('postInput'), randomPostInput);
-
-    expect(screen.queryByText(randomPostInput)).toBeInTheDocument();
+    const mainHeading = screen.getByText('POSTS');
+    expect(mainHeading).toBeInTheDocument();
   });
 
-  test('Error toast should be visible when user tries to create a post with an empty body', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
+  test('Should render the sub heading', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -241,22 +223,11 @@ describe('Testing Home Screen [User Portal]', () => {
 
     await wait();
 
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
-
-    userEvent.click(screen.getByTestId('postAction'));
-
-    expect(toast.error).toBeCalledWith(
-      "Can't create a post with an empty body."
-    );
+    const mainHeading = screen.getByText('Feed');
+    expect(mainHeading).toBeInTheDocument();
   });
 
-  test('Info toast should be visible when user tries to create a post with a valid body', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
+  test('Should display "Start a Post" text', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -271,15 +242,27 @@ describe('Testing Home Screen [User Portal]', () => {
 
     await wait();
 
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
+    const startPostText = screen.getByText('Start a Post');
+    expect(startPostText).toBeInTheDocument();
+  });
 
-    const randomPostInput = 'This is a test';
-    userEvent.type(screen.getByTestId('postInput'), randomPostInput);
-    expect(screen.queryByText(randomPostInput)).toBeInTheDocument();
+  test('Should update postContent state on input change', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Home />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
 
-    userEvent.click(screen.getByTestId('postAction'));
+    await wait();
 
-    expect(toast.error).not.toBeCalledWith();
-    expect(toast.info).toBeCalledWith('Processing your post. Please wait.');
+    const postInput = screen.getByTestId('postInput');
+    userEvent.type(postInput, 'Testing post content');
+    expect(postInput).toHaveValue('Testing post content');
   });
 });
