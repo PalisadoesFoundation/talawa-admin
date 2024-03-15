@@ -80,37 +80,6 @@ function organizationVenues(): JSX.Element {
     }
   };
 
-  const [create] = useMutation(CREATE_VENUE_MUTATION);
-
-  const createVenue = async (e: any): Promise<void> => {
-    e.preventDefault();
-    if (createFormState.name.trim().length > 0) {
-      try {
-        const { data: addVenue } = await create({
-          variables: {
-            capacity: parseInt(createFormState.capacity),
-            file: createFormState.imageURL,
-            description: createFormState.description,
-            name: createFormState.name,
-            organizationId: currentUrl,
-          },
-        });
-
-        if (addVenue) {
-          toast.success(t('venueAdded'));
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
-        }
-      } catch (error: any) {
-        errorHandler(t, error);
-      }
-    }
-    if (createFormState.name.trim().length === 0) {
-      toast.warning('Venue title can not be blank!');
-    }
-  };
-
   const filterData: Partial<OperationVariables> | undefined = [];
   const [id, setId] = useState('');
 
@@ -137,6 +106,36 @@ function organizationVenues(): JSX.Element {
     imageURL: '',
   });
 
+  const [create] = useMutation(CREATE_VENUE_MUTATION);
+
+  const createVenue = async (e: any): Promise<void> => {
+    e.preventDefault();
+    if (createFormState.name.trim().length > 0) {
+      try {
+        const { data: addVenue } = await create({
+          variables: {
+            capacity: parseInt(createFormState.capacity),
+            file: createFormState.imageURL,
+            description: createFormState.description,
+            name: createFormState.name,
+            organizationId: currentUrl,
+          },
+        });
+
+        if (addVenue) {
+          toast.success(t('venueAdded'));
+          memberRefetch();
+          hideInviteModal();
+        }
+      } catch (error: any) {
+        errorHandler(t, error);
+      }
+    }
+    if (createFormState.name.trim().length === 0) {
+      toast.warning('Venue title can not be blank!');
+    }
+  };
+
   const toggleUpdateAdminModal = (orgId: any): void => {
     setId(orgId);
     setShowUpdateAdminModal(!showUpdateAdminModal);
@@ -158,9 +157,8 @@ function organizationVenues(): JSX.Element {
 
         if (editVenue) {
           toast.success(t('venueUpdated'));
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
+          memberRefetch();
+          toggleUpdateAdminModal('');
         }
       } catch (error: any) {
         errorHandler(t, error);
@@ -172,11 +170,19 @@ function organizationVenues(): JSX.Element {
   };
 
   const filteredVenues = [];
-  const organizationsLength = memberData?.organizations.length;
-  for (let i = 0; i < organizationsLength; i++) {
-    for (const venue of memberData?.organizations[i]?.venues || []) {
-      if (venue.organization._id == currentUrl) {
-        filteredVenues.push(venue);
+
+  if (memberData && memberData.organizations) {
+    for (const organization of memberData.organizations) {
+      if (organization && organization.venues) {
+        for (const venue of organization.venues) {
+          if (
+            venue &&
+            venue.organization &&
+            venue.organization._id === currentUrl
+          ) {
+            filteredVenues.push(venue);
+          }
+        }
       }
     }
   }
@@ -314,7 +320,7 @@ function organizationVenues(): JSX.Element {
               <Loader />
             </>
           ) : (
-            <div className={styles.list_box} data-testid="orgpeoplelist">
+            <div className={styles.list_box} data-testid="orgvenueslist">
               <Col sm={5}>
                 <TableContainer component={Paper} sx={{ minWidth: '820px' }}>
                   <Table aria-label="customized table">
@@ -368,9 +374,6 @@ function organizationVenues(): JSX.Element {
                                   show={
                                     id === datas._id && showUpdateAdminModal
                                   }
-                                  onHide={() => {
-                                    toggleUpdateAdminModal(datas._id);
-                                  }}
                                   data-testid="updateModal"
                                 >
                                   <Modal.Header>
