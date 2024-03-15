@@ -20,17 +20,8 @@ import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams, useNavigate } from 'react-router-dom';
 import RecurrenceRuleModal from './RecurrenceRuleModal';
-import { Frequency, WeekDays } from 'utils/enums';
-
-const Days = [
-  WeekDays.SU,
-  WeekDays.MO,
-  WeekDays.TU,
-  WeekDays.WE,
-  WeekDays.TH,
-  WeekDays.FR,
-  WeekDays.SA,
-];
+import { Frequency, Days } from 'utils/recurrenceRuleUtils';
+import type { WeekDays } from 'utils/recurrenceRuleUtils';
 
 const timeToDayJs = (time: string): Dayjs => {
   const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
@@ -83,10 +74,6 @@ function organizationEvents(): JSX.Element {
     setEventModalIsOpen(false);
   };
 
-  const showRecurrenceRuleModal = (): void => {
-    setRecurrenceRuleModalIsOpen(true);
-  };
-
   const hideRecurrenceRuleModal = (): void => {
     setRecurrenceRuleModalIsOpen(false);
   };
@@ -131,13 +118,13 @@ function organizationEvents(): JSX.Element {
             isRegisterable: registrablechecked,
             organizationId: currentUrl,
             startDate: dayjs(startDate).format('YYYY-MM-DD'),
-            endDate: dayjs(endDate).format('YYYY-MM-DD'),
+            endDate: endDate ? dayjs(endDate).format('YYYY-MM-DD') : undefined,
             allDay: alldaychecked,
             location: formState.location,
             startTime: !alldaychecked ? formState.startTime + 'Z' : null,
             endTime: !alldaychecked ? formState.endTime + 'Z' : null,
             frequency,
-            weekDays,
+            weekDays: frequency === Frequency.WEEKLY ? weekDays : undefined,
             count,
           },
         });
@@ -155,6 +142,11 @@ function organizationEvents(): JSX.Element {
             startTime: '08:00:00',
             endTime: '18:00:00',
           });
+          setRecurringChecked(false);
+          setFrequency(Frequency.WEEKLY);
+          setWeekDays([Days[currentDay]]);
+          setCount(undefined);
+          setEndDate(new Date());
         }
       } catch (error: any) {
         /* istanbul ignore next */
@@ -284,7 +276,7 @@ function organizationEvents(): JSX.Element {
                 <DatePicker
                   label={t('endDate')}
                   className={styles.datebox}
-                  value={dayjs(endDate)}
+                  value={dayjs(endDate ?? startDate)}
                   onChange={(date: Dayjs | null): void => {
                     if (date) {
                       setEndDate(date?.toDate());
@@ -402,6 +394,13 @@ function organizationEvents(): JSX.Element {
 
       {/* Recurrence Rule Modal */}
       <RecurrenceRuleModal
+        frequency={frequency}
+        setFrequency={setFrequency}
+        weekDays={weekDays}
+        setWeekDays={setWeekDays}
+        setCount={setCount}
+        endDate={endDate}
+        setEndDate={setEndDate}
         recurringchecked={recurringchecked}
         recurrenceRuleModalIsOpen={recurrenceRuleModalIsOpen}
         hideRecurrenceRuleModal={hideRecurrenceRuleModal}

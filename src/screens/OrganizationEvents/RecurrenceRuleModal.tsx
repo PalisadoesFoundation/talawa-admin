@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
-import {
-  Badge,
-  Button,
-  Dropdown,
-  Form,
-  FormControl,
-  Modal,
-} from 'react-bootstrap';
+import { Button, Dropdown, Form, FormControl, Modal } from 'react-bootstrap';
 import styles from './OrganizationEvents.module.css';
 import { DatePicker } from '@mui/x-date-pickers';
-
-const dayMapping = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+import { Days, Frequency, frequencies } from 'utils/recurrenceRuleUtils';
+import type { WeekDays } from 'utils/recurrenceRuleUtils';
+import type { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 
 interface InterfaceRecurrenceRuleProps {
+  frequency: Frequency;
+  setFrequency: (state: React.SetStateAction<Frequency>) => void;
+  weekDays: WeekDays[];
+  setWeekDays: (state: React.SetStateAction<WeekDays[]>) => void;
+  setCount: (state: React.SetStateAction<number | undefined>) => void;
+  endDate: Date | null;
+  setEndDate: (state: React.SetStateAction<Date | null>) => void;
   recurrenceRuleModalIsOpen: boolean;
   recurringchecked: boolean;
   hideRecurrenceRuleModal: () => void;
@@ -21,30 +23,42 @@ interface InterfaceRecurrenceRuleProps {
 }
 
 const RecurrenceRuleModal: React.FC<InterfaceRecurrenceRuleProps> = ({
+  frequency,
+  setFrequency,
+  weekDays,
+  setWeekDays,
+  setCount,
+  endDate,
+  setEndDate,
   recurrenceRuleModalIsOpen,
   recurringchecked,
   hideRecurrenceRuleModal,
   setRecurrenceRuleModalIsOpen,
   t,
 }) => {
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectedOption, setSelectedOption] = useState<string>('On');
 
-  const handleOptionChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
-    console.log(selectedOption);
-    setSelectedOption(event.target.value);
+  const handleOptionChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const endsOnOption = e.target.value;
+    setSelectedOption(endsOnOption);
+    if (endsOnOption === 'Never') {
+      setCount(undefined);
+      setEndDate(null);
+    }
+    if (endsOnOption === 'On') {
+      setCount(undefined);
+    }
+    if (endsOnOption === 'After') {
+      setEndDate(null);
+    }
   };
 
-  const [weekDays, setWeekDays] = useState<string[]>([]);
-
-  const handleDayClick = (day: string): void => {
+  const handleDayClick = (day: WeekDays): void => {
     if (weekDays.includes(day)) {
       setWeekDays(weekDays.filter((d) => d !== day));
     } else {
       setWeekDays([...weekDays, day]);
     }
-    console.log(weekDays);
   };
 
   const handleRecurrenceRuleSubmit = (): void => {
@@ -89,14 +103,22 @@ const RecurrenceRuleModal: React.FC<InterfaceRecurrenceRuleProps> = ({
                 variant="outline-secondary"
                 id="dropdown-basic"
               >
-                Week
+                {frequencies[frequency]}
               </Dropdown.Toggle>
 
               <Dropdown.Menu>
-                <Dropdown.Item>Day</Dropdown.Item>
-                <Dropdown.Item>Week</Dropdown.Item>
-                <Dropdown.Item>Month</Dropdown.Item>
-                <Dropdown.Item>Year</Dropdown.Item>
+                <Dropdown.Item onClick={() => setFrequency(Frequency.DAILY)}>
+                  Day
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => setFrequency(Frequency.WEEKLY)}>
+                  Week
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => setFrequency(Frequency.MONTHLY)}>
+                  Month
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => setFrequency(Frequency.YEARLY)}>
+                  Year
+                </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </div>
@@ -108,8 +130,8 @@ const RecurrenceRuleModal: React.FC<InterfaceRecurrenceRuleProps> = ({
               {days.map((day, index) => (
                 <div
                   key={index}
-                  className={`${styles.recurrenceDayButton} ${weekDays.includes(dayMapping[index]) ? styles.selected : ''}`}
-                  onClick={() => handleDayClick(dayMapping[index])}
+                  className={`${styles.recurrenceDayButton} ${weekDays.includes(Days[index]) ? styles.selected : ''}`}
+                  onClick={() => handleDayClick(Days[index])}
                 >
                   <span>{day}</span>
                 </div>
@@ -131,7 +153,7 @@ const RecurrenceRuleModal: React.FC<InterfaceRecurrenceRuleProps> = ({
                       className="d-inline-block me-5"
                       value={option}
                       onChange={handleOptionChange}
-                      defaultChecked={option === 'Never'}
+                      defaultChecked={option === 'On'}
                     />
 
                     {option === 'On' && (
@@ -139,6 +161,12 @@ const RecurrenceRuleModal: React.FC<InterfaceRecurrenceRuleProps> = ({
                         <DatePicker
                           className={styles.recurrenceRuleDateBox}
                           disabled={selectedOption !== 'On'}
+                          value={dayjs(endDate ?? new Date())}
+                          onChange={(date: Dayjs | null): void => {
+                            if (date) {
+                              setEndDate(date?.toDate());
+                            }
+                          }}
                         />
                       </div>
                     )}
@@ -148,6 +176,7 @@ const RecurrenceRuleModal: React.FC<InterfaceRecurrenceRuleProps> = ({
                           type="number"
                           defaultValue={1}
                           min={1}
+                          onChange={(e) => setCount(Number(e.target.value))}
                           className={`${styles.recurrenceRuleNumberInput} ms-1 me-2 d-inline-block py-2`}
                           disabled={selectedOption !== 'After'}
                         />{' '}
