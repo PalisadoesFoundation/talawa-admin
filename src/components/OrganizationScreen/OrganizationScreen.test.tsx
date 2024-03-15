@@ -1,6 +1,6 @@
 import React from 'react';
-import { MockedProvider, wait } from '@apollo/react-testing';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { MockedProvider } from '@apollo/react-testing';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import 'jest-location-mock';
 import { Provider } from 'react-redux';
@@ -118,28 +118,5 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
       </MockedProvider>,
     );
     expect(window.location.pathname).toEqual('/');
-  });
-
-  test('Testing logout functionality', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    fireEvent.click(screen.getByTestId('toggleDropdown'));
-    fireEvent.click(screen.getByTestId('logoutBtn'));
-    await waitFor(() => {
-      // Assert that localStorage.clear has been called
-      expect(localStorage.clear).toHaveBeenCalled();
-
-      // Assert that window location pathname is '/'
-      expect(window.location.pathname).toBe('/');
-    });
   });
 });

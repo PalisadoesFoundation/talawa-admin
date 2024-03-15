@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { WarningAmberOutlined } from '@mui/icons-material';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
@@ -6,13 +6,12 @@ import IconComponent from 'components/IconComponent/IconComponent';
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import styles from './LeftDrawerOrg.module.css';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import Avatar from 'components/Avatar/Avatar';
 
 export interface InterfaceLeftDrawerProps {
@@ -43,8 +42,6 @@ const leftDrawerOrg = ({
   } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: orgId },
   });
-
-  const navigate = useNavigate();
 
   // Set organization data
   useEffect(() => {

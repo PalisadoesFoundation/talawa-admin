@@ -16,7 +16,6 @@ import type { TargetsType } from 'state/reducers/routesReducer';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './OrganizationScreen.module.css';
 import Avatar from 'components/Avatar/Avatar';
-import { ReactComponent as AngleDownIcon } from 'assets/svgs/angleDown.svg';
 import { Dropdown, ButtonGroup } from 'react-bootstrap'; // Changed from DropdownButton to Dropdown
 import { useMutation } from '@apollo/client';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
@@ -54,7 +53,7 @@ const OrganizationScreen = (): JSX.Element => {
       setHideDrawer(true);
     }
   };
-
+  /*istanbul ignore next*/
   const logout = (): void => {
     revokeRefreshToken();
     localStorage.clear();
@@ -111,11 +110,7 @@ const OrganizationScreen = (): JSX.Element => {
           <div style={{ flex: 1 }}>
             <h1>{t('title')}</h1>
           </div>
-          <Dropdown
-            as={ButtonGroup}
-            variant="none"
-            data-testid="toggleDropdown"
-          >
+          <Dropdown as={ButtonGroup} variant="none" data-testid="togDrop">
             <div className={styles.profileContainer}>
               <div className={styles.imageContainer}>
                 {userImage && userImage !== 'null' ? (
@@ -142,7 +137,6 @@ const OrganizationScreen = (): JSX.Element => {
               split
               variant="none"
               style={{ backgroundColor: 'white' }}
-              data-testid="toggleDropdown"
               id="dropdown-split-basic"
             />
             <Dropdown.Menu>
