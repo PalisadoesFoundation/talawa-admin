@@ -14,6 +14,7 @@ import { toast } from 'react-toastify';
 import { Search, Sort } from '@mui/icons-material';
 import Loader from 'components/Loader/Loader';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
+import OrgAdminListCard from 'components/OrgAdminListCard/OrgAdminListCard';
 import { DataGrid } from '@mui/x-data-grid';
 import type { GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
@@ -38,13 +39,25 @@ function organizationPeople(): JSX.Element {
     lastName_contains: '',
   });
 
-  const [showRemoveAdminModal, setShowRemoveAdminModal] = React.useState(false);
+  const [showRemoveModal, setShowRemoveModal] = React.useState(false);
+  const [selectedAdminId, setSelectedAdminId] = React.useState<
+    string | undefined
+  >();
   const [selectedMemId, setSelectedMemId] = React.useState<
     string | undefined
   >();
-  const toggleRemoveAdminModal = (id: string): void => {
+  const toggleRemoveModal = (): void => {
+    setShowRemoveModal((prev) => !prev);
+  };
+  const toggleRemoveMemberModal = (id: string): void => {
     setSelectedMemId(id);
-    setShowRemoveAdminModal((prev) => !prev);
+    setSelectedAdminId(undefined);
+    toggleRemoveModal();
+  };
+  const toggleRemoveAdminModal = (id: string): void => {
+    setSelectedAdminId(id);
+    setSelectedMemId(undefined);
+    toggleRemoveModal();
   };
 
   const {
@@ -222,10 +235,16 @@ function organizationPeople(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: any): any => {
-        return (
+        return state === 1 ? (
           <Button
-            className={styles.memberfontcreatedbtn}
             onClick={() => toggleRemoveAdminModal(params.row._id)}
+            data-testid="removeAdminModalBtn"
+          >
+            Remove
+          </Button>
+        ) : (
+          <Button
+            onClick={() => toggleRemoveMemberModal(params.row._id)}
             data-testid="removeMemberModalBtn"
           >
             Remove
@@ -366,10 +385,16 @@ function organizationPeople(): JSX.Element {
           />
         </div>
       )}
-      {showRemoveAdminModal && selectedMemId && (
+      {showRemoveModal && selectedMemId && (
         <OrgPeopleListCard
           id={selectedMemId}
-          toggleRemoveAdminModal={toggleRemoveAdminModal}
+          toggleRemoveModal={toggleRemoveModal}
+        />
+      )}
+      {showRemoveModal && selectedAdminId && (
+        <OrgAdminListCard
+          id={selectedAdminId}
+          toggleRemoveModal={toggleRemoveModal}
         />
       )}
     </>

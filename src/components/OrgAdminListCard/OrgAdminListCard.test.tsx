@@ -41,7 +41,7 @@ describe('Testing Organization Admin List Card', () => {
 
   test('should render props and text elements test for the page component', async () => {
     const props = {
-      key: 123,
+      toggleRemoveModal: () => true,
       id: '456',
     };
 
@@ -57,14 +57,13 @@ describe('Testing Organization Admin List Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId(/removeAdminModalBtn/i));
     userEvent.click(screen.getByTestId(/removeAdminBtn/i));
   });
 
-  test('Should render text elements when props value is not passed', async () => {
+  test('Should not render modal when id is undefined', async () => {
     const props = {
-      key: 123,
-      id: '456',
+      toggleRemoveModal: () => true,
+      id: undefined,
     };
 
     render(
@@ -79,7 +78,6 @@ describe('Testing Organization Admin List Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId(/removeAdminModalBtn/i));
-    userEvent.click(screen.getByTestId(/removeAdminBtn/i));
+    expect(window.location.pathname).toEqual('/orglist');
   });
 });

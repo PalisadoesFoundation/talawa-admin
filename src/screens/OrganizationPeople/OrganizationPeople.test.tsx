@@ -940,7 +940,7 @@ describe('Organization People Page', () => {
     expect(window.location).toBeAt('/orgpeople/6401ff65ce8e8406b8f07af2');
   });
 
-  test('datagrid', async () => {
+  test('Datagrid renders with members data', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -955,6 +955,30 @@ describe('Organization People Page', () => {
     const dataGrid = screen.getByRole('grid');
     expect(dataGrid).toBeInTheDocument();
     const removeButtons = screen.getAllByTestId('removeMemberModalBtn');
+    userEvent.click(removeButtons[0]);
+  });
+
+  test('Datagrid renders with admin data', async () => {
+    window.location.assign('/orgpeople/orgid');
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrganizationPeople />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    const dropdownToggles = screen.getAllByTestId('role');
+    dropdownToggles.forEach((dropdownToggle) => {
+      userEvent.click(dropdownToggle);
+    });
+    const adminDropdownItem = screen.getByTestId('admins');
+    userEvent.click(adminDropdownItem);
+    await wait();
+    const removeButtons = screen.getAllByTestId('removeAdminModalBtn');
     userEvent.click(removeButtons[0]);
   });
 

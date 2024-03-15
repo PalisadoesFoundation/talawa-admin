@@ -39,7 +39,7 @@ async function wait(ms = 100): Promise<void> {
 describe('Testing Organization People List Card', () => {
   const props = {
     id: '1',
-    toggleRemoveAdminModal: () => true,
+    toggleRemoveModal: () => true,
   };
   global.alert = jest.fn();
 
@@ -68,10 +68,7 @@ describe('Testing Organization People List Card', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
-            <OrgPeopleListCard
-              id={undefined}
-              toggleRemoveAdminModal={() => true}
-            />
+            <OrgPeopleListCard id={undefined} toggleRemoveModal={() => true} />
           </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,

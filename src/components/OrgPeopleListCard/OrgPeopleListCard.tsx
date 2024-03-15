@@ -10,7 +10,7 @@ import { errorHandler } from 'utils/errorHandler';
 
 interface InterfaceOrgPeopleListCardProps {
   id: string | undefined;
-  toggleRemoveAdminModal: any;
+  toggleRemoveModal: any;
 }
 
 function orgPeopleListCard(
@@ -49,16 +49,16 @@ function orgPeopleListCard(
   };
   return (
     <div>
-      <Modal show={true} onHide={props.toggleRemoveAdminModal}>
+      <Modal show={true} onHide={props.toggleRemoveModal}>
         <Modal.Header>
           <h5>{t('removeMember')}</h5>
-          <Button variant="danger" onClick={props.toggleRemoveAdminModal}>
+          <Button variant="danger" onClick={props.toggleRemoveModal}>
             <i className="fa fa-times"></i>
           </Button>
         </Modal.Header>
         <Modal.Body>{t('removeMemberMsg')}</Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={props.toggleRemoveAdminModal}>
+          <Button variant="danger" onClick={props.toggleRemoveModal}>
             {t('no')}
           </Button>
           <Button
