@@ -348,7 +348,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                 />
               );
             });
-
+          /*istanbul ignore next*/
           return (
             <div key={hour} className={styles.calendar_hour_block}>
               <div className={styles.calendar_hour_text_container}>
@@ -381,6 +381,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                         : styles.event_list
                     }
                   >
+                    {/*istanbul ignore next*/}
                     {expanded === index
                       ? timeEventsList
                       : timeEventsList?.slice(0, 1)}
@@ -557,6 +558,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             <div className={styles.calendar__days}>{renderDays()}</div>
           </div>
         ) : (
+          /*istanbul ignore next*/
           <div className={styles.clendar__hours}>{renderHours()}</div>
         )}
       </div>

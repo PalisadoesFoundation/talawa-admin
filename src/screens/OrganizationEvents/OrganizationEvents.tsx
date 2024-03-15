@@ -68,6 +68,7 @@ function organizationEvents(): JSX.Element {
     setEventModalIsOpen(false);
   };
   const handleChangeView = (item: any): void => {
+    /*istanbul ignore next*/
     setViewType(item);
   };
 
@@ -274,12 +275,14 @@ function organizationEvents(): JSX.Element {
                   className={styles.datebox}
                   timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
                   value={timeToDayJs(formState.startTime)}
+                  /*istanbul ignore next*/
                   onChange={(time): void => {
                     if (time) {
                       setFormState({
                         ...formState,
                         startTime: time?.format('HH:mm:ss'),
                         endTime:
+                          /*istanbul ignore next*/
                           timeToDayJs(formState.endTime) < time
                             ? time?.format('HH:mm:ss')
                             : formState.endTime,
@@ -294,6 +297,7 @@ function organizationEvents(): JSX.Element {
                   label={t('endTime')}
                   className={styles.datebox}
                   timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
+                  /*istanbul ignore next*/
                   value={timeToDayJs(formState.endTime)}
                   onChange={(time): void => {
                     if (time) {

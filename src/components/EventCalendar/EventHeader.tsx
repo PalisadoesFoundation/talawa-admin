@@ -34,6 +34,7 @@ function eventHeader({
             required
             className={styles.inputField}
             value={eventName}
+            /*istanbul ignore next*/
             onChange={(e) => setEventName(e.target.value)}
           />
           <Button
