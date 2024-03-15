@@ -440,6 +440,50 @@ function organizationVenues(): JSX.Element {
                                           });
                                         }}
                                       />
+                                      <Form.Label htmlFor="postPhoto">
+                                        {t('image')}
+                                      </Form.Label>
+                                      <Form.Control
+                                        accept="image/*"
+                                        id="postImageUrl"
+                                        data-testid="postImageUrl"
+                                        name="postphoto"
+                                        type="file"
+                                        placeholder={t('uploadVenueImage')}
+                                        multiple={false}
+                                        onChange={async (
+                                          e: React.ChangeEvent<HTMLInputElement>,
+                                        ): Promise<void> => {
+                                          setFormState((prevPostFormState) => ({
+                                            ...prevPostFormState,
+                                            imageURL: '',
+                                          }));
+                                          setPostPhotoUpdated(true);
+                                          const file = e.target.files?.[0];
+                                          if (file) {
+                                            setFormState({
+                                              ...formState,
+                                              imageURL:
+                                                await convertToBase64(file),
+                                            });
+                                          }
+                                        }}
+                                      />
+                                      {postPhotoUpdated && (
+                                        <div className={styles.preview}>
+                                          <img
+                                            src={formState.imageURL}
+                                            alt="Post Image Preview"
+                                          />
+                                          <button
+                                            className={styles.closeButtonP}
+                                            onClick={clearImageInput}
+                                            data-testid="closeimage"
+                                          >
+                                            <i className="fa fa-times"></i>
+                                          </button>
+                                        </div>
+                                      )}
                                       <Button
                                         type="submit"
                                         className={styles.greenregbtn}

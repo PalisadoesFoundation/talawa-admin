@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen, fireEvent, within } from '@testing-library/react';
+import { act, render, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import 'jest-location-mock';
@@ -14,18 +14,9 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
 import {
-  ApolloClient,
-  ApolloLink,
-  HttpLink,
-  InMemoryCache,
-  NormalizedCacheObject,
-} from '@apollo/client';
-import { BACKEND_URL } from 'Constant/constant';
-import {
   CREATE_VENUE_MUTATION,
   UPDATE_VENUE_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import useLocalStorage from 'utils/useLocalstorage';
 import { VENUE_LIST } from 'GraphQl/Queries/OrganizationQueries';
 
 const MOCKS = [
@@ -110,7 +101,6 @@ const MOCKS = [
     },
   },
 ];
-const link2 = new StaticMockLink([], true);
 const link = new StaticMockLink(MOCKS, true);
 const linkURL = 'orgid';
 jest.mock('react-router-dom', () => ({
@@ -141,13 +131,6 @@ describe('Organisation Venues Page', () => {
     capacity: 100,
     orgId: '123',
     file: 'newVenue',
-  };
-  const updateFormData = {
-    title: 'Updated Dummy Venue',
-    description: 'This is an updated dummy venues',
-    capacity: 102,
-    orgId: '123',
-    file: 'updatedVenue',
   };
 
   global.alert = jest.fn();
