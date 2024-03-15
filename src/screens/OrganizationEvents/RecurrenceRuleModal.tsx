@@ -76,14 +76,11 @@ const RecurrenceRuleModal: React.FC<InterfaceRecurrenceRuleProps> = ({
         centered
       >
         <Modal.Header>
-          <p className={styles.titlemodal}>
-            {/* {t('eventDetails')} */}
-            Custom recurrence
-          </p>
+          <p className={styles.titlemodal}>Custom recurrence</p>
           <Button
             variant="danger"
             onClick={hideRecurrenceRuleModal}
-            data-testid="createEventModalCloseBtn"
+            data-testid="customRecurrenceModalCloseBtn"
           >
             <i className="fa fa-times"></i>
           </Button>
@@ -194,11 +191,9 @@ const RecurrenceRuleModal: React.FC<InterfaceRecurrenceRuleProps> = ({
           <div className="mx w-100 position-relative">
             <Button
               className={styles.recurrenceRuleSubmitBtn}
-              value="createevent"
-              data-testid="createEventBtn"
+              data-testid="customRecurrenceBtn"
               onClick={handleRecurrenceRuleSubmit}
             >
-              {/* {t('createEvent')} */}
               Done
             </Button>
           </div>
