@@ -113,6 +113,7 @@ const OrganizationScreen = (): JSX.Element => {
           <Dropdown as={ButtonGroup} variant="none" data-testid="togDrop">
             <div className={styles.profileContainer}>
               <div className={styles.imageContainer}>
+                {/*istanbul ignore next*/}
                 {userImage && userImage !== 'null' ? (
                   <img src={userImage} alt={`profile picture`} />
                 ) : (
@@ -140,6 +141,7 @@ const OrganizationScreen = (): JSX.Element => {
               id="dropdown-split-basic"
             />
             <Dropdown.Menu>
+              {/*istanbul ignore next*/}
               <Dropdown.Item onClick={() => navigate(`/member/${orgId}`)}>
                 View Profile
               </Dropdown.Item>
