@@ -250,9 +250,7 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
     fireEvent.click(screen.getByTestId('joinBtn'));
     await wait();
 
-    expect(toast.success).toHaveBeenCalledWith(
-      'Membership request sent successfully',
-    );
+    expect(toast.success).toHaveBeenCalledWith('users.MembershipRequestSent');
   });
 
   test('send membership request to public org', async () => {
@@ -282,7 +280,7 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
     fireEvent.click(screen.getByTestId('joinBtn'));
     await wait();
 
-    expect(toast.success).toHaveBeenCalledTimes(1);
+    expect(toast.success).toHaveBeenCalledTimes(2);
   });
 
   test('withdraw membership request', async () => {
