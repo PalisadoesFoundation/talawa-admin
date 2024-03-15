@@ -842,7 +842,7 @@
     "categoryEnabled": "Catégorie d’action activée",
     "categoryDisabled": "Catégorie d’action désactivée"
   },
-  "organisationVenues": {
+  "organizationVenues": {
     "venueTitle": "Lieux",
     "addVenue": "Ajouter un lieu",
     "venueDetails": "Détails du lieu",
