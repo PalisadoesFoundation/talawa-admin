@@ -4,7 +4,7 @@ import convertToBase64 from 'utils/convertToBase64';
 import type { ChangeEvent } from 'react';
 import styles from './OrgList.module.css';
 import type { InterfaceAddress } from 'utils/interfaces';
-import countryOptions from 'utils/countryList';
+import { countryOptions } from 'utils/formEnumFields';
 
 /**
  * Represents the state of the form in the organization modal.

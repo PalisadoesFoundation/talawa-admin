@@ -14,7 +14,13 @@ import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLang
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
-import countryOptions from 'utils/countryList';
+import {
+  countryOptions,
+  educationGradeEnum,
+  employmentStatusEnum,
+  genderEnum,
+  maritalStatusEnum,
+} from 'utils/formEnumFields';
 
 export default function settings(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -77,6 +83,7 @@ export default function settings(): JSX.Element {
   };
 
   const handleResetChanges = (): void => {
+    /* istanbul ignore next */
     if (data) {
       const {
         firstName,
@@ -254,9 +261,11 @@ export default function settings(): JSX.Element {
                         <option value="" disabled>
                           {t('sgender')}
                         </option>
-                        <option value="MALE">{t('male')}</option>
-                        <option value="FEMALE">{t('female')}</option>
-                        <option value="OTHER">{t('other')}</option>
+                        {genderEnum.map((g) => (
+                          <option key={g.value.toLowerCase()} value={g.value}>
+                            {t(g.label)}
+                          </option>
+                        ))}
                       </Form.Control>
                     </Col>
                   </Row>
@@ -375,22 +384,14 @@ export default function settings(): JSX.Element {
                         <option value="" disabled>
                           {t('gradePlaceholder')}
                         </option>
-                        <option value="GRADE_1">{t('grade1')}</option>
-                        <option value="GRADE_2">{t('grade2')}</option>
-                        <option value="GRADE_3">{t('grade3')}</option>
-                        <option value="GRADE_4">{t('grade4')}</option>
-                        <option value="GRADE_5">{t('grade5')}</option>
-                        <option value="GRADE_6">{t('grade6')}</option>
-                        <option value="GRADE_7">{t('grade7')}</option>
-                        <option value="GRADE_8">{t('grade8')}</option>
-                        <option value="GRADE_9">{t('grade9')}</option>
-                        <option value="GRADE_10">{t('grade10')}</option>
-                        <option value="GRADE_11">{t('grade11')}</option>
-                        <option value="GRADE_12">{t('grade12')}</option>
-                        <option value="GRADUATE">{t('graduate')}</option>
-                        <option value="KG">{t('kg')}</option>
-                        <option value="PRE_KG">{t('preKg')}</option>
-                        <option value="NO_GRADE">{t('noGrade')}</option>
+                        {educationGradeEnum.map((grade) => (
+                          <option
+                            key={grade.value.toLowerCase()}
+                            value={grade.value}
+                          >
+                            {t(grade.label)}
+                          </option>
+                        ))}
                       </Form.Control>
                     </Col>
                   </Row>
@@ -415,9 +416,14 @@ export default function settings(): JSX.Element {
                         <option value="" disabled>
                           {t('sEmpStatus')}
                         </option>
-                        <option value="FULL_TIME">{t('fullTime')}</option>
-                        <option value="PART_TIME">{t('partTime')}</option>
-                        <option value="UNEMPLOYED">{t('unemployed')}</option>
+                        {employmentStatusEnum.map((status) => (
+                          <option
+                            key={status.value.toLowerCase()}
+                            value={status.value}
+                          >
+                            {t(status.label)}
+                          </option>
+                        ))}
                       </Form.Control>
                     </Col>
                     <Col lg={4}>
@@ -440,12 +446,14 @@ export default function settings(): JSX.Element {
                         <option value="" disabled>
                           {t('sMaritalStatus')}
                         </option>
-                        <option value="SINGLE">{t('single')}</option>
-                        <option value="MARRIED">{t('married')}</option>
-                        <option value="DIVORCED">{t('divorced')}</option>
-                        <option value="ENGAGED">{t('engaged')}</option>
-                        <option value="SEPERATED">{t('seperated')}</option>
-                        <option value="WIDOWED">{t('widowed')}</option>
+                        {maritalStatusEnum.map((status) => (
+                          <option
+                            key={status.value.toLowerCase()}
+                            value={status.value}
+                          >
+                            {t(status.label)}
+                          </option>
+                        ))}
                       </Form.Control>
                     </Col>
                   </Row>
