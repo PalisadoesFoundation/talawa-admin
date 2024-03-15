@@ -11,6 +11,19 @@ export const CHECK_AUTH = gql`
       image
       email
       userType
+      birthDate
+      educationGrade
+      employmentStatus
+      gender
+      maritalStatus
+      phone {
+        mobile
+      }
+      address {
+        line1
+        state
+        countryCode
+      }
     }
   }
 `;

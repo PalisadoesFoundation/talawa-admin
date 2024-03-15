@@ -24,49 +24,38 @@ export default function settings(): JSX.Element {
   const { setItem } = useLocalStorage();
 
   const { data } = useQuery(CHECK_AUTH, { fetchPolicy: 'network-only' });
-  const [image, setImage] = React.useState('');
   const [updateUserDetails] = useMutation(UPDATE_USER_MUTATION);
-  const [firstName, setFirstName] = React.useState('');
-  const [lastName, setLastName] = React.useState('');
-  const [gender, setGender] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [phoneNumber, setPhoneNumber] = React.useState('');
-  const fileInputRef = React.useRef(null);
-  const [birthDate, setBirthDate] = React.useState('');
-  const [grade, setGrade] = React.useState('');
-  const [empStatus, setEmpStatus] = React.useState('');
-  const [martitalStatus, setMartitalStatus] = React.useState('');
-  const [address, setAddress] = React.useState('');
-  const [state, setState] = React.useState('');
-  const [country, setCountry] = React.useState('');
 
+  const [userDetails, setUserDetails] = React.useState({
+    firstName: '',
+    lastName: '',
+    gender: '',
+    email: '',
+    phoneNumber: '',
+    birthDate: '',
+    grade: '',
+    empStatus: '',
+    maritalStatus: '',
+    address: '',
+    state: '',
+    country: '',
+    image: '',
+  });
+
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
   const handleUpdateUserDetails = async (): Promise<void> => {
-    let variables: any = {
-      firstName,
-      lastName,
-    };
-
-    /* istanbul ignore next */
-    if (image) {
-      variables = {
-        ...variables,
-        file: image,
-      };
-    }
     try {
       const { data } = await updateUserDetails({
-        variables,
+        variables: userDetails,
       });
-
       /* istanbul ignore next */
       if (data) {
-        setImage('');
         toast.success('Your details have been updated.');
         setTimeout(() => {
           window.location.reload();
         }, 500);
 
-        const userFullName = `${firstName} ${lastName}`;
+        const userFullName = `${userDetails.firstName} ${userDetails.lastName}`;
         setItem('name', userFullName);
       }
     } catch (error: any) {
@@ -74,24 +63,11 @@ export default function settings(): JSX.Element {
     }
   };
 
-  const handleFirstNameChange = (e: any): void => {
-    const { value } = e.target;
-    setFirstName(value);
-  };
-
-  const handleLastNameChange = (e: any): void => {
-    const { value } = e.target;
-    setLastName(value);
-  };
-
-  const handleGenderChange = (e: any): void => {
-    const { value } = e.target;
-    setGender(value);
-  };
-
-  const handlePhoneNumberChange = (e: any): void => {
-    const { value } = e.target;
-    setPhoneNumber(value);
+  const handleFieldChange = (fieldName: string, value: string): void => {
+    setUserDetails((prevState) => ({
+      ...prevState,
+      [fieldName]: value,
+    }));
   };
 
   const handleImageUpload = (): void => {
@@ -100,64 +76,72 @@ export default function settings(): JSX.Element {
     }
   };
 
-  const handleBirthDateChange = (e: any): void => {
-    const { value } = e.target;
-    setBirthDate(value);
-  };
-
-  const handleGradeChange = (e: any): void => {
-    const { value } = e.target;
-    setGrade(value);
-  };
-
-  const handleEmpStatusChange = (e: any): void => {
-    const { value } = e.target;
-    setEmpStatus(value);
-  };
-
-  const handleMartitalStatusChange = (e: any): void => {
-    const { value } = e.target;
-    setMartitalStatus(value);
-  };
-
-  const handleAdressChange = (e: any): void => {
-    const { value } = e.target;
-    setAddress(value);
-  };
-
-  const handleStateChange = (e: any): void => {
-    const { value } = e.target;
-    setState(value);
-  };
-
-  const handleCountryChange = (e: any): void => {
-    const { value } = e.target;
-    setCountry(value);
-  };
-
   const handleResetChanges = (): void => {
-    setFirstName(data.checkAuth.firstName);
-    setLastName(data.checkAuth.lastName);
-    setGender('');
-    setPhoneNumber('');
-    setBirthDate('');
-    setGrade('');
-    setEmpStatus('');
-    setMartitalStatus('');
-    setAddress('');
-    setState('');
-    setCountry('');
+    if (data) {
+      const {
+        firstName,
+        lastName,
+        gender,
+        phone,
+        birthDate,
+        educationGrade,
+        employmentStatus,
+        maritalStatus,
+        address,
+      } = data.checkAuth;
+
+      setUserDetails({
+        ...userDetails,
+        firstName: firstName || '',
+        lastName: lastName || '',
+        gender: gender || '',
+        phoneNumber: phone?.mobile || '',
+        birthDate: birthDate || '',
+        grade: educationGrade || '',
+        empStatus: employmentStatus || '',
+        maritalStatus: maritalStatus || '',
+        address: address?.line1 || '',
+        state: address?.state || '',
+        country: address?.countryCode || '',
+      });
+    }
   };
 
   React.useEffect(() => {
     /* istanbul ignore next */
     if (data) {
-      setFirstName(data.checkAuth.firstName);
-      setLastName(data.checkAuth.lastName);
-      setEmail(data.checkAuth.email);
+      const {
+        firstName,
+        lastName,
+        gender,
+        email,
+        phone,
+        birthDate,
+        educationGrade,
+        employmentStatus,
+        maritalStatus,
+        address,
+        image,
+      } = data.checkAuth;
+
+      setUserDetails({
+        firstName,
+        lastName,
+        gender,
+        email,
+        phoneNumber: phone?.mobile || '',
+        birthDate,
+        grade: educationGrade || '',
+        empStatus: employmentStatus || '',
+        maritalStatus: maritalStatus || '',
+        address: address?.line1 || '',
+        state: address?.state || '',
+        country: address?.countryCode || '',
+        image,
+      });
     }
   }, [data]);
-
+  console.log(data);
   return (
     <>
       <UserNavbar />
@@ -174,21 +158,21 @@ export default function settings(): JSX.Element {
                 <Card.Body className={styles.cardBody}>
                   <div className={`d-flex mb-2 ${styles.profileContainer}`}>
                     <div className={styles.imgContianer}>
-                      {image && image !== 'null' ? (
-                        <img src={image} alt={`profile picture`} />
+                      {userDetails.image && userDetails.image !== 'null' ? (
+                        <img src={userDetails.image} alt={`profile picture`} />
                       ) : (
                         <Avatar
-                          name={`${firstName} ${lastName}`}
+                          name={`${userDetails.firstName} ${userDetails.lastName}`}
                           alt={`dummy picture`}
                         />
                       )}
                     </div>
                     <div className={styles.profileDetails}>
                       <span style={{ fontWeight: '700', fontSize: '28px' }}>
-                        {`${firstName}`.charAt(0).toUpperCase() +
-                          `${firstName}`.slice(1)}
+                        {`${userDetails.firstName}`.charAt(0).toUpperCase() +
+                          `${userDetails.firstName}`.slice(1)}
                       </span>
-                      <span data-testid="userEmail">{email}</span>
+                      <span data-testid="userEmail">{userDetails.email}</span>
                       <span className="d-flex">
                         <CalendarMonthOutlinedIcon />
                         <span className="d-flex align-end">
@@ -224,8 +208,10 @@ export default function settings(): JSX.Element {
                       <Form.Control
                         type="text"
                         id="inputFirstName"
-                        value={firstName}
-                        onChange={handleFirstNameChange}
+                        value={userDetails.firstName}
+                        onChange={(e) =>
+                          handleFieldChange('firstName', e.target.value)
+                        }
                         className={`${styles.cardControl}`}
                         data-testid="inputFirstName"
                       />
@@ -240,8 +226,10 @@ export default function settings(): JSX.Element {
                       <Form.Control
                         type="text"
                         id="inputLastName"
-                        value={lastName}
-                        onChange={handleLastNameChange}
+                        value={userDetails.lastName}
+                        onChange={(e) =>
+                          handleFieldChange('lastName', e.target.value)
+                        }
                         className={`${styles.cardControl}`}
                         data-testid="inputLastName"
                       />
@@ -256,17 +244,19 @@ export default function settings(): JSX.Element {
                       <Form.Control
                         as="select"
                         id="gender"
-                        value={gender}
-                        onChange={handleGenderChange}
+                        value={userDetails.gender}
+                        onChange={(e) =>
+                          handleFieldChange('gender', e.target.value)
+                        }
                         className={`${styles.cardControl}`}
                         data-testid="inputGender"
                       >
                         <option value="" disabled>
                           {t('sgender')}
                         </option>
-                        <option value="Male">{t('male')}</option>
-                        <option value="Female">{t('female')}</option>
-                        <option value="Other">{t('other')}</option>
+                        <option value="MALE">{t('male')}</option>
+                        <option value="FEMALE">{t('female')}</option>
+                        <option value="OTHER">{t('other')}</option>
                       </Form.Control>
                     </Col>
                   </Row>
@@ -281,7 +271,7 @@ export default function settings(): JSX.Element {
                       <Form.Control
                         type="email"
                         id="inputEmail"
-                        value={email}
+                        value={userDetails.email}
                         className={`${styles.cardControl}`}
                         disabled
                       />
@@ -297,8 +287,10 @@ export default function settings(): JSX.Element {
                         type="tel"
                         id="phoneNo"
                         placeholder="1234567890"
-                        value={phoneNumber}
-                        onChange={handlePhoneNumberChange}
+                        value={userDetails.phoneNumber}
+                        onChange={(e) =>
+                          handleFieldChange('phoneNumber', e.target.value)
+                        }
                         className={`${styles.cardControl}`}
                         data-testid="inputPhoneNumber"
                       />
@@ -329,12 +321,14 @@ export default function settings(): JSX.Element {
                           ref={fileInputRef}
                           onChange={
                             /* istanbul ignore next */
-                            async (e: React.ChangeEvent): Promise<void> => {
+                            async (
+                              e: React.ChangeEvent<HTMLInputElement>,
+                            ): Promise<void> => {
                               const target = e.target as HTMLInputElement;
                               const file = target.files && target.files[0];
                               if (file) {
                                 const image = await convertToBase64(file);
-                                setImage(image);
+                                setUserDetails({ ...userDetails, image });
                               }
                             }
                           }
@@ -354,8 +348,10 @@ export default function settings(): JSX.Element {
                       <Form.Control
                         type="date"
                         id="birthDate"
-                        value={birthDate}
-                        onChange={handleBirthDateChange}
+                        value={userDetails.birthDate}
+                        onChange={(e) =>
+                          handleFieldChange('birthDate', e.target.value)
+                        }
                         className={`${styles.cardControl}`}
                       />
                     </Col>
@@ -367,14 +363,35 @@ export default function settings(): JSX.Element {
                         {t('grade')}
                       </Form.Label>
                       <Form.Control
-                        type="text"
+                        as="select"
                         id="grade"
-                        placeholder={t('gradePlaceholder')}
-                        value={grade}
-                        onChange={handleGradeChange}
+                        value={userDetails.grade}
+                        onChange={(e) =>
+                          handleFieldChange('grade', e.target.value)
+                        }
                         className={`${styles.cardControl}`}
                         data-testid="inputGrade"
-                      />
+                      >
+                        <option value="" disabled>
+                          {t('gradePlaceholder')}
+                        </option>
+                        <option value="GRADE_1">{t('grade1')}</option>
+                        <option value="GRADE_2">{t('grade2')}</option>
+                        <option value="GRADE_3">{t('grade3')}</option>
+                        <option value="GRADE_4">{t('grade4')}</option>
+                        <option value="GRADE_5">{t('grade5')}</option>
+                        <option value="GRADE_6">{t('grade6')}</option>
+                        <option value="GRADE_7">{t('grade7')}</option>
+                        <option value="GRADE_8">{t('grade8')}</option>
+                        <option value="GRADE_9">{t('grade9')}</option>
+                        <option value="GRADE_10">{t('grade10')}</option>
+                        <option value="GRADE_11">{t('grade11')}</option>
+                        <option value="GRADE_12">{t('grade12')}</option>
+                        <option value="GRADUATE">{t('graduate')}</option>
+                        <option value="KG">{t('kg')}</option>
+                        <option value="PRE_KG">{t('preKg')}</option>
+                        <option value="NO_GRADE">{t('noGrade')}</option>
+                      </Form.Control>
                     </Col>
                   </Row>
                   <Row className="mb-1">
@@ -388,16 +405,19 @@ export default function settings(): JSX.Element {
                       <Form.Control
                         as="select"
                         id="empStatus"
-                        value={empStatus}
-                        onChange={handleEmpStatusChange}
+                        value={userDetails.empStatus}
+                        onChange={(e) =>
+                          handleFieldChange('empStatus', e.target.value)
+                        }
                         className={`${styles.cardControl}`}
                         data-testid="inputEmpStatus"
                       >
                         <option value="" disabled>
                           {t('sEmpStatus')}
                         </option>
-                        <option value="Employed">{t('employed')}</option>
-                        <option value="Unemployed">{t('unemployed')}</option>
+                        <option value="FULL_TIME">{t('fullTime')}</option>
+                        <option value="PART_TIME">{t('partTime')}</option>
+                        <option value="UNEMPLOYED">{t('unemployed')}</option>
                       </Form.Control>
                     </Col>
                     <Col lg={4}>
@@ -410,18 +430,22 @@ export default function settings(): JSX.Element {
                       <Form.Control
                         as="select"
                         id="maritalStatus"
-                        value={martitalStatus}
-                        onChange={handleMartitalStatusChange}
+                        value={userDetails.maritalStatus}
+                        onChange={(e) =>
+                          handleFieldChange('maritalStatus', e.target.value)
+                        }
                         className={`${styles.cardControl}`}
                         data-testid="inputMaritalStatus"
                       >
                         <option value="" disabled>
                           {t('sMaritalStatus')}
                         </option>
-                        <option value="Single">{t('single')}</option>
-                        <option value="Married">{t('married')}</option>
-                        <option value="Divorced">{t('divorced')}</option>
-                        <option value="Widowed">{t('widowed')}</option>
+                        <option value="SINGLE">{t('single')}</option>
+                        <option value="MARRIED">{t('married')}</option>
+                        <option value="DIVORCED">{t('divorced')}</option>
+                        <option value="ENGAGED">{t('engaged')}</option>
+                        <option value="SEPERATED">{t('seperated')}</option>
+                        <option value="WIDOWED">{t('widowed')}</option>
                       </Form.Control>
                     </Col>
                   </Row>
@@ -437,8 +461,10 @@ export default function settings(): JSX.Element {
                         type="text"
                         placeholder="Eg: lane 123, Main Street"
                         id="address"
-                        value={address}
-                        onChange={handleAdressChange}
+                        value={userDetails.address}
+                        onChange={(e) =>
+                          handleFieldChange('address', e.target.value)
+                        }
                         className={`${styles.cardControl}`}
                         data-testid="inputAddress"
                       />
@@ -454,8 +480,10 @@ export default function settings(): JSX.Element {
                         type="text"
                         id="inputState"
                         placeholder={t('enterState')}
-                        value={state}
-                        onChange={handleStateChange}
+                        value={userDetails.state}
+                        onChange={(e) =>
+                          handleFieldChange('state', e.target.value)
+                        }
                         className={`${styles.cardControl}`}
                         data-testid="inputState"
                       />
@@ -470,8 +498,10 @@ export default function settings(): JSX.Element {
                       <Form.Control
                         as="select"
                         id="country"
-                        value={country}
-                        onChange={handleCountryChange}
+                        value={userDetails.country}
+                        onChange={(e) =>
+                          handleFieldChange('country', e.target.value)
+                        }
                         className={`${styles.cardControl}`}
                         data-testid="inputCountry"
                       >
@@ -522,21 +552,21 @@ export default function settings(): JSX.Element {
                 <Card.Body className={styles.cardBody}>
                   <div className={`d-flex mb-2 ${styles.profileContainer}`}>
                     <div className={styles.imgContianer}>
-                      {image && image !== 'null' ? (
-                        <img src={image} alt={`profile picture`} />
+                      {userDetails.image && userDetails.image !== 'null' ? (
+                        <img src={userDetails.image} alt={`profile picture`} />
                       ) : (
                         <Avatar
-                          name={`${firstName} ${lastName}`}
+                          name={`${userDetails.firstName} ${userDetails.lastName}`}
                           alt={`dummy picture`}
                         />
                       )}
                     </div>
                     <div className={styles.profileDetails}>
                       <span style={{ fontWeight: '700', fontSize: '28px' }}>
-                        {`${firstName}`.charAt(0).toUpperCase() +
-                          `${firstName}`.slice(1)}
+                        {`${userDetails.firstName}`.charAt(0).toUpperCase() +
+                          `${userDetails.firstName}`.slice(1)}
                       </span>
-                      <span data-testid="userEmail">{email}</span>
+                      <span data-testid="userEmail">{userDetails.email}</span>
                       <span className="d-flex">
                         <CalendarMonthOutlinedIcon />
                         <span className="d-flex align-end">
