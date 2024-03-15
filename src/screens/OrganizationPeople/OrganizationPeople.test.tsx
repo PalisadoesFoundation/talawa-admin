@@ -43,22 +43,23 @@ for (let i = 0; i < 100; i++) {
   });
 
   users.push({
-    __typename: 'User',
-    firstName: 'firstName',
-    lastName: 'lastName',
-    image: null,
-    _id: i + 'id',
-    email: 'email',
-    userType: ['SUPERADMIN', 'USER'][i < 50 ? 0 : 1],
-    adminApproved: true,
-    organizationsBlockedBy: [],
-    createdAt: new Date().toISOString(),
-    joinedOrganizations: [
-      {
-        __typename: 'Organization',
-        _id: `6411a8f197d5631eb0765857${i}`,
-      },
-    ],
+    user: {
+      __typename: 'User',
+      firstName: 'firstName',
+      lastName: 'lastName',
+      image: null,
+      _id: i + 'id',
+      email: 'email',
+      adminApproved: true,
+      organizationsBlockedBy: [],
+      createdAt: new Date().toISOString(),
+      joinedOrganizations: [
+        {
+          __typename: 'Organization',
+          _id: `6411a8f197d5631eb0765857${i}`,
+        },
+      ],
+    },
   });
 }
 
@@ -183,40 +184,44 @@ const createUserMock = (
     data: {
       users: [
         {
-          __typename: 'User',
-          firstName: 'Aditya',
-          lastName: 'Userguy',
-          image: null,
-          _id: '64001660a711c62d5b4076a2',
-          email: 'adidacreator1@gmail.com',
-          userType: 'SUPERADMIN',
-          adminApproved: true,
-          organizationsBlockedBy: [],
-          createdAt: '2023-03-02T03:22:08.101Z',
-          joinedOrganizations: [
-            {
-              __typename: 'Organization',
-              _id: '6401ff65ce8e8406b8f07af1',
-            },
-          ],
+          user: {
+            __typename: 'User',
+            firstName: 'Aditya',
+            lastName: 'Userguy',
+            image: null,
+            _id: '64001660a711c62d5b4076a2',
+            email: 'adidacreator1@gmail.com',
+            userType: 'SUPERADMIN',
+            adminApproved: true,
+            organizationsBlockedBy: [],
+            createdAt: '2023-03-02T03:22:08.101Z',
+            joinedOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '6401ff65ce8e8406b8f07af1',
+              },
+            ],
+          },
         },
         {
-          __typename: 'User',
-          firstName: 'Aditya',
-          lastName: 'Userguytwo',
-          image: null,
-          _id: '6402030dce8e8406b8f07b0e',
-          email: 'adi1@gmail.com',
-          userType: 'USER',
-          adminApproved: true,
-          organizationsBlockedBy: [],
-          createdAt: '2023-03-03T14:24:13.084Z',
-          joinedOrganizations: [
-            {
-              __typename: 'Organization',
-              _id: '6401ff65ce8e8406b8f07af2',
-            },
-          ],
+          user: {
+            __typename: 'User',
+            firstName: 'Aditya',
+            lastName: 'Userguytwo',
+            image: null,
+            _id: '6402030dce8e8406b8f07b0e',
+            email: 'adi1@gmail.com',
+            userType: 'USER',
+            adminApproved: true,
+            organizationsBlockedBy: [],
+            createdAt: '2023-03-03T14:24:13.084Z',
+            joinedOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '6401ff65ce8e8406b8f07af2',
+              },
+            ],
+          },
         },
       ],
     },
@@ -392,40 +397,42 @@ const MOCKS: any[] = [
       data: {
         users: [
           {
-            __typename: 'User',
-            firstName: 'Aditya',
-            lastName: 'Userguy',
-            image: null,
-            _id: '64001660a711c62d5b4076a2',
-            email: 'adidacreator1@gmail.com',
-            userType: 'SUPERADMIN',
-            adminApproved: true,
-            organizationsBlockedBy: [],
-            createdAt: '2023-03-02T03:22:08.101Z',
-            joinedOrganizations: [
-              {
-                __typename: 'Organization',
-                _id: '6401ff65ce8e8406b8f07af1',
-              },
-            ],
+            user: {
+              __typename: 'User',
+              firstName: 'Aditya',
+              lastName: 'Userguy',
+              image: null,
+              _id: '64001660a711c62d5b4076a2',
+              email: 'adidacreator1@gmail.com',
+              adminApproved: true,
+              organizationsBlockedBy: [],
+              createdAt: '2023-03-02T03:22:08.101Z',
+              joinedOrganizations: [
+                {
+                  __typename: 'Organization',
+                  _id: '6401ff65ce8e8406b8f07af1',
+                },
+              ],
+            },
           },
           {
-            __typename: 'User',
-            firstName: 'Aditya',
-            lastName: 'Userguytwo',
-            image: null,
-            _id: '6402030dce8e8406b8f07b0e',
-            email: 'adi1@gmail.com',
-            userType: 'USER',
-            adminApproved: true,
-            organizationsBlockedBy: [],
-            createdAt: '2023-03-03T14:24:13.084Z',
-            joinedOrganizations: [
-              {
-                __typename: 'Organization',
-                _id: '6401ff65ce8e8406b8f07af2',
-              },
-            ],
+            user: {
+              __typename: 'User',
+              firstName: 'Aditya',
+              lastName: 'Userguytwo',
+              image: null,
+              _id: '6402030dce8e8406b8f07b0e',
+              email: 'adi1@gmail.com',
+              adminApproved: true,
+              organizationsBlockedBy: [],
+              createdAt: '2023-03-03T14:24:13.084Z',
+              joinedOrganizations: [
+                {
+                  __typename: 'Organization',
+                  _id: '6401ff65ce8e8406b8f07af2',
+                },
+              ],
+            },
           },
           ...users,
         ],
@@ -523,21 +530,23 @@ describe('Organization People Page', () => {
 
       const expectedUsersLength = MOCKS[3]?.result?.data?.users?.filter(
         (datas: {
-          _id: string;
-          lastName: string;
-          firstName: string;
-          image: string;
-          email: string;
-          createdAt: string;
-          joinedOrganizations: {
-            __typename: string;
+          user: {
             _id: string;
-          }[];
+            lastName: string;
+            firstName: string;
+            image: string;
+            email: string;
+            createdAt: string;
+            joinedOrganizations: {
+              __typename: string;
+              _id: string;
+            }[];
+          };
         }) => {
           window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af1');
           const pathname = window.location.pathname;
           const id = pathname.split('=')[1];
-          return datas.joinedOrganizations.some((org) => org._id === id);
+          return datas.user.joinedOrganizations.some((org) => org._id === id);
         }
       ).length;
 
@@ -617,40 +626,42 @@ describe('Organization People Page', () => {
 
     expect(dataQuery3).toEqual([
       {
-        __typename: 'User',
-        firstName: 'Aditya',
-        lastName: 'Userguy',
-        image: null,
-        _id: '64001660a711c62d5b4076a2',
-        email: 'adidacreator1@gmail.com',
-        userType: 'SUPERADMIN',
-        adminApproved: true,
-        organizationsBlockedBy: [],
-        createdAt: '2023-03-02T03:22:08.101Z',
-        joinedOrganizations: [
-          {
-            __typename: 'Organization',
-            _id: '6401ff65ce8e8406b8f07af1',
-          },
-        ],
+        user: {
+          __typename: 'User',
+          firstName: 'Aditya',
+          lastName: 'Userguy',
+          image: null,
+          _id: '64001660a711c62d5b4076a2',
+          email: 'adidacreator1@gmail.com',
+          adminApproved: true,
+          organizationsBlockedBy: [],
+          createdAt: '2023-03-02T03:22:08.101Z',
+          joinedOrganizations: [
+            {
+              __typename: 'Organization',
+              _id: '6401ff65ce8e8406b8f07af1',
+            },
+          ],
+        },
       },
       {
-        __typename: 'User',
-        firstName: 'Aditya',
-        lastName: 'Userguytwo',
-        image: null,
-        _id: '6402030dce8e8406b8f07b0e',
-        email: 'adi1@gmail.com',
-        userType: 'USER',
-        adminApproved: true,
-        organizationsBlockedBy: [],
-        createdAt: '2023-03-03T14:24:13.084Z',
-        joinedOrganizations: [
-          {
-            __typename: 'Organization',
-            _id: '6401ff65ce8e8406b8f07af2',
-          },
-        ],
+        user: {
+          __typename: 'User',
+          firstName: 'Aditya',
+          lastName: 'Userguytwo',
+          image: null,
+          _id: '6402030dce8e8406b8f07b0e',
+          email: 'adi1@gmail.com',
+          adminApproved: true,
+          organizationsBlockedBy: [],
+          createdAt: '2023-03-03T14:24:13.084Z',
+          joinedOrganizations: [
+            {
+              __typename: 'Organization',
+              _id: '6401ff65ce8e8406b8f07af2',
+            },
+          ],
+        },
       },
       ...users,
     ]);
@@ -910,7 +921,7 @@ describe('Organization People Page', () => {
       }
     );
     await wait();
-    expect(orgUsers?.length).toBe(1);
+    expect(orgUsers?.length).toBe(0);
 
     await wait();
     expect(window.location).toBeAt('/orgpeople/id=6401ff65ce8e8406b8f07af1');
@@ -970,7 +981,7 @@ describe('Organization People Page', () => {
       }
     );
     await wait();
-    expect(orgUsers?.length).toBe(1);
+    expect(orgUsers?.length).toBe(0);
 
     await wait();
     expect(window.location).toBeAt('/orgpeople/id=6401ff65ce8e8406b8f07af2');
