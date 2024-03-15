@@ -16,7 +16,7 @@
   border: none;
   padding: 2.1rem 0.5rem;
   height: 52px;
-  border-radius: 8px;
+  border-radius: 8px 0px 0px 8px;
   display: flex;
   align-items: center;
   background-color: white !important;
@@ -95,6 +95,13 @@
   border-radius: 0px;
   margin-right: 20px;
   color: black;
+}
+.profileDropdown {
+  background-color: transparent !important;
+}
+.profileDropdown .dropdown-toggle .btn .btn-normal {
+  display: none !important;
+  background-color: transparent !important;
 }
 
 @media (max-width: 1120px) {

@@ -17,10 +17,14 @@ import useLocalStorage from 'utils/useLocalstorage';
 import styles from './OrganizationScreen.module.css';
 import Avatar from 'components/Avatar/Avatar';
 import { ReactComponent as AngleDownIcon } from 'assets/svgs/angleDown.svg';
+import { Dropdown, ButtonGroup } from 'react-bootstrap'; // Changed from DropdownButton to Dropdown
+import { useMutation } from '@apollo/client';
+import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 
-const organizationScreen = (): JSX.Element => {
+const OrganizationScreen = (): JSX.Element => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const titleKey = map[location.pathname.split('/')[1]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
@@ -30,6 +34,7 @@ const organizationScreen = (): JSX.Element => {
   const lastName = getItem('LastName');
   const userImage = getItem('UserImage');
   const { orgId } = useParams();
+
   if (!orgId) {
     return <Navigate to={'/'} replace />;
   }
@@ -42,12 +47,18 @@ const organizationScreen = (): JSX.Element => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(updateTargets(orgId));
-  }, []);
+  }, [orgId]); // Added orgId to the dependency array
 
   const handleResize = (): void => {
     if (window.innerWidth <= 820 && !hideDrawer) {
       setHideDrawer(true);
     }
+  };
+
+  const logout = (): void => {
+    revokeRefreshToken();
+    localStorage.clear();
+    navigate('/');
   };
 
   const toggleDrawer = (): void => {
@@ -98,40 +109,55 @@ const organizationScreen = (): JSX.Element => {
       >
         <div className="d-flex justify-content-between align-items-center">
           <div style={{ flex: 1 }}>
-            <h2>{t('title')}</h2>
+            <h1>{t('title')}</h1>
           </div>
-          <button
-            className={styles.profileContainer}
-            data-testid="profileBtn"
-            onClick={(): void => {
-              navigate(`/member/${orgId}`);
-            }}
+          <Dropdown
+            as={ButtonGroup}
+            variant="none"
+            data-testid="toggleDropdown"
           >
-            <div className={styles.imageContainer}>
-              {userImage && userImage !== 'null' ? (
-                <img src={userImage} alt={`profile picture`} />
-              ) : (
-                <Avatar
-                  size={45}
-                  avatarStyle={styles.avatarStyle}
-                  name={`${firstName} ${lastName}`}
-                  alt={`dummy picture`}
-                />
-              )}
+            <div className={styles.profileContainer}>
+              <div className={styles.imageContainer}>
+                {userImage && userImage !== 'null' ? (
+                  <img src={userImage} alt={`profile picture`} />
+                ) : (
+                  <Avatar
+                    size={45}
+                    avatarStyle={styles.avatarStyle}
+                    name={`${firstName} ${lastName}`}
+                    alt={`dummy picture`}
+                  />
+                )}
+              </div>
+              <div className={styles.profileText}>
+                <span className={styles.primaryText}>
+                  {firstName} {lastName}
+                </span>
+                <span className={styles.secondaryText}>
+                  {`${userType}`.toLowerCase()}
+                </span>
+              </div>
             </div>
-            <div className={styles.profileText}>
-              <span className={styles.primaryText}>
-                {firstName} {lastName}
-              </span>
-              <span className={styles.secondaryText}>
-                {`${userType}`.toLowerCase()}
-              </span>
-            </div>
-            <AngleDownIcon
-              fill={'var(--bs-secondary)'}
-              className={styles.angleDown}
+            <Dropdown.Toggle
+              split
+              variant="none"
+              style={{ backgroundColor: 'white' }}
+              data-testid="toggleDropdown"
+              id="dropdown-split-basic"
             />
-          </button>
+            <Dropdown.Menu>
+              <Dropdown.Item onClick={() => navigate(`/member/${orgId}`)}>
+                View Profile
+              </Dropdown.Item>
+              <Dropdown.Item
+                style={{ color: 'red' }}
+                onClick={logout}
+                data-testid="logoutBtn"
+              >
+                Logout
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
         <Outlet />
       </div>
@@ -139,7 +165,7 @@ const organizationScreen = (): JSX.Element => {
   );
 };
 
-export default organizationScreen;
+export default OrganizationScreen;
 
 const map: any = {
   orgdash: 'dashboard',

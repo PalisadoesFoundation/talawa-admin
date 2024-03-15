@@ -375,23 +375,4 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
       </MockedProvider>,
     );
   });
-
-  test('Testing logout functionality', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LeftDrawerOrg {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    userEvent.click(screen.getByTestId('logoutBtn'));
-    await waitFor(() => {
-      expect(localStorage.clear).toHaveBeenCalled();
-      expect(global.window.location.pathname).toBe('/');
-    });
-  });
 });

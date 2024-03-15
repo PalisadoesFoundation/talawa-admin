@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { NavLink, useNavigate } from 'react-router-dom';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
-import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
+
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import styles from './LeftDrawerOrg.module.css';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
@@ -44,13 +44,8 @@ const leftDrawerOrg = ({
     variables: { id: orgId },
   });
 
-  const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const navigate = useNavigate();
-  const logout = (): void => {
-    revokeRefreshToken();
-    localStorage.clear();
-    navigate('/');
-  };
+
   // Set organization data
   useEffect(() => {
     let isMounted = true;
@@ -163,21 +158,6 @@ const leftDrawerOrg = ({
               />
             );
           })}
-        </div>
-
-        {/* Profile Section & Logout Btn */}
-        <div style={{ marginTop: 'auto' }}>
-          <Button
-            variant="light"
-            className={`mt-4 d-flex justify-content-start px-0 w-100 ${styles.logout}`}
-            onClick={(): void => logout()}
-            data-testid="logoutBtn"
-          >
-            <div className={styles.imageContainer}>
-              <LogoutIcon fill={'var(--bs-secondary)'} />
-            </div>
-            {t('logout')}
-          </Button>
         </div>
       </div>
     </>
