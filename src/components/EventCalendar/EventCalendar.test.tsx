@@ -115,12 +115,18 @@ describe('Calendar', () => {
   });
 
   it('should render the current month and year', () => {
-    const { getByText } = render(<Calendar eventData={eventData} />);
+    const { getByTestId } = render(<Calendar eventData={eventData} />);
+
+    // Find the element by its data-testid attribute
+    const currentDateElement = getByTestId('current-date');
+
+    // Assert that the text content of the element matches the current month and year
     const currentMonth = new Date().toLocaleString('default', {
       month: 'long',
     });
     const currentYear = new Date().getFullYear();
-    expect(getByText(`${currentMonth} ${currentYear}`)).toBeInTheDocument();
+    const expectedText = `${new Date().getDate()} ${currentMonth} ${currentYear}`;
+    expect(currentDateElement.textContent).toContain(expectedText);
   });
 
   it('should highlight the selected date when clicked', () => {

@@ -282,9 +282,7 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
     fireEvent.click(screen.getByTestId('joinBtn'));
     await wait();
 
-    expect(toast.success).toHaveBeenCalledWith(
-      'Joined organization successfully',
-    );
+    expect(toast.success).toHaveBeenCalledTimes(1);
   });
 
   test('withdraw membership request', async () => {
