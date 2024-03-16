@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
@@ -10,57 +10,21 @@ import { store } from 'state/store';
 import {
   ORGANIZATIONS_LIST,
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+  USERS_CONNECTION_LIST,
   USER_LIST,
 } from 'GraphQl/Queries/Queries';
 import 'jest-location-mock';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import {
+  ADD_MEMBER_MUTATION,
+  SIGNUP_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 
 // This loop creates dummy data for members, admin and users
 const members: any[] = [];
 const admins: any[] = [];
 const users: any[] = [];
-
-for (let i = 0; i < 100; i++) {
-  members.push({
-    __typename: 'User',
-    _id: i + '1',
-    firstName: 'firstName',
-    lastName: 'lastName',
-    image: 'dummyURL',
-    email: 'email',
-    createdAt: new Date().toISOString(),
-  });
-
-  admins.push({
-    __typename: 'User',
-    _id: i + '1',
-    firstName: 'firstName',
-    lastName: 'lastName',
-    image: null,
-    email: 'email',
-    createdAt: new Date().toISOString(),
-  });
-
-  users.push({
-    __typename: 'User',
-    firstName: 'firstName',
-    lastName: 'lastName',
-    image: null,
-    _id: i + 'id',
-    email: 'email',
-    userType: ['SUPERADMIN', 'USER'][i < 50 ? 0 : 1],
-    adminApproved: true,
-    organizationsBlockedBy: [],
-    createdAt: new Date().toISOString(),
-    joinedOrganizations: [
-      {
-        __typename: 'Organization',
-        _id: `6411a8f197d5631eb0765857${i}`,
-      },
-    ],
-  });
-}
 
 const createMemberMock = (
   orgId = '',
@@ -290,10 +254,8 @@ const MOCKS: any[] = [
     result: {
       data: {
         organizationsMemberConnection: {
-          __typename: 'UserConnection',
           edges: [
             {
-              __typename: 'User',
               _id: '64001660a711c62d5b4076a2',
               firstName: 'Aditya',
               lastName: 'Memberguy',
@@ -310,10 +272,8 @@ const MOCKS: any[] = [
       //A function if multiple request are sent
       data: {
         organizationsMemberConnection: {
-          __typename: 'UserConnection',
           edges: [
             {
-              __typename: 'User',
               _id: '64001660a711c62d5b4076a2',
               firstName: 'Aditya',
               lastName: 'Memberguy',
@@ -444,6 +404,109 @@ const MOCKS: any[] = [
   createUserMock('Aditya', ''),
   createUserMock('', 'Userguytwo'),
   createUserMock('Aditya', 'Userguytwo'),
+
+  {
+    request: {
+      query: USERS_CONNECTION_LIST,
+      variables: {
+        id_not_in: ['64001660a711c62d5b4076a2'],
+        firstName_contains: '',
+        lastName_contains: '',
+      },
+    },
+    result: {
+      data: {
+        users: [
+          {
+            firstName: 'Vyvyan',
+            lastName: 'Kerry',
+            image: null,
+            _id: '65378abd85008f171cf2990d',
+            email: 'testadmin1@example.com',
+            userType: 'ADMIN',
+            adminApproved: true,
+            adminFor: [
+              {
+                _id: '6537904485008f171cf29924',
+                __typename: 'Organization',
+              },
+            ],
+            createdAt: '2023-04-13T04:53:17.742Z',
+            organizationsBlockedBy: [],
+            joinedOrganizations: [
+              {
+                _id: '6537904485008f171cf29924',
+                name: 'Unity Foundation',
+                image: null,
+                address: {
+                  city: 'Queens',
+                  countryCode: 'US',
+                  dependentLocality: 'Some Dependent Locality',
+                  line1: '123 Coffee Street',
+                  line2: 'Apartment 501',
+                  postalCode: '11427',
+                  sortingCode: 'ABC-133',
+                  state: 'NYC',
+                  __typename: 'Address',
+                },
+                createdAt: '2023-04-13T05:16:52.827Z',
+                creator: {
+                  _id: '64378abd85008f171cf2990d',
+                  firstName: 'Wilt',
+                  lastName: 'Shepherd',
+                  image: null,
+                  email: 'testsuperadmin@example.com',
+                  createdAt: '2023-04-13T04:53:17.742Z',
+                  __typename: 'User',
+                },
+                __typename: 'Organization',
+              },
+            ],
+            __typename: 'User',
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: SIGNUP_MUTATION,
+      variables: {
+        firstName: 'Disha',
+        lastName: 'Talreja',
+        email: 'test@gmail.com',
+        password: 'dishatalreja',
+      },
+    },
+    result: {
+      data: {
+        signUp: {
+          user: {
+            _id: '',
+          },
+          accessToken: 'accessToken',
+          refreshToken: 'refreshToken',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: ADD_MEMBER_MUTATION,
+      variables: {
+        userid: '65378abd85008f171cf2990d',
+        orgid: 'orgid',
+      },
+    },
+    result: {
+      data: {
+        createMember: {
+          _id: '6437904485008f171cf29924',
+          __typename: 'Organization',
+        },
+      },
+    },
+  },
 ];
 const EMPTYMOCKS: any[] = [
   {
@@ -473,7 +536,6 @@ const EMPTYMOCKS: any[] = [
     result: {
       data: {
         organizationsMemberConnection: {
-          __typename: 'UserConnection',
           edges: [],
         },
       },
@@ -557,7 +619,6 @@ describe('Organization People Page', () => {
 
     expect(dataQuery1).toEqual([
       {
-        __typename: 'User',
         _id: '64001660a711c62d5b4076a2',
         firstName: 'Aditya',
         lastName: 'Memberguy',
@@ -650,7 +711,7 @@ describe('Organization People Page', () => {
     window.location.assign('/orgpeople/orgid');
     render(
       <MockedProvider
-        addTypename={true}
+        addTypename={false}
         link={link}
         defaultOptions={{
           watchQuery: { fetchPolicy: 'no-cache' },
@@ -846,6 +907,313 @@ describe('Organization People Page', () => {
     expect(window.location).toBeAt('/orgpeople/orgid');
   });
 
+  test('Testing add existing user modal', async () => {
+    window.location.assign('/orgpeople/6401ff65ce8e8406b8f07af1');
+    render(
+      <MockedProvider
+        addTypename={true}
+        link={link}
+        defaultOptions={{
+          watchQuery: { fetchPolicy: 'no-cache' },
+          query: { fetchPolicy: 'no-cache' },
+        }}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationPeople />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for the component to finish rendering
+    await wait();
+
+    // Click on the dropdown toggle to open the menu
+    userEvent.click(screen.getByTestId('addMembers'));
+    await wait();
+
+    expect(screen.getByTestId('existingUser')).toBeInTheDocument();
+
+    // Click on the "Admins" option in the dropdown menu
+    userEvent.click(screen.getByTestId('existingUser'));
+    await wait();
+
+    expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
+    await wait();
+
+    userEvent.click(screen.getByTestId('addBtn'));
+  });
+
+  test('Open and search existing user', async () => {
+    window.location.assign('/orgpeople/orgid');
+    render(
+      <MockedProvider
+        addTypename={true}
+        link={link}
+        defaultOptions={{
+          watchQuery: { fetchPolicy: 'no-cache' },
+          query: { fetchPolicy: 'no-cache' },
+        }}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationPeople />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for the component to finish rendering
+    await wait();
+
+    // Click on the dropdown toggle to open the menu
+    userEvent.click(screen.getByTestId('addMembers'));
+    await wait();
+
+    // Click on the "Admins" option in the dropdown menu
+    userEvent.click(screen.getByTestId('existingUser'));
+    await wait();
+
+    expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
+
+    fireEvent.change(screen.getByTestId('searchUser'), {
+      target: { value: 'Disha' },
+    });
+  });
+
+  test('Open and close add new user modal', async () => {
+    window.location.assign('/orgpeople/orgid');
+    render(
+      <MockedProvider
+        addTypename={true}
+        link={link}
+        defaultOptions={{
+          watchQuery: { fetchPolicy: 'no-cache' },
+          query: { fetchPolicy: 'no-cache' },
+        }}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationPeople />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for the component to finish rendering
+    await wait();
+
+    // Click on the dropdown toggle to open the menu
+    userEvent.click(screen.getByTestId('addMembers'));
+    await wait();
+
+    // Click on the "Admins" option in the dropdown menu
+    userEvent.click(screen.getByTestId('newUser'));
+    await wait();
+
+    expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
+
+    userEvent.click(screen.getByTestId('closeBtn'));
+  });
+
+  test('Testing add new user modal', async () => {
+    window.location.assign('/orgpeople/orgid');
+    render(
+      <MockedProvider
+        addTypename={true}
+        link={link}
+        defaultOptions={{
+          watchQuery: { fetchPolicy: 'no-cache' },
+          query: { fetchPolicy: 'no-cache' },
+        }}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationPeople />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for the component to finish rendering
+    await wait();
+
+    // Click on the dropdown toggle to open the menu
+    userEvent.click(screen.getByTestId('addMembers'));
+    await wait();
+
+    // Click on the "Admins" option in the dropdown menu
+    userEvent.click(screen.getByTestId('newUser'));
+    await wait();
+
+    expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
+
+    fireEvent.change(screen.getByTestId('firstNameInput'), {
+      target: { value: 'Disha' },
+    });
+    expect(screen.getByTestId('firstNameInput')).toHaveValue('Disha');
+
+    fireEvent.change(screen.getByTestId('lastNameInput'), {
+      target: { value: 'Talreja' },
+    });
+    expect(screen.getByTestId('lastNameInput')).toHaveValue('Talreja');
+
+    fireEvent.change(screen.getByTestId('emailInput'), {
+      target: { value: 'test@gmail.com' },
+    });
+    expect(screen.getByTestId('emailInput')).toHaveValue('test@gmail.com');
+
+    fireEvent.change(screen.getByTestId('passwordInput'), {
+      target: { value: 'dishatalreja' },
+    });
+    userEvent.click(screen.getByTestId('showPassword'));
+    expect(screen.getByTestId('passwordInput')).toHaveValue('dishatalreja');
+
+    fireEvent.change(screen.getByTestId('confirmPasswordInput'), {
+      target: { value: 'dishatalreja' },
+    });
+    userEvent.click(screen.getByTestId('showConfirmPassword'));
+    expect(screen.getByTestId('confirmPasswordInput')).toHaveValue(
+      'dishatalreja',
+    );
+
+    userEvent.click(screen.getByTestId('createBtn'));
+  });
+
+  test('Throw invalid details error in add new user modal', async () => {
+    window.location.assign('/orgpeople/orgid');
+    render(
+      <MockedProvider
+        addTypename={true}
+        link={link}
+        defaultOptions={{
+          watchQuery: { fetchPolicy: 'no-cache' },
+          query: { fetchPolicy: 'no-cache' },
+        }}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationPeople />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for the component to finish rendering
+    await wait();
+
+    // Click on the dropdown toggle to open the menu
+    userEvent.click(screen.getByTestId('addMembers'));
+    await wait();
+
+    // Click on the "Admins" option in the dropdown menu
+    userEvent.click(screen.getByTestId('newUser'));
+    await wait();
+
+    expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
+
+    fireEvent.change(screen.getByTestId('firstNameInput'), {
+      target: { value: 'Disha' },
+    });
+    expect(screen.getByTestId('firstNameInput')).toHaveValue('Disha');
+
+    fireEvent.change(screen.getByTestId('lastNameInput'), {
+      target: { value: 'Talreja' },
+    });
+    expect(screen.getByTestId('lastNameInput')).toHaveValue('Talreja');
+
+    fireEvent.change(screen.getByTestId('emailInput'), {
+      target: { value: 'test@gmail.com' },
+    });
+    expect(screen.getByTestId('emailInput')).toHaveValue('test@gmail.com');
+
+    fireEvent.change(screen.getByTestId('passwordInput'), {
+      target: { value: 'dishatalreja' },
+    });
+    userEvent.click(screen.getByTestId('showPassword'));
+    expect(screen.getByTestId('passwordInput')).toHaveValue('dishatalreja');
+
+    fireEvent.change(screen.getByTestId('confirmPasswordInput'), {
+      target: { value: 'disha' },
+    });
+    userEvent.click(screen.getByTestId('showConfirmPassword'));
+    expect(screen.getByTestId('confirmPasswordInput')).toHaveValue('disha');
+
+    userEvent.click(screen.getByTestId('createBtn'));
+  });
+
+  test('Throw passwordNotMatch error in add new user modal', async () => {
+    window.location.assign('/orgpeople/orgid');
+    render(
+      <MockedProvider
+        addTypename={true}
+        link={link}
+        defaultOptions={{
+          watchQuery: { fetchPolicy: 'no-cache' },
+          query: { fetchPolicy: 'no-cache' },
+        }}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationPeople />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for the component to finish rendering
+    await wait();
+
+    // Click on the dropdown toggle to open the menu
+    userEvent.click(screen.getByTestId('addMembers'));
+    await wait();
+
+    // Click on the "Admins" option in the dropdown menu
+    userEvent.click(screen.getByTestId('newUser'));
+    await wait();
+
+    expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
+
+    fireEvent.change(screen.getByTestId('firstNameInput'), {
+      target: { value: 'Disha' },
+    });
+    expect(screen.getByTestId('firstNameInput')).toHaveValue('Disha');
+
+    fireEvent.change(screen.getByTestId('lastNameInput'), {
+      target: { value: 'Talreja' },
+    });
+    expect(screen.getByTestId('lastNameInput')).toHaveValue('Talreja');
+
+    fireEvent.change(screen.getByTestId('passwordInput'), {
+      target: { value: 'dishatalreja' },
+    });
+    userEvent.click(screen.getByTestId('showPassword'));
+    expect(screen.getByTestId('passwordInput')).toHaveValue('dishatalreja');
+
+    fireEvent.change(screen.getByTestId('confirmPasswordInput'), {
+      target: { value: 'dishatalreja' },
+    });
+    userEvent.click(screen.getByTestId('showConfirmPassword'));
+    expect(screen.getByTestId('confirmPasswordInput')).toHaveValue(
+      'dishatalreja',
+    );
+
+    userEvent.click(screen.getByTestId('createBtn'));
+  });
+
   test('Testing USERS list', async () => {
     window.location.assign('/orgpeople/6401ff65ce8e8406b8f07af1');
 
@@ -870,7 +1238,7 @@ describe('Organization People Page', () => {
     await wait();
 
     const orgUsers = MOCKS[3]?.result?.data?.users;
-    expect(orgUsers?.length).toBe(102);
+    expect(orgUsers?.length).toBe(2);
 
     const dropdownToggles = screen.getAllByTestId('role');
 
