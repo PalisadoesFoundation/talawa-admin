@@ -316,42 +316,4 @@ describe('Testing Settings Screen [User Portal]', () => {
     userEvent.click(screen.getByTestId('updateUserBtn'));
     await wait();
   });
-
-  test('Details correctly rendered', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Settings />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-    expect(screen.getAllByText('Profile Details')[0]).toBeInTheDocument();
-    expect(screen.getAllByTestId('copyProfileLink')[0]).toBeInTheDocument();
-    expect(screen.getAllByTestId('userEmail')[0]).toBeInTheDocument();
-  });
-
-  test('Other settings card is rendered properly', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Settings />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    expect(screen.getAllByText('Other Settings')[0]).toBeInTheDocument();
-    expect(screen.getAllByText('Change Language')[0]).toBeInTheDocument();
-  });
 });

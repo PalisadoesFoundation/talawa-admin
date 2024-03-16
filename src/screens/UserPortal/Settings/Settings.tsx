@@ -10,10 +10,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { errorHandler } from 'utils/errorHandler';
 import { toast } from 'react-toastify';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
-import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
 import useLocalStorage from 'utils/useLocalstorage';
-import Avatar from 'components/Avatar/Avatar';
-import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import {
   countryOptions,
   educationGradeEnum,
@@ -21,6 +18,9 @@ import {
   genderEnum,
   maritalStatusEnum,
 } from 'utils/formEnumFields';
+import UserProfile from 'components/UserProfileSettings/UserProfile';
+import DeleteUser from 'components/UserProfileSettings/DeleteUser';
+import OtherSettings from 'components/UserProfileSettings/OtherSettings';
 
 export default function settings(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -48,11 +48,16 @@ export default function settings(): JSX.Element {
     image: '',
   });
 
+  const originalImageState = React.useRef<string>('');
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const handleUpdateUserDetails = async (): Promise<void> => {
     try {
+      let updatedUserDetails = { ...userDetails };
+      if (updatedUserDetails.image === originalImageState.current) {
+        updatedUserDetails = { ...updatedUserDetails, image: '' };
+      }
       const { data } = await updateUserDetails({
-        variables: userDetails,
+        variables: updatedUserDetails,
       });
       /* istanbul ignore next */
       if (data) {
@@ -146,9 +151,10 @@ export default function settings(): JSX.Element {
         country: address?.countryCode || '',
         image,
       });
+      originalImageState.current = image;
     }
   }, [data]);
-  console.log(data);
+  console.log('userDetails', userDetails);
   return (
     <>
       <UserNavbar />
@@ -158,43 +164,12 @@ export default function settings(): JSX.Element {
           <h3>{t('settings')}</h3>
           <Row>
             <Col lg={5} className="d-lg-none">
-              <Card border="0" className="rounded-4 mb-4">
-                <div className={styles.cardHeader}>
-                  <div className={styles.cardTitle}>{t('profileDetails')}</div>
-                </div>
-                <Card.Body className={styles.cardBody}>
-                  <div className={`d-flex mb-2 ${styles.profileContainer}`}>
-                    <div className={styles.imgContianer}>
-                      {userDetails.image && userDetails.image !== 'null' ? (
-                        <img src={userDetails.image} alt={`profile picture`} />
-                      ) : (
-                        <Avatar
-                          name={`${userDetails.firstName} ${userDetails.lastName}`}
-                          alt={`dummy picture`}
-                        />
-                      )}
-                    </div>
-                    <div className={styles.profileDetails}>
-                      <span style={{ fontWeight: '700', fontSize: '28px' }}>
-                        {`${userDetails.firstName}`.charAt(0).toUpperCase() +
-                          `${userDetails.firstName}`.slice(1)}
-                      </span>
-                      <span data-testid="userEmail">{userDetails.email}</span>
-                      <span className="d-flex">
-                        <CalendarMonthOutlinedIcon />
-                        <span className="d-flex align-end">
-                          {t('joined')} 1st May, 2021
-                        </span>
-                      </span>
-                    </div>
-                  </div>
-                  <div className="mt-2 mb-1 d-flex justify-content-center">
-                    <Button data-testid="copyProfileLink">
-                      {t('copyLink')}
-                    </Button>
-                  </div>
-                </Card.Body>
-              </Card>
+              <UserProfile
+                firstName={userDetails.firstName}
+                lastName={userDetails.lastName}
+                email={userDetails.email}
+                image={userDetails.image}
+              />
             </Col>
             <Col lg={7}>
               <Card border="0" className="rounded-4 mb-4">
@@ -553,89 +528,18 @@ export default function settings(): JSX.Element {
               </Card>
             </Col>
             <Col lg={5} className="d-none d-lg-block">
-              <Card border="0" className="rounded-4 mb-4">
-                <div className={styles.cardHeader}>
-                  <div className={styles.cardTitle}>{t('profileDetails')}</div>
-                </div>
-                <Card.Body className={styles.cardBody}>
-                  <div className={`d-flex mb-2 ${styles.profileContainer}`}>
-                    <div className={styles.imgContianer}>
-                      {userDetails.image && userDetails.image !== 'null' ? (
-                        <img src={userDetails.image} alt={`profile picture`} />
-                      ) : (
-                        <Avatar
-                          name={`${userDetails.firstName} ${userDetails.lastName}`}
-                          alt={`dummy picture`}
-                        />
-                      )}
-                    </div>
-                    <div className={styles.profileDetails}>
-                      <span style={{ fontWeight: '700', fontSize: '28px' }}>
-                        {`${userDetails.firstName}`.charAt(0).toUpperCase() +
-                          `${userDetails.firstName}`.slice(1)}
-                      </span>
-                      <span data-testid="userEmail">{userDetails.email}</span>
-                      <span className="d-flex">
-                        <CalendarMonthOutlinedIcon />
-                        <span className="d-flex align-end">
-                          {t('joined')} 1st May, 2021
-                        </span>
-                      </span>
-                    </div>
-                  </div>
-                  <div className="mt-2 mb-1 d-flex justify-content-center">
-                    <Button data-testid="copyProfileLink">
-                      {t('copyLink')}
-                    </Button>
-                  </div>
-                </Card.Body>
-              </Card>
-              <Card border="0" className="rounded-4 mb-4">
-                <div className={styles.cardHeader}>
-                  <div className={styles.cardTitle}>{t('deleteUser')}</div>
-                </div>
-                <Card.Body className={styles.cardBody}>
-                  <p style={{ margin: '1rem 0' }}>{t('deleteUserMessage')}</p>
-                  <Button variant="danger">{t('deleteUser')}</Button>
-                </Card.Body>
-              </Card>
-              <Card border="0" className="rounded-4 mb-4">
-                <div className={styles.cardHeader}>
-                  <div className={styles.cardTitle}>{t('otherSettings')}</div>
-                </div>
-                <Card.Body className={styles.cardBody}>
-                  <Form.Label
-                    className={`text-secondary fw-bold ${styles.cardLabel}`}
-                  >
-                    {t('changeLanguage')}
-                  </Form.Label>
-                  <ChangeLanguageDropDown />
-                </Card.Body>
-              </Card>
+              <UserProfile
+                firstName={userDetails.firstName}
+                lastName={userDetails.lastName}
+                email={userDetails.email}
+                image={userDetails.image}
+              />
+              <DeleteUser />
+              <OtherSettings />
             </Col>
             <Col lg={5} className="d-lg-none">
-              <Card border="0" className="rounded-4 mb-4">
-                <div className={styles.cardHeader}>
-                  <div className={styles.cardTitle}>{t('deleteUser')}</div>
-                </div>
-                <Card.Body className={styles.cardBody}>
-                  <p style={{ margin: '1rem 0' }}>{t('deleteUserMessage')}</p>
-                  <Button variant="danger">{t('deleteUser')}</Button>
-                </Card.Body>
-              </Card>
-              <Card border="0" className="rounded-4 mb-4">
-                <div className={styles.cardHeader}>
-                  <div className={styles.cardTitle}>{t('otherSettings')}</div>
-                </div>
-                <Card.Body className={styles.cardBody}>
-                  <Form.Label
-                    className={`text-secondary fw-bold ${styles.cardLabel}`}
-                  >
-                    {t('changeLanguage')}
-                  </Form.Label>
-                  <ChangeLanguageDropDown />
-                </Card.Body>
-              </Card>
+              <DeleteUser />
+              <OtherSettings />
             </Col>
           </Row>
         </div>
