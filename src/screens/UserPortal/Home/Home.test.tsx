@@ -112,7 +112,7 @@ const MOCKS = [
                   lastName: 'abc',
                 },
               ],
-              pinned: false,
+              pinned: true,
             },
           ],
         },
@@ -264,5 +264,24 @@ describe('Testing Home Screen [User Portal]', () => {
     const postInput = screen.getByTestId('postInput');
     userEvent.type(postInput, 'Testing post content');
     expect(postInput).toHaveValue('Testing post content');
+  });
+
+  test('Scroll right button should be in document for pinned posts.', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Home />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const scrollRightButton = screen.getByTestId('scrollRightButton');
+    expect(scrollRightButton).toBeInTheDocument();
   });
 });
