@@ -10,7 +10,7 @@ import type {
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 
-interface InterfaceCustomRecurrenceProps {
+interface InterfaceCustomRecurrenceModalProps {
   recurrenceRuleState: InterfaceRecurrenceRule;
   setRecurrenceRuleState: (
     state: React.SetStateAction<InterfaceRecurrenceRule>,
@@ -25,7 +25,7 @@ interface InterfaceCustomRecurrenceProps {
   t: (key: string) => string;
 }
 
-const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceProps> = ({
+const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
   recurrenceRuleState,
   setRecurrenceRuleState,
   endDate,

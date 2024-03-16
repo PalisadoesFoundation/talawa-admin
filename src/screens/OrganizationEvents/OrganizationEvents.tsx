@@ -44,7 +44,7 @@ function organizationEvents(): JSX.Element {
   const [customRecurrenceModalIsOpen, setCustomRecurrenceModalIsOpen] =
     useState<boolean>(false);
 
-  const [startDate, setStartDate] = React.useState<Date | null>(new Date());
+  const [startDate, setStartDate] = React.useState<Date>(new Date());
   const [endDate, setEndDate] = React.useState<Date | null>(new Date());
 
   const [alldaychecked, setAllDayChecked] = React.useState(true);
@@ -53,11 +53,10 @@ function organizationEvents(): JSX.Element {
   const [publicchecked, setPublicChecked] = React.useState(true);
   const [registrablechecked, setRegistrableChecked] = React.useState(false);
 
-  const currentDay = new Date().getDay();
   const [recurrenceRuleState, setRecurrenceRuleState] =
     useState<InterfaceRecurrenceRule>({
       frequency: Frequency.WEEKLY,
-      weekDays: [Days[currentDay]],
+      weekDays: [Days[startDate.getDay()]],
       count: undefined,
     });
 
@@ -107,7 +106,7 @@ function organizationEvents(): JSX.Element {
   const { frequency, weekDays, count } = recurrenceRuleState;
   const recurrenceRuleText = getRecurrenceRuleText(
     recurrenceRuleState,
-    startDate as Date,
+    startDate,
     endDate,
   );
 
@@ -156,7 +155,7 @@ function organizationEvents(): JSX.Element {
           setRecurringChecked(false);
           setRecurrenceRuleState({
             frequency: Frequency.WEEKLY,
-            weekDays: [Days[currentDay]],
+            weekDays: [Days[new Date().getDay()]],
             count: undefined,
           });
           setStartDate(new Date());
@@ -183,10 +182,6 @@ function organizationEvents(): JSX.Element {
       navigate('/orglist');
     }
   }, [error]);
-
-  useEffect(() => {
-    console.log(recurrenceRuleState);
-  }, [recurrenceRuleState]);
 
   if (loading || loading2) {
     return <Loader />;
@@ -295,6 +290,10 @@ function organizationEvents(): JSX.Element {
                         endDate &&
                           (endDate < date?.toDate() ? date?.toDate() : endDate),
                       );
+                      setRecurrenceRuleState({
+                        ...recurrenceRuleState,
+                        weekDays: [Days[date?.toDate().getDay()]],
+                      });
                     }
                   }}
                 />
@@ -409,8 +408,8 @@ function organizationEvents(): JSX.Element {
             {recurringchecked && (
               <Dropdown drop="up" className="mt-2 d-inline-block w-100">
                 <Dropdown.Toggle
-                  className="py-2"
                   variant="outline-secondary"
+                  className="py-2 border border-secondary-subtle rounded-2"
                   id="dropdown-basic"
                 >
                   {recurrenceRuleText.length > 45 ? (
@@ -427,13 +426,7 @@ function organizationEvents(): JSX.Element {
                       </span>
                     </OverlayTrigger>
                   ) : (
-                    <span className="fw-semibold">
-                      {getRecurrenceRuleText(
-                        recurrenceRuleState,
-                        startDate as Date,
-                        endDate,
-                      )}
-                    </span>
+                    <span className="fw-semibold">{recurrenceRuleText}</span>
                   )}
                 </Dropdown.Toggle>
 
@@ -449,10 +442,10 @@ function organizationEvents(): JSX.Element {
                     {getRecurrenceRuleText(
                       {
                         frequency: Frequency.DAILY,
-                        weekDays: [],
+                        weekDays,
                         count,
                       },
-                      startDate as Date,
+                      startDate,
                       endDate,
                     )}
                   </Dropdown.Item>
@@ -467,10 +460,10 @@ function organizationEvents(): JSX.Element {
                     {getRecurrenceRuleText(
                       {
                         frequency: Frequency.WEEKLY,
-                        weekDays: [Days[currentDay]],
+                        weekDays: [Days[startDate.getDay()]],
                         count,
                       },
-                      startDate as Date,
+                      startDate,
                       endDate,
                     )}
                   </Dropdown.Item>
@@ -485,10 +478,10 @@ function organizationEvents(): JSX.Element {
                     {getRecurrenceRuleText(
                       {
                         frequency: Frequency.MONTHLY,
-                        weekDays: [Days[currentDay]],
+                        weekDays,
                         count,
                       },
-                      startDate as Date,
+                      startDate,
                       endDate,
                     )}
                   </Dropdown.Item>
@@ -503,10 +496,10 @@ function organizationEvents(): JSX.Element {
                     {getRecurrenceRuleText(
                       {
                         frequency: Frequency.YEARLY,
-                        weekDays: [Days[currentDay]],
+                        weekDays,
                         count,
                       },
-                      startDate as Date,
+                      startDate,
                       endDate,
                     )}
                   </Dropdown.Item>
