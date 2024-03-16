@@ -17,7 +17,6 @@ import userEvent from '@testing-library/user-event';
 import * as getOrganizationId from 'utils/getOrganizationId';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
-import dayjs from 'dayjs';
 import { REACT_APP_CUSTOM_PORT } from 'Constant/constant';
 
 jest.mock('react-toastify', () => ({
