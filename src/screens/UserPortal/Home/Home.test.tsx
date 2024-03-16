@@ -1,22 +1,18 @@
 import React from 'react';
+import { act, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import type { RenderResult } from '@testing-library/react';
-import { act, render, screen, waitFor, within } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
-import userEvent from '@testing-library/user-event';
-import {
-  ADVERTISEMENTS_GET,
-  ORGANIZATION_POST_LIST,
-} from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
+import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
+import * as getOrganizationId from 'utils/getOrganizationId';
 import i18nForTest from 'utils/i18nForTest';
+import userEvent from '@testing-library/user-event';
+import dayjs from 'dayjs';
 import Home from './Home';
-import useLocalStorage from 'utils/useLocalstorage';
-
-const { setItem } = useLocalStorage();
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -29,174 +25,121 @@ jest.mock('react-toastify', () => ({
 const MOCKS = [
   {
     request: {
-      query: ORGANIZATION_POST_LIST,
+      query: ORGANIZATION_POST_CONNECTION_LIST,
       variables: {
-        id: 'orgId',
-        first: 10,
+        id: '',
       },
     },
     result: {
       data: {
-        organizations: [
-          {
-            posts: {
-              edges: [
+        postsByOrganizationConnection: {
+          edges: [
+            {
+              _id: '6411e53835d7ba2344a78e21',
+              title: 'postone',
+              text: 'THis is the frist post',
+              imageUrl: null,
+              videoUrl: null,
+              creator: {
+                _id: '640d98d9eb6a743d75341067',
+                firstName: 'Aditya',
+                lastName: 'Shelke',
+                email: 'adidacreator1@gmail.com',
+                image: '',
+              },
+              createdAt: dayjs(new Date()).add(1, 'day'),
+              likeCount: 0,
+              commentCount: 0,
+              comments: [],
+              likedBy: [],
+              pinned: false,
+            },
+            {
+              _id: '6411e54835d7ba2344a78e29',
+              title: 'posttwo',
+              text: 'THis is the post two',
+              imageUrl: null,
+              videoUrl: null,
+              creator: {
+                _id: '640d98d9eb6a743d75341067',
+                firstName: 'Aditya',
+                lastName: 'Shelke',
+                email: 'adidacreator1@gmail.com',
+              },
+              createdAt: dayjs(new Date()).add(1, 'day'),
+              likeCount: 0,
+              commentCount: 2,
+              comments: [
                 {
-                  node: {
-                    _id: '6411e53835d7ba2344a78e21',
-                    title: 'post one',
-                    text: 'This is the first post',
-                    imageUrl: null,
-                    videoUrl: null,
-                    createdAt: '2024-03-03T09:26:56.524+00:00',
-                    creator: {
-                      _id: '640d98d9eb6a743d75341067',
-                      firstName: 'Glen',
-                      lastName: 'Dsza',
-                      email: 'glendsza@gmail.com',
-                    },
-                    likeCount: 0,
-                    commentCount: 0,
-                    comments: [],
-                    pinned: true,
-                    likedBy: [],
+                  _id: '64eb13beca85de60ebe0ed0e',
+                  creator: {
+                    _id: '63d6064458fce20ee25c3bf7',
+                    firstName: 'Noble',
+                    lastName: 'Mittal',
+                    email: 'test@gmail.com',
+                    __typename: 'User',
                   },
-                  cursor: '6411e53835d7ba2344a78e21',
+                  likeCount: 1,
+                  likedBy: [
+                    {
+                      _id: 1,
+                    },
+                  ],
+                  text: 'First comment from Talawa user portal.',
+                  __typename: 'Comment',
                 },
                 {
-                  node: {
-                    _id: '6411e54835d7ba2344a78e29',
-                    title: 'post two',
-                    text: 'This is the post two',
-                    imageUrl: null,
-                    videoUrl: null,
-                    createdAt: '2024-03-03T09:26:56.524+00:00',
-                    creator: {
-                      _id: '640d98d9eb6a743d75341067',
-                      firstName: 'Glen',
-                      lastName: 'Dsza',
-                      email: 'glendsza@gmail.com',
-                    },
-                    likeCount: 2,
-                    commentCount: 1,
-                    pinned: false,
-                    likedBy: [
-                      {
-                        _id: '640d98d9eb6a743d75341067',
-                        firstName: 'Glen',
-                        lastName: 'Dsza',
-                      },
-                      {
-                        _id: '640d98d9eb6a743d75341068',
-                        firstName: 'Glen2',
-                        lastName: 'Dsza2',
-                      },
-                    ],
-                    comments: [
-                      {
-                        _id: '6411e54835d7ba2344a78e29',
-                        creator: {
-                          _id: '640d98d9eb6a743d75341067',
-                          firstName: 'Glen',
-                          lastName: 'Dsza',
-                          email: 'glendsza@gmail.com',
-                        },
-                        likeCount: 2,
-                        likedBy: [
-                          {
-                            _id: '640d98d9eb6a743d75341067',
-                            firstName: 'Glen',
-                            lastName: 'Dsza',
-                          },
-                          {
-                            _id: '640d98d9eb6a743d75341068',
-                            firstName: 'Glen2',
-                            lastName: 'Dsza2',
-                          },
-                        ],
-                        text: 'This is the post two',
-                      },
-                    ],
+                  _id: '64eb483aca85de60ebe0ef99',
+                  creator: {
+                    _id: '63d6064458fce20ee25c3bf7',
+                    firstName: 'Noble',
+                    lastName: 'Mittal',
+                    email: 'test@gmail.com',
+                    createdAt: '2023-02-18T09:22:27.969Z',
+
+                    __typename: 'User',
                   },
-                  cursor: '6411e54835d7ba2344a78e29',
+                  likeCount: 0,
+                  likedBy: [],
+                  text: 'Great View',
+                  __typename: 'Comment',
                 },
               ],
-              pageInfo: {
-                startCursor: '6411e53835d7ba2344a78e21',
-                endCursor: '6411e54835d7ba2344a78e31',
-                hasNextPage: false,
-                hasPreviousPage: false,
-              },
-              totalCount: 2,
+              likedBy: [
+                {
+                  _id: '63d6064458fce20ee25c3bf7',
+                  firstName: 'test',
+                  lastName: 'abc',
+                },
+              ],
+              pinned: false,
             },
-          },
-        ],
+          ],
+        },
       },
     },
   },
   {
     request: {
-      query: ADVERTISEMENTS_GET,
-      variables: {},
-    },
-    result: {
-      data: {
-        advertisementsConnection: [
-          {
-            _id: '1234',
-            name: 'Ad 1',
-            type: 'Type 1',
-            organization: {
-              _id: 'orgId',
-            },
-            mediaUrl: 'Link 1',
-            endDate: '2024-12-31',
-            startDate: '2022-01-01',
+      query: CREATE_POST_MUTATION,
+      variables: {
+        title: '',
+        text: 'This is a test',
+        organizationId: '',
+        file: '',
+      },
+      result: {
+        data: {
+          createPost: {
+            _id: '453',
           },
-          {
-            _id: '2345',
-            name: 'Ad 2',
-            type: 'Type 1',
-            organization: {
-              _id: 'orgId',
-            },
-            mediaUrl: 'Link 2',
-            endDate: '2024-09-31',
-            startDate: '2023-04-01',
-          },
-          {
-            _id: '3456',
-            name: 'name3',
-            type: 'Type 2',
-            organization: {
-              _id: 'orgId',
-            },
-            mediaUrl: 'link3',
-            startDate: '2023-01-30',
-            endDate: '2023-12-31',
-          },
-          {
-            _id: '4567',
-            name: 'name4',
-            type: 'Type 2',
-            organization: {
-              _id: 'orgId',
-            },
-            mediaUrl: 'link4',
-            startDate: '2023-01-30',
-            endDate: '2023-12-01',
-          },
-        ],
+        },
       },
     },
   },
 ];
 
 const link = new StaticMockLink(MOCKS, true);
-
-afterEach(() => {
-  localStorage.clear();
-});
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -206,145 +149,120 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-const renderHomeScreen = (): RenderResult =>
-  render(
-    <MockedProvider addTypename={false} link={link}>
-      <MemoryRouter initialEntries={['/user/organization/id=orgId']}>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Routes>
-              <Route path="/user/organization/:orgId" element={<Home />} />
-            </Routes>
-          </I18nextProvider>
-        </Provider>
-      </MemoryRouter>
-    </MockedProvider>,
-  );
+describe('Testing Home Screen [User Portal]', () => {
+  jest.mock('utils/getOrganizationId');
 
-describe('Testing Home Screen: User Portal', () => {
-  beforeAll(() => {
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: jest.fn().mockImplementation((query) => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addListener: jest.fn(), // Deprecated
-        removeListener: jest.fn(), // Deprecated
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
-        dispatchEvent: jest.fn(),
-      })),
-    });
-
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'id=orgId' }),
-    }));
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: jest.fn().mockImplementation((query) => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: jest.fn(), // Deprecated
+      removeListener: jest.fn(), // Deprecated
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+      dispatchEvent: jest.fn(),
+    })),
   });
 
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
+  test('Screen should be rendered properly', async () => {
+    const getOrganizationIdSpy = jest
+      .spyOn(getOrganizationId, 'default')
+      .mockImplementation(() => {
+        return '';
+      });
 
-  test('Check if HomeScreen renders properly', async () => {
-    renderHomeScreen();
-
-    await wait();
-    const startPostBtn = await screen.findByTestId('startPostBtn');
-    expect(startPostBtn).toBeInTheDocument();
-  });
-
-  test('StartPostModal should render on click of StartPost btn', async () => {
-    renderHomeScreen();
-
-    await wait();
-    const startPostBtn = await screen.findByTestId('startPostBtn');
-    expect(startPostBtn).toBeInTheDocument();
-
-    userEvent.click(startPostBtn);
-    const startPostModal = screen.getByTestId('startPostModal');
-    expect(startPostModal).toBeInTheDocument();
-  });
-
-  test('StartPostModal should close on clicking the close button', async () => {
-    renderHomeScreen();
-
-    await wait();
-    const startPostBtn = await screen.findByTestId('startPostBtn');
-    expect(startPostBtn).toBeInTheDocument();
-
-    userEvent.click(startPostBtn);
-    const startPostModal = screen.getByTestId('startPostModal');
-    expect(startPostModal).toBeInTheDocument();
-
-    userEvent.type(screen.getByTestId('postInput'), 'some content');
-    userEvent.upload(
-      screen.getByTestId('postImageInput'),
-      new File(['image content'], 'image.png', { type: 'image/png' }),
-    );
-
-    // Check that the content and image have been added
-    expect(screen.getByTestId('postInput')).toHaveValue('some content');
-    await screen.findByAltText('Post Image Preview');
-    expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
-
-    const closeButton = within(startPostModal).getByRole('button', {
-      name: /close/i,
-    });
-    userEvent.click(closeButton);
-
-    const closedModalText = screen.queryByText(/somethingOnYourMind/i);
-    expect(closedModalText).not.toBeInTheDocument();
-
-    expect(screen.getByTestId('postInput')).toHaveValue('');
-    expect(screen.getByTestId('postImageInput')).toHaveValue('');
-  });
-
-  test('Check whether Posts render in PostCard', async () => {
-    setItem('userId', '640d98d9eb6a743d75341067');
-    renderHomeScreen();
-    await wait();
-
-    const postCardContainers = screen.findAllByTestId('postCardContainer');
-    expect(postCardContainers).not.toBeNull();
-
-    expect(screen.queryByText('post one')).toBeInTheDocument();
-    expect(screen.queryByText('This is the first post')).toBeInTheDocument();
-
-    expect(screen.queryByText('post two')).toBeInTheDocument();
-    expect(screen.queryByText('This is the post two')).toBeInTheDocument();
-  });
-});
-
-describe('HomeScreen with invalid orgId', () => {
-  test('Redirect to /user when organizationId is falsy', async () => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: '' }),
-    }));
     render(
       <MockedProvider addTypename={false} link={link}>
-        <MemoryRouter initialEntries={['/user/organization/orgId']}>
+        <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route path="/user/organization/:orgId" element={<Home />} />
-                <Route
-                  path="/user"
-                  element={<div data-testid="homeEl"></div>}
-                />
-              </Routes>
+              <Home />
             </I18nextProvider>
           </Provider>
-        </MemoryRouter>
+        </BrowserRouter>
       </MockedProvider>,
     );
 
-    // Wait for the navigation to occur
-    await waitFor(() => {
-      const homeEl = screen.getByTestId('homeEl');
-      expect(homeEl).toBeInTheDocument();
-    });
+    await wait();
+
+    expect(getOrganizationIdSpy).toHaveBeenCalled();
+  });
+  test('Should render the main heading', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Home />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const mainHeading = screen.getByText('POSTS');
+    expect(mainHeading).toBeInTheDocument();
+  });
+
+  test('Should render the sub heading', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Home />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const mainHeading = screen.getByText('Feed');
+    expect(mainHeading).toBeInTheDocument();
+  });
+
+  test('Should display "Start a Post" text', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Home />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const startPostText = screen.getByText('Start a Post');
+    expect(startPostText).toBeInTheDocument();
+  });
+
+  test('Should update postContent state on input change', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Home />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const postInput = screen.getByTestId('postInput');
+    userEvent.type(postInput, 'Testing post content');
+    expect(postInput).toHaveValue('Testing post content');
   });
 });

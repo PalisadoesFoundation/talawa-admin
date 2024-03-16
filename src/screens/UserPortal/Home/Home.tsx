@@ -1,278 +1,342 @@
-import { useQuery } from '@apollo/client';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import {
-  ADVERTISEMENTS_GET,
-  ORGANIZATION_POST_LIST,
-  USER_DETAILS,
-} from 'GraphQl/Queries/Queries';
-import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
-import PostCard from 'components/UserPortal/PostCard/PostCard';
-import type { InterfacePostCard } from 'utils/interfaces';
-import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
-import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
-import StartPostModal from 'components/UserPortal/StartPostModal/StartPostModal';
-import React, { useEffect, useState } from 'react';
-import { Button, Col, Container, Image, Row } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
-
-import { Link, Navigate, useParams } from 'react-router-dom';
-import useLocalStorage from 'utils/useLocalstorage';
-import UserDefault from '../../../assets/images/defaultImg.png';
-import { ReactComponent as MediaIcon } from 'assets/svgs/media.svg';
-import { ReactComponent as ArticleIcon } from 'assets/svgs/article.svg';
-import { ReactComponent as EventIcon } from 'assets/svgs/userEvent.svg';
+import React, { useRef, useEffect } from 'react';
+import type { ChangeEvent } from 'react';
+import { Button, Card } from 'react-bootstrap';
 import styles from './Home.module.css';
+import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
+import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
+import convertToBase64 from 'utils/convertToBase64';
+import getOrganizationId from 'utils/getOrganizationId';
+import { useMutation, useQuery } from '@apollo/client';
+import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
+import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
+import { toast } from 'react-toastify';
+import { errorHandler } from 'utils/errorHandler';
+import { useTranslation } from 'react-i18next';
+import PostCard from 'components/UserPortal/PostCard/PostCard';
+import { ReactComponent as PostIcon } from 'assets/svgs/postUser.svg';
+import { ReactComponent as RightScrollIcon } from 'assets/svgs/rightScroll.svg';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 
-interface InterfaceAdContent {
-  _id: string;
-  name: string;
-  type: string;
-  organization: {
-    _id: string;
+interface InterfacePostCardProps {
+  id: string;
+  creator: {
+    firstName: string;
+    lastName: string;
+    image: string;
+    id: string;
   };
-  link: string;
-  endDate: string;
-  startDate: string;
+  image: string;
+  video: string;
+  text: string;
+  title: string;
+  createdAt: number;
+}
+
+interface InterfacePost {
+  _id: string;
+  title: string;
+  text: string;
+  imageUrl: string;
+  videoUrl: string;
+  creator: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    image: string;
+  };
+  createdAt: number;
+  likeCount: string;
+  commentCount: number;
+  comments: {
+    _id: string;
+    creator: {
+      _id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+    };
+    likeCount: number;
+    likedBy: {
+      _id: string;
+    };
+    text: string;
+  };
+  likedBy: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  };
+  pinned: boolean;
 }
 
 export default function home(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'home' });
-  const { getItem } = useLocalStorage();
-  const [posts, setPosts] = useState([]);
-  const [adContent, setAdContent] = useState<InterfaceAdContent[]>([]);
-  const [filteredAd, setFilteredAd] = useState<InterfaceAdContent[]>([]);
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const { orgId } = useParams();
-  const organizationId = orgId?.split('=')[1] || null;
-  if (!organizationId) {
-    return <Navigate to={'/user'} />;
-  }
+  const organizationId = getOrganizationId(window.location.href);
+  const [posts, setPosts] = React.useState<InterfacePost[]>([]);
+  const [postContent, setPostContent] = React.useState('');
+  const [postImage, setPostImage] = React.useState('');
+  const [hasPinnedPost, setHasPinnedPost] = React.useState(false);
+
+  useEffect(() => {
+    const hasPinned = posts.some((post) => post.pinned === true);
+    setHasPinnedPost(hasPinned);
+  });
+
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  const handleScrollRight = (): void => {
+    if (carouselRef.current) {
+      (carouselRef.current as any).scrollBy({
+        left: 300, // Adjust this value to change the scroll amount
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  const handlePostInput = (e: ChangeEvent<HTMLInputElement>): void => {
+    const content = e.target.value;
+    setPostContent(content);
+  };
 
   const navbarProps = {
     currentPage: 'home',
   };
-  const { data: promotedPostsData } = useQuery(ADVERTISEMENTS_GET);
+
   const {
     data,
     refetch,
     loading: loadingPosts,
-  } = useQuery(ORGANIZATION_POST_LIST, {
-    variables: { id: organizationId, first: 10 },
-  });
-  const userId: string | null = getItem('userId');
-
-  const { data: userData } = useQuery(USER_DETAILS, {
-    variables: { id: userId },
+  } = useQuery(ORGANIZATION_POST_CONNECTION_LIST, {
+    variables: { id: organizationId },
   });
 
-  useEffect(() => {
+  const [create] = useMutation(CREATE_POST_MUTATION);
+
+  const handlePost = async (): Promise<void> => {
+    try {
+      if (!postContent) {
+        throw new Error("Can't create a post with an empty body.");
+      }
+      toast.info('Processing your post. Please wait.');
+
+      const { data } = await create({
+        variables: {
+          title: '',
+          text: postContent,
+          organizationId: organizationId,
+          file: postImage,
+        },
+      });
+      /* istanbul ignore next */
+      if (data) {
+        toast.dismiss();
+        toast.success('Your post is now visible in the feed.');
+        refetch();
+        setPostContent('');
+        setPostImage('');
+      }
+    } catch (error: any) {
+      /* istanbul ignore next */
+      errorHandler(t, error);
+    }
+  };
+
+  React.useEffect(() => {
     if (data) {
-      setPosts(data.organizations[0].posts.edges);
+      setPosts(data.postsByOrganizationConnection.edges);
     }
   }, [data]);
-
-  useEffect(() => {
-    if (promotedPostsData) {
-      setAdContent(promotedPostsData.advertisementsConnection);
-    }
-  }, [promotedPostsData]);
-
-  useEffect(() => {
-    setFilteredAd(filterAdContent(adContent, organizationId));
-  }, [adContent]);
-
-  const filterAdContent = (
-    adCont: InterfaceAdContent[],
-    currentOrgId: string,
-    currentDate: Date = new Date(),
-  ): InterfaceAdContent[] => {
-    return adCont.filter(
-      (ad: InterfaceAdContent) =>
-        ad.organization._id === currentOrgId &&
-        new Date(ad.endDate) > currentDate,
-    );
-  };
-
-  const handlePostButtonClick = (): void => {
-    setShowModal(true);
-  };
-
-  const handleModalClose = (): void => {
-    setShowModal(false);
-  };
 
   return (
     <>
       <OrganizationNavbar {...navbarProps} />
-      <div className={`d-flex flex-row ${styles.containerHeight}`}>
+      <div className={`${styles.mainContainer}`}>
         <UserSidebar />
-        <div className={`${styles.colorLight} ${styles.mainContainer}`}>
-          <Container className={styles.postContainer}>
-            <Row className="d-flex align-items-center justify-content-center">
-              <Col xs={2} className={styles.userImage}>
-                <Image
-                  src={userData?.image || UserDefault}
-                  roundedCircle
-                  className="mt-2"
+        <div className={`${styles.postPageContainer}`}>
+          <div className={`${styles.mainHeading}`}>POSTS</div>
+          <Card className={`${styles.cardStyle}`}>
+            <div className={`${styles.startPostAndBrowse}`}>
+              <div className={`${styles.startPostText}`}>Start a Post</div>
+              <div className={`${styles.browseAndPostInput}`}>
+                <label className={`bold-text ${styles.browseButton}`}>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={
+                      /* istanbul ignore next */
+                      async (e: React.ChangeEvent): Promise<void> => {
+                        const target = e.target as HTMLInputElement;
+                        const file = target.files && target.files[0];
+                        if (file) {
+                          const image = await convertToBase64(file);
+                          console.log(image);
+                          setPostImage(image);
+                        }
+                      }
+                    }
+                    style={{ display: 'none' }}
+                  />
+                  Browse Files
+                </label>
+                <input
+                  className={`${styles.yourPostInput}`}
+                  placeholder="Start Your Post"
+                  data-testid="postInput"
+                  onChange={handlePostInput}
                 />
-              </Col>
-              <Col xs={10}>
-                <Button
-                  className={styles.startPostBtn}
-                  onClick={handlePostButtonClick}
-                  data-testid="startPostBtn"
-                >
-                  {t('startPost')}
+              </div>
+              <div className={`${styles.postButtonDiv}`}>
+                <Button className={`${styles.postButton}`} onClick={handlePost}>
+                  Post
+                  <div className={`${styles.postButtonIcon}`}>
+                    <PostIcon />
+                  </div>
                 </Button>
-              </Col>
-            </Row>
-            <Row className="mt-3 d-flex align-items-center justify-content-evenly">
-              <Col xs={4} className={styles.uploadLink}>
-                <div className="d-flex gap-2 align-items-center justify-content-center">
-                  <div className={styles.icons}>
-                    <MediaIcon />
-                  </div>
-                  <p className={styles.iconLabel}>{t('media')}</p>
-                </div>
-              </Col>
-              <Col xs={4} className={styles.uploadLink}>
-                <div className="d-flex gap-2 align-items-center justify-content-center">
-                  {/* <div className={styles.icons}>{eventSvg}</div> */}
-                  <div className={styles.icons}>
-                    <EventIcon />
-                  </div>
-                  <p className={styles.iconLabel}>{t('event')}</p>
-                </div>
-              </Col>
-              <Col xs={4} className={styles.uploadLink}>
-                <div className="d-flex gap-2 align-items-center justify-content-center">
-                  <div className={styles.icons}>
-                    <ArticleIcon />
-                  </div>
-                  <p className={styles.iconLabel}>{t('article')}</p>
-                </div>
-              </Col>
-            </Row>
-          </Container>
-          <div
-            style={{
-              display: `flex`,
-              flexDirection: `row`,
-              justifyContent: `space-between`,
-              alignItems: `center`,
-            }}
-          >
-            <h3>{t('feed')}</h3>
-            <div>
-              <Link to="/user/organizations" className={styles.link}>
-                {t('pinnedPosts')}
-                <ChevronRightIcon
-                  fontSize="small"
-                  className={styles.marginTop}
-                />
-              </Link>
+              </div>
             </div>
-          </div>
-
-          {filteredAd.length > 0 && (
-            <div data-testid="promotedPostsContainer">
-              {filteredAd.map((post: any) => (
-                <PromotedPost
-                  key={post._id}
-                  id={post._id}
-                  media={post.mediaUrl}
-                  title={post.name}
-                  data-testid="postid"
-                />
-              ))}
-            </div>
-          )}
-
+          </Card>
+          <span className={`${styles.feedText}`}>Feed</span>
+          <span className={`${styles.secondaryHeading}`}>Pinned post</span>
           {loadingPosts ? (
             <div className={`d-flex flex-row justify-content-center`}>
               <HourglassBottomIcon /> <span>Loading...</span>
             </div>
           ) : (
-            <>
-              {posts.map(({ node }: any) => {
-                const {
-                  // likedBy,
-                  // comments,
-                  creator,
-                  _id,
-                  imageUrl,
-                  videoUrl,
-                  title,
-                  text,
-                  likeCount,
-                  commentCount,
-                } = node;
+            <div
+              className={`${styles.pinnedPosts}`}
+              ref={carouselRef}
+              data-testid="carousel"
+            >
+              {posts
+                .filter((post) => post.pinned === true)
+                .map((post: any) => {
+                  const allLikes: any = [];
+                  post.likedBy.forEach((value: any) => {
+                    const singleLike = {
+                      firstName: value.firstName,
+                      lastName: value.lastName,
+                      id: value._id,
+                    };
+                    allLikes.push(singleLike);
+                  });
 
-                // const allLikes: any =
-                //   likedBy && Array.isArray(likedBy)
-                //     ? likedBy.map((value: any) => ({
-                //         firstName: value.firstName,
-                //         lastName: value.lastName,
-                //         id: value._id,
-                //       }))
-                //     : [];
+                  const postComments: any = [];
+                  post.comments.forEach((value: any) => {
+                    const commentLikes: any = [];
 
+                    value.likedBy.forEach((commentLike: any) => {
+                      const singleLike = {
+                        id: commentLike._id,
+                      };
+                      commentLikes.push(singleLike);
+                    });
+
+                    const singleCommnet: any = {
+                      id: value._id,
+                      creator: {
+                        firstName: value.creator.firstName,
+                        lastName: value.creator.lastName,
+                        id: value.creator._id,
+                        image: value.creator.image,
+                      },
+                      likeCount: value.likeCount,
+                      likedBy: commentLikes,
+                      text: value.text,
+                    };
+
+                    postComments.push(singleCommnet);
+                  });
+
+                  const cardProps: InterfacePostCardProps = {
+                    id: post._id,
+                    creator: {
+                      id: post.creator._id,
+                      firstName: post.creator.firstName,
+                      lastName: post.creator.lastName,
+                      image: post.creator.image,
+                    },
+                    image: post.imageUrl,
+                    video: post.videoUrl,
+                    title: post.title,
+                    text: post.text,
+                    createdAt: post.createdAt,
+                  };
+
+                  return <PostCard key={post._id} {...cardProps} />;
+                })}
+              {hasPinnedPost && (
+                <Button
+                  className={`${styles.rightScrollButton}`}
+                  onClick={handleScrollRight}
+                  data-testid="scrollRightButton"
+                >
+                  <RightScrollIcon />
+                </Button>
+              )}
+            </div>
+          )}
+
+          <span className={`${styles.secondaryHeading}`}>Your Feed</span>
+          <div className={`${styles.feedPosts}`}>
+            {posts
+              .filter((post) => post.pinned === false)
+              .map((post: any) => {
                 const allLikes: any = [];
-
-                // const postComments: any =
-                //   comments && Array.isArray(comments)
-                //     ? comments.map((value: any) => {
-                //         const commentLikes = value.likedBy.map(
-                //           (commentLike: any) => ({ id: commentLike._id }),
-                //         );
-                //         return {
-                //           id: value._id,
-                //           creator: {
-                //             firstName: value.creator.firstName,
-                //             lastName: value.creator.lastName,
-                //             id: value.creator._id,
-                //             email: value.creator.email,
-                //           },
-                //           likeCount: value.likeCount,
-                //           likedBy: commentLikes,
-                //           text: value.text,
-                //         };
-                //       })
-                //     : [];
+                post.likedBy.forEach((value: any) => {
+                  const singleLike = {
+                    firstName: value.firstName,
+                    lastName: value.lastName,
+                    id: value._id,
+                  };
+                  allLikes.push(singleLike);
+                });
 
                 const postComments: any = [];
+                post.comments.forEach((value: any) => {
+                  const commentLikes: any = [];
 
-                const cardProps: InterfacePostCard = {
-                  id: _id,
+                  value.likedBy.forEach((commentLike: any) => {
+                    const singleLike = {
+                      id: commentLike._id,
+                    };
+                    commentLikes.push(singleLike);
+                  });
+
+                  const singleCommnet: any = {
+                    id: value._id,
+                    creator: {
+                      firstName: value.creator.firstName,
+                      lastName: value.creator.lastName,
+                      id: value.creator._id,
+                      image: value.creator.image,
+                    },
+                    likeCount: value.likeCount,
+                    likedBy: commentLikes,
+                    text: value.text,
+                  };
+
+                  postComments.push(singleCommnet);
+                });
+
+                const cardProps: InterfacePostCardProps = {
+                  id: post._id,
                   creator: {
-                    id: creator._id,
-                    firstName: creator.firstName,
-                    lastName: creator.lastName,
-                    email: creator.email,
+                    id: post.creator._id,
+                    firstName: post.creator.firstName,
+                    lastName: post.creator.lastName,
+                    image: post.creator.image,
                   },
-                  image: imageUrl,
-                  video: videoUrl,
-                  title,
-                  text,
-                  likeCount,
-                  commentCount,
-                  comments: postComments,
-                  likedBy: allLikes,
+                  image: post.imageUrl,
+                  video: post.videoUrl,
+                  title: post.title,
+                  text: post.text,
+                  createdAt: post.createdAt,
                 };
 
-                return <PostCard key={_id} {...cardProps} />;
+                return <PostCard key={post._id} {...cardProps} />;
               })}
-            </>
-          )}
+          </div>
         </div>
-        <StartPostModal
-          show={showModal}
-          onHide={handleModalClose}
-          fetchPosts={refetch}
-          userData={userData}
-          organizationId={organizationId}
-        />
       </div>
     </>
   );

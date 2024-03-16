@@ -197,3 +197,54 @@ export const ORGANIZATION_FUNDS = gql`
     }
   }
 `;
+
+export const ORGANIZATION_POST_CONNECTION_LIST = gql`
+  query PostsByOrganizationConnection(
+    $id: ID!
+    $title_contains: String
+    $text_contains: String
+  ) {
+    postsByOrganizationConnection(
+      id: $id
+      where: { title_contains: $title_contains, text_contains: $text_contains }
+      orderBy: createdAt_DESC
+    ) {
+      edges {
+        _id
+        title
+        text
+        imageUrl
+        videoUrl
+        creator {
+          _id
+          firstName
+          lastName
+          email
+        }
+        createdAt
+        likeCount
+        commentCount
+        comments {
+          _id
+          creator {
+            _id
+            firstName
+            lastName
+            email
+          }
+          likeCount
+          likedBy {
+            _id
+          }
+          text
+        }
+        likedBy {
+          _id
+          firstName
+          lastName
+        }
+        pinned
+      }
+    }
+  }
+`;
