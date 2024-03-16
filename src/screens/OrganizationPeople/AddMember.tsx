@@ -491,7 +491,7 @@ function AddMember(): JSX.Element {
             <InputGroup className="mt-2 mb-4">
               <Form.Control
                 className={styles.borderNone}
-                value={organizationData?.organizations[0].name}
+                value={organizationData?.organizations[0]?.name}
                 onChange={handlePasswordChange}
                 data-testid=""
                 disabled
