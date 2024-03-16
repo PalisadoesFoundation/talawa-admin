@@ -111,14 +111,14 @@ export default function advertisements(): JSX.Element {
                 onSelect={updateSelectedTab}
               >
                 <Tab eventKey="avaactiveAdsilable" title={t('activeAds')}>
-                  {data2?.getAdvertisements
-                    .filter((ad: any) => ad.orgId == currentOrgId)
+                  {data2?.advertisementsConnection
+                    .filter((ad: any) => ad.organization._id == currentOrgId)
                     .filter((ad: any) => new Date(ad.endDate) > new Date())
                     .length == 0 ? (
                     <h4>{t('pMessage')} </h4> // eslint-disable-line
                   ) : (
-                    data2?.getAdvertisements
-                      .filter((ad: any) => ad.orgId == currentOrgId)
+                    data2?.advertisementsConnection
+                      .filter((ad: any) => ad.organization._id == currentOrgId)
                       .filter((ad: any) => new Date(ad.endDate) > new Date())
                       .map(
                         (
@@ -126,8 +126,8 @@ export default function advertisements(): JSX.Element {
                             _id: string;
                             name: string | undefined;
                             type: string | undefined;
-                            orgId: string;
-                            link: string;
+                            organization: { _id: string };
+                            mediaUrl: string;
                             endDate: Date;
                             startDate: Date;
                           },
@@ -138,10 +138,10 @@ export default function advertisements(): JSX.Element {
                             key={i}
                             name={ad.name}
                             type={ad.type}
-                            orgId={ad.orgId}
+                            orgId={ad.organization._id}
                             startDate={new Date(ad.startDate)}
                             endDate={new Date(ad.endDate)}
-                            link={ad.link}
+                            link={ad.mediaUrl}
                             // getInstalledPlugins={getInstalledPlugins}
                           />
                         )
@@ -149,14 +149,14 @@ export default function advertisements(): JSX.Element {
                   )}
                 </Tab>
                 <Tab eventKey="archievedAds" title={t('archievedAds')}>
-                  {data2?.getAdvertisements
-                    .filter((ad: any) => ad.orgId == currentOrgId)
+                  {data2?.advertisementsConnection
+                    .filter((ad: any) => ad.organization._id == currentOrgId)
                     .filter((ad: any) => new Date(ad.endDate) < new Date())
                     .length == 0 ? (
                     <h4>{t('pMessage')} </h4> // eslint-disable-line
                   ) : (
-                    data2?.getAdvertisements
-                      .filter((ad: any) => ad.orgId == currentOrgId)
+                    data2?.advertisementsConnection
+                      .filter((ad: any) => ad.organization._id == currentOrgId)
                       .filter((ad: any) => new Date(ad.endDate) < new Date())
                       .map(
                         (
@@ -164,8 +164,8 @@ export default function advertisements(): JSX.Element {
                             _id: string;
                             name: string | undefined;
                             type: string | undefined;
-                            orgId: string;
-                            link: string;
+                            organization: { _id: string };
+                            mediaUrl: string;
                             endDate: Date;
                             startDate: Date;
                           },
@@ -176,7 +176,7 @@ export default function advertisements(): JSX.Element {
                             key={i}
                             name={ad.name}
                             type={ad.type}
-                            orgId={ad.orgId}
+                            orgId={ad.organization._id}
                             startDate={new Date(ad.startDate)}
                             endDate={new Date(ad.endDate)}
                             // getInstalledPlugins={getInstalledPlugins}

@@ -186,7 +186,7 @@ describe('Testing Advertisement Component', () => {
         },
         result: {
           data: {
-            getAdvertisements: [],
+            advertisementsConnection: [],
           },
           loading: false,
         },
@@ -245,13 +245,15 @@ describe('Testing Advertisement Component', () => {
         },
         result: {
           data: {
-            getAdvertisements: [
+            advertisementsConnection: [
               {
                 _id: '1',
                 name: 'Advertisement1',
                 type: 'POPUP',
-                orgId: 'undefined',
-                link: 'http://example1.com',
+                organization: {
+                  _id: 'undefined',
+                },
+                mediaUrl: 'http://example1.com',
                 endDate: '2023-01-01',
                 startDate: '2022-01-01',
               },
@@ -310,13 +312,15 @@ describe('Testing Advertisement Component', () => {
         },
         result: {
           data: {
-            getAdvertisements: [
+            advertisementsConnection: [
               {
                 _id: '1',
                 name: 'Advertisement1',
                 type: 'POPUP',
-                orgId: 'undefined',
-                link: 'http://example1.com',
+                organization: {
+                  _id: 'undefined',
+                },
+                mediaUrl: 'http://example1.com',
                 endDate: '2023-01-01',
                 startDate: '2022-01-01',
               },
@@ -324,8 +328,10 @@ describe('Testing Advertisement Component', () => {
                 _id: '2',
                 name: 'Advertisement2',
                 type: 'BANNER',
-                orgId: 'undefined',
-                link: 'http://example2.com',
+                organization: {
+                  _id: 'undefined',
+                },
+                mediaUrl: 'http://example2.com',
                 endDate: tomorrow,
                 startDate: today,
               },
