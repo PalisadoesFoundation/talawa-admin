@@ -94,7 +94,6 @@ export default function orgPostCard(
     if (playPromise !== undefined) {
       playPromise
         .then(() => {
-          // setModalVisible(true);
           setPlaying(true);
         })
         .catch((error: any) => {
@@ -104,11 +103,7 @@ export default function orgPostCard(
   };
 
   const handleVideoPause = (): void => {
-    // setPlaying(false);
-    // videoRef.current?.pause();
-    // setModalVisible(false);
     if (playing) {
-      console.log('IIIII');
       setPlaying(false);
       videoRef.current?.pause();
       setModalVisible(false);
@@ -413,9 +408,7 @@ export default function orgPostCard(
               </button>
               <button
                 className={styles.closeButton}
-                onClick={(): void => {
-                  setModalVisible(false);
-                }}
+                onClick={(): void => setModalVisible(false)}
                 data-testid="closeiconbtn"
               >
                 <CloseIcon />
