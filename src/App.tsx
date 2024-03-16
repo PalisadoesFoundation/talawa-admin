@@ -70,7 +70,6 @@ function app(): JSX.Element {
       setItem('id', data.checkAuth._id);
       setItem('email', data.checkAuth.email);
       setItem('IsLoggedIn', 'TRUE');
-      setItem('UserType', data.checkAuth.userType);
       setItem('FirstName', data.checkAuth.firstName);
       setItem('LastName', data.checkAuth.lastName);
       setItem('UserImage', data.checkAuth.image);
