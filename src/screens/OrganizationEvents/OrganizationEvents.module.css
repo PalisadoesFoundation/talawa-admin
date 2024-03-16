@@ -265,6 +265,7 @@
 }
 .checkboxdiv {
   display: flex;
+  margin-bottom: 5px;
 }
 .checkboxdiv > div {
   width: 50%;

@@ -3,50 +3,56 @@ import { Button, Dropdown, Form, FormControl, Modal } from 'react-bootstrap';
 import styles from './OrganizationEvents.module.css';
 import { DatePicker } from '@mui/x-date-pickers';
 import { Days, Frequency, frequencies } from 'utils/recurrenceRuleUtils';
-import type { WeekDays } from 'utils/recurrenceRuleUtils';
+import type {
+  InterfaceRecurrenceRule,
+  WeekDays,
+} from 'utils/recurrenceRuleUtils';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 
-interface InterfaceRecurrenceRuleProps {
-  frequency: Frequency;
-  setFrequency: (state: React.SetStateAction<Frequency>) => void;
-  weekDays: WeekDays[];
-  setWeekDays: (state: React.SetStateAction<WeekDays[]>) => void;
-  setCount: (state: React.SetStateAction<number | undefined>) => void;
+interface InterfaceCustomRecurrenceProps {
+  recurrenceRuleState: InterfaceRecurrenceRule;
+  setRecurrenceRuleState: (
+    state: React.SetStateAction<InterfaceRecurrenceRule>,
+  ) => void;
   endDate: Date | null;
   setEndDate: (state: React.SetStateAction<Date | null>) => void;
-  recurrenceRuleModalIsOpen: boolean;
-  recurringchecked: boolean;
-  hideRecurrenceRuleModal: () => void;
-  setRecurrenceRuleModalIsOpen: (state: React.SetStateAction<boolean>) => void;
+  customRecurrenceModalIsOpen: boolean;
+  hideCustomRecurrenceModal: () => void;
+  setCustomRecurrenceModalIsOpen: (
+    state: React.SetStateAction<boolean>,
+  ) => void;
   t: (key: string) => string;
 }
 
-const RecurrenceRuleModal: React.FC<InterfaceRecurrenceRuleProps> = ({
-  frequency,
-  setFrequency,
-  weekDays,
-  setWeekDays,
-  setCount,
+const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceProps> = ({
+  recurrenceRuleState,
+  setRecurrenceRuleState,
   endDate,
   setEndDate,
-  recurrenceRuleModalIsOpen,
-  recurringchecked,
-  hideRecurrenceRuleModal,
-  setRecurrenceRuleModalIsOpen,
+  customRecurrenceModalIsOpen,
+  hideCustomRecurrenceModal,
+  setCustomRecurrenceModalIsOpen,
   t,
 }) => {
+  const { frequency, weekDays } = recurrenceRuleState;
   const [selectedOption, setSelectedOption] = useState<string>('On');
 
   const handleOptionChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const endsOnOption = e.target.value;
     setSelectedOption(endsOnOption);
     if (endsOnOption === 'Never') {
-      setCount(undefined);
       setEndDate(null);
+      setRecurrenceRuleState({
+        ...recurrenceRuleState,
+        count: undefined,
+      });
     }
     if (endsOnOption === 'On') {
-      setCount(undefined);
+      setRecurrenceRuleState({
+        ...recurrenceRuleState,
+        count: undefined,
+      });
     }
     if (endsOnOption === 'After') {
       setEndDate(null);
@@ -55,14 +61,20 @@ const RecurrenceRuleModal: React.FC<InterfaceRecurrenceRuleProps> = ({
 
   const handleDayClick = (day: WeekDays): void => {
     if (weekDays.includes(day)) {
-      setWeekDays(weekDays.filter((d) => d !== day));
+      setRecurrenceRuleState({
+        ...recurrenceRuleState,
+        weekDays: weekDays.filter((d) => d !== day),
+      });
     } else {
-      setWeekDays([...weekDays, day]);
+      setRecurrenceRuleState({
+        ...recurrenceRuleState,
+        weekDays: [...weekDays, day],
+      });
     }
   };
 
   const handleRecurrenceRuleSubmit = (): void => {
-    setRecurrenceRuleModalIsOpen(!recurrenceRuleModalIsOpen);
+    setCustomRecurrenceModalIsOpen(!customRecurrenceModalIsOpen);
   };
 
   const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
@@ -71,15 +83,15 @@ const RecurrenceRuleModal: React.FC<InterfaceRecurrenceRuleProps> = ({
   return (
     <>
       <Modal
-        show={recurrenceRuleModalIsOpen && recurringchecked}
-        onHide={hideRecurrenceRuleModal}
+        show={customRecurrenceModalIsOpen}
+        onHide={hideCustomRecurrenceModal}
         centered
       >
         <Modal.Header>
           <p className={styles.titlemodal}>Custom recurrence</p>
           <Button
             variant="danger"
-            onClick={hideRecurrenceRuleModal}
+            onClick={hideCustomRecurrenceModal}
             data-testid="customRecurrenceModalCloseBtn"
           >
             <i className="fa fa-times"></i>
@@ -104,37 +116,67 @@ const RecurrenceRuleModal: React.FC<InterfaceRecurrenceRuleProps> = ({
               </Dropdown.Toggle>
 
               <Dropdown.Menu>
-                <Dropdown.Item onClick={() => setFrequency(Frequency.DAILY)}>
+                <Dropdown.Item
+                  onClick={() =>
+                    setRecurrenceRuleState({
+                      ...recurrenceRuleState,
+                      frequency: Frequency.DAILY,
+                    })
+                  }
+                >
                   Day
                 </Dropdown.Item>
-                <Dropdown.Item onClick={() => setFrequency(Frequency.WEEKLY)}>
+                <Dropdown.Item
+                  onClick={() =>
+                    setRecurrenceRuleState({
+                      ...recurrenceRuleState,
+                      frequency: Frequency.WEEKLY,
+                    })
+                  }
+                >
                   Week
                 </Dropdown.Item>
-                <Dropdown.Item onClick={() => setFrequency(Frequency.MONTHLY)}>
+                <Dropdown.Item
+                  onClick={() =>
+                    setRecurrenceRuleState({
+                      ...recurrenceRuleState,
+                      frequency: Frequency.MONTHLY,
+                    })
+                  }
+                >
                   Month
                 </Dropdown.Item>
-                <Dropdown.Item onClick={() => setFrequency(Frequency.YEARLY)}>
+                <Dropdown.Item
+                  onClick={() =>
+                    setRecurrenceRuleState({
+                      ...recurrenceRuleState,
+                      frequency: Frequency.YEARLY,
+                    })
+                  }
+                >
                   Year
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </div>
 
-          <div className="mb-4">
-            <span className="fw-semibold text-secondary">Repeats on</span>
-            <br />
-            <div className="mx-2 mt-3 d-flex gap-1">
-              {days.map((day, index) => (
-                <div
-                  key={index}
-                  className={`${styles.recurrenceDayButton} ${weekDays.includes(Days[index]) ? styles.selected : ''}`}
-                  onClick={() => handleDayClick(Days[index])}
-                >
-                  <span>{day}</span>
-                </div>
-              ))}
+          {frequency === Frequency.WEEKLY && (
+            <div className="mb-4">
+              <span className="fw-semibold text-secondary">Repeats on</span>
+              <br />
+              <div className="mx-2 mt-3 d-flex gap-1">
+                {days.map((day, index) => (
+                  <div
+                    key={index}
+                    className={`${styles.recurrenceDayButton} ${weekDays.includes(Days[index]) ? styles.selected : ''}`}
+                    onClick={() => handleDayClick(Days[index])}
+                  >
+                    <span>{day}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="mb-3">
             <span className="fw-semibold text-secondary">Ends</span>
@@ -173,7 +215,12 @@ const RecurrenceRuleModal: React.FC<InterfaceRecurrenceRuleProps> = ({
                           type="number"
                           defaultValue={1}
                           min={1}
-                          onChange={(e) => setCount(Number(e.target.value))}
+                          onChange={(e) =>
+                            setRecurrenceRuleState({
+                              ...recurrenceRuleState,
+                              count: Number(e.target.value),
+                            })
+                          }
                           className={`${styles.recurrenceRuleNumberInput} ms-1 me-2 d-inline-block py-2`}
                           disabled={selectedOption !== 'After'}
                         />{' '}
@@ -203,4 +250,4 @@ const RecurrenceRuleModal: React.FC<InterfaceRecurrenceRuleProps> = ({
   );
 };
 
-export default RecurrenceRuleModal;
+export default CustomRecurrenceModal;

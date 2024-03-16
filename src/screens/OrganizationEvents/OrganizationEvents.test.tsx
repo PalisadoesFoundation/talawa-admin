@@ -1,6 +1,12 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen, fireEvent } from '@testing-library/react';
+import {
+  act,
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+} from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import 'jest-location-mock';
@@ -450,4 +456,44 @@ describe('Organisation Events Page', () => {
 
     userEvent.click(screen.getByTestId('createEventBtn'));
   });
+
+  // test('Testing toggling of custom recurrence modal', async () => {
+  //   render(
+  //     <MockedProvider addTypename={false} link={link}>
+  //       <BrowserRouter>
+  //         <Provider store={store}>
+  //           <LocalizationProvider dateAdapter={AdapterDayjs}>
+  //             <ThemeProvider theme={theme}>
+  //               <I18nextProvider i18n={i18nForTest}>
+  //                 <OrganizationEvents />
+  //               </I18nextProvider>
+  //             </ThemeProvider>
+  //           </LocalizationProvider>
+  //         </Provider>
+  //       </BrowserRouter>
+  //     </MockedProvider>,
+  //   );
+
+  //   await wait();
+
+  //   await waitFor(() => {
+  //     expect(screen.getByTestId('recurringCheck')).toBeInTheDocument();
+  //   });
+
+  //   userEvent.click(screen.getByTestId('recurringCheck'));
+
+  //   await waitFor(() => {
+  //     expect(
+  //       screen.getByTestId('customRecurrenceModalCloseBtn'),
+  //     ).toBeInTheDocument();
+  //   });
+
+  //   userEvent.click(screen.getByTestId('customRecurrenceModalCloseBtn'));
+
+  //   await waitFor(() => {
+  //     expect(
+  //       screen.queryByTestId('customRecurrenceModalCloseBtn'),
+  //     ).not.toBeInTheDocument();
+  //   });
+  // });
 });
