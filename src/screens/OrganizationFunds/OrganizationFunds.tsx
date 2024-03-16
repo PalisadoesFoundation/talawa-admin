@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import {
@@ -8,10 +7,9 @@ import {
 } from 'GraphQl/Mutations/FundMutation';
 import { ORGANIZATION_FUNDS } from 'GraphQl/Queries/OrganizationQueries';
 import Loader from 'components/Loader/Loader';
-import { useEffect, useState, type ChangeEvent } from 'react';
+import React, { useEffect, useState, type ChangeEvent } from 'react';
 import { Button, Col, Dropdown, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type {
   InterfaceCreateFund,
@@ -23,6 +21,7 @@ import FundCreateModal from './FundCreateModal';
 import FundDeleteModal from './FundDeleteModal';
 import FundUpdateModal from './FundUpdateModal';
 import styles from './OrganizationFunds.module.css';
+import { useParams } from 'react-router-dom';
 
 const organizationFunds = (): JSX.Element => {
   const { t } = useTranslation('translation', {
@@ -30,7 +29,7 @@ const organizationFunds = (): JSX.Element => {
   });
 
   const { orgId: currentUrl } = useParams();
-  const navigate = useNavigate();
+
   const [fundCreateModalIsOpen, setFundCreateModalIsOpen] =
     useState<boolean>(false);
   const [fundUpdateModalIsOpen, setFundUpdateModalIsOpen] =
@@ -69,7 +68,6 @@ const organizationFunds = (): JSX.Element => {
       id: currentUrl,
     },
   });
-  console.log(fundData);
 
   const [createFund] = useMutation(CREATE_FUND_MUTATION);
   const [updateFund] = useMutation(UPDATE_FUND_MUTATION);
@@ -216,10 +214,6 @@ const organizationFunds = (): JSX.Element => {
     }
   }, [click]);
 
-  const handleClick = (fundId: String) => {
-    navigate(`/orgfundcampaign/${currentUrl}/${fundId}`);
-  };
-
   if (fundLoading) {
     return <Loader size="xl" />;
   }
@@ -250,7 +244,7 @@ const organizationFunds = (): JSX.Element => {
       </Button>
 
       <div className={`${styles.container}  bg-white rounded-4 my-3`}>
-        <div className="mx-4 pt-4">
+        <div className="mx-4 mt-4">
           <Dropdown
             aria-expanded="false"
             data-testid="type"
@@ -288,7 +282,7 @@ const organizationFunds = (): JSX.Element => {
             </Row>
           </div>
 
-          <div className="mx-4 bg-light-subtle border border-light-subtle border-top-0 rounded-bottom-4 shadow-md">
+          <div className="mx-4 bg-light-subtle border border-light-subtle border-top-0 rounded-bottom-4 shadow-sm">
             {fundData?.organizations[0].funds
               ?.filter((fund) =>
                 fundType === 'Archived' ? fund.isArchived : !fund.isArchived,
@@ -305,15 +299,7 @@ const organizationFunds = (): JSX.Element => {
                       lg={3}
                       className={`align-self-center fw-bold ${styles.fundName}`}
                     >
-                      <div
-                        className="fw-bold cursor-pointer"
-                        data-testid="fundName"
-                        onClick={() => {
-                          handleClick(fundd._id);
-                        }}
-                      >
-                        {fundd.name}
-                      </div>
+                      <div className="fw-bold cursor-pointer">{fundd.name}</div>
                     </Col>
 
                     <Col xs={5} sm={3} lg={2} className="p-0">

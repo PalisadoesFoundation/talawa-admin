@@ -95,9 +95,7 @@ const loginPage = (): JSX.Element => {
   useEffect(() => {
     const isLoggedIn = getItem('IsLoggedIn');
     if (isLoggedIn == 'TRUE') {
-      navigate(
-        getItem('UserType') === 'USER' ? '/user/organizations' : '/orglist',
-      );
+      navigate(role === 'admin' ? '/orglist' : '/user/organizations');
     }
     setComponentLoader(false);
   }, []);

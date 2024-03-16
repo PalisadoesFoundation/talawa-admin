@@ -19,7 +19,6 @@ import { DataGrid } from '@mui/x-data-grid';
 import type { GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
-import AddMember from './AddMember';
 
 function organizationPeople(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -332,9 +331,6 @@ function organizationPeople(): JSX.Element {
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
-            </div>
-            <div className={styles.btnsBlock}>
-              <AddMember></AddMember>
             </div>
           </div>
         </div>

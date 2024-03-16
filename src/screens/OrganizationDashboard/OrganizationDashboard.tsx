@@ -103,7 +103,6 @@ function organizationDashboard(): JSX.Element {
 
   useEffect(() => {
     if (errorOrg || errorPost || errorEvent) {
-      console.log('error', errorPost);
       navigate('/orglist');
     }
   }, [errorOrg, errorPost, errorEvent]);

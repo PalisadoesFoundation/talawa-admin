@@ -1,12 +1,12 @@
 import { MockedProvider } from '@apollo/client/testing';
 import {
   act,
-  fireEvent,
   render,
   screen,
   waitFor,
   waitForElementToBeRemoved,
 } from '@testing-library/react';
+import React from 'react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -27,12 +27,6 @@ import {
   MOCKS_ERROR_UPDATE_FUND,
   MOCKS_UNARCHIVED_FUND,
 } from './OrganizationFundsMocks';
-import React from 'react';
-const mockNavigate = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigate,
-}));
 jest.mock('react-toastify', () => ({
   toast: {
     success: jest.fn(),
@@ -309,17 +303,10 @@ describe('Testing OrganizationFunds screen', () => {
         screen.findByTestId('editFundModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-
-    const fundName = screen.getByPlaceholderText(translations.enterfundName);
-    fireEvent.change(fundName, { target: { value: 'Fund 4' } });
-    const taxSwitch = screen.getByTestId('taxDeductibleSwitch');
-    const archiveSwitch = screen.getByTestId('archivedSwitch');
-    const defaultSwitch = screen.getByTestId('defaultSwitch');
-
-    fireEvent.click(taxSwitch);
-    fireEvent.click(archiveSwitch);
-    fireEvent.click(defaultSwitch);
-
+    userEvent.type(
+      screen.getByPlaceholderText(translations.enterfundName),
+      'Test Fund Updated',
+    );
     userEvent.click(screen.getByTestId('editFundFormSubmitBtn'));
 
     await waitFor(() => {
@@ -595,27 +582,6 @@ describe('Testing OrganizationFunds screen', () => {
     userEvent.click(screen.getAllByTestId('archiveFundBtn')[0]);
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
-    });
-  });
-  it('redirects to campaign screen when clicked on fund name', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link1}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              {<OrganizationFunds />}
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-    await wait();
-    await waitFor(() => {
-      expect(screen.getAllByTestId('fundName')[0]).toBeInTheDocument();
-    });
-    userEvent.click(screen.getAllByTestId('fundName')[0]);
-    await waitFor(() => {
-      expect(mockNavigate).toBeCalledWith('/orgfundcampaign/undefined/1');
     });
   });
 });

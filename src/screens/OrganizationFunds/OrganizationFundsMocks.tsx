@@ -67,10 +67,7 @@ export const MOCKS = [
       query: UPDATE_FUND_MUTATION,
       variables: {
         id: '1',
-        name: 'Fund 4',
-        taxDeductible: false,
-        isArchived: true,
-        isDefault: true,
+        name: 'Fund 1Test Fund Updated',
       },
     },
     result: {

@@ -70,6 +70,10 @@
   box-shadow: none;
 }
 
+.imageInput {
+  display: none;
+}
+
 .postContainer {
   margin: 1rem auto;
   background-color: transparent;
@@ -157,4 +161,16 @@
 .modal {
   width: 100dvw;
   margin: 0 auto;
+}
+
+.previewImage {
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.previewImage img {
+  border-radius: 8px;
 }
