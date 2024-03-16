@@ -18,40 +18,7 @@ import SendIcon from '@mui/icons-material/Send';
 import { errorHandler } from 'utils/errorHandler';
 import CommentCard from '../CommentCard/CommentCard';
 import useLocalStorage from 'utils/useLocalstorage';
-
-interface InterfacePostCardProps {
-  id: string;
-  creator: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    id: string;
-  };
-  image: string;
-  video: string;
-  text: string;
-  title: string;
-  likeCount: number;
-  commentCount: number;
-  comments: {
-    creator: {
-      _id: string;
-      firstName: string;
-      lastName: string;
-      email: string;
-    };
-    likeCount: number;
-    likedBy: {
-      id: string;
-    }[];
-    text: string;
-  }[];
-  likedBy: {
-    firstName: string;
-    lastName: string;
-    id: string;
-  }[];
-}
+import type { InterfacePostCard } from 'utils/interfaces';
 
 interface InterfaceCommentCardProps {
   id: string;
@@ -68,7 +35,7 @@ interface InterfaceCommentCardProps {
   text: string;
 }
 
-export default function postCard(props: InterfacePostCardProps): JSX.Element {
+export default function postCard(props: InterfacePostCard): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'postCard',
   });
@@ -173,7 +140,7 @@ export default function postCard(props: InterfacePostCardProps): JSX.Element {
   };
 
   return (
-    <>
+    <div data-testid="postCardContainer">
       <Card className="my-3">
         <Card.Header>
           <div className={`${styles.cardHeader}`}>
@@ -289,6 +256,6 @@ export default function postCard(props: InterfacePostCardProps): JSX.Element {
           </InputGroup>
         </Modal.Body>
       </Modal>
-    </>
+    </div>
   );
 }
