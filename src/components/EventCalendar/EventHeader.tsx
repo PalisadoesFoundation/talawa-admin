@@ -69,7 +69,6 @@ function eventHeader({
             </Dropdown>
           </div>
           <div>
-            {/*istanbul ignore next*/}
             <Dropdown className={styles.selectType}>
               <Dropdown.Toggle
                 id="dropdown-basic"

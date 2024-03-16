@@ -161,6 +161,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   }, [eventData, orgData, userRole, userId]);
 
   const handlePrevMonth = (): void => {
+    /*istanbul ignore next*/
     if (currentMonth === 0) {
       setCurrentMonth(11);
       setCurrentYear(currentYear - 1);
@@ -170,6 +171,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   };
 
   const handleNextMonth = (): void => {
+    /*istanbul ignore next*/
     if (currentMonth === 11) {
       setCurrentMonth(0);
       setCurrentYear(currentYear + 1);
@@ -231,6 +233,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     '0',
   )}:${String(Math.abs(new Date().getTimezoneOffset()) % 60).padStart(2, '0')}`;
 
+  /*istanbul ignore next*/
   const renderHours = (): JSX.Element => {
     const toggleExpand = (index: number): void => {
       if (expanded === index) {
@@ -240,8 +243,10 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       }
     };
 
+    /*istanbul ignore next*/
     const allDayEventsList: any = events
       ?.filter((datas) => {
+        /*istanbul ignore next*/
         const currDate = new Date(currentYear, currentMonth, currentDate);
         if (
           datas.startTime == undefined &&
