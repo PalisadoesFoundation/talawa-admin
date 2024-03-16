@@ -1,14 +1,20 @@
-/*eslint-disable*/
 import { useMutation, useQuery } from '@apollo/client';
-import { CREATE_PlEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
+import { WarningAmberRounded } from '@mui/icons-material';
+import {
+  CREATE_PlEDGE,
+  DELETE_PLEDGE,
+  UPDATE_PLEDGE,
+} from 'GraphQl/Mutations/PledgeMutation';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
+import Loader from 'components/Loader/Loader';
 import dayjs from 'dayjs';
 import { useState, type ChangeEvent } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { currencySymbols } from 'utils/currency';
-import {
+import type {
   InterfaceCreatePledge,
   InterfacePledgeInfo,
   InterfaceQueryFundCampaignsPledges,
@@ -16,15 +22,21 @@ import {
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './FundCampaignPledge.module.css';
 import PledgeCreateModal from './PledgeCreateModal';
+import PledgeDeleteModal from './PledgeDeleteModal';
 import PledgeEditModal from './PledgeEditModal';
-
-const fundCampaignPledge = () => {
+import React from 'react';
+const fundCampaignPledge = (): JSX.Element => {
   const { fundCampaignId: currentUrl } = useParams();
   const { getItem } = useLocalStorage();
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'pledges',
+  });
 
   const [createPledgeModalIsOpen, setCreatePledgeModalIsOpen] =
     useState<boolean>(false);
   const [updatePledgeModalIsOpen, setUpdatePledgeModalIsOpen] =
+    useState<boolean>(false);
+  const [deletePledgeModalIsOpen, setDeletePledgeModalIsOpen] =
     useState<boolean>(false);
   const [pledge, setPledge] = useState<InterfacePledgeInfo | null>(null);
 
@@ -36,6 +48,7 @@ const fundCampaignPledge = () => {
   });
   const [createPledge] = useMutation(CREATE_PlEDGE);
   const [updatePledge] = useMutation(UPDATE_PLEDGE);
+  const [deletePledge] = useMutation(DELETE_PLEDGE);
 
   const {
     data: fundCampaignPledgeData,
@@ -68,6 +81,12 @@ const fundCampaignPledge = () => {
   const hideUpdatePledgeModal = (): void => {
     setUpdatePledgeModalIsOpen(false);
   };
+  const showDeletePledgeModal = (): void => {
+    setDeletePledgeModalIsOpen(true);
+  };
+  const hideDeletePledgeModal = (): void => {
+    setDeletePledgeModalIsOpen(false);
+  };
   const handleEditClick = (pledge: InterfacePledgeInfo): void => {
     setFormState({
       pledgeAmount: pledge.amount,
@@ -77,6 +96,10 @@ const fundCampaignPledge = () => {
     });
     setPledge(pledge);
     showUpdatePledgeModal();
+  };
+  const handleDeleteClick = (pledge: InterfacePledgeInfo): void => {
+    setPledge(pledge);
+    showDeletePledgeModal();
   };
   const createPledgeHandler = async (
     e: ChangeEvent<HTMLFormElement>,
@@ -96,7 +119,7 @@ const fundCampaignPledge = () => {
       });
       await refetchFundCampaignPledge();
       hideCreatePledgeModal();
-      toast.success('Pledge Created Successfully');
+      toast.success(t('pledgeCreated'));
       setFormState({
         pledgeAmount: 0,
         pledgeCurrency: 'USD',
@@ -113,7 +136,6 @@ const fundCampaignPledge = () => {
   ): Promise<void> => {
     try {
       e.preventDefault();
-      const userId = getItem('userId');
       const updatedFields: { [key: string]: any } = {};
       if (formState.pledgeAmount !== pledge?.amount) {
         updatedFields.amount = formState.pledgeAmount;
@@ -146,41 +168,70 @@ const fundCampaignPledge = () => {
       });
       await refetchFundCampaignPledge();
       hideUpdatePledgeModal();
-      toast.success('Pledge Updated Successfully');
+      toast.success(t('pledgeUpdated'));
     } catch (error: unknown) {
       toast.error((error as Error).message);
       console.log(error);
     }
   };
-
+  const deleteHandler = async (): Promise<void> => {
+    try {
+      await deletePledge({
+        variables: {
+          id: pledge?._id,
+        },
+      });
+      await refetchFundCampaignPledge();
+      hideDeletePledgeModal();
+      toast.success(t('pledgeDeleted'));
+    } catch (error: unknown) {
+      toast.error((error as Error).message);
+      console.log(error);
+    }
+  };
+  if (fundCampaignPledgeLoading) return <Loader size="xl" />;
+  if (fundCampaignPledgeError) {
+    return (
+      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+        <div className={styles.message} data-testid="errorMsg">
+          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <h6 className="fw-bold text-danger text-center">
+            Error occured while loading Funds
+            <br />
+            {fundCampaignPledgeError.message}
+          </h6>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className={styles.pledgeContainer}>
       <Button
         variant="success"
         className={styles.createPledgeBtn}
         onClick={showCreatePledgeModal}
-        data-testid="addCampaignBtn"
+        data-testid="addPledgeBtn"
       >
         <i className={'fa fa-plus me-2'} />
-        Add Pledge
+        {t('addPledge')}
       </Button>
       <div className={`${styles.container} bg-white rounded-4 `}>
         <div className="mx-1 my-4 py-4">
           <Row className="mx-4 border border-light-subtle rounded-top-4 py-3 justify-content-between shadow-sm">
             <Col xs={7} sm={2} md={3} lg={3} className=" fw-bold">
-              <div className="ms-2">Volunteers</div>
+              <div className="ms-2"> {t('volunteers')} </div>
             </Col>
             <Col className=" fw-bold " md={2} sm={2}>
-              <div className="ms-3">StartDate</div>
+              <div className="ms-3">{t('startDate')}</div>
             </Col>
             <Col className=" fw-bold " sm={2} md={2}>
-              <div className="ms-3">EndDate</div>
+              <div className="ms-3">{t('endDate')}</div>
             </Col>
             <Col className=" fw-bold" md={2} sm={2}>
-              <div className="ms-3">Pledged</div>
+              <div>{t('pledgeAmount')}</div>
             </Col>
             <Col xs={5} md={2} sm={2} lg={2} className=" fw-bold">
-              <div className="ms-3">Options</div>
+              <div className="ms-3"> {t('pledgeOptions')} </div>
             </Col>
           </Row>
           <div className="mx-4 bg-light-subtle border border-light-subtle border-top-0 rounded-bottom-4 shadow-sm">
@@ -202,14 +253,14 @@ const fundCampaignPledge = () => {
                     </Col>
                     <Col sm={2} md={2}>
                       <div className="ms-1">
-                        {new Date(pledge.startDate).toLocaleDateString()}
+                        {dayjs(pledge.startDate).format('DD/MM/YYYY')}
                       </div>
                     </Col>
                     <Col sm={2} md={2}>
-                      <div>{new Date(pledge.endDate).toLocaleDateString()}</div>
+                      <div>{dayjs(pledge.endDate).format('DD/MM/YYYY')}</div>
                     </Col>
                     <Col sm={2} md={2}>
-                      <div>
+                      <div className="ms-2">
                         {
                           currencySymbols[
                             pledge.currency as keyof typeof currencySymbols
@@ -223,6 +274,7 @@ const fundCampaignPledge = () => {
                         variant="success"
                         size="sm"
                         className="me-2"
+                        data-testid="editPledgeBtn"
                         onClick={() => {
                           handleEditClick(pledge);
                           console.log('Edit Pledge');
@@ -234,7 +286,9 @@ const fundCampaignPledge = () => {
                       <Button
                         size="sm"
                         variant="danger"
+                        data-testid="deletePledgeBtn"
                         onClick={() => {
+                          handleDeleteClick(pledge);
                           console.log('Delete Pledge');
                         }}
                       >
@@ -242,8 +296,20 @@ const fundCampaignPledge = () => {
                       </Button>
                     </Col>
                   </Row>
+                  {fundCampaignPledgeData.getFundraisingCampaignById.pledges &&
+                    index !==
+                      fundCampaignPledgeData.getFundraisingCampaignById.pledges
+                        .length -
+                        1 && <hr className="mx-3" />}
                 </div>
               ),
+            )}
+
+            {fundCampaignPledgeData?.getFundraisingCampaignById.pledges
+              .length === 0 && (
+              <div className="pt-2 text-center fw-semibold text-body-tertiary ">
+                <h5>{t('noPledges')}</h5>
+              </div>
             )}
           </div>
         </div>
@@ -264,6 +330,7 @@ const fundCampaignPledge = () => {
           fundCampaignPledgeData?.getFundraisingCampaignById.endDate ??
           new Date()
         }
+        t={t}
       />
 
       {/* Update Pledge Modal */}
@@ -281,6 +348,15 @@ const fundCampaignPledge = () => {
           fundCampaignPledgeData?.getFundraisingCampaignById.endDate ??
           new Date()
         }
+        t={t}
+      />
+
+      {/* Delete Pledge Modal */}
+      <PledgeDeleteModal
+        deletePledgeModalIsOpen={deletePledgeModalIsOpen}
+        hideDeletePledgeModal={hideDeletePledgeModal}
+        deletePledgeHandler={deleteHandler}
+        t={t}
       />
     </div>
   );

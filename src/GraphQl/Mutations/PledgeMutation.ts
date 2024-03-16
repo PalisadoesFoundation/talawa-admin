@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import gql from 'graphql-tag';
 
 /**
@@ -76,6 +75,8 @@ export const UPDATE_PLEDGE = gql`
  */
 export const DELETE_PLEDGE = gql`
   mutation DeleteFundraisingCampaignPledge($id: ID!) {
-    removeFundraisingCampaignPledge(id: $id)
+    removeFundraisingCampaignPledge(id: $id) {
+      _id
+    }
   }
 `;

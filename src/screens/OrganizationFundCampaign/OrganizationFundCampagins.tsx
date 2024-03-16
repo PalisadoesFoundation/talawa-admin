@@ -207,7 +207,7 @@ const orgFundCampaign = (): JSX.Element => {
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading Funds
+            Error occured while loading Campaigns
             <br />
             {fundCampaignError.message}
           </h6>
@@ -263,6 +263,7 @@ const orgFundCampaign = (): JSX.Element => {
                     <div
                       className={` ${styles.campaignNameInfo} text-bg-body-tertiary:hover `}
                       onClick={() => handleClick(campaign._id)}
+                      data-testid="campaignName"
                     >
                       {campaign.name}
                     </div>

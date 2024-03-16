@@ -1,11 +1,11 @@
-/*eslint-disable*/
 import { DatePicker } from '@mui/x-date-pickers';
-import dayjs, { Dayjs } from 'dayjs';
-import { ChangeEvent } from 'react';
+import dayjs, { type Dayjs } from 'dayjs';
+import type { ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { currencyOptions } from 'utils/currency';
-import { InterfaceCreatePledge } from 'utils/interfaces';
+import type { InterfaceCreatePledge } from 'utils/interfaces';
 import styles from './FundCampaignPledge.module.css';
+import React from 'react';
 
 interface InterfaceUpdatePledgeModal {
   updatePledgeModalIsOpen: boolean;
@@ -15,6 +15,7 @@ interface InterfaceUpdatePledgeModal {
   updatePledgeHandler: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
   startDate: Date;
   endDate: Date;
+  t: (key: string) => string;
 }
 const PledgeEditModal: React.FC<InterfaceUpdatePledgeModal> = ({
   updatePledgeModalIsOpen,
@@ -24,6 +25,7 @@ const PledgeEditModal: React.FC<InterfaceUpdatePledgeModal> = ({
   updatePledgeHandler,
   startDate,
   endDate,
+  t,
 }) => {
   return (
     <>
@@ -33,11 +35,11 @@ const PledgeEditModal: React.FC<InterfaceUpdatePledgeModal> = ({
         show={updatePledgeModalIsOpen}
       >
         <Modal.Header>
-          <p className={styles.titlemodal}> Edit Pledge</p>
+          <p className={styles.titlemodal}> {t('editPledge')}</p>
           <Button
             variant="danger"
             onClick={hideUpdatePledgeModal}
-            data-testid="createCampaignCloseBtn"
+            data-testid="updatePledgeCloseBtn"
           >
             {' '}
             <i className="fa fa-times"></i>
@@ -48,7 +50,7 @@ const PledgeEditModal: React.FC<InterfaceUpdatePledgeModal> = ({
             <Form.Group className="d-flex flex-column mx-auto  mb-3">
               <div className="mb-4">
                 <DatePicker
-                  label="Start Date"
+                  label={t('startDate')}
                   value={dayjs(formState.pledgeStartDate)}
                   className="me-4 "
                   onChange={(date: Dayjs | null): void => {
@@ -69,7 +71,7 @@ const PledgeEditModal: React.FC<InterfaceUpdatePledgeModal> = ({
               </div>
               <div>
                 <DatePicker
-                  label="End Date"
+                  label={t('endDate')}
                   value={dayjs(endDate)}
                   onChange={(date: Dayjs | null): void => {
                     if (date) {
@@ -85,7 +87,7 @@ const PledgeEditModal: React.FC<InterfaceUpdatePledgeModal> = ({
             </Form.Group>
             <Form.Group className="d-flex mx-auto">
               <Form.Group>
-                <Form.Label className="">Currency</Form.Label>
+                <Form.Label className=""> {t('currency')}</Form.Label>
                 <div>
                   <Form.Control
                     as="select"
@@ -101,7 +103,7 @@ const PledgeEditModal: React.FC<InterfaceUpdatePledgeModal> = ({
                     }}
                   >
                     <option value="" disabled>
-                      Select Currency
+                      {t('selectCurrency')}
                     </option>
                     {currencyOptions.map((currency) => (
                       <option key={currency.value} value={currency.value}>
@@ -112,10 +114,10 @@ const PledgeEditModal: React.FC<InterfaceUpdatePledgeModal> = ({
                 </div>
               </Form.Group>
               <Form.Group className="me-auto">
-                <Form.Label> Amount </Form.Label>
+                <Form.Label> {t('amount')} </Form.Label>
                 <Form.Control
                   type="number"
-                  placeholder="Enter Funding Goal"
+                  placeholder="Enter Pledge Amount"
                   value={formState.pledgeAmount}
                   className="p-1 "
                   onChange={(e) => {
@@ -132,9 +134,9 @@ const PledgeEditModal: React.FC<InterfaceUpdatePledgeModal> = ({
             <Button
               type="submit"
               className={styles.greenregbtn}
-              data-testid="createCampaignBtn"
+              data-testid="updatePledgeBtn"
             >
-              Update Pledge
+              {t('updatePledge')}
             </Button>
           </Form>
         </Modal.Body>

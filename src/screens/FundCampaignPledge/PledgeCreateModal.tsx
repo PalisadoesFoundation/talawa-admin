@@ -1,11 +1,11 @@
-/*eslint-disable*/
 import { DatePicker } from '@mui/x-date-pickers';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs, { type Dayjs } from 'dayjs';
 import { type ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { currencyOptions } from 'utils/currency';
-import { InterfaceCreatePledge } from 'utils/interfaces';
+import type { InterfaceCreatePledge } from 'utils/interfaces';
 import styles from './FundCampaignPledge.module.css';
+import React from 'react';
 
 interface InterfaceCreatePledgeModal {
   createCamapignModalIsOpen: boolean;
@@ -15,6 +15,7 @@ interface InterfaceCreatePledgeModal {
   createPledgeHandler: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
   startDate: Date;
   endDate: Date;
+  t: (key: string) => string;
 }
 
 const PledgeCreateModal: React.FC<InterfaceCreatePledgeModal> = ({
@@ -25,6 +26,7 @@ const PledgeCreateModal: React.FC<InterfaceCreatePledgeModal> = ({
   createPledgeHandler,
   startDate,
   endDate,
+  t,
 }) => {
   return (
     <>
@@ -34,11 +36,11 @@ const PledgeCreateModal: React.FC<InterfaceCreatePledgeModal> = ({
         show={createCamapignModalIsOpen}
       >
         <Modal.Header>
-          <p className={styles.titlemodal}> Create Pledge</p>
+          <p className={styles.titlemodal}> {t('createPledge')}</p>
           <Button
             variant="danger"
             onClick={hideCreateCampaignModal}
-            data-testid="createCampaignCloseBtn"
+            data-testid="createPledgeCloseBtn"
           >
             {' '}
             <i className="fa fa-times"></i>
@@ -49,7 +51,7 @@ const PledgeCreateModal: React.FC<InterfaceCreatePledgeModal> = ({
             <Form.Group className="d-flex flex-column mx-auto  mb-3">
               <div className="mb-4">
                 <DatePicker
-                  label="Start Date"
+                  label={t('startDate')}
                   value={dayjs(startDate)}
                   className="me-4 "
                   onChange={(date: Dayjs | null): void => {
@@ -70,7 +72,7 @@ const PledgeCreateModal: React.FC<InterfaceCreatePledgeModal> = ({
               </div>
               <div>
                 <DatePicker
-                  label="End Date"
+                  label={t('endDate')}
                   value={dayjs(endDate)}
                   onChange={(date: Dayjs | null): void => {
                     if (date) {
@@ -86,7 +88,7 @@ const PledgeCreateModal: React.FC<InterfaceCreatePledgeModal> = ({
             </Form.Group>
             <Form.Group className="d-flex mx-auto">
               <Form.Group>
-                <Form.Label className="">Currency</Form.Label>
+                <Form.Label className="">{t('currency')}</Form.Label>
                 <div>
                   <Form.Control
                     as="select"
@@ -102,7 +104,7 @@ const PledgeCreateModal: React.FC<InterfaceCreatePledgeModal> = ({
                     }}
                   >
                     <option value="" disabled>
-                      Select Currency
+                      {t('selectCurrency')}
                     </option>
                     {currencyOptions.map((currency) => (
                       <option key={currency.value} value={currency.value}>
@@ -113,10 +115,10 @@ const PledgeCreateModal: React.FC<InterfaceCreatePledgeModal> = ({
                 </div>
               </Form.Group>
               <Form.Group className="me-auto">
-                <Form.Label> Amount </Form.Label>
+                <Form.Label> {t('amount')} </Form.Label>
                 <Form.Control
                   type="number"
-                  placeholder="Enter Funding Goal"
+                  placeholder="Enter Pledge Amount"
                   value={formState.pledgeAmount}
                   className="p-1 "
                   onChange={(e) => {
@@ -133,9 +135,9 @@ const PledgeCreateModal: React.FC<InterfaceCreatePledgeModal> = ({
             <Button
               type="submit"
               className={styles.greenregbtn}
-              data-testid="createCampaignBtn"
+              data-testid="createPledgeBtn"
             >
-              Create Pledge
+              {t('createPledge')}
             </Button>
           </Form>
         </Modal.Body>

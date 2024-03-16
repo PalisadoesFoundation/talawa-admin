@@ -44,3 +44,10 @@
     box-shadow 0.2s;
   width: 100%;
 }
+.message {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
