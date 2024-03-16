@@ -1,6 +1,12 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen, fireEvent } from '@testing-library/react';
+import {
+  act,
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+} from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import 'jest-location-mock';
@@ -95,14 +101,41 @@ const MOCKS = [
       query: CREATE_EVENT_MUTATION,
       variables: {
         title: 'Dummy Org',
+        location: 'New Delhi',
         description: 'This is a dummy organization',
         isPublic: false,
-        recurring: true,
+        recurring: false,
         isRegisterable: true,
         organizationId: undefined,
-        startDate: 'Thu Mar 28 20222',
-        endDate: 'Fri Mar 28 20223',
+        startDate: '2022-03-28',
+        endDate: '2023-04-15',
         allDay: true,
+      },
+    },
+    result: {
+      data: {
+        createEvent: {
+          _id: '1',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_EVENT_MUTATION,
+      variables: {
+        title: 'Dummy Org',
+        location: 'New Delhi',
+        description: 'This is a dummy organization',
+        isPublic: true,
+        recurring: false,
+        isRegisterable: false,
+        organizationId: undefined,
+        startDate: '2024-03-16',
+        endDate: '2024-03-16',
+        allDay: false,
+        startTime: '09:00:00Z',
+        endTime: '17:00:00Z',
       },
     },
     result: {
@@ -124,6 +157,12 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
+
+const translations = JSON.parse(
+  JSON.stringify(
+    i18nForTest.getDataByLanguage('en')?.translation.organizationEvents,
+  ),
+);
 
 jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
   return {
@@ -148,8 +187,8 @@ describe('Organisation Events Page', () => {
     startDate: '03/28/2022',
     endDate: '04/15/2023',
     location: 'New Delhi',
-    startTime: '02:00',
-    endTime: '06:00',
+    startTime: '09:00 AM',
+    endTime: '05:00 PM',
   };
 
   global.alert = jest.fn();
@@ -237,6 +276,10 @@ describe('Organisation Events Page', () => {
     );
 
     await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
+    });
   });
 
   test('Testing toggling of Create event modal', async () => {
@@ -258,9 +301,25 @@ describe('Organisation Events Page', () => {
 
     await wait();
 
+    await waitFor(() => {
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
+    });
+
     userEvent.click(screen.getByTestId('createEventModalBtn'));
 
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('createEventModalCloseBtn'),
+      ).toBeInTheDocument();
+    });
+
     userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('createEventModalCloseBtn'),
+      ).not.toBeInTheDocument();
+    });
   });
 
   test('Testing Create event modal', async () => {
@@ -282,16 +341,21 @@ describe('Organisation Events Page', () => {
 
     await wait();
 
+    await waitFor(() => {
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
+    });
+
     userEvent.click(screen.getByTestId('createEventModalBtn'));
 
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText(/Enter Title/i)).toBeInTheDocument();
+    });
+
     userEvent.type(screen.getByPlaceholderText(/Enter Title/i), formData.title);
+
     userEvent.type(
       screen.getByPlaceholderText(/Enter Description/i),
       formData.description,
-    );
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter Location/i),
-      formData.location,
     );
     userEvent.type(
       screen.getByPlaceholderText(/Enter Location/i),
@@ -308,8 +372,6 @@ describe('Organisation Events Page', () => {
       target: { value: formData.startDate },
     });
 
-    userEvent.click(screen.getByTestId('alldayCheck'));
-    userEvent.click(screen.getByTestId('recurringCheck'));
     userEvent.click(screen.getByTestId('ispublicCheck'));
     userEvent.click(screen.getByTestId('registrableCheck'));
 
@@ -324,13 +386,21 @@ describe('Organisation Events Page', () => {
 
     expect(endDateDatePicker).toHaveValue(formData.endDate);
     expect(startDateDatePicker).toHaveValue(formData.startDate);
-    expect(screen.getByTestId('alldayCheck')).not.toBeChecked();
-    expect(screen.getByTestId('recurringCheck')).toBeChecked();
     expect(screen.getByTestId('ispublicCheck')).not.toBeChecked();
     expect(screen.getByTestId('registrableCheck')).toBeChecked();
 
     userEvent.click(screen.getByTestId('createEventBtn'));
-  }, 15000);
+
+    await waitFor(() => {
+      expect(toast.success).toBeCalledWith(translations.eventCreated);
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('createEventModalCloseBtn'),
+      ).not.toBeInTheDocument();
+    });
+  });
 
   test('Testing Create event with invalid inputs', async () => {
     const formData = {
@@ -364,7 +434,15 @@ describe('Organisation Events Page', () => {
 
     await wait();
 
+    await waitFor(() => {
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
+    });
+
     userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText(/Enter Title/i)).toBeInTheDocument();
+    });
 
     userEvent.type(screen.getByPlaceholderText(/Enter Title/i), formData.title);
     userEvent.type(
@@ -411,7 +489,15 @@ describe('Organisation Events Page', () => {
     expect(toast.warning).toBeCalledWith('Title can not be blank!');
     expect(toast.warning).toBeCalledWith('Description can not be blank!');
     expect(toast.warning).toBeCalledWith('Location can not be blank!');
-  }, 15000);
+
+    userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('createEventModalCloseBtn'),
+      ).not.toBeInTheDocument();
+    });
+  });
 
   test('Testing if the event is not for all day', async () => {
     render(
@@ -432,22 +518,54 @@ describe('Organisation Events Page', () => {
 
     await wait();
 
+    await waitFor(() => {
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
+    });
+
     userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText(/Enter Title/i)).toBeInTheDocument();
+    });
+
     userEvent.type(screen.getByPlaceholderText(/Enter Title/i), formData.title);
+
     userEvent.type(
       screen.getByPlaceholderText(/Enter Description/i),
       formData.description,
     );
+
     userEvent.type(
       screen.getByPlaceholderText(/Enter Location/i),
       formData.location,
     );
     userEvent.click(screen.getByTestId('alldayCheck'));
-    await wait();
 
-    userEvent.type(screen.getByLabelText('Start Time'), formData.startTime);
-    userEvent.type(screen.getByLabelText('End Time'), formData.endTime);
+    await waitFor(() => {
+      expect(screen.getByLabelText(translations.startTime)).toBeInTheDocument();
+    });
+
+    const startTimePicker = screen.getByLabelText(translations.startTime);
+    const endTimePicker = screen.getByLabelText(translations.endTime);
+
+    fireEvent.change(startTimePicker, {
+      target: { value: formData.startTime },
+    });
+
+    fireEvent.change(endTimePicker, {
+      target: { value: formData.endTime },
+    });
 
     userEvent.click(screen.getByTestId('createEventBtn'));
+
+    await waitFor(() => {
+      expect(toast.success).toBeCalledWith(translations.eventCreated);
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('createEventModalCloseBtn'),
+      ).not.toBeInTheDocument();
+    });
   });
 });

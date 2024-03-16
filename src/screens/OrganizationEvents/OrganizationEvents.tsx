@@ -82,17 +82,19 @@ function organizationEvents(): JSX.Element {
     setCustomRecurrenceModalIsOpen(false);
   };
 
-  const { data, loading, error, refetch } = useQuery(
-    ORGANIZATION_EVENT_CONNECTION_LIST,
-    {
-      variables: {
-        organization_id: currentUrl,
-        title_contains: '',
-        description_contains: '',
-        location_contains: '',
-      },
+  const {
+    data,
+    loading,
+    error: eventDataError,
+    refetch,
+  } = useQuery(ORGANIZATION_EVENT_CONNECTION_LIST, {
+    variables: {
+      organization_id: currentUrl,
+      title_contains: '',
+      description_contains: '',
+      location_contains: '',
     },
-  );
+  });
 
   const { data: orgData } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: currentUrl },
@@ -132,10 +134,13 @@ function organizationEvents(): JSX.Element {
             endDate: endDate ? dayjs(endDate).format('YYYY-MM-DD') : undefined,
             allDay: alldaychecked,
             location: formState.location,
-            startTime: !alldaychecked ? formState.startTime + 'Z' : null,
-            endTime: !alldaychecked ? formState.endTime + 'Z' : null,
-            frequency,
-            weekDays: frequency === Frequency.WEEKLY ? weekDays : undefined,
+            startTime: !alldaychecked ? formState.startTime + 'Z' : undefined,
+            endTime: !alldaychecked ? formState.endTime + 'Z' : undefined,
+            frequency: recurringchecked ? frequency : undefined,
+            weekDays:
+              recurringchecked && frequency === Frequency.WEEKLY
+                ? weekDays
+                : undefined,
             count,
           },
         });
@@ -178,10 +183,10 @@ function organizationEvents(): JSX.Element {
   };
 
   useEffect(() => {
-    if (error) {
+    if (eventDataError) {
       navigate('/orglist');
     }
-  }, [error]);
+  }, [eventDataError]);
 
   if (loading || loading2) {
     return <Loader />;
