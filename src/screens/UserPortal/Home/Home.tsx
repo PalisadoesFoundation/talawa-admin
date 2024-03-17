@@ -85,11 +85,8 @@ export default function home(): JSX.Element {
   const carouselRef = useRef<HTMLDivElement>(null);
 
   const handleScrollRight = (): void => {
-    if (carouselRef.current) {
-      (carouselRef.current as any).scrollBy({
-        left: 300, // Adjust this value to change the scroll amount
-        behavior: 'smooth',
-      });
+    if (carouselRef.current instanceof HTMLElement) {
+      carouselRef.current.scrollLeft += 300;
     }
   };
 
@@ -210,43 +207,6 @@ export default function home(): JSX.Element {
               {posts
                 .filter((post) => post.pinned === true)
                 .map((post: any) => {
-                  const allLikes: any = [];
-                  post.likedBy.forEach((value: any) => {
-                    const singleLike = {
-                      firstName: value.firstName,
-                      lastName: value.lastName,
-                      id: value._id,
-                    };
-                    allLikes.push(singleLike);
-                  });
-
-                  const postComments: any = [];
-                  post.comments.forEach((value: any) => {
-                    const commentLikes: any = [];
-
-                    value.likedBy.forEach((commentLike: any) => {
-                      const singleLike = {
-                        id: commentLike._id,
-                      };
-                      commentLikes.push(singleLike);
-                    });
-
-                    const singleCommnet: any = {
-                      id: value._id,
-                      creator: {
-                        firstName: value.creator.firstName,
-                        lastName: value.creator.lastName,
-                        id: value.creator._id,
-                        image: value.creator.image,
-                      },
-                      likeCount: value.likeCount,
-                      likedBy: commentLikes,
-                      text: value.text,
-                    };
-
-                    postComments.push(singleCommnet);
-                  });
-
                   const cardProps: InterfacePostCardProps = {
                     id: post._id,
                     creator: {
@@ -268,7 +228,7 @@ export default function home(): JSX.Element {
                 <Button
                   className={`${styles.rightScrollButton}`}
                   onClick={handleScrollRight}
-                  data-testid="scrollRightButton"
+                  aria-label="Scroll Right"
                 >
                   <RightScrollIcon />
                 </Button>
@@ -281,43 +241,6 @@ export default function home(): JSX.Element {
             {posts
               .filter((post) => post.pinned === false)
               .map((post: any) => {
-                const allLikes: any = [];
-                post.likedBy.forEach((value: any) => {
-                  const singleLike = {
-                    firstName: value.firstName,
-                    lastName: value.lastName,
-                    id: value._id,
-                  };
-                  allLikes.push(singleLike);
-                });
-
-                const postComments: any = [];
-                post.comments.forEach((value: any) => {
-                  const commentLikes: any = [];
-
-                  value.likedBy.forEach((commentLike: any) => {
-                    const singleLike = {
-                      id: commentLike._id,
-                    };
-                    commentLikes.push(singleLike);
-                  });
-
-                  const singleCommnet: any = {
-                    id: value._id,
-                    creator: {
-                      firstName: value.creator.firstName,
-                      lastName: value.creator.lastName,
-                      id: value.creator._id,
-                      image: value.creator.image,
-                    },
-                    likeCount: value.likeCount,
-                    likedBy: commentLikes,
-                    text: value.text,
-                  };
-
-                  postComments.push(singleCommnet);
-                });
-
                 const cardProps: InterfacePostCardProps = {
                   id: post._id,
                   creator: {

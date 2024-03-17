@@ -24,6 +24,20 @@ describe('PostCard compoenent', () => {
     title: 'This is post test title',
     createdAt: 1647398400000,
   };
+  const postWithImage = {
+    id: '1',
+    creator: {
+      firstName: 'John',
+      lastName: 'Doe',
+      image: '',
+      id: '1',
+    },
+    image: 'https://example.com/image.jpg',
+    video: '',
+    text: 'Lorem ipsum dolor sit amet',
+    title: 'Example Post',
+    createdAt: 1626166078000,
+  };
   test('Render post card with the correct content.', () => {
     render(
       <MockedProvider addTypename={false}>
@@ -64,5 +78,22 @@ describe('PostCard compoenent', () => {
     expect(screen.getByText('Report')).toBeInTheDocument();
     expect(screen.getByText('Pin Post')).toBeInTheDocument();
     expect(screen.getByText('Share')).toBeInTheDocument();
+  });
+
+  test('Renders image if the image prop is provided', async () => {
+    render(
+      <MockedProvider addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...postWithImage} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    const Image = screen.getByRole('img');
+    expect(Image).toBeInTheDocument();
+    expect(Image).toHaveAttribute('src', postWithImage.image);
   });
 });

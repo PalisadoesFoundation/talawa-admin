@@ -52,7 +52,7 @@ const MOCKS = [
               commentCount: 0,
               comments: [],
               likedBy: [],
-              pinned: false,
+              pinned: true,
             },
             {
               _id: '6411e54835d7ba2344a78e29',
@@ -266,7 +266,7 @@ describe('Testing Home Screen [User Portal]', () => {
     expect(postInput).toHaveValue('Testing post content');
   });
 
-  test('Scroll right button should be in document for pinned posts.', async () => {
+  test('Should scroll the carousel right on the" click', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -278,10 +278,18 @@ describe('Testing Home Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
     await wait();
-
-    const scrollRightButton = screen.getByTestId('scrollRightButton');
+    const carousel = screen.getByTestId('carousel');
+    expect(carousel).toBeInTheDocument();
+    const scrollRightButton = screen.getByRole('button', {
+      name: 'Scroll Right',
+    });
     expect(scrollRightButton).toBeInTheDocument();
+    expect(carousel.scrollLeft).toBe(0);
+    act(() => {
+      userEvent.click(scrollRightButton);
+    });
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    expect(carousel.scrollLeft).toBeGreaterThan(0);
   });
 });

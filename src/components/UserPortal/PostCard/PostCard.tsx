@@ -48,7 +48,8 @@ export default function postCard(props: InterfacePostCardProps): JSX.Element {
               <img
                 src={props.creator.image}
                 className={`${styles.profile}`}
-              ></img>
+                alt="postImage"
+              />
             )}
             {!props.creator.image && (
               <div className={`${styles.profileNotPresent}`}></div>
