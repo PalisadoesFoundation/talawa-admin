@@ -207,6 +207,7 @@ function loginPage(): JSX.Element {
         setItem('userId', loginData.login.user._id);
         setItem('refreshToken', loginData.login.refreshToken);
         setItem('IsLoggedIn', 'TRUE');
+        setItem('UserType', 'USER');
         navigator.clipboard.writeText('');
         if (getItem('IsLoggedIn') == 'TRUE') {
           history.push('/user/organizations/');

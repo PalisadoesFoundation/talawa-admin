@@ -19,7 +19,7 @@ import PostCard from 'components/UserPortal/PostCard/PostCard';
 import { useMutation, useQuery } from '@apollo/client';
 import {
   ADVERTISEMENTS_GET,
-  ORGANIZATION_POST_CONNECTION_LIST,
+  ORGANIZATION_POST_LIST,
   USER_DETAILS,
 } from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -70,8 +70,8 @@ interface InterfaceAdContent {
   _id: string;
   name: string;
   type: string;
-  orgId: string;
-  link: string;
+  organization: { _id: string };
+  mediaUrl: string;
   endDate: string;
   startDate: string;
 }
@@ -105,7 +105,7 @@ export default function home(): JSX.Element {
     data,
     refetch,
     loading: loadingPosts,
-  } = useQuery(ORGANIZATION_POST_CONNECTION_LIST, {
+  } = useQuery(ORGANIZATION_POST_LIST, {
     variables: { id: organizationId },
   });
 
@@ -155,13 +155,13 @@ export default function home(): JSX.Element {
 
   React.useEffect(() => {
     if (data) {
-      setPosts(data.postsByOrganizationConnection.edges);
+      setPosts(data.organizations[0].posts.edges);
     }
   }, [data]);
 
   React.useEffect(() => {
     if (promotedPostsData) {
-      setAdContent(promotedPostsData.getAdvertisements);
+      setAdContent(promotedPostsData.advertisementsConnection);
     }
   }, [data]);
 
@@ -176,7 +176,8 @@ export default function home(): JSX.Element {
   ): InterfaceAdContent[] => {
     return adCont.filter(
       (ad: InterfaceAdContent) =>
-        ad.orgId === currentOrgId && new Date(ad.endDate) > currentDate
+        ad.organization._id === currentOrgId &&
+        new Date(ad.endDate) > currentDate
     );
   };
 
@@ -208,7 +209,9 @@ export default function home(): JSX.Element {
             <Row className="d-flex align-items-center justify-content-center">
               <Col xs={2} className={styles.userImage}>
                 <Image
-                  src={userData?.image ? userData?.image : UserDefault}
+                  src={
+                    userData?.user.image ? userData?.user.image : UserDefault
+                  }
                   roundedCircle
                   className="mt-2"
                 />
@@ -317,10 +320,10 @@ export default function home(): JSX.Element {
             <div data-testid="promotedPostsContainer">
               {filteredAd.map((post: any) => (
                 <PromotedPost
-                  key={post._id}
-                  id={post._id}
-                  image={post.link}
-                  title={post.name}
+                  key={post.organization._id}
+                  id={post.organization._id}
+                  image={post.organization.mediaUrl}
+                  title={post.organization.name}
                   data-testid="postid"
                 />
               ))}
@@ -411,12 +414,14 @@ export default function home(): JSX.Element {
               <span className="d-flex gap-2 align-items-center">
                 <span className={styles.userImage}>
                   <Image
-                    src={userData?.image ? userData?.image : UserDefault}
+                    src={
+                      userData?.user.image ? userData?.user.image : UserDefault
+                    }
                     roundedCircle
                     className="mt-2"
                   />
                 </span>
-                <span>{`${userData?.user?.firstName} ${userData?.user?.lastName}`}</span>
+                <span>{`${userData?.user.firstName} ${userData?.user.lastName}`}</span>
               </span>
             </Modal.Title>
           </Modal.Header>

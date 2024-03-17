@@ -412,7 +412,6 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
     $orgId: ID!
     $firstName_contains: String
     $lastName_contains: String
-    $admin_for: ID
     $event_title_contains: String
     $first: Int
     $skip: Int
@@ -424,7 +423,6 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
       where: {
         firstName_contains: $firstName_contains
         lastName_contains: $lastName_contains
-        admin_for: $admin_for
         event_title_contains: $event_title_contains
       }
     ) {
@@ -456,42 +454,39 @@ export const USER_ORGANIZATION_LIST = gql`
 
 // To take the details of a user
 export const USER_DETAILS = gql`
-  query Query($userId: ID!) {
-    user(id: $userId) {
+  query User($id: ID!) {
+    user(id: $id) {
+      user {
+        _id
+        adminApproved
+        joinedOrganizations {
+          _id
+        }
+        firstName
+        lastName
+        email
+        image
+        createdAt
+        registeredEvents {
+          _id
+        }
+        membershipRequests {
+          _id
+        }
+      }
       appUserProfile {
+        _id
         adminFor {
+          _id
+        }
+        isSuperAdmin
+        createdOrganizations {
           _id
         }
         createdEvents {
           _id
         }
         eventAdmin {
-          _id
-        }
-        createdOrganizations {
-          _id
-        }
-        pluginCreationAllowed
-        appLanguageCode
-        isSuperAdmin
-      }
-      user {
-        firstName
-        lastName
-        createdAt
-        image
-        email
-        adminApproved
-        joinedOrganizations {
-          _id
-        }
-        membershipRequests {
-          _id
-        }
-        registeredEvents {
-          _id
-        }
-        organizationsBlockedBy {
           _id
         }
       }

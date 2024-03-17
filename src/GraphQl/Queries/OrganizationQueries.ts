@@ -11,20 +11,48 @@ import gql from 'graphql-tag';
  */
 
 export const ORGANIZATION_POST_LIST = gql`
-  query PostsByOrganization($id: ID!) {
-    postsByOrganization(id: $id) {
-      _id
-      title
-      text
-      imageUrl
-      videoUrl
-      creator {
-        _id
-        firstName
-        lastName
-        email
+  query Organizations(
+    $id: ID!
+    $after: String
+    $before: String
+    $first: PositiveInt
+    $last: PositiveInt
+  ) {
+    organizations(id: $id) {
+      posts(after: $after, before: $before, first: $first, last: $last) {
+        edges {
+          node {
+            _id
+            title
+            text
+            imageUrl
+            videoUrl
+            creator {
+              _id
+              firstName
+              lastName
+              email
+            }
+            createdAt
+            likeCount
+            likedBy {
+              _id
+              firstName
+              lastName
+            }
+            commentCount
+            pinned
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+        totalCount
       }
-      createdAt
     }
   }
 `;
@@ -135,11 +163,13 @@ export const USER_ORGANIZATION_CONNECTION = gql`
 export const USER_JOINED_ORGANIZATIONS = gql`
   query UserJoinedOrganizations($id: ID!) {
     users(where: { id: $id }) {
-      joinedOrganizations {
-        _id
-        name
-        description
-        image
+      user {
+        joinedOrganizations {
+          _id
+          name
+          description
+          image
+        }
       }
     }
   }

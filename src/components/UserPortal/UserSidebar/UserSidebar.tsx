@@ -46,14 +46,14 @@ function userSidebar(): JSX.Element {
   /* istanbul ignore next */
   React.useEffect(() => {
     if (data) {
-      setOrganizations(data.users[0].joinedOrganizations);
+      setOrganizations(data.users[0].user.joinedOrganizations);
     }
   }, [data]);
 
   /* istanbul ignore next */
   React.useEffect(() => {
     if (data2) {
-      setDetails(data2.user);
+      setDetails(data2.user.user);
     }
   }, [data2]);
 

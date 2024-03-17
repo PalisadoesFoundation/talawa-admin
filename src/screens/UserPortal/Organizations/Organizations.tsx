@@ -112,7 +112,7 @@ export default function organizations(): JSX.Element {
       }
     } else if (mode == 1) {
       if (data2) {
-        setOrganizations(data2.users[0].joinedOrganizations);
+        setOrganizations(data2.users[0].user.joinedOrganizations);
       }
     } else if (mode == 2) {
       if (data3) {
