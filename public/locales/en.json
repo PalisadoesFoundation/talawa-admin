@@ -267,7 +267,16 @@
     "enterDescrip": "Enter Description",
     "eventLocation": "Enter Location",
     "eventCreated": "Congratulations! The Event is created.",
-    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
+    "customRecurrence": "Custom Recurrence",
+    "repeatsEvery": "Repeats Every",
+    "repeatsOn": "Repeats On",
+    "ends": "Ends",
+    "never": "Never",
+    "on": "On",
+    "after": "After",
+    "occurences": "occurences",
+    "done": "Done"
   },
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",

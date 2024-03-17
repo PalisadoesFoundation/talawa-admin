@@ -38,6 +38,10 @@ export const Days = [
   WeekDays.SA,
 ];
 
+export const mondayToFriday = Days.filter(
+  (day) => day !== WeekDays.SA && day !== WeekDays.SU,
+);
+
 const dayNames = {
   [WeekDays.SU]: 'Sunday',
   [WeekDays.MO]: 'Monday',
@@ -124,13 +128,5 @@ const getWeekDaysString = (weekDays: WeekDays[]): string => {
 };
 
 const isMondayToFriday = (weekDays: WeekDays[]): boolean => {
-  const mondayToFriday = [
-    WeekDays.MO,
-    WeekDays.TU,
-    WeekDays.WE,
-    WeekDays.TH,
-    WeekDays.FR,
-  ];
-
   return mondayToFriday.every((day) => weekDays.includes(day));
 };

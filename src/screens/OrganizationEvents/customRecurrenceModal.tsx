@@ -11,7 +11,7 @@ import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 
 const daysOptions = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-const endsOnOptions = ['Never', 'On', 'After'];
+const endsOnOptions = ['never', 'on', 'after'];
 
 interface InterfaceCustomRecurrenceModalProps {
   recurrenceRuleState: InterfaceRecurrenceRule;
@@ -39,31 +39,31 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
   t,
 }) => {
   const { frequency, weekDays } = recurrenceRuleState;
-  const [endsOnOption, setEndsOnOption] = useState<string>('Never');
+  const [endsOnOption, setEndsOnOption] = useState<string>('never');
 
   useEffect(() => {
     if (endDate) {
-      setEndsOnOption('On');
+      setEndsOnOption('on');
     }
   }, [endDate]);
 
   const handleOptionChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const endsOnOption = e.target.value;
     setEndsOnOption(endsOnOption);
-    if (endsOnOption === 'Never') {
+    if (endsOnOption === 'never') {
       setEndDate(null);
       setRecurrenceRuleState({
         ...recurrenceRuleState,
         count: undefined,
       });
     }
-    if (endsOnOption === 'On') {
+    if (endsOnOption === 'on') {
       setRecurrenceRuleState({
         ...recurrenceRuleState,
         count: undefined,
       });
     }
-    if (endsOnOption === 'After') {
+    if (endsOnOption === 'after') {
       setEndDate(null);
     }
   };
@@ -94,7 +94,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
         centered
       >
         <Modal.Header>
-          <p className={styles.titlemodal}>Custom recurrence</p>
+          <p className={styles.titlemodal}>{t('customRecurrence')}</p>
           <Button
             variant="danger"
             onClick={hideCustomRecurrenceModal}
@@ -105,7 +105,9 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
         </Modal.Header>
         <Modal.Body className="pb-2">
           <div className="mb-4">
-            <span className="fw-semibold text-secondary">Repeats every</span>{' '}
+            <span className="fw-semibold text-secondary">
+              {t('repeatsEvery')}
+            </span>{' '}
             <FormControl
               type="number"
               defaultValue={1}
@@ -168,7 +170,9 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
 
           {frequency === Frequency.WEEKLY && (
             <div className="mb-4">
-              <span className="fw-semibold text-secondary">Repeats on</span>
+              <span className="fw-semibold text-secondary">
+                {t('repeatsOn')}
+              </span>
               <br />
               <div className="mx-2 mt-3 d-flex gap-1">
                 {daysOptions.map((day, index) => (
@@ -185,7 +189,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
           )}
 
           <div className="mb-3">
-            <span className="fw-semibold text-secondary">Ends</span>
+            <span className="fw-semibold text-secondary">{t('ends')}</span>
             <div className="ms-3 mt-3">
               <Form>
                 {endsOnOptions.map((option, index) => (
@@ -193,7 +197,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                     <Form.Check
                       type="radio"
                       id={`radio-${index}`}
-                      label={option}
+                      label={t(option)}
                       name="recurrenceEnd"
                       className="d-inline-block me-5"
                       value={option}
@@ -201,11 +205,11 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                       defaultChecked={option === endsOnOption}
                     />
 
-                    {option === 'On' && (
+                    {option === 'on' && (
                       <div className="ms-3">
                         <DatePicker
                           className={styles.recurrenceRuleDateBox}
-                          disabled={endsOnOption !== 'On'}
+                          disabled={endsOnOption !== 'on'}
                           value={dayjs(endDate ?? new Date())}
                           onChange={(date: Dayjs | null): void => {
                             if (date) {
@@ -215,7 +219,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                         />
                       </div>
                     )}
-                    {option === 'After' && (
+                    {option === 'after' && (
                       <>
                         <FormControl
                           type="number"
@@ -228,9 +232,9 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                             })
                           }
                           className={`${styles.recurrenceRuleNumberInput} ms-1 me-2 d-inline-block py-2`}
-                          disabled={endsOnOption !== 'After'}
+                          disabled={endsOnOption !== 'after'}
                         />{' '}
-                        occurrences
+                        {t('occurences')}
                       </>
                     )}
                   </div>
@@ -247,7 +251,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
               data-testid="customRecurrenceBtn"
               onClick={handleRecurrenceRuleSubmit}
             >
-              Done
+              {t('done')}
             </Button>
           </div>
         </Modal.Body>

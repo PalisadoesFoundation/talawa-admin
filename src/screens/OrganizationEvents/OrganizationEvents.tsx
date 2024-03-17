@@ -19,12 +19,13 @@ import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams, useNavigate } from 'react-router-dom';
-import CustomRecurrenceModal from './customRecurrenceModal';
+import CustomRecurrenceModal from './CustomRecurrenceModal';
 import {
   Frequency,
   Days,
   getRecurrenceRuleText,
   WeekDays,
+  mondayToFriday,
 } from 'utils/recurrenceRuleUtils';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceRuleUtils';
 
@@ -421,6 +422,7 @@ function organizationEvents(): JSX.Element {
                   variant="outline-secondary"
                   className="py-2 border border-secondary-subtle rounded-2"
                   id="dropdown-basic"
+                  data-testid="recurrenceOptions"
                 >
                   {recurrenceRuleText.length > 45 ? (
                     <OverlayTrigger
@@ -448,6 +450,7 @@ function organizationEvents(): JSX.Element {
                         frequency: Frequency.DAILY,
                       })
                     }
+                    data-testid="dailyRecurrence"
                   >
                     <span className="fw-semibold text-secondary">
                       {getRecurrenceRuleText(
@@ -468,6 +471,7 @@ function organizationEvents(): JSX.Element {
                         weekDays: [Days[startDate.getDay()]],
                       })
                     }
+                    data-testid="weeklyRecurrence"
                   >
                     <span className="fw-semibold text-secondary">
                       {getRecurrenceRuleText(
@@ -488,6 +492,7 @@ function organizationEvents(): JSX.Element {
                         frequency: Frequency.MONTHLY,
                       })
                     }
+                    data-testid="monthlyRecurrence"
                   >
                     <span className="fw-semibold text-secondary">
                       {getRecurrenceRuleText(
@@ -507,6 +512,7 @@ function organizationEvents(): JSX.Element {
                         frequency: Frequency.YEARLY,
                       })
                     }
+                    data-testid="yearlyRecurrence"
                   >
                     <span className="fw-semibold text-secondary">
                       {getRecurrenceRuleText(
@@ -524,20 +530,17 @@ function organizationEvents(): JSX.Element {
                       setRecurrenceRuleState({
                         ...recurrenceRuleState,
                         frequency: Frequency.WEEKLY,
-                        weekDays: Days.filter(
-                          (day) => day !== WeekDays.SA && day !== WeekDays.SU,
-                        ),
+                        weekDays: mondayToFriday,
                       })
                     }
+                    data-testid="mondayToFridayRecurrence"
                   >
                     <span className="fw-semibold text-secondary">
                       {getRecurrenceRuleText(
                         {
                           ...recurrenceRuleState,
                           frequency: Frequency.WEEKLY,
-                          weekDays: Days.filter(
-                            (day) => day !== WeekDays.SA && day !== WeekDays.SU,
-                          ),
+                          weekDays: mondayToFriday,
                         },
                         startDate,
                         endDate,
@@ -546,6 +549,7 @@ function organizationEvents(): JSX.Element {
                   </Dropdown.Item>
                   <Dropdown.Item
                     onClick={() => setCustomRecurrenceModalIsOpen(true)}
+                    data-testid="customRecurrence"
                   >
                     <span className="fw-semibold text-body-tertiary">
                       Custom...
