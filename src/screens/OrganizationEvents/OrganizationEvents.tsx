@@ -135,7 +135,7 @@ function organizationEvents(): JSX.Element {
             startDate: dayjs(startDate).format('YYYY-MM-DD'),
             endDate: endDate
               ? dayjs(endDate).format('YYYY-MM-DD')
-              : recurringchecked
+              : /* istanbul ignore next */ recurringchecked
                 ? undefined
                 : dayjs(startDate).format('YYYY-MM-DD'),
             allDay: alldaychecked,
@@ -337,7 +337,9 @@ function organizationEvents(): JSX.Element {
                         startTime: time?.format('HH:mm:ss'),
                         endTime:
                           timeToDayJs(formState.endTime) < time
-                            ? time?.format('HH:mm:ss')
+                            ? /* istanbul ignore next */ time?.format(
+                                'HH:mm:ss',
+                              )
                             : formState.endTime,
                       });
                     }

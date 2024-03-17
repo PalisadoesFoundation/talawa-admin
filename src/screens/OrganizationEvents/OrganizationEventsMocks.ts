@@ -169,4 +169,54 @@ export const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: CREATE_EVENT_MUTATION,
+      variables: {
+        title: 'Dummy Org',
+        location: 'New Delhi',
+        description: 'This is a dummy organization',
+        isPublic: true,
+        recurring: true,
+        isRegisterable: false,
+        organizationId: undefined,
+        startDate: '2022-03-28',
+        endDate: '2023-04-15',
+        allDay: true,
+        frequency: 'MONTHLY',
+      },
+    },
+    result: {
+      data: {
+        createEvent: {
+          _id: '1',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_EVENT_MUTATION,
+      variables: {
+        title: 'Dummy Org',
+        location: 'New Delhi',
+        description: 'This is a dummy organization',
+        isPublic: true,
+        recurring: true,
+        isRegisterable: false,
+        organizationId: undefined,
+        startDate: '2022-03-28',
+        allDay: true,
+        frequency: 'DAILY',
+        count: 100,
+      },
+    },
+    result: {
+      data: {
+        createEvent: {
+          _id: '1',
+        },
+      },
+    },
+  },
 ];
