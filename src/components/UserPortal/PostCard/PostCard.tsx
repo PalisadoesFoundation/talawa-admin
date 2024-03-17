@@ -49,6 +49,7 @@ export default function postCard(props: InterfacePostCardProps): JSX.Element {
                 src={props.creator.image}
                 className={`${styles.profile}`}
                 alt="postImage"
+                aria-label="profileImg"
               />
             )}
             {!props.creator.image && (

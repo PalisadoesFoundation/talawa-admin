@@ -96,4 +96,20 @@ describe('PostCard compoenent', () => {
     expect(Image).toBeInTheDocument();
     expect(Image).toHaveAttribute('src', postWithImage.image);
   });
+
+  test('Author profile should be present in the card.', async () => {
+    render(
+      <MockedProvider addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...postWithImage} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    const authorProfile = screen.getByRole('button', { name: 'profileImg' });
+    expect(authorProfile).toBeInTheDocument();
+  });
 });

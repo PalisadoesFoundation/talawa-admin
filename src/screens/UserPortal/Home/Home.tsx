@@ -183,7 +183,11 @@ export default function home(): JSX.Element {
                 />
               </div>
               <div className={`${styles.postButtonDiv}`}>
-                <Button className={`${styles.postButton}`} onClick={handlePost}>
+                <Button
+                  className={`${styles.postButton}`}
+                  onClick={handlePost}
+                  aria-label="Create Post"
+                >
                   Post
                   <div className={`${styles.postButtonIcon}`}>
                     <PostIcon />

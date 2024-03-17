@@ -11,6 +11,7 @@ import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import * as getOrganizationId from 'utils/getOrganizationId';
 import i18nForTest from 'utils/i18nForTest';
 import userEvent from '@testing-library/user-event';
+import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import Home from './Home';
 
@@ -37,7 +38,7 @@ const MOCKS = [
             {
               _id: '6411e53835d7ba2344a78e21',
               title: 'postone',
-              text: 'THis is the frist post',
+              text: 'This is the frist post',
               imageUrl: null,
               videoUrl: null,
               creator: {
@@ -291,5 +292,93 @@ describe('Testing Home Screen [User Portal]', () => {
     });
     await new Promise((resolve) => setTimeout(resolve, 500));
     expect(carousel.scrollLeft).toBeGreaterThan(0);
+  });
+
+  test('Error toast should be visible when user tries to create a post with an empty body', async () => {
+    const getOrganizationIdSpy = jest
+      .spyOn(getOrganizationId, 'default')
+      .mockImplementation(() => {
+        return '';
+      });
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Home />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    expect(getOrganizationIdSpy).toHaveBeenCalled();
+
+    const postActionButton = screen.getByRole('button', {
+      name: 'Create Post',
+    });
+    userEvent.click(postActionButton);
+
+    expect(toast.error).toBeCalledWith(
+      "Can't create a post with an empty body.",
+    );
+  });
+
+  test('Info toast should be visible when user tries to create a post with a valid body', async () => {
+    const getOrganizationIdSpy = jest
+      .spyOn(getOrganizationId, 'default')
+      .mockImplementation(() => {
+        return '';
+      });
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Home />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    expect(getOrganizationIdSpy).toHaveBeenCalled();
+
+    const postInput = screen.getByTestId('postInput');
+    userEvent.type(postInput, 'Testing post content');
+    expect(postInput).toHaveValue('Testing post content');
+
+    const postActionButton = screen.getByRole('button', {
+      name: 'Create Post',
+    });
+    userEvent.click(postActionButton);
+
+    expect(toast.error).not.toBeCalledWith();
+    expect(toast.info).toBeCalledWith('Processing your post. Please wait.');
+  });
+  test('Posts should be visible.', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Home />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    const PostTitle = screen.getByText('postone');
+    expect(PostTitle).toBeInTheDocument();
+    const PostText = screen.getByText('This is the frist post');
+    expect(PostText).toBeInTheDocument();
   });
 });
