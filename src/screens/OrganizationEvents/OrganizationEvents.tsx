@@ -19,7 +19,7 @@ import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams, useNavigate } from 'react-router-dom';
-import CustomRecurrenceModal from './CustomRecurrenceModal';
+// import CustomRecurrenceModal from './CustomRecurrenceModal';
 import {
   Frequency,
   Days,
@@ -573,7 +573,7 @@ function organizationEvents(): JSX.Element {
       </Modal>
 
       {/* Custom Recurrence */}
-      <CustomRecurrenceModal
+      {/* <CustomRecurrenceModal
         recurrenceRuleState={recurrenceRuleState}
         setRecurrenceRuleState={setRecurrenceRuleState}
         endDate={endDate}
@@ -582,7 +582,7 @@ function organizationEvents(): JSX.Element {
         hideCustomRecurrenceModal={hideCustomRecurrenceModal}
         setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
         t={t}
-      />
+      /> */}
     </>
   );
 }
