@@ -340,25 +340,29 @@ function organizationPeople(): JSX.Element {
                             : usersData.users
                           ).map(
                             (datas: {
-                              _id: string;
-                              lastName: string;
-                              firstName: string;
-                              image: string;
-                              email: string;
-                              createdAt: string;
+                              user: {
+                                _id: string;
+                                lastName: string;
+                                firstName: string;
+                                image: string;
+                                email: string;
+                                createdAt: string;
+                              };
                             }) => {
                               return (
                                 <UserListCard
-                                  key={datas._id}
-                                  id={datas._id}
-                                  memberImage={datas.image}
-                                  joinDate={dayjs(datas.createdAt).format(
+                                  key={datas.user._id}
+                                  id={datas.user._id}
+                                  memberImage={datas.user.image}
+                                  joinDate={dayjs(datas.user.createdAt).format(
                                     'DD/MM/YYYY'
                                   )}
                                   memberName={
-                                    datas.firstName + ' ' + datas.lastName
+                                    datas.user.firstName +
+                                    ' ' +
+                                    datas.user.lastName
                                   }
-                                  memberEmail={datas.email}
+                                  memberEmail={datas.user.email}
                                 />
                               );
                             }
