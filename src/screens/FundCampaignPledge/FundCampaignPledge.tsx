@@ -8,7 +8,7 @@ import {
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
 import dayjs from 'dayjs';
-import { useState, type ChangeEvent } from 'react';
+import React, { useState, type ChangeEvent } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -24,7 +24,6 @@ import styles from './FundCampaignPledge.module.css';
 import PledgeCreateModal from './PledgeCreateModal';
 import PledgeDeleteModal from './PledgeDeleteModal';
 import PledgeEditModal from './PledgeEditModal';
-import React from 'react';
 const fundCampaignPledge = (): JSX.Element => {
   const { fundCampaignId: currentUrl } = useParams();
   const { getItem } = useLocalStorage();
@@ -323,12 +322,10 @@ const fundCampaignPledge = (): JSX.Element => {
         setFormState={setFormState}
         createPledgeHandler={createPledgeHandler}
         startDate={
-          fundCampaignPledgeData?.getFundraisingCampaignById.startDate ??
-          new Date()
+          fundCampaignPledgeData?.getFundraisingCampaignById.startDate as Date
         }
         endDate={
-          fundCampaignPledgeData?.getFundraisingCampaignById.endDate ??
-          new Date()
+          fundCampaignPledgeData?.getFundraisingCampaignById.endDate as Date
         }
         t={t}
       />
@@ -341,12 +338,10 @@ const fundCampaignPledge = (): JSX.Element => {
         setFormState={setFormState}
         updatePledgeHandler={updatePledgeHandler}
         startDate={
-          fundCampaignPledgeData?.getFundraisingCampaignById.startDate ??
-          new Date()
+          fundCampaignPledgeData?.getFundraisingCampaignById.startDate as Date
         }
         endDate={
-          fundCampaignPledgeData?.getFundraisingCampaignById.endDate ??
-          new Date()
+          fundCampaignPledgeData?.getFundraisingCampaignById.endDate as Date
         }
         t={t}
       />

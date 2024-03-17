@@ -198,6 +198,7 @@ describe('Testing FundCampaigns Screen', () => {
     fireEvent.change(endDate, {
       target: { value: formData.campaignEndDate },
     });
+
     userEvent.click(screen.getByTestId('createCampaignBtn'));
 
     await waitFor(() => {
