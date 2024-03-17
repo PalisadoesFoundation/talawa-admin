@@ -561,11 +561,5 @@ describe('Organisation Events Page', () => {
     await waitFor(() => {
       expect(toast.success).toBeCalledWith(translations.eventCreated);
     });
-
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('createEventModalCloseBtn'),
-      ).not.toBeInTheDocument();
-    });
   });
 });

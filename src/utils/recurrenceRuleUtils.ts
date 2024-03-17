@@ -76,6 +76,10 @@ export const getRecurrenceRuleText = (
       recurrenceRuleText = 'Daily';
       break;
     case Frequency.WEEKLY:
+      if (isMondayToFriday(weekDays)) {
+        recurrenceRuleText = 'Monday to Friday';
+        break;
+      }
       recurrenceRuleText = 'Weekly on ';
       recurrenceRuleText += getWeekDaysString(weekDays);
       break;
@@ -117,4 +121,16 @@ const getWeekDaysString = (weekDays: WeekDays[]): string => {
   }
 
   return weekDaysString;
+};
+
+const isMondayToFriday = (weekDays: WeekDays[]): boolean => {
+  const mondayToFriday = [
+    WeekDays.MO,
+    WeekDays.TU,
+    WeekDays.WE,
+    WeekDays.TH,
+    WeekDays.FR,
+  ];
+
+  return mondayToFriday.every((day) => weekDays.includes(day));
 };
