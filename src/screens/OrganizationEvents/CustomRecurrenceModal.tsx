@@ -11,11 +11,12 @@ import {
   endsOn,
   frequencies,
   recurrenceEndOptions,
-} from 'utils/recurrenceRuleUtils';
+} from 'utils/recurrenceUtils';
 import type {
   InterfaceRecurrenceRule,
+  RecurrenceEndOption,
   WeekDays,
-} from 'utils/recurrenceRuleUtils';
+} from 'utils/recurrenceUtils';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 
@@ -46,7 +47,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
 }) => {
   const { frequency, weekDays } = recurrenceRuleState;
   const [selectedRecurrenceEndOption, setSelectedRecurrenceEndOption] =
-    useState<string>(endsNever);
+    useState<RecurrenceEndOption>(endsNever);
 
   useEffect(() => {
     if (endDate) {
@@ -54,10 +55,10 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
     }
   }, [endDate]);
 
-  const handleEndsOnOptionChange = (
+  const handleRecurrenceEndOptionChange = (
     e: React.ChangeEvent<HTMLInputElement>,
   ): void => {
-    const selectedRecurrenceEndOption = e.target.value;
+    const selectedRecurrenceEndOption = e.target.value as RecurrenceEndOption;
     setSelectedRecurrenceEndOption(selectedRecurrenceEndOption);
     if (selectedRecurrenceEndOption === endsNever) {
       setEndDate(null);
@@ -214,10 +215,10 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                       type="radio"
                       id={`radio-${index}`}
                       label={t(option)}
-                      name="recurrenceEnd"
+                      name="recurrenceEndOption"
                       className="d-inline-block me-5"
                       value={option}
-                      onChange={handleEndsOnOptionChange}
+                      onChange={handleRecurrenceEndOptionChange}
                       defaultChecked={option === selectedRecurrenceEndOption}
                       data-testid={`${option}`}
                     />

@@ -25,8 +25,8 @@ import {
   Days,
   getRecurrenceRuleText,
   mondayToFriday,
-} from 'utils/recurrenceRuleUtils';
-import type { InterfaceRecurrenceRule } from 'utils/recurrenceRuleUtils';
+} from 'utils/recurrenceUtils';
+import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 
 const timeToDayJs = (time: string): Dayjs => {
   const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
