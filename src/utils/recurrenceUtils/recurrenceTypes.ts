@@ -17,14 +17,6 @@ export enum Frequency {
   YEARLY = 'YEARLY',
 }
 
-// recurrence frequency mapping
-export const frequencies = {
-  [Frequency.DAILY]: 'Day',
-  [Frequency.WEEKLY]: 'Week',
-  [Frequency.MONTHLY]: 'Month',
-  [Frequency.YEARLY]: 'Year',
-};
-
 // recurrence week days
 export enum WeekDays {
   SU = 'SU',

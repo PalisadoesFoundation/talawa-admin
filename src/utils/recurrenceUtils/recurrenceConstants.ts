@@ -2,7 +2,15 @@
   Recurrence constants
 */
 
-import { RecurrenceEndOption, WeekDays } from './recurrenceTypes';
+import { Frequency, RecurrenceEndOption, WeekDays } from './recurrenceTypes';
+
+// recurrence frequency mapping
+export const frequencies = {
+  [Frequency.DAILY]: 'Day',
+  [Frequency.WEEKLY]: 'Week',
+  [Frequency.MONTHLY]: 'Month',
+  [Frequency.YEARLY]: 'Year',
+};
 
 // recurrence days options to select from in the UI
 export const daysOptions = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
