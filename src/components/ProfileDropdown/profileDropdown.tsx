@@ -27,7 +27,7 @@ const profileDropdown = (): JSX.Element => {
     navigate('/');
   };
   const MAX_NAME_LENGTH = 20;
-  const fullName = `dsfsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsdfdsf`;
+  const fullName = `${firstName} ${lastName}`;
   const displayedName =
     fullName.length > MAX_NAME_LENGTH
       ? fullName.substring(0, MAX_NAME_LENGTH - 3) + '...'
