@@ -3,35 +3,18 @@ import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  Navigate,
-  useNavigate,
-  Outlet,
-  useLocation,
-  useParams,
-} from 'react-router-dom';
+import { Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
 import { updateTargets } from 'state/action-creators';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
-import useLocalStorage from 'utils/useLocalstorage';
 import styles from './OrganizationScreen.module.css';
-import Avatar from 'components/Avatar/Avatar';
-import { Dropdown, ButtonGroup } from 'react-bootstrap'; // Changed from DropdownButton to Dropdown
-import { useMutation } from '@apollo/client';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import ProfileDropdown from 'components/ProfileDropdown/profileDropdown';
 
 const OrganizationScreen = (): JSX.Element => {
-  const navigate = useNavigate();
   const location = useLocation();
-  const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const titleKey = map[location.pathname.split('/')[1]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
-  const { getItem } = useLocalStorage();
-  const userType = getItem('UserType');
-  const firstName = getItem('FirstName');
-  const lastName = getItem('LastName');
-  const userImage = getItem('UserImage');
   const { orgId } = useParams();
 
   if (!orgId) {
@@ -52,12 +35,6 @@ const OrganizationScreen = (): JSX.Element => {
     if (window.innerWidth <= 820 && !hideDrawer) {
       setHideDrawer(true);
     }
-  };
-  /*istanbul ignore next*/
-  const logout = (): void => {
-    revokeRefreshToken();
-    localStorage.clear();
-    navigate('/');
   };
 
   const toggleDrawer = (): void => {
@@ -110,52 +87,7 @@ const OrganizationScreen = (): JSX.Element => {
           <div style={{ flex: 1 }}>
             <h1>{t('title')}</h1>
           </div>
-          <Dropdown as={ButtonGroup} variant="none" data-testid="togDrop">
-            <div className={styles.profileContainer}>
-              <div className={styles.imageContainer}>
-                {userImage && userImage !== 'null' ? (
-                  /*istanbul ignore next*/
-                  <img src={userImage} alt={`profile picture`} />
-                ) : (
-                  <Avatar
-                    size={45}
-                    avatarStyle={styles.avatarStyle}
-                    name={`${firstName} ${lastName}`}
-                    alt={`dummy picture`}
-                  />
-                )}
-              </div>
-              <div className={styles.profileText}>
-                <span className={styles.primaryText}>
-                  {firstName} {lastName}
-                </span>
-                <span className={styles.secondaryText}>
-                  {`${userType}`.toLowerCase()}
-                </span>
-              </div>
-            </div>
-            <Dropdown.Toggle
-              split
-              variant="none"
-              style={{ backgroundColor: 'white' }}
-              id="dropdown-split-basic"
-            />
-            <Dropdown.Menu>
-              <Dropdown.Item
-                data-testid="profileBtn"
-                onClick={() => navigate(`/member/${orgId}`)}
-              >
-                View Profile
-              </Dropdown.Item>
-              <Dropdown.Item
-                style={{ color: 'red' }}
-                onClick={logout}
-                data-testid="logoutBtn"
-              >
-                Logout
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+          <ProfileDropdown />
         </div>
         <Outlet />
       </div>
