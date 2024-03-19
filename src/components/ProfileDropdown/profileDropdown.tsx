@@ -34,7 +34,7 @@ const profileDropdown = (): JSX.Element => {
       : fullName;
 
   return (
-    <Dropdown as={ButtonGroup} variant="none" data-testid="togDrop">
+    <Dropdown as={ButtonGroup} variant="none">
       <div className={styles.profileContainer}>
         <div className={styles.imageContainer}>
           {userImage && userImage !== 'null' ? (
@@ -60,6 +60,7 @@ const profileDropdown = (): JSX.Element => {
         split
         variant="none"
         style={{ backgroundColor: 'white' }}
+        data-testid="togDrop"
         id="dropdown-split-basic"
         className={styles.dropdownToggle}
         aria-label="User Profile Menu"
