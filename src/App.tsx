@@ -20,6 +20,7 @@ import OrganizaitionFundCampiagn from 'screens/OrganizationFundCampaign/Organiza
 import OrganizationFunds from 'screens/OrganizationFunds/OrganizationFunds';
 import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
+import Requests from 'screens/Requests/Requests';
 import Users from 'screens/Users/Users';
 
 // User Portal Components
@@ -82,6 +83,7 @@ function app(): JSX.Element {
           <Route element={<SuperAdminScreen />}>
             <Route path="/orglist" element={<OrgList />} />
             <Route path="/member" element={<MemberDetail />} />
+            <Route path="/requests" element={<Requests />} />
             <Route path="/users" element={<Users />} />
           </Route>
           <Route element={<OrganizationScreen />}>

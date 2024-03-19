@@ -7,6 +7,7 @@ import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
 import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
 import { ReactComponent as RolesIcon } from 'assets/svgs/roles.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
+import { ReactComponent as RequestsIcon } from 'assets/svgs/requests.svg';
 import styles from './LeftDrawer.module.css';
 import { useMutation } from '@apollo/client';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
@@ -74,6 +75,30 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
               </Button>
             )}
           </NavLink>
+          {userType === 'ADMIN' && (
+            <NavLink to={'/requests'}>
+              {({ isActive }) => (
+                <Button
+                  variant={isActive === true ? 'success' : 'light'}
+                  className={`${
+                    isActive === true ? 'text-white' : 'text-secondary'
+                  }`}
+                  data-testid="requestsBtn"
+                >
+                  <div className={styles.iconWrapper}>
+                    <RequestsIcon
+                      fill={`${
+                        isActive === true
+                          ? 'var(--bs-white)'
+                          : 'var(--bs-secondary)'
+                      }`}
+                    />
+                  </div>
+                  {t('requests')}
+                </Button>
+              )}
+            </NavLink>
+          )}
           {userType === 'SUPERADMIN' && (
             <NavLink to={'/users'}>
               {({ isActive }) => (

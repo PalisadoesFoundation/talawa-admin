@@ -60,6 +60,7 @@
     "menu": "मेन्यू",
     "my organizations": "मेरे संगठन",
     "users": "उपयोगकर्ता",
+    "requests": "अनुरोध",
     "logout": "लॉग आउट"
   },
   "leftDrawerOrg": {
@@ -133,6 +134,23 @@
   "paginationList": {
     "rowsPerPage": "प्रति पृष्ठ पंक्तियाँ",
     "all": "सभी"
+  },
+  "requests": {
+    "title": "अनुरोध",
+    "sl_no": "क्रमांक",
+    "name": "नाम",
+    "email": "ईमेल",
+    "accept": "स्वीकार करें",
+    "reject": "अस्वीकार करें",
+    "searchRequests": "अनुरोध खोजें",
+    "endOfResults": "परिणामों का समाप्ति",
+    "noOrgError": "संगठन नहीं मिला, कृपया डैशबोर्ड के माध्यम से एक संगठन बनाएं",
+    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला ",
+    "noRequestsFound": "कोई अनुरोध नहीं मिला",
+    "acceptedSuccessfully": "अनुरोध सफलतापूर्वक स्वीकार किया गया",
+    "rejectedSuccessfully": "अनुरोध सफलतापूर्वक अस्वीकार किया गया",
+    "noOrgErrorTitle": "संगठन नहीं मिला",
+    "noOrgErrorDescription": "कृपया डैशबोर्ड के माध्यम से एक संगठन बनाएं"
   },
   "users": {
     "title": "तलावा भूमिकाएं",

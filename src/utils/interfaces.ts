@@ -350,3 +350,18 @@ export interface InterfaceCreateCampaign {
   campaignStartDate: Date;
   campaignEndDate: Date;
 }
+
+export interface InterfaceQueryMembershipRequestsListItem {
+  organizations: {
+    _id: string;
+    membershipRequests: {
+      _id: string;
+      user: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+      };
+    }[];
+  }[];
+}
