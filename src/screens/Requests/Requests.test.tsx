@@ -18,6 +18,7 @@ import {
   MOCKS,
   MOCKS2,
   EMPTY_REQUEST_MOCKS,
+  MOCKS3,
 } from './RequestsMocks';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -28,6 +29,7 @@ const link2 = new StaticMockLink(EMPTY_MOCKS, true);
 const link3 = new StaticMockLink(EMPTY_REQUEST_MOCKS, true);
 const link4 = new StaticMockLink(MOCKS2, true);
 const link5 = new StaticMockLink(MOCKS_WITH_ERROR, true);
+const link6 = new StaticMockLink(MOCKS3, true);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -232,6 +234,23 @@ describe('Testing Requests screen', () => {
     expect(container.textContent).not.toMatch(
       'Organizations not found, please create an organization through dashboard',
     );
+  });
+
+  test('Should render properly when there are no organizations present in requestsData', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link6}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
   });
 
   test('check for rerendering', async () => {
