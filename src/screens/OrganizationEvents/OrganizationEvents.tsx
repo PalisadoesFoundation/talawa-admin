@@ -154,7 +154,6 @@ function organizationEvents(): JSX.Element {
     <>
       <div className={styles.mainpageright}>
         <div className={styles.justifysp}>
-          <p className={styles.logintitle}>{t('events')}</p>
           <Button
             variant="success"
             className={styles.addbtn}
