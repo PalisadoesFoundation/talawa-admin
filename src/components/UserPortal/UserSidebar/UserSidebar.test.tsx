@@ -33,7 +33,6 @@ const MOCKS = [
             image: null,
             firstName: 'Noble',
             lastName: 'Mittal',
-            adminApproved: true,
             email: 'noble@mittal.com',
             createdAt: '2023-02-18T09:22:27.969Z',
             joinedOrganizations: [],
@@ -43,6 +42,7 @@ const MOCKS = [
           appUserProfile: {
             _id: getItem('userId'),
             adminFor: [],
+            adminApproved: true,
             createdOrganizations: [],
             createdEvents: [],
             eventAdmin: [],
@@ -69,7 +69,6 @@ const MOCKS = [
             lastName: 'Mittal',
             email: 'noble@mittal.com',
             createdAt: '2023-02-18T09:22:27.969Z',
-            adminApproved: true,
             joinedOrganizations: [],
             membershipRequests: [],
             registeredEvents: [],
@@ -77,6 +76,7 @@ const MOCKS = [
           appUserProfile: {
             _id: '2',
             adminFor: [],
+            adminApproved: true,
             createdOrganizations: [],
             createdEvents: [],
             eventAdmin: [],

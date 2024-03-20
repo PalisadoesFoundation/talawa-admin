@@ -50,7 +50,6 @@ for (let i = 0; i < 100; i++) {
       image: null,
       _id: i + 'id',
       email: 'email',
-      adminApproved: true,
       organizationsBlockedBy: [],
       createdAt: new Date().toISOString(),
       joinedOrganizations: [
@@ -192,7 +191,6 @@ const createUserMock = (
             _id: '64001660a711c62d5b4076a2',
             email: 'adidacreator1@gmail.com',
             userType: 'SUPERADMIN',
-            adminApproved: true,
             organizationsBlockedBy: [],
             createdAt: '2023-03-02T03:22:08.101Z',
             joinedOrganizations: [
@@ -212,7 +210,6 @@ const createUserMock = (
             _id: '6402030dce8e8406b8f07b0e',
             email: 'adi1@gmail.com',
             userType: 'USER',
-            adminApproved: true,
             organizationsBlockedBy: [],
             createdAt: '2023-03-03T14:24:13.084Z',
             joinedOrganizations: [
@@ -404,7 +401,6 @@ const MOCKS: any[] = [
               image: null,
               _id: '64001660a711c62d5b4076a2',
               email: 'adidacreator1@gmail.com',
-              adminApproved: true,
               organizationsBlockedBy: [],
               createdAt: '2023-03-02T03:22:08.101Z',
               joinedOrganizations: [
@@ -423,7 +419,6 @@ const MOCKS: any[] = [
               image: null,
               _id: '6402030dce8e8406b8f07b0e',
               email: 'adi1@gmail.com',
-              adminApproved: true,
               organizationsBlockedBy: [],
               createdAt: '2023-03-03T14:24:13.084Z',
               joinedOrganizations: [
@@ -633,7 +628,6 @@ describe('Organization People Page', () => {
           image: null,
           _id: '64001660a711c62d5b4076a2',
           email: 'adidacreator1@gmail.com',
-          adminApproved: true,
           organizationsBlockedBy: [],
           createdAt: '2023-03-02T03:22:08.101Z',
           joinedOrganizations: [
@@ -652,7 +646,6 @@ describe('Organization People Page', () => {
           image: null,
           _id: '6402030dce8e8406b8f07b0e',
           email: 'adi1@gmail.com',
-          adminApproved: true,
           organizationsBlockedBy: [],
           createdAt: '2023-03-03T14:24:13.084Z',
           joinedOrganizations: [

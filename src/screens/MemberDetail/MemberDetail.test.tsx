@@ -36,6 +36,7 @@ const MOCKS1 = [
                 _id: '65e0e2abb92c9f3e29503d4e',
               },
             ],
+            adminApproved: true,
             isSuperAdmin: true,
             appLanguageCode: 'en',
             createdEvents: [
@@ -64,7 +65,6 @@ const MOCKS1 = [
           },
           user: {
             __typename: 'User',
-            adminApproved: true,
             createdAt: '2024-02-26T10:36:33.098Z',
             email: 'adi790u@gmail.com',
             firstName: 'Aditya',
@@ -134,6 +134,7 @@ const MOCKS2 = [
                   _id: '65e0e2abb92c9f3e29503d4e',
                 },
               ],
+              adminApproved: true,
               isSuperAdmin: true,
               appLanguageCode: 'en',
               createdEvents: [],
@@ -143,7 +144,6 @@ const MOCKS2 = [
             },
             user: {
               __typename: 'User',
-              adminApproved: true,
               createdAt: '2024-02-26T10:36:33.098Z',
               email: 'adi790u@gmail.com',
               firstName: 'Aditya',
