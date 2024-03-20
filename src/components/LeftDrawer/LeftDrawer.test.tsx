@@ -124,10 +124,10 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     const rolesBtn = screen.getByTestId(/rolesBtn/i);
 
     expect(
-      orgsBtn.className.includes('text-secondary btn btn-light'),
+      orgsBtn.className.includes('text-white btn btn-success'),
     ).toBeTruthy();
     expect(
-      rolesBtn.className.includes('text-white btn btn-success'),
+      rolesBtn.className.includes('text-secondary btn btn-light'),
     ).toBeTruthy();
   });
 
