@@ -112,7 +112,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           description: formState.orgDescrip,
           address: {
             city: formState.address.city,
-            // countryCode: formState.address.countryCode,
+            countryCode: formState.address.countryCode,
             dependentLocality: formState.address.dependentLocality,
             line1: formState.address.line1,
             line2: formState.address.line2,
