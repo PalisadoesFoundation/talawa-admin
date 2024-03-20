@@ -13,11 +13,13 @@ import {
   LOGIN_MUTATION,
   RECAPTCHA_MUTATION,
   SIGNUP_MUTATION,
+  UPDATE_COMMUNITY,
 } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
+import { GET_COMMUNITY_DATA } from 'GraphQl/Queries/Queries';
 
 const MOCKS = [
   {
@@ -77,9 +79,74 @@ const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: GET_COMMUNITY_DATA,
+    },
+    result: {
+      data: {
+        getCommunityData: null,
+      },
+    },
+  },
+];
+const MOCKS2 = [
+  {
+    request: {
+      query: UPDATE_COMMUNITY,
+      variables: {
+        data: {
+          name: 'testName',
+          logo: 'image.png',
+          websiteLink: 'http://link.com',
+          socialMediaUrls: {
+            facebook: 'http://url.com',
+            gitHub: 'http://url.com',
+            youTube: 'http://url.com',
+            instagram: 'http://url.com',
+            linkedIn: 'http://url.com',
+            reddit: 'http://url.com',
+            slack: 'http://url.com',
+            twitter: 'http://url.com',
+          },
+        },
+      },
+    },
+    result: {
+      data: {
+        updateCommunity: true,
+      },
+    },
+  },
+  {
+    request: {
+      query: GET_COMMUNITY_DATA,
+    },
+    result: {
+      data: {
+        getCommunityData: {
+          _id: '',
+          websiteLink: 'http://link.com',
+          name: 'New name1',
+          logoUrl: 'image.png',
+          socialMediaUrls: {
+            facebook: 'http://url.com',
+            gitHub: 'http://url.com',
+            youTube: 'http://url.com',
+            instagram: 'http://url.com',
+            linkedIn: 'http://url.com',
+            reddit: 'http://url.com',
+            slack: 'http://url.com',
+            twitter: 'http://url.com',
+          },
+        },
+      },
+    },
+  },
 ];
 
 const link = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(MOCKS2, true);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -213,6 +280,52 @@ describe('Testing Login Page Screen', () => {
     await wait();
     expect(screen.getByText(/Admin/i)).toBeInTheDocument();
     expect(window.location).toBeAt('/orglist');
+  });
+
+  test('There should be default values of pre-login data when queried result is null', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    expect(screen.getByTestId('PalisadoesLogo')).toBeInTheDocument();
+    expect(
+      screen.getAllByTestId('PalisadoesSocialMedia')[0],
+    ).toBeInTheDocument();
+
+    await wait();
+    expect(screen.queryByTestId('preLoginLogo')).not.toBeInTheDocument();
+    expect(screen.queryAllByTestId('preLoginSocialMedia')[0]).toBeUndefined();
+  });
+
+  test('There should be a different values of pre-login data if the queried result is not null', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    expect(screen.getByTestId('preLoginLogo')).toBeInTheDocument();
+    expect(screen.getAllByTestId('preLoginSocialMedia')[0]).toBeInTheDocument();
+
+    await wait();
+    expect(screen.queryByTestId('PalisadoesLogo')).not.toBeInTheDocument();
+    expect(screen.queryAllByTestId('PalisadoesSocialMedia')[0]).toBeUndefined();
   });
 
   test('Testing registration functionality', async () => {

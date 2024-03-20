@@ -580,9 +580,15 @@ export const REGISTER_EVENT = gql`
   }
 `;
 
-export const UPLOAD_PRELOGIN_IMAGERY = gql`
-  mutation uploadPreLoginImagery($data: PreLoginImageryInput!) {
-    uploadPreLoginImagery(data: $data)
+export const UPDATE_COMMUNITY = gql`
+  mutation updateCommunity($data: UpdateCommunityInput!) {
+    updateCommunity(data: $data)
+  }
+`;
+
+export const RESET_COMMUNITY = gql`
+  mutation resetCommunity {
+    resetCommunity
   }
 `;
 

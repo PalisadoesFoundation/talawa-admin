@@ -183,7 +183,9 @@
     "wesiteLink": "Lien de site Web",
     "logo": "Logo",
     "social": "Liens vers les réseaux sociaux",
-    "url": "Entrer l'URL"
+    "url": "Entrer l'URL",
+    "profileChangedMsg": "Les détails du profil ont été mis à jour avec succès.",
+    "resetData": "Réinitialisez avec succès les détails du profil."
   },
   "dashboard": {
     "title": "Tableau de bord",

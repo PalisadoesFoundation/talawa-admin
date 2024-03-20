@@ -1,9 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Form } from 'react-bootstrap';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
+import { toast } from 'react-toastify';
 
-import { UPLOAD_PRELOGIN_IMAGERY } from 'GraphQl/Mutations/mutations';
+import Loader from 'components/Loader/Loader';
+import { GET_COMMUNITY_DATA } from 'GraphQl/Queries/Queries';
+import { UPDATE_COMMUNITY, RESET_COMMUNITY } from 'GraphQl/Mutations/mutations';
 import {
   FacebookLogo,
   InstagramLogo,
@@ -16,6 +19,7 @@ import {
 } from 'assets/svgs/social-icons';
 import convertToBase64 from 'utils/convertToBase64';
 import styles from './CommunityProfile.module.css';
+import { errorHandler } from 'utils/errorHandler';
 
 const CommunityProfile = (): JSX.Element => {
   const { t } = useTranslation('translation', {
@@ -24,21 +28,59 @@ const CommunityProfile = (): JSX.Element => {
 
   document.title = t('title');
 
+  type PreLoginImageryDataType = {
+    _id: string;
+    name: string | undefined;
+    websiteLink: string | undefined;
+    logoUrl: string | undefined;
+    socialMediaUrls: {
+      facebook: string | undefined;
+      instagram: string | undefined;
+      twitter: string | undefined;
+      linkedIn: string | undefined;
+      gitHub: string | undefined;
+      youTube: string | undefined;
+      reddit: string | undefined;
+      slack: string | undefined;
+    };
+  };
+
   const [profileVariable, setProfileVariable] = React.useState({
     name: '',
     websiteLink: '',
-    logo: '',
-    facebookUrl: '',
-    instagramUrl: '',
-    twitterUrl: '',
-    linkedInUrl: '',
-    githubUrl: '',
-    youtubeUrl: '',
-    redditUrl: '',
-    slackUrl: '',
+    logoUrl: '',
+    facebook: '',
+    instagram: '',
+    twitter: '',
+    linkedIn: '',
+    github: '',
+    youtube: '',
+    reddit: '',
+    slack: '',
   });
 
-  const [upload] = useMutation(UPLOAD_PRELOGIN_IMAGERY);
+  const { data, loading } = useQuery(GET_COMMUNITY_DATA);
+  const [uploadPreLoginImagery] = useMutation(UPDATE_COMMUNITY);
+  const [resetPreLoginImagery] = useMutation(RESET_COMMUNITY);
+
+  React.useEffect(() => {
+    const preLoginData: PreLoginImageryDataType | undefined =
+      data?.getCommunityData;
+    preLoginData &&
+      setProfileVariable({
+        name: preLoginData.name ?? '',
+        websiteLink: preLoginData.websiteLink ?? '',
+        logoUrl: preLoginData.logoUrl ?? '',
+        facebook: preLoginData.socialMediaUrls.facebook ?? '',
+        instagram: preLoginData.socialMediaUrls.instagram ?? '',
+        twitter: preLoginData.socialMediaUrls.twitter ?? '',
+        linkedIn: preLoginData.socialMediaUrls.linkedIn ?? '',
+        github: preLoginData.socialMediaUrls.gitHub ?? '',
+        youtube: preLoginData.socialMediaUrls.youTube ?? '',
+        reddit: preLoginData.socialMediaUrls.reddit ?? '',
+        slack: preLoginData.socialMediaUrls.slack ?? '',
+      });
+  }, [data]);
 
   const handleOnChange = (e: any): void => {
     setProfileVariable({
@@ -46,28 +88,83 @@ const CommunityProfile = (): JSX.Element => {
       [e.target.name]: e.target.value,
     });
   };
-  const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+
+  const handleOnSubmit = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
     e.preventDefault();
-    upload({
-      variables: {
-        data: {
-          id: '2',
-          name: profileVariable.name,
-          websiteLink: profileVariable.websiteLink,
-          logo: profileVariable.logo,
-          facebookUrl: profileVariable.facebookUrl,
-          instagramUrl: profileVariable.instagramUrl,
-          twitterUrl: profileVariable.twitterUrl,
-          linkedInUrl: profileVariable.linkedInUrl,
-          githubUrl: profileVariable.githubUrl,
-          youtubeUrl: profileVariable.youtubeUrl,
-          redditUrl: profileVariable.redditUrl,
-          slackUrl: profileVariable.slackUrl,
+    try {
+      await uploadPreLoginImagery({
+        variables: {
+          data: {
+            name: profileVariable.name,
+            websiteLink: profileVariable.websiteLink,
+            logo: profileVariable.logoUrl,
+            socialMediaUrls: {
+              facebook: profileVariable.facebook,
+              instagram: profileVariable.instagram,
+              twitter: profileVariable.twitter,
+              linkedIn: profileVariable.linkedIn,
+              gitHub: profileVariable.github,
+              youTube: profileVariable.youtube,
+              reddit: profileVariable.reddit,
+              slack: profileVariable.slack,
+            },
+          },
         },
-      },
-    });
+      });
+      toast.success(t('profileChangedMsg'));
+    } catch (error: any) {
+      /* istanbul ignore next */
+      errorHandler(t, error);
+    }
   };
 
+  const resetData = async (): Promise<void> => {
+    const preLoginData: PreLoginImageryDataType | undefined =
+      data?.getCommunityData;
+    try {
+      setProfileVariable({
+        name: '',
+        websiteLink: '',
+        logoUrl: '',
+        facebook: '',
+        instagram: '',
+        twitter: '',
+        linkedIn: '',
+        github: '',
+        youtube: '',
+        reddit: '',
+        slack: '',
+      });
+
+      await resetPreLoginImagery({
+        variables: {
+          resetPreLoginImageryId: preLoginData?._id,
+        },
+      });
+      toast.success(t(`resetData`));
+    } catch (error: any) {
+      /* istanbul ignore next */
+      errorHandler(t, error);
+    }
+  };
+
+  const isDisabled = (): boolean => {
+    if (
+      profileVariable.name == '' &&
+      profileVariable.websiteLink == '' &&
+      profileVariable.logoUrl == ''
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  if (loading) {
+    <Loader />;
+  }
   return (
     <Card border="0" className={`${styles.card} "rounded-4 my-4 shadow-sm"`}>
       <div className={styles.cardHeader}>
@@ -124,11 +221,12 @@ const CommunityProfile = (): JSX.Element => {
                   ...prevInput,
                   logo: '',
                 }));
-                const file = e.target.files?.[0];
-                const base64file = file ? await convertToBase64(file) : '';
+                const target = e.target as HTMLInputElement;
+                const file = target.files && target.files[0];
+                const base64file = file && (await convertToBase64(file));
                 setProfileVariable({
                   ...profileVariable,
-                  logo: base64file,
+                  logoUrl: base64file ?? '',
                 });
               }}
               className="mb-3"
@@ -143,14 +241,13 @@ const CommunityProfile = (): JSX.Element => {
               <Form.Control
                 type="url"
                 id="facebook"
-                name="facebookUrl"
+                name="facebook"
                 data-testid="facebook"
                 className={styles.socialInput}
-                value={profileVariable.facebookUrl}
+                value={profileVariable.facebook}
                 onChange={handleOnChange}
                 placeholder={t('url')}
                 autoComplete="off"
-                required
               />
             </div>
             <div className="mb-3 d-flex align-items-center gap-3">
@@ -158,14 +255,13 @@ const CommunityProfile = (): JSX.Element => {
               <Form.Control
                 type="url"
                 id="instagram"
-                name="instagramUrl"
+                name="instagram"
                 data-testid="instagram"
                 className={styles.socialInput}
-                value={profileVariable.instagramUrl}
+                value={profileVariable.instagram}
                 onChange={handleOnChange}
                 placeholder={t('url')}
                 autoComplete="off"
-                required
               />
             </div>
             <div className="mb-3 d-flex align-items-center gap-3">
@@ -173,14 +269,13 @@ const CommunityProfile = (): JSX.Element => {
               <Form.Control
                 type="url"
                 id="twitter"
-                name="twitterUrl"
+                name="twitter"
                 data-testid="twitter"
                 className={styles.socialInput}
-                value={profileVariable.twitterUrl}
+                value={profileVariable.twitter}
                 onChange={handleOnChange}
                 placeholder={t('url')}
                 autoComplete="off"
-                required
               />
             </div>
             <div className="mb-3 d-flex align-items-center gap-3">
@@ -188,14 +283,13 @@ const CommunityProfile = (): JSX.Element => {
               <Form.Control
                 type="url"
                 id="linkedIn"
-                name="linkedInUrl"
+                name="linkedIn"
                 data-testid="linkedIn"
                 className={styles.socialInput}
-                value={profileVariable.linkedInUrl}
+                value={profileVariable.linkedIn}
                 onChange={handleOnChange}
                 placeholder={t('url')}
                 autoComplete="off"
-                required
               />
             </div>
             <div className="mb-3 d-flex align-items-center gap-3">
@@ -203,14 +297,13 @@ const CommunityProfile = (): JSX.Element => {
               <Form.Control
                 type="url"
                 id="github"
-                name="githubUrl"
+                name="github"
                 data-testid="github"
                 className={styles.socialInput}
-                value={profileVariable.githubUrl}
+                value={profileVariable.github}
                 onChange={handleOnChange}
                 placeholder={t('url')}
                 autoComplete="off"
-                required
               />
             </div>
             <div className="mb-3 d-flex align-items-center gap-3">
@@ -218,14 +311,13 @@ const CommunityProfile = (): JSX.Element => {
               <Form.Control
                 type="url"
                 id="youtube"
-                name="youtubeUrl"
+                name="youtube"
                 data-testid="youtube"
                 className={styles.socialInput}
-                value={profileVariable.youtubeUrl}
+                value={profileVariable.youtube}
                 onChange={handleOnChange}
                 placeholder={t('url')}
                 autoComplete="off"
-                required
               />
             </div>
             <div className="mb-3 d-flex align-items-center gap-3">
@@ -233,14 +325,13 @@ const CommunityProfile = (): JSX.Element => {
               <Form.Control
                 type="url"
                 id="reddit"
-                name="redditUrl"
+                name="reddit"
                 data-testid="reddit"
                 className={styles.socialInput}
-                value={profileVariable.redditUrl}
+                value={profileVariable.reddit}
                 onChange={handleOnChange}
                 placeholder={t('url')}
                 autoComplete="off"
-                required
               />
             </div>
             <div className="mb-3 d-flex align-items-center gap-3">
@@ -248,14 +339,13 @@ const CommunityProfile = (): JSX.Element => {
               <Form.Control
                 type="url"
                 id="slack"
-                name="slackUrl"
+                name="slack"
                 data-testid="slack"
                 className={styles.socialInput}
-                value={profileVariable.slackUrl}
+                value={profileVariable.slack}
                 onChange={handleOnChange}
                 placeholder={t('url')}
                 autoComplete="off"
-                required
               />
             </div>
           </Form.Group>
@@ -264,25 +354,19 @@ const CommunityProfile = (): JSX.Element => {
           >
             <Button
               variant="outline-success"
-              onClick={() =>
-                setProfileVariable({
-                  name: '',
-                  websiteLink: '',
-                  logo: '',
-                  facebookUrl: '',
-                  instagramUrl: '',
-                  twitterUrl: '',
-                  linkedInUrl: '',
-                  githubUrl: '',
-                  youtubeUrl: '',
-                  redditUrl: '',
-                  slackUrl: '',
-                })
-              }
+              onClick={resetData}
+              data-testid="resetChangesBtn"
+              disabled={isDisabled()}
             >
               Reset Changes
             </Button>
-            <Button type="submit">Save Changes</Button>
+            <Button
+              type="submit"
+              data-testid="saveChangesBtn"
+              disabled={isDisabled()}
+            >
+              Save Changes
+            </Button>
           </div>
         </Form>
       </Card.Body>

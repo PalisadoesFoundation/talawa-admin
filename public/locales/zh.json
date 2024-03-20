@@ -233,7 +233,9 @@
     "wesiteLink": "网站链接",
     "logo": "标识",
     "social": "社交媒体链接",
-    "url": "输入网址"
+    "url": "输入网址",
+    "profileChangedMsg": "已成功更新个人资料详细信息。",
+    "resetData": "成功重置个人资料详细信息。"
   },
   "dashboard": {
     "title": "儀表板",

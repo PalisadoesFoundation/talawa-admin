@@ -189,7 +189,9 @@
     "wesiteLink": "Website Link",
     "logo": "Logo",
     "social": "Social Media Links",
-    "url": "Enter url"
+    "url": "Enter url",
+    "profileChangedMsg": "Successfully updated the Profile Details.",
+    "resetData": "Successfully reset the Profile Details."
   },
   "dashboard": {
     "title": "Dashboard",
