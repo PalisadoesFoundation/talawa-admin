@@ -222,7 +222,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                           <Row className="border-bottom py-3">
                             <Col sm={6}>{t('adminApproved')}</Col>
                             <Col sm={6} data-testid="adminApproved">
-                              {userData?.user?.appUserProfile?.adminApproved
+                              {userData?.appUserProfile?.adminApproved
                                 ? 'Yes'
                                 : 'No'}
                             </Col>
