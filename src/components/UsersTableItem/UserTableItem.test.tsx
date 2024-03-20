@@ -78,7 +78,6 @@ describe('Testing User Table Item', () => {
           lastName: 'Doe',
           image: null,
           email: 'john@example.com',
-          adminApproved: true,
           createdAt: '2023-09-29T15:39:36.355Z',
           organizationsBlockedBy: [
             {
@@ -190,6 +189,7 @@ describe('Testing User Table Item', () => {
               _id: 'abc',
             },
           ],
+          adminApproved: true,
         },
       },
       index: 0,
@@ -233,7 +233,6 @@ describe('Testing User Table Item', () => {
           lastName: 'Doe',
           image: null,
           email: 'john@example.com',
-          adminApproved: true,
           createdAt: '2023-09-29T15:39:36.355Z',
           organizationsBlockedBy: [],
           joinedOrganizations: [],
@@ -251,6 +250,7 @@ describe('Testing User Table Item', () => {
               _id: 'abc',
             },
           ],
+          adminApproved: true,
         },
       },
       index: 0,
@@ -306,7 +306,6 @@ describe('Testing User Table Item', () => {
           lastName: 'Doe',
           image: null,
           email: 'john@example.com',
-          adminApproved: true,
           createdAt: '2023-09-29T15:39:36.355Z',
           organizationsBlockedBy: [
             {
@@ -418,6 +417,7 @@ describe('Testing User Table Item', () => {
               _id: 'abc',
             },
           ],
+          adminApproved: true,
         },
       },
       index: 0,
@@ -523,7 +523,6 @@ describe('Testing User Table Item', () => {
           lastName: 'Doe',
           image: null,
           email: 'john@example.com',
-          adminApproved: true,
           createdAt: '2023-09-29T15:39:36.355Z',
           organizationsBlockedBy: [
             {
@@ -635,6 +634,7 @@ describe('Testing User Table Item', () => {
               _id: 'xyz',
             },
           ],
+          adminApproved: true,
         },
       },
       index: 0,
@@ -741,7 +741,6 @@ describe('Testing User Table Item', () => {
           lastName: 'Doe',
           image: null,
           email: 'john@example.com',
-          adminApproved: true,
           createdAt: '2023-09-29T15:39:36.355Z',
           organizationsBlockedBy: [
             {
@@ -853,6 +852,7 @@ describe('Testing User Table Item', () => {
               _id: 'abc',
             },
           ],
+          adminApproved: true,
         },
       },
       index: 0,
@@ -920,7 +920,6 @@ describe('Testing User Table Item', () => {
           lastName: 'Doe',
           image: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
           email: 'john@example.com',
-          adminApproved: true,
           createdAt: '2022-09-29T15:39:36.355Z',
           organizationsBlockedBy: [
             {
@@ -1037,6 +1036,7 @@ describe('Testing User Table Item', () => {
               _id: 'xyz',
             },
           ],
+          adminApproved: true,
         },
       },
       index: 0,

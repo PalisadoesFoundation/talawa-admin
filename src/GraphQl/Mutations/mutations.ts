@@ -143,11 +143,11 @@ export const LOGIN_MUTATION = gql`
     login(data: { email: $email, password: $password }) {
       user {
         _id
-        adminApproved
         firstName
         lastName
       }
       appUserProfile {
+        adminApproved
         adminFor {
           _id
         }

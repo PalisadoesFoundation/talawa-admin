@@ -119,7 +119,6 @@ export const USER_LIST = gql`
     ) {
       user {
         _id
-        adminApproved
         joinedOrganizations {
           _id
           name
@@ -183,6 +182,7 @@ export const USER_LIST = gql`
         adminFor {
           _id
         }
+        adminApproved
         isSuperAdmin
         createdOrganizations {
           _id
@@ -205,7 +205,6 @@ export const USER_LIST_REQUEST = gql`
     $first: Int
     $skip: Int
     $userType: String
-    $adminApproved: Boolean
   ) {
     users(
       where: {
@@ -215,7 +214,6 @@ export const USER_LIST_REQUEST = gql`
       skip: $skip
       first: $first
       userType: $userType
-      adminApproved: $adminApproved
     ) {
       firstName
       lastName
@@ -223,7 +221,6 @@ export const USER_LIST_REQUEST = gql`
       _id
       email
       userType
-      adminApproved
       createdAt
     }
   }
@@ -458,7 +455,6 @@ export const USER_DETAILS = gql`
     user(id: $id) {
       user {
         _id
-        adminApproved
         joinedOrganizations {
           _id
         }
@@ -479,6 +475,7 @@ export const USER_DETAILS = gql`
         adminFor {
           _id
         }
+        adminApproved
         isSuperAdmin
         createdOrganizations {
           _id

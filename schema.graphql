@@ -94,6 +94,7 @@ scalar Any
 type AppUserProfile {
   _id: ID!
   adminFor: [Organization]
+  adminApproved: Boolean!
   appLanguageCode: String!
   createdEvents: [Event]
   createdOrganizations: [Organization]
@@ -1234,7 +1235,6 @@ scalar Upload
 type User {
   _id: ID!
   address: Address
-  adminApproved: Boolean
   appUserProfileId: AppUserProfile
   birthDate: Date
   createdAt: DateTime!

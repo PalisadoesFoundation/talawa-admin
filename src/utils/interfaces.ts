@@ -126,7 +126,6 @@ export interface InterfaceQueryUserListItem {
     lastName: string;
     image: string | null;
     email: string;
-    adminApproved: boolean;
     organizationsBlockedBy: {
       _id: string;
       name: string;
@@ -162,6 +161,7 @@ export interface InterfaceQueryUserListItem {
   appUserProfile: {
     _id: string;
     adminFor: { _id: string }[];
+    adminApproved: boolean;
     isSuperAdmin: boolean;
     createdOrganizations: { _id: string }[];
     createdEvents: { _id: string }[];
@@ -176,7 +176,6 @@ export interface InterfaceQueryRequestListItem {
   image: string;
   email: string;
   userType: string;
-  adminApproved: boolean;
   createdAt: string;
 }
 

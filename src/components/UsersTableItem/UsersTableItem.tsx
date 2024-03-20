@@ -174,7 +174,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             defaultValue={
               user.appUserProfile.isSuperAdmin
                 ? 'SUPERADMIN' + `?${user.user._id}`
-                : user.user.adminApproved
+                : user.appUserProfile.adminApproved
                 ? 'ADMIN' + `?${user.user._id}`
                 : 'USER' + `?${user.user._id}`
             }
