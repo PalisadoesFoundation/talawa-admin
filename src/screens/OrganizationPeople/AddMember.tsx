@@ -246,26 +246,22 @@ function AddMember(): JSX.Element {
     setCreateUserVariables({ ...createUserVariables, confirmPassword });
   };
 
-  const callFilterData = (): void => {
-    const [firstName, lastName] = userName.split(' ');
-
-    const newFilterData = {
-      firstName_contains: firstName ?? '',
-      lastName_contains: lastName ?? '',
-    };
-
-    allUsersRefetch({
-      ...newFilterData,
-    });
-  };
-
   const handleUserModalSearchChange = (e: any): void => {
     /* istanbul ignore next */
-    if (e.key === 'Backspace' && userName === '') {
-      callFilterData();
-    }
-    if (e.key === 'Enter' && userName !== '') {
-      callFilterData();
+    if (
+      (e.key === 'Backspace' && userName === '') ||
+      (e.key === 'Enter' && userName !== '')
+    ) {
+      const [firstName, lastName] = userName.split(' ');
+
+      const newFilterData = {
+        firstName_contains: firstName ?? '',
+        lastName_contains: lastName ?? '',
+      };
+
+      allUsersRefetch({
+        ...newFilterData,
+      });
     }
   };
 
