@@ -671,7 +671,6 @@ export {
 
 // display posts
 export { ORGANIZATION_POST_LIST } from './OrganizationQueries';
-
 export {
   ORGANIZATION_ADMINS_LIST,
   USER_CREATED_ORGANIZATIONS,

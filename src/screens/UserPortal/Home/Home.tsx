@@ -207,6 +207,8 @@ export default function home(): JSX.Element {
                   text,
                   likeCount,
                   commentCount,
+                  likedBy,
+                  comments,
                 } = node;
 
                 // const allLikes: any =
@@ -219,6 +221,14 @@ export default function home(): JSX.Element {
                 //     : [];
 
                 const allLikes: any = [];
+                likedBy.forEach((value: any) => {
+                  const singleLike = {
+                    firstName: value.firstName,
+                    lastName: value.lastName,
+                    id: value._id,
+                  };
+                  allLikes.push(singleLike);
+                });
 
                 // const postComments: any =
                 //   comments && Array.isArray(comments)
@@ -242,6 +252,30 @@ export default function home(): JSX.Element {
                 //     : [];
 
                 const postComments: any = [];
+
+                comments.forEach((value: any) => {
+                  const commentLikes: any = [];
+                  value.likedBy.forEach((commentLike: any) => {
+                    const singleLike = {
+                      id: commentLike._id,
+                    };
+                    commentLikes.push(singleLike);
+                  });
+
+                  const comment = {
+                    id: value._id,
+                    creator: {
+                      firstName: value.creator.firstName,
+                      lastName: value.creator.lastName,
+                      id: value.creator._id,
+                      email: value.creator.email,
+                    },
+                    likeCount: value.likeCount,
+                    likedBy: commentLikes,
+                    text: value.text,
+                  };
+                  postComments.push(comment);
+                });
 
                 const cardProps: InterfacePostCard = {
                   id: _id,

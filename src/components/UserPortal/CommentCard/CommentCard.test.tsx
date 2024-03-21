@@ -55,6 +55,13 @@ const MOCKS = [
     },
   },
 ];
+const handleLikeComment = (commentId: string): void => {
+  return;
+};
+
+const handleDislikeComment = (commentId: string): void => {
+  return;
+};
 
 const link = new StaticMockLink(MOCKS, true);
 
@@ -81,6 +88,8 @@ describe('Testing CommentCard Component [User Portal]', () => {
         },
       ],
       text: 'testComment',
+      handleLikeComment: handleLikeComment,
+      handleDislikeComment: handleDislikeComment,
     };
 
     const beforeUserId = getItem('userId');
@@ -120,6 +129,8 @@ describe('Testing CommentCard Component [User Portal]', () => {
         },
       ],
       text: 'testComment',
+      handleLikeComment: handleLikeComment,
+      handleDislikeComment: handleDislikeComment,
     };
 
     const beforeUserId = getItem('userId');
@@ -159,6 +170,8 @@ describe('Testing CommentCard Component [User Portal]', () => {
         },
       ],
       text: 'testComment',
+      handleLikeComment: handleLikeComment,
+      handleDislikeComment: handleDislikeComment,
     };
 
     const beforeUserId = getItem('userId');
@@ -203,6 +216,8 @@ describe('Testing CommentCard Component [User Portal]', () => {
         },
       ],
       text: 'testComment',
+      handleLikeComment: handleLikeComment,
+      handleDislikeComment: handleDislikeComment,
     };
 
     const beforeUserId = getItem('userId');

@@ -38,7 +38,25 @@ export const ORGANIZATION_POST_LIST = gql`
             createdAt
             likeCount
             commentCount
-
+            likedBy {
+              _id
+            }
+            likeCount
+            comments {
+              _id
+              text
+              creator {
+                _id
+                firstName
+                lastName
+                email
+              }
+              createdAt
+              likeCount
+              likedBy {
+                _id
+              }
+            }
             pinned
           }
           cursor

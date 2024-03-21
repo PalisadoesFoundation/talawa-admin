@@ -33,6 +33,9 @@ interface InterfaceCommentCardProps {
     id: string;
   }[];
   text: string;
+
+  handleLikeComment: (commentId: string) => void;
+  handleDislikeComment: (commentId: string) => void;
 }
 
 export default function postCard(props: InterfacePostCard): JSX.Element {
@@ -102,6 +105,40 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   ): void => {
     const comment = event.target.value;
     setCommentInput(comment);
+  };
+
+  const handleLikeComment = (commentId: string): void => {
+    const updatedComments = comments.map((comment) => {
+      if (
+        comment.id === commentId &&
+        !comment.likedBy.some((user) => user.id === userId)
+      ) {
+        return {
+          ...comment,
+          likedBy: [...comment.likedBy, { id: userId }],
+          likeCount: comment.likeCount + 1,
+        };
+      }
+      return comment;
+    });
+    setComments(updatedComments);
+  };
+
+  const handleDislikeComment = (commentId: string): void => {
+    const updatedComments = comments.map((comment) => {
+      if (
+        comment.id === commentId &&
+        comment.likedBy.some((user) => user.id === userId)
+      ) {
+        return {
+          ...comment,
+          likedBy: comment.likedBy.filter((user) => user.id !== userId),
+          likeCount: comment.likeCount - 1,
+        };
+      }
+      return comment;
+    });
+    setComments(updatedComments);
   };
 
   const createComment = async (): Promise<void> => {
@@ -225,6 +262,8 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
                 likeCount: comment.likeCount,
                 likedBy: comment.likedBy,
                 text: comment.text,
+                handleLikeComment: handleLikeComment, // Pass the like function,
+                handleDislikeComment: handleDislikeComment, // Pass the dislike function
               };
 
               return <CommentCard key={index} {...cardProps} />;
