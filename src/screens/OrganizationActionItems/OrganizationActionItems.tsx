@@ -22,7 +22,7 @@ import type {
   InterfaceActionItemList,
   InterfaceMembersList,
 } from 'utils/interfaces';
-import ActionItemsContainer from 'components/ActionItemsContainer/ActionItemsContainer';
+import ActionItemsContainer from 'components/ActionItems/ActionItemsContainer';
 import ActionItemCreateModal from './ActionItemCreateModal';
 import styles from './OrganizationActionItems.module.css';
 import Loader from 'components/Loader/Loader';
@@ -313,7 +313,7 @@ function organizationActionItems(): JSX.Element {
               </Dropdown>
             </div>
 
-            <div className="d-none d-lg-inline flex-grow-1 d-flex align-items-center border bg-light-subtle rounded-3">
+            <div className="mt-3 d-none d-lg-inline flex-grow-1 d-flex align-items-center border bg-light-subtle rounded-3">
               {!actionItemCategoryName && !actionItemStatus && (
                 <div className="lh-lg mt-2 text-center fw-semibold text-body-tertiary">
                   No Filters
@@ -350,6 +350,7 @@ function organizationActionItems(): JSX.Element {
               variant="success"
               onClick={handleClearFilters}
               data-testid="clearFilters"
+              className={styles.clearFiltersBtn}
             >
               <i className="fa fa-broom me-2"></i>
               {t('clearFilters')}
@@ -360,6 +361,7 @@ function organizationActionItems(): JSX.Element {
         <hr />
 
         <ActionItemsContainer
+          actionItemsConnection={`Organization`}
           actionItemsData={actionItemsData?.actionItemsByOrganization}
           membersData={membersData?.organizations[0].members}
           actionItemsRefetch={actionItemsRefetch}

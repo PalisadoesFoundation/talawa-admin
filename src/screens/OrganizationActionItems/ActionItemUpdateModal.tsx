@@ -106,24 +106,6 @@ const ActionItemUpdateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
               className="mb-2"
             />
 
-            <label htmlFor="actionItemPostCompletionNotes">
-              {t('postCompletionNotes')}
-            </label>
-            <Form.Control
-              type="actionItemPostCompletionNotes"
-              id="actionItemPostCompletionNotes"
-              placeholder={t('postCompletionNotes')}
-              autoComplete="off"
-              value={formState.postCompletionNotes || ''}
-              onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  postCompletionNotes: e.target.value,
-                });
-              }}
-              className="mb-2"
-            />
-
             <div className={`${styles.datediv} mt-3 mb-2`}>
               <div>
                 <DatePicker
@@ -147,25 +129,6 @@ const ActionItemUpdateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
                       setCompletionDate(date?.toDate());
                     }
                   }}
-                />
-              </div>
-            </div>
-
-            <div className={styles.checkboxdiv}>
-              <div className={styles.dispflex}>
-                <label htmlFor="allday">{t('isCompleted')}?</label>
-                <Form.Switch
-                  className="ms-2"
-                  id="allday"
-                  type="checkbox"
-                  checked={formState.isCompleted}
-                  data-testid="alldayCheck"
-                  onChange={(): void =>
-                    setFormState({
-                      ...formState,
-                      isCompleted: !formState.isCompleted,
-                    })
-                  }
                 />
               </div>
             </div>

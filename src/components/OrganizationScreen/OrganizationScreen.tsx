@@ -1,13 +1,14 @@
 import LeftDrawerOrg from 'components/LeftDrawerOrg/LeftDrawerOrg';
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
+import { updateTargets } from 'state/action-creators';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
+
 import styles from './OrganizationScreen.module.css';
-import { updateTargets } from 'state/action-creators';
-import { Navigate, useParams, useLocation, Outlet } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 
 const organizationScreen = (): JSX.Element => {
   const location = useLocation();
@@ -101,8 +102,11 @@ const map: any = {
   orgads: 'advertisement',
   member: 'memberDetail',
   orgevents: 'organizationEvents',
+  orgactionitems: 'organizationActionItems',
   orgcontribution: 'orgContribution',
   orgpost: 'orgPost',
+  orgfunds: 'funds',
+  orgfundcampaign: 'fundCampaign',
   orgsetting: 'orgSettings',
   orgstore: 'addOnStore',
   blockuser: 'blockUnblockUser',
