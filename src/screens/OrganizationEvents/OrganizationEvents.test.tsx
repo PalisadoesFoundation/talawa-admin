@@ -215,7 +215,11 @@ describe('Organisation Events Page', () => {
 
     expect(container.textContent).not.toBe('Loading data...');
     await wait();
-    expect(container.textContent).toMatch('Events');
+
+    console.log(container.textContent);
+    expect(container.textContent).toMatch(
+      'Add Event March 2024TodayMonthSunMonTueWedThuFriSat252627282912345678910111213141516171819202122232425262728293031123456',
+    );
     expect(window.location).toBeAt('/orglist');
   });
 
