@@ -211,53 +211,6 @@ jest.mock('react-google-recaptcha', () => {
   return recaptcha;
 });
 
-describe('Talawa-API server fetch check', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  test('Checks if Talawa-API resource is loaded successfully', async () => {
-    global.fetch = jest.fn(() => Promise.resolve({} as unknown as Response));
-
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <LoginPage />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-    });
-
-    expect(fetch).toHaveBeenCalledWith(BACKEND_URL);
-  });
-
-  test('displays warning message when resource loading fails', async () => {
-    const mockError = new Error('Network error');
-    global.fetch = jest.fn(() => Promise.reject(mockError));
-
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <LoginPage />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-    });
-
-    expect(fetch).toHaveBeenCalledWith(BACKEND_URL);
-  });
-});
-
 describe('Testing Login Page Screen', () => {
   test('Component Should be rendered properly', async () => {
     window.location.assign('/orglist');
@@ -865,6 +818,7 @@ describe('Testing Login Page Screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
+    await wait();
 
     const recaptchaElements = screen.getAllByTestId('mock-recaptcha');
 
@@ -920,5 +874,52 @@ describe('Testing redirect if already logged in', () => {
     );
     await wait();
     expect(mockNavigate).toHaveBeenCalledWith('/orglist');
+  });
+});
+
+describe('Talawa-API server fetch check', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('Checks if Talawa-API resource is loaded successfully', async () => {
+    global.fetch = jest.fn(() => Promise.resolve({} as unknown as Response));
+
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+
+    expect(fetch).toHaveBeenCalledWith(BACKEND_URL);
+  });
+
+  test('displays warning message when resource loading fails', async () => {
+    const mockError = new Error('Network error');
+    global.fetch = jest.fn(() => Promise.reject(mockError));
+
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+
+    expect(fetch).toHaveBeenCalledWith(BACKEND_URL);
   });
 });
