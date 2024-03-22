@@ -227,40 +227,6 @@ describe('MemberDetail', () => {
       expect(screen.getAllByText(/Events/i)).toBeTruthy();
       expect(screen.getAllByText(/Admin for events/i)).toBeTruthy();
 
-<<<<<<< HEAD
-    expect(screen.getByTestId('dashboardTitleBtn')).toBeInTheDocument();
-    expect(screen.getByTestId('dashboardTitleBtn')).toHaveTextContent(
-      'User Details',
-    );
-    expect(screen.getAllByText(/Email/i)).toBeTruthy();
-    expect(screen.getAllByText(/Main/i)).toBeTruthy();
-    expect(screen.getAllByText(/First name/i)).toBeTruthy();
-    expect(screen.getAllByText(/Last name/i)).toBeTruthy();
-    expect(screen.getAllByText(/Language/i)).toBeTruthy();
-    expect(screen.getByText(/Admin approved/i)).toBeInTheDocument();
-    expect(screen.getByText(/Plugin creation allowed/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/Created on/i)).toBeTruthy();
-    expect(screen.getAllByText(/Admin for organizations/i)).toBeTruthy();
-    expect(screen.getAllByText(/Membership requests/i)).toBeTruthy();
-    expect(screen.getAllByText(/Events/i)).toBeTruthy();
-    expect(screen.getAllByText(/Admin for events/i)).toBeTruthy();
-
-    expect(screen.getAllByText(/Created On/i)).toHaveLength(2);
-    expect(screen.getAllByText(/User Details/i)).toHaveLength(1);
-    expect(screen.getAllByText(/Role/i)).toHaveLength(2);
-    expect(screen.getAllByText(/Created/i)).toHaveLength(4);
-    expect(screen.getAllByText(/Joined/i)).toHaveLength(2);
-    expect(screen.getByTestId('addAdminBtn')).toBeInTheDocument();
-    const addAdminBtn = MOCKS1[2].request.variables.userType;
-    // if the button is not disabled
-    expect(screen.getByTestId('addAdminBtn').getAttribute('disabled')).toBe(
-      addAdminBtn == 'ADMIN' || addAdminBtn == 'SUPERADMIN'
-        ? expect.anything()
-        : null,
-    );
-    expect(screen.getByTestId('stateBtn')).toBeInTheDocument();
-    userEvent.click(screen.getByTestId('stateBtn'));
-=======
       expect(screen.getAllByText(/Created On/i)).toHaveLength(2);
       expect(screen.getAllByText(/User Details/i)).toHaveLength(2);
       expect(screen.getAllByText(/Role/i)).toHaveLength(2);
@@ -270,7 +236,6 @@ describe('MemberDetail', () => {
       expect(screen.getByTestId('stateBtn')).toBeInTheDocument();
       userEvent.click(screen.getByTestId('stateBtn'));
     });
->>>>>>> develop-userTypeFix
   });
 
   test('prettyDate function should work properly', () => {

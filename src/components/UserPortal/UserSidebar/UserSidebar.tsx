@@ -53,12 +53,7 @@ function userSidebar(): JSX.Element {
   /* istanbul ignore next */
   React.useEffect(() => {
     if (data2) {
-<<<<<<< HEAD
-      setDetails(data2.user);
-      console.log(data2, 'user details');
-=======
       setDetails(data2.user.user);
->>>>>>> develop-userTypeFix
     }
   }, [data2]);
 

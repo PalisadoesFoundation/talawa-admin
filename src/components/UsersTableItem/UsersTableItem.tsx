@@ -41,11 +41,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
   });
   const [joinedOrgs, setJoinedOrgs] = useState(user.user.joinedOrganizations);
   const [orgsBlockedBy, setOrgsBlockedBy] = useState(
-<<<<<<< HEAD
-    user.organizationsBlockedBy,
-=======
     user.user.organizationsBlockedBy
->>>>>>> develop-userTypeFix
   );
   const [searchByNameJoinedOrgs, setSearchByNameJoinedOrgs] = useState('');
   const [searchByNameOrgsBlockedBy, setSearchByNameOrgsBlockedBy] =
@@ -112,13 +108,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
     if (value == '') {
       setJoinedOrgs(user.user.joinedOrganizations);
     } else {
-<<<<<<< HEAD
-      const filteredOrgs = user.joinedOrganizations.filter((org) =>
-        org.name.toLowerCase().includes(value.toLowerCase()),
-=======
       const filteredOrgs = user.user.joinedOrganizations.filter((org) =>
         org.name.toLowerCase().includes(value.toLowerCase())
->>>>>>> develop-userTypeFix
       );
       setJoinedOrgs(filteredOrgs);
     }
@@ -128,10 +119,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
     if (value == '') {
       setOrgsBlockedBy(user.user.organizationsBlockedBy);
     } else {
-<<<<<<< HEAD
-      const filteredOrgs = user.organizationsBlockedBy.filter((org) =>
-        org.name.toLowerCase().includes(value.toLowerCase()),
-=======
       const filteredOrgs = user.user.organizationsBlockedBy.filter((org) =>
         org.name.toLowerCase().includes(value.toLowerCase())
 >>>>>>> develop-userTypeFix

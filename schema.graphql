@@ -58,11 +58,7 @@ type Advertisement {
   endDate: Date!
   mediaUrl: URL!
   name: String!
-<<<<<<< HEAD
-  organization: Organization
-=======
   orgId: ID!
->>>>>>> develop-userTypeFix
   startDate: Date!
   type: AdvertisementType!
   updatedAt: DateTime!
@@ -622,10 +618,6 @@ type Mutation {
   blockUser(organizationId: ID!, userId: ID!): User!
   cancelMembershipRequest(membershipRequestId: ID!): MembershipRequest!
   checkIn(data: CheckInInput!): CheckIn!
-<<<<<<< HEAD
-  createAdmin(data: UserAndOrganizationInput!): User!
-  createAdvertisement(input: CreateAdvertisementInput!): CreateAdvertisementPayload
-=======
   createActionItem(
     actionItemCategoryId: ID!
     data: CreateActionItemInput!
@@ -644,7 +636,6 @@ type Mutation {
     type: String!
   ): Advertisement!
   createAgendaCategory(input: CreateAgendaCategoryInput!): AgendaCategory!
->>>>>>> develop-userTypeFix
   createComment(data: CommentInput!, postId: ID!): Comment
   createDirectChat(data: createChatInput!): DirectChat!
   createDonation(
@@ -679,7 +670,6 @@ type Mutation {
 =======
   deleteAdvertisementById(id: ID!): DeletePayload!
   deleteAgendaCategory(id: ID!): ID!
->>>>>>> develop-userTypeFix
   deleteDonationById(id: ID!): DeletePayload!
   forgotPassword(data: ForgotPasswordData!): Boolean!
   joinPublicOrganization(organizationId: ID!): User!

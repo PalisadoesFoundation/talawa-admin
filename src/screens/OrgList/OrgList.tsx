@@ -35,9 +35,6 @@ function orgList(): JSX.Element {
   const navigate = useNavigate();
   const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
   const [dialogRedirectOrgId, setDialogRedirectOrgId] = useState('<ORG_ID>');
-<<<<<<< HEAD
-  function openDialogModal(redirectOrgId: string): void {
-=======
 
   /* eslint-disable @typescript-eslint/explicit-function-return-type */
   function openDialogModal(redirectOrgId: string) {
@@ -589,7 +586,6 @@ function orgList(): JSX.Element {
                   })}
             </InfiniteScroll>
             {isLoading && (
->>>>>>> develop-userTypeFix
               <>
                 {[...Array(perPageResult)].map((_, index) => (
                   <div key={index} className={styles.itemCard}>
@@ -610,102 +606,50 @@ function orgList(): JSX.Element {
                   </div>
                 ))}
               </>
-            }
-            hasMore={hasMore}
-            className={styles.listBox}
-            data-testid="organizations-list"
-            endMessage={
-              <div className={'w-100 text-center my-4'}>
-                <h5 className="m-0 ">{t('endOfResults')}</h5>
-              </div>
-            }
+            )}
+          </>
+        )}
+        {/* Create Organization Modal */}
+        {/**
+         * Renders the `OrganizationModal` component.
+         *
+         * @param showModal - A boolean indicating whether the modal should be displayed.
+         * @param toggleModal - A function to toggle the visibility of the modal.
+         * @param formState - The state of the form in the organization modal.
+         * @param setFormState - A function to update the state of the form in the organization modal.
+         * @param createOrg - A function to handle the submission of the organization creation form.
+         * @param t - A translation function for localization.
+         * @param userData - Information about the current user.
+         * @param triggerCreateSampleOrg - A function to trigger the creation of a sample organization.
+         * @returns JSX element representing the `OrganizationModal`.
+         */}
+        <OrganizationModal
+          showModal={showModal}
+          toggleModal={toggleModal}
+          formState={formState}
+          setFormState={setFormState}
+          createOrg={createOrg}
+          t={t}
+          userData={userData}
+          triggerCreateSampleOrg={triggerCreateSampleOrg}
+        />
+        {/* Plugin Notification Modal after Org is Created */}
+        <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
+          <Modal.Header
+            className="bg-primary"
+            closeButton
+            data-testid="pluginNotificationHeader"
           >
-            {userData && userData.user.userType == 'SUPERADMIN'
-              ? orgsData?.organizationsConnection.map((item) => {
-                  return (
-                    <div key={item._id} className={styles.itemCard}>
-                      <OrgListCard data={item} />
-                    </div>
-                  );
-                })
-              : userData &&
-                userData.user.userType == 'ADMIN' &&
-                userData.user.adminFor.length > 0 &&
-                orgsData?.organizationsConnection.map((item) => {
-                  if (isAdminForCurrentOrg(item)) {
-                    return (
-                      <div key={item._id} className={styles.itemCard}>
-                        <OrgListCard data={item} />
-                      </div>
-                    );
-                  }
-                })}
-          </InfiniteScroll>
-          {isLoading && (
-            <>
-              {[...Array(perPageResult)].map((_, index) => (
-                <div key={index} className={styles.itemCard}>
-                  <div className={styles.loadingWrapper}>
-                    <div className={styles.innerContainer}>
-                      <div
-                        className={`${styles.orgImgContainer} shimmer`}
-                      ></div>
-                      <div className={styles.content}>
-                        <h5 className="shimmer" title="Org name"></h5>
-                        <h6 className="shimmer" title="Location"></h6>
-                        <h6 className="shimmer" title="Admins"></h6>
-                        <h6 className="shimmer" title="Members"></h6>
-                      </div>
-                    </div>
-                    <div className={`shimmer ${styles.button}`} />
-                  </div>
-                </div>
-              ))}
-            </>
-          )}
-        </>
-      )}
-      {/* Create Organization Modal */}
-      {/**
-       * Renders the `OrganizationModal` component.
-       *
-       * @param showModal - A boolean indicating whether the modal should be displayed.
-       * @param toggleModal - A function to toggle the visibility of the modal.
-       * @param formState - The state of the form in the organization modal.
-       * @param setFormState - A function to update the state of the form in the organization modal.
-       * @param createOrg - A function to handle the submission of the organization creation form.
-       * @param t - A translation function for localization.
-       * @param userData - Information about the current user.
-       * @param triggerCreateSampleOrg - A function to trigger the creation of a sample organization.
-       * @returns JSX element representing the `OrganizationModal`.
-       */}
-      <OrganizationModal
-        showModal={showModal}
-        toggleModal={toggleModal}
-        formState={formState}
-        setFormState={setFormState}
-        createOrg={createOrg}
-        t={t}
-        userData={userData}
-        triggerCreateSampleOrg={triggerCreateSampleOrg}
-      />
-      {/* Plugin Notification Modal after Org is Created */}
-      <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
-        <Modal.Header
-          className="bg-primary"
-          closeButton
-          data-testid="pluginNotificationHeader"
-        >
-          <Modal.Title className="text-white">
-            {t('manageFeatures')}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <section id={styles.grid_wrapper}>
-            <div>
-              <h4 className={styles.titlemodaldialog}>
-                {t('manageFeaturesInfo')}
-              </h4>
+            <Modal.Title className="text-white">
+              {t('manageFeatures')}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <section id={styles.grid_wrapper}>
+              <div>
+                <h4 className={styles.titlemodaldialog}>
+                  {t('manageFeaturesInfo')}
+                </h4>
 
               <div className={styles.pluginStoreBtnContainer}>
                 <Link

@@ -14,8 +14,6 @@ import gql from 'graphql-tag';
  */
 export const ORGANIZATION_POST_LIST = gql`
   query Organizations(
-<<<<<<< HEAD
-=======
     $id: ID!
     $after: String
     $before: String

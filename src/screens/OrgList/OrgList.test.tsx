@@ -174,7 +174,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
 
     screen.debug();
@@ -208,13 +208,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
     await wait(500);
 
     expect(localStorage.setItem).toHaveBeenLastCalledWith(
-<<<<<<< HEAD
-      'Talawa-admin_UserType',
-      JSON.stringify('SUPERADMIN'),
-=======
       'Talawa-admin_AdminFor',
       JSON.stringify([{ name: 'adi', _id: '1234', image: '' }])
->>>>>>> develop-userTypeFix
     );
 
     userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
@@ -314,13 +309,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
     await wait(500);
 
     expect(localStorage.setItem).toHaveBeenLastCalledWith(
-<<<<<<< HEAD
-      'Talawa-admin_UserType',
-      JSON.stringify('SUPERADMIN'),
-=======
       'Talawa-admin_AdminFor',
       JSON.stringify([{ name: 'adi', _id: '1234', image: '' }])
->>>>>>> develop-userTypeFix
     );
 
     userEvent.click(screen.getByTestId(/createOrganizationBtn/i));

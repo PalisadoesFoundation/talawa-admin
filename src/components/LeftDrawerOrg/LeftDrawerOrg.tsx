@@ -58,6 +58,8 @@ const leftDrawerOrg = ({
 
   const role = superAdmin ? 'SuperAdmin' : 'Admin';
 
+  const role = superAdmin ? 'SuperAdmin' : 'Admin';
+
   // Set organization data
   useEffect(() => {
     let isMounted = true;

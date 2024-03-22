@@ -158,18 +158,6 @@ const MOCKS = [
       data: {
         users: [
           {
-<<<<<<< HEAD
-            joinedOrganizations: [
-              {
-                __typename: 'Organization',
-                _id: '6401ff65ce8e8406b8f07af2',
-                name: 'joinedOrganization',
-                createdAt: '1234567890',
-                image: '',
-                description: 'New Desc',
-              },
-            ],
-=======
             user: {
               joinedOrganizations: [
                 {
@@ -181,7 +169,6 @@ const MOCKS = [
                 },
               ],
             },
->>>>>>> develop-userTypeFix
           },
         ],
       },

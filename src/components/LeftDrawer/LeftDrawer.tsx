@@ -30,6 +30,8 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
 
   const role = superAdmin ? 'SuperAdmin' : 'Admin';
 
+  const role = superAdmin ? 'SuperAdmin' : 'Admin';
+
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
 
   const logout = (): void => {

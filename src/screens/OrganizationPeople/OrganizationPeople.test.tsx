@@ -1360,7 +1360,6 @@ describe('Organization People Page', () => {
     );
     await wait();
     expect(orgUsers?.length).toBe(0);
->>>>>>> develop-userTypeFix
 
     await wait();
     expect(window.location).toBeAt('/orgpeople/6401ff65ce8e8406b8f07af1');
@@ -1414,11 +1413,7 @@ describe('Organization People Page', () => {
       },
     );
     await wait();
-<<<<<<< HEAD
-    expect(orgUserssize?.length).toBe(1);
-=======
     expect(orgUsers?.length).toBe(0);
->>>>>>> develop-userTypeFix
 
     await wait();
     expect(window.location).toBeAt('/orgpeople/6401ff65ce8e8406b8f07af2');

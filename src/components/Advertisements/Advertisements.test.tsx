@@ -341,11 +341,7 @@ describe('Testing Advertisement Component', () => {
                 name: 'Advertisement1',
                 type: 'POPUP',
                 organization: {
-<<<<<<< HEAD
-                  _id: '65844efc814dd4003db811c4',
-=======
                   _id: 'undefined',
->>>>>>> develop-userTypeFix
                 },
                 mediaUrl: 'http://example1.com',
                 endDate: '2023-01-01',
@@ -356,11 +352,7 @@ describe('Testing Advertisement Component', () => {
                 name: 'Advertisement2',
                 type: 'BANNER',
                 organization: {
-<<<<<<< HEAD
-                  _id: '65844efc814dd4003db811c4',
-=======
                   _id: 'undefined',
->>>>>>> develop-userTypeFix
                 },
                 mediaUrl: 'http://example2.com',
                 endDate: tomorrow,

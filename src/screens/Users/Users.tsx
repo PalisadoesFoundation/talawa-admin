@@ -193,23 +193,15 @@ const Users = (): JSX.Element => {
     if (sortingOption === 'newest') {
       sortedUsers.sort(
         (a, b) =>
-<<<<<<< HEAD
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-=======
           new Date(b.user.createdAt).getTime() -
           new Date(a.user.createdAt).getTime()
->>>>>>> develop-userTypeFix
       );
       return sortedUsers;
     } else {
       sortedUsers.sort(
         (a, b) =>
-<<<<<<< HEAD
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-=======
           new Date(a.user.createdAt).getTime() -
           new Date(b.user.createdAt).getTime()
->>>>>>> develop-userTypeFix
       );
       return sortedUsers;
     }
@@ -322,8 +314,8 @@ const Users = (): JSX.Element => {
               <Dropdown.Toggle
                 variant="outline-success"
                 data-testid="filterUsers"
-              >
-<<<<<<< HEAD
+              > 
+
                 <FilterListIcon className={'me-1'} />
                 {t('filter')}
               </Dropdown.Toggle>
@@ -341,21 +333,66 @@ const Users = (): JSX.Element => {
                   {t('superAdmin')}
                 </Dropdown.Item>
 
-                <Dropdown.Item
-                  data-testid="user"
-                  onClick={(): void => handleFiltering('user')}
-                >
-                  {t('user')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  data-testid="cancel"
-                  onClick={(): void => handleFiltering('cancel')}
-                >
-                  {t('cancel')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-=======
+                  <Dropdown.Item
+                    data-testid="user"
+                    onClick={(): void => handleFiltering('user')}
+                  >
+                    {t('user')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    data-testid="cancel"
+                    onClick={(): void => handleFiltering('cancel')}
+                  >
+                    {t('cancel')}
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+          </div>
+        </div>
+        {isLoading == false &&
+        usersData &&
+        displayedUsers.length === 0 &&
+        searchByName.length > 0 ? (
+          <div className={styles.notFound}>
+            <h4>
+              {t('noResultsFoundFor')} &quot;{searchByName}&quot;
+            </h4>
+          </div>
+        ) : isLoading == false && usersData && displayedUsers.length === 0 ? (
+          // eslint-disable-next-line react/jsx-indent
+          <div className={styles.notFound}>
+            <h4>{t('noUserFound')}</h4>
+          </div>
+        ) : (
+          <div className={styles.listBox}>
+            {isLoading ? (
+              <TableLoader
+                headerTitles={headerTitles}
+                noOfRows={perPageResult}
+              />
+            ) : (
+              <InfiniteScroll
+                dataLength={
+                  /* istanbul ignore next */
+                  displayedUsers.length ?? 0
+                }
+                next={loadMoreUsers}
+                loader={
+                  <TableLoader
+                    noOfCols={headerTitles.length}
+                    noOfRows={perPageResult}
+                  />
+                }
+                hasMore={hasMore}
+                className={styles.listBox}
+                data-testid="users-list"
+                endMessage={
+                  <div className={'w-100 text-center my-4'}>
+                    <h5 className="m-0 ">{t('endOfResults')}</h5>
+                  </div>
+                }
+              >
                 <Table className="mb-0" responsive>
                   <thead>
                     <tr>
@@ -389,80 +426,9 @@ const Users = (): JSX.Element => {
                 </Table>
               </InfiniteScroll>
             )}
->>>>>>> develop-userTypeFix
           </div>
-        </div>
-      </div>
-      {isLoading == false &&
-      usersData &&
-      displayedUsers.length === 0 &&
-      searchByName.length > 0 ? (
-        <div className={styles.notFound}>
-          <h4>
-            {t('noResultsFoundFor')} &quot;{searchByName}&quot;
-          </h4>
-        </div>
-      ) : isLoading == false && usersData && displayedUsers.length === 0 ? (
-        <div className={styles.notFound}>
-          <h4>{t('noUserFound')}</h4>
-        </div>
-      ) : (
-        <div className={styles.listBox}>
-          {isLoading ? (
-            <TableLoader headerTitles={headerTitles} noOfRows={perPageResult} />
-          ) : (
-            <InfiniteScroll
-              dataLength={
-                /* istanbul ignore next */
-                displayedUsers.length ?? 0
-              }
-              next={loadMoreUsers}
-              loader={
-                <TableLoader
-                  noOfCols={headerTitles.length}
-                  noOfRows={perPageResult}
-                />
-              }
-              hasMore={hasMore}
-              className={styles.listBox}
-              data-testid="users-list"
-              endMessage={
-                <div className={'w-100 text-center my-4'}>
-                  <h5 className="m-0 ">{t('endOfResults')}</h5>
-                </div>
-              }
-            >
-              <Table className="mb-0" responsive>
-                <thead>
-                  <tr>
-                    {headerTitles.map((title: string, index: number) => {
-                      return (
-                        <th key={index} scope="col">
-                          {title}
-                        </th>
-                      );
-                    })}
-                  </tr>
-                </thead>
-                <tbody>
-                  {usersData &&
-                    displayedUsers.map((user, index) => {
-                      return (
-                        <UsersTableItem
-                          key={user._id}
-                          index={index}
-                          resetAndRefetch={resetAndRefetch}
-                          user={user}
-                          loggedInUserId={loggedInUserId ? loggedInUserId : ''}
-                        />
-                      );
-                    })}
-                </tbody>
-              </Table>
-            </InfiniteScroll>
-          )}
-        </div>
-      )}
+        )}
+      </SuperAdminScreen>
     </>
   );
 };

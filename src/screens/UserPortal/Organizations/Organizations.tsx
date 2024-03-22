@@ -191,7 +191,6 @@ export default function organizations(): JSX.Element {
 =======
       if (data2) {
         setOrganizations(data2.users[0].user.joinedOrganizations);
->>>>>>> develop-userTypeFix
       }
     } else if (mode == 2) {
       const membershipRequestStatus = 'accepted';

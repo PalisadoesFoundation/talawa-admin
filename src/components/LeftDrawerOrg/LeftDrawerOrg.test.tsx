@@ -265,12 +265,9 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
 
   test('Component should be rendered properly', async () => {
     setItem('UserImage', '');
-<<<<<<< HEAD
-=======
     setItem('SuperAdmin', true);
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
->>>>>>> develop-userTypeFix
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -292,13 +289,10 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   });
 
   test('Testing Profile Page & Organization Detail Modal', async () => {
-<<<<<<< HEAD
-=======
     setItem('UserImage', '');
     setItem('SuperAdmin', true);
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
->>>>>>> develop-userTypeFix
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -316,13 +310,10 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   });
 
   test('Testing Menu Buttons', async () => {
-<<<<<<< HEAD
-=======
     setItem('UserImage', '');
     setItem('SuperAdmin', true);
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
->>>>>>> develop-userTypeFix
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -340,13 +331,10 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   });
 
   test('Testing when image is present for Organization', async () => {
-<<<<<<< HEAD
-=======
     setItem('UserImage', '');
     setItem('SuperAdmin', true);
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
->>>>>>> develop-userTypeFix
     render(
       <MockedProvider addTypename={false} link={linkImage}>
         <BrowserRouter>
@@ -362,13 +350,10 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   });
 
   test('Testing when Organization does not exists', async () => {
-<<<<<<< HEAD
-=======
     setItem('UserImage', '');
     setItem('SuperAdmin', true);
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
->>>>>>> develop-userTypeFix
     render(
       <MockedProvider addTypename={false} link={linkEmpty}>
         <BrowserRouter>
@@ -387,13 +372,10 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   });
 
   test('Testing Drawer when hideDrawer is null', () => {
-<<<<<<< HEAD
-=======
     setItem('UserImage', '');
     setItem('SuperAdmin', true);
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
->>>>>>> develop-userTypeFix
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -408,13 +390,10 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   });
 
   test('Testing Drawer when hideDrawer is true', () => {
-<<<<<<< HEAD
-=======
     setItem('UserImage', '');
     setItem('SuperAdmin', true);
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
->>>>>>> develop-userTypeFix
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -429,13 +408,10 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   });
 
   test('Testing logout functionality', async () => {
-<<<<<<< HEAD
-=======
     setItem('UserImage', '');
     setItem('SuperAdmin', true);
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
->>>>>>> develop-userTypeFix
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
