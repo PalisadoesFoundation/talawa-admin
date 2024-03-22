@@ -83,6 +83,7 @@ export const ADDRESS_DETAILS_FRAGMENT = gql`
 // to update the details of the user
 
 export const UPDATE_USER_MUTATION = gql`
+<<<<<<< HEAD
   mutation UpdateUserProfile(
     $firstName: String
     $lastName: String
@@ -93,6 +94,10 @@ export const UPDATE_USER_MUTATION = gql`
       data: { firstName: $firstName, lastName: $lastName, email: $email }
       file: $file
     ) {
+=======
+  mutation Mutation($data: UpdateUserInput, $file: String) {
+    updateUserProfile(data: $data, file: $file) {
+>>>>>>> develop-userTypeFix
       _id
     }
   }
@@ -151,12 +156,20 @@ export const LOGIN_MUTATION = gql`
     login(data: { email: $email, password: $password }) {
       user {
         _id
-        userType
         adminApproved
         firstName
         lastName
+<<<<<<< HEAD
         email
         image
+=======
+      }
+      appUserProfile {
+        adminFor {
+          _id
+        }
+        isSuperAdmin
+>>>>>>> develop-userTypeFix
       }
       accessToken
       refreshToken

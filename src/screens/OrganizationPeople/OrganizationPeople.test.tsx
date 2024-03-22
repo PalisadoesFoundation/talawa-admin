@@ -26,6 +26,51 @@ const members: any[] = [];
 const admins: any[] = [];
 const users: any[] = [];
 
+<<<<<<< HEAD
+=======
+for (let i = 0; i < 100; i++) {
+  members.push({
+    __typename: 'User',
+    _id: i + '1',
+    firstName: 'firstName',
+    lastName: 'lastName',
+    image: null,
+    email: 'email',
+    createdAt: new Date().toISOString(),
+  });
+
+  admins.push({
+    __typename: 'User',
+    _id: i + '1',
+    firstName: 'firstName',
+    lastName: 'lastName',
+    image: null,
+    email: 'email',
+    createdAt: new Date().toISOString(),
+  });
+
+  users.push({
+    user: {
+      __typename: 'User',
+      firstName: 'firstName',
+      lastName: 'lastName',
+      image: null,
+      _id: i + 'id',
+      email: 'email',
+      adminApproved: true,
+      organizationsBlockedBy: [],
+      createdAt: new Date().toISOString(),
+      joinedOrganizations: [
+        {
+          __typename: 'Organization',
+          _id: `6411a8f197d5631eb0765857${i}`,
+        },
+      ],
+    },
+  });
+}
+
+>>>>>>> develop-userTypeFix
 const createMemberMock = (
   orgId = '',
   firstNameContains = '',
@@ -147,40 +192,44 @@ const createUserMock = (
     data: {
       users: [
         {
-          __typename: 'User',
-          firstName: 'Aditya',
-          lastName: 'Userguy',
-          image: null,
-          _id: '64001660a711c62d5b4076a2',
-          email: 'adidacreator1@gmail.com',
-          userType: 'SUPERADMIN',
-          adminApproved: true,
-          organizationsBlockedBy: [],
-          createdAt: '2023-03-02T03:22:08.101Z',
-          joinedOrganizations: [
-            {
-              __typename: 'Organization',
-              _id: '6401ff65ce8e8406b8f07af1',
-            },
-          ],
+          user: {
+            __typename: 'User',
+            firstName: 'Aditya',
+            lastName: 'Userguy',
+            image: null,
+            _id: '64001660a711c62d5b4076a2',
+            email: 'adidacreator1@gmail.com',
+            userType: 'SUPERADMIN',
+            adminApproved: true,
+            organizationsBlockedBy: [],
+            createdAt: '2023-03-02T03:22:08.101Z',
+            joinedOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '6401ff65ce8e8406b8f07af1',
+              },
+            ],
+          },
         },
         {
-          __typename: 'User',
-          firstName: 'Aditya',
-          lastName: 'Userguytwo',
-          image: null,
-          _id: '6402030dce8e8406b8f07b0e',
-          email: 'adi1@gmail.com',
-          userType: 'USER',
-          adminApproved: true,
-          organizationsBlockedBy: [],
-          createdAt: '2023-03-03T14:24:13.084Z',
-          joinedOrganizations: [
-            {
-              __typename: 'Organization',
-              _id: '6401ff65ce8e8406b8f07af2',
-            },
-          ],
+          user: {
+            __typename: 'User',
+            firstName: 'Aditya',
+            lastName: 'Userguytwo',
+            image: null,
+            _id: '6402030dce8e8406b8f07b0e',
+            email: 'adi1@gmail.com',
+            userType: 'USER',
+            adminApproved: true,
+            organizationsBlockedBy: [],
+            createdAt: '2023-03-03T14:24:13.084Z',
+            joinedOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '6401ff65ce8e8406b8f07af2',
+              },
+            ],
+          },
         },
       ],
     },
@@ -356,40 +405,42 @@ const MOCKS: any[] = [
       data: {
         users: [
           {
-            __typename: 'User',
-            firstName: 'Aditya',
-            lastName: 'Userguy',
-            image: null,
-            _id: '64001660a711c62d5b4076a2',
-            email: 'adidacreator1@gmail.com',
-            userType: 'SUPERADMIN',
-            adminApproved: true,
-            organizationsBlockedBy: [],
-            createdAt: '2023-03-02T03:22:08.101Z',
-            joinedOrganizations: [
-              {
-                __typename: 'Organization',
-                _id: '6401ff65ce8e8406b8f07af1',
-              },
-            ],
+            user: {
+              __typename: 'User',
+              firstName: 'Aditya',
+              lastName: 'Userguy',
+              image: null,
+              _id: '64001660a711c62d5b4076a2',
+              email: 'adidacreator1@gmail.com',
+              adminApproved: true,
+              organizationsBlockedBy: [],
+              createdAt: '2023-03-02T03:22:08.101Z',
+              joinedOrganizations: [
+                {
+                  __typename: 'Organization',
+                  _id: '6401ff65ce8e8406b8f07af1',
+                },
+              ],
+            },
           },
           {
-            __typename: 'User',
-            firstName: 'Aditya',
-            lastName: 'Userguytwo',
-            image: null,
-            _id: '6402030dce8e8406b8f07b0e',
-            email: 'adi1@gmail.com',
-            userType: 'USER',
-            adminApproved: true,
-            organizationsBlockedBy: [],
-            createdAt: '2023-03-03T14:24:13.084Z',
-            joinedOrganizations: [
-              {
-                __typename: 'Organization',
-                _id: '6401ff65ce8e8406b8f07af2',
-              },
-            ],
+            user: {
+              __typename: 'User',
+              firstName: 'Aditya',
+              lastName: 'Userguytwo',
+              image: null,
+              _id: '6402030dce8e8406b8f07b0e',
+              email: 'adi1@gmail.com',
+              adminApproved: true,
+              organizationsBlockedBy: [],
+              createdAt: '2023-03-03T14:24:13.084Z',
+              joinedOrganizations: [
+                {
+                  __typename: 'Organization',
+                  _id: '6401ff65ce8e8406b8f07af2',
+                },
+              ],
+            },
           },
           ...users,
         ],
@@ -540,6 +591,122 @@ describe('Organization People Page', () => {
     event: 'Event',
   };
 
+<<<<<<< HEAD
+=======
+  test('The number of organizations people rendered on the DOM should be equal to the rowsPerPage state value', async () => {
+    window.location.assign('orgpeople/id=6401ff65ce8e8406b8f07af1');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationPeople />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    await screen.findByTestId('rowsPPSelect');
+
+    // Get the reference to all userTypes through the radio buttons in the DOM
+    // => users, members, admins
+    const allPeopleTypes = Array.from(
+      screen.getByTestId('usertypelist').querySelectorAll('input[type="radio"]')
+    ).map((radioButton: HTMLInputElement | any) => radioButton.dataset?.testid);
+
+    // This variable represents the array index of currently selected UserType(i.e "member" or "admin" or "user")
+    let peopleTypeIndex = 0;
+
+    const changeRowsPerPage = async (currRowPPindex: number): Promise<void> => {
+      // currRowPPindex is the index of the currently selected option of rows per page dropdown
+
+      await screen.findByTestId('rowsPPSelect');
+
+      //Get the reference to the dropdown for rows per page
+      const rowsPerPageSelect: HTMLSelectElement | null =
+        screen.getByTestId('rowsPPSelect').querySelector('select') || null;
+
+      if (rowsPerPageSelect === null) {
+        throw new Error('rowsPerPageSelect is null');
+      }
+
+      // Get all possible dropdown options
+      // => -1, 5, 10, 30
+      const rowsPerPageOptions: any[] = Array.from(
+        rowsPerPageSelect?.querySelectorAll('option')
+      );
+
+      // Change the selected option of dropdown to the value of the current option
+      userEvent.selectOptions(
+        rowsPerPageSelect,
+        rowsPerPageOptions[currRowPPindex].textContent
+      );
+
+      const expectedUsersLength = MOCKS[3]?.result?.data?.users?.filter(
+        (datas: {
+          user: {
+            _id: string;
+            lastName: string;
+            firstName: string;
+            image: string;
+            email: string;
+            createdAt: string;
+            joinedOrganizations: {
+              __typename: string;
+              _id: string;
+            }[];
+          };
+        }) => {
+          window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af1');
+          const pathname = window.location.pathname;
+          const id = pathname.split('=')[1];
+          return datas.user.joinedOrganizations.some((org) => org._id === id);
+        }
+      ).length;
+
+      await wait();
+      const totalNumPeople = screen.getAllByTestId('orgpeoplelist').length;
+      expect(totalNumPeople).toBe(expectedUsersLength);
+
+      if (rowsPerPageOptions[currRowPPindex].textContent === 'All') {
+        peopleTypeIndex += 1;
+
+        await changePeopleType();
+
+        return;
+      }
+
+      if (currRowPPindex < rowsPerPageOptions.length) {
+        currRowPPindex += 1;
+        await changeRowsPerPage(currRowPPindex);
+      }
+    };
+
+    const changePeopleType = async (): Promise<void> => {
+      if (peopleTypeIndex === allPeopleTypes.length - 1) return;
+
+      const peopleTypeButton = screen
+        .getByTestId('usertypelist')
+        .querySelector(`input[data-testid=${allPeopleTypes[peopleTypeIndex]}]`);
+
+      if (peopleTypeButton === null) {
+        throw new Error('peopleTypeButton is null');
+      }
+
+      // Change people type
+      userEvent.click(peopleTypeButton);
+
+      await changeRowsPerPage(1);
+    };
+
+    await changePeopleType();
+  }, 15000);
+
+>>>>>>> develop-userTypeFix
   test('Correct mock data should be queried', async () => {
     window.location.assign('/orgpeople/orgid');
 
@@ -578,40 +745,42 @@ describe('Organization People Page', () => {
 
     expect(dataQuery3).toEqual([
       {
-        __typename: 'User',
-        firstName: 'Aditya',
-        lastName: 'Userguy',
-        image: null,
-        _id: '64001660a711c62d5b4076a2',
-        email: 'adidacreator1@gmail.com',
-        userType: 'SUPERADMIN',
-        adminApproved: true,
-        organizationsBlockedBy: [],
-        createdAt: '2023-03-02T03:22:08.101Z',
-        joinedOrganizations: [
-          {
-            __typename: 'Organization',
-            _id: '6401ff65ce8e8406b8f07af1',
-          },
-        ],
+        user: {
+          __typename: 'User',
+          firstName: 'Aditya',
+          lastName: 'Userguy',
+          image: null,
+          _id: '64001660a711c62d5b4076a2',
+          email: 'adidacreator1@gmail.com',
+          adminApproved: true,
+          organizationsBlockedBy: [],
+          createdAt: '2023-03-02T03:22:08.101Z',
+          joinedOrganizations: [
+            {
+              __typename: 'Organization',
+              _id: '6401ff65ce8e8406b8f07af1',
+            },
+          ],
+        },
       },
       {
-        __typename: 'User',
-        firstName: 'Aditya',
-        lastName: 'Userguytwo',
-        image: null,
-        _id: '6402030dce8e8406b8f07b0e',
-        email: 'adi1@gmail.com',
-        userType: 'USER',
-        adminApproved: true,
-        organizationsBlockedBy: [],
-        createdAt: '2023-03-03T14:24:13.084Z',
-        joinedOrganizations: [
-          {
-            __typename: 'Organization',
-            _id: '6401ff65ce8e8406b8f07af2',
-          },
-        ],
+        user: {
+          __typename: 'User',
+          firstName: 'Aditya',
+          lastName: 'Userguytwo',
+          image: null,
+          _id: '6402030dce8e8406b8f07b0e',
+          email: 'adi1@gmail.com',
+          adminApproved: true,
+          organizationsBlockedBy: [],
+          createdAt: '2023-03-03T14:24:13.084Z',
+          joinedOrganizations: [
+            {
+              __typename: 'Organization',
+              _id: '6401ff65ce8e8406b8f07af2',
+            },
+          ],
+        },
       },
       ...users,
     ]);
@@ -1161,9 +1330,37 @@ describe('Organization People Page', () => {
       </MockedProvider>,
     );
     await wait();
+<<<<<<< HEAD
 
     const orgUsers = MOCKS[3]?.result?.data?.users;
     expect(orgUsers?.length).toBe(2);
+=======
+    userEvent.click(screen.getByLabelText(/Users/i));
+    await wait();
+    expect(screen.getByLabelText(/Users/i)).toBeChecked();
+    await wait();
+    const orgUsers = dataQueryForUsers?.filter(
+      (datas: {
+        _id: string;
+        lastName: string;
+        firstName: string;
+        image: string;
+        email: string;
+        createdAt: string;
+        joinedOrganizations: {
+          __typename: string;
+          _id: string;
+        }[];
+      }) => {
+        window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af1');
+        const pathname = window.location.pathname;
+        const id = pathname.split('=')[1];
+        return datas.joinedOrganizations?.some((org) => org._id === id);
+      }
+    );
+    await wait();
+    expect(orgUsers?.length).toBe(0);
+>>>>>>> develop-userTypeFix
 
     await wait();
     expect(window.location).toBeAt('/orgpeople/6401ff65ce8e8406b8f07af1');
@@ -1217,7 +1414,11 @@ describe('Organization People Page', () => {
       },
     );
     await wait();
+<<<<<<< HEAD
     expect(orgUserssize?.length).toBe(1);
+=======
+    expect(orgUsers?.length).toBe(0);
+>>>>>>> develop-userTypeFix
 
     await wait();
     expect(window.location).toBeAt('/orgpeople/6401ff65ce8e8406b8f07af2');

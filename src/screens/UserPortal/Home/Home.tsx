@@ -69,10 +69,15 @@ interface InterfaceAdContent {
   _id: string;
   name: string;
   type: string;
+<<<<<<< HEAD
   organization: {
     _id: string;
   };
   link: string;
+=======
+  organization: { _id: string };
+  mediaUrl: string;
+>>>>>>> develop-userTypeFix
   endDate: string;
   startDate: string;
 }
@@ -103,7 +108,11 @@ export default function home(): JSX.Element {
     refetch,
     loading: loadingPosts,
   } = useQuery(ORGANIZATION_POST_LIST, {
+<<<<<<< HEAD
     variables: { id: organizationId, first: 10 },
+=======
+    variables: { id: organizationId },
+>>>>>>> develop-userTypeFix
   });
 
   const userId: string | null = getItem('userId');
@@ -152,7 +161,11 @@ export default function home(): JSX.Element {
 
   React.useEffect(() => {
     if (data) {
+<<<<<<< HEAD
       setPosts(data.organizaitons[0].posts.edges);
+=======
+      setPosts(data.organizations[0].posts.edges);
+>>>>>>> develop-userTypeFix
     }
   }, [data]);
 
@@ -173,8 +186,13 @@ export default function home(): JSX.Element {
   ): InterfaceAdContent[] => {
     return adCont.filter(
       (ad: InterfaceAdContent) =>
+<<<<<<< HEAD
         ad.organization._id === organizationId &&
         new Date(ad.endDate) > currentDate,
+=======
+        ad.organization._id === currentOrgId &&
+        new Date(ad.endDate) > currentDate
+>>>>>>> develop-userTypeFix
     );
   };
 
@@ -206,7 +224,9 @@ export default function home(): JSX.Element {
             <Row className="d-flex align-items-center justify-content-center">
               <Col xs={2} className={styles.userImage}>
                 <Image
-                  src={userData?.image ? userData?.image : UserDefault}
+                  src={
+                    userData?.user.image ? userData?.user.image : UserDefault
+                  }
                   roundedCircle
                   className="mt-2"
                 />
@@ -315,10 +335,17 @@ export default function home(): JSX.Element {
             <div data-testid="promotedPostsContainer">
               {filteredAd.map((post: any) => (
                 <PromotedPost
+<<<<<<< HEAD
                   key={post._id}
                   id={post._id}
                   media={post.mediaUrl}
                   title={post.name}
+=======
+                  key={post.organization._id}
+                  id={post.organization._id}
+                  image={post.organization.mediaUrl}
+                  title={post.organization.name}
+>>>>>>> develop-userTypeFix
                   data-testid="postid"
                 />
               ))}
@@ -409,12 +436,14 @@ export default function home(): JSX.Element {
               <span className="d-flex gap-2 align-items-center">
                 <span className={styles.userImage}>
                   <Image
-                    src={userData?.image ? userData?.image : UserDefault}
+                    src={
+                      userData?.user.image ? userData?.user.image : UserDefault
+                    }
                     roundedCircle
                     className="mt-2"
                   />
                 </span>
-                <span>{`${userData?.user?.firstName} ${userData?.user?.lastName}`}</span>
+                <span>{`${userData?.user.firstName} ${userData?.user.lastName}`}</span>
               </span>
             </Modal.Title>
           </Modal.Header>

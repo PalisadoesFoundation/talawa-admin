@@ -22,11 +22,13 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
 
   const { getItem } = useLocalStorage();
-  const userType = getItem('UserType');
+  const superAdmin = getItem('SuperAdmin');
   const firstName = getItem('FirstName');
   const lastName = getItem('LastName');
   const userImage = getItem('UserImage');
   const navigate = useNavigate();
+
+  const role = superAdmin ? 'SuperAdmin' : 'Admin';
 
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
 
@@ -59,6 +61,7 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
                 className={`${
                   isActive === true ? 'text-white' : 'text-secondary'
                 }`}
+<<<<<<< HEAD
                 data-testid="orgsBtn"
               >
                 <div className={styles.iconWrapper}>
@@ -81,6 +84,29 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
                   variant={isActive === true ? 'success' : 'light'}
                   className={`${
                     isActive === true ? 'text-white' : 'text-secondary'
+=======
+              />
+            </div>
+            {t('my organizations')}
+          </Button>
+          {superAdmin && (
+            <Button
+              variant={screenName === 'Users' ? 'success' : 'light'}
+              className={`${
+                screenName === 'Users' ? 'text-white' : 'text-secondary'
+              }`}
+              onClick={(): void => {
+                history.push('/users');
+              }}
+              data-testid="rolesBtn"
+            >
+              <div className={styles.iconWrapper}>
+                <RolesIcon
+                  fill={`${
+                    screenName === 'Users'
+                      ? 'var(--bs-white)'
+                      : 'var(--bs-secondary)'
+>>>>>>> develop-userTypeFix
                   }`}
                   data-testid="rolesBtn"
                 >
@@ -122,7 +148,7 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
                 {firstName} {lastName}
               </span>
               <span className={styles.secondaryText}>
-                {`${userType}`.toLowerCase()}
+                {`${role}`.toLowerCase()}
               </span>
             </div>
             <AngleRightIcon fill={'var(--bs-secondary)'} />

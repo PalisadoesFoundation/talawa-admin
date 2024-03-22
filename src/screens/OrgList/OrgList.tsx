@@ -35,13 +35,21 @@ function orgList(): JSX.Element {
   const navigate = useNavigate();
   const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
   const [dialogRedirectOrgId, setDialogRedirectOrgId] = useState('<ORG_ID>');
+<<<<<<< HEAD
   function openDialogModal(redirectOrgId: string): void {
+=======
+
+  /* eslint-disable @typescript-eslint/explicit-function-return-type */
+  function openDialogModal(redirectOrgId: string) {
+>>>>>>> develop-userTypeFix
     setDialogRedirectOrgId(redirectOrgId);
     // console.log(redirectOrgId, dialogRedirectOrgId);
     setdialogModalIsOpen(true);
   }
 
   const { getItem } = useLocalStorage();
+  const superAdmin = getItem('SuperAdmin');
+  const adminFor = getItem('AdminFor');
 
   function closeDialogModal(): void {
     setdialogModalIsOpen(false);
@@ -94,7 +102,7 @@ function orgList(): JSX.Element {
     loading: boolean;
     error?: Error | undefined;
   } = useQuery(USER_ORGANIZATION_LIST, {
-    variables: { id: getItem('id') },
+    variables: { userId: getItem('id') },
     context: {
       headers: { authorization: `Bearer ${getItem('token')}` },
     },
@@ -155,13 +163,13 @@ function orgList(): JSX.Element {
   const isAdminForCurrentOrg = (
     currentOrg: InterfaceOrgConnectionInfoType,
   ): boolean => {
-    if (userData?.user?.adminFor.length === 1) {
+    if (adminFor.length === 1) {
       // If user is admin for one org only then check if that org is current org
-      return userData?.user?.adminFor[0]._id === currentOrg._id;
+      return adminFor[0]._id === currentOrg._id;
     } else {
       // If user is admin for more than one org then check if current org is present in adminFor array
       return (
-        userData?.user?.adminFor.some(
+        adminFor.some(
           (org: { _id: string; name: string; image: string | null }) =>
             org._id === currentOrg._id,
         ) ?? false
@@ -338,6 +346,7 @@ function orgList(): JSX.Element {
 
   return (
     <>
+<<<<<<< HEAD
       {/* Buttons Container */}
       <div className={styles.btnsContainer}>
         <div className={styles.input}>
@@ -431,6 +440,156 @@ function orgList(): JSX.Element {
             dataLength={orgsData?.organizationsConnection?.length ?? 0}
             next={loadMoreOrganizations}
             loader={
+=======
+      <SuperAdminScreen
+        title={t('my organizations')}
+        screenName="My Organizations"
+      >
+        {/* Buttons Container */}
+        <div className={styles.btnsContainer}>
+          <div className={styles.input}>
+            <Form.Control
+              type="name"
+              id="searchOrgname"
+              className="bg-white"
+              placeholder={t('searchByName')}
+              data-testid="searchByName"
+              autoComplete="off"
+              required
+              onKeyUp={handleSearchByEnter}
+            />
+            <Button
+              tabIndex={-1}
+              className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+              onClick={handleSearchByBtnClick}
+              data-testid="searchBtn"
+            >
+              <Search />
+            </Button>
+          </div>
+          <div className={styles.btnsBlock}>
+            <div className="d-flex">
+              <Dropdown
+                aria-expanded="false"
+                title="Sort organizations"
+                data-testid="sort"
+              >
+                <Dropdown.Toggle
+                  variant={
+                    sortingState.option === '' ? 'outline-success' : 'success'
+                  }
+                  data-testid="sortOrgs"
+                >
+                  <SortIcon className={'me-1'} />
+                  {sortingState.selectedOption}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    onClick={(): void => handleSorting('Latest')}
+                    data-testid="latest"
+                  >
+                    {t('Latest')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={(): void => handleSorting('Earliest')}
+                    data-testid="oldest"
+                  >
+                    {t('Earliest')}
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+            {superAdmin && (
+              <Button
+                variant="success"
+                onClick={toggleModal}
+                data-testid="createOrganizationBtn"
+              >
+                <i className={'fa fa-plus me-2'} />
+                {t('createOrganization')}
+              </Button>
+            )}
+          </div>
+        </div>
+        {/* Text Infos for list */}
+        {!isLoading &&
+        ((orgsData?.organizationsConnection.length === 0 &&
+          searchByName.length == 0) ||
+          (userData && adminFor.length === 0)) ? (
+          // eslint-disable-next-line
+          <div className={styles.notFound}>
+            <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
+            <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
+          </div>
+        ) : !isLoading &&
+          orgsData?.organizationsConnection.length == 0 &&
+          /* istanbul ignore next */
+          searchByName.length > 0 ? (
+          /* istanbul ignore next */
+          // eslint-disable-next-line
+          <div className={styles.notFound} data-testid="noResultFound">
+            <h4 className="m-0">
+              {t('noResultsFoundFor')} &quot;{searchByName}&quot;
+            </h4>
+          </div>
+        ) : (
+          <>
+            <InfiniteScroll
+              dataLength={orgsData?.organizationsConnection?.length ?? 0}
+              next={loadMoreOrganizations}
+              loader={
+                <>
+                  {[...Array(perPageResult)].map((_, index) => (
+                    <div key={index} className={styles.itemCard}>
+                      <div className={styles.loadingWrapper}>
+                        <div className={styles.innerContainer}>
+                          <div
+                            className={`${styles.orgImgContainer} shimmer`}
+                          ></div>
+                          <div className={styles.content}>
+                            <h5 className="shimmer" title="Org name"></h5>
+                            <h6 className="shimmer" title="Location"></h6>
+                            <h6 className="shimmer" title="Admins"></h6>
+                            <h6 className="shimmer" title="Members"></h6>
+                          </div>
+                        </div>
+                        <div className={`shimmer ${styles.button}`} />
+                      </div>
+                    </div>
+                  ))}
+                </>
+              }
+              hasMore={hasMore}
+              className={styles.listBox}
+              data-testid="organizations-list"
+              endMessage={
+                <div className={'w-100 text-center my-4'}>
+                  <h5 className="m-0 ">{t('endOfResults')}</h5>
+                </div>
+              }
+            >
+              {userData && superAdmin
+                ? orgsData?.organizationsConnection.map((item) => {
+                    return (
+                      <div key={item._id} className={styles.itemCard}>
+                        <OrgListCard data={item} />
+                      </div>
+                    );
+                  })
+                : userData &&
+                  adminFor.length > 0 &&
+                  orgsData?.organizationsConnection.map((item) => {
+                    if (isAdminForCurrentOrg(item)) {
+                      return (
+                        <div key={item._id} className={styles.itemCard}>
+                          <OrgListCard data={item} />
+                        </div>
+                      );
+                    }
+                  })}
+            </InfiniteScroll>
+            {isLoading && (
+>>>>>>> develop-userTypeFix
               <>
                 {[...Array(perPageResult)].map((_, index) => (
                   <div key={index} className={styles.itemCard}>

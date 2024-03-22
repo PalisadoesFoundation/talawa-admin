@@ -2,7 +2,6 @@ import { useMutation } from '@apollo/client';
 import { Search } from '@mui/icons-material';
 import {
   REMOVE_MEMBER_MUTATION,
-  UPDATE_USERTYPE_MUTATION,
   UPDATE_USER_ROLE_IN_ORG_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
@@ -40,46 +39,26 @@ const UsersTableItem = (props: Props): JSX.Element => {
     orgId: '',
     setShowOnCancel: '',
   });
-  const [joinedOrgs, setJoinedOrgs] = useState(user.joinedOrganizations);
+  const [joinedOrgs, setJoinedOrgs] = useState(user.user.joinedOrganizations);
   const [orgsBlockedBy, setOrgsBlockedBy] = useState(
+<<<<<<< HEAD
     user.organizationsBlockedBy,
+=======
+    user.user.organizationsBlockedBy
+>>>>>>> develop-userTypeFix
   );
   const [searchByNameJoinedOrgs, setSearchByNameJoinedOrgs] = useState('');
   const [searchByNameOrgsBlockedBy, setSearchByNameOrgsBlockedBy] =
     useState('');
-  const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
   const [removeUser] = useMutation(REMOVE_MEMBER_MUTATION);
   const [updateUserInOrgType] = useMutation(UPDATE_USER_ROLE_IN_ORG_MUTATION);
   const navigate = useNavigate();
-
-  /* istanbul ignore next */
-  const changeRole = async (e: any): Promise<void> => {
-    const { value } = e.target;
-
-    const inputData = value.split('?');
-
-    try {
-      const { data } = await updateUserType({
-        variables: {
-          id: inputData[1],
-          userType: inputData[0],
-        },
-      });
-      if (data) {
-        toast.success(t('roleUpdated'));
-        resetAndRefetch();
-      }
-    } catch (error: any) {
-      /* istanbul ignore next */
-      errorHandler(t, error);
-    }
-  };
 
   const confirmRemoveUser = async (): Promise<void> => {
     try {
       const { data } = await removeUser({
         variables: {
-          userid: user._id,
+          userid: user.user._id,
           orgid: removeUserProps.orgId,
         },
       });
@@ -103,7 +82,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
     try {
       const { data } = await updateUserInOrgType({
         variables: {
-          userId: user._id,
+          userId: user.user._id,
           role: inputData[0],
           organizationId: inputData[1],
         },
@@ -131,10 +110,15 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const searchJoinedOrgs = (value: string): void => {
     setSearchByNameJoinedOrgs(value);
     if (value == '') {
-      setJoinedOrgs(user.joinedOrganizations);
+      setJoinedOrgs(user.user.joinedOrganizations);
     } else {
+<<<<<<< HEAD
       const filteredOrgs = user.joinedOrganizations.filter((org) =>
         org.name.toLowerCase().includes(value.toLowerCase()),
+=======
+      const filteredOrgs = user.user.joinedOrganizations.filter((org) =>
+        org.name.toLowerCase().includes(value.toLowerCase())
+>>>>>>> develop-userTypeFix
       );
       setJoinedOrgs(filteredOrgs);
     }
@@ -142,10 +126,15 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const searchOrgsBlockedBy = (value: string): void => {
     setSearchByNameOrgsBlockedBy(value);
     if (value == '') {
-      setOrgsBlockedBy(user.organizationsBlockedBy);
+      setOrgsBlockedBy(user.user.organizationsBlockedBy);
     } else {
+<<<<<<< HEAD
       const filteredOrgs = user.organizationsBlockedBy.filter((org) =>
         org.name.toLowerCase().includes(value.toLowerCase()),
+=======
+      const filteredOrgs = user.user.organizationsBlockedBy.filter((org) =>
+        org.name.toLowerCase().includes(value.toLowerCase())
+>>>>>>> develop-userTypeFix
       );
       setOrgsBlockedBy(filteredOrgs);
     }
@@ -190,37 +179,44 @@ const UsersTableItem = (props: Props): JSX.Element => {
       {/* Table Item */}
       <tr>
         <th scope="row">{index + 1}</th>
-        <td>{`${user.firstName} ${user.lastName}`}</td>
-        <td>{user.email}</td>
+        <td>{`${user.user.firstName} ${user.user.lastName}`}</td>
+        <td>{user.user.email}</td>
         <td>
           <Form.Select
-            name={`role${user._id}`}
-            data-testid={`changeRole${user._id}`}
-            onChange={changeRole}
-            disabled={user._id === loggedInUserId}
-            defaultValue={`${user.userType}?${user._id}`}
+            name={`role${user.user._id}`}
+            data-testid={`changeRole${user.user._id}`}
+            disabled={user.user._id === loggedInUserId}
+            defaultValue={
+              user.appUserProfile.isSuperAdmin
+                ? 'SUPERADMIN' + `?${user.user._id}`
+                : user.user.adminApproved
+                ? 'ADMIN' + `?${user.user._id}`
+                : 'USER' + `?${user.user._id}`
+            }
           >
-            <option value={`ADMIN?${user._id}`}>{t('admin')}</option>
-            <option value={`SUPERADMIN?${user._id}`}>{t('superAdmin')}</option>
-            <option value={`USER?${user._id}`}>{t('user')}</option>
+            <option value={`ADMIN?${user.user._id}`}>{t('admin')}</option>
+            <option value={`SUPERADMIN?${user.user._id}`}>
+              {t('superAdmin')}
+            </option>
+            <option value={`USER?${user.user._id}`}>{t('user')}</option>
           </Form.Select>
         </td>
         <td>
           <Button
             onClick={() => setShowJoinedOrganizations(true)}
-            data-testid={`showJoinedOrgsBtn${user._id}`}
+            data-testid={`showJoinedOrgsBtn${user.user._id}`}
           >
-            {t('view')} ({user.joinedOrganizations.length})
+            {t('view')} ({user.user.joinedOrganizations.length})
           </Button>
         </td>
 
         <td>
           <Button
             variant="danger"
-            data-testid={`showBlockedByOrgsBtn${user._id}`}
+            data-testid={`showBlockedByOrgsBtn${user.user._id}`}
             onClick={() => setShowBlockedOrganizations(true)}
           >
-            {t('view')} ({user.organizationsBlockedBy.length})
+            {t('view')} ({user.user.organizationsBlockedBy.length})
           </Button>
         </td>
       </tr>
@@ -229,17 +225,17 @@ const UsersTableItem = (props: Props): JSX.Element => {
         show={showJoinedOrganizations}
         key={`modal-joined-org-${index}`}
         size="xl"
-        data-testid={`modal-joined-org-${user._id}`}
+        data-testid={`modal-joined-org-${user.user._id}`}
         onHide={() => setShowJoinedOrganizations(false)}
       >
         <Modal.Header className="bg-primary" closeButton>
           <Modal.Title className="text-white">
-            {t('orgJoinedBy')} {`${user.firstName}`} {`${user.lastName}`} (
-            {user.joinedOrganizations.length})
+            {t('orgJoinedBy')} {`${user.user.firstName}`}{' '}
+            {`${user.user.lastName}`} ({user.user.joinedOrganizations.length})
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {user.joinedOrganizations.length !== 0 && (
+          {user.user.joinedOrganizations.length !== 0 && (
             <div className={'position-relative mb-4 border rounded'}>
               <Form.Control
                 type="name"
@@ -262,10 +258,11 @@ const UsersTableItem = (props: Props): JSX.Element => {
             </div>
           )}
           <Row>
-            {user.joinedOrganizations.length == 0 ? (
+            {user.user.joinedOrganizations.length == 0 ? (
               <div className={styles.notJoined}>
                 <h4>
-                  {user.firstName} {user.lastName} {t('hasNotJoinedAnyOrg')}
+                  {user.user.firstName} {user.user.lastName}{' '}
+                  {t('hasNotJoinedAnyOrg')}
                 </h4>
               </div>
             ) : joinedOrgs.length == 0 ? (
@@ -294,7 +291,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                   {joinedOrgs.map((org) => {
                     // Check user is admin for this organization or not
                     let isAdmin = false;
-                    user.adminFor.map((item) => {
+                    user.appUserProfile.adminFor.map((item) => {
                       if (item._id == org._id) {
                         isAdmin = true;
                       }
@@ -390,7 +387,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
           <Button
             variant="secondary"
             onClick={() => setShowJoinedOrganizations(false)}
-            data-testid={`closeJoinedOrgsBtn${user._id}`}
+            data-testid={`closeJoinedOrgsBtn${user.user._id}`}
           >
             Close
           </Button>
@@ -402,16 +399,17 @@ const UsersTableItem = (props: Props): JSX.Element => {
         key={`modal-blocked-org-${index}`}
         size="xl"
         onHide={() => setShowBlockedOrganizations(false)}
-        data-testid={`modal-blocked-org-${user._id}`}
+        data-testid={`modal-blocked-org-${user.user._id}`}
       >
         <Modal.Header className="bg-danger" closeButton>
           <Modal.Title className="text-white">
-            {t('orgThatBlocked')} {`${user.firstName}`} {`${user.lastName}`} (
-            {user.organizationsBlockedBy.length})
+            {t('orgThatBlocked')} {`${user.user.firstName}`}{' '}
+            {`${user.user.lastName}`} ({user.user.organizationsBlockedBy.length}
+            )
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {user.organizationsBlockedBy.length !== 0 && (
+          {user.user.organizationsBlockedBy.length !== 0 && (
             <div className={'position-relative mb-4 border rounded'}>
               <Form.Control
                 type="name"
@@ -435,10 +433,11 @@ const UsersTableItem = (props: Props): JSX.Element => {
             </div>
           )}
           <Row>
-            {user.organizationsBlockedBy.length == 0 ? (
+            {user.user.organizationsBlockedBy.length == 0 ? (
               <div className={styles.notJoined}>
                 <h4>
-                  {user.firstName} {user.lastName} {t('isNotBlockedByAnyOrg')}
+                  {user.user.firstName} {user.user.lastName}{' '}
+                  {t('isNotBlockedByAnyOrg')}
                 </h4>
               </div>
             ) : orgsBlockedBy.length == 0 ? (
@@ -468,7 +467,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                   {orgsBlockedBy.map((org) => {
                     // Check user is admin for this organization or not
                     let isAdmin = false;
-                    user.adminFor.map((item) => {
+                    user.appUserProfile.adminFor.map((item) => {
                       if (item._id == org._id) {
                         isAdmin = true;
                       }
@@ -564,7 +563,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
           <Button
             variant="secondary"
             onClick={() => setShowBlockedOrganizations(false)}
-            data-testid={`closeBlockedByOrgsBtn${user._id}`}
+            data-testid={`closeBlockedByOrgsBtn${user.user._id}`}
           >
             Close
           </Button>
@@ -574,7 +573,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
       <Modal
         show={showRemoveUserModal}
         key={`modal-remove-org-${index}`}
-        data-testid={`modal-remove-user-${user._id}`}
+        data-testid={`modal-remove-user-${user.user._id}`}
         onHide={() => onHideRemoveUserModal()}
       >
         <Modal.Header className="bg-danger" closeButton>
@@ -586,7 +585,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
           <p>
             Are you sure you want to remove{' '}
             <strong>
-              &ldquo;{user.firstName} {user.lastName}&rdquo;
+              &ldquo;{user.user.firstName} {user.user.lastName}&rdquo;
             </strong>{' '}
             from organization{' '}
             <strong>
@@ -600,14 +599,14 @@ const UsersTableItem = (props: Props): JSX.Element => {
           <Button
             variant="secondary"
             onClick={() => onHideRemoveUserModal()}
-            data-testid={`closeRemoveUserModal${user._id}`}
+            data-testid={`closeRemoveUserModal${user.user._id}`}
           >
             Close
           </Button>
           <Button
             variant="danger"
             onClick={() => confirmRemoveUser()}
-            data-testid={`confirmRemoveUser${user._id}`}
+            data-testid={`confirmRemoveUser${user.user._id}`}
           >
             Remove
           </Button>

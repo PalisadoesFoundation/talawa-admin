@@ -1,15 +1,24 @@
 import { useMutation } from '@apollo/client';
 import type { ChangeEvent } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Check, Clear } from '@mui/icons-material';
+
+import {
+  FacebookLogo,
+  LinkedInLogo,
+  GithubLogo,
+  InstagramLogo,
+  SlackLogo,
+  TwitterLogo,
+  YoutubeLogo,
+} from 'assets/svgs/social-icons';
 
 import {
   REACT_APP_USE_RECAPTCHA,
@@ -27,28 +36,19 @@ import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLang
 import LoginPortalToggle from 'components/LoginPortalToggle/LoginPortalToggle';
 import Loader from 'components/Loader/Loader';
 import { errorHandler } from 'utils/errorHandler';
-import styles from './LoginPage.module.css';
+import styles from './UserLoginPage.module.css';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import useLocalStorage from 'utils/useLocalstorage';
-import { socialMediaLinks } from '../../constants';
 
-const loginPage = (): JSX.Element => {
-  const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
-  const navigate = useNavigate();
-
-  const { getItem, setItem } = useLocalStorage();
+function loginPage(): JSX.Element {
+  const { t } = useTranslation('translation', { keyPrefix: 'userLoginPage' });
+  const history = useHistory();
 
   document.title = t('title');
 
-  type PasswordValidation = {
-    lowercaseChar: boolean;
-    uppercaseChar: boolean;
-    numericValue: boolean;
-    specialChar: boolean;
-  };
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const { getItem, setItem } = useLocalStorage();
+
   const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
-  const [role, setRole] = useState<'admin' | 'user'>('admin');
   const [componentLoader, setComponentLoader] = useState(true);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [signformState, setSignFormState] = useState({
@@ -65,39 +65,12 @@ const loginPage = (): JSX.Element => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
-  const [showAlert, setShowAlert] = useState<PasswordValidation>({
-    lowercaseChar: true,
-    uppercaseChar: true,
-    numericValue: true,
-    specialChar: true,
-  });
-
-  const passwordValidationRegExp = {
-    lowercaseCharRegExp: new RegExp('[a-z]'),
-    uppercaseCharRegExp: new RegExp('[A-Z]'),
-    numericalValueRegExp: new RegExp('\\d'),
-    specialCharRegExp: new RegExp('[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\/-]'),
-  };
-
-  const handlePasswordCheck = (pass: string): void => {
-    setShowAlert({
-      lowercaseChar: !passwordValidationRegExp.lowercaseCharRegExp.test(pass),
-      uppercaseChar: !passwordValidationRegExp.uppercaseCharRegExp.test(pass),
-      numericValue: !passwordValidationRegExp.numericalValueRegExp.test(pass),
-      specialChar: !passwordValidationRegExp.specialCharRegExp.test(pass),
-    });
-  };
-
-  const handleRoleToggle = (role: 'admin' | 'user'): void => {
-    setRole(role);
-  };
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   useEffect(() => {
     const isLoggedIn = getItem('IsLoggedIn');
     if (isLoggedIn == 'TRUE') {
-      navigate(
-        getItem('UserType') === 'USER' ? '/user/organizations' : '/orglist',
-      );
+      history.push('/user/organizations/');
     }
     setComponentLoader(false);
   }, []);
@@ -106,8 +79,11 @@ const loginPage = (): JSX.Element => {
   const toggleConfirmPassword = (): void =>
     setShowConfirmPassword(!showConfirmPassword);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [login, { loading: loginLoading }] = useMutation(LOGIN_MUTATION);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [recaptcha, { loading: recaptchaLoading }] =
     useMutation(RECAPTCHA_MUTATION);
 
@@ -125,7 +101,7 @@ const loginPage = (): JSX.Element => {
   }, []);
 
   const verifyRecaptcha = async (
-    recaptchaToken: any,
+    recaptchaToken: any
   ): Promise<boolean | void> => {
     try {
       /* istanbul ignore next */
@@ -145,15 +121,14 @@ const loginPage = (): JSX.Element => {
     }
   };
 
-  const handleCaptcha = (token: string | null): void => {
-    setRecaptchaToken(token);
-  };
-
   const signupLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
     const { signfirstName, signlastName, signEmail, signPassword, cPassword } =
       signformState;
+
+    const recaptchaToken = recaptchaRef.current?.getValue();
+    recaptchaRef.current?.reset();
 
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
@@ -161,28 +136,12 @@ const loginPage = (): JSX.Element => {
       toast.error(t('Please_check_the_captcha'));
       return;
     }
-    const isValidatedString = (value: string): boolean =>
-      /^[a-zA-Z]+$/.test(value);
-
-    const validatePassword = (password: string): boolean => {
-      const lengthCheck = new RegExp('^.{6,}$');
-      return (
-        lengthCheck.test(password) &&
-        passwordValidationRegExp.lowercaseCharRegExp.test(password) &&
-        passwordValidationRegExp.uppercaseCharRegExp.test(password) &&
-        passwordValidationRegExp.numericalValueRegExp.test(password) &&
-        passwordValidationRegExp.specialCharRegExp.test(password)
-      );
-    };
 
     if (
-      isValidatedString(signfirstName) &&
-      isValidatedString(signlastName) &&
       signfirstName.length > 1 &&
       signlastName.length > 1 &&
       signEmail.length >= 8 &&
-      signPassword.length > 1 &&
-      validatePassword(signPassword)
+      signPassword.length > 1
     ) {
       if (cPassword == signPassword) {
         try {
@@ -197,12 +156,10 @@ const loginPage = (): JSX.Element => {
 
           /* istanbul ignore next */
           if (signUpData) {
-            toast.success(
-              role === 'admin'
-                ? 'Successfully Registered. Please wait until you will be approved.'
-                : 'Successfully registered. Please wait for admin to approve your request.',
-            );
+            toast.success(t('afterRegister'));
+
             setShowTab('LOGIN');
+
             setSignFormState({
               signfirstName: '',
               signlastName: '',
@@ -219,23 +176,16 @@ const loginPage = (): JSX.Element => {
         toast.warn(t('passwordMismatches'));
       }
     } else {
-      if (!isValidatedString(signfirstName)) {
-        toast.warn(t('firstName_invalid'));
-      }
-      if (!isValidatedString(signlastName)) {
-        toast.warn(t('lastName_invalid'));
-      }
-      if (!validatePassword(signPassword)) {
-        toast.warn(t('password_invalid'));
-      }
-      if (signEmail.length < 8) {
-        toast.warn(t('email_invalid'));
-      }
+      toast.warn(t('fillCorrectly'));
     }
   };
 
   const loginLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+
+    const recaptchaToken = recaptchaRef.current?.getValue();
+    recaptchaRef.current?.reset();
+
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
@@ -253,58 +203,17 @@ const loginPage = (): JSX.Element => {
 
       /* istanbul ignore next */
       if (loginData) {
-<<<<<<< HEAD
-        if (role === 'admin') {
-          if (
-            loginData.login.user.userType === 'SUPERADMIN' ||
-            (loginData.login.user.userType === 'ADMIN' &&
-              loginData.login.user.adminApproved === true)
-          ) {
-            setItem('token', loginData.login.accessToken);
-            setItem('refreshToken', loginData.login.refreshToken);
-            setItem('id', loginData.login.user._id);
-            setItem('IsLoggedIn', 'TRUE');
-            setItem('UserType', loginData.login.user.userType);
-          } else {
-            toast.warn(t('notAuthorised'));
-=======
-        if (
-          loginData.login.appUserProfile.isSuperAdmin ||
-          (loginData.login.appUserProfile.adminFor.length !== 0 &&
-            loginData.login.user.adminApproved === true)
-        ) {
-          setItem('FirstName', loginData.login.user.firstName);
-          setItem('LastName', loginData.login.user.lastName);
-          setItem('token', loginData.login.accessToken);
-          setItem('refreshToken', loginData.login.refreshToken);
-          setItem('id', loginData.login.user._id);
-          setItem('IsLoggedIn', 'TRUE');
-          setItem('SuperAdmin', loginData.login.appUserProfile.isSuperAdmin);
-          setItem('AdminFor', loginData.login.appUserProfile.adminFor);
-          if (getItem('IsLoggedIn') == 'TRUE') {
-            history.push('/orglist');
->>>>>>> develop-userTypeFix
-          }
-        } else {
-          setItem('token', loginData.login.accessToken);
-          setItem('refreshToken', loginData.login.refreshToken);
-          setItem('userId', loginData.login.user._id);
-          setItem('IsLoggedIn', 'TRUE');
-          setItem('UserType', loginData.login.user.userType);
-        }
-        setItem(
-          'name',
-          `${loginData.login.user.firstName} ${loginData.login.user.lastName}`,
-        );
-        setItem('email', loginData.login.user.email);
-        setItem('FirstName', loginData.login.user.firstName);
-        setItem('LastName', loginData.login.user.lastName);
-        setItem('UserImage', loginData.login.user.image);
+        setItem('token', loginData.login.accessToken);
+        setItem('userId', loginData.login.user._id);
+        setItem('refreshToken', loginData.login.refreshToken);
+        setItem('IsLoggedIn', 'TRUE');
+        setItem('UserType', 'USER');
+        navigator.clipboard.writeText('');
         if (getItem('IsLoggedIn') == 'TRUE') {
-          navigate(role === 'admin' ? '/orglist' : '/user/organizations');
+          history.push('/user/organizations/');
         }
       } else {
-        toast.warn(t('notFound'));
+        toast.warn(t('notAuthorised'));
       }
     } catch (error: any) {
       /* istanbul ignore next */
@@ -316,28 +225,67 @@ const loginPage = (): JSX.Element => {
     return <Loader />;
   }
 
-  const socialIconsList = socialMediaLinks.map(({ href, logo }, index) => (
-    <a key={index} href={href} target="_blank" rel="noopener noreferrer">
-      <img src={logo} />
-    </a>
-  ));
-
   return (
     <>
       <section className={styles.login_background}>
         <Row className={styles.row}>
           <Col sm={0} md={6} lg={7} className={styles.left_portion}>
             <div className={styles.inner}>
+              <PalisadoesLogo className={styles.palisadoes_logo} />
+              <p className="text-center">{t('fromPalisadoes')}</p>
+            </div>
+
+            <div className={styles.socialIcons}>
               <a
-                href="https://www.palisadoes.org/"
+                href="https://www.facebook.com/palisadoesproject"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <PalisadoesLogo className={styles.palisadoes_logo} />
-                <p className="text-center">{t('fromPalisadoes')}</p>
+                <img src={FacebookLogo} />
+              </a>
+              <a
+                href="https://twitter.com/palisadoesorg?lang=en"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={TwitterLogo} className={styles.socialIcon} />
+              </a>
+              <a
+                href="https://www.linkedin.com/company/palisadoes/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={LinkedInLogo} />
+              </a>
+              <a
+                href="https://github.com/PalisadoesFoundation"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={GithubLogo} />
+              </a>
+              <a
+                href="https://www.youtube.com/@PalisadoesOrganization"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={YoutubeLogo} />
+              </a>
+              <a
+                href="https://www.palisadoes.org/slack"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={SlackLogo} />
+              </a>
+              <a
+                href="https://www.instagram.com/palisadoes/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={InstagramLogo} />
               </a>
             </div>
-            <div className={styles.socialIcons}>{socialIconsList}</div>
           </Col>
           <Col sm={12} md={6} lg={5}>
             <div className={styles.right_portion}>
@@ -351,7 +299,7 @@ const loginPage = (): JSX.Element => {
                 }`}
               />
 
-              <LoginPortalToggle onToggle={handleRoleToggle} />
+              <LoginPortalToggle />
 
               {/* LOGIN FORM */}
               <div
@@ -361,7 +309,7 @@ const loginPage = (): JSX.Element => {
               >
                 <form onSubmit={loginLink}>
                   <h1 className="fs-2 fw-bold text-dark mb-3">
-                    {role === 'admin' ? t('login') : t('userLogin')}
+                    {t('userLogin')}
                   </h1>
                   <Form.Label>{t('email')}</Form.Label>
                   <div className="position-relative">
@@ -390,7 +338,7 @@ const loginPage = (): JSX.Element => {
                   <div className="position-relative">
                     <Form.Control
                       type={showPassword ? 'text' : 'password'}
-                      className="input_box_second lh-1"
+                      className="input_box_second"
                       placeholder={t('enterPassword')}
                       required
                       value={formState.password}
@@ -427,12 +375,12 @@ const loginPage = (): JSX.Element => {
                   {REACT_APP_USE_RECAPTCHA === 'yes' ? (
                     <div className="googleRecaptcha">
                       <ReCAPTCHA
-                        className="mt-2"
+                        ref={recaptchaRef}
+                        className="mt-3"
                         sitekey={
                           /* istanbul ignore next */
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
                         }
-                        onChange={handleCaptcha}
                       />
                     </div>
                   ) : (
@@ -447,7 +395,7 @@ const loginPage = (): JSX.Element => {
                   >
                     {t('login')}
                   </Button>
-                  <div className="position-relative my-2">
+                  <div className="position-relative">
                     <hr />
                     <span className={styles.orText}>{t('OR')}</span>
                   </div>
@@ -559,7 +507,6 @@ const loginPage = (): JSX.Element => {
                             ...signformState,
                             signPassword: e.target.value,
                           });
-                          handlePasswordCheck(e.target.value);
                         }}
                       />
                       <Button
@@ -574,127 +521,25 @@ const loginPage = (): JSX.Element => {
                         )}
                       </Button>
                     </div>
-                    <div className={styles.password_checks}>
-                      {isInputFocused ? (
-                        signformState.signPassword.length < 6 ? (
-                          <div data-testid="passwordCheck">
-                            <p
-                              className={`form-text text-danger ${styles.password_check_element_top}`}
-                            >
-                              <span>
-                                <Clear className="" />
-                              </span>
-                              {t('atleast_6_char_long')}
-                            </p>
-                          </div>
-                        ) : (
-                          <p
-                            className={`form-text text-success ${styles.password_check_element_top}`}
-                          >
-                            <span>
-                              <Check />
-                            </span>
-                            {t('atleast_6_char_long')}
-                          </p>
-                        )
-                      ) : null}
-
-                      {!isInputFocused &&
-                        signformState.signPassword.length > 0 &&
-                        signformState.signPassword.length < 6 && (
-                          <div
-                            className={`form-text text-danger ${styles.password_check_element}`}
-                            data-testid="passwordCheck"
-                          >
-                            <span>
-                              <Check className="size-sm" />
-                            </span>
-                            {t('atleast_6_char_long')}
-                          </div>
-                        )}
-                      {isInputFocused && (
-                        <p
-                          className={`form-text ${
-                            showAlert.lowercaseChar
-                              ? 'text-danger'
-                              : 'text-success'
-                          } ${styles.password_check_element}`}
+                    {isInputFocused &&
+                      signformState.signPassword.length < 8 && (
+                        <div
+                          className="form-text text-danger"
+                          data-testid="passwordCheck"
                         >
-                          {showAlert.lowercaseChar ? (
-                            <span>
-                              <Clear />
-                            </span>
-                          ) : (
-                            <span>
-                              <Check />
-                            </span>
-                          )}
-                          {t('lowercase_check')}
-                        </p>
+                          {t('atleast_8_char_long')}
+                        </div>
                       )}
-                      {isInputFocused && (
-                        <p
-                          className={`form-text ${
-                            showAlert.uppercaseChar
-                              ? 'text-danger'
-                              : 'text-success'
-                          } ${styles.password_check_element}`}
+                    {!isInputFocused &&
+                      signformState.signPassword.length > 0 &&
+                      signformState.signPassword.length < 8 && (
+                        <div
+                          className="form-text text-danger"
+                          data-testid="passwordCheck"
                         >
-                          {showAlert.uppercaseChar ? (
-                            <span>
-                              <Clear />
-                            </span>
-                          ) : (
-                            <span>
-                              <Check />
-                            </span>
-                          )}
-                          {t('uppercase_check')}
-                        </p>
+                          {t('atleast_8_char_long')}
+                        </div>
                       )}
-                      {isInputFocused && (
-                        <p
-                          className={`form-text ${
-                            showAlert.numericValue
-                              ? 'text-danger'
-                              : 'text-success'
-                          } ${styles.password_check_element}`}
-                        >
-                          {showAlert.numericValue ? (
-                            <span>
-                              <Clear />
-                            </span>
-                          ) : (
-                            <span>
-                              <Check />
-                            </span>
-                          )}
-                          {t('numeric_value_check')}
-                        </p>
-                      )}
-                      {isInputFocused && (
-                        <p
-                          className={`form-text ${
-                            showAlert.specialChar
-                              ? 'text-danger'
-                              : 'text-success'
-                          } ${styles.password_check_element} ${
-                            styles.password_check_element_bottom
-                          }`}
-                        >
-                          {showAlert.specialChar ? (
-                            <span>
-                              <Clear />
-                            </span>
-                          ) : (
-                            <span>
-                              <Check />
-                            </span>
-                          )}
-                          {t('special_char_check')}
-                        </p>
-                      )}
-                    </div>
                   </div>
                   <div className="position-relative">
                     <Form.Label>{t('confirmPassword')}</Form.Label>
@@ -739,11 +584,11 @@ const loginPage = (): JSX.Element => {
                   {REACT_APP_USE_RECAPTCHA === 'yes' ? (
                     <div className="mt-3">
                       <ReCAPTCHA
+                        ref={recaptchaRef}
                         sitekey={
                           /* istanbul ignore next */
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
                         }
-                        onChange={handleCaptcha}
                       />
                     </div>
                   ) : (
@@ -782,6 +627,6 @@ const loginPage = (): JSX.Element => {
       </section>
     </>
   );
-};
+}
 
 export default loginPage;

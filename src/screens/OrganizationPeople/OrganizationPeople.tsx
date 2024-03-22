@@ -421,6 +421,7 @@ function organizationPeople(): JSX.Element {
                             </StyledTableRow>
                           ))
                         ) : (
+<<<<<<< HEAD
                           /* istanbul ignore next */
                           <NotFound
                             title={
@@ -429,6 +430,45 @@ function organizationPeople(): JSX.Element {
                                 : state === 1
                                   ? 'admin'
                                   : 'user'
+=======
+                          <NotFound title="admin" keyPrefix="userNotFound" />
+                        )
+                      ) : state == 2 ? (
+                        usersData && usersData.users.length > 0 ? (
+                          (rowsPerPage > 0
+                            ? usersData.users.slice(
+                                page * rowsPerPage,
+                                page * rowsPerPage + rowsPerPage
+                              )
+                            : usersData.users
+                          ).map(
+                            (datas: {
+                              user: {
+                                _id: string;
+                                lastName: string;
+                                firstName: string;
+                                image: string;
+                                email: string;
+                                createdAt: string;
+                              };
+                            }) => {
+                              return (
+                                <UserListCard
+                                  key={datas.user._id}
+                                  id={datas.user._id}
+                                  memberImage={datas.user.image}
+                                  joinDate={dayjs(datas.user.createdAt).format(
+                                    'DD/MM/YYYY'
+                                  )}
+                                  memberName={
+                                    datas.user.firstName +
+                                    ' ' +
+                                    datas.user.lastName
+                                  }
+                                  memberEmail={datas.user.email}
+                                />
+                              );
+>>>>>>> develop-userTypeFix
                             }
                             keyPrefix="userNotFound"
                           />

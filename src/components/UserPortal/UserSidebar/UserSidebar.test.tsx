@@ -28,25 +28,26 @@ const MOCKS = [
     result: {
       data: {
         user: {
-          __typename: 'User',
-          image: null,
-          firstName: 'Noble',
-          lastName: 'Mittal',
-          email: 'noble@mittal.com',
-          role: 'SUPERADMIN',
-          appLanguageCode: 'en',
-          userType: 'SUPERADMIN',
-          pluginCreationAllowed: true,
-          adminApproved: true,
-          createdAt: '2023-02-18T09:22:27.969Z',
-          adminFor: [],
-          createdOrganizations: [],
-          joinedOrganizations: [],
-          organizationsBlockedBy: [],
-          createdEvents: [],
-          registeredEvents: [],
-          eventAdmin: [],
-          membershipRequests: [],
+          user: {
+            _id: getItem('userId'),
+            image: null,
+            firstName: 'Noble',
+            lastName: 'Mittal',
+            adminApproved: true,
+            email: 'noble@mittal.com',
+            createdAt: '2023-02-18T09:22:27.969Z',
+            joinedOrganizations: [],
+            membershipRequests: [],
+            registeredEvents: [],
+          },
+          appUserProfile: {
+            _id: getItem('userId'),
+            adminFor: [],
+            createdOrganizations: [],
+            createdEvents: [],
+            eventAdmin: [],
+            isSuperAdmin: true,
+          },
         },
       },
     },
@@ -61,25 +62,26 @@ const MOCKS = [
     result: {
       data: {
         user: {
-          __typename: 'User',
-          image: 'adssda',
-          firstName: 'Noble',
-          lastName: 'Mittal',
-          email: 'noble@mittal.com',
-          role: 'SUPERADMIN',
-          appLanguageCode: 'en',
-          userType: 'SUPERADMIN',
-          pluginCreationAllowed: true,
-          adminApproved: true,
-          createdAt: '2023-02-18T09:22:27.969Z',
-          adminFor: [],
-          createdOrganizations: [],
-          joinedOrganizations: [],
-          organizationsBlockedBy: [],
-          createdEvents: [],
-          registeredEvents: [],
-          eventAdmin: [],
-          membershipRequests: [],
+          user: {
+            _id: '2',
+            image: 'adssda',
+            firstName: 'Noble',
+            lastName: 'Mittal',
+            email: 'noble@mittal.com',
+            createdAt: '2023-02-18T09:22:27.969Z',
+            adminApproved: true,
+            joinedOrganizations: [],
+            membershipRequests: [],
+            registeredEvents: [],
+          },
+          appUserProfile: {
+            _id: '2',
+            adminFor: [],
+            createdOrganizations: [],
+            createdEvents: [],
+            eventAdmin: [],
+            isSuperAdmin: true,
+          },
         },
       },
     },
@@ -95,15 +97,17 @@ const MOCKS = [
       data: {
         users: [
           {
-            joinedOrganizations: [
-              {
-                __typename: 'Organization',
-                _id: '6401ff65ce8e8406b8f07af2',
-                name: 'Any Organization',
-                image: '',
-                description: 'New Desc',
-              },
-            ],
+            user: {
+              joinedOrganizations: [
+                {
+                  __typename: 'Organization',
+                  _id: '6401ff65ce8e8406b8f07af2',
+                  name: 'Any Organization',
+                  image: '',
+                  description: 'New Desc',
+                },
+              ],
+            },
           },
         ],
       },
@@ -120,15 +124,17 @@ const MOCKS = [
       data: {
         users: [
           {
-            joinedOrganizations: [
-              {
-                __typename: 'Organization',
-                _id: '6401ff65ce8e8406b8f07af2',
-                name: 'Any Organization',
-                image: 'dadsa',
-                description: 'New Desc',
-              },
-            ],
+            user: {
+              joinedOrganizations: [
+                {
+                  __typename: 'Organization',
+                  _id: '6401ff65ce8e8406b8f07af2',
+                  name: 'Any Organization',
+                  image: 'dadsa',
+                  description: 'New Desc',
+                },
+              ],
+            },
           },
         ],
       },
@@ -145,7 +151,9 @@ const MOCKS = [
       data: {
         users: [
           {
-            joinedOrganizations: [],
+            user: {
+              joinedOrganizations: [],
+            },
           },
         ],
       },

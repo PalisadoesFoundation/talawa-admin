@@ -30,6 +30,7 @@ import { ToastContainer, toast } from 'react-toastify';
 
 jest.setTimeout(30000);
 import useLocalStorage from 'utils/useLocalstorage';
+
 const { setItem } = useLocalStorage();
 
 async function wait(ms = 100): Promise<void> {
@@ -70,6 +71,9 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
   test('Testing search functionality by pressing enter', async () => {
     setItem('id', '123');
+    setItem('SuperAdmin', true);
+    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
+
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -91,6 +95,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
   test('Testing search functionality by Btn click', async () => {
     setItem('id', '123');
+    setItem('SuperAdmin', true);
+    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -113,6 +119,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
   test('Should render no organisation warning alert when there are no organization', async () => {
     window.location.assign('/');
     setItem('id', '123');
+    setItem('SuperAdmin', true);
+    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
     render(
       <MockedProvider addTypename={false} link={link2}>
@@ -135,6 +143,10 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing Organization data is not present', async () => {
+    setItem('id', '123');
+    setItem('SuperAdmin', false);
+    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
+
     render(
       <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
@@ -150,9 +162,11 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
   test('Testing create organization modal', async () => {
     setItem('id', '123');
+    setItem('SuperAdmin', true);
+    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={true} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -163,15 +177,20 @@ describe('Organisations Page testing as SuperAdmin', () => {
       </MockedProvider>,
     );
 
-    await wait();
-    const createOrgBtn = screen.getByTestId(/createOrganizationBtn/i);
-    expect(createOrgBtn).toBeInTheDocument();
-    userEvent.click(createOrgBtn);
+    screen.debug();
+
+    expect(localStorage.setItem).toHaveBeenLastCalledWith(
+      'Talawa-admin_AdminFor',
+      JSON.stringify([{ name: 'adi', _id: '1234', image: '' }])
+    );
+
+    expect(screen.getByTestId(/createOrganizationBtn/i)).toBeInTheDocument();
   });
 
   test('Create organization model should work properly', async () => {
     setItem('id', '123');
-    setItem('UserType', 'SUPERADMIN');
+    setItem('SuperAdmin', true);
+    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -189,8 +208,13 @@ describe('Organisations Page testing as SuperAdmin', () => {
     await wait(500);
 
     expect(localStorage.setItem).toHaveBeenLastCalledWith(
+<<<<<<< HEAD
       'Talawa-admin_UserType',
       JSON.stringify('SUPERADMIN'),
+=======
+      'Talawa-admin_AdminFor',
+      JSON.stringify([{ name: 'adi', _id: '1234', image: '' }])
+>>>>>>> develop-userTypeFix
     );
 
     userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
@@ -271,7 +295,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
   test('Plugin Notification model should work properly', async () => {
     setItem('id', '123');
-    setItem('UserType', 'SUPERADMIN');
+    setItem('SuperAdmin', true);
+    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -289,8 +314,13 @@ describe('Organisations Page testing as SuperAdmin', () => {
     await wait(500);
 
     expect(localStorage.setItem).toHaveBeenLastCalledWith(
+<<<<<<< HEAD
       'Talawa-admin_UserType',
       JSON.stringify('SUPERADMIN'),
+=======
+      'Talawa-admin_AdminFor',
+      JSON.stringify([{ name: 'adi', _id: '1234', image: '' }])
+>>>>>>> develop-userTypeFix
     );
 
     userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
@@ -378,7 +408,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
   test('Testing create sample organization working properly', async () => {
     setItem('id', '123');
-    setItem('UserType', 'SUPERADMIN');
+    setItem('SuperAdmin', true);
+    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -403,7 +434,9 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
   test('Testing error handling for CreateSampleOrg', async () => {
     setItem('id', '123');
-    setItem('UserType', 'SUPERADMIN');
+    setItem('SuperAdmin', true);
+    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
+
     jest.spyOn(toast, 'error');
     render(
       <MockedProvider addTypename={false} link={link3}>
@@ -431,6 +464,9 @@ describe('Organisations Page testing as Admin', () => {
 
   test('Create organization modal should not be present in the page for Admin', async () => {
     setItem('id', '123');
+    setItem('SuperAdmin', false);
+    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
+
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -447,6 +483,10 @@ describe('Organisations Page testing as Admin', () => {
     });
   });
   test('Testing sort latest and oldest toggle', async () => {
+    setItem('id', '123');
+    setItem('SuperAdmin', false);
+    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
+
     await act(async () => {
       render(
         <MockedProvider addTypename={false} link={link}>

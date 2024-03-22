@@ -61,6 +61,24 @@ function app(): JSX.Element {
 
   // TODO: Fetch Installed plugin extras and store for use within MainContent and Side Panel Components.
 
+<<<<<<< HEAD
+=======
+  const { data, loading } = useQuery(CHECK_AUTH);
+
+  useEffect(() => {
+    if (data) {
+      setItem('name', `${data.checkAuth.firstName} ${data.checkAuth.lastName}`);
+      setItem('id', data.checkAuth._id);
+      setItem('email', data.checkAuth.email);
+      setItem('IsLoggedIn', 'TRUE');
+      setItem('FirstName', data.checkAuth.firstName);
+      setItem('LastName', data.checkAuth.lastName);
+      setItem('UserImage', data.checkAuth.image);
+      setItem('Email', data.checkAuth.email);
+    }
+  }, [data, loading]);
+
+>>>>>>> develop-userTypeFix
   const extraRoutes = Object.entries(installedPlugins).map(
     (plugin: any, index) => {
       const extraComponent = plugin[1];
