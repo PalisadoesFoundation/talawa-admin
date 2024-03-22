@@ -21,7 +21,7 @@ env:
 
 jobs:
   Code-Quality-Checks:
-    name: Performs linting, formatting, type-checking
+    name: Performs linting, formatting, type-checking, checking for different source and target branch
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the Repository
@@ -66,6 +66,13 @@ jobs:
           chmod +x .github/workflows/compare_translations.py
           python .github/workflows/compare_translations.py --directory public/locales
 
+      - name: Check if the source and target branches are different
+        if: ${{ github.event.pull_request.base.ref == github.event.pull_request.head.ref }}
+        run: |
+          echo "Source Branch ${{ github.event.pull_request.head.ref }}"
+          echo "Target Branch ${{ github.event.pull_request.base.ref }}"
+          echo "Error: Source and Target Branches are the same. Please ensure they are different."
+          exit 1
 
   Check-Changed-Files:
     name: File count, sensitive files and branch check

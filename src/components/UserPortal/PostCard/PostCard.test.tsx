@@ -29,7 +29,7 @@ describe('PostCard compoenent', () => {
     creator: {
       firstName: 'John',
       lastName: 'Doe',
-      image: '',
+      image: 'https://example.com/authorimage.jpg',
       id: '1',
     },
     image: 'https://example.com/image.jpg',
@@ -92,7 +92,7 @@ describe('PostCard compoenent', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    const Image = screen.getByRole('img');
+    const Image = screen.getByRole('img', { name: 'postImg' });
     expect(Image).toBeInTheDocument();
     expect(Image).toHaveAttribute('src', postWithImage.image);
   });
@@ -109,7 +109,8 @@ describe('PostCard compoenent', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    const authorProfile = screen.getByRole('button', { name: 'profileImg' });
-    expect(authorProfile).toBeInTheDocument();
+    const imgElement = screen.getByRole('img', { name: 'profileImg' });
+    expect(imgElement).toBeInTheDocument();
+    expect(imgElement).toHaveAttribute('src', postWithImage.creator.image);
   });
 });

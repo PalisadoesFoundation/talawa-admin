@@ -97,8 +97,13 @@ export default function postCard(props: InterfacePostCardProps): JSX.Element {
             )}
           </div>
         </div>
-        {/* image */}
-        {props.image && <img src={props.image} className={`${styles.img}`} />}
+        {props.image && (
+          <img
+            src={props.image}
+            className={`${styles.img}`}
+            aria-label="postImg"
+          />
+        )}
         {!props.image && <div className={`${styles.imgNotPresent}`}></div>}
         <div className={`${styles.postCardContent}`}>
           <span className={`${styles.postHeading}`}>{props.title}</span>
