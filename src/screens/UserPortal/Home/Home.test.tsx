@@ -57,8 +57,8 @@ const MOCKS = [
             },
             {
               _id: '6411e54835d7ba2344a78e29',
-              title: 'posttwo',
-              text: 'THis is the post two',
+              title: 'Non pinned post',
+              text: 'This is a feed post which is non pinned',
               imageUrl: null,
               videoUrl: null,
               creator: {
@@ -379,6 +379,27 @@ describe('Testing Home Screen [User Portal]', () => {
     const PostTitle = screen.getByText('postone');
     expect(PostTitle).toBeInTheDocument();
     const PostText = screen.getByText('This is the frist post');
+    expect(PostText).toBeInTheDocument();
+  });
+  test('Non pinned post should be visible in the feed section.', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Home />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    const PostTitle = screen.getByText('Non pinned post');
+    expect(PostTitle).toBeInTheDocument();
+    const PostText = screen.getByText(
+      'This is a feed post which is non pinned',
+    );
     expect(PostText).toBeInTheDocument();
   });
 });
