@@ -26,8 +26,6 @@ const members: any[] = [];
 const admins: any[] = [];
 const users: any[] = [];
 
-<<<<<<< HEAD
-=======
 for (let i = 0; i < 100; i++) {
   members.push({
     __typename: 'User',
@@ -70,7 +68,6 @@ for (let i = 0; i < 100; i++) {
   });
 }
 
->>>>>>> develop-userTypeFix
 const createMemberMock = (
   orgId = '',
   firstNameContains = '',
@@ -591,8 +588,6 @@ describe('Organization People Page', () => {
     event: 'Event',
   };
 
-<<<<<<< HEAD
-=======
   test('The number of organizations people rendered on the DOM should be equal to the rowsPerPage state value', async () => {
     window.location.assign('orgpeople/id=6401ff65ce8e8406b8f07af1');
 
@@ -706,7 +701,6 @@ describe('Organization People Page', () => {
     await changePeopleType();
   }, 15000);
 
->>>>>>> develop-userTypeFix
   test('Correct mock data should be queried', async () => {
     window.location.assign('/orgpeople/orgid');
 
@@ -1330,11 +1324,9 @@ describe('Organization People Page', () => {
       </MockedProvider>,
     );
     await wait();
-<<<<<<< HEAD
-
+      
     const orgUsers = MOCKS[3]?.result?.data?.users;
     expect(orgUsers?.length).toBe(2);
-=======
     userEvent.click(screen.getByLabelText(/Users/i));
     await wait();
     expect(screen.getByLabelText(/Users/i)).toBeChecked();
