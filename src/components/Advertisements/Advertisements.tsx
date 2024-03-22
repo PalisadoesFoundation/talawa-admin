@@ -1,17 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // import PropTypes from 'react';
+import styles from './Advertisements.module.css';
 import { useQuery } from '@apollo/client';
 import { ADVERTISEMENTS_GET, PLUGIN_GET } from 'GraphQl/Queries/Queries'; // PLUGIN_LIST
-import PluginHelper from 'components/AddOn/support/services/Plugin.helper';
-import { Col, Row, Tab, Tabs } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { store } from 'state/store';
 import type { RootState } from '../../state/reducers';
-import styles from './Advertisements.module.css';
+import { Col, Form, Row, Tab, Tabs } from 'react-bootstrap';
+import PluginHelper from 'components/AddOn/support/services/Plugin.helper';
+import { store } from 'state/store';
+import { useTranslation } from 'react-i18next';
+import Loader from 'components/Loader/Loader';
+import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 import AdvertisementEntry from './core/AdvertisementEntry/AdvertisementEntry';
 import AdvertisementRegister from './core/AdvertisementRegister/AdvertisementRegister';
+import AddOnRegister from 'components/AddOn/core/AddOnRegister/AddOnRegister';
 export default function advertisements(): JSX.Element {
   const {
     data: data2,
@@ -29,8 +32,6 @@ export default function advertisements(): JSX.Element {
 
   const [render, setRender] = useState(true);
   const appRoutes = useSelector((state: RootState) => state.appRoutes);
-  const { targets } = appRoutes;
-
   const plugins = useSelector((state: RootState) => state.plugins);
   const { installed, addonStore } = plugins;
   const { data, loading, error } = useQuery(PLUGIN_GET);

@@ -1,16 +1,16 @@
-import React from 'react';
-import { act, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { store } from 'state/store';
-import { I18nextProvider } from 'react-i18next';
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
-import i18nForTest from 'utils/i18nForTest';
+import { I18nextProvider } from 'react-i18next';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import i18nForTest from 'utils/i18nForTest';
 import MemberDetail, { getLanguageName, prettyDate } from './MemberDetail';
+import React from 'react';
 
 const MOCKS1 = [
   {
@@ -212,7 +212,7 @@ describe('MemberDetail', () => {
       expect(screen.getByTestId('addAdminBtn')).toBeInTheDocument();
       expect(screen.getByTestId('dashboardTitleBtn')).toBeInTheDocument();
       expect(screen.getByTestId('dashboardTitleBtn')).toHaveTextContent(
-        'User Details'
+        'User Details',
       );
       expect(screen.getAllByText(/Email/i)).toBeTruthy();
       expect(screen.getAllByText(/Main/i)).toBeTruthy();
@@ -261,7 +261,7 @@ describe('MemberDetail', () => {
       id: 'rishav-jha-mech',
       from: 'orglist',
     };
-
+    const user = MOCKS1[0].result.data.user;
     render(
       <MockedProvider addTypename={false} link={link1}>
         <BrowserRouter>
@@ -275,22 +275,14 @@ describe('MemberDetail', () => {
     );
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
 
-    const dicebearUrl = `mocked-data-uri`;
-
-<<<<<<< HEAD
-    const userImage = await screen.findByTestId('userImageAbsent');
-    expect(userImage).toBeInTheDocument();
-    expect(userImage.getAttribute('src')).toBe(dicebearUrl);
-=======
     waitFor(() =>
-      expect(screen.getByTestId('userImageAbsent')).toBeInTheDocument()
+      expect(screen.getByTestId('userImageAbsent')).toBeInTheDocument(),
     );
     waitFor(() =>
       expect(screen.getByTestId('userImageAbsent').getAttribute('src')).toBe(
-        `https://api.dicebear.com/5.x/initials/svg?seed=${user?.user?.firstName} ${user?.user?.lastName}`
-      )
+        `https://api.dicebear.com/5.x/initials/svg?seed=${user?.user?.firstName} ${user?.user?.lastName}`,
+      ),
     );
->>>>>>> develop-userTypeFix
   });
 
   test('Should display image if image is present', async () => {
@@ -314,21 +306,15 @@ describe('MemberDetail', () => {
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
 
     const user = MOCKS2[0].result.data.user;
-<<<<<<< HEAD
-    const userImage = await screen.findByTestId('userImagePresent');
-    expect(userImage).toBeInTheDocument();
-    expect(userImage.getAttribute('src')).toBe(user?.image);
-=======
 
     waitFor(() =>
-      expect(screen.getByTestId('userImagePresent')).toBeInTheDocument()
+      expect(screen.getByTestId('userImagePresent')).toBeInTheDocument(),
     );
     waitFor(() =>
       expect(screen.getByTestId('userImagePresent').getAttribute('src')).toBe(
-        user?.user.user.image
-      )
+        user?.user.user.image,
+      ),
     );
->>>>>>> develop-userTypeFix
   });
 
   test('should call setState with 2 when button is clicked', async () => {

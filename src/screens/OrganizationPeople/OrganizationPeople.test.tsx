@@ -26,8 +26,6 @@ const members: any[] = [];
 const admins: any[] = [];
 const users: any[] = [];
 
-<<<<<<< HEAD
-=======
 for (let i = 0; i < 100; i++) {
   members.push({
     __typename: 'User',
@@ -70,7 +68,6 @@ for (let i = 0; i < 100; i++) {
   });
 }
 
->>>>>>> develop-userTypeFix
 const createMemberMock = (
   orgId = '',
   firstNameContains = '',
@@ -591,8 +588,6 @@ describe('Organization People Page', () => {
     event: 'Event',
   };
 
-<<<<<<< HEAD
-=======
   test('The number of organizations people rendered on the DOM should be equal to the rowsPerPage state value', async () => {
     window.location.assign('orgpeople/id=6401ff65ce8e8406b8f07af1');
 
@@ -605,7 +600,7 @@ describe('Organization People Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -615,7 +610,9 @@ describe('Organization People Page', () => {
     // Get the reference to all userTypes through the radio buttons in the DOM
     // => users, members, admins
     const allPeopleTypes = Array.from(
-      screen.getByTestId('usertypelist').querySelectorAll('input[type="radio"]')
+      screen
+        .getByTestId('usertypelist')
+        .querySelectorAll('input[type="radio"]'),
     ).map((radioButton: HTMLInputElement | any) => radioButton.dataset?.testid);
 
     // This variable represents the array index of currently selected UserType(i.e "member" or "admin" or "user")
@@ -637,13 +634,13 @@ describe('Organization People Page', () => {
       // Get all possible dropdown options
       // => -1, 5, 10, 30
       const rowsPerPageOptions: any[] = Array.from(
-        rowsPerPageSelect?.querySelectorAll('option')
+        rowsPerPageSelect?.querySelectorAll('option'),
       );
 
       // Change the selected option of dropdown to the value of the current option
       userEvent.selectOptions(
         rowsPerPageSelect,
-        rowsPerPageOptions[currRowPPindex].textContent
+        rowsPerPageOptions[currRowPPindex].textContent,
       );
 
       const expectedUsersLength = MOCKS[3]?.result?.data?.users?.filter(
@@ -665,7 +662,7 @@ describe('Organization People Page', () => {
           const pathname = window.location.pathname;
           const id = pathname.split('=')[1];
           return datas.user.joinedOrganizations.some((org) => org._id === id);
-        }
+        },
       ).length;
 
       await wait();
@@ -706,7 +703,6 @@ describe('Organization People Page', () => {
     await changePeopleType();
   }, 15000);
 
->>>>>>> develop-userTypeFix
   test('Correct mock data should be queried', async () => {
     window.location.assign('/orgpeople/orgid');
 
@@ -1309,7 +1305,8 @@ describe('Organization People Page', () => {
   });
 
   test('Testing USERS list', async () => {
-    window.location.assign('/orgpeople/6401ff65ce8e8406b8f07af1');
+    const dataQueryForUsers = MOCKS[3]?.result?.data?.users;
+    window.location.assign('/orgpeople/id=6401ff65ce8e8406b8f07af1');
 
     render(
       <MockedProvider
@@ -1330,11 +1327,6 @@ describe('Organization People Page', () => {
       </MockedProvider>,
     );
     await wait();
-<<<<<<< HEAD
-
-    const orgUsers = MOCKS[3]?.result?.data?.users;
-    expect(orgUsers?.length).toBe(2);
-=======
     userEvent.click(screen.getByLabelText(/Users/i));
     await wait();
     expect(screen.getByLabelText(/Users/i)).toBeChecked();
@@ -1356,15 +1348,14 @@ describe('Organization People Page', () => {
         const pathname = window.location.pathname;
         const id = pathname.split('=')[1];
         return datas.joinedOrganizations?.some((org) => org._id === id);
-      }
+      },
     );
     await wait();
     expect(orgUsers?.length).toBe(0);
 
     await wait();
-    expect(window.location).toBeAt('/orgpeople/6401ff65ce8e8406b8f07af1');
+    expect(window.location).toBeAt('/orgpeople/id=6401ff65ce8e8406b8f07af1');
   });
-
   test('Testing USERS list with filters', async () => {
     window.location.assign('/orgpeople/6401ff65ce8e8406b8f07af2');
 
@@ -1394,24 +1385,24 @@ describe('Organization People Page', () => {
     userEvent.type(fullNameInput, searchData.fullNameUser);
     await wait();
     const orgUsers = MOCKS[3]?.result?.data?.users;
-    const orgUserssize = orgUsers?.filter(
-      (datas: {
-        _id: string;
-        lastName: string;
-        firstName: string;
-        image: string;
-        email: string;
-        createdAt: string;
-        joinedOrganizations: {
-          __typename: string;
-          _id: string;
-        }[];
-      }) => {
-        return datas.joinedOrganizations?.some(
-          (org) => org._id === '6401ff65ce8e8406b8f07af2',
-        );
-      },
-    );
+    // const orgUserssize = orgUsers?.filter(
+    //   (datas: {
+    //     _id: string;
+    //     lastName: string;
+    //     firstName: string;
+    //     image: string;
+    //     email: string;
+    //     createdAt: string;
+    //     joinedOrganizations: {
+    //       __typename: string;
+    //       _id: string;
+    //     }[];
+    //   }) => {
+    //     return datas.joinedOrganizations?.some(
+    //       (org) => org._id === '6401ff65ce8e8406b8f07af2',
+    //     );
+    //   },
+    // );
     await wait();
     expect(orgUsers?.length).toBe(0);
 

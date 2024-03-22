@@ -27,10 +27,10 @@ const httpLink = new HttpLink({
     authorization: 'Bearer ' + getItem('token') || '',
   },
 });
-
 const translations = JSON.parse(
   JSON.stringify(
-    i18nForTest.getDataByLanguage('en')?.translation?.advertisement ?? null,
+    // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+    i18nForTest.getDataByLanguage('en')?.translation.advertisement!,
   ),
 );
 
@@ -47,10 +47,6 @@ jest.mock('@apollo/client', () => {
     useMutation: () => mockUseMutation(),
   };
 });
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ orgId: '1' }),
-}));
 
 describe('Testing Advertisement Entry Component', () => {
   test('Testing rendering and deleting of advertisement', async () => {
@@ -66,9 +62,9 @@ describe('Testing Advertisement Entry Component', () => {
                 startDate={new Date()}
                 id="1"
                 key={1}
-                mediaUrl="data:videos"
+                link="google.com"
                 name="Advert1"
-                organizationId="1"
+                orgId="1"
                 type="POPUP"
               />
             </I18nextProvider>
@@ -81,7 +77,6 @@ describe('Testing Advertisement Entry Component', () => {
     expect(getByTestId('AdEntry')).toBeInTheDocument();
     expect(getAllByText('POPUP')[0]).toBeInTheDocument();
     expect(getAllByText('Advert1')[0]).toBeInTheDocument();
-    expect(screen.getByTestId('media')).toBeInTheDocument();
 
     //Testing successful deletion
     fireEvent.click(getByTestId('moreiconbtn'));
@@ -138,9 +133,9 @@ describe('Testing Advertisement Entry Component', () => {
                 startDate={new Date()}
                 id="1"
                 key={1}
-                mediaUrl=""
+                link="google.com"
                 name="Advert1"
-                organizationId="1"
+                orgId="1"
                 type="POPUP"
               />
             </I18nextProvider>
@@ -180,7 +175,7 @@ describe('Testing Advertisement Entry Component', () => {
           advertisement: {
             _id: '1',
             name: 'Updated Advertisement',
-            mediaUrl: '',
+            link: 'google.com',
             startDate: dayjs(new Date()).add(1, 'day').format('YYYY-MM-DD'),
             endDate: dayjs(new Date()).add(2, 'days').format('YYYY-MM-DD'),
             type: 'BANNER',
@@ -196,15 +191,17 @@ describe('Testing Advertisement Entry Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <AdvertisementEntry
-                endDate={new Date()}
-                startDate={new Date()}
-                type="POPUP"
-                name="Advert1"
-                organizationId="1"
-                mediaUrl=""
-                id="1"
-              />
+              {
+                <AdvertisementEntry
+                  endDate={new Date()}
+                  startDate={new Date()}
+                  type="POPUP"
+                  name="Advert1"
+                  orgId="1"
+                  link="google.com"
+                  id="1"
+                />
+              }
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
@@ -221,6 +218,13 @@ describe('Testing Advertisement Entry Component', () => {
 
     expect(screen.getByLabelText('Enter name of Advertisement')).toHaveValue(
       'Updated Advertisement',
+    );
+
+    fireEvent.change(screen.getByLabelText(translations.Rlink), {
+      target: { value: 'http://example.com' },
+    });
+    expect(screen.getByLabelText(translations.Rlink)).toHaveValue(
+      'http://example.com',
     );
 
     fireEvent.change(screen.getByLabelText(translations.Rtype), {
@@ -242,6 +246,7 @@ describe('Testing Advertisement Entry Component', () => {
       variables: {
         id: '1',
         name: 'Updated Advertisement',
+        link: 'http://example.com',
         type: 'BANNER',
         startDate: dayjs().add(1, 'day').format('YYYY-MM-DD'),
         endDate: dayjs().add(2, 'days').format('YYYY-MM-DD'),
@@ -265,15 +270,17 @@ describe('Testing Advertisement Entry Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <AdvertisementEntry
-                endDate={new Date()}
-                startDate={new Date()}
-                type="POPUP"
-                name="Advert1"
-                organizationId="1"
-                mediaUrl=""
-                id="1"
-              />
+              {
+                <AdvertisementEntry
+                  endDate={new Date()}
+                  startDate={new Date()}
+                  type="POPUP"
+                  name="Advert1"
+                  orgId="1"
+                  link="google.com"
+                  id="1"
+                />
+              }
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
@@ -304,6 +311,53 @@ describe('Testing Advertisement Entry Component', () => {
         id: '1',
         name: 'Updated Advertisement',
         type: 'BANNER',
+      },
+    });
+  });
+
+  test('Updates the advertisement and shows error toast on successful update', async () => {
+    const updateAdByIdMock = jest.fn();
+
+    mockUseMutation.mockReturnValue([updateAdByIdMock]);
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              {
+                <AdvertisementRegister
+                  formStatus="edit"
+                  idEdit="-100"
+                  nameEdit="Updated"
+                  endDateEdit={new Date()}
+                  startDateEdit={new Date()}
+                  typeEdit="POPUP"
+                  orgId="1"
+                  linkEdit="google.com"
+                />
+              }
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    fireEvent.click(screen.getByTestId('editBtn'));
+
+    fireEvent.change(screen.getByLabelText(translations.Rlink), {
+      target: { value: 'http://example.com' },
+    });
+    expect(screen.getByLabelText(translations.Rlink)).toHaveValue(
+      'http://example.com',
+    );
+
+    fireEvent.click(screen.getByTestId('addonupdate'));
+
+    expect(updateAdByIdMock).toHaveBeenCalledWith({
+      variables: {
+        id: '-100',
+        link: 'http://example.com',
       },
     });
   });
@@ -348,6 +402,13 @@ describe('Testing Advertisement Entry Component', () => {
       'Updated Advertisement',
     );
 
+    fireEvent.change(screen.getByLabelText(translations.Rlink), {
+      target: { value: 'http://example.com' },
+    });
+    expect(screen.getByLabelText(translations.Rlink)).toHaveValue(
+      'http://example.com',
+    );
+
     fireEvent.change(screen.getByLabelText(translations.Rtype), {
       target: { value: 'BANNER' },
     });
@@ -371,9 +432,9 @@ describe('Testing Advertisement Entry Component', () => {
 
     expect(createAdByIdMock).toHaveBeenCalledWith({
       variables: {
-        organizationId: '1',
+        orgId: '1',
         name: 'Updated Advertisement',
-        file: '',
+        link: 'http://example.com',
         type: 'BANNER',
         startDate: dayjs(new Date('2023-01-01')).format('YYYY-MM-DD'),
         endDate: dayjs(new Date('2023-02-01')).format('YYYY-MM-DD'),

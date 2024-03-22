@@ -1,4 +1,5 @@
 import { useMutation } from '@apollo/client';
+import { Check, Clear } from '@mui/icons-material';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
@@ -9,28 +10,27 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Check, Clear } from '@mui/icons-material';
 
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import {
+  BACKEND_URL,
   REACT_APP_USE_RECAPTCHA,
   RECAPTCHA_SITE_KEY,
-  BACKEND_URL,
 } from 'Constant/constant';
 import {
   LOGIN_MUTATION,
   RECAPTCHA_MUTATION,
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import { ReactComponent as PalisadoesLogo } from 'assets/svgs/palisadoes.svg';
+import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
-import LoginPortalToggle from 'components/LoginPortalToggle/LoginPortalToggle';
 import Loader from 'components/Loader/Loader';
+import LoginPortalToggle from 'components/LoginPortalToggle/LoginPortalToggle';
 import { errorHandler } from 'utils/errorHandler';
-import styles from './LoginPage.module.css';
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../constants';
+import styles from './LoginPage.module.css';
 
 const loginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -253,21 +253,6 @@ const loginPage = (): JSX.Element => {
 
       /* istanbul ignore next */
       if (loginData) {
-<<<<<<< HEAD
-        if (role === 'admin') {
-          if (
-            loginData.login.user.userType === 'SUPERADMIN' ||
-            (loginData.login.user.userType === 'ADMIN' &&
-              loginData.login.user.adminApproved === true)
-          ) {
-            setItem('token', loginData.login.accessToken);
-            setItem('refreshToken', loginData.login.refreshToken);
-            setItem('id', loginData.login.user._id);
-            setItem('IsLoggedIn', 'TRUE');
-            setItem('UserType', loginData.login.user.userType);
-          } else {
-            toast.warn(t('notAuthorised'));
-=======
         if (
           loginData.login.appUserProfile.isSuperAdmin ||
           (loginData.login.appUserProfile.adminFor.length !== 0 &&
@@ -282,8 +267,7 @@ const loginPage = (): JSX.Element => {
           setItem('SuperAdmin', loginData.login.appUserProfile.isSuperAdmin);
           setItem('AdminFor', loginData.login.appUserProfile.adminFor);
           if (getItem('IsLoggedIn') == 'TRUE') {
-            history.push('/orglist');
->>>>>>> develop-userTypeFix
+            navigate(role === 'admin' ? '/orglist' : '/user/organizations');
           }
         } else {
           setItem('token', loginData.login.accessToken);

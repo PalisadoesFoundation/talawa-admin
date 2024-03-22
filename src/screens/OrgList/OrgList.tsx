@@ -11,7 +11,6 @@ import {
 } from 'GraphQl/Queries/Queries';
 
 import OrgListCard from 'components/OrgListCard/OrgListCard';
-import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Dropdown, Form } from 'react-bootstrap';
@@ -413,7 +412,7 @@ function orgList(): JSX.Element {
         searchByName.length == 0) ||
         (userData && adminFor.length === 0)) ? (
         // eslint-disable-next-line
-          <div className={styles.notFound}>
+        <div className={styles.notFound}>
           <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
           <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
         </div>
@@ -423,7 +422,7 @@ function orgList(): JSX.Element {
         searchByName.length > 0 ? (
         /* istanbul ignore next */
         // eslint-disable-next-line
-          <div className={styles.notFound} data-testid="noResultFound">
+        <div className={styles.notFound} data-testid="noResultFound">
           <h4 className="m-0">
             {t('noResultsFoundFor')} &quot;{searchByName}&quot;
           </h4>
