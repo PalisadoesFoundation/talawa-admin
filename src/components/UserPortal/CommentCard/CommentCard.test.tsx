@@ -55,13 +55,9 @@ const MOCKS = [
     },
   },
 ];
-const handleLikeComment = (commentId: string): void => {
-  return;
-};
 
-const handleDislikeComment = (commentId: string): void => {
-  return;
-};
+const handleLikeComment = jest.fn();
+const handleDislikeComment = jest.fn();
 
 const link = new StaticMockLink(MOCKS, true);
 
