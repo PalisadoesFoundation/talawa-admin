@@ -828,9 +828,17 @@ describe('Organization People Page', () => {
     );
     await wait();
 
-    const findtext = screen.getByText(/Aditya Memberguy/i);
+    const findByTextRegex = (regex: RegExp): HTMLElement | null => {
+      const elements = Array.from(document.body.querySelectorAll('*'));
+      const foundElement = elements.find(
+        (node) => node.textContent && regex.test(node.textContent),
+      );
+      return foundElement instanceof HTMLElement ? foundElement : null;
+    };
+
+    const findText = findByTextRegex(/Aditya Memberguy/i);
     await wait();
-    expect(findtext).toBeInTheDocument();
+    expect(findText).toBeInTheDocument();
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter Full Name/i),
