@@ -277,11 +277,9 @@ describe('MemberDetail', () => {
 
     const dicebearUrl = `mocked-data-uri`;
 
-<<<<<<< HEAD
     const userImage = await screen.findByTestId('userImageAbsent');
     expect(userImage).toBeInTheDocument();
     expect(userImage.getAttribute('src')).toBe(dicebearUrl);
-=======
     waitFor(() =>
       expect(screen.getByTestId('userImageAbsent')).toBeInTheDocument()
     );
@@ -290,7 +288,6 @@ describe('MemberDetail', () => {
         `https://api.dicebear.com/5.x/initials/svg?seed=${user?.user?.firstName} ${user?.user?.lastName}`
       )
     );
->>>>>>> develop-userTypeFix
   });
 
   test('Should display image if image is present', async () => {
@@ -314,11 +311,9 @@ describe('MemberDetail', () => {
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
 
     const user = MOCKS2[0].result.data.user;
-<<<<<<< HEAD
     const userImage = await screen.findByTestId('userImagePresent');
     expect(userImage).toBeInTheDocument();
     expect(userImage.getAttribute('src')).toBe(user?.image);
-=======
 
     waitFor(() =>
       expect(screen.getByTestId('userImagePresent')).toBeInTheDocument()
@@ -328,7 +323,6 @@ describe('MemberDetail', () => {
         user?.user.user.image
       )
     );
->>>>>>> develop-userTypeFix
   });
 
   test('should call setState with 2 when button is clicked', async () => {
