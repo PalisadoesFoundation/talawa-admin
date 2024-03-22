@@ -75,11 +75,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         ...prevState,
         birthDate: dayjs(date).format('YYYY-MM-DD'), // Convert Dayjs object to JavaScript Date object
       }));
-    } else {
-      setFormState((prevState) => ({
-        ...prevState,
-        birthDate: '', // Set birthDate to null if no date is selected
-      }));
     }
   };
   const [updateUser] = useMutation(UPDATE_USER_MUTATION);
@@ -133,7 +128,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       ...formState,
       [name]: value,
     });
-    console.log(formState);
+    // console.log(formState);
   };
 
   const handleAddressChange = (
@@ -147,7 +142,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         [name]: value,
       },
     });
-    console.log(formState);
+    // console.log(formState);
   };
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -159,16 +154,17 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         [name]: value,
       },
     });
-    console.log(formState);
+    // console.log(formState);
   };
 
   const handleToggleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    console.log(e.target.checked);
     const { name, checked } = e.target;
     setFormState({
       ...formState,
       [name]: checked,
     });
-    console.log(formState);
+    // console.log(formState);
   };
 
   const loginLink = async (): Promise<void> => {
@@ -211,7 +207,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           }
           toast.success('Successful updated');
         }
-        refetch();
       } catch (error: any) {
         errorHandler(t, error);
       }
@@ -289,9 +284,18 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   <p className="my-0 mx-2">{t('birthDate')}</p>
                   <div>
                     <DatePicker
+                      // label={t('birthDate')}
                       className={styles.datebox}
                       value={dayjs(formState.birthDate)}
                       onChange={handleDateChange}
+                      data-testid="birthDate"
+                      slotProps={{
+                        textField: {
+                          inputProps: {
+                            'data-testid': 'birthDate',
+                          },
+                        },
+                      }}
                     />
                   </div>
                 </div>
@@ -363,6 +367,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     type="number"
                     name="home"
                     onChange={handlePhoneChange}
+                    placeholder={t('phone')}
                   />
                 </div>
                 <div className="w-50 p-2">
@@ -486,8 +491,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       name="adminApproved"
                       className="mx-2"
                       checked={formState.adminApproved}
-                      onChange={handleToggleChange}
-                      disabled // API not supporting this feature
+                      onChange={handleToggleChange} // API not supporting this feature
+                      data-testid="adminApproved"
+                      placeholder="adminApproved"
                     />
                     <p className="p-0 m-0">
                       {`${t('adminApproved')} (API not supported yet)`}
@@ -499,8 +505,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       name="pluginCreationAllowed"
                       className="mx-2"
                       checked={formState.pluginCreationAllowed}
-                      onChange={handleToggleChange}
-                      disabled // API not supporting this feature
+                      onChange={handleToggleChange} // API not supporting this feature
+                      data-testid="pluginCreationAllowed"
+                      placeholder="pluginCreationAllowed"
                     />
                     <p className="p-0 m-0">
                       {`${t('pluginCreationAllowed')} (API not supported yet)`}
@@ -514,7 +521,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         {t('appLanguageCode')} <br />
                         {`(API not supported yet)`}
                         <select
-                          disabled
                           className="form-control"
                           data-testid="applangcode"
                           onChange={(e): void => {
@@ -570,22 +576,7 @@ export const prettyDate = (param: string): string => {
   const day = date.getDate();
   const month = date.toLocaleString('default', { month: 'long' });
   const year = date.getFullYear();
-  return `${day}${getOrdinalSuffix(day)} ${month} ${year}`;
-};
-const getOrdinalSuffix = (day: number): string => {
-  if (day >= 11 && day <= 13) {
-    return 'th';
-  }
-  switch (day % 10) {
-    case 1:
-      return 'st';
-    case 2:
-      return 'nd';
-    case 3:
-      return 'rd';
-    default:
-      return 'th';
-  }
+  return `${day}} ${month} ${year}`;
 };
 export const getLanguageName = (code: string): string => {
   let language = 'Unavailable';

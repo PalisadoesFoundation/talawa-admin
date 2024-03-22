@@ -1,5 +1,11 @@
 import React from 'react';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
@@ -48,7 +54,7 @@ const MOCKS = [
           eventAdmin: [],
           membershipRequests: [],
           gender: '',
-          birthDate: '',
+          birthDate: '03/28/2023',
           educationGrade: '',
           employmentStatus: '',
           maritalStatus: '',
@@ -237,6 +243,14 @@ async function wait(ms = 2): Promise<void> {
   await act(() => new Promise((resolve) => setTimeout(resolve, ms)));
 }
 
+jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
+  return {
+    DateTimePicker: jest.requireActual(
+      '@mui/x-date-pickers/DesktopDateTimePicker',
+    ).DesktopDateTimePicker,
+  };
+});
+
 jest.mock('react-toastify');
 
 describe('MemberDetail', () => {
@@ -306,6 +320,12 @@ describe('MemberDetail', () => {
       lastName: 'Goyal',
       email: 'ansh@gmail.com',
       image: new File(['hello'], 'hello.png', { type: 'image/png' }),
+      address: 'abc',
+      countryCode: 'IN',
+      state: 'abc',
+      city: 'abc',
+      phone: '1234567890',
+      birthDate: '03/28/2022',
     };
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -318,6 +338,10 @@ describe('MemberDetail', () => {
     );
 
     await wait();
+    const birthDateDatePicker = screen.getByTestId('birthDate');
+    fireEvent.change(birthDateDatePicker, {
+      target: { value: formData.birthDate },
+    });
 
     userEvent.type(
       screen.getByPlaceholderText(/First Name/i),
@@ -327,9 +351,17 @@ describe('MemberDetail', () => {
       screen.getByPlaceholderText(/Last Name/i),
       formData.lastName,
     );
+    userEvent.type(screen.getByPlaceholderText(/Address/i), formData.address);
+    userEvent.type(
+      screen.getByPlaceholderText(/Country Code/i),
+      formData.countryCode,
+    );
+    userEvent.type(screen.getByPlaceholderText(/State/i), formData.state);
+    userEvent.type(screen.getByPlaceholderText(/City/i), formData.city);
     userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
-    // userEvent.click(screen.getByTestId('gender-dropdown-btn'));
-    // userEvent.click(screen.getByTestId('change-gender-btn-FEMALE'));
+    userEvent.type(screen.getByPlaceholderText(/Phone/i), formData.phone);
+    userEvent.click(screen.getByPlaceholderText(/adminApproved/i));
+    userEvent.click(screen.getByPlaceholderText(/pluginCreationAllowed/i));
     userEvent.selectOptions(screen.getByTestId('applangcode'), 'Français');
     userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
     await wait();
@@ -342,6 +374,7 @@ describe('MemberDetail', () => {
     expect(screen.getByPlaceholderText(/Last Name/i)).toHaveValue(
       formData.lastName,
     );
+    expect(birthDateDatePicker).toHaveValue(formData.birthDate);
     expect(screen.getByPlaceholderText(/Email/i)).toHaveValue(formData.email);
     expect(screen.getByPlaceholderText(/First Name/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Last Name/i)).toBeInTheDocument();
