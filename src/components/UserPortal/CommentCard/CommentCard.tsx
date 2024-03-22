@@ -8,7 +8,6 @@ import { toast } from 'react-toastify';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import useLocalStorage from 'utils/useLocalstorage';
-
 interface InterfaceCommentCardProps {
   id: string;
   creator: {
@@ -22,6 +21,8 @@ interface InterfaceCommentCardProps {
     id: string;
   }[];
   text: string;
+  handleLikeComment: (commentId: string) => void;
+  handleDislikeComment: (commentId: string) => void;
 }
 
 function commentCard(props: InterfaceCommentCardProps): JSX.Element {
@@ -32,6 +33,7 @@ function commentCard(props: InterfaceCommentCardProps): JSX.Element {
   const likedByUser = props.likedBy.some((likedBy) => likedBy.id === userId);
 
   const [likes, setLikes] = React.useState(props.likeCount);
+
   const [isLikedByUser, setIsLikedByUser] = React.useState(likedByUser);
   const [likeComment, { loading: likeLoading }] = useMutation(LIKE_COMMENT);
   const [unlikeComment, { loading: unlikeLoading }] =
@@ -49,6 +51,8 @@ function commentCard(props: InterfaceCommentCardProps): JSX.Element {
         if (data) {
           setLikes((likes) => likes - 1);
           setIsLikedByUser(false);
+          // unlikeComment(props.id)
+          props.handleDislikeComment(props.id);
         }
       } catch (error: any) {
         /* istanbul ignore next */
@@ -61,10 +65,12 @@ function commentCard(props: InterfaceCommentCardProps): JSX.Element {
             commentId: props.id,
           },
         });
+
         /* istanbul ignore next */
         if (data) {
           setLikes((likes) => likes + 1);
           setIsLikedByUser(true);
+          props.handleLikeComment(props.id);
         }
       } catch (error: any) {
         /* istanbul ignore next */

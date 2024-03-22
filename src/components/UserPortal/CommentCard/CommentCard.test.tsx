@@ -56,6 +56,9 @@ const MOCKS = [
   },
 ];
 
+const handleLikeComment = jest.fn();
+const handleDislikeComment = jest.fn();
+
 const link = new StaticMockLink(MOCKS, true);
 
 describe('Testing CommentCard Component [User Portal]', () => {
@@ -81,6 +84,8 @@ describe('Testing CommentCard Component [User Portal]', () => {
         },
       ],
       text: 'testComment',
+      handleLikeComment: handleLikeComment,
+      handleDislikeComment: handleDislikeComment,
     };
 
     const beforeUserId = getItem('userId');
@@ -120,6 +125,8 @@ describe('Testing CommentCard Component [User Portal]', () => {
         },
       ],
       text: 'testComment',
+      handleLikeComment: handleLikeComment,
+      handleDislikeComment: handleDislikeComment,
     };
 
     const beforeUserId = getItem('userId');
@@ -159,6 +166,8 @@ describe('Testing CommentCard Component [User Portal]', () => {
         },
       ],
       text: 'testComment',
+      handleLikeComment: handleLikeComment,
+      handleDislikeComment: handleDislikeComment,
     };
 
     const beforeUserId = getItem('userId');
@@ -203,6 +212,8 @@ describe('Testing CommentCard Component [User Portal]', () => {
         },
       ],
       text: 'testComment',
+      handleLikeComment: handleLikeComment,
+      handleDislikeComment: handleDislikeComment,
     };
 
     const beforeUserId = getItem('userId');
