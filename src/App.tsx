@@ -31,9 +31,14 @@ import People from 'screens/UserPortal/People/People';
 import Settings from 'screens/UserPortal/Settings/Settings';
 // import UserLoginPage from 'screens/UserPortal/UserLoginPage/UserLoginPage';
 // import Chat from 'screens/UserPortal/Chat/Chat';
+import { useQuery } from '@apollo/client';
 import Advertisements from 'components/Advertisements/Advertisements';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
-import React from 'react';
+import { useEffect } from 'react';
+import useLocalStorage from 'utils/useLocalstorage';
+import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
+
+const { setItem } = useLocalStorage();
 
 function app(): JSX.Element {
   /*const { updatePluginLinks, updateInstalled } = bindActionCreators(
@@ -61,8 +66,6 @@ function app(): JSX.Element {
 
   // TODO: Fetch Installed plugin extras and store for use within MainContent and Side Panel Components.
 
-<<<<<<< HEAD
-=======
   const { data, loading } = useQuery(CHECK_AUTH);
 
   useEffect(() => {
@@ -78,7 +81,6 @@ function app(): JSX.Element {
     }
   }, [data, loading]);
 
->>>>>>> develop-userTypeFix
   const extraRoutes = Object.entries(installedPlugins).map(
     (plugin: any, index) => {
       const extraComponent = plugin[1];

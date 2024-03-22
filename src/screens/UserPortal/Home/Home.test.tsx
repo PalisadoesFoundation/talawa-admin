@@ -1,21 +1,7 @@
-import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 
-<<<<<<< HEAD
-=======
-import {
-  ADVERTISEMENTS_GET,
-  ORGANIZATION_POST_LIST,
-} from 'GraphQl/Queries/Queries';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { store } from 'state/store';
-import i18nForTest from 'utils/i18nForTest';
-import { StaticMockLink } from 'utils/StaticMockLink';
-import Home from './Home';
->>>>>>> develop-userTypeFix
 import userEvent from '@testing-library/user-event';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
@@ -25,14 +11,10 @@ import {
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { toast } from 'react-toastify';
-<<<<<<< HEAD
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import Home from './Home';
-=======
-import { REACT_APP_CUSTOM_PORT } from 'Constant/constant';
->>>>>>> develop-userTypeFix
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -243,11 +225,7 @@ const MOCKS = [
             name: 'name4',
             type: 'Type 2',
             organization: {
-<<<<<<< HEAD
-              _id: 'orgId',
-=======
               _id: 'orgId1',
->>>>>>> develop-userTypeFix
             },
             mediaUrl: 'link4',
             startDate: '2023-01-30',

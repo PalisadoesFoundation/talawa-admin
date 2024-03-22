@@ -69,15 +69,8 @@ interface InterfaceAdContent {
   _id: string;
   name: string;
   type: string;
-<<<<<<< HEAD
-  organization: {
-    _id: string;
-  };
-  link: string;
-=======
   organization: { _id: string };
   mediaUrl: string;
->>>>>>> develop-userTypeFix
   endDate: string;
   startDate: string;
 }
@@ -108,11 +101,7 @@ export default function home(): JSX.Element {
     refetch,
     loading: loadingPosts,
   } = useQuery(ORGANIZATION_POST_LIST, {
-<<<<<<< HEAD
     variables: { id: organizationId, first: 10 },
-=======
-    variables: { id: organizationId },
->>>>>>> develop-userTypeFix
   });
 
   const userId: string | null = getItem('userId');
@@ -161,11 +150,7 @@ export default function home(): JSX.Element {
 
   React.useEffect(() => {
     if (data) {
-<<<<<<< HEAD
-      setPosts(data.organizaitons[0].posts.edges);
-=======
       setPosts(data.organizations[0].posts.edges);
->>>>>>> develop-userTypeFix
     }
   }, [data]);
 
@@ -186,13 +171,8 @@ export default function home(): JSX.Element {
   ): InterfaceAdContent[] => {
     return adCont.filter(
       (ad: InterfaceAdContent) =>
-<<<<<<< HEAD
-        ad.organization._id === organizationId &&
-        new Date(ad.endDate) > currentDate,
-=======
         ad.organization._id === currentOrgId &&
         new Date(ad.endDate) > currentDate
->>>>>>> develop-userTypeFix
     );
   };
 
@@ -335,17 +315,10 @@ export default function home(): JSX.Element {
             <div data-testid="promotedPostsContainer">
               {filteredAd.map((post: any) => (
                 <PromotedPost
-<<<<<<< HEAD
-                  key={post._id}
-                  id={post._id}
-                  media={post.mediaUrl}
-                  title={post.name}
-=======
                   key={post.organization._id}
                   id={post.organization._id}
-                  image={post.organization.mediaUrl}
+                  media={post.organization.mediaUrl}
                   title={post.organization.name}
->>>>>>> develop-userTypeFix
                   data-testid="postid"
                 />
               ))}

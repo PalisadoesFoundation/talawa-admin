@@ -5,6 +5,6 @@
 # npm run lint:fix
 # npm run lint-staged
 # npm run typecheck
-npm run update:toc
+# npm run update:toc
 
 git add .
