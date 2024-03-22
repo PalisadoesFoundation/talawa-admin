@@ -421,7 +421,6 @@ function organizationPeople(): JSX.Element {
                             </StyledTableRow>
                           ))
                         ) : (
-<<<<<<< HEAD
                           /* istanbul ignore next */
                           <NotFound
                             title={
@@ -430,7 +429,6 @@ function organizationPeople(): JSX.Element {
                                 : state === 1
                                   ? 'admin'
                                   : 'user'
-=======
                           <NotFound title="admin" keyPrefix="userNotFound" />
                         )
                       ) : state == 2 ? (
@@ -468,7 +466,6 @@ function organizationPeople(): JSX.Element {
                                   memberEmail={datas.user.email}
                                 />
                               );
->>>>>>> develop-userTypeFix
                             }
                             keyPrefix="userNotFound"
                           />
