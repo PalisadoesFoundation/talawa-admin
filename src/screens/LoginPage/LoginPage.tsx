@@ -253,7 +253,6 @@ const loginPage = (): JSX.Element => {
 
       /* istanbul ignore next */
       if (loginData) {
-<<<<<<< HEAD
         if (role === 'admin') {
           if (
             loginData.login.user.userType === 'SUPERADMIN' ||
@@ -267,7 +266,6 @@ const loginPage = (): JSX.Element => {
             setItem('UserType', loginData.login.user.userType);
           } else {
             toast.warn(t('notAuthorised'));
-=======
         if (
           loginData.login.appUserProfile.isSuperAdmin ||
           (loginData.login.appUserProfile.adminFor.length !== 0 &&
@@ -283,7 +281,6 @@ const loginPage = (): JSX.Element => {
           setItem('AdminFor', loginData.login.appUserProfile.adminFor);
           if (getItem('IsLoggedIn') == 'TRUE') {
             history.push('/orglist');
->>>>>>> develop-userTypeFix
           }
         } else {
           setItem('token', loginData.login.accessToken);
