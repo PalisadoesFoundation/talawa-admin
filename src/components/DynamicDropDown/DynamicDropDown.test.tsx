@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  getByTestId,
-  render,
-  screen,
-  act,
-  waitFor,
-} from '@testing-library/react';
+import { render, screen, act, waitFor } from '@testing-library/react';
 import DynamicDropDown from './DynamicDropDown';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
@@ -29,7 +23,7 @@ describe('DynamicDropDown component', () => {
       jest.fn(),
     ];
 
-    const { getByAltText } = render(
+    render(
       <BrowserRouter>
         <I18nextProvider i18n={i18nForTest}>
           <DynamicDropDown

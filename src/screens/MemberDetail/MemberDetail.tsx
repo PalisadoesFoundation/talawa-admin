@@ -82,7 +82,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     data: userData,
     loading: loading,
     error: error,
-    refetch: refetch,
   } = useQuery(USER_DETAILS, {
     variables: { id: currentUrl }, // For testing we are sending the id as a prop
   });
