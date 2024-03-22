@@ -677,7 +677,12 @@
     "membershipRequests": "Membership requests",
     "adminForEvents": "Admin for events",
     "addedAsAdmin": "User is added as admin.",
-    "talawaApiUnavailable": "Talawa-API service is unavailable. Kindly check your network connection and wait for a while."
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Kindly check your network connection and wait for a while.",
+    "password": "Password",
+    "userType": "User Type",
+    "admin": "Admin",
+    "superAdmin": "Superadmin",
+    "cancel": "Cancel"
   },
   "userLogin": {
     "login": "Login",

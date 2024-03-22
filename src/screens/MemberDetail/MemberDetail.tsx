@@ -259,7 +259,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     name="firstName"
                     onChange={handleChange}
                     required
-                    placeholder="John"
+                    placeholder={t('firstName')}
                   />
                 </div>
                 <div>
@@ -271,7 +271,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     name="lastName"
                     onChange={handleChange}
                     required
-                    placeholder="Doe"
+                    placeholder={t('lastName')}
                   />
                 </div>
                 <div>
@@ -323,25 +323,27 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   />
                 </div>
                 <p className="my-0 mx-2 w-100">
-                  {t('displayImage')}:
-                  <Form.Control
-                    className="w-75"
-                    accept="image/*"
-                    id="orgphoto"
-                    name="photo"
-                    type="file"
-                    multiple={false}
-                    onChange={async (e: React.ChangeEvent): Promise<void> => {
-                      const target = e.target as HTMLInputElement;
-                      const file = target.files && target.files[0];
-                      if (file)
-                        setFormState({
-                          ...formState,
-                          file: await convertToBase64(file),
-                        });
-                    }}
-                    data-testid="organisationImage"
-                  />
+                  <label htmlFor="orgphoto" className={styles.orgphoto}>
+                    {t('displayImage')}:
+                    <Form.Control
+                      className="w-75"
+                      accept="image/*"
+                      id="orgphoto"
+                      name="photo"
+                      type="file"
+                      multiple={false}
+                      onChange={async (e: React.ChangeEvent): Promise<void> => {
+                        const target = e.target as HTMLInputElement;
+                        const file = target.files && target.files[0];
+                        if (file)
+                          setFormState({
+                            ...formState,
+                            file: await convertToBase64(file),
+                          });
+                      }}
+                      data-testid="organisationImage"
+                    />
+                  </label>
                 </p>
               </div>
             </div>
@@ -372,7 +374,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     name="email"
                     onChange={handleChange}
                     required
-                    placeholder="john@example.com"
+                    placeholder={t('email')}
                   />
                 </div>
                 <div className="p-2" style={{ width: `82%` }}>
@@ -383,7 +385,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     type="email"
                     name="line1"
                     onChange={handleAddressChange}
-                    placeholder="123 Random Street"
+                    placeholder={t('address')}
                   />
                 </div>
                 <div className="w-25 p-2">
@@ -394,7 +396,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     type="text"
                     name="countryCode"
                     onChange={handleAddressChange}
-                    placeholder="eg. US or IN"
+                    placeholder={t('countryCode')}
                   />
                 </div>
                 <div className="w-25 p-2">
@@ -405,7 +407,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     type="text"
                     name="city"
                     onChange={handleAddressChange}
-                    placeholder="Queens"
+                    placeholder={t('city')}
                   />
                 </div>
                 <div className="w-25 p-2">
@@ -416,7 +418,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     type="text"
                     name="state"
                     onChange={handleAddressChange}
-                    placeholder="NYC"
+                    placeholder={t('state')}
                   />
                 </div>
               </div>
