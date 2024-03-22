@@ -1,20 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 // import PropTypes from 'react';
-import styles from './Advertisements.module.css';
 import { useQuery } from '@apollo/client';
 import { ADVERTISEMENTS_GET, PLUGIN_GET } from 'GraphQl/Queries/Queries'; // PLUGIN_LIST
-import { useSelector } from 'react-redux';
-import type { RootState } from '../../state/reducers';
-import { Col, Form, Row, Tab, Tabs } from 'react-bootstrap';
 import PluginHelper from 'components/AddOn/support/services/Plugin.helper';
-import { store } from 'state/store';
+import { Col, Row, Tab, Tabs } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import Loader from 'components/Loader/Loader';
-import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
+import { useSelector } from 'react-redux';
+import { store } from 'state/store';
+import type { RootState } from '../../state/reducers';
+import styles from './Advertisements.module.css';
 import AdvertisementEntry from './core/AdvertisementEntry/AdvertisementEntry';
 import AdvertisementRegister from './core/AdvertisementRegister/AdvertisementRegister';
-import AddOnRegister from 'components/AddOn/core/AddOnRegister/AddOnRegister';
 export default function advertisements(): JSX.Element {
   const {
     data: data2,
@@ -108,7 +105,7 @@ export default function advertisements(): JSX.Element {
                   .filter((ad: any) => ad.organization._id == currentOrgId)
                   .filter((ad: any) => new Date(ad.endDate) > new Date())
                   .length == 0 ? (
-                    <h4>{t('pMessage')} </h4> // eslint-disable-line
+                  <h4>{t('pMessage')} </h4> // eslint-disable-line
                 ) : (
                   data2?.advertisementsConnection
                     .filter((ad: any) => ad.organization._id == currentOrgId)
@@ -146,7 +143,7 @@ export default function advertisements(): JSX.Element {
                   .filter((ad: any) => ad.organization._id == currentOrgId)
                   .filter((ad: any) => new Date(ad.endDate) < new Date())
                   .length == 0 ? (
-                    <h4>{t('pMessage')} </h4> // eslint-disable-line
+                  <h4>{t('pMessage')} </h4> // eslint-disable-line
                 ) : (
                   data2?.advertisementsConnection
                     .filter((ad: any) => ad.organization._id == currentOrgId)
