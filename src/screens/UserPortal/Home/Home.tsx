@@ -32,40 +32,6 @@ import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
 import UserDefault from '../../../assets/images/defaultImg.png';
 import useLocalStorage from 'utils/useLocalstorage';
 
-interface InterfacePostCardProps {
-  id: string;
-  creator: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    id: string;
-  };
-  image: string;
-  video: string;
-  text: string;
-  title: string;
-  likeCount: number;
-  commentCount: number;
-  comments: {
-    creator: {
-      _id: string;
-      firstName: string;
-      lastName: string;
-      email: string;
-    };
-    likeCount: number;
-    likedBy: {
-      id: string;
-    }[];
-    text: string;
-  }[];
-  likedBy: {
-    firstName: string;
-    lastName: string;
-    id: string;
-  }[];
-}
-
 interface InterfaceAdContent {
   _id: string;
   name: string;
@@ -78,8 +44,8 @@ interface InterfaceAdContent {
 
 export default function home(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'home' });
-
   const { getItem } = useLocalStorage();
+
 
   const organizationId = getOrganizationId(window.location.href);
   const [posts, setPosts] = React.useState([]);
@@ -108,58 +74,19 @@ export default function home(): JSX.Element {
   } = useQuery(ORGANIZATION_POST_LIST, {
     variables: { id: organizationId },
   });
-
   const userId: string | null = getItem('userId');
 
   const { data: userData } = useQuery(USER_DETAILS, {
     variables: { id: userId },
   });
 
-  const [create] = useMutation(CREATE_POST_MUTATION);
-
-  const handlePost = async (): Promise<void> => {
-    try {
-      if (!postContent) {
-        throw new Error("Can't create a post with an empty body.");
-      }
-      toast.info('Processing your post. Please wait.');
-
-      const { data } = await create({
-        variables: {
-          title: '',
-          text: postContent,
-          organizationId: organizationId,
-          file: postImage,
-        },
-      });
-      /* istanbul ignore next */
-      if (data) {
-        toast.dismiss();
-        toast.success('Your post is now visible in the feed.');
-        refetch();
-        setPostContent('');
-        setPostImage('');
-        setShowStartPost(false);
-      }
-    } catch (error: any) {
-      /* istanbul ignore next */
-      errorHandler(t, error);
-    }
-  };
-
-  const handlePostInput = (e: ChangeEvent<HTMLInputElement>): void => {
-    const content = e.target.value;
-
-    setPostContent(content);
-  };
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (data) {
       setPosts(data.organizations[0].posts.edges);
     }
   }, [data]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (promotedPostsData) {
       setAdContent(promotedPostsData.advertisementsConnection);
     }
@@ -182,21 +109,11 @@ export default function home(): JSX.Element {
   };
 
   const handlePostButtonClick = (): void => {
-    setShowStartPost(true);
-  };
-
-  const handleIconClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    e.preventDefault();
-
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
+    setShowModal(true);
   };
 
   const handleModalClose = (): void => {
-    setPostContent('');
-    setPostImage('');
-    setShowStartPost(false);
+    setShowModal(false);
   };
 
   return (
@@ -212,6 +129,7 @@ export default function home(): JSX.Element {
                   src={
                     userData?.user.image ? userData?.user.image : UserDefault
                   }
+
                   roundedCircle
                   className="mt-2"
                 />
@@ -230,66 +148,25 @@ export default function home(): JSX.Element {
               <Col xs={4} className={styles.uploadLink}>
                 <div className="d-flex gap-2 align-items-center justify-content-center">
                   <div className={styles.icons}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
-                      />
-                    </svg>
+                    <MediaIcon />
                   </div>
-
                   <p className={styles.iconLabel}>{t('media')}</p>
                 </div>
               </Col>
               <Col xs={4} className={styles.uploadLink}>
                 <div className="d-flex gap-2 align-items-center justify-content-center">
+                  {/* <div className={styles.icons}>{eventSvg}</div> */}
                   <div className={styles.icons}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
-                      />
-                    </svg>
+                    <EventIcon />
                   </div>
-
                   <p className={styles.iconLabel}>{t('event')}</p>
                 </div>
               </Col>
               <Col xs={4} className={styles.uploadLink}>
                 <div className="d-flex gap-2 align-items-center justify-content-center">
                   <div className={styles.icons}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"
-                      />
-                    </svg>
+                    <ArticleIcon />
                   </div>
-
                   <p className={styles.iconLabel}>{t('article')}</p>
                 </div>
               </Col>
@@ -314,9 +191,8 @@ export default function home(): JSX.Element {
               </Link>
             </div>
           </div>
-          {filteredAd.length === 0 ? (
-            ''
-          ) : (
+
+          {filteredAd.length > 0 && (
             <div data-testid="promotedPostsContainer">
               {filteredAd.map((post: any) => (
                 <PromotedPost
@@ -329,76 +205,86 @@ export default function home(): JSX.Element {
               ))}
             </div>
           )}
+
           {loadingPosts ? (
             <div className={`d-flex flex-row justify-content-center`}>
               <HourglassBottomIcon /> <span>Loading...</span>
             </div>
           ) : (
             <>
-              {posts.map((post: any) => {
+              {posts.map(({ node }: any) => {
+                const {
+                  // likedBy,
+                  // comments,
+                  creator,
+                  _id,
+                  imageUrl,
+                  videoUrl,
+                  title,
+                  text,
+                  likeCount,
+                  commentCount,
+                } = node;
+
+                // const allLikes: any =
+                //   likedBy && Array.isArray(likedBy)
+                //     ? likedBy.map((value: any) => ({
+                //         firstName: value.firstName,
+                //         lastName: value.lastName,
+                //         id: value._id,
+                //       }))
+                //     : [];
+
                 const allLikes: any = [];
-                post.likedBy.forEach((value: any) => {
-                  const singleLike = {
-                    firstName: value.firstName,
-                    lastName: value.lastName,
-                    id: value._id,
-                  };
-                  allLikes.push(singleLike);
-                });
+
+                // const postComments: any =
+                //   comments && Array.isArray(comments)
+                //     ? comments.map((value: any) => {
+                //         const commentLikes = value.likedBy.map(
+                //           (commentLike: any) => ({ id: commentLike._id }),
+                //         );
+                //         return {
+                //           id: value._id,
+                //           creator: {
+                //             firstName: value.creator.firstName,
+                //             lastName: value.creator.lastName,
+                //             id: value.creator._id,
+                //             email: value.creator.email,
+                //           },
+                //           likeCount: value.likeCount,
+                //           likedBy: commentLikes,
+                //           text: value.text,
+                //         };
+                //       })
+                //     : [];
 
                 const postComments: any = [];
-                post.comments.forEach((value: any) => {
-                  const commentLikes: any = [];
 
-                  value.likedBy.forEach((commentLike: any) => {
-                    const singleLike = {
-                      id: commentLike._id,
-                    };
-                    commentLikes.push(singleLike);
-                  });
-
-                  const singleCommnet: any = {
-                    id: value._id,
-                    creator: {
-                      firstName: value.creator.firstName,
-                      lastName: value.creator.lastName,
-                      id: value.creator._id,
-                      email: value.creator.email,
-                    },
-                    likeCount: value.likeCount,
-                    likedBy: commentLikes,
-                    text: value.text,
-                  };
-
-                  postComments.push(singleCommnet);
-                });
-
-                const cardProps: InterfacePostCardProps = {
-                  id: post._id,
+                const cardProps: InterfacePostCard = {
+                  id: _id,
                   creator: {
-                    id: post.creator._id,
-                    firstName: post.creator.firstName,
-                    lastName: post.creator.lastName,
-                    email: post.creator.email,
+                    id: creator._id,
+                    firstName: creator.firstName,
+                    lastName: creator.lastName,
+                    email: creator.email,
                   },
-                  image: post.imageUrl,
-                  video: post.videoUrl,
-                  title: post.title,
-                  text: post.text,
-                  likeCount: post.likeCount,
-                  commentCount: post.commentCount,
+                  image: imageUrl,
+                  video: videoUrl,
+                  title,
+                  text,
+                  likeCount,
+                  commentCount,
                   comments: postComments,
                   likedBy: allLikes,
                 };
 
-                return <PostCard key={post._id} {...cardProps} />;
+                return <PostCard key={_id} {...cardProps} />;
               })}
             </>
           )}
         </div>
-        <Modal
-          size="lg"
-          show={showStartPost}
+        <StartPostModal
+          show={showModal}
           onHide={handleModalClose}
           backdrop="static"
           aria-labelledby="contained-modal-title-vcenter"
