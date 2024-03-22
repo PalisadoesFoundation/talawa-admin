@@ -60,59 +60,6 @@ export const ORGANIZATION_POST_LIST = gql`
 `;
 
 /**
- * GraphQL query to retrieve posts by organization with additional filtering options.
- *
- * @param id - The ID of the organization for which posts are being retrieved.
- * @param title_contains - Optional. Filter posts by title containing a specified string.
- * @param text_contains - Optional. Filter posts by text containing a specified string.
- * @returns The list of posts associated with the organization based on the applied filters.
- */
-
-export const ORGANIZATION_POST_CONNECTION_LIST = gql`
-  query PostsByOrganizationConnection(
->>>>>>> develop-userTypeFix
-    $id: ID!
-    $after: String
-    $before: String
-    $first: PositiveInt
-    $last: PositiveInt
-  ) {
-    organizations(id: $id) {
-      posts(after: $after, before: $before, first: $first, last: $last) {
-        edges {
-          node {
-            _id
-            title
-            text
-            imageUrl
-            videoUrl
-            creator {
-              _id
-              firstName
-              lastName
-              email
-            }
-            createdAt
-            likeCount
-            commentCount
-
-            pinned
-          }
-          cursor
-        }
-        pageInfo {
-          startCursor
-          endCursor
-          hasNextPage
-          hasPreviousPage
-        }
-        totalCount
-      }
-    }
-  }
-`;
-
-/**
  * GraphQL query to retrieve organizations based on user connection.
  *
  * @param first - Optional. Number of organizations to retrieve in the first batch.
