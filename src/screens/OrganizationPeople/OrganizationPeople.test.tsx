@@ -836,7 +836,7 @@ describe('Organization People Page', () => {
       return foundElement instanceof HTMLElement ? foundElement : null;
     };
 
-    const findText = findByTextRegex(/Aditya Memberguy/i);
+    const findText = screen.getByText(/Aditya Memberguy/i);
     await wait();
     expect(findText).toBeInTheDocument();
 
