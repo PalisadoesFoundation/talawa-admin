@@ -331,7 +331,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           </Col>
         </Row>
       </OrganizationScreen>
->>>>>>> develop-userTypeFix
     </>
   );
 };
