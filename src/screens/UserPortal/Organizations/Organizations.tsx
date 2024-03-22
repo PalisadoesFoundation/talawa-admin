@@ -177,7 +177,6 @@ export default function organizations(): JSX.Element {
         setOrganizations(organizations);
       }
     } else if (mode == 1) {
-<<<<<<< HEAD
       console.log(joinedOrganizationsData, 'joined', userId);
       if (joinedOrganizationsData) {
         const membershipRequestStatus = 'accepted';
@@ -188,7 +187,7 @@ export default function organizations(): JSX.Element {
             },
           );
         setOrganizations(organizations);
-=======
+
       if (data2) {
         setOrganizations(data2.users[0].user.joinedOrganizations);
       }
