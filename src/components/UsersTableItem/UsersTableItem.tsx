@@ -41,7 +41,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
   });
   const [joinedOrgs, setJoinedOrgs] = useState(user.user.joinedOrganizations);
   const [orgsBlockedBy, setOrgsBlockedBy] = useState(
-    user.user.organizationsBlockedBy
+    user.user.organizationsBlockedBy,
   );
   const [searchByNameJoinedOrgs, setSearchByNameJoinedOrgs] = useState('');
   const [searchByNameOrgsBlockedBy, setSearchByNameOrgsBlockedBy] =
@@ -109,7 +109,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
       setJoinedOrgs(user.user.joinedOrganizations);
     } else {
       const filteredOrgs = user.user.joinedOrganizations.filter((org) =>
-        org.name.toLowerCase().includes(value.toLowerCase())
+        org.name.toLowerCase().includes(value.toLowerCase()),
       );
       setJoinedOrgs(filteredOrgs);
     }
@@ -120,8 +120,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
       setOrgsBlockedBy(user.user.organizationsBlockedBy);
     } else {
       const filteredOrgs = user.user.organizationsBlockedBy.filter((org) =>
-        org.name.toLowerCase().includes(value.toLowerCase())
->>>>>>> develop-userTypeFix
+        org.name.toLowerCase().includes(value.toLowerCase()),
       );
       setOrgsBlockedBy(filteredOrgs);
     }
@@ -177,8 +176,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
               user.appUserProfile.isSuperAdmin
                 ? 'SUPERADMIN' + `?${user.user._id}`
                 : user.user.adminApproved
-                ? 'ADMIN' + `?${user.user._id}`
-                : 'USER' + `?${user.user._id}`
+                  ? 'ADMIN' + `?${user.user._id}`
+                  : 'USER' + `?${user.user._id}`
             }
           >
             <option value={`ADMIN?${user.user._id}`}>{t('admin')}</option>

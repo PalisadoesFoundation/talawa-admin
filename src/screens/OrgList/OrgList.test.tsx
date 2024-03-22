@@ -174,14 +174,14 @@ describe('Organisations Page testing as SuperAdmin', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     screen.debug();
 
     expect(localStorage.setItem).toHaveBeenLastCalledWith(
       'Talawa-admin_AdminFor',
-      JSON.stringify([{ name: 'adi', _id: '1234', image: '' }])
+      JSON.stringify([{ name: 'adi', _id: '1234', image: '' }]),
     );
 
     expect(screen.getByTestId(/createOrganizationBtn/i)).toBeInTheDocument();
@@ -209,7 +209,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     expect(localStorage.setItem).toHaveBeenLastCalledWith(
       'Talawa-admin_AdminFor',
-      JSON.stringify([{ name: 'adi', _id: '1234', image: '' }])
+      JSON.stringify([{ name: 'adi', _id: '1234', image: '' }]),
     );
 
     userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
@@ -310,7 +310,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     expect(localStorage.setItem).toHaveBeenLastCalledWith(
       'Talawa-admin_AdminFor',
-      JSON.stringify([{ name: 'adi', _id: '1234', image: '' }])
+      JSON.stringify([{ name: 'adi', _id: '1234', image: '' }]),
     );
 
     userEvent.click(screen.getByTestId(/createOrganizationBtn/i));

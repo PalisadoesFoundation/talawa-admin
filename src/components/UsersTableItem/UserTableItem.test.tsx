@@ -726,8 +726,7 @@ describe('Testing User Table Item', () => {
     // Click on Organization Link
     fireEvent.click(screen.getByText(/XYZ/i));
     expect(window.location.replace).toBeCalledWith('/orgdash/id=xyz');
-    expect(mockHistoryPush).toBeCalledWith('/orgdash/id=xyz');
->>>>>>> develop-userTypeFix
+    expect(mockNavgatePush).toBeCalledWith('/orgdash/xyz');
     fireEvent.click(screen.getByTestId(`closeBlockedByOrgsBtn${123}`));
   });
 

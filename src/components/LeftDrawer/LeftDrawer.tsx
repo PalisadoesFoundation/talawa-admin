@@ -1,17 +1,17 @@
-import React from 'react';
-import Button from 'react-bootstrap/Button';
-import { useTranslation } from 'react-i18next';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useMutation } from '@apollo/client';
+import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
 import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
 import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
 import { ReactComponent as RolesIcon } from 'assets/svgs/roles.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
-import styles from './LeftDrawer.module.css';
-import { useMutation } from '@apollo/client';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
-import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
+import React from 'react';
+import Button from 'react-bootstrap/Button';
+import { useTranslation } from 'react-i18next';
+import { NavLink, useNavigate } from 'react-router-dom';
+import useLocalStorage from 'utils/useLocalstorage';
+import styles from './LeftDrawer.module.css';
 
 export interface InterfaceLeftDrawerProps {
   hideDrawer: boolean | null;
@@ -27,11 +27,7 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
   const lastName = getItem('LastName');
   const userImage = getItem('UserImage');
   const navigate = useNavigate();
-
   const role = superAdmin ? 'SuperAdmin' : 'Admin';
-
-  const role = superAdmin ? 'SuperAdmin' : 'Admin';
-
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
 
   const logout = (): void => {
@@ -63,7 +59,6 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
                 className={`${
                   isActive === true ? 'text-white' : 'text-secondary'
                 }`}
-<<<<<<< HEAD
                 data-testid="orgsBtn"
               >
                 <div className={styles.iconWrapper}>
@@ -79,36 +74,13 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
               </Button>
             )}
           </NavLink>
-          {userType === 'SUPERADMIN' && (
+          {superAdmin && (
             <NavLink to={'/users'}>
               {({ isActive }) => (
                 <Button
                   variant={isActive === true ? 'success' : 'light'}
                   className={`${
                     isActive === true ? 'text-white' : 'text-secondary'
-=======
-              />
-            </div>
-            {t('my organizations')}
-          </Button>
-          {superAdmin && (
-            <Button
-              variant={screenName === 'Users' ? 'success' : 'light'}
-              className={`${
-                screenName === 'Users' ? 'text-white' : 'text-secondary'
-              }`}
-              onClick={(): void => {
-                history.push('/users');
-              }}
-              data-testid="rolesBtn"
-            >
-              <div className={styles.iconWrapper}>
-                <RolesIcon
-                  fill={`${
-                    screenName === 'Users'
-                      ? 'var(--bs-white)'
-                      : 'var(--bs-secondary)'
->>>>>>> develop-userTypeFix
                   }`}
                   data-testid="rolesBtn"
                 >

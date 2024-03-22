@@ -21,7 +21,7 @@ import OrganizationFunds from 'screens/OrganizationFunds/OrganizationFunds';
 import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import Users from 'screens/Users/Users';
-
+import React, { useEffect } from 'react';
 // User Portal Components
 import Donate from 'screens/UserPortal/Donate/Donate';
 import Events from 'screens/UserPortal/Events/Events';
@@ -32,11 +32,11 @@ import Settings from 'screens/UserPortal/Settings/Settings';
 // import UserLoginPage from 'screens/UserPortal/UserLoginPage/UserLoginPage';
 // import Chat from 'screens/UserPortal/Chat/Chat';
 import { useQuery } from '@apollo/client';
+import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 import Advertisements from 'components/Advertisements/Advertisements';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
-import { useEffect } from 'react';
+
 import useLocalStorage from 'utils/useLocalstorage';
-import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 
 const { setItem } = useLocalStorage();
 

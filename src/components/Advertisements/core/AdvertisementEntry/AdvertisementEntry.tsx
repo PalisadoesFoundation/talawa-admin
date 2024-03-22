@@ -12,9 +12,9 @@ import { toast } from 'react-toastify';
 interface InterfaceAddOnEntryProps {
   id: string;
   name: string;
-  mediaUrl: string;
+  link: string;
   type: string;
-  organizationId: string;
+  orgId: string;
   startDate: Date;
   endDate: Date;
 }
@@ -22,9 +22,11 @@ function advertisementEntry({
   id,
   name,
   type,
-  mediaUrl,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  orgId,
+  link,
   endDate,
-  organizationId,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   startDate,
 }: InterfaceAddOnEntryProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
@@ -77,8 +79,8 @@ function advertisementEntry({
                         idEdit={id}
                         nameEdit={name}
                         typeEdit={type}
-                        orgIdEdit={organizationId}
-                        advertisementMediaEdit={mediaUrl}
+                        orgIdEdit={orgId}
+                        linkEdit={link}
                         endDateEdit={endDate}
                         startDateEdit={startDate}
                       />
@@ -89,34 +91,19 @@ function advertisementEntry({
                   </ul>
                 )}
               </div>
-              {mediaUrl?.includes('videos') ? (
-                <video
-                  muted
-                  className={styles.admedia}
-                  autoPlay={true}
-                  loop={true}
-                  playsInline
-                  data-testid="media"
-                  crossOrigin="anonymous"
-                >
-                  <source src={mediaUrl} type="video/mp4" />
-                </video>
-              ) : (
-                <Card.Img
-                  className={styles.admedia}
-                  variant="top"
-                  src={mediaUrl}
-                  data-testid="media"
-                />
-              )}
+              <Card.Img
+                variant="top"
+                src={
+                  'https://i.pinimg.com/736x/f0/68/da/f068daf5f23f74ada84537bcb70c7e4b.jpg'
+                }
+              />
               <Card.Body>
                 <Card.Title>{name}</Card.Title>
-                <Card.Text data-testid="Ad_end_date">
-                  Ends on {endDate?.toDateString()}
-                </Card.Text>
+                <Card.Text>Ends on {endDate?.toDateString()}</Card.Text>
                 <Card.Subtitle className="mb-2 text-muted author">
                   {type}
                 </Card.Subtitle>
+                <Card.Text>{link} </Card.Text>
                 <div className={styles.buttons}>
                   <Button
                     className={styles.entryaction}
@@ -173,8 +160,8 @@ function advertisementEntry({
 advertisementEntry.propTypes = {
   name: PropTypes.string,
   type: PropTypes.string,
-  organizationId: PropTypes.string,
-  mediaUrl: PropTypes.string,
+  orgId: PropTypes.string,
+  link: PropTypes.string,
   endDate: PropTypes.instanceOf(Date),
   startDate: PropTypes.instanceOf(Date),
 };
@@ -182,8 +169,8 @@ advertisementEntry.propTypes = {
 advertisementEntry.defaultProps = {
   name: '',
   type: '',
-  organizationId: '',
-  mediaUrl: '',
+  orgId: '',
+  link: '',
   endDate: new Date(),
   startDate: new Date(),
 };
