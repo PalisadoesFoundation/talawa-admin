@@ -172,7 +172,7 @@ export default function home(): JSX.Element {
     return adCont.filter(
       (ad: InterfaceAdContent) =>
         ad.organization._id === currentOrgId &&
-        new Date(ad.endDate) > currentDate
+        new Date(ad.endDate) > currentDate,
     );
   };
 
