@@ -94,11 +94,7 @@ export default function home(): JSX.Element {
   const navbarProps = {
     currentPage: 'home',
   };
-  const {
-    data: promotedPostsData,
-    refetch: _promotedPostsRefetch,
-    loading: promotedPostsLoading,
-  } = useQuery(ADVERTISEMENTS_GET);
+  const { data: promotedPostsData } = useQuery(ADVERTISEMENTS_GET);
   const {
     data,
     refetch,

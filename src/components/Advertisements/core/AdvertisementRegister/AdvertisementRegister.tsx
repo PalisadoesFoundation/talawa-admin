@@ -10,64 +10,57 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
+import convertToBase64 from 'utils/convertToBase64';
 import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
-import { Check, Clear } from '@mui/icons-material';
-import { isValidLink } from 'utils/linkValidator';
-
+import { useParams } from 'react-router-dom';
 interface InterfaceAddOnRegisterProps {
-  id?: string; // OrgId
+  id?: string; // organizationId
   createdBy?: string; // User
   formStatus?: string;
   idEdit?: string;
   nameEdit?: string;
   typeEdit?: string;
   orgIdEdit?: string;
-  linkEdit?: string;
+  advertisementMediaEdit?: string;
   endDateEdit?: Date;
   startDateEdit?: Date;
 }
 interface InterfaceFormStateTypes {
   name: string;
-  link: string;
+  advertisementMedia: string;
   type: string;
   startDate: Date;
   endDate: Date;
-  orgId: string;
+  organizationId: string | undefined;
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 function advertisementRegister({
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  createdBy,
   formStatus,
   idEdit,
   nameEdit,
   typeEdit,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  orgIdEdit,
-  linkEdit,
+  advertisementMediaEdit,
   endDateEdit,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   startDateEdit,
 }: InterfaceAddOnRegisterProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
 
   const [show, setShow] = useState(false);
-  const [isInputFocused, setIsInputFocused] = useState(false);
   const handleClose = (): void => setShow(false);
   const handleShow = (): void => setShow(true);
   const [create] = useMutation(ADD_ADVERTISEMENT_MUTATION);
   const [updateAdvertisement] = useMutation(UPDATE_ADVERTISEMENT_MUTATION);
   const { refetch } = useQuery(ADVERTISEMENTS_GET);
 
-  //getting orgId from URL
-  const currentOrg = window.location.href.split('/id=')[1] + '';
+  //getting organizationId from URL
+  const { orgId: currentOrg } = useParams();
   const [formState, setFormState] = useState<InterfaceFormStateTypes>({
     name: '',
-    link: '',
+    advertisementMedia: '',
     type: 'BANNER',
     startDate: new Date(),
     endDate: new Date(),
-    orgId: currentOrg,
+    organizationId: currentOrg,
   });
 
   //if set to edit set the formState by edit variables
@@ -76,7 +69,7 @@ function advertisementRegister({
       setFormState((prevState) => ({
         ...prevState,
         name: nameEdit || '',
-        link: linkEdit || '',
+        advertisementMedia: advertisementMediaEdit || '',
         type: typeEdit || 'BANNER',
         startDate: startDateEdit || new Date(),
         endDate: endDateEdit || new Date(),
@@ -86,7 +79,7 @@ function advertisementRegister({
   }, [
     formStatus,
     nameEdit,
-    linkEdit,
+    advertisementMediaEdit,
     typeEdit,
     startDateEdit,
     endDateEdit,
@@ -95,10 +88,6 @@ function advertisementRegister({
 
   const handleRegister = async (): Promise<void> => {
     try {
-      if (!isValidLink(formState.link)) {
-        toast.warn('Link is invalid. Please enter a valid link');
-        return;
-      }
       console.log('At handle register', formState);
       if (formState.endDate < formState.startDate) {
         toast.error('End date must be greater than or equal to start date');
@@ -106,12 +95,12 @@ function advertisementRegister({
       }
       const { data } = await create({
         variables: {
-          orgId: currentOrg,
+          organizationId: currentOrg,
           name: formState.name as string,
-          link: formState.link as string,
           type: formState.type as string,
           startDate: dayjs(formState.startDate).format('YYYY-MM-DD'),
           endDate: dayjs(formState.endDate).format('YYYY-MM-DD'),
+          file: formState.advertisementMedia as string,
         },
       });
 
@@ -120,11 +109,11 @@ function advertisementRegister({
         refetch();
         setFormState({
           name: '',
-          link: '',
+          advertisementMedia: '',
           type: 'BANNER',
           startDate: new Date(),
           endDate: new Date(),
-          orgId: currentOrg,
+          organizationId: currentOrg,
         });
         handleClose();
       }
@@ -141,8 +130,8 @@ function advertisementRegister({
       if (formState.name !== nameEdit) {
         updatedFields.name = formState.name;
       }
-      if (formState.link !== linkEdit) {
-        updatedFields.link = formState.link;
+      if (formState.advertisementMedia !== advertisementMediaEdit) {
+        updatedFields.advertisementMedia = formState.advertisementMedia;
       }
       if (formState.type !== typeEdit) {
         updatedFields.type = formState.type;
@@ -176,7 +165,9 @@ function advertisementRegister({
         variables: {
           id: idEdit,
           ...(updatedFields.name && { name: updatedFields.name }),
-          ...(updatedFields.link && { link: updatedFields.link }),
+          ...(updatedFields.advertisementMedia && {
+            file: updatedFields.advertisementMedia,
+          }),
           ...(updatedFields.type && { type: updatedFields.type }),
           ...(updatedFields.startDate && {
             startDate: startDateFormattedString,
@@ -239,38 +230,70 @@ function advertisementRegister({
                 }}
               />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="registerForm.Rlink">
-              <Form.Label>{t('Rlink')}</Form.Label>
+            <Form.Group className="mb-3">
+              <Form.Label htmlFor="advertisementMedia">
+                {t('Rmedia')}
+              </Form.Label>
               <Form.Control
-                type="text"
-                placeholder={t('EXlink')}
-                autoComplete="off"
-                required
-                onFocus={(): void => setIsInputFocused(true)}
-                onBlur={(): void => setIsInputFocused(false)}
-                value={formState.link}
-                onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    link: e.target.value,
-                  });
+                accept="image/*, video/*"
+                data-testid="advertisementMedia"
+                name="advertisementMedia"
+                type="file"
+                id="advertisementMedia"
+                multiple={false}
+                onChange={async (
+                  e: React.ChangeEvent<HTMLInputElement>,
+                ): Promise<void> => {
+                  const target = e.target as HTMLInputElement;
+                  const file = target.files && target.files[0];
+                  if (file) {
+                    const mediaBase64 = await convertToBase64(file);
+                    setFormState({
+                      ...formState,
+                      advertisementMedia: mediaBase64,
+                    });
+                  }
                 }}
               />
-              <div className="styles.link_check">
-                {isInputFocused && (
-                  <p className="pt-2">
-                    {isValidLink(formState.link) ? (
-                      <span className="form-text text-success">
-                        <Check /> {t('validLink')}
-                      </span>
-                    ) : (
-                      <span className="form-text text-danger">
-                        <Clear /> {t('invalidLink')}
-                      </span>
-                    )}
-                  </p>
-                )}
-              </div>
+              {formState.advertisementMedia && (
+                <div className={styles.preview} data-testid="mediaPreview">
+                  {formState.advertisementMedia.includes('video') ? (
+                    <video
+                      muted
+                      autoPlay={true}
+                      loop={true}
+                      playsInline
+                      crossOrigin="anonymous"
+                    >
+                      <source
+                        src={formState.advertisementMedia}
+                        type="video/mp4"
+                      />
+                    </video>
+                  ) : (
+                    <img src={formState.advertisementMedia} />
+                  )}
+                  <button
+                    className={styles.closeButton}
+                    onClick={(e): void => {
+                      e.preventDefault();
+                      setFormState({
+                        ...formState,
+                        advertisementMedia: '',
+                      });
+                      const fileInput = document.getElementById(
+                        'advertisementMedia',
+                      ) as HTMLInputElement;
+                      if (fileInput) {
+                        fileInput.value = '';
+                      }
+                    }}
+                    data-testid="closePreview"
+                  >
+                    <i className="fa fa-times"></i>
+                  </button>
+                </div>
+              )}
             </Form.Group>
             <Form.Group className="mb-3" controlId="registerForm.Rtype">
               <Form.Label>{t('Rtype')}</Form.Label>
@@ -353,21 +376,21 @@ function advertisementRegister({
 
 advertisementRegister.defaultProps = {
   name: '',
-  link: '',
+  advertisementMedia: '',
   type: 'BANNER',
   startDate: new Date(),
   endDate: new Date(),
-  orgId: '',
+  organizationId: '',
   formStatus: 'register',
 };
 
 advertisementRegister.propTypes = {
   name: PropTypes.string,
-  link: PropTypes.string,
+  advertisementMedia: PropTypes.string,
   type: PropTypes.string,
   startDate: PropTypes.instanceOf(Date),
   endDate: PropTypes.instanceOf(Date),
-  orgId: PropTypes.string,
+  organizationId: PropTypes.string,
   formStatus: PropTypes.string,
 };
 
