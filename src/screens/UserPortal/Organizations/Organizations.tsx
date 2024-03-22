@@ -133,7 +133,7 @@ export default function organizations(): JSX.Element {
       }
     } else if (mode == 2) {
       if (data3) {
-        setOrganizations(data3.users[0].createdOrganizations);
+        setOrganizations(data3.users[0].appUserProfile.createdOrganizations);
       }
     }
   }, [mode]);
