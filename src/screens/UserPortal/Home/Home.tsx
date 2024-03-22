@@ -1,35 +1,36 @@
-import { useMutation, useQuery } from '@apollo/client';
+import React, { useEffect, useRef, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
+import styles from './Home.module.css';
+import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  Button,
+  Form,
+  Col,
+  Container,
+  Image,
+  Row,
+  Modal,
+} from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import getOrganizationId from 'utils/getOrganizationId';
+import PostCard from 'components/UserPortal/PostCard/PostCard';
+import { useMutation, useQuery } from '@apollo/client';
 import {
   ADVERTISEMENTS_GET,
   ORGANIZATION_POST_LIST,
   USER_DETAILS,
 } from 'GraphQl/Queries/Queries';
-import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
-import PostCard from 'components/UserPortal/PostCard/PostCard';
-import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
-import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
-import type { ChangeEvent } from 'react';
-import React, { useEffect, useRef, useState } from 'react';
-import {
-  Button,
-  Col,
-  Container,
-  Form,
-  Image,
-  Modal,
-  Row,
-} from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
-import { Link, Navigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import convertToBase64 from 'utils/convertToBase64';
+import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
-import useLocalStorage from 'utils/useLocalstorage';
+import { useTranslation } from 'react-i18next';
+import convertToBase64 from 'utils/convertToBase64';
+import { toast } from 'react-toastify';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
 import UserDefault from '../../../assets/images/defaultImg.png';
-import styles from './Home.module.css';
+import useLocalStorage from 'utils/useLocalstorage';
 
 interface InterfacePostCardProps {
   id: string;
@@ -80,10 +81,7 @@ export default function home(): JSX.Element {
 
   const { getItem } = useLocalStorage();
 
-  const { orgId: organizationId } = useParams();
-  if (!organizationId) {
-    return <Navigate to={'/user'} />;
-  }
+  const organizationId = getOrganizationId(window.location.href);
   const [posts, setPosts] = React.useState([]);
   const [postContent, setPostContent] = React.useState<string>('');
   const [postImage, setPostImage] = React.useState<string>('');
@@ -91,17 +89,24 @@ export default function home(): JSX.Element {
   const [filteredAd, setFilteredAd] = useState<InterfaceAdContent[]>([]);
   const [showStartPost, setShowStartPost] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const currentOrgId = window.location.href.split('/id=')[1] + '';
 
   const navbarProps = {
     currentPage: 'home',
   };
-  const { data: promotedPostsData } = useQuery(ADVERTISEMENTS_GET);
+  const {
+    data: promotedPostsData,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    refetch: _promotedPostsRefetch,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    loading: promotedPostsLoading,
+  } = useQuery(ADVERTISEMENTS_GET);
   const {
     data,
     refetch,
     loading: loadingPosts,
   } = useQuery(ORGANIZATION_POST_LIST, {
-    variables: { id: organizationId, first: 10 },
+    variables: { id: organizationId },
   });
 
   const userId: string | null = getItem('userId');
@@ -158,21 +163,21 @@ export default function home(): JSX.Element {
     if (promotedPostsData) {
       setAdContent(promotedPostsData.advertisementsConnection);
     }
-  }, [promotedPostsData]);
+  }, [data]);
 
   useEffect(() => {
-    setFilteredAd(filterAdContent(adContent, organizationId));
+    setFilteredAd(filterAdContent(adContent, currentOrgId));
   }, [adContent]);
 
   const filterAdContent = (
     adCont: InterfaceAdContent[],
     currentOrgId: string,
-    currentDate: Date = new Date(),
+    currentDate: Date = new Date()
   ): InterfaceAdContent[] => {
     return adCont.filter(
       (ad: InterfaceAdContent) =>
         ad.organization._id === currentOrgId &&
-        new Date(ad.endDate) > currentDate,
+        new Date(ad.endDate) > currentDate
     );
   };
 
@@ -317,7 +322,7 @@ export default function home(): JSX.Element {
                 <PromotedPost
                   key={post.organization._id}
                   id={post.organization._id}
-                  media={post.organization.mediaUrl}
+                  image={post.organization.mediaUrl}
                   title={post.organization.name}
                   data-testid="postid"
                 />
@@ -445,7 +450,7 @@ export default function home(): JSX.Element {
                 multiple={false}
                 data-testid="postImageInput"
                 onChange={async (
-                  e: React.ChangeEvent<HTMLInputElement>,
+                  e: React.ChangeEvent<HTMLInputElement>
                 ): Promise<void> => {
                   const file = e.target.files && e.target.files[0];
                   if (file) {
