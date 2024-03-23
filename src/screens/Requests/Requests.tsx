@@ -8,15 +8,11 @@ import { Search } from '@mui/icons-material';
 import {
   MEMBERSHIP_REQUEST,
   ORGANIZATION_CONNECTION_LIST,
-  USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import TableLoader from 'components/TableLoader/TableLoader';
 import RequestsTableItem from 'components/RequestsTableItem/RequestsTableItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import type {
-  InterfaceQueryMembershipRequestsListItem,
-  InterfaceUserType,
-} from 'utils/interfaces';
+import type { InterfaceQueryMembershipRequestsListItem } from 'utils/interfaces';
 import styles from './Requests.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -32,42 +28,12 @@ const Requests = (): JSX.Element => {
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState<string>('');
-  const [organizationId, setOrganizationId] = useState<string>('');
   const userType = getItem('SuperAdmin')
     ? 'SUPERADMIN'
     : getItem('AdminFor')
       ? 'ADMIN'
       : 'USER';
-  const {
-    data: userData,
-    error: errorUser,
-  }: {
-    data: InterfaceUserType | undefined;
-    loading: boolean;
-    error?: Error | undefined;
-  } = useQuery(USER_ORGANIZATION_LIST, {
-    variables: { id: getItem('id') },
-    context: {
-      headers: { authorization: `Bearer ${getItem('token')}` },
-    },
-  });
-
-  // useEffect(() => {
-  //   if (!userData) {
-  //     return;
-  //   }
-
-  //   const adminFor = userData.user.adminFor;
-  //   if (adminFor && adminFor.length == 1) {
-  //     setOrganizationId(adminFor[0]._id);
-  //   }
-  // }, [userData]);
-
-  useEffect(() => {
-    if (errorUser) {
-      window.location.assign('/orglist');
-    }
-  }, [errorUser]);
+  const organizationId = getItem('AdminFor')?.[0]?._id;
 
   const {
     data: requestsData,
@@ -82,12 +48,11 @@ const Requests = (): JSX.Element => {
     error?: Error | undefined;
   } = useQuery(MEMBERSHIP_REQUEST, {
     variables: {
+      id: organizationId,
       first: perPageResult,
       skip: 0,
-      id: organizationId,
       firstName_contains: '',
     },
-    skip: !organizationId,
     notifyOnNetworkStatusChange: true,
   });
 
@@ -264,8 +229,7 @@ const Requests = (): JSX.Element => {
           </div>
         </div>
       </div>
-      {!isLoading &&
-      (orgsData?.organizationsConnection.length === 0 || userData) ? (
+      {!isLoading && orgsData?.organizationsConnection.length === 0 ? (
         <div className={styles.notFound}>
           <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
           <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>

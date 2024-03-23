@@ -40,8 +40,9 @@ async function wait(ms = 100): Promise<void> {
 }
 
 beforeEach(() => {
-  setItem('UserType', 'ADMIN');
   setItem('id', 'user1');
+  setItem('AdminFor', [{ _id: 'org1', __typename: 'Organization' }]);
+  setItem('SuperAdmin', false);
 });
 
 afterEach(() => {
@@ -102,6 +103,7 @@ describe('Testing Requests screen', () => {
   });
 
   test('Redirecting on error', async () => {
+    setItem('SuperAdmin', true);
     render(
       <MockedProvider addTypename={false} link={link5}>
         <BrowserRouter>

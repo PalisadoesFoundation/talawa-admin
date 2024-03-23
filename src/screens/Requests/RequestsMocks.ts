@@ -1,34 +1,9 @@
 import {
   MEMBERSHIP_REQUEST,
   ORGANIZATION_CONNECTION_LIST,
-  USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 
 export const EMPTY_REQUEST_MOCKS = [
-  {
-    request: {
-      query: USER_ORGANIZATION_LIST,
-      variables: { id: 'user1' },
-    },
-    result: {
-      data: {
-        user: {
-          userType: 'ADMIN',
-          firstName: 'John',
-          lastName: 'Doe',
-          image: '',
-          email: 'John_Does_Palasidoes@gmail.com',
-          adminFor: [
-            {
-              _id: 'org1',
-              name: 'Palisadoes',
-              image: '',
-            },
-          ],
-        },
-      },
-    },
-  },
   {
     request: {
       query: ORGANIZATION_CONNECTION_LIST,
@@ -94,30 +69,6 @@ export const EMPTY_REQUEST_MOCKS = [
 ];
 
 export const MOCKS = [
-  {
-    request: {
-      query: USER_ORGANIZATION_LIST,
-      variables: { id: 'user1' },
-    },
-    result: {
-      data: {
-        user: {
-          userType: 'ADMIN',
-          firstName: 'John',
-          lastName: 'Doe',
-          image: '',
-          email: 'John_Does_Palasidoes@gmail.com',
-          adminFor: [
-            {
-              _id: 'org1',
-              name: 'Palisadoes',
-              image: '',
-            },
-          ],
-        },
-      },
-    },
-  },
   {
     request: {
       query: ORGANIZATION_CONNECTION_LIST,
@@ -204,30 +155,6 @@ export const MOCKS = [
 export const MOCKS2 = [
   {
     request: {
-      query: USER_ORGANIZATION_LIST,
-      variables: { id: 'user1' },
-    },
-    result: {
-      data: {
-        user: {
-          userType: 'ADMIN',
-          firstName: 'John',
-          lastName: 'Doe',
-          image: '',
-          email: 'John_Does_Palasidoes@gmail.com',
-          adminFor: [
-            {
-              _id: 'org1',
-              name: 'Palisadoes',
-              image: '',
-            },
-          ],
-        },
-      },
-    },
-  },
-  {
-    request: {
       query: ORGANIZATION_CONNECTION_LIST,
     },
     result: {
@@ -303,30 +230,6 @@ export const MOCKS2 = [
 export const MOCKS3 = [
   {
     request: {
-      query: USER_ORGANIZATION_LIST,
-      variables: { id: 'user1' },
-    },
-    result: {
-      data: {
-        user: {
-          userType: 'ADMIN',
-          firstName: 'John',
-          lastName: 'Doe',
-          image: '',
-          email: 'John_Does_Palasidoes@gmail.com',
-          adminFor: [
-            {
-              _id: 'org1',
-              name: 'Palisadoes',
-              image: '',
-            },
-          ],
-        },
-      },
-    },
-  },
-  {
-    request: {
       query: ORGANIZATION_CONNECTION_LIST,
     },
     result: {
@@ -387,24 +290,6 @@ export const MOCKS3 = [
 export const EMPTY_MOCKS = [
   {
     request: {
-      query: USER_ORGANIZATION_LIST,
-      variables: { id: '123' },
-    },
-    result: {
-      data: {
-        user: {
-          userType: 'ADMIN',
-          firstName: 'John',
-          lastName: 'Doe',
-          image: '',
-          email: 'John_Does_Palasidoes@gmail.com',
-          adminFor: [],
-        },
-      },
-    },
-  },
-  {
-    request: {
       query: MEMBERSHIP_REQUEST,
       variables: {
         id: 'org1',
@@ -437,12 +322,6 @@ export const EMPTY_MOCKS = [
 ];
 
 export const MOCKS_WITH_ERROR = [
-  {
-    request: {
-      query: USER_ORGANIZATION_LIST,
-      variables: { id: 'user1' },
-    },
-  },
   {
     request: {
       query: MEMBERSHIP_REQUEST,
