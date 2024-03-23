@@ -116,7 +116,6 @@ function AddMember(): JSX.Element {
   });
 
   const getMembersId = (): any => {
-    console.log(memberData);
     if (memberData) {
       const ids = memberData?.organizationsMemberConnection.edges.map(
         (member: { _id: string }) => member._id,

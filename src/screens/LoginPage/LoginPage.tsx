@@ -266,7 +266,6 @@ const loginPage = (): JSX.Element => {
           setItem('IsLoggedIn', 'TRUE');
           setItem('SuperAdmin', loginData.login.appUserProfile.isSuperAdmin);
           setItem('AdminFor', loginData.login.appUserProfile.adminFor);
-          console.log(loginData.login.appUserProfile.adminFor);
           if (getItem('IsLoggedIn') == 'TRUE') {
             navigate(role === 'admin' ? '/orglist' : '/user/organizations');
           }
