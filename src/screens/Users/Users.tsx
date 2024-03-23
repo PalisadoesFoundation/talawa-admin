@@ -221,14 +221,14 @@ const Users = (): JSX.Element => {
       return filteredUsers;
     } else if (filteringOption === 'user') {
       const output = filteredUsers.filter((user) => {
-        return user.user.adminApproved === false;
+        return user.appUserProfile.adminApproved === false;
       });
       return output;
     } else if (filteringOption === 'admin') {
       const output = filteredUsers.filter((user) => {
         return (
           user.appUserProfile.isSuperAdmin === false &&
-          user.user.adminApproved === true
+          user.appUserProfile.adminApproved === true
         );
       });
       return output;

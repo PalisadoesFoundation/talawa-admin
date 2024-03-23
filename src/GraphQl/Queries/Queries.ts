@@ -106,7 +106,6 @@ export const USER_LIST = gql`
     ) {
       user {
         _id
-        adminApproved
         joinedOrganizations {
           _id
           name
@@ -166,6 +165,7 @@ export const USER_LIST = gql`
         }
       }
       appUserProfile {
+        adminApproved
         _id
         adminFor {
           _id
