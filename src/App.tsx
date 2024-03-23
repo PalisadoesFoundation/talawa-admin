@@ -82,6 +82,7 @@ function app(): JSX.Element {
   }, [data, loading]);
 
   const extraRoutes = Object.entries(installedPlugins).map(
+    //eslint-disable-next-line
     (plugin: any, index) => {
       const extraComponent = plugin[1];
       return (

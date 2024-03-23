@@ -48,8 +48,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   useEffect(() => {
     if (userData) {
       const isAdmin =
-        userData.user.appUserProfile.adminFor.length > 0 ||
-        userData.user.appUserProfile.isSuperAdmin;
+        userData?.user?.appUserProfile.adminFor.length > 0 ||
+        userData?.user?.appUserProfile.isSuperAdmin;
       setIsAdmin(isAdmin);
     }
   }, [userData]);
@@ -86,6 +86,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         }, 2000);
       }
       /* istanbul ignore next */
+      //eslint-disable-next-line
     } catch (error: any) {
       /* istanbul ignore next */
       errorHandler(t, error);
@@ -157,9 +158,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     <p>
                       <strong>{t('role')} :</strong>{' '}
                       <span>
-                        {userData.user.appUserProfile.isSuperAdmin
+                        {userData?.user?.appUserProfile?.isSuperAdmin
                           ? 'SuperAdmin'
-                          : userData.user.appUserProfile.adminFor.length > 0
+                          : userData?.user?.appUserProfile?.adminFor.length > 0
                             ? 'Admin'
                             : 'User'}
                       </span>
@@ -170,7 +171,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     </p>
                     <p>
                       <strong>{t('createdOn')} :</strong>{' '}
-                      {prettyDate(userData?.user.user?.createdAt)}
+                      {prettyDate(userData?.user?.user?.createdAt)}
                     </p>
                   </div>
                 </Col>
@@ -201,9 +202,10 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         <Row className="border-bottom py-3">
                           <Col sm={6}>{t('role')}</Col>
                           <Col sm={6}>
-                            {userData.user.appUserProfile.isSuperAdmin
+                            {userData?.user?.appUserProfile?.isSuperAdmin
                               ? 'SuperAdmin'
-                              : userData.user.appUserProfile.adminFor.length > 0
+                              : userData?.user?.appUserProfile?.adminFor
+                                    .length > 0
                                 ? 'Admin'
                                 : 'User'}
                           </Col>
