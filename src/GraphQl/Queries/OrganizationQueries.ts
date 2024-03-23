@@ -150,11 +150,13 @@ export const USER_JOINED_ORGANIZATIONS = gql`
 export const USER_CREATED_ORGANIZATIONS = gql`
   query UserCreatedOrganizations($id: ID!) {
     users(where: { id: $id }) {
-      createdOrganizations {
-        _id
-        name
-        description
-        image
+      appUserProfile {
+        createdOrganizations {
+          _id
+          name
+          description
+          image
+        }
       }
     }
   }
