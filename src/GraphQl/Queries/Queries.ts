@@ -282,8 +282,6 @@ export const EVENT_CHECKINS = gql`
         checkIn {
           _id
           time
-          allotedRoom
-          allotedSeat
         }
       }
     }
@@ -432,6 +430,7 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
         image
         email
         createdAt
+        userType
       }
     }
   }
