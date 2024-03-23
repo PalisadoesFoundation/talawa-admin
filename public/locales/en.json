@@ -736,10 +736,11 @@
     "allOrganizations": "All Organizations",
     "joinedOrganizations": "Joined Organizations",
     "createdOrganizations": "Created Organizations",
-    "search": "Search",
+    "search": "Search users",
     "nothingToShow": "Nothing to show here.",
     "organizations": "Organizations",
-    "searchByName": "Search By Name"
+    "searchByName": "Search By Name",
+    "filter": "Filter"
   },
   "userSidebar": {
     "yourOrganizations": "Your Organizations",
