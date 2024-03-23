@@ -444,7 +444,6 @@ export const USER_DETAILS = gql`
     user(id: $id) {
       user {
         _id
-        adminApproved
         joinedOrganizations {
           _id
         }
@@ -462,6 +461,7 @@ export const USER_DETAILS = gql`
       }
       appUserProfile {
         _id
+        adminApproved
         adminFor {
           _id
         }
